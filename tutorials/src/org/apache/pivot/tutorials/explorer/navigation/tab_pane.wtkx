@@ -18,41 +18,33 @@ limitations under the License.
 
 <TabPane xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <tabs>
-        <BoxPane TabPane.icon="@bell.png"
-            TabPane.label="Bell"
-            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-            <Border styles="{padding:2}">
-                <content>
-                    <Label text="120x90" preferredWidth="120" preferredHeight="90"
-                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                </content>
-            </Border>
-        </BoxPane>
+    <BoxPane TabPane.icon="@bell.png"
+        TabPane.label="Bell"
+        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+        <Border styles="{padding:2}">
+            <Label text="120x90" preferredWidth="120" preferredHeight="90"
+                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+        </Border>
+    </BoxPane>
 
-        <BoxPane TabPane.icon="@clock.png"
-            TabPane.label="Clock"
-            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-            <Border styles="{padding:2}">
-                <content>
-                    <Label text="240x180" preferredWidth="240" preferredHeight="180"
-                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                </content>
-            </Border>
-        </BoxPane>
+    <BoxPane TabPane.icon="@clock.png"
+        TabPane.label="Clock"
+        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+        <Border styles="{padding:2}">
+            <Label text="240x180" preferredWidth="240" preferredHeight="180"
+                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+        </Border>
+    </BoxPane>
 
-        <BoxPane TabPane.icon="@house.png"
-            TabPane.label="House"
-            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-            <Border styles="{padding:2}">
-                <content>
-                    <Label text="320x240" preferredWidth="320" preferredHeight="240"
-                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                </content>
-            </Border>
-        </BoxPane>
+    <BoxPane TabPane.icon="@house.png"
+        TabPane.label="House"
+        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+        <Border styles="{padding:2}">
+            <Label text="320x240" preferredWidth="320" preferredHeight="240"
+                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+        </Border>
+    </BoxPane>
 
-        <BoxPane TabPane.icon="@star.png"
-            TabPane.label="Star" enabled="false"/>
-    </tabs>
+    <BoxPane TabPane.icon="@star.png"
+        TabPane.label="Star" enabled="false"/>
 </TabPane>

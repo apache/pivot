@@ -19,8 +19,6 @@ limitations under the License.
 <Border title="Border Title" styles="{padding:2}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Label text="Border Content" styles="{horizontalAlignment:'center',
-            verticalAlignment:'center', wrapText:true}"/>
-    </content>
+    <Label text="Border Content" styles="{horizontalAlignment:'center',
+        verticalAlignment:'center', wrapText:true}"/>
 </Border>

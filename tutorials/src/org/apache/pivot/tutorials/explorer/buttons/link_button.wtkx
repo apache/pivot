@@ -19,7 +19,5 @@ limitations under the License.
 <LinkButton xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <buttonData>
-        <content:ButtonData text="Click Me!" icon="@resultset_next.png"/>
-    </buttonData>
+    <content:ButtonData text="Click Me!" icon="@resultset_next.png"/>
 </LinkButton>

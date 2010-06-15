@@ -18,39 +18,37 @@ limitations under the License.
 
 <Form xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <sections>
-        <Form.Section heading="Personal Information">
-            <BoxPane wtkx:id="nameBoxPane" Form.label="Name">
-                <TextInput wtkx:id="lastNameTextInput" prompt="Last"/>
-                <TextInput wtkx:id="firstNameTextInput" prompt="First"/>
+    <Form.Section heading="Personal Information">
+        <BoxPane wtkx:id="nameBoxPane" Form.label="Name">
+            <TextInput wtkx:id="lastNameTextInput" prompt="Last"/>
+            <TextInput wtkx:id="firstNameTextInput" prompt="First"/>
+        </BoxPane>
+    </Form.Section>
+    <Form.Section heading="Addresses">
+        <BoxPane Form.label="Home" orientation="vertical">
+            <TextInput prompt="Street" textSize="24"/>
+            <BoxPane>
+                <TextInput prompt="City"/>
+                <TextInput prompt="State" textSize="6"/>
+                <TextInput prompt="Zip" textSize="10"/>
             </BoxPane>
-        </Form.Section>
-        <Form.Section heading="Addresses">
-            <BoxPane Form.label="Home" orientation="vertical">
-                <TextInput prompt="Street" textSize="24"/>
-                <BoxPane>
-                    <TextInput prompt="City"/>
-                    <TextInput prompt="State" textSize="6"/>
-                    <TextInput prompt="Zip" textSize="10"/>
-                </BoxPane>
+        </BoxPane>
+        <BoxPane Form.label="Work" orientation="vertical">
+            <TextInput prompt="Street" textSize="24"/>
+            <BoxPane>
+                <TextInput prompt="City"/>
+                <TextInput prompt="State" textSize="6"/>
+                <TextInput prompt="Zip" textSize="10"/>
             </BoxPane>
-            <BoxPane Form.label="Work" orientation="vertical">
-                <TextInput prompt="Street" textSize="24"/>
-                <BoxPane>
-                    <TextInput prompt="City"/>
-                    <TextInput prompt="State" textSize="6"/>
-                    <TextInput prompt="Zip" textSize="10"/>
-                </BoxPane>
-            </BoxPane>
-        </Form.Section>
-        <Form.Section heading="Phone Numbers">
-            <TextInput Form.label="Home"/>
-            <TextInput Form.label="Work"/>
-        </Form.Section>
-        <Form.Section heading="Email Addresses">
-            <TextInput Form.label="Home"
-                Form.flag="{messageType:'info', message:'We won\'t spam you!'}"/>
-            <TextInput Form.label="Work"/>
-        </Form.Section>
-    </sections>
+        </BoxPane>
+    </Form.Section>
+    <Form.Section heading="Phone Numbers">
+        <TextInput Form.label="Home"/>
+        <TextInput Form.label="Work"/>
+    </Form.Section>
+    <Form.Section heading="Email Addresses">
+        <TextInput Form.label="Home"
+            Form.flag="{messageType:'info', message:'We won\'t spam you!'}"/>
+        <TextInput Form.label="Work"/>
+    </Form.Section>
 </Form>

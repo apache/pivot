@@ -28,25 +28,23 @@ limitations under the License.
         <TablePane.Column width="2*"/>
     </columns>
 
-    <rows>
-        <TablePane.Row height="-1">
-            <TablePane.Filler/>
-            <Label text="50" styles="{horizontalAlignment:'center'}"/>
-            <Label text="-1" styles="{horizontalAlignment:'center'}"/>
-            <Label text="1*" styles="{horizontalAlignment:'center'}"/>
-            <Label text="2*" styles="{horizontalAlignment:'center'}"/>
-        </TablePane.Row>
-        <TablePane.Row height="50">
-            <Label text="50" styles="{verticalAlignment:'center'}"/>
-        </TablePane.Row>
-        <TablePane.Row height="-1">
-            <Label text="-1" styles="{verticalAlignment:'center'}"/>
-        </TablePane.Row>
-        <TablePane.Row height="1*">
-            <Label text="1*" styles="{verticalAlignment:'center'}"/>
-        </TablePane.Row>
-        <TablePane.Row height="2*">
-            <Label text="2*" styles="{verticalAlignment:'center'}"/>
-        </TablePane.Row>
-    </rows>
+    <TablePane.Row height="-1">
+        <TablePane.Filler/>
+        <Label text="50" styles="{horizontalAlignment:'center'}"/>
+        <Label text="-1" styles="{horizontalAlignment:'center'}"/>
+        <Label text="1*" styles="{horizontalAlignment:'center'}"/>
+        <Label text="2*" styles="{horizontalAlignment:'center'}"/>
+    </TablePane.Row>
+    <TablePane.Row height="50">
+        <Label text="50" styles="{verticalAlignment:'center'}"/>
+    </TablePane.Row>
+    <TablePane.Row height="-1">
+        <Label text="-1" styles="{verticalAlignment:'center'}"/>
+    </TablePane.Row>
+    <TablePane.Row height="1*">
+        <Label text="1*" styles="{verticalAlignment:'center'}"/>
+    </TablePane.Row>
+    <TablePane.Row height="2*">
+        <Label text="2*" styles="{verticalAlignment:'center'}"/>
+    </TablePane.Row>
 </TablePane>

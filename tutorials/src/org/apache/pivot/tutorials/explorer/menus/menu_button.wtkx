@@ -22,28 +22,21 @@ limitations under the License.
     <buttonData>
         <content:ButtonData icon="@coins.png" text="Finances"/>
     </buttonData>
-    <menu>
-        <Menu>
-            <sections>
-                <Menu.Section>
-                    <Menu.Item buttonData="Earn Money"/>
-                    <Menu.Item buttonData="Steal Money"/>
-                    <Menu.Item buttonData="Borrow Money"/>
-                    <Menu.Item buttonData="Gamble">
-                        <menu>
-                            <Menu>
-                                <sections>
-                                    <Menu.Section>
-                                        <Menu.Item buttonData="Track"/>
-                                        <Menu.Item buttonData="Casino"/>
-                                        <Menu.Item buttonData="Stock Market"/>
-                                    </Menu.Section>
-                                </sections>
-                            </Menu>
-                        </menu>
-                    </Menu.Item>
-                </Menu.Section>
-            </sections>
-        </Menu>
-    </menu>
+
+    <Menu>
+        <Menu.Section>
+            <Menu.Item buttonData="Earn Money"/>
+            <Menu.Item buttonData="Steal Money"/>
+            <Menu.Item buttonData="Borrow Money"/>
+            <Menu.Item buttonData="Gamble">
+                <Menu>
+                    <Menu.Section>
+                        <Menu.Item buttonData="Track"/>
+                        <Menu.Item buttonData="Casino"/>
+                        <Menu.Item buttonData="Stock Market"/>
+                    </Menu.Section>
+                </Menu>
+            </Menu.Item>
+        </Menu.Section>
+    </Menu>
 </MenuButton>

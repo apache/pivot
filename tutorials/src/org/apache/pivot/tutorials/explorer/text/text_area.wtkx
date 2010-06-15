@@ -16,27 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TextArea xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk">
-    <componentListeners>
-        <wtkx:script>
-        <![CDATA[
-        function parentChanged(component, previousParent) {
-            if (component.getParent() != null) {
-                component.setText("Lorem ipsum dolor sit amet, consetetur\n" +
-                    "sadipscing elitr, sed diam nonumy eirmod\n" +
-                    "tempor invidunt ut labore et dolore magna\n" +
-                    "aliquyam erat, sed diam voluptua. At vero\n" +
-                    "eos et accusam et justo duo dolores et ea\n" +
-                    "rebum. Stet clita kasd gubergren, no sea\n" +
-                    "takimata sanctus est Lorem ipsum dolor sit\n" +
-                    "amet.\n" +
-                    "\n" +
-                    "Stet clita kasd gubergren, no sea takimata\n" +
-                    "sanctus est Lorem ipsum dolor sit amet.");
-            }
-        }
-        ]]>
-        </wtkx:script>
-    </componentListeners>
-</TextArea>
+<TextArea text="@text_area.txt"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk"/>

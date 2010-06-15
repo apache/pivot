@@ -18,25 +18,23 @@ limitations under the License.
 
 <GridPane columnCount="3"
     styles="{verticalSpacing:1, showHorizontalGridLines:true,
-    horizontalSpacing:1, showVerticalGridLines:true}"
+        horizontalSpacing:1, showVerticalGridLines:true}"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <rows>
-        <GridPane.Row>
-            <GridPane.Filler/>
-            <GridPane.Filler/>
-            <GridPane.Filler/>
-        </GridPane.Row>
-        <GridPane.Row>
-            <GridPane.Filler/>
-            <Label text="Hello World!" styles="{horizontalAlignment:'center',
-                verticalAlignment:'center', wrapText:true}"/>
-            <GridPane.Filler/>
-        </GridPane.Row>
-        <GridPane.Row>
-            <GridPane.Filler/>
-            <GridPane.Filler/>
-            <GridPane.Filler/>
-        </GridPane.Row>
-    </rows>
+    <GridPane.Row>
+        <GridPane.Filler/>
+        <GridPane.Filler/>
+        <GridPane.Filler/>
+    </GridPane.Row>
+    <GridPane.Row>
+        <GridPane.Filler/>
+        <Label text="Hello World!" styles="{horizontalAlignment:'center',
+            verticalAlignment:'center', wrapText:true}"/>
+        <GridPane.Filler/>
+    </GridPane.Row>
+    <GridPane.Row>
+        <GridPane.Filler/>
+        <GridPane.Filler/>
+        <GridPane.Filler/>
+    </GridPane.Row>
 </GridPane>
