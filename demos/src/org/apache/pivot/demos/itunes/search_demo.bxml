@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <Window title="Search Demo" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{color:10}">
@@ -35,9 +35,9 @@ limitations under the License.
 
                     <TablePane.Row height="-1">
                         <BoxPane styles="{verticalAlignment:'center'}">
-                            <TextInput textSize="18" wtkx:id="termTextInput">
+                            <TextInput textSize="18" bxml:id="termTextInput">
                                 <componentKeyListeners>
-                                    <wtkx:script>
+                                    <bxml:script>
                                     <![CDATA[
                                     importPackage(org.apache.pivot.wtk);
                                     function keyPressed(component, keyCode, keyLocation) {
@@ -53,23 +53,23 @@ limitations under the License.
                                         return false;
                                     }
                                     ]]>
-                                    </wtkx:script>
+                                    </bxml:script>
                                 </componentKeyListeners>
                                 <textInputTextListeners>
-                                    <wtkx:script>
+                                    <bxml:script>
                                     <![CDATA[
                                     function textChanged(textInput) {
                                         var term = termTextInput.getText();
                                         searchButton.setEnabled(term.length() > 0);
                                     }
                                     ]]>
-                                    </wtkx:script>
+                                    </bxml:script>
                                 </textInputTextListeners>
                             </TextInput>
-                            <PushButton wtkx:id="searchButton" enabled="false"
+                            <PushButton bxml:id="searchButton" enabled="false"
                                 styles="{toolbar:true, padding:1}">
                                 <buttonPressListeners>
-                                    <wtkx:script>
+                                    <bxml:script>
                                     <![CDATA[
                                     function buttonPressed(button) {
                                         if (application.isQueryExecuting()) {
@@ -79,10 +79,10 @@ limitations under the License.
                                         }
                                     }
                                     ]]>
-                                    </wtkx:script>
+                                    </bxml:script>
                                 </buttonPressListeners>
                                 <componentKeyListeners>
-                                    <wtkx:script>
+                                    <bxml:script>
                                     <![CDATA[
                                     importPackage(org.apache.pivot.wtk);
                                     function keyPressed(component, keyCode, keyLocation) {
@@ -95,11 +95,11 @@ limitations under the License.
                                         return false;
                                     }
                                     ]]>
-                                    </wtkx:script>
+                                    </bxml:script>
                                 </componentKeyListeners>
                             </PushButton>
                         </BoxPane>
-                        <Label wtkx:id="statusLabel" styles="{horizontalAlignment:'right',
+                        <Label bxml:id="statusLabel" styles="{horizontalAlignment:'right',
                             verticalAlignment:'center'}"/>
                     </TablePane.Row>
                 </TablePane>
@@ -116,7 +116,7 @@ limitations under the License.
                         <StackPane>
                             <Border>
                                 <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
-                                    <TableView wtkx:id="resultsTableView">
+                                    <TableView bxml:id="resultsTableView">
                                         <columns>
                                             <TableView.Column name="itemName" width="1*" headerData="Name"/>
                                             <TableView.Column name="itemParentName" width="1*" headerData="Album"/>
@@ -124,7 +124,7 @@ limitations under the License.
                                         </columns>
 
                                         <componentMouseButtonListeners>
-                                            <wtkx:script>
+                                            <bxml:script>
                                             <![CDATA[
                                             importClass(java.awt.Desktop);
                                             importClass(java.net.URL);
@@ -141,11 +141,11 @@ limitations under the License.
                                                 }
                                             }
                                             ]]>
-                                            </wtkx:script>
+                                            </bxml:script>
                                         </componentMouseButtonListeners>
 
                                         <tableViewSelectionListeners>
-                                            <wtkx:script>
+                                            <bxml:script>
                                             <![CDATA[
                                             function selectedRangeAdded(tableView, rangeStart, rangeEnd) {
                                                 application.updateArtwork();
@@ -159,18 +159,18 @@ limitations under the License.
                                                 application.updateArtwork();
                                             }
                                             ]]>
-                                            </wtkx:script>
+                                            </bxml:script>
                                         </tableViewSelectionListeners>
 
                                         <tableViewSortListeners>
-                                            <wtkx:script>
+                                            <bxml:script>
                                             <![CDATA[
                                             function sortChanged(tableView) {
                                                 var tableData = tableView.getTableData();
                                                 tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
                                             }
                                             ]]>
-                                            </wtkx:script>
+                                            </bxml:script>
                                         </tableViewSortListeners>
                                     </TableView>
 
@@ -180,22 +180,22 @@ limitations under the License.
                                 </ScrollPane>
                             </Border>
 
-                            <BoxPane wtkx:id="activityIndicatorBoxPane" visible="false"
+                            <BoxPane bxml:id="activityIndicatorBoxPane" visible="false"
                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                <ActivityIndicator wtkx:id="activityIndicator"
+                                <ActivityIndicator bxml:id="activityIndicator"
                                     preferredWidth="96" preferredHeight="96"/>
                             </BoxPane>
                         </StackPane>
 
                         <BoxPane orientation="vertical" styles="{fill:true}">
                             <Border>
-                                <ImageView wtkx:id="artworkImageView"
+                                <ImageView bxml:id="artworkImageView"
                                     preferredWidth="120" preferredHeight="120"/>
                             </Border>
                             <BoxPane styles="{horizontalAlignment:'center'}">
-                                <PushButton wtkx:id="previewButton" buttonData="Preview" enabled="false">
+                                <PushButton bxml:id="previewButton" buttonData="Preview" enabled="false">
                                     <buttonPressListeners>
-                                        <wtkx:script>
+                                        <bxml:script>
                                         <![CDATA[
                                         importClass(java.awt.Desktop);
                                         importClass(java.net.URL);
@@ -205,7 +205,7 @@ limitations under the License.
                                             Desktop.getDesktop().browse(url.toURI());
                                         }
                                         ]]>
-                                        </wtkx:script>
+                                        </bxml:script>
                                     </buttonPressListeners>
                                 </PushButton>
                             </BoxPane>

@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Drawing xmlns:wtkx="http://pivot.apache.org/wtkx"
+<Drawing xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk.media">
     <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
         <Ellipse x="1" y="1" width="238" height="238" stroke="#777777" strokeThickness="1" fill="#eeeeee"/>
@@ -27,7 +27,7 @@ limitations under the License.
             <Path.CurveTo x1="5" y1="9" x2="-5" y2="9" x3="-5" y3="0"/>
 
             <transforms>
-                <Shape.Rotate wtkx:id="hoursRotation"/>
+                <Shape.Rotate bxml:id="hoursRotation"/>
             </transforms>
         </Path>
         <Path x="120" y="120" stroke="#0000dd" fill="#0000dd">
@@ -37,12 +37,12 @@ limitations under the License.
             <Path.CurveTo x1="3" y1="4" x2="-3" y2="4" x3="-3" y3="0"/>
 
             <transforms>
-                <Shape.Rotate wtkx:id="minutesRotation"/>
+                <Shape.Rotate bxml:id="minutesRotation"/>
             </transforms>
         </Path>
         <Line x="120" y="120" x1="0" y1="10" x2="0" y2="-110" stroke="#dd0000" strokeThickness="2">
             <transforms>
-                <Shape.Rotate wtkx:id="secondsRotation"/>
+                <Shape.Rotate bxml:id="secondsRotation"/>
             </transforms>
         </Line>
     </Canvas>

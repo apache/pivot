@@ -192,8 +192,7 @@ public class TextArea extends Container {
         }
     }
 
-    // TODO Don't allow null values, only empty strings
-    private Document document;
+    private Document document = null;
 
     private int selectionStart = 0;
     private int selectionLength = 0;
@@ -279,7 +278,6 @@ public class TextArea extends Container {
 
     public TextArea() {
         installThemeSkin(TextArea.class);
-        setText("");
     }
 
     @Override

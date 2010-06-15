@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <Window title="File Drop Target Demo" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:terra="org.apache.pivot.wtk.skin.terra"
     xmlns="org.apache.pivot.wtk">
     <TablePane styles="{verticalSpacing:6}">
@@ -29,7 +29,7 @@ limitations under the License.
             <Border styles="{color:10}">
                 <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                     verticalScrollBarPolicy="fill_to_capacity">
-                    <TableView wtkx:id="fileTableView" selectMode="multi"
+                    <TableView bxml:id="fileTableView" selectMode="multi"
                         styles="{showHorizontalGridLines:false}">
                         <columns>
                             <TableView.Column name="name" width="3*" headerData="File">
@@ -58,7 +58,7 @@ limitations under the License.
         </TablePane.Row>
         <TablePane.Row height="-1">
             <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
-                <PushButton wtkx:id="uploadButton" buttonData="Upload"
+                <PushButton bxml:id="uploadButton" buttonData="Upload"
                    enabled="false" styles="{minimumAspectRatio:3}"/>
             </BoxPane>
         </TablePane.Row>

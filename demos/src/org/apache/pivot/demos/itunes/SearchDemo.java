@@ -72,11 +72,11 @@ public class SearchDemo implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        wtkxSerializer.put(APPLICATION_KEY, this);
+        BeanSerializer beanSerializer = new BeanSerializer();
+        beanSerializer.put(APPLICATION_KEY, this);
 
-        window = (Window)wtkxSerializer.readObject(this, "search_demo.wtkx");
-        wtkxSerializer.bind(this, SearchDemo.class);
+        window = (Window)beanSerializer.readObject(this, "search_demo.bxml");
+        beanSerializer.bind(this, SearchDemo.class);
 
         searchButton.setButtonData(searchImage);
         window.open(display);

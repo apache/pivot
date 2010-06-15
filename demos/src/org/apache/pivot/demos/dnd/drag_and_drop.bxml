@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <Window title="Drag and Drop Demo" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <TablePane styles="{padding:4, horizontalSpacing:4}">
         <columns>
@@ -40,15 +40,15 @@ limitations under the License.
                     <TablePane.Row height="1*">
                         <Border styles="{padding:2, color:10}">
                             <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
-                                <Label wtkx:id="label"
+                                <Label bxml:id="label"
                                     styles="{horizontalAlignment:'left', verticalAlignment:'top', wrapText:true}" />
                             </ScrollPane>
                         </Border>
                     </TablePane.Row>
                     <TablePane.Row>
                         <BoxPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
-                            <PushButton wtkx:id="copyTextButton" buttonData="Copy"/>
-                            <PushButton wtkx:id="pasteTextButton" buttonData="Paste"/>
+                            <PushButton bxml:id="copyTextButton" buttonData="Copy"/>
+                            <PushButton bxml:id="pasteTextButton" buttonData="Paste"/>
                         </BoxPane>
                     </TablePane.Row>
                 </TablePane>
@@ -66,14 +66,14 @@ limitations under the License.
                     </TablePane.Row>
                     <TablePane.Row height="1*">
                         <Border styles="{color:10}">
-                            <ImageView wtkx:id="imageView"
+                            <ImageView bxml:id="imageView"
                                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}" />
                         </Border>
                     </TablePane.Row>
                     <TablePane.Row>
                         <BoxPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
-                            <PushButton wtkx:id="copyImageButton" buttonData="Copy"/>
-                            <PushButton wtkx:id="pasteImageButton" buttonData="Paste"/>
+                            <PushButton bxml:id="copyImageButton" buttonData="Copy"/>
+                            <PushButton bxml:id="pasteImageButton" buttonData="Paste"/>
                         </BoxPane>
                     </TablePane.Row>
                 </TablePane>
@@ -92,14 +92,14 @@ limitations under the License.
                     <TablePane.Row height="1*">
                         <Border styles="{color:10}">
                             <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" verticalScrollBarPolicy="fill_to_capacity">
-                                <ListView wtkx:id="listView" selectMode="none"/>
+                                <ListView bxml:id="listView" selectMode="none"/>
                             </ScrollPane>
                         </Border>
                     </TablePane.Row>
                     <TablePane.Row>
                         <BoxPane styles="{padding:4, spacing:4, horizontalAlignment:'center'}">
-                            <PushButton wtkx:id="copyFilesButton" buttonData="Copy"/>
-                            <PushButton wtkx:id="pasteFilesButton" buttonData="Paste"/>
+                            <PushButton bxml:id="copyFilesButton" buttonData="Copy"/>
+                            <PushButton bxml:id="pasteFilesButton" buttonData="Paste"/>
                         </BoxPane>
                     </TablePane.Row>
                 </TablePane>

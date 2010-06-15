@@ -827,12 +827,9 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
                     } else {
                         String defaultPropertyName = defaultProperty.value();
                         BeanAdapter beanAdapter = new BeanAdapter(element.parent.value);
-                        Class<?> defaultPropertyType = beanAdapter.getType(defaultPropertyName);
+                        Object defaultPropertyValue = beanAdapter.get(defaultPropertyName);
 
-                        if (Sequence.class.isAssignableFrom(defaultPropertyType)
-                            && (beanAdapter.isReadOnly(defaultPropertyName)
-                                || defaultProperty.add())) {
-                            Object defaultPropertyValue = beanAdapter.get(defaultPropertyName);
+                        if (defaultPropertyValue instanceof Sequence<?>) {
                             Sequence<Object> sequence = (Sequence<Object>)defaultPropertyValue;
                             sequence.add(element.value);
                         } else {

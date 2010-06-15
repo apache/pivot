@@ -59,9 +59,9 @@ public class DragAndDropDemo implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "drag_and_drop.wtkx");
-        wtkxSerializer.bind(this, DragAndDropDemo.class);
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "drag_and_drop.bxml");
+        beanSerializer.bind(this, DragAndDropDemo.class);
 
         // Text
         label.setDragSource(new DragSource() {

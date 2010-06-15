@@ -42,9 +42,9 @@ public class DecoratorDemo implements Application {
         mainWindow.setMaximized(true);
         mainWindow.open(display);
 
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        reflectionWindow = (Window)wtkxSerializer.readObject(this, "reflection.wtkx");
-        translucentFrame = (Frame)wtkxSerializer.readObject(this, "translucent.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        reflectionWindow = (Window)beanSerializer.readObject(this, "reflection.bxml");
+        translucentFrame = (Frame)beanSerializer.readObject(this, "translucent.bxml");
 
         final FadeDecorator fadeDecorator = new FadeDecorator();
         translucentFrame.getDecorators().insert(fadeDecorator, 0);

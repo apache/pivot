@@ -16,14 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Frame title="Translucent Window" x="80" y="80"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+<Window title="Suggestion Demo" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <BoxPane orientation="vertical" styles="{fill:true}">
-        <Label text="A Translucent Window"/>
-        <Border styles="{color:13}">
-            <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
-        </Border>
-    </BoxPane>
-</Frame>
-
+    <Border>
+        <FlowPane styles="{padding:6, alignToBaseline:true}">
+            <Label text="Search:"/>
+            <TextInput bxml:id="textInput" textSize="20"/>
+            <ActivityIndicator bxml:id="activityIndicator"/>
+        </FlowPane>
+    </Border>
+</Window>

@@ -40,10 +40,10 @@ public class FixedColumnTable implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "fixed_column_table.wtkx");
-        primaryTableView = (TableView)wtkxSerializer.get("primaryTableView");
-        fixedTableView = (TableView)wtkxSerializer.get("fixedTableView");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "fixed_column_table.bxml");
+        primaryTableView = (TableView)beanSerializer.get("primaryTableView");
+        fixedTableView = (TableView)beanSerializer.get("fixedTableView");
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {

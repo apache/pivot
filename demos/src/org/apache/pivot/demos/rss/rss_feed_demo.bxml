@@ -16,14 +16,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Suggestion Demo" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+<Window title="RSS Feed Demo" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:effects="org.apache.pivot.wtk.effects"
+    xmlns:rss="org.apache.pivot.demos.rss"
     xmlns="org.apache.pivot.wtk">
-    <Border>
-        <FlowPane styles="{padding:6, alignToBaseline:true}">
-            <Label text="Search:"/>
-            <TextInput wtkx:id="textInput" textSize="20"/>
-            <ActivityIndicator wtkx:id="activityIndicator"/>
-        </FlowPane>
+    <Border styles="{color:10}">
+        <CardPane bxml:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'crossfade'}">
+            <Label bxml:id="statusLabel" text="Loading..."
+                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+            <ScrollPane horizontalScrollBarPolicy="fill">
+                <ListView bxml:id="feedListView" styles="{variableItemHeight:true}">
+                    <itemRenderer>
+                        <rss:RSSItemRenderer/>
+                    </itemRenderer>
+                </ListView>
+            </ScrollPane>
+        </CardPane>
     </Border>
 </Window>

@@ -51,10 +51,10 @@ public class SuggestionDemo implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "suggestion_demo.wtkx");
-        textInput = (TextInput)wtkxSerializer.get("textInput");
-        activityIndicator = (ActivityIndicator)wtkxSerializer.get("activityIndicator");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "suggestion_demo.bxml");
+        textInput = (TextInput)beanSerializer.get("textInput");
+        activityIndicator = (ActivityIndicator)beanSerializer.get("activityIndicator");
 
         textInput.getTextInputCharacterListeners().add(new TextInputCharacterListener() {
             @Override

@@ -31,7 +31,7 @@ import org.apache.pivot.wtk.media.drawing.CanvasListener;
 /**
  * Image representing a vector drawing.
  */
-@DefaultProperty(value="canvas", add=false)
+@DefaultProperty("canvas")
 public class Drawing extends Image {
     private static class DrawingListenerList extends ListenerList<DrawingListener>
         implements DrawingListener {
@@ -75,10 +75,6 @@ public class Drawing extends Image {
     };
 
     private DrawingListenerList drawingListeners = new DrawingListenerList();
-
-    public Drawing() {
-        setCanvas(new Canvas());
-    }
 
     @Override
     public int getWidth() {

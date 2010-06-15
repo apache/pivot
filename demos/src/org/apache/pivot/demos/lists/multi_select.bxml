@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <Window title="Multiple Selection Demo" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
@@ -30,14 +30,16 @@ limitations under the License.
         <TablePane.Row height="1*">
             <Border styles="{color:10}">
                 <ScrollPane horizontalScrollBarPolicy="fill">
-                    <ListView wtkx:id="dataListView" selectMode="multi">
-                        <content:NumericSpinnerData lowerBound="0" upperBound="31" increment="1"/>
+                    <ListView bxml:id="dataListView" selectMode="multi">
+                        <listData>
+                            <content:NumericSpinnerData lowerBound="0" upperBound="31" increment="1"/>
+                        </listData>
                     </ListView>
                 </ScrollPane>
             </Border>
             <Border styles="{color:10}">
                 <ScrollPane horizontalScrollBarPolicy="fill">
-                    <ListView wtkx:id="selectionListView" selectMode="none"/>
+                    <ListView bxml:id="selectionListView" selectMode="none"/>
                 </ScrollPane>
             </Border>
         </TablePane.Row>

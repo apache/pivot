@@ -51,11 +51,11 @@ public class RSSFeedDemo implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "rss_feed_demo.wtkx");
-        feedListView = (ListView)wtkxSerializer.get("feedListView");
-        cardPane = (CardPane)wtkxSerializer.get("cardPane");
-        statusLabel = (Label)wtkxSerializer.get("statusLabel");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "rss_feed_demo.bxml");
+        feedListView = (ListView)beanSerializer.get("feedListView");
+        cardPane = (CardPane)beanSerializer.get("cardPane");
+        statusLabel = (Label)beanSerializer.get("statusLabel");
 
         feedListView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
             private int index = -1;

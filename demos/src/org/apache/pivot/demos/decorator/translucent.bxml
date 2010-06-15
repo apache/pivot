@@ -16,14 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Reflection Window" x="20" y="20"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:effects="org.apache.pivot.wtk.effects"
+<Frame title="Translucent Window" x="80" y="80"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <decorators>
-        <effects:ReflectionDecorator/>
-    </decorators>
-
-    <ImageView image="@IMG_0767_2.jpg"/>
-</Window>
+    <BoxPane orientation="vertical" styles="{fill:true}">
+        <Label text="A Translucent Window"/>
+        <Border styles="{color:13}">
+            <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
+        </Border>
+    </BoxPane>
+</Frame>
 

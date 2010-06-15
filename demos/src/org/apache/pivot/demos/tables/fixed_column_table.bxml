@@ -17,10 +17,10 @@ limitations under the License.
 -->
 
 <Window title="Fixed Column Table Demo" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <wtkx:define xmlns="org.apache.pivot.collections">
-        <ArrayList wtkx:id="tableData">
+    <bxml:define xmlns="org.apache.pivot.collections">
+        <ArrayList bxml:id="tableData">
             <HashMap name="User 1" colA="1.A" colB="1.B" colC="1.C" />
             <HashMap name="User 2" colA="2.A" colB="2.B" colC="2.C" />
             <HashMap name="User 3" colA="3.A" colB="3.B" colC="3.C" />
@@ -30,12 +30,12 @@ limitations under the License.
             <HashMap name="User 7" colA="7.A" colB="7.B" colC="7.C" />
             <HashMap name="User 8" colA="8.A" colB="8.B" colC="8.C" />
         </ArrayList>
-    </wtkx:define>
+    </bxml:define>
 
     <Border styles="{color:7}">
         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
             verticalScrollBarPolicy="fill_to_capacity">
-            <TableView wtkx:id="primaryTableView" tableData="$tableData" selectMode="multi"
+            <TableView bxml:id="primaryTableView" tableData="$tableData" selectMode="multi"
                 styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
                     selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
                     alternateRowBackgroundColor:null, showHighlight:false,
@@ -54,7 +54,7 @@ limitations under the License.
             </columnHeader>
 
             <rowHeader>
-                <TableView wtkx:id="fixedTableView" tableData="$tableData" selectMode="multi"
+                <TableView bxml:id="fixedTableView" tableData="$tableData" selectMode="multi"
                     styles="{selectionColor:'#ffffff', inactiveSelectionColor:'#ffffff',
                         selectionBackgroundColor:'#144f8b', inactiveSelectionBackgroundColor:'#144f8b',
                         alternateRowBackgroundColor:null, showHighlight:false,

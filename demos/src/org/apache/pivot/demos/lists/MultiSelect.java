@@ -36,11 +36,11 @@ public class MultiSelect implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "multi_select.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "multi_select.bxml");
 
-        dataListView = (ListView)wtkxSerializer.get("dataListView");
-        selectionListView = (ListView)wtkxSerializer.get("selectionListView");
+        dataListView = (ListView)beanSerializer.get("dataListView");
+        selectionListView = (ListView)beanSerializer.get("selectionListView");
 
         dataListView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
             @Override

@@ -16,22 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="RSS Feed Demo" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+<Window title="Reflection Window" x="20" y="20"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:effects="org.apache.pivot.wtk.effects"
-    xmlns:rss="org.apache.pivot.demos.rss"
     xmlns="org.apache.pivot.wtk">
-    <Border styles="{color:10}">
-        <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'crossfade'}">
-            <Label wtkx:id="statusLabel" text="Loading..."
-                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-            <ScrollPane horizontalScrollBarPolicy="fill">
-                <ListView wtkx:id="feedListView" styles="{variableItemHeight:true}">
-                    <itemRenderer>
-                        <rss:RSSItemRenderer/>
-                    </itemRenderer>
-                </ListView>
-            </ScrollPane>
-        </CardPane>
-    </Border>
+    <decorators>
+        <effects:ReflectionDecorator/>
+    </decorators>
+
+    <ImageView image="@IMG_0767_2.jpg"/>
 </Window>
+

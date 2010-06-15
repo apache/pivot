@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <Window title="Large Data Demo" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
@@ -30,19 +30,19 @@ limitations under the License.
             <TablePane.Row height="-1">
                 <BoxPane orientation="vertical" styles="{fill:true}">
                     <BoxPane>
-                        <ListButton wtkx:id="fileListButton"
+                        <ListButton bxml:id="fileListButton"
                             listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0"/>
-                        <PushButton wtkx:id="loadDataButton" buttonData="Load Data" styles="{minimumAspectRatio:3}"/>
-                        <PushButton wtkx:id="cancelButton" buttonData="Cancel" enabled="false" styles="{minimumAspectRatio:3}"/>
+                        <PushButton bxml:id="loadDataButton" buttonData="Load Data" styles="{minimumAspectRatio:3}"/>
+                        <PushButton bxml:id="cancelButton" buttonData="Cancel" enabled="false" styles="{minimumAspectRatio:3}"/>
                     </BoxPane>
-                    <Label wtkx:id="statusLabel"/>
+                    <Label bxml:id="statusLabel"/>
                     <Separator/>
                 </BoxPane>
             </TablePane.Row>
             <TablePane.Row height="1*">
                 <Border>
                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                        <TableView wtkx:id="tableView" selectMode="single"
+                        <TableView bxml:id="tableView" selectMode="single"
                             styles="{showHorizontalGridLines:false}">
                             <columns>
                                 <TableView.Column name="c0" headerData="0" width="120"/>

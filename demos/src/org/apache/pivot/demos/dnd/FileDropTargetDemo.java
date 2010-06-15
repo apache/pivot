@@ -56,7 +56,7 @@ public class FileDropTargetDemo implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "file_drop_target_demo.wtkx");
+        window = (Window)wtkxSerializer.readObject(this, "file_drop_target_demo.bxml");
         wtkxSerializer.bind(this, FileDropTargetDemo.class);
 
         fileList = new FileList();
