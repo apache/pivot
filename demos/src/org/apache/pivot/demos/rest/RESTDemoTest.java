@@ -64,7 +64,9 @@ public class RESTDemoTest {
         // Read
         GetQuery getQuery = new GetQuery(hostname, port, path, secure);
 
-        assertEquals(contact, getQuery.execute());
+        Object result = getQuery.execute();
+        assertEquals(JSON.get(contact, "address.street"), JSON.get(result, "address.street"));
+        assertEquals(contact, result);
 
         // Update
         JSON.put(contact, "name", "Joseph User");
@@ -80,5 +82,11 @@ public class RESTDemoTest {
         deleteQuery.execute();
 
         assertEquals(deleteQuery.getStatus(), Query.Status.NO_CONTENT);
+    }
+
+    @Test(expected=QueryException.class)
+    public void testException() throws IOException, SerializationException, QueryException {
+        GetQuery getQuery = new GetQuery(hostname, port, "/pivot-demos/rest_demo/foo", secure);
+        getQuery.execute();
     }
 }
