@@ -245,8 +245,7 @@ limitations under the License.
                     <include name="**/*.txt"/>
                     <include name="**/*.properties"/>
                     <include name="**/*.xml"/>
-                    <include name="**/*.wtkx"/>
-                    <include name="**/*.wtkd"/>
+                    <include name="**/*.bxml"/>
                     <include name="**/*.json"/>
                     <exclude name="**/*.class"/>
                 </fileset>
@@ -694,8 +693,7 @@ limitations under the License.
             <include name="**/*.txt"/>
             <include name="**/*.properties"/>
             <include name="**/*.xml"/>
-            <include name="**/*.wtkx"/>
-            <include name="**/*.wtkd"/>
+            <include name="**/*.bxml"/>
             <include name="**/*.json"/>
         </fileset>
         <replaceregexp match="[\t]" replace="    " flags="gm" byline="true">
