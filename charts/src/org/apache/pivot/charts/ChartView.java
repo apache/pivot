@@ -18,6 +18,7 @@ package org.apache.pivot.charts;
 
 import java.util.Comparator;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
@@ -29,6 +30,7 @@ import org.apache.pivot.wtk.Component;
 /**
  * Abstract base class for chart views.
  */
+@DefaultProperty("chartData")
 public abstract class ChartView extends Component {
     /**
      * Represents a chart category.

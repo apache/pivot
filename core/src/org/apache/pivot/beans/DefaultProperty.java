@@ -34,4 +34,14 @@ public @interface DefaultProperty {
      * The name of the default property.
      */
     public String value();
+
+    /**
+     * Determines the serializer's behavior when the default property refers
+     * to a sequence.
+     *
+     * @return
+     * <tt>true</tt> if sub-elements should be added to the sequence, or
+     * <tt>false</ff> if sub-elements should replace the sequence.
+     */
+    public boolean add() default true;
 }
