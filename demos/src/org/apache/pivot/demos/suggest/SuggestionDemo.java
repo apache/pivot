@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSON;
@@ -39,7 +40,6 @@ import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class SuggestionDemo implements Application {
     private Window window = null;
@@ -51,7 +51,7 @@ public class SuggestionDemo implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "suggestion_demo.wtkx");
         textInput = (TextInput)wtkxSerializer.get("textInput");
         activityIndicator = (ActivityIndicator)wtkxSerializer.get("activityIndicator");

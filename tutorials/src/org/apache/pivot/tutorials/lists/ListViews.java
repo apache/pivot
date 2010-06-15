@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.lists;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Application;
@@ -26,7 +27,6 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ListViews implements Application {
     private Window window = null;
@@ -76,7 +76,7 @@ public class ListViews implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "list_views.wtkx");
         selectionLabel = (Label)wtkxSerializer.get("selectionLabel");
         listView = (ListView)wtkxSerializer.get("listView");

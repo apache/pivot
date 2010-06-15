@@ -18,12 +18,12 @@ package org.apache.pivot.tutorials.stocktracker;
 
 import java.util.Locale;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Stock Tracker application.
@@ -41,8 +41,8 @@ public class StockTracker implements Application {
         }
 
         Resources resources = new Resources(StockTrackerWindow.class.getName());
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
-        window = (StockTrackerWindow)wtkxSerializer.readObject(this, "stock_tracker_window.wtkx");
+        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
+        window = (StockTrackerWindow)wtkxSerializer.readObject(this, "stock_tracker_window.bxml");
         window.open(display);
     }
 

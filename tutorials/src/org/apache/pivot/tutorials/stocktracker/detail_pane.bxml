@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <BoxPane orientation="vertical" styles="{fill:true}"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:stocktracker="org.apache.pivot.tutorials.stocktracker"
     xmlns="org.apache.pivot.wtk">
     <Label textKey="companyName" styles="{font:{size:12, bold:true}}"/>
@@ -27,28 +27,28 @@ limitations under the License.
     <Form styles="{padding:0, fill:true, showFlagIcons:false, showFlagHighlight:false,
         leftAlignLabels:true}">
         <Form.Section>
-            <wtkx:define>
-                <stocktracker:ValueMapping wtkx:id="valueMapping"/>
-                <stocktracker:ChangeMapping wtkx:id="changeMapping"/>
-                <stocktracker:VolumeMapping wtkx:id="volumeMapping"/>
-            </wtkx:define>
+            <bxml:define>
+                <stocktracker:ValueMapping bxml:id="valueMapping"/>
+                <stocktracker:ChangeMapping bxml:id="changeMapping"/>
+                <stocktracker:VolumeMapping bxml:id="volumeMapping"/>
+            </bxml:define>
 
-            <Label wtkx:id="valueLabel" Form.label="%value"
+            <Label bxml:id="valueLabel" Form.label="%value"
                 textKey="value" textBindMapping="$valueMapping"
                 styles="{horizontalAlignment:'right'}"/>
-            <Label wtkx:id="changeLabel" Form.label="%change"
+            <Label bxml:id="changeLabel" Form.label="%change"
                 textKey="change" textBindMapping="$valueMapping"
                 styles="{horizontalAlignment:'right'}"/>
-            <Label wtkx:id="openingValueLabel" Form.label="%openingValue"
+            <Label bxml:id="openingValueLabel" Form.label="%openingValue"
                 textKey="openingValue" textBindMapping="$valueMapping"
                 styles="{horizontalAlignment:'right'}"/>
-            <Label wtkx:id="highValueLabel" Form.label="%highValue"
+            <Label bxml:id="highValueLabel" Form.label="%highValue"
                 textKey="highValue" textBindMapping="$valueMapping"
                 styles="{horizontalAlignment:'right'}"/>
-            <Label wtkx:id="lowValueLabel" Form.label="%lowValue"
+            <Label bxml:id="lowValueLabel" Form.label="%lowValue"
                 textKey="lowValue" textBindMapping="$changeMapping"
                 styles="{horizontalAlignment:'right'}"/>
-            <Label wtkx:id="volumeLabel" Form.label="%volume"
+            <Label bxml:id="volumeLabel" Form.label="%volume"
                 textKey="volume" textBindMapping="$volumeMapping"
                 styles="{horizontalAlignment:'right'}"/>
         </Form.Section>

@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Alert;
@@ -25,7 +26,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ActionMappingTest implements Application {
     private Window window = null;
@@ -46,7 +46,7 @@ public class ActionMappingTest implements Application {
             }
         });
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "action_mapping_test.wtkx");
         window.getActionMappings().add(new Window.ActionMapping(new Keyboard.KeyStroke(Keyboard.KeyCode.B,
             Keyboard.Modifier.SHIFT.getMask()), "action2"));

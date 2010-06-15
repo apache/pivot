@@ -18,12 +18,12 @@ package org.apache.pivot.wtk;
 
 import java.util.Iterator;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.MenuBarItemDataRenderer;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component representing a menu bar.

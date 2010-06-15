@@ -14,24 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtkx;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.apache.pivot.beans;
 
 /**
- * Specifies a property to which child elements will be added or set when an
- * explicit property is not given.
+ * Thrown when an error is encountered during binding.
  */
-@Inherited
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface DefaultProperty {
-    /**
-     * The name of the default property.
-     */
-    public String value();
+public class BindException extends RuntimeException {
+    private static final long serialVersionUID = 7245531555497832713L;
+
+    public BindException() {
+        super();
+    }
+
+    public BindException(String message) {
+        super(message);
+    }
+
+    public BindException(Throwable cause) {
+        super(cause);
+    }
+
+    public BindException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

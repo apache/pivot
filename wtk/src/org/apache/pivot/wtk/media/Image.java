@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.io.IOTask;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
@@ -30,7 +31,6 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Visual;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Abstract base class for images. An image is either a bitmapped "picture"
@@ -97,7 +97,7 @@ public abstract class Image implements Visual {
                     inputStream = new MonitoredInputStream(new BufferedInputStream(location.openStream()));
 
                     if (location.getFile().endsWith("wtkd")) {
-                        WTKXSerializer serializer = new WTKXSerializer();
+                        BeanSerializer serializer = new BeanSerializer();
                         image = (Drawing)serializer.readObject(inputStream);
                     } else {
                         BufferedImageSerializer serializer = new BufferedImageSerializer();

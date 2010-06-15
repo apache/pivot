@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -25,7 +26,6 @@ import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowEditor;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class TableViewTest2 implements Application {
     private Window window = null;
@@ -34,7 +34,7 @@ public class TableViewTest2 implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "table_view_test2.wtkx");
         tableView = (TableView)wtkxSerializer.get("tableView");
 

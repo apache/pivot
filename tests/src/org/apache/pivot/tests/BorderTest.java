@@ -16,13 +16,13 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 
 public class BorderTest implements Application {
@@ -31,7 +31,7 @@ public class BorderTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("border_test.wtkx")));
         frame.setTitle("Border Test");
         frame.setPreferredSize(480, 360);

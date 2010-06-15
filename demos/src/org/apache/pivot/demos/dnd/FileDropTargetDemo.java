@@ -19,6 +19,8 @@ package org.apache.pivot.demos.dnd;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
@@ -41,21 +43,19 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class FileDropTargetDemo implements Application {
     private Window window = null;
 
-    @WTKX private TableView fileTableView;
-    @WTKX private PushButton uploadButton;
+    @BXML private TableView fileTableView;
+    @BXML private PushButton uploadButton;
 
     private FileList fileList = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "file_drop_target_demo.wtkx");
         wtkxSerializer.bind(this, FileDropTargetDemo.class);
 

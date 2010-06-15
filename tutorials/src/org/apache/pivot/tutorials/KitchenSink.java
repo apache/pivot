@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -79,7 +80,6 @@ import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 import org.apache.pivot.wtk.media.Image;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class KitchenSink implements Application, Application.AboutHandler {
     private abstract class RollupStateHandler
@@ -101,7 +101,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "buttons.wtkx");
                 } catch(IOException exception) {
@@ -128,7 +128,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "lists.wtkx");
                 } catch(IOException exception) {
@@ -180,7 +180,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "text.wtkx");
                 } catch(IOException exception) {
@@ -202,7 +202,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "calendars.wtkx");
                 } catch(IOException exception) {
@@ -224,7 +224,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "color_choosers.wtkx");
                 } catch(IOException exception) {
@@ -246,7 +246,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "navigation.wtkx");
                 } catch(IOException exception) {
@@ -268,7 +268,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "splitters.wtkx");
                 } catch(IOException exception) {
@@ -327,7 +327,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     }
                 });
 
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "menus.wtkx");
                 } catch(IOException exception) {
@@ -379,7 +379,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "meters.wtkx");
                 } catch(IOException exception) {
@@ -432,7 +432,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "spinners.wtkx");
                 } catch(IOException exception) {
@@ -500,7 +500,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "tables.wtkx");
                 } catch(IOException exception) {
@@ -603,7 +603,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "trees.wtkx");
                 } catch(IOException exception) {
@@ -659,7 +659,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "dragdrop.wtkx");
                 } catch(IOException exception) {
@@ -816,7 +816,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 try {
                     component = (Component)wtkxSerializer.readObject(this, "alerts.wtkx");
                 } catch(IOException exception) {
@@ -851,7 +851,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             options.add("Cancel");
 
                             Component body = null;
-                            WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                            BeanSerializer wtkxSerializer = new BeanSerializer();
                             try {
                                 body = (Component)wtkxSerializer.readObject(this, "alert.wtkx");
                             } catch(Exception exception) {
@@ -891,7 +891,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             options.add("Cancel");
 
                             Component body = null;
-                            WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                            BeanSerializer wtkxSerializer = new BeanSerializer();
                             try {
                                 body = (Component)wtkxSerializer.readObject(this, "alert.wtkx");
                             } catch(Exception exception) {
@@ -938,7 +938,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "kitchen_sink.wtkx");
         wtkxSerializer.bind(this, KitchenSink.class);
 

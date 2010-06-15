@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSON;
@@ -28,7 +29,6 @@ import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.media.Image;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that displays an image.

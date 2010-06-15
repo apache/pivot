@@ -17,33 +17,33 @@ limitations under the License.
 -->
 
 <Border styles="{padding:10}"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <TablePane wtkx:id="tablePane" styles="{verticalSpacing:8}">
+    <TablePane bxml:id="tablePane" styles="{verticalSpacing:8}">
         <columns>
             <TablePane.Column width="1*"/>
         </columns>
 
         <TablePane.Row height="-1">
-            <BoxPane wtkx:id="saveAsBoxPane" orientation="vertical" styles="{fill:true}">
+            <BoxPane bxml:id="saveAsBoxPane" orientation="vertical" styles="{fill:true}">
                 <BoxPane styles="{verticalAlignment:'center'}">
                     <Label text="%saveAs"/>
-                    <TextInput wtkx:id="saveAsTextInput" textSize="32"/>
+                    <TextInput bxml:id="saveAsTextInput" textSize="32"/>
                 </BoxPane>
                 <Separator styles="{padding:2}"/>
             </BoxPane>
         </TablePane.Row>
 
         <TablePane.Row height="1*">
-            <FileBrowser wtkx:id="fileBrowser"
+            <FileBrowser bxml:id="fileBrowser"
                 preferredWidth="480" preferredHeight="240"/>
         </TablePane.Row>
 
         <TablePane.Row height="-1">
             <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
-                <PushButton wtkx:id="okButton" buttonData="%ok"
+                <PushButton bxml:id="okButton" buttonData="%ok"
                     styles="@command_button.json"/>
-                <PushButton wtkx:id="cancelButton" buttonData="%cancel"
+                <PushButton bxml:id="cancelButton" buttonData="%cancel"
                     styles="@command_button.json"/>
             </BoxPane>
         </TablePane.Row>

@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Application;
@@ -30,7 +31,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Sheet;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class CardPaneTest implements Application {
     private Frame frame = null;
@@ -48,7 +48,7 @@ public class CardPaneTest implements Application {
         frame.setPreferredSize(800, 600);
         frame.setLocation(20, 20);
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         sheet = (Sheet)wtkxSerializer.readObject(this, "card_pane_test.wtkx");
         cardPane = (CardPane)wtkxSerializer.get("cardPane");
         sizeGroup = (ButtonGroup)wtkxSerializer.get("sizeGroup");

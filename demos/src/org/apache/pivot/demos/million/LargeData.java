@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
@@ -39,7 +40,6 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowComparator;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class LargeData implements Application {
     private class LoadDataCallback implements Runnable {
@@ -167,7 +167,7 @@ public class LargeData implements Application {
             throw new IllegalArgumentException(BASE_PATH_KEY + " is required.");
         }
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "large_data.wtkx");
         fileListButton = (ListButton)wtkxSerializer.get("fileListButton");
         loadDataButton = (PushButton)wtkxSerializer.get("loadDataButton");

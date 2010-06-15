@@ -18,6 +18,7 @@ package org.apache.pivot.tutorials.windows;
 
 import java.io.IOException;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Application;
@@ -25,7 +26,6 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Windows implements Application {
     private Display display = null;
@@ -38,7 +38,7 @@ public class Windows implements Application {
         int y = 0;
 
         for (int i = 0; i < 3; i++) {
-            WTKXSerializer wtkxSerializer = new WTKXSerializer();
+            BeanSerializer wtkxSerializer = new BeanSerializer();
             wtkxSerializer.put("application", this);
 
             Frame frame;
@@ -79,7 +79,7 @@ public class Windows implements Application {
 
     public Window load(String fileName)
         throws SerializationException, IOException {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         return (Window)wtkxSerializer.readObject(this, fileName);
     }
 

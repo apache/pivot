@@ -21,6 +21,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Map;
@@ -42,8 +44,6 @@ import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.OverlayDecorator;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 import org.apache.pivot.xml.Element;
 import org.apache.pivot.xml.Node;
 import org.apache.pivot.xml.TextNode;
@@ -56,11 +56,11 @@ import org.apache.pivot.xml.XMLSerializer;
 public class XMLViewer implements Application {
     private Window window = null;
 
-    @WTKX private TreeView treeView = null;
-    @WTKX private CardPane propertiesCardPane = null;
-    @WTKX private TableView namespacesTableView = null;
-    @WTKX private TableView attributesTableView = null;
-    @WTKX private TextArea textArea = null;
+    @BXML private TreeView treeView = null;
+    @BXML private CardPane propertiesCardPane = null;
+    @BXML private TableView namespacesTableView = null;
+    @BXML private TableView attributesTableView = null;
+    @BXML private TextArea textArea = null;
 
     private OverlayDecorator promptDecorator = new OverlayDecorator();
 
@@ -70,7 +70,7 @@ public class XMLViewer implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         wtkxSerializer.put(APPLICATION_KEY, this);
 
         window = (Window)wtkxSerializer.readObject(this, "xml_viewer.wtkx");

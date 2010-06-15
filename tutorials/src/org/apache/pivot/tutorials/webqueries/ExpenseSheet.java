@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.webqueries;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
@@ -27,19 +29,17 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtkx.Bindable;
-import org.apache.pivot.wtkx.WTKX;
 
 /**
  * Sheet that allows a user to add or edit an expense record.
  */
 public class ExpenseSheet extends Sheet implements Bindable {
-    @WTKX private Spinner dateSpinner = null;
-    @WTKX private ListButton typeListButton = null;
-    @WTKX private TextInput amountTextInput = null;
+    @BXML private Spinner dateSpinner = null;
+    @BXML private ListButton typeListButton = null;
+    @BXML private TextInput amountTextInput = null;
 
-    @WTKX private PushButton cancelButton = null;
-    @WTKX private PushButton okButton = null;
+    @BXML private PushButton cancelButton = null;
+    @BXML private PushButton okButton = null;
 
     private Resources resources = null;
 

@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
@@ -27,20 +29,18 @@ import org.apache.pivot.wtk.SuggestionPopupCloseListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class SuggestionPopupTest implements Application {
     private Window window = null;
 
-    @WTKX private TextInput textInput = null;
-    @WTKX private Label selectedIndexLabel = null;
+    @BXML private TextInput textInput = null;
+    @BXML private Label selectedIndexLabel = null;
 
     private SuggestionPopup suggestionPopup = new SuggestionPopup();
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "suggestion_popup_test.wtkx");
         wtkxSerializer.bind(this);
 

@@ -19,10 +19,10 @@ package org.apache.pivot.wtk;
 import java.net.URL;
 import java.io.File;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.ThreadUtilities;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Script application loader.
@@ -46,7 +46,7 @@ public class ScriptApplication implements Application {
             resources = new Resources(properties.get(RESOURCES_KEY));
         }
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
 
         ClassLoader classLoader = ThreadUtilities.getClassLoader();
         URL location = classLoader.getResource(src);

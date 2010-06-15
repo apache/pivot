@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
@@ -24,19 +26,17 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ContextMenuTest implements Application {
     private Window window = null;
 
-    @WTKX private Menu.Section globalSection;
-    @WTKX private Menu.Section helpSection;
-    @WTKX private Menu.Section hoursSection;
+    @BXML private Menu.Section globalSection;
+    @BXML private Menu.Section helpSection;
+    @BXML private Menu.Section hoursSection;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "context_menu_test.wtkx");
         wtkxSerializer.bind(this, ContextMenuTest.class);
 

@@ -16,14 +16,14 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSONSerializer;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class WTKXDictionaryTest {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         HashMap<String, Object> hashMap =
             (HashMap<String, Object>)wtkxSerializer.readObject(WTKXDictionaryTest.class.getResource("wtkx_dictionary_test.wtkx"));
         System.out.println(JSONSerializer.toString(hashMap));

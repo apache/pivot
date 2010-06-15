@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.webqueries;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.concurrent.Task;
@@ -28,7 +29,6 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Web query tutorial application.
@@ -41,7 +41,7 @@ public class WebQueries implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "web_queries.wtkx");
 
         listView = (ListView)wtkxSerializer.get("listView");

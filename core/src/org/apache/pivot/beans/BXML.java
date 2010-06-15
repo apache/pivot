@@ -14,27 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtkx;
+package org.apache.pivot.beans;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Thrown when an error is encountered during binding.
+ * Annotation that causes a loaded BXML element to be bound to the annotated
+ * field.
  */
-public class BindException extends RuntimeException {
-    private static final long serialVersionUID = 7245531555497832713L;
-
-    public BindException() {
-        super();
-    }
-
-    public BindException(String message) {
-        super(message);
-    }
-
-    public BindException(Throwable cause) {
-        super(cause);
-    }
-
-    public BindException(String message, Throwable cause) {
-        super(message, cause);
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface BXML {
+    /**
+     * The ID of the BXML variable that references the element to bind. It
+     * should be a valid <tt>bxml:id</tt> from the loaded BXML resource. If
+     * unspecified, the name of the annotated field will be used.
+     */
+    public String id() default "\0";
 }

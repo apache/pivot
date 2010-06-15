@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <stocktracker:StockTrackerWindow title="%stockTracker" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:stocktracker="org.apache.pivot.tutorials.stocktracker"
     xmlns="org.apache.pivot.wtk">
@@ -38,7 +38,7 @@ limitations under the License.
                         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                             verticalScrollBarPolicy="fill_to_capacity">
                             <StackPane>
-                                <TableView wtkx:id="stocksTableView" selectMode="multi"
+                                <TableView bxml:id="stocksTableView" selectMode="multi"
                                     styles="{showHorizontalGridLines:false}">
                                     <columns>
                                         <TableView.Column name="symbol"
@@ -68,7 +68,7 @@ limitations under the License.
 
                 <right>
                     <Border styles="{padding:6, color:10}">
-                        <wtkx:include wtkx:id="detailPane" src="detail_pane.wtkx"/>
+                        <bxml:include bxml:id="detailPane" src="detail_pane.bxml"/>
                     </Border>
                 </right>
             </SplitPane>
@@ -77,13 +77,13 @@ limitations under the License.
         <TablePane.Row height="-1">
             <BoxPane styles="{horizontalAlignment:'left', verticalAlignment:'center'}">
                 <Label text="%symbol" styles="{font:{bold:true}}" />
-                <TextInput wtkx:id="symbolTextInput" textSize="10"
+                <TextInput bxml:id="symbolTextInput" textSize="10"
                     maximumLength="8" />
-                <LinkButton wtkx:id="addSymbolButton" enabled="false"
+                <LinkButton bxml:id="addSymbolButton" enabled="false"
                     tooltipText="%addSymbol">
                     <content:ButtonData icon="@add.png" />
                 </LinkButton>
-                <LinkButton wtkx:id="removeSymbolsButton" enabled="false"
+                <LinkButton bxml:id="removeSymbolsButton" enabled="false"
                     tooltipText="%removeSymbol">
                     <content:ButtonData icon="@delete.png" />
                 </LinkButton>
@@ -100,11 +100,11 @@ limitations under the License.
                 <TablePane.Row>
                     <BoxPane>
                         <Label text="%lastUpdate"/>
-                        <Label wtkx:id="lastUpdateLabel"/>
+                        <Label bxml:id="lastUpdateLabel"/>
                     </BoxPane>
                     <BoxPane styles="{horizontalAlignment:'right'}">
                         <Label text="%dataProvidedBy" />
-                        <LinkButton wtkx:id="yahooFinanceButton"
+                        <LinkButton bxml:id="yahooFinanceButton"
                             buttonData="%yahooFinance" />
                     </BoxPane>
                 </TablePane.Row>

@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
@@ -27,7 +28,6 @@ import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.media.Image;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that provides access to a set of components via selectable headers.

@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Iterator;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
@@ -25,7 +26,6 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Resources;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Class representing an "alert", a dialog commonly used to facilitate simple

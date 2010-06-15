@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
@@ -24,7 +25,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Panorama;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class PanoramaTest implements Application {
     private Frame frame1 = null;
@@ -45,7 +45,7 @@ public class PanoramaTest implements Application {
         panorama.setView(imageView);
         frame1.open(display);
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         frame2 = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("panorama_test.wtkx")));
         frame2.setTitle("Panorama Test 2");
         frame2.setPreferredSize(480, 360);

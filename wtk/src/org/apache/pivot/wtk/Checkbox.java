@@ -16,8 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component representing a checkbox.

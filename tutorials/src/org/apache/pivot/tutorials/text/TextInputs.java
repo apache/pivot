@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.text;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
@@ -24,7 +25,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class TextInputs implements Application {
     private Window window = null;
@@ -128,7 +128,7 @@ public class TextInputs implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "text_inputs.wtkx");
         stateTextInput = (TextInput)wtkxSerializer.get("stateTextInput");
 

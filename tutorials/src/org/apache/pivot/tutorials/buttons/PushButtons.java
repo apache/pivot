@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.buttons;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
@@ -26,7 +27,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class PushButtons implements Application {
     private Window window = null;
@@ -34,7 +34,7 @@ public class PushButtons implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "push_buttons.wtkx");
         pushButton = (PushButton)wtkxSerializer.get("pushButton");
 

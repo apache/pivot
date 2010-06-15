@@ -18,6 +18,7 @@ package org.apache.pivot.tutorials.layout;
 
 import java.io.IOException;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.SerializationException;
@@ -36,7 +37,6 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class TablePanes implements Application {
     private class ContextMenuHandler extends MenuHandler.Adapter {
@@ -94,7 +94,7 @@ public class TablePanes implements Application {
         namedActions.put("configureCell", new Action() {
             @Override
             public void perform() {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 Sheet sheet;
 
                 // Make the cell component available to script blocks
@@ -118,7 +118,7 @@ public class TablePanes implements Application {
         namedActions.put("configureRow", new Action() {
             @Override
             public void perform() {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 Sheet sheet;
 
                 // Make the selected row available to script blocks
@@ -141,7 +141,7 @@ public class TablePanes implements Application {
         namedActions.put("insertRow", new Action() {
             @Override
             public void perform() {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 Sheet sheet;
 
                 // Create and insert a new row
@@ -198,7 +198,7 @@ public class TablePanes implements Application {
         namedActions.put("configureColumn", new Action() {
             @Override
             public void perform() {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 Sheet sheet;
 
                 // Make the selected column available to script blocks
@@ -221,7 +221,7 @@ public class TablePanes implements Application {
         namedActions.put("insertColumn", new Action() {
             @Override
             public void perform() {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 Sheet sheet;
 
                 // Create and insert a new column
@@ -285,7 +285,7 @@ public class TablePanes implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "table_panes.wtkx");
 
         tablePane = (TablePane)wtkxSerializer.get("tablePane");

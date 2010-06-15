@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Comparator;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
@@ -29,7 +30,6 @@ import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Class that displays a hierarchical data structure, allowing a user to select

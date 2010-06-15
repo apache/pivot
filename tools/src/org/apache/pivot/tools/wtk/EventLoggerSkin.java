@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -38,7 +39,6 @@ import org.apache.pivot.wtk.TreeViewNodeStateListener;
 import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.skin.ContainerSkin;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLoggerListener {
     private static class TreeNodeComparator implements Comparator<TreeNode> {
@@ -86,7 +86,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
             throw new RuntimeException(exception);
         }
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
         try {
             content = (Component)wtkxSerializer.readObject(this, "event_logger_skin.wtkx");
         } catch (IOException exception) {

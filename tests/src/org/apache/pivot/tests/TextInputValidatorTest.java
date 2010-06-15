@@ -13,6 +13,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
@@ -26,7 +27,6 @@ import org.apache.pivot.wtk.validation.FloatRangeValidator;
 import org.apache.pivot.wtk.validation.IntRangeValidator;
 import org.apache.pivot.wtk.validation.RegexTextValidator;
 import org.apache.pivot.wtk.validation.Validator;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Text input validator test.
@@ -41,7 +41,7 @@ public class TextInputValidatorTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = new Window((Component)wtkxSerializer.readObject(
             getClass().getResource("textInputValidator_test.wtkx")));
         textinputFloatRange = (TextInput)wtkxSerializer.get("textinputFloatRange");

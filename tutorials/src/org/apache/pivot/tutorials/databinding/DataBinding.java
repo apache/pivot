@@ -19,6 +19,7 @@ package org.apache.pivot.tutorials.databinding;
 import java.io.InputStream;
 
 import org.apache.pivot.beans.BeanAdapter;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.wtk.Application;
@@ -30,7 +31,6 @@ import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class DataBinding implements Application {
     private Window window = null;
@@ -48,7 +48,7 @@ public class DataBinding implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "data_binding.wtkx");
         form = (Form)wtkxSerializer.get("form");
         loadJavaButton = (PushButton)wtkxSerializer.get("loadJavaButton");

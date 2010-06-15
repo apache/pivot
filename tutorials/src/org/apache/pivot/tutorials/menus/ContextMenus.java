@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.menus;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Application;
@@ -26,7 +27,6 @@ import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ContextMenus implements Application {
     private Window window = null;
@@ -57,7 +57,7 @@ public class ContextMenus implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "context_menus.wtkx");
         window.setMenuHandler(menuHandler);
 

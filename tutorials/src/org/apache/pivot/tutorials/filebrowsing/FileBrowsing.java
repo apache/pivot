@@ -18,6 +18,8 @@ package org.apache.pivot.tutorials.filebrowsing;
 
 import java.io.File;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
@@ -35,19 +37,17 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class FileBrowsing implements Application {
     private Window window = null;
 
-    @WTKX private ButtonGroup fileBrowserSheetModeGroup = null;
-    @WTKX private PushButton openSheetButton = null;
+    @BXML private ButtonGroup fileBrowserSheetModeGroup = null;
+    @BXML private PushButton openSheetButton = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
 
         window = (Window)wtkxSerializer.readObject(getClass().getResource("file_browsing.wtkx"));
         wtkxSerializer.bind(this, FileBrowsing.class);

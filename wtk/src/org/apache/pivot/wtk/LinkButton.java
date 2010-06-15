@@ -16,8 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.wtk.content.LinkButtonDataRenderer;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Button component that resembles an HTML hyperlink.

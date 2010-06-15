@@ -18,6 +18,8 @@ package org.apache.pivot.demos.dnd;
 
 import java.io.IOException;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.wtk.Application;
@@ -40,26 +42,24 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Image;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class DragAndDropDemo implements Application {
     private Window window = null;
 
-    @WTKX private Label label;
-    @WTKX private PushButton copyTextButton;
-    @WTKX private PushButton pasteTextButton;
-    @WTKX private ImageView imageView;
-    @WTKX private PushButton copyImageButton;
-    @WTKX private PushButton pasteImageButton;
-    @WTKX private ListView listView;
-    @WTKX private PushButton copyFilesButton;
-    @WTKX private PushButton pasteFilesButton;
+    @BXML private Label label;
+    @BXML private PushButton copyTextButton;
+    @BXML private PushButton pasteTextButton;
+    @BXML private ImageView imageView;
+    @BXML private PushButton copyImageButton;
+    @BXML private PushButton pasteImageButton;
+    @BXML private ListView listView;
+    @BXML private PushButton copyFilesButton;
+    @BXML private PushButton pasteFilesButton;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "drag_and_drop.wtkx");
         wtkxSerializer.bind(this, DragAndDropDemo.class);
 

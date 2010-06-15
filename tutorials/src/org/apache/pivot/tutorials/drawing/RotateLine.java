@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.drawing;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
@@ -25,7 +26,6 @@ import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Drawing;
 import org.apache.pivot.wtk.media.drawing.Shape;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class RotateLine implements Application {
     private Drawing drawing = null;
@@ -36,7 +36,7 @@ public class RotateLine implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception{
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         drawing = (Drawing)wtkxSerializer.readObject(this, "rotate_line.wtkd");
         rotation = (Shape.Rotate)wtkxSerializer.get("rotation");
 

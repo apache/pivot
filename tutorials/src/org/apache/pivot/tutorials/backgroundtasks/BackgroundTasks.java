@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.backgroundtasks;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
@@ -29,7 +30,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class BackgroundTasks implements Application {
     private Window window = null;
@@ -40,7 +40,7 @@ public class BackgroundTasks implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "background_tasks.wtkx");
 
         activityIndicator = (ActivityIndicator)wtkxSerializer.get("activityIndicator");

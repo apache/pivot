@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtkx;
+package org.apache.pivot.beans;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -47,7 +47,6 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
@@ -63,7 +62,7 @@ import org.apache.pivot.util.Vote;
 /**
  * Loads an object hierarchy from an XML document.
  */
-public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Object> {
+public class BeanSerializer implements Serializer<Object>, Dictionary<String, Object> {
     private class NamedObjectBindings implements Bindings {
         @Override
         public Object get(Object key) {
@@ -279,7 +278,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     private Resources resources;
     private HashMap<String, Object> namedObjects;
-    private HashMap<String, WTKXSerializer> namedSerializers;
+    private HashMap<String, BeanSerializer> namedSerializers;
 
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;
@@ -298,7 +297,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     public static final String LANGUAGE_PROCESSING_INSTRUCTION = "language";
 
-    public static final String WTKX_PREFIX = "wtkx";
+    public static final String BXML_PREFIX = "bxml";
     public static final String ID_ATTRIBUTE = "id";
 
     public static final String INCLUDE_TAG = "include";
@@ -314,23 +313,23 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     public static final String DEFAULT_LANGUAGE = "javascript";
 
-    public static final String MIME_TYPE = "application/wtkx";
+    public static final String MIME_TYPE = "application/bxml";
 
-    public WTKXSerializer() {
+    public BeanSerializer() {
         this(null, null);
     }
 
-    public WTKXSerializer(Resources resources) {
+    public BeanSerializer(Resources resources) {
         this(resources, null);
     }
 
-    protected WTKXSerializer(Resources resources, WTKXSerializer owner) {
+    protected BeanSerializer(Resources resources, BeanSerializer owner) {
         this.resources = resources;
 
         if (owner == null) {
             inline = false;
             namedObjects = new HashMap<String, Object>();
-            namedSerializers = new HashMap<String, WTKXSerializer>();
+            namedSerializers = new HashMap<String, BeanSerializer>();
         } else {
             inline = true;
             namedObjects = owner.namedObjects;
@@ -558,16 +557,16 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             String attributeValue = xmlStreamReader.getAttributeValue(i);
 
             if (attributePrefix != null
-                && attributePrefix.equals(WTKX_PREFIX)) {
+                && attributePrefix.equals(BXML_PREFIX)) {
                 if (attributeLocalName.equals(ID_ATTRIBUTE)) {
                     if (attributeValue.length() == 0) {
-                        throw new IllegalArgumentException(WTKX_PREFIX + ":" + ID_ATTRIBUTE
+                        throw new IllegalArgumentException(BXML_PREFIX + ":" + ID_ATTRIBUTE
                             + " must not be empty.");
                     }
 
                     id = attributeValue;
                 } else {
-                    throw new SerializationException(WTKX_PREFIX + ":" + attributeLocalName
+                    throw new SerializationException(BXML_PREFIX + ":" + attributeLocalName
                         + " is not a valid attribute.");
                 }
             } else {
@@ -586,8 +585,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         Object value = null;
 
         if (prefix != null
-            && prefix.equals(WTKX_PREFIX)) {
-            // The element represents a WTKX operation
+            && prefix.equals(BXML_PREFIX)) {
+            // The element represents a BXML operation
             if (element == null) {
                 throw new SerializationException(prefix + ":" + localName
                     + " is not a valid root element.");
@@ -599,7 +598,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 elementType = Element.Type.SCRIPT;
             } else if (localName.equals(DEFINE_TAG)) {
                 if (attributes.getLength() > 0) {
-                    throw new SerializationException(WTKX_PREFIX + ":" + DEFINE_TAG
+                    throw new SerializationException(BXML_PREFIX + ":" + DEFINE_TAG
                         + " cannot have attributes.");
                 }
 
@@ -694,8 +693,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
      * @param resources
      * @param owner
      */
-    protected WTKXSerializer createSerializer(Resources resources, WTKXSerializer owner) {
-        return new WTKXSerializer(resources, owner);
+    protected BeanSerializer createSerializer(Resources resources, BeanSerializer owner) {
+        return new BeanSerializer(resources, owner);
     }
 
     /**
@@ -737,7 +736,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         } else {
                             if (!Character.isUpperCase(attribute.localName.charAt(0))) {
                                 throw new SerializationException("Instance property setters are not"
-                                    + " supported for " + WTKX_PREFIX + ":" + INCLUDE_TAG
+                                    + " supported for " + BXML_PREFIX + ":" + INCLUDE_TAG
                                     + " " + " tag.");
                             }
 
@@ -747,12 +746,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                     if (src == null) {
                         throw new SerializationException(INCLUDE_SRC_ATTRIBUTE
-                            + " attribute is required for " + WTKX_PREFIX + ":" + INCLUDE_TAG
+                            + " attribute is required for " + BXML_PREFIX + ":" + INCLUDE_TAG
                             + " tag.");
                     }
 
                     // Read the object
-                    WTKXSerializer serializer = createSerializer(resources, inline ? this : null);
+                    BeanSerializer serializer = createSerializer(resources, inline ? this : null);
 
                     if (element.id != null) {
                         if (namedSerializers.containsKey(element.id)) {
@@ -1005,7 +1004,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         language = attribute.value;
                     } else {
                         throw new SerializationException(attribute.localName + " is not a valid"
-                            + " attribute for the " + WTKX_PREFIX + ":" + SCRIPT_TAG + " tag.");
+                            + " attribute for the " + BXML_PREFIX + ":" + SCRIPT_TAG + " tag.");
                     }
                 }
 
@@ -1181,7 +1180,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         } else {
             String serializerName = name.substring(0, name.lastIndexOf('.'));
             String id = name.substring(serializerName.length() + 1);
-            WTKXSerializer serializer = getSerializer(serializerName);
+            BeanSerializer serializer = getSerializer(serializerName);
 
             if (serializer != null) {
                 value = serializer.get(id);
@@ -1216,7 +1215,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         } else {
             String serializerName = name.substring(0, name.lastIndexOf('.'));
             String id = name.substring(serializerName.length() + 1);
-            WTKXSerializer serializer = getSerializer(serializerName);
+            BeanSerializer serializer = getSerializer(serializerName);
             previousValue = serializer.put(id, value);
         }
 
@@ -1239,7 +1238,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         } else {
             String serializerName = name.substring(0, name.lastIndexOf('.'));
             String id = name.substring(serializerName.length() + 1);
-            WTKXSerializer serializer = getSerializer(serializerName);
+            BeanSerializer serializer = getSerializer(serializerName);
             previousValue = serializer.remove(id);
         }
 
@@ -1260,7 +1259,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         } else {
             String serializerName = name.substring(0, name.lastIndexOf('.'));
             String id = name.substring(serializerName.length() + 1);
-            WTKXSerializer serializer = getSerializer(serializerName);
+            BeanSerializer serializer = getSerializer(serializerName);
 
             if (serializer != null) {
                 containsKey = serializer.containsKey(id);
@@ -1298,12 +1297,12 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
      * @return The named serializer, or <tt>null</tt> if a serializer with the
      * given name does not exist.
      */
-    public WTKXSerializer getSerializer(String name) {
+    public BeanSerializer getSerializer(String name) {
         if (name == null) {
             throw new IllegalArgumentException("name is null.");
         }
 
-        WTKXSerializer serializer = this;
+        BeanSerializer serializer = this;
         String[] path = name.split("\\.");
 
         int i = 0;
@@ -1317,11 +1316,11 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     /**
-     * Returns the location of the WTKX most recently processed by this
+     * Returns the location of the BXML most recently processed by this
      * serializer.
      *
      * @return
-     * The location of the WTKX, or <tt>null</tt> if this serializer has not
+     * The location of the BXML, or <tt>null</tt> if this serializer has not
      * yet read an object from a URL.
      */
     public URL getLocation() {
@@ -1329,7 +1328,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     /**
-     * Applies WTKX binding annotations to an object.
+     * Applies BXML binding annotations to an object.
      *
      * @param object
      *
@@ -1344,7 +1343,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     /**
-     * Applies WTKX binding annotations to an object.
+     * Applies BXML binding annotations to an object.
      * <p>
      * NOTE This method uses reflection to set internal member variables. As
      * a result, it may only be called from trusted code.
@@ -1372,8 +1371,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
             String fieldName = field.getName();
             int fieldModifiers = field.getModifiers();
 
-            WTKX wtkxAnnotation = field.getAnnotation(WTKX.class);
-            if (wtkxAnnotation != null) {
+            BXML bxmlAnnotation = field.getAnnotation(BXML.class);
+            if (bxmlAnnotation != null) {
                 // Ensure that we can write to the field
                 if ((fieldModifiers & Modifier.FINAL) > 0) {
                     throw new BindException(fieldName + " is final.");
@@ -1387,7 +1386,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                     }
                 }
 
-                String id = wtkxAnnotation.id();
+                String id = bxmlAnnotation.id();
                 if (id.equals("\0")) {
                     id = field.getName();
                 }

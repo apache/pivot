@@ -25,6 +25,8 @@ import java.text.DateFormat;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.FilteredList;
@@ -70,8 +72,6 @@ import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Terra file browser skin.
@@ -543,15 +543,15 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     private Component content = null;
 
-    @WTKX private ListButton driveListButton = null;
-    @WTKX private ListButton pathListButton = null;
-    @WTKX private PushButton goUpButton = null;
-    @WTKX private PushButton newFolderButton = null;
-    @WTKX private PushButton goHomeButton = null;
-    @WTKX private TextInput searchTextInput = null;
+    @BXML private ListButton driveListButton = null;
+    @BXML private ListButton pathListButton = null;
+    @BXML private PushButton goUpButton = null;
+    @BXML private PushButton newFolderButton = null;
+    @BXML private PushButton goHomeButton = null;
+    @BXML private TextInput searchTextInput = null;
 
-    @WTKX private ScrollPane fileScrollPane = null;
-    @WTKX private TableView fileTableView = null;
+    @BXML private ScrollPane fileScrollPane = null;
+    @BXML private TableView fileTableView = null;
 
     private FilteredList<File> files = new FilteredList<File>(new IncludeFileFilter());
 
@@ -582,9 +582,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             throw new RuntimeException(exception);
         }
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
         try {
-            content = (Component)wtkxSerializer.readObject(this, "terra_file_browser_skin.wtkx");
+            content = (Component)wtkxSerializer.readObject(this, "terra_file_browser_skin.bxml");
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {

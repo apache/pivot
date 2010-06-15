@@ -21,6 +21,8 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.Locale;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.concurrent.Task;
@@ -39,20 +41,18 @@ import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Image;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class SearchDemo implements Application {
     private Window window = null;
 
-    @WTKX private TextInput termTextInput;
-    @WTKX private PushButton searchButton;
-    @WTKX private Label statusLabel;
-    @WTKX private TableView resultsTableView;
-    @WTKX private BoxPane activityIndicatorBoxPane;
-    @WTKX private ActivityIndicator activityIndicator;
-    @WTKX private ImageView artworkImageView;
-    @WTKX private PushButton previewButton;
+    @BXML private TextInput termTextInput;
+    @BXML private PushButton searchButton;
+    @BXML private Label statusLabel;
+    @BXML private TableView resultsTableView;
+    @BXML private BoxPane activityIndicatorBoxPane;
+    @BXML private ActivityIndicator activityIndicator;
+    @BXML private ImageView artworkImageView;
+    @BXML private PushButton previewButton;
 
     private GetQuery getQuery = null;
 
@@ -72,7 +72,7 @@ public class SearchDemo implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         wtkxSerializer.put(APPLICATION_KEY, this);
 
         window = (Window)wtkxSerializer.readObject(this, "search_demo.wtkx");

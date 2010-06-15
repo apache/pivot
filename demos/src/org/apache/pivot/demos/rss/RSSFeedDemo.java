@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
@@ -37,7 +38,6 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 import org.apache.pivot.xml.Element;
 import org.apache.pivot.xml.XML;
 import org.apache.pivot.xml.XMLSerializer;
@@ -51,7 +51,7 @@ public class RSSFeedDemo implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "rss_feed_demo.wtkx");
         feedListView = (ListView)wtkxSerializer.get("feedListView");
         cardPane = (CardPane)wtkxSerializer.get("cardPane");

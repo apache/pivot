@@ -16,12 +16,12 @@
  */
 package org.apache.pivot.tutorials.webqueries;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Query servlet tutorial client application.
@@ -63,7 +63,7 @@ public class Expenses implements Application {
             secure = Boolean.parseBoolean(properties.get(SECURE_KEY));
         }
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(new Resources(ExpensesWindow.class.getName()));
+        BeanSerializer wtkxSerializer = new BeanSerializer(new Resources(ExpensesWindow.class.getName()));
         expensesWindow = (ExpensesWindow)wtkxSerializer.readObject(this, "expenses_window.wtkx");
         expensesWindow.open(display);
     }

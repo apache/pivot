@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.layout;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
@@ -29,7 +30,6 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class BoxPanes implements Application {
     private Window window = null;
@@ -46,7 +46,7 @@ public class BoxPanes implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "box_panes.wtkx");
         boxPane = (BoxPane)wtkxSerializer.get("boxPane");
         horizontalOrientationButton = (RadioButton)wtkxSerializer.get("horizontalOrientationButton");

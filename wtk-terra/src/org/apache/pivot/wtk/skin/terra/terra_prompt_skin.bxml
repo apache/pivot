@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <TablePane styles="{verticalSpacing:8}"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <columns>
         <TablePane.Column width="1*"/>
@@ -34,12 +34,12 @@ limitations under the License.
 
                 <TablePane.Row height="-1">
                     <BoxPane styles="{verticalAlignment:'top'}">
-                        <ImageView wtkx:id="typeImageView"/>
+                        <ImageView bxml:id="typeImageView"/>
                     </BoxPane>
 
-                    <BoxPane wtkx:id="messageBoxPane" orientation="vertical"
+                    <BoxPane bxml:id="messageBoxPane" orientation="vertical"
                         styles="{spacing:10, fill:true}">
-                        <Label wtkx:id="messageLabel" styles="{font:{bold:true}, wrapText:true}"/>
+                        <Label bxml:id="messageLabel" styles="{font:{bold:true}, wrapText:true}"/>
                     </BoxPane>
                 </TablePane.Row>
             </TablePane>
@@ -47,7 +47,7 @@ limitations under the License.
     </TablePane.Row>
 
     <TablePane.Row height="-1">
-        <BoxPane wtkx:id="optionButtonBoxPane"
+        <BoxPane bxml:id="optionButtonBoxPane"
             styles="{horizontalAlignment:'right', fill:true}"/>
     </TablePane.Row>
 </TablePane>

@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.BoxPane;
@@ -24,7 +25,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ColorListButtonTest implements Application {
     private Frame frame = null;
@@ -33,7 +33,7 @@ public class ColorListButtonTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         BoxPane boxPane = (BoxPane) wtkxSerializer.readObject(this, "color_list_button_test.wtkx");
         listButton = (ListButton)wtkxSerializer.get("listButton");
         // test the getListPopup() method

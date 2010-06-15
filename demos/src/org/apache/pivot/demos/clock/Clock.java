@@ -19,11 +19,11 @@ package org.apache.pivot.demos.clock;
 import java.awt.Graphics2D;
 import java.util.Calendar;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.ImageListener;
 import org.apache.pivot.wtk.media.Movie;
 import org.apache.pivot.wtk.media.drawing.Shape;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 
 /**
@@ -31,11 +31,11 @@ import org.apache.pivot.wtkx.WTKXSerializer;
  */
 public class Clock extends Movie {
     private Calendar calendar = Calendar.getInstance();
-    private WTKXSerializer wtkxSerializer;
+    private BeanSerializer wtkxSerializer;
     private Image image = null;
 
     public Clock() {
-        wtkxSerializer = new WTKXSerializer();
+        wtkxSerializer = new BeanSerializer();
         try {
             image = (Image)wtkxSerializer.readObject(getClass().getResource("clock.wtkd"));
         } catch (Exception ex) {

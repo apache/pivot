@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
@@ -28,7 +29,6 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Drawing;
 import org.apache.pivot.wtk.media.drawing.Canvas;
 import org.apache.pivot.wtk.media.drawing.Shape;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class DrawingTest implements Application {
     private Window window = null;
@@ -48,7 +48,7 @@ public class DrawingTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "drawing_test.wtkx");
         imageView = (ImageView)wtkxSerializer.get("imageView");
 

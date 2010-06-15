@@ -19,6 +19,8 @@ package org.apache.pivot.wtk.skin.terra;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.SerializationException;
@@ -41,8 +43,6 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Terra file browser sheet skin.
@@ -63,11 +63,11 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         }
     }
 
-    @WTKX private BoxPane saveAsBoxPane = null;
-    @WTKX private TextInput saveAsTextInput = null;
-    @WTKX private FileBrowser fileBrowser = null;
-    @WTKX private PushButton okButton = null;
-    @WTKX private PushButton cancelButton = null;
+    @BXML private BoxPane saveAsBoxPane = null;
+    @BXML private TextInput saveAsTextInput = null;
+    @BXML private FileBrowser fileBrowser = null;
+    @BXML private PushButton okButton = null;
+    @BXML private PushButton cancelButton = null;
 
     private boolean updatingSelection = false;
     private int selectedDirectoryCount = 0;
@@ -94,11 +94,11 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             throw new RuntimeException(exception);
         }
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
 
         Component content;
         try {
-            content = (Component)wtkxSerializer.readObject(this, "terra_file_browser_sheet_skin.wtkx");
+            content = (Component)wtkxSerializer.readObject(this, "terra_file_browser_sheet_skin.bxml");
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {

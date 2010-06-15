@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.io.IOException;
 import java.net.URL;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSON;
@@ -29,7 +30,6 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.ListView.ListDataBindMapping;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that allows a user to select one of several list options. The

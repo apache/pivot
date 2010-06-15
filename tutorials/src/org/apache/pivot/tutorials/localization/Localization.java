@@ -20,6 +20,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.util.Locale;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
@@ -27,7 +28,6 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Localization implements Application {
     private Window window = null;
@@ -56,7 +56,7 @@ public class Localization implements Application {
             }
         }
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
 
         window = (Window)wtkxSerializer.readObject(this, "localization.wtkx");
         window.open(display);

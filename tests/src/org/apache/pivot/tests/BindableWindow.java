@@ -16,14 +16,14 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.Bindable;
-import org.apache.pivot.wtkx.WTKX;
 
 public class BindableWindow extends Window implements Bindable {
-    @WTKX private Label label = null;
+    @BXML private Label label = null;
 
     @Override
     public void initialize(Resources resources) {

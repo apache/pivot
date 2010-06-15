@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
@@ -29,18 +31,16 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class CalendarTest implements Application {
     private Window window = null;
 
-    @WTKX private Calendar calendar = null;
-    @WTKX private CalendarButton calendarButton = null;
+    @BXML private Calendar calendar = null;
+    @BXML private CalendarButton calendarButton = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
 
         window = (Window)wtkxSerializer.readObject(this, "calendar_test.wtkx");
         wtkxSerializer.bind(this, CalendarTest.class);

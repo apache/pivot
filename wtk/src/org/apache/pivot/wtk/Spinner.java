@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Comparator;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
@@ -27,7 +28,6 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Component that presents a means of cycling through a list of items.

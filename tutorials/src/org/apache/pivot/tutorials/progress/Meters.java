@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.progress;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
@@ -30,7 +31,6 @@ import org.apache.pivot.wtk.Meter;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Meters implements Application {
     public class SampleTask extends Task<Void> {
@@ -72,7 +72,7 @@ public class Meters implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "meters.wtkx");
         meter = (Meter)wtkxSerializer.get("meter");
         progressButton = (PushButton)wtkxSerializer.get("progressButton");

@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.layout;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
@@ -30,7 +31,6 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class SimpleTablePanes implements Application {
     private Window window = null;
@@ -38,7 +38,7 @@ public class SimpleTablePanes implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "simple_table_panes.wtkx");
         tablePane = (TablePane)wtkxSerializer.get("tablePane");
 

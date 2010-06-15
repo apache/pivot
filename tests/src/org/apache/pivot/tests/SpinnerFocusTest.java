@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Alert;
@@ -25,7 +26,6 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Spinner;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class SpinnerFocusTest implements Application {
     private Frame frame = null;
@@ -47,7 +47,7 @@ public class SpinnerFocusTest implements Application {
 
         Action.getNamedActions().put("buttonAction", action);
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("spinner_focus_test.wtkx")));
         frame.setTitle("Spinner Focus Test");
         frame.open(display);

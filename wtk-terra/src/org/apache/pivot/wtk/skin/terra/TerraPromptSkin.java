@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
@@ -36,7 +37,6 @@ import org.apache.pivot.wtk.PromptListener;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Prompt skin.
@@ -91,11 +91,11 @@ public class TerraPromptSkin extends TerraSheetSkin
         prompt.getPromptListeners().add(this);
 
         // Load the prompt content
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
 
         Component content;
         try {
-            content = (Component)wtkxSerializer.readObject(this, "terra_prompt_skin.wtkx");
+            content = (Component)wtkxSerializer.readObject(this, "terra_prompt_skin.bxml");
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }

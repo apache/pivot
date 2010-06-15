@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.demos.decorator;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Border;
@@ -26,7 +27,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.FadeDecorator;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class DecoratorDemo implements Application {
     private Window mainWindow = null;
@@ -42,7 +42,7 @@ public class DecoratorDemo implements Application {
         mainWindow.setMaximized(true);
         mainWindow.open(display);
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         reflectionWindow = (Window)wtkxSerializer.readObject(this, "reflection.wtkx");
         translucentFrame = (Frame)wtkxSerializer.readObject(this, "translucent.wtkx");
 

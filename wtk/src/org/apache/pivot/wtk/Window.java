@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.net.URL;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
@@ -26,7 +27,6 @@ import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.media.Image;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Top-level container representing the entry point into a user interface.

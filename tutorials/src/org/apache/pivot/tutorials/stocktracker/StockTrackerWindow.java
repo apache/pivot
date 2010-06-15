@@ -26,7 +26,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BeanAdapter;
+import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
@@ -57,20 +59,18 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowComparator;
-import org.apache.pivot.wtkx.Bindable;
-import org.apache.pivot.wtkx.WTKX;
 
 /**
  * Main Stock Tracker window.
  */
 public class StockTrackerWindow extends Window implements Bindable {
-    @WTKX private TableView stocksTableView = null;
-    @WTKX private TextInput symbolTextInput = null;
-    @WTKX private Button addSymbolButton = null;
-    @WTKX private Button removeSymbolsButton = null;
-    @WTKX private BoxPane detailPane = null;
-    @WTKX private Label lastUpdateLabel = null;
-    @WTKX private Button yahooFinanceButton = null;
+    @BXML private TableView stocksTableView = null;
+    @BXML private TextInput symbolTextInput = null;
+    @BXML private Button addSymbolButton = null;
+    @BXML private Button removeSymbolsButton = null;
+    @BXML private BoxPane detailPane = null;
+    @BXML private Label lastUpdateLabel = null;
+    @BXML private Button yahooFinanceButton = null;
 
     private ArrayList<String> symbols;
     private GetQuery getQuery = null;

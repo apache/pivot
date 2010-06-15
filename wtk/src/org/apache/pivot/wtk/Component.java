@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.Iterator;
 
 import org.apache.pivot.beans.BeanAdapter;
+import org.apache.pivot.beans.IDProperty;
 import org.apache.pivot.beans.PropertyNotFoundException;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -38,7 +39,6 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.wtk.effects.Decorator;
-import org.apache.pivot.wtkx.IDProperty;
 
 /**
  * Top level abstract base class for all components. In MVC terminology, a

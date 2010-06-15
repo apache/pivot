@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
@@ -51,7 +52,6 @@ import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.PlainTextSerializer;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ComponentExplorer implements Application {
     private Window window = null;
@@ -83,7 +83,7 @@ public class ComponentExplorer implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         Resources resources = new Resources(getClass().getName());
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
         window = (Window)wtkxSerializer.readObject(this, "component_explorer.wtkx");
 
         splitPane = wtkxSerializer.getValue("splitPane");
@@ -138,7 +138,7 @@ public class ComponentExplorer implements Application {
 
                     sourceTextArea.setDocument(document);
 
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                    BeanSerializer wtkxSerializer = new BeanSerializer();
                     try {
                         component = (Component)wtkxSerializer.readObject(url);
                     } catch (IOException exception) {

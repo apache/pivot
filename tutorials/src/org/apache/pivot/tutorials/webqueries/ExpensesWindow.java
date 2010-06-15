@@ -19,6 +19,9 @@ package org.apache.pivot.tutorials.webqueries;
 import java.io.IOException;
 import java.net.URL;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -45,9 +48,6 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.Bindable;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Main expense management window.
@@ -94,9 +94,9 @@ public class ExpensesWindow extends Window implements Bindable {
     private EditSelectedExpenseAction editSelectedExpenseAction = new EditSelectedExpenseAction();
     private DeleteSelectedExpenseAction deleteSelectedExpenseAction = new DeleteSelectedExpenseAction();
 
-    @WTKX private TableView expenseTableView = null;
-    @WTKX private ActivityIndicator activityIndicator = null;
-    @WTKX private BoxPane activityIndicatorBoxPane = null;
+    @BXML private TableView expenseTableView = null;
+    @BXML private ActivityIndicator activityIndicator = null;
+    @BXML private BoxPane activityIndicatorBoxPane = null;
 
     private ExpenseSheet expenseSheet = null;
     private Prompt deleteConfirmationPrompt = null;
@@ -119,7 +119,7 @@ public class ExpensesWindow extends Window implements Bindable {
     public void initialize(Resources resources) {
         // Load the add/edit sheet
         try {
-            WTKXSerializer wtkxSerializer = new WTKXSerializer(new Resources(ExpenseSheet.class.getName()));
+            BeanSerializer wtkxSerializer = new BeanSerializer(new Resources(ExpenseSheet.class.getName()));
             expenseSheet = (ExpenseSheet)wtkxSerializer.readObject(this, "expense_sheet.wtkx");
         } catch (IOException exception) {
             throw new RuntimeException(exception);

@@ -18,6 +18,7 @@ package org.apache.pivot.tutorials.menus;
 
 import java.io.IOException;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Action;
@@ -35,7 +36,6 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputSelectionListener;
 import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class MenuBars implements Application {
     private Window window = null;
@@ -94,7 +94,7 @@ public class MenuBars implements Application {
         Action.getNamedActions().put("fileNew", new Action() {
             @Override
             public void perform() {
-                WTKXSerializer wtkxSerializer = new WTKXSerializer();
+                BeanSerializer wtkxSerializer = new BeanSerializer();
                 Component tab;
                 try {
                     tab = new Border((Component)wtkxSerializer.readObject(this, "document.wtkx"));
@@ -154,7 +154,7 @@ public class MenuBars implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "menu_bars.wtkx");
 
         tabPane = (TabPane)wtkxSerializer.get("tabPane");

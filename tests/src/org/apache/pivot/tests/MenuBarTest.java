@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.BoxPane;
@@ -27,16 +29,14 @@ import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class MenuBarTest implements Application {
     private Frame frame1 = null;
     private Frame frame2 = null;
 
-    @WTKX private TextInput textInput1 = null;
-    @WTKX private TextInput textInput2 = null;
-    @WTKX private TextInput textInput3 = null;
+    @BXML private TextInput textInput1 = null;
+    @BXML private TextInput textInput2 = null;
+    @BXML private TextInput textInput3 = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
@@ -49,7 +49,7 @@ public class MenuBarTest implements Application {
         frame1.setPreferredSize(320, 240);
         frame1.open(display);
 
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         frame2 = (Frame)wtkxSerializer.readObject(this, "menu_bar_test.wtkx");
         wtkxSerializer.bind(this, MenuBarTest.class);
 

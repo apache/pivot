@@ -14,18 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtkx;
+package org.apache.pivot.beans;
 
-import org.apache.pivot.util.Resources;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Allows WTKX serializer to automatically bind to an instance of a
- * deserialized class.
+ * Specifies a property to which child elements will be added or set when an
+ * explicit property is not given.
  */
-public interface Bindable {
+@Inherited
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface DefaultProperty {
     /**
-     * Called to initialize the class after it has been completely
-     * processed and bound by the serializer.
+     * The name of the default property.
      */
-    public void initialize(Resources resources);
+    public String value();
 }

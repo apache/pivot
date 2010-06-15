@@ -16,9 +16,9 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.media.Movie;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 
 /**

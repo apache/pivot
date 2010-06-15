@@ -14,24 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtkx;
+package org.apache.pivot.beans;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.pivot.util.Resources;
 
 /**
- * Annotation that causes a loaded WTKX element to be bound to the annotated
- * field.
+ * Allows {@link BeanSerializer} to automatically bind to an instance of a
+ * deserialized class.
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface WTKX {
+public interface Bindable {
     /**
-     * The ID of the WTKX variable that references the element to bind. It
-     * should be a valid <tt>wtkx:id</tt> from the loaded WTKX resource. If
-     * unspecified, the name of the annotated field will be used.
+     * Called to initialize the class after it has been completely
+     * processed and bound by the serializer.
      */
-    public String id() default "\0";
+    public void initialize(Resources resources);
 }

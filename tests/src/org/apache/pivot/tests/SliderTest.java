@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
@@ -25,7 +26,6 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.SliderValueListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class SliderTest implements Application {
     private Window window = null;
@@ -37,7 +37,7 @@ public class SliderTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("slider_test.wtkx")));
         slider1 = (Slider)wtkxSerializer.get("slider1");
         slider1.getSliderValueListeners().add(new SliderValueListener() {

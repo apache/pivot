@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.demos.lists;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
@@ -26,7 +27,6 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class MultiSelect implements Application {
     private Window window = null;
@@ -36,7 +36,7 @@ public class MultiSelect implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "multi_select.wtkx");
 
         dataListView = (ListView)wtkxSerializer.get("dataListView");

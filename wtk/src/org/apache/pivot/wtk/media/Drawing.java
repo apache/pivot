@@ -20,13 +20,13 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RenderingHints;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.media.drawing.Canvas;
 import org.apache.pivot.wtk.media.drawing.CanvasListener;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 
 /**

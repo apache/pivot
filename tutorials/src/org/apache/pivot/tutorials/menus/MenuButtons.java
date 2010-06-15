@@ -19,6 +19,7 @@ package org.apache.pivot.tutorials.menus;
 import java.awt.Color;
 import java.awt.Paint;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Application;
@@ -35,7 +36,6 @@ import org.apache.pivot.wtk.media.drawing.Ellipse;
 import org.apache.pivot.wtk.media.drawing.Rectangle;
 import org.apache.pivot.wtk.media.drawing.Shape;
 import org.apache.pivot.wtk.media.drawing.Text;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class MenuButtons implements Application {
     private Window window = null;
@@ -93,7 +93,7 @@ public class MenuButtons implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "menu_buttons.wtkx");
         colorListButton = (ListButton)wtkxSerializer.get("colorListButton");
         imageView = (ImageView)wtkxSerializer.get("imageView");

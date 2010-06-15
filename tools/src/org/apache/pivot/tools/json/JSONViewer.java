@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Comparator;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence.Tree.Path;
@@ -42,8 +44,6 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.effects.OverlayDecorator;
-import org.apache.pivot.wtkx.WTKX;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 /**
  * Utility application that allows the user to browse a JSON structure
@@ -52,7 +52,7 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class JSONViewer implements Application {
     private Window window = null;
 
-    @WTKX private TreeView treeView = null;
+    @BXML private TreeView treeView = null;
 
     private OverlayDecorator promptDecorator = new OverlayDecorator();
 
@@ -62,7 +62,7 @@ public class JSONViewer implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         wtkxSerializer.put(APPLICATION_KEY, this);
 
         window = (Window)wtkxSerializer.readObject(this, "json_viewer.wtkx");

@@ -16,10 +16,10 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.wtkx.DefaultProperty;
 
 /**
  * Container that can be expanded or collapsed to respectively show or hide its

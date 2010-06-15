@@ -16,13 +16,13 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class ResolveTest implements Application {
     private Window window = null;
@@ -30,7 +30,7 @@ public class ResolveTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         Resources resources = new Resources(getClass().getName());
-        WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
+        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
         window = (Window)wtkxSerializer.readObject(this, "resolve_test.wtkx");
         window.open(display);
     }

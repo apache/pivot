@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.navigation;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Vote;
@@ -31,7 +32,6 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class Accordions implements Application {
     private Window window = null;
@@ -82,7 +82,7 @@ public class Accordions implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "accordions.wtkx");
         accordion = (Accordion)wtkxSerializer.get("accordion");
 

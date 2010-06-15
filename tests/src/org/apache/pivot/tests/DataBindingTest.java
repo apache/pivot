@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
@@ -31,7 +32,6 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
-import org.apache.pivot.wtkx.WTKXSerializer;
 
 public class DataBindingTest implements Application {
     public static class TestListButtonDataRenderer extends ListButtonDataRenderer {
@@ -115,7 +115,7 @@ public class DataBindingTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        WTKXSerializer wtkxSerializer = new WTKXSerializer();
+        BeanSerializer wtkxSerializer = new BeanSerializer();
         window = (Window)wtkxSerializer.readObject(this, "data_binding_test.wtkx");
         window.open(display);
 
