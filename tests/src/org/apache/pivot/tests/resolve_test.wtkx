@@ -23,16 +23,14 @@ limitations under the License.
     var foo = "ABC";
     </wtkx:script>
 
-    <content>
-        <BoxPane orientation="vertical">
-            <BoxPane styles="{verticalAlignment:'center'}">
-                <Label text="%labelText"/>
-                <PushButton buttonData="%buttonData"/>
-            </BoxPane>
-            <BoxPane styles="{verticalAlignment:'center'}">
-                <Label text="$foo"/>
-                <PushButton buttonData="$bar"/>
-            </BoxPane>
+    <BoxPane orientation="vertical">
+        <BoxPane styles="{verticalAlignment:'center'}">
+            <Label text="%labelText"/>
+            <PushButton buttonData="%buttonData"/>
         </BoxPane>
-    </content>
+        <BoxPane styles="{verticalAlignment:'center'}">
+            <Label text="$foo"/>
+            <PushButton buttonData="$bar"/>
+        </BoxPane>
+    </BoxPane>
 </Window>

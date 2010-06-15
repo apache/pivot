@@ -18,11 +18,7 @@ limitations under the License.
 
 <Window xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <ScrollPane>
-            <view>
-                <ImageView styles="{backgroundColor:'#999999'}" image="@sample_drawing.wtkd"/>
-            </view>
-        </ScrollPane>
-    </content>
+    <ScrollPane>
+        <ImageView styles="{backgroundColor:'#999999'}" image="@sample_drawing.wtkd"/>
+    </ScrollPane>
 </Window>

@@ -22,44 +22,37 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <left>
         <Border>
-            <content>
-                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                    <view>
-                        <TreeView wtkx:id="declaredEventsTreeView"
-                            checkmarksEnabled="true"
-                            showMixedCheckmarkState="true"
-                            selectMode="none">
-                            <nodeRenderer>
-                                <content:TreeViewNodeRenderer showIcon="false"/>
-                            </nodeRenderer>
-                        </TreeView>
-                    </view>
-                </ScrollPane>
-            </content>
+            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                <TreeView wtkx:id="declaredEventsTreeView"
+                    checkmarksEnabled="true"
+                    showMixedCheckmarkState="true"
+                    selectMode="none">
+                    <nodeRenderer>
+                        <content:TreeViewNodeRenderer showIcon="false"/>
+                    </nodeRenderer>
+                </TreeView>
+            </ScrollPane>
         </Border>
     </left>
     <right>
         <Border>
-            <content>
-                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                    <view>
-                        <TableView wtkx:id="firedEventsTableView" selectMode="none">
-                            <columns>
-                                <TableView.Column name="interface" width="175"
-                                    headerData="%interface"/>
-                                <TableView.Column name="method" width="200"
-                                    headerData="%method"/>
-                                <TableView.Column name="arguments" width="1*"
-                                    headerData="%arguments" minimumWidth="200"/>
-                            </columns>
-                        </TableView>
-                    </view>
-                    <columnHeader>
-                        <TableViewHeader tableView="$firedEventsTableView"
-                            sortMode="none" styles="{headersPressable:false}"/>
-                    </columnHeader>
-                </ScrollPane>
-            </content>
+            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                <TableView wtkx:id="firedEventsTableView" selectMode="none">
+                    <columns>
+                        <TableView.Column name="interface" width="175"
+                            headerData="%interface"/>
+                        <TableView.Column name="method" width="200"
+                            headerData="%method"/>
+                        <TableView.Column name="arguments" width="1*"
+                            headerData="%arguments" minimumWidth="200"/>
+                    </columns>
+                </TableView>
+
+                <columnHeader>
+                    <TableViewHeader tableView="$firedEventsTableView"
+                        sortMode="none" styles="{headersPressable:false}"/>
+                </columnHeader>
+            </ScrollPane>
         </Border>
     </right>
 </SplitPane>

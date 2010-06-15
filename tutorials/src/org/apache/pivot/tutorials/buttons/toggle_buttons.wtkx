@@ -20,25 +20,17 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane styles="{padding:4, horizontalAlignment:'center',
-            verticalAlignment:'center'}">
-            <PushButton toggleButton="true">
-                <buttonData>
-                    <content:ButtonData text="Anchor" icon="org/apache/pivot/tutorials/anchor.png"/>
-                </buttonData>
-            </PushButton>
-            <PushButton toggleButton="true">
-                <buttonData>
-                    <content:ButtonData text="Cup" icon="org/apache/pivot/tutorials/cup.png"/>
-                </buttonData>
-            </PushButton>
-            <PushButton toggleButton="true">
-                <buttonData>
-                    <content:ButtonData text="Star" icon="org/apache/pivot/tutorials/star.png"/>
-                </buttonData>
-            </PushButton>
-        </BoxPane>
-    </content>
+    <BoxPane styles="{padding:4, horizontalAlignment:'center',
+        verticalAlignment:'center'}">
+        <PushButton toggleButton="true">
+            <content:ButtonData text="Anchor" icon="org/apache/pivot/tutorials/anchor.png"/>
+        </PushButton>
+        <PushButton toggleButton="true">
+            <content:ButtonData text="Cup" icon="org/apache/pivot/tutorials/cup.png"/>
+        </PushButton>
+        <PushButton toggleButton="true">
+            <content:ButtonData text="Star" icon="org/apache/pivot/tutorials/star.png"/>
+        </PushButton>
+    </BoxPane>
 </Window>
 

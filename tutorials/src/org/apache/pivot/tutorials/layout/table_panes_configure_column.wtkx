@@ -67,63 +67,61 @@ limitations under the License.
 
             <TablePane.Row height="1*">
                 <Border styles="{padding:10}">
-                    <content>
-                        <Form wtkx:id="form">
-                            <Form.Section>
-                                <TablePane Form.label="Column Width"
-                                    styles="{horizontalSpacing:8, verticalSpacing:4}">
-                                    <columns>
-                                        <TablePane.Column width="-1"/>
-                                        <TablePane.Column width="1*"/>
-                                    </columns>
+                    <Form wtkx:id="form">
+                        <Form.Section>
+                            <TablePane Form.label="Column Width"
+                                styles="{horizontalSpacing:8, verticalSpacing:4}">
+                                <columns>
+                                    <TablePane.Column width="-1"/>
+                                    <TablePane.Column width="1*"/>
+                                </columns>
 
-                                    <TablePane.Row height="1*">
-                                        <RadioButton wtkx:id="defaultWidthButton"
-                                            buttonData="Default" buttonGroup="$columnWidthGroup"/>
-                                    </TablePane.Row>
+                                <TablePane.Row height="1*">
+                                    <RadioButton wtkx:id="defaultWidthButton"
+                                        buttonData="Default" buttonGroup="$columnWidthGroup"/>
+                                </TablePane.Row>
 
-                                    <TablePane.Row height="1*">
-                                        <RadioButton wtkx:id="relativeWidthButton"
-                                            buttonData="Relative" buttonGroup="$columnWidthGroup"/>
+                                <TablePane.Row height="1*">
+                                    <RadioButton wtkx:id="relativeWidthButton"
+                                        buttonData="Relative" buttonGroup="$columnWidthGroup"/>
 
-                                        <Spinner wtkx:id="relativeWidthSpinner"
-                                            styles="{sizeToContent:true}">
-                                            <content:NumericSpinnerData lowerBound="1" upperBound="256"/>
+                                    <Spinner wtkx:id="relativeWidthSpinner"
+                                        styles="{sizeToContent:true}">
+                                        <content:NumericSpinnerData lowerBound="1" upperBound="256"/>
 
-                                            <spinnerSelectionListeners>
-                                                <wtkx:script>
-                                                <![CDATA[
-                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                    setColumnWidth();
-                                                }
-                                                ]]>
-                                                </wtkx:script>
-                                            </spinnerSelectionListeners>
-                                        </Spinner>
-                                    </TablePane.Row>
+                                        <spinnerSelectionListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                setColumnWidth();
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </spinnerSelectionListeners>
+                                    </Spinner>
+                                </TablePane.Row>
 
-                                    <TablePane.Row height="1*">
-                                        <RadioButton wtkx:id="absoluteWidthButton"
-                                            buttonData="Absolute" buttonGroup="$columnWidthGroup"/>
-                                        <Spinner wtkx:id="absoluteWidthSpinner"
-                                            styles="{sizeToContent:true}">
-                                            <content:NumericSpinnerData lowerBound="50" upperBound="300"/>
+                                <TablePane.Row height="1*">
+                                    <RadioButton wtkx:id="absoluteWidthButton"
+                                        buttonData="Absolute" buttonGroup="$columnWidthGroup"/>
+                                    <Spinner wtkx:id="absoluteWidthSpinner"
+                                        styles="{sizeToContent:true}">
+                                        <content:NumericSpinnerData lowerBound="50" upperBound="300"/>
 
-                                            <spinnerSelectionListeners>
-                                                <wtkx:script>
-                                                <![CDATA[
-                                                function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                                    setColumnWidth();
-                                                }
-                                                ]]>
-                                                </wtkx:script>
-                                            </spinnerSelectionListeners>
-                                        </Spinner>
-                                    </TablePane.Row>
-                                </TablePane>
-                            </Form.Section>
-                        </Form>
-                    </content>
+                                        <spinnerSelectionListeners>
+                                            <wtkx:script>
+                                            <![CDATA[
+                                            function selectedIndexChanged(spinner, previousSelectedIndex) {
+                                                setColumnWidth();
+                                            }
+                                            ]]>
+                                            </wtkx:script>
+                                        </spinnerSelectionListeners>
+                                    </Spinner>
+                                </TablePane.Row>
+                            </TablePane>
+                        </Form.Section>
+                    </Form>
                 </Border>
             </TablePane.Row>
 

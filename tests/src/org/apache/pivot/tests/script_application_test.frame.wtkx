@@ -19,9 +19,7 @@ limitations under the License.
 <Frame title="Script Application Test Frame" preferredWidth="320" preferredHeight="240"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <Label text="Sample Frame"
-            styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-    </content>
+    <Label text="Sample Frame"
+        styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
 </Frame>
 

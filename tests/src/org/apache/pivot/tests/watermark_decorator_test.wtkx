@@ -21,39 +21,36 @@ limitations under the License.
     maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane styles="{verticalSpacing:1, showHorizontalGridLines:true}">
-            <columns>
-                <TablePane.Column width="1*" />
-            </columns>
-            <rows>
-                <TablePane.Row height="-1">
-                    <BoxPane styles="{padding:10}">
-                        <PushButton buttonData="Toggle Watermark" toggleButton="true">
-                            <buttonStateListeners>
-                                <wtkx:script>
-                                <![CDATA[
-                                importPackage(org.apache.pivot.wtk.effects);
+    <TablePane styles="{verticalSpacing:1, showHorizontalGridLines:true}">
+        <columns>
+            <TablePane.Column width="1*" />
+        </columns>
 
-                                function stateChanged(button, previousState) {
-                                    if (button.isSelected()) {
-                                        cardPane.getDecorators().add(new WatermarkDecorator("Only below the line"));
-                                    } else {
-                                        cardPane.getDecorators().removeAll();
-                                    }
-                                }
-                                ]]>
-                                </wtkx:script>
-                            </buttonStateListeners>
-                        </PushButton>
-                    </BoxPane>
-                </TablePane.Row>
-                <TablePane.Row height="1*">
-                    <CardPane wtkx:id="cardPane" selectedIndex="0">
-                        <BoxPane />
-                    </CardPane>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+        <TablePane.Row height="-1">
+            <BoxPane styles="{padding:10}">
+                <PushButton buttonData="Toggle Watermark" toggleButton="true">
+                    <buttonStateListeners>
+                        <wtkx:script>
+                        <![CDATA[
+                        importPackage(org.apache.pivot.wtk.effects);
+
+                        function stateChanged(button, previousState) {
+                            if (button.isSelected()) {
+                                cardPane.getDecorators().add(new WatermarkDecorator("Only below the line"));
+                            } else {
+                                cardPane.getDecorators().removeAll();
+                            }
+                        }
+                        ]]>
+                        </wtkx:script>
+                    </buttonStateListeners>
+                </PushButton>
+            </BoxPane>
+        </TablePane.Row>
+        <TablePane.Row height="1*">
+            <CardPane wtkx:id="cardPane" selectedIndex="0">
+                <BoxPane />
+            </CardPane>
+        </TablePane.Row>
+    </TablePane>
 </Window>

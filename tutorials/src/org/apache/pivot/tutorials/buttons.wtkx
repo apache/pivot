@@ -87,78 +87,74 @@ limitations under the License.
     </Border>
 
     <Border styles="{padding:2}">
-        <content>
-            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
-                <BoxPane orientation="vertical">
-                    <Label text="Basic Radio Buttons" styles="{font:{bold:true}}"/>
-                    <BoxPane>
-                        <wtkx:define>
-                            <ButtonGroup wtkx:id="radioButtons"/>
-                        </wtkx:define>
-                        <RadioButton buttonData="One" buttonGroup="$radioButtons"/>
-                        <RadioButton buttonData="Two" buttonGroup="$radioButtons"/>
-                        <RadioButton buttonData="Three" buttonGroup="$radioButtons" selected="true" enabled="false"/>
-                    </BoxPane>
-                </BoxPane>
-
-                <BoxPane orientation="vertical">
-                    <Label text="Image Radio Buttons" styles="{font:{bold:true}}"/>
-                    <BoxPane orientation="vertical">
-                        <wtkx:define>
-                            <ButtonGroup wtkx:id="imageRadioButtons"/>
-                        </wtkx:define>
-                        <RadioButton buttonGroup="$imageRadioButtons">
-                            <content:ButtonData icon="@bell.png" text="Bell"/>
-                        </RadioButton>
-                        <RadioButton buttonGroup="$imageRadioButtons">
-                            <content:ButtonData icon="@clock.png" text="Clock"/>
-                        </RadioButton>
-                        <RadioButton buttonGroup="$imageRadioButtons" selected="true" enabled="false">
-                            <content:ButtonData icon="@house.png" text="House"/>
-                        </RadioButton>
-                    </BoxPane>
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+            <BoxPane orientation="vertical">
+                <Label text="Basic Radio Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane>
+                    <wtkx:define>
+                        <ButtonGroup wtkx:id="radioButtons"/>
+                    </wtkx:define>
+                    <RadioButton buttonData="One" buttonGroup="$radioButtons"/>
+                    <RadioButton buttonData="Two" buttonGroup="$radioButtons"/>
+                    <RadioButton buttonData="Three" buttonGroup="$radioButtons" selected="true" enabled="false"/>
                 </BoxPane>
             </BoxPane>
-        </content>
+
+            <BoxPane orientation="vertical">
+                <Label text="Image Radio Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane orientation="vertical">
+                    <wtkx:define>
+                        <ButtonGroup wtkx:id="imageRadioButtons"/>
+                    </wtkx:define>
+                    <RadioButton buttonGroup="$imageRadioButtons">
+                        <content:ButtonData icon="@bell.png" text="Bell"/>
+                    </RadioButton>
+                    <RadioButton buttonGroup="$imageRadioButtons">
+                        <content:ButtonData icon="@clock.png" text="Clock"/>
+                    </RadioButton>
+                    <RadioButton buttonGroup="$imageRadioButtons" selected="true" enabled="false">
+                        <content:ButtonData icon="@house.png" text="House"/>
+                    </RadioButton>
+                </BoxPane>
+            </BoxPane>
+        </BoxPane>
     </Border>
 
     <Border styles="{padding:2}">
-        <content>
-            <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
-                <BoxPane orientation="vertical">
-                    <Label text="Basic Checkboxes" styles="{font:{bold:true}}"/>
-                    <BoxPane>
-                        <Checkbox buttonData="One"/>
-                        <Checkbox buttonData="Two"/>
-                        <Checkbox buttonData="Three" selected="true" enabled="false"/>
-                    </BoxPane>
-                </BoxPane>
-
-                <BoxPane orientation="vertical">
-                    <Label text="Image Checkboxes" styles="{font:{bold:true}}"/>
-                    <BoxPane orientation="vertical">
-                        <Checkbox>
-                            <content:ButtonData icon="@clock.png" text="Clock"/>
-                        </Checkbox>
-                        <Checkbox>
-                            <content:ButtonData icon="@bell.png" text="Bell"/>
-                        </Checkbox>
-                        <Checkbox selected="true" enabled="false">
-                            <content:ButtonData icon="@house.png" text="House"/>
-                        </Checkbox>
-                    </BoxPane>
-                </BoxPane>
-
-                <BoxPane orientation="vertical">
-                    <Label text="Tri-state Checkboxes" styles="{font:{bold:true}}"/>
-                    <BoxPane orientation="vertical">
-                        <Checkbox buttonData="Read" triState="true" state="selected"/>
-                        <Checkbox buttonData="Write" triState="true" state="unselected"/>
-                        <Checkbox buttonData="Execute" triState="true" state="mixed" enabled="false"/>
-                    </BoxPane>
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+            <BoxPane orientation="vertical">
+                <Label text="Basic Checkboxes" styles="{font:{bold:true}}"/>
+                <BoxPane>
+                    <Checkbox buttonData="One"/>
+                    <Checkbox buttonData="Two"/>
+                    <Checkbox buttonData="Three" selected="true" enabled="false"/>
                 </BoxPane>
             </BoxPane>
-        </content>
+
+            <BoxPane orientation="vertical">
+                <Label text="Image Checkboxes" styles="{font:{bold:true}}"/>
+                <BoxPane orientation="vertical">
+                    <Checkbox>
+                        <content:ButtonData icon="@clock.png" text="Clock"/>
+                    </Checkbox>
+                    <Checkbox>
+                        <content:ButtonData icon="@bell.png" text="Bell"/>
+                    </Checkbox>
+                    <Checkbox selected="true" enabled="false">
+                        <content:ButtonData icon="@house.png" text="House"/>
+                    </Checkbox>
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane orientation="vertical">
+                <Label text="Tri-state Checkboxes" styles="{font:{bold:true}}"/>
+                <BoxPane orientation="vertical">
+                    <Checkbox buttonData="Read" triState="true" state="selected"/>
+                    <Checkbox buttonData="Write" triState="true" state="unselected"/>
+                    <Checkbox buttonData="Execute" triState="true" state="mixed" enabled="false"/>
+                </BoxPane>
+            </BoxPane>
+        </BoxPane>
     </Border>
 
     <Border styles="{padding:2}">

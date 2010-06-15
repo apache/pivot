@@ -19,25 +19,22 @@ limitations under the License.
 <Window title="TablePane Test" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <TablePane styles="{padding:6, verticalSpacing:8}">
-            <columns>
-                <TablePane.Column width="-1"/>
-            </columns>
-            <rows>
-                <TablePane.Row height="-1">
-                    <PushButton buttonData="One"/>
-                </TablePane.Row>
-                <TablePane.Row height="-1">
-                    <TablePane.Filler preferredHeight="60"/>
-                </TablePane.Row>
-                <TablePane.Row height="-1">
-                    <PushButton buttonData="Three" visible="false"/>
-                </TablePane.Row>
-                <TablePane.Row height="-1">
-                    <PushButton buttonData="Four"/>
-                </TablePane.Row>
-            </rows>
-        </TablePane>
-    </content>
+    <TablePane styles="{padding:6, verticalSpacing:8}">
+        <columns>
+            <TablePane.Column width="-1"/>
+        </columns>
+
+        <TablePane.Row height="-1">
+            <PushButton buttonData="One"/>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+            <TablePane.Filler preferredHeight="60"/>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+            <PushButton buttonData="Three" visible="false"/>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+            <PushButton buttonData="Four"/>
+        </TablePane.Row>
+    </TablePane>
 </Window>

@@ -25,27 +25,25 @@ limitations under the License.
         <Label wtkx:id="label1" text="Hello"/>
     </wtkx:define>
 
-    <content>
-        <BoxPane orientation="vertical">
-            <Label wtkx:id="fooLabel"/>
-            <Label wtkx:id="barLabel"/>
-            <PushButton buttonData="Click Me">
-                <buttonPressListeners>
-                    <wtkx:script>
-                    <![CDATA[
-                    function buttonPressed(button) {
-                        testFrame.open(window);
-                        java.lang.System.out.println(label1.getText());
-                        java.lang.System.out.println(label2.getText());
-                    }
-                    ]]>
-                    </wtkx:script>
-                    <wtkx:define>
-                        <Label wtkx:id="label2" text="World"/>
-                    </wtkx:define>
-                </buttonPressListeners>
-            </PushButton>
-        </BoxPane>
-    </content>
+    <BoxPane orientation="vertical">
+        <Label wtkx:id="fooLabel"/>
+        <Label wtkx:id="barLabel"/>
+        <PushButton buttonData="Click Me">
+            <buttonPressListeners>
+                <wtkx:script>
+                <![CDATA[
+                function buttonPressed(button) {
+                    testFrame.open(window);
+                    java.lang.System.out.println(label1.getText());
+                    java.lang.System.out.println(label2.getText());
+                }
+                ]]>
+                </wtkx:script>
+                <wtkx:define>
+                    <Label wtkx:id="label2" text="World"/>
+                </wtkx:define>
+            </buttonPressListeners>
+        </PushButton>
+    </BoxPane>
 </Window>
 

@@ -16,50 +16,47 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<BoxPane xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns="org.apache.pivot.wtk" orientation="vertical" styles="{fill:true}">
+<BoxPane orientation="vertical" styles="{fill:true}"
+    xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns="org.apache.pivot.wtk" >
     <Label text="Test 1"/>
-            <SplitPane orientation="vertical" splitRatio="0.5" preferredWidth="480" preferredHeight="360">
-                <top>
-                    <SplitPane orientation="horizontal" splitRatio="0.5" resizeMode="primary_region">
-                        <left>
-                            <ImageView asynchronous="true"
-                                image="@IMG_0735_2.jpg"
-                                styles="{backgroundColor:'#404040'}"/>
-                        </left>
-                        <right>
-                            <ImageView asynchronous="true"
-                                image="@IMG_0735_2.jpg"
-                                styles="{backgroundColor:'#404040'}"/>
-                        </right>
-                    </SplitPane>
-                </top>
-                <bottom>
-                    <ImageView asynchronous="true"
-                        image="@IMG_0735_2.jpg"
+    <SplitPane orientation="vertical" splitRatio="0.5" preferredWidth="480"
+        preferredHeight="360">
+        <top>
+            <SplitPane orientation="horizontal" splitRatio="0.5" resizeMode="primary_region">
+                <left>
+                    <ImageView asynchronous="true" image="@IMG_0735_2.jpg"
                         styles="{backgroundColor:'#404040'}"/>
-                </bottom>
+                </left>
+                <right>
+                    <ImageView asynchronous="true" image="@IMG_0735_2.jpg"
+                        styles="{backgroundColor:'#404040'}"/>
+                </right>
             </SplitPane>
+        </top>
+        <bottom>
+            <ImageView asynchronous="true" image="@IMG_0735_2.jpg"
+                styles="{backgroundColor:'#404040'}"/>
+        </bottom>
+    </SplitPane>
     <Label text="Test 2"/>
-            <SplitPane orientation="horizontal" splitRatio="0.5" preferredWidth="480" preferredHeight="360">
-                <top>
-                    <SplitPane orientation="vertical" splitRatio="0.5" resizeMode="primary_region">
-                        <left>
-                            <ImageView asynchronous="true"
-                                image="@IMG_0735_2.jpg"
-                                styles="{backgroundColor:'#404040'}"/>
-                        </left>
-                        <right>
-                            <ImageView asynchronous="true"
-                                image="@IMG_0735_2.jpg"
-                                styles="{backgroundColor:'#404040'}"/>
-                        </right>
-                    </SplitPane>
-                </top>
-                <bottom>
-                    <ImageView asynchronous="true"
-                        image="@IMG_0735_2.jpg"
+    <SplitPane orientation="horizontal" splitRatio="0.5" preferredWidth="480"
+        preferredHeight="360">
+        <top>
+            <SplitPane orientation="vertical" splitRatio="0.5" resizeMode="primary_region">
+                <left>
+                    <ImageView asynchronous="true" image="@IMG_0735_2.jpg"
                         styles="{backgroundColor:'#404040'}"/>
-                </bottom>
+                </left>
+                <right>
+                    <ImageView asynchronous="true" image="@IMG_0735_2.jpg"
+                        styles="{backgroundColor:'#404040'}"/>
+                </right>
             </SplitPane>
+        </top>
+        <bottom>
+            <ImageView asynchronous="true" image="@IMG_0735_2.jpg"
+                styles="{backgroundColor:'#404040'}"/>
+        </bottom>
+    </SplitPane>
 </BoxPane>

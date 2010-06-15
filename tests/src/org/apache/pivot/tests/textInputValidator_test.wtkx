@@ -21,23 +21,22 @@ limitations under the License.
         <TablePane.Column width="-1"/>
         <TablePane.Column width="-1"/>
     </columns>
-    <rows>
-        <TablePane.Row height="-1">
-            <Label text="float range 0.3-2000"/>
-            <TextInput wtkx:id="textinputFloatRange"/>
-            <Label wtkx:id="invalidLabel"/>
-        </TablePane.Row>
-        <TablePane.Row height="-1">
-            <Label text="int range 0-100"/>
-            <TextInput wtkx:id="textinputIntRange"/>
-        </TablePane.Row>
-        <TablePane.Row height="-1">
-            <Label text="date regex"/>
-            <TextInput wtkx:id="textinputDateRegex"/>
-        </TablePane.Row>
-        <TablePane.Row height="-1">
-            <Label text="custom boolean"/>
-            <TextInput wtkx:id="textinputCustomBoolean"/>
-        </TablePane.Row>
-    </rows>
+
+    <TablePane.Row height="-1">
+        <Label text="float range 0.3-2000"/>
+        <TextInput wtkx:id="textinputFloatRange"/>
+        <Label wtkx:id="invalidLabel"/>
+    </TablePane.Row>
+    <TablePane.Row height="-1">
+        <Label text="int range 0-100"/>
+        <TextInput wtkx:id="textinputIntRange"/>
+    </TablePane.Row>
+    <TablePane.Row height="-1">
+        <Label text="date regex"/>
+        <TextInput wtkx:id="textinputDateRegex"/>
+    </TablePane.Row>
+    <TablePane.Row height="-1">
+        <Label text="custom boolean"/>
+        <TextInput wtkx:id="textinputCustomBoolean"/>
+    </TablePane.Row>
 </TablePane>

@@ -35,44 +35,40 @@ limitations under the License.
     var i = Image.load(new URL(location, "go-home.png"));
     ]]>
     </wtkx:script>
-    <content>
-        <TableView>
-            <columns>
-                <TableView.Column name="value" width="-1">
-                    <cellRenderer>
-                        <content:TableViewMultiCellRenderer>
-                            <wtkx:define>
-                                <content:TableViewBooleanCellRenderer wtkx:id="booleanCellRenderer"/>
-                                <content:TableViewNumberCellRenderer wtkx:id="numberCellRenderer"/>
-                                <content:TableViewDateCellRenderer wtkx:id="dateCellRenderer"/>
-                                <content:TableViewImageCellRenderer wtkx:id="imageCellRenderer" preferredHeight="40"/>
-                            </wtkx:define>
 
-                            <rendererMappings>
-                                <content:TableViewMultiCellRenderer.RendererMapping valueClass="java.lang.Boolean"
-                                    cellRenderer="$booleanCellRenderer"/>
-                                <content:TableViewMultiCellRenderer.RendererMapping valueClass="java.lang.Number"
-                                    cellRenderer="$numberCellRenderer"/>
-                                <content:TableViewMultiCellRenderer.RendererMapping valueClass="org.apache.pivot.util.CalendarDate"
-                                    cellRenderer="$dateCellRenderer"/>
-                                <content:TableViewMultiCellRenderer.RendererMapping valueClass="org.apache.pivot.wtk.media.Image"
-                                    cellRenderer="$imageCellRenderer"/>
-                            </rendererMappings>
-                        </content:TableViewMultiCellRenderer>
-                    </cellRenderer>
-                </TableView.Column>
+    <TableView>
+        <columns>
+            <TableView.Column name="value" width="-1">
+                <cellRenderer>
+                    <content:TableViewMultiCellRenderer>
+                        <wtkx:define>
+                            <content:TableViewBooleanCellRenderer wtkx:id="booleanCellRenderer"/>
+                            <content:TableViewNumberCellRenderer wtkx:id="numberCellRenderer"/>
+                            <content:TableViewDateCellRenderer wtkx:id="dateCellRenderer"/>
+                            <content:TableViewImageCellRenderer wtkx:id="imageCellRenderer" preferredHeight="40"/>
+                        </wtkx:define>
 
-                <TableView.Column width="1*"/>
-            </columns>
-            <tableData>
-                <collections:ArrayList>
-                    <collections:HashMap value="$s"/>
-                    <collections:HashMap value="$b"/>
-                    <collections:HashMap value="$n"/>
-                    <collections:HashMap value="$d"/>
-                    <collections:HashMap value="$i"/>
-                </collections:ArrayList>
-            </tableData>
-        </TableView>
-    </content>
+                        <rendererMappings>
+                            <content:TableViewMultiCellRenderer.RendererMapping valueClass="java.lang.Boolean"
+                                cellRenderer="$booleanCellRenderer"/>
+                            <content:TableViewMultiCellRenderer.RendererMapping valueClass="java.lang.Number"
+                                cellRenderer="$numberCellRenderer"/>
+                            <content:TableViewMultiCellRenderer.RendererMapping valueClass="org.apache.pivot.util.CalendarDate"
+                                cellRenderer="$dateCellRenderer"/>
+                            <content:TableViewMultiCellRenderer.RendererMapping valueClass="org.apache.pivot.wtk.media.Image"
+                                cellRenderer="$imageCellRenderer"/>
+                        </rendererMappings>
+                    </content:TableViewMultiCellRenderer>
+                </cellRenderer>
+            </TableView.Column>
+
+            <TableView.Column width="1*"/>
+        </columns>
+
+        <collections:HashMap value="$s"/>
+        <collections:HashMap value="$b"/>
+        <collections:HashMap value="$n"/>
+        <collections:HashMap value="$d"/>
+        <collections:HashMap value="$i"/>
+    </TableView>
 </Window>

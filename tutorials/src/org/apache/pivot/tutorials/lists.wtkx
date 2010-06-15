@@ -20,150 +20,130 @@ limitations under the License.
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
-            <BoxPane orientation="vertical" styles="{spacing:6}">
-                <Label text="Editable" styles="{font:{bold:true}}"/>
-                <Border styles="{color:10}">
-                    <content>
-                        <ScrollPane preferredWidth="62" preferredHeight="80" horizontalScrollBarPolicy="fill">
-                            <view>
-                                <ListView wtkx:id="editableListView" selectMode="single" selectedIndex="0">
-                                    <itemEditor>
-                                        <content:ListViewItemEditor/>
-                                    </itemEditor>
+    <BoxPane styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
+        <BoxPane orientation="vertical" styles="{spacing:6}">
+            <Label text="Editable" styles="{font:{bold:true}}"/>
+            <Border styles="{color:10}">
+                <ScrollPane preferredWidth="62" preferredHeight="80" horizontalScrollBarPolicy="fill">
+                    <ListView wtkx:id="editableListView" selectMode="single" selectedIndex="0">
+                        <itemEditor>
+                            <content:ListViewItemEditor/>
+                        </itemEditor>
 
-                                    <content:ListItem text="Red"/>
-                                    <content:ListItem text="Orange"/>
-                                    <content:ListItem text="Yellow"/>
-                                    <content:ListItem text="Green"/>
-                                    <content:ListItem text="Blue"/>
-                                    <content:ListItem text="Purple"/>
-                                </ListView>
-                            </view>
-                        </ScrollPane>
-                    </content>
-                </Border>
-            </BoxPane>
-
-            <BoxPane orientation="vertical" styles="{spacing:6}">
-                <Label text="Multi-Select" styles="{font:{bold:true}}"/>
-                <Border styles="{color:10}">
-                    <content>
-                        <ScrollPane preferredHeight="80">
-                            <view>
-                                <ListView wtkx:id="shapeListView" selectMode="multi"
-                                    selectedRanges="[{start:0, end:0}, {start:2, end:3}]">
-                                    <content:ListItem text="Circle"/>
-                                    <content:ListItem text="Ellipse"/>
-                                    <content:ListItem text="Square"/>
-                                    <content:ListItem text="Rectangle"/>
-                                    <content:ListItem text="Hexagon"/>
-                                    <content:ListItem text="Octagon"/>
-                                </ListView>
-                            </view>
-                        </ScrollPane>
-                    </content>
-                </Border>
-            </BoxPane>
-
-            <BoxPane orientation="vertical" styles="{spacing:6}">
-                <Label text="Image" styles="{font:{bold:true}}"/>
-                <Border styles="{color:10}">
-                    <content>
-                        <ScrollPane preferredHeight="80">
-                            <view>
-                                <ListView wtkx:id="iconListView" selectMode="multi" selectedIndex="2">
-                                    <itemRenderer>
-                                        <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
-                                            showIcon="true"/>
-                                    </itemRenderer>
-
-                                    <content:ListItem icon="@anchor.png" text="Anchor"/>
-                                    <content:ListItem icon="@bell.png" text="Bell"/>
-                                    <content:ListItem icon="@clock.png" text="Clock"/>
-                                    <content:ListItem icon="@cup.png" text="Cup"/>
-                                    <content:ListItem icon="@house.png" text="House"/>
-                                    <content:ListItem icon="@star.png" text="Star"/>
-                                </ListView>
-                            </view>
-                        </ScrollPane>
-                    </content>
-                </Border>
-            </BoxPane>
-
-            <BoxPane orientation="vertical" styles="{spacing:6}">
-                <Label text="Checked" styles="{font:{bold:true}}"/>
-                <Border styles="{color:10}">
-                    <content>
-                        <ScrollPane preferredHeight="80">
-                            <view>
-                                <ListView wtkx:id="checkedListView" selectMode="single"
-                                    listData="['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']"
-                                    checkmarksEnabled="true" selectedIndex="0"/>
-                            </view>
-                        </ScrollPane>
-                    </content>
-                </Border>
-            </BoxPane>
-
-            <BoxPane orientation="vertical" styles="{spacing:6}">
-                <Label text="List Buttons" styles="{font:{bold:true}}"/>
-                <Form styles="{showFlagIcons:false, padding:0}">
-                    <sections>
-                        <Form.Section>
-                            <ListButton Form.label="Basic" buttonData="Color">
-                                <content:ListItem text="Red"/>
-                                <content:ListItem text="Orange"/>
-                                <content:ListItem text="Yellow"/>
-                                <content:ListItem text="Green"/>
-                                <content:ListItem text="Blue"/>
-                                <content:ListItem text="Purple"/>
-                            </ListButton>
-
-                            <ListButton wtkx:id="iconListButton" Form.label="Image" selectedIndex="2">
-                                <itemRenderer>
-                                    <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
-                                        showIcon="true"/>
-                                </itemRenderer>
-
-                                <content:ListItem icon="@anchor.png" text="Anchor"/>
-                                <content:ListItem icon="@bell.png" text="Bell"/>
-                                <content:ListItem icon="@clock.png" text="Clock"/>
-                                <content:ListItem icon="@cup.png" text="Cup"/>
-                                <content:ListItem icon="@house.png" text="House"/>
-                                <content:ListItem icon="@star.png" text="Star"/>
-                            </ListButton>
-
-                            <ListButton Form.label="Color" listSize="6" selectedIndex="0">
-                                <dataRenderer>
-                                    <content:ListButtonColorItemRenderer/>
-                                </dataRenderer>
-                                <itemRenderer>
-                                    <content:ListViewColorItemRenderer/>
-                                </itemRenderer>
-
-                                <content:ColorItem color="#000000" name="Black"/>
-                                <content:ColorItem color="#0000AA" name="Blue"/>
-                                <content:ColorItem color="#00AA00" name="Green"/>
-                                <content:ColorItem color="#00AAAA" name="Cyan"/>
-                                <content:ColorItem color="#AA0000" name="Red"/>
-                                <content:ColorItem color="#AA00AA" name="Magenta"/>
-                                <content:ColorItem color="#AA5500" name="Brown"/>
-                                <content:ColorItem color="#AAAAAA" name="Light Gray"/>
-                                <content:ColorItem color="#555555" name="Dark Gray"/>
-                                <content:ColorItem color="#5555FF" name="Bright Blue"/>
-                                <content:ColorItem color="#55FF55" name="Bright Green"/>
-                                <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
-                                <content:ColorItem color="#FF5555" name="Bright Red"/>
-                                <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
-                                <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
-                                <content:ColorItem color="#FFFFFF" name="White"/>
-                            </ListButton>
-                        </Form.Section>
-                    </sections>
-                </Form>
-            </BoxPane>
+                        <content:ListItem text="Red"/>
+                        <content:ListItem text="Orange"/>
+                        <content:ListItem text="Yellow"/>
+                        <content:ListItem text="Green"/>
+                        <content:ListItem text="Blue"/>
+                        <content:ListItem text="Purple"/>
+                    </ListView>
+                </ScrollPane>
+            </Border>
         </BoxPane>
-    </content>
+
+        <BoxPane orientation="vertical" styles="{spacing:6}">
+            <Label text="Multi-Select" styles="{font:{bold:true}}"/>
+            <Border styles="{color:10}">
+                <ScrollPane preferredHeight="80">
+                    <ListView wtkx:id="shapeListView" selectMode="multi"
+                        selectedRanges="[{start:0, end:0}, {start:2, end:3}]">
+                        <content:ListItem text="Circle"/>
+                        <content:ListItem text="Ellipse"/>
+                        <content:ListItem text="Square"/>
+                        <content:ListItem text="Rectangle"/>
+                        <content:ListItem text="Hexagon"/>
+                        <content:ListItem text="Octagon"/>
+                    </ListView>
+                </ScrollPane>
+            </Border>
+        </BoxPane>
+
+        <BoxPane orientation="vertical" styles="{spacing:6}">
+            <Label text="Image" styles="{font:{bold:true}}"/>
+            <Border styles="{color:10}">
+                <ScrollPane preferredHeight="80">
+                    <ListView wtkx:id="iconListView" selectMode="multi" selectedIndex="2">
+                        <itemRenderer>
+                            <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
+                                showIcon="true"/>
+                        </itemRenderer>
+
+                        <content:ListItem icon="@anchor.png" text="Anchor"/>
+                        <content:ListItem icon="@bell.png" text="Bell"/>
+                        <content:ListItem icon="@clock.png" text="Clock"/>
+                        <content:ListItem icon="@cup.png" text="Cup"/>
+                        <content:ListItem icon="@house.png" text="House"/>
+                        <content:ListItem icon="@star.png" text="Star"/>
+                    </ListView>
+                </ScrollPane>
+            </Border>
+        </BoxPane>
+
+        <BoxPane orientation="vertical" styles="{spacing:6}">
+            <Label text="Checked" styles="{font:{bold:true}}"/>
+            <Border styles="{color:10}">
+                <ScrollPane preferredHeight="80">
+                    <ListView wtkx:id="checkedListView" selectMode="single"
+                        listData="['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']"
+                        checkmarksEnabled="true" selectedIndex="0"/>
+                </ScrollPane>
+            </Border>
+        </BoxPane>
+
+        <BoxPane orientation="vertical" styles="{spacing:6}">
+            <Label text="List Buttons" styles="{font:{bold:true}}"/>
+            <Form styles="{showFlagIcons:false, padding:0}">
+                <Form.Section>
+                    <ListButton Form.label="Basic" buttonData="Color">
+                        <content:ListItem text="Red"/>
+                        <content:ListItem text="Orange"/>
+                        <content:ListItem text="Yellow"/>
+                        <content:ListItem text="Green"/>
+                        <content:ListItem text="Blue"/>
+                        <content:ListItem text="Purple"/>
+                    </ListButton>
+
+                    <ListButton wtkx:id="iconListButton" Form.label="Image" selectedIndex="2">
+                        <itemRenderer>
+                            <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
+                                showIcon="true"/>
+                        </itemRenderer>
+
+                        <content:ListItem icon="@anchor.png" text="Anchor"/>
+                        <content:ListItem icon="@bell.png" text="Bell"/>
+                        <content:ListItem icon="@clock.png" text="Clock"/>
+                        <content:ListItem icon="@cup.png" text="Cup"/>
+                        <content:ListItem icon="@house.png" text="House"/>
+                        <content:ListItem icon="@star.png" text="Star"/>
+                    </ListButton>
+
+                    <ListButton Form.label="Color" listSize="6" selectedIndex="0">
+                        <dataRenderer>
+                            <content:ListButtonColorItemRenderer/>
+                        </dataRenderer>
+                        <itemRenderer>
+                            <content:ListViewColorItemRenderer/>
+                        </itemRenderer>
+
+                        <content:ColorItem color="#000000" name="Black"/>
+                        <content:ColorItem color="#0000AA" name="Blue"/>
+                        <content:ColorItem color="#00AA00" name="Green"/>
+                        <content:ColorItem color="#00AAAA" name="Cyan"/>
+                        <content:ColorItem color="#AA0000" name="Red"/>
+                        <content:ColorItem color="#AA00AA" name="Magenta"/>
+                        <content:ColorItem color="#AA5500" name="Brown"/>
+                        <content:ColorItem color="#AAAAAA" name="Light Gray"/>
+                        <content:ColorItem color="#555555" name="Dark Gray"/>
+                        <content:ColorItem color="#5555FF" name="Bright Blue"/>
+                        <content:ColorItem color="#55FF55" name="Bright Green"/>
+                        <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
+                        <content:ColorItem color="#FF5555" name="Bright Red"/>
+                        <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
+                        <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
+                        <content:ColorItem color="#FFFFFF" name="White"/>
+                    </ListButton>
+                </Form.Section>
+            </Form>
+        </BoxPane>
+    </BoxPane>
 </Border>

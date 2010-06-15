@@ -18,40 +18,34 @@ limitations under the License.
 
 <Window title="Table Selection Test" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
+    xmlns:collections="org.apache.pivot.collections"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
-            <view>
-                <TableView selectMode="multi">
-                    <columns>
-                        <TableView.Column name="a" width="1*"/>
-                    </columns>
-                    <tableData xmlns:collections="org.apache.pivot.collections">
-                        <collections:ArrayList>
-                            <collections:HashMap a="0"/>
-                            <collections:HashMap a="1"/>
-                            <collections:HashMap a="2"/>
-                            <collections:HashMap a="3"/>
-                            <collections:HashMap a="4"/>
-                            <collections:HashMap a="5"/>
-                            <collections:HashMap a="6"/>
-                            <collections:HashMap a="7"/>
-                            <collections:HashMap a="8"/>
-                            <collections:HashMap a="9"/>
-                            <collections:HashMap a="0"/>
-                            <collections:HashMap a="1"/>
-                            <collections:HashMap a="2"/>
-                            <collections:HashMap a="3"/>
-                            <collections:HashMap a="4"/>
-                            <collections:HashMap a="5"/>
-                            <collections:HashMap a="6"/>
-                            <collections:HashMap a="7"/>
-                            <collections:HashMap a="8"/>
-                            <collections:HashMap a="9"/>
-                        </collections:ArrayList>
-                    </tableData>
-                </TableView>
-            </view>
-        </ScrollPane>
-    </content>
+    <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
+        <TableView selectMode="multi">
+            <columns>
+                <TableView.Column name="a" width="1*"/>
+            </columns>
+
+            <collections:HashMap a="0"/>
+            <collections:HashMap a="1"/>
+            <collections:HashMap a="2"/>
+            <collections:HashMap a="3"/>
+            <collections:HashMap a="4"/>
+            <collections:HashMap a="5"/>
+            <collections:HashMap a="6"/>
+            <collections:HashMap a="7"/>
+            <collections:HashMap a="8"/>
+            <collections:HashMap a="9"/>
+            <collections:HashMap a="0"/>
+            <collections:HashMap a="1"/>
+            <collections:HashMap a="2"/>
+            <collections:HashMap a="3"/>
+            <collections:HashMap a="4"/>
+            <collections:HashMap a="5"/>
+            <collections:HashMap a="6"/>
+            <collections:HashMap a="7"/>
+            <collections:HashMap a="8"/>
+            <collections:HashMap a="9"/>
+        </TableView>
+    </ScrollPane>
 </Window>

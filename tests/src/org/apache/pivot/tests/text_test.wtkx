@@ -19,15 +19,13 @@ limitations under the License.
 <Window title="Text Test" maximized="true"
     xmlns:wtkx="http://pivot.apache.org/wtkx"
     xmlns="org.apache.pivot.wtk">
-    <content>
-        <BoxPane orientation="vertical" styles="{fill:true, spacing:8, padding:8}">
-            <Separator heading="INFORMATION"/>
-            <Border title="INFORMATION" styles="{padding:6}">
-                <content>
-                    <Label text="This is the information."/>
-                </content>
-            </Border>
-            <Label text="INFORMATION" styles="{font:{bold:true}, color:13}"/>
-        </BoxPane>
-    </content>
+    <BoxPane orientation="vertical" styles="{fill:true, spacing:8, padding:8}">
+        <Separator heading="INFORMATION"/>
+        <Border title="INFORMATION" styles="{padding:6}">
+            <content>
+                <Label text="This is the information."/>
+            </content>
+        </Border>
+        <Label text="INFORMATION" styles="{font:{bold:true}, color:13}"/>
+    </BoxPane>
 </Window>

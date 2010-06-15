@@ -638,9 +638,8 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 }
             } else {
                 // The element represents a property
-                if (element == null
-                    || element.type != Element.Type.INSTANCE) {
-                    throw new SerializationException("Parent element must be a typed object.");
+                if (element == null) {
+                    throw new SerializationException("Cannot specify property as root element.");
                 }
 
                 if (prefix != null
@@ -651,6 +650,10 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                 if (element.value instanceof Dictionary<?, ?>) {
                     elementType = Element.Type.WRITABLE_PROPERTY;
                 } else {
+                    if (element.type != Element.Type.INSTANCE) {
+                        throw new SerializationException("Parent element must be a typed object.");
+                    }
+
                     BeanAdapter beanAdapter = new BeanAdapter(element.value);
 
                     if (beanAdapter.isReadOnly(localName)) {
@@ -674,12 +677,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         // Set the current element
-        String tagName = localName;
-        if (prefix != null
-            && prefix.length() > 0) {
-            tagName = prefix + ":" + tagName;
-        }
-
         Location xmlStreamLocation = xmlStreamReader.getLocation();
         element = new Element(element, namespaceURI, localName, attributes, elementType,
             id, value, xmlStreamLocation.getLineNumber());

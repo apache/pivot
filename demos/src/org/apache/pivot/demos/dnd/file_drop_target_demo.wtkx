@@ -27,35 +27,33 @@ limitations under the License.
 
         <TablePane.Row height="1*">
             <Border styles="{color:10}">
-                <content>
-                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-                        verticalScrollBarPolicy="fill_to_capacity">
-                        <TableView wtkx:id="fileTableView" selectMode="multi"
-                            styles="{showHorizontalGridLines:false}">
-                            <columns>
-                                <TableView.Column name="name" width="3*" headerData="File">
-                                    <cellRenderer>
-                                        <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
-                                    </cellRenderer>
-                                </TableView.Column>
-                                <TableView.Column name="size" width="1*" headerData="Size">
-                                    <cellRenderer>
-                                        <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
-                                    </cellRenderer>
-                                </TableView.Column>
-                                <TableView.Column name="lastModified" width="2*" headerData="Modified">
-                                    <cellRenderer>
-                                        <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
-                                    </cellRenderer>
-                                </TableView.Column>
-                            </columns>
-                        </TableView>
+                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
+                    verticalScrollBarPolicy="fill_to_capacity">
+                    <TableView wtkx:id="fileTableView" selectMode="multi"
+                        styles="{showHorizontalGridLines:false}">
+                        <columns>
+                            <TableView.Column name="name" width="3*" headerData="File">
+                                <cellRenderer>
+                                    <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
+                                </cellRenderer>
+                            </TableView.Column>
+                            <TableView.Column name="size" width="1*" headerData="Size">
+                                <cellRenderer>
+                                    <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
+                                </cellRenderer>
+                            </TableView.Column>
+                            <TableView.Column name="lastModified" width="2*" headerData="Modified">
+                                <cellRenderer>
+                                    <terra:TerraFileBrowserSkin.TableViewFileRenderer/>
+                                </cellRenderer>
+                            </TableView.Column>
+                        </columns>
+                    </TableView>
 
-                        <columnHeader>
-                            <TableViewHeader tableView="$fileTableView" styles="{headersPressable:false}"/>
-                        </columnHeader>
-                    </ScrollPane>
-                </content>
+                    <columnHeader>
+                        <TableViewHeader tableView="$fileTableView" styles="{headersPressable:false}"/>
+                    </columnHeader>
+                </ScrollPane>
             </Border>
         </TablePane.Row>
         <TablePane.Row height="-1">
