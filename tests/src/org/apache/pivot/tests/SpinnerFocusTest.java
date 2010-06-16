@@ -47,12 +47,12 @@ public class SpinnerFocusTest implements Application {
 
         Action.getNamedActions().put("buttonAction", action);
 
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("spinner_focus_test.wtkx")));
+        BeanSerializer beanSerializer = new BeanSerializer();
+        frame = new Frame((Component)beanSerializer.readObject(getClass().getResource("spinner_focus_test.bxml")));
         frame.setTitle("Spinner Focus Test");
         frame.open(display);
 
-        Spinner spinner = (Spinner)wtkxSerializer.get("spinner");
+        Spinner spinner = (Spinner)beanSerializer.get("spinner");
         spinner.requestFocus();
 
         action.setEnabled(false);

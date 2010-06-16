@@ -40,10 +40,10 @@ public class CalendarTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
+        BeanSerializer beanSerializer = new BeanSerializer();
 
-        window = (Window)wtkxSerializer.readObject(this, "calendar_test.wtkx");
-        wtkxSerializer.bind(this, CalendarTest.class);
+        window = (Window)beanSerializer.readObject(this, "calendar_test.bxml");
+        beanSerializer.bind(this, CalendarTest.class);
 
         Filter<CalendarDate> todayFilter = new Filter<CalendarDate>() {
             @Override

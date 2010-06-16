@@ -45,8 +45,8 @@ public class PanoramaTest implements Application {
         panorama.setView(imageView);
         frame1.open(display);
 
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        frame2 = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("panorama_test.wtkx")));
+        BeanSerializer beanSerializer = new BeanSerializer();
+        frame2 = new Frame((Component)beanSerializer.readObject(getClass().getResource("panorama_test.bxml")));
         frame2.setTitle("Panorama Test 2");
         frame2.setPreferredSize(480, 360);
         frame2.open(display);

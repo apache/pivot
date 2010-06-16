@@ -46,8 +46,8 @@ public class ActionMappingTest implements Application {
             }
         });
 
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "action_mapping_test.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "action_mapping_test.bxml");
         window.getActionMappings().add(new Window.ActionMapping(new Keyboard.KeyStroke(Keyboard.KeyCode.B,
             Keyboard.Modifier.SHIFT.getMask()), "action2"));
 

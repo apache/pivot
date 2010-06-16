@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:media="org.apache.pivot.wtk.media"
+    xmlns="org.apache.pivot.wtk">
+    <ImageView bxml:id="imageView"
+        styles="{horizontalAlignment:'left', verticalAlignment:'top', backgroundColor:'#999999'}">
+        <media:Drawing>
+            <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
+                <Rectangle x="0" y="0" width="120" height="60"
+                    fill="#ff0000" stroke=""/>
+                <Ellipse x="60" y="30" width="120" height="120"
+                    fill="#00ff00" stroke="#000000" strokeThickness="20">
+                    <transforms>
+                        <Shape.Translate x="40" y="40"/>
+                        <Shape.Scale x="0.5" y="0.5"/>
+                    </transforms>
+                </Ellipse>
+                <Line x="50" y="50" x1="0" y1="0" x2="100" y2="0" strokeThickness="10">
+                    <transforms>
+                        <Shape.Rotate angle="90"/>
+                    </transforms>
+                </Line>
+                <Path x="100" y="0" stroke="#000000" fill="#aaaaff" strokeThickness="4">
+                    <Path.MoveTo x="20" y="70"/>
+                    <Path.LineTo x="30" y="20"/>
+                    <Path.QuadTo x1="40" y1="10" x2="50" y2="20"/>
+                    <Path.LineTo x="60" y="70"/>
+                    <Path.QuadTo x1="70" y1="80" x2="60" y2="80"/>
+                    <Path.LineTo x="20" y="80"/>
+                    <Path.QuadTo x1="10" y1="80" x2="20" y2="70"/>
+                </Path>
+            </Canvas>
+        </media:Drawing>
+    </ImageView>
+</Window>

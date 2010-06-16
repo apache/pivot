@@ -29,8 +29,8 @@ public class TablePaneTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "table_pane_test.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "table_pane_test.bxml");
         window.open(display);
     }
 

@@ -30,8 +30,8 @@ public class AccordionTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        frame = (Frame)wtkxSerializer.readObject(this, "accordion_test.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        frame = (Frame)beanSerializer.readObject(this, "accordion_test.bxml");
         frame.open(display);
     }
 

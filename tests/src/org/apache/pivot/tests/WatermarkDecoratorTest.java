@@ -28,8 +28,8 @@ public class WatermarkDecoratorTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "watermark_decorator_test.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "watermark_decorator_test.bxml");
 
         window.open(display);
     }

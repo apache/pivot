@@ -41,13 +41,13 @@ public class TextInputValidatorTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(
-            getClass().getResource("textInputValidator_test.wtkx")));
-        textinputFloatRange = (TextInput)wtkxSerializer.get("textinputFloatRange");
-        textinputIntRange = (TextInput)wtkxSerializer.get("textinputIntRange");
-        textinputDateRegex = (TextInput)wtkxSerializer.get("textinputDateRegex");
-        textinputCustomBoolean = (TextInput)wtkxSerializer.get("textinputCustomBoolean");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = new Window((Component)beanSerializer.readObject(
+            getClass().getResource("textInputValidator_test.bxml")));
+        textinputFloatRange = (TextInput)beanSerializer.get("textinputFloatRange");
+        textinputIntRange = (TextInput)beanSerializer.get("textinputIntRange");
+        textinputDateRegex = (TextInput)beanSerializer.get("textinputDateRegex");
+        textinputCustomBoolean = (TextInput)beanSerializer.get("textinputCustomBoolean");
 
         // standard float range model
         textinputFloatRange.setText("0.5");
@@ -61,7 +61,7 @@ public class TextInputValidatorTest implements Application {
             }
         });
 
-        invalidLabel = (Label)wtkxSerializer.get("invalidLabel");
+        invalidLabel = (Label)beanSerializer.get("invalidLabel");
 
         // standard int range model
         textinputIntRange.setText("0");

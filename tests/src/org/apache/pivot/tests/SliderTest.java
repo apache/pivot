@@ -37,16 +37,16 @@ public class SliderTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("slider_test.wtkx")));
-        slider1 = (Slider)wtkxSerializer.get("slider1");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = new Window((Component)beanSerializer.readObject(getClass().getResource("slider_test.bxml")));
+        slider1 = (Slider)beanSerializer.get("slider1");
         slider1.getSliderValueListeners().add(new SliderValueListener() {
             @Override
             public void valueChanged(Slider slider, int previousValue) {
                 valueLabel1.setText(Integer.toString(slider.getValue()));
             }
         });
-        slider2 = (Slider)wtkxSerializer.get("slider2");
+        slider2 = (Slider)beanSerializer.get("slider2");
         slider2.getSliderValueListeners().add(new SliderValueListener() {
             @Override
             public void valueChanged(Slider slider, int previousValue) {
@@ -54,8 +54,8 @@ public class SliderTest implements Application {
             }
         });
 
-        valueLabel1 = (Label)wtkxSerializer.get("valueLabel1");
-        valueLabel2 = (Label)wtkxSerializer.get("valueLabel2");
+        valueLabel1 = (Label)beanSerializer.get("valueLabel1");
+        valueLabel2 = (Label)beanSerializer.get("valueLabel2");
 
         window.setTitle("Slider Test");
         window.setMaximized(true);

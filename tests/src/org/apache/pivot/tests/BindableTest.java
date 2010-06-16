@@ -28,8 +28,8 @@ public class BindableTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer(new Resources(BindableWindow.class.getName()));
-        window = (BindableWindow)wtkxSerializer.readObject(this, "bindable_test.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer(new Resources(BindableWindow.class.getName()));
+        window = (BindableWindow)beanSerializer.readObject(this, "bindable_test.bxml");
         window.open(display);
     }
 

@@ -29,8 +29,8 @@ public class SplitPaneTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("splitpane_test.wtkx")));
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = new Window((Component)beanSerializer.readObject(getClass().getResource("splitpane_test.bxml")));
 
         window.setTitle("SplitPane Test");
         window.setMaximized(true);

@@ -33,9 +33,9 @@ public class ColorListButtonTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        BoxPane boxPane = (BoxPane) wtkxSerializer.readObject(this, "color_list_button_test.wtkx");
-        listButton = (ListButton)wtkxSerializer.get("listButton");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        BoxPane boxPane = (BoxPane) beanSerializer.readObject(this, "color_list_button_test.bxml");
+        listButton = (ListButton)beanSerializer.get("listButton");
         // test the getListPopup() method
         listButton.getListPopup().getDecorators().add(new ReflectionDecorator());
 

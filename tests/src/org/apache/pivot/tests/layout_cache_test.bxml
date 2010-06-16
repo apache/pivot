@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Frame title="Layout Cache Test" preferredWidth="640" preferredHeight="480"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk">
+    <BoxPane orientation="vertical" styles="{padding:10, fill:true, spacing:5}">
+        <BoxPane orientation="vertical" styles="{fill:true, spacing:10}">
+            <Label styles="{wrapText:true}" text="Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the 'License'); you may not use this file except in compliance with the License.  You may obtain a copy of the License at:"/>
+            <Label styles="{wrapText:true}" text="http://www.apache.org/licenses/LICENSE-2.0"/>
+            <Label styles="{wrapText:true}" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License."/>
+        </BoxPane>
+        <Separator/>
+        <BoxPane orientation="vertical" styles="{fill:true, spacing:10}">
+            <Label styles="{wrapText:true}" text="'Twas brillig, and the slithy toves Did gyre and gimble in the wabe; All mimsy were the borogoves, And the mome raths outgrabe."/>
+            <Label styles="{wrapText:true}" text="Beware the Jabberwock, my son! The jaws that bite, the claws that catch! Beware the Jubjub bird, and shun The frumious Bandersnatch!"/>
+            <Label styles="{wrapText:true}" text="He took his vorpal sword in hand: Long time the manxome foe he sought- So rested he by the Tumtum tree, And stood awhile in thought."/>
+            <Label styles="{wrapText:true}" text="And as in uffish thought he stood, The Jabberwock, with eyes of flame, Came whiffling through the tulgey wood, And burbled as it came!"/>
+            <Label styles="{wrapText:true}" text="One, two! One, two! and through and through The vorpal blade went snicker-snack! He left it dead, and with its head He went galumphing back."/>
+            <Label styles="{wrapText:true}" text="And hast thou slain the Jabberwock? Come to my arms, my beamish boy! O frabjous day! Callooh! Callay! He chortled in his joy."/>
+            <Label styles="{wrapText:true}" text="'Twas brillig, and the slithy toves Did gyre and gimble in the wabe; All mimsy were the borogoves, And the mome raths outgrabe."/>
+        </BoxPane>
+        <Separator/>
+        <BoxPane orientation="vertical" styles="{fill:true, spacing:10}">
+            <Label styles="{wrapText:true}" text="Pivot applications are written using a combination of Java and XML and can be run either as an applet or as a standalone (optionally offline) desktop application. While Pivot was designed to be familiar to web developers who have experience building AJAX applications using HTML, CSS, and JavaScript, it provides a much richer set of standard widgets than HTML, and allows developers to create sophisticated user experiences much more quickly and easily. Pivot will also seem familiar to Swing developers, as both Swing and Pivot are based on Java2D and employ a model-view-controller (MVC) architecture to separate component data from presentation. However, Pivot includes additional features that make building modern GUI applications much easier, including declarative UI, data binding, effects and transitions, and web services integration."/>
+        </BoxPane>
+        <Separator/>
+        <BoxPane orientation="vertical" styles="{fill:true, spacing:10}">
+            <Label styles="{wrapText:true}" text="Apache Pivot is an effort undergoing incubation at The ASF, sponsored by the Apache Incubator Project Management Committee (PMC)."/>
+            <Label styles="{wrapText:true}" text="Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects."/>
+            <Label styles="{wrapText:true}" text="While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF."/>
+        </BoxPane>
+    </BoxPane>
+</Frame>

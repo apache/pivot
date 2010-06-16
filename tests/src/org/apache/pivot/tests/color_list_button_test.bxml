@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<BoxPane xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content" xmlns="org.apache.pivot.wtk">
+    <ListButton bxml:id="listButton" selectedIndex="0">
+        <dataRenderer>
+            <content:ListButtonColorItemRenderer/>
+        </dataRenderer>
+        <itemRenderer>
+            <content:ListViewColorItemRenderer/>
+        </itemRenderer>
+
+        <content:ColorItem color="#000000" name="Black"/>
+        <content:ColorItem color="#0000AA" name="Blue"/>
+        <content:ColorItem color="#00AA00" name="Green"/>
+        <content:ColorItem color="#00AAAA" name="Cyan"/>
+        <content:ColorItem color="#AA0000" name="Red"/>
+        <content:ColorItem color="#AA00AA" name="Magenta"/>
+        <content:ColorItem color="#AA5500" name="Brown"/>
+        <content:ColorItem color="#AAAAAA" name="Light Gray"/>
+        <content:ColorItem color="#555555" name="Dark Gray"/>
+        <content:ColorItem color="#5555FF" name="Bright Blue"/>
+        <content:ColorItem color="#55FF55" name="Bright Green"/>
+        <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
+        <content:ColorItem color="#FF5555" name="Bright Red"/>
+        <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
+        <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
+        <content:ColorItem color="#FFFFFF" name="White"/>
+    </ListButton>
+</BoxPane>

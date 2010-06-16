@@ -34,9 +34,9 @@ public class TableViewTest2 implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "table_view_test2.wtkx");
-        tableView = (TableView)wtkxSerializer.get("tableView");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "table_view_test2.bxml");
+        tableView = (TableView)beanSerializer.get("tableView");
 
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
         tableViewRowEditor.setEditEffect(CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);

@@ -49,9 +49,9 @@ public class MenuBarTest implements Application {
         frame1.setPreferredSize(320, 240);
         frame1.open(display);
 
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        frame2 = (Frame)wtkxSerializer.readObject(this, "menu_bar_test.wtkx");
-        wtkxSerializer.bind(this, MenuBarTest.class);
+        BeanSerializer beanSerializer = new BeanSerializer();
+        frame2 = (Frame)beanSerializer.readObject(this, "menu_bar_test.bxml");
+        beanSerializer.bind(this, MenuBarTest.class);
 
         MenuHandler menuHandler = new MenuHandler.Adapter() {
             @Override

@@ -23,9 +23,9 @@ import org.apache.pivot.json.JSONSerializer;
 public class WTKXDictionaryTest {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
+        BeanSerializer beanSerializer = new BeanSerializer();
         HashMap<String, Object> hashMap =
-            (HashMap<String, Object>)wtkxSerializer.readObject(WTKXDictionaryTest.class.getResource("wtkx_dictionary_test.wtkx"));
+            (HashMap<String, Object>)beanSerializer.readObject(WTKXDictionaryTest.class.getResource("wtkx_dictionary_test.bxml"));
         System.out.println(JSONSerializer.toString(hashMap));
     }
 }

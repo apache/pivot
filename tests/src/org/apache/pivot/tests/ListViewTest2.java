@@ -30,8 +30,8 @@ public class ListViewTest2 implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = new Window((Component)wtkxSerializer.readObject(getClass().getResource("listview_test2.wtkx")));
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = new Window((Component)beanSerializer.readObject(getClass().getResource("listview_test2.bxml")));
 
         window.setTitle("ListView Test2");
         window.setMaximized(true);

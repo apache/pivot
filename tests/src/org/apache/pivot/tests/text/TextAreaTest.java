@@ -68,14 +68,14 @@ public class TextAreaTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("text_area_test.wtkx")));
+        BeanSerializer beanSerializer = new BeanSerializer();
+        frame = new Frame((Component)beanSerializer.readObject(getClass().getResource("text_area_test.bxml")));
         frame.setTitle("TextArea Test");
         frame.setPreferredSize(640, 480);
         frame.setLocation(80, 40);
         frame.open(display);
 
-        textArea = (TextArea)wtkxSerializer.get("textArea");
+        textArea = (TextArea)beanSerializer.get("textArea");
         textArea.getTextAreaSelectionListeners().add(new TextAreaSelectionListener() {
             @Override
             public void selectionChanged(TextArea textArea,
@@ -96,10 +96,10 @@ public class TextAreaTest implements Application {
             }
         });
 
-        selectionStartLabel = (Label)wtkxSerializer.get("selectionStartLabel");
-        selectionLengthLabel = (Label)wtkxSerializer.get("selectionLengthLabel");
+        selectionStartLabel = (Label)beanSerializer.get("selectionStartLabel");
+        selectionLengthLabel = (Label)beanSerializer.get("selectionLengthLabel");
 
-        treeView = (TreeView)wtkxSerializer.get("treeView");
+        treeView = (TreeView)beanSerializer.get("treeView");
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
             @Override
             public void selectedPathAdded(TreeView treeView, Path path) {
@@ -135,8 +135,8 @@ public class TextAreaTest implements Application {
             }
         });
 
-        offsetLabel = (Label)wtkxSerializer.get("offsetLabel");
-        charactersLabel = (Label)wtkxSerializer.get("charactersLabel");
+        offsetLabel = (Label)beanSerializer.get("offsetLabel");
+        charactersLabel = (Label)beanSerializer.get("charactersLabel");
 
         documentAdapter = new DocumentAdapter(textArea.getDocument());
         treeView.setTreeData(documentAdapter);

@@ -30,8 +30,8 @@ public class FormTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        frame = new Frame((Component)wtkxSerializer.readObject(getClass().getResource("form_test.wtkx")));
+        BeanSerializer beanSerializer = new BeanSerializer();
+        frame = new Frame((Component)beanSerializer.readObject(getClass().getResource("form_test.bxml")));
         frame.setTitle("Form Test");
         frame.setPreferredSize(480, 360);
         frame.open(display);
