@@ -19,6 +19,6 @@ limitations under the License.
 <Window xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <ScrollPane>
-        <ImageView styles="{backgroundColor:'#999999'}" image="@sample_drawing.wtkd"/>
+        <ImageView styles="{backgroundColor:'#999999'}" image="@sample_drawing.bxml"/>
     </ScrollPane>
 </Window>

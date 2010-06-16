@@ -37,7 +37,7 @@ public class RotateLine implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception{
         BeanSerializer beanSerializer = new BeanSerializer();
-        drawing = (Drawing)beanSerializer.readObject(this, "rotate_line.wtkd");
+        drawing = (Drawing)beanSerializer.readObject(this, "rotate_line.bxml");
         rotation = (Shape.Rotate)beanSerializer.get("rotation");
 
         ApplicationContext.scheduleRecurringCallback(new Runnable() {

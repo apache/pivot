@@ -16,19 +16,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Simple Drawing" maximized="true"
-    xmlns:wtkx="http://pivot.apache.org/wtkx"
-    xmlns:media="org.apache.pivot.wtk.media"
-    xmlns="org.apache.pivot.wtk">
-    <ImageView>
-        <media:Drawing>
-            <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
-                <Ellipse x="0" y="0" width="240" height="240" stroke="" fill="#ffff00"/>
-                <Ellipse x="70" y="60" width="30" height="40" fill="#000000"/>
-                <Ellipse x="140" y="60" width="30" height="40" fill="#000000"/>
-                <Arc x="60" y="120" width="120" height="70"
-                    start="190" extent="160" type="open" strokeThickness="8"/>
-            </Canvas>
-        </media:Drawing>
-    </ImageView>
-</Window>
+<Drawing xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk.media">
+    <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
+        <Ellipse width="320" height="320" stroke="" fill="#eeeeee"/>
+        <Line x1="0" y1="0" x2="0" y2="-160" strokeThickness="4">
+            <transforms>
+                <Shape.Translate x="160" y="160"/>
+                <Shape.Rotate bxml:id="rotation"/>
+            </transforms>
+        </Line>
+    </Canvas>
+</Drawing>
