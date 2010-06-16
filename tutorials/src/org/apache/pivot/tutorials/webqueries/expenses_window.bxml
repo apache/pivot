@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<webqueries:ExpensesWindow title="%title" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:webqueries="org.apache.pivot.tutorials.webqueries"
+    xmlns="org.apache.pivot.wtk">
+    <StackPane>
+        <TablePane styles="{verticalSpacing:4}">
+            <columns>
+                <TablePane.Column width="1*"/>
+            </columns>
+
+            <TablePane.Row height="1*">
+                <Border styles="{color:7}">
+                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                        <TableView bxml:id="expenseTableView" selectMode="single"
+                            styles="{includeTrailingVerticalGridLine:true}">
+                            <columns>
+                                <TableView.Column name="date" width="87" headerData="%date"/>
+                                <TableView.Column name="type" width="125" headerData="%type"/>
+                                <TableView.Column name="amount" width="75" headerData="%amount">
+                                    <cellRenderer>
+                                        <content:TableViewNumberCellRenderer numberFormat="%amountFormat"/>
+                                    </cellRenderer>
+                                </TableView.Column>
+                                <TableView.Column name="description" width="150" headerData="%description"/>
+                            </columns>
+                        </TableView>
+
+                        <columnHeader>
+                            <TableViewHeader tableView="$expenseTableView"
+                                styles="{headersPressable:false, includeTrailingVerticalGridLine:true}"/>
+                        </columnHeader>
+                    </ScrollPane>
+                </Border>
+            </TablePane.Row>
+
+            <TablePane.Row height="-1">
+                <BoxPane styles="{spacing:0, fill:true}">
+                    <PushButton action="add_expense" styles="{toolbar:true}">
+                        <content:ButtonData icon="@add.png" text="%add"/>
+                    </PushButton>
+                    <PushButton action="edit_selected_expense" styles="{toolbar:true}">
+                        <content:ButtonData icon="@pencil.png" text="%edit"/>
+                    </PushButton>
+                    <PushButton action="delete_selected_expense" styles="{toolbar:true}">
+                        <content:ButtonData icon="@delete.png" text="%delete"/>
+                    </PushButton>
+                </BoxPane>
+            </TablePane.Row>
+        </TablePane>
+
+        <BoxPane bxml:id="activityIndicatorBoxPane" visible="false"
+            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+            <ActivityIndicator bxml:id="activityIndicator"
+                preferredWidth="128" preferredHeight="128"/>
+        </BoxPane>
+    </StackPane>
+</webqueries:ExpensesWindow>

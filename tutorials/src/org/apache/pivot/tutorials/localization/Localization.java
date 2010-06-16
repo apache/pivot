@@ -56,9 +56,9 @@ public class Localization implements Application {
             }
         }
 
-        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
+        BeanSerializer beanSerializer = new BeanSerializer(resources);
 
-        window = (Window)wtkxSerializer.readObject(this, "localization.wtkx");
+        window = (Window)beanSerializer.readObject(this, "localization.bxml");
         window.open(display);
     }
 

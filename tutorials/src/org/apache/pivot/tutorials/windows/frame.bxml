@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Frame bxml:id="frame" icon="@application_form.png"
+    preferredWidth="480" preferredHeight="360"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <bxml:define>
+        <bxml:include bxml:id="dialog" src="dialog.bxml"/>
+        <bxml:include bxml:id="sheet" src="sheet.bxml"/>
+    </bxml:define>
+
+    <bxml:script>
+    var palette = null;
+    </bxml:script>
+
+    <BoxPane orientation="vertical">
+        <PushButton buttonData="Show Alert">
+            <buttonPressListeners>
+                <bxml:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    Alert.alert("This is an Alert.", frame);
+                }
+                ]]>
+                </bxml:script>
+            </buttonPressListeners>
+        </PushButton>
+
+        <PushButton buttonData="Show Prompt">
+            <buttonPressListeners>
+                <bxml:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    Prompt.prompt("This is a Prompt.", frame);
+                }
+                ]]>
+                </bxml:script>
+            </buttonPressListeners>
+        </PushButton>
+
+        <PushButton buttonData="Show Dialog">
+            <buttonPressListeners>
+                <bxml:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    dialog.open(frame, null);
+                }
+                ]]>
+                </bxml:script>
+            </buttonPressListeners>
+        </PushButton>
+
+        <PushButton buttonData="Show Sheet">
+            <buttonPressListeners>
+                <bxml:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    sheet.open(frame, null);
+                }
+                ]]>
+                </bxml:script>
+            </buttonPressListeners>
+        </PushButton>
+
+        <PushButton buttonData="Show Palette">
+            <buttonPressListeners>
+                <bxml:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    if (palette == null) {
+                        palette = application.load("palette.bxml");
+                        palette.setLocation(frame.getX() + frame.getWidth() + 20, frame.getY() + 20);
+                    }
+
+                    palette.open(frame);
+                }
+                ]]>
+                </bxml:script>
+            </buttonPressListeners>
+        </PushButton>
+    </BoxPane>
+</Frame>

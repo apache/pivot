@@ -94,18 +94,18 @@ public class MenuBars implements Application {
         Action.getNamedActions().put("fileNew", new Action() {
             @Override
             public void perform() {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 Component tab;
                 try {
-                    tab = new Border((Component)wtkxSerializer.readObject(this, "document.wtkx"));
+                    tab = new Border((Component)beanSerializer.readObject(this, "document.bxml"));
 
-                    TextInput textInput1 = (TextInput)wtkxSerializer.get("textInput1");
+                    TextInput textInput1 = (TextInput)beanSerializer.get("textInput1");
                     textInput1.setMenuHandler(menuHandler);
 
-                    TextInput textInput2 = (TextInput)wtkxSerializer.get("textInput2");
+                    TextInput textInput2 = (TextInput)beanSerializer.get("textInput2");
                     textInput2.setMenuHandler(menuHandler);
 
-                    PushButton pushButton = (PushButton)wtkxSerializer.get("pushButton");
+                    PushButton pushButton = (PushButton)beanSerializer.get("pushButton");
                     pushButton.setMenuHandler(menuHandler);
                 } catch (IOException exception) {
                     throw new RuntimeException(exception);
@@ -154,10 +154,10 @@ public class MenuBars implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "menu_bars.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "menu_bars.bxml");
 
-        tabPane = (TabPane)wtkxSerializer.get("tabPane");
+        tabPane = (TabPane)beanSerializer.get("tabPane");
 
         fileBrowserSheet = new FileBrowserSheet();
 

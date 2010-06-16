@@ -39,13 +39,13 @@ public class FlowPanes implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
-        flowPane = (FlowPane)wtkxSerializer.get("flowPane");
-        leftRadioButton = (RadioButton)wtkxSerializer.get("leftRadioButton");
-        rightRadioButton = (RadioButton)wtkxSerializer.get("rightRadioButton");
-        centerRadioButton = (RadioButton)wtkxSerializer.get("centerRadioButton");
-        alignToBaselineCheckbox = (Checkbox)wtkxSerializer.get("alignToBaselineCheckbox");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "flow_panes.bxml");
+        flowPane = (FlowPane)beanSerializer.get("flowPane");
+        leftRadioButton = (RadioButton)beanSerializer.get("leftRadioButton");
+        rightRadioButton = (RadioButton)beanSerializer.get("rightRadioButton");
+        centerRadioButton = (RadioButton)beanSerializer.get("centerRadioButton");
+        alignToBaselineCheckbox = (Checkbox)beanSerializer.get("alignToBaselineCheckbox");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
             @Override

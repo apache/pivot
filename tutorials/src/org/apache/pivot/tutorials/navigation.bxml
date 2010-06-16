@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<BoxPane xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <Border styles="{padding:2}">
+        <TablePane styles="{horizontalSpacing:8, verticalSpacing:8, padding:{top:2, left:4, bottom:4, right:4}}">
+            <columns>
+                <TablePane.Column width="-1"/>
+                <TablePane.Column width="-1"/>
+            </columns>
+
+            <TablePane.Row height="-1">
+                <Label text="Horizontal Tabs" styles="{font:{bold:true}}"/>
+                <Label text="Vertical Tabs" styles="{font:{bold:true}}"/>
+            </TablePane.Row>
+
+            <TablePane.Row height="-1">
+                <TablePane styles="{horizontalSpacing:8, verticalSpacing:8}">
+                    <columns>
+                        <TablePane.Column width="-1"/>
+                    </columns>
+
+                    <TablePane.Row height="1*">
+                        <TabPane selectedIndex="0" styles="{tabOrientation:'horizontal'}">
+                            <Label TabPane.icon="@bell.png" TabPane.label="Bell" text="Basic"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                            <Label TabPane.icon="@clock.png" TabPane.label="Clock" text="Basic"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                            <Label TabPane.icon="@house.png" TabPane.label="House" text="Basic"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                        </TabPane>
+                    </TablePane.Row>
+
+                    <TablePane.Row height="-1">
+                        <TabPane selectedIndex="-1" styles="{tabOrientation:'horizontal', collapsible:true}"
+                            tooltipText="Click a tab to expand/collapse">
+                            <BoxPane TabPane.icon="@anchor.png" TabPane.label="Anchor"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <Label text="Collapsible"/>
+                            </BoxPane>
+
+                            <BoxPane TabPane.icon="@cup.png" TabPane.label="Cup"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <Label text="Collapsible"/>
+                            </BoxPane>
+
+                            <BoxPane TabPane.icon="@star.png" TabPane.label="Star"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <Label text="Collapsible"/>
+                            </BoxPane>
+                        </TabPane>
+                    </TablePane.Row>
+                </TablePane>
+
+                <TablePane styles="{horizontalSpacing:8, verticalSpacing:8}">
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                        <TablePane.Column width="-1"/>
+                    </columns>
+
+                    <TablePane.Row height="-1">
+                        <TabPane selectedIndex="0" styles="{tabOrientation:'vertical'}">
+                            <Label TabPane.icon="@bell.png" TabPane.label="Bell" text="Basic"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                            <Label TabPane.icon="@clock.png" TabPane.label="Clock" text="Basic"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                            <Label TabPane.icon="@house.png" TabPane.label="House" text="Basic"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                        </TabPane>
+
+                        <TabPane selectedIndex="-1" styles="{tabOrientation:'vertical', collapsible:true}"
+                            tooltipText="Click a tab to expand/collapse">
+                            <BoxPane TabPane.icon="@anchor.png" TabPane.label="Anchor"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <Label text="Collapsible"/>
+                            </BoxPane>
+
+                            <BoxPane TabPane.icon="@cup.png" TabPane.label="Cup"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <Label text="Collapsible"/>
+                            </BoxPane>
+
+                            <BoxPane TabPane.icon="@star.png" TabPane.label="Star"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <Label text="Collapsible"/>
+                            </BoxPane>
+                        </TabPane>
+                    </TablePane.Row>
+                </TablePane>
+            </TablePane.Row>
+        </TablePane>
+    </Border>
+
+    <Border styles="{padding:2}">
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
+            <Label text="Expanders" styles="{font:{bold:true}}"/>
+            <BoxPane orientation="vertical" styles="{fill:true}">
+                <Expander title="One" expanded="false">
+                    <Label preferredWidth="100" preferredHeight="20" text="Un"
+                        styles="{horizontalAlignment:'center', verticalAlignment:'top', font:{italic:true}}"/>
+                </Expander>
+
+                <Expander title="Two" expanded="false">
+                    <Label preferredWidth="100" preferredHeight="80" text="Deux"
+                        styles="{horizontalAlignment:'center', verticalAlignment:'center', font:{italic:true}}"/>
+                </Expander>
+
+                <Expander title="Three">
+                    <Label preferredWidth="100" preferredHeight="50" text="Trois"
+                        styles="{horizontalAlignment:'center', verticalAlignment:'bottom', font:{italic:true}}"/>
+                </Expander>
+            </BoxPane>
+        </BoxPane>
+    </Border>
+
+    <Border styles="{padding:2}">
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
+            <Label text="Accordion" styles="{font:{bold:true}}"/>
+            <Accordion selectedIndex="1" preferredWidth="110" preferredHeight="180">
+                <Label Accordion.label="One" text="Un"
+                  styles="{horizontalAlignment:'center', verticalAlignment:'top', font:{italic:true}}"/>
+                <Label Accordion.label="Two" text="Deux"
+                  styles="{horizontalAlignment:'center', verticalAlignment:'center', font:{italic:true}}"/>
+                <Label Accordion.label="Three" text="Trois"
+                  styles="{horizontalAlignment:'center', verticalAlignment:'bottom', font:{italic:true}}"/>
+            </Accordion>
+        </BoxPane>
+    </Border>
+
+    <Border styles="{padding:2}">
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
+            <Label text="Rollups" styles="{font:{bold:true}}"/>
+            <Rollup>
+                <heading>
+                    <Label text="Colors"/>
+                </heading>
+
+                <BoxPane orientation="vertical">
+                    <Label text="Red" styles="{color:'#ff0000'}"/>
+                    <Label text="Orange" styles="{color:'#ffa500'}"/>
+                    <Label text="Yellow" styles="{color:'#ffff00'}"/>
+                    <Label text="Green" styles="{color:'#00ff00'}"/>
+                    <Label text="Blue" styles="{color:'#0000ff'}"/>
+                    <Label text="Purple" styles="{color:'#800080'}"/>
+                </BoxPane>
+            </Rollup>
+            <Rollup expanded="true">
+                <heading>
+                    <Label text="Shapes"/>
+                </heading>
+
+                <BoxPane orientation="vertical">
+                    <Checkbox buttonData="Circle"/>
+                    <Checkbox buttonData="Ellipse" selected="true"/>
+                    <Checkbox buttonData="Square" selected="true"/>
+                    <Checkbox buttonData="Rectangle"/>
+                    <Checkbox buttonData="Hexagon"/>
+                    <Checkbox buttonData="Octagon" selected="true"/>
+                </BoxPane>
+            </Rollup>
+            <Rollup>
+                <heading>
+                    <Label text="Images"/>
+                </heading>
+
+                <BoxPane orientation="vertical">
+                    <bxml:define>
+                        <ButtonGroup bxml:id="images"/>
+                    </bxml:define>
+
+                    <RadioButton buttonGroup="$images" selected="true">
+                        <content:ButtonData text="Anchor" icon="@anchor.png"/>
+                    </RadioButton>
+                    <RadioButton buttonGroup="$images" selected="true">
+                        <content:ButtonData text="Bell" icon="@bell.png"/>
+                    </RadioButton>
+                    <RadioButton buttonGroup="$images" selected="true">
+                        <content:ButtonData text="Clock" icon="@clock.png"/>
+                    </RadioButton>
+                    <RadioButton buttonGroup="$images" selected="true">
+                        <content:ButtonData text="Cup" icon="@cup.png"/>
+                    </RadioButton>
+                    <RadioButton buttonGroup="$images" selected="true">
+                        <content:ButtonData text="House" icon="@house.png"/>
+                    </RadioButton>
+                    <RadioButton buttonGroup="$images" selected="true">
+                        <content:ButtonData text="Star" icon="@star.png"/>
+                    </RadioButton>
+                </BoxPane>
+            </Rollup>
+        </BoxPane>
+    </Border>
+</BoxPane>
+

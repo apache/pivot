@@ -48,13 +48,13 @@ public class DataBinding implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "data_binding.wtkx");
-        form = (Form)wtkxSerializer.get("form");
-        loadJavaButton = (PushButton)wtkxSerializer.get("loadJavaButton");
-        loadJSONButton = (PushButton)wtkxSerializer.get("loadJSONButton");
-        clearButton = (PushButton)wtkxSerializer.get("clearButton");
-        sourceLabel = (Label)wtkxSerializer.get("sourceLabel");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "data_binding.bxml");
+        form = (Form)beanSerializer.get("form");
+        loadJavaButton = (PushButton)beanSerializer.get("loadJavaButton");
+        loadJSONButton = (PushButton)beanSerializer.get("loadJSONButton");
+        clearButton = (PushButton)beanSerializer.get("clearButton");
+        sourceLabel = (Label)beanSerializer.get("sourceLabel");
 
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

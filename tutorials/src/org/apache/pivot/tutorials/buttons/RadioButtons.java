@@ -36,12 +36,12 @@ public class RadioButtons implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "radio_buttons.wtkx");
-        selectButton = (PushButton)wtkxSerializer.get("selectButton");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "radio_buttons.bxml");
+        selectButton = (PushButton)beanSerializer.get("selectButton");
 
         // Get a reference to the button group
-        final ButtonGroup numbersGroup = (ButtonGroup)wtkxSerializer.get("numbers");
+        final ButtonGroup numbersGroup = (ButtonGroup)beanSerializer.get("numbers");
 
         // Add a button press listener
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {

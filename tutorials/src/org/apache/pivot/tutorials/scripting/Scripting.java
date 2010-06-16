@@ -42,12 +42,12 @@ public class Scripting implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        wtkxSerializer.put("bar", "12345");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        beanSerializer.put("bar", "12345");
 
-        window = (Window)wtkxSerializer.readObject(this, "scripting.wtkx");
-        foo = (String)wtkxSerializer.get("foo");
-        listData = (List<?>)wtkxSerializer.get("listData");
+        window = (Window)beanSerializer.readObject(this, "scripting.bxml");
+        foo = (String)beanSerializer.get("foo");
+        listData = (List<?>)beanSerializer.get("listData");
 
         System.out.println("foo = " + foo);
         System.out.println("listData.getLength() = " + listData.getLength());

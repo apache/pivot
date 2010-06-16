@@ -76,10 +76,10 @@ public class ListViews implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "list_views.wtkx");
-        selectionLabel = (Label)wtkxSerializer.get("selectionLabel");
-        listView = (ListView)wtkxSerializer.get("listView");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "list_views.bxml");
+        selectionLabel = (Label)beanSerializer.get("selectionLabel");
+        listView = (ListView)beanSerializer.get("listView");
 
         listView.getListViewSelectionListeners().add(listViewSelectionListener);
 

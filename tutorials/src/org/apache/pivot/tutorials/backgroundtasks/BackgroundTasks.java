@@ -40,12 +40,12 @@ public class BackgroundTasks implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "background_tasks.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "background_tasks.bxml");
 
-        activityIndicator = (ActivityIndicator)wtkxSerializer.get("activityIndicator");
+        activityIndicator = (ActivityIndicator)beanSerializer.get("activityIndicator");
 
-        executeSynchronousButton = (PushButton)wtkxSerializer.get("executeSynchronousButton");
+        executeSynchronousButton = (PushButton)beanSerializer.get("executeSynchronousButton");
         executeSynchronousButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
@@ -68,7 +68,7 @@ public class BackgroundTasks implements Application {
             }
         });
 
-        executeAsynchronousButton = (PushButton)wtkxSerializer.get("executeAsynchronousButton");
+        executeAsynchronousButton = (PushButton)beanSerializer.get("executeAsynchronousButton");
         executeAsynchronousButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {

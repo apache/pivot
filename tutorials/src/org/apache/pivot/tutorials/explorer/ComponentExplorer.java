@@ -83,30 +83,30 @@ public class ComponentExplorer implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         Resources resources = new Resources(getClass().getName());
-        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
-        window = (Window)wtkxSerializer.readObject(this, "component_explorer.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer(resources);
+        window = (Window)beanSerializer.readObject(this, "component_explorer.bxml");
 
-        splitPane = wtkxSerializer.getValue("splitPane");
-        treeView = wtkxSerializer.getValue("treeView");
-        contentScrollPane = wtkxSerializer.getValue("contentScrollPane");
-        contentPane = wtkxSerializer.getValue("contentPane");
-        sourceTextArea = wtkxSerializer.getValue("sourceTextArea");
-        componentPropertyInspector = wtkxSerializer.getValue("componentPropertyInspector");
-        componentStyleInspector = wtkxSerializer.getValue("componentStyleInspector");
-        eventLogger = wtkxSerializer.getValue("eventLogger");
+        splitPane = beanSerializer.getValue("splitPane");
+        treeView = beanSerializer.getValue("treeView");
+        contentScrollPane = beanSerializer.getValue("contentScrollPane");
+        contentPane = beanSerializer.getValue("contentPane");
+        sourceTextArea = beanSerializer.getValue("sourceTextArea");
+        componentPropertyInspector = beanSerializer.getValue("componentPropertyInspector");
+        componentStyleInspector = beanSerializer.getValue("componentStyleInspector");
+        eventLogger = beanSerializer.getValue("eventLogger");
 
-        horizontalScrollBarPolicyGroup = wtkxSerializer.getValue("horizontalScrollBarPolicyGroup");
-        verticalScrollBarPolicyGroup = wtkxSerializer.getValue("verticalScrollBarPolicyGroup");
-        horizontalAutoButton = wtkxSerializer.getValue("horizontalAutoButton");
-        horizontalFillButton = wtkxSerializer.getValue("horizontalFillButton");
-        horizontalFillToCapacityButton = wtkxSerializer.getValue("horizontalFillToCapacityButton");
-        horizontalNeverButton = wtkxSerializer.getValue("horizontalNeverButton");
-        horizontalAlwaysButton = wtkxSerializer.getValue("horizontalAlwaysButton");
-        verticalAutoButton = wtkxSerializer.getValue("verticalAutoButton");
-        verticalFillButton = wtkxSerializer.getValue("verticalFillButton");
-        verticalFillToCapacityButton = wtkxSerializer.getValue("verticalFillToCapacityButton");
-        verticalNeverButton = wtkxSerializer.getValue("verticalNeverButton");
-        verticalAlwaysButton = wtkxSerializer.getValue("verticalAlwaysButton");
+        horizontalScrollBarPolicyGroup = beanSerializer.getValue("horizontalScrollBarPolicyGroup");
+        verticalScrollBarPolicyGroup = beanSerializer.getValue("verticalScrollBarPolicyGroup");
+        horizontalAutoButton = beanSerializer.getValue("horizontalAutoButton");
+        horizontalFillButton = beanSerializer.getValue("horizontalFillButton");
+        horizontalFillToCapacityButton = beanSerializer.getValue("horizontalFillToCapacityButton");
+        horizontalNeverButton = beanSerializer.getValue("horizontalNeverButton");
+        horizontalAlwaysButton = beanSerializer.getValue("horizontalAlwaysButton");
+        verticalAutoButton = beanSerializer.getValue("verticalAutoButton");
+        verticalFillButton = beanSerializer.getValue("verticalFillButton");
+        verticalFillToCapacityButton = beanSerializer.getValue("verticalFillToCapacityButton");
+        verticalNeverButton = beanSerializer.getValue("verticalNeverButton");
+        verticalAlwaysButton = beanSerializer.getValue("verticalAlwaysButton");
 
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener.Adapter() {
             @Override
@@ -138,9 +138,9 @@ public class ComponentExplorer implements Application {
 
                     sourceTextArea.setDocument(document);
 
-                    BeanSerializer wtkxSerializer = new BeanSerializer();
+                    BeanSerializer beanSerializer = new BeanSerializer();
                     try {
-                        component = (Component)wtkxSerializer.readObject(url);
+                        component = (Component)beanSerializer.readObject(url);
                     } catch (IOException exception) {
                         throw new RuntimeException(exception);
                     } catch (SerializationException exception) {

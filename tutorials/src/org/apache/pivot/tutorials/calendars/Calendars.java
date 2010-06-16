@@ -40,11 +40,11 @@ public class Calendars implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "calendars.wtkx");
-        calendar = (Calendar)wtkxSerializer.get("calendar");
-        calendarButton = (CalendarButton)wtkxSerializer.get("calendarButton");
-        selectedDateLabel = (Label)wtkxSerializer.get("selectedDateLabel");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "calendars.bxml");
+        calendar = (Calendar)beanSerializer.get("calendar");
+        calendarButton = (CalendarButton)beanSerializer.get("calendarButton");
+        selectedDateLabel = (Label)beanSerializer.get("selectedDateLabel");
 
         calendar.getCalendarSelectionListeners().add(new CalendarSelectionListener() {
             @Override

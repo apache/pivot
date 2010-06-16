@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<TablePane styles="{horizontalSpacing:6, verticalSpacing:6}"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk">
+    <columns>
+        <TablePane.Column width="1*"/>
+        <TablePane.Column width="-1"/>
+        <TablePane.Column width="-1"/>
+    </columns>
+
+    <TablePane.Row>
+        <Label text="AAPL"/>
+        <Label text="124.18" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-1.69" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="AMZN"/>
+        <Label text="75.96" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-2.01" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="EBAY"/>
+        <Label text="17.15" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-0.56" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="GOOG"/>
+        <Label text="396.50" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-0.68" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="JAVA"/>
+        <Label text="9.02" styles="{horizontalAlignment:'right'}"/>
+        <Label text="+0.04" styles="{color:'#008000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="MSFT"/>
+        <Label text="19.82" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-0.56" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+
+    <TablePane.Row>
+        <Label text="ORCL"/>
+        <Label text="18.57" styles="{horizontalAlignment:'right'}"/>
+        <Label text="-0.37" styles="{color:'#ff0000', horizontalAlignment:'right'}"/>
+    </TablePane.Row>
+</TablePane>
+

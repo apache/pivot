@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<BoxPane xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <Border styles="{padding:2}">
+        <BoxPane orientation="vertical" styles="{spacing: 12}">
+            <BoxPane orientation="vertical" styles="{padding: 6, spacing: 6}">
+                <bxml:define>
+                    <ButtonGroup bxml:id="messageTypeGroup"/>
+                </bxml:define>
+
+                <RadioButton buttonData="Error" buttonGroup="$messageTypeGroup" selected="true">
+                    <userData messageInfo="{messageType:'error', message:'This is an error message.'}"/>
+                </RadioButton>
+                <RadioButton buttonData="Warning" buttonGroup="$messageTypeGroup">
+                    <userData messageInfo="{messageType:'warning', message:'This is a warning message.'}"/>
+                </RadioButton>
+                <RadioButton buttonData="Question" buttonGroup="$messageTypeGroup">
+                    <userData messageInfo="{messageType:'question', message:'This is a question message.'}"/>
+                </RadioButton>
+                <RadioButton buttonData="Info" buttonGroup="$messageTypeGroup">
+                    <userData messageInfo="{messageType:'info', message:'This is an info message.'}"/>
+                </RadioButton>
+                <RadioButton buttonData="Custom" buttonGroup="$messageTypeGroup">
+                    <userData messageInfo="{message:'This is a custom message.'}"/>
+                </RadioButton>
+
+                <BoxPane>
+                    <PushButton bxml:id="alertButton" buttonData="Show Alert"/>
+                    <PushButton bxml:id="promptButton" buttonData="Show Prompt"/>
+                </BoxPane>
+            </BoxPane>
+        </BoxPane>
+    </Border>
+</BoxPane>
+

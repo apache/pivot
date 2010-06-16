@@ -37,12 +37,12 @@ public class ActivityIndicators implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "activity_indicators.wtkx");
-        activityIndicator1 = (ActivityIndicator)wtkxSerializer.get("activityIndicator1");
-        activityIndicator2 = (ActivityIndicator)wtkxSerializer.get("activityIndicator2");
-        activityIndicator3 = (ActivityIndicator)wtkxSerializer.get("activityIndicator3");
-        activityButton = (PushButton)wtkxSerializer.get("activityButton");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "activity_indicators.bxml");
+        activityIndicator1 = (ActivityIndicator)beanSerializer.get("activityIndicator1");
+        activityIndicator2 = (ActivityIndicator)beanSerializer.get("activityIndicator2");
+        activityIndicator3 = (ActivityIndicator)beanSerializer.get("activityIndicator3");
+        activityButton = (PushButton)beanSerializer.get("activityButton");
 
         activityButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

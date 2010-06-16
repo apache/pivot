@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Table Views" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns="org.apache.pivot.wtk">
+    <Border>
+        <ScrollPane>
+            <TableView bxml:id="tableView">
+                <columns>
+                    <TableView.Column name="nation" width="180" headerData="Nation"/>
+                    <TableView.Column name="gold" width="60" headerData="Gold"/>
+                    <TableView.Column name="silver" width="60" headerData="Silver"/>
+                    <TableView.Column name="bronze" width="60" headerData="Bronze"/>
+                    <TableView.Column name="total" width="60" headerData="Total"/>
+                </columns>
+
+                <!-- Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table -->
+                <collections:HashMap nation="China" gold="51" silver="21" bronze="28" total="100"/>
+                <collections:HashMap nation="United States" gold="36" silver="38" bronze="36" total="110"/>
+                <collections:HashMap nation="Russia" gold="23" silver="21" bronze="28" total="72"/>
+                <collections:HashMap nation="Great Britain" gold="19" silver="13" bronze="15" total="47"/>
+                <collections:HashMap nation="Germany" gold="16" silver="10" bronze="15" total="41"/>
+                <collections:HashMap nation="Australia" gold="14" silver="15" bronze="17" total="46"/>
+                <collections:HashMap nation="South Korea" gold="13" silver="10" bronze="8" total="31"/>
+                <collections:HashMap nation="Japan" gold="9" silver="6" bronze="11" total="26"/>
+                <collections:HashMap nation="Italy" gold="8" silver="10" bronze="10" total="28"/>
+                <collections:HashMap nation="France" gold="7" silver="16" bronze="17" total="40"/>
+            </TableView>
+
+            <columnHeader>
+                <TableViewHeader tableView="$tableView"/>
+            </columnHeader>
+        </ScrollPane>
+    </Border>
+</Window>

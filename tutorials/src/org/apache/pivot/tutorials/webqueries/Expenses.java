@@ -63,8 +63,8 @@ public class Expenses implements Application {
             secure = Boolean.parseBoolean(properties.get(SECURE_KEY));
         }
 
-        BeanSerializer wtkxSerializer = new BeanSerializer(new Resources(ExpensesWindow.class.getName()));
-        expensesWindow = (ExpensesWindow)wtkxSerializer.readObject(this, "expenses_window.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer(new Resources(ExpensesWindow.class.getName()));
+        expensesWindow = (ExpensesWindow)beanSerializer.readObject(this, "expenses_window.bxml");
         expensesWindow.open(display);
     }
 

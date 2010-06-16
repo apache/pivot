@@ -42,13 +42,13 @@ public class Forms implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "forms.wtkx");
-        nameBoxPane = (BoxPane)wtkxSerializer.get("nameBoxPane");
-        lastNameTextInput = (TextInput)wtkxSerializer.get("lastNameTextInput");
-        firstNameTextInput = (TextInput)wtkxSerializer.get("firstNameTextInput");
-        submitButton = (PushButton)wtkxSerializer.get("submitButton");
-        errorLabel = (Label)wtkxSerializer.get("errorLabel");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "forms.bxml");
+        nameBoxPane = (BoxPane)beanSerializer.get("nameBoxPane");
+        lastNameTextInput = (TextInput)beanSerializer.get("lastNameTextInput");
+        firstNameTextInput = (TextInput)beanSerializer.get("firstNameTextInput");
+        submitButton = (PushButton)beanSerializer.get("submitButton");
+        errorLabel = (Label)beanSerializer.get("errorLabel");
 
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

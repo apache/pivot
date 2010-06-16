@@ -82,9 +82,9 @@ public class Accordions implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "accordions.wtkx");
-        accordion = (Accordion)wtkxSerializer.get("accordion");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "accordions.bxml");
+        accordion = (Accordion)beanSerializer.get("accordion");
 
         accordion.getAccordionSelectionListeners().add(accordionSelectionListener);
 
@@ -95,13 +95,13 @@ public class Accordions implements Application {
             }
         };
 
-        shippingNextButton = (PushButton)wtkxSerializer.get("shippingPanel.nextButton");
+        shippingNextButton = (PushButton)beanSerializer.get("shippingPanel.nextButton");
         shippingNextButton.getButtonPressListeners().add(nextButtonPressListener);
 
-        paymentNextButton = (PushButton)wtkxSerializer.get("paymentPanel.nextButton");
+        paymentNextButton = (PushButton)beanSerializer.get("paymentPanel.nextButton");
         paymentNextButton.getButtonPressListeners().add(nextButtonPressListener);
 
-        confirmOrderButton = (PushButton)wtkxSerializer.get("summaryPanel.confirmOrderButton");
+        confirmOrderButton = (PushButton)beanSerializer.get("summaryPanel.confirmOrderButton");
         confirmOrderButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
@@ -112,8 +112,8 @@ public class Accordions implements Application {
             }
         });
 
-        activityIndicator = (ActivityIndicator)wtkxSerializer.get("summaryPanel.activityIndicator");
-        processingOrderLabel = (Label)wtkxSerializer.get("summaryPanel.processingOrderLabel");
+        activityIndicator = (ActivityIndicator)beanSerializer.get("summaryPanel.activityIndicator");
+        processingOrderLabel = (Label)beanSerializer.get("summaryPanel.processingOrderLabel");
 
         updateAccordion();
         updateConfirmOrderButton();

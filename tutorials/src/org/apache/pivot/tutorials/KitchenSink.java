@@ -101,9 +101,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "buttons.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "buttons.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -128,19 +128,19 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "lists.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "lists.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                editableListView = (ListView)wtkxSerializer.get("editableListView");
-                iconListView = (ListView)wtkxSerializer.get("iconListView");
-                checkedListView = (ListView)wtkxSerializer.get("checkedListView");
-                iconListButton = (ListButton)wtkxSerializer.get("iconListButton");
+                editableListView = (ListView)beanSerializer.get("editableListView");
+                iconListView = (ListView)beanSerializer.get("iconListView");
+                checkedListView = (ListView)beanSerializer.get("checkedListView");
+                iconListButton = (ListButton)beanSerializer.get("iconListButton");
 
                 rollup.setContent(component);
 
@@ -180,9 +180,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "text.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "text.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -202,9 +202,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "calendars.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "calendars.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -224,9 +224,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "color_choosers.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "color_choosers.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -246,9 +246,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "navigation.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "navigation.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -268,9 +268,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "splitters.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "splitters.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -327,23 +327,23 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     }
                 });
 
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "menus.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "menus.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                menuImageView = (ImageView)wtkxSerializer.get("menuImageView");
-                helpAboutMenuItem  = (Menu.Item)wtkxSerializer.get("menuBar.helpAboutMenuItem");
+                menuImageView = (ImageView)beanSerializer.get("menuImageView");
+                helpAboutMenuItem  = (Menu.Item)beanSerializer.get("menuBar.helpAboutMenuItem");
 
                 rollup.setContent(component);
 
                 try {
-                    menuSection = (Menu.Section)wtkxSerializer.readObject(this, "menu_section.wtkx");
-                    imageMenuGroup = (ButtonGroup)wtkxSerializer.get("imageMenuGroup");
+                    menuSection = (Menu.Section)beanSerializer.readObject(this, "menu_section.bxml");
+                    imageMenuGroup = (ButtonGroup)beanSerializer.get("imageMenuGroup");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -379,18 +379,18 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "meters.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "meters.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                activityIndicator1 = (ActivityIndicator)wtkxSerializer.get("activityIndicator1");
-                activityIndicator2 = (ActivityIndicator)wtkxSerializer.get("activityIndicator2");
-                activityIndicator3 = (ActivityIndicator)wtkxSerializer.get("activityIndicator3");
+                activityIndicator1 = (ActivityIndicator)beanSerializer.get("activityIndicator1");
+                activityIndicator2 = (ActivityIndicator)beanSerializer.get("activityIndicator2");
+                activityIndicator3 = (ActivityIndicator)beanSerializer.get("activityIndicator3");
 
                 rollup.setContent(component);
 
@@ -432,22 +432,22 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "spinners.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "spinners.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                numericSpinner = (Spinner)wtkxSerializer.get("numericSpinner");
-                dateSpinner = (Spinner)wtkxSerializer.get("dateSpinner");
+                numericSpinner = (Spinner)beanSerializer.get("numericSpinner");
+                dateSpinner = (Spinner)beanSerializer.get("dateSpinner");
 
-                redSlider = (Slider)wtkxSerializer.get("redSlider");
-                greenSlider = (Slider)wtkxSerializer.get("greenSlider");
-                blueSlider = (Slider)wtkxSerializer.get("blueSlider");
-                colorBorder = (Border)wtkxSerializer.get("colorBorder");
+                redSlider = (Slider)beanSerializer.get("redSlider");
+                greenSlider = (Slider)beanSerializer.get("greenSlider");
+                blueSlider = (Slider)beanSerializer.get("blueSlider");
+                colorBorder = (Border)beanSerializer.get("colorBorder");
 
                 rollup.setContent(component);
 
@@ -500,17 +500,17 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "tables.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "tables.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                sortableTableView = (TableView)wtkxSerializer.get("sortableTableView");
-                customTableView = (TableView)wtkxSerializer.get("customTableView");
+                sortableTableView = (TableView)beanSerializer.get("sortableTableView");
+                customTableView = (TableView)beanSerializer.get("customTableView");
 
                 rollup.setContent(component);
 
@@ -603,17 +603,17 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "trees.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "trees.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                editableTreeView = (TreeView)wtkxSerializer.get("editableTreeView");
-                checkTreeView = (TreeView)wtkxSerializer.get("checkTreeView");
+                editableTreeView = (TreeView)beanSerializer.get("editableTreeView");
+                checkTreeView = (TreeView)beanSerializer.get("checkTreeView");
 
                 rollup.setContent(component);
 
@@ -659,18 +659,18 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "dragdrop.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "dragdrop.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                imageView1 = (ImageView)wtkxSerializer.get("imageView1");
-                imageView2 = (ImageView)wtkxSerializer.get("imageView2");
-                imageView3 = (ImageView)wtkxSerializer.get("imageView3");
+                imageView1 = (ImageView)beanSerializer.get("imageView1");
+                imageView2 = (ImageView)beanSerializer.get("imageView2");
+                imageView3 = (ImageView)beanSerializer.get("imageView3");
 
                 rollup.setContent(component);
 
@@ -816,18 +816,18 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 try {
-                    component = (Component)wtkxSerializer.readObject(this, "alerts.wtkx");
+                    component = (Component)beanSerializer.readObject(this, "alerts.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                alertButton = (PushButton)wtkxSerializer.get("alertButton");
-                promptButton = (PushButton)wtkxSerializer.get("promptButton");
-                messageTypeGroup = (ButtonGroup)wtkxSerializer.get("messageTypeGroup");
+                alertButton = (PushButton)beanSerializer.get("alertButton");
+                promptButton = (PushButton)beanSerializer.get("promptButton");
+                messageTypeGroup = (ButtonGroup)beanSerializer.get("messageTypeGroup");
 
                 rollup.setContent(component);
 
@@ -851,9 +851,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             options.add("Cancel");
 
                             Component body = null;
-                            BeanSerializer wtkxSerializer = new BeanSerializer();
+                            BeanSerializer beanSerializer = new BeanSerializer();
                             try {
-                                body = (Component)wtkxSerializer.readObject(this, "alert.wtkx");
+                                body = (Component)beanSerializer.readObject(this, "alert.bxml");
                             } catch(Exception exception) {
                                 System.err.println(exception);
                             }
@@ -891,9 +891,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             options.add("Cancel");
 
                             Component body = null;
-                            BeanSerializer wtkxSerializer = new BeanSerializer();
+                            BeanSerializer beanSerializer = new BeanSerializer();
                             try {
-                                body = (Component)wtkxSerializer.readObject(this, "alert.wtkx");
+                                body = (Component)beanSerializer.readObject(this, "alert.bxml");
                             } catch(Exception exception) {
                                 System.err.println(exception);
                             }
@@ -938,50 +938,50 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "kitchen_sink.wtkx");
-        wtkxSerializer.bind(this, KitchenSink.class);
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "kitchen_sink.bxml");
+        beanSerializer.bind(this, KitchenSink.class);
 
-        buttonsRollup = (Rollup)wtkxSerializer.get("buttonsRollup");
+        buttonsRollup = (Rollup)beanSerializer.get("buttonsRollup");
         buttonsRollup.getRollupStateListeners().add(new ButtonsRollupStateHandler());
 
-        listsRollup = (Rollup)wtkxSerializer.get("listsRollup");
+        listsRollup = (Rollup)beanSerializer.get("listsRollup");
         listsRollup.getRollupStateListeners().add(new ListsRollupStateHandler());
 
-        textRollup = (Rollup)wtkxSerializer.get("textRollup");
+        textRollup = (Rollup)beanSerializer.get("textRollup");
         textRollup.getRollupStateListeners().add(new TextRollupStateHandler());
 
-        calendarsRollup = (Rollup)wtkxSerializer.get("calendarsRollup");
+        calendarsRollup = (Rollup)beanSerializer.get("calendarsRollup");
         calendarsRollup.getRollupStateListeners().add(new CalendarsRollupStateHandler());
 
-        colorChoosersRollup = (Rollup)wtkxSerializer.get("colorChoosersRollup");
+        colorChoosersRollup = (Rollup)beanSerializer.get("colorChoosersRollup");
         colorChoosersRollup.getRollupStateListeners().add(new ColorChoosersRollupStateHandler());
 
-        navigationRollup = (Rollup)wtkxSerializer.get("navigationRollup");
+        navigationRollup = (Rollup)beanSerializer.get("navigationRollup");
         navigationRollup.getRollupStateListeners().add(new NavigationRollupStateHandler());
 
-        splittersRollup = (Rollup)wtkxSerializer.get("splittersRollup");
+        splittersRollup = (Rollup)beanSerializer.get("splittersRollup");
         splittersRollup.getRollupStateListeners().add(new SplittersRollupStateHandler());
 
-        menusRollup = (Rollup)wtkxSerializer.get("menusRollup");
+        menusRollup = (Rollup)beanSerializer.get("menusRollup");
         menusRollup.getRollupStateListeners().add(new MenusRollupStateHandler());
 
-        metersRollup = (Rollup)wtkxSerializer.get("metersRollup");
+        metersRollup = (Rollup)beanSerializer.get("metersRollup");
         metersRollup.getRollupStateListeners().add(new MetersRollupStateHandler());
 
-        spinnersRollup = (Rollup)wtkxSerializer.get("spinnersRollup");
+        spinnersRollup = (Rollup)beanSerializer.get("spinnersRollup");
         spinnersRollup.getRollupStateListeners().add(new SpinnersRollupStateHandler());
 
-        tablesRollup = (Rollup)wtkxSerializer.get("tablesRollup");
+        tablesRollup = (Rollup)beanSerializer.get("tablesRollup");
         tablesRollup.getRollupStateListeners().add(new TablesRollupStateHandler());
 
-        treesRollup = (Rollup)wtkxSerializer.get("treesRollup");
+        treesRollup = (Rollup)beanSerializer.get("treesRollup");
         treesRollup.getRollupStateListeners().add(new TreesRollupStateHandler());
 
-        dragDropRollup = (Rollup)wtkxSerializer.get("dragDropRollup");
+        dragDropRollup = (Rollup)beanSerializer.get("dragDropRollup");
         dragDropRollup.getRollupStateListeners().add(new DragDropRollupStateHandler());
 
-        alertsRollup = (Rollup)wtkxSerializer.get("alertsRollup");
+        alertsRollup = (Rollup)beanSerializer.get("alertsRollup");
         alertsRollup.getRollupStateListeners().add(new AlertsRollupStateHandler());
 
         window.open(display);

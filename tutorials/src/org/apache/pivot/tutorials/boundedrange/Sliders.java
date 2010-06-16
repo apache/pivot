@@ -33,10 +33,10 @@ public class Sliders implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "sliders.wtkx");
-        slider = (Slider)wtkxSerializer.get("slider");
-        label = (Label)wtkxSerializer.get("label");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "sliders.bxml");
+        slider = (Slider)beanSerializer.get("slider");
+        label = (Label)beanSerializer.get("label");
 
         slider.getSliderValueListeners().add(new SliderValueListener() {
             @Override

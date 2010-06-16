@@ -94,17 +94,17 @@ public class TablePanes implements Application {
         namedActions.put("configureCell", new Action() {
             @Override
             public void perform() {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 Sheet sheet;
 
                 // Make the cell component available to script blocks
                 int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
                 int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
                 Component component = tablePane.getCellComponent(rowIndex, columnIndex);
-                wtkxSerializer.put("component", component);
+                beanSerializer.put("component", component);
 
                 try {
-                    sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_cell.wtkx");
+                    sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_cell.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -118,16 +118,16 @@ public class TablePanes implements Application {
         namedActions.put("configureRow", new Action() {
             @Override
             public void perform() {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 Sheet sheet;
 
                 // Make the selected row available to script blocks
                 int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
                 TablePane.Row row = tablePane.getRows().get(rowIndex);
-                wtkxSerializer.put("row", row);
+                beanSerializer.put("row", row);
 
                 try {
-                    sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_row.wtkx");
+                    sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_row.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -141,7 +141,7 @@ public class TablePanes implements Application {
         namedActions.put("insertRow", new Action() {
             @Override
             public void perform() {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 Sheet sheet;
 
                 // Create and insert a new row
@@ -158,10 +158,10 @@ public class TablePanes implements Application {
                 }
 
                 // Make the new row available to script blocks
-                wtkxSerializer.put("row", row);
+                beanSerializer.put("row", row);
 
                 try {
-                    sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_row.wtkx");
+                    sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_row.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -198,16 +198,16 @@ public class TablePanes implements Application {
         namedActions.put("configureColumn", new Action() {
             @Override
             public void perform() {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 Sheet sheet;
 
                 // Make the selected column available to script blocks
                 int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
                 TablePane.Column column = tablePane.getColumns().get(columnIndex);
-                wtkxSerializer.put("column", column);
+                beanSerializer.put("column", column);
 
                 try {
-                    sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_column.wtkx");
+                    sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_column.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -221,7 +221,7 @@ public class TablePanes implements Application {
         namedActions.put("insertColumn", new Action() {
             @Override
             public void perform() {
-                BeanSerializer wtkxSerializer = new BeanSerializer();
+                BeanSerializer beanSerializer = new BeanSerializer();
                 Sheet sheet;
 
                 // Create and insert a new column
@@ -239,10 +239,10 @@ public class TablePanes implements Application {
                 }
 
                 // Make the new column available to script blocks
-                wtkxSerializer.put("column", column);
+                beanSerializer.put("column", column);
 
                 try {
-                    sheet = (Sheet)wtkxSerializer.readObject(this, "table_panes_configure_column.wtkx");
+                    sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_column.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -285,13 +285,13 @@ public class TablePanes implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "table_panes.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "table_panes.bxml");
 
-        tablePane = (TablePane)wtkxSerializer.get("tablePane");
-        cellSection = (Menu.Section)wtkxSerializer.get("cellSection");
-        rowSection = (Menu.Section)wtkxSerializer.get("rowSection");
-        columnSection = (Menu.Section)wtkxSerializer.get("columnSection");
+        tablePane = (TablePane)beanSerializer.get("tablePane");
+        cellSection = (Menu.Section)beanSerializer.get("cellSection");
+        rowSection = (Menu.Section)beanSerializer.get("rowSection");
+        columnSection = (Menu.Section)beanSerializer.get("columnSection");
 
         tablePane.setMenuHandler(contextMenuHandler);
 

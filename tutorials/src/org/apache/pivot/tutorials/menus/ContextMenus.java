@@ -57,8 +57,8 @@ public class ContextMenus implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "context_menus.wtkx");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "context_menus.bxml");
         window.setMenuHandler(menuHandler);
 
         window.open(display);

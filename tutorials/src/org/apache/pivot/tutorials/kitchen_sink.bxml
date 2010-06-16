@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Pivot &quot;Kitchen Sink&quot; Demo" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:effects="org.apache.pivot.wtk.effects"
+    xmlns="org.apache.pivot.wtk">
+    <Border styles="{backgroundColor:10, thickness:0, padding:8}">
+        <Border>
+            <ScrollPane bxml:id="scrollPane" styles="{backgroundColor:11}"
+                horizontalScrollBarPolicy="auto"
+                verticalScrollBarPolicy="auto">
+                <BoxPane orientation="vertical" styles="{padding:6}">
+                    <Rollup bxml:id="buttonsRollup">
+                        <heading>
+                            <Label text="Buttons" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="listsRollup">
+                        <heading>
+                            <Label text="Lists" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="textRollup">
+                        <heading>
+                            <Label text="Text" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="calendarsRollup">
+                        <heading>
+                            <Label text="Calendars" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="colorChoosersRollup">
+                        <heading>
+                            <Label text="Color Choosers" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="navigationRollup">
+                        <heading>
+                            <Label text="Navigation" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="splittersRollup">
+                        <heading>
+                            <Label text="Splitters" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="menusRollup">
+                        <heading>
+                            <Label text="Menus" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="metersRollup">
+                        <heading>
+                            <Label text="Meters &amp; Activity Indicators" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="spinnersRollup">
+                        <heading>
+                            <Label text="Spinners &amp; Sliders" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="tablesRollup">
+                        <heading>
+                            <Label text="Tables" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="treesRollup">
+                        <heading>
+                            <Label text="Trees" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="dragDropRollup">
+                        <heading>
+                            <Label text="Drag &amp; Drop" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                    <Rollup bxml:id="alertsRollup">
+                        <heading>
+                            <Label text="Alerts &amp; Prompts" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                        </heading>
+                    </Rollup>
+                </BoxPane>
+            </ScrollPane>
+        </Border>
+    </Border>
+</Window>

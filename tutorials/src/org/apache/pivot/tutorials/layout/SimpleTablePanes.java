@@ -38,9 +38,9 @@ public class SimpleTablePanes implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "simple_table_panes.wtkx");
-        tablePane = (TablePane)wtkxSerializer.get("tablePane");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "simple_table_panes.bxml");
+        tablePane = (TablePane)beanSerializer.get("tablePane");
 
         tablePane.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
             @Override

@@ -93,10 +93,10 @@ public class MenuButtons implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "menu_buttons.wtkx");
-        colorListButton = (ListButton)wtkxSerializer.get("colorListButton");
-        imageView = (ImageView)wtkxSerializer.get("imageView");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "menu_buttons.bxml");
+        colorListButton = (ListButton)beanSerializer.get("colorListButton");
+        imageView = (ImageView)beanSerializer.get("imageView");
 
         drawing = new Drawing();
 

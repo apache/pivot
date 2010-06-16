@@ -38,12 +38,12 @@ public class Windows implements Application {
         int y = 0;
 
         for (int i = 0; i < 3; i++) {
-            BeanSerializer wtkxSerializer = new BeanSerializer();
-            wtkxSerializer.put("application", this);
+            BeanSerializer beanSerializer = new BeanSerializer();
+            beanSerializer.put("application", this);
 
             Frame frame;
             try {
-                frame = (Frame)wtkxSerializer.readObject(Windows.this, "frame.wtkx");
+                frame = (Frame)beanSerializer.readObject(Windows.this, "frame.bxml");
             } catch (SerializationException exception) {
                 throw new RuntimeException(exception);
             } catch (IOException exception) {
@@ -79,8 +79,8 @@ public class Windows implements Application {
 
     public Window load(String fileName)
         throws SerializationException, IOException {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        return (Window)wtkxSerializer.readObject(this, fileName);
+        BeanSerializer beanSerializer = new BeanSerializer();
+        return (Window)beanSerializer.readObject(this, fileName);
     }
 
     public static void main(String[] args) {

@@ -72,10 +72,10 @@ public class ListButtons implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "list_buttons.wtkx");
-        listButton = (ListButton)wtkxSerializer.get("listButton");
-        imageView = (ImageView)wtkxSerializer.get("imageView");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "list_buttons.bxml");
+        listButton = (ListButton)beanSerializer.get("listButton");
+        imageView = (ImageView)beanSerializer.get("imageView");
 
         listButton.getListButtonSelectionListeners().add(listButtonSelectionListener);
         listButton.setSelectedIndex(0);

@@ -47,10 +47,10 @@ public class FileBrowsing implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
+        BeanSerializer beanSerializer = new BeanSerializer();
 
-        window = (Window)wtkxSerializer.readObject(getClass().getResource("file_browsing.wtkx"));
-        wtkxSerializer.bind(this, FileBrowsing.class);
+        window = (Window)beanSerializer.readObject(getClass().getResource("file_browsing.bxml"));
+        beanSerializer.bind(this, FileBrowsing.class);
 
         openSheetButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

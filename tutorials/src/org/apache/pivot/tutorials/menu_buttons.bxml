@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Border styles="{padding:2}"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <BoxPane orientation="vertical"
+        styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+        <BoxPane orientation="vertical">
+            <Label text="Menu Buttons" styles="{font:{bold:true}}" />
+            <BoxPane orientation="vertical">
+                <MenuButton buttonData="File">
+                    <Menu>
+                        <Menu.Section>
+                            <Menu.Item>
+                                 <buttonData>
+                                     <content:ButtonData text="New" icon="@document-new.png"/>
+                                 </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:ButtonData text="Open" icon="@document-open.png"/>
+                                </buttonData>
+                            </Menu.Item>
+                        </Menu.Section>
+                        <Menu.Section>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:ButtonData text="Close"/>
+                                </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:ButtonData text="Close All"/>
+                                </buttonData>
+                            </Menu.Item>
+                        </Menu.Section>
+                        <Menu.Section>
+                            <Menu.Item enabled="false">
+                                <buttonData>
+                                    <content:ButtonData text="Save" icon="@document-save.png"/>
+                                </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:ButtonData text="Save As" icon="@document-save-as.png"/>
+                                </buttonData>
+                                <Menu>
+                                    <Menu.Section>
+                                        <Menu.Item buttonData="JPEG"/>
+                                        <Menu.Item buttonData="PNG"/>
+                                        <Menu.Item buttonData="GIF"/>
+                                        <Menu.Item buttonData="PDF"/>
+                                    </Menu.Section>
+                                </Menu>
+                            </Menu.Item>
+                        </Menu.Section>
+                    </Menu>
+                </MenuButton>
+
+                <MenuButton styles="{spacing:2}">
+                    <buttonData>
+                        <content:ButtonData text="Edit" icon="@page_edit.png"/>
+                    </buttonData>
+                    <Menu>
+                        <Menu.Section>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:MenuItemData text="Undo" icon="@edit-undo.png"
+                                        keyboardShortcut="CTRL-Z"/>
+                                </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:MenuItemData text="Redo" icon="@edit-redo.png"
+                                        keyboardShortcut="SHIFT-CTRL-Z"/>
+                                </buttonData>
+                            </Menu.Item>
+                        </Menu.Section>
+                        <Menu.Section>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:MenuItemData text="Cut" icon="@edit-cut.png"
+                                        keyboardShortcut="CTRL-X"/>
+                                </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:MenuItemData text="Copy" icon="@edit-copy.png"
+                                        keyboardShortcut="CTRL-C"/>
+                                </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:MenuItemData text="Paste" icon="@edit-paste.png"
+                                        keyboardShortcut="CTRL-V"/>
+                                </buttonData>
+                            </Menu.Item>
+                        </Menu.Section>
+                        <Menu.Section>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:MenuItemData text="Delete" icon="@edit-delete.png"
+                                        keyboardShortcut="DELETE"/>
+                                </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:MenuItemData text="Select All" icon="@edit-select-all.png"
+                                        keyboardShortcut="CTRL-A"/>
+                                </buttonData>
+                            </Menu.Item>
+                        </Menu.Section>
+                    </Menu>
+                </MenuButton>
+
+                <MenuButton tooltipText="Help" styles="{spacing:2, toolbar:true}">
+                    <buttonData>
+                        <content:ButtonData icon="@help.png"/>
+                    </buttonData>
+                    <Menu>
+                        <Menu.Section>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:ButtonData text="Contents" icon="@book_open.png"/>
+                                </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:ButtonData text="Search" icon="@magnifier.png"/>
+                                </buttonData>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <buttonData>
+                                    <content:ButtonData text="About" icon="@application.png"/>
+                                </buttonData>
+                            </Menu.Item>
+                        </Menu.Section>
+                    </Menu>
+                </MenuButton>
+            </BoxPane>
+        </BoxPane>
+    </BoxPane>
+</Border>

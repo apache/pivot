@@ -41,13 +41,13 @@ public class TabPanes implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "tab_panes.wtkx");
-        tabPane = (TabPane)wtkxSerializer.get("tabPane");
-        collapsibleCheckbox = (Checkbox)wtkxSerializer.get("collapsibleCheckbox");
-        horizontalRadioButton = (RadioButton)wtkxSerializer.get("horizontalRadioButton");
-        verticalRadioButton = (RadioButton)wtkxSerializer.get("verticalRadioButton");
-        cornerBoxPane = (BoxPane)wtkxSerializer.get("cornerBoxPane");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "tab_panes.bxml");
+        tabPane = (TabPane)beanSerializer.get("tabPane");
+        collapsibleCheckbox = (Checkbox)beanSerializer.get("collapsibleCheckbox");
+        horizontalRadioButton = (RadioButton)beanSerializer.get("horizontalRadioButton");
+        verticalRadioButton = (RadioButton)beanSerializer.get("verticalRadioButton");
+        cornerBoxPane = (BoxPane)beanSerializer.get("cornerBoxPane");
 
         ButtonStateListener checkboxStateListener = new ButtonStateListener() {
             @Override

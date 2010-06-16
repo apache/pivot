@@ -119,8 +119,8 @@ public class ExpensesWindow extends Window implements Bindable {
     public void initialize(Resources resources) {
         // Load the add/edit sheet
         try {
-            BeanSerializer wtkxSerializer = new BeanSerializer(new Resources(ExpenseSheet.class.getName()));
-            expenseSheet = (ExpenseSheet)wtkxSerializer.readObject(this, "expense_sheet.wtkx");
+            BeanSerializer beanSerializer = new BeanSerializer(new Resources(ExpenseSheet.class.getName()));
+            expenseSheet = (ExpenseSheet)beanSerializer.readObject(this, "expense_sheet.bxml");
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {

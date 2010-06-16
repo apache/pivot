@@ -46,18 +46,18 @@ public class BoxPanes implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "box_panes.wtkx");
-        boxPane = (BoxPane)wtkxSerializer.get("boxPane");
-        horizontalOrientationButton = (RadioButton)wtkxSerializer.get("horizontalOrientationButton");
-        verticalOrientationButton = (RadioButton)wtkxSerializer.get("verticalOrientationButton");
-        horizontalAlignmentRightButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentRightButton");
-        horizontalAlignmentLeftButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentLeftButton");
-        horizontalAlignmentCenterButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentCenterButton");
-        verticalAlignmentTopButton = (RadioButton)wtkxSerializer.get("verticalAlignmentTopButton");
-        verticalAlignmentBottomButton = (RadioButton)wtkxSerializer.get("verticalAlignmentBottomButton");
-        verticalAlignmentCenterButton = (RadioButton)wtkxSerializer.get("verticalAlignmentCenterButton");
-        fillCheckbox = (Checkbox)wtkxSerializer.get("fillCheckbox");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "box_panes.bxml");
+        boxPane = (BoxPane)beanSerializer.get("boxPane");
+        horizontalOrientationButton = (RadioButton)beanSerializer.get("horizontalOrientationButton");
+        verticalOrientationButton = (RadioButton)beanSerializer.get("verticalOrientationButton");
+        horizontalAlignmentRightButton = (RadioButton)beanSerializer.get("horizontalAlignmentRightButton");
+        horizontalAlignmentLeftButton = (RadioButton)beanSerializer.get("horizontalAlignmentLeftButton");
+        horizontalAlignmentCenterButton = (RadioButton)beanSerializer.get("horizontalAlignmentCenterButton");
+        verticalAlignmentTopButton = (RadioButton)beanSerializer.get("verticalAlignmentTopButton");
+        verticalAlignmentBottomButton = (RadioButton)beanSerializer.get("verticalAlignmentBottomButton");
+        verticalAlignmentCenterButton = (RadioButton)beanSerializer.get("verticalAlignmentCenterButton");
+        fillCheckbox = (Checkbox)beanSerializer.get("fillCheckbox");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
             @Override

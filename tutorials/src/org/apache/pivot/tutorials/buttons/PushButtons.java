@@ -34,9 +34,9 @@ public class PushButtons implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "push_buttons.wtkx");
-        pushButton = (PushButton)wtkxSerializer.get("pushButton");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "push_buttons.bxml");
+        pushButton = (PushButton)beanSerializer.get("pushButton");
 
         // Add a button press listener
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {

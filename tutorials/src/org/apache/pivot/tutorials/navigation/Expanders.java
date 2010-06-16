@@ -34,11 +34,11 @@ public class Expanders implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "expanders.wtkx");
-        stocksExpander = (Expander)wtkxSerializer.get("stocksExpander");
-        weatherExpander = (Expander)wtkxSerializer.get("weatherExpander");
-        calendarExpander = (Expander)wtkxSerializer.get("calendarExpander");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "expanders.bxml");
+        stocksExpander = (Expander)beanSerializer.get("stocksExpander");
+        weatherExpander = (Expander)beanSerializer.get("weatherExpander");
+        calendarExpander = (Expander)beanSerializer.get("calendarExpander");
 
         ExpanderListener expanderListener = new ExpanderListener.Adapter() {
             @Override

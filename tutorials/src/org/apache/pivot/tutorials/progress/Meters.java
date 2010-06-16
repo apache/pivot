@@ -72,10 +72,10 @@ public class Meters implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "meters.wtkx");
-        meter = (Meter)wtkxSerializer.get("meter");
-        progressButton = (PushButton)wtkxSerializer.get("progressButton");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "meters.bxml");
+        meter = (Meter)beanSerializer.get("meter");
+        progressButton = (PushButton)beanSerializer.get("progressButton");
 
         progressButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

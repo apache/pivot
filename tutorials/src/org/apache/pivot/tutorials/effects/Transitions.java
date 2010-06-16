@@ -44,12 +44,12 @@ public class Transitions implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "transitions.wtkx");
-        button1 = (PushButton)wtkxSerializer.get("button1");
-        button2 = (PushButton)wtkxSerializer.get("button2");
-        button3 = (PushButton)wtkxSerializer.get("button3");
-        button4 = (PushButton)wtkxSerializer.get("button4");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "transitions.bxml");
+        button1 = (PushButton)beanSerializer.get("button1");
+        button2 = (PushButton)beanSerializer.get("button2");
+        button3 = (PushButton)beanSerializer.get("button3");
+        button4 = (PushButton)beanSerializer.get("button4");
 
         ButtonPressListener buttonPressListener = new ButtonPressListener() {
             @Override

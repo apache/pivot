@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<BoxPane xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <Border styles="{padding:2}">
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+            <BoxPane orientation="vertical">
+                <Label text="Basic Push Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane>
+                    <PushButton buttonData="One"/>
+                    <PushButton buttonData="Two"/>
+                    <PushButton buttonData="Three" enabled="false"/>
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane orientation="vertical">
+                <Label text="Ungrouped Toggle Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane>
+                    <PushButton buttonData="One" toggleButton="true"/>
+                    <PushButton buttonData="Two" toggleButton="true"/>
+                    <PushButton buttonData="Three" toggleButton="true" enabled="false"/>
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane orientation="vertical">
+                <Label text="Grouped Toggle Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane>
+                    <bxml:define>
+                        <ButtonGroup bxml:id="toggleButtons"/>
+                    </bxml:define>
+                    <PushButton buttonData="One" toggleButton="true" buttonGroup="$toggleButtons"/>
+                    <PushButton buttonData="Two" toggleButton="true" buttonGroup="$toggleButtons"/>
+                    <PushButton buttonData="Three" toggleButton="true" buttonGroup="$toggleButtons" selected="true" enabled="false"/>
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane orientation="vertical">
+                <Label text="Image Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane>
+                    <PushButton>
+                        <content:ButtonData icon="@bell.png" text="Bell"/>
+                    </PushButton>
+                    <PushButton>
+                        <dataRenderer>
+                            <content:ButtonDataRenderer orientation="vertical"/>
+                        </dataRenderer>
+                        <content:ButtonData icon="@clock.png" text="Clock"/>
+                    </PushButton>
+                    <PushButton enabled="false">
+                        <content:ButtonData icon="@house.png" text="House"/>
+                    </PushButton>
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane orientation="vertical">
+                <Label text="Toolbar Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane>
+                    <PushButton styles="{toolbar:true}">
+                        <content:ButtonData icon="@bell.png"/>
+                    </PushButton>
+                    <PushButton styles="{toolbar:true}">
+                        <content:ButtonData icon="@clock.png"/>
+                    </PushButton>
+                    <PushButton enabled="false" styles="{toolbar:true}">
+                        <content:ButtonData icon="@house.png"/>
+                    </PushButton>
+                </BoxPane>
+            </BoxPane>
+        </BoxPane>
+    </Border>
+
+    <Border styles="{padding:2}">
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+            <BoxPane orientation="vertical">
+                <Label text="Basic Radio Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane>
+                    <bxml:define>
+                        <ButtonGroup bxml:id="radioButtons"/>
+                    </bxml:define>
+                    <RadioButton buttonData="One" buttonGroup="$radioButtons"/>
+                    <RadioButton buttonData="Two" buttonGroup="$radioButtons"/>
+                    <RadioButton buttonData="Three" buttonGroup="$radioButtons" selected="true" enabled="false"/>
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane orientation="vertical">
+                <Label text="Image Radio Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane orientation="vertical">
+                    <bxml:define>
+                        <ButtonGroup bxml:id="imageRadioButtons"/>
+                    </bxml:define>
+                    <RadioButton buttonGroup="$imageRadioButtons">
+                        <content:ButtonData icon="@bell.png" text="Bell"/>
+                    </RadioButton>
+                    <RadioButton buttonGroup="$imageRadioButtons">
+                        <content:ButtonData icon="@clock.png" text="Clock"/>
+                    </RadioButton>
+                    <RadioButton buttonGroup="$imageRadioButtons" selected="true" enabled="false">
+                        <content:ButtonData icon="@house.png" text="House"/>
+                    </RadioButton>
+                </BoxPane>
+            </BoxPane>
+        </BoxPane>
+    </Border>
+
+    <Border styles="{padding:2}">
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+            <BoxPane orientation="vertical">
+                <Label text="Basic Checkboxes" styles="{font:{bold:true}}"/>
+                <BoxPane>
+                    <Checkbox buttonData="One"/>
+                    <Checkbox buttonData="Two"/>
+                    <Checkbox buttonData="Three" selected="true" enabled="false"/>
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane orientation="vertical">
+                <Label text="Image Checkboxes" styles="{font:{bold:true}}"/>
+                <BoxPane orientation="vertical">
+                    <Checkbox>
+                        <content:ButtonData icon="@clock.png" text="Clock"/>
+                    </Checkbox>
+                    <Checkbox>
+                        <content:ButtonData icon="@bell.png" text="Bell"/>
+                    </Checkbox>
+                    <Checkbox selected="true" enabled="false">
+                        <content:ButtonData icon="@house.png" text="House"/>
+                    </Checkbox>
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane orientation="vertical">
+                <Label text="Tri-state Checkboxes" styles="{font:{bold:true}}"/>
+                <BoxPane orientation="vertical">
+                    <Checkbox buttonData="Read" triState="true" state="selected"/>
+                    <Checkbox buttonData="Write" triState="true" state="unselected"/>
+                    <Checkbox buttonData="Execute" triState="true" state="mixed" enabled="false"/>
+                </BoxPane>
+            </BoxPane>
+        </BoxPane>
+    </Border>
+
+    <Border styles="{padding:2}">
+        <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:10}">
+            <BoxPane orientation="vertical">
+                <Label text="Basic Link Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane>
+                    <LinkButton buttonData="One"/>
+                    <LinkButton buttonData="Two"/>
+                    <LinkButton buttonData="Three" enabled="false"/>
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane orientation="vertical">
+                <Label text="Image Link Buttons" styles="{font:{bold:true}}"/>
+                <BoxPane orientation="vertical">
+                    <LinkButton>
+                        <content:ButtonData icon="@bell.png" text="Bell"/>
+                    </LinkButton>
+                    <LinkButton>
+                        <content:ButtonData icon="@clock.png" text="Clock"/>
+                    </LinkButton>
+                    <LinkButton enabled="false">
+                        <content:ButtonData icon="@house.png" text="House"/>
+                    </LinkButton>
+                </BoxPane>
+            </BoxPane>
+        </BoxPane>
+    </Border>
+</BoxPane>
+

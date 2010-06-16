@@ -128,9 +128,9 @@ public class TextInputs implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "text_inputs.wtkx");
-        stateTextInput = (TextInput)wtkxSerializer.get("stateTextInput");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "text_inputs.bxml");
+        stateTextInput = (TextInput)beanSerializer.get("stateTextInput");
 
         stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
 

@@ -49,21 +49,21 @@ public class CardPanes implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer wtkxSerializer = new BeanSerializer();
-        window = (Window)wtkxSerializer.readObject(this, "card_panes.wtkx");
-        cardPane = (CardPane)wtkxSerializer.get("cardPane");
-        previousButton = (LinkButton)wtkxSerializer.get("previousButton");
-        nextButton = (LinkButton)wtkxSerializer.get("nextButton");
-        sizeToSelectionCheckbox = (Checkbox)wtkxSerializer.get("sizeToSelectionCheckbox");
+        BeanSerializer beanSerializer = new BeanSerializer();
+        window = (Window)beanSerializer.readObject(this, "card_panes.bxml");
+        cardPane = (CardPane)beanSerializer.get("cardPane");
+        previousButton = (LinkButton)beanSerializer.get("previousButton");
+        nextButton = (LinkButton)beanSerializer.get("nextButton");
+        sizeToSelectionCheckbox = (Checkbox)beanSerializer.get("sizeToSelectionCheckbox");
 
 
-        crossfadeRadioButton = (RadioButton)wtkxSerializer.get("crossfadeRadioButton");
-        horizontalSlideRadioButton = (RadioButton)wtkxSerializer.get("horizontalSlideRadioButton");
-        verticalSlideRadioButton = (RadioButton)wtkxSerializer.get("verticalSlideRadioButton");
-        horizontalFlipRadioButton = (RadioButton)wtkxSerializer.get("horizontalFlipRadioButton");
-        verticalFlipRadioButton = (RadioButton)wtkxSerializer.get("verticalFlipRadioButton");
-        zoomRadioButton = (RadioButton)wtkxSerializer.get("zoomRadioButton");
-        noneRadioButton = (RadioButton)wtkxSerializer.get("noneRadioButton");
+        crossfadeRadioButton = (RadioButton)beanSerializer.get("crossfadeRadioButton");
+        horizontalSlideRadioButton = (RadioButton)beanSerializer.get("horizontalSlideRadioButton");
+        verticalSlideRadioButton = (RadioButton)beanSerializer.get("verticalSlideRadioButton");
+        horizontalFlipRadioButton = (RadioButton)beanSerializer.get("horizontalFlipRadioButton");
+        verticalFlipRadioButton = (RadioButton)beanSerializer.get("verticalFlipRadioButton");
+        zoomRadioButton = (RadioButton)beanSerializer.get("zoomRadioButton");
+        noneRadioButton = (RadioButton)beanSerializer.get("noneRadioButton");
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
             @Override
