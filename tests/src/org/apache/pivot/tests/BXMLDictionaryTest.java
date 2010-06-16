@@ -20,12 +20,12 @@ import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSONSerializer;
 
-public class WTKXDictionaryTest {
+public class BXMLDictionaryTest {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         BeanSerializer beanSerializer = new BeanSerializer();
         HashMap<String, Object> hashMap =
-            (HashMap<String, Object>)beanSerializer.readObject(WTKXDictionaryTest.class.getResource("wtkx_dictionary_test.bxml"));
+            (HashMap<String, Object>)beanSerializer.readObject(BXMLDictionaryTest.class.getResource("bxml_dictionary_test.bxml"));
         System.out.println(JSONSerializer.toString(hashMap));
     }
 }

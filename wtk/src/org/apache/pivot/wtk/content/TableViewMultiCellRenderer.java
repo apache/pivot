@@ -128,7 +128,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
 
     /**
      * Provides a sequence hook into this renderer's mappings, thus enabling
-     * developers to define their multi-cell renderer in WTKX.
+     * developers to define their multi-cell renderer in BXML.
      */
     private class RendererMappingSequence implements Sequence<RendererMapping> {
         private ArrayList<RendererMapping> mappings = new ArrayList<RendererMapping>();

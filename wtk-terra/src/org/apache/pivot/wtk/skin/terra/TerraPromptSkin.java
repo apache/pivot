@@ -91,21 +91,21 @@ public class TerraPromptSkin extends TerraSheetSkin
         prompt.getPromptListeners().add(this);
 
         // Load the prompt content
-        BeanSerializer wtkxSerializer = new BeanSerializer();
+        BeanSerializer beanSerializer = new BeanSerializer();
 
         Component content;
         try {
-            content = (Component)wtkxSerializer.readObject(this, "terra_prompt_skin.bxml");
+            content = (Component)beanSerializer.readObject(this, "terra_prompt_skin.bxml");
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }
 
         prompt.setContent(content);
 
-        typeImageView = (ImageView)wtkxSerializer.get("typeImageView");
-        messageLabel = (Label)wtkxSerializer.get("messageLabel");
-        messageBoxPane = (BoxPane)wtkxSerializer.get("messageBoxPane");
-        optionButtonBoxPane = (BoxPane)wtkxSerializer.get("optionButtonBoxPane");
+        typeImageView = (ImageView)beanSerializer.get("typeImageView");
+        messageLabel = (Label)beanSerializer.get("messageLabel");
+        messageBoxPane = (BoxPane)beanSerializer.get("messageBoxPane");
+        optionButtonBoxPane = (BoxPane)beanSerializer.get("optionButtonBoxPane");
 
         for (Object option : prompt.getOptions()) {
             PushButton optionButton = new PushButton(option);

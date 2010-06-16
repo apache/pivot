@@ -46,7 +46,7 @@ public class ScriptApplication implements Application {
             resources = new Resources(properties.get(RESOURCES_KEY));
         }
 
-        BeanSerializer wtkxSerializer = new BeanSerializer(resources);
+        BeanSerializer beanSerializer = new BeanSerializer(resources);
 
         ClassLoader classLoader = ThreadUtilities.getClassLoader();
         URL location = classLoader.getResource(src);
@@ -62,8 +62,8 @@ public class ScriptApplication implements Application {
             throw new IllegalArgumentException("Cannot find source file \"" + src + "\".");
         }
 
-        wtkxSerializer.put("location", location);
-        window = (Window)wtkxSerializer.readObject(location);
+        beanSerializer.put("location", location);
+        window = (Window)beanSerializer.readObject(location);
         window.open(display);
     }
 

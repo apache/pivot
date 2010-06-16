@@ -23,7 +23,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class HelloWTKX implements Application {
+public class HelloBXML implements Application {
     private Window window = null;
 
     @Override
@@ -52,6 +52,6 @@ public class HelloWTKX implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(HelloWTKX.class, args);
+        DesktopApplicationContext.main(HelloBXML.class, args);
     }
 }
