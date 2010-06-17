@@ -21,7 +21,7 @@ limitations under the License.
 
     <target name="bxml_upgrade">
         <!-- *.java -->
-        <replace dir="${src}" token="wtkxSerializer" value="beanSerializer">
+        <replace dir="${src}" token="org.apache.pivot.wtkx" value="org.apache.pivot.beans">
             <include name="**/*.java"/>
         </replace>
 
@@ -29,7 +29,11 @@ limitations under the License.
             <include name="**/*.java"/>
         </replace>
 
-        <replace dir="${src}" token="@WTKX" value="@BXML">
+        <replace dir="${src}" token="wtkxSerializer" value="beanSerializer">
+            <include name="**/*.java"/>
+        </replace>
+
+        <replace dir="${src}" token="WTKX" value="BXML">
             <include name="**/*.java"/>
         </replace>
 
