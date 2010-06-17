@@ -16,20 +16,21 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtkx.WTKXSerializer;
 
+@SuppressWarnings("deprecation")
 public class BindableTest implements Application {
     private BindableWindow window = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer(new Resources(BindableWindow.class.getName()));
-        window = (BindableWindow)beanSerializer.readObject(this, "bindable_test.bxml");
+        WTKXSerializer wtkxSerializer = new WTKXSerializer(new Resources(BindableWindow.class.getName()));
+        window = (BindableWindow)wtkxSerializer.readObject(this, "bindable_test.wtkx");
         window.open(display);
     }
 

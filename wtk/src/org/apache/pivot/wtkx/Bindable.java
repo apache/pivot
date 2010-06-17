@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tests;
+package org.apache.pivot.wtkx;
 
-import org.apache.pivot.util.Resources;
-import org.apache.pivot.wtk.Label;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.Bindable;
-import org.apache.pivot.wtkx.WTKX;
-
-@SuppressWarnings("deprecation")
-public class BindableWindow extends Window implements Bindable {
-    @WTKX private Label label = null;
-
-    @Override
-    public void initialize(Resources resources) {
-        label.setText(resources.getString("message"));
-    }
+/**
+ * Allows WTKX serializer to automatically bind to an instance of a
+ * deserialized class.
+ *
+ * @deprecated
+ * This class has been moved to {@link org.apache.pivot.beans.Bindable}.
+ * You can use the <tt>bxml_upgrade.xml</tt> Ant script to update your
+ * source code to use the new classes. Usage:
+ * <p>
+ * <tt>ant -f bxml_upgrade.xml -Dsrc=&lt;sourcedir&gt;</tt>
+ * </p>
+ */
+@Deprecated
+public interface Bindable extends org.apache.pivot.beans.Bindable {
 }

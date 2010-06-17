@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -277,6 +278,9 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     private Resources resources;
+    private String internalNamespacePrefix;
+    private Class<? extends Annotation> bindingAnnotationClass;
+
     private HashMap<String, Object> namedObjects;
     private HashMap<String, BeanSerializer> namedSerializers;
 
@@ -316,15 +320,18 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
     public static final String MIME_TYPE = "application/bxml";
 
     public BeanSerializer() {
-        this(null, null);
+        this(null);
     }
 
     public BeanSerializer(Resources resources) {
-        this(resources, null);
+        this(resources, null, BXML_PREFIX, BXML.class);
     }
 
-    protected BeanSerializer(Resources resources, BeanSerializer owner) {
+    protected BeanSerializer(Resources resources, BeanSerializer owner,
+        String internalNamespacePrefix, Class<? extends Annotation> bindingAnnotationClass) {
         this.resources = resources;
+        this.internalNamespacePrefix = internalNamespacePrefix;
+        this.bindingAnnotationClass = bindingAnnotationClass;
 
         if (owner == null) {
             inline = false;
@@ -557,16 +564,16 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
             String attributeValue = xmlStreamReader.getAttributeValue(i);
 
             if (attributePrefix != null
-                && attributePrefix.equals(BXML_PREFIX)) {
+                && attributePrefix.equals(internalNamespacePrefix)) {
                 if (attributeLocalName.equals(ID_ATTRIBUTE)) {
                     if (attributeValue.length() == 0) {
-                        throw new IllegalArgumentException(BXML_PREFIX + ":" + ID_ATTRIBUTE
+                        throw new IllegalArgumentException(internalNamespacePrefix + ":" + ID_ATTRIBUTE
                             + " must not be empty.");
                     }
 
                     id = attributeValue;
                 } else {
-                    throw new SerializationException(BXML_PREFIX + ":" + attributeLocalName
+                    throw new SerializationException(internalNamespacePrefix + ":" + attributeLocalName
                         + " is not a valid attribute.");
                 }
             } else {
@@ -585,7 +592,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
         Object value = null;
 
         if (prefix != null
-            && prefix.equals(BXML_PREFIX)) {
+            && prefix.equals(internalNamespacePrefix)) {
             // The element represents a BXML operation
             if (element == null) {
                 throw new SerializationException(prefix + ":" + localName
@@ -598,7 +605,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
                 elementType = Element.Type.SCRIPT;
             } else if (localName.equals(DEFINE_TAG)) {
                 if (attributes.getLength() > 0) {
-                    throw new SerializationException(BXML_PREFIX + ":" + DEFINE_TAG
+                    throw new SerializationException(internalNamespacePrefix + ":" + DEFINE_TAG
                         + " cannot have attributes.");
                 }
 
@@ -686,28 +693,6 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
-    /**
-     * Serializer factory method. Subclasses can override this method to return custom
-     * serializer instances.
-     *
-     * @param resources
-     * @param owner
-     */
-    protected BeanSerializer createSerializer(Resources resources, BeanSerializer owner) {
-        return new BeanSerializer(resources, owner);
-    }
-
-    /**
-     * Object factory method. Subclasses can override this method to perform custom
-     * object instantiation.
-     *
-     * @param type
-     * @param id
-     */
-    protected Object createInstance(Class<?> type, String id) throws Exception {
-        return type.newInstance();
-    }
-
     @SuppressWarnings("unchecked")
     private void processEndElement(XMLStreamReader xmlStreamReader)
         throws SerializationException, IOException {
@@ -736,7 +721,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
                         } else {
                             if (!Character.isUpperCase(attribute.localName.charAt(0))) {
                                 throw new SerializationException("Instance property setters are not"
-                                    + " supported for " + BXML_PREFIX + ":" + INCLUDE_TAG
+                                    + " supported for " + internalNamespacePrefix + ":" + INCLUDE_TAG
                                     + " " + " tag.");
                             }
 
@@ -746,7 +731,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                     if (src == null) {
                         throw new SerializationException(INCLUDE_SRC_ATTRIBUTE
-                            + " attribute is required for " + BXML_PREFIX + ":" + INCLUDE_TAG
+                            + " attribute is required for " + internalNamespacePrefix + ":" + INCLUDE_TAG
                             + " tag.");
                     }
 
@@ -999,7 +984,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
                         language = attribute.value;
                     } else {
                         throw new SerializationException(attribute.localName + " is not a valid"
-                            + " attribute for the " + BXML_PREFIX + ":" + SCRIPT_TAG + " tag.");
+                            + " attribute for the " + internalNamespacePrefix + ":" + SCRIPT_TAG + " tag.");
                     }
                 }
 
@@ -1117,6 +1102,35 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
         if (element.parent != null) {
             element = element.parent;
         }
+    }
+
+    /**
+     * Returns the element that is currently being processed.
+     */
+    protected Element getCurrentElement() {
+        return element;
+    }
+
+    /**
+     * Serializer factory method. Subclasses can override this method to return custom
+     * serializer instances.
+     *
+     * @param resources
+     * @param owner
+     */
+    protected BeanSerializer createSerializer(Resources resources, BeanSerializer owner) {
+        return new BeanSerializer(resources, owner, internalNamespacePrefix, bindingAnnotationClass);
+    }
+
+    /**
+     * Object factory method. Subclasses can override this method to perform custom
+     * object instantiation.
+     *
+     * @param type
+     * @param id
+     */
+    protected Object createInstance(Class<?> type, String id) throws Exception {
+        return type.newInstance();
     }
 
     private void logException() {
@@ -1366,8 +1380,11 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
             String fieldName = field.getName();
             int fieldModifiers = field.getModifiers();
 
-            BXML bxmlAnnotation = field.getAnnotation(BXML.class);
-            if (bxmlAnnotation != null) {
+            // TODO Revert to the following when support for WTKXSerializer is dropped:
+            // BXML bindingAnnotation = field.getAnnotation(BXML.class);
+            Annotation bindingAnnotation = field.getAnnotation(bindingAnnotationClass);
+
+            if (bindingAnnotation != null) {
                 // Ensure that we can write to the field
                 if ((fieldModifiers & Modifier.FINAL) > 0) {
                     throw new BindException(fieldName + " is final.");
@@ -1381,7 +1398,27 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
                     }
                 }
 
-                String id = bxmlAnnotation.id();
+                String id;
+                if (bindingAnnotationClass == BXML.class) {
+                    id = ((BXML)bindingAnnotation).id();
+                } else {
+                    // TODO Remove this block when support for WTKXSerializer is dropped
+                    Method idMethod;
+                    try {
+                        idMethod = bindingAnnotationClass.getMethod("id");
+                    } catch (NoSuchMethodException exception) {
+                        throw new RuntimeException(exception);
+                    }
+
+                    try {
+                        id = (String)idMethod.invoke(bindingAnnotation);
+                    } catch (IllegalAccessException exception) {
+                        throw new RuntimeException(exception);
+                    } catch (InvocationTargetException exception) {
+                        throw new RuntimeException(exception);
+                    }
+                }
+
                 if (id.equals("\0")) {
                     id = field.getName();
                 }

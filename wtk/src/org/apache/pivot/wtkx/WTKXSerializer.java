@@ -14,20 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tests;
+package org.apache.pivot.wtkx;
 
+import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.util.Resources;
-import org.apache.pivot.wtk.Label;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtkx.Bindable;
-import org.apache.pivot.wtkx.WTKX;
 
-@SuppressWarnings("deprecation")
-public class BindableWindow extends Window implements Bindable {
-    @WTKX private Label label = null;
+/**
+ * Loads an object hierarchy from an XML document.
+ *
+ * @deprecated
+ * This class has been moved to {@link org.apache.pivot.beans.BeanSerializer}.
+ * You can use the <tt>bxml_upgrade.xml</tt> Ant script to update your
+ * source code to use the new classes. Usage:
+ * <p>
+ * <tt>ant -f bxml_upgrade.xml -Dsrc=&lt;sourcedir&gt;</tt>
+ * </p>
+ */
+@Deprecated
+public class WTKXSerializer extends BeanSerializer {
+    public static final String WTKX_PREFIX = "wtkx";
 
-    @Override
-    public void initialize(Resources resources) {
-        label.setText(resources.getString("message"));
+    public WTKXSerializer() {
+        super(null);
+    }
+
+    public WTKXSerializer(Resources resources) {
+        super(resources, null, WTKX_PREFIX, WTKX.class);
     }
 }
