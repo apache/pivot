@@ -219,7 +219,6 @@ public class TextArea extends Container {
 
         @Override
         public void offsetChanged(Node node, int previousOffset) {
-            // @TODO if a ComponentNode moved around, we need to change it's position in the list
         }
 
         @Override
@@ -250,7 +249,6 @@ public class TextArea extends Container {
         public void nodeInserted(Node node, int offset) {
             Node descendant = document.getDescendantAt(offset);
             if (descendant instanceof ComponentNode) {
-                // @TODO need to insert this at the correct index
                 ComponentNode componentNode = (ComponentNode) descendant;
                 componentNode.getComponentNodeListeners().add(componentNodeListener);
                 TextArea.super.add(componentNode.getComponent());
