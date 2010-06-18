@@ -105,7 +105,7 @@ public class NumericSpinnerData implements List<Integer> {
             throw new IllegalArgumentException("Lower bound must be less than upper bound.");
         }
 
-        long length = ((upperBound - lowerBound) / increment) + 1;
+        long length = (((long)upperBound - (long)lowerBound) / increment) + 1;
 
         if (length > Integer.MAX_VALUE) {
             throw new IllegalArgumentException("Bounded range is too large.");
