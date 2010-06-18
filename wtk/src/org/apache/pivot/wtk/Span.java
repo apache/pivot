@@ -76,7 +76,7 @@ public final class Span {
      * The absolute value of (<tt>end</tt> minus <tt>start</tt>) + 1.
      */
     public long getLength() {
-        return Math.abs(end - start) + 1;
+        return Math.abs((long)end - (long)start) + 1;
     }
 
     /**
