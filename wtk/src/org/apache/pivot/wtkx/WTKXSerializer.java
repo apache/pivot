@@ -690,28 +690,6 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
-    /**
-     * Serializer factory method. Subclasses can override this method to return custom
-     * serializer instances.
-     *
-     * @param resources
-     * @param owner
-     */
-    protected WTKXSerializer createSerializer(Resources resources, WTKXSerializer owner) {
-        return new WTKXSerializer(resources, owner);
-    }
-
-    /**
-     * Object factory method. Subclasses can override this method to perform custom
-     * object instantiation.
-     *
-     * @param type
-     * @param id
-     */
-    protected Object createInstance(Class<?> type, String id) throws Exception {
-        return type.newInstance();
-    }
-
     @SuppressWarnings("unchecked")
     private void processEndElement(XMLStreamReader xmlStreamReader)
         throws SerializationException, IOException {
@@ -1097,6 +1075,35 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
         if (element.parent != null) {
             element = element.parent;
         }
+    }
+
+    /**
+     * Returns the element that is currently being processed.
+     */
+    protected Element getCurrentElement() {
+        return element;
+    }
+
+    /**
+     * Serializer factory method. Subclasses can override this method to return custom
+     * serializer instances.
+     *
+     * @param resources
+     * @param owner
+     */
+    protected WTKXSerializer createSerializer(Resources resources, WTKXSerializer owner) {
+        return new WTKXSerializer(resources, owner);
+    }
+
+    /**
+     * Object factory method. Subclasses can override this method to perform custom
+     * object instantiation.
+     *
+     * @param type
+     * @param id
+     */
+    protected Object createInstance(Class<?> type, String id) throws Exception {
+        return type.newInstance();
     }
 
     private void logException() {
