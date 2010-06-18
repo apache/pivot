@@ -151,7 +151,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
-    private static class Element  {
+    protected static class Element  {
         public enum Type {
             DEFINE,
             INSTANCE,
@@ -183,7 +183,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
-    private static class Attribute {
+    protected static class Attribute {
         public final String namespaceURI;
         public final String localName;
         public final String value;
