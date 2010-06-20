@@ -37,7 +37,7 @@ limitations under the License.
                 textKey="value" textBindMapping="$valueMapping"
                 styles="{horizontalAlignment:'right'}"/>
             <Label bxml:id="changeLabel" Form.label="%change"
-                textKey="change" textBindMapping="$valueMapping"
+                textKey="change" textBindMapping="$changeMapping"
                 styles="{horizontalAlignment:'right'}"/>
             <Label bxml:id="openingValueLabel" Form.label="%openingValue"
                 textKey="openingValue" textBindMapping="$valueMapping"
@@ -46,7 +46,7 @@ limitations under the License.
                 textKey="highValue" textBindMapping="$valueMapping"
                 styles="{horizontalAlignment:'right'}"/>
             <Label bxml:id="lowValueLabel" Form.label="%lowValue"
-                textKey="lowValue" textBindMapping="$changeMapping"
+                textKey="lowValue" textBindMapping="$valueMapping"
                 styles="{horizontalAlignment:'right'}"/>
             <Label bxml:id="volumeLabel" Form.label="%volume"
                 textKey="volume" textBindMapping="$volumeMapping"
