@@ -42,7 +42,7 @@
 
     contentPane: {
         visualizationLabel: "Visualization",
-        wtkxSourceLabel: "WTKX Source",
+        wtkxSourceLabel: "BXML Source",
 
         scrollBarPolicy: {
             horizontal: "Horizontal Scroll Bar Policy",
