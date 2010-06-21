@@ -257,11 +257,19 @@ public class TextArea extends Container {
 
         @Override
         public void rangeRemoved(Node node, int offset, int characterCount) {
+            // if the end of the selection is in or after the range removed
             if (selectionStart + selectionLength > offset) {
+                // if the start of the selection is in the range removed
                 if (selectionStart > offset) {
                     selectionStart -= characterCount;
+                    if (selectionStart < offset) {
+                        selectionStart = offset;
+                    }
                 } else {
                     selectionLength -= characterCount;
+                    if (selectionLength < 0) {
+                        selectionLength = 0;
+                    }
                 }
             }
 
