@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Document xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:wtk="org.apache.pivot.wtk"
+    xmlns="org.apache.pivot.wtk.text">
+    <Paragraph>Pivot is an open-source platform for building rich internet applications in Java. It combines the enhanced productivity and usability features of a modern RIA toolkit with the robustness of the industry-standard Java platform.</Paragraph>
+    <Paragraph></Paragraph>
+    <Paragraph>Pivot applications are written using a combination of Java and XML and can be run either as an applet or as a standalone (optionally offline) desktop application. While Pivot was designed to be familiar to web developers who have experience building AJAX applications using HTML, CSS, and JavaScript, it provides a much richer set of standard widgets than HTML, and allows developers to create sophisticated user experiences much more quickly and easily. Pivot will also seem familiar to Swing developers, as both Swing and Pivot are based on Java2D and employ a model-view-controller (MVC) architecture to separate component data from presentation. However, Pivot includes additional features that make building modern GUI applications much easier, including declarative UI, data binding, effects and transitions, and web services integration.</Paragraph>
+    <Paragraph>ABCD</Paragraph>
+    <Paragraph></Paragraph>
+    <Paragraph>1234</Paragraph>
+    <Paragraph font="Arial BOLD 24">abcd</Paragraph>
+    <Paragraph font="Arial ITALIC 24">abcd</Paragraph>
+    <Paragraph foregroundColor="red">abcd</Paragraph>
+    <Paragraph backgroundColor="red">abcd</Paragraph>
+    <Paragraph>abcd</Paragraph>
+</Document>
