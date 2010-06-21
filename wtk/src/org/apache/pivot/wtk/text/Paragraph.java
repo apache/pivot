@@ -48,12 +48,12 @@ public class Paragraph extends Block {
     }
 
     @Override
-    public Node getRange(int offset, int characterCount) {
+    public Paragraph getRange(int offset, int characterCount) {
         if (offset + characterCount == getCharacterCount()) {
             characterCount--;
         }
 
-        return super.getRange(offset, characterCount);
+        return (Paragraph) super.getRange(offset, characterCount);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class Paragraph extends Block {
     }
 
     @Override
-    public Node duplicate(boolean recursive) {
+    public Paragraph duplicate(boolean recursive) {
         return new Paragraph(this, recursive);
     }
 }

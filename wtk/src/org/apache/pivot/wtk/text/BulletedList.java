@@ -55,7 +55,7 @@ public class BulletedList extends List {
     }
 
     @Override
-    public Node duplicate(boolean recursive) {
+    public BulletedList duplicate(boolean recursive) {
         return new BulletedList(this, recursive);
     }
 }

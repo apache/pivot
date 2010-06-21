@@ -45,7 +45,7 @@ public abstract class List extends Block {
         }
 
         @Override
-        public Node duplicate(boolean recursive) {
+        public Item duplicate(boolean recursive) {
             return new Item(this, recursive);
         }
     }

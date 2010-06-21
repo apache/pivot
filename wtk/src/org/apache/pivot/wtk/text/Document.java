@@ -36,7 +36,7 @@ public class Document extends Block {
     }
 
     @Override
-    public Node duplicate(boolean recursive) {
+    public Document duplicate(boolean recursive) {
         return new Document(this, recursive);
     }
 

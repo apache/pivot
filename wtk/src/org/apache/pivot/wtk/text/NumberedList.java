@@ -56,7 +56,7 @@ public class NumberedList extends List {
     }
 
     @Override
-    public Node duplicate(boolean recursive) {
+    public NumberedList duplicate(boolean recursive) {
         return new NumberedList(this, recursive);
     }
 }

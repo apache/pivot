@@ -232,21 +232,23 @@ public abstract class Element extends Node
     }
 
     @Override
-    public Node getRange(int offset, int characterCount) {
+    public Element getRange(int offset, int characterCount) {
         if (characterCount < 0) {
             throw new IllegalArgumentException("characterCount is negative.");
         }
 
-        if (offset < 0
-            || offset + characterCount > this.characterCount) {
-            throw new IndexOutOfBoundsException();
+        if (offset < 0) {
+            throw new IndexOutOfBoundsException("offset < 0, offset=" + offset);
+        }
+        if (offset + characterCount > this.characterCount) {
+            throw new IndexOutOfBoundsException("offset+characterCount>this.characterCount offset=" + offset 
+                + " characterCount=" + characterCount + " this.characterCount=" + this.characterCount);
         }
 
         // Create a copy of this element
-        Node range = duplicate(false);
+        Element range = duplicate(false);
 
         if (characterCount > 0) {
-            Element element = (Element)range;
 
             int start = getIndexAt(offset);
             int end = getIndexAt(offset + characterCount - 1);
@@ -255,7 +257,7 @@ public abstract class Element extends Node
                 // The range is entirely contained by one child node
                 Node node = get(start);
                 Node segment = node.getRange(offset - node.getOffset(), characterCount);
-                element.add(segment);
+                range.add(segment);
             } else {
                 // The range spans multiple child nodes
                 Node leadingSegment = null;
@@ -285,19 +287,19 @@ public abstract class Element extends Node
                 // Add the leading segment to the range
                 if (leadingSegment != null
                     && leadingSegment.getCharacterCount() > 0) {
-                    element.add(leadingSegment);
+                    range.add(leadingSegment);
                     start++;
                 }
 
                 // Duplicate the intervening nodes
                 for (int i = start; i < end; i++) {
-                    element.add(get(i).duplicate(true));
+                    range.add(get(i).duplicate(true));
                 }
 
                 // Add the trailing segment to the range
                 if (trailingSegment != null
                     && trailingSegment.getCharacterCount() > 0) {
-                    element.add(trailingSegment);
+                    range.add(trailingSegment);
                 }
             }
         }
@@ -305,6 +307,9 @@ public abstract class Element extends Node
         return range;
     }
 
+    @Override
+    public abstract Element duplicate(boolean recursive);
+    
     @Override
     public char getCharacterAt(int offset) {
         Node node = getNodeAt(offset);

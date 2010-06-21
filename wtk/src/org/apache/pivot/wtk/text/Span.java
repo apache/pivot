@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.text;
 
+
 /**
  * Element representing an inline range of styled characters.
  * <p>
@@ -41,7 +42,12 @@ public class Span extends Element {
     }
 
     @Override
-    public Node duplicate(boolean recursive) {
+    public Span duplicate(boolean recursive) {
         return new Span(this, recursive);
+    }
+    
+    @Override
+    public Span getRange(int offset, int characterCount) {
+        return (Span) super.getRange(offset, characterCount);
     }
 }
