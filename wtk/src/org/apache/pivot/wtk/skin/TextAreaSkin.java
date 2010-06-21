@@ -1002,6 +1002,136 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
         }
     }
 
+    public class SpanView extends ElementView {
+
+        public SpanView(org.apache.pivot.wtk.text.Span span) {
+            super(span);
+        }
+        
+        @Override
+        public void validate() {
+            if (!isValid()) {
+                // I have to re-create my children here instead of in attach(), because that is how ParagraphView works,
+                // and ParagraphView is always my super-node.
+                
+                // Clear all existing views
+                remove(0, getLength());
+                
+                // Attach child node views
+                org.apache.pivot.wtk.text.Span span = (org.apache.pivot.wtk.text.Span)getNode();
+                for (Node node : span) {
+                    add(createNodeView(node));
+                }
+                
+                int breakWidth = getBreakWidth();
+
+                int width = 0;
+                int height = 0;
+
+                int i = 0;
+                int n = getLength();
+
+                while (i < n) {
+                    NodeView nodeView = get(i++);
+                    nodeView.setBreakWidth(breakWidth);
+                    nodeView.validate();
+
+                    nodeView.setLocation(0, height);
+
+                    width = Math.max(width, nodeView.getWidth());
+                    height += nodeView.getHeight();
+                }
+
+                setSize(width, height);
+
+                super.validate();
+            }
+        }
+        
+        @Override
+        public int getInsertionPoint(int x, int y) {
+            int offset = -1;
+
+            for (int i = 0, n = getLength(); i < n; i++) {
+                NodeView nodeView = get(i);
+                Bounds nodeViewBounds = nodeView.getBounds();
+
+                if (y >= nodeViewBounds.y
+                    && y < nodeViewBounds.y + nodeViewBounds.height) {
+                    offset = nodeView.getInsertionPoint(x - nodeView.getX(), y - nodeView.getY())
+                        + nodeView.getOffset();
+                    break;
+                }
+            }
+
+            return offset;
+        }
+
+        @Override
+        public NodeView getNext() {
+            return null;
+        }
+
+        @Override
+        public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        @Override
+        public int getRowCount() {
+            int rowCount = 0;
+
+            for (NodeView nodeView : this) {
+                rowCount += nodeView.getRowCount();
+            }
+
+            return rowCount;
+        }
+
+        @Override
+        public int getRowIndex(int offset) {
+            int rowIndex = 0;
+
+            for (NodeView nodeView : this) {
+                int nodeViewOffset = nodeView.getOffset();
+                int characterCount = nodeView.getCharacterCount();
+
+                if (offset >= nodeViewOffset
+                    && offset < nodeViewOffset + characterCount) {
+                    rowIndex += nodeView.getRowIndex(offset - nodeView.getOffset());
+                    break;
+                }
+
+                rowIndex += nodeView.getRowCount();
+            }
+
+            return rowIndex;
+        }
+
+        @Override
+        protected void setSkinLocation(int skinX, int skinY) {
+            for (NodeView nodeView : this) {
+                nodeView.setSkinLocation(skinX, skinY + nodeView.getY());
+            }
+        }
+        
+        @Override
+        public void nodeInserted(Element element, int index) {
+            super.nodeInserted(element, index);
+
+            org.apache.pivot.wtk.text.Span span = (org.apache.pivot.wtk.text.Span)getNode();
+            insert(createNodeView(span.get(index)), index);
+        }
+
+        @Override
+        public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
+            remove(index, nodes.getLength());
+
+            super.nodesRemoved(element, index, nodes);
+        }
+    }
+    
     /**
      * Text node view.
      */
@@ -2599,6 +2729,8 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
             nodeView = new ImageNodeView((ImageNode)node);
         } else if (node instanceof ComponentNode) {
             nodeView = new ComponentNodeView((ComponentNode)node);
+        } else if (node instanceof org.apache.pivot.wtk.text.Span) {
+            nodeView = new SpanView((org.apache.pivot.wtk.text.Span)node);
         } else {
             throw new IllegalArgumentException("Unsupported node type: "
                 + node.getClass().getName());
