@@ -18,9 +18,12 @@ package org.apache.pivot.util;
 
 import org.apache.pivot.collections.HashMap;
 
+/**
+ * Provides support for basic intra-application message passing.
+ */
 public class MessageBus {
     private static HashMap<Class<?>, ListenerList<MessageBusListener<?>>> messageTopics
-    = new HashMap<Class<?>, ListenerList<MessageBusListener<?>>>();
+        = new HashMap<Class<?>, ListenerList<MessageBusListener<?>>>();
 
     /**
      * Subscribes a listener to a message topic.
