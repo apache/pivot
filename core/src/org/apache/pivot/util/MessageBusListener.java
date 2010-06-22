@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtk;
+package org.apache.pivot.util;
 
 /**
- * Application context message listener interface.
+ * Message bus listener interface.
  */
-public interface ApplicationContextMessageListener<T> {
+public interface MessageBusListener<T> {
     /**
-     * Called when a message has been sent via {@link ApplicationContext#sendMessage(Object)}.
+     * Called when a message has been sent via {@link MessageBus#sendMessage(Object)}.
      *
      * @param message
      */

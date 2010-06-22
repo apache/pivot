@@ -16,27 +16,27 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.wtk.ApplicationContext;
-import org.apache.pivot.wtk.ApplicationContextMessageListener;
+import org.apache.pivot.util.MessageBus;
+import org.apache.pivot.util.MessageBusListener;
 
-public class ApplicationContextMessageTest {
+public class MessageBusTest {
     public enum TestMessage {
         HELLO,
         GOODBYE
     }
 
     public static void main(String[] args) {
-        ApplicationContextMessageListener<TestMessage> testMessageListener =
-            new ApplicationContextMessageListener<TestMessage>() {
+        MessageBusListener<TestMessage> testMessageListener =
+            new MessageBusListener<TestMessage>() {
                 public void messageSent(TestMessage message) {
                     System.out.println(message);
                 }
             };
 
-        ApplicationContext.subscribe(TestMessage.class, testMessageListener);
-        ApplicationContext.sendMessage(TestMessage.HELLO);
+        MessageBus.subscribe(TestMessage.class, testMessageListener);
+        MessageBus.sendMessage(TestMessage.HELLO);
 
-        ApplicationContext.unsubscribe(TestMessage.class, testMessageListener);
-        ApplicationContext.sendMessage(TestMessage.GOODBYE);
+        MessageBus.unsubscribe(TestMessage.class, testMessageListener);
+        MessageBus.sendMessage(TestMessage.GOODBYE);
     }
 }

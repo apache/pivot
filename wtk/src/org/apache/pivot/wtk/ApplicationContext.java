@@ -53,7 +53,6 @@ import java.util.TimerTask;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
-import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Version;
 import org.apache.pivot.wtk.Component.DecoratorSequence;
 import org.apache.pivot.wtk.effects.Decorator;
@@ -1479,9 +1478,6 @@ public abstract class ApplicationContext {
     private static HashMap<URI, Object> resourceCache = new HashMap<URI, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
-    private static HashMap<Class<?>, ListenerList<ApplicationContextMessageListener<?>>> messageTopics
-        = new HashMap<Class<?>, ListenerList<ApplicationContextMessageListener<?>>>();
-
     private static Timer timer = null;
     private static ArrayList<Display> displays = new ArrayList<Display>();
     private static ArrayList<Application> applications = new ArrayList<Application>();
@@ -1657,73 +1653,6 @@ public abstract class ApplicationContext {
         }
 
         return queuedCallback;
-    }
-
-    /**
-     * Subscribes a listener to a message topic.
-     *
-     * @param topic
-     * @param messageListener
-     */
-    public static <T> void subscribe(Class<? super T> topic, ApplicationContextMessageListener<T> messageListener) {
-        ListenerList<ApplicationContextMessageListener<?>> topicListeners = messageTopics.get(topic);
-
-        if (topicListeners == null) {
-            topicListeners = new ListenerList<ApplicationContextMessageListener<?>>() {};
-            messageTopics.put(topic, topicListeners);
-        }
-
-        topicListeners.add(messageListener);
-    }
-
-    /**
-     * Unsubscribes a listener from a message topic.
-     *
-     * @param topic
-     * @param messageListener
-     */
-    public static <T> void unsubscribe(Class<? super T> topic, ApplicationContextMessageListener<T> messageListener) {
-        ListenerList<ApplicationContextMessageListener<?>> topicListeners = messageTopics.get(topic);
-
-        if (topicListeners == null) {
-            throw new IllegalArgumentException(topic.getName() + " does not exist.");
-        }
-
-        topicListeners.remove(messageListener);
-        if (topicListeners.isEmpty()) {
-            messageTopics.remove(topic);
-        }
-    }
-
-    /**
-     * Sends a message to subscribed topic listeners.
-     *
-     * @param message
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> void sendMessage(T message) {
-        Class<?> topic = message.getClass();
-        ListenerList<ApplicationContextMessageListener<?>> topicListeners = messageTopics.get(topic);
-
-        if (topicListeners != null) {
-            for (ApplicationContextMessageListener<?> listener : topicListeners) {
-                ((ApplicationContextMessageListener<T>)listener).messageSent(message);
-            }
-        }
-    }
-
-    /**
-     * Queues a callback to send a message via {@link #sendMessage(Object)}.
-     *
-     * @param message
-     */
-    public static <T> void queueMessage(final T message) {
-        queueCallback(new Runnable() {
-            @Override
-            public void run() {
-                sendMessage(message);
-            }
-        });
     }
 
     protected static void createTimer() {
