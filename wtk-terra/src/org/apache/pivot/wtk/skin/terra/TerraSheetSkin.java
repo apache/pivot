@@ -382,15 +382,15 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
                 if (preferredWidthSet || noPreferredSet) {
                     preferredWidth = Math.max(location.x - sheet.getX() + resizeOffset.x, 2);
-                    preferredWidth = Math.min(preferredWidth, sheet.getMaximumPreferredWidth());
-                    preferredWidth = Math.max(preferredWidth, sheet.getMinimumPreferredWidth());
+                    preferredWidth = Math.min(preferredWidth, sheet.getMaximumWidth());
+                    preferredWidth = Math.max(preferredWidth, sheet.getMinimumWidth());
                 }
 
                 if (preferredHeightSet || noPreferredSet) {
                     preferredHeight = Math.max(location.y - sheet.getY() + resizeOffset.y,
                         resizeHandle.getHeight() + 7);
-                    preferredHeight = Math.min(preferredHeight, sheet.getMaximumPreferredHeight());
-                    preferredHeight = Math.max(preferredHeight, sheet.getMinimumPreferredHeight());
+                    preferredHeight = Math.min(preferredHeight, sheet.getMaximumHeight());
+                    preferredHeight = Math.max(preferredHeight, sheet.getMinimumHeight());
                 }
 
                 sheet.setPreferredSize(preferredWidth, preferredHeight);

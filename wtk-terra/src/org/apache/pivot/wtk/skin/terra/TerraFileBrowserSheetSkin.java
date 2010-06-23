@@ -81,8 +81,8 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         super.install(component);
 
         final FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)component;
-        fileBrowserSheet.setMinimumPreferredWidth(360);
-        fileBrowserSheet.setMinimumPreferredHeight(180);
+        fileBrowserSheet.setMinimumWidth(360);
+        fileBrowserSheet.setMinimumHeight(180);
 
         // Load the sheet content
         Resources resources;

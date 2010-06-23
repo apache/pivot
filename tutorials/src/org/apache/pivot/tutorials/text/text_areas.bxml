@@ -38,7 +38,7 @@ limitations under the License.
 
                 <TablePane.Row height="-1">
                     <Border styles="{color:10}">
-                        <TextArea minimumPreferredHeight="80" text="@sample2.txt"/>
+                        <TextArea minimumHeight="80" text="@sample2.txt"/>
                     </Border>
                 </TablePane.Row>
             </TablePane>

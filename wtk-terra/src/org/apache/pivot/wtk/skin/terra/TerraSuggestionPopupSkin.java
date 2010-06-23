@@ -269,7 +269,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         // Reposition under text input
         Point location = textInput.mapPointToAncestor(textInput.getDisplay(), 0, 0);
         suggestionPopup.setLocation(location.x, location.y + textInput.getHeight() - 1);
-        suggestionPopup.setMinimumPreferredWidth(textInput.getWidth());
+        suggestionPopup.setMinimumWidth(textInput.getWidth());
     }
 
     @Override

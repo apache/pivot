@@ -458,15 +458,15 @@ public class TerraPaletteSkin extends WindowSkin {
                     if (palette.isPreferredWidthSet()) {
                         preferredWidth = Math.max(location.x - palette.getX() + resizeOffset.x,
                             titleBarTablePane.getPreferredWidth(-1) + 2);
-                        preferredWidth = Math.min(preferredWidth, palette.getMaximumPreferredWidth());
-                        preferredWidth = Math.max(preferredWidth, palette.getMinimumPreferredWidth());
+                        preferredWidth = Math.min(preferredWidth, palette.getMaximumWidth());
+                        preferredWidth = Math.max(preferredWidth, palette.getMinimumWidth());
                     }
 
                     if (palette.isPreferredHeightSet()) {
                         preferredHeight = Math.max(location.y - palette.getY() + resizeOffset.y,
                             titleBarTablePane.getHeight() + resizeHandle.getHeight() + 7);
-                        preferredHeight = Math.min(preferredHeight, palette.getMaximumPreferredHeight());
-                        preferredHeight = Math.max(preferredHeight, palette.getMinimumPreferredHeight());
+                        preferredHeight = Math.min(preferredHeight, palette.getMaximumHeight());
+                        preferredHeight = Math.max(preferredHeight, palette.getMinimumHeight());
                     }
 
                     palette.setPreferredSize(preferredWidth, preferredHeight);

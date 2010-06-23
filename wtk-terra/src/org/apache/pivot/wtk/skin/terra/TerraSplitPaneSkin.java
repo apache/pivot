@@ -560,14 +560,14 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
             upper = Math.max(getWidth() - splitterThickness, 0);
 
             if (topLeft  != null) {
-                int leftLimit = topLeft.getMinimumPreferredWidth();
+                int leftLimit = topLeft.getMinimumWidth();
                 if (leftLimit >= 0) {
                     lower = Math.min(leftLimit, upper);
                 }
             }
 
             if (bottomRight != null) {
-                int rightLimit = bottomRight.getMinimumPreferredWidth();
+                int rightLimit = bottomRight.getMinimumWidth();
                 if (rightLimit >= 0) {
                     upper = Math.max(upper - rightLimit, lower);
                 }
@@ -577,14 +577,14 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
             upper = Math.max(getHeight() - splitterThickness, 0);
 
             if (topLeft  != null) {
-                int topLimit = topLeft.getMinimumPreferredHeight();
+                int topLimit = topLeft.getMinimumHeight();
                 if (topLimit >= 0) {
                     lower = Math.min(topLimit, upper);
                 }
             }
 
             if (bottomRight != null) {
-                int bottomLimit = bottomRight.getMinimumPreferredHeight();
+                int bottomLimit = bottomRight.getMinimumHeight();
                 if (bottomLimit >= 0) {
                     upper = Math.max(upper - bottomLimit, lower);
                 }

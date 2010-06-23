@@ -1312,7 +1312,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         CalendarDate calendarDate = (CalendarDate)dictionary.get(key);
 
         CalendarButton calendarButton = new CalendarButton();
-        calendarButton.setMinimumPreferredWidth(75);
+        calendarButton.setMinimumWidth(75);
         calendarButton.setSelectedDate(calendarDate);
         section.add(calendarButton);
         Form.setLabel(calendarButton, key);

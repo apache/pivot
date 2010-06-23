@@ -38,13 +38,13 @@ public interface ComponentListener {
         }
 
         @Override
-        public void preferredWidthLimitsChanged(Component component, int previousMinimumPreferredWidth,
-            int previousMaximumPreferredWidth) {
+        public void widthLimitsChanged(Component component, int previousMinimumWidth,
+            int previousMaximumWidth) {
         }
 
         @Override
-        public void preferredHeightLimitsChanged(Component component, int previousMinimumPreferredHeight,
-            int previousMaximumPreferredHeight) {
+        public void heightLimitsChanged(Component component, int previousMinimumHeight,
+            int previousMaximumHeight) {
         }
 
         @Override
@@ -116,21 +116,21 @@ public interface ComponentListener {
      * Called when a component's preferred width limits have changed.
      *
      * @param component
-     * @param previousMinimumPreferredWidth
-     * @param previousMaximumPreferredWidth
+     * @param previousMinimumWidth
+     * @param previousMaximumWidth
      */
-    public void preferredWidthLimitsChanged(Component component, int previousMinimumPreferredWidth,
-        int previousMaximumPreferredWidth);
+    public void widthLimitsChanged(Component component, int previousMinimumWidth,
+        int previousMaximumWidth);
 
     /**
      * Called when a component's preferred height limits have changed.
      *
      * @param component
-     * @param previousMinimumPreferredHeight
-     * @param previousMaximumPreferredHeight
+     * @param previousMinimumHeight
+     * @param previousMaximumHeight
      */
-    public void preferredHeightLimitsChanged(Component component, int previousMinimumPreferredHeight,
-        int previousMaximumPreferredHeight);
+    public void heightLimitsChanged(Component component, int previousMinimumHeight,
+        int previousMaximumHeight);
 
     /**
      * Called when a component's location has changed.
