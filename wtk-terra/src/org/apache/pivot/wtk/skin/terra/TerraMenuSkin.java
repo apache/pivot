@@ -29,6 +29,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuListener;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.Menu.Item;
@@ -160,6 +161,11 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         }
 
         return new Dimensions(preferredWidth, preferredHeight);
+    }
+
+    @Override
+    public Orientation getDisposition() {
+        return Orientation.VERTICAL;
     }
 
     @Override

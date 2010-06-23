@@ -221,7 +221,7 @@ public final class TextNode extends Node {
         removeText(0, getCharacterCount());
         insertText(text, 0);
     }
-    
+
     public String getSubstring(int start, int end) {
         return textBuilder.substring(start, end);
     }

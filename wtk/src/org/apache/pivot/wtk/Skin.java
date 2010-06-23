@@ -27,11 +27,11 @@ package org.apache.pivot.wtk;
  * <p>
  * Skins are primarily responsible for the following:
  * <ul>
+ * <li>Adding additional subcomponents, if a composite.</li>
  * <li>Painting the component; if a container, this is effectively the
- * background of the container - the Container class itself will paint the
- * subcomponents.</li>
- * <li>Layout of subcomponents; if not a container, <tt>layout()</tt> is
- * a no-op (it exists solely to avoid type checking during layout).</li>
+ * background of the container, since a container cannot paint on top of
+ * its children.</li>
+ * <li>Layout of subcomponents or content.</li>
  * </ul>
  * Skins will often change their appearance in response to events fired by
  * the component; most commonly, this will be in response to data changes within
@@ -62,6 +62,15 @@ public interface Skin extends ConstrainedVisual {
      * Returns the component with which a skin is associated.
      */
     public Component getComponent();
+
+    /**
+     * Returns the skin's layout disposition.
+     *
+     * @return
+     * The skin's layout disposition, or <tt>null</tt> if the skin does not
+     * have a layout disposition.
+     */
+    public Orientation getDisposition();
 
     /**
      * If the component on which the skin is installed is a container, lays

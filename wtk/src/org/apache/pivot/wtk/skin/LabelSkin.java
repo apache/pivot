@@ -37,6 +37,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.LabelListener;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.TextDecoration;
 import org.apache.pivot.wtk.Theme;
@@ -212,6 +213,11 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         }
 
         return baseline;
+    }
+
+    @Override
+    public Orientation getDisposition() {
+        return Orientation.HORIZONTAL;
     }
 
     @Override

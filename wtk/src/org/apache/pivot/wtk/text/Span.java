@@ -45,7 +45,7 @@ public class Span extends Element {
     public Span duplicate(boolean recursive) {
         return new Span(this, recursive);
     }
-    
+
     @Override
     public Span getRange(int offset, int characterCount) {
         return (Span) super.getRange(offset, characterCount);

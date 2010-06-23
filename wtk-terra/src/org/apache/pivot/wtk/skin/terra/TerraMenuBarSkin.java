@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuBarListener;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
@@ -121,6 +122,11 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         }
 
         return new Dimensions(preferredWidth, preferredHeight);
+    }
+
+    @Override
+    public Orientation getDisposition() {
+        return Orientation.HORIZONTAL;
     }
 
     @Override

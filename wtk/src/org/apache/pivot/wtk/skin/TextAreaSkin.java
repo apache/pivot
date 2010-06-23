@@ -44,6 +44,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Span;
@@ -1007,22 +1008,22 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
         public SpanView(org.apache.pivot.wtk.text.Span span) {
             super(span);
         }
-        
+
         @Override
         public void validate() {
             if (!isValid()) {
                 // I have to re-create my children here instead of in attach(), because that is how ParagraphView works,
                 // and ParagraphView is always my super-node.
-                
+
                 // Clear all existing views
                 remove(0, getLength());
-                
+
                 // Attach child node views
                 org.apache.pivot.wtk.text.Span span = (org.apache.pivot.wtk.text.Span)getNode();
                 for (Node node : span) {
                     add(createNodeView(node));
                 }
-                
+
                 int breakWidth = getBreakWidth();
 
                 int width = 0;
@@ -1047,7 +1048,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                 super.validate();
             }
         }
-        
+
         @Override
         public int getInsertionPoint(int x, int y) {
             int offset = -1;
@@ -1115,7 +1116,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                 nodeView.setSkinLocation(skinX, skinY + nodeView.getY());
             }
         }
-        
+
         @Override
         public void nodeInserted(Element element, int index) {
             super.nodeInserted(element, index);
@@ -1131,7 +1132,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
             super.nodesRemoved(element, index, nodes);
         }
     }
-    
+
     /**
      * Text node view.
      */
@@ -1904,6 +1905,11 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
         return margin.top + Math.round(ascent);
+    }
+
+    @Override
+    public Orientation getDisposition() {
+        return Orientation.HORIZONTAL;
     }
 
     @Override

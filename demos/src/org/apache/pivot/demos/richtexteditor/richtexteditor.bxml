@@ -25,29 +25,29 @@ limitations under the License.
                 <TablePane.Column width="1*"/>
             </columns>
             <TablePane.Row height="-1">
-			    <BoxPane orientation="horizontal" styles="{spacing:6}">
-			        <PushButton bxml:id="openFileButton" buttonData="Open File"/>
-			        <PushButton bxml:id="saveFileButton" buttonData="Save File"/>
-			        <Label text="  "/> <!-- spacer -->
-			        <PushButton bxml:id="boldButton" buttonData="Bold"/>
-			        <PushButton bxml:id="italicButton" buttonData="Italic"/>
+                <BoxPane orientation="horizontal" styles="{spacing:6}">
+                    <PushButton bxml:id="openFileButton" buttonData="Open File"/>
+                    <PushButton bxml:id="saveFileButton" buttonData="Save File"/>
+                    <Label text="  "/> <!-- spacer -->
+                    <PushButton bxml:id="boldButton" buttonData="Bold"/>
+                    <PushButton bxml:id="italicButton" buttonData="Italic"/>
                     <ListButton bxml:id="fontFamilyListButton"/>
                     <ListButton bxml:id="fontSizeListButton"/>
-			    </BoxPane>
+                </BoxPane>
             </TablePane.Row>
             <TablePane.Row height="-1">
-		        <Label text="  "/> <!-- spacer -->
+                <Label text="  "/> <!-- spacer -->
             </TablePane.Row>
             <TablePane.Row height="1*">
-			    <Border styles="{color:10}">
-			        <ScrollPane horizontalScrollBarPolicy="fill"
-			            verticalScrollBarPolicy="fill_to_capacity"
-			            preferredHeight="240">
-	                    <TextArea bxml:id="textarea" styles="{margin:10, wrapText:false}">
-	                       <bxml:include src="document.bxml"/>
-	                    </TextArea>
-	                </ScrollPane>
-			    </Border>
+                <Border styles="{color:10}">
+                    <ScrollPane horizontalScrollBarPolicy="fill"
+                        verticalScrollBarPolicy="fill_to_capacity"
+                        preferredHeight="240">
+                        <TextArea bxml:id="textarea" styles="{margin:10, wrapText:false}">
+                           <bxml:include src="document.bxml"/>
+                        </TextArea>
+                    </ScrollPane>
+                </Border>
             </TablePane.Row>
         </TablePane>
     </Border>

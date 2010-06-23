@@ -84,7 +84,7 @@ public final class Limits implements Serializable {
      * @return
      * The bounded value.
      */
-    public int limit(int value) {
+    public int constrain(int value) {
         if (value < minimum) {
             value = minimum;
         } else if (value > maximum) {

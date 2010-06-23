@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.ListViewItemStateListener;
 import org.apache.pivot.wtk.ListViewListener;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Theme;
@@ -201,6 +202,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         return baseline;
+    }
+
+    @Override
+    public Orientation getDisposition() {
+        return Orientation.VERTICAL;
     }
 
     @Override

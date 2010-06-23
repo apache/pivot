@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Skin;
 import org.apache.pivot.wtk.Theme;
@@ -140,7 +141,15 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     /**
-     * By default, components are focusable.
+     * By default, skins do not have a layout disposition.
+     */
+    @Override
+    public Orientation getDisposition() {
+        return null;
+    }
+
+    /**
+     * By default, skins are focusable.
      */
     @Override
     public boolean isFocusable() {

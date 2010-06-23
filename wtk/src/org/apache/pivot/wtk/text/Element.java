@@ -241,7 +241,7 @@ public abstract class Element extends Node
             throw new IndexOutOfBoundsException("offset < 0, offset=" + offset);
         }
         if (offset + characterCount > this.characterCount) {
-            throw new IndexOutOfBoundsException("offset+characterCount>this.characterCount offset=" + offset 
+            throw new IndexOutOfBoundsException("offset+characterCount>this.characterCount offset=" + offset
                 + " characterCount=" + characterCount + " this.characterCount=" + this.characterCount);
         }
 
@@ -309,7 +309,7 @@ public abstract class Element extends Node
 
     @Override
     public abstract Element duplicate(boolean recursive);
-    
+
     @Override
     public char getCharacterAt(int offset) {
         Node node = getNodeAt(offset);

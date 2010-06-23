@@ -248,7 +248,7 @@ public class RichTextEditorDemo implements Application {
                 int selectedFontSize = (Integer) fontSizeListButton.getSelectedItem();
                 String selectedFontFamily = (String) fontFamilyListButton.getSelectedItem();
                 final Font derivedFont = Font.decode(selectedFontFamily + " " + selectedFontSize);
-                
+
                 applyStyle(textarea.getDocument(), span, new StyleApplicator() {
                     @Override
                     public void apply(org.apache.pivot.wtk.text.Span span) {
@@ -259,7 +259,7 @@ public class RichTextEditorDemo implements Application {
         };
         fontFamilyListButton.getListButtonSelectionListeners().add(fontButtonPressListener);
         fontSizeListButton.getListButtonSelectionListeners().add(fontButtonPressListener);
-            
+
         window.open(display);
         textarea.requestFocus();
     }
