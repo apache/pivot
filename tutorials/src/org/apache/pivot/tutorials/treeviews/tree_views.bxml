@@ -22,7 +22,9 @@ limitations under the License.
     <Border>
         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
             <TreeView>
-                <bxml:include src="tree_data.bxml"/>
+                <treeData>
+                    <bxml:include src="tree_data.bxml"/>
+                </treeData>
             </TreeView>
         </ScrollPane>
     </Border>
