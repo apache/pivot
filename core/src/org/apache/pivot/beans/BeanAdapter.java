@@ -148,8 +148,10 @@ public class BeanAdapter implements Map<String, Object> {
     public static final String SET_PREFIX = "set";
     public static final String FIELD_PREFIX = "~";
 
-    private static final String PROPERTY_EXCEPTION_MESSAGE_FORMAT =
+    private static final String ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT =
         "Unable to access property \"%s\" for type %s.";
+    private static final String INVOCATION_TARGET_EXCEPTION_MESSAGE_FORMAT =
+        "Error getting or setting property \"%s\" for type %s.";
 
     /**
      * Creates a new bean dictionary.
@@ -211,7 +213,7 @@ public class BeanAdapter implements Map<String, Object> {
                 try {
                     value = field.get(bean);
                 } catch (IllegalAccessException exception) {
-                    throw new RuntimeException(String.format(PROPERTY_EXCEPTION_MESSAGE_FORMAT,
+                    throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                         key, bean.getClass().getName()), exception);
                 }
             }
@@ -222,10 +224,10 @@ public class BeanAdapter implements Map<String, Object> {
                 try {
                     value = getterMethod.invoke(bean, new Object[] {});
                 } catch (IllegalAccessException exception) {
-                    throw new RuntimeException(String.format(PROPERTY_EXCEPTION_MESSAGE_FORMAT,
+                    throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                         key, bean.getClass().getName()), exception);
                 } catch (InvocationTargetException exception) {
-                    throw new RuntimeException(String.format(PROPERTY_EXCEPTION_MESSAGE_FORMAT,
+                    throw new RuntimeException(String.format(INVOCATION_TARGET_EXCEPTION_MESSAGE_FORMAT,
                         key, bean.getClass().getName()), exception.getCause());
                 }
             }
@@ -279,7 +281,7 @@ public class BeanAdapter implements Map<String, Object> {
             try {
                 field.set(bean, value);
             } catch (IllegalAccessException exception) {
-                throw new RuntimeException(String.format(PROPERTY_EXCEPTION_MESSAGE_FORMAT,
+                throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                     key, bean.getClass().getName()), exception);
             }
         } else {
@@ -305,10 +307,10 @@ public class BeanAdapter implements Map<String, Object> {
             try {
                 setterMethod.invoke(bean, new Object[] {value});
             } catch (IllegalAccessException exception) {
-                throw new RuntimeException(String.format(PROPERTY_EXCEPTION_MESSAGE_FORMAT,
+                throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                     key, bean.getClass().getName()), exception);
             } catch (InvocationTargetException exception) {
-                throw new RuntimeException(String.format(PROPERTY_EXCEPTION_MESSAGE_FORMAT,
+                throw new RuntimeException(String.format(INVOCATION_TARGET_EXCEPTION_MESSAGE_FORMAT,
                     key, bean.getClass().getName()), exception.getCause());
             }
         }
@@ -741,7 +743,7 @@ public class BeanAdapter implements Map<String, Object> {
                 } catch (NoSuchFieldException exception) {
                     // No-op
                 } catch (IllegalAccessException exception) {
-                    throw new RuntimeException(String.format(PROPERTY_EXCEPTION_MESSAGE_FORMAT,
+                    throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                         key, beanClass.getName()), exception);
                 }
             }

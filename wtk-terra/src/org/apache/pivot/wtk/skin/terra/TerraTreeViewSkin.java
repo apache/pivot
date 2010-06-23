@@ -583,11 +583,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    public Orientation getDisposition() {
-        return Orientation.VERTICAL;
-    }
-
-    @Override
     public void layout() {
         if (validateSelection) {
             // Ensure that the selection is visible

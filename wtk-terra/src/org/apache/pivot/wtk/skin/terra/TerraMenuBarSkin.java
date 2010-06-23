@@ -125,11 +125,6 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     @Override
-    public Orientation getDisposition() {
-        return Orientation.HORIZONTAL;
-    }
-
-    @Override
     public void layout() {
         MenuBar menuBar = (MenuBar)getComponent();
 

@@ -164,11 +164,6 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     @Override
-    public Orientation getDisposition() {
-        return Orientation.VERTICAL;
-    }
-
-    @Override
     public void layout() {
         Menu menu = (Menu)getComponent();
         Menu.SectionSequence sections = menu.getSections();

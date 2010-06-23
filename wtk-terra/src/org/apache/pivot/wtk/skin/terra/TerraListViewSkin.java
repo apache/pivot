@@ -205,11 +205,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    public Orientation getDisposition() {
-        return Orientation.VERTICAL;
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public void layout() {
         ListView listView = (ListView)getComponent();

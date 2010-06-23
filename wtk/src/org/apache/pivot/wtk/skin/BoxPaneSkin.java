@@ -308,12 +308,6 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     @Override
-    public Orientation getDisposition() {
-        BoxPane boxPane = (BoxPane)getComponent();
-        return boxPane.getOrientation();
-    }
-
-    @Override
     public void layout() {
         BoxPane boxPane = (BoxPane)getComponent();
         int n = boxPane.getLength();

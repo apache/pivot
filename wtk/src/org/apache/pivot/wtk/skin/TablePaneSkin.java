@@ -510,11 +510,6 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     @Override
-    public Orientation getDisposition() {
-        return Orientation.HORIZONTAL;
-    }
-
-    @Override
     public void layout() {
         TablePane tablePane = (TablePane)getComponent();
 

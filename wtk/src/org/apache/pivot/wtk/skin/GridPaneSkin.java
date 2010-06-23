@@ -291,11 +291,6 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     }
 
     @Override
-    public Orientation getDisposition() {
-        return Orientation.HORIZONTAL;
-    }
-
-    @Override
     public void layout() {
         GridPane gridPane = (GridPane)getComponent();
 
