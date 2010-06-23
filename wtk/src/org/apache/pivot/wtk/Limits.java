@@ -28,19 +28,19 @@ import org.apache.pivot.serialization.SerializationException;
 public final class Limits implements Serializable {
     private static final long serialVersionUID = -1420266625812552298L;
 
-    public final int min;
-    public final int max;
+    public final int minimum;
+    public final int maximum;
 
-    public static final String MIN_KEY = "min";
-    public static final String MAX_KEY = "max";
+    public static final String MINIMUM_KEY = "minimum";
+    public static final String MAXIMUM_KEY = "maximum";
 
-    public Limits(int min, int max) {
-        if (min > max) {
-            throw new IllegalArgumentException("min > max");
+    public Limits(int minimum, int maximum) {
+        if (minimum > maximum) {
+            throw new IllegalArgumentException("minimum is greater than maximum.");
         }
 
-        this.min = min;
-        this.max = max;
+        this.minimum = minimum;
+        this.maximum = maximum;
     }
 
     public Limits(Limits limits) {
@@ -48,8 +48,8 @@ public final class Limits implements Serializable {
             throw new IllegalArgumentException("limits is null.");
         }
 
-        min = limits.min;
-        max = limits.max;
+        minimum = limits.minimum;
+        maximum = limits.maximum;
     }
 
     public Limits(Dictionary<String, ?> limits) {
@@ -57,37 +57,38 @@ public final class Limits implements Serializable {
             throw new IllegalArgumentException("limits is null.");
         }
 
-        if (limits.containsKey(MIN_KEY)) {
-            min = (Integer)limits.get(MIN_KEY);
+        if (limits.containsKey(MINIMUM_KEY)) {
+            minimum = (Integer)limits.get(MINIMUM_KEY);
         } else {
-            min = Integer.MIN_VALUE;
+            minimum = Integer.MIN_VALUE;
         }
 
-        if (limits.containsKey(MAX_KEY)) {
-            max = (Integer)limits.get(MAX_KEY);
+        if (limits.containsKey(MAXIMUM_KEY)) {
+            maximum = (Integer)limits.get(MAXIMUM_KEY);
         } else {
-            max = Integer.MAX_VALUE;
+            maximum = Integer.MAX_VALUE;
         }
 
-        if (min > max) {
-            throw new IllegalArgumentException("min > max");
+        if (minimum > maximum) {
+            throw new IllegalArgumentException("minimum is greater than maximum.");
         }
     }
 
     /**
-     * Limits the specified value to the min and max values of this object.
+     * Limits the specified value to the minimum and maximum values of
+     * this object.
      *
      * @param value
-     * The value to limit
+     * The value to limit.
      *
      * @return
-     * The bounded value
+     * The bounded value.
      */
     public int limit(int value) {
-        if (value < min) {
-            value = min;
-        } else if (value > max) {
-            value = max;
+        if (value < minimum) {
+            value = minimum;
+        } else if (value > maximum) {
+            value = maximum;
         }
 
         return value;
@@ -99,8 +100,8 @@ public final class Limits implements Serializable {
 
         if (object instanceof Limits) {
             Limits limits = (Limits)object;
-            equals = (min == limits.min
-                && max == limits.max);
+            equals = (minimum == limits.minimum
+                && maximum == limits.maximum);
         }
 
         return equals;
@@ -108,7 +109,7 @@ public final class Limits implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31 * min + max;
+        return 31 * minimum + maximum;
     }
 
     @Override
@@ -118,18 +119,18 @@ public final class Limits implements Serializable {
         buf.append(getClass().getName());
         buf.append(" [");
 
-        if (min == Integer.MIN_VALUE) {
+        if (minimum == Integer.MIN_VALUE) {
             buf.append("MIN");
         } else {
-            buf.append(min);
+            buf.append(minimum);
         }
 
         buf.append("-");
 
-        if (max == Integer.MAX_VALUE) {
+        if (maximum == Integer.MAX_VALUE) {
             buf.append("MAX");
         } else {
-            buf.append(max);
+            buf.append(maximum);
         }
 
         buf.append("]");

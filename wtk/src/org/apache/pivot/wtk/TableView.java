@@ -343,7 +343,7 @@ public class TableView extends Component {
          * The new width limits.
          */
         public void setWidthLimits(Limits widthLimits) {
-            setWidthLimits(widthLimits.min, widthLimits.max);
+            setWidthLimits(widthLimits.minimum, widthLimits.maximum);
         }
 
         /**

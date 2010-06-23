@@ -669,7 +669,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setTextSize(10);
         textInput.setMaximumLength(10);
         textInput.setValidator(new IntValidator());
-        textInput.setText(String.valueOf(limits.min));
+        textInput.setText(String.valueOf(limits.minimum));
         flowPane.add(textInput);
 
         textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
@@ -681,10 +681,10 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
                     try {
                         int min = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Limits(min, limits.max));
+                        dictionary.put(key, new Limits(min, limits.maximum));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(limits.min));
+                        textInput.setText(String.valueOf(limits.minimum));
                     }
                 }
             }
@@ -703,7 +703,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setTextSize(10);
         textInput.setMaximumLength(10);
         textInput.setValidator(new IntValidator());
-        textInput.setText(String.valueOf(limits.max));
+        textInput.setText(String.valueOf(limits.maximum));
         flowPane.add(textInput);
 
         textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
@@ -715,10 +715,10 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
                     try {
                         int max = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Limits(limits.min, max));
+                        dictionary.put(key, new Limits(limits.minimum, max));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(limits.max));
+                        textInput.setText(String.valueOf(limits.maximum));
                     }
                 }
             }
@@ -740,8 +740,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             TextInput minTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
             TextInput maxTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
 
-            minTextInput.setText(String.valueOf(limits.min));
-            maxTextInput.setText(String.valueOf(limits.max));
+            minTextInput.setText(String.valueOf(limits.minimum));
+            maxTextInput.setText(String.valueOf(limits.maximum));
         }
     }
 

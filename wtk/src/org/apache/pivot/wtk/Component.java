@@ -1189,7 +1189,7 @@ public abstract class Component implements ConstrainedVisual {
             throw new IllegalArgumentException("widthLimits is null.");
         }
 
-        setWidthLimits(widthLimits.min, widthLimits.max);
+        setWidthLimits(widthLimits.minimum, widthLimits.maximum);
     }
 
     /**
@@ -1270,7 +1270,7 @@ public abstract class Component implements ConstrainedVisual {
             throw new IllegalArgumentException("heightLimits is null.");
         }
 
-        setHeightLimits(heightLimits.min, heightLimits.max);
+        setHeightLimits(heightLimits.minimum, heightLimits.maximum);
     }
 
     /**
