@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuListener;
-import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.Menu.Item;

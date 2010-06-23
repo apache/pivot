@@ -1062,7 +1062,7 @@ public abstract class Component implements ConstrainedVisual {
             if (layoutDisposition != null) {
                 switch (layoutDisposition) {
                     case HORIZONTAL: {
-                        if (preferredWidth != preferredSize.width) {
+                        if (preferredSize.width > preferredWidth) {
                             preferredHeight = heightLimits.constrain(skin.getPreferredHeight(preferredWidth));
                         }
 
@@ -1070,7 +1070,7 @@ public abstract class Component implements ConstrainedVisual {
                     }
 
                     case VERTICAL: {
-                        if (preferredHeight != preferredSize.height) {
+                        if (preferredSize.height > preferredHeight) {
                             preferredWidth = widthLimits.constrain(skin.getPreferredWidth(preferredHeight));
                         }
 

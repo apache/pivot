@@ -26,7 +26,6 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuBarListener;
-import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
