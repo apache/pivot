@@ -76,6 +76,14 @@ public class Drawing extends Image {
 
     private DrawingListenerList drawingListeners = new DrawingListenerList();
 
+    public Drawing() {
+        this(null);
+    }
+
+    public Drawing(Canvas canvas) {
+        setCanvas(canvas);
+    }
+
     @Override
     public int getWidth() {
         validate();

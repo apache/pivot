@@ -39,13 +39,6 @@ public class Menu extends Container {
         private static class ItemListenerList extends ListenerList<ItemListener>
             implements ItemListener {
             @Override
-            public void nameChanged(Item item, String previousName) {
-                for (ItemListener listener : this) {
-                    listener.nameChanged(item, previousName);
-                }
-            }
-
-            @Override
             public void menuChanged(Item item, Menu previousMenu) {
                 for (ItemListener listener : this) {
                     listener.menuChanged(item, previousMenu);
@@ -105,34 +98,6 @@ public class Menu extends Container {
 
         public Section getSection() {
             return section;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            String previousName = this.name;
-
-            if (name != previousName) {
-                if (section != null
-                    && section.menu != null) {
-                    if (section.menu.itemMap.containsKey(name)) {
-                        throw new IllegalArgumentException("A menu item named \"" + name
-                            + "\" already exists.");
-                    }
-
-                    if (previousName != null) {
-                        section.menu.itemMap.remove(previousName);
-                    }
-
-                    section.menu.itemMap.put(name, this);
-                }
-
-                this.name = name;
-
-                itemListeners.nameChanged(this, previousName);
-            }
         }
 
         public Menu getMenu() {
@@ -242,14 +207,6 @@ public class Menu extends Container {
      */
     public interface ItemListener {
         /**
-         * Called when an item's name has changed.
-         *
-         * @param item
-         * @param previousName
-         */
-        public void nameChanged(Item item, String previousName);
-
-        /**
          * Called when an item's menu has changed.
          *
          * @param item
@@ -285,13 +242,6 @@ public class Menu extends Container {
                     listener.itemsRemoved(section, index, removed);
                 }
             }
-
-            @Override
-            public void nameChanged(Menu.Section section, String previousName) {
-                for (SectionListener listener : this) {
-                    listener.nameChanged(section, previousName);
-                }
-            }
         }
 
         private Menu menu = null;
@@ -303,33 +253,6 @@ public class Menu extends Container {
 
         public Menu getMenu() {
             return menu;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            String previousName = this.name;
-
-            if (name != previousName) {
-                if (menu != null) {
-                    if (menu.sectionMap.containsKey(name)) {
-                        throw new IllegalArgumentException("A menu section named \"" + name
-                            + "\" already exists.");
-                    }
-
-                    if (previousName != null) {
-                        menu.sectionMap.remove(previousName);
-                    }
-
-                    menu.sectionMap.put(name, this);
-                }
-
-                this.name = name;
-
-                sectionListeners.nameChanged(this, previousName);
-            }
         }
 
         @Override
@@ -434,14 +357,6 @@ public class Menu extends Container {
          * @param removed
          */
         public void itemsRemoved(Section section, int index, Sequence<Item> removed);
-
-        /**
-         * Called when a section's name has changed.
-         *
-         * @param section
-         * @param previousName
-         */
-        public void nameChanged(Section section, String previousName);
     }
 
     /**

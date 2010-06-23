@@ -32,6 +32,7 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ColorItem;
 import org.apache.pivot.wtk.media.Drawing;
+import org.apache.pivot.wtk.media.drawing.Canvas;
 import org.apache.pivot.wtk.media.drawing.Ellipse;
 import org.apache.pivot.wtk.media.drawing.Rectangle;
 import org.apache.pivot.wtk.media.drawing.Shape;
@@ -98,14 +99,16 @@ public class MenuButtons implements Application {
         colorListButton = (ListButton)beanSerializer.get("colorListButton");
         imageView = (ImageView)beanSerializer.get("imageView");
 
-        drawing = new Drawing();
 
         Rectangle borderRectangle = new Rectangle();
         borderRectangle.setSize(MAX_X, MAX_Y);
         borderRectangle.setStroke((Paint)null);
         borderRectangle.setFill("#eeeeee");
 
-        drawing.getCanvas().add(borderRectangle);
+        Canvas canvas = new Canvas();
+        canvas.add(borderRectangle);
+
+        drawing = new Drawing(canvas);
 
         imageView.setImage(drawing);
 
