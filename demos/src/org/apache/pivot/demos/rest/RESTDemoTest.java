@@ -85,7 +85,7 @@ public class RESTDemoTest {
     }
 
     @Test(expected=QueryException.class)
-    public void testException() throws IOException, SerializationException, QueryException {
+    public void testException() throws QueryException {
         GetQuery getQuery = new GetQuery(hostname, port, "/pivot-demos/rest_demo/foo", secure);
         getQuery.execute();
     }
