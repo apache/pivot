@@ -18,29 +18,27 @@ package org.apache.pivot.tutorials.menus;
 
 import java.io.IOException;
 
+import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FileBrowserSheet;
+import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuHandler;
-import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputSelectionListener;
 import org.apache.pivot.wtk.TextInputTextListener;
-import org.apache.pivot.wtk.Window;
 
-public class MenuBars implements Application {
-    private Window window = null;
-    private TabPane tabPane = null;
-    private FileBrowserSheet fileBrowserSheet = null;
+public class MenuBars extends Frame implements Bindable {
+    @BXML private FileBrowserSheet fileBrowserSheet;
+    @BXML private TabPane tabPane = null;
 
     private MenuHandler menuHandler = new MenuHandler.Adapter() {
         TextInputTextListener textInputTextListener = new TextInputTextListener() {
@@ -95,18 +93,11 @@ public class MenuBars implements Application {
             @Override
             public void perform() {
                 BeanSerializer beanSerializer = new BeanSerializer();
+                beanSerializer.put("menuHandler", menuHandler);
+
                 Component tab;
                 try {
                     tab = new Border((Component)beanSerializer.readObject(this, "document.bxml"));
-
-                    TextInput textInput1 = (TextInput)beanSerializer.get("textInput1");
-                    textInput1.setMenuHandler(menuHandler);
-
-                    TextInput textInput2 = (TextInput)beanSerializer.get("textInput2");
-                    textInput2.setMenuHandler(menuHandler);
-
-                    PushButton pushButton = (PushButton)beanSerializer.get("pushButton");
-                    pushButton.setMenuHandler(menuHandler);
                 } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 } catch (SerializationException exception) {
@@ -122,14 +113,14 @@ public class MenuBars implements Application {
         Action.getNamedActions().put("fileOpen", new Action() {
             @Override
             public void perform() {
-                fileBrowserSheet.open(window);
+                fileBrowserSheet.open(MenuBars.this);
             }
         });
 
         Action.getNamedActions().put("cut", new Action(false) {
             @Override
             public void perform() {
-                TextInput textInput = (TextInput)window.getFocusDescendant();
+                TextInput textInput = (TextInput)MenuBars.this.getFocusDescendant();
                 textInput.cut();
             }
         });
@@ -137,7 +128,7 @@ public class MenuBars implements Application {
         Action.getNamedActions().put("copy", new Action(false) {
             @Override
             public void perform() {
-                TextInput textInput = (TextInput)window.getFocusDescendant();
+                TextInput textInput = (TextInput)MenuBars.this.getFocusDescendant();
                 textInput.copy();
             }
         });
@@ -145,43 +136,13 @@ public class MenuBars implements Application {
         Action.getNamedActions().put("paste", new Action(false) {
             @Override
             public void perform() {
-                TextInput textInput = (TextInput)window.getFocusDescendant();
+                TextInput textInput = (TextInput)MenuBars.this.getFocusDescendant();
                 textInput.paste();
             }
         });
     }
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "menu_bars.bxml");
-
-        tabPane = (TabPane)beanSerializer.get("tabPane");
-
-        fileBrowserSheet = new FileBrowserSheet();
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(MenuBars.class, args);
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
     }
 }

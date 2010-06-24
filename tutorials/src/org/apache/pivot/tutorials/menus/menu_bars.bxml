@@ -16,11 +16,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Frame title="Menu Bars" maximized="true"
+<menus:MenuBars title="Menu Bars" maximized="true"
     styles="{padding:{top:0, left:4, bottom:4, right:4}, showWindowControls:false}"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:menus="org.apache.pivot.tutorials.menus"
     xmlns="org.apache.pivot.wtk">
+    <bxml:define>
+        <FileBrowserSheet bxml:id="fileBrowserSheet"/>
+    </bxml:define>
+
     <actionMappings>
         <Window.ActionMapping action="cut" keyStroke="CTRL-X"/>
         <Window.ActionMapping action="copy" keyStroke="CTRL-C"/>
@@ -65,4 +70,4 @@ limitations under the License.
     <Border styles="{backgroundColor:null, padding:2}">
         <TabPane bxml:id="tabPane"/>
     </Border>
-</Frame>
+</menus:MenuBars>

@@ -16,24 +16,21 @@
  */
 package org.apache.pivot.tutorials.menus;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.Window;
 
-public class ContextMenus implements Application {
-    private Window window = null;
+public class ContextMenus extends Window implements Bindable {
     private MenuHandler menuHandler = new MenuHandler.Adapter() {
         @Override
         public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
-            final Component descendant = window.getDescendantAt(x, y);
+            final Component descendant = getDescendantAt(x, y);
 
             Menu.Section menuSection = new Menu.Section();
             menu.getSections().add(menuSection);
@@ -45,7 +42,7 @@ public class ContextMenus implements Application {
                     String description = (String)descendant.getUserData().get("description");
                     String message = "This is a " + description + ".";
 
-                    Prompt.prompt(message, window);
+                    Prompt.prompt(message, ContextMenus.this);
                 }
             });
 
@@ -56,32 +53,7 @@ public class ContextMenus implements Application {
     };
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "context_menus.bxml");
-        window.setMenuHandler(menuHandler);
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(ContextMenus.class, args);
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        setMenuHandler(menuHandler);
     }
 }

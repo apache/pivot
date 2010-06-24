@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Context Menus" maximized="true"
+<menus:ContextMenus title="Context Menus" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:menus="org.apache.pivot.tutorials.menus"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{color:10}">
         <TablePane styles="{horizontalSpacing:1, verticalSpacing:1,
@@ -47,4 +48,4 @@ limitations under the License.
             </TablePane.Row>
         </TablePane>
     </Border>
-</Window>
+</menus:ContextMenus>

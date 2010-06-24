@@ -16,33 +16,27 @@
  */
 package org.apache.pivot.tutorials.progress;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.ActivityIndicator;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class ActivityIndicators implements Application {
-    private Window window = null;
+public class ActivityIndicators extends Window implements Bindable {
     private ActivityIndicator activityIndicator1 = null;
     private ActivityIndicator activityIndicator2 = null;
     private ActivityIndicator activityIndicator3 = null;
     private PushButton activityButton = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "activity_indicators.bxml");
-        activityIndicator1 = (ActivityIndicator)beanSerializer.get("activityIndicator1");
-        activityIndicator2 = (ActivityIndicator)beanSerializer.get("activityIndicator2");
-        activityIndicator3 = (ActivityIndicator)beanSerializer.get("activityIndicator3");
-        activityButton = (PushButton)beanSerializer.get("activityButton");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        activityIndicator1 = (ActivityIndicator)context.get("activityIndicator1");
+        activityIndicator2 = (ActivityIndicator)context.get("activityIndicator2");
+        activityIndicator3 = (ActivityIndicator)context.get("activityIndicator3");
+        activityButton = (PushButton)context.get("activityButton");
 
         activityButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -55,32 +49,9 @@ public class ActivityIndicators implements Application {
         });
 
         updateButtonData();
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void updateButtonData() {
         activityButton.setButtonData(activityIndicator1.isActive() ? "Stop" : "Start");
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(ActivityIndicators.class, args);
     }
 }

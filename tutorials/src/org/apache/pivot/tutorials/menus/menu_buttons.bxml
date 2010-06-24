@@ -16,9 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Menu Buttons" maximized="true"
+<menus:MenuButtons title="Menu Buttons" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:menus="org.apache.pivot.tutorials.menus"
     xmlns="org.apache.pivot.wtk">
     <TablePane styles="{verticalSpacing:2}">
         <columns>
@@ -74,9 +75,18 @@ limitations under the License.
             <Border styles="{padding:2}">
                 <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                     verticalScrollBarPolicy="fill_to_capacity">
-                    <ImageView bxml:id="imageView"/>
+                    <ImageView bxml:id="imageView">
+                        <image>
+                            <Drawing bxml:id="drawing"
+                                xmlns="org.apache.pivot.wtk.media">
+                                <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
+                                    <Rectangle bxml:id="border" stroke="" fill="#eeeeee" width="480" height="360"/>
+                                </Canvas>
+                            </Drawing>
+                        </image>
+                    </ImageView>
                 </ScrollPane>
             </Border>
         </TablePane.Row>
     </TablePane>
-</Window>
+</menus:MenuButtons>

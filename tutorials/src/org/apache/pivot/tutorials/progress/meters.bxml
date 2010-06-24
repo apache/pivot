@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Meters" maximized="true"
+<progress:Meters title="Meters" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:progress="org.apache.pivot.tutorials.progress"
     xmlns="org.apache.pivot.wtk">
     <TablePane>
         <columns>
@@ -39,4 +40,4 @@ limitations under the License.
             </BoxPane>
         </TablePane.Row>
     </TablePane>
-</Window>
+</progress:Meters>

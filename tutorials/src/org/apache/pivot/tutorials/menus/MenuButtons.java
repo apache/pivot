@@ -19,34 +19,25 @@ package org.apache.pivot.tutorials.menus;
 import java.awt.Color;
 import java.awt.Paint;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Bounds;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ColorItem;
 import org.apache.pivot.wtk.media.Drawing;
-import org.apache.pivot.wtk.media.drawing.Canvas;
 import org.apache.pivot.wtk.media.drawing.Ellipse;
 import org.apache.pivot.wtk.media.drawing.Rectangle;
 import org.apache.pivot.wtk.media.drawing.Shape;
 import org.apache.pivot.wtk.media.drawing.Text;
 
-public class MenuButtons implements Application {
-    private Window window = null;
+public class MenuButtons extends Window implements Bindable {
     private ListButton colorListButton = null;
-    private ImageView imageView = null;
-
     private Drawing drawing = null;
-
-    public static final int MAX_X = 480;
-    public static final int MAX_Y = 360;
+    private Rectangle border = null;
 
     public MenuButtons() {
         Action.getNamedActions().put("newCircle", new Action() {
@@ -93,43 +84,10 @@ public class MenuButtons implements Application {
     }
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "menu_buttons.bxml");
-        colorListButton = (ListButton)beanSerializer.get("colorListButton");
-        imageView = (ImageView)beanSerializer.get("imageView");
-
-
-        Rectangle borderRectangle = new Rectangle();
-        borderRectangle.setSize(MAX_X, MAX_Y);
-        borderRectangle.setStroke((Paint)null);
-        borderRectangle.setFill("#eeeeee");
-
-        Canvas canvas = new Canvas();
-        canvas.add(borderRectangle);
-
-        drawing = new Drawing(canvas);
-
-        imageView.setImage(drawing);
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        colorListButton = (ListButton)context.get("colorListButton");
+        drawing = (Drawing)context.get("drawing");
+        border = (Rectangle)context.get("border");
     }
 
     public Color getSelectedColor() {
@@ -139,14 +97,9 @@ public class MenuButtons implements Application {
 
     public Point getRandomLocation(Shape shape) {
         Bounds bounds = shape.getBounds();
-
-        int x = (int)(Math.random() * (MAX_X - bounds.width));
-        int y = (int)(Math.random() * (MAX_Y - bounds.height));
+        int x = (int)(Math.random() * (border.getWidth() - bounds.width));
+        int y = (int)(Math.random() * (border.getHeight() - bounds.height));
 
         return new Point(x, y);
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(MenuButtons.class, args);
     }
 }

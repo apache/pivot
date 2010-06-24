@@ -16,23 +16,21 @@
  */
 package org.apache.pivot.tutorials.progress;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Meter;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 
-public class Meters implements Application {
+public class Meters extends Window implements Bindable {
     public class SampleTask extends Task<Void> {
         private int percentage = 0;
 
@@ -63,19 +61,15 @@ public class Meters implements Application {
         }
     }
 
-    private Window window = null;
     private Meter meter = null;
     private PushButton progressButton = null;
 
     private SampleTask sampleTask = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "meters.bxml");
-        meter = (Meter)beanSerializer.get("meter");
-        progressButton = (PushButton)beanSerializer.get("progressButton");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        meter = (Meter)context.get("meter");
+        progressButton = (PushButton)context.get("progressButton");
 
         progressButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -113,25 +107,6 @@ public class Meters implements Application {
         });
 
         updateProgressButton();
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void updateProgressButton() {
@@ -140,9 +115,5 @@ public class Meters implements Application {
         } else {
             progressButton.setButtonData("Cancel");
         }
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(Meters.class, args);
     }
 }
