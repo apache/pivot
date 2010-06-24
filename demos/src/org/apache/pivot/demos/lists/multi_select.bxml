@@ -16,10 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Multiple Selection Demo" maximized="true"
+<lists:MultiSelect title="Multiple Selection Demo" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:lists="org.apache.pivot.demos.lists"
     xmlns="org.apache.pivot.wtk">
     <TablePane styles="{horizontalSpacing:8}">
         <columns>
@@ -44,4 +45,4 @@ limitations under the License.
             </Border>
         </TablePane.Row>
     </TablePane>
-</Window>
+</lists:MultiSelect>

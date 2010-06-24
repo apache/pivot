@@ -19,16 +19,14 @@ package org.apache.pivot.demos.dnd;
 import java.io.IOException;
 
 import org.apache.pivot.beans.BXML;
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.io.FileList;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Clipboard;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropAction;
 import org.apache.pivot.wtk.DropTarget;
@@ -43,9 +41,7 @@ import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Image;
 
-public class DragAndDropDemo implements Application {
-    private Window window = null;
-
+public class DragAndDropDemo extends Window implements Bindable {
     @BXML private Label label;
     @BXML private PushButton copyTextButton;
     @BXML private PushButton pasteTextButton;
@@ -57,12 +53,7 @@ public class DragAndDropDemo implements Application {
     @BXML private PushButton pasteFilesButton;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "drag_and_drop.bxml");
-        beanSerializer.bind(this, DragAndDropDemo.class);
-
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
         // Text
         label.setDragSource(new DragSource() {
             private LocalManifest content = null;
@@ -423,28 +414,5 @@ public class DragAndDropDemo implements Application {
                 // TODO
             }
         });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(DragAndDropDemo.class, args);
     }
 }

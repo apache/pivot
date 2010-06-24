@@ -20,19 +20,17 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.pivot.beans.BXML;
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.FileList;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.DropAction;
 import org.apache.pivot.wtk.DropTarget;
 import org.apache.pivot.wtk.Keyboard;
@@ -44,21 +42,14 @@ import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.Window;
 
-public class FileDropTargetDemo implements Application {
-    private Window window = null;
-
+public class FileDropTargetDemo extends Window implements Bindable {
     @BXML private TableView fileTableView;
     @BXML private PushButton uploadButton;
 
     private FileList fileList = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "file_drop_target_demo.bxml");
-        beanSerializer.bind(this, FileDropTargetDemo.class);
-
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
         fileList = new FileList();
         fileTableView.setTableData(fileList);
 
@@ -160,31 +151,8 @@ public class FileDropTargetDemo implements Application {
         uploadButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                Prompt.prompt(MessageType.INFO, "Pretending to upload...", window);
+                Prompt.prompt(MessageType.INFO, "Pretending to upload...", FileDropTargetDemo.this);
             }
         });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) throws Exception {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(FileDropTargetDemo.class, args);
     }
 }

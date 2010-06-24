@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="RSS Feed Demo" maximized="true"
+<rss:RSSFeedDemo title="RSS Feed Demo" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:effects="org.apache.pivot.wtk.effects"
     xmlns:rss="org.apache.pivot.demos.rss"
@@ -34,4 +34,4 @@ limitations under the License.
             </ScrollPane>
         </CardPane>
     </Border>
-</Window>
+</rss:RSSFeedDemo>

@@ -16,31 +16,25 @@
  */
 package org.apache.pivot.demos.lists;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Window;
 
-public class MultiSelect implements Application {
-    private Window window = null;
+public class MultiSelect extends Window implements Bindable {
     private ListView dataListView = null;
     private ListView selectionListView = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "multi_select.bxml");
-
-        dataListView = (ListView)beanSerializer.get("dataListView");
-        selectionListView = (ListView)beanSerializer.get("selectionListView");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        dataListView = (ListView)context.get("dataListView");
+        selectionListView = (ListView)context.get("selectionListView");
 
         dataListView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
             @Override
@@ -58,35 +52,17 @@ public class MultiSelect implements Application {
                 refreshSelectionListData();
             }
         });
+    }
+
+    @Override
+    public void open(Display display, Window owner) {
+        super.open(display, owner);
 
         refreshSelectionListData();
-
-        window.open(display);
         dataListView.requestFocus();
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void refreshSelectionListData() {
         selectionListView.setListData(new ArrayList<Span>(dataListView.getSelectedRanges()));
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(MultiSelect.class, args);
     }
 }

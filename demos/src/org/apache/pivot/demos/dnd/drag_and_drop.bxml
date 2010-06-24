@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Drag and Drop Demo" maximized="true"
+<dnd:DragAndDropDemo title="Drag and Drop Demo" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:dnd="org.apache.pivot.demos.dnd"
     xmlns="org.apache.pivot.wtk">
     <TablePane styles="{padding:4, horizontalSpacing:4}">
         <columns>
@@ -106,4 +107,4 @@ limitations under the License.
             </Border>
         </TablePane.Row>
     </TablePane>
-</Window>
+</dnd:DragAndDropDemo>

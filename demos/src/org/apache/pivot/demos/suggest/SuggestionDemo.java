@@ -23,16 +23,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
-import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSON;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.web.GetQuery;
 import org.apache.pivot.wtk.ActivityIndicator;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.SuggestionPopupCloseListener;
@@ -41,8 +40,7 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.Window;
 
-public class SuggestionDemo implements Application {
-    private Window window = null;
+public class SuggestionDemo extends Window implements Bindable {
     private TextInput textInput = null;
     private ActivityIndicator activityIndicator = null;
 
@@ -50,11 +48,9 @@ public class SuggestionDemo implements Application {
     private GetQuery suggestionQuery = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "suggestion_demo.bxml");
-        textInput = (TextInput)beanSerializer.get("textInput");
-        activityIndicator = (ActivityIndicator)beanSerializer.get("activityIndicator");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        textInput = (TextInput)context.get("textInput");
+        activityIndicator = (ActivityIndicator)context.get("activityIndicator");
 
         textInput.getTextInputCharacterListeners().add(new TextInputCharacterListener() {
             @Override
@@ -71,8 +67,11 @@ public class SuggestionDemo implements Application {
                 suggestionPopup.close();
             }
         });
+    }
 
-        window.open(display);
+    @Override
+    public void open(Display display, Window owner) {
+        super.open(display, owner);
         textInput.requestFocus();
     }
 
@@ -153,26 +152,5 @@ public class SuggestionDemo implements Application {
         }));
 
         activityIndicator.setActive(true);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(SuggestionDemo.class, args);
     }
 }

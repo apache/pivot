@@ -22,17 +22,15 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.web.GetQuery;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
@@ -42,20 +40,16 @@ import org.apache.pivot.xml.Element;
 import org.apache.pivot.xml.XML;
 import org.apache.pivot.xml.XMLSerializer;
 
-public class RSSFeedDemo implements Application {
-    private Window window = null;
+public class RSSFeedDemo extends Window implements Bindable {
     private ListView feedListView = null;
     private CardPane cardPane = null;
     private Label statusLabel = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "rss_feed_demo.bxml");
-        feedListView = (ListView)beanSerializer.get("feedListView");
-        cardPane = (CardPane)beanSerializer.get("cardPane");
-        statusLabel = (Label)beanSerializer.get("statusLabel");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        feedListView = (ListView)context.get("feedListView");
+        cardPane = (CardPane)context.get("cardPane");
+        statusLabel = (Label)context.get("statusLabel");
 
         feedListView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
             private int index = -1;
@@ -103,29 +97,5 @@ public class RSSFeedDemo implements Application {
                 statusLabel.setText(task.getFault().toString());
             }
         }));
-
-        window.setMaximized(true);
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) throws Exception {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(RSSFeedDemo.class, args);
     }
 }

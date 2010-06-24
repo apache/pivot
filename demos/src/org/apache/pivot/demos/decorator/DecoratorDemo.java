@@ -19,7 +19,6 @@ package org.apache.pivot.demos.decorator;
 import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -29,22 +28,14 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.FadeDecorator;
 
 public class DecoratorDemo implements Application {
-    private Window mainWindow = null;
     private Window reflectionWindow = null;
     private Frame translucentFrame = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        Border border = new Border();
-        border.getStyles().put("color", 10);
-        border.getStyles().put("backgroundColor", 3);
-        mainWindow = new Window(border);
-        mainWindow.setMaximized(true);
-        mainWindow.open(display);
-
         BeanSerializer beanSerializer = new BeanSerializer();
-        reflectionWindow = (Window)beanSerializer.readObject(this, "reflection.bxml");
-        translucentFrame = (Frame)beanSerializer.readObject(this, "translucent.bxml");
+        reflectionWindow = (Window)beanSerializer.readObject(this, "reflection_window.bxml");
+        translucentFrame = (Frame)beanSerializer.readObject(this, "translucent_frame.bxml");
 
         final FadeDecorator fadeDecorator = new FadeDecorator();
         translucentFrame.getDecorators().insert(fadeDecorator, 0);
@@ -63,7 +54,7 @@ public class DecoratorDemo implements Application {
             }
         });
 
-        reflectionWindow.open(mainWindow);
+        reflectionWindow.open(display);
         translucentFrame.open(reflectionWindow);
     }
 
@@ -75,10 +66,6 @@ public class DecoratorDemo implements Application {
 
         if (translucentFrame != null) {
             translucentFrame.close();
-        }
-
-        if (mainWindow != null) {
-            mainWindow.close();
         }
 
         return false;

@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="File Drop Target Demo" maximized="true"
+<dnd:FileDropTargetDemo title="File Drop Target Demo" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:dnd="org.apache.pivot.demos.dnd"
     xmlns:terra="org.apache.pivot.wtk.skin.terra"
     xmlns="org.apache.pivot.wtk">
     <TablePane styles="{verticalSpacing:6}">
@@ -63,4 +64,4 @@ limitations under the License.
             </BoxPane>
         </TablePane.Row>
     </TablePane>
-</Window>
+</dnd:FileDropTargetDemo>

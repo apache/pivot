@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Fixed Column Table Demo" maximized="true"
+<tables:FixedColumnTableDemo title="Fixed Column Table Demo" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:tables="org.apache.pivot.demos.tables"
     xmlns="org.apache.pivot.wtk">
     <bxml:define xmlns="org.apache.pivot.collections">
         <ArrayList bxml:id="tableData">
@@ -71,4 +72,4 @@ limitations under the License.
             </corner>
         </ScrollPane>
     </Border>
-</Window>
+</tables:FixedColumnTableDemo>

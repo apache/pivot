@@ -16,13 +16,11 @@
  */
 package org.apache.pivot.demos.tables;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
-import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
@@ -30,20 +28,16 @@ import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowComparator;
 
-public class FixedColumnTable implements Application {
-    private Window window = null;
+public class FixedColumnTableDemo extends Window implements Bindable {
     private TableView primaryTableView = null;
     private TableView fixedTableView = null;
 
     private boolean synchronizingSelection = false;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "fixed_column_table.bxml");
-        primaryTableView = (TableView)beanSerializer.get("primaryTableView");
-        fixedTableView = (TableView)beanSerializer.get("fixedTableView");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        primaryTableView = (TableView)context.get("primaryTableView");
+        fixedTableView = (TableView)context.get("fixedTableView");
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
@@ -130,28 +124,5 @@ public class FixedColumnTable implements Application {
                 tableData.setComparator(new TableViewRowComparator(tableView));
             }
         });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(FixedColumnTable.class, args);
     }
 }

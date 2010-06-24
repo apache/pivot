@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Suggestion Demo" maximized="true"
+<suggest:SuggestionDemo title="Suggestion Demo" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:suggest="org.apache.pivot.demos.suggest"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <FlowPane styles="{padding:6, alignToBaseline:true}">
@@ -26,4 +27,4 @@ limitations under the License.
             <ActivityIndicator bxml:id="activityIndicator"/>
         </FlowPane>
     </Border>
-</Window>
+</suggest:SuggestionDemo>
