@@ -235,7 +235,7 @@ public class ResultList implements List<Map<String, Object>> {
     }
 
     public ResultList(ResultSet resultSet, boolean includeNullValues, Field... fields) {
-        this(resultSet, false, new ArrayList<Field>(fields));
+        this(resultSet, includeNullValues, new ArrayList<Field>(fields));
     }
 
     public ResultList(ResultSet resultSet, Sequence<Field> fields) {
@@ -243,7 +243,7 @@ public class ResultList implements List<Map<String, Object>> {
     }
 
     public ResultList(ResultSet resultSet, boolean includeNullValues, Sequence<Field> fields) {
-        this(resultSet, false, new ArrayList<Field>(fields));
+        this(resultSet, includeNullValues, new ArrayList<Field>(fields));
     }
 
     private ResultList(ResultSet resultSet, boolean includeNullValues, ArrayList<Field> fields) {
