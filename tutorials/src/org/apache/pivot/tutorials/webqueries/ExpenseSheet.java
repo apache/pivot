@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.tutorials.webqueries;
 
-import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.CalendarDate;
@@ -35,18 +34,25 @@ import org.apache.pivot.wtk.TextInput;
  * Sheet that allows a user to add or edit an expense record.
  */
 public class ExpenseSheet extends Sheet implements Bindable {
-    @BXML private Spinner dateSpinner = null;
-    @BXML private ListButton typeListButton = null;
-    @BXML private TextInput amountTextInput = null;
+    private Spinner dateSpinner = null;
+    private ListButton typeListButton = null;
+    private TextInput amountTextInput = null;
 
-    @BXML private PushButton cancelButton = null;
-    @BXML private PushButton okButton = null;
+    private PushButton cancelButton = null;
+    private PushButton okButton = null;
 
     private Resources resources = null;
 
     @Override
     public void initialize(Dictionary<String, Object> context, Resources resource) {
         this.resources = resource;
+
+        dateSpinner = (Spinner)context.get("dateSpinner");
+        typeListButton = (ListButton)context.get("typeListButton");
+        amountTextInput = (TextInput)context.get("amountTextInput");
+
+        cancelButton = (PushButton)context.get("cancelButton");
+        okButton = (PushButton)context.get("okButton");
 
         cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

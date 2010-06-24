@@ -48,7 +48,9 @@ limitations under the License.
                                 <webqueries:DateBindMapping/>
                             </selectedItemBindMapping>
 
-                            <content:CalendarDateSpinnerData/>
+                            <spinnerData>
+                                <content:CalendarDateSpinnerData/>
+                            </spinnerData>
                         </Spinner>
 
                         <ListButton bxml:id="typeListButton" Form.label="%type" listData="@types.json"

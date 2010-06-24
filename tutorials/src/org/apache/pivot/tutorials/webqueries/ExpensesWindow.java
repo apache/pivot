@@ -19,7 +19,6 @@ package org.apache.pivot.tutorials.webqueries;
 import java.io.IOException;
 import java.net.URL;
 
-import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
@@ -95,9 +94,9 @@ public class ExpensesWindow extends Window implements Bindable {
     private EditSelectedExpenseAction editSelectedExpenseAction = new EditSelectedExpenseAction();
     private DeleteSelectedExpenseAction deleteSelectedExpenseAction = new DeleteSelectedExpenseAction();
 
-    @BXML private TableView expenseTableView = null;
-    @BXML private ActivityIndicator activityIndicator = null;
-    @BXML private BoxPane activityIndicatorBoxPane = null;
+    private TableView expenseTableView = null;
+    private ActivityIndicator activityIndicator = null;
+    private BoxPane activityIndicatorBoxPane = null;
 
     private ExpenseSheet expenseSheet = null;
     private Prompt deleteConfirmationPrompt = null;
@@ -118,6 +117,10 @@ public class ExpensesWindow extends Window implements Bindable {
     @Override
     @SuppressWarnings("unchecked")
     public void initialize(Dictionary<String, Object> context, Resources resources) {
+        expenseTableView = (TableView)context.get("expenseTableView");
+        activityIndicator = (ActivityIndicator)context.get("activityIndicator");
+        activityIndicatorBoxPane = (BoxPane)context.get("activityIndicatorBoxPane");
+
         // Load the add/edit sheet
         try {
             BeanSerializer beanSerializer = new BeanSerializer(new Resources(ExpenseSheet.class.getName()));
