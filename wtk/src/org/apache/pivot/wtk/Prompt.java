@@ -187,11 +187,11 @@ public class Prompt extends Sheet {
         this(null, null, null);
     }
 
-    public Prompt(MessageType type, String message, Sequence<?> options) {
-        this(type, message, options, null);
+    public Prompt(MessageType messageType, String message, Sequence<?> options) {
+        this(messageType, message, options, null);
     }
 
-    public Prompt(MessageType type, String message, Sequence<?> options, Component body) {
+    public Prompt(MessageType messageType, String message, Sequence<?> options, Component body) {
         if (messageType == null) {
             messageType = MessageType.INFO;
         }
