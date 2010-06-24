@@ -23,6 +23,5 @@ public enum MessageType {
     ERROR,
     WARNING,
     QUESTION,
-    INFO,
-    APPLICATION
+    INFO
 }
