@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Suggestion Popups" maximized="true"
+<text:SuggestionPopups title="Suggestion Popups" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:text="org.apache.pivot.tutorials.text"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <BoxPane orientation="vertical" styles="{padding:4, verticalAlignment:'top'}">
@@ -27,4 +28,4 @@ limitations under the License.
             </BoxPane>
         </BoxPane>
     </Border>
-</Window>
+</text:SuggestionPopups>

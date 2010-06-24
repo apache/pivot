@@ -16,11 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Text Inputs" maximized="true"
+<text:TextInputs title="Text Inputs" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:text="org.apache.pivot.tutorials.text"
     xmlns="org.apache.pivot.wtk">
     <BoxPane styles="{padding:4, verticalAlignment:'center'}">
         <Label text="State:"/>
         <TextInput bxml:id="stateTextInput"/>
     </BoxPane>
-</Window>
+</text:TextInputs>

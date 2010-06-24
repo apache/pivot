@@ -16,22 +16,19 @@
  */
 package org.apache.pivot.tutorials.navigation;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.Window;
 
-public class TabPanes implements Application {
-    private Window window = null;
+public class TabPanes extends Window implements Bindable {
     private TabPane tabPane = null;
     private Checkbox collapsibleCheckbox = null;
     private RadioButton horizontalRadioButton = null;
@@ -39,15 +36,12 @@ public class TabPanes implements Application {
     private BoxPane cornerBoxPane = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "tab_panes.bxml");
-        tabPane = (TabPane)beanSerializer.get("tabPane");
-        collapsibleCheckbox = (Checkbox)beanSerializer.get("collapsibleCheckbox");
-        horizontalRadioButton = (RadioButton)beanSerializer.get("horizontalRadioButton");
-        verticalRadioButton = (RadioButton)beanSerializer.get("verticalRadioButton");
-        cornerBoxPane = (BoxPane)beanSerializer.get("cornerBoxPane");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        tabPane = (TabPane)context.get("tabPane");
+        collapsibleCheckbox = (Checkbox)context.get("collapsibleCheckbox");
+        horizontalRadioButton = (RadioButton)context.get("horizontalRadioButton");
+        verticalRadioButton = (RadioButton)context.get("verticalRadioButton");
+        cornerBoxPane = (BoxPane)context.get("cornerBoxPane");
 
         ButtonStateListener checkboxStateListener = new ButtonStateListener() {
             @Override
@@ -71,25 +65,6 @@ public class TabPanes implements Application {
         verticalRadioButton.getButtonStateListeners().add(radioButtonStateListener);
 
         updateTabPane();
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void updateTabPane() {
@@ -106,9 +81,5 @@ public class TabPanes implements Application {
                 tabPane.setCorner(null);
             }
         }
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(TabPanes.class, args);
     }
 }

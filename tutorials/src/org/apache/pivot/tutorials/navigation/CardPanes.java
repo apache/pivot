@@ -16,24 +16,21 @@
  */
 package org.apache.pivot.tutorials.navigation;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.CardPaneListener;
 import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 
-public class CardPanes implements Application {
-    private Window window = null;
+public class CardPanes extends Window implements Bindable {
     private CardPane cardPane = null;
     private LinkButton previousButton = null;
     private LinkButton nextButton = null;
@@ -47,23 +44,19 @@ public class CardPanes implements Application {
     private RadioButton noneRadioButton = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "card_panes.bxml");
-        cardPane = (CardPane)beanSerializer.get("cardPane");
-        previousButton = (LinkButton)beanSerializer.get("previousButton");
-        nextButton = (LinkButton)beanSerializer.get("nextButton");
-        sizeToSelectionCheckbox = (Checkbox)beanSerializer.get("sizeToSelectionCheckbox");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        cardPane = (CardPane)context.get("cardPane");
+        previousButton = (LinkButton)context.get("previousButton");
+        nextButton = (LinkButton)context.get("nextButton");
+        sizeToSelectionCheckbox = (Checkbox)context.get("sizeToSelectionCheckbox");
 
-
-        crossfadeRadioButton = (RadioButton)beanSerializer.get("crossfadeRadioButton");
-        horizontalSlideRadioButton = (RadioButton)beanSerializer.get("horizontalSlideRadioButton");
-        verticalSlideRadioButton = (RadioButton)beanSerializer.get("verticalSlideRadioButton");
-        horizontalFlipRadioButton = (RadioButton)beanSerializer.get("horizontalFlipRadioButton");
-        verticalFlipRadioButton = (RadioButton)beanSerializer.get("verticalFlipRadioButton");
-        zoomRadioButton = (RadioButton)beanSerializer.get("zoomRadioButton");
-        noneRadioButton = (RadioButton)beanSerializer.get("noneRadioButton");
+        crossfadeRadioButton = (RadioButton)context.get("crossfadeRadioButton");
+        horizontalSlideRadioButton = (RadioButton)context.get("horizontalSlideRadioButton");
+        verticalSlideRadioButton = (RadioButton)context.get("verticalSlideRadioButton");
+        horizontalFlipRadioButton = (RadioButton)context.get("horizontalFlipRadioButton");
+        verticalFlipRadioButton = (RadioButton)context.get("verticalFlipRadioButton");
+        zoomRadioButton = (RadioButton)context.get("zoomRadioButton");
+        noneRadioButton = (RadioButton)context.get("noneRadioButton");
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
             @Override
@@ -114,25 +107,6 @@ public class CardPanes implements Application {
 
         updateCardPane();
         updateLinkButtonState();
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void updateCardPane() {
@@ -165,9 +139,5 @@ public class CardPanes implements Application {
         int selectedIndex = cardPane.getSelectedIndex();
         previousButton.setEnabled(selectedIndex > 0);
         nextButton.setEnabled(selectedIndex < cardPane.getLength() - 1);
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(CardPanes.class, args);
     }
 }

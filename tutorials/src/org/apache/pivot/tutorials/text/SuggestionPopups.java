@@ -16,19 +16,17 @@
  */
 package org.apache.pivot.tutorials.text;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.Window;
 
-public class SuggestionPopups implements Application {
-    private Window window = null;
+public class SuggestionPopups extends Window implements Bindable {
     private TextInput stateTextInput = null;
 
     private ArrayList<String> states;
@@ -118,36 +116,14 @@ public class SuggestionPopups implements Application {
     }
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "suggestion_popups.bxml");
-        stateTextInput = (TextInput)beanSerializer.get("stateTextInput");
-
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        stateTextInput = (TextInput)context.get("stateTextInput");
         stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
+    }
 
-        window.open(display);
+    @Override
+    public void open(Display display, Window owner) {
+        super.open(display, owner);
         stateTextInput.requestFocus();
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(SuggestionPopups.class, args);
     }
 }

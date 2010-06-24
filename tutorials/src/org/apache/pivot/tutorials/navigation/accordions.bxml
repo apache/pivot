@@ -16,13 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Accordions" maximized="true"
+<navigation:Accordions title="Accordions" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:navigation="org.apache.pivot.tutorials.navigation"
     xmlns="org.apache.pivot.wtk">
     <Accordion bxml:id="accordion" styles="{padding:0}">
         <bxml:include bxml:id="shippingPanel" src="shipping.bxml" Accordion.label="Shipping Information"/>
         <bxml:include bxml:id="paymentPanel" src="payment.bxml" Accordion.label="Payment Information"/>
         <bxml:include bxml:id="summaryPanel" src="summary.bxml" Accordion.label="Summary &amp; Confirmation"/>
     </Accordion>
-</Window>
+</navigation:Accordions>
 

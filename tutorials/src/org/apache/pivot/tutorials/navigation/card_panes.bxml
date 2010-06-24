@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Card Panes" maximized="true"
+<navigation:CardPanes title="Card Panes" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:navigation="org.apache.pivot.tutorials.navigation"
     xmlns="org.apache.pivot.wtk">
     <TablePane styles="{padding:8, horizontalSpacing:6}">
         <columns>
@@ -85,5 +86,5 @@ limitations under the License.
             </Border>
         </TablePane.Row>
     </TablePane>
-</Window>
+</navigation:CardPanes>
 

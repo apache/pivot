@@ -16,25 +16,22 @@
  */
 package org.apache.pivot.tutorials.navigation;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Accordion;
 import org.apache.pivot.wtk.AccordionSelectionListener;
 import org.apache.pivot.wtk.ActivityIndicator;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class Accordions implements Application {
-    private Window window = null;
+public class Accordions extends Window implements Bindable {
     private Accordion accordion = null;
     private PushButton shippingNextButton = null;
     private PushButton paymentNextButton = null;
@@ -80,11 +77,13 @@ public class Accordions implements Application {
     };
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "accordions.bxml");
-        accordion = (Accordion)beanSerializer.get("accordion");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        accordion = (Accordion)context.get("accordion");
+        shippingNextButton = (PushButton)context.get("shippingPanel.nextButton");
+        paymentNextButton = (PushButton)context.get("paymentPanel.nextButton");
+        confirmOrderButton = (PushButton)context.get("summaryPanel.confirmOrderButton");
+        activityIndicator = (ActivityIndicator)context.get("summaryPanel.activityIndicator");
+        processingOrderLabel = (Label)context.get("summaryPanel.processingOrderLabel");
 
         accordion.getAccordionSelectionListeners().add(accordionSelectionListener);
 
@@ -95,13 +94,10 @@ public class Accordions implements Application {
             }
         };
 
-        shippingNextButton = (PushButton)beanSerializer.get("shippingPanel.nextButton");
         shippingNextButton.getButtonPressListeners().add(nextButtonPressListener);
 
-        paymentNextButton = (PushButton)beanSerializer.get("paymentPanel.nextButton");
         paymentNextButton.getButtonPressListeners().add(nextButtonPressListener);
 
-        confirmOrderButton = (PushButton)beanSerializer.get("summaryPanel.confirmOrderButton");
         confirmOrderButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
@@ -112,30 +108,8 @@ public class Accordions implements Application {
             }
         });
 
-        activityIndicator = (ActivityIndicator)beanSerializer.get("summaryPanel.activityIndicator");
-        processingOrderLabel = (Label)beanSerializer.get("summaryPanel.processingOrderLabel");
-
         updateAccordion();
         updateConfirmOrderButton();
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void updateAccordion() {
@@ -153,9 +127,5 @@ public class Accordions implements Application {
         } else {
             confirmOrderButton.setButtonData("Confirm Order");
         }
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(Accordions.class, args);
     }
 }
