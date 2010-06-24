@@ -16,9 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Flow Panes" maximized="true"
+<layout:FlowPanes title="Flow Panes" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:effects="org.apache.pivot.wtk.effects"
+    xmlns:layout="org.apache.pivot.tutorials.layout"
     xmlns="org.apache.pivot.wtk">
     <SplitPane splitRatio="0.75">
         <left>
@@ -61,4 +62,4 @@ limitations under the License.
         </Border>
         </right>
     </SplitPane>
-</Window>
+</layout:FlowPanes>

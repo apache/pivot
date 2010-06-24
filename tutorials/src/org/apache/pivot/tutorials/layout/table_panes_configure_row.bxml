@@ -82,7 +82,9 @@ limitations under the License.
                                     <RadioButton bxml:id="relativeHeightButton"
                                         buttonData="Relative" buttonGroup="$rowHeightGroup"/>
                                     <Spinner bxml:id="relativeHeightSpinner" styles="{sizeToContent:true}">
-                                        <content:NumericSpinnerData lowerBound="1" upperBound="256"/>
+                                        <spinnerData>
+                                            <content:NumericSpinnerData lowerBound="1" upperBound="256"/>
+                                        </spinnerData>
 
                                         <spinnerSelectionListeners>
                                             <bxml:script>
@@ -100,7 +102,9 @@ limitations under the License.
                                     <RadioButton bxml:id="absoluteHeightButton"
                                         buttonData="Absolute" buttonGroup="$rowHeightGroup"/>
                                     <Spinner bxml:id="absoluteHeightSpinner" styles="{sizeToContent:true}">
-                                        <content:NumericSpinnerData lowerBound="50" upperBound="300"/>
+                                        <spinnerData>
+                                            <content:NumericSpinnerData lowerBound="50" upperBound="300"/>
+                                        </spinnerData>
 
                                         <spinnerSelectionListeners>
                                             <bxml:script>

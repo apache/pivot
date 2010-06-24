@@ -18,89 +18,59 @@ package org.apache.pivot.tutorials.lists;
 
 import java.net.URL;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Image;
 
-public class ListButtons implements Application {
-    private Window window = null;
+public class ListButtons extends Window implements Bindable {
     private ListButton listButton = null;
     private ImageView imageView = null;
 
-    private ListButtonSelectionListener listButtonSelectionListener =
-        new ListButtonSelectionListener() {
-        @Override
-        public void selectedIndexChanged(ListButton listButton, int previousIndex) {
-            int index = listButton.getSelectedIndex();
+    @Override
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        listButton = (ListButton)context.get("listButton");
+        imageView = (ImageView)context.get("imageView");
 
-            if (index != -1) {
-                String item = (String)listButton.getListData().get(index);
+        listButton.getListButtonSelectionListeners().add(    new ListButtonSelectionListener() {
+            @Override
+            public void selectedIndexChanged(ListButton listButton, int previousIndex) {
+                int index = listButton.getSelectedIndex();
 
-                // Get the image URL for the selected item
-                ClassLoader classLoader = ThreadUtilities.getClassLoader();
-                URL imageURL = classLoader.getResource("org/apache/pivot/tutorials/" + item);
+                if (index != -1) {
+                    String item = (String)listButton.getListData().get(index);
 
-                // If the image has not been added to the resource cache yet,
-                // add it
-                Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+                    // Get the image URL for the selected item
+                    ClassLoader classLoader = ThreadUtilities.getClassLoader();
+                    URL imageURL = classLoader.getResource("org/apache/pivot/tutorials/" + item);
 
-                if (image == null) {
-                    try {
-                        image = Image.load(imageURL);
-                    } catch (TaskExecutionException exception) {
-                        throw new RuntimeException(exception);
+                    // If the image has not been added to the resource cache yet,
+                    // add it
+                    Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+
+                    if (image == null) {
+                        try {
+                            image = Image.load(imageURL);
+                        } catch (TaskExecutionException exception) {
+                            throw new RuntimeException(exception);
+                        }
+
+                        ApplicationContext.getResourceCache().put(imageURL, image);
                     }
 
-                    ApplicationContext.getResourceCache().put(imageURL, image);
+                    // Update the image
+                    imageView.setImage(image);
                 }
-
-                // Update the image
-                imageView.setImage(image);
             }
-        }
-    };
+        });
 
-    @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "list_buttons.bxml");
-        listButton = (ListButton)beanSerializer.get("listButton");
-        imageView = (ImageView)beanSerializer.get("imageView");
-
-        listButton.getListButtonSelectionListeners().add(listButtonSelectionListener);
         listButton.setSelectedIndex(0);
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(ListButtons.class, args);
     }
 }

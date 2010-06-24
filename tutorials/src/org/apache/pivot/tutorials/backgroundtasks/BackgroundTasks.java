@@ -66,7 +66,7 @@ public class BackgroundTasks extends Window implements Bindable {
             @Override
             public void buttonPressed(Button button) {
                 activityIndicator.setActive(true);
-                getWindow().setEnabled(false);
+                setEnabled(false);
 
                 System.out.println("Starting asynchronous task execution.");
 
@@ -75,7 +75,7 @@ public class BackgroundTasks extends Window implements Bindable {
                     @Override
                     public void taskExecuted(Task<String> task) {
                         activityIndicator.setActive(false);
-                        getWindow().setEnabled(true);
+                        setEnabled(true);
 
                         System.out.println("Synchronous task execution complete: \""
                             + task.getResult() + "\"");
@@ -84,7 +84,7 @@ public class BackgroundTasks extends Window implements Bindable {
                     @Override
                     public void executeFailed(Task<String> task) {
                         activityIndicator.setActive(false);
-                        getWindow().setEnabled(true);
+                        setEnabled(true);
 
                         System.err.println(task.getFault());
                     }

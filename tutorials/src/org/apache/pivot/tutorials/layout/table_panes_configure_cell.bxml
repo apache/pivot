@@ -34,7 +34,9 @@ limitations under the License.
                             <Form.Section>
                                 <Spinner bxml:id="rowSpanSpinner" Form.label="Row Span"
                                     styles="{sizeToContent:true}">
-                                    <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
+                                    <spinnerData>
+                                        <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
+                                    </spinnerData>
 
                                     <spinnerSelectionListeners>
                                         <bxml:script>
@@ -49,7 +51,9 @@ limitations under the License.
 
                                 <Spinner bxml:id="columnSpanSpinner" Form.label="Column Span"
                                     styles="{sizeToContent:true}">
-                                    <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
+                                    <spinnerData>
+                                        <content:NumericSpinnerData lowerBound="1" upperBound="10"/>
+                                    </spinnerData>
 
                                     <spinnerSelectionListeners>
                                         <bxml:script>

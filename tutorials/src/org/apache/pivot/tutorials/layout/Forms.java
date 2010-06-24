@@ -16,13 +16,11 @@
  */
 package org.apache.pivot.tutorials.layout;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Label;
@@ -32,8 +30,7 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 
-public class Forms implements Application {
-    private Window window = null;
+public class Forms extends Window implements Bindable {
     private BoxPane nameBoxPane = null;
     private TextInput lastNameTextInput = null;
     private TextInput firstNameTextInput = null;
@@ -41,14 +38,12 @@ public class Forms implements Application {
     private Label errorLabel = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "forms.bxml");
-        nameBoxPane = (BoxPane)beanSerializer.get("nameBoxPane");
-        lastNameTextInput = (TextInput)beanSerializer.get("lastNameTextInput");
-        firstNameTextInput = (TextInput)beanSerializer.get("firstNameTextInput");
-        submitButton = (PushButton)beanSerializer.get("submitButton");
-        errorLabel = (Label)beanSerializer.get("errorLabel");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        nameBoxPane = (BoxPane)context.get("nameBoxPane");
+        lastNameTextInput = (TextInput)context.get("lastNameTextInput");
+        firstNameTextInput = (TextInput)context.get("firstNameTextInput");
+        submitButton = (PushButton)context.get("submitButton");
+        errorLabel = (Label)context.get("errorLabel");
 
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -66,34 +61,11 @@ public class Forms implements Application {
 
                 if (flag == null) {
                     errorLabel.setText(null);
-                    Prompt.prompt("Pretending to submit...", window);
+                    Prompt.prompt("Pretending to submit...", Forms.this);
                 } else {
                     errorLabel.setText("Some required information is missing.");
                 }
             }
         });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(Forms.class, args);
     }
 }

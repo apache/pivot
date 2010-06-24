@@ -87,7 +87,9 @@ limitations under the License.
 
                                     <Spinner bxml:id="relativeWidthSpinner"
                                         styles="{sizeToContent:true}">
-                                        <content:NumericSpinnerData lowerBound="1" upperBound="256"/>
+                                        <spinnerData>
+                                            <content:NumericSpinnerData lowerBound="1" upperBound="256"/>
+                                        </spinnerData>
 
                                         <spinnerSelectionListeners>
                                             <bxml:script>
@@ -106,7 +108,9 @@ limitations under the License.
                                         buttonData="Absolute" buttonGroup="$columnWidthGroup"/>
                                     <Spinner bxml:id="absoluteWidthSpinner"
                                         styles="{sizeToContent:true}">
-                                        <content:NumericSpinnerData lowerBound="50" upperBound="300"/>
+                                        <spinnerData>
+                                            <content:NumericSpinnerData lowerBound="50" upperBound="300"/>
+                                        </spinnerData>
 
                                         <spinnerSelectionListeners>
                                             <bxml:script>

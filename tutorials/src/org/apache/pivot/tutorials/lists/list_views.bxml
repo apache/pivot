@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="List Views" maximized="true"
+<lists:ListViews title="List Views" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:lists="org.apache.pivot.tutorials.lists"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <BoxPane styles="{padding:4, spacing:4}">
@@ -36,4 +37,4 @@ limitations under the License.
             </BoxPane>
         </BoxPane>
     </Border>
-</Window>
+</lists:ListViews>

@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="File Browser Sheets" maximized="true"
+<filebrowsing:FileBrowsing title="File Browser Sheets" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:filebrowsing="org.apache.pivot.tutorials.filebrowsing"
     xmlns="org.apache.pivot.wtk">
     <bxml:define>
         <ButtonGroup bxml:id="fileBrowserSheetModeGroup"/>
@@ -43,5 +44,5 @@ limitations under the License.
             <PushButton bxml:id="openSheetButton" buttonData="Open Sheet"/>
         </BoxPane>
     </Border>
-</Window>
+</filebrowsing:FileBrowsing>
 

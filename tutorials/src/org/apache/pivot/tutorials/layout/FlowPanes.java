@@ -16,21 +16,18 @@
  */
 package org.apache.pivot.tutorials.layout;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FlowPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.Window;
 
-public class FlowPanes implements Application {
-    private Window window = null;
+public class FlowPanes extends Window implements Bindable {
     private FlowPane flowPane = null;
     private RadioButton leftRadioButton = null;
     private RadioButton rightRadioButton = null;
@@ -38,14 +35,12 @@ public class FlowPanes implements Application {
     private Checkbox alignToBaselineCheckbox = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "flow_panes.bxml");
-        flowPane = (FlowPane)beanSerializer.get("flowPane");
-        leftRadioButton = (RadioButton)beanSerializer.get("leftRadioButton");
-        rightRadioButton = (RadioButton)beanSerializer.get("rightRadioButton");
-        centerRadioButton = (RadioButton)beanSerializer.get("centerRadioButton");
-        alignToBaselineCheckbox = (Checkbox)beanSerializer.get("alignToBaselineCheckbox");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        flowPane = (FlowPane)context.get("flowPane");
+        leftRadioButton = (RadioButton)context.get("leftRadioButton");
+        rightRadioButton = (RadioButton)context.get("rightRadioButton");
+        centerRadioButton = (RadioButton)context.get("centerRadioButton");
+        alignToBaselineCheckbox = (Checkbox)context.get("alignToBaselineCheckbox");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
             @Override
@@ -60,25 +55,6 @@ public class FlowPanes implements Application {
         alignToBaselineCheckbox.getButtonStateListeners().add(buttonStateListener);
 
         updateFlowPaneState();
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void updateFlowPaneState() {
@@ -97,9 +73,5 @@ public class FlowPanes implements Application {
         }
 
         flowPane.getStyles().put("alignToBaseline", alignToBaselineCheckbox.isSelected());
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(FlowPanes.class, args);
     }
 }

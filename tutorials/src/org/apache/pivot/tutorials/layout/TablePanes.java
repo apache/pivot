@@ -19,14 +19,13 @@ package org.apache.pivot.tutorials.layout;
 import java.io.IOException;
 
 import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuHandler;
@@ -38,7 +37,7 @@ import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Window;
 
-public class TablePanes implements Application {
+public class TablePanes extends Window implements Bindable {
     private class ContextMenuHandler extends MenuHandler.Adapter {
         private int x = -1;
         private int y = -1;
@@ -79,7 +78,6 @@ public class TablePanes implements Application {
         }
     }
 
-    private Window window = null;
     private TablePane tablePane = null;
 
     private Menu.Section cellSection = null;
@@ -111,7 +109,7 @@ public class TablePanes implements Application {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.open(window);
+                sheet.open(TablePanes.this);
             }
         });
 
@@ -134,7 +132,7 @@ public class TablePanes implements Application {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.open(window);
+                sheet.open(TablePanes.this);
             }
         });
 
@@ -168,7 +166,7 @@ public class TablePanes implements Application {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.open(window);
+                sheet.open(TablePanes.this);
             }
         });
 
@@ -183,7 +181,7 @@ public class TablePanes implements Application {
                 final Prompt prompt = new Prompt(MessageType.QUESTION, message, options, body);
                 prompt.setSelectedOption(0);
 
-                prompt.open(window, new SheetCloseListener() {
+                prompt.open(TablePanes.this, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
                         if (prompt.getResult() && prompt.getSelectedOption() == 0) {
@@ -214,7 +212,7 @@ public class TablePanes implements Application {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.open(window);
+                sheet.open(TablePanes.this);
             }
         });
 
@@ -249,7 +247,7 @@ public class TablePanes implements Application {
                     throw new RuntimeException(exception);
                 }
 
-                sheet.open(window);
+                sheet.open(TablePanes.this);
             }
         });
 
@@ -264,7 +262,7 @@ public class TablePanes implements Application {
                 final Prompt prompt = new Prompt(MessageType.QUESTION, message, options, body);
                 prompt.setSelectedOption(0);
 
-                prompt.open(window, new SheetCloseListener() {
+                prompt.open(TablePanes.this, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
                         if (prompt.getResult() && prompt.getSelectedOption() == 0) {
@@ -284,40 +282,12 @@ public class TablePanes implements Application {
     }
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "table_panes.bxml");
-
-        tablePane = (TablePane)beanSerializer.get("tablePane");
-        cellSection = (Menu.Section)beanSerializer.get("cellSection");
-        rowSection = (Menu.Section)beanSerializer.get("rowSection");
-        columnSection = (Menu.Section)beanSerializer.get("columnSection");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        tablePane = (TablePane)context.get("tablePane");
+        cellSection = (Menu.Section)context.get("cellSection");
+        rowSection = (Menu.Section)context.get("rowSection");
+        columnSection = (Menu.Section)context.get("columnSection");
 
         tablePane.setMenuHandler(contextMenuHandler);
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-        // No-op
-    }
-
-    @Override
-    public void resume() {
-        // No-op
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(TablePanes.class, args);
     }
 }

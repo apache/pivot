@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window bxml:id="window" title="Table Panes" maximized="true"
+<layout:SimpleTablePanes bxml:id="window" title="Table Panes" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:layout="org.apache.pivot.tutorials.layout"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <TablePane bxml:id="tablePane" styles="{verticalSpacing:1, showHorizontalGridLines:true,
@@ -55,4 +56,4 @@ limitations under the License.
             </TablePane.Row>
         </TablePane>
     </Border>
-</Window>
+</layout:SimpleTablePanes>

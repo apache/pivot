@@ -16,14 +16,12 @@
  */
 package org.apache.pivot.tutorials.layout;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Orientation;
@@ -31,8 +29,7 @@ import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 
-public class BoxPanes implements Application {
-    private Window window = null;
+public class BoxPanes extends Window implements Bindable {
     private BoxPane boxPane = null;
     private RadioButton horizontalOrientationButton = null;
     private RadioButton verticalOrientationButton = null;
@@ -45,19 +42,17 @@ public class BoxPanes implements Application {
     private Checkbox fillCheckbox = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "box_panes.bxml");
-        boxPane = (BoxPane)beanSerializer.get("boxPane");
-        horizontalOrientationButton = (RadioButton)beanSerializer.get("horizontalOrientationButton");
-        verticalOrientationButton = (RadioButton)beanSerializer.get("verticalOrientationButton");
-        horizontalAlignmentRightButton = (RadioButton)beanSerializer.get("horizontalAlignmentRightButton");
-        horizontalAlignmentLeftButton = (RadioButton)beanSerializer.get("horizontalAlignmentLeftButton");
-        horizontalAlignmentCenterButton = (RadioButton)beanSerializer.get("horizontalAlignmentCenterButton");
-        verticalAlignmentTopButton = (RadioButton)beanSerializer.get("verticalAlignmentTopButton");
-        verticalAlignmentBottomButton = (RadioButton)beanSerializer.get("verticalAlignmentBottomButton");
-        verticalAlignmentCenterButton = (RadioButton)beanSerializer.get("verticalAlignmentCenterButton");
-        fillCheckbox = (Checkbox)beanSerializer.get("fillCheckbox");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        boxPane = (BoxPane)context.get("boxPane");
+        horizontalOrientationButton = (RadioButton)context.get("horizontalOrientationButton");
+        verticalOrientationButton = (RadioButton)context.get("verticalOrientationButton");
+        horizontalAlignmentRightButton = (RadioButton)context.get("horizontalAlignmentRightButton");
+        horizontalAlignmentLeftButton = (RadioButton)context.get("horizontalAlignmentLeftButton");
+        horizontalAlignmentCenterButton = (RadioButton)context.get("horizontalAlignmentCenterButton");
+        verticalAlignmentTopButton = (RadioButton)context.get("verticalAlignmentTopButton");
+        verticalAlignmentBottomButton = (RadioButton)context.get("verticalAlignmentBottomButton");
+        verticalAlignmentCenterButton = (RadioButton)context.get("verticalAlignmentCenterButton");
+        fillCheckbox = (Checkbox)context.get("fillCheckbox");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
             @Override
@@ -77,25 +72,6 @@ public class BoxPanes implements Application {
         fillCheckbox.getButtonStateListeners().add(buttonStateListener);
 
         updateBoxPaneState();
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void updateBoxPaneState() {
@@ -137,9 +113,5 @@ public class BoxPanes implements Application {
         }
 
         boxPane.getStyles().put("fill", fillCheckbox.isSelected());
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(BoxPanes.class, args);
     }
 }

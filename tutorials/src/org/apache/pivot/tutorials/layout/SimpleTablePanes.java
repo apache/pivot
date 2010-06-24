@@ -16,14 +16,12 @@
  */
 package org.apache.pivot.tutorials.layout;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Mouse;
@@ -32,15 +30,12 @@ import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Window;
 
-public class SimpleTablePanes implements Application {
-    private Window window = null;
+public class SimpleTablePanes extends Window implements Bindable {
     private TablePane tablePane = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "simple_table_panes.bxml");
-        tablePane = (TablePane)beanSerializer.get("tablePane");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        tablePane = (TablePane)context.get("tablePane");
 
         tablePane.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
             @Override
@@ -69,36 +64,11 @@ public class SimpleTablePanes implements Application {
                     body.add(heightLabel);
                     body.add(widthLabel);
 
-                    Prompt.prompt(MessageType.INFO, message, body, window);
+                    Prompt.prompt(MessageType.INFO, message, body, SimpleTablePanes.this);
                 }
 
                 return false;
             }
         });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-        // No-op
-    }
-
-    @Override
-    public void resume() {
-        // No-op
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(SimpleTablePanes.class, args);
     }
 }
