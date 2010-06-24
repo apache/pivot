@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Background Tasks" maximized="true"
+<backgroundtasks:BackgroundTasks title="Background Tasks" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:backgroundtasks="org.apache.pivot.tutorials.backgroundtasks"
     xmlns="org.apache.pivot.wtk">
     <BoxPane orientation="vertical"
         styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
@@ -28,4 +29,4 @@ limitations under the License.
         <PushButton bxml:id="executeSynchronousButton" buttonData="Execute Synchronously"/>
         <PushButton bxml:id="executeAsynchronousButton" buttonData="Execute Asynchronously"/>
     </BoxPane>
-</Window>
+</backgroundtasks:BackgroundTasks>

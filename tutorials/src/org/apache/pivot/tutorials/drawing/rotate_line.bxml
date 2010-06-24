@@ -16,15 +16,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Drawing xmlns:bxml="http://pivot.apache.org/bxml"
-    xmlns="org.apache.pivot.wtk.media">
-    <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
-        <Ellipse width="320" height="320" stroke="" fill="#eeeeee"/>
-        <Line x1="0" y1="0" x2="0" y2="-160" strokeThickness="4">
-            <transforms>
-                <Shape.Translate x="160" y="160"/>
-                <Shape.Rotate bxml:id="rotation"/>
-            </transforms>
-        </Line>
-    </Canvas>
-</Drawing>
+<drawing:RotateLine title="Rotate Line" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:drawing="org.apache.pivot.tutorials.drawing"
+    xmlns="org.apache.pivot.wtk">
+    <ImageView>
+        <image>
+            <Drawing xmlns="org.apache.pivot.wtk.media">
+                <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
+                    <Ellipse width="320" height="320" stroke="" fill="#eeeeee"/>
+                    <Line x1="0" y1="0" x2="0" y2="-160" strokeThickness="4">
+                        <transforms>
+                            <Shape.Translate x="160" y="160"/>
+                            <Shape.Rotate bxml:id="rotation"/>
+                        </transforms>
+                    </Line>
+                </Canvas>
+            </Drawing>
+        </image>
+    </ImageView>
+</drawing:RotateLine>

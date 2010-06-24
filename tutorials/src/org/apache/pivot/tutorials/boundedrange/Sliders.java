@@ -16,27 +16,22 @@
  */
 package org.apache.pivot.tutorials.boundedrange;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.SliderValueListener;
 import org.apache.pivot.wtk.Window;
 
-public class Sliders implements Application {
-    private Window window = null;
+public class Sliders extends Window implements Bindable {
     private Slider slider = null;
     private Label label = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "sliders.bxml");
-        slider = (Slider)beanSerializer.get("slider");
-        label = (Label)beanSerializer.get("label");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        slider = (Slider)context.get("slider");
+        label = (Label)context.get("label");
 
         slider.getSliderValueListeners().add(new SliderValueListener() {
             @Override
@@ -46,31 +41,9 @@ public class Sliders implements Application {
         });
 
         updateLabel();
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void updateLabel() {
         label.setText(Integer.toString(slider.getValue()));
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(Sliders.class, args);
     }
 }

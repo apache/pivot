@@ -16,36 +16,30 @@
  */
 package org.apache.pivot.tutorials.backgroundtasks;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.ActivityIndicator;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 
-public class BackgroundTasks implements Application {
-    private Window window = null;
-
+public class BackgroundTasks extends Window implements Bindable {
     private ActivityIndicator activityIndicator = null;
     private PushButton executeSynchronousButton = null;
     private PushButton executeAsynchronousButton = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "background_tasks.bxml");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        activityIndicator = (ActivityIndicator)context.get("activityIndicator");
+        executeSynchronousButton = (PushButton)context.get("executeSynchronousButton");
+        executeAsynchronousButton = (PushButton)context.get("executeAsynchronousButton");
 
-        activityIndicator = (ActivityIndicator)beanSerializer.get("activityIndicator");
-
-        executeSynchronousButton = (PushButton)beanSerializer.get("executeSynchronousButton");
         executeSynchronousButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
@@ -68,12 +62,11 @@ public class BackgroundTasks implements Application {
             }
         });
 
-        executeAsynchronousButton = (PushButton)beanSerializer.get("executeAsynchronousButton");
         executeAsynchronousButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
                 activityIndicator.setActive(true);
-                window.setEnabled(false);
+                getWindow().setEnabled(false);
 
                 System.out.println("Starting asynchronous task execution.");
 
@@ -82,7 +75,7 @@ public class BackgroundTasks implements Application {
                     @Override
                     public void taskExecuted(Task<String> task) {
                         activityIndicator.setActive(false);
-                        window.setEnabled(true);
+                        getWindow().setEnabled(true);
 
                         System.out.println("Synchronous task execution complete: \""
                             + task.getResult() + "\"");
@@ -91,7 +84,7 @@ public class BackgroundTasks implements Application {
                     @Override
                     public void executeFailed(Task<String> task) {
                         activityIndicator.setActive(false);
-                        window.setEnabled(true);
+                        getWindow().setEnabled(true);
 
                         System.err.println(task.getFault());
                     }
@@ -100,28 +93,5 @@ public class BackgroundTasks implements Application {
                 sleepTask.execute(new TaskAdapter<String>(taskListener));
             }
         });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(BackgroundTasks.class, args);
     }
 }

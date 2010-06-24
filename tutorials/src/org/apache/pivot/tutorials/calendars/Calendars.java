@@ -16,21 +16,18 @@
  */
 package org.apache.pivot.tutorials.calendars;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.CalendarDate;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarButton;
 import org.apache.pivot.wtk.CalendarButtonSelectionListener;
 import org.apache.pivot.wtk.CalendarSelectionListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Window;
 
-public class Calendars implements Application {
-    private Window window = null;
+public class Calendars extends Window implements Bindable {
     private Calendar calendar = null;
     private CalendarButton calendarButton = null;
     private Label selectedDateLabel = null;
@@ -38,13 +35,10 @@ public class Calendars implements Application {
     private boolean updatingSelectedDate = false;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "calendars.bxml");
-        calendar = (Calendar)beanSerializer.get("calendar");
-        calendarButton = (CalendarButton)beanSerializer.get("calendarButton");
-        selectedDateLabel = (Label)beanSerializer.get("selectedDateLabel");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        calendar = (Calendar)context.get("calendar");
+        calendarButton = (CalendarButton)context.get("calendarButton");
+        selectedDateLabel = (Label)context.get("selectedDateLabel");
 
         calendar.getCalendarSelectionListeners().add(new CalendarSelectionListener() {
             @Override
@@ -59,25 +53,6 @@ public class Calendars implements Application {
                 updateSelectedDate(calendarButton.getSelectedDate());
             }
         });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void updateSelectedDate(CalendarDate selectedDate) {
@@ -94,9 +69,5 @@ public class Calendars implements Application {
 
             updatingSelectedDate = false;
         }
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(Calendars.class, args);
     }
 }

@@ -16,11 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Sliders" maximized="true"
+<boundedrange:Sliders title="Sliders" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:boundedrange="org.apache.pivot.tutorials.boundedrange"
     xmlns="org.apache.pivot.wtk">
     <BoxPane styles="{verticalAlignment:'center'}">
         <Slider bxml:id="slider" range="{start:0, end:255}" value="0"/>
         <Label bxml:id="label"/>
     </BoxPane>
-</Window>
+</boundedrange:Sliders>

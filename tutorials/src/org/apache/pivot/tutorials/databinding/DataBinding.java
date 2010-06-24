@@ -19,21 +19,18 @@ package org.apache.pivot.tutorials.databinding;
 import java.io.InputStream;
 
 import org.apache.pivot.beans.BeanAdapter;
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSONSerializer;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class DataBinding implements Application {
-    private Window window = null;
+public class DataBinding extends Window implements Bindable {
     private Form form = null;
     private PushButton loadJavaButton = null;
     private PushButton loadJSONButton = null;
@@ -46,15 +43,12 @@ public class DataBinding implements Application {
         new IMAccount("juser1234", "AIM"));
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "data_binding.bxml");
-        form = (Form)beanSerializer.get("form");
-        loadJavaButton = (PushButton)beanSerializer.get("loadJavaButton");
-        loadJSONButton = (PushButton)beanSerializer.get("loadJSONButton");
-        clearButton = (PushButton)beanSerializer.get("clearButton");
-        sourceLabel = (Label)beanSerializer.get("sourceLabel");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        form = (Form)context.get("form");
+        loadJavaButton = (PushButton)context.get("loadJavaButton");
+        loadJSONButton = (PushButton)context.get("loadJSONButton");
+        clearButton = (PushButton)context.get("clearButton");
+        sourceLabel = (Label)context.get("sourceLabel");
 
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -88,29 +82,5 @@ public class DataBinding implements Application {
                 sourceLabel.setText(null);
             }
         });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(DataBinding.class, args);
     }
 }

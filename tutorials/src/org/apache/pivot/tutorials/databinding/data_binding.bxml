@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Data Binding" maximized="true"
+<databinding:DataBinding title="Data Binding" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:databinding="org.apache.pivot.tutorials.databinding"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:6}">
         <BoxPane orientation="vertical" styles="{spacing:10, fill:true}">
@@ -57,4 +58,4 @@ limitations under the License.
             </BoxPane>
         </BoxPane>
     </Border>
-</Window>
+</databinding:DataBinding>

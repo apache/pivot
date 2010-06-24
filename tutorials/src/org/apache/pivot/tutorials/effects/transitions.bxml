@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Transitions" maximized="true"
+<effects:Transitions title="Transitions" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:effects="org.apache.pivot.tutorials.effects"
     xmlns="org.apache.pivot.wtk">
     <BoxPane styles="{padding:4, spacing:4}">
         <PushButton bxml:id="button1" buttonData="One"/>
@@ -25,4 +26,4 @@ limitations under the License.
         <PushButton bxml:id="button3" buttonData="Three"/>
         <PushButton bxml:id="button4" buttonData="Four"/>
     </BoxPane>
-</Window>
+</effects:Transitions>

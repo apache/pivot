@@ -16,29 +16,19 @@
  */
 package org.apache.pivot.tutorials.drawing;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.ApplicationContext;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.media.Drawing;
 import org.apache.pivot.wtk.media.drawing.Shape;
 
-public class RotateLine implements Application {
-    private Drawing drawing = null;
+public class RotateLine extends Window implements Bindable {
     private Shape.Rotate rotation = null;
 
-    private Window window = null;
-
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception{
-        BeanSerializer beanSerializer = new BeanSerializer();
-        drawing = (Drawing)beanSerializer.readObject(this, "rotate_line.bxml");
-        rotation = (Shape.Rotate)beanSerializer.get("rotation");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        rotation = (Shape.Rotate)context.get("rotation");
 
         ApplicationContext.scheduleRecurringCallback(new Runnable() {
             @Override
@@ -48,30 +38,5 @@ public class RotateLine implements Application {
                 rotation.setAngle(angle);
             }
         }, 1000);
-
-        window = new Window(new ImageView(drawing));
-        window.setMaximized(true);
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(RotateLine.class, args);
     }
 }

@@ -16,21 +16,18 @@
  */
 package org.apache.pivot.tutorials.effects;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 
-public class Transitions implements Application {
-    private Window window = null;
+public class Transitions extends Window implements Bindable {
     private PushButton button1 = null;
     private PushButton button2 = null;
     private PushButton button3 = null;
@@ -42,14 +39,11 @@ public class Transitions implements Application {
     public static int TRANSITION_RATE = 30;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "transitions.bxml");
-        button1 = (PushButton)beanSerializer.get("button1");
-        button2 = (PushButton)beanSerializer.get("button2");
-        button3 = (PushButton)beanSerializer.get("button3");
-        button4 = (PushButton)beanSerializer.get("button4");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        button1 = (PushButton)context.get("button1");
+        button2 = (PushButton)context.get("button2");
+        button3 = (PushButton)context.get("button3");
+        button4 = (PushButton)context.get("button4");
 
         ButtonPressListener buttonPressListener = new ButtonPressListener() {
             @Override
@@ -86,28 +80,5 @@ public class Transitions implements Application {
         button2.getButtonPressListeners().add(buttonPressListener);
         button3.getButtonPressListeners().add(buttonPressListener);
         button4.getButtonPressListeners().add(buttonPressListener);
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(Transitions.class, args);
     }
 }
