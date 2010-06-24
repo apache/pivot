@@ -263,6 +263,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static final String CENTER_ARGUMENT = "center";
     private static final String RESIZABLE_ARGUMENT = "resizable";
     private static final String MAXIMIZED_ARGUMENT = "maximized";
+    private static final String UNDECORATED_ARGUMENT = "undecorated";
 
     private static final String FULL_SCREEN_ARGUMENT = "fullScreen";
 
@@ -344,6 +345,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         boolean center = false;
         boolean resizable = true;
         boolean maximized = false;
+        boolean undecorated = false;
         boolean fullScreen = false;
 
         try {
@@ -390,6 +392,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             fullScreen = Boolean.parseBoolean(value);
                         } else if (key.equals(MAXIMIZED_ARGUMENT)) {
                             maximized = Boolean.parseBoolean(value);
+                        } else if (key.equals(UNDECORATED_ARGUMENT)) {
+                            undecorated = Boolean.parseBoolean(value);
                         } else {
                             properties.put(key, value);
                         }
@@ -442,6 +446,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Create the windowed host frame
         windowedHostFrame = new HostFrame();
         windowedHostFrame.add(displayHost);
+        windowedHostFrame.setUndecorated(undecorated);
 
         windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
         windowedHostFrame.setSize(width, height);
