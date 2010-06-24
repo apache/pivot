@@ -43,11 +43,6 @@ public class Expenses implements Application {
     private static Expenses instance = null;
 
     public Expenses() {
-        if (instance != null) {
-            throw new IllegalStateException("Another instance of " + Expenses.class.getName()
-                + " is already running.");
-        }
-
         instance = this;
     }
 
