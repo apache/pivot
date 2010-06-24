@@ -18,6 +18,7 @@ package org.apache.pivot.tutorials.webqueries;
 
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
@@ -44,7 +45,7 @@ public class ExpenseSheet extends Sheet implements Bindable {
     private Resources resources = null;
 
     @Override
-    public void initialize(Resources resource) {
+    public void initialize(Dictionary<String, Object> context, Resources resource) {
         this.resources = resource;
 
         cancelButton.getButtonPressListeners().add(new ButtonPressListener() {

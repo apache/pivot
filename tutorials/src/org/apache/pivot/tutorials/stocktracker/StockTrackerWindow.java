@@ -30,6 +30,7 @@ import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
@@ -161,7 +162,7 @@ public class StockTrackerWindow extends Window implements Bindable {
     }
 
     @Override
-    public void initialize(Resources resources) {
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
         // Add stocks table view event handlers
         stocksTableView.getTableViewRowListeners().add(new TableViewRowListener.Adapter() {
             @Override

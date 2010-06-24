@@ -488,7 +488,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
             bind(root);
 
             Bindable bindable = (Bindable)root;
-            bindable.initialize(resources);
+            bindable.initialize(this, resources);
         }
 
         // Reset the serializer

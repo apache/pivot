@@ -16,16 +16,25 @@
  */
 package org.apache.pivot.beans;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
 
 /**
- * Allows {@link BeanSerializer} to automatically bind to an instance of a
- * deserialized class.
+ * Allows {@link BeanSerializer} to initialize an instance of a deserialized class.
  */
 public interface Bindable {
     /**
      * Called to initialize the class after it has been completely
      * processed and bound by the serializer.
+     *
+     * @param context
+     * The bind context. The bindable object can use this value to extract properties
+     * from the serializer's namespace. Alternatively, the {@link BXML} annotation can
+     * be used by trusted code to automatically map namespace values to member
+     * variables.
+     *
+     * @param resources
+     * The resources that were passed to the serializer's constructor.
      */
-    public void initialize(Resources resources);
+    public void initialize(Dictionary<String, Object> context, Resources resources);
 }

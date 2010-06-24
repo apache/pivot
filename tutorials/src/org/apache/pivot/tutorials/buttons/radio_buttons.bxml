@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Radio Buttons" maximized="true"
+<buttons:RadioButtons title="Radio Buttons" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:buttons="org.apache.pivot.tutorials.buttons"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <BoxPane orientation="vertical" styles="{padding:4}">
@@ -30,4 +31,4 @@ limitations under the License.
             <PushButton bxml:id="selectButton" buttonData="Select"/>
         </BoxPane>
     </Border>
-</Window>
+</buttons:RadioButtons>

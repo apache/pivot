@@ -23,6 +23,7 @@ import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
@@ -116,7 +117,7 @@ public class ExpensesWindow extends Window implements Bindable {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void initialize(Resources resources) {
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
         // Load the add/edit sheet
         try {
             BeanSerializer beanSerializer = new BeanSerializer(new Resources(ExpenseSheet.class.getName()));

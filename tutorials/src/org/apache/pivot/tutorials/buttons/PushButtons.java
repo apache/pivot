@@ -16,57 +16,28 @@
  */
 package org.apache.pivot.tutorials.buttons;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Alert;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class PushButtons implements Application {
-    private Window window = null;
-    private PushButton pushButton = null;
+public class PushButtons extends Window implements Bindable {
+    private PushButton pushButton;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "push_buttons.bxml");
-        pushButton = (PushButton)beanSerializer.get("pushButton");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        pushButton = (PushButton)context.get("pushButton");
 
-        // Add a button press listener
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                Alert.alert(MessageType.INFO, "You clicked me!", window);
+                Alert.alert(MessageType.INFO, "You clicked me!", PushButtons.this);
             }
         });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(PushButtons.class, args);
     }
 }

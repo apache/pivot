@@ -16,32 +16,26 @@
  */
 package org.apache.pivot.tutorials.buttons;
 
-import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.Map;
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Alert;
-import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonPressListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class RadioButtons implements Application {
-    private Window window = null;
+public class RadioButtons extends Window implements Bindable {
     private PushButton selectButton = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
-        window = (Window)beanSerializer.readObject(this, "radio_buttons.bxml");
-        selectButton = (PushButton)beanSerializer.get("selectButton");
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
+        selectButton = (PushButton)context.get("selectButton");
 
         // Get a reference to the button group
-        final ButtonGroup numbersGroup = (ButtonGroup)beanSerializer.get("numbers");
+        final ButtonGroup numbersGroup = (ButtonGroup)context.get("numbers");
 
         // Add a button press listener
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {
@@ -50,31 +44,8 @@ public class RadioButtons implements Application {
                 String message = "You selected \""
                     + numbersGroup.getSelection().getButtonData()
                     + "\".";
-                Alert.alert(MessageType.INFO, message, window);
+                Alert.alert(MessageType.INFO, message, RadioButtons.this);
             }
         });
-
-        window.open(display);
-    }
-
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(RadioButtons.class, args);
     }
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Window;
@@ -27,7 +28,7 @@ public class BindableWindow extends Window implements Bindable {
     @WTKX private Label label = null;
 
     @Override
-    public void initialize(Resources resources) {
+    public void initialize(Dictionary<String, Object> context, Resources resources) {
         label.setText(resources.getString("message"));
     }
 }

@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Push Buttons" maximized="true"
+<buttons:PushButtons title="Push Buttons" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:buttons="org.apache.pivot.tutorials.buttons"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <BoxPane styles="{padding:4, horizontalAlignment:'center',
@@ -25,5 +26,5 @@ limitations under the License.
             <PushButton bxml:id="pushButton" buttonData="Click Me!"/>
         </BoxPane>
     </Border>
-</Window>
+</buttons:PushButtons>
 
