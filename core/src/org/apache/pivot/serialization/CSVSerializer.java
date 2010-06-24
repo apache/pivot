@@ -397,7 +397,9 @@ public class CSVSerializer implements Serializer<List<?>> {
         }
 
         // Trim the value
-        value = value.trim();
+        if (value != null) {
+            value = value.trim();
+        }
 
         return value;
     }
