@@ -16,10 +16,13 @@
  */
 package org.apache.pivot.tutorials.webqueries;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.BeanSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 
@@ -27,8 +30,8 @@ import org.apache.pivot.wtk.Display;
  * Query servlet tutorial client application.
  */
 public class Expenses implements Application {
-    private String hostname = "localhost";
-    private int port = -1;
+    private String hostname = null;
+    private int port = 0;
     private boolean secure = false;
 
     private ExpensesWindow expensesWindow = null;
@@ -51,16 +54,24 @@ public class Expenses implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         // Get startup properties
+        URL origin = ApplicationContext.getOrigin();
+
         if (properties.containsKey(HOSTNAME_KEY)) {
             hostname = properties.get(HOSTNAME_KEY);
+        } else {
+            hostname = origin.getHost();
         }
 
         if (properties.containsKey(PORT_KEY)) {
             port = Integer.parseInt(properties.get(PORT_KEY));
+        } else {
+            port = origin.getPort();
         }
 
         if (properties.containsKey(SECURE_KEY)) {
             secure = Boolean.parseBoolean(properties.get(SECURE_KEY));
+        } else {
+            secure = origin.getProtocol().equals("HTTPS");
         }
 
         BeanSerializer beanSerializer = new BeanSerializer(new Resources(ExpensesWindow.class.getName()));
