@@ -16,325 +16,28 @@
  */
 package org.apache.pivot.tutorials.explorer;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.URL;
-
 import org.apache.pivot.beans.BeanSerializer;
-import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.collections.Sequence.Tree;
-import org.apache.pivot.collections.Sequence.Tree.Path;
-import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.tools.wtk.ComponentPropertyInspector;
-import org.apache.pivot.tools.wtk.ComponentStyleInspector;
-import org.apache.pivot.tools.wtk.EventLogger;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.ApplicationContext;
-import org.apache.pivot.wtk.Border;
-import org.apache.pivot.wtk.Button;
-import org.apache.pivot.wtk.ButtonGroup;
-import org.apache.pivot.wtk.ButtonGroupListener;
-import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Mouse;
-import org.apache.pivot.wtk.ScrollPane;
-import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
-import org.apache.pivot.wtk.SplitPane;
-import org.apache.pivot.wtk.TextArea;
-import org.apache.pivot.wtk.TreeView;
-import org.apache.pivot.wtk.TreeViewSelectionListener;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.text.Document;
-import org.apache.pivot.wtk.text.PlainTextSerializer;
 
 public class ComponentExplorer implements Application {
-    private Window window = null;
-    private SplitPane splitPane = null;
-    private TreeView treeView = null;
-    private ScrollPane contentScrollPane = null;
-    private Border contentPane = null;
-    private TextArea sourceTextArea = null;
-    private ComponentPropertyInspector componentPropertyInspector = null;
-    private ComponentStyleInspector componentStyleInspector = null;
-    private EventLogger eventLogger = null;
-
-    private ButtonGroup horizontalScrollBarPolicyGroup = null;
-    private ButtonGroup verticalScrollBarPolicyGroup = null;
-    private Button horizontalAutoButton = null;
-    private Button horizontalFillButton = null;
-    private Button horizontalFillToCapacityButton = null;
-    private Button horizontalNeverButton = null;
-    private Button horizontalAlwaysButton = null;
-    private Button verticalAutoButton = null;
-    private Button verticalFillButton = null;
-    private Button verticalFillToCapacityButton = null;
-    private Button verticalNeverButton = null;
-    private Button verticalAlwaysButton = null;
+    private ComponentExplorerWindow window = null;
 
     public static final String CLASS_PROPERTY = "class";
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        Resources resources = new Resources(getClass().getName());
-        BeanSerializer beanSerializer = new BeanSerializer(resources);
-        window = (Window)beanSerializer.readObject(this, "component_explorer.bxml");
-
-        splitPane = beanSerializer.getValue("splitPane");
-        treeView = beanSerializer.getValue("treeView");
-        contentScrollPane = beanSerializer.getValue("contentScrollPane");
-        contentPane = beanSerializer.getValue("contentPane");
-        sourceTextArea = beanSerializer.getValue("sourceTextArea");
-        componentPropertyInspector = beanSerializer.getValue("componentPropertyInspector");
-        componentStyleInspector = beanSerializer.getValue("componentStyleInspector");
-        eventLogger = beanSerializer.getValue("eventLogger");
-
-        horizontalScrollBarPolicyGroup = beanSerializer.getValue("horizontalScrollBarPolicyGroup");
-        verticalScrollBarPolicyGroup = beanSerializer.getValue("verticalScrollBarPolicyGroup");
-        horizontalAutoButton = beanSerializer.getValue("horizontalAutoButton");
-        horizontalFillButton = beanSerializer.getValue("horizontalFillButton");
-        horizontalFillToCapacityButton = beanSerializer.getValue("horizontalFillToCapacityButton");
-        horizontalNeverButton = beanSerializer.getValue("horizontalNeverButton");
-        horizontalAlwaysButton = beanSerializer.getValue("horizontalAlwaysButton");
-        verticalAutoButton = beanSerializer.getValue("verticalAutoButton");
-        verticalFillButton = beanSerializer.getValue("verticalFillButton");
-        verticalFillToCapacityButton = beanSerializer.getValue("verticalFillToCapacityButton");
-        verticalNeverButton = beanSerializer.getValue("verticalNeverButton");
-        verticalAlwaysButton = beanSerializer.getValue("verticalAlwaysButton");
-
-        treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener.Adapter() {
-            @Override
-            public void selectedPathsChanged(TreeView treeView,
-                Sequence<Path> previousSelectedPaths) {
-                Component component = null;
-
-                Object node = treeView.getSelectedNode();
-                if (node instanceof ComponentNode) {
-                    ComponentNode componentNode = (ComponentNode)node;
-                    URL url = componentNode.getSrc();
-
-                    Document document = null;
-
-                    try {
-                        PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
-                        InputStream inputStream = new BufferedInputStream(url.openStream());
-
-                        try {
-                            document = plainTextSerializer.readObject(inputStream);
-                        } finally {
-                            inputStream.close();
-                        }
-                    } catch (IOException exception) {
-                        throw new RuntimeException(exception);
-                    } catch (SerializationException exception) {
-                        throw new RuntimeException(exception);
-                    }
-
-                    sourceTextArea.setDocument(document);
-
-                    BeanSerializer beanSerializer = new BeanSerializer();
-                    try {
-                        component = (Component)beanSerializer.readObject(url);
-                    } catch (IOException exception) {
-                        throw new RuntimeException(exception);
-                    } catch (SerializationException exception) {
-                        throw new RuntimeException(exception);
-                    }
-
-                    switch (componentNode.getHorizontalScrollBarPolicy()) {
-                    case AUTO:
-                        horizontalScrollBarPolicyGroup.setSelection(horizontalAutoButton);
-                        break;
-                    case FILL:
-                        horizontalScrollBarPolicyGroup.setSelection(horizontalFillButton);
-                        break;
-                    case FILL_TO_CAPACITY:
-                        horizontalScrollBarPolicyGroup.setSelection(horizontalFillToCapacityButton);
-                        break;
-                    case NEVER:
-                        horizontalScrollBarPolicyGroup.setSelection(horizontalNeverButton);
-                        break;
-                    case ALWAYS:
-                        horizontalScrollBarPolicyGroup.setSelection(horizontalAlwaysButton);
-                        break;
-                    }
-
-                    switch (componentNode.getVerticalScrollBarPolicy()) {
-                    case AUTO:
-                        verticalScrollBarPolicyGroup.setSelection(verticalAutoButton);
-                        break;
-                    case FILL:
-                        verticalScrollBarPolicyGroup.setSelection(verticalFillButton);
-                        break;
-                    case FILL_TO_CAPACITY:
-                        verticalScrollBarPolicyGroup.setSelection(verticalFillToCapacityButton);
-                        break;
-                    case NEVER:
-                        verticalScrollBarPolicyGroup.setSelection(verticalNeverButton);
-                        break;
-                    case ALWAYS:
-                        verticalScrollBarPolicyGroup.setSelection(verticalAlwaysButton);
-                        break;
-                    }
-                } else {
-                    sourceTextArea.setText((String)null);
-                }
-
-                contentPane.setContent(component);
-                componentPropertyInspector.setSource(component);
-                componentStyleInspector.setSource(component);
-                eventLogger.setSource(component);
-                eventLogger.clearLog();
-            }
-        });
-
-        treeView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-            @Override
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
-                int count) {
-                if (button == Mouse.Button.LEFT && count == 2) {
-                    Path path = treeView.getNodeAt(y);
-
-                    if (path != null) {
-                        List<?> treeData = treeView.getTreeData();
-                        Object node = Tree.get(treeData, path);
-
-                        if (node instanceof List<?>) {
-                            treeView.setBranchExpanded(path, !treeView.isBranchExpanded(path));
-                        }
-                    }
-                }
-
-                return false;
-            }
-        });
-
-        horizontalScrollBarPolicyGroup.getButtonGroupListeners().add
-            (new ButtonGroupListener.Adapter() {
-            @Override
-            public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
-                Button button = buttonGroup.getSelection();
-
-                ScrollBarPolicy horizontalScrollBarPolicy = null;
-
-                if (button == horizontalAutoButton) {
-                    horizontalScrollBarPolicy = ScrollBarPolicy.AUTO;
-                } else if (button == horizontalFillButton) {
-                    horizontalScrollBarPolicy = ScrollBarPolicy.FILL;
-                } else if (button == horizontalFillToCapacityButton) {
-                    horizontalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
-                } else if (button == horizontalNeverButton) {
-                    horizontalScrollBarPolicy = ScrollBarPolicy.NEVER;
-                } else if (button == horizontalAlwaysButton) {
-                    horizontalScrollBarPolicy = ScrollBarPolicy.ALWAYS;
-                }
-
-                if (horizontalScrollBarPolicy != null) {
-                    contentScrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
-                }
-            }
-        });
-
-        verticalScrollBarPolicyGroup.getButtonGroupListeners().add
-            (new ButtonGroupListener.Adapter() {
-            @Override
-            public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
-                Button button = buttonGroup.getSelection();
-
-                ScrollBarPolicy verticalScrollBarPolicy = null;
-
-                if (button == verticalAutoButton) {
-                    verticalScrollBarPolicy = ScrollBarPolicy.AUTO;
-                } else if (button == verticalFillButton) {
-                    verticalScrollBarPolicy = ScrollBarPolicy.FILL;
-                } else if (button == verticalFillToCapacityButton) {
-                    verticalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
-                } else if (button == verticalNeverButton) {
-                    verticalScrollBarPolicy = ScrollBarPolicy.NEVER;
-                } else if (button == verticalAlwaysButton) {
-                    verticalScrollBarPolicy = ScrollBarPolicy.ALWAYS;
-                }
-
-                if (verticalScrollBarPolicy != null) {
-                    contentScrollPane.setVerticalScrollBarPolicy(verticalScrollBarPolicy);
-                }
-            }
-        });
-
-        Path initialSelectedPath = null;
-        Path firstComponentPath = null;
-
-        String classProperty = properties.get(CLASS_PROPERTY);
-
-        Tree.ItemIterator<?> itemIterator = Tree.depthFirstIterator(treeView.getTreeData());
-        while (itemIterator.hasNext()) {
-            Object node = itemIterator.next();
-
-            if (node instanceof ComponentNode) {
-                ComponentNode componentNode = (ComponentNode)node;
-                Path path = itemIterator.getPath();
-
-                if (firstComponentPath == null) {
-                    firstComponentPath = path;
-                }
-
-                if (classProperty != null) {
-                    // class property was set; open the corresponding
-                    // component node
-                    if (componentNode.getText().equals(classProperty)) {
-                        splitPane.setSplitRatio(0);
-                        splitPane.setLocked(true);
-
-                        initialSelectedPath = path;
-                        break;
-                    }
-                } else {
-                    // class property was *not* set; open the first component
-                    // node we find
-                    initialSelectedPath = path;
-                    break;
-                }
-            }
-        }
-
-        // Default the initial selected path to the first component
-        if (initialSelectedPath == null) {
-            initialSelectedPath = firstComponentPath;
-        }
-
-        if (initialSelectedPath != null) {
-            // Select the path
-            treeView.setSelectedPath(initialSelectedPath);
-
-            // Ensure that it's visible to the user
-            Path branchPath = new Path(initialSelectedPath, initialSelectedPath.getLength() - 1);
-            while (branchPath.getLength() > 0) {
-                treeView.expandBranch(branchPath);
-                branchPath.remove(branchPath.getLength() - 1, 1);
-            }
-
-            final Path path = initialSelectedPath;
-            ApplicationContext.queueCallback(new Runnable() {
-                @Override
-                public void run() {
-                    treeView.scrollAreaToVisible(treeView.getNodeBounds(path));
-                }
-            });
-        }
-
+    public void startup(Display display, Map<String, String> properties) throws Exception {
+        BeanSerializer beanSerializer = new BeanSerializer(new Resources(getClass().getName()));
+        window = (ComponentExplorerWindow)beanSerializer.readObject(getClass().getResource("component_explorer_window.bxml"));
+        window.setClassProperty(properties.get(CLASS_PROPERTY));
         window.open(display);
-
-        treeView.requestFocus();
     }
 
     @Override
-    public boolean shutdown(boolean optional) throws Exception {
+    public boolean shutdown(boolean optional) {
         if (window != null) {
             window.close();
         }
@@ -354,3 +57,4 @@ public class ComponentExplorer implements Application {
         DesktopApplicationContext.main(ComponentExplorer.class, args);
     }
 }
+

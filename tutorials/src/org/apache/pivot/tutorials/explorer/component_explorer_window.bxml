@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="%title" maximized="true"
+<explorer:ComponentExplorerWindow title="%title" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:tools="org.apache.pivot.tools.wtk"
@@ -42,13 +42,13 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="Label"
                                                 icon="@../page_white.png"
-                                                src="@basic/label.bxml"
+                                                src="@label.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
                                                 text="ImageView"
                                                 icon="@../page_white.png"
-                                                src="@basic/image_view.bxml"
+                                                src="@image_view.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                         </content:TreeBranch>
@@ -58,25 +58,25 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="PushButton"
                                                 icon="@../page_white.png"
-                                                src="@buttons/push_button.bxml"
+                                                src="@push_button.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="RadioButton"
                                                 icon="@../page_white.png"
-                                                src="@buttons/radio_button.bxml"
+                                                src="@radio_button.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="Checkbox"
                                                 icon="@../page_white.png"
-                                                src="@buttons/checkbox.bxml"
+                                                src="@checkbox.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="LinkButton"
                                                 icon="@../page_white.png"
-                                                src="@buttons/link_button.bxml"
+                                                src="@link_button.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -86,13 +86,13 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="ListView"
                                                 icon="@../page_white.png"
-                                                src="@lists/list_view.bxml"
+                                                src="@list_view.bxml"
                                                 horizontalScrollBarPolicy="fill_to_capacity"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="ListButton"
                                                 icon="@../page_white.png"
-                                                src="@lists/list_button.bxml"
+                                                src="@list_button.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -102,13 +102,13 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="TextInput"
                                                 icon="@../page_white.png"
-                                                src="@text/text_input.bxml"
+                                                src="@text_input.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="TextArea"
                                                 icon="@../page_white.png"
-                                                src="@text/text_area.bxml"
+                                                src="@text_area.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill_to_capacity"/>
                                         </content:TreeBranch>
@@ -118,7 +118,7 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="Separator"
                                                 icon="@../page_white.png"
-                                                src="@separators/separator.bxml"
+                                                src="@separator.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -128,55 +128,55 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="FlowPane"
                                                 icon="@../page_white.png"
-                                                src="@layout/flow_pane.bxml"
+                                                src="@flow_pane.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
                                                 text="BoxPane"
                                                 icon="@../page_white.png"
-                                                src="@layout/box_pane.bxml"
+                                                src="@box_pane.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
                                                 text="TablePane"
                                                 icon="@../page_white.png"
-                                                src="@layout/table_pane.bxml"
+                                                src="@table_pane.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
                                                 text="GridPane"
                                                 icon="@../page_white.png"
-                                                src="@layout/grid_pane.bxml"
+                                                src="@grid_pane.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
                                                 text="Border"
                                                 icon="@../page_white.png"
-                                                src="@layout/border.bxml"
+                                                src="@border.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
                                                 text="StackPane"
                                                 icon="@../page_white.png"
-                                                src="@layout/stack_pane.bxml"
+                                                src="@stack_pane.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
                                                 text="SplitPane"
                                                 icon="@../page_white.png"
-                                                src="@layout/split_pane.bxml"
+                                                src="@split_pane.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
                                                 text="Form"
                                                 icon="@../page_white.png"
-                                                src="@layout/form.bxml"
+                                                src="@form.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="Panel"
                                                 icon="@../page_white.png"
-                                                src="@layout/panel.bxml"
+                                                src="@panel.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                         </content:TreeBranch>
@@ -186,31 +186,31 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="CardPane"
                                                 icon="@../page_white.png"
-                                                src="@navigation/card_pane.bxml"
+                                                src="@card_pane.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
                                                 text="TabPane"
                                                 icon="@../page_white.png"
-                                                src="@navigation/tab_pane.bxml"
+                                                src="@tab_pane.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="Accordion"
                                                 icon="@../page_white.png"
-                                                src="@navigation/accordion.bxml"
+                                                src="@accordion.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="Expander"
                                                 icon="@../page_white.png"
-                                                src="@navigation/expander.bxml"
+                                                src="@expander.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="Rollup"
                                                 icon="@../page_white.png"
-                                                src="@navigation/rollup.bxml"
+                                                src="@rollup.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <content:TreeBranch
@@ -219,13 +219,13 @@ limitations under the License.
                                                 <explorer:ComponentNode
                                                     text="ScrollPane"
                                                     icon="@../page_white.png"
-                                                    src="@navigation/scroll_pane.bxml"
+                                                    src="@scroll_pane.bxml"
                                                     horizontalScrollBarPolicy="fill"
                                                     verticalScrollBarPolicy="fill"/>
                                                 <explorer:ComponentNode
                                                     text="Panorama"
                                                     icon="@../page_white.png"
-                                                    src="@navigation/panorama.bxml"
+                                                    src="@panorama.bxml"
                                                     horizontalScrollBarPolicy="fill"
                                                     verticalScrollBarPolicy="fill"/>
                                             </content:TreeBranch>
@@ -236,13 +236,13 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="Meter"
                                                 icon="@../page_white.png"
-                                                src="@progress/meter.bxml"
+                                                src="@meter.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="ActivityIndicator"
                                                 icon="@../page_white.png"
-                                                src="@progress/activity_indicator.bxml"
+                                                src="@activity_indicator.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -252,19 +252,19 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="ScrollBar"
                                                 icon="@../page_white.png"
-                                                src="@boundedrange/scroll_bar.bxml"
+                                                src="@scroll_bar.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="Slider"
                                                 icon="@../page_white.png"
-                                                src="@boundedrange/slider.bxml"
+                                                src="@slider.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="Spinner"
                                                 icon="@../page_white.png"
-                                                src="@boundedrange/spinner.bxml"
+                                                src="@spinner.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -274,13 +274,13 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="Calendar"
                                                 icon="@../page_white.png"
-                                                src="@calendars/calendar.bxml"
+                                                src="@calendar.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="CalendarButton"
                                                 icon="@../page_white.png"
-                                                src="@calendars/calendar_button.bxml"
+                                                src="@calendar_button.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -290,13 +290,13 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="ColorChooser"
                                                 icon="@../page_white.png"
-                                                src="@colorchoosers/color_chooser.bxml"
+                                                src="@color_chooser.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="ColorChooserButton"
                                                 icon="@../page_white.png"
-                                                src="@colorchoosers/color_chooser_button.bxml"
+                                                src="@color_chooser_button.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -306,13 +306,13 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="MenuBar"
                                                 icon="@../page_white.png"
-                                                src="@menus/menu_bar.bxml"
+                                                src="@menu_bar.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
                                                 text="MenuButton"
                                                 icon="@../page_white.png"
-                                                src="@menus/menu_button.bxml"
+                                                src="@menu_button.bxml"
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -322,7 +322,7 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="TableView"
                                                 icon="@../page_white.png"
-                                                src="@tables/table_view.bxml"
+                                                src="@table_view.bxml"
                                                 horizontalScrollBarPolicy="fill_to_capacity"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -332,7 +332,7 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="TreeView"
                                                 icon="@../page_white.png"
-                                                src="@trees/tree_view.bxml"
+                                                src="@tree_view.bxml"
                                                 horizontalScrollBarPolicy="fill_to_capacity"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -342,7 +342,7 @@ limitations under the License.
                                             <explorer:ComponentNode
                                                 text="FileBrowser"
                                                 icon="@../page_white.png"
-                                                src="@filebrowsing/file_browser.bxml"
+                                                src="@file_browser.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="auto"/>
                                         </content:TreeBranch>
@@ -497,4 +497,4 @@ limitations under the License.
             </right>
         </SplitPane>
     </CardPane>
-</Window>
+</explorer:ComponentExplorerWindow>

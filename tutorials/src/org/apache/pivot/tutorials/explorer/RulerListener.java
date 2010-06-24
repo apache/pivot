@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tutorials.explorer.navigation;
+package org.apache.pivot.tutorials.explorer;
 
 public interface RulerListener {
     public void orientationChanged(Ruler ruler);
