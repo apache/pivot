@@ -33,9 +33,6 @@ import org.apache.pivot.web.Query;
 import org.apache.pivot.web.QueryException;
 import org.apache.pivot.web.server.QueryServlet;
 
-/**
- * Servlet that implements expense management web service.
- */
 public class ExpenseServlet extends QueryServlet {
     private static final long serialVersionUID = 0;
 

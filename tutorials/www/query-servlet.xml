@@ -22,6 +22,609 @@ limitations under the License.
     </properties>
 
     <body>
-        <!-- TODO -->
+        <p>
+            As discussed in the previous section, Pivot provides a set of classes for interacting
+            with HTTP-based REST services, which Pivot calls "web queries". Pivot also provides an
+            abstract base class named <tt>org.apache.pivot.web.server.QueryServlet</tt> that helps
+            to facilitate implementation of such services.
+        </p>
+
+        <p>
+            The following example shows a Pivot client application that interacts with a REST
+            service for managing expense data. The web service is implemented using
+            <tt>QueryServlet</tt> and is discussed below:
+        </p>
+
+        <p>
+            <em>NOTE</em> This application must be run via a locally-deployed WAR file. It will not
+            work in the online tutorial.
+        </p>
+
+        <application class="org.apache.pivot.tutorials.webqueries.Expenses"
+            width="480" height="280">
+            <libraries signed="true">
+                <library>core</library>
+                <library>web</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+        </application>
+
+        <h2>QueryServlet</h2>
+
+        <p>
+            The <tt>QueryServlet</tt> class extends <tt>javax.servlet.http.HttpServlet</tt> and
+            provides overloaded versions of the base HTTP handler methods that make them easier to
+            work with in a REST-oriented manner:
+        </p>
+
+        <ul>
+            <li><tt>Object doGet(Path path)</tt></li>
+            <li><tt>URL doPost(Path path, Object value)</tt></li>
+            <li><tt>boolean doPut(Path path, Object value)</tt></li>
+            <li><tt>void doDelete(Path path)</tt></li>
+        </ul>
+
+        <p>
+            Each method takes an instance of <tt>QueryServlet.Path</tt> that represents the path to
+            the resource being accessed, relative to the location of the servlet itself.
+            <tt>Path</tt> is a sequence type that allows a caller to access the components of the
+            path via numeric index. For example, if the query servlet is mapped to the
+            "/my_service/*" URL pattern, given the following URL:
+        </p>
+
+        <pre>http://pivot.apache.org/my_service/foo/bar</pre>
+
+        <p>
+            the <tt>path</tt> argument would contain the values "foo" and "bar", accessible via
+            indices 0 and 1, respectively.
+        </p>
+
+        <h4>Serializers</h4>
+
+        <p>
+            Unlike the base <tt>HttpServlet</tt> class, <tt>QueryServlet</tt> operates on arbitrary
+            Java types rather than HTTP request and response objects. This allows developers to
+            focus on the resources managed by the service rather than the lower-level details of
+            the HTTP protocol.
+        </p>
+
+        <p>
+            <tt>QueryServlet</tt> uses a serializer (an implementation of the
+            <tt>org.apache.pivot.serialization.Serializer</tt> interface) to determine how to
+            serialize the data sent to and returned from the servlet. The serializer used for a
+            given HTTP request is determined by the return value of the abstract
+            <tt>createSerializer()</tt> method. This method is called by <tt>QueryServlet</tt>
+            prior to invoking the actual HTTP handler method. The example servlet uses an instance
+            of <tt>org.apache.pivot.json.JSONSerializer</tt>, which supports reading and writing of
+            JSON data. Pivot provides a number of additional serializers supporting XML, CSV, and
+            Java serialization, among others, and service implementations are free to define their
+            own custom serializers as well.
+        </p>
+
+        <h4>Exceptions</h4>
+
+        <p>
+            Each handler method declares that it may throw an instance of
+            <tt>org.apache.pivot.web.QueryException</tt>. This exception encapsulates an HTTP error
+            response. It takes an integer value representing the response code as a constructor
+            argument (the <tt>org.apache.pivot.web.Query.Status</tt> class defines a number of
+            constants for status codes commonly used in REST responses). The web query client API,
+            discussed in the previous section, effectively re-throws these exceptions, allowing the
+            client to handle an error response returned by the server as if the exception was
+            generated locally.
+        </p>
+
+        <h4>Query String Parameters and HTTP Headers</h4>
+
+        <p>
+            Though it is not shown in this example, query servlet implementations can also access
+            the query string arguments and HTTP headers included in the HTTP request, as well as
+            control the headers sent back with the response. Query string parameters are accessible
+            via the <tt>getParameters()</tt> method of <tt>QueryServlet</tt>, and the
+            request/response headers can be accessed via <tt>getRequestHeaders()</tt> and
+            <tt>getResponseHeaders()</tt>, respectively. All three methods return an instance of
+            <tt>org.apache.pivot.web.QueryDictionary</tt>, which allows the caller to manipulate
+            these collections via <tt>get()</tt>, <tt>put()</tt>, and <tt>remove()</tt> methods.
+        </p>
+
+        <h2>ExpenseServlet</h2>
+
+        <p>
+            The following listing contains the full source code for <tt>ExpenseServlet</tt>, which
+            provides the implementation for the REST service used in this example. The
+            implementation of each method is discussed in more detail below:
+        </p>
+
+        <pre class="brush:java">
+        package org.apache.pivot.tutorials.webqueries.server;
+
+        import java.io.IOException;
+        import java.io.InputStream;
+        import java.net.MalformedURLException;
+        import java.net.URL;
+
+        import javax.servlet.ServletException;
+
+        import org.apache.pivot.collections.HashMap;
+        import org.apache.pivot.collections.List;
+        import org.apache.pivot.json.JSONSerializer;
+        import org.apache.pivot.serialization.CSVSerializer;
+        import org.apache.pivot.serialization.SerializationException;
+        import org.apache.pivot.serialization.Serializer;
+        import org.apache.pivot.web.Query;
+        import org.apache.pivot.web.QueryException;
+        import org.apache.pivot.web.server.QueryServlet;
+
+        /**
+         * Servlet that implements expense management web service.
+         */
+        public class ExpenseServlet extends QueryServlet {
+            private static final long serialVersionUID = 0;
+
+            private List&lt;Expense&gt; expenses = null;
+            private HashMap&lt;Integer, Expense&gt; expenseMap = new HashMap&lt;Integer, Expense&gt;();
+
+            private static int nextID = 0;
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public void init() throws ServletException {
+                CSVSerializer csvSerializer = new CSVSerializer();
+                csvSerializer.getKeys().add("date");
+                csvSerializer.getKeys().add("type");
+                csvSerializer.getKeys().add("amount");
+                csvSerializer.getKeys().add("description");
+                csvSerializer.setItemClass(Expense.class);
+
+                // Load the initial expense data
+                InputStream inputStream = ExpenseServlet.class.getResourceAsStream("expenses.csv");
+
+                try {
+                    expenses = (List&lt;Expense&gt;)csvSerializer.readObject(inputStream);
+                } catch (IOException exception) {
+                    throw new ServletException(exception);
+                } catch (SerializationException exception) {
+                    throw new ServletException(exception);
+                }
+
+                // Index the initial expenses
+                for (Expense expense : expenses) {
+                    int id = nextID++;
+                    expense.setID(id);
+                    expenseMap.put(id, expense);
+                }
+            }
+
+            @Override
+            protected Object doGet(Path path) throws QueryException {
+                Object value;
+
+                if (path.getLength() == 0) {
+                    value = expenses;
+                } else {
+                    // Get the ID of the expense to retrieve from the path
+                    int id = Integer.parseInt(path.get(0));
+
+                    // Get the expense data from the map
+                    synchronized (this) {
+                        value = expenseMap.get(id);
+                    }
+
+                    if (value == null) {
+                        throw new QueryException(Query.Status.NOT_FOUND);
+                    }
+                }
+
+                return value;
+            }
+
+            @Override
+            protected URL doPost(Path path, Object value) throws QueryException {
+                if (value == null) {
+                    throw new QueryException(Query.Status.BAD_REQUEST);
+                }
+
+                Expense expense = (Expense)value;
+
+                // Add the expense to the list/map
+                int id;
+                synchronized (this) {
+                    id = nextID++;
+                    expense.setID(id);
+                    expenses.add(expense);
+                    expenseMap.put(id, expense);
+                }
+
+                // Return the location of the newly-created resource
+                URL location = getLocation();
+                try {
+                    location = new URL(location, Integer.toString(id));
+                } catch (MalformedURLException exception) {
+                    throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
+                }
+
+                return location;
+            }
+
+            @Override
+            protected boolean doPut(Path path, Object value) throws QueryException {
+                if (path.getLength() == 0
+                    || value == null) {
+                    throw new QueryException(Query.Status.BAD_REQUEST);
+                }
+
+                // Get the ID of the expense to retrieve from the path
+                int id = Integer.parseInt(path.get(0));
+
+                // Create the new expense and bind the data to it
+                Expense expense = (Expense)value;
+                expense.setID(id);
+
+                // Update the list/map
+                Expense previousExpense;
+                synchronized (this) {
+                    previousExpense = expenseMap.put(id, expense);
+                    expenses.remove(previousExpense);
+                    expenses.add(expense);
+                }
+
+                return (previousExpense == null);
+            }
+
+            @Override
+            protected void doDelete(Path path) throws QueryException {
+                if (path.getLength() == 0) {
+                    throw new QueryException(Query.Status.BAD_REQUEST);
+                }
+
+                // Get the ID of the expense to retrieve from the path
+                int id = Integer.parseInt(path.get(0));
+
+                // Update the list/map
+                Expense expense;
+                synchronized (this) {
+                    expense = expenseMap.remove(id);
+                    expenses.remove(expense);
+                }
+
+                if (expense == null) {
+                    throw new QueryException(Query.Status.NOT_FOUND);
+                }
+            }
+
+            @Override
+            protected Serializer&lt;?&gt; createSerializer(Path path) throws QueryException {
+                return new JSONSerializer(Expense.class);
+            }
+        }
+        </pre>
+
+        <h3>init()</h3>
+
+        <p>
+            The <tt>init()</tt> method, which is defined by <tt>QueryServlet</tt>'s base class
+            <tt>HttpServlet</tt>, is called when a servlet is first created by a servlet container.
+            <tt>ExpenseServlet</tt>'s implementation of <tt>init()</tt> is as follows:
+        </p>
+
+        <pre class="brush:java">
+        public void init() throws ServletException {
+            CSVSerializer csvSerializer = new CSVSerializer();
+            csvSerializer.getKeys().add("date");
+            csvSerializer.getKeys().add("type");
+            csvSerializer.getKeys().add("amount");
+            csvSerializer.getKeys().add("description");
+            csvSerializer.setItemClass(Expense.class);
+
+            // Load the initial expense data
+            InputStream inputStream = ExpenseServlet.class.getResourceAsStream("expenses.csv");
+
+            try {
+                expenses = (List&lt;Expense&gt;)csvSerializer.readObject(inputStream);
+            } catch (IOException exception) {
+                throw new ServletException(exception);
+            } catch (SerializationException exception) {
+                throw new ServletException(exception);
+            }
+
+            // Index the initial expenses
+            for (Expense expense : expenses) {
+                int id = nextID++;
+                expense.setID(id);
+                expenseMap.put(id, expense);
+            }
+        }
+        </pre>
+
+        <p>
+            It loads an initial list of expenses using an instance of <tt>CSVSerializer</tt>. The
+            contents of the CSV file are as follows:
+        </p>
+
+        <pre>
+        2010-03-28, Travel,     1286.90,    Ticket #145-XX-71903-09
+        2010-03-28, Meals,      34.12,      Took client out
+        2010-03-31, Meals,      27.00,
+        2010-04-01, Meals,      12.55,
+        2010-04-02, Meals,      18.86,
+        2010-04-02, Parking,    30.00,      Cambridge Center parking
+        2010-04-03, Meals,      20.72,
+        2010-04-06, Travel,     529.00,     Marriott reservation #DF-9982-BRN
+        </pre>
+
+        <p>
+            Due to the call to <tt>setItemClass()</tt>, the rows in the CSV file are deserialized
+            as instances of <tt>org.apache.pivot.tutorials.webqueries.server.Expense</tt>, a Java
+            Bean class that is defined as follows:
+        </p>
+
+        <pre class="brush:java">
+        package org.apache.pivot.tutorials.webqueries.server;
+
+        public class Expense {
+            private Integer id = -1;
+            private String date = null;
+            private String type = null;
+            private Double amount = 0d;
+            private String description = null;
+
+            public Integer getID() {
+                return id;
+            }
+
+            public Integer getId() {
+                return getID();
+            }
+
+            public void setID(Integer id) {
+                this.id = id;
+            }
+
+            public void setId(Integer id) {
+                setID(id);
+            }
+
+            public String getDate() {
+                return date;
+            }
+
+            public void setDate(String date) {
+                this.date = date;
+            }
+
+            public String getType() {
+                return type;
+            }
+
+            public void setType(String type) {
+                this.type = type;
+            }
+
+            public Double getAmount() {
+                return amount;
+            }
+
+            public void setAmount(Double amount) {
+                this.amount = amount;
+            }
+
+            public final void setAmount(String amount) {
+                setAmount(Double.parseDouble(amount));
+            }
+
+            public String getDescription() {
+                return description;
+            }
+
+            public void setDescription(String description) {
+                this.description = description;
+            }
+        }
+        </pre>
+
+        <p>
+            After the list of expenses has been loaded, <tt>init()</tt> iterates over the list,
+            assigns each expense an ID, and adds it to a map. This collection-based approach is
+            sufficient for a tutorial example; a real application would most likely use a
+            relational database to manage the expense data.
+        </p>
+
+        <h3>doGet()</h3>
+
+        <p>
+            <tt>doGet()</tt> is used to handle an HTTP GET request. It returns an object
+            representing the resource at a given path. The <tt>doGet()</tt> method in the example
+            servlet is defined as follows:
+        </p>
+
+        <pre class="brush:java">
+        protected Object doGet(Path path) throws QueryException {
+            Object value;
+
+            if (path.getLength() == 0) {
+                value = expenses;
+            } else {
+                // Get the ID of the expense to retrieve from the path
+                int id = Integer.parseInt(path.get(0));
+
+                // Get the expense data from the map
+                synchronized (this) {
+                    value = expenseMap.get(id);
+                }
+
+                if (value == null) {
+                    throw new QueryException(Query.Status.NOT_FOUND);
+                }
+            }
+
+            return value;
+        }
+        </pre>
+
+        <p>
+            If the request does not contain a path, the method returns the list of all expenses.
+            Otherwise, it attemps to look up and return the requested expense by its ID. If the
+            expense is not found, an HTTP 404 ("Not Found") error is returned to the caller via the
+            thrown <tt>QueryException</tt>; otherwise, the expense is returned along with the
+            default HTTP 200 ("OK") status code. The bean value is converted to JSON format by the
+            <tt>JSONSerializer</tt> instance returned by <tt>createSerializer()</tt>.
+        </p>
+
+        <h3>doPost()</h3>
+
+        <p>
+            <tt>doPost()</tt> is used to handle an HTTP POST request. It is primarily used to
+            create a new resource on the server, but can also be used to execute arbitrary
+            server-side actions.
+        </p>
+
+        <p>
+            When a resource is created, <tt>doPost()</tt> returns a URL representing the location
+            of the new resource. Consistent with the HTTP specification, this value is returned in
+            the "Location" response header along with an HTTP status code of 201 ("Created"). If a
+            POST request does not result in the creation of a resource, <tt>doPost()</tt> can
+            return <tt>null</tt>, which is translated by <tt>QueryServlet</tt> to an HTTP response
+            of 204 ("No Content") and no corresponding "Location" header.
+        </p>
+
+        <p>
+            The <tt>doPost()</tt> method in the example looks like this:
+        </p>
+
+        <pre class="brush:java">
+        protected URL doPost(Path path, Object value) throws QueryException {
+            if (value == null) {
+                throw new QueryException(Query.Status.BAD_REQUEST);
+            }
+
+            Expense expense = (Expense)value;
+
+            // Add the expense to the list/map
+            int id;
+            synchronized (this) {
+                id = nextID++;
+                expense.setID(id);
+                expenses.add(expense);
+                expenseMap.put(id, expense);
+            }
+
+            // Return the location of the newly-created resource
+            URL location = getLocation();
+            try {
+                location = new URL(location, Integer.toString(id));
+            } catch (MalformedURLException exception) {
+                throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
+            }
+
+            return location;
+        }
+        </pre>
+
+        <p>
+            The first thing the method does is ensure that the request is valid. If the caller has
+            not provided a value in the body of the request, HTTP 400 ("Bad Request") is returned.
+            Otherwise, it assigns the expense an ID and adds it to the list and map.
+        </p>
+
+        <p>
+            Finally, it returns the location of the new expense resource. The location value is
+            generated simply by appending the name of the temp file to the location of the servlet,
+            obtained by a call to <tt>QueryServlet#getLocation()</tt>.
+        </p>
+
+        <h3>doPut()</h3>
+
+        <p>
+            <tt>doPut()</tt> handles an HTTP PUT request. It is often used to update an existing
+            resource, but can also be used to create a new resource. The return value of
+            <tt>doPut()</tt> is a boolean flag indicating whether or not a resource was created.
+            If <tt>true</tt>, HTTP 201 is returned to the caller; otherwise, HTTP 204 is
+            returned.
+        </p>
+
+        <p>
+            <tt>ExpenseServlet</tt>'s implementation of <tt>doPut()</tt> is as follows:
+        </p>
+
+        <pre class="brush:java">
+        protected boolean doPut(Path path, Object value) throws QueryException {
+            if (path.getLength() == 0
+                || value == null) {
+                throw new QueryException(Query.Status.BAD_REQUEST);
+            }
+
+            // Get the ID of the expense to retrieve from the path
+            int id = Integer.parseInt(path.get(0));
+
+            // Create the new expense and bind the data to it
+            Expense expense = (Expense)value;
+            expense.setID(id);
+
+            // Update the list/map
+            Expense previousExpense;
+            synchronized (this) {
+                previousExpense = expenseMap.put(id, expense);
+                expenses.remove(previousExpense);
+                expenses.add(expense);
+            }
+
+            return (previousExpense == null);
+        }
+        </pre>
+
+        <p>
+            Like <tt>doPost()</tt>, it first validates the format of the request. In addition to a
+            body, <tt>doPut()</tt> also requires a path component to identify the resource to be
+            updated. A real expense service might want to verify that the requested resource exists
+            before proceeding; however, the example service simply interprets an unused ID as a
+            request to create a new resource. Consistent with the API, it returns <tt>true</tt> if
+            a resource was created and <tt>false</tt> otherwise.
+        </p>
+
+        <h3>doDelete()</h3>
+
+        <p>
+            <tt>doDelete()</tt> handles an HTTP DELETE request. When successful, it simply
+            deletes the resource specified by the path and returns HTTP 204. The source code for
+            this method is shown below:
+        </p>
+
+        <pre class="brush:java">
+        protected void doDelete(Path path) throws QueryException {
+            if (path.getLength() == 0) {
+                throw new QueryException(Query.Status.BAD_REQUEST);
+            }
+
+            // Get the ID of the expense to retrieve from the path
+            int id = Integer.parseInt(path.get(0));
+
+            // Update the list/map
+            Expense expense;
+            synchronized (this) {
+                expense = expenseMap.remove(id);
+                expenses.remove(expense);
+            }
+
+            if (expense == null) {
+                throw new QueryException(Query.Status.NOT_FOUND);
+            }
+        }
+        </pre>
+
+        <p>
+            Like the other methods, the request is first validated; then, if the expense exists,
+            it is deleted. Otherwise, HTTP 404 is returned.
+        </p>
+
+        <h2>The Expenses Application</h2>
+
+        <p>
+            The Expenses client application allows a user to interact with the web service. It is
+            not described in this section, but builds on concepts discussed in earlier sections.
+            The source code is available in the Pivot source distribution under the "tutorials"
+            project.
+        </p>
     </body>
 </document>

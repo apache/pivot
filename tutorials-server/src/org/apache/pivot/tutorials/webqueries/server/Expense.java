@@ -16,9 +16,6 @@
  */
 package org.apache.pivot.tutorials.webqueries.server;
 
-/**
- * Java Bean class representing an expense record.
- */
 public class Expense {
     private Integer id = -1;
     private String date = null;
