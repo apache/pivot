@@ -371,18 +371,14 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
             int viewWidth = view.getWidth();
             int viewHeight = view.getHeight();
 
-            int scrollTop = panorama.getScrollTop();
             int maxScrollTop = getMaxScrollTop();
-            if (scrollTop > maxScrollTop) {
+            if (panorama.getScrollTop() > maxScrollTop) {
                 panorama.setScrollTop(maxScrollTop);
-                scrollTop = maxScrollTop;
             }
 
-            int scrollLeft = panorama.getScrollLeft();
             int maxScrollLeft = getMaxScrollLeft();
-            if (scrollLeft > maxScrollLeft) {
+            if (panorama.getScrollLeft() > maxScrollLeft) {
                 panorama.setScrollLeft(maxScrollLeft);
-                scrollLeft = maxScrollLeft;
             }
 
             if (width < viewWidth) {

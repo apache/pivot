@@ -1371,19 +1371,18 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
 
         private Font getEffectiveFont() {
             Font font = null;
-            Node node = getNode().getParent();
-            // run up the tree until we find a Element's style to apply
-            while (node != null) {
-                if (node instanceof Element) {
-                    font = ((Element) node).getFont();
-                    if (font != null) {
-                        break;
-                    }
+            // run up the tree until we find an element's style to apply
+            Element element = getNode().getParent();
+            while (element != null) {
+                font = element.getFont();
+                if (font != null) {
+                    break;
                 }
-                node = node.getParent();
+
+                element = element.getParent();
             }
             // if we find nothing, use the default font
-            if (node == null) {
+            if (element == null) {
                 font = TextAreaSkin.this.font;
             }
             return font;
@@ -1391,19 +1390,18 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
 
         private Color getEffectiveForegroundColor() {
             Color foregroundColor = null;
-            Node node = getNode().getParent();
-            // run up the tree until we find a Element's style to apply
-            while (node != null) {
-                if (node instanceof Element) {
-                    foregroundColor = ((Element) node).getForegroundColor();
-                    if (foregroundColor != null) {
-                        break;
-                    }
+            // run up the tree until we find an element's style to apply
+            Element element = getNode().getParent();
+            while (element != null) {
+                foregroundColor = element.getForegroundColor();
+                if (foregroundColor != null) {
+                    break;
                 }
-                node = node.getParent();
+
+                element = element.getParent();
             }
             // if we find nothing, use the default color
-            if (node == null) {
+            if (element == null) {
                 foregroundColor = TextAreaSkin.this.color;
             }
             return foregroundColor;
