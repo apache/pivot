@@ -1,0 +1,138 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.pivot.demos.swing;
+
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JInternalFrame;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+
+import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.Window;
+
+public class SwingDemo extends JFrame {
+    private static final long serialVersionUID = 0;
+
+    private JDesktopPane desktop = new JDesktopPane();
+
+    public SwingDemo() {
+        super("Pivot/Swing Demo");
+
+        setContentPane(desktop);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1024, 768);
+    }
+
+    private void createSwingFrame() {
+        // Create the internal frame that will contain the Swing components
+        JInternalFrame internalFrame = new JInternalFrame("Swing Components");
+        desktop.add(internalFrame);
+
+        Box box = Box.createVerticalBox();
+        box.setBorder(new EmptyBorder(8, 8, 8, 8));
+
+        box.add(new JLabel("Hello from Swing!"));
+        box.add(Box.createVerticalStrut(8));
+
+        box.add(new JButton("JButton"));
+        box.add(Box.createVerticalStrut(8));
+
+        JCheckBox jCheckBox = new JCheckBox("JCheckBox");
+        jCheckBox.setSelected(true);
+        box.add(jCheckBox);
+        box.add(Box.createVerticalStrut(8));
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+
+        JRadioButton jRadioButton1 = new JRadioButton("JRadioButton 1", true);
+        buttonGroup.add(jRadioButton1);
+        box.add(jRadioButton1);
+
+        JRadioButton jRadioButton2 = new JRadioButton("JRadioButton 2", true);
+        buttonGroup.add(jRadioButton2);
+        box.add(jRadioButton2);
+
+        JRadioButton jRadioButton3 = new JRadioButton("JRadioButton 3", true);
+        buttonGroup.add(jRadioButton3);
+        box.add(jRadioButton3);
+
+        internalFrame.add(box);
+
+        // Open and select the internal frame
+        internalFrame.setLocation(50, 50);
+        internalFrame.setSize(640, 480);
+        internalFrame.setVisible(true);
+    }
+
+    private void createPivotFrame() {
+        // Create the internal frame that will contain the Pivot components
+        JInternalFrame internalFrame = new JInternalFrame("Pivot Components");
+        desktop.add(internalFrame);
+
+        // Create the display host and load the Pivot window
+        ApplicationContext.DisplayHost displayHost = new ApplicationContext.DisplayHost();
+        internalFrame.add(displayHost);
+        BeanSerializer beanSerializer = new BeanSerializer();
+        Window window;
+        try {
+            window = (Window)beanSerializer.readObject(this, "pivot_window.bxml");
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        } catch (SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        // Open the Pivot window on the display
+        window.open(displayHost.getDisplay());
+
+        // Open and select the internal frame
+        internalFrame.setLocation(100, 100);
+        internalFrame.setSize(640, 480);
+        internalFrame.setVisible(true);
+
+        try {
+            internalFrame.setSelected(true);
+        } catch (PropertyVetoException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    public static void main(String[] args) {
+        final SwingDemo swingDemo = new SwingDemo();
+        swingDemo.setVisible(true);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                swingDemo.createSwingFrame();
+                swingDemo.createPivotFrame();
+            }
+        });
+    }
+}

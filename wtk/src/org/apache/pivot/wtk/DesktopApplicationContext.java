@@ -43,11 +43,9 @@ import org.apache.pivot.wtk.media.Picture;
  * window.
  */
 public final class DesktopApplicationContext extends ApplicationContext {
-    public static class HostFrame extends java.awt.Frame {
+    private static class HostFrame extends java.awt.Frame {
         private static final long serialVersionUID = 5340356674429280196L;
 
-        // TODO Should this be public? What happens if we create more than one? Give it an
-        // application class?
         public HostFrame() {
             enableEvents(AWTEvent.WINDOW_EVENT_MASK
                 | AWTEvent.WINDOW_STATE_EVENT_MASK);

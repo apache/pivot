@@ -64,10 +64,9 @@ public abstract class ApplicationContext {
     /**
      * Native display host.
      */
-    public static class DisplayHost extends java.awt.Canvas {
+    public static class DisplayHost extends java.awt.Component {
         private static final long serialVersionUID = -815713849595314026L;
 
-        // private ApplicationContext applicationContext;
         private Display display = new Display(this);
 
         private Component focusedComponent = null;
@@ -83,7 +82,6 @@ public abstract class ApplicationContext {
         private double scale = 1;
 
         private boolean paintPending = false;
-
         private boolean debugPaint = false;
 
         private Random random = null;
