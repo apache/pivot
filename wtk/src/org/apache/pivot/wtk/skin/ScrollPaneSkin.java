@@ -887,10 +887,9 @@ public class ScrollPaneSkin extends ContainerSkin
 
             ScrollPane scrollPane = (ScrollPane)getComponent();
             ApplicationContext.DisplayHost displayHost = scrollPane.getDisplay().getDisplayHost();
-            ApplicationContext applicationContext = displayHost.getApplicationContext();
 
             optimizeScrolling = (displayHost.getScale() == 1
-                && (applicationContext instanceof DesktopApplicationContext
+                && (DesktopApplicationContext.isActive()
                 || (displayHost.getPeer().canDetermineObscurity()
                 && !displayHost.getPeer().isObscured())));
         }

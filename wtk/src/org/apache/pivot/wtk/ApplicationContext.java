@@ -64,8 +64,11 @@ public abstract class ApplicationContext {
     /**
      * Native display host.
      */
-    public final class DisplayHost extends java.awt.Canvas {
+    public static class DisplayHost extends java.awt.Canvas {
         private static final long serialVersionUID = -815713849595314026L;
+
+        // private ApplicationContext applicationContext;
+        private Display display = new Display(this);
 
         private Component focusedComponent = null;
 
@@ -259,7 +262,7 @@ public abstract class ApplicationContext {
             }
         };
 
-        protected DisplayHost() {
+        public DisplayHost() {
             enableEvents(AWTEvent.COMPONENT_EVENT_MASK
                 | AWTEvent.FOCUS_EVENT_MASK
                 | AWTEvent.MOUSE_EVENT_MASK
@@ -289,8 +292,8 @@ public abstract class ApplicationContext {
             setFocusTraversalKeysEnabled(false);
         }
 
-        public ApplicationContext getApplicationContext() {
-            return ApplicationContext.this;
+        public Display getDisplay() {
+            return display;
         }
 
         public double getScale() {
@@ -566,7 +569,7 @@ public abstract class ApplicationContext {
             final int supportedDropActions = dragSource.getSupportedDropActions();
 
             DragGestureRecognizer dragGestureRecognizer =
-                new DragGestureRecognizer(java.awt.dnd.DragSource.getDefaultDragSource(), displayHost) {
+                new DragGestureRecognizer(java.awt.dnd.DragSource.getDefaultDragSource(), DisplayHost.this) {
                     private static final long serialVersionUID = -3204487375572082596L;
 
                 {   appendEvent(mouseEvent);
@@ -772,13 +775,7 @@ public abstract class ApplicationContext {
                         }
                     }
                 } catch (Exception exception) {
-                    if (application instanceof Application.UncaughtExceptionHandler) {
-                        Application.UncaughtExceptionHandler uncaughtExceptionHandler =
-                            (Application.UncaughtExceptionHandler)application;
-                        uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
-                    } else {
-                        exception.printStackTrace();
-                    }
+                    handleUncaughtException(exception);
                 }
             } else {
                 // Determine the mouse owner
@@ -904,13 +901,7 @@ public abstract class ApplicationContext {
                         }
                     }
                 } catch (Exception exception) {
-                    if (application instanceof Application.UncaughtExceptionHandler) {
-                        Application.UncaughtExceptionHandler uncaughtExceptionHandler =
-                            (Application.UncaughtExceptionHandler)application;
-                        uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
-                    } else {
-                        exception.printStackTrace();
-                    }
+                    handleUncaughtException(exception);
                 }
             }
         }
@@ -1056,13 +1047,7 @@ public abstract class ApplicationContext {
                         }
                     }
                 } catch (Exception exception) {
-                    if (application instanceof Application.UncaughtExceptionHandler) {
-                        Application.UncaughtExceptionHandler uncaughtExceptionHandler =
-                            (Application.UncaughtExceptionHandler)application;
-                        uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
-                    } else {
-                        exception.printStackTrace();
-                    }
+                    handleUncaughtException(exception);
                 }
             }
         }
@@ -1122,13 +1107,7 @@ public abstract class ApplicationContext {
                     }
                 }
             } catch (Exception exception) {
-                if (application instanceof Application.UncaughtExceptionHandler) {
-                    Application.UncaughtExceptionHandler uncaughtExceptionHandler =
-                        (Application.UncaughtExceptionHandler)application;
-                    uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
-                } else {
-                    exception.printStackTrace();
-                }
+                handleUncaughtException(exception);
             }
         }
 
@@ -1206,10 +1185,12 @@ public abstract class ApplicationContext {
 
                         try {
                             if (focusedComponent == null) {
-                                if (application instanceof Application.UnprocessedKeyHandler) {
-                                    Application.UnprocessedKeyHandler unprocessedKeyHandler =
-                                        (Application.UnprocessedKeyHandler)application;
-                                    unprocessedKeyHandler.keyPressed(keyCode, keyLocation);
+                                for (Application application : applications) {
+                                    if (application instanceof Application.UnprocessedKeyHandler) {
+                                        Application.UnprocessedKeyHandler unprocessedKeyHandler =
+                                            (Application.UnprocessedKeyHandler)application;
+                                        unprocessedKeyHandler.keyPressed(keyCode, keyLocation);
+                                    }
                                 }
                             } else {
                                 if (!focusedComponent.isBlocked()) {
@@ -1217,13 +1198,7 @@ public abstract class ApplicationContext {
                                 }
                             }
                         } catch (Exception exception) {
-                            if (application instanceof Application.UncaughtExceptionHandler) {
-                                Application.UncaughtExceptionHandler uncaughtExceptionHandler =
-                                    (Application.UncaughtExceptionHandler)application;
-                                uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
-                            } else {
-                                exception.printStackTrace();
-                            }
+                            handleUncaughtException(exception);
                         }
 
                         if (consumed) {
@@ -1240,10 +1215,12 @@ public abstract class ApplicationContext {
 
                         try {
                             if (focusedComponent == null) {
-                                if (application instanceof Application.UnprocessedKeyHandler) {
-                                    Application.UnprocessedKeyHandler unprocessedKeyHandler =
-                                        (Application.UnprocessedKeyHandler)application;
-                                    unprocessedKeyHandler.keyReleased(keyCode, keyLocation);
+                                for (Application application : applications) {
+                                    if (application instanceof Application.UnprocessedKeyHandler) {
+                                        Application.UnprocessedKeyHandler unprocessedKeyHandler =
+                                            (Application.UnprocessedKeyHandler)application;
+                                        unprocessedKeyHandler.keyReleased(keyCode, keyLocation);
+                                    }
                                 }
                             } else {
                                 if (!focusedComponent.isBlocked()) {
@@ -1251,13 +1228,7 @@ public abstract class ApplicationContext {
                                 }
                             }
                         } catch (Exception exception) {
-                            if (application instanceof Application.UncaughtExceptionHandler) {
-                                Application.UncaughtExceptionHandler uncaughtExceptionHandler =
-                                    (Application.UncaughtExceptionHandler)application;
-                                uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
-                            } else {
-                                exception.printStackTrace();
-                            }
+                            handleUncaughtException(exception);
                         }
 
                         if (consumed) {
@@ -1274,10 +1245,12 @@ public abstract class ApplicationContext {
 
                         try {
                             if (focusedComponent == null) {
-                                if (application instanceof Application.UnprocessedKeyHandler) {
-                                    Application.UnprocessedKeyHandler unprocessedKeyHandler =
-                                        (Application.UnprocessedKeyHandler)application;
-                                    unprocessedKeyHandler.keyTyped(keyChar);
+                                for (Application application : applications) {
+                                    if (application instanceof Application.UnprocessedKeyHandler) {
+                                        Application.UnprocessedKeyHandler unprocessedKeyHandler =
+                                            (Application.UnprocessedKeyHandler)application;
+                                        unprocessedKeyHandler.keyTyped(keyChar);
+                                    }
                                 }
                             } else {
                                 if (!focusedComponent.isBlocked()) {
@@ -1285,13 +1258,7 @@ public abstract class ApplicationContext {
                                 }
                             }
                         } catch (Exception exception) {
-                            if (application instanceof Application.UncaughtExceptionHandler) {
-                                Application.UncaughtExceptionHandler uncaughtExceptionHandler =
-                                    (Application.UncaughtExceptionHandler)application;
-                                uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
-                            } else {
-                                exception.printStackTrace();
-                            }
+                            handleUncaughtException(exception);
                         }
 
                         if (consumed) {
@@ -1333,6 +1300,9 @@ public abstract class ApplicationContext {
      */
     public static final class ResourceCacheDictionary
         implements Dictionary<URL, Object>, Iterable<URL> {
+        private ResourceCacheDictionary() {
+        }
+
         @Override
         public Object get(URL key) {
             try {
@@ -1468,45 +1438,18 @@ public abstract class ApplicationContext {
         }
     }
 
-    private DisplayHost displayHost;
-    private Display display;
-
-    private Application application = null;
-
     protected static URL origin = null;
+    protected static ArrayList<Display> displays = new ArrayList<Display>();
+    protected static ArrayList<Application> applications = new ArrayList<Application>();
 
     private static HashMap<URI, Object> resourceCache = new HashMap<URI, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
     private static Timer timer = null;
-    private static ArrayList<Display> displays = new ArrayList<Display>();
-    private static ArrayList<Application> applications = new ArrayList<Application>();
 
     private static Version jvmVersion = null;
     static {
         jvmVersion = Version.decode(System.getProperty("java.vm.version"));
-    }
-
-    protected ApplicationContext() {
-        // Create the display host and display
-        displayHost = new DisplayHost();
-        display = new Display(displayHost);
-    }
-
-    protected Application getApplication() {
-        return application;
-    }
-
-    protected void setApplication(Application application) {
-        this.application = application;
-    }
-
-    protected DisplayHost getDisplayHost() {
-        return displayHost;
-    }
-
-    protected Display getDisplay() {
-        return display;
     }
 
     /**
@@ -1664,26 +1607,10 @@ public abstract class ApplicationContext {
         timer = null;
     }
 
-    protected static void addDisplay(Display display) {
-        displays.add(display);
-    }
-
-    protected static void removeDisplay(Display display) {
-        displays.remove(display);
-    }
-
     protected static void invalidateDisplays() {
         for (Display display : displays) {
             display.invalidate();
         }
-    }
-
-    protected static void addApplication(Application application) {
-        applications.add(application);
-    }
-
-    protected static void removeApplication(Application application) {
-        applications.remove(application);
     }
 
     private static DropAction getUserDropAction(InputEvent event) {
@@ -1796,5 +1723,21 @@ public abstract class ApplicationContext {
         }
 
         return cursor;
+    }
+
+    private static void handleUncaughtException(Exception exception) {
+        int n = 0;
+        for (Application application : applications) {
+            if (application instanceof Application.UncaughtExceptionHandler) {
+                Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                    (Application.UncaughtExceptionHandler)application;
+                uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                n++;
+            }
+        }
+
+        if (n == 0) {
+            exception.printStackTrace();
+        }
     }
 }

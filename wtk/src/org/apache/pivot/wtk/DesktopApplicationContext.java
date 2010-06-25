@@ -43,10 +43,12 @@ import org.apache.pivot.wtk.media.Picture;
  * window.
  */
 public final class DesktopApplicationContext extends ApplicationContext {
-    private static class HostFrame extends java.awt.Frame {
+    public static class HostFrame extends java.awt.Frame {
         private static final long serialVersionUID = 5340356674429280196L;
 
-        private HostFrame() {
+        // TODO Should this be public? What happens if we create more than one? Give it an
+        // application class?
+        public HostFrame() {
             enableEvents(AWTEvent.WINDOW_EVENT_MASK
                 | AWTEvent.WINDOW_STATE_EVENT_MASK);
 
@@ -69,36 +71,33 @@ public final class DesktopApplicationContext extends ApplicationContext {
             if (this == windowedHostFrame) {
                 switch(event.getID()) {
                     case WindowEvent.WINDOW_OPENED: {
-                        addDisplay(applicationContext.getDisplay());
+                        displays.add(displayHost.getDisplay());
                         createTimer();
 
                         // Load the application
-                        Application application = null;
                         try {
                             Class<?> applicationClass = Class.forName(applicationClassName);
                             application = (Application)applicationClass.newInstance();
-                            applicationContext.setApplication(application);
                         } catch(Exception exception) {
                             Alert.alert(MessageType.ERROR, exception.getMessage(),
-                                applicationContext.getDisplay());
+                                displayHost.getDisplay());
                             exception.printStackTrace();
                         }
 
                         // Set focus to the display host
-                        DisplayHost displayHost = applicationContext.getDisplayHost();
                         displayHost.requestFocus();
 
                         // Start the application
                         if (application != null) {
                             try {
-                                application.startup(applicationContext.getDisplay(),
+                                application.startup(displayHost.getDisplay(),
                                     new ImmutableMap<String, String>(properties));
                             } catch(Exception exception) {
                                 displayException(exception);
                             }
 
                             // Add the application to the application list
-                            addApplication(application);
+                            applications.add(application);
 
                             // Hook into OS X application menu
                             String osName = System.getProperty("os.name");
@@ -165,7 +164,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     }
 
                     case WindowEvent.WINDOW_CLOSED: {
-                        removeDisplay(applicationContext.getDisplay());
+                        displays.remove(displayHost.getDisplay());
                         destroyTimer();
                         System.exit(0);
                         break;
@@ -181,12 +180,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             case APPLICATION_MODAL:
                             case DOCUMENT_MODAL:
                             case TOOLKIT_MODAL:
-                                applicationContext.getDisplay().setEnabled(false);
+                                displayHost.getDisplay().setEnabled(false);
 
                                 dialog.addWindowListener(new WindowAdapter() {
                                     @Override
                                     public void windowClosed(WindowEvent event) {
-                                        applicationContext.getDisplay().setEnabled(true);
+                                        displayHost.getDisplay().setEnabled(true);
                                         event.getWindow().removeWindowListener(this);
                                     }
                                 });
@@ -206,8 +205,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
             super.processWindowStateEvent(event);
 
             if (this == windowedHostFrame) {
-                Application application = applicationContext.getApplication();
-
                 switch(event.getID()) {
                     case WindowEvent.WINDOW_ICONIFIED: {
                         try {
@@ -233,14 +230,16 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
-    private static DesktopApplicationContext applicationContext = null;
     private static String applicationClassName = null;
     private static HashMap<String, String> properties = null;
 
-    private static Window rootOwner = null;
+    private static Application application = null;
+
+    private static DisplayHost displayHost = null;
     private static HostFrame windowedHostFrame = null;
     private static HostFrame fullScreenHostFrame = null;
 
+    private static Window rootOwner = null;
     private static Runnable updateFrameTitleBarCallback = null;
 
     private static final WindowListener TOP_WINDOW_LISTENER = new WindowListener.Adapter() {
@@ -268,13 +267,16 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     private static final String FULL_SCREEN_ARGUMENT = "fullScreen";
 
+    public static boolean isActive() {
+        return (application != null);
+    }
+
     /**
      * Terminates the application context.
      */
     public static boolean exit() {
         boolean cancelShutdown = false;
 
-        Application application = applicationContext.getApplication();
         if (application != null) {
             try {
                 cancelShutdown = application.shutdown(true);
@@ -284,7 +286,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             if (!cancelShutdown) {
                 // Remove the application from the application list
-                removeApplication(application);
+                applications.remove(application);
             }
         }
 
@@ -324,10 +326,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * @param args
      */
     public static void main(String[] args) {
-        if (applicationContext != null) {
-            throw new IllegalStateException();
-        }
-
         // Get the application class name
         if (args.length == 0) {
             System.err.println("Application class name is required.");
@@ -440,9 +438,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
         }
 
-        // Create the application context
-        applicationContext = new DesktopApplicationContext();
-        DisplayHost displayHost = applicationContext.getDisplayHost();
+        // Create the display host
+        displayHost = new DisplayHost();
 
         // Create the windowed host frame
         windowedHostFrame = new HostFrame();
@@ -465,7 +462,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             windowedHostFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         }
 
-        applicationContext.getDisplay().getContainerListeners().add(new ContainerListener.Adapter() {
+        displayHost.getDisplay().getContainerListeners().add(new ContainerListener.Adapter() {
             @Override
             public void componentInserted(Container container, int index) {
                 if (index == container.getLength() - 1) {
@@ -577,7 +574,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             body.getStyles().put("wrapText", true);
         }
 
-        Alert.alert(MessageType.ERROR, message, body, applicationContext.getDisplay());
+        Alert.alert(MessageType.ERROR, message, body, displayHost.getDisplay());
     }
 
     /**
@@ -585,7 +582,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * the {@link Application.AboutHandler} interface.
      */
     public static void handleAbout() {
-        Application application = applicationContext.getApplication();
         Application.AboutHandler aboutHandler = (Application.AboutHandler)application;
         aboutHandler.aboutRequested();
     }
@@ -604,8 +600,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
      */
     public static void setFullScreen(boolean fullScreen) {
         if (fullScreen != isFullScreen()) {
-            DisplayHost displayHost = applicationContext.getDisplayHost();
-
             GraphicsDevice graphicsDevice =
                 windowedHostFrame.getGraphicsConfiguration().getDevice();
 
@@ -642,10 +636,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
     public static void sizeToFit(Window window) {
         if (window == null) {
             throw new IllegalArgumentException();
-        }
-
-        if (applicationContext == null) {
-            throw new IllegalStateException("Desktop application context is not active.");
         }
 
         if (isFullScreen()) {

@@ -131,22 +131,19 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     }
                 }
 
-                // Create the application context
-                applicationContext = new BrowserApplicationContext();
-
-                // Add the display host to the applet
-                DisplayHost displayHost = applicationContext.getDisplayHost();
+                // Create the display host
+                displayHost = new DisplayHost();
                 setLayout(new java.awt.BorderLayout());
                 add(displayHost);
+
+                // Add the display to the display list
+                displays.add(displayHost.getDisplay());
 
                 // Disable focus traversal keys
                 setFocusTraversalKeysEnabled(false);
 
                 // Clear the background
                 setBackground(null);
-
-                // Add the display to the display list
-                addDisplay(applicationContext.getDisplay());
 
                 // Start the timer and add this applet to the host applet list
                 if (hostApplets.getLength() == 0) {
@@ -161,19 +158,17 @@ public final class BrowserApplicationContext extends ApplicationContext {
             @Override
             public void run() {
                 // Load the application
-                Application application = null;
                 String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
                 if (applicationClassName == null) {
                     Alert.alert(MessageType.ERROR, "Application class name is required.",
-                        applicationContext.getDisplay());
+                        displayHost.getDisplay());
                 } else {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
                         application = (Application)applicationClass.newInstance();
-                        applicationContext.setApplication(application);
                     } catch (Throwable throwable) {
                         Alert.alert(MessageType.ERROR, throwable.getMessage(),
-                            applicationContext.getDisplay());
+                            displayHost.getDisplay());
                         throwable.printStackTrace();
                     }
                 }
@@ -181,14 +176,14 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Start the application
                 if (application != null) {
                     try {
-                        application.startup(applicationContext.getDisplay(),
+                        application.startup(displayHost.getDisplay(),
                             new ImmutableMap<String, String>(startupProperties));
                     } catch (Exception exception) {
                         displayException(exception);
                     }
 
                     // Add the application to the application list
-                    addApplication(application);
+                    applications.add(application);
                 }
             }
         }
@@ -196,7 +191,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
         private class StopCallback implements Runnable {
             @Override
             public void run() {
-                Application application = applicationContext.getApplication();
                 if (application != null) {
                     try {
                         application.shutdown(false);
@@ -205,7 +199,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     }
 
                     // Remove the application from the application list
-                    removeApplication(application);
+                    applications.remove(application);
+                    application = null;
                 }
             }
         }
@@ -214,7 +209,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
             @Override
             public void run() {
                 // Remove the display from the display list
-                removeDisplay(applicationContext.getDisplay());
+                displays.remove(displayHost.getDisplay());
 
                 // Remove this applet from the host applets list and stop the timer
                 hostApplets.remove(HostApplet.this);
@@ -225,7 +220,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
             }
         }
 
-        private transient BrowserApplicationContext applicationContext = null;
+        private DisplayHost displayHost = null;
+        private Application application = null;
         private HashMap<String, String> startupProperties = null;
 
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "application_class_name";
@@ -233,7 +229,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
         public static final String SYSTEM_PROPERTIES_PARAMETER = "system_properties";
 
         public Application getApplication() {
-            return applicationContext.getApplication();
+            return application;
         }
 
         @Override
@@ -298,11 +294,15 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 body.getStyles().put("wrapText", true);
             }
 
-            Alert.alert(MessageType.ERROR, message, body, applicationContext.getDisplay());
+            Alert.alert(MessageType.ERROR, message, body, displayHost.getDisplay());
         }
     }
 
     private static ArrayList<HostApplet> hostApplets = new ArrayList<HostApplet>();
+
+    public static boolean isActive() {
+        return (hostApplets.getLength() > 0);
+    }
 
     /**
      * Retrieves a named application.
