@@ -640,6 +640,10 @@ public class Window extends Container {
             }
 
             // Close this window only if all owned windows are closing or closed
+            // (we allow the owner to close even if an owned window is only reports
+            // that it is closing, under the assumption that it will ultimately
+            // close - not doing so would prevent close transitions from running
+            // in parallel, forcing them to run in series)
             if (cancel) {
                 closing = false;
             } else {

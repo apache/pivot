@@ -413,12 +413,19 @@ public interface Sequence<T> {
                 throw new IllegalArgumentException("path is null.");
             }
 
-            int i = 0, n = path.getLength() - 1;
-            while (i < n) {
-                sequence = (Sequence<T>)sequence.get(path.get(i++));
+            T item;
+            if (path.getLength() == 0) {
+                item = null;
+            } else {
+                int i = 0, n = path.getLength() - 1;
+                while (i < n) {
+                    sequence = (Sequence<T>)sequence.get(path.get(i++));
+                }
+
+                item = sequence.get(path.get(i));
             }
 
-            return sequence.get(path.get(i));
+            return item;
         }
 
         /**

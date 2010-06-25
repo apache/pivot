@@ -237,6 +237,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static String applicationClassName = null;
     private static HashMap<String, String> properties = null;
 
+    private static Window rootOwner = null;
     private static HostFrame windowedHostFrame = null;
     private static HostFrame fullScreenHostFrame = null;
 
@@ -245,12 +246,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static final WindowListener TOP_WINDOW_LISTENER = new WindowListener.Adapter() {
         @Override
         public void titleChanged(Window window, String previousTitle) {
-            updateFrameTitleBar(window);
+            updateFrameTitleBar(window.getDisplay());
         }
 
         @Override
         public void iconChanged(Window window, Image previousIcon) {
-            updateFrameTitleBar(window);
+            updateFrameTitleBar(window.getDisplay());
         }
     };
 
@@ -468,17 +469,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
             @Override
             public void componentInserted(Container container, int index) {
                 if (index == container.getLength() - 1) {
-                    topWindowChanged((Display)container,
-                        (index > 0) ? (Window)container.get(index - 1) : null);
+                    updateFrameTitleBar((Display)container);
                 }
             }
 
             @Override
             public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
-                int n = removed.getLength();
-
-                if (index + n == container.getLength()) {
-                    topWindowChanged((Display)container, (Window)removed.get(n - 1));
+                if (index == container.getLength()) {
+                    updateFrameTitleBar((Display)container);
                 }
             }
 
@@ -486,50 +484,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
             public void componentMoved(Container container, int from, int to) {
                 int n = container.getLength();
 
-                if (from == n - 1) {
-                    // The top-most window was moved elsewhere
-                    topWindowChanged((Display)container, (Window)container.get(from));
-                } else if (to == n - 1) {
-                    // A new window was moved to top
-                    topWindowChanged((Display)container,
-                        (to > 0) ? (Window)container.get(to - 1) : null);
-                }
-            }
-
-            private void topWindowChanged(Display display, final Window previousTopWindow) {
-                if (previousTopWindow != null) {
-                    Window previousRootOwner = previousTopWindow.getRootOwner();
-                    previousRootOwner.getWindowListeners().remove(TOP_WINDOW_LISTENER);
-                }
-
-                int n = display.getLength();
-                if (n > 0) {
-                    Window topWindow = (Window)display.get(n - 1);
-                    Window rootOwner = topWindow.getRootOwner();
-                    rootOwner.getWindowListeners().add(TOP_WINDOW_LISTENER);
-                }
-
-                if (updateFrameTitleBarCallback == null) {
-                    updateFrameTitleBarCallback = new Runnable() {
-                        @Override
-                        public void run() {
-                            Display display = applicationContext.getDisplay();
-
-                            int n = display.getLength();
-                            if (n == 0) {
-                                windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
-                                windowedHostFrame.setIconImage(null);
-                            } else {
-                                Window topWindow = (Window)display.get(n - 1);
-                                Window rootOwner = topWindow.getRootOwner();
-                                updateFrameTitleBar(rootOwner);
-                            }
-
-                            updateFrameTitleBarCallback = null;
-                        }
-                    };
-
-                    queueCallback(updateFrameTitleBarCallback);
+                if (from == n - 1
+                    || to == n - 1) {
+                    updateFrameTitleBar((Display)container);
                 }
             }
         });
@@ -558,13 +515,52 @@ public final class DesktopApplicationContext extends ApplicationContext {
         setFullScreen(fullScreen);
     }
 
-    private static void updateFrameTitleBar(Window rootOwner) {
-        windowedHostFrame.setTitle(rootOwner.getTitle());
+    private static void updateFrameTitleBar(Display display) {
+        int n = display.getLength();
 
-        Image icon = rootOwner.getIcon();
-        if (icon instanceof Picture) {
-            Picture rootPicture = (Picture)icon;
-            windowedHostFrame.setIconImage(rootPicture.getBufferedImage());
+        Window rootOwner;
+        if (n == 0) {
+            rootOwner = null;
+        } else {
+            Window topWindow = (Window)display.get(display.getLength() - 1);
+            rootOwner = topWindow.getRootOwner();
+        }
+
+        Window previousRootOwner = DesktopApplicationContext.rootOwner;
+        if (rootOwner != previousRootOwner) {
+            if (previousRootOwner != null) {
+                previousRootOwner.getWindowListeners().remove(TOP_WINDOW_LISTENER);
+            }
+
+            if (rootOwner != null) {
+                rootOwner.getWindowListeners().add(TOP_WINDOW_LISTENER);
+            }
+
+            DesktopApplicationContext.rootOwner = rootOwner;
+        }
+
+        if (updateFrameTitleBarCallback == null) {
+            updateFrameTitleBarCallback = new Runnable() {
+                @Override
+                public void run() {
+                    if (DesktopApplicationContext.rootOwner == null) {
+                        windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
+                        windowedHostFrame.setIconImage(null);
+                    } else {
+                        windowedHostFrame.setTitle(DesktopApplicationContext.rootOwner.getTitle());
+
+                        Image icon = DesktopApplicationContext.rootOwner.getIcon();
+                        if (icon instanceof Picture) {
+                            Picture rootPicture = (Picture)icon;
+                            windowedHostFrame.setIconImage(rootPicture.getBufferedImage());
+                        }
+                    }
+
+                    updateFrameTitleBarCallback = null;
+                }
+            };
+
+            queueCallback(updateFrameTitleBarCallback);
         }
     }
 
