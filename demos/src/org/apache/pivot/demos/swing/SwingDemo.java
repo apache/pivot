@@ -27,6 +27,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
@@ -36,20 +37,32 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Window;
 
-public class SwingDemo extends JFrame {
+public class SwingDemo extends ApplicationContext {
     private static final long serialVersionUID = 0;
 
-    private JDesktopPane desktop = new JDesktopPane();
+    private static JDesktopPane desktop = new JDesktopPane();
 
-    public SwingDemo() {
-        super("Pivot/Swing Demo");
+    public static void main(String[] args) {
+        final JFrame jFrame = new JFrame("Pivot/Swing Demo");
 
-        setContentPane(desktop);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1024, 768);
+        jFrame.setContentPane(desktop);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setSize(1024, 768);
+        jFrame.setVisible(true);
+
+        // Start the callback timer
+        createTimer();
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                createSwingFrame();
+                createPivotFrame();
+            }
+        });
     }
 
-    private void createSwingFrame() {
+    private static void createSwingFrame() {
         // Create the internal frame that will contain the Swing components
         JInternalFrame internalFrame = new JInternalFrame("Swing Components");
         desktop.add(internalFrame);
@@ -81,6 +94,11 @@ public class SwingDemo extends JFrame {
         JRadioButton jRadioButton3 = new JRadioButton("JRadioButton 3", true);
         buttonGroup.add(jRadioButton3);
         box.add(jRadioButton3);
+        box.add(Box.createVerticalStrut(8));
+
+        JProgressBar jProgressBar = new JProgressBar();
+        jProgressBar.setIndeterminate(true);
+        box.add(jProgressBar);
 
         internalFrame.add(box);
 
@@ -90,18 +108,23 @@ public class SwingDemo extends JFrame {
         internalFrame.setVisible(true);
     }
 
-    private void createPivotFrame() {
+    private static void createPivotFrame() {
         // Create the internal frame that will contain the Pivot components
         JInternalFrame internalFrame = new JInternalFrame("Pivot Components");
         desktop.add(internalFrame);
 
-        // Create the display host and load the Pivot window
+        // Create the display host
         ApplicationContext.DisplayHost displayHost = new ApplicationContext.DisplayHost();
         internalFrame.add(displayHost);
+
+        // Add the display to the display list
+        displays.add(displayHost.getDisplay());
+
+        // Load the Pivot window
         BeanSerializer beanSerializer = new BeanSerializer();
         Window window;
         try {
-            window = (Window)beanSerializer.readObject(this, "pivot_window.bxml");
+            window = (Window)beanSerializer.readObject(SwingDemo.class.getResource("pivot_window.bxml"));
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {
@@ -112,7 +135,7 @@ public class SwingDemo extends JFrame {
         window.open(displayHost.getDisplay());
 
         // Open and select the internal frame
-        internalFrame.setLocation(100, 100);
+        internalFrame.setLocation(240, 100);
         internalFrame.setSize(640, 480);
         internalFrame.setVisible(true);
 
@@ -121,18 +144,5 @@ public class SwingDemo extends JFrame {
         } catch (PropertyVetoException exception) {
             throw new RuntimeException(exception);
         }
-    }
-
-    public static void main(String[] args) {
-        final SwingDemo swingDemo = new SwingDemo();
-        swingDemo.setVisible(true);
-
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                swingDemo.createSwingFrame();
-                swingDemo.createPivotFrame();
-            }
-        });
     }
 }

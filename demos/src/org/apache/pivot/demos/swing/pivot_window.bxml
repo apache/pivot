@@ -34,5 +34,7 @@ limitations under the License.
                 <RadioButton buttonData="RadioButton 3" buttonGroup="$buttonGroup"/>
             </BoxPane>
         </Border>
+
+        <ActivityIndicator preferredWidth="32" preferredHeight="32" active="true"/>
     </BoxPane>
 </Window>
