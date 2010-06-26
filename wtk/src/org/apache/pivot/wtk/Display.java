@@ -36,6 +36,20 @@ public final class Display extends Container {
         return displayHost;
     }
 
+    public java.awt.Window getHostWindow() {
+        java.awt.Container parent = displayHost.getParent();
+        while (parent != null
+            && !(parent instanceof java.awt.Window)) {
+            parent = parent.getParent();
+        }
+
+        if (parent == null) {
+            throw new IllegalArgumentException("Window does not have a native host.");
+        }
+
+        return (java.awt.Window)parent;
+    }
+
     @Override
     protected void setSkin(Skin skin) {
         throw new UnsupportedOperationException("Can't replace Display skin.");

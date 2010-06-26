@@ -122,6 +122,15 @@ public class SheetTest implements Application {
             @Override
             public void buttonPressed(Button button) {
                 prompt.open(frame);
+
+                Display display = DesktopApplicationContext.createDisplay(640, 480, 100, 100, true,
+                    true, false, button.getDisplay().getHostWindow());
+
+                Window window = new Window();
+                window.setTitle("New Secondary Window");
+                window.setMaximized(true);
+                window.setContent(new Label("I am a secondary window!"));
+                window.open(display);
             }
         });
 
@@ -132,7 +141,7 @@ public class SheetTest implements Application {
             }
         });
 
-        DesktopApplicationContext.sizeToFit(frame);
+        DesktopApplicationContext.sizeHostToFit(frame);
     }
 
     @Override

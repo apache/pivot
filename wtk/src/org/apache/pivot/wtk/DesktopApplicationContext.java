@@ -21,7 +21,6 @@ import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.lang.reflect.InvocationHandler;
@@ -69,7 +68,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             if (this == windowedHostFrame) {
                 switch(event.getID()) {
                     case WindowEvent.WINDOW_OPENED: {
-                        displays.add(displayHost.getDisplay());
+                        displays.add(primaryDisplayHost.getDisplay());
                         createTimer();
 
                         // Load the application
@@ -78,17 +77,17 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             application = (Application)applicationClass.newInstance();
                         } catch(Exception exception) {
                             Alert.alert(MessageType.ERROR, exception.getMessage(),
-                                displayHost.getDisplay());
+                                primaryDisplayHost.getDisplay());
                             exception.printStackTrace();
                         }
 
                         // Set focus to the display host
-                        displayHost.requestFocus();
+                        primaryDisplayHost.requestFocus();
 
                         // Start the application
                         if (application != null) {
                             try {
-                                application.startup(displayHost.getDisplay(),
+                                application.startup(primaryDisplayHost.getDisplay(),
                                     new ImmutableMap<String, String>(properties));
                             } catch(Exception exception) {
                                 displayException(exception);
@@ -124,7 +123,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                                             String methodName = method.getName();
                                             if (methodName.equals("handleAbout"))  {
-                                                handleAbout();
+                                                Application.AboutHandler aboutHandler = (Application.AboutHandler)application;
+                                                aboutHandler.aboutRequested();
                                             } else if (methodName.equals("handleQuit")) {
                                                 handled = !exit();
                                             }
@@ -162,36 +162,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     }
 
                     case WindowEvent.WINDOW_CLOSED: {
-                        displays.remove(displayHost.getDisplay());
+                        displays.remove(primaryDisplayHost.getDisplay());
                         destroyTimer();
                         System.exit(0);
-                        break;
-                    }
-
-                    case WindowEvent.WINDOW_DEACTIVATED: {
-                        java.awt.Window oppositeWindow = event.getOppositeWindow();
-
-                        if (oppositeWindow instanceof java.awt.Dialog) {
-                            java.awt.Dialog dialog = (java.awt.Dialog)oppositeWindow;
-
-                            switch (dialog.getModalityType()) {
-                            case APPLICATION_MODAL:
-                            case DOCUMENT_MODAL:
-                            case TOOLKIT_MODAL:
-                                displayHost.getDisplay().setEnabled(false);
-
-                                dialog.addWindowListener(new WindowAdapter() {
-                                    @Override
-                                    public void windowClosed(WindowEvent event) {
-                                        displayHost.getDisplay().setEnabled(true);
-                                        event.getWindow().removeWindowListener(this);
-                                    }
-                                });
-
-                                break;
-                            }
-                        }
-
                         break;
                     }
                 }
@@ -228,12 +201,66 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
+    private static class HostDialog extends java.awt.Dialog {
+        private static final long serialVersionUID = 5340356674429280196L;
+
+        private DisplayHost displayHost = new DisplayHost();
+
+        public HostDialog(java.awt.Window owner, boolean modal) {
+            super(owner, modal
+                ? java.awt.Dialog.ModalityType.APPLICATION_MODAL : java.awt.Dialog.ModalityType.MODELESS);
+
+            enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+
+            // Disable focus traversal keys
+            setFocusTraversalKeysEnabled(false);
+
+            // Clear the background
+            setBackground(null);
+
+            // Add the display host
+            add(displayHost);
+        }
+
+        @Override
+        public void update(Graphics graphics) {
+            paint(graphics);
+        }
+
+        public Display getDisplay() {
+            return displayHost.getDisplay();
+        }
+
+        @Override
+        public void processWindowEvent(WindowEvent event) {
+            super.processWindowEvent(event);
+
+            switch(event.getID()) {
+                case WindowEvent.WINDOW_OPENED: {
+                    displays.add(displayHost.getDisplay());
+                    displayHost.requestFocus();
+                    break;
+                }
+
+                case WindowEvent.WINDOW_CLOSING: {
+                    dispose();
+                    break;
+                }
+
+                case WindowEvent.WINDOW_CLOSED: {
+                    displays.remove(displayHost.getDisplay());
+                    break;
+                }
+            }
+        }
+    }
+
     private static String applicationClassName = null;
     private static HashMap<String, String> properties = null;
 
     private static Application application = null;
 
-    private static DisplayHost displayHost = null;
+    private static DisplayHost primaryDisplayHost = null;
     private static HostFrame windowedHostFrame = null;
     private static HostFrame fullScreenHostFrame = null;
 
@@ -437,11 +464,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         // Create the display host
-        displayHost = new DisplayHost();
+        primaryDisplayHost = new DisplayHost();
 
         // Create the windowed host frame
         windowedHostFrame = new HostFrame();
-        windowedHostFrame.add(displayHost);
+        windowedHostFrame.add(primaryDisplayHost);
         windowedHostFrame.setUndecorated(undecorated);
 
         windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
@@ -460,7 +487,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             windowedHostFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         }
 
-        displayHost.getDisplay().getContainerListeners().add(new ContainerListener.Adapter() {
+        primaryDisplayHost.getDisplay().getContainerListeners().add(new ContainerListener.Adapter() {
             @Override
             public void componentInserted(Container container, int index) {
                 if (index == container.getLength() - 1) {
@@ -488,7 +515,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Add a key listener to the display host to toggle between full-screen
         // and windowed mode
-        displayHost.addKeyListener(new KeyAdapter() {
+        primaryDisplayHost.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_F
@@ -572,16 +599,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             body.getStyles().put("wrapText", true);
         }
 
-        Alert.alert(MessageType.ERROR, message, body, displayHost.getDisplay());
-    }
-
-    /**
-     * Invokes the application's about handler. The application must implement
-     * the {@link Application.AboutHandler} interface.
-     */
-    public static void handleAbout() {
-        Application.AboutHandler aboutHandler = (Application.AboutHandler)application;
-        aboutHandler.aboutRequested();
+        Alert.alert(MessageType.ERROR, message, body, primaryDisplayHost.getDisplay());
     }
 
     /**
@@ -603,10 +621,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             if (fullScreen) {
                 // Go to full screen mode
-                windowedHostFrame.remove(displayHost);
+                windowedHostFrame.remove(primaryDisplayHost);
                 windowedHostFrame.setVisible(false);
 
-                fullScreenHostFrame.add(displayHost);
+                fullScreenHostFrame.add(primaryDisplayHost);
                 fullScreenHostFrame.setVisible(true);
 
                 graphicsDevice.setFullScreenWindow(fullScreenHostFrame);
@@ -620,30 +638,74 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     // preceding call can throw.
                 }
 
-                fullScreenHostFrame.remove(displayHost);
+                fullScreenHostFrame.remove(primaryDisplayHost);
                 fullScreenHostFrame.setVisible(false);
 
-                windowedHostFrame.add(displayHost);
+                windowedHostFrame.add(primaryDisplayHost);
                 windowedHostFrame.setVisible(true);
             }
 
-            displayHost.requestFocus();
+            primaryDisplayHost.requestFocus();
         }
     }
 
-    public static void sizeToFit(Window window) {
+    /**
+     * Sizes the window's native host frame to match its preferred size.
+     *
+     * @param window
+     */
+    public static void sizeHostToFit(Window window) {
         if (window == null) {
             throw new IllegalArgumentException();
         }
 
         if (isFullScreen()) {
-            setFullScreen(false);
+            throw new IllegalStateException();
         }
 
         Dimensions size = window.getPreferredSize();
-        java.awt.Insets frameInsets = windowedHostFrame.getInsets();
-        windowedHostFrame.setSize(size.width + (frameInsets.left + frameInsets.right),
+        java.awt.Window hostWindow = window.getDisplay().getHostWindow();
+        java.awt.Insets frameInsets = hostWindow.getInsets();
+        hostWindow.setSize(size.width + (frameInsets.left + frameInsets.right),
             size.height + (frameInsets.top + frameInsets.bottom));
+    }
+
+    /**
+     * Creates a new secondary display.
+     *
+     * @param width
+     * @param height
+     * @param x
+     * @param y
+     * @param modal
+     * @param owner
+     */
+    public static Display createDisplay(int width, int height, int x, int y, boolean modal,
+        boolean resizable, boolean undecorated, java.awt.Window owner) {
+        if (owner == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (isFullScreen()) {
+            throw new IllegalStateException();
+        }
+
+        final HostDialog hostDialog = new HostDialog(owner, modal);
+        hostDialog.setLocation(x, y);
+        hostDialog.setSize(width, height);
+        hostDialog.setResizable(resizable);
+        hostDialog.setUndecorated(undecorated);
+
+        // Open the window in a callback; otherwise, if it is modal, it will block the
+        // calling thread
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                hostDialog.setVisible(true);
+            }
+        });
+
+        return hostDialog.getDisplay();
     }
 
     /**
