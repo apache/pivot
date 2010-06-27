@@ -42,6 +42,25 @@ import org.apache.pivot.wtk.media.Picture;
  * window.
  */
 public final class DesktopApplicationContext extends ApplicationContext {
+    /**
+     * Display listener interface.
+     */
+    public interface DisplayListener {
+        /**
+         * Called when the host window for secondary display has been opened.
+         *
+         * @param display
+         */
+        public void hostWindowOpened(Display display);
+
+        /**
+         * Called when the host window for secondary display has been closed.
+         *
+         * @param display
+         */
+        public void hostWindowClosed(Display display);
+    }
+
     private static class HostFrame extends java.awt.Frame {
         private static final long serialVersionUID = 5340356674429280196L;
 
@@ -206,9 +225,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         private DisplayHost displayHost = new DisplayHost();
 
-        public HostDialog(java.awt.Window owner, boolean modal) {
+        private DisplayListener displayCloseListener;
+
+        public HostDialog(java.awt.Window owner, boolean modal, DisplayListener displayCloseListener) {
             super(owner, modal
                 ? java.awt.Dialog.ModalityType.APPLICATION_MODAL : java.awt.Dialog.ModalityType.MODELESS);
+
+            this.displayCloseListener = displayCloseListener;
 
             enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 
@@ -237,8 +260,15 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             switch(event.getID()) {
                 case WindowEvent.WINDOW_OPENED: {
-                    displays.add(displayHost.getDisplay());
+                    Display display = displayHost.getDisplay();
+                    displays.add(display);
+
+                    if (displayCloseListener != null) {
+                        displayCloseListener.hostWindowOpened(display);
+                    }
+
                     displayHost.requestFocus();
+
                     break;
                 }
 
@@ -248,7 +278,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 }
 
                 case WindowEvent.WINDOW_CLOSED: {
-                    displays.remove(displayHost.getDisplay());
+                    Display display = displayHost.getDisplay();
+                    displays.remove(display);
+
+                    if (displayCloseListener != null) {
+                        displayCloseListener.hostWindowClosed(display);
+                    }
+
                     break;
                 }
             }
@@ -681,7 +717,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * @param owner
      */
     public static Display createDisplay(int width, int height, int x, int y, boolean modal,
-        boolean resizable, boolean undecorated, java.awt.Window owner) {
+        boolean resizable, boolean undecorated, java.awt.Window owner,
+        DisplayListener displayCloseListener) {
         if (owner == null) {
             throw new IllegalArgumentException();
         }
@@ -690,7 +727,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             throw new IllegalStateException();
         }
 
-        final HostDialog hostDialog = new HostDialog(owner, modal);
+        final HostDialog hostDialog = new HostDialog(owner, modal, displayCloseListener);
         hostDialog.setLocation(x, y);
         hostDialog.setSize(width, height);
         hostDialog.setResizable(resizable);

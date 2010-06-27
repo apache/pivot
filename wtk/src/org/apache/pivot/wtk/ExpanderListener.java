@@ -19,7 +19,7 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.util.Vote;
 
 /**
- * Expander listener list.
+ * Expander listener interface..
  */
 public interface ExpanderListener {
     /**

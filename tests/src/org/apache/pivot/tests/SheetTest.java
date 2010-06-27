@@ -124,7 +124,7 @@ public class SheetTest implements Application {
                 prompt.open(frame);
 
                 Display display = DesktopApplicationContext.createDisplay(640, 480, 100, 100, true,
-                    true, false, button.getDisplay().getHostWindow());
+                    true, false, button.getDisplay().getHostWindow(), null);
 
                 Window window = new Window();
                 window.setTitle("New Secondary Window");

@@ -27,13 +27,7 @@ limitations under the License.
                     <buttonPressListeners>
                         <bxml:script>
                         function buttonPressed(button) {
-                            // Get the host window before closing the Pivot window; otherwise,
-                            // the host will no longer be accessible
-                            var hostWindow = button.getDisplay().getHostWindow();
-
-                            // Close the Pivot window and dispose the host
-                            secondaryDisplayWindow.close();
-                            hostWindow.dispose();
+                            button.getDisplay().getHostWindow().dispose();
                         }
                         </bxml:script>
                     </buttonPressListeners>
@@ -50,9 +44,16 @@ limitations under the License.
 
                 function buttonPressed(button) {
                     var display = DesktopApplicationContext.createDisplay(640, 480, 100, 100, true,
-                        true, false, button.getDisplay().getHostWindow());
+                        true, false, button.getDisplay().getHostWindow(),
+                        new DesktopApplicationContext.DisplayListener() {
+                            hostWindowOpened: function(display) {
+                                secondaryDisplayWindow.open(display);
+                            },
 
-                    secondaryDisplayWindow.open(display);
+                            hostWindowClosed: function(display) {
+                                secondaryDisplayWindow.close();
+                            }
+                        });
                 }
                 </bxml:script>
             </buttonPressListeners>
