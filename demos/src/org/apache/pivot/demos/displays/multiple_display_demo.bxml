@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Multiple Display Demo" maximized="true"
+<Window bxml:id="primaryDisplayWindow" title="Multiple Display Demo" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <bxml:define>
@@ -27,7 +27,16 @@ limitations under the License.
                     <buttonPressListeners>
                         <bxml:script>
                         function buttonPressed(button) {
-                            button.getDisplay().getHostWindow().dispose();
+                            button.display.hostWindow.dispose();
+                        }
+                        </bxml:script>
+                    </buttonPressListeners>
+                </PushButton>
+                <PushButton buttonData="Set Title">
+                    <buttonPressListeners>
+                        <bxml:script>
+                        function buttonPressed(button) {
+                            secondaryDisplayWindow.title = "New Secondary Window Title";
                         }
                         </bxml:script>
                     </buttonPressListeners>
@@ -36,7 +45,7 @@ limitations under the License.
         </Window>
     </bxml:define>
 
-    <BoxPane styles="{padding:8}">
+    <BoxPane orientation="vertical" styles="{padding:8}">
         <PushButton buttonData="Open Secondary Display">
             <buttonPressListeners>
                 <bxml:script>
@@ -54,6 +63,15 @@ limitations under the License.
                                 secondaryDisplayWindow.close();
                             }
                         });
+                }
+                </bxml:script>
+            </buttonPressListeners>
+        </PushButton>
+        <PushButton buttonData="Set Title">
+            <buttonPressListeners>
+                <bxml:script>
+                function buttonPressed(button) {
+                    primaryDisplayWindow.title = "New Primary Window Title";
                 }
                 </bxml:script>
             </buttonPressListeners>

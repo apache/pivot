@@ -61,7 +61,117 @@ public final class DesktopApplicationContext extends ApplicationContext {
         public void hostWindowClosed(Display display);
     }
 
-    private static class HostFrame extends java.awt.Frame {
+    // Custom display host that sets the title of the host frame to match the
+    // title of the root Pivot owner window
+    private static class DesktopDisplayHost extends DisplayHost {
+        private static final long serialVersionUID = 0;
+
+        private Window rootOwner = null;
+        private Runnable updateHostWindowTitleBarCallback = null;
+
+        private WindowListener rootOwnerListener = new WindowListener.Adapter() {
+            @Override
+            public void titleChanged(Window window, String previousTitle) {
+                updateFrameTitleBar();
+            }
+
+            @Override
+            public void iconChanged(Window window, Image previousIcon) {
+                updateFrameTitleBar();
+            }
+        };
+
+        public DesktopDisplayHost() {
+            Display display = getDisplay();
+            display.getContainerListeners().add(new ContainerListener.Adapter() {
+                @Override
+                public void componentInserted(Container container, int index) {
+                    if (index == container.getLength() - 1) {
+                        updateFrameTitleBar();
+                    }
+                }
+
+                @Override
+                public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+                    if (index == container.getLength()) {
+                        updateFrameTitleBar();
+                    }
+                }
+
+                @Override
+                public void componentMoved(Container container, int from, int to) {
+                    int n = container.getLength();
+
+                    if (from == n - 1
+                        || to == n - 1) {
+                        updateFrameTitleBar();
+                    }
+                }
+            });
+        }
+
+        private void updateFrameTitleBar() {
+            Display display = getDisplay();
+            int n = display.getLength();
+
+            Window rootOwner;
+            if (n == 0) {
+                rootOwner = null;
+            } else {
+                Window topWindow = (Window)display.get(display.getLength() - 1);
+                rootOwner = topWindow.getRootOwner();
+            }
+
+            Window previousRootOwner = this.rootOwner;
+            if (rootOwner != previousRootOwner) {
+                if (previousRootOwner != null) {
+                    previousRootOwner.getWindowListeners().remove(rootOwnerListener);
+                }
+
+                if (rootOwner != null) {
+                    rootOwner.getWindowListeners().add(rootOwnerListener);
+                }
+
+                this.rootOwner = rootOwner;
+            }
+
+            if (updateHostWindowTitleBarCallback == null) {
+                updateHostWindowTitleBarCallback = new Runnable() {
+                    @Override
+                    public void run() {
+                        java.awt.Window hostWindow = getDisplay().getHostWindow();
+
+                        if (DesktopDisplayHost.this.rootOwner == null) {
+                            ((TitledWindow)hostWindow).setTitle(DEFAULT_HOST_WINDOW_TITLE);
+                            hostWindow.setIconImage(null);
+                        } else {
+                            ((TitledWindow)hostWindow).setTitle(DesktopDisplayHost.this.rootOwner.getTitle());
+
+                            Image icon = DesktopDisplayHost.this.rootOwner.getIcon();
+                            if (icon instanceof Picture) {
+                                Picture rootPicture = (Picture)icon;
+                                hostWindow.setIconImage(rootPicture.getBufferedImage());
+                            }
+                        }
+
+                        updateHostWindowTitleBarCallback = null;
+                    }
+                };
+
+                queueCallback(updateHostWindowTitleBarCallback);
+            }
+        }
+    }
+
+    // The AWT Window class does not define a title property; this interface allows
+    // the HostFrame and HostDialog titles to be handled polymorphicaly
+    private interface TitledWindow {
+        public String getTitle();
+        public void setTitle(String title);
+    }
+
+    // Native host frame
+    private static class HostFrame extends java.awt.Frame implements TitledWindow {
         private static final long serialVersionUID = 5340356674429280196L;
 
         public HostFrame() {
@@ -81,15 +191,22 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         @Override
+        public String getTitle() {
+            return super.getTitle();
+        }
+
+        @Override
+        public void setTitle(String title) {
+            super.setTitle(title);
+        }
+
+        @Override
         public void processWindowEvent(WindowEvent event) {
             super.processWindowEvent(event);
 
             if (this == windowedHostFrame) {
                 switch(event.getID()) {
                     case WindowEvent.WINDOW_OPENED: {
-                        displays.add(primaryDisplayHost.getDisplay());
-                        createTimer();
-
                         // Load the application
                         try {
                             Class<?> applicationClass = Class.forName(applicationClassName);
@@ -181,8 +298,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     }
 
                     case WindowEvent.WINDOW_CLOSED: {
-                        displays.remove(primaryDisplayHost.getDisplay());
-                        destroyTimer();
                         System.exit(0);
                         break;
                     }
@@ -220,10 +335,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
-    private static class HostDialog extends java.awt.Dialog {
+    // Native host dialog for secondary displays
+    private static class HostDialog extends java.awt.Dialog implements TitledWindow {
         private static final long serialVersionUID = 5340356674429280196L;
 
-        private DisplayHost displayHost = new DisplayHost();
+        private DisplayHost displayHost = new DesktopDisplayHost();
 
         private DisplayListener displayCloseListener;
 
@@ -252,6 +368,16 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         public Display getDisplay() {
             return displayHost.getDisplay();
+        }
+
+        @Override
+        public String getTitle() {
+            return super.getTitle();
+        }
+
+        @Override
+        public void setTitle(String title) {
+            super.setTitle(title);
         }
 
         @Override
@@ -300,22 +426,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static HostFrame windowedHostFrame = null;
     private static HostFrame fullScreenHostFrame = null;
 
-    private static Window rootOwner = null;
-    private static Runnable updateFrameTitleBarCallback = null;
-
-    private static final WindowListener TOP_WINDOW_LISTENER = new WindowListener.Adapter() {
-        @Override
-        public void titleChanged(Window window, String previousTitle) {
-            updateFrameTitleBar(window.getDisplay());
-        }
-
-        @Override
-        public void iconChanged(Window window, Image previousIcon) {
-            updateFrameTitleBar(window.getDisplay());
-        }
-    };
-
-    private static final String DEFAULT_HOST_FRAME_TITLE = "Apache Pivot";
+    private static final String DEFAULT_HOST_WINDOW_TITLE = "Apache Pivot";
 
     private static final String X_ARGUMENT = "x";
     private static final String Y_ARGUMENT = "y";
@@ -499,15 +610,19 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
         }
 
+        // Start the timer
+        createTimer();
+
         // Create the display host
-        primaryDisplayHost = new DisplayHost();
+        primaryDisplayHost = new DesktopDisplayHost();
+        displays.add(primaryDisplayHost.getDisplay());
 
         // Create the windowed host frame
         windowedHostFrame = new HostFrame();
         windowedHostFrame.add(primaryDisplayHost);
         windowedHostFrame.setUndecorated(undecorated);
 
-        windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
+        windowedHostFrame.setTitle(DEFAULT_HOST_WINDOW_TITLE);
         windowedHostFrame.setSize(width, height);
         windowedHostFrame.setResizable(resizable);
 
@@ -522,32 +637,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
         if (maximized) {
             windowedHostFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         }
-
-        primaryDisplayHost.getDisplay().getContainerListeners().add(new ContainerListener.Adapter() {
-            @Override
-            public void componentInserted(Container container, int index) {
-                if (index == container.getLength() - 1) {
-                    updateFrameTitleBar((Display)container);
-                }
-            }
-
-            @Override
-            public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
-                if (index == container.getLength()) {
-                    updateFrameTitleBar((Display)container);
-                }
-            }
-
-            @Override
-            public void componentMoved(Container container, int from, int to) {
-                int n = container.getLength();
-
-                if (from == n - 1
-                    || to == n - 1) {
-                    updateFrameTitleBar((Display)container);
-                }
-            }
-        });
 
         // Add a key listener to the display host to toggle between full-screen
         // and windowed mode
@@ -571,55 +660,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Go to full-screen mode, if requested
         setFullScreen(fullScreen);
-    }
-
-    private static void updateFrameTitleBar(Display display) {
-        int n = display.getLength();
-
-        Window rootOwner;
-        if (n == 0) {
-            rootOwner = null;
-        } else {
-            Window topWindow = (Window)display.get(display.getLength() - 1);
-            rootOwner = topWindow.getRootOwner();
-        }
-
-        Window previousRootOwner = DesktopApplicationContext.rootOwner;
-        if (rootOwner != previousRootOwner) {
-            if (previousRootOwner != null) {
-                previousRootOwner.getWindowListeners().remove(TOP_WINDOW_LISTENER);
-            }
-
-            if (rootOwner != null) {
-                rootOwner.getWindowListeners().add(TOP_WINDOW_LISTENER);
-            }
-
-            DesktopApplicationContext.rootOwner = rootOwner;
-        }
-
-        if (updateFrameTitleBarCallback == null) {
-            updateFrameTitleBarCallback = new Runnable() {
-                @Override
-                public void run() {
-                    if (DesktopApplicationContext.rootOwner == null) {
-                        windowedHostFrame.setTitle(DEFAULT_HOST_FRAME_TITLE);
-                        windowedHostFrame.setIconImage(null);
-                    } else {
-                        windowedHostFrame.setTitle(DesktopApplicationContext.rootOwner.getTitle());
-
-                        Image icon = DesktopApplicationContext.rootOwner.getIcon();
-                        if (icon instanceof Picture) {
-                            Picture rootPicture = (Picture)icon;
-                            windowedHostFrame.setIconImage(rootPicture.getBufferedImage());
-                        }
-                    }
-
-                    updateFrameTitleBarCallback = null;
-                }
-            };
-
-            queueCallback(updateFrameTitleBarCallback);
-        }
     }
 
     private static void displayException(Exception exception) {
@@ -661,10 +701,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 windowedHostFrame.setVisible(false);
 
                 fullScreenHostFrame.add(primaryDisplayHost);
+                fullScreenHostFrame.setTitle(windowedHostFrame.getTitle());
                 fullScreenHostFrame.setVisible(true);
 
                 graphicsDevice.setFullScreenWindow(fullScreenHostFrame);
-
             } else {
                 // Go to windowed mode
                 try {
@@ -678,6 +718,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 fullScreenHostFrame.setVisible(false);
 
                 windowedHostFrame.add(primaryDisplayHost);
+                windowedHostFrame.setTitle(fullScreenHostFrame.getTitle());
                 windowedHostFrame.setVisible(true);
             }
 
