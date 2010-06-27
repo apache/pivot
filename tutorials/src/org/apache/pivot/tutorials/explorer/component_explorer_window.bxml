@@ -19,7 +19,7 @@ limitations under the License.
 <explorer:ComponentExplorerWindow title="%title" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:content="org.apache.pivot.wtk.content"
-    xmlns:tools="org.apache.pivot.tools.wtk"
+    xmlns:tools="org.apache.pivot.tutorials.explorer.tools"
     xmlns:explorer="org.apache.pivot.tutorials.explorer"
     xmlns="org.apache.pivot.wtk">
     <CardPane styles="{padding:3}">

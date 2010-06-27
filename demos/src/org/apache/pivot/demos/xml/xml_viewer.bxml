@@ -18,7 +18,7 @@ limitations under the License.
 
 <Window maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
-    xmlns:tools.xml="org.apache.pivot.tools.xml"
+    xmlns:tools.xml="org.apache.pivot.demos.xml"
     xmlns="org.apache.pivot.wtk">
     <bxml:script src="xml_viewer.js"/>
 

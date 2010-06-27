@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tools.wtk;
+package org.apache.pivot.tutorials.explorer.tools;
 
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Component;

@@ -14,17 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tools.wtk;
+package org.apache.pivot.tutorials.explorer.tools;
+
+import org.apache.pivot.wtk.Component;
 
 /**
- * Java bean property change listener.
+ * Component inspector listener interface.
  */
-public interface PropertyChangeListener {
+public interface ComponentInspectorListener {
     /**
-     * Called when a Java bean property has changed.
+     * Called when an component inspector's source component has changed.
      *
-     * @param bean
-     * @param propertyName
+     * @param componentInspector
+     * @param previousSource
      */
-    public void propertyChanged(Object bean, String propertyName);
+    public void sourceChanged(ComponentInspector componentInspector, Component previousSource);
 }

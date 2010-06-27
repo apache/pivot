@@ -18,7 +18,7 @@ limitations under the License.
 
 <SplitPane bxml:id="splitPane" orientation="horizontal" splitRatio="0.5"
     xmlns:bxml="http://pivot.apache.org/bxml"
-    xmlns:tools="org.apache.pivot.tools.wtk"
+    xmlns:tools="org.apache.pivot.tutorials.explorer.tools"
     xmlns="org.apache.pivot.wtk">
     <left>
         <ImageView asynchronous="true"

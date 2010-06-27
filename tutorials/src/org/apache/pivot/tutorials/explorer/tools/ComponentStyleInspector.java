@@ -14,19 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tools.wtk;
+package org.apache.pivot.tutorials.explorer.tools;
 
 import org.apache.pivot.wtk.Component;
 
 /**
- * Component inspector listener interface.
+ * Inspects a source component's style properties.
  */
-public interface ComponentInspectorListener {
-    /**
-     * Called when an component inspector's source component has changed.
-     *
-     * @param componentInspector
-     * @param previousSource
-     */
-    public void sourceChanged(ComponentInspector componentInspector, Component previousSource);
+public class ComponentStyleInspector extends ComponentInspector {
+    public ComponentStyleInspector() {
+        this(null);
+    }
+
+    public ComponentStyleInspector(Component source) {
+        setSource(source);
+        setSkin(new ComponentStyleInspectorSkin());
+    }
 }
