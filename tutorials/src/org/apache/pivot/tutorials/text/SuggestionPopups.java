@@ -23,7 +23,7 @@ import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputCharacterListener;
+import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Window;
 
 public class SuggestionPopups extends Window implements Bindable {
@@ -31,31 +31,6 @@ public class SuggestionPopups extends Window implements Bindable {
 
     private ArrayList<String> states;
     private SuggestionPopup suggestionPopup = new SuggestionPopup();
-
-    private TextInputCharacterListener textInputCharacterListener =
-        new TextInputCharacterListener() {
-        @Override
-        public void charactersInserted(TextInput textInput, int index, int count) {
-            String text = textInput.getText();
-            ArrayList<String> suggestions = new ArrayList<String>();
-
-            for (String state : states) {
-                if (state.toUpperCase().startsWith(text.toUpperCase())) {
-                    suggestions.add(state);
-                }
-            }
-
-            if (suggestions.getLength() > 0) {
-                suggestionPopup.setSuggestions(suggestions);
-                suggestionPopup.open(textInput);
-            }
-        }
-
-        @Override
-        public void charactersRemoved(TextInput textInput, int index, int count) {
-            suggestionPopup.close();
-        }
-    };
 
     public SuggestionPopups() {
         // Populate the lookup values, ensuring that they are sorted
@@ -118,7 +93,29 @@ public class SuggestionPopups extends Window implements Bindable {
     @Override
     public void initialize(Dictionary<String, Object> context, Resources resources) {
         stateTextInput = (TextInput)context.get("stateTextInput");
-        stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
+        stateTextInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
+            @Override
+            public void charactersInserted(TextInput textInput, int index, int count) {
+                String text = textInput.getText();
+                ArrayList<String> suggestions = new ArrayList<String>();
+
+                for (String state : states) {
+                    if (state.toUpperCase().startsWith(text.toUpperCase())) {
+                        suggestions.add(state);
+                    }
+                }
+
+                if (suggestions.getLength() > 0) {
+                    suggestionPopup.setSuggestions(suggestions);
+                    suggestionPopup.open(textInput);
+                }
+            }
+
+            @Override
+            public void charactersRemoved(TextInput textInput, int index, int count) {
+                suggestionPopup.close();
+            }
+        });
     }
 
     @Override

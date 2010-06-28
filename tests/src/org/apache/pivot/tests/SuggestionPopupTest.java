@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.SuggestionPopupCloseListener;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputCharacterListener;
+import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Window;
 
 public class SuggestionPopupTest implements Application {
@@ -44,7 +44,7 @@ public class SuggestionPopupTest implements Application {
         window = (Window)beanSerializer.readObject(this, "suggestion_popup_test.bxml");
         beanSerializer.bind(this);
 
-        textInput.getTextInputCharacterListeners().add(new TextInputCharacterListener() {
+        textInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
             @Override
             public void charactersInserted(TextInput textInput, int index, int count) {
                 ArrayList<String> suggestions = new ArrayList<String>("One", "Two", "Three", "Four", "Five");

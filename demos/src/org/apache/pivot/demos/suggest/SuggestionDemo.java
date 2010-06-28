@@ -37,7 +37,7 @@ import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.SuggestionPopupCloseListener;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputCharacterListener;
+import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Window;
 
 public class SuggestionDemo extends Window implements Bindable {
@@ -52,7 +52,7 @@ public class SuggestionDemo extends Window implements Bindable {
         textInput = (TextInput)context.get("textInput");
         activityIndicator = (ActivityIndicator)context.get("activityIndicator");
 
-        textInput.getTextInputCharacterListeners().add(new TextInputCharacterListener() {
+        textInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
             @Override
             public void charactersInserted(TextInput textInput, int index, int count) {
                 getSuggestions();

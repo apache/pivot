@@ -139,26 +139,23 @@ public class TextInput extends Component {
     private static class TextInputTextListenerList extends ListenerList<TextInputTextListener>
         implements TextInputTextListener {
         @Override
-        public void textChanged(TextInput textInput) {
-            for (TextInputTextListener listener : this) {
-                listener.textChanged(textInput);
-            }
-        }
-    }
-
-    private static class TextInputCharacterListenerList extends ListenerList<TextInputCharacterListener>
-        implements TextInputCharacterListener {
-        @Override
         public void charactersInserted(TextInput textInput, int index, int count) {
-            for (TextInputCharacterListener listener : this) {
+            for (TextInputTextListener listener : this) {
                 listener.charactersInserted(textInput, index, count);
             }
         }
 
         @Override
         public void charactersRemoved(TextInput textInput, int index, int count) {
-            for (TextInputCharacterListener listener : this) {
+            for (TextInputTextListener listener : this) {
                 listener.charactersRemoved(textInput, index, count);
+            }
+        }
+
+        @Override
+        public void textChanged(TextInput textInput, String previousText) {
+            for (TextInputTextListener listener : this) {
+                listener.textChanged(textInput, previousText);
             }
         }
     }
@@ -223,6 +220,7 @@ public class TextInput extends Component {
     private NodeListener textNodeListener = new NodeListener.Adapter() {
         @Override
         public void rangeInserted(Node node, int offset, int characterCount) {
+            // TODO If selected range changes, also fire selection change event?
             if (selectionStart + selectionLength > offset) {
                 if (selectionStart > offset) {
                     selectionStart += characterCount;
@@ -231,13 +229,14 @@ public class TextInput extends Component {
                 }
             }
 
-            textInputCharacterListeners.charactersInserted(TextInput.this, offset, characterCount);
-            textInputTextListeners.textChanged(TextInput.this);
+            textInputTextListeners.charactersInserted(TextInput.this, offset, characterCount);
+            textInputTextListeners.textChanged(TextInput.this, null);
             validateText();
         }
 
         @Override
         public void rangeRemoved(Node node, int offset, int characterCount) {
+            // TODO If selected range changes, also fire selection change event?
             if (selectionStart + selectionLength > offset) {
                 if (selectionStart > offset) {
                     selectionStart -= characterCount;
@@ -246,15 +245,14 @@ public class TextInput extends Component {
                 }
             }
 
-            textInputCharacterListeners.charactersRemoved(TextInput.this, offset, characterCount);
-            textInputTextListeners.textChanged(TextInput.this);
+            textInputTextListeners.charactersRemoved(TextInput.this, offset, characterCount);
+            textInputTextListeners.textChanged(TextInput.this, null);
             validateText();
         }
     };
 
     private TextInputListenerList textInputListeners = new TextInputListenerList();
     private TextInputTextListenerList textInputTextListeners = new TextInputTextListenerList();
-    private TextInputCharacterListenerList textInputCharacterListeners = new TextInputCharacterListenerList();
     private TextInputSelectionListenerList textInputSelectionListeners = new TextInputSelectionListenerList();
     private TextInputBindingListenerList textInputBindingListeners = new TextInputBindingListenerList();
 
@@ -312,7 +310,10 @@ public class TextInput extends Component {
             selectionLength = 0;
 
             textInputListeners.textNodeChanged(this, previousTextNode);
-            textInputTextListeners.textChanged(this);
+            textInputTextListeners.textChanged(this,
+                (previousTextNode == null) ? null : previousTextNode.getText());
+
+            // TODO If selected range changes, also fire selection change event
 
             validateText();
         }
@@ -365,10 +366,12 @@ public class TextInput extends Component {
         int length = textNode.getCharacterCount();
         textNode.insertText(text, selectionStart);
 
-        // Update the selection only if a listener did not modify the text
+        // TODO Update the selection only if a listener did not modify the text?
         if (length + text.length() == textNode.getCharacterCount()) {
             setSelection(selectionStart + text.length(), 0);
         }
+
+        // TODO Move the text node event logic here
     }
 
     /**
@@ -390,6 +393,8 @@ public class TextInput extends Component {
             // TODO Make this part of the undoable action (for all such
             // actions)
             textNode.removeRange(selectionStart, selectionLength);
+
+            // TODO Move the text node event logic here
         } else {
             int offset = selectionStart;
 
@@ -897,13 +902,6 @@ public class TextInput extends Component {
      */
     public ListenerList<TextInputTextListener> getTextInputTextListeners() {
         return textInputTextListeners;
-    }
-
-    /**
-     * Returns the text input character listener list.
-     */
-    public ListenerList<TextInputCharacterListener> getTextInputCharacterListeners() {
-        return textInputCharacterListeners;
     }
 
     /**

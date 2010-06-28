@@ -22,48 +22,13 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputCharacterListener;
+import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Window;
 
 public class TextInputs extends Window implements Bindable {
     private TextInput stateTextInput = null;
 
     private ArrayList<String> states;
-
-    private TextInputCharacterListener textInputCharacterListener =
-        new TextInputCharacterListener.Adapter() {
-        @Override
-        public void charactersInserted(final TextInput textInput, int index, int count) {
-            String text = textInput.getText();
-
-            int i = ArrayList.binarySearch(states, text,
-                states.getComparator());
-
-            if (i < 0) {
-                i = -(i + 1);
-                int n = states.getLength();
-
-                if (i < n) {
-                    text = text.toLowerCase();
-                    final String state = states.get(i);
-
-                    if (state.toLowerCase().startsWith(text)) {
-                        String nextState = (i == n - 1) ?
-                            null : states.get(i + 1);
-
-                        if (nextState == null
-                            || !nextState.toLowerCase().startsWith(text)) {
-                            textInput.setText(state);
-
-                            int selectionStart = text.length();
-                            int selectionLength = state.length() - selectionStart;
-                            textInput.setSelection(selectionStart, selectionLength);
-                        }
-                    }
-                }
-            }
-        }
-    };
 
     public TextInputs() {
         // Populate the lookup values, ensuring that they are sorted
@@ -126,7 +91,39 @@ public class TextInputs extends Window implements Bindable {
     @Override
     public void initialize(Dictionary<String, Object> context, Resources resources) {
         stateTextInput = (TextInput)context.get("stateTextInput");
-        stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
+        stateTextInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
+            @Override
+            public void charactersInserted(final TextInput textInput, int index, int count) {
+                String text = textInput.getText();
+
+                int i = ArrayList.binarySearch(states, text,
+                    states.getComparator());
+
+                if (i < 0) {
+                    i = -(i + 1);
+                    int n = states.getLength();
+
+                    if (i < n) {
+                        text = text.toLowerCase();
+                        final String state = states.get(i);
+
+                        if (state.toLowerCase().startsWith(text)) {
+                            String nextState = (i == n - 1) ?
+                                null : states.get(i + 1);
+
+                            if (nextState == null
+                                || !nextState.toLowerCase().startsWith(text)) {
+                                textInput.setText(state);
+
+                                int selectionStart = text.length();
+                                int selectionLength = state.length() - selectionStart;
+                                textInput.setSelection(selectionStart, selectionLength);
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override

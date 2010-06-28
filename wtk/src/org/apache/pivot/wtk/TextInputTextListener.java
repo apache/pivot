@@ -21,9 +21,44 @@ package org.apache.pivot.wtk;
  */
 public interface TextInputTextListener {
     /**
+     * Text input character listener adapter.
+     */
+    public static class Adapter implements TextInputTextListener {
+        @Override
+        public void charactersInserted(TextInput textInput, int index, int count) {
+        }
+
+        @Override
+        public void charactersRemoved(TextInput textInput, int index, int count) {
+        }
+
+        @Override
+        public void textChanged(TextInput textInput, String previousText) {
+        }
+    }
+
+    /**
+     * Called when characters have been inserted into a text input.
+     *
+     * @param textInput
+     * @param index
+     * @param count
+     */
+    public void charactersInserted(TextInput textInput, int index, int count);
+
+    /**
+     * Called when characters have been removed from a text input.
+     *
+     * @param textInput
+     * @param index
+     * @param count
+     */
+    public void charactersRemoved(TextInput textInput, int index, int count);
+
+    /**
      * Called when a text input's text has changed.
      *
      * @param textInput
      */
-    public void textChanged(TextInput textInput);
+    public void textChanged(TextInput textInput, String previousText);
 }

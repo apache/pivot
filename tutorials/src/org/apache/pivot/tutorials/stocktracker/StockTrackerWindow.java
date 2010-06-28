@@ -209,9 +209,9 @@ public class StockTrackerWindow extends Window implements Bindable {
         });
 
         // Add symbol text input event handlers
-        symbolTextInput.getTextInputTextListeners().add(new TextInputTextListener() {
+        symbolTextInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
             @Override
-            public void textChanged(TextInput textInput) {
+            public void textChanged(TextInput textInput, String previousText) {
                 addSymbolAction.setEnabled(textInput.getTextLength() > 0);
             }
         });

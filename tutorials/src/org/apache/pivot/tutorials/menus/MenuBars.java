@@ -41,9 +41,9 @@ public class MenuBars extends Frame implements Bindable {
     @BXML private TabPane tabPane = null;
 
     private MenuHandler menuHandler = new MenuHandler.Adapter() {
-        TextInputTextListener textInputTextListener = new TextInputTextListener() {
+        TextInputTextListener textInputTextListener = new TextInputTextListener.Adapter() {
             @Override
-            public void textChanged(TextInput textInput) {
+            public void textChanged(TextInput textInput, String previousText) {
                 updateActionState(textInput);
             }
         };

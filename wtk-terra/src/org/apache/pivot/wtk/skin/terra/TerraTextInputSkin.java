@@ -46,9 +46,9 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputCharacterListener;
 import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.TextInputSelectionListener;
+import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ComponentSkin;
@@ -59,7 +59,7 @@ import org.apache.pivot.wtk.validation.Validator;
  * Text input skin.
  */
 public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
-    TextInputListener, TextInputCharacterListener, TextInputSelectionListener {
+    TextInputListener, TextInputTextListener, TextInputSelectionListener {
     private class BlinkCaretCallback implements Runnable {
         @Override
         public void run() {
@@ -184,7 +184,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         TextInput textInput = (TextInput)component;
         textInput.getTextInputListeners().add(this);
-        textInput.getTextInputCharacterListeners().add(this);
+        textInput.getTextInputTextListeners().add(this);
         textInput.getTextInputSelectionListeners().add(this);
 
         textInput.setCursor(Cursor.TEXT);
@@ -1358,12 +1358,16 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     // Text input character events
     @Override
     public void charactersInserted(TextInput textInput, int index, int count) {
-        layout();
-        repaintComponent();
+        // No-op
     }
 
     @Override
     public void charactersRemoved(TextInput textInput, int index, int count) {
+        // No-op
+    }
+
+    @Override
+    public void textChanged(TextInput textInput, String previousText) {
         layout();
         repaintComponent();
     }
