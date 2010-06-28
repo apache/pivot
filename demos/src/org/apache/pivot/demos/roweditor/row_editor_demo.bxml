@@ -29,7 +29,7 @@ limitations under the License.
         <ListButton bxml:id="typeListButton" listData="['Hotel', 'Miscellaneous', 'Meals', 'Parking', 'Travel']"
             selectedItemKey="type"/>
 
-        <TextInput bxml:id="amountTextInput" strictValidation="true" textKey="amount">
+        <TextInput bxml:id="amountTextInput" textKey="amount" styles="{strictValidation:true}">
             <validator>
                 <demo:CurrencyValidator/>
             </validator>

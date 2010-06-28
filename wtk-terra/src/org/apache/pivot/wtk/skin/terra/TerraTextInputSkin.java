@@ -52,7 +52,6 @@ import org.apache.pivot.wtk.TextInputTextListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ComponentSkin;
-import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.validation.Validator;
 
 /**
@@ -82,8 +81,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             switch (scrollDirection) {
                 case FORWARD: {
-                    TextNode textNode = textInput.getTextNode();
-                    if (selectionEnd < textNode.getCharacterCount() - 1) {
+                    if (selectionEnd < textInput.getTextLength() - 1) {
                         selectionEnd++;
                         textInput.setSelection(selectionStart, selectionEnd - selectionStart + 1);
                         scrollCharacterToVisible(selectionEnd);
@@ -137,8 +135,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private Color invalidBackgroundColor;
     private Color borderColor;
     private Color disabledBorderColor;
-    private Insets padding;
-
     private Color selectionColor;
     private Color selectionBackgroundColor;
     private Color inactiveSelectionColor;
@@ -147,6 +143,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private Color bevelColor;
     private Color disabledBevelColor;
     private Color invalidBevelColor;
+
+    private Insets padding;
+
+    private boolean strictValidation = false;
 
     private Dimensions averageCharacterSize;
 
@@ -189,10 +189,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         textInput.setCursor(Cursor.TEXT);
 
-        TextNode textNode = textInput.getTextNode();
-        if (textNode != null) {
-            updateSelection();
-        }
+        updateSelection();
     }
 
     @Override
@@ -228,50 +225,44 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     @Override
     public void layout() {
         TextInput textInput = (TextInput)getComponent();
-        TextNode textNode = textInput.getTextNode();
 
         glyphVector = null;
 
-        if (textNode != null) {
-            int n = textNode.getCharacterCount();
-
-            if (n > 0) {
-                CharacterIterator ci = null;
-                if (textInput.isPassword()) {
-                    StringBuilder buf = new StringBuilder(n);
-                    for (int i = 0; i < n; i++) {
-                        buf.append(BULLET);
-                    }
-
-                    ci = new StringCharacterIterator(buf.toString());
-                } else {
-                    ci= textNode.getCharacterIterator();
+        int n = textInput.getTextLength();
+        if (n > 0) {
+            String text;
+            if (textInput.isPassword()) {
+                StringBuilder buf = new StringBuilder(n);
+                for (int i = 0; i < n; i++) {
+                    buf.append(BULLET);
                 }
 
-                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-                glyphVector = font.createGlyphVector(fontRenderContext, ci);
+                text = buf.toString();
+            } else {
+                text = textInput.getText();
+            }
 
-                Rectangle2D textBounds = glyphVector.getLogicalBounds();
-                int textWidth = (int)textBounds.getWidth();
-                int width = getWidth();
+            CharacterIterator ci = new StringCharacterIterator(text);
 
-                if (textWidth - scrollLeft + padding.left + 1 < width - padding.right - 1) {
-                    // The right edge of the text is less than the right inset; align
-                    // the text's right edge with the inset
-                    scrollLeft = Math.max(textWidth + (padding.left + padding.right + 2) - width, 0);
-                } else {
-                    // Scroll lead selection to visible
-                    int selectionStart = textInput.getSelectionStart();
-                    if (selectionStart < n
-                        && textInput.isFocused()) {
-                        scrollCharacterToVisible(selectionStart);
-                    }
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            glyphVector = font.createGlyphVector(fontRenderContext, ci);
+
+            Rectangle2D textBounds = glyphVector.getLogicalBounds();
+            int textWidth = (int)textBounds.getWidth();
+            int width = getWidth();
+
+            if (textWidth - scrollLeft + padding.left + 1 < width - padding.right - 1) {
+                // The right edge of the text is less than the right inset; align
+                // the text's right edge with the inset
+                scrollLeft = Math.max(textWidth + (padding.left + padding.right + 2) - width, 0);
+            } else {
+                // Scroll lead selection to visible
+                int selectionStart = textInput.getSelectionStart();
+                if (selectionStart < n
+                    && textInput.isFocused()) {
+                    scrollCharacterToVisible(selectionStart);
                 }
             }
-        } else {
-            // Set scrollLeft to 0
-            scrollLeft = 0;
-            updateSelection();
         }
 
         updateSelection();
@@ -914,6 +905,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         setPadding(Insets.decode(padding));
     }
 
+    public boolean isStrictValidation() {
+        return strictValidation;
+    }
+
+    public void setStrictValidation(boolean strictValidation) {
+        this.strictValidation = strictValidation;
+    }
+
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -1024,11 +1023,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         if (button == Mouse.Button.LEFT
             && count > 1) {
             TextInput textInput = (TextInput)getComponent();
-            TextNode textNode = textInput.getTextNode();
-
-            if (textNode != null) {
-                textInput.setSelection(0, textNode.getCharacterCount());
-            }
+            textInput.setSelection(0, textInput.getTextLength());
         }
 
         return super.mouseClick(component, button, x, y, count);
@@ -1044,30 +1039,27 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             && character != 0x7F
             && !Keyboard.isPressed(Keyboard.Modifier.META)) {
             TextInput textInput = (TextInput)getComponent();
-            TextNode textNode = textInput.getTextNode();
 
-            if (textNode != null) {
-                if (textInput.getSelectionLength() == 0
-                    && textNode.getCharacterCount() == textInput.getMaximumLength()) {
-                    Toolkit.getDefaultToolkit().beep();
-                } else {
-                    Validator validator = textInput.getValidator();
-                    boolean strictValidation = textInput.isStrictValidation();
+            if (textInput.getSelectionLength() == 0
+                && textInput.getTextLength() == textInput.getMaximumLength()) {
+                Toolkit.getDefaultToolkit().beep();
+            } else {
+                Validator validator = textInput.getValidator();
+                boolean strictValidation = isStrictValidation();
 
-                    if (validator != null
-                        && strictValidation) {
-                        StringBuilder buf = new StringBuilder(textNode.getText());
-                        int selectionStart = textInput.getSelectionStart();
-                        buf.insert(selectionStart, character);
+                if (validator != null
+                    && strictValidation) {
+                    StringBuilder buf = new StringBuilder(textInput.getText());
+                    int selectionStart = textInput.getSelectionStart();
+                    buf.insert(selectionStart, character);
 
-                        if (validator.isValid(buf.toString())) {
-                            textInput.insert(character);
-                        } else {
-                            Toolkit.getDefaultToolkit().beep();
-                        }
-                    } else {
+                    if (validator.isValid(buf.toString())) {
                         textInput.insert(character);
+                    } else {
+                        Toolkit.getDefaultToolkit().beep();
                     }
+                } else {
+                    textInput.insert(character);
                 }
             }
         }
@@ -1080,183 +1072,180 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         TextInput textInput = (TextInput)getComponent();
-        TextNode textNode = textInput.getTextNode();
 
-        if (textNode != null) {
-            Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-            if (keyCode == Keyboard.KeyCode.DELETE
-                || keyCode == Keyboard.KeyCode.BACKSPACE) {
-                boolean backspace = (keyCode == Keyboard.KeyCode.DELETE ? false : true);
+        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+        if (keyCode == Keyboard.KeyCode.DELETE
+            || keyCode == Keyboard.KeyCode.BACKSPACE) {
+            boolean backspace = (keyCode == Keyboard.KeyCode.DELETE ? false : true);
 
-                Validator validator = textInput.getValidator();
-                boolean strictValidation = textInput.isStrictValidation();
+            Validator validator = textInput.getValidator();
+            boolean strictValidation = isStrictValidation();
 
-                if (validator != null
-                    && strictValidation) {
-                    StringBuilder buf = new StringBuilder(textNode.getText());
-                    int index = textInput.getSelectionStart();
-                    int count = textInput.getSelectionLength();
+            if (validator != null
+                && strictValidation) {
+                StringBuilder buf = new StringBuilder(textInput.getText());
+                int index = textInput.getSelectionStart();
+                int count = textInput.getSelectionLength();
 
-                    if (count > 0) {
-                        buf.delete(index, index + count);
-                    } else {
-                        if (backspace) {
-                            index--;
-                        }
-
-                        if (index >= 0
-                            && index < textNode.getCharacterCount()) {
-                            buf.deleteCharAt(index);
-                        }
-                    }
-
-                    if (validator.isValid(buf.toString())) {
-                        textInput.delete(backspace);
-                    } else {
-                        Toolkit.getDefaultToolkit().beep();
-                    }
+                if (count > 0) {
+                    buf.delete(index, index + count);
                 } else {
+                    if (backspace) {
+                        index--;
+                    }
+
+                    if (index >= 0
+                        && index < textInput.getTextLength()) {
+                        buf.deleteCharAt(index);
+                    }
+                }
+
+                if (validator.isValid(buf.toString())) {
                     textInput.delete(backspace);
-                }
-
-                consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.LEFT) {
-                int selectionStart = textInput.getSelectionStart();
-                int selectionLength = textInput.getSelectionLength();
-
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                    && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                    // Add all preceding text to the selection
-                    selectionLength = selectionStart + selectionLength;
-                    selectionStart = 0;
-                    consumed = true;
-                } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    // Add the previous character to the selection
-                    if (selectionStart > 0) {
-                        selectionStart--;
-                        selectionLength++;
-                    }
-
-                    consumed = true;
-                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                    // Clear the selection and move the caret to the beginning of
-                    // the text
-                    selectionStart = 0;
-                    selectionLength = 0;
-                    consumed = true;
                 } else {
-                    // Clear the selection and move the caret back by one
-                    // character
-                    if (selectionLength == 0
-                        && selectionStart > 0) {
-                        selectionStart--;
-                        consumed = true;
-                    }
-
-                    selectionLength = 0;
-                }
-
-                textInput.setSelection(selectionStart, selectionLength);
-
-                if (textNode.getCharacterCount() > 0) {
-                    scrollCharacterToVisible(selectionStart);
-                } else {
-                    setScrollLeft(0);
-                }
-            } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-                int selectionStart = textInput.getSelectionStart();
-                int selectionLength = textInput.getSelectionLength();
-
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                    && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                    // Add all subsequent text to the selection
-                    selectionLength = textNode.getCharacterCount() - selectionStart;
-                    consumed = true;
-                } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    // Add the next character to the selection
-                    if (selectionStart + selectionLength < textNode.getCharacterCount()) {
-                        selectionLength++;
-                    }
-
-                    consumed = true;
-                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                    // Clear the selection and move the caret to the end of
-                    // the text
-                    selectionStart = textNode.getCharacterCount();
-                    selectionLength = 0;
-                    consumed = true;
-                } else {
-                    // Clear the selection and move the caret forward by one
-                    // character
-                    selectionStart += selectionLength;
-
-                    if (selectionLength == 0
-                        && selectionStart < textNode.getCharacterCount()) {
-                        selectionStart++;
-                        consumed = true;
-                    }
-
-                    selectionLength = 0;
-                }
-
-                textInput.setSelection(selectionStart, selectionLength);
-
-                if (textNode.getCharacterCount() > 0) {
-                    scrollCharacterToVisible(selectionStart + selectionLength - 1);
-                } else {
-                    scrollLeft = 0;
-                    updateSelection();
-                }
-            } else if (keyCode == Keyboard.KeyCode.HOME) {
-                // Move the caret to the beginning of the text
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    textInput.setSelection(0, textInput.getSelectionStart());
-                } else {
-                    textInput.setSelection(0, 0);
-                }
-
-                consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.END) {
-                // Move the caret to the end of the text
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    int selectionStart = textInput.getSelectionStart();
-                    textInput.setSelection(selectionStart, textNode.getCharacterCount()
-                        - selectionStart);
-                } else {
-                    textInput.setSelection(textNode.getCharacterCount(), 0);
-                }
-
-                consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.A
-                && Keyboard.isPressed(commandModifier)) {
-                // Select all
-                textInput.setSelection(0, textNode.getCharacterCount());
-                consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.X
-                && Keyboard.isPressed(commandModifier)) {
-                if (textInput.isPassword()) {
                     Toolkit.getDefaultToolkit().beep();
-                } else {
-                    textInput.cut();
+                }
+            } else {
+                textInput.delete(backspace);
+            }
+
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.LEFT) {
+            int selectionStart = textInput.getSelectionStart();
+            int selectionLength = textInput.getSelectionLength();
+
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                // Add all preceding text to the selection
+                selectionLength = selectionStart + selectionLength;
+                selectionStart = 0;
+                consumed = true;
+            } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                // Add the previous character to the selection
+                if (selectionStart > 0) {
+                    selectionStart--;
+                    selectionLength++;
                 }
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.C
-                && Keyboard.isPressed(commandModifier)) {
-                if (textInput.isPassword()) {
-                    Toolkit.getDefaultToolkit().beep();
-                } else {
-                    textInput.copy();
-                }
-
-                consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.V
-                && Keyboard.isPressed(commandModifier)) {
-                textInput.paste();
+            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                // Clear the selection and move the caret to the beginning of
+                // the text
+                selectionStart = 0;
+                selectionLength = 0;
                 consumed = true;
             } else {
-                consumed = super.keyPressed(component, keyCode, keyLocation);
+                // Clear the selection and move the caret back by one
+                // character
+                if (selectionLength == 0
+                    && selectionStart > 0) {
+                    selectionStart--;
+                    consumed = true;
+                }
+
+                selectionLength = 0;
             }
+
+            textInput.setSelection(selectionStart, selectionLength);
+
+            if (textInput.getTextLength() > 0) {
+                scrollCharacterToVisible(selectionStart);
+            } else {
+                setScrollLeft(0);
+            }
+        } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+            int selectionStart = textInput.getSelectionStart();
+            int selectionLength = textInput.getSelectionLength();
+
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                // Add all subsequent text to the selection
+                selectionLength = textInput.getTextLength() - selectionStart;
+                consumed = true;
+            } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                // Add the next character to the selection
+                if (selectionStart + selectionLength < textInput.getTextLength()) {
+                    selectionLength++;
+                }
+
+                consumed = true;
+            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                // Clear the selection and move the caret to the end of
+                // the text
+                selectionStart = textInput.getTextLength();
+                selectionLength = 0;
+                consumed = true;
+            } else {
+                // Clear the selection and move the caret forward by one
+                // character
+                selectionStart += selectionLength;
+
+                if (selectionLength == 0
+                    && selectionStart < textInput.getTextLength()) {
+                    selectionStart++;
+                    consumed = true;
+                }
+
+                selectionLength = 0;
+            }
+
+            textInput.setSelection(selectionStart, selectionLength);
+
+            if (textInput.getTextLength() > 0) {
+                scrollCharacterToVisible(selectionStart + selectionLength - 1);
+            } else {
+                scrollLeft = 0;
+                updateSelection();
+            }
+        } else if (keyCode == Keyboard.KeyCode.HOME) {
+            // Move the caret to the beginning of the text
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                textInput.setSelection(0, textInput.getSelectionStart());
+            } else {
+                textInput.setSelection(0, 0);
+            }
+
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.END) {
+            // Move the caret to the end of the text
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                int selectionStart = textInput.getSelectionStart();
+                textInput.setSelection(selectionStart, textInput.getTextLength()
+                    - selectionStart);
+            } else {
+                textInput.setSelection(textInput.getTextLength(), 0);
+            }
+
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.A
+            && Keyboard.isPressed(commandModifier)) {
+            // Select all
+            textInput.setSelection(0, textInput.getTextLength());
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.X
+            && Keyboard.isPressed(commandModifier)) {
+            if (textInput.isPassword()) {
+                Toolkit.getDefaultToolkit().beep();
+            } else {
+                textInput.cut();
+            }
+
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.C
+            && Keyboard.isPressed(commandModifier)) {
+            if (textInput.isPassword()) {
+                Toolkit.getDefaultToolkit().beep();
+            } else {
+                textInput.copy();
+            }
+
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.V
+            && Keyboard.isPressed(commandModifier)) {
+            textInput.paste();
+            consumed = true;
+        } else {
+            consumed = super.keyPressed(component, keyCode, keyLocation);
         }
 
         return consumed;
@@ -1288,9 +1277,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             }
 
             if (textInput.getSelectionLength() == 0) {
-                TextNode textNode = textInput.getTextNode();
                 int selectionStart = textInput.getSelectionStart();
-                if (selectionStart < textNode.getCharacterCount()) {
+                if (selectionStart < textInput.getTextLength()) {
                     scrollCharacterToVisible(selectionStart);
                 }
 
@@ -1313,12 +1301,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     // Text input events
-    @Override
-    public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
-        layout();
-        repaintComponent();
-    }
-
     @Override
     public void textSizeChanged(TextInput textInput, int previousTextSize) {
         invalidateComponent();
@@ -1343,11 +1325,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     @Override
     public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
         repaintComponent();
-    }
-
-    @Override
-    public void strictValidationChanged(TextInput textInput) {
-        // No-op
     }
 
     @Override
@@ -1411,8 +1388,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int selectionStart = textInput.getSelectionStart();
         int selectionLength = textInput.getSelectionLength();
 
-        TextNode textNode = textInput.getTextNode();
-        int n = (textNode == null) ? 0 : textNode.getCharacterCount();
+        int n = textInput.getTextLength();
 
         Bounds leadingSelectionBounds;
         if (selectionStart < n) {

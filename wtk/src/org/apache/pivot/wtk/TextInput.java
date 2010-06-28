@@ -21,9 +21,6 @@ import java.io.IOException;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.wtk.text.Node;
-import org.apache.pivot.wtk.text.NodeListener;
-import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.validation.Validator;
 
 /**
@@ -81,13 +78,6 @@ public class TextInput extends Component {
     private static class TextInputListenerList extends ListenerList<TextInputListener>
         implements TextInputListener {
         @Override
-        public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
-            for (TextInputListener listener : this) {
-                listener.textNodeChanged(textInput, previousTextNode);
-            }
-        }
-
-        @Override
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
             for (TextInputListener listener : this) {
                 listener.textSizeChanged(textInput, previousTextSize);
@@ -119,12 +109,6 @@ public class TextInput extends Component {
         public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
             for (TextInputListener listener : this) {
                 listener.textValidatorChanged(textInput, previousValidator);
-            }
-        }
-
-        public void strictValidationChanged(TextInput textInput) {
-            for (TextInputListener listener : this) {
-                listener.strictValidationChanged(textInput);
             }
         }
 
@@ -196,15 +180,13 @@ public class TextInput extends Component {
         }
     }
 
-    // TODO Don't allow null values, only empty strings
-    private TextNode textNode;
+    private String text = "";
 
     private int selectionStart = 0;
     private int selectionLength = 0;
 
     private int textSize = DEFAULT_TEXT_SIZE;
     private int maximumLength = Integer.MAX_VALUE;
-
     private boolean password = false;
     private String prompt = null;
 
@@ -213,43 +195,7 @@ public class TextInput extends Component {
     private TextBindMapping textBindMapping = null;
 
     private Validator validator = null;
-    private boolean strictValidation = false;
-
     private boolean textValid = true;
-
-    private NodeListener textNodeListener = new NodeListener.Adapter() {
-        @Override
-        public void rangeInserted(Node node, int offset, int characterCount) {
-            // TODO If selected range changes, also fire selection change event?
-            if (selectionStart + selectionLength > offset) {
-                if (selectionStart > offset) {
-                    selectionStart += characterCount;
-                } else {
-                    selectionLength += characterCount;
-                }
-            }
-
-            textInputTextListeners.charactersInserted(TextInput.this, offset, characterCount);
-            textInputTextListeners.textChanged(TextInput.this, null);
-            validateText();
-        }
-
-        @Override
-        public void rangeRemoved(Node node, int offset, int characterCount) {
-            // TODO If selected range changes, also fire selection change event?
-            if (selectionStart + selectionLength > offset) {
-                if (selectionStart > offset) {
-                    selectionStart -= characterCount;
-                } else {
-                    selectionLength -= characterCount;
-                }
-            }
-
-            textInputTextListeners.charactersRemoved(TextInput.this, offset, characterCount);
-            textInputTextListeners.textChanged(TextInput.this, null);
-            validateText();
-        }
-    };
 
     private TextInputListenerList textInputListeners = new TextInputListenerList();
     private TextInputTextListenerList textInputTextListeners = new TextInputTextListenerList();
@@ -260,7 +206,6 @@ public class TextInput extends Component {
 
     public TextInput() {
         installThemeSkin(TextInput.class);
-        setText("");
     }
 
     @Override
@@ -273,58 +218,34 @@ public class TextInput extends Component {
         super.setSkin(skin);
     }
 
-    /**
-     * Returns the text node that backs the text input's content.
-     */
-    public TextNode getTextNode() {
-        return textNode;
-    }
-
-    /**
-     * Sets the text node that backs the text input's content.
-     *
-     * @param textNode
-     */
-    public void setTextNode(TextNode textNode) {
-        if (textNode != null
-            && textNode.getCharacterCount() > maximumLength) {
-            throw new IllegalArgumentException("Text length is greater than maximum length.");
-        }
-
-        TextNode previousTextNode = this.textNode;
-
-        if (previousTextNode != textNode) {
-            if (previousTextNode != null) {
-                previousTextNode.getNodeListeners().remove(textNodeListener);
-            }
-
-            this.textNode = textNode;
-
-            if (textNode == null) {
-                selectionStart = 0;
-            } else {
-                selectionStart = textNode.getCharacterCount();
-                textNode.getNodeListeners().add(textNodeListener);
-            }
-
-            selectionLength = 0;
-
-            textInputListeners.textNodeChanged(this, previousTextNode);
-            textInputTextListeners.textChanged(this,
-                (previousTextNode == null) ? null : previousTextNode.getText());
-
-            // TODO If selected range changes, also fire selection change event
-
-            validateText();
-        }
-    }
-
     public String getText() {
-        return (textNode == null) ? null : textNode.getText();
+        return text;
     }
 
     public void setText(String text) {
-        setTextNode((text == null) ? null : new TextNode(text));
+        if (text == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (text.length() > maximumLength) {
+            throw new IllegalArgumentException("Text length is greater than maximum length.");
+        }
+
+        // TODO Store previous selection start, length; previous text valid flag
+
+        String previousText = this.text;
+        if (previousText != text) {
+            this.text = text;
+
+            selectionStart = text.length();
+            selectionLength = 0;
+
+            // TODO Update textValid flag
+
+            textInputTextListeners.textChanged(this, previousText);
+
+            // TODO Fire additional events as needed
+        }
     }
 
     /**
@@ -346,12 +267,8 @@ public class TextInput extends Component {
      * The text to insert.
      */
     public void insert(String text) {
-        if (textNode == null) {
-            throw new IllegalStateException();
-        }
-
         if (text == null) {
-            throw new IllegalArgumentException("text is null.");
+            throw new IllegalArgumentException();
         }
 
         if (selectionLength > 0) {
@@ -359,19 +276,26 @@ public class TextInput extends Component {
         }
 
         // Insert the text
-        if (textNode.getCharacterCount() + text.length() > maximumLength) {
+        if (this.text.length() + text.length() > maximumLength) {
             throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
         }
 
-        int length = textNode.getCharacterCount();
-        textNode.insertText(text, selectionStart);
+        // TODO Store previous selection start, length; previous text valid flag
 
-        // TODO Update the selection only if a listener did not modify the text?
-        if (length + text.length() == textNode.getCharacterCount()) {
-            setSelection(selectionStart + text.length(), 0);
-        }
+        StringBuilder textBuilder = new StringBuilder(this.text.substring(0, selectionStart));
+        textBuilder.append(text);
+        textBuilder.append(this.text.substring(selectionStart));
+        this.text = textBuilder.toString();
 
-        // TODO Move the text node event logic here
+        selectionStart += text.length();
+        selectionLength = 0;
+
+        // TODO Update textValid flag
+
+        textInputTextListeners.charactersInserted(TextInput.this, selectionStart, text.length());
+        textInputTextListeners.textChanged(TextInput.this, null);
+
+        // TODO Fire additional events as needed
     }
 
     /**
@@ -381,59 +305,50 @@ public class TextInput extends Component {
      * The text node's length, or <tt>0</tt> if the text node is <tt>null</tt>.
      */
     public int getTextLength() {
-        return (textNode == null) ? 0 : textNode.getCharacterCount();
+        return text.length();
     }
 
     public void delete(boolean backspace) {
-        if (textNode == null) {
-            throw new IllegalStateException();
-        }
+        if (text.length() > 0) {
+            // TODO Store previous selection start, length; previous text valid flag
 
-        if (selectionLength > 0) {
-            // TODO Make this part of the undoable action (for all such
-            // actions)
-            textNode.removeRange(selectionStart, selectionLength);
+            int count;
+            if (selectionLength > 0) {
+                count = selectionLength;
+                selectionLength = 0;
+            } else {
+                if (backspace) {
+                    selectionStart--;
+                }
 
-            // TODO Move the text node event logic here
-        } else {
-            int offset = selectionStart;
-
-            if (backspace) {
-                offset--;
+                count = 1;
             }
 
-            if (offset >= 0
-                && offset < textNode.getCharacterCount()) {
-                textNode.removeRange(offset, 1);
+            if (selectionStart < text.length()) {
+                StringBuilder textBuilder = new StringBuilder(text.substring(0, selectionStart));
+                textBuilder.append(text.substring(selectionStart + count));
+                text = textBuilder.toString();
             }
+
+            // TODO Update textValid flag
+
+            textInputTextListeners.charactersRemoved(TextInput.this, selectionStart, count);
+            textInputTextListeners.textChanged(TextInput.this, null);
+
+            // TODO Fire additional events as needed
         }
     }
 
     public void cut() {
-        if (textNode == null) {
-            throw new IllegalStateException();
-        }
-
-        // Delete any selected text and put it on the clipboard
-        if (selectionLength > 0) {
-            TextNode removedRange =
-                (TextNode)textNode.removeRange(selectionStart, selectionLength);
-
-            LocalManifest clipboardContent = new LocalManifest();
-            clipboardContent.putText(removedRange.getText());
-            Clipboard.setContent(clipboardContent);
-        }
+        copy();
+        delete(false);
     }
 
     public void copy() {
-        if (textNode == null) {
-            throw new IllegalStateException();
-        }
-
         // Copy selection to clipboard
         String selectedText = getSelectedText();
 
-        if (selectedText != null) {
+        if (selectedText.length() > 0) {
             LocalManifest clipboardContent = new LocalManifest();
             clipboardContent.putText(selectedText);
             Clipboard.setContent(clipboardContent);
@@ -441,10 +356,6 @@ public class TextInput extends Component {
     }
 
     public void paste() {
-        if (textNode == null) {
-            throw new IllegalStateException();
-        }
-
         Manifest clipboardContent = Clipboard.getContent();
 
         if (clipboardContent != null
@@ -458,17 +369,9 @@ public class TextInput extends Component {
             }
 
             if (text != null) {
-                if ((text.length() + textNode.getCharacterCount()) > maximumLength) {
+                if ((this.text.length() + text.length()) > maximumLength) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
-                    // Remove any existing selection
-                    if (selectionLength > 0) {
-                        // TODO Make this part of the undoable action (for all such
-                        // actions)
-                        textNode.removeRange(selectionStart, selectionLength);
-                    }
-
-                    // Insert the clipboard contents
                     insert(text);
                 }
             }
@@ -526,16 +429,12 @@ public class TextInput extends Component {
      * The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
-        if (textNode == null) {
-            throw new IllegalStateException();
-        }
-
         if (selectionLength < 0) {
             throw new IllegalArgumentException("selectionLength is negative.");
         }
 
         if (selectionStart < 0
-            || selectionStart + selectionLength > textNode.getCharacterCount()) {
+            || selectionStart + selectionLength > text.length()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -571,11 +470,7 @@ public class TextInput extends Component {
      * Selects all text.
      */
     public void selectAll() {
-        if (textNode == null) {
-            throw new IllegalStateException();
-        }
-
-        setSelection(0, textNode.getCharacterCount());
+        setSelection(0, text.length());
     }
 
     /**
@@ -589,19 +484,10 @@ public class TextInput extends Component {
      * Returns the currently selected text.
      *
      * @return
-     * A new string containing a copy of the text in the selected range, or
-     * <tt>null</tt> if nothing is selected.
+     * A new string containing a copy of the text in the selected range.
      */
     public String getSelectedText() {
-        String selectedText = null;
-
-        if (selectionLength > 0) {
-            TextNode selectedRange = (TextNode)textNode.getRange(selectionStart,
-                selectionStart + selectionLength);
-            selectedText = selectedRange.getText();
-        }
-
-        return selectedText;
+        return text.substring(selectionStart, selectionStart + selectionLength);
     }
 
     /**
@@ -658,11 +544,9 @@ public class TextInput extends Component {
 
         if (previousMaximumLength != maximumLength) {
             // Truncate the text, if necessary
-            if (textNode != null) {
-                int characterCount = textNode.getCharacterCount();
-                if (characterCount > maximumLength) {
-                    textNode.removeText(maximumLength, characterCount - maximumLength);
-                }
+            int characterCount = text.length();
+            if (characterCount > maximumLength) {
+                text = text.substring(0, maximumLength);
             }
 
             this.maximumLength = maximumLength;
@@ -849,26 +733,6 @@ public class TextInput extends Component {
     }
 
     /**
-     * Returns the text input's strict validation flag.
-     */
-    public boolean isStrictValidation() {
-        return strictValidation;
-    }
-
-    /**
-     * Sets the text input's strict validation flag. When enabled, only valid text will be
-     * accepted by the text input.
-     *
-     * @param strictValidation
-     */
-    public void setStrictValidation(boolean strictValidation) {
-        if (this.strictValidation != strictValidation) {
-            this.strictValidation = strictValidation;
-            textInputListeners.strictValidationChanged(this);
-        }
-    }
-
-    /**
      * Tells whether or not this text input's text is currently valid as
      * defined by its validator. If there is no validator associated with this
      * text input, the text is assumed to always be valid.
@@ -881,6 +745,8 @@ public class TextInput extends Component {
      * Updates the valid state after the text or the validator has changed.
      */
     private void validateText() {
+        // TODO VERY IMPORTANT Eliminate this method
+
         String text = getText();
         boolean textValid = (validator == null || text == null) ? true : validator.isValid(text);
 

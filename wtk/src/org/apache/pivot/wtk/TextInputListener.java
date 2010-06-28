@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.validation.Validator;
 
 /**
@@ -27,10 +26,6 @@ public interface TextInputListener {
      * Text input listener adapter.
      */
     public static class Adapter implements TextInputListener {
-        @Override
-        public void textNodeChanged(TextInput textInput, TextNode previousTextNode) {
-        }
-
         @Override
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
         }
@@ -52,21 +47,9 @@ public interface TextInputListener {
         }
 
         @Override
-        public void strictValidationChanged(TextInput textInput) {
-        }
-
-        @Override
         public void textValidChanged(TextInput textInput) {
         }
     }
-
-    /**
-     * Called when a text input's text node has changed.
-     *
-     * @param textInput
-     * @param previousTextNode
-     */
-    public void textNodeChanged(TextInput textInput, TextNode previousTextNode);
 
     /**
      * Called when a text input's text size has changed.
@@ -106,13 +89,6 @@ public interface TextInputListener {
      * @param previousValidator
      */
     public void textValidatorChanged(TextInput textInput, Validator previousValidator);
-
-    /**
-     * Called when a text input's strict validation flag has changed.
-     *
-     * @param textInput
-     */
-    public void strictValidationChanged(TextInput textInput);
 
     /**
      * Called when the text changes validity.
