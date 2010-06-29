@@ -56,7 +56,6 @@ limitations under the License.
     <property name="jar.core" value="${ant.project.name}-core-${version}.jar" />
     <property name="jar.demos" value="${ant.project.name}-demos-${version}.jar" />
     <property name="jar.demos-server" value="${ant.project.name}-demos-server-${version}.jar" />
-    <property name="jar.tools" value="${ant.project.name}-tools-${version}.jar" />
     <property name="jar.tutorials" value="${ant.project.name}-tutorials-${version}.jar" />
     <property name="jar.tutorials-server" value="${ant.project.name}-tutorials-server-${version}.jar" />
     <property name="jar.web" value="${ant.project.name}-web-${version}.jar" />
@@ -272,7 +271,7 @@ limitations under the License.
 
     <!-- Compile all classes (tests included) -->
     <target name="compile" description="Compiles all projects"
-        depends="charts, core, demos, demos-server, tests, tools, tutorials, tutorials-server, web, web-server, wtk, wtk-terra"/>
+        depends="charts, core, demos, demos-server, tests, tutorials, tutorials-server, web, web-server, wtk, wtk-terra"/>
 
     <!-- Package JAR files -->
     <target name="package" description="Packages all projects into JAR files" depends="compile">
@@ -280,7 +279,6 @@ limitations under the License.
         <package project="core" jarFile="${jar.core}" title="Core"/>
         <package project="demos" jarFile="${jar.demos}" title="Demos"/>
         <package project="demos-server" jarFile="${jar.demos-server}" title="Demos Server"/>
-        <package project="tools" jarFile="${jar.tools}" title="Tools"/>
         <package project="tutorials" jarFile="${jar.tutorials}" title="Tutorials"/>
         <package project="tutorials-server" jarFile="${jar.tutorials-server}" title="Tutorials Server"/>
         <package project="web" jarFile="${jar.web}" title="Web"/>
@@ -311,7 +309,6 @@ limitations under the License.
         <clean project="demos"/>
         <clean project="demos-server"/>
         <clean project="tests"/>
-        <clean project="tools"/>
         <clean project="tutorials"/>
         <clean project="tutorials-server"/>
         <clean project="web"/>
@@ -336,7 +333,6 @@ limitations under the License.
 
             <packageset dir="charts/src" includes="**/*"/>
             <packageset dir="core/src" includes="**/*"/>
-            <packageset dir="tools/src" includes="**/*"/>
             <packageset dir="web/src" includes="**/*"/>
             <packageset dir="web-server/src" includes="**/*"/>
             <packageset dir="wtk/src" includes="**/*"/>
@@ -370,11 +366,7 @@ limitations under the License.
         <compile project="tests"/>
     </target>
 
-    <target name="tools" depends="core, wtk">
-        <compile project="tools"/>
-    </target>
-
-    <target name="tutorials" depends="core, wtk, web, tools">
+    <target name="tutorials" depends="core, wtk, web">
         <compile project="tutorials"/>
     </target>
 
@@ -477,7 +469,6 @@ limitations under the License.
             <fileset dir="${folder.lib}">
                 <include name="${jar.charts}"/>
                 <include name="${jar.core}"/>
-                <include name="${jar.tools}"/>
                 <include name="${jar.web}"/>
                 <include name="${jar.web-server}"/>
                 <include name="${jar.wtk}"/>
