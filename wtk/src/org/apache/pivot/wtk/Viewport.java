@@ -20,7 +20,6 @@ import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Abstract base class for viewport components. Viewports provide a windowed
  * view on a component (called the "view") that is too large to fit within a

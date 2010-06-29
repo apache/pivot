@@ -312,8 +312,13 @@ class ListSelection {
      * into the model data).
      *
      * @param index
+     *
+     * @return
+     * The number of ranges that were updated.
      */
-    public void insertIndex(int index) {
+    public int insertIndex(int index) {
+        int updated = 0;
+
         // Get the insertion point for the range corresponding to the given index
         Span range = new Span(index);
         int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
@@ -340,8 +345,11 @@ class ListSelection {
         while (i < n) {
             Span selectedRange = selectedRanges.get(i);
             selectedRanges.update(i, new Span(selectedRange.start + 1, selectedRange.end + 1));
+            updated++;
             i++;
         }
+
+        return updated;
     }
 
     /**
@@ -350,10 +358,14 @@ class ListSelection {
      *
      * @param index
      * @param count
+     *
+     * @return
+     * The number of ranges that were updated.
      */
-    public void removeIndexes(int index, int count) {
+    public int removeIndexes(int index, int count) {
         // Clear any selections in the given range
-        removeRange(index, (index + count) - 1);
+        Sequence<Span> removed = removeRange(index, (index + count) - 1);
+        int updated = removed.getLength();
 
         // Decrement any subsequent selection indexes
         Span range = new Span(index);
@@ -367,8 +379,11 @@ class ListSelection {
         while (i < n) {
             Span selectedRange = selectedRanges.get(i);
             selectedRanges.update(i, new Span(selectedRange.start - count, selectedRange.end - count));
+            updated++;
             i++;
         }
+
+        return updated;
     }
 
     public static Span normalize(int start, int end) {

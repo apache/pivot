@@ -1204,7 +1204,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
         if (listView.isValid()) {
             // Repaint the area occupied by the previous selection
-            if (previousSelectedRanges.getLength() > 0) {
+            if (previousSelectedRanges != null
+                && previousSelectedRanges.getLength() > 0) {
                 int rangeStart = previousSelectedRanges.get(0).start;
                 int rangeEnd = previousSelectedRanges.get(previousSelectedRanges.getLength() - 1).end;
 

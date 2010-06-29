@@ -137,11 +137,13 @@ public class ExpensesWindow extends Window implements Bindable {
         deleteConfirmationPrompt = new Prompt(MessageType.QUESTION, resources.getString("confirmDelete"),
             options);
 
-        // Attach event listener(s)
+        // Attach event listeners
         expenseTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
             @Override
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-                updateSelectionState();
+                int selectedIndex = expenseTableView.getSelectedIndex();
+                editSelectedExpenseAction.setEnabled(selectedIndex != -1);
+                deleteSelectedExpenseAction.setEnabled(selectedIndex != -1);
             }
         });
     }
@@ -315,7 +317,6 @@ public class ExpensesWindow extends Window implements Bindable {
                             for (int i = 0, n = expenses.getLength(); i < n; i++) {
                                 if (JSON.get(expenses.get(i), "id").equals(id)) {
                                     expenses.remove(i, 1);
-                                    updateSelectionState();
                                     break;
                                 }
                             }
@@ -332,11 +333,5 @@ public class ExpensesWindow extends Window implements Bindable {
                 }
             }
         });
-    }
-
-    private void updateSelectionState() {
-        int selectedIndex = expenseTableView.getSelectedIndex();
-        editSelectedExpenseAction.setEnabled(selectedIndex != -1);
-        deleteSelectedExpenseAction.setEnabled(selectedIndex != -1);
     }
 }

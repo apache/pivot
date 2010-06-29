@@ -36,17 +36,7 @@ public class MultiSelect extends Window implements Bindable {
         dataListView = (ListView)context.get("dataListView");
         selectionListView = (ListView)context.get("selectionListView");
 
-        dataListView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
-            @Override
-            public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
-                refreshSelectionListData();
-            }
-
-            @Override
-            public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
-                refreshSelectionListData();
-            }
-
+        dataListView.getListViewSelectionListeners().add(new ListViewSelectionListener.Adapter() {
             @Override
             public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
                 refreshSelectionListData();

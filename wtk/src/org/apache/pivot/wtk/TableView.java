@@ -1291,10 +1291,14 @@ public class TableView extends Component {
         @Override
         public void itemInserted(List<Object> list, int index) {
             // Increment selected ranges
-            selectedRanges.insertIndex(index);
+            int updated = selectedRanges.insertIndex(index);
 
             // Notify listeners that items were inserted
             tableViewRowListeners.rowInserted(TableView.this, index);
+
+            if (updated > 0) {
+                tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
+            }
         }
 
         @Override
@@ -1302,10 +1306,14 @@ public class TableView extends Component {
             int count = items.getLength();
 
             // Decrement selected ranges
-            selectedRanges.removeIndexes(index, count);
+            int updated = selectedRanges.removeIndexes(index, count);
 
             // Notify listeners that items were removed
             tableViewRowListeners.rowsRemoved(TableView.this, index, count);
+
+            if (updated > 0) {
+                tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
+            }
         }
 
         @Override
@@ -1317,9 +1325,14 @@ public class TableView extends Component {
         public void listCleared(List<Object> list) {
             // All items were removed; clear the selection and notify
             // listeners
+            int cleared = selectedRanges.getLength();
             selectedRanges.clear();
 
             tableViewRowListeners.rowsCleared(TableView.this);
+
+            if (cleared > 0) {
+                tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
+            }
         }
 
         @Override
@@ -1718,9 +1731,14 @@ public class TableView extends Component {
 
         Sequence<Span> addedRanges = selectedRanges.addRange(start, end);
 
-        for (int i = 0, n = addedRanges.getLength(); i < n; i++) {
+        int n = addedRanges.getLength();
+        for (int i = 0; i < n; i++) {
             Span addedRange = addedRanges.get(i);
             tableViewSelectionListeners.selectedRangeAdded(this, addedRange.start, addedRange.end);
+        }
+
+        if (n > 0) {
+            tableViewSelectionListeners.selectedRangesChanged(this, null);
         }
 
         return addedRanges;
@@ -1781,9 +1799,14 @@ public class TableView extends Component {
 
         Sequence<Span> removedRanges = selectedRanges.removeRange(start, end);
 
-        for (int i = 0, n = removedRanges.getLength(); i < n; i++) {
+        int n = removedRanges.getLength();
+        for (int i = 0; i < n; i++) {
             Span removedRange = removedRanges.get(i);
             tableViewSelectionListeners.selectedRangeRemoved(this, removedRange.start, removedRange.end);
+        }
+
+        if (n > 0) {
+            tableViewSelectionListeners.selectedRangesChanged(this, null);
         }
 
         return removedRanges;

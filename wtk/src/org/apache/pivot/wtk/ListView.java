@@ -671,17 +671,15 @@ public class ListView extends Component {
         @Override
         public void itemInserted(List<Object> list, int index) {
             // Increment selected ranges
-            selectedRanges.insertIndex(index);
-
-            int i, n;
+            int updated = selectedRanges.insertIndex(index);
 
             // Increment checked indexes
-            i = ArrayList.binarySearch(checkedIndexes, index);
+            int i = ArrayList.binarySearch(checkedIndexes, index);
             if (i < 0) {
                 i = -(i + 1);
             }
 
-            n = checkedIndexes.getLength();
+            int n = checkedIndexes.getLength();
             while (i < n) {
                 checkedIndexes.update(i, checkedIndexes.get(i) + 1);
                 i++;
@@ -689,6 +687,10 @@ public class ListView extends Component {
 
             // Notify listeners that items were inserted
             listViewItemListeners.itemInserted(ListView.this, index);
+
+            if (updated > 0) {
+                listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
+            }
         }
 
         @Override
@@ -696,7 +698,7 @@ public class ListView extends Component {
             int count = items.getLength();
 
             // Decrement selected ranges
-            selectedRanges.removeIndexes(index, count);
+            int updated = selectedRanges.removeIndexes(index, count);
 
             // Remove and decrement checked indexes
             int i = ArrayList.binarySearch(checkedIndexes, index);
@@ -721,6 +723,10 @@ public class ListView extends Component {
 
             // Notify listeners that items were removed
             listViewItemListeners.itemsRemoved(ListView.this, index, count);
+
+            if (updated > 0) {
+                listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
+            }
         }
 
         @Override
@@ -732,10 +738,15 @@ public class ListView extends Component {
         public void listCleared(List<Object> list) {
             // All items were removed; clear the selection and notify
             // listeners
+            int cleared = selectedRanges.getLength();
             selectedRanges.clear();
             checkedIndexes.clear();
 
             listViewItemListeners.itemsCleared(ListView.this);
+
+            if (cleared > 0) {
+                listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
+            }
         }
 
         @Override
@@ -1133,9 +1144,14 @@ public class ListView extends Component {
 
         Sequence<Span> addedRanges = selectedRanges.addRange(start, end);
 
-        for (int i = 0, n = addedRanges.getLength(); i < n; i++) {
+        int n = addedRanges.getLength();
+        for (int i = 0; i < n; i++) {
             Span addedRange = addedRanges.get(i);
             listViewSelectionListeners.selectedRangeAdded(this, addedRange.start, addedRange.end);
+        }
+
+        if (n > 0) {
+            listViewSelectionListeners.selectedRangesChanged(this, null);
         }
 
         return addedRanges;
@@ -1196,9 +1212,14 @@ public class ListView extends Component {
 
         Sequence<Span> removedRanges = selectedRanges.removeRange(start, end);
 
-        for (int i = 0, n = removedRanges.getLength(); i < n; i++) {
+        int n = removedRanges.getLength();
+        for (int i = 0; i < n; i++) {
             Span removedRange = removedRanges.get(i);
             listViewSelectionListeners.selectedRangeRemoved(this, removedRange.start, removedRange.end);
+        }
+
+        if (n > 0) {
+            listViewSelectionListeners.selectedRangesChanged(this, null);
         }
 
         return removedRanges;

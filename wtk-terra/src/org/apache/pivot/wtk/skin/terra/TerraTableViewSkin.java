@@ -1517,7 +1517,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
         if (tableView.isValid()) {
             // Repaint the area occupied by the previous selection
-            if (previousSelectedRanges.getLength() > 0) {
+            if (previousSelectedRanges != null
+                && previousSelectedRanges.getLength() > 0) {
                 int rangeStart = previousSelectedRanges.get(0).start;
                 int rangeEnd = previousSelectedRanges.get(previousSelectedRanges.getLength() - 1).end;
 
