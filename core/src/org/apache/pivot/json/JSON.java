@@ -419,8 +419,8 @@ public class JSON {
                 while(i <= n
                     && c != '.'
                     && c != '[') {
-                    if (c != '~'
-                        && !Character.isJavaIdentifierPart(c)) {
+                    if (!Character.isJavaIdentifierPart(c)
+                        && c != '~') {
                         throw new IllegalArgumentException("Illegal identifier character.");
                     }
 
