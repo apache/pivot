@@ -130,9 +130,9 @@ public class TextInput extends Component {
         }
 
         @Override
-        public void charactersRemoved(TextInput textInput, int index, int count) {
+        public void charactersRemoved(TextInput textInput, int index, char[] characters) {
             for (TextInputTextListener listener : this) {
-                listener.charactersRemoved(textInput, index, count);
+                listener.charactersRemoved(textInput, index, characters);
             }
         }
 
@@ -362,13 +362,15 @@ public class TextInput extends Component {
             // Update the text valid flag and selection state
             textValid = (validator == null) ? true : validator.isValid(text);
 
+            char[] removed = new char[count];
             if (selectionStart < text.length()) {
                 StringBuilder textBuilder = new StringBuilder(text.substring(0, selectionStart));
                 textBuilder.append(text.substring(selectionStart + count));
+                text.getChars(selectionStart, selectionStart + count, removed, 0);
                 text = textBuilder.toString();
             }
 
-            textInputTextListeners.charactersRemoved(TextInput.this, selectionStart, count);
+            textInputTextListeners.charactersRemoved(TextInput.this, selectionStart, removed);
             textInputTextListeners.textChanged(TextInput.this, null);
 
             // Fire additional events as needed

@@ -112,7 +112,7 @@ public class SuggestionPopups extends Window implements Bindable {
             }
 
             @Override
-            public void charactersRemoved(TextInput textInput, int index, int count) {
+            public void charactersRemoved(TextInput textInput, int index, char[] characters) {
                 suggestionPopup.close();
             }
         });

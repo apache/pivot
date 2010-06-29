@@ -29,7 +29,7 @@ public interface TextInputTextListener {
         }
 
         @Override
-        public void charactersRemoved(TextInput textInput, int index, int count) {
+        public void charactersRemoved(TextInput textInput, int index, char[] characters) {
         }
 
         @Override
@@ -60,10 +60,10 @@ public interface TextInputTextListener {
      * @param index
      * The index at which characters were removed.
      *
-     * @param count
-     * The number of characters that were removed.
+     * @param characters
+     * The characters that were removed.
      */
-    public void charactersRemoved(TextInput textInput, int index, int count);
+    public void charactersRemoved(TextInput textInput, int index, char[] characters);
 
     /**
      * Called when a text input's text has changed.

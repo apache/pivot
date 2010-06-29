@@ -63,7 +63,7 @@ public class SuggestionPopupTest implements Application {
             }
 
             @Override
-            public void charactersRemoved(TextInput textInput, int index, int count) {
+            public void charactersRemoved(TextInput textInput, int index, char[] characters) {
                 suggestionPopup.close();
             }
         });

@@ -59,7 +59,7 @@ public class SuggestionDemo extends Window implements Bindable {
             }
 
             @Override
-            public void charactersRemoved(TextInput textInput, int index, int count) {
+            public void charactersRemoved(TextInput textInput, int index, char[] characters) {
                 if (suggestionQuery != null) {
                     suggestionQuery.abort();
                 }

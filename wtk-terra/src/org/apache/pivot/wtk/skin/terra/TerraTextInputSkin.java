@@ -1339,7 +1339,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public void charactersRemoved(TextInput textInput, int index, int count) {
+    public void charactersRemoved(TextInput textInput, int index, char[] characters) {
         // No-op
     }
 
