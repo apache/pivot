@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -356,6 +357,18 @@ public final class DesktopApplicationContext extends ApplicationContext {
             width = preferences.getInt(WIDTH_ARGUMENT, width);
             height = preferences.getInt(HEIGHT_ARGUMENT, height);
             maximized = preferences.getBoolean(MAXIMIZED_ARGUMENT, maximized);
+
+            // Update positioning if window is offscreen
+            GraphicsDevice[] screenDevices = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+            if (screenDevices.length == 1) {
+                if (x < 0) {
+                    x = 0;
+                }
+                
+                if (y < 0) {
+                    y = 0;
+                }
+            }
         } catch (SecurityException exception) {
             System.err.println("Unable to retrieve startup preferences: " + exception);
         }
