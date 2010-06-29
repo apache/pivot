@@ -231,21 +231,40 @@ public class TextInput extends Component {
             throw new IllegalArgumentException("Text length is greater than maximum length.");
         }
 
-        // TODO Store previous selection start, length; previous text valid flag
-
         String previousText = this.text;
+
         if (previousText != text) {
             this.text = text;
 
+            // Store previous text valid flag, selection start/length
+            boolean previousTextValid = textValid;
+            int previousSelectionStart = selectionStart;
+            int previousSelectionLength = selectionLength;
+
+            // Update the text valid flag and selection state
+            textValid = (validator == null) ? true : validator.isValid(text);
             selectionStart = text.length();
             selectionLength = 0;
 
-            // TODO Update textValid flag
-
             textInputTextListeners.textChanged(this, previousText);
 
-            // TODO Fire additional events as needed
+            // Fire additional events as needed
+            if (textValid != previousTextValid) {
+                textInputListeners.textValidChanged(this);
+            }
+
+            if (selectionStart != previousSelectionStart
+                || selectionLength != previousSelectionLength) {
+                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+            }
         }
+    }
+
+    /**
+     * Returns the length of the text in the text input.
+     */
+    public int getTextLength() {
+        return text.length();
     }
 
     /**
@@ -260,8 +279,8 @@ public class TextInput extends Component {
     }
 
     /**
-     * Inserts text into the text input's content. The text replaces the current
-     * selection.
+     * Inserts a text string into the text input's content. The text replaces the
+     * current selection.
      *
      * @param text
      * The text to insert.
@@ -271,47 +290,58 @@ public class TextInput extends Component {
             throw new IllegalArgumentException();
         }
 
+        if (this.text.length() + text.length() > maximumLength) {
+            throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
+        }
+
         if (selectionLength > 0) {
             delete(false);
         }
 
         // Insert the text
-        if (this.text.length() + text.length() > maximumLength) {
-            throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
+        if (text.length() > 0) {
+            // Insert the text
+            StringBuilder textBuilder = new StringBuilder(this.text.substring(0, selectionStart));
+            textBuilder.append(text);
+            textBuilder.append(this.text.substring(selectionStart));
+            this.text = textBuilder.toString();
+
+            // Store previous text valid flag, selection start/length
+            boolean previousTextValid = textValid;
+            int previousSelectionStart = selectionStart;
+            int previousSelectionLength = selectionLength;
+
+            // Update the text valid flag and selection state
+            textValid = (validator == null) ? true : validator.isValid(text);
+            selectionStart += text.length();
+            selectionLength = 0;
+
+            textInputTextListeners.charactersInserted(TextInput.this, selectionStart, text.length());
+            textInputTextListeners.textChanged(TextInput.this, null);
+
+            // Fire additional events as needed
+            if (textValid != previousTextValid) {
+                textInputListeners.textValidChanged(this);
+            }
+
+            if (selectionStart != previousSelectionStart
+                || selectionLength != previousSelectionLength) {
+                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+            }
         }
-
-        // TODO Store previous selection start, length; previous text valid flag
-
-        StringBuilder textBuilder = new StringBuilder(this.text.substring(0, selectionStart));
-        textBuilder.append(text);
-        textBuilder.append(this.text.substring(selectionStart));
-        this.text = textBuilder.toString();
-
-        selectionStart += text.length();
-        selectionLength = 0;
-
-        // TODO Update textValid flag
-
-        textInputTextListeners.charactersInserted(TextInput.this, selectionStart, text.length());
-        textInputTextListeners.textChanged(TextInput.this, null);
-
-        // TODO Fire additional events as needed
     }
 
     /**
-     * Returns the character count of the text node.
+     * Deletes the current selection.
      *
-     * @return
-     * The text node's length, or <tt>0</tt> if the text node is <tt>null</tt>.
+     * @param backspace
+     * If the current selection length is <tt>0</tt>, moves the caret back
+     * character position before deleting; if the selection length is greater
+     * than <tt>0</tt>, this argument is ignored.
      */
-    public int getTextLength() {
-        return text.length();
-    }
-
     public void delete(boolean backspace) {
         if (text.length() > 0) {
-            // TODO Store previous selection start, length; previous text valid flag
-
+            // Remove the character
             int count;
             if (selectionLength > 0) {
                 count = selectionLength;
@@ -324,26 +354,47 @@ public class TextInput extends Component {
                 count = 1;
             }
 
+            // Store previous text valid flag, selection start/length
+            boolean previousTextValid = textValid;
+            int previousSelectionStart = selectionStart;
+            int previousSelectionLength = selectionLength;
+
+            // Update the text valid flag and selection state
+            textValid = (validator == null) ? true : validator.isValid(text);
+
             if (selectionStart < text.length()) {
                 StringBuilder textBuilder = new StringBuilder(text.substring(0, selectionStart));
                 textBuilder.append(text.substring(selectionStart + count));
                 text = textBuilder.toString();
             }
 
-            // TODO Update textValid flag
-
             textInputTextListeners.charactersRemoved(TextInput.this, selectionStart, count);
             textInputTextListeners.textChanged(TextInput.this, null);
 
-            // TODO Fire additional events as needed
+            // Fire additional events as needed
+            if (textValid != previousTextValid) {
+                textInputListeners.textValidChanged(this);
+            }
+
+            if (selectionStart != previousSelectionStart
+                || selectionLength != previousSelectionLength) {
+                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+            }
         }
     }
 
+    /**
+     * Places any selected text on the clipboard and deletes it from
+     * the text input.
+     */
     public void cut() {
         copy();
         delete(false);
     }
 
+    /**
+     * Places any selected text on the clipboard.
+     */
     public void copy() {
         // Copy selection to clipboard
         String selectedText = getSelectedText();
@@ -355,6 +406,9 @@ public class TextInput extends Component {
         }
     }
 
+    /**
+     * Inserts text from the clipboard into the text input.
+     */
     public void paste() {
         Manifest clipboardContent = Clipboard.getContent();
 
@@ -411,7 +465,7 @@ public class TextInput extends Component {
      *
      * @return
      * A span containing the current selection. Both start and end points are
-     * inclusive. Returns <tt>null</tt> if the selection is empty.
+     * inclusive. Returns <tt>null</tt> if the selection length is <tt>0</tt>.
      */
     public Span getSelection() {
         return (selectionLength == 0) ? null : new Span(selectionStart,
@@ -727,8 +781,19 @@ public class TextInput extends Component {
 
         if (validator != previousValidator) {
             this.validator = validator;
+
+            // Store previous text valid flag
+            boolean previousTextValid = textValid;
+
+            // Update the text valid flag
+            textValid = (validator == null) ? true : validator.isValid(text);
+
             textInputListeners.textValidatorChanged(this, previousValidator);
-            validateText();
+
+            // Fire additional events as needed
+            if (textValid != previousTextValid) {
+                textInputListeners.textValidChanged(this);
+            }
         }
     }
 
@@ -739,21 +804,6 @@ public class TextInput extends Component {
      */
     public boolean isTextValid() {
         return textValid;
-    }
-
-    /**
-     * Updates the valid state after the text or the validator has changed.
-     */
-    private void validateText() {
-        // TODO VERY IMPORTANT Eliminate this method
-
-        String text = getText();
-        boolean textValid = (validator == null || text == null) ? true : validator.isValid(text);
-
-        if (textValid != this.textValid) {
-            this.textValid = textValid;
-            textInputListeners.textValidChanged(this);
-        }
     }
 
     /**

@@ -41,8 +41,13 @@ public interface TextInputTextListener {
      * Called when characters have been inserted into a text input.
      *
      * @param textInput
+     * The source of the event.
+     *
      * @param index
+     * The index at which characters were inserted.
+     *
      * @param count
+     * The number of characters that were inserted.
      */
     public void charactersInserted(TextInput textInput, int index, int count);
 
@@ -50,8 +55,13 @@ public interface TextInputTextListener {
      * Called when characters have been removed from a text input.
      *
      * @param textInput
+     * The source of the event.
+     *
      * @param index
+     * The index at which characters were removed.
+     *
      * @param count
+     * The number of characters that were removed.
      */
     public void charactersRemoved(TextInput textInput, int index, int count);
 
@@ -59,6 +69,10 @@ public interface TextInputTextListener {
      * Called when a text input's text has changed.
      *
      * @param textInput
+     * The source of the event.
+     *
+     * @param previousText
+     * If the text changed directly, the previous text value. Otherwise, <tt>null</tt>.
      */
     public void textChanged(TextInput textInput, String previousText);
 }
