@@ -1336,12 +1336,16 @@ public class TableView extends Component {
         }
 
         @Override
-        public void comparatorChanged(List<Object> list,
-            Comparator<Object> previousComparator) {
+        public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
+            int cleared = selectedRanges.getLength();
+
             if (list.getComparator() != null) {
                 selectedRanges.clear();
-
                 tableViewRowListeners.rowsSorted(TableView.this);
+            }
+
+            if (cleared > 0) {
+                tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
             }
         }
     };
@@ -1424,11 +1428,15 @@ public class TableView extends Component {
         List<?> previousTableData = this.tableData;
 
         if (previousTableData != tableData) {
+            int cleared;
             if (previousTableData != null) {
                 // Clear any existing selection
+                cleared = selectedRanges.getLength();
                 selectedRanges.clear();
 
                 ((List<Object>)previousTableData).getListListeners().remove(tableDataListener);
+            } else {
+                cleared = 0;
             }
 
             ((List<Object>)tableData).getListListeners().add(tableDataListener);
@@ -1436,6 +1444,10 @@ public class TableView extends Component {
             // Update the list data and fire change event
             this.tableData = tableData;
             tableViewListeners.tableDataChanged(this, previousTableData);
+
+            if (cleared > 0) {
+                tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
+            }
         }
     }
 

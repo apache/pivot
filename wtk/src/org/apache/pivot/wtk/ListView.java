@@ -750,13 +750,17 @@ public class ListView extends Component {
         }
 
         @Override
-        public void comparatorChanged(List<Object> list,
-            Comparator<Object> previousComparator) {
+        public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
+            int cleared = selectedRanges.getLength();
+
             if (list.getComparator() != null) {
                 selectedRanges.clear();
                 checkedIndexes.clear();
-
                 listViewItemListeners.itemsSorted(ListView.this);
+            }
+
+            if (cleared > 0) {
+                listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
             }
         }
     };
@@ -813,12 +817,16 @@ public class ListView extends Component {
         List<?> previousListData = this.listData;
 
         if (previousListData != listData) {
+            int cleared;
             if (previousListData != null) {
                 // Clear any existing selection
+                cleared = selectedRanges.getLength();
                 selectedRanges.clear();
                 checkedIndexes.clear();
 
                 ((List<Object>)previousListData).getListListeners().remove(listDataListener);
+            } else {
+                cleared = 0;
             }
 
             ((List<Object>)listData).getListListeners().add(listDataListener);
@@ -826,6 +834,10 @@ public class ListView extends Component {
             // Update the list data and fire change event
             this.listData = listData;
             listViewListeners.listDataChanged(this, previousListData);
+
+            if (cleared > 0) {
+                listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
+            }
         }
     }
 

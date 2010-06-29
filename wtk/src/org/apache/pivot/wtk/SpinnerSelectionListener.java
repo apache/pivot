@@ -24,7 +24,11 @@ public interface SpinnerSelectionListener {
      * Called when a spinner's selected index has changed.
      *
      * @param spinner
+     * The source of the event.
+     *
      * @param previousSelectedIndex
+     * If the selection changed directly, contains the index that was previously
+     * selected. Otherwise, contains the current selection.
      */
     public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex);
 }

@@ -18,10 +18,13 @@ package org.apache.pivot.wtk;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.ListListener;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
@@ -147,6 +150,56 @@ public class ListButton extends Button {
     private BindType selectedItemBindType = BindType.BOTH;
     private ListView.ItemBindMapping selectedItemBindMapping = null;
 
+    private ListListener<Object> listDataListener = new ListListener<Object>() {
+        @Override
+        public void itemInserted(List<Object> list, int index) {
+            int previousSelectedIndex = selectedIndex;
+
+            if (index <= selectedIndex) {
+                selectedIndex++;
+            }
+
+            if (selectedIndex != previousSelectedIndex) {
+                listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
+            }
+        }
+
+        @Override
+        public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
+            int previousSelectedIndex = selectedIndex;
+
+            int count = items.getLength();
+            if (index + count <= selectedIndex) {
+                selectedIndex--;
+            } else if (index <= selectedIndex) {
+                selectedIndex = -1;
+            }
+
+            if (selectedIndex != previousSelectedIndex) {
+                listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
+            }
+        }
+
+        @Override
+        public void itemUpdated(List<Object> list, int index, Object previousItem) {
+            // No-op
+        }
+
+        @Override
+        public void listCleared(List<Object> list) {
+            // All items were removed; clear the selection and notify
+            // listeners
+            selectedIndex = -1;
+            listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
+        }
+
+        @Override
+        public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
+            selectedIndex = -1;
+            listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
+        }
+    };
+
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
     private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
     private ListButtonBindingListenerList listButtonBindingListeners = new ListButtonBindingListenerList();
@@ -236,6 +289,7 @@ public class ListButton extends Button {
      * @param listData
      * The list data to be presented by the list button.
      */
+    @SuppressWarnings("unchecked")
     public void setListData(List<?> listData) {
         if (listData == null) {
             throw new IllegalArgumentException("listData is null.");
@@ -244,13 +298,24 @@ public class ListButton extends Button {
         List<?> previousListData = this.listData;
 
         if (previousListData != listData) {
+            int previousSelectedIndex = selectedIndex;
+
             if (previousListData != null) {
+                // Clear any existing selection
                 selectedIndex = -1;
+
+                ((List<Object>)previousListData).getListListeners().remove(listDataListener);
             }
+
+            ((List<Object>)listData).getListListeners().add(listDataListener);
 
             // Update the list data and fire change event
             this.listData = listData;
             listButtonListeners.listDataChanged(this, previousListData);
+
+            if (selectedIndex != previousSelectedIndex) {
+                listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
+            }
         }
     }
 

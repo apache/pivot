@@ -336,7 +336,6 @@ public abstract class ListButtonSkin extends ButtonSkin
     // List button events
     @Override
     public void listDataChanged(ListButton listButton, List<?> previousListData) {
-        listButton.setButtonData(null);
         listView.setListData(listButton.getListData());
         invalidateComponent();
     }

@@ -265,18 +265,25 @@ public class Spinner extends Container {
     private ListListener<Object> spinnerDataListener = new ListListener<Object>() {
         @Override
         public void itemInserted(List<Object> list, int index) {
+            int previousSelectedIndex = selectedIndex;
+
             if (index <= selectedIndex) {
                 selectedIndex++;
             }
 
             // Notify listeners that items were inserted
             spinnerItemListeners.itemInserted(Spinner.this, index);
+
+            if (selectedIndex != previousSelectedIndex) {
+                spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
+            }
         }
 
         @Override
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
-            int count = items.getLength();
+            int previousSelectedIndex = selectedIndex;
 
+            int count = items.getLength();
             if (index + count <= selectedIndex) {
                 selectedIndex--;
             } else if (index <= selectedIndex) {
@@ -285,6 +292,10 @@ public class Spinner extends Container {
 
             // Notify listeners that items were removed
             spinnerItemListeners.itemsRemoved(Spinner.this, index, count);
+
+            if (selectedIndex != previousSelectedIndex) {
+                spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
+            }
         }
 
         @Override
@@ -298,15 +309,14 @@ public class Spinner extends Container {
             // listeners
             selectedIndex = -1;
             spinnerItemListeners.itemsCleared(Spinner.this);
+            spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
         }
 
         @Override
-        public void comparatorChanged(List<Object> list,
-            Comparator<Object> previousComparator) {
-            if (list.getComparator() != null) {
-                selectedIndex = -1;
-                spinnerItemListeners.itemsSorted(Spinner.this);
-            }
+        public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
+            selectedIndex = -1;
+            spinnerItemListeners.itemsSorted(Spinner.this);
+            spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
         }
     };
 
@@ -360,6 +370,8 @@ public class Spinner extends Container {
         List<?> previousSpinnerData = this.spinnerData;
 
         if (previousSpinnerData != spinnerData) {
+            int previousSelectedIndex = selectedIndex;
+
             if (previousSpinnerData != null) {
                 // Clear any existing selection
                 selectedIndex = -1;
@@ -372,6 +384,10 @@ public class Spinner extends Container {
             // Update the spinner data and fire change event
             this.spinnerData = spinnerData;
             spinnerListeners.spinnerDataChanged(this, previousSpinnerData);
+
+            if (selectedIndex != previousSelectedIndex) {
+                spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
+            }
         }
     }
 
