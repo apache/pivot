@@ -355,7 +355,7 @@ public class RichTextEditorDemo implements Application {
             // if the selection covers an internal part of the text-node, split the
             // text-node into 3 parts, and apply the style to the second part
             int part2Start = selectionSpan.start - textSpan.start;
-            int part2End = selectionSpan.end - textSpan.start;
+            int part2End = selectionSpan.end - textSpan.start + 1;
             String part1 = textNode.getSubstring(0, part2Start);
             String part2 = textNode.getSubstring(part2Start, part2End);
             String part3 = textNode.getSubstring(part2End, characterCount);
