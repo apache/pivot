@@ -917,18 +917,21 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
             }
 
             case READ_ONLY_PROPERTY: {
+                Dictionary<String, Object> dictionary;
                 if (element.value instanceof Dictionary<?, ?>) {
-                    // Process attributes looking for instance property setters
-                    for (Attribute attribute : element.attributes) {
-                        if (Character.isUpperCase(attribute.localName.charAt(0))) {
-                            throw new SerializationException("Static setters are not supported"
-                                + " for read-only properties.");
-                        }
+                    dictionary = (Dictionary<String, Object>)element.value;
+                } else {
+                    dictionary = new BeanAdapter(element.value);
+                }
 
-                        Dictionary<String, Object> dictionary =
-                            (Dictionary<String, Object>)element.value;
-                        dictionary.put(attribute.localName, resolve(attribute.value));
+                // Process attributes looking for instance property setters
+                for (Attribute attribute : element.attributes) {
+                    if (Character.isUpperCase(attribute.localName.charAt(0))) {
+                        throw new SerializationException("Static setters are not supported"
+                            + " for read-only properties.");
                     }
+
+                    dictionary.put(attribute.localName, resolve(attribute.value));
                 }
 
                 break;
