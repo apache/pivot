@@ -419,8 +419,7 @@ public class JSON {
                 while(i <= n
                     && c != '.'
                     && c != '[') {
-                    if (!Character.isJavaIdentifierPart(c)
-                        && c != '~') {
+                    if (!Character.isJavaIdentifierPart(c)) {
                         throw new IllegalArgumentException("Illegal identifier character.");
                     }
 
