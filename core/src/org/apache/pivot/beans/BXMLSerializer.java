@@ -666,11 +666,6 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                         elementType = Element.Type.READ_ONLY_PROPERTY;
                         value = beanAdapter.get(localName);
                         assert (value != null) : "Read-only properties cannot be null.";
-
-                        if (attributes.getLength() > 0
-                            && !(value instanceof Dictionary<?, ?>)) {
-                            throw new SerializationException("Only read-only dictionaries can have attributes.");
-                        }
                     } else {
                         if (attributes.getLength() > 0) {
                             throw new SerializationException("Writable property elements cannot have attributes.");
