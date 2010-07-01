@@ -65,7 +65,7 @@ public class TerraAlertSkin extends TerraDialogSkin
     private static Map<String, ?> commandButtonStyles;
 
     static {
-        URL location = TerraAlertSkin.class.getResource("command_button.json");
+        URL location = TerraAlertSkin.class.getResource("command_button_styles.json");
 
         try {
             InputStream inputStream = location.openStream();

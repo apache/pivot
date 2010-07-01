@@ -20,11 +20,11 @@ import java.util.Comparator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.ComponentListener;
+import org.apache.pivot.wtk.ComponentStyleListener;
 import org.apache.pivot.wtk.Form;
 
 class ComponentStyleInspectorSkin extends ComponentInspectorSkin {
-    private ComponentListener componentHandler = new ComponentListener.Adapter() {
+    private ComponentStyleListener componentStyleHandler = new ComponentStyleListener.Adapter() {
         @Override
         public void styleUpdated(Component component, String key, Object previousValue) {
             Component.StyleDictionary styles = component.getStyles();
@@ -45,11 +45,11 @@ class ComponentStyleInspectorSkin extends ComponentInspectorSkin {
         clearControls();
 
         if (previousSource != null) {
-            previousSource.getComponentListeners().remove(componentHandler);
+            previousSource.getComponentStyleListeners().remove(componentStyleHandler);
         }
 
         if (source != null) {
-            source.getComponentListeners().add(componentHandler);
+            source.getComponentStyleListeners().add(componentStyleHandler);
 
             Component.StyleDictionary styles = source.getStyles();
 

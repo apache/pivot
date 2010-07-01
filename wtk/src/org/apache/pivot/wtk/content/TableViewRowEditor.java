@@ -519,11 +519,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         @Override
-        public void styleUpdated(Component component, String styleKey, Object previousValue) {
-            // No-op
-        }
-
-        @Override
         public void cursorChanged(Component component, Cursor previousCursor) {
             // No-op
         }

@@ -30,7 +30,6 @@ import org.apache.pivot.beans.PropertyNotFoundException;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
-import org.apache.pivot.collections.HashSet;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
@@ -52,8 +51,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Style dictionary implementation.
      */
-    public final class StyleDictionary implements
-        Dictionary<String, Object>, Iterable<String> {
+    public final class StyleDictionary implements Dictionary<String, Object>, Iterable<String> {
         private StyleDictionary() {
         }
 
@@ -68,8 +66,7 @@ public abstract class Component implements ConstrainedVisual {
 
             try {
                 previousValue = styles.put(key, value);
-                customStyles.add(key);
-                componentListeners.styleUpdated(Component.this, key, previousValue);
+                componentStyleListeners.styleUpdated(Component.this, key, previousValue);
             } catch(PropertyNotFoundException exception) {
                 System.err.println("\"" + key + "\" is not a valid style for "
                     + Component.this);
@@ -80,8 +77,7 @@ public abstract class Component implements ConstrainedVisual {
 
         @Override
         public Object remove(String key) {
-            customStyles.remove(key);
-            return null;
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -328,13 +324,6 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         @Override
-        public void styleUpdated(Component component, String styleKey, Object previousValue) {
-            for (ComponentListener listener : this) {
-                listener.styleUpdated(component, styleKey, previousValue);
-            }
-        }
-
-        @Override
         public void cursorChanged(Component component, Cursor previousCursor) {
             for (ComponentListener listener : this) {
                 listener.cursorChanged(component, previousCursor);
@@ -415,6 +404,30 @@ public abstract class Component implements ConstrainedVisual {
             Sequence<Decorator> decorators) {
             for (ComponentDecoratorListener listener : this) {
                 listener.decoratorsRemoved(component, index, decorators);
+            }
+        }
+    }
+
+    private static class ComponentStyleListenerList
+        extends ListenerList<ComponentStyleListener> implements ComponentStyleListener {
+        @Override
+        public void styleUpdated(Component component, String styleKey, Object previousValue) {
+            for (ComponentStyleListener listener : this) {
+                listener.styleUpdated(component, styleKey, previousValue);
+            }
+        }
+
+        @Override
+        public void styleClassNameAdded(Component component, String styleClassName) {
+            for (ComponentStyleListener listener : this) {
+                listener.styleClassNameAdded(component, styleClassName);
+            }
+        }
+
+        @Override
+        public void styleClassNameRemoved(Component component, String styleClassName) {
+            for (ComponentStyleListener listener : this) {
+                listener.styleClassNameRemoved(component, styleClassName);
             }
         }
     }
@@ -571,11 +584,6 @@ public abstract class Component implements ConstrainedVisual {
 
     // The currently installed skin, or null if no skin is installed
     private Skin skin = null;
-    private BeanAdapter styles = null;
-    private StyleDictionary styleDictionary = new StyleDictionary();
-
-    // Custom style keys
-    private HashSet<String> customStyles = new HashSet<String>();
 
     // Preferred width and height values explicitly set by the user
     private int preferredWidth = -1;
@@ -635,6 +643,10 @@ public abstract class Component implements ConstrainedVisual {
     // The component's name
     private String name = null;
 
+    // The component's styles and style class names
+    private BeanAdapter styles = null;
+    private StyleDictionary styleDictionary = new StyleDictionary();
+
     // User data
     private HashMap<String, Object> userData = new HashMap<String, Object>();
     private UserDataDictionary userDataDictionary = new UserDataDictionary();
@@ -649,6 +661,7 @@ public abstract class Component implements ConstrainedVisual {
     private ComponentListenerList componentListeners = new ComponentListenerList();
     private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
     private ComponentDecoratorListenerList componentDecoratorListeners = new ComponentDecoratorListenerList();
+    private ComponentStyleListenerList componentStyleListeners = new ComponentStyleListenerList();
     private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
     private ComponentMouseWheelListenerList componentMouseWheelListeners = new ComponentMouseWheelListenerList();
@@ -767,12 +780,6 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         if (type == componentClass) {
-            // Cache the values of custom styles
-            HashMap<String, Object> styles = new HashMap<String, Object>();
-            for (String key : customStyles) {
-                styles.put(key, styleDictionary.get(key));
-            }
-
             try {
                 setSkin(skinClass.newInstance());
             } catch(InstantiationException exception) {
@@ -780,9 +787,6 @@ public abstract class Component implements ConstrainedVisual {
             } catch(IllegalAccessException exception) {
                 throw new IllegalArgumentException(exception);
             }
-
-            // Re-apply custom styles
-            setStyles(styles);
         }
     }
 
@@ -2441,17 +2445,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the user data dictionary.
-     */
-    public UserDataDictionary getUserData() {
-        return userDataDictionary;
-    }
-
-    /**
-     * Returns a dictionary instance representing the component's style
-     * properties. This is effectively a pass-through to the skin's dictionary
-     * implementation. It allows callers to modify the properties of the skin
-     * without directly obtaining a reference to the skin.
+     * Returns the component's style dictionary.
      */
     public final StyleDictionary getStyles() {
         return styleDictionary;
@@ -2461,6 +2455,7 @@ public abstract class Component implements ConstrainedVisual {
      * Applies a set of styles.
      *
      * @param styles
+     * A map containing the styles to apply.
      */
     public void setStyles(Map<String, ?> styles) {
         if (styles == null) {
@@ -2476,10 +2471,7 @@ public abstract class Component implements ConstrainedVisual {
      * Applies a set of styles.
      *
      * @param styles
-     * The location of the styles to apply. If the styles have been previously
-     * applied, they will be retrieved from the resource cache in the
-     * application context. Otherwise, they will be loaded from the given
-     * location and added to the cache before being applied.
+     * The location of the styles to apply.
      */
     @SuppressWarnings("unchecked")
     public void setStyles(URL styles) throws IOException, SerializationException {
@@ -2487,41 +2479,33 @@ public abstract class Component implements ConstrainedVisual {
             throw new IllegalArgumentException("styles is null.");
         }
 
-        Map<String, Object> cachedStyles =
-            (Map<String, Object>)ApplicationContext.getResourceCache().get(styles);
-
-        if (cachedStyles == null) {
-            JSONSerializer jsonSerializer = new JSONSerializer();
-            cachedStyles =
-                (Map<String, Object>)jsonSerializer.readObject(styles.openStream());
-
-            ApplicationContext.getResourceCache().put(styles, cachedStyles);
-        }
-
-        setStyles(cachedStyles);
+        JSONSerializer jsonSerializer = new JSONSerializer();
+        setStyles((Map<String, ?>)jsonSerializer.readObject(styles.openStream()));
     }
 
     /**
-     * Applies a set of styles encoded as a JSON string.
+     * Applies a set of styles.
      *
      * @param styles
+     * The styles encoded as a JSON string.
      */
-    public void setStyles(String styles) {
+    public void setStyles(String styles) throws IOException, SerializationException {
         if (styles == null) {
             throw new IllegalArgumentException("styles is null.");
         }
 
-        try {
-            if (styles.charAt(0) == '{') {
-                setStyles(JSONSerializer.parseMap(styles));
-            } else {
-                setStyles(ThreadUtilities.getClassLoader().getResource(styles));
-            }
-        } catch (IOException exception) {
-            throw new IllegalArgumentException(exception);
-        } catch (SerializationException exception) {
-            throw new IllegalArgumentException(exception);
+        if (styles.charAt(0) == '/') {
+            setStyles(ThreadUtilities.getClassLoader().getResource(styles.substring(1)));
+        } else {
+            setStyles(JSONSerializer.parseMap(styles));
         }
+    }
+
+    /**
+     * Returns the user data dictionary.
+     */
+    public UserDataDictionary getUserData() {
+        return userDataDictionary;
     }
 
     /**
@@ -2727,6 +2711,10 @@ public abstract class Component implements ConstrainedVisual {
 
     public ListenerList<ComponentDecoratorListener> getComponentDecoratorListeners() {
         return componentDecoratorListeners;
+    }
+
+    public ListenerList<ComponentStyleListener> getComponentStyleListeners() {
+        return componentStyleListeners;
     }
 
     public ListenerList<ComponentMouseListener> getComponentMouseListeners() {

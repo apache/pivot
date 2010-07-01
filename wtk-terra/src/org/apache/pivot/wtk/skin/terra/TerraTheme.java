@@ -170,7 +170,7 @@ public final class TerraTheme extends Theme {
         if (location == null) {
             load(getClass().getResource("TerraTheme_default.json"));
         } else {
-            load(ThreadUtilities.getClassLoader().getResource(location));
+            load(ThreadUtilities.getClassLoader().getResource(location.substring(1)));
         }
     }
 

@@ -56,10 +56,6 @@ public interface ComponentListener {
         }
 
         @Override
-        public void styleUpdated(Component component, String styleKey, Object previousValue) {
-        }
-
-        @Override
         public void cursorChanged(Component component, Cursor previousCursor) {
         }
 
@@ -147,15 +143,6 @@ public interface ComponentListener {
      * @param component
      */
     public void visibleChanged(Component component);
-
-    /**
-     * Called when a component style has been updated.
-     *
-     * @param component
-     * @param styleKey
-     * @param previousValue
-     */
-    public void styleUpdated(Component component, String styleKey, Object previousValue);
 
     /**
      * Called when a component's cursor has changed.
