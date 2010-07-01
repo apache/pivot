@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -86,7 +86,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
             throw new RuntimeException(exception);
         }
 
-        BeanSerializer beanSerializer = new BeanSerializer(resources);
+        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
         try {
             content = (Component)beanSerializer.readObject(this, "event_logger_skin.bxml");
         } catch (IOException exception) {

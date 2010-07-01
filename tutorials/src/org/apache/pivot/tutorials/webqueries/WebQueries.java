@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tutorials.webqueries;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.concurrent.Task;
@@ -41,7 +41,7 @@ public class WebQueries implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         window = (Window)beanSerializer.readObject(this, "web_queries.bxml");
 
         listView = (ListView)beanSerializer.get("listView");

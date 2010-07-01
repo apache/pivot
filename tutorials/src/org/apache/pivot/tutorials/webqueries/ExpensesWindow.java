@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.webqueries;
 import java.io.IOException;
 import java.net.URL;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -123,7 +123,7 @@ public class ExpensesWindow extends Window implements Bindable {
 
         // Load the add/edit sheet
         try {
-            BeanSerializer beanSerializer = new BeanSerializer(new Resources(ExpenseSheet.class.getName()));
+            BXMLSerializer beanSerializer = new BXMLSerializer(new Resources(ExpenseSheet.class.getName()));
             expenseSheet = (ExpenseSheet)beanSerializer.readObject(this, "expense_sheet.bxml");
         } catch (IOException exception) {
             throw new RuntimeException(exception);

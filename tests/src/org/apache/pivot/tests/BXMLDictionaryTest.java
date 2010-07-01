@@ -16,14 +16,14 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSONSerializer;
 
 public class BXMLDictionaryTest {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         HashMap<String, Object> hashMap =
             (HashMap<String, Object>)beanSerializer.readObject(BXMLDictionaryTest.class.getResource("bxml_dictionary_test.bxml"));
         System.out.println(JSONSerializer.toString(hashMap));

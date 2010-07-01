@@ -20,7 +20,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
 
 /**
- * Allows {@link BeanSerializer} to initialize an instance of a deserialized class.
+ * Allows {@link BXMLSerializer} to initialize an instance of a deserialized class.
  */
 public interface Bindable {
     /**

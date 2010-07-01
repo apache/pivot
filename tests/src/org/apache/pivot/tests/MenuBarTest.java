@@ -17,7 +17,7 @@
 package org.apache.pivot.tests;
 
 import org.apache.pivot.beans.BXML;
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.BoxPane;
@@ -49,7 +49,7 @@ public class MenuBarTest implements Application {
         frame1.setPreferredSize(320, 240);
         frame1.open(display);
 
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         frame2 = (Frame)beanSerializer.readObject(this, "menu_bar_test.bxml");
         beanSerializer.bind(this, MenuBarTest.class);
 

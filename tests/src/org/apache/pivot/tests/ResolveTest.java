@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
@@ -30,7 +30,7 @@ public class ResolveTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         Resources resources = new Resources(getClass().getName());
-        BeanSerializer beanSerializer = new BeanSerializer(resources);
+        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
         window = (Window)beanSerializer.readObject(this, "resolve_test.bxml");
         window.open(display);
     }

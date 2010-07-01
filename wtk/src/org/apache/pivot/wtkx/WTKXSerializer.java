@@ -16,14 +16,14 @@
  */
 package org.apache.pivot.wtkx;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.util.Resources;
 
 /**
  * Loads an object hierarchy from an XML document.
  *
  * @deprecated
- * This class has been moved to {@link org.apache.pivot.beans.BeanSerializer}.
+ * This class has been moved to {@link org.apache.pivot.beans.BXMLSerializer}.
  * You can use the <tt>bxml_upgrade.xml</tt> Ant script to update your
  * source code to use the new classes. Usage:
  * <p>
@@ -31,7 +31,7 @@ import org.apache.pivot.util.Resources;
  * </p>
  */
 @Deprecated
-public class WTKXSerializer extends BeanSerializer {
+public class WTKXSerializer extends BXMLSerializer {
     public static final String WTKX_PREFIX = "wtkx";
 
     public WTKXSerializer() {

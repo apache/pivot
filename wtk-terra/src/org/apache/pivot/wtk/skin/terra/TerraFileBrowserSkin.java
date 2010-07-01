@@ -26,7 +26,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.apache.pivot.beans.BXML;
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.FilteredList;
@@ -582,7 +582,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             throw new RuntimeException(exception);
         }
 
-        BeanSerializer beanSerializer = new BeanSerializer(resources);
+        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
         try {
             content = (Component)beanSerializer.readObject(this, "terra_file_browser_skin.bxml");
         } catch (IOException exception) {

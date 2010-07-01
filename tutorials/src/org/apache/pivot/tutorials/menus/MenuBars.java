@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.menus;
 import java.io.IOException;
 
 import org.apache.pivot.beans.BXML;
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.serialization.SerializationException;
@@ -92,7 +92,7 @@ public class MenuBars extends Frame implements Bindable {
         Action.getNamedActions().put("fileNew", new Action() {
             @Override
             public void perform() {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 beanSerializer.put("menuHandler", menuHandler);
 
                 Component tab;

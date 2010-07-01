@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tutorials.scripting;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
@@ -42,7 +42,7 @@ public class Scripting implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         beanSerializer.put("bar", "12345");
 
         window = (Window)beanSerializer.readObject(this, "scripting.bxml");

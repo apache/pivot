@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tests.text;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
@@ -68,7 +68,7 @@ public class TextAreaTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         frame = new Frame((Component)beanSerializer.readObject(getClass().getResource("text_area_test.bxml")));
         frame.setTitle("TextArea Test");
         frame.setPreferredSize(640, 480);

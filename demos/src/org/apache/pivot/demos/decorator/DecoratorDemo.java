@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.demos.decorator;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
@@ -33,7 +33,7 @@ public class DecoratorDemo implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         reflectionWindow = (Window)beanSerializer.readObject(this, "reflection_window.bxml");
         translucentFrame = (Frame)beanSerializer.readObject(this, "translucent_frame.bxml");
 

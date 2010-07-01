@@ -17,7 +17,7 @@
 package org.apache.pivot.tests;
 
 import org.apache.pivot.beans.BXML;
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
@@ -40,7 +40,7 @@ public class CalendarTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
 
         window = (Window)beanSerializer.readObject(this, "calendar_test.bxml");
         beanSerializer.bind(this, CalendarTest.class);

@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Application;
@@ -48,7 +48,7 @@ public class CardPaneTest implements Application {
         frame.setPreferredSize(800, 600);
         frame.setLocation(20, 20);
 
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         sheet = (Sheet)beanSerializer.readObject(this, "card_pane_test.bxml");
         cardPane = (CardPane)beanSerializer.get("cardPane");
         sizeGroup = (ButtonGroup)beanSerializer.get("sizeGroup");

@@ -18,7 +18,7 @@ package org.apache.pivot.tutorials.layout;
 
 import java.io.IOException;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -92,7 +92,7 @@ public class TablePanes extends Window implements Bindable {
         namedActions.put("configureCell", new Action() {
             @Override
             public void perform() {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 Sheet sheet;
 
                 // Make the cell component available to script blocks
@@ -116,7 +116,7 @@ public class TablePanes extends Window implements Bindable {
         namedActions.put("configureRow", new Action() {
             @Override
             public void perform() {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 Sheet sheet;
 
                 // Make the selected row available to script blocks
@@ -139,7 +139,7 @@ public class TablePanes extends Window implements Bindable {
         namedActions.put("insertRow", new Action() {
             @Override
             public void perform() {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 Sheet sheet;
 
                 // Create and insert a new row
@@ -196,7 +196,7 @@ public class TablePanes extends Window implements Bindable {
         namedActions.put("configureColumn", new Action() {
             @Override
             public void perform() {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 Sheet sheet;
 
                 // Make the selected column available to script blocks
@@ -219,7 +219,7 @@ public class TablePanes extends Window implements Bindable {
         namedActions.put("insertColumn", new Action() {
             @Override
             public void perform() {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 Sheet sheet;
 
                 // Create and insert a new column

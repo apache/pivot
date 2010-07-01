@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
@@ -91,7 +91,7 @@ public class TerraPromptSkin extends TerraSheetSkin
         prompt.getPromptListeners().add(this);
 
         // Load the prompt content
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
 
         Component content;
         try {

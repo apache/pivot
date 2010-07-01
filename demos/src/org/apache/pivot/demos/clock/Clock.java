@@ -19,7 +19,7 @@ package org.apache.pivot.demos.clock;
 import java.awt.Graphics2D;
 import java.util.Calendar;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.ImageListener;
 import org.apache.pivot.wtk.media.Movie;
@@ -31,11 +31,11 @@ import org.apache.pivot.wtk.media.drawing.Shape;
  */
 public class Clock extends Movie {
     private Calendar calendar = Calendar.getInstance();
-    private BeanSerializer beanSerializer;
+    private BXMLSerializer beanSerializer;
     private Image image = null;
 
     public Clock() {
-        beanSerializer = new BeanSerializer();
+        beanSerializer = new BXMLSerializer();
         try {
             image = (Image)beanSerializer.readObject(getClass().getResource("clock.bxml"));
         } catch (Exception ex) {

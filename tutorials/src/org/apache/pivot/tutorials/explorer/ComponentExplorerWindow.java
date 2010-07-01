@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
@@ -132,7 +132,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
 
                     sourceTextArea.setDocument(document);
 
-                    BeanSerializer beanSerializer = new BeanSerializer();
+                    BXMLSerializer beanSerializer = new BXMLSerializer();
                     try {
                         component = (Component)beanSerializer.readObject(url);
                     } catch (IOException exception) {

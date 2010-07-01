@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -101,7 +101,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "buttons.bxml");
                 } catch(IOException exception) {
@@ -128,7 +128,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "lists.bxml");
                 } catch(IOException exception) {
@@ -180,7 +180,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "text.bxml");
                 } catch(IOException exception) {
@@ -202,7 +202,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "calendars.bxml");
                 } catch(IOException exception) {
@@ -224,7 +224,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "color_choosers.bxml");
                 } catch(IOException exception) {
@@ -246,7 +246,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "navigation.bxml");
                 } catch(IOException exception) {
@@ -268,7 +268,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "splitters.bxml");
                 } catch(IOException exception) {
@@ -327,7 +327,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     }
                 });
 
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "menus.bxml");
                 } catch(IOException exception) {
@@ -379,7 +379,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "meters.bxml");
                 } catch(IOException exception) {
@@ -432,7 +432,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "spinners.bxml");
                 } catch(IOException exception) {
@@ -500,7 +500,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "tables.bxml");
                 } catch(IOException exception) {
@@ -603,7 +603,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "trees.bxml");
                 } catch(IOException exception) {
@@ -659,7 +659,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "dragdrop.bxml");
                 } catch(IOException exception) {
@@ -816,7 +816,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (component == null) {
-                BeanSerializer beanSerializer = new BeanSerializer();
+                BXMLSerializer beanSerializer = new BXMLSerializer();
                 try {
                     component = (Component)beanSerializer.readObject(this, "alerts.bxml");
                 } catch(IOException exception) {
@@ -851,7 +851,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             options.add("Cancel");
 
                             Component body = null;
-                            BeanSerializer beanSerializer = new BeanSerializer();
+                            BXMLSerializer beanSerializer = new BXMLSerializer();
                             try {
                                 body = (Component)beanSerializer.readObject(this, "alert.bxml");
                             } catch(Exception exception) {
@@ -891,7 +891,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             options.add("Cancel");
 
                             Component body = null;
-                            BeanSerializer beanSerializer = new BeanSerializer();
+                            BXMLSerializer beanSerializer = new BXMLSerializer();
                             try {
                                 body = (Component)beanSerializer.readObject(this, "alert.bxml");
                             } catch(Exception exception) {
@@ -938,7 +938,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         window = (Window)beanSerializer.readObject(this, "kitchen_sink.bxml");
         beanSerializer.bind(this, KitchenSink.class);
 

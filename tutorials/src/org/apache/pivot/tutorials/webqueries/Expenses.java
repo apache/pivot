@@ -18,7 +18,7 @@ package org.apache.pivot.tutorials.webqueries;
 
 import java.net.URL;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
@@ -69,7 +69,7 @@ public class Expenses implements Application {
             secure = origin.getProtocol().equals("HTTPS");
         }
 
-        BeanSerializer beanSerializer = new BeanSerializer(new Resources(ExpensesWindow.class.getName()));
+        BXMLSerializer beanSerializer = new BXMLSerializer(new Resources(ExpensesWindow.class.getName()));
         expensesWindow = (ExpensesWindow)beanSerializer.readObject(this, "expenses_window.bxml");
         expensesWindow.open(display);
     }

@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -28,7 +28,7 @@ public class WatermarkDecoratorTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         window = (Window)beanSerializer.readObject(this, "watermark_decorator_test.bxml");
 
         window.open(display);

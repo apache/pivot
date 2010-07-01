@@ -18,7 +18,7 @@ package org.apache.pivot.tutorials.stocktracker;
 
 import java.util.Locale;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
@@ -41,7 +41,7 @@ public class StockTracker implements Application {
         }
 
         Resources resources = new Resources(StockTrackerWindow.class.getName());
-        BeanSerializer beanSerializer = new BeanSerializer(resources);
+        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
         window = (StockTrackerWindow)beanSerializer.readObject(this, "stock_tracker_window.bxml");
         window.open(display);
     }

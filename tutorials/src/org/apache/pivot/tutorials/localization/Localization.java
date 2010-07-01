@@ -20,7 +20,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.util.Locale;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
@@ -56,7 +56,7 @@ public class Localization implements Application {
             }
         }
 
-        BeanSerializer beanSerializer = new BeanSerializer(resources);
+        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
 
         window = (Window)beanSerializer.readObject(this, "localization.bxml");
         window.open(display);

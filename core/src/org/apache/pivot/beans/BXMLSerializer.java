@@ -63,7 +63,7 @@ import org.apache.pivot.util.Vote;
 /**
  * Loads an object hierarchy from an XML document.
  */
-public class BeanSerializer implements Serializer<Object>, Dictionary<String, Object> {
+public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Object> {
     private class NamedObjectBindings implements Bindings {
         @Override
         public Object get(Object key) {
@@ -282,7 +282,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
     private Class<? extends Annotation> bindingAnnotationClass;
 
     private HashMap<String, Object> namedObjects;
-    private HashMap<String, BeanSerializer> namedSerializers;
+    private HashMap<String, BXMLSerializer> namedSerializers;
 
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;
@@ -319,15 +319,15 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
 
     public static final String MIME_TYPE = "application/bxml";
 
-    public BeanSerializer() {
+    public BXMLSerializer() {
         this(null);
     }
 
-    public BeanSerializer(Resources resources) {
+    public BXMLSerializer(Resources resources) {
         this(resources, null, BXML_PREFIX, BXML.class);
     }
 
-    protected BeanSerializer(Resources resources, BeanSerializer owner,
+    protected BXMLSerializer(Resources resources, BXMLSerializer owner,
         String internalNamespacePrefix, Class<? extends Annotation> bindingAnnotationClass) {
         this.resources = resources;
         this.internalNamespacePrefix = internalNamespacePrefix;
@@ -336,7 +336,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
         if (owner == null) {
             inline = false;
             namedObjects = new HashMap<String, Object>();
-            namedSerializers = new HashMap<String, BeanSerializer>();
+            namedSerializers = new HashMap<String, BXMLSerializer>();
         } else {
             inline = true;
             namedObjects = owner.namedObjects;
@@ -736,7 +736,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
                     }
 
                     // Read the object
-                    BeanSerializer serializer = createSerializer(resources, inline ? this : null);
+                    BXMLSerializer serializer = createSerializer(resources, inline ? this : null);
 
                     if (element.id != null) {
                         if (namedSerializers.containsKey(element.id)) {
@@ -1118,8 +1118,8 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
      * @param resources
      * @param owner
      */
-    protected BeanSerializer createSerializer(Resources resources, BeanSerializer owner) {
-        return new BeanSerializer(resources, owner, internalNamespacePrefix, bindingAnnotationClass);
+    protected BXMLSerializer createSerializer(Resources resources, BXMLSerializer owner) {
+        return new BXMLSerializer(resources, owner, internalNamespacePrefix, bindingAnnotationClass);
     }
 
     /**
@@ -1189,7 +1189,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
         } else {
             String serializerName = name.substring(0, name.lastIndexOf('.'));
             String id = name.substring(serializerName.length() + 1);
-            BeanSerializer serializer = getSerializer(serializerName);
+            BXMLSerializer serializer = getSerializer(serializerName);
 
             if (serializer != null) {
                 value = serializer.get(id);
@@ -1213,7 +1213,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
         } else {
             String serializerName = name.substring(0, name.lastIndexOf('.'));
             String id = name.substring(serializerName.length() + 1);
-            BeanSerializer serializer = getSerializer(serializerName);
+            BXMLSerializer serializer = getSerializer(serializerName);
             previousValue = serializer.put(id, value);
         }
 
@@ -1236,7 +1236,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
         } else {
             String serializerName = name.substring(0, name.lastIndexOf('.'));
             String id = name.substring(serializerName.length() + 1);
-            BeanSerializer serializer = getSerializer(serializerName);
+            BXMLSerializer serializer = getSerializer(serializerName);
             previousValue = serializer.remove(id);
         }
 
@@ -1257,7 +1257,7 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
         } else {
             String serializerName = name.substring(0, name.lastIndexOf('.'));
             String id = name.substring(serializerName.length() + 1);
-            BeanSerializer serializer = getSerializer(serializerName);
+            BXMLSerializer serializer = getSerializer(serializerName);
 
             if (serializer != null) {
                 containsKey = serializer.containsKey(id);
@@ -1295,12 +1295,12 @@ public class BeanSerializer implements Serializer<Object>, Dictionary<String, Ob
      * @return The named serializer, or <tt>null</tt> if a serializer with the
      * given name does not exist.
      */
-    public BeanSerializer getSerializer(String name) {
+    public BXMLSerializer getSerializer(String name) {
         if (name == null) {
             throw new IllegalArgumentException("name is null.");
         }
 
-        BeanSerializer serializer = this;
+        BXMLSerializer serializer = this;
         String[] path = name.split("\\.");
 
         int i = 0;

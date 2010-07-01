@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
@@ -45,7 +45,7 @@ public class PanoramaTest implements Application {
         panorama.setView(imageView);
         frame1.open(display);
 
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         frame2 = new Frame((Component)beanSerializer.readObject(getClass().getResource("panorama_test.bxml")));
         frame2.setTitle("Panorama Test 2");
         frame2.setPreferredSize(480, 360);

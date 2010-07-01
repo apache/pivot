@@ -19,7 +19,7 @@ package org.apache.pivot.wtk;
 import java.net.URL;
 import java.io.File;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.ThreadUtilities;
@@ -46,7 +46,7 @@ public class ScriptApplication implements Application {
             resources = new Resources(properties.get(RESOURCES_KEY));
         }
 
-        BeanSerializer beanSerializer = new BeanSerializer(resources);
+        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
 
         ClassLoader classLoader = ThreadUtilities.getClassLoader();
         URL location = classLoader.getResource(src);

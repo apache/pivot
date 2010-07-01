@@ -32,7 +32,7 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Window;
@@ -121,7 +121,7 @@ public class SwingDemo extends ApplicationContext {
         displays.add(displayHost.getDisplay());
 
         // Load the Pivot window
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         Window window;
         try {
             window = (Window)beanSerializer.readObject(SwingDemo.class.getResource("pivot_window.bxml"));

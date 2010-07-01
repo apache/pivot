@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.io.IOTask;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
@@ -97,7 +97,7 @@ public abstract class Image implements Visual {
                     inputStream = new MonitoredInputStream(new BufferedInputStream(location.openStream()));
 
                     if (location.getFile().endsWith("wtkd")) {
-                        BeanSerializer serializer = new BeanSerializer();
+                        BXMLSerializer serializer = new BXMLSerializer();
                         image = (Drawing)serializer.readObject(inputStream);
                     } else {
                         BufferedImageSerializer serializer = new BufferedImageSerializer();

@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Alert;
@@ -46,7 +46,7 @@ public class ActionMappingTest implements Application {
             }
         });
 
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         window = (Window)beanSerializer.readObject(this, "action_mapping_test.bxml");
         window.getActionMappings().add(new Window.ActionMapping(new Keyboard.KeyStroke(Keyboard.KeyCode.B,
             Keyboard.Modifier.SHIFT.getMask()), "action2"));

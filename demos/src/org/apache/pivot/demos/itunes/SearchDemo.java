@@ -22,7 +22,7 @@ import java.util.Comparator;
 import java.util.Locale;
 
 import org.apache.pivot.beans.BXML;
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.concurrent.Task;
@@ -72,7 +72,7 @@ public class SearchDemo implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         beanSerializer.put(APPLICATION_KEY, this);
 
         window = (Window)beanSerializer.readObject(this, "search_demo.bxml");

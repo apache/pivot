@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
@@ -167,7 +167,7 @@ public class LargeData implements Application {
             throw new IllegalArgumentException(BASE_PATH_KEY + " is required.");
         }
 
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         window = (Window)beanSerializer.readObject(this, "large_data.bxml");
         fileListButton = (ListButton)beanSerializer.get("fileListButton");
         loadDataButton = (PushButton)beanSerializer.get("loadDataButton");

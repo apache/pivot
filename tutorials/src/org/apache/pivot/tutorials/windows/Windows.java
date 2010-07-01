@@ -18,7 +18,7 @@ package org.apache.pivot.tutorials.windows;
 
 import java.io.IOException;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Application;
@@ -38,7 +38,7 @@ public class Windows implements Application {
         int y = 0;
 
         for (int i = 0; i < 3; i++) {
-            BeanSerializer beanSerializer = new BeanSerializer();
+            BXMLSerializer beanSerializer = new BXMLSerializer();
             beanSerializer.put("application", this);
 
             Frame frame;
@@ -79,7 +79,7 @@ public class Windows implements Application {
 
     public Window load(String fileName)
         throws SerializationException, IOException {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         return (Window)beanSerializer.readObject(this, fileName);
     }
 

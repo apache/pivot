@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Component;
@@ -37,7 +37,7 @@ public class SliderTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         window = new Window((Component)beanSerializer.readObject(getClass().getResource("slider_test.bxml")));
         slider1 = (Slider)beanSerializer.get("slider1");
         slider1.getSliderValueListeners().add(new SliderValueListener() {

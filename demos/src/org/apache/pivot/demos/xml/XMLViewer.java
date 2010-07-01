@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import org.apache.pivot.beans.BXML;
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Map;
@@ -70,7 +70,7 @@ public class XMLViewer implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         beanSerializer.put(APPLICATION_KEY, this);
 
         window = (Window)beanSerializer.readObject(this, "xml_viewer.bxml");

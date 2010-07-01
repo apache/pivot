@@ -16,7 +16,7 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.beans.BeanSerializer;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Alert;
@@ -47,7 +47,7 @@ public class SpinnerFocusTest implements Application {
 
         Action.getNamedActions().put("buttonAction", action);
 
-        BeanSerializer beanSerializer = new BeanSerializer();
+        BXMLSerializer beanSerializer = new BXMLSerializer();
         frame = new Frame((Component)beanSerializer.readObject(getClass().getResource("spinner_focus_test.bxml")));
         frame.setTitle("Spinner Focus Test");
         frame.open(display);
