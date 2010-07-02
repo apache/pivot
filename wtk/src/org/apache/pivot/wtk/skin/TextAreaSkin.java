@@ -1916,7 +1916,13 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
             TextArea textArea = (TextArea)getComponent();
             int width = getWidth();
 
-            documentView.setBreakWidth(Math.max(width - (margin.left + margin.right), 0));
+            int breakWidth;
+            if (wrapText) {
+                breakWidth = Math.max(width - (margin.left + margin.right), 0);
+            } else {
+                breakWidth = Integer.MAX_VALUE;
+            }
+            documentView.setBreakWidth(breakWidth);
             documentView.validate();
             documentView.setSkinLocation(margin.left, margin.top);
 
