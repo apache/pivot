@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BXMLSerializer;
@@ -33,6 +34,7 @@ import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FileBrowserSheet;
@@ -71,6 +73,8 @@ public class RichTextEditorDemo implements Application {
     private ListButton fontFamilyListButton = null;
     @BXML
     private ListButton fontSizeListButton = null;
+    @BXML
+    private Checkbox wrapTextCheckbox = null;
 
     private File loadedFile = null;
 
@@ -245,8 +249,8 @@ public class RichTextEditorDemo implements Application {
             @Override
             public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
                 org.apache.pivot.wtk.Span span = textarea.getSelection();
-                int selectedFontSize = (Integer) fontSizeListButton.getSelectedItem();
-                String selectedFontFamily = (String) fontFamilyListButton.getSelectedItem();
+                int selectedFontSize = (Integer)fontSizeListButton.getSelectedItem();
+                String selectedFontFamily = (String)fontFamilyListButton.getSelectedItem();
                 final Font derivedFont = Font.decode(selectedFontFamily + " " + selectedFontSize);
 
                 applyStyle(textarea.getDocument(), span, new StyleApplicator() {
@@ -260,12 +264,56 @@ public class RichTextEditorDemo implements Application {
         fontFamilyListButton.getListButtonSelectionListeners().add(fontButtonPressListener);
         fontSizeListButton.getListButtonSelectionListeners().add(fontButtonPressListener);
 
+        wrapTextCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                textarea.getStyles().put("wrapText", wrapTextCheckbox.isSelected());
+            }
+        });
         window.open(display);
         textarea.requestFocus();
     }
 
     private interface StyleApplicator {
         void apply(org.apache.pivot.wtk.text.Span span);
+    }
+
+    /** debugging tools */
+    @SuppressWarnings("unused")
+    private void dumpDocument() {
+        dumpDocumentNode(textarea.getDocument(), System.out, 0);
+    }
+
+    /** debugging tools */
+    private void dumpDocumentNode(Node node, PrintStream printStream, final int indent) {
+        for (int i = 0; i < indent; i++) {
+            printStream.append("  ");
+        }
+        printStream.append("<" + node.getClass().getSimpleName() + ">");
+        if (node instanceof TextNode) {
+            TextNode textNode = (TextNode)node;
+            String text = textNode.getText();
+            printStream.append(text);
+            printStream.append("</" + node.getClass().getSimpleName() + ">");
+            printStream.println();
+        } else {
+            printStream.println();
+            if (node instanceof Element) {
+                Element element = (Element)node;
+
+                for (Node childNode : element) {
+                    dumpDocumentNode(childNode, printStream, indent + 1);
+                }
+            } else {
+                String text = node.toString();
+                printStream.append(text);
+            }
+            for (int i = 0; i < indent; i++) {
+                printStream.append("  ");
+            }
+            printStream.append("</" + node.getClass().getSimpleName() + ">");
+            printStream.println();
+        }
     }
 
     private void applyStyle(Document document, org.apache.pivot.wtk.Span selectionSpan,
@@ -352,7 +400,8 @@ public class RichTextEditorDemo implements Application {
             parent.insert(new TextNode(part1), index);
             parent.insert(newSpanNode, index + 1);
         } else {
-            // if the selection covers an internal part of the text-node, split the
+            // if the selection covers an internal part of the text-node, split
+            // the
             // text-node into 3 parts, and apply the style to the second part
             int part2Start = selectionSpan.start - textSpan.start;
             int part2End = selectionSpan.end - textSpan.start + 1;
@@ -373,8 +422,8 @@ public class RichTextEditorDemo implements Application {
     }
 
     private void applyStyleToSpanNode(org.apache.pivot.wtk.Span selectionSpan,
-        StyleApplicator styleApplicator, org.apache.pivot.wtk.text.Span spanNode, int characterCount,
-        org.apache.pivot.wtk.Span textSpan) {
+        StyleApplicator styleApplicator, org.apache.pivot.wtk.text.Span spanNode,
+        int characterCount, org.apache.pivot.wtk.Span textSpan) {
         if (selectionSpan.contains(textSpan)) {
             // if the span-node is contained wholly inside the
             // selection, apply the style
@@ -395,7 +444,8 @@ public class RichTextEditorDemo implements Application {
             // the last part of the span-node, and apply the style to it
             int intersectionStart = selectionSpan.start - textSpan.start;
             org.apache.pivot.wtk.text.Span part1 = spanNode.getRange(0, intersectionStart);
-            org.apache.pivot.wtk.text.Span part2 = spanNode.getRange(intersectionStart, characterCount - intersectionStart);
+            org.apache.pivot.wtk.text.Span part2 = spanNode.getRange(intersectionStart,
+                characterCount - intersectionStart);
 
             styleApplicator.apply(part2);
 
@@ -404,13 +454,16 @@ public class RichTextEditorDemo implements Application {
             parent.insert(part1, index);
             parent.insert(part2, index + 1);
         } else {
-            // if the selection covers an internal part of the span-node, split the
+            // if the selection covers an internal part of the span-node, split
+            // the
             // span-node into 3 parts, and apply the style to the second part
             int part2Start = selectionSpan.start - textSpan.start;
             int part2End = selectionSpan.end - textSpan.start;
             org.apache.pivot.wtk.text.Span part1 = spanNode.getRange(0, part2Start);
-            org.apache.pivot.wtk.text.Span part2 = spanNode.getRange(part2Start, part2End - part2Start);
-            org.apache.pivot.wtk.text.Span part3 = spanNode.getRange(part2End, characterCount - part2End);
+            org.apache.pivot.wtk.text.Span part2 = spanNode.getRange(part2Start, part2End
+                - part2Start);
+            org.apache.pivot.wtk.text.Span part3 = spanNode.getRange(part2End, characterCount
+                - part2End);
 
             styleApplicator.apply(part2);
 

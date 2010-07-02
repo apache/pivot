@@ -25,7 +25,7 @@ limitations under the License.
                 <TablePane.Column width="1*"/>
             </columns>
             <TablePane.Row height="-1">
-                <BoxPane orientation="horizontal" styles="{spacing:6}">
+		        <FlowPane styles="{padding:1, horizontalSpacing:10, alignToBaseline:true}">
                     <PushButton bxml:id="openFileButton" buttonData="Open File"/>
                     <PushButton bxml:id="saveFileButton" buttonData="Save File"/>
                     <Label text="  "/> <!-- spacer -->
@@ -33,7 +33,8 @@ limitations under the License.
                     <PushButton bxml:id="italicButton" buttonData="Italic"/>
                     <ListButton bxml:id="fontFamilyListButton"/>
                     <ListButton bxml:id="fontSizeListButton"/>
-                </BoxPane>
+			        <Checkbox bxml:id="wrapTextCheckbox" buttonData="Wrap Text" selected="false"/>
+                </FlowPane>
             </TablePane.Row>
             <TablePane.Row height="-1">
                 <Label text="  "/> <!-- spacer -->
