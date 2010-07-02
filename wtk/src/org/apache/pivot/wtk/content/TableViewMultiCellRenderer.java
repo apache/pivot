@@ -120,10 +120,6 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                 }
             }
         }
-
-        private void setMultiCellRenderer(TableViewMultiCellRenderer multiCellRenderer) {
-            this.multiCellRenderer = multiCellRenderer;
-        }
     }
 
     /**
@@ -158,7 +154,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             TableView.CellRenderer cellRenderer = item.getCellRenderer();
             cellRenderers.put(valueClass, cellRenderer);
 
-            item.setMultiCellRenderer(TableViewMultiCellRenderer.this);
+            item.multiCellRenderer = TableViewMultiCellRenderer.this;
         }
 
         @Override
@@ -189,8 +185,8 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                 cellRenderers.remove(previousValueClass);
                 cellRenderers.put(valueClass, cellRenderer);
 
-                previousItem.setMultiCellRenderer(null);
-                item.setMultiCellRenderer(TableViewMultiCellRenderer.this);
+                previousItem.multiCellRenderer = null;
+                item.multiCellRenderer = TableViewMultiCellRenderer.this;
             }
 
             return previousItem;
@@ -216,7 +212,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                 Class<?> valueClass = item.getValueClass();
 
                 cellRenderers.remove(valueClass);
-                item.setMultiCellRenderer(null);
+                item.multiCellRenderer = null;
             }
 
             return removed;

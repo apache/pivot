@@ -48,10 +48,6 @@ public class Form extends Container {
             return form;
         }
 
-        private void setForm(Form form) {
-            this.form = form;
-        }
-
         public String getHeading() {
             return heading;
         }
@@ -172,7 +168,7 @@ public class Form extends Container {
             }
 
             sections.insert(section, index);
-            section.setForm(Form.this);
+            section.form = Form.this;
 
             for (int i = 0, n = section.getLength(); i < n; i++) {
                 Form.this.add(section.get(i));
@@ -203,7 +199,7 @@ public class Form extends Container {
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Section section = removed.get(i);
 
-                section.setForm(null);
+                section.form = null;
 
                 for (Component field : section) {
                     Form.this.remove(field);

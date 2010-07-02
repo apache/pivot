@@ -48,10 +48,6 @@ public class GridPane extends Container {
             return gridPane;
         }
 
-        private void setGridPane(GridPane gridPane) {
-            this.gridPane = gridPane;
-        }
-
         @Override
         public int add(Component component) {
             int i = getLength();
@@ -190,7 +186,7 @@ public class GridPane extends Container {
             }
 
             rows.insert(row, index);
-            row.setGridPane(GridPane.this);
+            row.gridPane = GridPane.this;
 
             for (int i = 0, n = row.getLength(); i < n; i++) {
                 Component component = row.get(i);
@@ -223,7 +219,7 @@ public class GridPane extends Container {
             if (count > 0) {
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
                     Row row = removed.get(i);
-                    row.setGridPane(null);
+                    row.gridPane = null;
 
                     for (int j = 0, m = row.getLength(); j < m; j++) {
                         Component component = row.get(j);

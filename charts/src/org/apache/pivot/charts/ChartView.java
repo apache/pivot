@@ -58,10 +58,6 @@ public abstract class ChartView extends Component {
             return chartView;
         }
 
-        private void setChartView(ChartView chartView) {
-            this.chartView = chartView;
-        }
-
         public String getKey() {
             return key;
         }
@@ -178,7 +174,7 @@ public abstract class ChartView extends Component {
             }
 
             categories.insert(category, index);
-            category.setChartView(ChartView.this);
+            category.chartView = ChartView.this;
 
             chartViewCategoryListeners.categoryInserted(ChartView.this, index);
         }
@@ -204,7 +200,7 @@ public abstract class ChartView extends Component {
 
             if (count > 0) {
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
-                    removed.get(i).setChartView(null);
+                    removed.get(i).chartView = null;
                 }
 
                 chartViewCategoryListeners.categoriesRemoved(ChartView.this, index, removed);

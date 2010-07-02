@@ -66,10 +66,6 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
             return element;
         }
 
-        private void setElement(Element element) {
-            this.element = element;
-        }
-
         /**
          * Returns the attribute's namespace prefix.
          *
@@ -218,7 +214,7 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
 
             attributes.insert(attribute, index);
             attributeMap.put(attributeName, attribute);
-            attribute.setElement(Element.this);
+            attribute.element = Element.this;
 
             elementListeners.attributeInserted(Element.this, index);
         }
@@ -262,7 +258,7 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
                     Attribute attribute = removed.get(i);
                     String attributeName = attribute.getName();
                     attributeMap.remove(attributeName);
-                    attribute.setElement(null);
+                    attribute.element = null;
                 }
 
                 elementListeners.attributesRemoved(Element.this, index, removed);

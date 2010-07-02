@@ -147,17 +147,6 @@ public class TableView extends Component {
         }
 
         /**
-         * Sets the table view with which this column is associated.
-         *
-         * @param tableView
-         * The column's table view, or <tt>null</tt> if the column does not
-         * currently belong to a table.
-         */
-        private void setTableView(TableView tableView) {
-            this.tableView = tableView;
-        }
-
-        /**
          * Returns the column name.
          *
          * @return
@@ -880,7 +869,7 @@ public class TableView extends Component {
             }
 
             columns.insert(column, index);
-            column.setTableView(TableView.this);
+            column.tableView = TableView.this;
 
             tableViewColumnListeners.columnInserted(TableView.this, index);
         }
@@ -906,7 +895,7 @@ public class TableView extends Component {
 
             if (count > 0) {
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
-                    removed.get(i).setTableView(null);
+                    removed.get(i).tableView = null;
                 }
 
                 tableViewColumnListeners.columnsRemoved(TableView.this, index, removed);

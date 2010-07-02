@@ -79,17 +79,6 @@ public class TablePane extends Container {
         }
 
         /**
-         * Sets the table pane with which this row is associated.
-         *
-         * @param tablePane
-         * The row's table pane, or <tt>null</tt> if the row does not
-         * currently belong to a table.
-         */
-        private void setTablePane(TablePane tablePane) {
-            this.tablePane = tablePane;
-        }
-
-        /**
          * Returns the row height.
          *
          * @return
@@ -330,17 +319,6 @@ public class TablePane extends Container {
         }
 
         /**
-         * Sets the table pane with which this column is associated.
-         *
-         * @param tablePane
-         * The column's table pane, or <tt>null</tt> if the column does not
-         * currently belong to a table.
-         */
-        private void setTablePane(TablePane tablePane) {
-            this.tablePane = tablePane;
-        }
-
-        /**
          * Returns the column width.
          *
          * @return
@@ -484,7 +462,7 @@ public class TablePane extends Container {
             }
 
             rows.insert(row, index);
-            row.setTablePane(TablePane.this);
+            row.tablePane = TablePane.this;
 
             for (int i = 0, n = row.getLength(); i < n; i++) {
                 Component component = row.get(i);
@@ -517,7 +495,7 @@ public class TablePane extends Container {
             if (count > 0) {
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
                     Row row = removed.get(i);
-                    row.setTablePane(null);
+                    row.tablePane = null;
 
                     for (int j = 0, m = row.getLength(); j < m; j++) {
                         Component component = row.get(j);
@@ -580,7 +558,7 @@ public class TablePane extends Container {
             }
 
             columns.insert(column, index);
-            column.setTablePane(TablePane.this);
+            column.tablePane = TablePane.this;
 
             // Notify listeners
             tablePaneListeners.columnInserted(TablePane.this, index);
@@ -608,7 +586,7 @@ public class TablePane extends Container {
             if (count > 0) {
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
                     Column column = removed.get(i);
-                    column.setTablePane(null);
+                    column.tablePane = null;
                 }
 
                 tablePaneListeners.columnsRemoved(TablePane.this, index, removed);
