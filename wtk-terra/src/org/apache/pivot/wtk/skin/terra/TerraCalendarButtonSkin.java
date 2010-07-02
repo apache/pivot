@@ -236,7 +236,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         // Paint the background
         graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
             width / 2f, height / 2f, backgroundColor));
-        graphics.fill(new RoundRectangle2D.Double(0, 0, width, height,
+        graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
             CORNER_RADIUS, CORNER_RADIUS));
 
         // Paint the content
