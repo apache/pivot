@@ -1,0 +1,141 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.pivot.wtk.skin;
+
+import java.awt.Graphics2D;
+
+import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentListener;
+import org.apache.pivot.wtk.FocusTraversalDirection;
+import org.apache.pivot.wtk.text.ComponentNode;
+import org.apache.pivot.wtk.text.ComponentNodeListener;
+
+public class TextAreaSkinComponentNodeView extends TextAreaSkinNodeView implements ComponentNodeListener {
+
+    private final ComponentListener myComponentListener = new ComponentListener.Adapter() {
+        @Override
+        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+            invalidate();
+        }
+    };
+
+    public TextAreaSkinComponentNodeView(ComponentNode componentNode) {
+        super(componentNode);
+    }
+
+    @Override
+    protected void attach() {
+        super.attach();
+
+        ComponentNode componentNode = (ComponentNode) getNode();
+        componentNode.getComponentNodeListeners().add(this);
+
+        Component component = componentNode.getComponent();
+        if (component != null) {
+            component.getComponentListeners().add(myComponentListener);
+        }
+    }
+
+    @Override
+    protected void detach() {
+        super.detach();
+
+        ComponentNode componentNode = (ComponentNode) getNode();
+        componentNode.getComponentNodeListeners().remove(this);
+    }
+
+    @Override
+    public void validate() {
+        if (!isValid()) {
+            ComponentNode componentNode = (ComponentNode) getNode();
+            Component component = componentNode.getComponent();
+
+            if (component == null) {
+                setSize(0, 0);
+            } else {
+                component.validate();
+                component.setSize(component.getPreferredWidth(), component.getPreferredHeight());
+                setSize(component.getWidth(), component.getHeight());
+            }
+
+            super.validate();
+        }
+    }
+
+    @Override
+    protected void setSkinLocation(int skinX, int skinY) {
+        ComponentNode componentNode = (ComponentNode) getNode();
+        Component component = componentNode.getComponent();
+
+        if (component != null) {
+            // I have to un-translate the x and y coordinates because the
+            // component is painted by the Container object, and it's co-ordinates
+            // are relative to the Container object, not to the document node hierarchy.
+            component.setLocation(skinX, skinY);
+        }
+    }
+
+    @Override
+    public void paint(Graphics2D graphics) {
+        // do nothing
+    }
+
+    @Override
+    public TextAreaSkinNodeView getNext() {
+        return null;
+    }
+
+    @Override
+    public int getInsertionPoint(int x, int y) {
+        return 0;
+    }
+
+    @Override
+    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+        return (from == -1) ? 0 : -1;
+    }
+
+    @Override
+    public int getRowIndex(int offset) {
+        return -1;
+    }
+
+    @Override
+    public int getRowCount() {
+        return 0;
+    }
+
+    @Override
+    public Bounds getCharacterBounds(int offset) {
+        return new Bounds(0, 0, getWidth(), getHeight());
+    }
+
+    @Override
+    public void componentChanged(ComponentNode componentNode, Component previousComponent) {
+        invalidate();
+
+        Component component = componentNode.getComponent();
+        if (component != null) {
+            component.getComponentListeners().add(myComponentListener);
+        }
+
+        if (previousComponent != null) {
+            previousComponent.getComponentListeners().remove(myComponentListener);
+        }
+    }
+}

@@ -1,0 +1,144 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.pivot.wtk.skin;
+
+import java.awt.Graphics2D;
+
+import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.FocusTraversalDirection;
+import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.media.ImageListener;
+import org.apache.pivot.wtk.text.ImageNode;
+import org.apache.pivot.wtk.text.ImageNodeListener;
+
+class TextAreaSkinImageNodeView extends TextAreaSkinNodeView implements ImageNodeListener, ImageListener {
+    public TextAreaSkinImageNodeView(ImageNode imageNode) {
+        super(imageNode);
+    }
+
+    @Override
+    protected void attach() {
+        super.attach();
+
+        ImageNode imageNode = (ImageNode)getNode();
+        imageNode.getImageNodeListeners().add(this);
+
+        Image image = imageNode.getImage();
+        if (image != null) {
+            image.getImageListeners().add(this);
+        }
+    }
+
+    @Override
+    protected void detach() {
+        super.detach();
+
+        ImageNode imageNode = (ImageNode)getNode();
+        imageNode.getImageNodeListeners().remove(this);
+    }
+
+    @Override
+    public void validate() {
+        if (!isValid()) {
+            ImageNode imageNode = (ImageNode)getNode();
+            Image image = imageNode.getImage();
+
+            if (image == null) {
+                setSize(0, 0);
+            } else {
+                setSize(image.getWidth(), image.getHeight());
+            }
+
+            super.validate();
+        }
+    }
+
+    @Override
+    protected void setSkinLocation(int skinX, int skinY) {
+    }
+
+    @Override
+    public void paint(Graphics2D graphics) {
+        ImageNode imageNode = (ImageNode)getNode();
+        Image image = imageNode.getImage();
+
+        if (image != null) {
+            image.paint(graphics);
+        }
+    }
+
+    @Override
+    public TextAreaSkinNodeView getNext() {
+        return null;
+    }
+
+    @Override
+    public int getInsertionPoint(int x, int y) {
+        return 0;
+    }
+
+    @Override
+    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+        return (from == -1) ? 0 : -1;
+    }
+
+    @Override
+    public int getRowIndex(int offset) {
+        return -1;
+    }
+
+    @Override
+    public int getRowCount() {
+        return 0;
+    }
+
+    @Override
+    public Bounds getCharacterBounds(int offset) {
+        return new Bounds(0, 0, getWidth(), getHeight());
+    }
+
+    @Override
+    public void imageChanged(ImageNode imageNode, Image previousImage) {
+        invalidate();
+
+        Image image = imageNode.getImage();
+        if (image != null) {
+            image.getImageListeners().add(this);
+        }
+
+        if (previousImage != null) {
+            previousImage.getImageListeners().remove(this);
+        }
+    }
+
+    @Override
+    public void sizeChanged(Image image, int previousWidth, int previousHeight) {
+        invalidate();
+    }
+
+    @Override
+    public void baselineChanged(Image image, int previousBaseline) {
+        // TODO Invalidate once baseline alignment of node view is supported
+    }
+
+    @Override
+    public void regionUpdated(Image image, int x, int y, int width, int height) {
+        // TODO Repaint the corresponding area of the component (add a repaint()
+        // method to NodeView to facilitate this as well as paint-only updates
+        // such as color changes)
+    }
+}
