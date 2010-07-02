@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.ComponentStyleListener;
 import org.apache.pivot.wtk.Form;
 
 class ComponentStyleInspectorSkin extends ComponentInspectorSkin {
-    private ComponentStyleListener componentStyleHandler = new ComponentStyleListener.Adapter() {
+    private ComponentStyleListener componentStyleHandler = new ComponentStyleListener() {
         @Override
         public void styleUpdated(Component component, String key, Object previousValue) {
             Component.StyleDictionary styles = component.getStyles();

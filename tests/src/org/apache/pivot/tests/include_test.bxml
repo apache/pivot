@@ -29,5 +29,5 @@ limitations under the License.
         </bxml:script>
     </windowStateListeners>
 
-    <bxml:include src="include_test.content.bxml" inline="true"/>
+    <bxml:include src="include_test.content.bxml" text="Hello, World!" inline="true"/>
 </Window>

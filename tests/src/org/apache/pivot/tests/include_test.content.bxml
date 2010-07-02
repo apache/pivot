@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Label bxml:id="label" text="Hello, World!"
+<Label bxml:id="label"
     styles="{horizontalAlignment:'center', verticalAlignment:'center'}"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk"/>

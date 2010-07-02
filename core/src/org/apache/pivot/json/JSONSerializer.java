@@ -452,11 +452,25 @@ public class JSONSerializer implements Serializer<Object> {
             // Get the target item type
             Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
             itemType = actualTypeArguments[0];
-        } else if (type == Object.class) {
-            sequence = new ArrayList<Object>();
-            itemType = Object.class;
         } else {
-            throw new IllegalArgumentException("Cannot convert array to " + type + ".");
+            Class<?> classType = (Class<?>)type;
+
+            if (Sequence.class.isAssignableFrom(classType)) {
+                try {
+                    sequence = (Sequence<Object>)classType.newInstance();
+                } catch (InstantiationException exception) {
+                    throw new IllegalArgumentException(exception);
+                } catch (IllegalAccessException exception) {
+                    throw new IllegalArgumentException(exception);
+                }
+
+                itemType = Object.class;
+            } else if (type == Object.class) {
+                sequence = new ArrayList<Object>();
+                itemType = Object.class;
+            } else {
+                throw new IllegalArgumentException("Cannot convert array to " + type + ".");
+            }
         }
 
         // Move to the next character after '['
@@ -511,20 +525,33 @@ public class JSONSerializer implements Serializer<Object> {
             // Get the target value type
             Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
             valueType = actualTypeArguments[1];
-        } else if (type == Object.class){
-            dictionary = new HashMap<String, Object>();
-            valueType = Object.class;
         } else {
-            Class<?> beanType = (Class<?>)type;
-            try {
-                dictionary = new BeanAdapter(beanType.newInstance());
-            } catch (InstantiationException exception) {
-                throw new RuntimeException(exception);
-            } catch (IllegalAccessException exception) {
-                throw new RuntimeException(exception);
-            }
+            Class<?> classType = (Class<?>)type;
+            if (Dictionary.class.isAssignableFrom(classType)) {
+                try {
+                    dictionary = (Dictionary<String, Object>)classType.newInstance();
+                } catch (InstantiationException exception) {
+                    throw new IllegalArgumentException(exception);
+                } catch (IllegalAccessException exception) {
+                    throw new IllegalArgumentException(exception);
+                }
 
-            valueType = null;
+                valueType = Object.class;
+            } else if (type == Object.class){
+                dictionary = new HashMap<String, Object>();
+                valueType = Object.class;
+            } else {
+                Class<?> beanType = (Class<?>)type;
+                try {
+                    dictionary = new BeanAdapter(beanType.newInstance());
+                } catch (InstantiationException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IllegalAccessException exception) {
+                    throw new RuntimeException(exception);
+                }
+
+                valueType = null;
+            }
         }
 
         // Move to the next character after '{'

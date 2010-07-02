@@ -700,8 +700,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                 ArrayList<Attribute> staticPropertyAttributes = new ArrayList<Attribute>();
 
                 if (element.type == Element.Type.INCLUDE) {
-                    // Process attributes looking for src, resources, and static property
-                    // setters only
+                    // Process attributes looking for src, resources, and property setters
                     String src = null;
                     Resources resources = this.resources;
                     boolean inline = false;
@@ -713,14 +712,10 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                             resources = new Resources(resources, attribute.value);
                         } else if (attribute.localName.equals(INCLUDE_INLINE_ATTRIBUTE)) {
                             inline = Boolean.parseBoolean(attribute.value);
-                        } else {
-                            if (!Character.isUpperCase(attribute.localName.charAt(0))) {
-                                throw new SerializationException("Instance property setters are not"
-                                    + " supported for " + internalNamespacePrefix + ":" + INCLUDE_TAG
-                                    + " " + " tag.");
-                            }
-
+                        } else if (Character.isUpperCase(attribute.localName.charAt(0))) {
                             staticPropertyAttributes.add(attribute);
+                        } else {
+                            instancePropertyAttributes.add(attribute);
                         }
                     }
 
@@ -748,7 +743,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                         element.value = serializer.readObject(new URL(location, src));
                     }
                 } else {
-                    // Process attributes looking for all property setters
+                    // Process attributes looking for property setters
                     for (Attribute attribute : element.attributes) {
                         if (Character.isUpperCase(attribute.localName.charAt(0))) {
                             staticPropertyAttributes.add(attribute);
@@ -787,35 +782,6 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                 for (Attribute attribute : instancePropertyAttributes) {
                     dictionary.put(attribute.localName, resolve(attribute.value));
-                }
-
-                // If the element's parent has a default property, use it; otherwise, if the
-                // parent is a sequence or a listener list, add the element to it
-                if (element.parent != null
-                    && element.parent.value != null) {
-                    Class<?> parentType = element.parent.value.getClass();
-                    DefaultProperty defaultProperty = parentType.getAnnotation(DefaultProperty.class);
-
-                    if (defaultProperty == null) {
-                        if (element.parent.value instanceof Sequence<?>) {
-                            Sequence<Object> sequence = (Sequence<Object>)element.parent.value;
-                            sequence.add(element.value);
-                        } else if (element.parent.value instanceof ListenerList<?>) {
-                            ListenerList<Object> listenerList = (ListenerList<Object>)element.parent.value;
-                            listenerList.add(element.value);
-                        }
-                    } else {
-                        String defaultPropertyName = defaultProperty.value();
-                        BeanAdapter beanAdapter = new BeanAdapter(element.parent.value);
-                        Object defaultPropertyValue = beanAdapter.get(defaultPropertyName);
-
-                        if (defaultPropertyValue instanceof Sequence<?>) {
-                            Sequence<Object> sequence = (Sequence<Object>)defaultPropertyValue;
-                            sequence.add(element.value);
-                        } else {
-                            beanAdapter.put(defaultPropertyName, element.value);
-                        }
-                    }
                 }
 
                 // Apply static attributes
@@ -901,11 +867,40 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                     }
                 }
 
-                // If the parent element is a writable property, set this as its
-                // value; it will be applied later in the parent's closing tag
-                if (element.parent != null
-                    && element.parent.type == Element.Type.WRITABLE_PROPERTY) {
-                    element.parent.value = element.value;
+                if (element.parent != null) {
+                    // If the parent element has a default property, use it; otherwise, if the
+                    // parent is a sequence or a listener list, add the element to it
+                    if (element.parent.value != null) {
+                        Class<?> parentType = element.parent.value.getClass();
+                        DefaultProperty defaultProperty = parentType.getAnnotation(DefaultProperty.class);
+
+                        if (defaultProperty == null) {
+                            if (element.parent.value instanceof Sequence<?>) {
+                                Sequence<Object> sequence = (Sequence<Object>)element.parent.value;
+                                sequence.add(element.value);
+                            } else if (element.parent.value instanceof ListenerList<?>) {
+                                ListenerList<Object> listenerList = (ListenerList<Object>)element.parent.value;
+                                listenerList.add(element.value);
+                            }
+                        } else {
+                            String defaultPropertyName = defaultProperty.value();
+                            BeanAdapter beanAdapter = new BeanAdapter(element.parent.value);
+                            Object defaultPropertyValue = beanAdapter.get(defaultPropertyName);
+
+                            if (defaultPropertyValue instanceof Sequence<?>) {
+                                Sequence<Object> sequence = (Sequence<Object>)defaultPropertyValue;
+                                sequence.add(element.value);
+                            } else {
+                                beanAdapter.put(defaultPropertyName, element.value);
+                            }
+                        }
+                    }
+
+                    // If the parent element is a writable property, set this as its
+                    // value; it will be applied later in the parent's closing tag
+                    if (element.parent.type == Element.Type.WRITABLE_PROPERTY) {
+                        element.parent.value = element.value;
+                    }
                 }
 
                 break;

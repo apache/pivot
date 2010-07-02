@@ -416,20 +416,6 @@ public abstract class Component implements ConstrainedVisual {
                 listener.styleUpdated(component, styleKey, previousValue);
             }
         }
-
-        @Override
-        public void styleClassNameAdded(Component component, String styleClassName) {
-            for (ComponentStyleListener listener : this) {
-                listener.styleClassNameAdded(component, styleClassName);
-            }
-        }
-
-        @Override
-        public void styleClassNameRemoved(Component component, String styleClassName) {
-            for (ComponentStyleListener listener : this) {
-                listener.styleClassNameRemoved(component, styleClassName);
-            }
-        }
     }
 
     private static class ComponentMouseListenerList extends ListenerList<ComponentMouseListener>
@@ -643,7 +629,7 @@ public abstract class Component implements ConstrainedVisual {
     // The component's name
     private String name = null;
 
-    // The component's styles and style class names
+    // The component's styles
     private BeanAdapter styles = null;
     private StyleDictionary styleDictionary = new StyleDictionary();
 

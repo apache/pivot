@@ -21,20 +21,6 @@ package org.apache.pivot.wtk;
  */
 public interface ComponentStyleListener {
     /**
-     * Component style listener adapter.
-     */
-    public static class Adapter implements ComponentStyleListener {
-        public void styleUpdated(Component component, String styleKey, Object previousValue) {
-        }
-
-        public void styleClassNameAdded(Component component, String styleClassName) {
-        }
-
-        public void styleClassNameRemoved(Component component, String styleClassName) {
-        }
-    }
-
-    /**
      * Called when a component style has been updated.
      *
      * @param component
@@ -42,20 +28,4 @@ public interface ComponentStyleListener {
      * @param previousValue
      */
     public void styleUpdated(Component component, String styleKey, Object previousValue);
-
-    /**
-     * Called when a style class name has been added.
-     *
-     * @param component
-     * @param styleClassName
-     */
-    public void styleClassNameAdded(Component component, String styleClassName);
-
-    /**
-     * Called when a style class name has been removed.
-     *
-     * @param component
-     * @param styleClassName
-     */
-    public void styleClassNameRemoved(Component component, String styleClassName);
 }

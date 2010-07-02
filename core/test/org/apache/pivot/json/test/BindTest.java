@@ -19,7 +19,11 @@ package org.apache.pivot.json.test;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.io.StringReader;
 
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
@@ -27,6 +31,7 @@ import org.junit.Test;
 
 public class BindTest {
     @Test
+    @SuppressWarnings("unchecked")
     public void testBind() throws IOException, SerializationException {
         JSONSerializer objectSerializer = new JSONSerializer();
         Object sampleObject = objectSerializer.readObject(getClass().getResourceAsStream("sample.json"));
@@ -40,5 +45,13 @@ public class BindTest {
         assertEquals(sampleBean.getD(), JSON.get(sampleObject, "d"));
         assertEquals(sampleBean.getE(), JSON.get(sampleObject, "e"));
         assertEquals(sampleBean.getI().getA(), JSON.get(sampleObject, "i.a"));
+
+        JSONSerializer listSerializer = new JSONSerializer(ArrayList.class);
+        List<?> list = (List<?>)listSerializer.readObject(new StringReader("[1, 2, 3, 4, 5]"));
+        assertEquals(list.get(0), 1);
+
+        JSONSerializer mapSerializer = new JSONSerializer(HashMap.class);
+        HashMap<String, ?> map = (HashMap<String, ?>)mapSerializer.readObject(new StringReader("{a:1, b:2, c:3}"));
+        assertEquals(map.get("a"), 1);
     }
 }
