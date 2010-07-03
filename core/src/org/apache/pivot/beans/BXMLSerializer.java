@@ -53,6 +53,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
@@ -64,15 +65,15 @@ import org.apache.pivot.util.Vote;
  * Loads an object hierarchy from an XML document.
  */
 public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Object> {
-    private class NamedObjectBindings implements Bindings {
+    private class NamespaceBindings implements Bindings {
         @Override
         public Object get(Object key) {
-            return namedObjects.get(key.toString());
+            return namespace.get(key.toString());
         }
 
         @Override
         public Object put(String key, Object value) {
-            return namedObjects.put(key, value);
+            return namespace.put(key, value);
         }
 
         @Override
@@ -84,24 +85,24 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         @Override
         public Object remove(Object key) {
-            return namedObjects.remove(key.toString());
+            return namespace.remove(key.toString());
         }
 
         @Override
         public void clear() {
-            namedObjects.clear();
+            namespace.clear();
         }
 
         @Override
         public boolean containsKey(Object key) {
-            return namedObjects.containsKey(key.toString());
+            return namespace.containsKey(key.toString());
         }
 
         @Override
         public boolean containsValue(Object value) {
             boolean contains = false;
-            for (String key : namedObjects) {
-                if (namedObjects.get(key).equals(value)) {
+            for (String key : namespace) {
+                if (namespace.get(key).equals(value)) {
                     contains = true;
                     break;
                 }
@@ -112,13 +113,13 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         @Override
         public boolean isEmpty() {
-            return namedObjects.isEmpty();
+            return namespace.isEmpty();
         }
 
         @Override
         public Set<String> keySet() {
             java.util.HashSet<String> keySet = new java.util.HashSet<String>();
-            for (String key : namedObjects) {
+            for (String key : namespace) {
                 keySet.add(key);
             }
 
@@ -128,8 +129,8 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
         @Override
         public Set<Entry<String, Object>> entrySet() {
             java.util.HashMap<String, Object> hashMap = new java.util.HashMap<String, Object>();
-            for (String key : namedObjects) {
-                hashMap.put(key, namedObjects.get(key));
+            for (String key : namespace) {
+                hashMap.put(key, namespace.get(key));
             }
 
             return hashMap.entrySet();
@@ -137,14 +138,14 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         @Override
         public int size() {
-            return namedObjects.getCount();
+            return namespace.getCount();
         }
 
         @Override
         public Collection<Object> values() {
             java.util.ArrayList<Object> values = new java.util.ArrayList<Object>();
-            for (String key : namedObjects) {
-                values.add(namedObjects.get(key));
+            for (String key : namespace) {
+                values.add(namespace.get(key));
             }
 
             return values;
@@ -281,8 +282,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
     private String internalNamespacePrefix;
     private Class<? extends Annotation> bindingAnnotationClass;
 
-    private HashMap<String, Object> namedObjects;
-    private HashMap<String, BXMLSerializer> namedSerializers;
+    private HashMap<String, Object> namespace;
 
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;
@@ -335,12 +335,10 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         if (owner == null) {
             inline = false;
-            namedObjects = new HashMap<String, Object>();
-            namedSerializers = new HashMap<String, BXMLSerializer>();
+            namespace = new HashMap<String, Object>();
         } else {
             inline = true;
-            namedObjects = owner.namedObjects;
-            namedSerializers = owner.namedSerializers;
+            namespace = owner.namespace;
         }
 
         clearNamespaceOnRead = !inline;
@@ -349,7 +347,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
 
         scriptEngineManager = new javax.script.ScriptEngineManager();
-        scriptEngineManager.setBindings(new NamedObjectBindings());
+        scriptEngineManager.setBindings(new NamespaceBindings());
     }
 
     public Resources getResources() {
@@ -430,8 +428,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
 
         // Reset the serializer
         if (clearNamespaceOnRead) {
-            namedObjects.clear();
-            namedSerializers.clear();
+            namespace.clear();
         }
 
         root = null;
@@ -728,15 +725,6 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                     // Read the object
                     BXMLSerializer serializer = createSerializer(resources, inline ? this : null);
 
-                    if (element.id != null) {
-                        if (namedSerializers.containsKey(element.id)) {
-                            throw new SerializationException("Namespace ID " + element.id
-                                + " is already in use.");
-                        }
-
-                        namedSerializers.put(element.id, serializer);
-                    }
-
                     if (src.charAt(0) == '/') {
                         element.value = serializer.readObject(src.substring(1));
                     } else {
@@ -753,14 +741,14 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                     }
                 }
 
-                // Add the value to the named objects map
+                // Add the value to the namespace
                 if (element.id != null) {
-                    if (namedObjects.containsKey(element.id)) {
+                    if (namespace.containsKey(element.id)) {
                         throw new SerializationException("Element ID " + element.id
                             + " is already in use.");
                     }
 
-                    namedObjects.put(element.id, element.value);
+                    namespace.put(element.id, element.value);
 
                     // If the type has an ID property, use it
                     Class<?> type = element.value.getClass();
@@ -1157,112 +1145,62 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     /**
-     * Retrieves a named object.
+     * Gets a value from this serializer's namespace.
      *
-     * @param name
-     * The name of the object, relative to this loader. The object's name is
-     * the concatenation of its parent IDs and its ID, separated by periods
-     * (e.g. "foo.bar.baz").
-     *
-     * @return The named object, or <tt>null</tt> if an object with the given
-     * name does not exist. Use {@link #containsKey(String)} to distinguish
-     * between the two cases.
+     * @param id
      */
     @Override
-    public Object get(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("name is null.");
+    public Object get(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException();
         }
 
-        Object value = null;
-
-        int i = name.lastIndexOf('.');
-        if (i == -1) {
-            value = namedObjects.get(name);
-        } else {
-            String serializerName = name.substring(0, name.lastIndexOf('.'));
-            String id = name.substring(serializerName.length() + 1);
-            BXMLSerializer serializer = getSerializer(serializerName);
-
-            if (serializer != null) {
-                value = serializer.get(id);
-            }
-        }
-
-        return value;
+        return JSON.get(namespace, id);
     }
 
+    /**
+     * Puts a value into this serializer's namespace.
+     *
+     * @param id
+     * @param value
+     */
     @Override
-    public Object put(String name, Object value) {
-        if (name == null) {
-            throw new IllegalArgumentException("name is null.");
-        }
-
-        Object previousValue;
-
-        int i = name.lastIndexOf('.');
-        if (i == -1) {
-            previousValue = namedObjects.put(name, value);
-        } else {
-            String serializerName = name.substring(0, name.lastIndexOf('.'));
-            String id = name.substring(serializerName.length() + 1);
-            BXMLSerializer serializer = getSerializer(serializerName);
-            previousValue = serializer.put(id, value);
+    public Object put(String id, Object value) {
+        if (id == null) {
+            throw new IllegalArgumentException();
         }
 
         clearNamespaceOnRead = false;
 
-        return previousValue;
+        return JSON.put(namespace, id, value);
     }
 
+    /**
+     * Removes a value from this serializer's namespace.
+     *
+     * @param id
+     */
     @Override
-    public Object remove(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("name is null.");
+    public Object remove(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException();
         }
 
-        Object previousValue;
-
-        int i = name.lastIndexOf('.');
-        if (i == -1) {
-            previousValue = namedObjects.remove(name);
-        } else {
-            String serializerName = name.substring(0, name.lastIndexOf('.'));
-            String id = name.substring(serializerName.length() + 1);
-            BXMLSerializer serializer = getSerializer(serializerName);
-            previousValue = serializer.remove(id);
-        }
-
-        return previousValue;
+        return JSON.remove(namespace, id);
     }
 
+    /**
+     * Tests this serializer's namespace for the existence of a given ID.
+     *
+     * @param id
+     */
     @Override
-    public boolean containsKey(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("name is null.");
+    public boolean containsKey(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException();
         }
 
-        boolean containsKey = false;
-
-        int i = name.lastIndexOf('.');
-        if (i == -1) {
-            containsKey = namedObjects.containsKey(name);
-        } else {
-            String serializerName = name.substring(0, name.lastIndexOf('.'));
-            String id = name.substring(serializerName.length() + 1);
-            BXMLSerializer serializer = getSerializer(serializerName);
-
-            if (serializer != null) {
-                containsKey = serializer.containsKey(id);
-            }
-        }
-
-        return containsKey;
-    }
-
-    public boolean isEmpty() {
-        return namedObjects.isEmpty()
-            && namedSerializers.isEmpty();
+        return JSON.containsKey(namespace, id);
     }
 
     /**
@@ -1275,35 +1213,6 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
      */
     public Object getRoot() {
         return root;
-    }
-
-    /**
-     * Retrieves a nested serializer.
-     *
-     * @param name
-     * The name of the serializer, relative to this loader. The serializer's name
-     * is the concatentation of its parent IDs and its ID, separated by periods
-     * (e.g. "foo.bar.baz").
-     *
-     * @return The named serializer, or <tt>null</tt> if a serializer with the
-     * given name does not exist.
-     */
-    public BXMLSerializer getSerializer(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("name is null.");
-        }
-
-        BXMLSerializer serializer = this;
-        String[] path = name.split("\\.");
-
-        int i = 0;
-        int n = path.length;
-        while (i < n && serializer != null) {
-            String id = path[i++];
-            serializer = serializer.namedSerializers.get(id);
-        }
-
-        return serializer;
     }
 
     /**
