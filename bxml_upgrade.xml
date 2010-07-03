@@ -25,19 +25,11 @@ limitations under the License.
             <include name="**/*.java"/>
         </replace>
 
-        <replace dir="${src}" token="WTKXSerializer" value="BeanSerializer">
-            <include name="**/*.java"/>
-        </replace>
-
-        <replace dir="${src}" token="wtkxSerializer" value="beanSerializer">
-            <include name="**/*.java"/>
-        </replace>
-
         <replace dir="${src}" token="WTKX" value="BXML">
             <include name="**/*.java"/>
         </replace>
 
-        <replace dir="${src}" token=".wtkx" value=".bxml">
+        <replace dir="${src}" token="wtkx" value="bxml">
             <include name="**/*.java"/>
         </replace>
 
