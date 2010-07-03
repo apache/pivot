@@ -367,7 +367,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         throws IOException, SerializationException {
         Map<String, Object> resourceMap = null;
 
-        InputStream inputStream = ThreadUtilities.getClassLoader().getResourceAsStream(name);
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(name);
 
         if (inputStream != null) {
             JSONSerializer serializer = new JSONSerializer(charset);

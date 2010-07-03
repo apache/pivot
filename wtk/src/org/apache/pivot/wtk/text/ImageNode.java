@@ -19,11 +19,9 @@ package org.apache.pivot.wtk.text;
 import java.net.URL;
 
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Node representing an image.
@@ -123,7 +121,7 @@ public class ImageNode extends Node {
             throw new IllegalArgumentException("image is null.");
         }
 
-        ClassLoader classLoader = ThreadUtilities.getClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         setImage(classLoader.getResource(image));
     }
 

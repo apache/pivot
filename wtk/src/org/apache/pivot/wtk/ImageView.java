@@ -24,7 +24,6 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
@@ -201,7 +200,7 @@ public class ImageView extends Component {
             throw new IllegalArgumentException("image is null.");
         }
 
-        ClassLoader classLoader = ThreadUtilities.getClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         setImage(classLoader.getResource(image));
     }
 

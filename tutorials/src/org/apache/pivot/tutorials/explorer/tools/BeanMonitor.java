@@ -28,7 +28,6 @@ import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.HashSet;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 
 /**
@@ -192,7 +191,7 @@ public class BeanMonitor {
                     // Get the listener for this interface
                     Object listener = beanListenerProxies.get(listenerInterface);
                     if (listener == null) {
-                        listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
+                        listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
                             new Class<?>[]{listenerInterface}, invocationHandler);
                         beanListenerProxies.put(listenerInterface, listener);
                     }

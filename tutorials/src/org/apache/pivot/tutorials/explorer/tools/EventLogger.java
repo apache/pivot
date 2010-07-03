@@ -30,7 +30,6 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.HashSet;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
@@ -323,7 +322,7 @@ public class EventLogger extends Container {
                     // Get the listener for this interface
                     Object listener = eventListenerProxies.get(listenerInterface);
                     if (listener == null) {
-                        listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
+                        listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
                             new Class<?>[]{listenerInterface}, loggerInvocationHandler);
                         eventListenerProxies.put(listenerInterface, listener);
                     }

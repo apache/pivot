@@ -28,7 +28,6 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Accordion;
 import org.apache.pivot.wtk.ActivityIndicator;
@@ -170,7 +169,8 @@ public final class TerraTheme extends Theme {
         if (location == null) {
             load(getClass().getResource("TerraTheme_default.json"));
         } else {
-            load(ThreadUtilities.getClassLoader().getResource(location.substring(1)));
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            load(classLoader.getResource(location.substring(1)));
         }
     }
 

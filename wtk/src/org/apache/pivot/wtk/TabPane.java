@@ -24,11 +24,9 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Container that provides access to a set of components via selectable tabs,
@@ -382,7 +380,7 @@ public class TabPane extends Container {
             throw new IllegalArgumentException("icon is null.");
         }
 
-        ClassLoader classLoader = ThreadUtilities.getClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         setIcon(component, classLoader.getResource(icon));
     }
 

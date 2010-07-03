@@ -36,7 +36,6 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.wtk.effects.Decorator;
 
 /**
@@ -2481,7 +2480,8 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         if (styles.charAt(0) == '/') {
-            setStyles(ThreadUtilities.getClassLoader().getResource(styles.substring(1)));
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            setStyles(classLoader.getResource(styles.substring(1)));
         } else {
             setStyles(JSONSerializer.parseMap(styles));
         }

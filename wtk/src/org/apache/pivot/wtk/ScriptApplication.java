@@ -22,7 +22,6 @@ import java.io.File;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
-import org.apache.pivot.util.ThreadUtilities;
 
 /**
  * Script application loader.
@@ -48,7 +47,7 @@ public class ScriptApplication implements Application {
 
         BXMLSerializer beanSerializer = new BXMLSerializer(resources);
 
-        ClassLoader classLoader = ThreadUtilities.getClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL location = classLoader.getResource(src);
 
         if (location == null) {

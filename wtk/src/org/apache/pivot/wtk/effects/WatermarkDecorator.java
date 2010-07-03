@@ -24,7 +24,6 @@ import java.net.URL;
 
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
@@ -36,7 +35,6 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Decorator that paints a watermark effect over a component.
@@ -242,7 +240,7 @@ public class WatermarkDecorator implements Decorator {
             throw new IllegalArgumentException("image is null.");
         }
 
-        ClassLoader classLoader = ThreadUtilities.getClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         setImage(classLoader.getResource(image));
     }
 

@@ -58,7 +58,6 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Resources;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.Vote;
 
 /**
@@ -360,7 +359,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
             throw new IllegalArgumentException("resourceName is null.");
         }
 
-        ClassLoader classLoader = ThreadUtilities.getClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL location = classLoader.getResource(resourceName);
 
         if (location == null) {
@@ -828,7 +827,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                                     localNameComponents[1],
                                     attribute.value);
 
-                            Object listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
+                            Object listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
                                 new Class<?>[]{propertyClass}, handler);
 
                             // Add the listener
@@ -1001,7 +1000,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                     try {
                         URL scriptLocation;
                         if (src.charAt(0) == '/') {
-                            ClassLoader classLoader = ThreadUtilities.getClassLoader();
+                            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
                             scriptLocation = classLoader.getResource(src);
                         } else {
                             scriptLocation = new URL(location, src);
@@ -1059,7 +1058,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                         throw new RuntimeException(exception);
                     }
 
-                    Object listener = Proxy.newProxyInstance(ThreadUtilities.getClassLoader(),
+                    Object listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
                         new Class<?>[]{listenerClass}, handler);
 
                     try {

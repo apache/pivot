@@ -33,6 +33,7 @@ import org.apache.pivot.util.Resources;
 @Deprecated
 public class WTKXSerializer extends BXMLSerializer {
     public static final String WTKX_PREFIX = "wtkx";
+    public static final String MIME_TYPE = "application/wtkx";
 
     public WTKXSerializer() {
         super(null);
@@ -40,5 +41,10 @@ public class WTKXSerializer extends BXMLSerializer {
 
     public WTKXSerializer(Resources resources) {
         super(resources, null, WTKX_PREFIX, WTKX.class);
+    }
+
+    @Override
+    public String getMIMEType(Object object) {
+        return MIME_TYPE;
     }
 }

@@ -18,11 +18,9 @@ package org.apache.pivot.wtk.content;
 
 import java.net.URL;
 
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Default button data implementation.
@@ -102,7 +100,7 @@ public class ButtonData {
             throw new IllegalArgumentException("iconName is null.");
         }
 
-        ClassLoader classLoader = ThreadUtilities.getClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         setIcon(classLoader.getResource(iconName));
     }
 

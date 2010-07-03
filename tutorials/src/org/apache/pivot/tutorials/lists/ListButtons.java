@@ -21,7 +21,6 @@ import java.net.URL;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
-import org.apache.pivot.util.ThreadUtilities;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.ImageView;
@@ -48,7 +47,7 @@ public class ListButtons extends Window implements Bindable {
                     String item = (String)listButton.getListData().get(index);
 
                     // Get the image URL for the selected item
-                    ClassLoader classLoader = ThreadUtilities.getClassLoader();
+                    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
                     URL imageURL = classLoader.getResource("org/apache/pivot/tutorials/" + item);
 
                     // If the image has not been added to the resource cache yet,

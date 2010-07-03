@@ -52,7 +52,7 @@ public class Service {
         if (providerClassName == null) {
             String serviceName = "META-INF/services/" + providerName;
 
-            ClassLoader classLoader = ThreadUtilities.getClassLoader();
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             InputStream serviceInputStream = classLoader.getResourceAsStream(serviceName);
 
             if (serviceInputStream != null) {
