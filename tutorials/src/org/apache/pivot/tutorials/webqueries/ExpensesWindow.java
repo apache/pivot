@@ -123,8 +123,8 @@ public class ExpensesWindow extends Window implements Bindable {
 
         // Load the add/edit sheet
         try {
-            BXMLSerializer beanSerializer = new BXMLSerializer(new Resources(ExpenseSheet.class.getName()));
-            expenseSheet = (ExpenseSheet)beanSerializer.readObject(this, "expense_sheet.bxml");
+            BXMLSerializer bxmlSerializer = new BXMLSerializer(new Resources(ExpenseSheet.class.getName()));
+            expenseSheet = (ExpenseSheet)bxmlSerializer.readObject(this, "expense_sheet.bxml");
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {

@@ -72,11 +72,11 @@ public class SearchDemo implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        beanSerializer.getNamespace().put(APPLICATION_KEY, this);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        bxmlSerializer.getNamespace().put(APPLICATION_KEY, this);
 
-        window = (Window)beanSerializer.readObject(this, "search_demo.bxml");
-        beanSerializer.bind(this, SearchDemo.class);
+        window = (Window)bxmlSerializer.readObject(this, "search_demo.bxml");
+        bxmlSerializer.bind(this, SearchDemo.class);
 
         searchButton.setButtonData(searchImage);
         window.open(display);

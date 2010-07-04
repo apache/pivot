@@ -31,8 +31,8 @@ public class BorderTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        frame = new Frame((Component)beanSerializer.readObject(getClass().getResource("border_test.bxml")));
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        frame = new Frame((Component)bxmlSerializer.readObject(getClass().getResource("border_test.bxml")));
         frame.setTitle("Border Test");
         frame.setPreferredSize(480, 360);
         frame.open(display);

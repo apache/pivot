@@ -48,10 +48,10 @@ public class CardPaneTest implements Application {
         frame.setPreferredSize(800, 600);
         frame.setLocation(20, 20);
 
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        sheet = (Sheet)beanSerializer.readObject(this, "card_pane_test.bxml");
-        cardPane = (CardPane)beanSerializer.getNamespace().get("cardPane");
-        sizeGroup = (ButtonGroup)beanSerializer.getNamespace().get("sizeGroup");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        sheet = (Sheet)bxmlSerializer.readObject(this, "card_pane_test.bxml");
+        cardPane = (CardPane)bxmlSerializer.getNamespace().get("cardPane");
+        sizeGroup = (ButtonGroup)bxmlSerializer.getNamespace().get("sizeGroup");
 
         sizeGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
             @Override

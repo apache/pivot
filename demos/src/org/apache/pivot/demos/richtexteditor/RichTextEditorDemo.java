@@ -83,9 +83,9 @@ public class RichTextEditorDemo implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = (Window)beanSerializer.readObject(this, "richtexteditor.bxml");
-        beanSerializer.bind(this, RichTextEditorDemo.class);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = (Window)bxmlSerializer.readObject(this, "richtexteditor.bxml");
+        bxmlSerializer.bind(this, RichTextEditorDemo.class);
 
         window.setTitle("Apache Pivot Rich Text Editor Demo");
 

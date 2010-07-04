@@ -115,8 +115,8 @@ public class DataBindingTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = (Window)beanSerializer.readObject(this, "data_binding_test.bxml");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = (Window)bxmlSerializer.readObject(this, "data_binding_test.bxml");
         window.open(display);
 
         HashMap<String, Object> context = new HashMap<String, Object>();

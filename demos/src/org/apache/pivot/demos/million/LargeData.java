@@ -167,13 +167,13 @@ public class LargeData implements Application {
             throw new IllegalArgumentException(BASE_PATH_KEY + " is required.");
         }
 
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = (Window)beanSerializer.readObject(this, "large_data.bxml");
-        fileListButton = (ListButton)beanSerializer.getNamespace().get("fileListButton");
-        loadDataButton = (PushButton)beanSerializer.getNamespace().get("loadDataButton");
-        cancelButton = (PushButton)beanSerializer.getNamespace().get("cancelButton");
-        statusLabel = (Label)beanSerializer.getNamespace().get("statusLabel");
-        tableView = (TableView)beanSerializer.getNamespace().get("tableView");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = (Window)bxmlSerializer.readObject(this, "large_data.bxml");
+        fileListButton = (ListButton)bxmlSerializer.getNamespace().get("fileListButton");
+        loadDataButton = (PushButton)bxmlSerializer.getNamespace().get("loadDataButton");
+        cancelButton = (PushButton)bxmlSerializer.getNamespace().get("cancelButton");
+        statusLabel = (Label)bxmlSerializer.getNamespace().get("statusLabel");
+        tableView = (TableView)bxmlSerializer.getNamespace().get("tableView");
 
         loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

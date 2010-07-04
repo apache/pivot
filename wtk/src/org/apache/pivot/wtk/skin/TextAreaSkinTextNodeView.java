@@ -41,7 +41,7 @@ import org.apache.pivot.wtk.text.TextNodeListener;
  * Text node view.
  */
 class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeListener {
-    
+
     private final TextAreaSkin textAreaSkin;
 
     private int start;

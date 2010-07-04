@@ -132,9 +132,9 @@ public class ComponentExplorerWindow extends Window implements Bindable {
 
                     sourceTextArea.setDocument(document);
 
-                    BXMLSerializer beanSerializer = new BXMLSerializer();
+                    BXMLSerializer bxmlSerializer = new BXMLSerializer();
                     try {
-                        component = (Component)beanSerializer.readObject(url);
+                        component = (Component)bxmlSerializer.readObject(url);
                     } catch (IOException exception) {
                         throw new RuntimeException(exception);
                     } catch (SerializationException exception) {

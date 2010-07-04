@@ -30,8 +30,8 @@ public class ApplicationHandlerTest implements Application,
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = (Window)beanSerializer.readObject(this, "application_handler_test.bxml");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = (Window)bxmlSerializer.readObject(this, "application_handler_test.bxml");
         window.open(display);
     }
 

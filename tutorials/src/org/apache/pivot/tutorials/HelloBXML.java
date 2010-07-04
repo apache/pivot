@@ -29,8 +29,8 @@ public class HelloBXML implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = (Window)beanSerializer.readObject(this, "hello.bxml");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = (Window)bxmlSerializer.readObject(this, "hello.bxml");
         window.open(display);
     }
 

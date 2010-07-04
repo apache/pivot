@@ -69,8 +69,8 @@ public class Expenses implements Application {
             secure = origin.getProtocol().equals("HTTPS");
         }
 
-        BXMLSerializer beanSerializer = new BXMLSerializer(new Resources(ExpensesWindow.class.getName()));
-        expensesWindow = (ExpensesWindow)beanSerializer.readObject(this, "expenses_window.bxml");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer(new Resources(ExpensesWindow.class.getName()));
+        expensesWindow = (ExpensesWindow)bxmlSerializer.readObject(this, "expenses_window.bxml");
         expensesWindow.open(display);
     }
 

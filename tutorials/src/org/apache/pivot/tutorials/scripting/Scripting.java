@@ -42,12 +42,12 @@ public class Scripting implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        beanSerializer.getNamespace().put("bar", "12345");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        bxmlSerializer.getNamespace().put("bar", "12345");
 
-        window = (Window)beanSerializer.readObject(this, "scripting.bxml");
-        foo = (String)beanSerializer.getNamespace().get("foo");
-        listData = (List<?>)beanSerializer.getNamespace().get("listData");
+        window = (Window)bxmlSerializer.readObject(this, "scripting.bxml");
+        foo = (String)bxmlSerializer.getNamespace().get("foo");
+        listData = (List<?>)bxmlSerializer.getNamespace().get("listData");
 
         System.out.println("foo = " + foo);
         System.out.println("listData.getLength() = " + listData.getLength());

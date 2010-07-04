@@ -62,11 +62,11 @@ public class JSONViewer implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        beanSerializer.getNamespace().put(APPLICATION_KEY, this);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        bxmlSerializer.getNamespace().put(APPLICATION_KEY, this);
 
-        window = (Window)beanSerializer.readObject(this, "json_viewer.bxml");
-        beanSerializer.bind(this);
+        window = (Window)bxmlSerializer.readObject(this, "json_viewer.bxml");
+        bxmlSerializer.bind(this);
 
         Label prompt = new Label("Drag or paste JSON here");
         prompt.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);

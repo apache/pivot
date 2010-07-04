@@ -582,9 +582,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             throw new RuntimeException(exception);
         }
 
-        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
         try {
-            content = (Component)beanSerializer.readObject(this, "terra_file_browser_skin.bxml");
+            content = (Component)bxmlSerializer.readObject(this, "terra_file_browser_skin.bxml");
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {
@@ -593,7 +593,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         fileBrowser.add(content);
 
-        beanSerializer.bind(this, TerraFileBrowserSkin.class);
+        bxmlSerializer.bind(this, TerraFileBrowserSkin.class);
 
         driveListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
             @Override

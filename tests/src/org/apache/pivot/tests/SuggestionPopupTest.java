@@ -40,9 +40,9 @@ public class SuggestionPopupTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = (Window)beanSerializer.readObject(this, "suggestion_popup_test.bxml");
-        beanSerializer.bind(this);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = (Window)bxmlSerializer.readObject(this, "suggestion_popup_test.bxml");
+        bxmlSerializer.bind(this);
 
         textInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
             @Override

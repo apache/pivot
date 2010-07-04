@@ -30,8 +30,8 @@ public class ResolveTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         Resources resources = new Resources(getClass().getName());
-        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
-        window = (Window)beanSerializer.readObject(this, "resolve_test.bxml");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
+        window = (Window)bxmlSerializer.readObject(this, "resolve_test.bxml");
         window.open(display);
     }
 

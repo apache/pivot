@@ -27,9 +27,9 @@ import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.Paragraph;
 
 class TextAreaSkinParagraphView extends TextAreaSkinElementView {
-    
+
     private static final int PARAGRAPH_TERMINATOR_WIDTH = 4;
-    
+
     private final TextAreaSkin textAreaSkin;
 
     private class Row {

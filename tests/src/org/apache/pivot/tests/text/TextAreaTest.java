@@ -68,14 +68,14 @@ public class TextAreaTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        frame = new Frame((Component)beanSerializer.readObject(getClass().getResource("text_area_test.bxml")));
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        frame = new Frame((Component)bxmlSerializer.readObject(getClass().getResource("text_area_test.bxml")));
         frame.setTitle("TextArea Test");
         frame.setPreferredSize(640, 480);
         frame.setLocation(80, 40);
         frame.open(display);
 
-        textArea = (TextArea)beanSerializer.getNamespace().get("textArea");
+        textArea = (TextArea)bxmlSerializer.getNamespace().get("textArea");
         textArea.getTextAreaSelectionListeners().add(new TextAreaSelectionListener() {
             @Override
             public void selectionChanged(TextArea textArea,
@@ -96,10 +96,10 @@ public class TextAreaTest implements Application {
             }
         });
 
-        selectionStartLabel = (Label)beanSerializer.getNamespace().get("selectionStartLabel");
-        selectionLengthLabel = (Label)beanSerializer.getNamespace().get("selectionLengthLabel");
+        selectionStartLabel = (Label)bxmlSerializer.getNamespace().get("selectionStartLabel");
+        selectionLengthLabel = (Label)bxmlSerializer.getNamespace().get("selectionLengthLabel");
 
-        treeView = (TreeView)beanSerializer.getNamespace().get("treeView");
+        treeView = (TreeView)bxmlSerializer.getNamespace().get("treeView");
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
             @Override
             public void selectedPathAdded(TreeView treeView, Path path) {
@@ -135,8 +135,8 @@ public class TextAreaTest implements Application {
             }
         });
 
-        offsetLabel = (Label)beanSerializer.getNamespace().get("offsetLabel");
-        charactersLabel = (Label)beanSerializer.getNamespace().get("charactersLabel");
+        offsetLabel = (Label)bxmlSerializer.getNamespace().get("offsetLabel");
+        charactersLabel = (Label)bxmlSerializer.getNamespace().get("charactersLabel");
 
         documentAdapter = new DocumentAdapter(textArea.getDocument());
         treeView.setTreeData(documentAdapter);

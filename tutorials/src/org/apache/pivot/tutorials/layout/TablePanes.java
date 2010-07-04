@@ -93,17 +93,17 @@ public class TablePanes extends Window implements Bindable {
         namedActions.put("configureCell", new Action() {
             @Override
             public void perform() {
-                BXMLSerializer beanSerializer = new BXMLSerializer();
+                BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 Sheet sheet;
 
                 // Make the cell component available to script blocks
                 int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
                 int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
                 Component component = tablePane.getCellComponent(rowIndex, columnIndex);
-                beanSerializer.getNamespace().put("component", component);
+                bxmlSerializer.getNamespace().put("component", component);
 
                 try {
-                    sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_cell.bxml");
+                    sheet = (Sheet)bxmlSerializer.readObject(this, "table_panes_configure_cell.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -117,16 +117,16 @@ public class TablePanes extends Window implements Bindable {
         namedActions.put("configureRow", new Action() {
             @Override
             public void perform() {
-                BXMLSerializer beanSerializer = new BXMLSerializer();
+                BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 Sheet sheet;
 
                 // Make the selected row available to script blocks
                 int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
                 TablePane.Row row = tablePane.getRows().get(rowIndex);
-                beanSerializer.getNamespace().put("row", row);
+                bxmlSerializer.getNamespace().put("row", row);
 
                 try {
-                    sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_row.bxml");
+                    sheet = (Sheet)bxmlSerializer.readObject(this, "table_panes_configure_row.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -140,7 +140,7 @@ public class TablePanes extends Window implements Bindable {
         namedActions.put("insertRow", new Action() {
             @Override
             public void perform() {
-                BXMLSerializer beanSerializer = new BXMLSerializer();
+                BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 Sheet sheet;
 
                 // Create and insert a new row
@@ -157,10 +157,10 @@ public class TablePanes extends Window implements Bindable {
                 }
 
                 // Make the new row available to script blocks
-                beanSerializer.getNamespace().put("row", row);
+                bxmlSerializer.getNamespace().put("row", row);
 
                 try {
-                    sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_row.bxml");
+                    sheet = (Sheet)bxmlSerializer.readObject(this, "table_panes_configure_row.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -197,16 +197,16 @@ public class TablePanes extends Window implements Bindable {
         namedActions.put("configureColumn", new Action() {
             @Override
             public void perform() {
-                BXMLSerializer beanSerializer = new BXMLSerializer();
+                BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 Sheet sheet;
 
                 // Make the selected column available to script blocks
                 int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
                 TablePane.Column column = tablePane.getColumns().get(columnIndex);
-                beanSerializer.getNamespace().put("column", column);
+                bxmlSerializer.getNamespace().put("column", column);
 
                 try {
-                    sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_column.bxml");
+                    sheet = (Sheet)bxmlSerializer.readObject(this, "table_panes_configure_column.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -220,7 +220,7 @@ public class TablePanes extends Window implements Bindable {
         namedActions.put("insertColumn", new Action() {
             @Override
             public void perform() {
-                BXMLSerializer beanSerializer = new BXMLSerializer();
+                BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 Sheet sheet;
 
                 // Create and insert a new column
@@ -238,10 +238,10 @@ public class TablePanes extends Window implements Bindable {
                 }
 
                 // Make the new column available to script blocks
-                beanSerializer.getNamespace().put("column", column);
+                bxmlSerializer.getNamespace().put("column", column);
 
                 try {
-                    sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_column.bxml");
+                    sheet = (Sheet)bxmlSerializer.readObject(this, "table_panes_configure_column.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {

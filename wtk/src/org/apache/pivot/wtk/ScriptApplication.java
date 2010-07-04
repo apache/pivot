@@ -45,7 +45,7 @@ public class ScriptApplication implements Application {
             resources = new Resources(properties.get(RESOURCES_KEY));
         }
 
-        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL location = classLoader.getResource(src);
@@ -61,8 +61,8 @@ public class ScriptApplication implements Application {
             throw new IllegalArgumentException("Cannot find source file \"" + src + "\".");
         }
 
-        beanSerializer.getNamespace().put("location", location);
-        window = (Window)beanSerializer.readObject(location);
+        bxmlSerializer.getNamespace().put("location", location);
+        window = (Window)bxmlSerializer.readObject(location);
         window.open(display);
     }
 

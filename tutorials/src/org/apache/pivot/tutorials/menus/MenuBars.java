@@ -93,12 +93,12 @@ public class MenuBars extends Frame implements Bindable {
         Action.getNamedActions().put("fileNew", new Action() {
             @Override
             public void perform() {
-                BXMLSerializer beanSerializer = new BXMLSerializer();
-                beanSerializer.getNamespace().put("menuHandler", menuHandler);
+                BXMLSerializer bxmlSerializer = new BXMLSerializer();
+                bxmlSerializer.getNamespace().put("menuHandler", menuHandler);
 
                 Component tab;
                 try {
-                    tab = new Border((Component)beanSerializer.readObject(this, "document.bxml"));
+                    tab = new Border((Component)bxmlSerializer.readObject(this, "document.bxml"));
                 } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 } catch (SerializationException exception) {

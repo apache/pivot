@@ -45,8 +45,8 @@ public class PanoramaTest implements Application {
         panorama.setView(imageView);
         frame1.open(display);
 
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        frame2 = new Frame((Component)beanSerializer.readObject(getClass().getResource("panorama_test.bxml")));
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        frame2 = new Frame((Component)bxmlSerializer.readObject(getClass().getResource("panorama_test.bxml")));
         frame2.setTitle("Panorama Test 2");
         frame2.setPreferredSize(480, 360);
         frame2.open(display);

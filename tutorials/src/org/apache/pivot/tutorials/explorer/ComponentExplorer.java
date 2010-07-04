@@ -30,8 +30,8 @@ public class ComponentExplorer implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer(new Resources(getClass().getName()));
-        window = (ComponentExplorerWindow)beanSerializer.readObject(getClass().getResource("component_explorer_window.bxml"));
+        BXMLSerializer bxmlSerializer = new BXMLSerializer(new Resources(getClass().getName()));
+        window = (ComponentExplorerWindow)bxmlSerializer.readObject(getClass().getResource("component_explorer_window.bxml"));
         window.setClassProperty(properties.get(CLASS_PROPERTY));
         window.open(display);
     }

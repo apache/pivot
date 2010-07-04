@@ -121,10 +121,10 @@ public class SwingDemo extends ApplicationContext {
         displays.add(displayHost.getDisplay());
 
         // Load the Pivot window
-        BXMLSerializer beanSerializer = new BXMLSerializer();
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
         Window window;
         try {
-            window = (Window)beanSerializer.readObject(SwingDemo.class.getResource("pivot_window.bxml"));
+            window = (Window)bxmlSerializer.readObject(SwingDemo.class.getResource("pivot_window.bxml"));
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {

@@ -38,12 +38,12 @@ public class Windows implements Application {
         int y = 0;
 
         for (int i = 0; i < 3; i++) {
-            BXMLSerializer beanSerializer = new BXMLSerializer();
-            beanSerializer.getNamespace().put("application", this);
+            BXMLSerializer bxmlSerializer = new BXMLSerializer();
+            bxmlSerializer.getNamespace().put("application", this);
 
             Frame frame;
             try {
-                frame = (Frame)beanSerializer.readObject(Windows.this, "frame.bxml");
+                frame = (Frame)bxmlSerializer.readObject(Windows.this, "frame.bxml");
             } catch (SerializationException exception) {
                 throw new RuntimeException(exception);
             } catch (IOException exception) {
@@ -79,8 +79,8 @@ public class Windows implements Application {
 
     public Window load(String fileName)
         throws SerializationException, IOException {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        return (Window)beanSerializer.readObject(this, fileName);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        return (Window)bxmlSerializer.readObject(this, fileName);
     }
 
     public static void main(String[] args) {

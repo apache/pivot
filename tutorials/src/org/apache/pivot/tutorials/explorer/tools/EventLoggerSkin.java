@@ -86,9 +86,9 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
             throw new RuntimeException(exception);
         }
 
-        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
         try {
-            content = (Component)beanSerializer.readObject(this, "event_logger_skin.bxml");
+            content = (Component)bxmlSerializer.readObject(this, "event_logger_skin.bxml");
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {
@@ -97,8 +97,8 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
         eventLogger.add(content);
 
-        declaredEventsTreeView = (TreeView)beanSerializer.getNamespace().get("declaredEventsTreeView");
-        firedEventsTableView = (TableView)beanSerializer.getNamespace().get("firedEventsTableView");
+        declaredEventsTreeView = (TreeView)bxmlSerializer.getNamespace().get("declaredEventsTreeView");
+        firedEventsTableView = (TableView)bxmlSerializer.getNamespace().get("firedEventsTableView");
 
         // Propagate check state upwards or downwards as necessary
         declaredEventsTreeView.getTreeViewNodeStateListeners().add(new TreeViewNodeStateListener() {

@@ -98,21 +98,21 @@ public class TerraAlertSkin extends TerraDialogSkin
         alert.getAlertListeners().add(this);
 
         // Load the alert content
-        BXMLSerializer beanSerializer = new BXMLSerializer();
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
         Component content;
         try {
-            content = (Component)beanSerializer.readObject(this, "terra_alert_skin.bxml");
+            content = (Component)bxmlSerializer.readObject(this, "terra_alert_skin.bxml");
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }
 
         alert.setContent(content);
 
-        typeImageView = (ImageView)beanSerializer.getNamespace().get("typeImageView");
-        messageLabel = (Label)beanSerializer.getNamespace().get("messageLabel");
-        messageBoxPane = (BoxPane)beanSerializer.getNamespace().get("messageBoxPane");
-        optionButtonBoxPane = (BoxPane)beanSerializer.getNamespace().get("optionButtonBoxPane");
+        typeImageView = (ImageView)bxmlSerializer.getNamespace().get("typeImageView");
+        messageLabel = (Label)bxmlSerializer.getNamespace().get("messageLabel");
+        messageBoxPane = (BoxPane)bxmlSerializer.getNamespace().get("messageBoxPane");
+        optionButtonBoxPane = (BoxPane)bxmlSerializer.getNamespace().get("optionButtonBoxPane");
 
         for (Object option : alert.getOptions()) {
             PushButton optionButton = new PushButton(option);

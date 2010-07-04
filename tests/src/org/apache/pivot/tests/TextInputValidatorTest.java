@@ -41,13 +41,13 @@ public class TextInputValidatorTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = new Window((Component)beanSerializer.readObject(
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = new Window((Component)bxmlSerializer.readObject(
             getClass().getResource("textInputValidator_test.bxml")));
-        textinputFloatRange = (TextInput)beanSerializer.getNamespace().get("textinputFloatRange");
-        textinputIntRange = (TextInput)beanSerializer.getNamespace().get("textinputIntRange");
-        textinputDateRegex = (TextInput)beanSerializer.getNamespace().get("textinputDateRegex");
-        textinputCustomBoolean = (TextInput)beanSerializer.getNamespace().get("textinputCustomBoolean");
+        textinputFloatRange = (TextInput)bxmlSerializer.getNamespace().get("textinputFloatRange");
+        textinputIntRange = (TextInput)bxmlSerializer.getNamespace().get("textinputIntRange");
+        textinputDateRegex = (TextInput)bxmlSerializer.getNamespace().get("textinputDateRegex");
+        textinputCustomBoolean = (TextInput)bxmlSerializer.getNamespace().get("textinputCustomBoolean");
 
         // standard float range model
         textinputFloatRange.setText("0.5");
@@ -61,7 +61,7 @@ public class TextInputValidatorTest implements Application {
             }
         });
 
-        invalidLabel = (Label)beanSerializer.getNamespace().get("invalidLabel");
+        invalidLabel = (Label)bxmlSerializer.getNamespace().get("invalidLabel");
 
         // standard int range model
         textinputIntRange.setText("0");

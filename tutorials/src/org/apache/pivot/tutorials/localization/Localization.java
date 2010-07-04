@@ -56,9 +56,9 @@ public class Localization implements Application {
             }
         }
 
-        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
 
-        window = (Window)beanSerializer.readObject(this, "localization.bxml");
+        window = (Window)bxmlSerializer.readObject(this, "localization.bxml");
         window.open(display);
     }
 

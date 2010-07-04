@@ -94,11 +94,11 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             throw new RuntimeException(exception);
         }
 
-        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
 
         Component content;
         try {
-            content = (Component)beanSerializer.readObject(this, "terra_file_browser_sheet_skin.bxml");
+            content = (Component)bxmlSerializer.readObject(this, "terra_file_browser_sheet_skin.bxml");
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {
@@ -107,7 +107,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         fileBrowserSheet.setContent(content);
 
-        beanSerializer.bind(this, TerraFileBrowserSheetSkin.class);
+        bxmlSerializer.bind(this, TerraFileBrowserSheetSkin.class);
 
         saveAsTextInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
             @Override

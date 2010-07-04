@@ -41,8 +41,8 @@ public class StockTracker implements Application {
         }
 
         Resources resources = new Resources(StockTrackerWindow.class.getName());
-        BXMLSerializer beanSerializer = new BXMLSerializer(resources);
-        window = (StockTrackerWindow)beanSerializer.readObject(this, "stock_tracker_window.bxml");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
+        window = (StockTrackerWindow)bxmlSerializer.readObject(this, "stock_tracker_window.bxml");
         window.open(display);
     }
 

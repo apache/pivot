@@ -31,13 +31,13 @@ import org.apache.pivot.wtk.media.drawing.Shape;
  */
 public class Clock extends Movie {
     private Calendar calendar = Calendar.getInstance();
-    private BXMLSerializer beanSerializer;
+    private BXMLSerializer bxmlSerializer;
     private Image image = null;
 
     public Clock() {
-        beanSerializer = new BXMLSerializer();
+        bxmlSerializer = new BXMLSerializer();
         try {
-            image = (Image)beanSerializer.readObject(getClass().getResource("clock.bxml"));
+            image = (Image)bxmlSerializer.readObject(getClass().getResource("clock.bxml"));
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -65,9 +65,9 @@ public class Clock extends Movie {
 
     @Override
     public void setCurrentFrame(int currentFrame) {
-        Shape.Rotate secondsRotation = (Shape.Rotate)beanSerializer.getNamespace().get("secondsRotation");
-        Shape.Rotate minutesRotation = (Shape.Rotate)beanSerializer.getNamespace().get("minutesRotation");
-        Shape.Rotate hoursRotation = (Shape.Rotate)beanSerializer.getNamespace().get("hoursRotation");
+        Shape.Rotate secondsRotation = (Shape.Rotate)bxmlSerializer.getNamespace().get("secondsRotation");
+        Shape.Rotate minutesRotation = (Shape.Rotate)bxmlSerializer.getNamespace().get("minutesRotation");
+        Shape.Rotate hoursRotation = (Shape.Rotate)bxmlSerializer.getNamespace().get("hoursRotation");
 
         calendar.setTimeInMillis(System.currentTimeMillis());
 

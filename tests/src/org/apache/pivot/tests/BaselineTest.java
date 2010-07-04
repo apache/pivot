@@ -29,8 +29,8 @@ public class BaselineTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = new Window((Component)beanSerializer.readObject(getClass().getResource("baseline_test.bxml")));
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = new Window((Component)bxmlSerializer.readObject(getClass().getResource("baseline_test.bxml")));
         window.setTitle("Baseline Test");
         window.setMaximized(true);
         window.open(display);

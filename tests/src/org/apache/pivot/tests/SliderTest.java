@@ -37,16 +37,16 @@ public class SliderTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = new Window((Component)beanSerializer.readObject(getClass().getResource("slider_test.bxml")));
-        slider1 = (Slider)beanSerializer.getNamespace().get("slider1");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = new Window((Component)bxmlSerializer.readObject(getClass().getResource("slider_test.bxml")));
+        slider1 = (Slider)bxmlSerializer.getNamespace().get("slider1");
         slider1.getSliderValueListeners().add(new SliderValueListener() {
             @Override
             public void valueChanged(Slider slider, int previousValue) {
                 valueLabel1.setText(Integer.toString(slider.getValue()));
             }
         });
-        slider2 = (Slider)beanSerializer.getNamespace().get("slider2");
+        slider2 = (Slider)bxmlSerializer.getNamespace().get("slider2");
         slider2.getSliderValueListeners().add(new SliderValueListener() {
             @Override
             public void valueChanged(Slider slider, int previousValue) {
@@ -54,8 +54,8 @@ public class SliderTest implements Application {
             }
         });
 
-        valueLabel1 = (Label)beanSerializer.getNamespace().get("valueLabel1");
-        valueLabel2 = (Label)beanSerializer.getNamespace().get("valueLabel2");
+        valueLabel1 = (Label)bxmlSerializer.getNamespace().get("valueLabel1");
+        valueLabel2 = (Label)bxmlSerializer.getNamespace().get("valueLabel2");
 
         window.setTitle("Slider Test");
         window.setMaximized(true);

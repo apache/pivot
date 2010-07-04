@@ -29,8 +29,8 @@ public class SplitPaneTest implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = new Window((Component)beanSerializer.readObject(getClass().getResource("splitpane_test.bxml")));
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = new Window((Component)bxmlSerializer.readObject(getClass().getResource("splitpane_test.bxml")));
 
         window.setTitle("SplitPane Test");
         window.setMaximized(true);

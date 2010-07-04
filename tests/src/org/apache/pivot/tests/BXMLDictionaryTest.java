@@ -23,9 +23,9 @@ import org.apache.pivot.json.JSONSerializer;
 public class BXMLDictionaryTest {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
         HashMap<String, Object> hashMap =
-            (HashMap<String, Object>)beanSerializer.readObject(BXMLDictionaryTest.class.getResource("bxml_dictionary_test.bxml"));
+            (HashMap<String, Object>)bxmlSerializer.readObject(BXMLDictionaryTest.class.getResource("bxml_dictionary_test.bxml"));
         System.out.println(JSONSerializer.toString(hashMap));
     }
 }

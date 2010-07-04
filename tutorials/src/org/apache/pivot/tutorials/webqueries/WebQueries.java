@@ -41,11 +41,11 @@ public class WebQueries implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer beanSerializer = new BXMLSerializer();
-        window = (Window)beanSerializer.readObject(this, "web_queries.bxml");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = (Window)bxmlSerializer.readObject(this, "web_queries.bxml");
 
-        listView = (ListView)beanSerializer.getNamespace().get("listView");
-        loadingLabel = (Label)beanSerializer.getNamespace().get("loadingLabel");
+        listView = (ListView)bxmlSerializer.getNamespace().get("listView");
+        loadingLabel = (Label)bxmlSerializer.getNamespace().get("loadingLabel");
 
         // Execute the query:
         // http://pipes.yahoo.com/pipes/pipe.run?_id=43115761f2da5af5341ae2e56a93d646&_render=json
