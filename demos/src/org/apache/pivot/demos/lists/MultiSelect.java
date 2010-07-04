@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.demos.lists;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -32,9 +34,9 @@ public class MultiSelect extends Window implements Bindable {
     private ListView selectionListView = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        dataListView = (ListView)context.get("dataListView");
-        selectionListView = (ListView)context.get("selectionListView");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        dataListView = (ListView)namespace.get("dataListView");
+        selectionListView = (ListView)namespace.get("selectionListView");
 
         dataListView.getListViewSelectionListeners().add(new ListViewSelectionListener.Adapter() {
             @Override

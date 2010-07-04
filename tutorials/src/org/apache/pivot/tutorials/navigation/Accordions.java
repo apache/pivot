@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.navigation;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
@@ -77,13 +79,13 @@ public class Accordions extends Window implements Bindable {
     };
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        accordion = (Accordion)context.get("accordion");
-        shippingNextButton = (PushButton)context.get("shippingPanel.nextButton");
-        paymentNextButton = (PushButton)context.get("paymentPanel.nextButton");
-        confirmOrderButton = (PushButton)context.get("summaryPanel.confirmOrderButton");
-        activityIndicator = (ActivityIndicator)context.get("summaryPanel.activityIndicator");
-        processingOrderLabel = (Label)context.get("summaryPanel.processingOrderLabel");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        accordion = (Accordion)namespace.get("accordion");
+        shippingNextButton = (PushButton)namespace.get("shippingPanel.nextButton");
+        paymentNextButton = (PushButton)namespace.get("paymentPanel.nextButton");
+        confirmOrderButton = (PushButton)namespace.get("summaryPanel.confirmOrderButton");
+        activityIndicator = (ActivityIndicator)namespace.get("summaryPanel.activityIndicator");
+        processingOrderLabel = (Label)namespace.get("summaryPanel.processingOrderLabel");
 
         accordion.getAccordionSelectionListeners().add(accordionSelectionListener);
 

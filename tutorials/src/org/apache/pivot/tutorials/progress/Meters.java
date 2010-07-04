@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.progress;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
@@ -67,9 +69,9 @@ public class Meters extends Window implements Bindable {
     private SampleTask sampleTask = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        meter = (Meter)context.get("meter");
-        progressButton = (PushButton)context.get("progressButton");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        meter = (Meter)namespace.get("meter");
+        progressButton = (PushButton)namespace.get("progressButton");
 
         progressButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

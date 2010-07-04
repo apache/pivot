@@ -34,9 +34,9 @@ public class ListButtons extends Window implements Bindable {
     private ImageView imageView = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        listButton = (ListButton)context.get("listButton");
-        imageView = (ImageView)context.get("imageView");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        listButton = (ListButton)namespace.get("listButton");
+        imageView = (ImageView)namespace.get("imageView");
 
         listButton.getListButtonSelectionListeners().add(    new ListButtonSelectionListener() {
             @Override

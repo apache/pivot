@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.webqueries;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.CalendarDate;
@@ -44,15 +46,15 @@ public class ExpenseSheet extends Sheet implements Bindable {
     private Resources resources = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resource) {
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resource) {
         this.resources = resource;
 
-        dateSpinner = (Spinner)context.get("dateSpinner");
-        typeListButton = (ListButton)context.get("typeListButton");
-        amountTextInput = (TextInput)context.get("amountTextInput");
+        dateSpinner = (Spinner)namespace.get("dateSpinner");
+        typeListButton = (ListButton)namespace.get("typeListButton");
+        amountTextInput = (TextInput)namespace.get("amountTextInput");
 
-        cancelButton = (PushButton)context.get("cancelButton");
-        okButton = (PushButton)context.get("okButton");
+        cancelButton = (PushButton)namespace.get("cancelButton");
+        okButton = (PushButton)namespace.get("okButton");
 
         cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -77,7 +79,7 @@ public class ExpenseSheet extends Sheet implements Bindable {
             // Validate the form contents
             if (typeListButton.getSelectedIndex() == -1) {
                 Form.setFlag(typeListButton, new Form.Flag(MessageType.ERROR,
-                    resources.getString("typeRequired")));
+                    (String)resources.get("typeRequired")));
                 errorCount++;
             } else {
                 Form.setFlag(typeListButton, (Form.Flag)null);
@@ -85,7 +87,7 @@ public class ExpenseSheet extends Sheet implements Bindable {
 
             if (amountTextInput.getTextLength() == 0) {
                 Form.setFlag(amountTextInput, new Form.Flag(MessageType.ERROR,
-                    resources.getString("amountRequired")));
+                    (String)resources.get("amountRequired")));
                 errorCount++;
             } else {
                 Form.setFlag(amountTextInput, (Form.Flag)null);

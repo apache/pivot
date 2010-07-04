@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.calendars;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.CalendarDate;
@@ -35,10 +37,10 @@ public class Calendars extends Window implements Bindable {
     private boolean updatingSelectedDate = false;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        calendar = (Calendar)context.get("calendar");
-        calendarButton = (CalendarButton)context.get("calendarButton");
-        selectedDateLabel = (Label)context.get("selectedDateLabel");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        calendar = (Calendar)namespace.get("calendar");
+        calendarButton = (CalendarButton)namespace.get("calendarButton");
+        selectedDateLabel = (Label)namespace.get("selectedDateLabel");
 
         calendar.getCalendarSelectionListeners().add(new CalendarSelectionListener() {
             @Override

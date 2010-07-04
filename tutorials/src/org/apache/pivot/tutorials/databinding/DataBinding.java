@@ -17,6 +17,7 @@
 package org.apache.pivot.tutorials.databinding;
 
 import java.io.InputStream;
+import java.net.URL;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.beans.Bindable;
@@ -43,12 +44,12 @@ public class DataBinding extends Window implements Bindable {
         new IMAccount("juser1234", "AIM"));
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        form = (Form)context.get("form");
-        loadJavaButton = (PushButton)context.get("loadJavaButton");
-        loadJSONButton = (PushButton)context.get("loadJSONButton");
-        clearButton = (PushButton)context.get("clearButton");
-        sourceLabel = (Label)context.get("sourceLabel");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        form = (Form)namespace.get("form");
+        loadJavaButton = (PushButton)namespace.get("loadJavaButton");
+        loadJSONButton = (PushButton)namespace.get("loadJSONButton");
+        clearButton = (PushButton)namespace.get("clearButton");
+        sourceLabel = (Label)namespace.get("sourceLabel");
 
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

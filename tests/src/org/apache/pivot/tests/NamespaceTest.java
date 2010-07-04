@@ -18,6 +18,7 @@ package org.apache.pivot.tests;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -31,8 +32,8 @@ public class NamespaceTest implements Application {
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window)bxmlSerializer.readObject(this, "namespace_test.bxml");
-        System.out.println(bxmlSerializer.get("content.text"));
-        System.out.println(bxmlSerializer.get("content['text']"));
+        System.out.println(JSON.get(bxmlSerializer.getNamespace(), "content.text"));
+        System.out.println(JSON.get(bxmlSerializer.getNamespace(), "content['text']"));
         window.open(display);
     }
 

@@ -39,67 +39,29 @@ public class ParentResourcesTest {
     @Before
     public void before() throws Exception {
         parent = new Resources(getClass().getName() + "Parent");
-        assertNotNull("From parent", parent.getString("parentKeyString"));
+        assertNotNull("From parent", parent.get("parentKeyString"));
         main = new Resources(parent, getClass().getName(), Locale.ENGLISH);
     }
 
     @Test
     public void testString() throws Exception {
-        assertNotNull("In main only", main.getString("mainKeyString"));
-        assertEquals("In parent", "From Parent", main.getParent().getString("someMagicString"));
-        assertEquals("In both", "From Main", main.getString("someMagicString"));
+        assertNotNull("In main only", main.get("mainKeyString"));
+        assertEquals("In parent", "From Parent", main.getParent().get("someMagicString"));
+        assertEquals("In both", "From Main", main.get("someMagicString"));
     }
 
     @Test
     public void testNumber() throws Exception {
-        assertNotNull("In main only", main.getNumber("mainKeyNumber"));
-        assertEquals("In parent", Integer.valueOf(100), main.getParent().getNumber(
-            "someMagicNumber"));
-        assertEquals("In both", Integer.valueOf(200), main.getNumber("someMagicNumber"));
-    }
-
-    @Test
-    public void testInteger() throws Exception {
-        assertNotNull("In main only", main.getInteger("mainKeyNumber"));
-        assertEquals("In parent", Integer.valueOf(100), main.getParent().getInteger(
-            "someMagicNumber"));
-        assertEquals("In both", Integer.valueOf(200), main.getInteger("someMagicNumber"));
-    }
-
-    @Test
-    public void testLong() throws Exception {
-        assertNotNull("In main only", main.getLong("mainKeyNumber"));
-        assertEquals("In parent", Long.valueOf(100), main.getParent().getLong("someMagicNumber"));
-        assertEquals("In both", Long.valueOf(200), main.getLong("someMagicNumber"));
-    }
-
-    @Test
-    public void testShort() throws Exception {
-        assertNotNull("In main only", main.getShort("mainKeyNumber"));
-        assertEquals("In parent", Short.valueOf((short) 100), main.getParent().getShort(
-            "someMagicNumber"));
-        assertEquals("In both", Short.valueOf((short) 200), main.getShort("someMagicNumber"));
-    }
-
-    @Test
-    public void testFloat() throws Exception {
-        assertNotNull("In main only", main.getFloat("mainKeyNumber"));
-        assertEquals("In parent", new Float(100), main.getParent().getFloat("someMagicNumber"));
-        assertEquals("In both", new Float(200), main.getFloat("someMagicNumber"));
-    }
-
-    @Test
-    public void testDouble() throws Exception {
-        assertNotNull("In main only", main.getDouble("mainKeyNumber"));
-        assertEquals("In parent", new Double(100), main.getParent().getDouble("someMagicNumber"));
-        assertEquals("In both", new Double(200), main.getDouble("someMagicNumber"));
+        assertNotNull("In main only", main.get("mainKeyNumber"));
+        assertEquals("In parent", Integer.valueOf(100), main.getParent().get("someMagicNumber"));
+        assertEquals("In both", Integer.valueOf(200), main.get("someMagicNumber"));
     }
 
     @Test
     public void testBoolean() throws Exception {
-        assertNotNull("In main only", main.getBoolean("mainKeyBoolean"));
-        assertEquals("In parent", false, main.getParent().getBoolean("someMagicBoolean"));
-        assertEquals("In both", true, main.getBoolean("someMagicBoolean"));
+        assertNotNull("In main only", main.get("mainKeyBoolean"));
+        assertEquals("In parent", false, main.getParent().get("someMagicBoolean"));
+        assertEquals("In both", true, main.get("someMagicBoolean"));
     }
 
     @Test
@@ -107,14 +69,14 @@ public class ParentResourcesTest {
         assertFalse("not contains noMap", main.containsKey("noMap"));
         assertTrue("contains myMap", main.containsKey("myMap"));
         assertNotNull("myMap as object not null", main.get("myMap"));
-        assertNull("noMap as map is null", main.getMap("noMap"));
-        assertNotNull("myMap as map not null", main.getMap("myMap"));
+        assertNull("noMap as map is null", main.get("noMap"));
+        assertNotNull("myMap as map not null", main.get("myMap"));
     }
 
     @Test
     public void testList() {
 
-        List<?> list = main.getList("aList");
+        List<?> list = (List<?>)main.get("aList");
         assertNotNull("aList not null", list);
         assertEquals("6 items", 6, list.getLength());
 
@@ -123,10 +85,10 @@ public class ParentResourcesTest {
     @Test
     public void testLanguage() {
 
-        assertEquals("Language", "This is specifically English", main.getString("languageKey"));
+        assertEquals("Language", "This is specifically English", main.get("languageKey"));
 
         assertEquals("Language in parent", "This is not a specific language and is in the parent.",
-            parent.getString("languageKey"));
+            parent.get("languageKey"));
 
     }
 

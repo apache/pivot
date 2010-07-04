@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.lists;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
@@ -31,9 +33,9 @@ public class ListViews extends Window implements Bindable {
     private ListView listView = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        selectionLabel = (Label)context.get("selectionLabel");
-        listView = (ListView)context.get("listView");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        selectionLabel = (Label)namespace.get("selectionLabel");
+        listView = (ListView)namespace.get("listView");
 
         listView.getListViewSelectionListeners().add(        new ListViewSelectionListener() {
             @Override

@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.demos.tables;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
@@ -35,9 +37,9 @@ public class FixedColumnTableDemo extends Window implements Bindable {
     private boolean synchronizingSelection = false;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        primaryTableView = (TableView)context.get("primaryTableView");
-        fixedTableView = (TableView)context.get("fixedTableView");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        primaryTableView = (TableView)namespace.get("primaryTableView");
+        fixedTableView = (TableView)namespace.get("fixedTableView");
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {

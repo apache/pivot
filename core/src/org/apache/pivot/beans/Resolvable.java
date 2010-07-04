@@ -18,29 +18,48 @@ package org.apache.pivot.beans;
 
 import java.net.URL;
 
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 
 /**
- * Allows {@link BXMLSerializer} to initialize an instance of a deserialized class.
+ * Interface representing a resolvable include. Serializers that want to
+ * support BXML's resolution operators should implement this interface.
  */
-public interface Bindable {
+public interface Resolvable {
     /**
-     * Called to initialize the class after it has been completely
-     * processed and bound by the serializer.
+     * Returns's the serializer's namespace.
+     */
+    public Map<String, Object> getNamespace();
+
+    /**
+     * Sets the serializer's namespace. This is used for variable resolution.
      *
      * @param namespace
-     * The serializer's namespace. The bindable object can use this to extract named
-     * values defined in the BXML file. Alternatively, the {@link BXML} annotation
-     * can be used by trusted code to automatically map namespace values to member
-     * variables.
+     */
+    public void setNamespace(Map<String, Object> namespace);
+
+    /**
+     * Returns the serializer's location.
+     */
+    public URL getLocation();
+
+    /**
+     * Sets the serializer's location. This is used for URL resolution.
      *
      * @param location
-     * The location of the BXML source. May be <tt>null</tt>.
+     */
+    public void setLocation(URL location);
+
+    /**
+     * Returns the serializer's resource bundle.
+     */
+    public Resources getResources();
+
+    /**
+     * Sets the serializer's resource bundle. This is used for resource
+     * resolution.
      *
      * @param resources
-     * The resources that were used to localize the deserialized content. May be
-     * <tt>null</tt>.
      */
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources);
+    public void setResources(Resources resources);
 }

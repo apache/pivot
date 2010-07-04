@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tests;
 
+import java.net.URL;
+
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Label;
@@ -28,7 +30,7 @@ public class BindableWindow extends Window implements Bindable {
     @WTKX private Label label = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        label.setText(resources.getString("message"));
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        label.setText((String)resources.get("message"));
     }
 }

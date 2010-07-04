@@ -17,6 +17,7 @@
 package org.apache.pivot.demos.dnd;
 
 import java.io.IOException;
+import java.net.URL;
 
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
@@ -53,7 +54,7 @@ public class DragAndDropDemo extends Window implements Bindable {
     @BXML private PushButton pasteFilesButton;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
         // Text
         label.setDragSource(new DragSource() {
             private LocalManifest content = null;

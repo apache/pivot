@@ -75,7 +75,7 @@ public class TextAreaTest implements Application {
         frame.setLocation(80, 40);
         frame.open(display);
 
-        textArea = (TextArea)beanSerializer.get("textArea");
+        textArea = (TextArea)beanSerializer.getNamespace().get("textArea");
         textArea.getTextAreaSelectionListeners().add(new TextAreaSelectionListener() {
             @Override
             public void selectionChanged(TextArea textArea,
@@ -96,10 +96,10 @@ public class TextAreaTest implements Application {
             }
         });
 
-        selectionStartLabel = (Label)beanSerializer.get("selectionStartLabel");
-        selectionLengthLabel = (Label)beanSerializer.get("selectionLengthLabel");
+        selectionStartLabel = (Label)beanSerializer.getNamespace().get("selectionStartLabel");
+        selectionLengthLabel = (Label)beanSerializer.getNamespace().get("selectionLengthLabel");
 
-        treeView = (TreeView)beanSerializer.get("treeView");
+        treeView = (TreeView)beanSerializer.getNamespace().get("treeView");
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
             @Override
             public void selectedPathAdded(TreeView treeView, Path path) {
@@ -135,8 +135,8 @@ public class TextAreaTest implements Application {
             }
         });
 
-        offsetLabel = (Label)beanSerializer.get("offsetLabel");
-        charactersLabel = (Label)beanSerializer.get("charactersLabel");
+        offsetLabel = (Label)beanSerializer.getNamespace().get("offsetLabel");
+        charactersLabel = (Label)beanSerializer.getNamespace().get("charactersLabel");
 
         documentAdapter = new DocumentAdapter(textArea.getDocument());
         treeView.setTreeData(documentAdapter);

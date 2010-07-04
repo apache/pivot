@@ -17,6 +17,7 @@
 package org.apache.pivot.tutorials.layout;
 
 import java.io.IOException;
+import java.net.URL;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
@@ -99,7 +100,7 @@ public class TablePanes extends Window implements Bindable {
                 int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
                 int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
                 Component component = tablePane.getCellComponent(rowIndex, columnIndex);
-                beanSerializer.put("component", component);
+                beanSerializer.getNamespace().put("component", component);
 
                 try {
                     sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_cell.bxml");
@@ -122,7 +123,7 @@ public class TablePanes extends Window implements Bindable {
                 // Make the selected row available to script blocks
                 int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
                 TablePane.Row row = tablePane.getRows().get(rowIndex);
-                beanSerializer.put("row", row);
+                beanSerializer.getNamespace().put("row", row);
 
                 try {
                     sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_row.bxml");
@@ -156,7 +157,7 @@ public class TablePanes extends Window implements Bindable {
                 }
 
                 // Make the new row available to script blocks
-                beanSerializer.put("row", row);
+                beanSerializer.getNamespace().put("row", row);
 
                 try {
                     sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_row.bxml");
@@ -202,7 +203,7 @@ public class TablePanes extends Window implements Bindable {
                 // Make the selected column available to script blocks
                 int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
                 TablePane.Column column = tablePane.getColumns().get(columnIndex);
-                beanSerializer.put("column", column);
+                beanSerializer.getNamespace().put("column", column);
 
                 try {
                     sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_column.bxml");
@@ -237,7 +238,7 @@ public class TablePanes extends Window implements Bindable {
                 }
 
                 // Make the new column available to script blocks
-                beanSerializer.put("column", column);
+                beanSerializer.getNamespace().put("column", column);
 
                 try {
                     sheet = (Sheet)beanSerializer.readObject(this, "table_panes_configure_column.bxml");
@@ -282,11 +283,11 @@ public class TablePanes extends Window implements Bindable {
     }
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        tablePane = (TablePane)context.get("tablePane");
-        cellSection = (Menu.Section)context.get("cellSection");
-        rowSection = (Menu.Section)context.get("rowSection");
-        columnSection = (Menu.Section)context.get("columnSection");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        tablePane = (TablePane)namespace.get("tablePane");
+        cellSection = (Menu.Section)namespace.get("cellSection");
+        rowSection = (Menu.Section)namespace.get("rowSection");
+        columnSection = (Menu.Section)namespace.get("columnSection");
 
         tablePane.setMenuHandler(contextMenuHandler);
     }

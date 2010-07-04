@@ -32,8 +32,6 @@ import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 
 import javax.script.Bindings;
 import javax.script.Invocable;
@@ -52,6 +50,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.serialization.SerializationException;
@@ -63,7 +62,7 @@ import org.apache.pivot.util.Vote;
 /**
  * Loads an object hierarchy from an XML document.
  */
-public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Object> {
+public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private class NamespaceBindings implements Bindings {
         @Override
         public Object get(Object key) {
@@ -76,7 +75,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         @Override
-        public void putAll(Map<? extends String, ? extends Object> map) {
+        public void putAll(java.util.Map<? extends String, ? extends Object> map) {
             for (String key : map.keySet()) {
                 put(key, map.get(key));
             }
@@ -116,7 +115,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         @Override
-        public Set<String> keySet() {
+        public java.util.Set<String> keySet() {
             java.util.HashSet<String> keySet = new java.util.HashSet<String>();
             for (String key : namespace) {
                 keySet.add(key);
@@ -126,7 +125,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
 
         @Override
-        public Set<Entry<String, Object>> entrySet() {
+        public java.util.Set<Entry<String, Object>> entrySet() {
             java.util.HashMap<String, Object> hashMap = new java.util.HashMap<String, Object>();
             for (String key : namespace) {
                 hashMap.put(key, namespace.get(key));
@@ -281,14 +280,14 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
     private String internalNamespacePrefix;
     private Class<? extends Annotation> bindingAnnotationClass;
 
-    private HashMap<String, Object> namespace;
-
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;
 
+    private URL location = null;
+    private Map<String, Object> namespace;
+
     private boolean inline;
     private boolean clearNamespaceOnRead;
-    private URL location = null;
     private Element element = null;
     private Object root = null;
 
@@ -349,10 +348,6 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
         scriptEngineManager.setBindings(new NamespaceBindings());
     }
 
-    public Resources getResources() {
-        return resources;
-    }
-
     public Object readObject(String resourceName)
         throws IOException, SerializationException {
         if (resourceName == null) {
@@ -411,11 +406,17 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
         this.location = location;
 
         InputStream inputStream = new BufferedInputStream(location.openStream());
+
+        Object object;
         try {
-            return readObject(inputStream);
+            object = readObject(inputStream);
         } finally {
             inputStream.close();
         }
+
+        this.location = null;
+
+        return object;
     }
 
     @Override
@@ -484,12 +485,10 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
             bind(root);
 
             Bindable bindable = (Bindable)root;
-            bindable.initialize(this, resources);
+            bindable.initialize(namespace, location, resources);
         }
 
-        // Reset the serializer
         clearNamespaceOnRead = true;
-        location = null;
 
         return root;
     }
@@ -633,7 +632,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                     try {
                         Class<?> type = Class.forName(className);
                         elementType = Element.Type.INSTANCE;
-                        value = createInstance(type, id);
+                        value = type.newInstance();
                     } catch (Exception exception) {
                         throw new SerializationException(exception);
                     }
@@ -722,7 +721,8 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                     }
 
                     // Read the object
-                    BXMLSerializer serializer = createSerializer(resources, inline ? this : null);
+                    BXMLSerializer serializer = new BXMLSerializer(resources, inline ? this : null,
+                        internalNamespacePrefix, bindingAnnotationClass);
 
                     if (src.charAt(0) == '/') {
                         element.value = serializer.readObject(src.substring(1));
@@ -740,7 +740,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                     }
                 }
 
-                // Add the value to the namespace
+                // Add the value to the context
                 if (element.id != null) {
                     if (namespace.containsKey(element.id)) {
                         throw new SerializationException("Element ID " + element.id
@@ -970,7 +970,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
 
                 Bindings bindings;
                 if (element.parent.value instanceof ListenerList<?>) {
-                    // Don't pollute the engine namespace with the listener functions
+                    // Don't pollute the engine bindings with the listener functions
                     bindings = new SimpleBindings();
                 } else {
                     bindings = scriptEngineManager.getBindings();
@@ -1084,35 +1084,6 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
         }
     }
 
-    /**
-     * Returns the element that is currently being processed.
-     */
-    protected Element getCurrentElement() {
-        return element;
-    }
-
-    /**
-     * Serializer factory method. Subclasses can override this method to return custom
-     * serializer instances.
-     *
-     * @param resources
-     * @param owner
-     */
-    protected BXMLSerializer createSerializer(Resources resources, BXMLSerializer owner) {
-        return new BXMLSerializer(resources, owner, internalNamespacePrefix, bindingAnnotationClass);
-    }
-
-    /**
-     * Object factory method. Subclasses can override this method to perform custom
-     * object instantiation.
-     *
-     * @param type
-     * @param id
-     */
-    protected Object createInstance(Class<?> type, String id) throws Exception {
-        return type.newInstance();
-    }
-
     private void logException() {
         String message = "An error occurred while processing ";
 
@@ -1144,65 +1115,6 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
     }
 
     /**
-     * Gets a value from this serializer's namespace.
-     *
-     * @param id
-     */
-    @Override
-    public Object get(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException();
-        }
-
-        return JSON.get(namespace, id);
-    }
-
-    /**
-     * Puts a value into this serializer's namespace.
-     *
-     * @param id
-     * @param value
-     */
-    @Override
-    public Object put(String id, Object value) {
-        if (id == null) {
-            throw new IllegalArgumentException();
-        }
-
-        clearNamespaceOnRead = false;
-
-        return JSON.put(namespace, id, value);
-    }
-
-    /**
-     * Removes a value from this serializer's namespace.
-     *
-     * @param id
-     */
-    @Override
-    public Object remove(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException();
-        }
-
-        return JSON.remove(namespace, id);
-    }
-
-    /**
-     * Tests this serializer's namespace for the existence of a given ID.
-     *
-     * @param id
-     */
-    @Override
-    public boolean containsKey(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException();
-        }
-
-        return JSON.containsKey(namespace, id);
-    }
-
-    /**
      * Retrieves the root of the object hierarchy most recently processed by
      * this serializer.
      *
@@ -1214,16 +1126,38 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
         return root;
     }
 
-    /**
-     * Returns the location of the BXML most recently processed by this
-     * serializer.
-     *
-     * @return
-     * The location of the BXML, or <tt>null</tt> if this serializer has not
-     * yet read an object from a URL.
-     */
+    @Override
+    public Map<String, Object> getNamespace() {
+        return namespace;
+    }
+
+    @Override
+    public void setNamespace(Map<String, Object> namespace) {
+        if (namespace == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.namespace = namespace;
+    }
+
+    @Override
     public URL getLocation() {
         return location;
+    }
+
+    @Override
+    public void setLocation(URL location) {
+        this.location = location;
+    }
+
+    @Override
+    public Resources getResources() {
+        return resources;
+    }
+
+    @Override
+    public void setResources(Resources resources) {
+        this.resources = resources;
     }
 
     /**
@@ -1313,9 +1247,9 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                     id = field.getName();
                 }
 
-                if (containsKey(id)) {
+                if (namespace.containsKey(id)) {
                     // Set the value into the field
-                    Object value = get(id);
+                    Object value = namespace.get(id);
                     try {
                         field.set(object, value);
                     } catch (IllegalAccessException exception) {
@@ -1364,7 +1298,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                             throw new IllegalStateException("Resources is null.");
                         }
 
-                        resolvedValue = resources.get(attributeValue.substring(1));
+                        resolvedValue = JSON.get(resources, attributeValue.substring(1));
 
                         if (resolvedValue == null) {
                             resolvedValue = attributeValue;
@@ -1376,7 +1310,7 @@ public class BXMLSerializer implements Serializer<Object>, Dictionary<String, Ob
                     if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
                         resolvedValue = attributeValue.substring(1);
                     } else {
-                        resolvedValue = get(attributeValue.substring(1));
+                        resolvedValue = JSON.get(namespace, attributeValue.substring(1));
 
                         if (resolvedValue == null) {
                             resolvedValue = attributeValue;

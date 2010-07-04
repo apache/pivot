@@ -65,9 +65,9 @@ public class Clock extends Movie {
 
     @Override
     public void setCurrentFrame(int currentFrame) {
-        Shape.Rotate secondsRotation = (Shape.Rotate)beanSerializer.get("secondsRotation");
-        Shape.Rotate minutesRotation = (Shape.Rotate)beanSerializer.get("minutesRotation");
-        Shape.Rotate hoursRotation = (Shape.Rotate)beanSerializer.get("hoursRotation");
+        Shape.Rotate secondsRotation = (Shape.Rotate)beanSerializer.getNamespace().get("secondsRotation");
+        Shape.Rotate minutesRotation = (Shape.Rotate)beanSerializer.getNamespace().get("minutesRotation");
+        Shape.Rotate hoursRotation = (Shape.Rotate)beanSerializer.getNamespace().get("hoursRotation");
 
         calendar.setTimeInMillis(System.currentTimeMillis());
 

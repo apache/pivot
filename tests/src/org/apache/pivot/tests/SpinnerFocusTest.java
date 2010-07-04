@@ -52,7 +52,7 @@ public class SpinnerFocusTest implements Application {
         frame.setTitle("Spinner Focus Test");
         frame.open(display);
 
-        Spinner spinner = (Spinner)beanSerializer.get("spinner");
+        Spinner spinner = (Spinner)beanSerializer.getNamespace().get("spinner");
         spinner.requestFocus();
 
         action.setEnabled(false);

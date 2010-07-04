@@ -46,10 +46,10 @@ public class RSSFeedDemo extends Window implements Bindable {
     private Label statusLabel = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        feedListView = (ListView)context.get("feedListView");
-        cardPane = (CardPane)context.get("cardPane");
-        statusLabel = (Label)context.get("statusLabel");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        feedListView = (ListView)namespace.get("feedListView");
+        cardPane = (CardPane)namespace.get("cardPane");
+        statusLabel = (Label)namespace.get("statusLabel");
 
         feedListView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
             private int index = -1;

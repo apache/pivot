@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.layout;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
@@ -38,12 +40,12 @@ public class Forms extends Window implements Bindable {
     private Label errorLabel = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        nameBoxPane = (BoxPane)context.get("nameBoxPane");
-        lastNameTextInput = (TextInput)context.get("lastNameTextInput");
-        firstNameTextInput = (TextInput)context.get("firstNameTextInput");
-        submitButton = (PushButton)context.get("submitButton");
-        errorLabel = (Label)context.get("errorLabel");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        nameBoxPane = (BoxPane)namespace.get("nameBoxPane");
+        lastNameTextInput = (TextInput)namespace.get("lastNameTextInput");
+        firstNameTextInput = (TextInput)namespace.get("firstNameTextInput");
+        submitButton = (PushButton)namespace.get("submitButton");
+        errorLabel = (Label)namespace.get("errorLabel");
 
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.buttons;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
@@ -31,11 +33,11 @@ public class RadioButtons extends Window implements Bindable {
     private PushButton selectButton = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        selectButton = (PushButton)context.get("selectButton");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        selectButton = (PushButton)namespace.get("selectButton");
 
         // Get a reference to the button group
-        final ButtonGroup numbersGroup = (ButtonGroup)context.get("numbers");
+        final ButtonGroup numbersGroup = (ButtonGroup)namespace.get("numbers");
 
         // Add a button press listener
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {

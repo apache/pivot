@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.layout;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
@@ -35,12 +37,12 @@ public class FlowPanes extends Window implements Bindable {
     private Checkbox alignToBaselineCheckbox = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        flowPane = (FlowPane)context.get("flowPane");
-        leftRadioButton = (RadioButton)context.get("leftRadioButton");
-        rightRadioButton = (RadioButton)context.get("rightRadioButton");
-        centerRadioButton = (RadioButton)context.get("centerRadioButton");
-        alignToBaselineCheckbox = (Checkbox)context.get("alignToBaselineCheckbox");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        flowPane = (FlowPane)namespace.get("flowPane");
+        leftRadioButton = (RadioButton)namespace.get("leftRadioButton");
+        rightRadioButton = (RadioButton)namespace.get("rightRadioButton");
+        centerRadioButton = (RadioButton)namespace.get("centerRadioButton");
+        alignToBaselineCheckbox = (Checkbox)namespace.get("alignToBaselineCheckbox");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
             @Override

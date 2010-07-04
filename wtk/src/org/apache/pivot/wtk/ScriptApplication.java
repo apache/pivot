@@ -61,7 +61,7 @@ public class ScriptApplication implements Application {
             throw new IllegalArgumentException("Cannot find source file \"" + src + "\".");
         }
 
-        beanSerializer.put("location", location);
+        beanSerializer.getNamespace().put("location", location);
         window = (Window)beanSerializer.readObject(location);
         window.open(display);
     }

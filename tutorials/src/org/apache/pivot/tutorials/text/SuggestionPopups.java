@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.text;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -91,8 +93,8 @@ public class SuggestionPopups extends Window implements Bindable {
     }
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        stateTextInput = (TextInput)context.get("stateTextInput");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        stateTextInput = (TextInput)namespace.get("stateTextInput");
         stateTextInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
             @Override
             public void charactersInserted(TextInput textInput, int index, int count) {

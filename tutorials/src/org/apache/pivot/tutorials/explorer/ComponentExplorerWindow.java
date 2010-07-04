@@ -79,28 +79,28 @@ public class ComponentExplorerWindow extends Window implements Bindable {
     public static final String CLASS_PROPERTY = "class";
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        splitPane = (SplitPane)context.get("splitPane");
-        treeView = (TreeView)context.get("treeView");
-        contentScrollPane = (ScrollPane)context.get("contentScrollPane");
-        contentPane = (Border)context.get("contentPane");
-        sourceTextArea = (TextArea)context.get("sourceTextArea");
-        componentPropertyInspector = (ComponentPropertyInspector)context.get("componentPropertyInspector");
-        componentStyleInspector = (ComponentStyleInspector)context.get("componentStyleInspector");
-        eventLogger = (EventLogger)context.get("eventLogger");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        splitPane = (SplitPane)namespace.get("splitPane");
+        treeView = (TreeView)namespace.get("treeView");
+        contentScrollPane = (ScrollPane)namespace.get("contentScrollPane");
+        contentPane = (Border)namespace.get("contentPane");
+        sourceTextArea = (TextArea)namespace.get("sourceTextArea");
+        componentPropertyInspector = (ComponentPropertyInspector)namespace.get("componentPropertyInspector");
+        componentStyleInspector = (ComponentStyleInspector)namespace.get("componentStyleInspector");
+        eventLogger = (EventLogger)namespace.get("eventLogger");
 
-        horizontalScrollBarPolicyGroup = (ButtonGroup)context.get("horizontalScrollBarPolicyGroup");
-        verticalScrollBarPolicyGroup = (ButtonGroup)context.get("verticalScrollBarPolicyGroup");
-        horizontalAutoButton = (Button)context.get("horizontalAutoButton");
-        horizontalFillButton = (Button)context.get("horizontalFillButton");
-        horizontalFillToCapacityButton = (Button)context.get("horizontalFillToCapacityButton");
-        horizontalNeverButton = (Button)context.get("horizontalNeverButton");
-        horizontalAlwaysButton = (Button)context.get("horizontalAlwaysButton");
-        verticalAutoButton = (Button)context.get("verticalAutoButton");
-        verticalFillButton = (Button)context.get("verticalFillButton");
-        verticalFillToCapacityButton = (Button)context.get("verticalFillToCapacityButton");
-        verticalNeverButton = (Button)context.get("verticalNeverButton");
-        verticalAlwaysButton = (Button)context.get("verticalAlwaysButton");
+        horizontalScrollBarPolicyGroup = (ButtonGroup)namespace.get("horizontalScrollBarPolicyGroup");
+        verticalScrollBarPolicyGroup = (ButtonGroup)namespace.get("verticalScrollBarPolicyGroup");
+        horizontalAutoButton = (Button)namespace.get("horizontalAutoButton");
+        horizontalFillButton = (Button)namespace.get("horizontalFillButton");
+        horizontalFillToCapacityButton = (Button)namespace.get("horizontalFillToCapacityButton");
+        horizontalNeverButton = (Button)namespace.get("horizontalNeverButton");
+        horizontalAlwaysButton = (Button)namespace.get("horizontalAlwaysButton");
+        verticalAutoButton = (Button)namespace.get("verticalAutoButton");
+        verticalFillButton = (Button)namespace.get("verticalFillButton");
+        verticalFillToCapacityButton = (Button)namespace.get("verticalFillToCapacityButton");
+        verticalNeverButton = (Button)namespace.get("verticalNeverButton");
+        verticalAlwaysButton = (Button)namespace.get("verticalAlwaysButton");
 
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener.Adapter() {
             @Override

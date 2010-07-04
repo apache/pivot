@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.menus;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
@@ -53,7 +55,7 @@ public class ContextMenus extends Window implements Bindable {
     };
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
         setMenuHandler(menuHandler);
     }
 }

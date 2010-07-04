@@ -71,7 +71,7 @@ public class XMLViewer implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer beanSerializer = new BXMLSerializer();
-        beanSerializer.put(APPLICATION_KEY, this);
+        beanSerializer.getNamespace().put(APPLICATION_KEY, this);
 
         window = (Window)beanSerializer.readObject(this, "xml_viewer.bxml");
         beanSerializer.bind(this);

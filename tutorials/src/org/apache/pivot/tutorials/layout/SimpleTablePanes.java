@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.layout;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
@@ -34,8 +36,8 @@ public class SimpleTablePanes extends Window implements Bindable {
     private TablePane tablePane = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        tablePane = (TablePane)context.get("tablePane");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        tablePane = (TablePane)namespace.get("tablePane");
 
         tablePane.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
             @Override

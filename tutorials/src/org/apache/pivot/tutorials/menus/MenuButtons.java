@@ -18,6 +18,7 @@ package org.apache.pivot.tutorials.menus;
 
 import java.awt.Color;
 import java.awt.Paint;
+import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
@@ -84,10 +85,10 @@ public class MenuButtons extends Window implements Bindable {
     }
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        colorListButton = (ListButton)context.get("colorListButton");
-        drawing = (Drawing)context.get("drawing");
-        border = (Rectangle)context.get("border");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        colorListButton = (ListButton)namespace.get("colorListButton");
+        drawing = (Drawing)namespace.get("drawing");
+        border = (Rectangle)namespace.get("border");
     }
 
     public Color getSelectedColor() {

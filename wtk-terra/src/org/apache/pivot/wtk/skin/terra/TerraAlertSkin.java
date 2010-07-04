@@ -109,10 +109,10 @@ public class TerraAlertSkin extends TerraDialogSkin
 
         alert.setContent(content);
 
-        typeImageView = (ImageView)beanSerializer.get("typeImageView");
-        messageLabel = (Label)beanSerializer.get("messageLabel");
-        messageBoxPane = (BoxPane)beanSerializer.get("messageBoxPane");
-        optionButtonBoxPane = (BoxPane)beanSerializer.get("optionButtonBoxPane");
+        typeImageView = (ImageView)beanSerializer.getNamespace().get("typeImageView");
+        messageLabel = (Label)beanSerializer.getNamespace().get("messageLabel");
+        messageBoxPane = (BoxPane)beanSerializer.getNamespace().get("messageBoxPane");
+        optionButtonBoxPane = (BoxPane)beanSerializer.getNamespace().get("optionButtonBoxPane");
 
         for (Object option : alert.getOptions()) {
             PushButton optionButton = new PushButton(option);

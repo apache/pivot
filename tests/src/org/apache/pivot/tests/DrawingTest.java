@@ -50,7 +50,7 @@ public class DrawingTest implements Application {
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer beanSerializer = new BXMLSerializer();
         window = (Window)beanSerializer.readObject(this, "drawing_test.bxml");
-        imageView = (ImageView)beanSerializer.get("imageView");
+        imageView = (ImageView)beanSerializer.getNamespace().get("imageView");
 
         imageView.getComponentMouseButtonListeners().add(imageViewMouseButtonListener);
 

@@ -169,11 +169,11 @@ public class LargeData implements Application {
 
         BXMLSerializer beanSerializer = new BXMLSerializer();
         window = (Window)beanSerializer.readObject(this, "large_data.bxml");
-        fileListButton = (ListButton)beanSerializer.get("fileListButton");
-        loadDataButton = (PushButton)beanSerializer.get("loadDataButton");
-        cancelButton = (PushButton)beanSerializer.get("cancelButton");
-        statusLabel = (Label)beanSerializer.get("statusLabel");
-        tableView = (TableView)beanSerializer.get("tableView");
+        fileListButton = (ListButton)beanSerializer.getNamespace().get("fileListButton");
+        loadDataButton = (PushButton)beanSerializer.getNamespace().get("loadDataButton");
+        cancelButton = (PushButton)beanSerializer.getNamespace().get("cancelButton");
+        statusLabel = (Label)beanSerializer.getNamespace().get("statusLabel");
+        tableView = (TableView)beanSerializer.getNamespace().get("tableView");
 
         loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

@@ -24,9 +24,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 
@@ -167,152 +165,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     @Override
     public Object get(String key) {
-        Object o = JSON.get(resourceMap, key);
-        if (o == null
-            && parent != null) {
-            o = parent.get(key);
-        }
-
-        return o;
-    }
-
-    public String getString(String key) {
-        String s = JSON.getString(resourceMap, key);
-        if (s == null
-            && parent != null) {
-            s = parent.getString(key);
-        }
-
-        return s;
-    }
-
-    /**
-     * Gets a resource string with positional token substitution. Tokens of the
-     * form <tt>{<i>N</i>}</tt> (where <tt>N</tt> is the variable argument
-     * index) will be substituted with their corresponding String in the
-     * variable arguments array.
-     * <p>
-     * For example, if resource string <tt>foo</tt> were defined to be
-     * <tt>"{0} knows {1}, and {1} knows {0}."</tt>, then calling
-     * <tt>getString("foo", "Jane", "John")</tt> would yield the string
-     * "Jane knows John, and John knows Jane."
-     *
-     * @param key
-     * The resource key
-     *
-     * @param args
-     * Arguments referenced within the value of the resource string
-     *
-     * @return
-     * The resource string after positional substitution has been performed
-     */
-    public String getString(String key, String... args) {
-        StringBuilder buf = new StringBuilder(getString(key));
-
-        for (int i = 0; i < args.length; i++) {
-            String token = '{' + String.valueOf(i) + '}';
-            String substitution = args[i];
-
-            int tokenLength = token.length();
-            int substituionLength = substitution.length();
-
-            for (int j = buf.indexOf(token, 0); j != -1; j = buf.indexOf(token, j)) {
-                buf.replace(j, j + tokenLength, substitution);
-                j += substituionLength;
-            }
-        }
-
-        return buf.toString();
-    }
-
-    public Number getNumber(String key) {
-        Number n = JSON.getNumber(resourceMap, key);
-        if (n == null
-            && parent != null) {
-            n = parent.getNumber(key);
-        }
-
-        return n;
-    }
-
-    public Short getShort(String key) {
-        Short s = JSON.getShort(resourceMap, key);
-        if (s == null
-            && parent != null) {
-            s = parent.getShort(key);
-        }
-
-        return s;
-    }
-
-    public Integer getInteger(String key) {
-        Integer i = JSON.getInteger(resourceMap, key);
-        if (i == null
-            && parent != null) {
-            i = parent.getInteger(key);
-        }
-
-        return i;
-    }
-
-    public Long getLong(String key) {
-        Long l = JSON.getLong(resourceMap, key);
-        if (l == null
-            && parent != null) {
-            l = parent.getLong(key);
-        }
-
-        return l;
-    }
-
-    public Float getFloat(String key) {
-        Float f = JSON.getFloat(resourceMap, key);
-        if (f == null
-            && parent != null) {
-            f = parent.getFloat(key);
-        }
-
-        return f;
-    }
-
-    public Double getDouble(String key) {
-        Double d = JSON.getDouble(resourceMap, key);
-        if (d == null
-            && parent != null) {
-            d = parent.getDouble(key);
-        }
-
-        return d;
-    }
-
-    public Boolean getBoolean(String key) {
-        Boolean b = JSON.getBoolean(resourceMap, key);
-        if (b == null
-            && parent != null) {
-            b = parent.getBoolean(key);
-        }
-
-        return b;
-    }
-
-    public List<?> getList(String key) {
-        List<?> list = JSON.getList(resourceMap, key);
-        if (list == null
-            && parent != null) {
-            list = parent.getList(key);
-        }
-
-        return list;
-    }
-
-    public Map<String, ?> getMap(String key) {
-        Map<String, ?> map = JSON.getMap(resourceMap, key);
-        if (map == null
-            && parent != null) {
-            map = parent.getMap(key);
-        }
-
-        return map;
+        return (resourceMap.containsKey(key)) ?
+            resourceMap.get(key) : (parent == null) ? null : parent.get(key);
     }
 
     @Override
@@ -327,14 +181,9 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     @Override
     public boolean containsKey(String key) {
-        boolean containsKey = resourceMap.containsKey(key);
-
-        if (!containsKey
-            && parent != null) {
-            return parent.containsKey(key);
-        }
-
-        return containsKey;
+        return resourceMap.containsKey(key)
+            || (parent != null
+                && parent.containsKey(key));
     }
 
     @Override
@@ -342,10 +191,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         return new ImmutableIterator<String>(resourceMap.iterator());
     }
 
-    @SuppressWarnings( { "unchecked" })
-    private void applyOverrides(Map<String, Object> sourceMap,
-        Map<String, Object> overridesMap) {
-
+    @SuppressWarnings("unchecked")
+    private void applyOverrides(Map<String, Object> sourceMap, Map<String, Object> overridesMap) {
         for (String key : overridesMap) {
             if (sourceMap.containsKey(key)) {
                 Object source = sourceMap.get(key);
@@ -353,8 +200,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
                 if (source instanceof Map<?, ?>
                     && override instanceof Map<?, ?>) {
-                    applyOverrides((Map<String, Object>) source,
-                        (Map<String, Object>) override);
+                    applyOverrides((Map<String, Object>)source, (Map<String, Object>)override);
                 } else {
                     sourceMap.put(key, overridesMap.get(key));
                 }

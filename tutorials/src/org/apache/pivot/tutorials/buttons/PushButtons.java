@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.buttons;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
@@ -30,8 +32,8 @@ public class PushButtons extends Window implements Bindable {
     private PushButton pushButton;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        pushButton = (PushButton)context.get("pushButton");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        pushButton = (PushButton)namespace.get("pushButton");
 
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

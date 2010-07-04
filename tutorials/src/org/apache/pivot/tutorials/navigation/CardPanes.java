@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tutorials.navigation;
 
+import java.net.URL;
+
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.Resources;
@@ -44,19 +46,19 @@ public class CardPanes extends Window implements Bindable {
     private RadioButton noneRadioButton = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        cardPane = (CardPane)context.get("cardPane");
-        previousButton = (LinkButton)context.get("previousButton");
-        nextButton = (LinkButton)context.get("nextButton");
-        sizeToSelectionCheckbox = (Checkbox)context.get("sizeToSelectionCheckbox");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        cardPane = (CardPane)namespace.get("cardPane");
+        previousButton = (LinkButton)namespace.get("previousButton");
+        nextButton = (LinkButton)namespace.get("nextButton");
+        sizeToSelectionCheckbox = (Checkbox)namespace.get("sizeToSelectionCheckbox");
 
-        crossfadeRadioButton = (RadioButton)context.get("crossfadeRadioButton");
-        horizontalSlideRadioButton = (RadioButton)context.get("horizontalSlideRadioButton");
-        verticalSlideRadioButton = (RadioButton)context.get("verticalSlideRadioButton");
-        horizontalFlipRadioButton = (RadioButton)context.get("horizontalFlipRadioButton");
-        verticalFlipRadioButton = (RadioButton)context.get("verticalFlipRadioButton");
-        zoomRadioButton = (RadioButton)context.get("zoomRadioButton");
-        noneRadioButton = (RadioButton)context.get("noneRadioButton");
+        crossfadeRadioButton = (RadioButton)namespace.get("crossfadeRadioButton");
+        horizontalSlideRadioButton = (RadioButton)namespace.get("horizontalSlideRadioButton");
+        verticalSlideRadioButton = (RadioButton)namespace.get("verticalSlideRadioButton");
+        horizontalFlipRadioButton = (RadioButton)namespace.get("horizontalFlipRadioButton");
+        verticalFlipRadioButton = (RadioButton)namespace.get("verticalFlipRadioButton");
+        zoomRadioButton = (RadioButton)namespace.get("zoomRadioButton");
+        noneRadioButton = (RadioButton)namespace.get("noneRadioButton");
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
             @Override

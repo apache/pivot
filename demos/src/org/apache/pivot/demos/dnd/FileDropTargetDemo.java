@@ -18,6 +18,7 @@ package org.apache.pivot.demos.dnd;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
@@ -49,7 +50,7 @@ public class FileDropTargetDemo extends Window implements Bindable {
     private FileList fileList = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
         fileList = new FileList();
         fileTableView.setTableData(fileList);
 

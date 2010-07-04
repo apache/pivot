@@ -43,11 +43,11 @@ public class Scripting implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer beanSerializer = new BXMLSerializer();
-        beanSerializer.put("bar", "12345");
+        beanSerializer.getNamespace().put("bar", "12345");
 
         window = (Window)beanSerializer.readObject(this, "scripting.bxml");
-        foo = (String)beanSerializer.get("foo");
-        listData = (List<?>)beanSerializer.get("listData");
+        foo = (String)beanSerializer.getNamespace().get("foo");
+        listData = (List<?>)beanSerializer.getNamespace().get("listData");
 
         System.out.println("foo = " + foo);
         System.out.println("listData.getLength() = " + listData.getLength());

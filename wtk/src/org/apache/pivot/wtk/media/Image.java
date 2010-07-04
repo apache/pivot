@@ -96,7 +96,7 @@ public abstract class Image implements Visual {
                     // operation
                     inputStream = new MonitoredInputStream(new BufferedInputStream(location.openStream()));
 
-                    if (location.getFile().endsWith("wtkd")) {
+                    if (location.getFile().endsWith("bxml")) {
                         BXMLSerializer serializer = new BXMLSerializer();
                         image = (Drawing)serializer.readObject(inputStream);
                     } else {

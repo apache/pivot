@@ -17,6 +17,7 @@
 package org.apache.pivot.tutorials.filebrowsing;
 
 import java.io.File;
+import java.net.URL;
 
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
@@ -41,7 +42,7 @@ public class FileBrowsing extends Window implements Bindable {
     @BXML private PushButton openSheetButton = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
         openSheetButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {

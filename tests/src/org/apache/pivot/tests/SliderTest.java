@@ -39,14 +39,14 @@ public class SliderTest implements Application {
         throws Exception {
         BXMLSerializer beanSerializer = new BXMLSerializer();
         window = new Window((Component)beanSerializer.readObject(getClass().getResource("slider_test.bxml")));
-        slider1 = (Slider)beanSerializer.get("slider1");
+        slider1 = (Slider)beanSerializer.getNamespace().get("slider1");
         slider1.getSliderValueListeners().add(new SliderValueListener() {
             @Override
             public void valueChanged(Slider slider, int previousValue) {
                 valueLabel1.setText(Integer.toString(slider.getValue()));
             }
         });
-        slider2 = (Slider)beanSerializer.get("slider2");
+        slider2 = (Slider)beanSerializer.getNamespace().get("slider2");
         slider2.getSliderValueListeners().add(new SliderValueListener() {
             @Override
             public void valueChanged(Slider slider, int previousValue) {
@@ -54,8 +54,8 @@ public class SliderTest implements Application {
             }
         });
 
-        valueLabel1 = (Label)beanSerializer.get("valueLabel1");
-        valueLabel2 = (Label)beanSerializer.get("valueLabel2");
+        valueLabel1 = (Label)beanSerializer.getNamespace().get("valueLabel1");
+        valueLabel2 = (Label)beanSerializer.getNamespace().get("valueLabel2");
 
         window.setTitle("Slider Test");
         window.setMaximized(true);

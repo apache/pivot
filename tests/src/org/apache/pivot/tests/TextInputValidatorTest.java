@@ -44,10 +44,10 @@ public class TextInputValidatorTest implements Application {
         BXMLSerializer beanSerializer = new BXMLSerializer();
         window = new Window((Component)beanSerializer.readObject(
             getClass().getResource("textInputValidator_test.bxml")));
-        textinputFloatRange = (TextInput)beanSerializer.get("textinputFloatRange");
-        textinputIntRange = (TextInput)beanSerializer.get("textinputIntRange");
-        textinputDateRegex = (TextInput)beanSerializer.get("textinputDateRegex");
-        textinputCustomBoolean = (TextInput)beanSerializer.get("textinputCustomBoolean");
+        textinputFloatRange = (TextInput)beanSerializer.getNamespace().get("textinputFloatRange");
+        textinputIntRange = (TextInput)beanSerializer.getNamespace().get("textinputIntRange");
+        textinputDateRegex = (TextInput)beanSerializer.getNamespace().get("textinputDateRegex");
+        textinputCustomBoolean = (TextInput)beanSerializer.getNamespace().get("textinputCustomBoolean");
 
         // standard float range model
         textinputFloatRange.setText("0.5");
@@ -61,7 +61,7 @@ public class TextInputValidatorTest implements Application {
             }
         });
 
-        invalidLabel = (Label)beanSerializer.get("invalidLabel");
+        invalidLabel = (Label)beanSerializer.getNamespace().get("invalidLabel");
 
         // standard int range model
         textinputIntRange.setText("0");

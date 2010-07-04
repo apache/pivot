@@ -39,7 +39,7 @@ public class Windows implements Application {
 
         for (int i = 0; i < 3; i++) {
             BXMLSerializer beanSerializer = new BXMLSerializer();
-            beanSerializer.put("application", this);
+            beanSerializer.getNamespace().put("application", this);
 
             Frame frame;
             try {

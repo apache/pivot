@@ -17,6 +17,7 @@
 package org.apache.pivot.tutorials.menus;
 
 import java.io.IOException;
+import java.net.URL;
 
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BXMLSerializer;
@@ -93,7 +94,7 @@ public class MenuBars extends Frame implements Bindable {
             @Override
             public void perform() {
                 BXMLSerializer beanSerializer = new BXMLSerializer();
-                beanSerializer.put("menuHandler", menuHandler);
+                beanSerializer.getNamespace().put("menuHandler", menuHandler);
 
                 Component tab;
                 try {
@@ -143,6 +144,6 @@ public class MenuBars extends Frame implements Bindable {
     }
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
     }
 }

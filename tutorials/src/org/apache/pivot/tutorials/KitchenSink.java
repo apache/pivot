@@ -137,10 +137,10 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     throw new RuntimeException(exception);
                 }
 
-                editableListView = (ListView)beanSerializer.get("editableListView");
-                iconListView = (ListView)beanSerializer.get("iconListView");
-                checkedListView = (ListView)beanSerializer.get("checkedListView");
-                iconListButton = (ListButton)beanSerializer.get("iconListButton");
+                editableListView = (ListView)beanSerializer.getNamespace().get("editableListView");
+                iconListView = (ListView)beanSerializer.getNamespace().get("iconListView");
+                checkedListView = (ListView)beanSerializer.getNamespace().get("checkedListView");
+                iconListButton = (ListButton)beanSerializer.getNamespace().get("iconListButton");
 
                 rollup.setContent(component);
 
@@ -336,14 +336,14 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     throw new RuntimeException(exception);
                 }
 
-                menuImageView = (ImageView)beanSerializer.get("menuImageView");
-                helpAboutMenuItem  = (Menu.Item)beanSerializer.get("menuBar.helpAboutMenuItem");
+                menuImageView = (ImageView)beanSerializer.getNamespace().get("menuImageView");
+                helpAboutMenuItem  = (Menu.Item)beanSerializer.getNamespace().get("menuBar.helpAboutMenuItem");
 
                 rollup.setContent(component);
 
                 try {
                     menuSection = (Menu.Section)beanSerializer.readObject(this, "menu_section.bxml");
-                    imageMenuGroup = (ButtonGroup)beanSerializer.get("imageMenuGroup");
+                    imageMenuGroup = (ButtonGroup)beanSerializer.getNamespace().get("imageMenuGroup");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -388,9 +388,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     throw new RuntimeException(exception);
                 }
 
-                activityIndicator1 = (ActivityIndicator)beanSerializer.get("activityIndicator1");
-                activityIndicator2 = (ActivityIndicator)beanSerializer.get("activityIndicator2");
-                activityIndicator3 = (ActivityIndicator)beanSerializer.get("activityIndicator3");
+                activityIndicator1 = (ActivityIndicator)beanSerializer.getNamespace().get("activityIndicator1");
+                activityIndicator2 = (ActivityIndicator)beanSerializer.getNamespace().get("activityIndicator2");
+                activityIndicator3 = (ActivityIndicator)beanSerializer.getNamespace().get("activityIndicator3");
 
                 rollup.setContent(component);
 
@@ -441,13 +441,13 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     throw new RuntimeException(exception);
                 }
 
-                numericSpinner = (Spinner)beanSerializer.get("numericSpinner");
-                dateSpinner = (Spinner)beanSerializer.get("dateSpinner");
+                numericSpinner = (Spinner)beanSerializer.getNamespace().get("numericSpinner");
+                dateSpinner = (Spinner)beanSerializer.getNamespace().get("dateSpinner");
 
-                redSlider = (Slider)beanSerializer.get("redSlider");
-                greenSlider = (Slider)beanSerializer.get("greenSlider");
-                blueSlider = (Slider)beanSerializer.get("blueSlider");
-                colorBorder = (Border)beanSerializer.get("colorBorder");
+                redSlider = (Slider)beanSerializer.getNamespace().get("redSlider");
+                greenSlider = (Slider)beanSerializer.getNamespace().get("greenSlider");
+                blueSlider = (Slider)beanSerializer.getNamespace().get("blueSlider");
+                colorBorder = (Border)beanSerializer.getNamespace().get("colorBorder");
 
                 rollup.setContent(component);
 
@@ -509,8 +509,8 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     throw new RuntimeException(exception);
                 }
 
-                sortableTableView = (TableView)beanSerializer.get("sortableTableView");
-                customTableView = (TableView)beanSerializer.get("customTableView");
+                sortableTableView = (TableView)beanSerializer.getNamespace().get("sortableTableView");
+                customTableView = (TableView)beanSerializer.getNamespace().get("customTableView");
 
                 rollup.setContent(component);
 
@@ -612,8 +612,8 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     throw new RuntimeException(exception);
                 }
 
-                editableTreeView = (TreeView)beanSerializer.get("editableTreeView");
-                checkTreeView = (TreeView)beanSerializer.get("checkTreeView");
+                editableTreeView = (TreeView)beanSerializer.getNamespace().get("editableTreeView");
+                checkTreeView = (TreeView)beanSerializer.getNamespace().get("checkTreeView");
 
                 rollup.setContent(component);
 
@@ -668,9 +668,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     throw new RuntimeException(exception);
                 }
 
-                imageView1 = (ImageView)beanSerializer.get("imageView1");
-                imageView2 = (ImageView)beanSerializer.get("imageView2");
-                imageView3 = (ImageView)beanSerializer.get("imageView3");
+                imageView1 = (ImageView)beanSerializer.getNamespace().get("imageView1");
+                imageView2 = (ImageView)beanSerializer.getNamespace().get("imageView2");
+                imageView3 = (ImageView)beanSerializer.getNamespace().get("imageView3");
 
                 rollup.setContent(component);
 
@@ -825,9 +825,9 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     throw new RuntimeException(exception);
                 }
 
-                alertButton = (PushButton)beanSerializer.get("alertButton");
-                promptButton = (PushButton)beanSerializer.get("promptButton");
-                messageTypeGroup = (ButtonGroup)beanSerializer.get("messageTypeGroup");
+                alertButton = (PushButton)beanSerializer.getNamespace().get("alertButton");
+                promptButton = (PushButton)beanSerializer.getNamespace().get("promptButton");
+                messageTypeGroup = (ButtonGroup)beanSerializer.getNamespace().get("messageTypeGroup");
 
                 rollup.setContent(component);
 
@@ -942,46 +942,46 @@ public class KitchenSink implements Application, Application.AboutHandler {
         window = (Window)beanSerializer.readObject(this, "kitchen_sink.bxml");
         beanSerializer.bind(this, KitchenSink.class);
 
-        buttonsRollup = (Rollup)beanSerializer.get("buttonsRollup");
+        buttonsRollup = (Rollup)beanSerializer.getNamespace().get("buttonsRollup");
         buttonsRollup.getRollupStateListeners().add(new ButtonsRollupStateHandler());
 
-        listsRollup = (Rollup)beanSerializer.get("listsRollup");
+        listsRollup = (Rollup)beanSerializer.getNamespace().get("listsRollup");
         listsRollup.getRollupStateListeners().add(new ListsRollupStateHandler());
 
-        textRollup = (Rollup)beanSerializer.get("textRollup");
+        textRollup = (Rollup)beanSerializer.getNamespace().get("textRollup");
         textRollup.getRollupStateListeners().add(new TextRollupStateHandler());
 
-        calendarsRollup = (Rollup)beanSerializer.get("calendarsRollup");
+        calendarsRollup = (Rollup)beanSerializer.getNamespace().get("calendarsRollup");
         calendarsRollup.getRollupStateListeners().add(new CalendarsRollupStateHandler());
 
-        colorChoosersRollup = (Rollup)beanSerializer.get("colorChoosersRollup");
+        colorChoosersRollup = (Rollup)beanSerializer.getNamespace().get("colorChoosersRollup");
         colorChoosersRollup.getRollupStateListeners().add(new ColorChoosersRollupStateHandler());
 
-        navigationRollup = (Rollup)beanSerializer.get("navigationRollup");
+        navigationRollup = (Rollup)beanSerializer.getNamespace().get("navigationRollup");
         navigationRollup.getRollupStateListeners().add(new NavigationRollupStateHandler());
 
-        splittersRollup = (Rollup)beanSerializer.get("splittersRollup");
+        splittersRollup = (Rollup)beanSerializer.getNamespace().get("splittersRollup");
         splittersRollup.getRollupStateListeners().add(new SplittersRollupStateHandler());
 
-        menusRollup = (Rollup)beanSerializer.get("menusRollup");
+        menusRollup = (Rollup)beanSerializer.getNamespace().get("menusRollup");
         menusRollup.getRollupStateListeners().add(new MenusRollupStateHandler());
 
-        metersRollup = (Rollup)beanSerializer.get("metersRollup");
+        metersRollup = (Rollup)beanSerializer.getNamespace().get("metersRollup");
         metersRollup.getRollupStateListeners().add(new MetersRollupStateHandler());
 
-        spinnersRollup = (Rollup)beanSerializer.get("spinnersRollup");
+        spinnersRollup = (Rollup)beanSerializer.getNamespace().get("spinnersRollup");
         spinnersRollup.getRollupStateListeners().add(new SpinnersRollupStateHandler());
 
-        tablesRollup = (Rollup)beanSerializer.get("tablesRollup");
+        tablesRollup = (Rollup)beanSerializer.getNamespace().get("tablesRollup");
         tablesRollup.getRollupStateListeners().add(new TablesRollupStateHandler());
 
-        treesRollup = (Rollup)beanSerializer.get("treesRollup");
+        treesRollup = (Rollup)beanSerializer.getNamespace().get("treesRollup");
         treesRollup.getRollupStateListeners().add(new TreesRollupStateHandler());
 
-        dragDropRollup = (Rollup)beanSerializer.get("dragDropRollup");
+        dragDropRollup = (Rollup)beanSerializer.getNamespace().get("dragDropRollup");
         dragDropRollup.getRollupStateListeners().add(new DragDropRollupStateHandler());
 
-        alertsRollup = (Rollup)beanSerializer.get("alertsRollup");
+        alertsRollup = (Rollup)beanSerializer.getNamespace().get("alertsRollup");
         alertsRollup.getRollupStateListeners().add(new AlertsRollupStateHandler());
 
         window.open(display);

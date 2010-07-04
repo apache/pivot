@@ -116,10 +116,10 @@ public class ExpensesWindow extends Window implements Bindable {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        expenseTableView = (TableView)context.get("expenseTableView");
-        activityIndicator = (ActivityIndicator)context.get("activityIndicator");
-        activityIndicatorBoxPane = (BoxPane)context.get("activityIndicatorBoxPane");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        expenseTableView = (TableView)namespace.get("expenseTableView");
+        activityIndicator = (ActivityIndicator)namespace.get("activityIndicator");
+        activityIndicatorBoxPane = (BoxPane)namespace.get("activityIndicatorBoxPane");
 
         // Load the add/edit sheet
         try {
@@ -132,9 +132,9 @@ public class ExpensesWindow extends Window implements Bindable {
         }
 
         // Create the delete confirmation prompt
-        ArrayList<String> options = new ArrayList(resources.getString("cancel"),
-            resources.getString("ok"));
-        deleteConfirmationPrompt = new Prompt(MessageType.QUESTION, resources.getString("confirmDelete"),
+        ArrayList<String> options = new ArrayList((String)resources.get("cancel"),
+            (String)resources.get("ok"));
+        deleteConfirmationPrompt = new Prompt(MessageType.QUESTION, (String)resources.get("confirmDelete"),
             options);
 
         // Attach event listeners

@@ -162,7 +162,7 @@ public class StockTrackerWindow extends Window implements Bindable {
     }
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
         // Add stocks table view event handlers
         stocksTableView.getTableViewRowListeners().add(new TableViewRowListener.Adapter() {
             @Override

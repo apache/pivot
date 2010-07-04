@@ -36,7 +36,7 @@ public class TableViewTest2 implements Application {
         throws Exception {
         BXMLSerializer beanSerializer = new BXMLSerializer();
         window = (Window)beanSerializer.readObject(this, "table_view_test2.bxml");
-        tableView = (TableView)beanSerializer.get("tableView");
+        tableView = (TableView)beanSerializer.getNamespace().get("tableView");
 
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
         tableViewRowEditor.setEditEffect(CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);

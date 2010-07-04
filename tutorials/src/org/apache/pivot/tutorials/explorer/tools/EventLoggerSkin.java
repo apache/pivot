@@ -97,8 +97,8 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
         eventLogger.add(content);
 
-        declaredEventsTreeView = (TreeView)beanSerializer.get("declaredEventsTreeView");
-        firedEventsTableView = (TableView)beanSerializer.get("firedEventsTableView");
+        declaredEventsTreeView = (TreeView)beanSerializer.getNamespace().get("declaredEventsTreeView");
+        firedEventsTableView = (TableView)beanSerializer.getNamespace().get("firedEventsTableView");
 
         // Propagate check state upwards or downwards as necessary
         declaredEventsTreeView.getTreeViewNodeStateListeners().add(new TreeViewNodeStateListener() {

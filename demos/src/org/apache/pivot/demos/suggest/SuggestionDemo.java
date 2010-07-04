@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
 
 import org.apache.pivot.beans.Bindable;
@@ -48,9 +49,9 @@ public class SuggestionDemo extends Window implements Bindable {
     private GetQuery suggestionQuery = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> context, Resources resources) {
-        textInput = (TextInput)context.get("textInput");
-        activityIndicator = (ActivityIndicator)context.get("activityIndicator");
+    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+        textInput = (TextInput)namespace.get("textInput");
+        activityIndicator = (ActivityIndicator)namespace.get("activityIndicator");
 
         textInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
             @Override

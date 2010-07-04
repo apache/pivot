@@ -44,8 +44,8 @@ public class WebQueries implements Application {
         BXMLSerializer beanSerializer = new BXMLSerializer();
         window = (Window)beanSerializer.readObject(this, "web_queries.bxml");
 
-        listView = (ListView)beanSerializer.get("listView");
-        loadingLabel = (Label)beanSerializer.get("loadingLabel");
+        listView = (ListView)beanSerializer.getNamespace().get("listView");
+        loadingLabel = (Label)beanSerializer.getNamespace().get("loadingLabel");
 
         // Execute the query:
         // http://pipes.yahoo.com/pipes/pipe.run?_id=43115761f2da5af5341ae2e56a93d646&_render=json
