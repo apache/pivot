@@ -196,11 +196,14 @@ public class TerraTabPaneSkin extends ContainerSkin
             int height = getHeight();
 
             // Draw the background
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
             switch(tabOrientation) {
                 case HORIZONTAL: {
                     graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor,
                         width / 2f, height / 2f, backgroundColor));
-                    graphics.fill(new RoundRectangle2D.Double(0, 0, width, height + CORNER_RADIUS,
+                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1 + CORNER_RADIUS,
                         CORNER_RADIUS, CORNER_RADIUS));
                     break;
                 }
@@ -208,7 +211,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                 case VERTICAL: {
                     graphics.setPaint(new GradientPaint(0, height / 2f, buttonBevelColor,
                         width / 2f, height / 2f, backgroundColor));
-                    graphics.fill(new RoundRectangle2D.Double(0, 0, width + CORNER_RADIUS, height,
+                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1 + CORNER_RADIUS, height - 1,
                         CORNER_RADIUS, CORNER_RADIUS));
                     break;
                 }
@@ -217,9 +220,6 @@ public class TerraTabPaneSkin extends ContainerSkin
             // Draw the border
             graphics.setPaint(borderColor);
             graphics.setStroke(new BasicStroke(1));
-
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
 
             switch(tabOrientation) {
                 case HORIZONTAL: {
