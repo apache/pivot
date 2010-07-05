@@ -34,8 +34,10 @@ public class DecoratorDemo implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        reflectionWindow = (Window)bxmlSerializer.readObject(this, "reflection_window.bxml");
-        translucentFrame = (Frame)bxmlSerializer.readObject(this, "translucent_frame.bxml");
+        reflectionWindow = (Window)bxmlSerializer.readObject(DecoratorDemo.class,
+            "reflection_window.bxml");
+        translucentFrame = (Frame)bxmlSerializer.readObject(DecoratorDemo.class,
+            "translucent_frame.bxml");
 
         final FadeDecorator fadeDecorator = new FadeDecorator();
         translucentFrame.getDecorators().insert(fadeDecorator, 0);

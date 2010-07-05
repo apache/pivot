@@ -42,7 +42,7 @@ public class CalendarTest implements Application {
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
-        window = (Window)bxmlSerializer.readObject(this, "calendar_test.bxml");
+        window = (Window)bxmlSerializer.readObject(CalendarTest.class, "calendar_test.bxml");
         bxmlSerializer.bind(this, CalendarTest.class);
 
         Filter<CalendarDate> todayFilter = new Filter<CalendarDate>() {

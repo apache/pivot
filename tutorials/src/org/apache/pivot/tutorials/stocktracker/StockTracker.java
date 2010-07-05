@@ -20,7 +20,6 @@ import java.util.Locale;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -40,9 +39,9 @@ public class StockTracker implements Application {
             Locale.setDefault(new Locale(language));
         }
 
-        Resources resources = new Resources(StockTrackerWindow.class.getName());
-        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
-        window = (StockTrackerWindow)bxmlSerializer.readObject(this, "stock_tracker_window.bxml");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = (StockTrackerWindow)bxmlSerializer.readObject(StockTrackerWindow.class,
+            "stock_tracker_window.bxml", true);
         window.open(display);
     }
 

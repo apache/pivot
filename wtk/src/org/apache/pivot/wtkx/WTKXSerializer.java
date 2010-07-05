@@ -16,31 +16,69 @@
  */
 package org.apache.pivot.wtkx;
 
+import java.io.IOException;
+import java.net.URL;
+
 import org.apache.pivot.beans.BXMLSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Resources;
 
 /**
  * Loads an object hierarchy from an XML document.
  *
  * @deprecated
- * This class has been moved to {@link org.apache.pivot.beans.BXMLSerializer}.
- * You can use the <tt>bxml_upgrade.xml</tt> Ant script to update your
- * source code to use the new classes. Usage:
- * <p>
- * <tt>ant -f bxml_upgrade.xml -Dsrc=&lt;sourcedir&gt;</tt>
- * </p>
+ * This class has been superseded by {@link org.apache.pivot.beans.BXMLSerializer}.
  */
 @Deprecated
 public class WTKXSerializer extends BXMLSerializer {
     public static final String WTKX_PREFIX = "wtkx";
+    public static final String WTKX_EXTENSION = "wtkx";
     public static final String MIME_TYPE = "application/wtkx";
 
+    static {
+        getFileExtensions().put(WTKX_EXTENSION, MIME_TYPE);
+        getMimeTypes().put(MIME_TYPE, WTKXSerializer.class);
+    }
+
     public WTKXSerializer() {
-        super(null);
+        this(null);
     }
 
     public WTKXSerializer(Resources resources) {
-        super(resources, null, WTKX_PREFIX, WTKX.class);
+        super(WTKX_PREFIX, WTKX.class);
+
+        setResources(resources);
+    }
+
+    public Object readObject(String resourceName)
+        throws IOException, SerializationException {
+        if (resourceName == null) {
+            throw new IllegalArgumentException("resourceName is null.");
+        }
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL location = classLoader.getResource(resourceName);
+
+        if (location == null) {
+            throw new SerializationException("Could not find resource named \""
+                + resourceName + "\".");
+        }
+
+        return readObject(location, getResources());
+    }
+
+    public Object readObject(Object baseObject, String resourceName)
+        throws IOException, SerializationException {
+        if (baseObject == null) {
+            throw new IllegalArgumentException("baseObject is null.");
+        }
+
+        if (resourceName == null) {
+            throw new IllegalArgumentException("resourceName is null.");
+        }
+
+        Class<?> baseType = baseObject.getClass();
+        return readObject(baseType.getResource(resourceName), getResources());
     }
 
     @Override

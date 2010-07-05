@@ -47,7 +47,7 @@ public class ActionMappingTest implements Application {
         });
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "action_mapping_test.bxml");
+        window = (Window)bxmlSerializer.readObject(ActionMappingTest.class, "action_mapping_test.bxml");
         window.getActionMappings().add(new Window.ActionMapping(new Keyboard.KeyStroke(Keyboard.KeyCode.B,
             Keyboard.Modifier.SHIFT.getMask()), "action2"));
 

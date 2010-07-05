@@ -45,13 +45,14 @@ public class ScriptApplication implements Application {
             resources = new Resources(properties.get(RESOURCES_KEY));
         }
 
-        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL location = classLoader.getResource(src);
 
         if (location == null) {
             File file = new File(src);
+
             if (file.exists()) {
                location = file.toURI().toURL();
             }
@@ -62,7 +63,7 @@ public class ScriptApplication implements Application {
         }
 
         bxmlSerializer.getNamespace().put("location", location);
-        window = (Window)bxmlSerializer.readObject(location);
+        window = (Window)bxmlSerializer.readObject(location, resources);
         window.open(display);
     }
 

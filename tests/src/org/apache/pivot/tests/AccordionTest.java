@@ -31,7 +31,7 @@ public class AccordionTest implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        frame = (Frame)bxmlSerializer.readObject(this, "accordion_test.bxml");
+        frame = (Frame)bxmlSerializer.readObject(AccordionTest.class, "accordion_test.bxml");
         frame.open(display);
     }
 

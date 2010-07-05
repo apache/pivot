@@ -46,6 +46,7 @@ public class XMLSerializer implements Serializer<Element> {
     public static final String XMLNS_ATTRIBUTE_PREFIX = "xmlns";
 
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
+    public static final String XML_EXTENSION = "xml";
     public static final String MIME_TYPE = "text/xml";
     public static final int BUFFER_SIZE = 2048;
 

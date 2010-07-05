@@ -50,7 +50,7 @@ public class MenuBarTest implements Application {
         frame1.open(display);
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        frame2 = (Frame)bxmlSerializer.readObject(this, "menu_bar_test.bxml");
+        frame2 = (Frame)bxmlSerializer.readObject(MenuBarTest.class, "menu_bar_test.bxml");
         bxmlSerializer.bind(this, MenuBarTest.class);
 
         MenuHandler menuHandler = new MenuHandler.Adapter() {

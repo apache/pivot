@@ -37,7 +37,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.text.FileSizeFormat;
 import org.apache.pivot.util.Filter;
-import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
@@ -573,18 +572,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         final FileBrowser fileBrowser = (FileBrowser)component;
 
-        Resources resources;
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
         try {
-            resources = new Resources(getClass().getName());
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        } catch (SerializationException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
-        try {
-            content = (Component)bxmlSerializer.readObject(this, "terra_file_browser_skin.bxml");
+            content = (Component)bxmlSerializer.readObject(TerraFileBrowserSkin.class,
+                "terra_file_browser_skin.bxml", true);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {

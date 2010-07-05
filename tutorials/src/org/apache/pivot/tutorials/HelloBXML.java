@@ -30,7 +30,7 @@ public class HelloBXML implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "hello.bxml");
+        window = (Window)bxmlSerializer.readObject(HelloBXML.class, "hello.bxml");
         window.open(display);
     }
 

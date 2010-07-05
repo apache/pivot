@@ -21,8 +21,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <Border>
         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-            <TableView bxml:id="tableView" tableData="@standings.json"
-                styles="{includeTrailingVerticalGridLine:true}">
+            <TableView bxml:id="tableView" styles="{includeTrailingVerticalGridLine:true}">
                 <columns>
                     <TableView.Column name="nation" width="180" headerData="Nation"/>
                     <TableView.Column name="gold" width="60" headerData="Gold"/>
@@ -41,6 +40,10 @@ limitations under the License.
                     ]]>
                     </bxml:script>
                 </tableViewSortListeners>
+
+                <tableData>
+                    <bxml:include src="standings.json"/>
+                </tableData>
             </TableView>
 
             <columnHeader>

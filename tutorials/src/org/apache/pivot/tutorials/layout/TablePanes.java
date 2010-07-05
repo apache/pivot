@@ -103,7 +103,8 @@ public class TablePanes extends Window implements Bindable {
                 bxmlSerializer.getNamespace().put("component", component);
 
                 try {
-                    sheet = (Sheet)bxmlSerializer.readObject(this, "table_panes_configure_cell.bxml");
+                    sheet = (Sheet)bxmlSerializer.readObject(TablePanes.class,
+                        "table_panes_configure_cell.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -126,7 +127,8 @@ public class TablePanes extends Window implements Bindable {
                 bxmlSerializer.getNamespace().put("row", row);
 
                 try {
-                    sheet = (Sheet)bxmlSerializer.readObject(this, "table_panes_configure_row.bxml");
+                    sheet = (Sheet)bxmlSerializer.readObject(TablePanes.class,
+                        "table_panes_configure_row.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -160,7 +162,8 @@ public class TablePanes extends Window implements Bindable {
                 bxmlSerializer.getNamespace().put("row", row);
 
                 try {
-                    sheet = (Sheet)bxmlSerializer.readObject(this, "table_panes_configure_row.bxml");
+                    sheet = (Sheet)bxmlSerializer.readObject(TablePanes.class,
+                        "table_panes_configure_row.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -206,7 +209,8 @@ public class TablePanes extends Window implements Bindable {
                 bxmlSerializer.getNamespace().put("column", column);
 
                 try {
-                    sheet = (Sheet)bxmlSerializer.readObject(this, "table_panes_configure_column.bxml");
+                    sheet = (Sheet)bxmlSerializer.readObject(TablePanes.class,
+                        "table_panes_configure_column.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {
@@ -241,7 +245,8 @@ public class TablePanes extends Window implements Bindable {
                 bxmlSerializer.getNamespace().put("column", column);
 
                 try {
-                    sheet = (Sheet)bxmlSerializer.readObject(this, "table_panes_configure_column.bxml");
+                    sheet = (Sheet)bxmlSerializer.readObject(TablePanes.class,
+                        "table_panes_configure_column.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IOException exception) {

@@ -30,7 +30,7 @@ public class TablePaneTest implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "table_pane_test.bxml");
+        window = (Window)bxmlSerializer.readObject(TablePaneTest.class, "table_pane_test.bxml");
         window.open(display);
     }
 

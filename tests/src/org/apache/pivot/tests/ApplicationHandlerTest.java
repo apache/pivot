@@ -31,7 +31,8 @@ public class ApplicationHandlerTest implements Application,
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "application_handler_test.bxml");
+        window = (Window)bxmlSerializer.readObject(ApplicationHandlerTest.class,
+            "application_handler_test.bxml");
         window.open(display);
     }
 

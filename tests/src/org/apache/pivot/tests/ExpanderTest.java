@@ -31,7 +31,7 @@ public class ExpanderTest implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "expander_test.bxml");
+        window = (Window)bxmlSerializer.readObject(ExpanderTest.class, "expander_test.bxml");
         window.open(display);
     }
 

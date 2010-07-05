@@ -35,7 +35,7 @@ public class TableViewTest2 implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "table_view_test2.bxml");
+        window = (Window)bxmlSerializer.readObject(TableViewTest2.class, "table_view_test2.bxml");
         tableView = (TableView)bxmlSerializer.getNamespace().get("tableView");
 
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();

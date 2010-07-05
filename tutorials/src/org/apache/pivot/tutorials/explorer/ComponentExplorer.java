@@ -18,7 +18,6 @@ package org.apache.pivot.tutorials.explorer;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -30,8 +29,9 @@ public class ComponentExplorer implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer bxmlSerializer = new BXMLSerializer(new Resources(getClass().getName()));
-        window = (ComponentExplorerWindow)bxmlSerializer.readObject(getClass().getResource("component_explorer_window.bxml"));
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        window = (ComponentExplorerWindow)bxmlSerializer.readObject(ComponentExplorer.class,
+            "component_explorer_window.bxml", true);
         window.setClassProperty(properties.get(CLASS_PROPERTY));
         window.open(display);
     }

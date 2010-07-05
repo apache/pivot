@@ -43,7 +43,7 @@ public class Windows implements Application {
 
             Frame frame;
             try {
-                frame = (Frame)bxmlSerializer.readObject(Windows.this, "frame.bxml");
+                frame = (Frame)bxmlSerializer.readObject(Windows.class, "frame.bxml");
             } catch (SerializationException exception) {
                 throw new RuntimeException(exception);
             } catch (IOException exception) {
@@ -80,7 +80,7 @@ public class Windows implements Application {
     public Window load(String fileName)
         throws SerializationException, IOException {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        return (Window)bxmlSerializer.readObject(this, fileName);
+        return (Window)bxmlSerializer.readObject(Windows.class, fileName);
     }
 
     public static void main(String[] args) {

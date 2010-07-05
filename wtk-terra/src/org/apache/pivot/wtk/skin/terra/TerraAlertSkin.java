@@ -102,7 +102,8 @@ public class TerraAlertSkin extends TerraDialogSkin
 
         Component content;
         try {
-            content = (Component)bxmlSerializer.readObject(this, "terra_alert_skin.bxml");
+            content = (Component)bxmlSerializer.readObject(TerraAlertSkin.class,
+                "terra_alert_skin.bxml");
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }

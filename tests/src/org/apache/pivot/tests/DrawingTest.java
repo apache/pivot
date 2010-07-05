@@ -49,7 +49,7 @@ public class DrawingTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "drawing_test.bxml");
+        window = (Window)bxmlSerializer.readObject(DrawingTest.class, "drawing_test.bxml");
         imageView = (ImageView)bxmlSerializer.getNamespace().get("imageView");
 
         imageView.getComponentMouseButtonListeners().add(imageViewMouseButtonListener);

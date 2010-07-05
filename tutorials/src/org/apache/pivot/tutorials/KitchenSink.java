@@ -103,7 +103,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "buttons.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "buttons.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -130,7 +130,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "lists.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "lists.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -182,7 +182,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "text.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "text.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -204,7 +204,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "calendars.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "calendars.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -226,7 +226,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "color_choosers.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "color_choosers.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -248,7 +248,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "navigation.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "navigation.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -270,7 +270,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "splitters.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "splitters.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -329,7 +329,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "menus.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "menus.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -342,7 +342,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 rollup.setContent(component);
 
                 try {
-                    menuSection = (Menu.Section)bxmlSerializer.readObject(this, "menu_section.bxml");
+                    menuSection = (Menu.Section)bxmlSerializer.readObject(KitchenSink.class, "menu_section.bxml");
                     imageMenuGroup = (ButtonGroup)bxmlSerializer.getNamespace().get("imageMenuGroup");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
@@ -381,7 +381,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "meters.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "meters.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -434,7 +434,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "spinners.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "spinners.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -502,7 +502,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "tables.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "tables.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -605,7 +605,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "trees.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "trees.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -661,7 +661,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "dragdrop.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "dragdrop.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -818,7 +818,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    component = (Component)bxmlSerializer.readObject(this, "alerts.bxml");
+                    component = (Component)bxmlSerializer.readObject(KitchenSink.class, "alerts.bxml");
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 } catch(SerializationException exception) {
@@ -853,7 +853,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             Component body = null;
                             BXMLSerializer bxmlSerializer = new BXMLSerializer();
                             try {
-                                body = (Component)bxmlSerializer.readObject(this, "alert.bxml");
+                                body = (Component)bxmlSerializer.readObject(KitchenSink.class, "alert.bxml");
                             } catch(Exception exception) {
                                 System.err.println(exception);
                             }
@@ -893,7 +893,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             Component body = null;
                             BXMLSerializer bxmlSerializer = new BXMLSerializer();
                             try {
-                                body = (Component)bxmlSerializer.readObject(this, "alert.bxml");
+                                body = (Component)bxmlSerializer.readObject(KitchenSink.class, "alert.bxml");
                             } catch(Exception exception) {
                                 System.err.println(exception);
                             }
@@ -939,7 +939,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "kitchen_sink.bxml");
+        window = (Window)bxmlSerializer.readObject(KitchenSink.class, "kitchen_sink.bxml");
         bxmlSerializer.bind(this, KitchenSink.class);
 
         buttonsRollup = (Rollup)bxmlSerializer.getNamespace().get("buttonsRollup");

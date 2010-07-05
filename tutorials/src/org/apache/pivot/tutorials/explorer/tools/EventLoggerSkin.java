@@ -28,7 +28,6 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -77,18 +76,10 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
         eventLogger.getEventLoggerListeners().add(this);
 
-        Resources resources;
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
         try {
-            resources = new Resources(getClass().getName());
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        } catch (SerializationException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
-        try {
-            content = (Component)bxmlSerializer.readObject(this, "event_logger_skin.bxml");
+            content = (Component)bxmlSerializer.readObject(EventLoggerSkin.class,
+                "event_logger_skin.bxml", true);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {

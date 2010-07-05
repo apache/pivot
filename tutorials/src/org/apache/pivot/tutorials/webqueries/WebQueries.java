@@ -42,7 +42,7 @@ public class WebQueries implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "web_queries.bxml");
+        window = (Window)bxmlSerializer.readObject(WebQueries.class, "web_queries.bxml");
 
         listView = (ListView)bxmlSerializer.getNamespace().get("listView");
         loadingLabel = (Label)bxmlSerializer.getNamespace().get("loadingLabel");

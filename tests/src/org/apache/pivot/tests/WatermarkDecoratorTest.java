@@ -29,7 +29,8 @@ public class WatermarkDecoratorTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "watermark_decorator_test.bxml");
+        window = (Window)bxmlSerializer.readObject(WatermarkDecoratorTest.class,
+            "watermark_decorator_test.bxml");
 
         window.open(display);
     }

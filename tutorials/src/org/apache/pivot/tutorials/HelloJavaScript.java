@@ -30,7 +30,7 @@ public class HelloJavaScript implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "hello_javascript.bxml");
+        window = (Window)bxmlSerializer.readObject(HelloJavaScript.class, "hello_javascript.bxml");
         window.open(display);
     }
 

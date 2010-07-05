@@ -31,6 +31,7 @@ import org.apache.pivot.collections.adapter.MapAdapter;
  *
  */
 public class PropertiesSerializer implements Serializer<Map<?, ?>> {
+    public static final String PROPERTIES_EXTENSION = "properties";
     public static final String MIME_TYPE = "text/plain";
 
     /**

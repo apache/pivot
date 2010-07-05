@@ -25,7 +25,6 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
-import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
@@ -85,20 +84,12 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         fileBrowserSheet.setMinimumHeight(180);
 
         // Load the sheet content
-        Resources resources;
-        try {
-            resources = new Resources(getClass().getName());
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        } catch (SerializationException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        BXMLSerializer bxmlSerializer = new BXMLSerializer(resources);
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
         Component content;
         try {
-            content = (Component)bxmlSerializer.readObject(this, "terra_file_browser_sheet_skin.bxml");
+            content = (Component)bxmlSerializer.readObject(FileBrowserSheet.class,
+                "terra_file_browser_sheet_skin.bxml", true);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {

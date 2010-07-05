@@ -53,6 +53,9 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
+import org.apache.pivot.json.JSONSerializer;
+import org.apache.pivot.serialization.CSVSerializer;
+import org.apache.pivot.serialization.PropertiesSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
@@ -150,7 +153,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
     }
 
-    protected static class Element  {
+    private static class Element  {
         public enum Type {
             DEFINE,
             INSTANCE,
@@ -182,7 +185,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
     }
 
-    protected static class Attribute {
+    private static class Attribute {
         public final String namespaceURI;
         public final String localName;
         public final String value;
@@ -276,22 +279,25 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
     }
 
-    private Resources resources;
+    // TODO Remove these when WTKXSerializer is dropped
     private String internalNamespacePrefix;
     private Class<? extends Annotation> bindingAnnotationClass;
 
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;
 
+    private Map<String, Object> namespace = new HashMap<String, Object>();
     private URL location = null;
-    private Map<String, Object> namespace;
+    private Resources resources = null;
 
-    private boolean inline;
-    private boolean clearNamespaceOnRead;
     private Element element = null;
     private Object root = null;
 
     private String language = DEFAULT_LANGUAGE;
+
+    private static HashMap<String, String> fileExtensions = new HashMap<String, String>();
+    private static HashMap<String, Class<? extends Serializer<?>>> mimeTypes =
+        new HashMap<String, Class<? extends Serializer<?>>>();
 
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
@@ -300,6 +306,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     public static final String LANGUAGE_PROCESSING_INSTRUCTION = "language";
 
     public static final String BXML_PREFIX = "bxml";
+    public static final String BXML_EXTENSION = "bxml";
     public static final String ID_ATTRIBUTE = "id";
 
     public static final String INCLUDE_TAG = "include";
@@ -317,29 +324,27 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     public static final String MIME_TYPE = "application/bxml";
 
+    static {
+        fileExtensions.put(BXML_EXTENSION, MIME_TYPE);
+        mimeTypes.put(MIME_TYPE, BXMLSerializer.class);
+
+        fileExtensions.put(CSVSerializer.CSV_EXTENSION, CSVSerializer.MIME_TYPE);
+        mimeTypes.put(CSVSerializer.MIME_TYPE, CSVSerializer.class);
+
+        fileExtensions.put(JSONSerializer.JSON_EXTENSION, JSONSerializer.MIME_TYPE);
+        mimeTypes.put(JSONSerializer.MIME_TYPE, JSONSerializer.class);
+
+        fileExtensions.put(PropertiesSerializer.PROPERTIES_EXTENSION, PropertiesSerializer.MIME_TYPE);
+        mimeTypes.put(PropertiesSerializer.MIME_TYPE, PropertiesSerializer.class);
+    }
+
     public BXMLSerializer() {
-        this(null);
+        this(BXML_PREFIX, BXML.class);
     }
 
-    public BXMLSerializer(Resources resources) {
-        this(resources, null, BXML_PREFIX, BXML.class);
-    }
-
-    protected BXMLSerializer(Resources resources, BXMLSerializer owner,
-        String internalNamespacePrefix, Class<? extends Annotation> bindingAnnotationClass) {
-        this.resources = resources;
+    protected BXMLSerializer(String internalNamespacePrefix, Class<? extends Annotation> bindingAnnotationClass) {
         this.internalNamespacePrefix = internalNamespacePrefix;
         this.bindingAnnotationClass = bindingAnnotationClass;
-
-        if (owner == null) {
-            inline = false;
-            namespace = new HashMap<String, Object>();
-        } else {
-            inline = true;
-            namespace = owner.namespace;
-        }
-
-        clearNamespaceOnRead = !inline;
 
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
@@ -348,87 +353,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         scriptEngineManager.setBindings(new NamespaceBindings());
     }
 
-    public Object readObject(String resourceName)
-        throws IOException, SerializationException {
-        if (resourceName == null) {
-            throw new IllegalArgumentException("resourceName is null.");
-        }
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL location = classLoader.getResource(resourceName);
-
-        if (location == null) {
-            throw new SerializationException("Could not find resource named \""
-                + resourceName + "\".");
-        }
-
-        return readObject(location);
-    }
-
-    public Object readObject(Object baseObject, String resourceName)
-        throws IOException, SerializationException {
-        if (baseObject == null) {
-            throw new IllegalArgumentException("baseObject is null.");
-        }
-
-        if (resourceName == null) {
-            throw new IllegalArgumentException("resourceName is null.");
-        }
-
-        return readObject(baseObject.getClass(), resourceName);
-    }
-
-    public Object readObject(Class<?> baseType, String resourceName)
-        throws IOException, SerializationException {
-        if (baseType == null) {
-            throw new IllegalArgumentException("baseType is null.");
-        }
-
-        if (resourceName == null) {
-            throw new IllegalArgumentException("resourceName is null.");
-        }
-
-        URL location = baseType.getResource(resourceName);
-        if (location == null) {
-            throw new IllegalArgumentException("Could not find resource \""
-                + resourceName + "\" for class \"" + baseType.getName() + "\".");
-        }
-
-        return readObject(location);
-    }
-
-    public Object readObject(URL location)
-        throws IOException, SerializationException {
-        if (location == null) {
-            throw new IllegalArgumentException("location is null.");
-        }
-
-        this.location = location;
-
-        InputStream inputStream = new BufferedInputStream(location.openStream());
-
-        Object object;
-        try {
-            object = readObject(inputStream);
-        } finally {
-            inputStream.close();
-        }
-
-        this.location = null;
-
-        return object;
-    }
-
     @Override
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
-        }
-
-        // Reset the serializer
-        if (clearNamespaceOnRead) {
-            namespace.clear();
         }
 
         root = null;
@@ -480,17 +409,63 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             throw exception;
         }
 
-        if (root instanceof Bindable
-            && !inline) {
+        if (root instanceof Bindable) {
             bind(root);
-
             Bindable bindable = (Bindable)root;
             bindable.initialize(namespace, location, resources);
         }
 
-        clearNamespaceOnRead = true;
-
         return root;
+    }
+
+    public final Object readObject(Class<?> baseType, String resourceName)
+        throws IOException, SerializationException {
+        return readObject(baseType, resourceName, false);
+    }
+
+    public Object readObject(Class<?> baseType, String resourceName, boolean localize)
+        throws IOException, SerializationException {
+        if (baseType == null) {
+            throw new IllegalArgumentException("baseType is null.");
+        }
+
+        if (resourceName == null) {
+            throw new IllegalArgumentException("resourceName is null.");
+        }
+
+        return readObject(baseType.getResource(resourceName),
+            localize ? new Resources(baseType.getName()) : null);
+    }
+
+    public final Object readObject(URL location)
+        throws IOException, SerializationException {
+        return readObject(location, null);
+    }
+
+    public Object readObject(URL location, Resources resources)
+        throws IOException, SerializationException {
+        if (location == null) {
+            throw new IllegalArgumentException("location is null.");
+        }
+
+        namespace.clear();
+
+        this.location = location;
+        this.resources = resources;
+
+        InputStream inputStream = new BufferedInputStream(location.openStream());
+
+        Object object;
+        try {
+            object = readObject(inputStream);
+        } finally {
+            inputStream.close();
+        }
+
+        this.location = null;
+        this.resources = null;
+
+        return object;
     }
 
     private void processProcessingInstruction(XMLStreamReader xmlStreamReader) {
@@ -633,7 +608,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         Class<?> type = Class.forName(className);
                         elementType = Element.Type.INSTANCE;
                         value = type.newInstance();
-                    } catch (Exception exception) {
+                    } catch (ClassNotFoundException exception) {
+                        throw new SerializationException(exception);
+                    } catch (InstantiationException exception) {
+                        throw new SerializationException(exception);
+                    } catch (IllegalAccessException exception) {
                         throw new SerializationException(exception);
                     }
                 }
@@ -720,14 +699,67 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             + " tag.");
                     }
 
-                    // Read the object
-                    BXMLSerializer serializer = new BXMLSerializer(resources, inline ? this : null,
-                        internalNamespacePrefix, bindingAnnotationClass);
+                    // Determine the MIME type of the include
+                    // TODO Read this from an attribute first; if null, attempt to infer
+                    // from file extension
+                    String mimeType = null;
 
+                    if (mimeType == null) {
+                        // Get the file extension
+                        int i = src.lastIndexOf(".");
+                        if (i != -1) {
+                            String extension = src.substring(i + 1);
+                            mimeType = fileExtensions.get(extension);
+                        }
+                    }
+
+                    if (mimeType == null) {
+                        throw new SerializationException("Cannot determine MIME type of include \""
+                            + src + "\".");
+                    }
+
+                    Class<? extends Serializer> serializerClass = mimeTypes.get(mimeType);
+
+                    if (serializerClass == null) {
+                        throw new SerializationException("No serializer associated with MIME type "
+                            + mimeType + ".");
+                    }
+
+                    Serializer<?> serializer;
+                    try {
+                        serializer = serializerClass.newInstance();
+                    } catch (InstantiationException exception) {
+                        throw new SerializationException(exception);
+                    } catch (IllegalAccessException exception) {
+                        throw new SerializationException(exception);
+                    }
+
+                    // Determine location from src attribute
+                    URL location;
                     if (src.charAt(0) == '/') {
-                        element.value = serializer.readObject(src.substring(1));
+                        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                        location = classLoader.getResource(src.substring(1));
                     } else {
-                        element.value = serializer.readObject(new URL(location, src));
+                        location = new URL(this.location, src);
+                    }
+
+                    // Set optional resolution properties
+                    if (serializer instanceof Resolvable) {
+                        Resolvable resolvable = (Resolvable)serializer;
+                        if (inline) {
+                            resolvable.setNamespace(namespace);
+                        }
+
+                        resolvable.setLocation(location);
+                        resolvable.setResources(resources);
+                    }
+
+                    // Read the object
+                    InputStream inputStream = new BufferedInputStream(location.openStream());
+                    try {
+                        element.value = serializer.readObject(inputStream);
+                    } finally {
+                        inputStream.close();
                     }
                 } else {
                     // Process attributes looking for property setters
@@ -1325,6 +1357,26 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
 
         return resolvedValue;
+    }
+
+    /**
+     * Returns the file extension/MIME type map. This map associates file
+     * extensions with MIME types, which are used to automatically determine
+     * an appropriate serializer to use for an include based on file extension.
+     *
+     * @see #getMimeTypes()
+     */
+    public static Map<String, String> getFileExtensions() {
+        return fileExtensions;
+    }
+
+    /**
+     * Returns the MIME type/serializer class map. This map associates MIME types
+     * with serializer classes. The serializer for a given MIME type will be used
+     * to deserialize the data for an include that references the MIME type.
+     */
+    public static Map<String, Class<? extends Serializer<?>>> getMimeTypes() {
+        return mimeTypes;
     }
 
     private static Method getStaticGetterMethod(Class<?> propertyClass, String propertyName,

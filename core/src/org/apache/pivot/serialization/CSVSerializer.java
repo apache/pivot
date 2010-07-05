@@ -138,6 +138,7 @@ public class CSVSerializer implements Serializer<List<?>> {
     private boolean verbose = false;
 
     public static final String DEFAULT_CHARSET_NAME = "ISO-8859-1";
+    public static final String CSV_EXTENSION = "csv";
     public static final String MIME_TYPE = "text/csv";
     public static final int BUFFER_SIZE = 2048;
 

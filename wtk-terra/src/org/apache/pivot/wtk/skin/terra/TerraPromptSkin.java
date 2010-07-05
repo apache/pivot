@@ -95,7 +95,8 @@ public class TerraPromptSkin extends TerraSheetSkin
 
         Component content;
         try {
-            content = (Component)bxmlSerializer.readObject(this, "terra_prompt_skin.bxml");
+            content = (Component)bxmlSerializer.readObject(TerraPromptSkin.class,
+                "terra_prompt_skin.bxml");
         } catch(Exception exception) {
             throw new RuntimeException(exception);
         }

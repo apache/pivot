@@ -65,7 +65,7 @@ public class JSONViewer implements Application {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         bxmlSerializer.getNamespace().put(APPLICATION_KEY, this);
 
-        window = (Window)bxmlSerializer.readObject(this, "json_viewer.bxml");
+        window = (Window)bxmlSerializer.readObject(JSONViewer.class, "json_viewer.bxml");
         bxmlSerializer.bind(this);
 
         Label prompt = new Label("Drag or paste JSON here");

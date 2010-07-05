@@ -37,7 +37,8 @@ public class ContextMenuTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "context_menu_test.bxml");
+        window = (Window)bxmlSerializer.readObject(ContextMenuTest.class,
+            "context_menu_test.bxml");
         bxmlSerializer.bind(this, ContextMenuTest.class);
 
         window.setMenuHandler(new MenuHandler.Adapter() {

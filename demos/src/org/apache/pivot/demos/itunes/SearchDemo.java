@@ -75,7 +75,7 @@ public class SearchDemo implements Application {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         bxmlSerializer.getNamespace().put(APPLICATION_KEY, this);
 
-        window = (Window)bxmlSerializer.readObject(this, "search_demo.bxml");
+        window = (Window)bxmlSerializer.readObject(SearchDemo.class, "search_demo.bxml");
         bxmlSerializer.bind(this, SearchDemo.class);
 
         searchButton.setButtonData(searchImage);

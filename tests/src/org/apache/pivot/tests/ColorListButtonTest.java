@@ -34,7 +34,8 @@ public class ColorListButtonTest implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        BoxPane boxPane = (BoxPane) bxmlSerializer.readObject(this, "color_list_button_test.bxml");
+        BoxPane boxPane = (BoxPane)bxmlSerializer.readObject(ColorListButtonTest.class,
+            "color_list_button_test.bxml");
         listButton = (ListButton)bxmlSerializer.getNamespace().get("listButton");
         // test the getListPopup() method
         listButton.getListPopup().getDecorators().add(new ReflectionDecorator());

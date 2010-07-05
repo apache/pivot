@@ -168,7 +168,7 @@ public class LargeData implements Application {
         }
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "large_data.bxml");
+        window = (Window)bxmlSerializer.readObject(LargeData.class, "large_data.bxml");
         fileListButton = (ListButton)bxmlSerializer.getNamespace().get("fileListButton");
         loadDataButton = (PushButton)bxmlSerializer.getNamespace().get("loadDataButton");
         cancelButton = (PushButton)bxmlSerializer.getNamespace().get("cancelButton");

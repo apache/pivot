@@ -30,7 +30,7 @@ public class GridPaneTest implements Application {
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this, "gridpane_test.bxml");
+        window = (Window)bxmlSerializer.readObject(GridPaneTest.class, "gridpane_test.bxml");
         window.open(display);
     }
 

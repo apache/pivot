@@ -98,7 +98,7 @@ public class MenuBars extends Frame implements Bindable {
 
                 Component tab;
                 try {
-                    tab = new Border((Component)bxmlSerializer.readObject(this, "document.bxml"));
+                    tab = new Border((Component)bxmlSerializer.readObject(MenuBars.class, "document.bxml"));
                 } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 } catch (SerializationException exception) {

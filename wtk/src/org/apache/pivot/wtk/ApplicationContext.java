@@ -1440,12 +1440,13 @@ public abstract class ApplicationContext {
     protected static ArrayList<Display> displays = new ArrayList<Display>();
     protected static ArrayList<Application> applications = new ArrayList<Application>();
 
+    private static Timer timer = null;
+
     private static HashMap<URI, Object> resourceCache = new HashMap<URI, Object>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
-    private static Timer timer = null;
-
     private static Version jvmVersion = null;
+
     static {
         jvmVersion = Version.decode(System.getProperty("java.vm.version"));
     }

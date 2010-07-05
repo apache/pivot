@@ -20,7 +20,6 @@ import java.net.URL;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -69,8 +68,9 @@ public class Expenses implements Application {
             secure = origin.getProtocol().equals("HTTPS");
         }
 
-        BXMLSerializer bxmlSerializer = new BXMLSerializer(new Resources(ExpensesWindow.class.getName()));
-        expensesWindow = (ExpensesWindow)bxmlSerializer.readObject(this, "expenses_window.bxml");
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        expensesWindow = (ExpensesWindow)bxmlSerializer.readObject(ExpensesWindow.class,
+            "expenses_window.bxml", true);
         expensesWindow.open(display);
     }
 

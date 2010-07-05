@@ -73,7 +73,7 @@ public class XMLViewer implements Application {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         bxmlSerializer.getNamespace().put(APPLICATION_KEY, this);
 
-        window = (Window)bxmlSerializer.readObject(this, "xml_viewer.bxml");
+        window = (Window)bxmlSerializer.readObject(XMLViewer.class, "xml_viewer.bxml");
         bxmlSerializer.bind(this);
 
         Label prompt = new Label("Drag or paste XML here");

@@ -45,7 +45,7 @@ public class Scripting implements Application {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         bxmlSerializer.getNamespace().put("bar", "12345");
 
-        window = (Window)bxmlSerializer.readObject(this, "scripting.bxml");
+        window = (Window)bxmlSerializer.readObject(Scripting.class, "scripting.bxml");
         foo = (String)bxmlSerializer.getNamespace().get("foo");
         listData = (List<?>)bxmlSerializer.getNamespace().get("listData");
 

@@ -49,7 +49,7 @@ public class CardPaneTest implements Application {
         frame.setLocation(20, 20);
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        sheet = (Sheet)bxmlSerializer.readObject(this, "card_pane_test.bxml");
+        sheet = (Sheet)bxmlSerializer.readObject(CardPaneTest.class, "card_pane_test.bxml");
         cardPane = (CardPane)bxmlSerializer.getNamespace().get("cardPane");
         sizeGroup = (ButtonGroup)bxmlSerializer.getNamespace().get("sizeGroup");
 
