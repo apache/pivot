@@ -88,7 +88,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         Component content;
         try {
-            content = (Component)bxmlSerializer.readObject(FileBrowserSheet.class,
+            content = (Component)bxmlSerializer.readObject(TerraFileBrowserSheetSkin.class,
                 "terra_file_browser_sheet_skin.bxml", true);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
