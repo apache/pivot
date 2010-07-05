@@ -180,12 +180,18 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         }
 
         // Paint the background
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+
         graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
             width / 2f, height / 2f, backgroundColor));
         graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
             CORNER_RADIUS, CORNER_RADIUS));
 
         // Paint the content
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_OFF);
+
         Bounds contentBounds = new Bounds(0, 0,
             Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(height - 1, 0));
         Button.DataRenderer dataRenderer = colorChooserButton.getDataRenderer();

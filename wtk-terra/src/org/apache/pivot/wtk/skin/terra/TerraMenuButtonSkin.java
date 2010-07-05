@@ -227,6 +227,9 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         // Paint the background
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+
         if (backgroundColor != null
             && bevelColor != null) {
             graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
@@ -236,6 +239,9 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         // Paint the content
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_OFF);
+
         Bounds contentBounds = new Bounds(padding.left + 1, padding.top + 1,
             Math.max(width - (padding.left + padding.right + spacing + TRIGGER_WIDTH + 2), 0),
             Math.max(height - (padding.top + padding.bottom + 2), 0));

@@ -217,6 +217,9 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         // Paint the background
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+
         if (backgroundColor != null
             && bevelColor != null) {
             graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
@@ -226,6 +229,9 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         // Paint the content
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_OFF);
+
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
         dataRenderer.render(pushButton.getButtonData(), pushButton, highlighted);
         dataRenderer.setSize(Math.max(width - (padding.left + padding.right + 2), 0),
