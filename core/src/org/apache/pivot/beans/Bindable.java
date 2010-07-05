@@ -36,11 +36,12 @@ public interface Bindable {
      * variables.
      *
      * @param location
-     * The location of the BXML source. May be <tt>null</tt>.
+     * The location of the BXML source. May be <tt>null</tt> if the location of the
+     * source is not known.
      *
      * @param resources
      * The resources that were used to localize the deserialized content. May be
-     * <tt>null</tt>.
+     * <tt>null</tt> if no resources were specified.
      */
     public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources);
 }

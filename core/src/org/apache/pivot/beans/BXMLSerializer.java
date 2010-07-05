@@ -54,6 +54,8 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
+import org.apache.pivot.serialization.BinarySerializer;
+import org.apache.pivot.serialization.ByteArraySerializer;
 import org.apache.pivot.serialization.CSVSerializer;
 import org.apache.pivot.serialization.PropertiesSerializer;
 import org.apache.pivot.serialization.SerializationException;
@@ -312,6 +314,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     public static final String INCLUDE_TAG = "include";
     public static final String INCLUDE_SRC_ATTRIBUTE = "src";
     public static final String INCLUDE_RESOURCES_ATTRIBUTE = "resources";
+    public static final String INCLUDE_MIME_TYPE_ATTRIBUTE = "mimeType";
     public static final String INCLUDE_INLINE_ATTRIBUTE = "inline";
 
     public static final String SCRIPT_TAG = "script";
@@ -325,17 +328,19 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     public static final String MIME_TYPE = "application/bxml";
 
     static {
-        fileExtensions.put(BXML_EXTENSION, MIME_TYPE);
         mimeTypes.put(MIME_TYPE, BXMLSerializer.class);
 
-        fileExtensions.put(CSVSerializer.CSV_EXTENSION, CSVSerializer.MIME_TYPE);
+        mimeTypes.put(BinarySerializer.MIME_TYPE, BinarySerializer.class);
+        mimeTypes.put(ByteArraySerializer.MIME_TYPE, ByteArraySerializer.class);
         mimeTypes.put(CSVSerializer.MIME_TYPE, CSVSerializer.class);
-
-        fileExtensions.put(JSONSerializer.JSON_EXTENSION, JSONSerializer.MIME_TYPE);
         mimeTypes.put(JSONSerializer.MIME_TYPE, JSONSerializer.class);
-
-        fileExtensions.put(PropertiesSerializer.PROPERTIES_EXTENSION, PropertiesSerializer.MIME_TYPE);
         mimeTypes.put(PropertiesSerializer.MIME_TYPE, PropertiesSerializer.class);
+
+        fileExtensions.put(BXML_EXTENSION, MIME_TYPE);
+
+        fileExtensions.put(CSVSerializer.CSV_EXTENSION, CSVSerializer.MIME_TYPE);
+        fileExtensions.put(JSONSerializer.JSON_EXTENSION, JSONSerializer.MIME_TYPE);
+        fileExtensions.put(PropertiesSerializer.PROPERTIES_EXTENSION, PropertiesSerializer.MIME_TYPE);
     }
 
     public BXMLSerializer() {
@@ -674,9 +679,10 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 ArrayList<Attribute> staticPropertyAttributes = new ArrayList<Attribute>();
 
                 if (element.type == Element.Type.INCLUDE) {
-                    // Process attributes looking for src, resources, and property setters
+                    // Process attributes looking for include parameters and property setters
                     String src = null;
                     Resources resources = this.resources;
+                    String mimeType = null;
                     boolean inline = false;
 
                     for (Attribute attribute : element.attributes) {
@@ -684,6 +690,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             src = attribute.value;
                         } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
                             resources = new Resources(resources, attribute.value);
+                        } else if (attribute.localName.equals(INCLUDE_MIME_TYPE_ATTRIBUTE)) {
+                            mimeType = attribute.value;
                         } else if (attribute.localName.equals(INCLUDE_INLINE_ATTRIBUTE)) {
                             inline = Boolean.parseBoolean(attribute.value);
                         } else if (Character.isUpperCase(attribute.localName.charAt(0))) {
@@ -698,11 +706,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             + " attribute is required for " + internalNamespacePrefix + ":" + INCLUDE_TAG
                             + " tag.");
                     }
-
-                    // Determine the MIME type of the include
-                    // TODO Read this from an attribute first; if null, attempt to infer
-                    // from file extension
-                    String mimeType = null;
 
                     if (mimeType == null) {
                         // Get the file extension

@@ -179,12 +179,11 @@ public class JSONSerializer implements Serializer<Object> {
         }
 
         // Move to the first character
-        c = reader.read();
+        LineNumberReader lineNumberReader = new LineNumberReader(reader);
+        c = lineNumberReader.read();
 
         // Read the root value
-        LineNumberReader lineNumberReader = new LineNumberReader(reader);
         Object object;
-
         try {
             object = readValue(lineNumberReader, type);
         } catch (SerializationException exception) {

@@ -41,55 +41,8 @@ import org.apache.pivot.io.EchoWriter;
 /**
  * Implementation of the {@link Serializer} interface that reads data from
  * and writes data to a comma-separated value (CSV) file.
- * <p>
- * TODO Add "firstLineContainsKeys" flag.
  */
 public class CSVSerializer implements Serializer<List<?>> {
-    /**
-     * Class representing the serializers key sequence.
-     */
-    public class KeySequence implements Sequence<String> {
-        @Override
-        public int add(String item) {
-            return keys.add(item);
-        }
-
-        @Override
-        public void insert(String item, int index) {
-            keys.insert(item, index);
-        }
-
-        @Override
-        public String update(int index, String item) {
-            return keys.update(index, item);
-        }
-
-        @Override
-        public int remove(String item) {
-            return keys.remove(item);
-        }
-
-        @Override
-        public Sequence<String> remove(int index, int count) {
-            return keys.remove(index, count);
-        }
-
-        @Override
-        public String get(int index) {
-            return keys.get(index);
-        }
-
-        @Override
-        public int indexOf(String item) {
-            return keys.indexOf(item);
-        }
-
-        @Override
-        public int getLength() {
-            return keys.getLength();
-        }
-    }
-
     /**
      * Allows a caller to retrieve the contents of a CSV stream iteratively.
      */
@@ -133,8 +86,8 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     int c = -1;
     private ArrayList<String> keys = new ArrayList<String>();
-    private KeySequence keySequence = new KeySequence();
     private Class<?> itemClass = HashMap.class;
+    private boolean writeKeys = false;
     private boolean verbose = false;
 
     public static final String DEFAULT_CHARSET_NAME = "ISO-8859-1";
@@ -162,8 +115,8 @@ public class CSVSerializer implements Serializer<List<?>> {
      * Returns a sequence representing the fields that will be read or written
      * by this serializer.
      */
-    public KeySequence getKeys() {
-        return keySequence;
+    public Sequence<String> getKeys() {
+        return keys;
     }
 
     /**
@@ -185,6 +138,24 @@ public class CSVSerializer implements Serializer<List<?>> {
         }
 
         this.itemClass = itemClass;
+    }
+
+    /**
+     * Returns the serializer's write keys flag.
+     */
+    public boolean getWriteKeys() {
+        return writeKeys;
+    }
+
+    /**
+     * Sets the serializer's write keys flag.
+     *
+     * @param writeKeys
+     * If <tt>true</tt>, the first line of the output will contain the keys.
+     * Otherwise, the first line will contain the first line of data.
+     */
+    public void setWriteKeys(boolean writeKeys) {
+        this.writeKeys = writeKeys;
     }
 
     /**
@@ -237,6 +208,9 @@ public class CSVSerializer implements Serializer<List<?>> {
      * A list containing the data read from the CSV file. The list items are
      * instances of Dictionary<String, Object> populated by mapping columns in
      * the CSV file to keys in the key sequence.
+     * <p>
+     * If no keys have been specified when this method is called, they are assumed
+     * to be defined in the first line of the file.
      */
     public List<?> readObject(Reader reader)
         throws IOException, SerializationException {
@@ -244,12 +218,28 @@ public class CSVSerializer implements Serializer<List<?>> {
             throw new IllegalArgumentException("reader is null.");
         }
 
+        LineNumberReader lineNumberReader = new LineNumberReader(reader);
+
+        if (keys.getLength() == 0) {
+            // Read keys from first line
+            String line = lineNumberReader.readLine();
+            if (line == null) {
+                throw new SerializationException("Could not read keys from input.");
+            }
+
+            String[] keys = line.split(",");
+            this.keys = new ArrayList<String>(keys.length);
+
+            for (int i = 0; i < keys.length; i++) {
+                String key = keys[i];
+                this.keys.add(key.trim());
+            }
+        }
+
         ArrayList<Object> items = new ArrayList<Object>();
 
         // Move to the first character
-        c = reader.read();
-
-        LineNumberReader lineNumberReader = new LineNumberReader(reader);
+        c = lineNumberReader.read();
 
         try {
             while (c != -1) {
@@ -338,6 +328,19 @@ public class CSVSerializer implements Serializer<List<?>> {
                         + key + " from input stream.");
                 }
 
+                if (c == '\r' || c == '\n') {
+                    if (i < n - 1) {
+                        throw new SerializationException("Line data is incomplete.");
+                    }
+
+                    // Move to next char; if LF, move again
+                    c = reader.read();
+
+                    if (c == '\n') {
+                        c = reader.read();
+                    }
+                }
+
                 itemDictionary.put(key, value);
             }
         }
@@ -393,8 +396,11 @@ public class CSVSerializer implements Serializer<List<?>> {
 
             value = valueBuilder.toString();
 
-            // Move to the next character after ','
-            c = reader.read();
+            // Move to the next character after ',' (don't automatically advance to
+            // the next line)
+            if (c == ',') {
+                c = reader.read();
+            }
         }
 
         // Trim the value
@@ -454,6 +460,19 @@ public class CSVSerializer implements Serializer<List<?>> {
 
         if (writer == null) {
             throw new IllegalArgumentException("writer is null.");
+        }
+
+        if (writeKeys) {
+            // Write keys as first line
+            for (int i = 0, n = keys.getLength(); i < n; i++) {
+                String key = keys.get(i);
+
+                if (i > 0) {
+                    writer.append(",");
+                }
+
+                writer.append(key);
+            }
         }
 
         for (Object item : items) {

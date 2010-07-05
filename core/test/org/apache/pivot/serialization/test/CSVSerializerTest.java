@@ -123,7 +123,7 @@ public class CSVSerializerTest {
     @SuppressWarnings("unchecked")
     public void testQuotedNewlineReadObject() throws IOException, SerializationException {
         StringBuilder buf = new StringBuilder();
-        buf.append("a,\"\nb\n\",c\r\n");
+        buf.append("a,\"b\nb  \",c\r\n");
 
         StringReader reader = new StringReader(buf.toString());
 
@@ -136,7 +136,7 @@ public class CSVSerializerTest {
 
         Dictionary<String, Object> row = (Dictionary<String, Object>)result.get(0);
         assertEquals("a", row.get("A"));
-        assertEquals("\nb\n", row.get("B"));
+        assertEquals("b\nb", row.get("B"));
         assertEquals("c", row.get("C"));
     }
 
