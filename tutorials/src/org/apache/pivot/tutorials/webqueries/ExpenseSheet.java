@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.webqueries;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
@@ -46,7 +46,7 @@ public class ExpenseSheet extends Sheet implements Bindable {
     private Resources resources = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resource) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resource) {
         this.resources = resource;
 
         dateSpinner = (Spinner)namespace.get("dateSpinner");

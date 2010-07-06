@@ -21,7 +21,7 @@ import java.net.URL;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
@@ -44,7 +44,7 @@ public class DataBinding extends Window implements Bindable {
         new IMAccount("juser1234", "AIM"));
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         form = (Form)namespace.get("form");
         loadJavaButton = (PushButton)namespace.get("loadJavaButton");
         loadJSONButton = (PushButton)namespace.get("loadJSONButton");

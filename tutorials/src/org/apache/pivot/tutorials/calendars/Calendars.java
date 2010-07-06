@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.calendars;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Calendar;
@@ -37,7 +37,7 @@ public class Calendars extends Window implements Bindable {
     private boolean updatingSelectedDate = false;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         calendar = (Calendar)namespace.get("calendar");
         calendarButton = (CalendarButton)namespace.get("calendarButton");
         selectedDateLabel = (Label)namespace.get("selectedDateLabel");

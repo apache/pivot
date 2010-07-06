@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.layout;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -40,7 +40,7 @@ public class Forms extends Window implements Bindable {
     private Label errorLabel = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         nameBoxPane = (BoxPane)namespace.get("nameBoxPane");
         lastNameTextInput = (TextInput)namespace.get("lastNameTextInput");
         firstNameTextInput = (TextInput)namespace.get("firstNameTextInput");

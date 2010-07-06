@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.navigation;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -46,7 +46,7 @@ public class CardPanes extends Window implements Bindable {
     private RadioButton noneRadioButton = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         cardPane = (CardPane)namespace.get("cardPane");
         previousButton = (LinkButton)namespace.get("previousButton");
         nextButton = (LinkButton)namespace.get("nextButton");

@@ -22,7 +22,7 @@ import java.net.URL;
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
@@ -144,6 +144,6 @@ public class MenuBars extends Frame implements Bindable {
     }
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
     }
 }

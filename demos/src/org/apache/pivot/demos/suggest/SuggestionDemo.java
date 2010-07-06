@@ -25,8 +25,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.Task;
@@ -49,7 +49,7 @@ public class SuggestionDemo extends Window implements Bindable {
     private GetQuery suggestionQuery = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         textInput = (TextInput)namespace.get("textInput");
         activityIndicator = (ActivityIndicator)namespace.get("activityIndicator");
 

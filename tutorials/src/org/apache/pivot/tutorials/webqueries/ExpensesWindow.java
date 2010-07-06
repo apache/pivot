@@ -22,9 +22,9 @@ import java.net.URL;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.serialization.SerializationException;
@@ -116,7 +116,7 @@ public class ExpensesWindow extends Window implements Bindable {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         expenseTableView = (TableView)namespace.get("expenseTableView");
         activityIndicator = (ActivityIndicator)namespace.get("activityIndicator");
         activityIndicatorBoxPane = (BoxPane)namespace.get("activityIndicatorBoxPane");

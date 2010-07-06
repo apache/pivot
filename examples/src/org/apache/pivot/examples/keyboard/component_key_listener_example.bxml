@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<keyboard:ComponentKeyListenerExample title="Keyboard Example" maximized="true" 
+<keyboard:ComponentKeyListenerExample title="Keyboard Example" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:keyboard="org.apache.pivot.examples.keyboard"
     xmlns="org.apache.pivot.wtk">
@@ -24,10 +24,10 @@ limitations under the License.
         <TextInput bxml:id="textInput">
             <componentKeyListeners>
                 <bxml:script>
-                <![CDATA[            
+                <![CDATA[
                 importPackage(java.lang);
                 importPackage(org.apache.pivot.wtk);
-                
+
                 function keyPressed(component, keyCode, keyLocation) {
                     if (keyCode == Keyboard.KeyCode.S
                         && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {

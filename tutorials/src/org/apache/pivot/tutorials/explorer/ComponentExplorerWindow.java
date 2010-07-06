@@ -23,8 +23,8 @@ import java.net.URL;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.serialization.SerializationException;
@@ -79,7 +79,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
     public static final String CLASS_PROPERTY = "class";
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         splitPane = (SplitPane)namespace.get("splitPane");
         treeView = (TreeView)namespace.get("treeView");
         contentScrollPane = (ScrollPane)namespace.get("contentScrollPane");

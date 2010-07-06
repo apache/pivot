@@ -20,7 +20,7 @@ import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.TextInput;
@@ -91,7 +91,7 @@ public class TextInputs extends Window implements Bindable {
     }
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         stateTextInput = (TextInput)namespace.get("stateTextInput");
         stateTextInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
             @Override

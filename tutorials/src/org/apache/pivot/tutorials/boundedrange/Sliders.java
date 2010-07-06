@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.boundedrange;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Slider;
@@ -31,7 +31,7 @@ public class Sliders extends Window implements Bindable {
     private Label label = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         slider = (Slider)namespace.get("slider");
         label = (Label)namespace.get("label");
 

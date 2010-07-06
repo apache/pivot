@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.progress;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
@@ -69,7 +69,7 @@ public class Meters extends Window implements Bindable {
     private SampleTask sampleTask = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         meter = (Meter)namespace.get("meter");
         progressButton = (PushButton)namespace.get("progressButton");
 

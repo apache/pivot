@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.lists;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.ApplicationContext;
@@ -34,7 +34,7 @@ public class ListButtons extends Window implements Bindable {
     private ImageView imageView = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         listButton = (ListButton)namespace.get("listButton");
         imageView = (ImageView)namespace.get("imageView");
 

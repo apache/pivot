@@ -22,7 +22,7 @@ import java.net.URL;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
@@ -288,7 +288,7 @@ public class TablePanes extends Window implements Bindable {
     }
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         tablePane = (TablePane)namespace.get("tablePane");
         cellSection = (Menu.Section)namespace.get("cellSection");
         rowSection = (Menu.Section)namespace.get("rowSection");

@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.progress;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.ActivityIndicator;
 import org.apache.pivot.wtk.Button;
@@ -34,7 +34,7 @@ public class ActivityIndicators extends Window implements Bindable {
     private PushButton activityButton = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         activityIndicator1 = (ActivityIndicator)namespace.get("activityIndicator1");
         activityIndicator2 = (ActivityIndicator)namespace.get("activityIndicator2");
         activityIndicator3 = (ActivityIndicator)namespace.get("activityIndicator3");

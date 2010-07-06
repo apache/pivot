@@ -22,9 +22,9 @@ import java.net.URL;
 
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.util.Resources;
@@ -50,7 +50,7 @@ public class FileDropTargetDemo extends Window implements Bindable {
     private FileList fileList = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         fileList = new FileList();
         fileTableView.setTableData(fileList);
 

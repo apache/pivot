@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.effects;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -41,7 +41,7 @@ public class Transitions extends Window implements Bindable {
     public static int TRANSITION_RATE = 30;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         button1 = (PushButton)namespace.get("button1");
         button2 = (PushButton)namespace.get("button2");
         button3 = (PushButton)namespace.get("button3");

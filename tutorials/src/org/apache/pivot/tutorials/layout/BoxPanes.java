@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.layout;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
@@ -44,7 +44,7 @@ public class BoxPanes extends Window implements Bindable {
     private Checkbox fillCheckbox = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         boxPane = (BoxPane)namespace.get("boxPane");
         horizontalOrientationButton = (RadioButton)namespace.get("horizontalOrientationButton");
         verticalOrientationButton = (RadioButton)namespace.get("verticalOrientationButton");

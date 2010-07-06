@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.navigation;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
@@ -38,7 +38,7 @@ public class TabPanes extends Window implements Bindable {
     private BoxPane cornerBoxPane = null;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         tabPane = (TabPane)namespace.get("tabPane");
         collapsibleCheckbox = (Checkbox)namespace.get("collapsibleCheckbox");
         horizontalRadioButton = (RadioButton)namespace.get("horizontalRadioButton");

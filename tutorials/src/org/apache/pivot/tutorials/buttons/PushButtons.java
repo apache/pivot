@@ -19,7 +19,7 @@ package org.apache.pivot.tutorials.buttons;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Button;
@@ -32,7 +32,7 @@ public class PushButtons extends Window implements Bindable {
     private PushButton pushButton;
 
     @Override
-    public void initialize(Dictionary<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         pushButton = (PushButton)namespace.get("pushButton");
 
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {
