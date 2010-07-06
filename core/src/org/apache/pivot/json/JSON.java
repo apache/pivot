@@ -31,14 +31,15 @@ public class JSON {
      * Returns the value at the given path.
      *
      * @param root
-     * The root object; must be an instance of {@link org.apache.pivot.collections.Map}
-     * or {@link org.apache.pivot.collections.List}.
+     * The root object.
      *
      * @param path
-     * The path to the value, in JavaScript path notation.
+     * The path to the value as a JavaScript path.
      *
      * @return
      * The value at the given path.
+     *
+     * @see #get(Object, Sequence)
      */
     public static Object get(Object root, String path) {
         if (root == null) {
@@ -49,11 +50,24 @@ public class JSON {
             throw new IllegalArgumentException("path is null.");
         }
 
-        return get(root, split(path));
+        return get(root, parse(path));
     }
 
+    /**
+     * Returns the value at the given path.
+     *
+     * @param root
+     * The root object; must be an instance of {@link org.apache.pivot.collections.Map}
+     * or {@link org.apache.pivot.collections.List} or a Java bean object.
+     *
+     * @param keys
+     * The path to the value, as a set of keys.
+     *
+     * @return
+     * The value at the given path.
+     */
     @SuppressWarnings("unchecked")
-    private static Object get(Object root, Sequence<String> keys) {
+    public static Object get(Object root, Sequence<String> keys) {
         Object value = root;
 
         for (int i = 0, n = keys.getLength(); i < n; i++) {
@@ -231,7 +245,7 @@ public class JSON {
 
         Object previousValue;
 
-        Sequence<String> keys = split(path);
+        Sequence<String> keys = parse(path);
         if (keys.getLength() == 0) {
             throw new IllegalArgumentException("Bad path.");
         }
@@ -277,7 +291,7 @@ public class JSON {
 
         Object previousValue;
 
-        Sequence<String> keys = split(path);
+        Sequence<String> keys = parse(path);
         if (keys.getLength() == 0) {
             throw new IllegalArgumentException("Bad path.");
         }
@@ -323,7 +337,7 @@ public class JSON {
 
         boolean containsKey;
 
-        Sequence<String> keys = split(path);
+        Sequence<String> keys = parse(path);
         if (keys.getLength() == 0) {
             throw new IllegalArgumentException("Bad path.");
         }
@@ -348,7 +362,12 @@ public class JSON {
         return containsKey;
     }
 
-    private static Sequence<String> split(String path) {
+    /**
+     * Parses a JSON path into a sequence of string keys.
+     *
+     * @param path
+     */
+    public static Sequence<String> parse(String path) {
         ArrayList<String> keys = new ArrayList<String>();
 
         int i = 0;

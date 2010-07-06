@@ -170,6 +170,10 @@ public class BeanAdapter implements Map<String, Object> {
      * The bean object to wrap.
      */
     public BeanAdapter(Object bean, boolean ignoreReadOnlyProperties) {
+        if (bean == null) {
+            throw new IllegalArgumentException();
+        }
+
         this.bean = bean;
         this.ignoreReadOnlyProperties = ignoreReadOnlyProperties;
     }
@@ -196,12 +200,12 @@ public class BeanAdapter implements Map<String, Object> {
      */
     @Override
     public Object get(String key) {
-        if (bean == null) {
-            throw new IllegalStateException("bean is null.");
-        }
-
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
+        }
+
+        if (key.length() == 0) {
+            throw new IllegalArgumentException("key is empty.");
         }
 
         Object value = null;
@@ -256,12 +260,12 @@ public class BeanAdapter implements Map<String, Object> {
      */
     @Override
     public Object put(String key, Object value) {
-        if (bean == null) {
-            throw new IllegalStateException("bean is null.");
-        }
-
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
+        }
+
+        if (key.length() == 0) {
+            throw new IllegalArgumentException("key is empty.");
         }
 
         if (key.startsWith(FIELD_PREFIX)) {
@@ -295,8 +299,11 @@ public class BeanAdapter implements Map<String, Object> {
             if (setterMethod == null) {
                 // Get the property type and attempt to coerce the value to it
                 Class<?> propertyType = getType(key);
-                setterMethod = getSetterMethod(key, propertyType);
-                value = coerce(value, propertyType);
+
+                if (propertyType != null) {
+                    setterMethod = getSetterMethod(key, propertyType);
+                    value = coerce(value, propertyType);
+                }
             }
 
             if (setterMethod == null) {
@@ -351,12 +358,12 @@ public class BeanAdapter implements Map<String, Object> {
      */
     @Override
     public boolean containsKey(String key) {
-        if (bean == null) {
-            throw new IllegalStateException("bean is null.");
-        }
-
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
+        }
+
+        if (key.length() == 0) {
+            throw new IllegalArgumentException("key is empty.");
         }
 
         boolean containsKey;
@@ -412,10 +419,6 @@ public class BeanAdapter implements Map<String, Object> {
      * <tt>true</tt> if the property is read-only; <tt>false</tt>, otherwise.
      */
     public boolean isReadOnly(String key) {
-        if (bean == null) {
-            throw new IllegalStateException("bean is null.");
-        }
-
         return isReadOnly(bean.getClass(), key);
     }
 
@@ -429,10 +432,6 @@ public class BeanAdapter implements Map<String, Object> {
      * #getType(Class, String)
      */
     public Class<?> getType(String key) {
-        if (bean == null) {
-            throw new IllegalStateException("bean is null.");
-        }
-
         return getType(bean.getClass(), key);
     }
 
@@ -446,10 +445,6 @@ public class BeanAdapter implements Map<String, Object> {
      * #getGenericType(Class, String)
      */
     public Type getGenericType(String key) {
-        if (bean == null) {
-            throw new IllegalStateException("bean is null.");
-        }
-
         return getGenericType(bean.getClass(), key);
     }
 
@@ -461,10 +456,6 @@ public class BeanAdapter implements Map<String, Object> {
      */
     @Override
     public Iterator<String> iterator() {
-        if (bean == null) {
-            throw new IllegalStateException("bean is null.");
-        }
-
         return new PropertyIterator();
     }
 
@@ -511,6 +502,10 @@ public class BeanAdapter implements Map<String, Object> {
      * non-public or static
      */
     private Field getField(String fieldName) {
+        if (fieldName == null) {
+            throw new IllegalArgumentException("fieldName is null.");
+        }
+
         return getField(bean.getClass(), fieldName);
     }
 
@@ -519,7 +514,7 @@ public class BeanAdapter implements Map<String, Object> {
      * exists, this method will return <tt>true</tt> (it will <u>not</u> throw
      * an exception).
      *
-     * @param type
+     * @param beanClass
      * The bean class.
      *
      * @param key
@@ -528,22 +523,30 @@ public class BeanAdapter implements Map<String, Object> {
      * @return
      * <tt>true</tt> if the property is read-only; <tt>false</tt>, otherwise.
      */
-    public static boolean isReadOnly(Class<?> type, String key) {
+    public static boolean isReadOnly(Class<?> beanClass, String key) {
+        if (beanClass == null) {
+            throw new IllegalArgumentException("beanClass is null.");
+        }
+
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
+        }
+
+        if (key.length() == 0) {
+            throw new IllegalArgumentException("key is empty.");
         }
 
         boolean isReadOnly = true;
 
         if (key.startsWith(FIELD_PREFIX)) {
-            Field field = getField(type, key.substring(1));
+            Field field = getField(beanClass, key.substring(1));
             if (field != null) {
                 isReadOnly = ((field.getModifiers() & Modifier.FINAL) != 0);
             }
         } else {
-            Method getterMethod = getGetterMethod(type, key);
+            Method getterMethod = getGetterMethod(beanClass, key);
             if (getterMethod != null) {
-                Method setterMethod = getSetterMethod(type, key, getType(type, key));
+                Method setterMethod = getSetterMethod(beanClass, key, getType(beanClass, key));
                 isReadOnly = (setterMethod == null);
             }
         }
@@ -565,8 +568,16 @@ public class BeanAdapter implements Map<String, Object> {
      * exists.
      */
     public static Class<?> getType(Class<?> beanClass, String key) {
+        if (beanClass == null) {
+            throw new IllegalArgumentException("beanClass is null.");
+        }
+
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
+        }
+
+        if (key.length() == 0) {
+            throw new IllegalArgumentException("key is empty.");
         }
 
         Class<?> type = null;
@@ -604,8 +615,16 @@ public class BeanAdapter implements Map<String, Object> {
      * an instance of {@link java.lang.Class} will be returned.
      */
     public static Type getGenericType(Class<?> beanClass, String key) {
+        if (beanClass == null) {
+            throw new IllegalArgumentException("beanClass is null.");
+        }
+
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
+        }
+
+        if (key.length() == 0) {
+            throw new IllegalArgumentException("key is empty.");
         }
 
         Type genericType = null;
@@ -631,21 +650,33 @@ public class BeanAdapter implements Map<String, Object> {
      * Returns the public, non-static fields for a property. Note that fields
      * will only be consulted for bean properties after bean methods.
      *
-     * @param type
-     * The bean class
+     * @param beanClass
+     * The bean class.
      *
-     * @param fieldName
-     * The property name
+     * @param key
+     * The property name.
      *
      * @return
      * The field, or <tt>null</tt> if the field does not exist, or is
      * non-public or static.
      */
-    public static Field getField(Class<?> type, String fieldName) {
+    public static Field getField(Class<?> beanClass, String key) {
+        if (beanClass == null) {
+            throw new IllegalArgumentException("beanClass is null.");
+        }
+
+        if (key == null) {
+            throw new IllegalArgumentException("key is null.");
+        }
+
+        if (key.length() == 0) {
+            throw new IllegalArgumentException("key is empty.");
+        }
+
         Field field = null;
 
         try {
-            field = type.getField(fieldName);
+            field = beanClass.getField(key);
 
             int modifiers = field.getModifiers();
 
@@ -674,6 +705,18 @@ public class BeanAdapter implements Map<String, Object> {
      * The getter method, or <tt>null</tt> if the method does not exist.
      */
     public static Method getGetterMethod(Class<?> beanClass, String key) {
+        if (beanClass == null) {
+            throw new IllegalArgumentException("beanClass is null.");
+        }
+
+        if (key == null) {
+            throw new IllegalArgumentException("key is null.");
+        }
+
+        if (key.length() == 0) {
+            throw new IllegalArgumentException("key is empty.");
+        }
+
         // Upper-case the first letter
         key = Character.toUpperCase(key.charAt(0)) + key.substring(1);
         Method getterMethod = null;
@@ -708,6 +751,18 @@ public class BeanAdapter implements Map<String, Object> {
      * The getter method, or <tt>null</tt> if the method does not exist.
      */
     public static Method getSetterMethod(Class<?> beanClass, String key, Class<?> valueType) {
+        if (beanClass == null) {
+            throw new IllegalArgumentException("beanClass is null.");
+        }
+
+        if (key == null) {
+            throw new IllegalArgumentException("key is null.");
+        }
+
+        if (key.length() == 0) {
+            throw new IllegalArgumentException("key is empty.");
+        }
+
         Method setterMethod = null;
 
         if (valueType != null) {
