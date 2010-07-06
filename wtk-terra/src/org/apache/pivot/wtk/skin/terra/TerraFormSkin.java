@@ -216,7 +216,6 @@ public class TerraFormSkin extends ContainerSkin
     private int verticalSpacing;
     private int flagIconOffset;
     private boolean fill;
-    private boolean showFirstSectionHeading;
     private boolean showFlagIcons;
     private boolean showFlagHighlight;
     private boolean showFlagMessagesInline;
@@ -325,7 +324,6 @@ public class TerraFormSkin extends ContainerSkin
         verticalSpacing = 6;
         flagIconOffset = 4;
         fill = false;
-        showFirstSectionHeading = false;
         showFlagIcons = true;
         showFlagHighlight = true;
         showFlagMessagesInline = false;
@@ -422,8 +420,8 @@ public class TerraFormSkin extends ContainerSkin
             sectionIndex < sectionCount; sectionIndex++) {
             Form.Section section = sections.get(sectionIndex);
 
-            if (showFirstSectionHeading
-                || sectionIndex > 0) {
+            if (sectionIndex > 0
+                || section.getHeading() != null) {
                 Separator separator = separators.get(sectionIndex);
                 maximumSeparatorWidth = Math.max(maximumSeparatorWidth,
                     separator.getPreferredWidth());
@@ -485,8 +483,8 @@ public class TerraFormSkin extends ContainerSkin
             sectionIndex < sectionCount; sectionIndex++) {
             Form.Section section = sections.get(sectionIndex);
 
-            if (showFirstSectionHeading
-                || sectionIndex > 0) {
+            if (sectionIndex > 0
+                || section.getHeading() != null) {
                 Separator separator = separators.get(sectionIndex);
                 preferredHeight += separator.getPreferredHeight(width);
                 preferredHeight += verticalSpacing;
@@ -561,8 +559,8 @@ public class TerraFormSkin extends ContainerSkin
             && baseline == -1) {
             Form.Section section = sections.get(sectionIndex);
 
-            if (showFirstSectionHeading
-                || sectionIndex > 0) {
+            if (sectionIndex > 0
+                || section.getHeading() != null) {
                 Separator separator = separators.get(sectionIndex);
                 rowY += separator.getPreferredHeight(width);
                 rowY += verticalSpacing;
@@ -725,15 +723,15 @@ public class TerraFormSkin extends ContainerSkin
             Form.Section section = sections.get(sectionIndex);
 
             Separator separator = separators.get(sectionIndex);
-            if (sectionIndex == 0
-                && !showFirstSectionHeading) {
-                separator.setVisible(false);
-            } else {
+            if (sectionIndex > 0
+                || section.getHeading() != null) {
                 int separatorWidth = width - (padding.left + padding.right);
                 separator.setVisible(true);
                 separator.setSize(separatorWidth, separator.getPreferredHeight(separatorWidth));
                 separator.setLocation(padding.left, rowY);
                 rowY += separator.getHeight();
+            } else {
+                separator.setVisible(false);
             }
 
             for (int fieldIndex = 0, fieldCount = section.getLength();
@@ -1015,15 +1013,6 @@ public class TerraFormSkin extends ContainerSkin
 
     public void setFill(boolean fill) {
         this.fill = fill;
-        invalidateComponent();
-    }
-
-    public boolean getShowFirstSectionHeading() {
-        return showFirstSectionHeading;
-    }
-
-    public void setShowFirstSectionHeading(boolean showFirstSectionHeading) {
-        this.showFirstSectionHeading = showFirstSectionHeading;
         invalidateComponent();
     }
 

@@ -65,8 +65,6 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
                 updateControl(beanAdapter, propertyName, type);
             }
         });
-
-        form.getStyles().put("showFirstSectionHeading", true);
     }
 
     @Override
