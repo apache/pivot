@@ -20,6 +20,8 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 
 import org.apache.pivot.beans.BeanAdapter;
+import org.apache.pivot.beans.BeanMonitor;
+import org.apache.pivot.beans.PropertyChangeListener;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -51,21 +53,19 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
         }
     }
 
-    private BeanMonitor beanMonitor = new BeanMonitor();
+    private BeanMonitor beanMonitor = null;
+
+    private PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
+        @Override
+        public void propertyChanged(Object bean, String propertyName) {
+            BeanAdapter beanAdapter = new BeanAdapter(bean);
+            Class<?> type = beanAdapter.getType(propertyName);
+            updateControl(beanAdapter, propertyName, type);
+        }
+    };
 
     private static NameComparator nameComparator = new NameComparator();
     private static ClassComparator classComparator = new ClassComparator();
-
-    public ComponentPropertyInspectorSkin() {
-        beanMonitor.getPropertyChangeListeners().add(new PropertyChangeListener() {
-            @Override
-            public void propertyChanged(Object bean, String propertyName) {
-                BeanAdapter beanAdapter = new BeanAdapter(bean);
-                Class<?> type = beanAdapter.getType(propertyName);
-                updateControl(beanAdapter, propertyName, type);
-            }
-        });
-    }
 
     @Override
     public void sourceChanged(ComponentInspector componentInspector, Component previousSource) {
@@ -75,9 +75,16 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
         Form.SectionSequence sections = form.getSections();
         sections.remove(0, sections.getLength());
 
-        beanMonitor.setBean(source);
+        if (previousSource != null) {
+            beanMonitor.getPropertyChangeListeners().remove(propertyChangeListener);
+        }
 
-        if (source != null) {
+        if (source == null) {
+            beanMonitor = null;
+        } else {
+            beanMonitor = new BeanMonitor(source);
+            beanMonitor.getPropertyChangeListeners().add(propertyChangeListener);
+
             Class<?> sourceType = source.getClass();
             HashMap<Class<?>, List<String>> declaringClassPartitions =
                 new HashMap<Class<?>, List<String>>(classComparator);

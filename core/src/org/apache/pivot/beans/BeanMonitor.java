@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tutorials.explorer.tools;
+package org.apache.pivot.beans;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +24,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 
-import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.HashSet;
 import org.apache.pivot.util.ListenerList;
@@ -59,8 +58,26 @@ public class BeanMonitor {
         }
     }
 
-    private static class PropertyChangeListenerList extends ListenerList<PropertyChangeListener>
+    private class PropertyChangeListenerList extends ListenerList<PropertyChangeListener>
         implements PropertyChangeListener {
+        @Override
+        public void add(PropertyChangeListener listener) {
+            if (isEmpty()) {
+                registerBeanListeners();
+            }
+
+            super.add(listener);
+        }
+
+        @Override
+        public void remove(PropertyChangeListener listener) {
+            super.remove(listener);
+
+            if (isEmpty()) {
+                unregisterBeanListeners();
+            }
+        }
+
         public void propertyChanged(Object bean, String propertyName) {
             for (PropertyChangeListener listener : this) {
                 listener.propertyChanged(bean, propertyName);
@@ -79,71 +96,13 @@ public class BeanMonitor {
     public static final String LISTENERS_SUFFIX = "Listeners";
     public static final String PROPERTY_CHANGE_SUFFIX = "Changed";
 
-    public BeanMonitor() {
-        this(null);
-    }
-
     public BeanMonitor(Object bean) {
-        setBean(bean);
-    }
-
-    /**
-     * Returns the bean object that this monitor wraps.
-     */
-    public Object getBean() {
-        return bean;
-    }
-
-    /**
-     * Sets the bean object that this monitor will wrap.
-     * <p>
-     * <b>NOTE</b>: failing to clear the bean of a bean monitor may result in
-     * memory leaks, as the bean object may maintain references to the bean
-     * monitor as long as it is set.
-     *
-     * @param bean
-     * The bean object, or <tt>null</tt> to clear the bean.
-     */
-    public void setBean(Object bean) {
-        Object previousBean = this.bean;
-
-        if (bean != previousBean) {
-            if (previousBean != null) {
-                unregisterBeanListeners();
-            }
-
-            this.bean = bean;
-
-            if (bean != null) {
-                registerBeanListeners();
-            }
-        }
-    }
-
-    /**
-     * Tells whether or not the specified property fires change events.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * <tt>true</tt> if the property fires change events; <tt>false</tt>
-     * otherwise.
-     */
-    public boolean isNotifying(String key) {
         if (bean == null) {
-            throw new IllegalStateException("bean is null.");
+            throw new IllegalArgumentException();
         }
 
-        return notifyingProperties.contains(key);
-    }
+        this.bean = bean;
 
-    /**
-     * Registers event listeners on the bean so that the dictionary can fire
-     * property change events and report which properties can fire change
-     * events.
-     */
-    private void registerBeanListeners() {
         BeanAdapter beanAdapter = new BeanAdapter(bean);
         Method[] methods = bean.getClass().getMethods();
 
@@ -177,6 +136,50 @@ public class BeanMonitor {
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns the bean object that this monitor wraps.
+     */
+    public Object getBean() {
+        return bean;
+    }
+
+    /**
+     * Tests whether a property fires change events.
+     *
+     * @param key
+     * The property name.
+     *
+     * @return
+     * <tt>true</tt> if the property fires change events; <tt>false</tt>
+     * otherwise.
+     */
+    public boolean isNotifying(String key) {
+        return notifyingProperties.contains(key);
+    }
+
+    /**
+     * Registers event listeners on the bean so that the dictionary can fire
+     * property change events and report which properties can fire change
+     * events.
+     */
+    private void registerBeanListeners() {
+        Method[] methods = bean.getClass().getMethods();
+
+        for (int i = 0; i < methods.length; i++) {
+            Method method = methods[i];
+
+            if (ListenerList.class.isAssignableFrom(method.getReturnType())
+                && (method.getModifiers() & Modifier.STATIC) == 0) {
+                ParameterizedType genericType = (ParameterizedType)method.getGenericReturnType();
+                Type[] typeArguments = genericType.getActualTypeArguments();
+
+                if (typeArguments.length == 1) {
+                    Class<?> listenerInterface = (Class<?>)typeArguments[0];
 
                     // Get the listener list
                     Object listenerList;
@@ -271,8 +274,6 @@ public class BeanMonitor {
                 }
             }
         }
-
-        notifyingProperties.clear();
     }
 
     public ListenerList<PropertyChangeListener> getPropertyChangeListeners() {

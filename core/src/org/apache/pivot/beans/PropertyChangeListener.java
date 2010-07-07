@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tutorials.explorer.tools;
+package org.apache.pivot.beans;
 
 /**
  * Java bean property change listener.
