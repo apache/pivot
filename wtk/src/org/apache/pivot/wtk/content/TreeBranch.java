@@ -144,19 +144,22 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     @Override
     public void setComparator(Comparator<TreeNode> comparator) {
         Comparator<TreeNode> previousComparator = treeNodes.getComparator();
-        treeNodes.setComparator(comparator);
 
-        // Recursively apply comparator change
-        for (int i = 0, n = treeNodes.getLength(); i < n; i++) {
-            TreeNode treeNode = treeNodes.get(i);
+        if (previousComparator != comparator) {
+            treeNodes.setComparator(comparator);
 
-            if (treeNode instanceof TreeBranch) {
-                TreeBranch treeBranch = (TreeBranch)treeNode;
-                treeBranch.setComparator(comparator);
+            // Recursively apply comparator change
+            for (int i = 0, n = treeNodes.getLength(); i < n; i++) {
+                TreeNode treeNode = treeNodes.get(i);
+
+                if (treeNode instanceof TreeBranch) {
+                    TreeBranch treeBranch = (TreeBranch)treeNode;
+                    treeBranch.setComparator(comparator);
+                }
             }
-        }
 
-        listListeners.comparatorChanged(this, previousComparator);
+            listListeners.comparatorChanged(this, previousComparator);
+        }
     }
 
     @Override
