@@ -304,6 +304,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
     public static final char OBJECT_REFERENCE_PREFIX = '$';
+    public static final char NAMESPACE_BINDING_PREFIX = '{';
+    public static final char NAMESPACE_BINDING_SUFFIX = '}';
 
     public static final String LANGUAGE_PROCESSING_INSTRUCTION = "language";
 
@@ -544,6 +546,10 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     if (attributeValue.length() == 0) {
                         throw new IllegalArgumentException(internalNamespacePrefix + ":" + ID_ATTRIBUTE
                             + " must not be empty.");
+                    }
+
+                    if (attributeValue.contains(".")) {
+                        throw new IllegalArgumentException("\"" + attributeValue + "\" is not a valid ID value.");
                     }
 
                     id = attributeValue;
@@ -803,7 +809,20 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 for (Attribute attribute : instancePropertyAttributes) {
-                    dictionary.put(attribute.localName, resolve(attribute.value));
+                    String sourcePath = getSourcePath(attribute.value);
+
+                    if (sourcePath == null) {
+                        dictionary.put(attribute.localName, resolve(attribute.value));
+                    } else {
+                        // Bind to <element id>.<attribute name>
+                        if (element.id == null) {
+                            throw new SerializationException("Bind target does not have an ID.");
+                        }
+
+                        String targetPath = element.id + "." + attribute.localName;
+                        NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath);
+                        namespaceBinding.bind();
+                    }
                 }
 
                 // Apply static attributes
@@ -943,7 +962,20 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             + " for read-only properties.");
                     }
 
-                    dictionary.put(attribute.localName, resolve(attribute.value));
+                    String sourcePath = getSourcePath(attribute.value);
+
+                    if (sourcePath == null) {
+                        dictionary.put(attribute.localName, resolve(attribute.value));
+                    } else {
+                        // Bind to <parent ID>.<element name>.<attribute name>
+                        if (element.parent.id == null) {
+                            throw new SerializationException("Bind target does not have an ID.");
+                        }
+
+                        String targetPath = element.parent.id + "." + element.localName + "." + attribute.localName;
+                        NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath);
+                        namespaceBinding.bind();
+                    }
                 }
 
                 break;
@@ -1491,5 +1523,21 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         } catch (Exception exception) {
             throw new SerializationException(exception);
         }
+    }
+
+    private static String getSourcePath(String attributeValue) {
+        int n = attributeValue.length();
+
+        String sourcePath;
+        if (n >= 3
+            && attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX
+            && attributeValue.charAt(1) == NAMESPACE_BINDING_PREFIX
+            && attributeValue.charAt(attributeValue.length() - 1) == NAMESPACE_BINDING_SUFFIX) {
+            sourcePath = attributeValue.substring(2, n - 1);
+        } else {
+            sourcePath = null;
+        }
+
+        return sourcePath;
     }
 }
