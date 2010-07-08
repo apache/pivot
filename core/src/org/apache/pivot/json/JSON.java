@@ -57,6 +57,24 @@ public class JSON {
      * Returns the value at the given path.
      *
      * @param root
+     * The root object.
+     *
+     * @param keys
+     * The path to the value.
+     *
+     * @return
+     * The value at the given path.
+     *
+     * @see #get(Object, Sequence, int)
+     */
+    public static Object get(Object root, Sequence<String> keys) {
+        return get(root, keys, keys.getLength());
+    }
+
+    /**
+     * Returns the value at a given depth along a path.
+     *
+     * @param root
      * The root object; must be an instance of {@link org.apache.pivot.collections.Map}
      * or {@link org.apache.pivot.collections.List} or a Java bean object.
      *
@@ -64,13 +82,13 @@ public class JSON {
      * The path to the value, as a set of keys.
      *
      * @return
-     * The value at the given path.
+     * The value at the given depth along the given path.
      */
     @SuppressWarnings("unchecked")
-    public static Object get(Object root, Sequence<String> keys) {
+    public static Object get(Object root, Sequence<String> keys, int depth) {
         Object value = root;
 
-        for (int i = 0, n = keys.getLength(); i < n; i++) {
+        for (int i = 0; i < depth; i++) {
             String key = keys.get(i);
 
             if (value instanceof Sequence<?>) {
