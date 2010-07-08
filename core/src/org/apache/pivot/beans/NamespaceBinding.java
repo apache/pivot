@@ -98,6 +98,11 @@ public class NamespaceBinding {
                 + "\" does not exist.");
         }
 
+        if (sourceMonitor != null
+            && !sourceMonitor.isNotifying(sourceKey)) {
+            throw new IllegalArgumentException("\"" + sourceKey + "\" is not a notifying property.");
+        }
+
         // Set the target properties
         this.targetPath = targetPath;
 
