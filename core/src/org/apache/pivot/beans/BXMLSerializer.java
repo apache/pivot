@@ -72,6 +72,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             INSTANCE,
             READ_ONLY_PROPERTY,
             WRITABLE_PROPERTY,
+            LISTENER_LIST_PROPERTY,
             INCLUDE,
             SCRIPT,
             DEFINE
@@ -548,51 +549,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     break;
                 }
 
-                case READ_ONLY_PROPERTY: {
-                    if (element.value instanceof ListenerList<?>) {
-                        // Get a script engine for the current language; apply simple bindings
-                        // so the engine namespace isn't polluted with the listener functions
-                        ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
-                        scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
-
-                        try {
-                            scriptEngine.eval(text);
-                        } catch (ScriptException exception) {
-                            System.err.println(exception);
-                            break;
-                        }
-
-                        // Create the listener and add it to the list
-                        Class<?> listenerListClass = element.value.getClass();
-
-                        java.lang.reflect.Type[] genericInterfaces = listenerListClass.getGenericInterfaces();
-                        Class<?> listenerClass = (Class<?>)genericInterfaces[0];
-
-                        ElementInvocationHandler handler = new ElementInvocationHandler(scriptEngine);
-
-                        Method addMethod;
-                        try {
-                            addMethod = listenerListClass.getMethod("add", Object.class);
-                        } catch (NoSuchMethodException exception) {
-                            throw new RuntimeException(exception);
-                        }
-
-                        Object listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-                            new Class<?>[]{listenerClass}, handler);
-
-                        try {
-                            addMethod.invoke(element.value, listener);
-                        } catch (IllegalAccessException exception) {
-                            throw new SerializationException(exception);
-                        } catch (InvocationTargetException exception) {
-                            throw new SerializationException(exception);
-                        }
-                    }
-
-                    break;
-                }
-
                 case WRITABLE_PROPERTY:
+                case LISTENER_LIST_PROPERTY:
                 case SCRIPT: {
                     element.value = text;
                     break;
@@ -695,9 +653,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     BeanAdapter beanAdapter = new BeanAdapter(element.value);
 
                     if (beanAdapter.isReadOnly(localName)) {
-                        elementType = Element.Type.READ_ONLY_PROPERTY;
-                        value = beanAdapter.get(localName);
-                        assert (value != null) : "Read-only properties cannot be null.";
+                        if (ListenerList.class.isAssignableFrom(beanAdapter.getType(localName))) {
+                            elementType = Element.Type.LISTENER_LIST_PROPERTY;
+                        } else {
+                            elementType = Element.Type.READ_ONLY_PROPERTY;
+                            value = beanAdapter.get(localName);
+                            assert (value != null) : "Read-only properties cannot be null.";
+                        }
                     } else {
                         elementType = Element.Type.WRITABLE_PROPERTY;
                     }
@@ -1125,6 +1087,52 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                     setStaticProperty(element.parent.value, element.propertyClass,
                         element.name, element.value);
+                }
+
+                break;
+            }
+
+            case LISTENER_LIST_PROPERTY: {
+                // Evaluate the script
+                String script = (String)element.value;
+                ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
+
+                // Don't pollute the engine namespace with the listener functions
+                scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
+
+                try {
+                    scriptEngine.eval(script);
+                } catch (ScriptException exception) {
+                    System.err.println(exception);
+                    break;
+                }
+
+                // Create the listener and add it to the list
+                BeanAdapter beanAdapter = new BeanAdapter(element.parent.value);
+                ListenerList<?> listenerList = (ListenerList<?>)beanAdapter.get(element.name);
+                Class<?> listenerListClass = listenerList.getClass();
+
+                java.lang.reflect.Type[] genericInterfaces = listenerListClass.getGenericInterfaces();
+                Class<?> listenerClass = (Class<?>)genericInterfaces[0];
+
+                ElementInvocationHandler handler = new ElementInvocationHandler(scriptEngine);
+
+                Method addMethod;
+                try {
+                    addMethod = listenerListClass.getMethod("add", Object.class);
+                } catch (NoSuchMethodException exception) {
+                    throw new RuntimeException(exception);
+                }
+
+                Object listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                    new Class<?>[]{listenerClass}, handler);
+
+                try {
+                    addMethod.invoke(listenerList, listener);
+                } catch (IllegalAccessException exception) {
+                    throw new SerializationException(exception);
+                } catch (InvocationTargetException exception) {
+                    throw new SerializationException(exception);
                 }
 
                 break;
