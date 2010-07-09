@@ -46,10 +46,9 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
-import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
@@ -168,31 +167,28 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         public final Element parent;
         public final String namespaceURI;
         public final String localName;
-        public final List<Attribute> attributes;
         public final Type type;
-        public final String id;
         public Object value;
-        public final int lineNumber;
 
-        public Element(Element parent, String namespaceURI, String localName, List<Attribute> attributes,
-            Type type, String id, Object value, int lineNumber) {
+        public final LinkedList<Attribute> attributes = new LinkedList<Attribute>();
+
+        public Element(Element parent, String namespaceURI, String localName, Type type, Object value) {
             this.parent = parent;
             this.namespaceURI = namespaceURI;
             this.localName = localName;
-            this.attributes = attributes;
             this.type = type;
-            this.id = id;
             this.value = value;
-            this.lineNumber = lineNumber;
         }
     }
 
     private static class Attribute {
+        public final Element element;
         public final String namespaceURI;
         public final String localName;
-        public final String value;
+        public final Object value;
 
-        public Attribute(String namespaceURI, String localName, String value) {
+        public Attribute(Element element, String namespaceURI, String localName, Object value) {
+            this.element = element;
             this.namespaceURI = namespaceURI;
             this.localName = localName;
             this.value = value;
@@ -292,10 +288,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private URL location = null;
     private Resources resources = null;
 
-    private Element element = null;
-    private Object root = null;
-
     private String language = DEFAULT_LANGUAGE;
+
+    private XMLStreamReader xmlStreamReader = null;
+    private Element element = null;
+    private LinkedList<Attribute> objectReferenceAttributes = new LinkedList<Attribute>();
+
+    private Object root = null;
 
     private static HashMap<String, String> fileExtensions = new HashMap<String, String>();
     private static HashMap<String, Class<? extends Serializer<?>>> mimeTypes =
@@ -371,11 +370,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         language = DEFAULT_LANGUAGE;
 
         // Parse the XML stream
-        element = null;
-
         try {
             try {
-                XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(inputStream);
+                xmlStreamReader = xmlInputFactory.createXMLStreamReader(inputStream);
 
                 while (xmlStreamReader.hasNext()) {
                     int event = xmlStreamReader.next();
@@ -415,6 +412,10 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             logException();
             throw exception;
         }
+
+        xmlStreamReader = null;
+
+        objectReferenceAttributes.clear();
 
         if (root instanceof Bindable) {
             bind(root);
@@ -529,44 +530,15 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         // Get element properties
         String namespaceURI = xmlStreamReader.getNamespaceURI();
         String prefix = xmlStreamReader.getPrefix();
-        String localName = xmlStreamReader.getLocalName();
 
-        // Build attribute list; these will be processed in the close tag
-        String id = null;
-        ArrayList<Attribute> attributes = new ArrayList<Attribute>();
-
-        for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
-            String attributePrefix = xmlStreamReader.getAttributePrefix(i);
-            String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
-            String attributeValue = xmlStreamReader.getAttributeValue(i);
-
-            if (attributePrefix != null
-                && attributePrefix.equals(internalNamespacePrefix)) {
-                if (attributeLocalName.equals(ID_ATTRIBUTE)) {
-                    if (attributeValue.length() == 0) {
-                        throw new IllegalArgumentException(internalNamespacePrefix + ":" + ID_ATTRIBUTE
-                            + " must not be empty.");
-                    }
-
-                    if (attributeValue.contains(".")) {
-                        throw new IllegalArgumentException("\"" + attributeValue + "\" is not a valid ID value.");
-                    }
-
-                    id = attributeValue;
-                } else {
-                    throw new SerializationException(internalNamespacePrefix + ":" + attributeLocalName
-                        + " is not a valid attribute.");
-                }
-            } else {
-                String attributeNamespaceURI = xmlStreamReader.getAttributeNamespace(i);
-                if (attributeNamespaceURI == null) {
-                    attributeNamespaceURI = xmlStreamReader.getNamespaceURI("");
-                }
-
-                attributes.add(new Attribute(attributeNamespaceURI, attributeLocalName,
-                    attributeValue));
-            }
+        // Some stream readers incorrectly report an empty string as the prefix
+        // for the default namespace
+        if (prefix != null
+            && prefix.length() == 0) {
+            prefix = null;
         }
+
+        String localName = xmlStreamReader.getLocalName();
 
         // Determine the type and value of this element
         Element.Type elementType = null;
@@ -585,11 +557,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             } else if (localName.equals(SCRIPT_TAG)) {
                 elementType = Element.Type.SCRIPT;
             } else if (localName.equals(DEFINE_TAG)) {
-                if (attributes.getLength() > 0) {
-                    throw new SerializationException(internalNamespacePrefix + ":" + DEFINE_TAG
-                        + " cannot have attributes.");
-                }
-
                 elementType = Element.Type.DEFINE;
             } else {
                 throw new SerializationException(prefix + ":" + localName
@@ -598,10 +565,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         } else {
             if (Character.isUpperCase(localName.charAt(0))) {
                 int i = localName.indexOf('.');
-                if (i == localName.length() - 1) {
-                    throw new SerializationException(localName + " is not a valid element name.");
-                }
-
                 if (i != -1
                     && Character.isLowerCase(localName.charAt(i + 1))) {
                     // The element represents an attached property
@@ -629,22 +592,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
             } else {
                 // The element represents a property
-                if (element == null) {
-                    throw new SerializationException("Cannot specify property as root element.");
-                }
-
-                if (prefix != null
-                    && prefix.length() > 0) {
+                if (prefix != null) {
                     throw new SerializationException("Property elements cannot have a namespace prefix.");
                 }
 
                 if (element.value instanceof Dictionary<?, ?>) {
                     elementType = Element.Type.WRITABLE_PROPERTY;
                 } else {
-                    if (element.type != Element.Type.INSTANCE) {
-                        throw new SerializationException("Parent element must be a typed object.");
-                    }
-
                     BeanAdapter beanAdapter = new BeanAdapter(element.value);
 
                     if (beanAdapter.isReadOnly(localName)) {
@@ -652,24 +606,122 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         value = beanAdapter.get(localName);
                         assert (value != null) : "Read-only properties cannot be null.";
                     } else {
-                        if (attributes.getLength() > 0) {
-                            throw new SerializationException("Writable property elements cannot have attributes.");
-                        }
-
                         elementType = Element.Type.WRITABLE_PROPERTY;
                     }
                 }
             }
         }
 
-        // Set the current element
-        Location xmlStreamLocation = xmlStreamReader.getLocation();
-        element = new Element(element, namespaceURI, localName, attributes, elementType,
-            id, value, xmlStreamLocation.getLineNumber());
+        // Create the element
+        element = new Element(element, namespaceURI, localName, elementType, value);
+        processAttributes();
+    }
 
-        // If this is the root, set it
-        if (element.parent == null) {
-            root = element.value;
+    private void processAttributes() throws SerializationException {
+        String id = null;
+
+        for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
+            String attributePrefix = xmlStreamReader.getAttributePrefix(i);
+            String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
+            String attributeValue = xmlStreamReader.getAttributeValue(i);
+
+            if (attributePrefix != null
+                && attributePrefix.equals(internalNamespacePrefix)) {
+                if (attributeLocalName.equals(ID_ATTRIBUTE)) {
+                    if (attributeValue.length() == 0
+                        || attributeValue.contains(".")) {
+                        throw new IllegalArgumentException("\"" + attributeValue + "\" is not a valid ID value.");
+                    }
+
+                    id = attributeValue;
+                } else {
+                    throw new SerializationException(internalNamespacePrefix + ":" + attributeLocalName
+                        + " is not a valid attribute.");
+                }
+            } else {
+                String attributeNamespaceURI = xmlStreamReader.getAttributeNamespace(i);
+                if (attributeNamespaceURI == null) {
+                    attributeNamespaceURI = xmlStreamReader.getNamespaceURI("");
+                }
+
+                Object resolvedValue = null;
+
+                if (attributeValue.length() > 0) {
+                    if (attributeValue.charAt(0) == URL_PREFIX) {
+                        if (attributeValue.length() > 1) {
+                            if (attributeValue.charAt(1) == URL_PREFIX) {
+                                resolvedValue = attributeValue.substring(1);
+                            } else {
+                                if (location == null) {
+                                    throw new IllegalStateException("Base location is undefined.");
+                                }
+
+                                try {
+                                    resolvedValue = new URL(location, attributeValue.substring(1));
+                                } catch (MalformedURLException exception) {
+                                    throw new SerializationException(exception);
+                                }
+                            }
+                        }
+                    } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
+                        if (attributeValue.length() > 1) {
+                            if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
+                                resolvedValue = attributeValue.substring(1);
+                            } else {
+                                if (resources == null) {
+                                    throw new IllegalStateException("Resources is null.");
+                                }
+
+                                resolvedValue = JSON.get(resources, attributeValue.substring(1));
+
+                                if (resolvedValue == null) {
+                                    resolvedValue = attributeValue;
+                                }
+                            }
+                        }
+                    } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
+                        if (attributeValue.length() > 1) {
+                            if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
+                                resolvedValue = attributeValue.substring(1);
+                            } else if (attributeValue.charAt(1) != NAMESPACE_BINDING_PREFIX) {
+                                // TODO The above check is temporary; this entire block needs to move
+                                // to processEndElement() or readObject()
+                                resolvedValue = JSON.get(namespace, attributeValue.substring(1));
+
+                                if (resolvedValue == null) {
+                                    resolvedValue = attributeValue;
+                                }
+                            }
+                        }
+                    } else {
+                        resolvedValue = attributeValue;
+                    }
+                } else {
+                    resolvedValue = attributeValue;
+                }
+
+                // TODO Don't do this for all attributes, only those that were resolved
+                element.attributes.add(new Attribute(element, attributeNamespaceURI, attributeLocalName,
+                    resolvedValue));
+            }
+        }
+
+        // Add the value to the namespace
+        if (id != null) {
+            if (namespace.containsKey(id)) {
+                throw new SerializationException("ID " + id + " is already in use.");
+            }
+
+            namespace.put(id, element.value);
+
+            // If the type has an ID property, use it
+            Class<?> type = element.value.getClass();
+            IDProperty idProperty = type.getAnnotation(IDProperty.class);
+
+            if (idProperty != null) {
+                BeanAdapter beanAdapter = new BeanAdapter(element.value);
+                beanAdapter.put(idProperty.value(), id);
+            }
         }
     }
 
@@ -681,8 +733,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         switch (element.type) {
             case INSTANCE:
             case INCLUDE: {
-                ArrayList<Attribute> instancePropertyAttributes = new ArrayList<Attribute>();
-                ArrayList<Attribute> staticPropertyAttributes = new ArrayList<Attribute>();
+                LinkedList<Attribute> instancePropertyAttributes = new LinkedList<Attribute>();
+                LinkedList<Attribute> staticPropertyAttributes = new LinkedList<Attribute>();
 
                 if (element.type == Element.Type.INCLUDE) {
                     // Process attributes looking for include parameters and property setters
@@ -691,15 +743,16 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     String mimeType = null;
                     boolean inline = false;
 
+                    // TODO Move this to processStartElement(); we won't need to cast to String there
                     for (Attribute attribute : element.attributes) {
                         if (attribute.localName.equals(INCLUDE_SRC_ATTRIBUTE)) {
-                            src = attribute.value;
+                            src = (String)attribute.value;
                         } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
-                            resources = new Resources(resources, attribute.value);
+                            resources = new Resources(resources, (String)attribute.value);
                         } else if (attribute.localName.equals(INCLUDE_MIME_TYPE_ATTRIBUTE)) {
-                            mimeType = attribute.value;
+                            mimeType = (String)attribute.value;
                         } else if (attribute.localName.equals(INCLUDE_INLINE_ATTRIBUTE)) {
-                            inline = Boolean.parseBoolean(attribute.value);
+                            inline = Boolean.parseBoolean((String)attribute.value);
                         } else if (Character.isUpperCase(attribute.localName.charAt(0))) {
                             staticPropertyAttributes.add(attribute);
                         } else {
@@ -781,25 +834,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     }
                 }
 
-                // Add the value to the context
-                if (element.id != null) {
-                    if (namespace.containsKey(element.id)) {
-                        throw new SerializationException("Element ID " + element.id
-                            + " is already in use.");
-                    }
-
-                    namespace.put(element.id, element.value);
-
-                    // If the type has an ID property, use it
-                    Class<?> type = element.value.getClass();
-                    IDProperty idProperty = type.getAnnotation(IDProperty.class);
-
-                    if (idProperty != null) {
-                        BeanAdapter beanAdapter = new BeanAdapter(element.value);
-                        beanAdapter.put(idProperty.value(), element.id);
-                    }
-                }
-
                 // Apply instance attributes
                 Dictionary<String, Object> dictionary;
                 if (element.value instanceof Dictionary<?, ?>) {
@@ -809,20 +843,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 for (Attribute attribute : instancePropertyAttributes) {
-                    String sourcePath = getSourcePath(attribute.value);
-
-                    if (sourcePath == null) {
-                        dictionary.put(attribute.localName, resolve(attribute.value));
-                    } else {
-                        // Bind to <element id>.<attribute name>
-                        if (element.id == null) {
-                            throw new SerializationException("Bind target does not have an ID.");
-                        }
-
-                        String targetPath = element.id + "." + attribute.localName;
-                        NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath);
-                        namespaceBinding.bind();
-                    }
+                    dictionary.put(attribute.localName, attribute.value);
                 }
 
                 // Apply static attributes
@@ -879,7 +900,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             AttributeInvocationHandler handler =
                                 new AttributeInvocationHandler(scriptEngine,
                                     localNameComponents[1],
-                                    attribute.value);
+                                    (String)attribute.value);
 
                             Object listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
                                 new Class<?>[]{propertyClass}, handler);
@@ -902,8 +923,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             }
                         } else {
                             // The attribute represents a static setter
-                            setStaticProperty(element.value, propertyClass, localNameComponents[1],
-                                resolve(attribute.value));
+                            setStaticProperty(element.value, propertyClass, localNameComponents[1], attribute.value);
                         }
                     }
                 }
@@ -962,20 +982,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             + " for read-only properties.");
                     }
 
-                    String sourcePath = getSourcePath(attribute.value);
-
-                    if (sourcePath == null) {
-                        dictionary.put(attribute.localName, resolve(attribute.value));
-                    } else {
-                        // Bind to <parent ID>.<element name>.<attribute name>
-                        if (element.parent.id == null) {
-                            throw new SerializationException("Bind target does not have an ID.");
-                        }
-
-                        String targetPath = element.parent.id + "." + element.localName + "." + attribute.localName;
-                        NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath);
-                        namespaceBinding.bind();
-                    }
+                    dictionary.put(attribute.localName, attribute.value);
                 }
 
                 break;
@@ -1022,13 +1029,14 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             case SCRIPT: {
                 // Process attributes looking for src and language
+                // TODO Move to processStartElement(); we won't need to cast to String there
                 String src = null;
                 String language = this.language;
                 for (Attribute attribute : element.attributes) {
                     if (attribute.localName.equals(SCRIPT_SRC_ATTRIBUTE)) {
-                        src = attribute.value;
+                        src = (String)attribute.value;
                     } else if (attribute.localName.equals(SCRIPT_LANGUAGE_ATTRIBUTE)) {
-                        language = attribute.value;
+                        language = (String)attribute.value;
                     } else {
                         throw new SerializationException(attribute.localName + " is not a valid"
                             + " attribute for the " + internalNamespacePrefix + ":" + SCRIPT_TAG + " tag.");
@@ -1146,20 +1154,16 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
 
         // Move up the stack
-        if (element.parent != null) {
-            element = element.parent;
+        if (element.parent == null) {
+            root = element.value;
         }
+
+        element = element.parent;
     }
 
     private void logException() {
-        String message = "An error occurred while processing ";
-
-        if (element == null) {
-            message += " the root element";
-        } else {
-            message += " " + element.namespaceURI + "." + element.localName
-                + " starting at line number " + element.lineNumber;
-        }
+        Location streamReaderlocation = xmlStreamReader.getLocation();
+        String message = "An error occurred at line number " + streamReaderlocation.getLineNumber();
 
         if (location != null) {
             message += " in file " + location.getPath();
@@ -1328,73 +1332,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     /**
-     * Resolves an attribute value as either a URL, resource value, or
-     * object reference, depending on the value's prefix. If the value can't
-     * or doesn't need to be resolved, the original attribute value is
-     * returned.
-     *
-     * @param attributeValue
-     * The attribute value to resolve.
-     *
-     * @return
-     * The resolved value.
-     */
-    private Object resolve(String attributeValue)
-        throws MalformedURLException {
-        Object resolvedValue = null;
-
-        if (attributeValue.length() > 0) {
-            if (attributeValue.charAt(0) == URL_PREFIX) {
-                if (attributeValue.length() > 1) {
-                    if (attributeValue.charAt(1) == URL_PREFIX) {
-                        resolvedValue = attributeValue.substring(1);
-                    } else {
-                        if (location == null) {
-                            throw new IllegalStateException("Base location is undefined.");
-                        }
-
-                        resolvedValue = new URL(location, attributeValue.substring(1));
-                    }
-                }
-            } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
-                if (attributeValue.length() > 1) {
-                    if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
-                        resolvedValue = attributeValue.substring(1);
-                    } else {
-                        if (resources == null) {
-                            throw new IllegalStateException("Resources is null.");
-                        }
-
-                        resolvedValue = JSON.get(resources, attributeValue.substring(1));
-
-                        if (resolvedValue == null) {
-                            resolvedValue = attributeValue;
-                        }
-                    }
-                }
-            } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
-                if (attributeValue.length() > 1) {
-                    if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
-                        resolvedValue = attributeValue.substring(1);
-                    } else {
-                        resolvedValue = JSON.get(namespace, attributeValue.substring(1));
-
-                        if (resolvedValue == null) {
-                            resolvedValue = attributeValue;
-                        }
-                    }
-                }
-            } else {
-                resolvedValue = attributeValue;
-            }
-        } else {
-            resolvedValue = attributeValue;
-        }
-
-        return resolvedValue;
-    }
-
-    /**
      * Returns the file extension/MIME type map. This map associates file
      * extensions with MIME types, which are used to automatically determine
      * an appropriate serializer to use for an include based on file extension.
@@ -1523,21 +1460,5 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         } catch (Exception exception) {
             throw new SerializationException(exception);
         }
-    }
-
-    private static String getSourcePath(String attributeValue) {
-        int n = attributeValue.length();
-
-        String sourcePath;
-        if (n >= 3
-            && attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX
-            && attributeValue.charAt(1) == NAMESPACE_BINDING_PREFIX
-            && attributeValue.charAt(attributeValue.length() - 1) == NAMESPACE_BINDING_SUFFIX) {
-            sourcePath = attributeValue.substring(2, n - 1);
-        } else {
-            sourcePath = null;
-        }
-
-        return sourcePath;
     }
 }
