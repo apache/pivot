@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.Window;
 public class NamespaceBindingDemo extends Window implements Bindable {
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+        // Manually bind list button selection to label text
         NamespaceBinding namespaceBinding = new NamespaceBinding(namespace,
             "listButton.selectedIndex", "listButtonLabel.text");
         namespaceBinding.bind();

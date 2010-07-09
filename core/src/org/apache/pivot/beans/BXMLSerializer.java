@@ -418,19 +418,60 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         // Resolve object references
         for (Attribute attribute : objectReferenceAttributes) {
-            Object value = JSON.get(namespace, (String)attribute.value);
+            Element element = attribute.element;
+            String reference = (String)attribute.value;
 
-            if (attribute.propertyClass == null) {
-                Dictionary<String, Object> dictionary;
-                if (attribute.element.value instanceof Dictionary<?, ?>) {
-                    dictionary = (Dictionary<String, Object>)attribute.element.value;
-                } else {
-                    dictionary = new BeanAdapter(attribute.element.value);
+            if (reference.startsWith(Character.toString(NAMESPACE_BINDING_PREFIX))
+                && reference.endsWith(Character.toString(NAMESPACE_BINDING_SUFFIX))) {
+                reference = reference.substring(1, reference.length() - 1);
+
+                switch (element.type) {
+                    case INSTANCE:
+                    case INCLUDE: {
+                        // Bind to <element ID>.<attribute name>
+                        if (element.id == null) {
+                            throw new SerializationException("Bind target does not have an ID.");
+                        }
+
+                        String targetPath = element.id + "." + attribute.name;
+                        NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, reference, targetPath);
+                        namespaceBinding.bind();
+
+                        break;
+                    }
+
+                    case READ_ONLY_PROPERTY: {
+                        // Bind to <parent element ID>.<element name>.<attribute name>
+                        if (element.parent.id == null) {
+                            throw new SerializationException("Bind target does not have an ID.");
+                        }
+
+                        String targetPath = element.parent.id + "." + element.name + "." + attribute.name;
+                        NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, reference, targetPath);
+                        namespaceBinding.bind();
+
+                        break;
+                    }
+                }
+            } else {
+                if (!JSON.containsKey(namespace, reference)) {
+                    throw new SerializationException("Value \"" + reference + "\" does not exist.");
                 }
 
-                dictionary.put(attribute.name, value);
-            } else {
-                setStaticProperty(element.value, attribute.propertyClass, attribute.name, value);
+                Object value = JSON.get(namespace, reference);
+
+                if (attribute.propertyClass == null) {
+                    Dictionary<String, Object> dictionary;
+                    if (element.value instanceof Dictionary<?, ?>) {
+                        dictionary = (Dictionary<String, Object>)element.value;
+                    } else {
+                        dictionary = new BeanAdapter(element.value);
+                    }
+
+                    dictionary.put(attribute.name, value);
+                } else {
+                    setStaticProperty(element.value, attribute.propertyClass, attribute.name, value);
+                }
             }
         }
 
@@ -608,7 +649,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     }
 
                     elementType = Element.Type.INSTANCE;
-                    name = "<" + prefix + ":" + localName + ">";
+                    name = "<" + ((prefix == null) ? "" : prefix + ":") + localName + ">";
 
                     String className = namespaceURI + "." + localName.replace('.', '$');
 
@@ -878,9 +919,15 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                 if (value.charAt(0) == OBJECT_REFERENCE_PREFIX) {
                                     attribute.value = value;
                                 } else {
-                                    if (attribute.propertyClass != null
-                                        && attribute.propertyClass.isInterface()) {
-                                        throw new SerializationException("An object reference is not valid in this context.");
+                                    if (attribute.propertyClass != null) {
+                                        if (attribute.propertyClass.isInterface()) {
+                                            throw new SerializationException("An object reference is not valid in this context.");
+                                        }
+
+                                        if (value.startsWith(Character.toString(NAMESPACE_BINDING_PREFIX))
+                                            && value.endsWith(Character.toString(NAMESPACE_BINDING_SUFFIX))) {
+                                            throw new SerializationException("Cannot bind to a static property.");
+                                        }
                                     }
 
                                     attribute.value = value;
