@@ -360,6 +360,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
         if (inputStream == null) {
@@ -417,11 +418,25 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         // Resolve object references
         for (Attribute attribute : objectReferenceAttributes) {
-            // TODO
+            Object value = JSON.get(namespace, (String)attribute.value);
+
+            if (attribute.propertyClass == null) {
+                Dictionary<String, Object> dictionary;
+                if (attribute.element.value instanceof Dictionary<?, ?>) {
+                    dictionary = (Dictionary<String, Object>)attribute.element.value;
+                } else {
+                    dictionary = new BeanAdapter(attribute.element.value);
+                }
+
+                dictionary.put(attribute.name, value);
+            } else {
+                setStaticProperty(element.value, attribute.propertyClass, attribute.name, value);
+            }
         }
 
         objectReferenceAttributes.clear();
 
+        // Bind the root to the namespace
         if (root instanceof Bindable) {
             bind(root);
             Bindable bindable = (Bindable)root;
@@ -672,7 +687,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             boolean inline = false;
             if (element.properties.containsKey(INCLUDE_INLINE_ATTRIBUTE)) {
-                Boolean.parseBoolean(element.properties.get(INCLUDE_INLINE_ATTRIBUTE));
+                inline = Boolean.parseBoolean(element.properties.get(INCLUDE_INLINE_ATTRIBUTE));
             }
 
             // Determine an appropriate serializer to use for the include
@@ -812,23 +827,23 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     }
 
                     // Resolve the attribute value
-                    Object resolvedValue;
+                    Attribute attribute = new Attribute(element, name, propertyClass, value);
+                    boolean resolved = true;
 
                     if (value.length() > 0) {
                         if (value.charAt(0) == URL_PREFIX) {
                             value = value.substring(1);
 
                             if (value.length() > 0) {
-                                // The attribute is a URL or an escaped value with a URL prefix
                                 if (value.charAt(0) == URL_PREFIX) {
-                                    resolvedValue = value;
+                                    attribute.value = value;
                                 } else {
                                     if (location == null) {
                                         throw new IllegalStateException("Base location is undefined.");
                                     }
 
                                     try {
-                                        resolvedValue = new URL(location, value);
+                                        attribute.value = new URL(location, value);
                                     } catch (MalformedURLException exception) {
                                         throw new SerializationException(exception);
                                     }
@@ -840,15 +855,17 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             value = value.substring(1);
 
                             if (value.length() > 0) {
-                                // The attribute is a resource key or an escaped value with a resource
-                                // key prefix
                                 if (value.charAt(0) == RESOURCE_KEY_PREFIX) {
-                                    resolvedValue = value;
+                                    attribute.value = value;
                                 } else {
-                                    resolvedValue = JSON.get(resources, value);
+                                    if (resources == null) {
+                                        throw new IllegalStateException("Resource bundle is undefined.");
+                                    }
 
-                                    if (resolvedValue == null) {
-                                        resolvedValue = value;
+                                    attribute.value = JSON.get(resources, value);
+
+                                    if (attribute.value == null) {
+                                        attribute.value = value;
                                     }
                                 }
                             } else {
@@ -858,28 +875,27 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             value = value.substring(1);
 
                             if (value.length() > 0) {
-                                // The attribute is an object reference or an escaped value with an object
-                                // reference prefix
                                 if (value.charAt(0) == OBJECT_REFERENCE_PREFIX) {
-                                    resolvedValue = value;
+                                    attribute.value = value;
                                 } else {
-                                    // TODO Defer until later
-                                    // objectReferenceAttributes.add(attribute);
-                                    resolvedValue = JSON.get(namespace, value);
+                                    if (attribute.propertyClass != null
+                                        && attribute.propertyClass.isInterface()) {
+                                        throw new SerializationException("An object reference is not valid in this context.");
+                                    }
+
+                                    attribute.value = value;
+                                    objectReferenceAttributes.add(attribute);
+                                    resolved = false;
                                 }
                             } else {
                                 throw new SerializationException("Invalid object resolution argument.");
                             }
-                        } else {
-                            resolvedValue = value;
                         }
-                    } else {
-                        resolvedValue = value;
                     }
 
                     // If the value was resolved, add it to the element's attribute list
-                    if (resolvedValue != null) {
-                        element.attributes.add(new Attribute(element, name, propertyClass, resolvedValue));
+                    if (resolved) {
+                        element.attributes.add(attribute);
                     }
                 }
             }
@@ -892,15 +908,15 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             case INSTANCE:
             case INCLUDE: {
                 // Apply attributes
-                Dictionary<String, Object> dictionary;
-                if (element.value instanceof Dictionary<?, ?>) {
-                    dictionary = (Dictionary<String, Object>)element.value;
-                } else {
-                    dictionary = new BeanAdapter(element.value);
-                }
-
                 for (Attribute attribute : element.attributes) {
                     if (attribute.propertyClass == null) {
+                        Dictionary<String, Object> dictionary;
+                        if (element.value instanceof Dictionary<?, ?>) {
+                            dictionary = (Dictionary<String, Object>)element.value;
+                        } else {
+                            dictionary = new BeanAdapter(element.value);
+                        }
+
                         dictionary.put(attribute.name, attribute.value);
                     } else {
                         if (attribute.propertyClass.isInterface()) {
@@ -1025,14 +1041,14 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             }
 
             case WRITABLE_PROPERTY: {
-                Dictionary<String, Object> dictionary;
-                if (element.parent.value instanceof Dictionary) {
-                    dictionary = (Dictionary<String, Object>)element.parent.value;
-                } else {
-                    dictionary = new BeanAdapter(element.parent.value);
-                }
-
                 if (element.propertyClass == null) {
+                    Dictionary<String, Object> dictionary;
+                    if (element.parent.value instanceof Dictionary) {
+                        dictionary = (Dictionary<String, Object>)element.parent.value;
+                    } else {
+                        dictionary = new BeanAdapter(element.parent.value);
+                    }
+
                     dictionary.put(element.name, element.value);
                 } else {
                     if (element.parent == null) {

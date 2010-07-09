@@ -337,7 +337,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 }
 
                 menuImageView = (ImageView)bxmlSerializer.getNamespace().get("menuImageView");
-                helpAboutMenuItem  = (Menu.Item)bxmlSerializer.getNamespace().get("menuBar.helpAboutMenuItem");
+                helpAboutMenuItem  = (Menu.Item)bxmlSerializer.getNamespace().get("helpAboutMenuItem");
 
                 rollup.setContent(component);
 
