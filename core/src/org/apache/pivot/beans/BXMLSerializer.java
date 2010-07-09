@@ -207,9 +207,10 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     private XMLStreamReader xmlStreamReader = null;
     private Element element = null;
-    private LinkedList<Attribute> objectReferenceAttributes = new LinkedList<Attribute>();
 
     private Object root = null;
+
+    private LinkedList<Attribute> namespaceBindingAttributes = new LinkedList<Attribute>();
 
     private static HashMap<String, String> fileExtensions = new HashMap<String, String>();
     private static HashMap<String, Class<? extends Serializer<?>>> mimeTypes =
@@ -218,8 +219,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
     public static final char OBJECT_REFERENCE_PREFIX = '$';
-    public static final char NAMESPACE_BINDING_PREFIX = '{';
-    public static final char NAMESPACE_BINDING_SUFFIX = '}';
+
+    public static final String NAMESPACE_BINDING_PREFIX = OBJECT_REFERENCE_PREFIX + "{";
+    public static final String NAMESPACE_BINDING_SUFFIX = "}";
 
     public static final String LANGUAGE_PROCESSING_INSTRUCTION = "language";
 
@@ -360,7 +362,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
         if (inputStream == null) {
@@ -416,66 +417,42 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         xmlStreamReader = null;
 
-        // Resolve object references
-        for (Attribute attribute : objectReferenceAttributes) {
+        // Apply the namespace bindings
+        for (Attribute attribute : namespaceBindingAttributes) {
             Element element = attribute.element;
-            String reference = (String)attribute.value;
+            String sourcePath = (String)attribute.value;
 
-            if (reference.startsWith(Character.toString(NAMESPACE_BINDING_PREFIX))
-                && reference.endsWith(Character.toString(NAMESPACE_BINDING_SUFFIX))) {
-                reference = reference.substring(1, reference.length() - 1);
-
-                switch (element.type) {
-                    case INSTANCE:
-                    case INCLUDE: {
-                        // Bind to <element ID>.<attribute name>
-                        if (element.id == null) {
-                            throw new SerializationException("Bind target does not have an ID.");
-                        }
-
-                        String targetPath = element.id + "." + attribute.name;
-                        NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, reference, targetPath);
-                        namespaceBinding.bind();
-
-                        break;
+            switch (element.type) {
+                case INSTANCE:
+                case INCLUDE: {
+                    // Bind to <element ID>.<attribute name>
+                    if (element.id == null) {
+                        throw new SerializationException("Bind target does not have an ID.");
                     }
 
-                    case READ_ONLY_PROPERTY: {
-                        // Bind to <parent element ID>.<element name>.<attribute name>
-                        if (element.parent.id == null) {
-                            throw new SerializationException("Bind target does not have an ID.");
-                        }
+                    String targetPath = element.id + "." + attribute.name;
+                    NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath);
+                    namespaceBinding.bind();
 
-                        String targetPath = element.parent.id + "." + element.name + "." + attribute.name;
-                        NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, reference, targetPath);
-                        namespaceBinding.bind();
-
-                        break;
-                    }
-                }
-            } else {
-                if (!JSON.containsKey(namespace, reference)) {
-                    throw new SerializationException("Value \"" + reference + "\" does not exist.");
+                    break;
                 }
 
-                Object value = JSON.get(namespace, reference);
-
-                if (attribute.propertyClass == null) {
-                    Dictionary<String, Object> dictionary;
-                    if (element.value instanceof Dictionary<?, ?>) {
-                        dictionary = (Dictionary<String, Object>)element.value;
-                    } else {
-                        dictionary = new BeanAdapter(element.value);
+                case READ_ONLY_PROPERTY: {
+                    // Bind to <parent element ID>.<element name>.<attribute name>
+                    if (element.parent.id == null) {
+                        throw new SerializationException("Bind target does not have an ID.");
                     }
 
-                    dictionary.put(attribute.name, value);
-                } else {
-                    setStaticProperty(element.value, attribute.propertyClass, attribute.name, value);
+                    String targetPath = element.parent.id + "." + element.name + "." + attribute.name;
+                    NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath);
+                    namespaceBinding.bind();
+
+                    break;
                 }
             }
         }
 
-        objectReferenceAttributes.clear();
+        namespaceBindingAttributes.clear();
 
         // Bind the root to the namespace
         if (root instanceof Bindable) {
@@ -571,10 +548,52 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     break;
                 }
 
-                case SCRIPT:
-                case WRITABLE_PROPERTY: {
-                    // TODO Also do this for read-only properties, so we can handle inline
-                    // script?
+                case READ_ONLY_PROPERTY: {
+                    if (element.value instanceof ListenerList<?>) {
+                        // Get a script engine for the current language; apply simple bindings
+                        // so the engine namespace isn't polluted with the listener functions
+                        ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
+                        scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
+
+                        try {
+                            scriptEngine.eval(text);
+                        } catch (ScriptException exception) {
+                            System.err.println(exception);
+                            break;
+                        }
+
+                        // Create the listener and add it to the list
+                        Class<?> listenerListClass = element.value.getClass();
+
+                        java.lang.reflect.Type[] genericInterfaces = listenerListClass.getGenericInterfaces();
+                        Class<?> listenerClass = (Class<?>)genericInterfaces[0];
+
+                        ElementInvocationHandler handler = new ElementInvocationHandler(scriptEngine);
+
+                        Method addMethod;
+                        try {
+                            addMethod = listenerListClass.getMethod("add", Object.class);
+                        } catch (NoSuchMethodException exception) {
+                            throw new RuntimeException(exception);
+                        }
+
+                        Object listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                            new Class<?>[]{listenerClass}, handler);
+
+                        try {
+                            addMethod.invoke(element.value, listener);
+                        } catch (IllegalAccessException exception) {
+                            throw new SerializationException(exception);
+                        } catch (InvocationTargetException exception) {
+                            throw new SerializationException(exception);
+                        }
+                    }
+
+                    break;
+                }
+
+                case WRITABLE_PROPERTY:
+                case SCRIPT: {
                     element.value = text;
                     break;
                 }
@@ -867,81 +886,79 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         name = localName;
                     }
 
-                    // Resolve the attribute value
-                    Attribute attribute = new Attribute(element, name, propertyClass, value);
-                    boolean resolved = true;
+                    if (value.startsWith(NAMESPACE_BINDING_PREFIX)
+                        && value.endsWith(NAMESPACE_BINDING_SUFFIX)) {
+                        // The attribute represents a namespace binding
+                        if (propertyClass != null) {
+                            throw new SerializationException("Namespace binding is not supported for static properties.");
+                        }
 
-                    if (value.length() > 0) {
-                        if (value.charAt(0) == URL_PREFIX) {
-                            value = value.substring(1);
+                        namespaceBindingAttributes.add(new Attribute(element, name, propertyClass,
+                            value.substring(2, value.length() - 1)));
+                    } else {
+                        // Resolve the attribute value
+                        Attribute attribute = new Attribute(element, name, propertyClass, value);
 
-                            if (value.length() > 0) {
-                                if (value.charAt(0) == URL_PREFIX) {
-                                    attribute.value = value;
-                                } else {
-                                    if (location == null) {
-                                        throw new IllegalStateException("Base location is undefined.");
-                                    }
+                        if (value.length() > 0) {
+                            if (value.charAt(0) == URL_PREFIX) {
+                                value = value.substring(1);
 
-                                    try {
-                                        attribute.value = new URL(location, value);
-                                    } catch (MalformedURLException exception) {
-                                        throw new SerializationException(exception);
-                                    }
-                                }
-                            } else {
-                                throw new SerializationException("Invalid URL resolution argument.");
-                            }
-                        } else if (value.charAt(0) == RESOURCE_KEY_PREFIX) {
-                            value = value.substring(1);
-
-                            if (value.length() > 0) {
-                                if (value.charAt(0) == RESOURCE_KEY_PREFIX) {
-                                    attribute.value = value;
-                                } else {
-                                    if (resources == null) {
-                                        throw new IllegalStateException("Resource bundle is undefined.");
-                                    }
-
-                                    attribute.value = JSON.get(resources, value);
-
-                                    if (attribute.value == null) {
+                                if (value.length() > 0) {
+                                    if (value.charAt(0) == URL_PREFIX) {
                                         attribute.value = value;
-                                    }
-                                }
-                            } else {
-                                throw new SerializationException("Invalid resource resolution argument.");
-                            }
-                        } else if (value.charAt(0) == OBJECT_REFERENCE_PREFIX) {
-                            value = value.substring(1);
+                                    } else {
+                                        if (location == null) {
+                                            throw new IllegalStateException("Base location is undefined.");
+                                        }
 
-                            if (value.length() > 0) {
-                                if (value.charAt(0) == OBJECT_REFERENCE_PREFIX) {
-                                    attribute.value = value;
+                                        try {
+                                            attribute.value = new URL(location, value);
+                                        } catch (MalformedURLException exception) {
+                                            throw new SerializationException(exception);
+                                        }
+                                    }
                                 } else {
-                                    if (attribute.propertyClass != null) {
-                                        if (attribute.propertyClass.isInterface()) {
-                                            throw new SerializationException("An object reference is not valid in this context.");
+                                    throw new SerializationException("Invalid URL resolution argument.");
+                                }
+                            } else if (value.charAt(0) == RESOURCE_KEY_PREFIX) {
+                                value = value.substring(1);
+
+                                if (value.length() > 0) {
+                                    if (value.charAt(0) == RESOURCE_KEY_PREFIX) {
+                                        attribute.value = value;
+                                    } else {
+                                        if (resources == null) {
+                                            throw new IllegalStateException("Resource bundle is undefined.");
                                         }
 
-                                        if (value.startsWith(Character.toString(NAMESPACE_BINDING_PREFIX))
-                                            && value.endsWith(Character.toString(NAMESPACE_BINDING_SUFFIX))) {
-                                            throw new SerializationException("Cannot bind to a static property.");
+                                        attribute.value = JSON.get(resources, value);
+
+                                        if (attribute.value == null) {
+                                            attribute.value = value;
                                         }
                                     }
-
-                                    attribute.value = value;
-                                    objectReferenceAttributes.add(attribute);
-                                    resolved = false;
+                                } else {
+                                    throw new SerializationException("Invalid resource resolution argument.");
                                 }
-                            } else {
-                                throw new SerializationException("Invalid object resolution argument.");
+                            } else if (value.charAt(0) == OBJECT_REFERENCE_PREFIX) {
+                                value = value.substring(1);
+
+                                if (value.length() > 0) {
+                                    if (value.charAt(0) == OBJECT_REFERENCE_PREFIX) {
+                                        attribute.value = value;
+                                    } else {
+                                        if (!JSON.containsKey(namespace, value)) {
+                                            throw new SerializationException("Value \"" + value + "\" is not defined.");
+                                        }
+
+                                        attribute.value = JSON.get(namespace, value);
+                                    }
+                                } else {
+                                    throw new SerializationException("Invalid object resolution argument.");
+                                }
                             }
                         }
-                    }
 
-                    // If the value was resolved, add it to the element's attribute list
-                    if (resolved) {
                         element.attributes.add(attribute);
                     }
                 }
@@ -1065,23 +1082,23 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             }
 
             case READ_ONLY_PROPERTY: {
-                // TODO If this is a listener list, handle inline script
-
-                Dictionary<String, Object> dictionary;
-                if (element.value instanceof Dictionary<?, ?>) {
-                    dictionary = (Dictionary<String, Object>)element.value;
-                } else {
-                    dictionary = new BeanAdapter(element.value);
-                }
-
-                // Process attributes looking for instance property setters
-                for (Attribute attribute : element.attributes) {
-                    if (attribute.propertyClass != null) {
-                        throw new SerializationException("Static setters are not supported"
-                            + " for read-only properties.");
+                if (!(element.value instanceof ListenerList<?>)) {
+                    Dictionary<String, Object> dictionary;
+                    if (element.value instanceof Dictionary<?, ?>) {
+                        dictionary = (Dictionary<String, Object>)element.value;
+                    } else {
+                        dictionary = new BeanAdapter(element.value);
                     }
 
-                    dictionary.put(attribute.name, attribute.value);
+                    // Process attributes looking for instance property setters
+                    for (Attribute attribute : element.attributes) {
+                        if (attribute.propertyClass != null) {
+                            throw new SerializationException("Static setters are not supported"
+                                + " for read-only properties.");
+                        }
+
+                        dictionary.put(attribute.name, attribute.value);
+                    }
                 }
 
                 break;

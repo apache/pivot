@@ -45,14 +45,12 @@ limitations under the License.
         <BoxPane orientation="vertical" styles="{padding:6}">
             <PushButton buttonData="Click Me!">
                 <buttonPressListeners>
-                    <bxml:script>
-                    <![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function buttonPressed(button) {
-                        Prompt.prompt("x = " + x, button.getWindow());
-                    }
-                    ]]>
-                    </bxml:script>
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function buttonPressed(button) {
+                    Prompt.prompt("x = " + x, button.getWindow());
+                }
+                ]]>
                 </buttonPressListeners>
             </PushButton>
 

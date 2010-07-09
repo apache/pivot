@@ -30,17 +30,15 @@ limitations under the License.
                     <content:TreeViewNodeRenderer showIcon="false"/>
                 </nodeRenderer>
                 <componentKeyListeners>
-                    <bxml:script>
-                    <![CDATA[
-                    importPackage(org.apache.pivot.wtk);
-                    function keyPressed(component, keyCode, keyLocation) {
-                        if (keyCode == Keyboard.KeyCode.V
-                            && Keyboard.isPressed(Platform.getCommandModifier())) {
-                            application.paste();
-                        }
+                <![CDATA[
+                importPackage(org.apache.pivot.wtk);
+                function keyPressed(component, keyCode, keyLocation) {
+                    if (keyCode == Keyboard.KeyCode.V
+                        && Keyboard.isPressed(Platform.getCommandModifier())) {
+                        application.paste();
                     }
-                    ]]>
-                    </bxml:script>
+                }
+                ]]>
                 </componentKeyListeners>
             </TreeView>
         </ScrollPane>
