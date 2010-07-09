@@ -67,130 +67,45 @@ import org.apache.pivot.util.Vote;
  * Loads an object hierarchy from an XML document.
  */
 public class BXMLSerializer implements Serializer<Object>, Resolvable {
-    private class NamespaceBindings implements Bindings {
-        @Override
-        public Object get(Object key) {
-            return namespace.get(key.toString());
-        }
-
-        @Override
-        public Object put(String key, Object value) {
-            return namespace.put(key, value);
-        }
-
-        @Override
-        public void putAll(java.util.Map<? extends String, ? extends Object> map) {
-            for (String key : map.keySet()) {
-                put(key, map.get(key));
-            }
-        }
-
-        @Override
-        public Object remove(Object key) {
-            return namespace.remove(key.toString());
-        }
-
-        @Override
-        public void clear() {
-            namespace.clear();
-        }
-
-        @Override
-        public boolean containsKey(Object key) {
-            return namespace.containsKey(key.toString());
-        }
-
-        @Override
-        public boolean containsValue(Object value) {
-            boolean contains = false;
-            for (String key : namespace) {
-                if (namespace.get(key).equals(value)) {
-                    contains = true;
-                    break;
-                }
-            }
-
-            return contains;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return namespace.isEmpty();
-        }
-
-        @Override
-        public java.util.Set<String> keySet() {
-            java.util.HashSet<String> keySet = new java.util.HashSet<String>();
-            for (String key : namespace) {
-                keySet.add(key);
-            }
-
-            return keySet;
-        }
-
-        @Override
-        public java.util.Set<Entry<String, Object>> entrySet() {
-            java.util.HashMap<String, Object> hashMap = new java.util.HashMap<String, Object>();
-            for (String key : namespace) {
-                hashMap.put(key, namespace.get(key));
-            }
-
-            return hashMap.entrySet();
-        }
-
-        @Override
-        public int size() {
-            return namespace.getCount();
-        }
-
-        @Override
-        public Collection<Object> values() {
-            java.util.ArrayList<Object> values = new java.util.ArrayList<Object>();
-            for (String key : namespace) {
-                values.add(namespace.get(key));
-            }
-
-            return values;
-        }
-    }
-
     private static class Element  {
         public enum Type {
-            DEFINE,
             INSTANCE,
+            READ_ONLY_PROPERTY,
+            WRITABLE_PROPERTY,
             INCLUDE,
             SCRIPT,
-            READ_ONLY_PROPERTY,
-            WRITABLE_PROPERTY
+            DEFINE
         }
 
         public final Element parent;
-        public final String namespaceURI;
-        public final String localName;
         public final Type type;
+        public final Class<?> propertyClass;
+        public final String name;
         public Object value;
 
+        public String id = null;
+        public final HashMap<String, String> properties = new HashMap<String, String>();
         public final LinkedList<Attribute> attributes = new LinkedList<Attribute>();
 
-        public Element(Element parent, String namespaceURI, String localName, Type type, Object value) {
+        public Element(Element parent, Type type, String name, Class<?> propertyClass, Object value) {
             this.parent = parent;
-            this.namespaceURI = namespaceURI;
-            this.localName = localName;
             this.type = type;
+            this.name = name;
+            this.propertyClass = propertyClass;
             this.value = value;
         }
     }
 
     private static class Attribute {
         public final Element element;
-        public final String namespaceURI;
-        public final String localName;
-        public final Object value;
+        public final String name;
+        public final Class<?> propertyClass;
+        public Object value;
 
-        public Attribute(Element element, String namespaceURI, String localName, Object value) {
+        public Attribute(Element element, String name, Class<?> propertyClass, Object value) {
             this.element = element;
-            this.namespaceURI = namespaceURI;
-            this.localName = localName;
+            this.name = name;
+            this.propertyClass = propertyClass;
             this.value = value;
         }
     }
@@ -356,7 +271,92 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
 
         scriptEngineManager = new javax.script.ScriptEngineManager();
-        scriptEngineManager.setBindings(new NamespaceBindings());
+        scriptEngineManager.setBindings(new Bindings() {
+            @Override
+            public Object get(Object key) {
+                return namespace.get(key.toString());
+            }
+
+            @Override
+            public Object put(String key, Object value) {
+                return namespace.put(key, value);
+            }
+
+            @Override
+            public void putAll(java.util.Map<? extends String, ? extends Object> map) {
+                for (String key : map.keySet()) {
+                    put(key, map.get(key));
+                }
+            }
+
+            @Override
+            public Object remove(Object key) {
+                return namespace.remove(key.toString());
+            }
+
+            @Override
+            public void clear() {
+                namespace.clear();
+            }
+
+            @Override
+            public boolean containsKey(Object key) {
+                return namespace.containsKey(key.toString());
+            }
+
+            @Override
+            public boolean containsValue(Object value) {
+                boolean contains = false;
+                for (String key : namespace) {
+                    if (namespace.get(key).equals(value)) {
+                        contains = true;
+                        break;
+                    }
+                }
+
+                return contains;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return namespace.isEmpty();
+            }
+
+            @Override
+            public java.util.Set<String> keySet() {
+                java.util.HashSet<String> keySet = new java.util.HashSet<String>();
+                for (String key : namespace) {
+                    keySet.add(key);
+                }
+
+                return keySet;
+            }
+
+            @Override
+            public java.util.Set<Entry<String, Object>> entrySet() {
+                java.util.HashMap<String, Object> hashMap = new java.util.HashMap<String, Object>();
+                for (String key : namespace) {
+                    hashMap.put(key, namespace.get(key));
+                }
+
+                return hashMap.entrySet();
+            }
+
+            @Override
+            public int size() {
+                return namespace.getCount();
+            }
+
+            @Override
+            public Collection<Object> values() {
+                java.util.ArrayList<Object> values = new java.util.ArrayList<Object>();
+                for (String key : namespace) {
+                    values.add(namespace.get(key));
+                }
+
+                return values;
+            }
+        });
     }
 
     @Override
@@ -379,22 +379,22 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                     switch (event) {
                         case XMLStreamConstants.PROCESSING_INSTRUCTION: {
-                            processProcessingInstruction(xmlStreamReader);
+                            processProcessingInstruction();
                             break;
                         }
 
                         case XMLStreamConstants.CHARACTERS: {
-                            processCharacters(xmlStreamReader);
+                            processCharacters();
                             break;
                         }
 
                         case XMLStreamConstants.START_ELEMENT: {
-                            processStartElement(xmlStreamReader);
+                            processStartElement();
                             break;
                         }
 
                         case XMLStreamConstants.END_ELEMENT: {
-                            processEndElement(xmlStreamReader);
+                            processEndElement();
                             break;
                         }
                     }
@@ -414,6 +414,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
 
         xmlStreamReader = null;
+
+        // Resolve object references
+        for (Attribute attribute : objectReferenceAttributes) {
+            // TODO
+        }
 
         objectReferenceAttributes.clear();
 
@@ -456,8 +461,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             throw new IllegalArgumentException("location is null.");
         }
 
-        namespace.clear();
-
         this.location = location;
         this.resources = resources;
 
@@ -476,7 +479,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         return object;
     }
 
-    private void processProcessingInstruction(XMLStreamReader xmlStreamReader) {
+    private void processProcessingInstruction() {
         String piTarget = xmlStreamReader.getPITarget();
         String piData = xmlStreamReader.getPIData();
 
@@ -486,7 +489,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     @SuppressWarnings("unchecked")
-    private void processCharacters(XMLStreamReader xmlStreamReader) throws SerializationException {
+    private void processCharacters() throws SerializationException {
         if (!xmlStreamReader.isWhiteSpace()) {
             // Process the text
             String text = xmlStreamReader.getText();
@@ -514,6 +517,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                 case SCRIPT:
                 case WRITABLE_PROPERTY: {
+                    // TODO Also do this for read-only properties, so we can handle inline
+                    // script?
                     element.value = text;
                     break;
                 }
@@ -526,7 +531,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
     }
 
-    private void processStartElement(XMLStreamReader xmlStreamReader) throws SerializationException {
+    private void processStartElement() throws IOException, SerializationException {
         // Get element properties
         String namespaceURI = xmlStreamReader.getNamespaceURI();
         String prefix = xmlStreamReader.getPrefix();
@@ -541,15 +546,16 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         String localName = xmlStreamReader.getLocalName();
 
         // Determine the type and value of this element
-        Element.Type elementType = null;
+        Element.Type elementType;
+        String name;
+        Class<?> propertyClass = null;
         Object value = null;
 
         if (prefix != null
             && prefix.equals(internalNamespacePrefix)) {
             // The element represents a BXML operation
             if (element == null) {
-                throw new SerializationException(prefix + ":" + localName
-                    + " is not a valid root element.");
+                throw new SerializationException("Invalid root element.");
             }
 
             if (localName.equals(INCLUDE_TAG)) {
@@ -559,16 +565,26 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             } else if (localName.equals(DEFINE_TAG)) {
                 elementType = Element.Type.DEFINE;
             } else {
-                throw new SerializationException(prefix + ":" + localName
-                    + " is not a valid element.");
+                throw new SerializationException("Invalid element.");
             }
+
+            name = "<" + prefix + ":" + localName + ">";
         } else {
             if (Character.isUpperCase(localName.charAt(0))) {
                 int i = localName.indexOf('.');
+
                 if (i != -1
                     && Character.isLowerCase(localName.charAt(i + 1))) {
                     // The element represents an attached property
                     elementType = Element.Type.WRITABLE_PROPERTY;
+                    name = localName.substring(i + 1);
+
+                    String propertyClassName = namespaceURI + "." + localName.substring(0, i);
+                    try {
+                        propertyClass = Class.forName(propertyClassName);
+                    } catch (ClassNotFoundException exception) {
+                        throw new SerializationException(exception);
+                    }
                 } else {
                     // The element represents a typed object
                     if (namespaceURI == null) {
@@ -576,11 +592,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             + localName + " tag.");
                     }
 
+                    elementType = Element.Type.INSTANCE;
+                    name = "<" + prefix + ":" + localName + ">";
+
                     String className = namespaceURI + "." + localName.replace('.', '$');
 
                     try {
                         Class<?> type = Class.forName(className);
-                        elementType = Element.Type.INSTANCE;
                         value = type.newInstance();
                     } catch (ClassNotFoundException exception) {
                         throw new SerializationException(exception);
@@ -609,110 +627,103 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         elementType = Element.Type.WRITABLE_PROPERTY;
                     }
                 }
+
+                name = localName;
             }
         }
 
-        // Create the element
-        element = new Element(element, namespaceURI, localName, elementType, value);
+        // Create the element and process the attributes
+        element = new Element(element, elementType, name, propertyClass, value);
         processAttributes();
-    }
 
-    private void processAttributes() throws SerializationException {
-        String id = null;
+        // If the element is an include, load it
+        if (elementType == Element.Type.INCLUDE) {
+            if (!element.properties.containsKey(INCLUDE_SRC_ATTRIBUTE)) {
+                throw new SerializationException(INCLUDE_SRC_ATTRIBUTE
+                    + " attribute is required for " + internalNamespacePrefix + ":" + INCLUDE_TAG
+                    + " tag.");
+            }
 
-        for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
-            String attributePrefix = xmlStreamReader.getAttributePrefix(i);
-            String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
-            String attributeValue = xmlStreamReader.getAttributeValue(i);
+            String src = element.properties.get(INCLUDE_SRC_ATTRIBUTE);
 
-            if (attributePrefix != null
-                && attributePrefix.equals(internalNamespacePrefix)) {
-                if (attributeLocalName.equals(ID_ATTRIBUTE)) {
-                    if (attributeValue.length() == 0
-                        || attributeValue.contains(".")) {
-                        throw new IllegalArgumentException("\"" + attributeValue + "\" is not a valid ID value.");
-                    }
+            Resources resources = this.resources;
+            if (element.properties.containsKey(INCLUDE_RESOURCES_ATTRIBUTE)) {
+                resources = new Resources(resources, element.properties.get(INCLUDE_RESOURCES_ATTRIBUTE));
+            }
 
-                    id = attributeValue;
-                } else {
-                    throw new SerializationException(internalNamespacePrefix + ":" + attributeLocalName
-                        + " is not a valid attribute.");
+            String mimeType = null;
+            if (element.properties.containsKey(INCLUDE_MIME_TYPE_ATTRIBUTE)) {
+                mimeType = element.properties.get(INCLUDE_MIME_TYPE_ATTRIBUTE);
+            }
+
+            if (mimeType == null) {
+                // Get the file extension
+                int i = src.lastIndexOf(".");
+                if (i != -1) {
+                    String extension = src.substring(i + 1);
+                    mimeType = fileExtensions.get(extension);
                 }
+            }
+
+            if (mimeType == null) {
+                throw new SerializationException("Cannot determine MIME type of include \""
+                    + src + "\".");
+            }
+
+            boolean inline = false;
+            if (element.properties.containsKey(INCLUDE_INLINE_ATTRIBUTE)) {
+                Boolean.parseBoolean(element.properties.get(INCLUDE_INLINE_ATTRIBUTE));
+            }
+
+            // Determine an appropriate serializer to use for the include
+            Class<? extends Serializer<?>> serializerClass = mimeTypes.get(mimeType);
+
+            if (serializerClass == null) {
+                throw new SerializationException("No serializer associated with MIME type "
+                    + mimeType + ".");
+            }
+
+            Serializer<?> serializer;
+            try {
+                serializer = serializerClass.newInstance();
+            } catch (InstantiationException exception) {
+                throw new SerializationException(exception);
+            } catch (IllegalAccessException exception) {
+                throw new SerializationException(exception);
+            }
+
+            // Determine location from src attribute
+            URL location;
+            if (src.charAt(0) == '/') {
+                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                location = classLoader.getResource(src.substring(1));
             } else {
-                String attributeNamespaceURI = xmlStreamReader.getAttributeNamespace(i);
-                if (attributeNamespaceURI == null) {
-                    attributeNamespaceURI = xmlStreamReader.getNamespaceURI("");
+                location = new URL(this.location, src);
+            }
+
+            // Set optional resolution properties
+            if (serializer instanceof Resolvable) {
+                Resolvable resolvable = (Resolvable)serializer;
+                if (inline) {
+                    resolvable.setNamespace(namespace);
                 }
 
-                Object resolvedValue = null;
+                resolvable.setLocation(location);
+                resolvable.setResources(resources);
+            }
 
-                if (attributeValue.length() > 0) {
-                    if (attributeValue.charAt(0) == URL_PREFIX) {
-                        if (attributeValue.length() > 1) {
-                            if (attributeValue.charAt(1) == URL_PREFIX) {
-                                resolvedValue = attributeValue.substring(1);
-                            } else {
-                                if (location == null) {
-                                    throw new IllegalStateException("Base location is undefined.");
-                                }
-
-                                try {
-                                    resolvedValue = new URL(location, attributeValue.substring(1));
-                                } catch (MalformedURLException exception) {
-                                    throw new SerializationException(exception);
-                                }
-                            }
-                        }
-                    } else if (attributeValue.charAt(0) == RESOURCE_KEY_PREFIX) {
-                        if (attributeValue.length() > 1) {
-                            if (attributeValue.charAt(1) == RESOURCE_KEY_PREFIX) {
-                                resolvedValue = attributeValue.substring(1);
-                            } else {
-                                if (resources == null) {
-                                    throw new IllegalStateException("Resources is null.");
-                                }
-
-                                resolvedValue = JSON.get(resources, attributeValue.substring(1));
-
-                                if (resolvedValue == null) {
-                                    resolvedValue = attributeValue;
-                                }
-                            }
-                        }
-                    } else if (attributeValue.charAt(0) == OBJECT_REFERENCE_PREFIX) {
-                        if (attributeValue.length() > 1) {
-                            if (attributeValue.charAt(1) == OBJECT_REFERENCE_PREFIX) {
-                                resolvedValue = attributeValue.substring(1);
-                            } else if (attributeValue.charAt(1) != NAMESPACE_BINDING_PREFIX) {
-                                // TODO The above check is temporary; this entire block needs to move
-                                // to processEndElement() or readObject()
-                                resolvedValue = JSON.get(namespace, attributeValue.substring(1));
-
-                                if (resolvedValue == null) {
-                                    resolvedValue = attributeValue;
-                                }
-                            }
-                        }
-                    } else {
-                        resolvedValue = attributeValue;
-                    }
-                } else {
-                    resolvedValue = attributeValue;
-                }
-
-                // TODO Don't do this for all attributes, only those that were resolved
-                element.attributes.add(new Attribute(element, attributeNamespaceURI, attributeLocalName,
-                    resolvedValue));
+            // Read the object
+            InputStream inputStream = new BufferedInputStream(location.openStream());
+            try {
+                element.value = serializer.readObject(inputStream);
+            } finally {
+                inputStream.close();
             }
         }
 
-        // Add the value to the namespace
-        if (id != null) {
-            if (namespace.containsKey(id)) {
-                throw new SerializationException("ID " + id + " is already in use.");
-            }
-
-            namespace.put(id, element.value);
+        // If the element has an ID, add the value to the namespace
+        if (element.id != null) {
+            namespace.put(element.id, element.value);
 
             // If the type has an ID property, use it
             Class<?> type = element.value.getClass();
@@ -720,121 +731,167 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             if (idProperty != null) {
                 BeanAdapter beanAdapter = new BeanAdapter(element.value);
-                beanAdapter.put(idProperty.value(), id);
+                beanAdapter.put(idProperty.value(), element.id);
+            }
+        }
+    }
+
+    private void processAttributes() throws SerializationException {
+        for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
+            String prefix = xmlStreamReader.getAttributePrefix(i);
+            String localName = xmlStreamReader.getAttributeLocalName(i);
+            String value = xmlStreamReader.getAttributeValue(i);
+
+            if (prefix != null
+                && prefix.equals(internalNamespacePrefix)) {
+                // The attribute represents an internal value
+                if (localName.equals(ID_ATTRIBUTE)) {
+                    if (value.length() == 0
+                        || value.contains(".")) {
+                        throw new IllegalArgumentException("\"" + value + "\" is not a valid ID value.");
+                    }
+
+                    if (namespace.containsKey(value)) {
+                        throw new SerializationException("ID " + value + " is already in use.");
+                    }
+
+                    if (element.type != Element.Type.INSTANCE
+                        && element.type != Element.Type.INCLUDE) {
+                        throw new SerializationException("An ID cannot be assigned to this element.");
+                    }
+
+                    element.id = value;
+                } else {
+                    throw new SerializationException(internalNamespacePrefix + ":" + localName
+                        + " is not a valid attribute.");
+                }
+            } else {
+                boolean property = false;
+
+                switch (element.type) {
+                    case INCLUDE: {
+                        property = (localName.equals(INCLUDE_SRC_ATTRIBUTE)
+                            || localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)
+                            || localName.equals(INCLUDE_MIME_TYPE_ATTRIBUTE)
+                            || localName.equals(INCLUDE_INLINE_ATTRIBUTE));
+                        break;
+                    }
+
+                    case SCRIPT: {
+                        property = (localName.equals(SCRIPT_SRC_ATTRIBUTE)
+                            || localName.equals(SCRIPT_LANGUAGE_ATTRIBUTE));
+                        break;
+                    }
+                }
+
+                if (property) {
+                    element.properties.put(localName, value);
+                } else {
+                    String name;
+                    Class<?> propertyClass = null;
+
+                    if (Character.isUpperCase(localName.charAt(0))) {
+                        // The attribute represents a static property or listener list
+                        int j = localName.indexOf('.');
+                        name = localName.substring(j + 1);
+
+                        String namespaceURI = xmlStreamReader.getAttributeNamespace(i);
+                        if (namespaceURI == null) {
+                            namespaceURI = xmlStreamReader.getNamespaceURI("");
+                        }
+
+                        String propertyClassName = namespaceURI + "." + localName.substring(0, j);
+                        try {
+                            propertyClass = Class.forName(propertyClassName);
+                        } catch (ClassNotFoundException exception) {
+                            throw new SerializationException(exception);
+                        }
+                    } else {
+                        // The attribute represents an instance property
+                        name = localName;
+                    }
+
+                    // Resolve the attribute value
+                    Object resolvedValue;
+
+                    if (value.length() > 0) {
+                        if (value.charAt(0) == URL_PREFIX) {
+                            value = value.substring(1);
+
+                            if (value.length() > 0) {
+                                // The attribute is a URL or an escaped value with a URL prefix
+                                if (value.charAt(0) == URL_PREFIX) {
+                                    resolvedValue = value;
+                                } else {
+                                    if (location == null) {
+                                        throw new IllegalStateException("Base location is undefined.");
+                                    }
+
+                                    try {
+                                        resolvedValue = new URL(location, value);
+                                    } catch (MalformedURLException exception) {
+                                        throw new SerializationException(exception);
+                                    }
+                                }
+                            } else {
+                                throw new SerializationException("Invalid URL resolution argument.");
+                            }
+                        } else if (value.charAt(0) == RESOURCE_KEY_PREFIX) {
+                            value = value.substring(1);
+
+                            if (value.length() > 0) {
+                                // The attribute is a resource key or an escaped value with a resource
+                                // key prefix
+                                if (value.charAt(0) == RESOURCE_KEY_PREFIX) {
+                                    resolvedValue = value;
+                                } else {
+                                    resolvedValue = JSON.get(resources, value);
+
+                                    if (resolvedValue == null) {
+                                        resolvedValue = value;
+                                    }
+                                }
+                            } else {
+                                throw new SerializationException("Invalid resource resolution argument.");
+                            }
+                        } else if (value.charAt(0) == OBJECT_REFERENCE_PREFIX) {
+                            value = value.substring(1);
+
+                            if (value.length() > 0) {
+                                // The attribute is an object reference or an escaped value with an object
+                                // reference prefix
+                                if (value.charAt(0) == OBJECT_REFERENCE_PREFIX) {
+                                    resolvedValue = value;
+                                } else {
+                                    // TODO Defer until later
+                                    // objectReferenceAttributes.add(attribute);
+                                    resolvedValue = JSON.get(namespace, value);
+                                }
+                            } else {
+                                throw new SerializationException("Invalid object resolution argument.");
+                            }
+                        } else {
+                            resolvedValue = value;
+                        }
+                    } else {
+                        resolvedValue = value;
+                    }
+
+                    // If the value was resolved, add it to the element's attribute list
+                    if (resolvedValue != null) {
+                        element.attributes.add(new Attribute(element, name, propertyClass, resolvedValue));
+                    }
+                }
             }
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void processEndElement(XMLStreamReader xmlStreamReader)
-        throws SerializationException, IOException {
-        String localName = xmlStreamReader.getLocalName();
-
+    private void processEndElement() throws SerializationException {
         switch (element.type) {
             case INSTANCE:
             case INCLUDE: {
-                LinkedList<Attribute> instancePropertyAttributes = new LinkedList<Attribute>();
-                LinkedList<Attribute> staticPropertyAttributes = new LinkedList<Attribute>();
-
-                if (element.type == Element.Type.INCLUDE) {
-                    // Process attributes looking for include parameters and property setters
-                    String src = null;
-                    Resources resources = this.resources;
-                    String mimeType = null;
-                    boolean inline = false;
-
-                    // TODO Move this to processStartElement(); we won't need to cast to String there
-                    for (Attribute attribute : element.attributes) {
-                        if (attribute.localName.equals(INCLUDE_SRC_ATTRIBUTE)) {
-                            src = (String)attribute.value;
-                        } else if (attribute.localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)) {
-                            resources = new Resources(resources, (String)attribute.value);
-                        } else if (attribute.localName.equals(INCLUDE_MIME_TYPE_ATTRIBUTE)) {
-                            mimeType = (String)attribute.value;
-                        } else if (attribute.localName.equals(INCLUDE_INLINE_ATTRIBUTE)) {
-                            inline = Boolean.parseBoolean((String)attribute.value);
-                        } else if (Character.isUpperCase(attribute.localName.charAt(0))) {
-                            staticPropertyAttributes.add(attribute);
-                        } else {
-                            instancePropertyAttributes.add(attribute);
-                        }
-                    }
-
-                    if (src == null) {
-                        throw new SerializationException(INCLUDE_SRC_ATTRIBUTE
-                            + " attribute is required for " + internalNamespacePrefix + ":" + INCLUDE_TAG
-                            + " tag.");
-                    }
-
-                    if (mimeType == null) {
-                        // Get the file extension
-                        int i = src.lastIndexOf(".");
-                        if (i != -1) {
-                            String extension = src.substring(i + 1);
-                            mimeType = fileExtensions.get(extension);
-                        }
-                    }
-
-                    if (mimeType == null) {
-                        throw new SerializationException("Cannot determine MIME type of include \""
-                            + src + "\".");
-                    }
-
-                    Class<? extends Serializer> serializerClass = mimeTypes.get(mimeType);
-
-                    if (serializerClass == null) {
-                        throw new SerializationException("No serializer associated with MIME type "
-                            + mimeType + ".");
-                    }
-
-                    Serializer<?> serializer;
-                    try {
-                        serializer = serializerClass.newInstance();
-                    } catch (InstantiationException exception) {
-                        throw new SerializationException(exception);
-                    } catch (IllegalAccessException exception) {
-                        throw new SerializationException(exception);
-                    }
-
-                    // Determine location from src attribute
-                    URL location;
-                    if (src.charAt(0) == '/') {
-                        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                        location = classLoader.getResource(src.substring(1));
-                    } else {
-                        location = new URL(this.location, src);
-                    }
-
-                    // Set optional resolution properties
-                    if (serializer instanceof Resolvable) {
-                        Resolvable resolvable = (Resolvable)serializer;
-                        if (inline) {
-                            resolvable.setNamespace(namespace);
-                        }
-
-                        resolvable.setLocation(location);
-                        resolvable.setResources(resources);
-                    }
-
-                    // Read the object
-                    InputStream inputStream = new BufferedInputStream(location.openStream());
-                    try {
-                        element.value = serializer.readObject(inputStream);
-                    } finally {
-                        inputStream.close();
-                    }
-                } else {
-                    // Process attributes looking for property setters
-                    for (Attribute attribute : element.attributes) {
-                        if (Character.isUpperCase(attribute.localName.charAt(0))) {
-                            staticPropertyAttributes.add(attribute);
-                        } else {
-                            instancePropertyAttributes.add(attribute);
-                        }
-                    }
-                }
-
-                // Apply instance attributes
+                // Apply attributes
                 Dictionary<String, Object> dictionary;
                 if (element.value instanceof Dictionary<?, ?>) {
                     dictionary = (Dictionary<String, Object>)element.value;
@@ -842,39 +899,16 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     dictionary = new BeanAdapter(element.value);
                 }
 
-                for (Attribute attribute : instancePropertyAttributes) {
-                    dictionary.put(attribute.localName, attribute.value);
-                }
-
-                // Apply static attributes
-                if (element.value instanceof Dictionary<?, ?>) {
-                    if (staticPropertyAttributes.getLength() > 0) {
-                        throw new SerializationException("Static setters are only supported"
-                            + " for typed objects.");
-                    }
-                } else {
-                    for (Attribute attribute : staticPropertyAttributes) {
-                        // Split the local name
-                        String[] localNameComponents = attribute.localName.split("\\.");
-                        if (localNameComponents.length != 2) {
-                            throw new SerializationException("\"" + attribute.localName
-                                + "\" is not a valid attribute name.");
-                        }
-
-                        // Determine the type of the attribute
-                        String propertyClassName = attribute.namespaceURI + "." + localNameComponents[0];
-
-                        Class<?> propertyClass = null;
-                        try {
-                            propertyClass = Class.forName(propertyClassName);
-                        } catch (ClassNotFoundException exception) {
-                            throw new SerializationException(exception);
-                        }
-
-                        if (propertyClass.isInterface()) {
+                for (Attribute attribute : element.attributes) {
+                    if (attribute.propertyClass == null) {
+                        dictionary.put(attribute.name, attribute.value);
+                    } else {
+                        if (attribute.propertyClass.isInterface()) {
                             // The attribute represents an event listener
-                            String listenerClassName = localNameComponents[0];
-                            String getListenerListMethodName = "get" + Character.toUpperCase(listenerClassName.charAt(0))
+                            String listenerClassName = attribute.propertyClass.getName();
+                            listenerClassName = listenerClassName.substring(listenerClassName.lastIndexOf('.') + 1);
+                            String getListenerListMethodName = "get"
+                                + Character.toUpperCase(listenerClassName.charAt(0))
                                 + listenerClassName.substring(1) + "s";
 
                             // Get the listener list
@@ -898,12 +932,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             // Create an invocation handler for this listener
                             ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
                             AttributeInvocationHandler handler =
-                                new AttributeInvocationHandler(scriptEngine,
-                                    localNameComponents[1],
+                                new AttributeInvocationHandler(scriptEngine, attribute.name,
                                     (String)attribute.value);
 
                             Object listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-                                new Class<?>[]{propertyClass}, handler);
+                                new Class<?>[]{attribute.propertyClass}, handler);
 
                             // Add the listener
                             Class<?> listenerListClass = listenerList.getClass();
@@ -923,7 +956,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             }
                         } else {
                             // The attribute represents a static setter
-                            setStaticProperty(element.value, propertyClass, localNameComponents[1], attribute.value);
+                            setStaticProperty(element.value, attribute.propertyClass,
+                                attribute.name, attribute.value);
                         }
                     }
                 }
@@ -968,6 +1002,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             }
 
             case READ_ONLY_PROPERTY: {
+                // TODO If this is a listener list, handle inline script
+
                 Dictionary<String, Object> dictionary;
                 if (element.value instanceof Dictionary<?, ?>) {
                     dictionary = (Dictionary<String, Object>)element.value;
@@ -977,12 +1013,12 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                 // Process attributes looking for instance property setters
                 for (Attribute attribute : element.attributes) {
-                    if (Character.isUpperCase(attribute.localName.charAt(0))) {
+                    if (attribute.propertyClass != null) {
                         throw new SerializationException("Static setters are not supported"
                             + " for read-only properties.");
                     }
 
-                    dictionary.put(attribute.localName, attribute.value);
+                    dictionary.put(attribute.name, attribute.value);
                 }
 
                 break;
@@ -996,66 +1032,31 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     dictionary = new BeanAdapter(element.parent.value);
                 }
 
-                if (Character.isUpperCase(element.localName.charAt(0))) {
-                    if (element.parent == null
-                        || element.parent.value == null) {
+                if (element.propertyClass == null) {
+                    dictionary.put(element.name, element.value);
+                } else {
+                    if (element.parent == null) {
                         throw new SerializationException("Element does not have a parent.");
                     }
 
-                    // Set static property
-                    String[] localNameComponents = element.localName.split("\\.");
-                    if (localNameComponents.length != 2) {
-                        throw new SerializationException("\"" + element.localName
-                            + "\" is not a valid attribute name.");
+                    if (element.parent.value == null) {
+                        throw new SerializationException("Parent value is null.");
                     }
 
-                    String propertyClassName = element.namespaceURI + "." + localNameComponents[0];
-
-                    Class<?> propertyClass = null;
-                    try {
-                        propertyClass = Class.forName(propertyClassName);
-                    } catch (ClassNotFoundException exception) {
-                        throw new SerializationException(exception);
-                    }
-
-                    setStaticProperty(element.parent.value, propertyClass, localNameComponents[1],
-                        element.value);
-                } else {
-                    dictionary.put(localName, element.value);
+                    setStaticProperty(element.parent.value, element.propertyClass,
+                        element.name, element.value);
                 }
 
                 break;
             }
 
             case SCRIPT: {
-                // Process attributes looking for src and language
-                // TODO Move to processStartElement(); we won't need to cast to String there
                 String src = null;
-                String language = this.language;
-                for (Attribute attribute : element.attributes) {
-                    if (attribute.localName.equals(SCRIPT_SRC_ATTRIBUTE)) {
-                        src = (String)attribute.value;
-                    } else if (attribute.localName.equals(SCRIPT_LANGUAGE_ATTRIBUTE)) {
-                        language = (String)attribute.value;
-                    } else {
-                        throw new SerializationException(attribute.localName + " is not a valid"
-                            + " attribute for the " + internalNamespacePrefix + ":" + SCRIPT_TAG + " tag.");
-                    }
+                if (element.properties.containsKey(INCLUDE_SRC_ATTRIBUTE)) {
+                    src = element.properties.get(INCLUDE_SRC_ATTRIBUTE);
                 }
-
-                Bindings bindings;
-                if (element.parent.value instanceof ListenerList<?>) {
-                    // Don't pollute the engine bindings with the listener functions
-                    bindings = new SimpleBindings();
-                } else {
-                    bindings = scriptEngineManager.getBindings();
-                }
-
-                // Execute script
-                final ScriptEngine scriptEngine;
 
                 if (src != null) {
-                    // The script is located in an external file
                     int i = src.lastIndexOf(".");
                     if (i == -1) {
                         throw new SerializationException("Cannot determine type of script \""
@@ -1063,14 +1064,14 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     }
 
                     String extension = src.substring(i + 1);
-                    scriptEngine = scriptEngineManager.getEngineByExtension(extension);
+                    ScriptEngine scriptEngine = scriptEngineManager.getEngineByExtension(extension);
 
                     if (scriptEngine == null) {
                         throw new SerializationException("Unable to find scripting engine for"
                             + " extension " + extension + ".");
                     }
 
-                    scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+                    scriptEngine.setBindings(scriptEngineManager.getBindings(), ScriptContext.ENGINE_SCOPE);
 
                     try {
                         URL scriptLocation;
@@ -1095,53 +1096,30 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     } catch (IOException exception) {
                         throw new SerializationException(exception);
                     }
-                } else {
-                    // The script is inline
-                    scriptEngine = scriptEngineManager.getEngineByName(language);
+                }
+
+                if (element.value != null) {
+                    String language = this.language;
+                    if (element.properties.containsKey(SCRIPT_LANGUAGE_ATTRIBUTE)) {
+                        language = element.properties.get(SCRIPT_LANGUAGE_ATTRIBUTE);
+                    }
+
+                    // Evaluate the script
+                    String script = (String)element.value;
+                    ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
 
                     if (scriptEngine == null) {
                         throw new SerializationException("Unable to find scripting engine for"
                             + " language \"" + language + "\".");
                     }
 
-                    scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
-
-                    String script = (String)element.value;
-                    if (script != null) {
-                        try {
-                            scriptEngine.eval(script);
-                        } catch (ScriptException exception) {
-                            System.err.println(exception);
-                            System.err.println(script);
-                        }
-                    }
-                }
-
-                if (element.parent.value instanceof ListenerList<?>) {
-                    // Create the listener and add it to the list
-                    Class<?> listenerListClass = element.parent.value.getClass();
-
-                    java.lang.reflect.Type[] genericInterfaces = listenerListClass.getGenericInterfaces();
-                    Class<?> listenerClass = (Class<?>)genericInterfaces[0];
-
-                    ElementInvocationHandler handler = new ElementInvocationHandler(scriptEngine);
-
-                    Method addMethod;
-                    try {
-                        addMethod = listenerListClass.getMethod("add", Object.class);
-                    } catch (NoSuchMethodException exception) {
-                        throw new RuntimeException(exception);
-                    }
-
-                    Object listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-                        new Class<?>[]{listenerClass}, handler);
+                    scriptEngine.setBindings(scriptEngineManager.getBindings(), ScriptContext.ENGINE_SCOPE);
 
                     try {
-                        addMethod.invoke(element.parent.value, listener);
-                    } catch (IllegalAccessException exception) {
-                        throw new SerializationException(exception);
-                    } catch (InvocationTargetException exception) {
-                        throw new SerializationException(exception);
+                        scriptEngine.eval(script);
+                    } catch (ScriptException exception) {
+                        System.err.println(exception);
+                        System.err.println(script);
                     }
                 }
 
