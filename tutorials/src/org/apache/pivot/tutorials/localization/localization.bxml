@@ -20,13 +20,11 @@ limitations under the License.
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <windowStateListeners>
-        <bxml:script>
         <![CDATA[
         function windowOpened(window) {
             window.requestFocus();
         }
         ]]>
-        </bxml:script>
     </windowStateListeners>
 
     <Border styles="{padding:6}">

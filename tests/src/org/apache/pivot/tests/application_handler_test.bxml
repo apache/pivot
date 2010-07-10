@@ -22,13 +22,11 @@ limitations under the License.
     <BoxPane>
         <PushButton buttonData="Throw Exception">
             <buttonPressListeners>
-                <bxml:script>
                 <![CDATA[
                 function buttonPressed(button) {
                     throw new java.lang.RuntimeException("Button pressed");
                 }
                 ]]>
-                </bxml:script>
             </buttonPressListeners>
         </PushButton>
     </BoxPane>

@@ -25,16 +25,16 @@ limitations under the License.
                 <Label text="I am a secondary display!"/>
                 <PushButton buttonData="Close">
                     <buttonPressListeners>
-                    function buttonPressed(button) {
-                        button.display.hostWindow.dispose();
-                    }
+                        function buttonPressed(button) {
+                            button.display.hostWindow.dispose();
+                        }
                     </buttonPressListeners>
                 </PushButton>
                 <PushButton buttonData="Set Title">
                     <buttonPressListeners>
-                    function buttonPressed(button) {
-                        secondaryDisplayWindow.title = "New Secondary Window Title";
-                    }
+                        function buttonPressed(button) {
+                            secondaryDisplayWindow.title = "New Secondary Window Title";
+                        }
                     </buttonPressListeners>
                 </PushButton>
             </BoxPane>
@@ -44,28 +44,28 @@ limitations under the License.
     <BoxPane orientation="vertical" styles="{padding:8}">
         <PushButton buttonData="Open Secondary Display">
             <buttonPressListeners>
-            importClass(org.apache.pivot.wtk.DesktopApplicationContext);
+                importClass(org.apache.pivot.wtk.DesktopApplicationContext);
 
-            function buttonPressed(button) {
-                var display = DesktopApplicationContext.createDisplay(640, 480, 100, 100, true,
-                    true, false, button.getDisplay().getHostWindow(),
-                    new DesktopApplicationContext.DisplayListener() {
-                        hostWindowOpened: function(display) {
-                            secondaryDisplayWindow.open(display);
-                        },
+                function buttonPressed(button) {
+                    var display = DesktopApplicationContext.createDisplay(640, 480, 100, 100, true,
+                        true, false, button.getDisplay().getHostWindow(),
+                        new DesktopApplicationContext.DisplayListener() {
+                            hostWindowOpened: function(display) {
+                                secondaryDisplayWindow.open(display);
+                            },
 
-                        hostWindowClosed: function(display) {
-                            secondaryDisplayWindow.close();
-                        }
-                    });
-            }
+                            hostWindowClosed: function(display) {
+                                secondaryDisplayWindow.close();
+                            }
+                        });
+                }
             </buttonPressListeners>
         </PushButton>
         <PushButton buttonData="Set Title">
             <buttonPressListeners>
-            function buttonPressed(button) {
-                primaryDisplayWindow.title = "New Primary Window Title";
-            }
+                function buttonPressed(button) {
+                    primaryDisplayWindow.title = "New Primary Window Title";
+                }
             </buttonPressListeners>
         </PushButton>
     </BoxPane>

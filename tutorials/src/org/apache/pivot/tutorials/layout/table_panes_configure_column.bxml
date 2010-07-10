@@ -23,13 +23,11 @@ limitations under the License.
     <bxml:define>
         <ButtonGroup bxml:id="columnWidthGroup">
             <buttonGroupListeners>
-                <bxml:script>
                 <![CDATA[
                 function selectionChanged(group, previousSelection) {
                     setColumnWidth();
                 }
                 ]]>
-                </bxml:script>
             </buttonGroupListeners>
         </ButtonGroup>
     </bxml:define>
@@ -92,13 +90,11 @@ limitations under the License.
                                         </spinnerData>
 
                                         <spinnerSelectionListeners>
-                                            <bxml:script>
                                             <![CDATA[
                                             function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                 setColumnWidth();
                                             }
                                             ]]>
-                                            </bxml:script>
                                         </spinnerSelectionListeners>
                                     </Spinner>
                                 </TablePane.Row>
@@ -113,13 +109,11 @@ limitations under the License.
                                         </spinnerData>
 
                                         <spinnerSelectionListeners>
-                                            <bxml:script>
                                             <![CDATA[
                                             function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                 setColumnWidth();
                                             }
                                             ]]>
-                                            </bxml:script>
                                         </spinnerSelectionListeners>
                                     </Spinner>
                                 </TablePane.Row>
@@ -140,19 +134,19 @@ limitations under the License.
     </BoxPane>
 
     <bxml:script>
-        <![CDATA[
-        relativeWidthSpinner.setSelectedIndex(0);
-        absoluteWidthSpinner.setSelectedIndex(0);
+    <![CDATA[
+    relativeWidthSpinner.setSelectedIndex(0);
+    absoluteWidthSpinner.setSelectedIndex(0);
 
-        if (column.isRelative()) {
-            relativeWidthSpinner.setSelectedIndex(column.getWidth() - 1);
-            relativeWidthButton.setSelected(true);
-        } else if (column.getWidth() == -1) {
-            defaultWidthButton.setSelected(true);
-        } else {
-            absoluteWidthSpinner.setSelectedIndex(column.getWidth() - 50);
-            absoluteWidthButton.setSelected(true);
-        }
-        ]]>
+    if (column.isRelative()) {
+        relativeWidthSpinner.setSelectedIndex(column.getWidth() - 1);
+        relativeWidthButton.setSelected(true);
+    } else if (column.getWidth() == -1) {
+        defaultWidthButton.setSelected(true);
+    } else {
+        absoluteWidthSpinner.setSelectedIndex(column.getWidth() - 50);
+        absoluteWidthButton.setSelected(true);
+    }
+    ]]>
     </bxml:script>
 </Sheet>

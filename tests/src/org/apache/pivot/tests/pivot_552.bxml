@@ -22,21 +22,17 @@ limitations under the License.
     <BoxPane>
         <ListButton bxml:id="listButton" listData="['One', 'Three', 'Four']" selectedIndex="1">
             <listButtonSelectionListeners>
-                <bxml:script>
                 function selectedIndexChanged(listButton, previousSelectedIndex) {
                     java.lang.System.out.println(previousSelectedIndex + ", " + listButton.selectedIndex);
                 }
-                </bxml:script>
             </listButtonSelectionListeners>
         </ListButton>
 
         <PushButton buttonData="Add Two">
             <buttonPressListeners>
-                <bxml:script>
                 function buttonPressed(button) {
                     listButton.listData.insert("Two", 1);
                 }
-                </bxml:script>
             </buttonPressListeners>
         </PushButton>
     </BoxPane>

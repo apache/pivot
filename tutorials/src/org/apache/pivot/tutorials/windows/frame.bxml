@@ -33,59 +33,50 @@ limitations under the License.
     <BoxPane orientation="vertical">
         <PushButton buttonData="Show Alert">
             <buttonPressListeners>
-                <bxml:script>
                 <![CDATA[
                 importPackage(org.apache.pivot.wtk);
                 function buttonPressed(button) {
                     Alert.alert("This is an Alert.", frame);
                 }
                 ]]>
-                </bxml:script>
             </buttonPressListeners>
         </PushButton>
 
         <PushButton buttonData="Show Prompt">
             <buttonPressListeners>
-                <bxml:script>
                 <![CDATA[
                 importPackage(org.apache.pivot.wtk);
                 function buttonPressed(button) {
                     Prompt.prompt("This is a Prompt.", frame);
                 }
                 ]]>
-                </bxml:script>
             </buttonPressListeners>
         </PushButton>
 
         <PushButton buttonData="Show Dialog">
             <buttonPressListeners>
-                <bxml:script>
                 <![CDATA[
                 importPackage(org.apache.pivot.wtk);
                 function buttonPressed(button) {
                     dialog.open(frame, null);
                 }
                 ]]>
-                </bxml:script>
             </buttonPressListeners>
         </PushButton>
 
         <PushButton buttonData="Show Sheet">
             <buttonPressListeners>
-                <bxml:script>
                 <![CDATA[
                 importPackage(org.apache.pivot.wtk);
                 function buttonPressed(button) {
                     sheet.open(frame, null);
                 }
                 ]]>
-                </bxml:script>
             </buttonPressListeners>
         </PushButton>
 
         <PushButton buttonData="Show Palette">
             <buttonPressListeners>
-                <bxml:script>
                 <![CDATA[
                 importPackage(org.apache.pivot.wtk);
                 function buttonPressed(button) {
@@ -97,7 +88,6 @@ limitations under the License.
                     palette.open(frame);
                 }
                 ]]>
-                </bxml:script>
             </buttonPressListeners>
         </PushButton>
     </BoxPane>

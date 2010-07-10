@@ -38,14 +38,12 @@ limitations under the License.
                 </columns>
 
                 <tableViewSortListeners>
-                    <bxml:script>
                     <![CDATA[
                     function sortChanged(tableView) {
                         var tableData = tableView.getTableData();
                         tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
                     }
                     ]]>
-                    </bxml:script>
                 </tableViewSortListeners>
 
                 <!-- Source: http://en.wikipedia.org/wiki/2008_Summer_Olympics_medal_table -->

@@ -36,11 +36,9 @@ limitations under the License.
 
         <PushButton buttonData="Set Title">
             <buttonPressListeners>
-                <bxml:script>
                 function buttonPressed(button) {
                     window.setTitle("New Title");
                 }
-                </bxml:script>
             </buttonPressListeners>
         </PushButton>
     </BoxPane>

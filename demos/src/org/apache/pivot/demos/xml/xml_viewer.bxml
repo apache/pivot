@@ -34,23 +34,23 @@ limitations under the License.
                             </nodeRenderer>
 
                             <componentKeyListeners>
-                            <![CDATA[
-                            importPackage(org.apache.pivot.wtk);
-                            function keyPressed(component, keyCode, keyLocation) {
-                                if (keyCode == Keyboard.KeyCode.V
-                                    && Keyboard.isPressed(Platform.getCommandModifier())) {
-                                    application.paste();
+                                <![CDATA[
+                                importPackage(org.apache.pivot.wtk);
+                                function keyPressed(component, keyCode, keyLocation) {
+                                    if (keyCode == Keyboard.KeyCode.V
+                                        && Keyboard.isPressed(Platform.getCommandModifier())) {
+                                        application.paste();
+                                    }
                                 }
-                            }
-                            ]]>
+                                ]]>
                             </componentKeyListeners>
 
                             <treeViewSelectionListeners>
-                            <![CDATA[
-                            function selectedPathsChanged(treeView, previousSelectedPaths) {
-                                application.updateProperties();
-                            }
-                            ]]>
+                                <![CDATA[
+                                function selectedPathsChanged(treeView, previousSelectedPaths) {
+                                    application.updateProperties();
+                                }
+                                ]]>
                             </treeViewSelectionListeners>
                         </TreeView>
                     </ScrollPane>

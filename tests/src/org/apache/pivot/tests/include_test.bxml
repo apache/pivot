@@ -20,13 +20,11 @@ limitations under the License.
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <windowStateListeners>
-        <bxml:script>
         <![CDATA[
         function windowOpened(window) {
             java.lang.System.out.println(label.getText());
         }
         ]]>
-        </bxml:script>
     </windowStateListeners>
 
     <bxml:include src="include_test.content.bxml" text="Hello, World!" inline="true"/>

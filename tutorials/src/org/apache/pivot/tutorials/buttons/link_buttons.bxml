@@ -28,13 +28,11 @@ limitations under the License.
                     <content:ButtonData text="Next" icon="@resultset_next.png"/>
 
                     <buttonPressListeners>
-                        <bxml:script>
                         <![CDATA[
                         function buttonPressed(button) {
                             cardPane.setSelectedIndex(1);
                         }
                         ]]>
-                        </bxml:script>
                     </buttonPressListeners>
                 </LinkButton>
             </BoxPane>
@@ -45,13 +43,11 @@ limitations under the License.
                     <content:ButtonData text="Previous" icon="@resultset_previous.png"/>
 
                     <buttonPressListeners>
-                        <bxml:script>
                         <![CDATA[
                         function buttonPressed(button) {
                             cardPane.setSelectedIndex(0);
                         }
                         ]]>
-                        </bxml:script>
                     </buttonPressListeners>
                 </LinkButton>
             </BoxPane>

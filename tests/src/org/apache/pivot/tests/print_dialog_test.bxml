@@ -22,7 +22,6 @@ limitations under the License.
     <BoxPane styles="{padding:8}">
         <PushButton buttonData="Show Print Dialog">
             <buttonPressListeners>
-                <bxml:script>
                 importPackage(java.awt.print);
 
                 function buttonPressed(button) {
@@ -35,7 +34,6 @@ limitations under the License.
 
                     printerJob.printDialog();
                 }
-                </bxml:script>
             </buttonPressListeners>
         </PushButton>
     </BoxPane>

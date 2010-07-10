@@ -40,19 +40,17 @@ limitations under the License.
                     <TextInput bxml:id="hexInput" Form.label="HTML Notation" textSize="6"
                         ComponentStateListener.focusedChanged="onInputFocusChange()">
                         <componentKeyListeners>
-                            <bxml:script>
-                                <![CDATA[
-                                importClass(org.apache.pivot.wtk.Component);
-                                importClass(org.apache.pivot.wtk.Keyboard);
+                            <![CDATA[
+                            importClass(org.apache.pivot.wtk.Component);
+                            importClass(org.apache.pivot.wtk.Keyboard);
 
-                                function keyPressed(component, keyCode, keyLocation) {
-                                    if (keyCode == Keyboard.KeyCode.TAB ||
-                                        keyCode == Keyboard.KeyCode.ENTER) {
-                                        Component.clearFocus();
-                                    }
+                            function keyPressed(component, keyCode, keyLocation) {
+                                if (keyCode == Keyboard.KeyCode.TAB ||
+                                    keyCode == Keyboard.KeyCode.ENTER) {
+                                    Component.clearFocus();
                                 }
-                                ]]>
-                            </bxml:script>
+                            }
+                            ]]>
                         </componentKeyListeners>
                     </TextInput>
                 </Form.Section>

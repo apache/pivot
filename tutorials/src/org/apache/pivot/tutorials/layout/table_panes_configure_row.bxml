@@ -23,13 +23,11 @@ limitations under the License.
     <bxml:define>
         <ButtonGroup bxml:id="rowHeightGroup">
             <buttonGroupListeners>
-                <bxml:script>
                 <![CDATA[
                 function selectionChanged(group, previousSelection) {
                     setRowHeight();
                 }
                 ]]>
-                </bxml:script>
             </buttonGroupListeners>
         </ButtonGroup>
     </bxml:define>
@@ -87,13 +85,11 @@ limitations under the License.
                                         </spinnerData>
 
                                         <spinnerSelectionListeners>
-                                            <bxml:script>
                                             <![CDATA[
                                             function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                 setRowHeight();
                                             }
                                             ]]>
-                                            </bxml:script>
                                         </spinnerSelectionListeners>
                                     </Spinner>
                                 </TablePane.Row>
@@ -107,13 +103,11 @@ limitations under the License.
                                         </spinnerData>
 
                                         <spinnerSelectionListeners>
-                                            <bxml:script>
                                             <![CDATA[
                                             function selectedIndexChanged(spinner, previousSelectedIndex) {
                                                 setRowHeight();
                                             }
                                             ]]>
-                                            </bxml:script>
                                         </spinnerSelectionListeners>
                                     </Spinner>
                                 </TablePane.Row>

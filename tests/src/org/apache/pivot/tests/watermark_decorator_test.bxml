@@ -30,7 +30,6 @@ limitations under the License.
             <BoxPane styles="{padding:10}">
                 <PushButton buttonData="Toggle Watermark" toggleButton="true">
                     <buttonStateListeners>
-                        <bxml:script>
                         <![CDATA[
                         importPackage(org.apache.pivot.wtk.effects);
 
@@ -42,7 +41,6 @@ limitations under the License.
                             }
                         }
                         ]]>
-                        </bxml:script>
                     </buttonStateListeners>
                 </PushButton>
             </BoxPane>

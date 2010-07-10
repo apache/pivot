@@ -22,14 +22,12 @@ limitations under the License.
     <bxml:script src="clipboard.js"/>
 
     <windowStateListeners>
-        <bxml:script>
         <![CDATA[
         function windowOpened(window) {
             sourceImageButtonGroup.setSelection(sourceImageButton1);
             sourceImageButton1.requestFocus();
         }
         ]]>
-        </bxml:script>
     </windowStateListeners>
 
     <TablePane styles="{horizontalSpacing:4, verticalSpacing:4}">
@@ -60,7 +58,6 @@ limitations under the License.
                     <bxml:define>
                         <ButtonGroup bxml:id="sourceImageButtonGroup">
                             <buttonGroupListeners>
-                                <bxml:script>
                                 <![CDATA[
                                 function selectionChanged(buttonGroup, previousSelection) {
                                     var selection = buttonGroup.getSelection();
@@ -71,7 +68,6 @@ limitations under the License.
                                     }
                                 }
                                 ]]>
-                                </bxml:script>
                             </buttonGroupListeners>
                         </ButtonGroup>
                     </bxml:define>

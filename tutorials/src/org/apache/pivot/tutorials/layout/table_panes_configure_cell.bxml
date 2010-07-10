@@ -39,13 +39,11 @@ limitations under the License.
                                     </spinnerData>
 
                                     <spinnerSelectionListeners>
-                                        <bxml:script>
                                         <![CDATA[
                                         function selectedIndexChanged(spinner, previousSelectedIndex) {
                                             TablePane.setRowSpan(component, spinner.getSelectedItem());
                                         }
                                         ]]>
-                                        </bxml:script>
                                     </spinnerSelectionListeners>
                                 </Spinner>
 
@@ -56,13 +54,11 @@ limitations under the License.
                                     </spinnerData>
 
                                     <spinnerSelectionListeners>
-                                        <bxml:script>
                                         <![CDATA[
                                         function selectedIndexChanged(spinner, previousSelectedIndex) {
                                             TablePane.setColumnSpan(component, spinner.getSelectedItem());
                                         }
                                         ]]>
-                                        </bxml:script>
                                     </spinnerSelectionListeners>
                                 </Spinner>
 
@@ -77,14 +73,12 @@ limitations under the License.
                                     </itemRenderer>
 
                                     <listButtonSelectionListeners>
-                                        <bxml:script>
                                         <![CDATA[
                                         function selectedIndexChanged(listButton, previousSelectedIndex) {
                                             var colorItem = backgroundColorListButton.getSelectedItem();
                                             component.getStyles().put("backgroundColor", colorItem.getColor());
                                         }
                                         ]]>
-                                        </bxml:script>
                                     </listButtonSelectionListeners>
 
                                     <content:ColorItem color="0x00000000" name="Transparent"/>

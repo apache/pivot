@@ -41,7 +41,6 @@ limitations under the License.
                     <bxml:define>
                         <ButtonGroup bxml:id="orientation">
                             <buttonGroupListeners>
-                                <bxml:script>
                                 <![CDATA[
                                 function selectionChanged(buttonGroup, previousSelection) {
                                     var selection = buttonGroup.getSelection();
@@ -52,7 +51,6 @@ limitations under the License.
                                     }
                                 }
                                 ]]>
-                                </bxml:script>
                             </buttonGroupListeners>
                         </ButtonGroup>
                     </bxml:define>
@@ -67,13 +65,11 @@ limitations under the License.
 
                     <Checkbox buttonData="Use Shadow">
                         <buttonStateListeners>
-                            <bxml:script>
                             <![CDATA[
                             function stateChanged(button, previousState) {
                                 splitPane.getStyles().put("useShadow", button.isSelected());
                             }
                             ]]>
-                            </bxml:script>
                         </buttonStateListeners>
                     </Checkbox>
                 </BoxPane>

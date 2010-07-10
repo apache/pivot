@@ -37,60 +37,60 @@ limitations under the License.
                         <BoxPane styles="{verticalAlignment:'center'}">
                             <TextInput textSize="18" bxml:id="termTextInput">
                                 <componentKeyListeners>
-                                <![CDATA[
-                                importPackage(org.apache.pivot.wtk);
-                                function keyPressed(component, keyCode, keyLocation) {
-                                    var term = termTextInput.getText();
+                                    <![CDATA[
+                                    importPackage(org.apache.pivot.wtk);
+                                    function keyPressed(component, keyCode, keyLocation) {
+                                        var term = termTextInput.getText();
 
-                                    if (keyCode == Keyboard.KeyCode.ENTER) {
-                                        if (!application.isQueryExecuting()
-                                            && term.length() > 0) {
-                                            searchButton.press();
+                                        if (keyCode == Keyboard.KeyCode.ENTER) {
+                                            if (!application.isQueryExecuting()
+                                                && term.length() > 0) {
+                                                searchButton.press();
+                                            }
                                         }
-                                    }
 
-                                    return false;
-                                }
-                                ]]>
+                                        return false;
+                                    }
+                                    ]]>
                                 </componentKeyListeners>
 
                                 <textInputTextListeners>
-                                <![CDATA[
-                                function textChanged(textInput) {
-                                    var term = termTextInput.getText();
-                                    searchButton.setEnabled(term.length() > 0);
-                                }
-                                ]]>
+                                    <![CDATA[
+                                    function textChanged(textInput) {
+                                        var term = termTextInput.getText();
+                                        searchButton.setEnabled(term.length() > 0);
+                                    }
+                                    ]]>
                                 </textInputTextListeners>
                             </TextInput>
 
                             <PushButton bxml:id="searchButton" enabled="false"
                                 styles="{toolbar:true, padding:1}">
                                 <buttonPressListeners>
-                                <![CDATA[
-                                function buttonPressed(button) {
-                                    if (application.isQueryExecuting()) {
-                                        application.abortQuery();
-                                    } else {
-                                        application.executeQuery(termTextInput.getText());
+                                    <![CDATA[
+                                    function buttonPressed(button) {
+                                        if (application.isQueryExecuting()) {
+                                            application.abortQuery();
+                                        } else {
+                                            application.executeQuery(termTextInput.getText());
+                                        }
                                     }
-                                }
-                                ]]>
+                                    ]]>
                                 </buttonPressListeners>
 
                                 <componentKeyListeners>
-                                <![CDATA[
-                                importPackage(org.apache.pivot.wtk);
-                                function keyPressed(component, keyCode, keyLocation) {
-                                    if (keyCode == Keyboard.KeyCode.ESCAPE) {
-                                        if (application.isQueryExecuting()) {
-                                            application.abortQuery();
+                                    <![CDATA[
+                                    importPackage(org.apache.pivot.wtk);
+                                    function keyPressed(component, keyCode, keyLocation) {
+                                        if (keyCode == Keyboard.KeyCode.ESCAPE) {
+                                            if (application.isQueryExecuting()) {
+                                                application.abortQuery();
+                                            }
                                         }
-                                    }
 
-                                    return false;
-                                }
-                                ]]>
+                                        return false;
+                                    }
+                                    ]]>
                                 </componentKeyListeners>
                             </PushButton>
                         </BoxPane>
@@ -119,47 +119,47 @@ limitations under the License.
                                         </columns>
 
                                         <componentMouseButtonListeners>
-                                        <![CDATA[
-                                        importClass(java.awt.Desktop);
-                                        importClass(java.net.URL);
-                                        var selectedResult;
+                                            <![CDATA[
+                                            importClass(java.awt.Desktop);
+                                            importClass(java.net.URL);
+                                            var selectedResult;
 
-                                        function mouseClick(component, button, x, y, count) {
-                                            if (count == 1) {
-                                                selectedResult = resultsTableView.getSelectedRow();
-                                            } else if (count == 2) {
-                                                if (selectedResult == resultsTableView.getSelectedRow()) {
-                                                    var url = new URL(selectedResult.get("previewUrl"));
-                                                    Desktop.getDesktop().browse(url.toURI());
+                                            function mouseClick(component, button, x, y, count) {
+                                                if (count == 1) {
+                                                    selectedResult = resultsTableView.getSelectedRow();
+                                                } else if (count == 2) {
+                                                    if (selectedResult == resultsTableView.getSelectedRow()) {
+                                                        var url = new URL(selectedResult.get("previewUrl"));
+                                                        Desktop.getDesktop().browse(url.toURI());
+                                                    }
                                                 }
                                             }
-                                        }
-                                        ]]>
+                                            ]]>
                                         </componentMouseButtonListeners>
 
                                         <tableViewSelectionListeners>
-                                        <![CDATA[
-                                        function selectedRangeAdded(tableView, rangeStart, rangeEnd) {
-                                            application.updateArtwork();
-                                        }
+                                            <![CDATA[
+                                            function selectedRangeAdded(tableView, rangeStart, rangeEnd) {
+                                                application.updateArtwork();
+                                            }
 
-                                        function selectedRangeRemoved(tableView, rangeStart, rangeEnd) {
-                                            application.updateArtwork();
-                                        }
+                                            function selectedRangeRemoved(tableView, rangeStart, rangeEnd) {
+                                                application.updateArtwork();
+                                            }
 
-                                        function selectedRangesChanged(tableView, previousSelectedRanges) {
-                                            application.updateArtwork();
-                                        }
-                                        ]]>
+                                            function selectedRangesChanged(tableView, previousSelectedRanges) {
+                                                application.updateArtwork();
+                                            }
+                                            ]]>
                                         </tableViewSelectionListeners>
 
                                         <tableViewSortListeners>
-                                        <![CDATA[
-                                        function sortChanged(tableView) {
-                                            var tableData = tableView.getTableData();
-                                            tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
-                                        }
-                                        ]]>
+                                            <![CDATA[
+                                            function sortChanged(tableView) {
+                                                var tableData = tableView.getTableData();
+                                                tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                                            }
+                                            ]]>
                                         </tableViewSortListeners>
                                     </TableView>
 
@@ -184,15 +184,15 @@ limitations under the License.
                             <BoxPane styles="{horizontalAlignment:'center'}">
                                 <PushButton bxml:id="previewButton" buttonData="Preview" enabled="false">
                                     <buttonPressListeners>
-                                    <![CDATA[
-                                    importClass(java.awt.Desktop);
-                                    importClass(java.net.URL);
-                                    function buttonPressed(button) {
-                                        var selectedResult = resultsTableView.getSelectedRow();
-                                        var url = new URL(selectedResult.get("previewUrl"));
-                                        Desktop.getDesktop().browse(url.toURI());
-                                    }
-                                    ]]>
+                                        <![CDATA[
+                                        importClass(java.awt.Desktop);
+                                        importClass(java.net.URL);
+                                        function buttonPressed(button) {
+                                            var selectedResult = resultsTableView.getSelectedRow();
+                                            var url = new URL(selectedResult.get("previewUrl"));
+                                            Desktop.getDesktop().browse(url.toURI());
+                                        }
+                                        ]]>
                                     </buttonPressListeners>
                                 </PushButton>
                             </BoxPane>

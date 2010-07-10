@@ -99,27 +99,23 @@ limitations under the License.
                     <Form.Section>
                         <Checkbox Form.label="Show horizontal grid lines" selected="true">
                             <buttonStateListeners>
-                                <bxml:script>
                                 <![CDATA[
                                 function stateChanged(button, previousState) {
                                     tablePane.getStyles().put("showHorizontalGridLines",
                                         button.isSelected());
                                 }
                                 ]]>
-                                </bxml:script>
                             </buttonStateListeners>
                         </Checkbox>
 
                         <Checkbox Form.label="Show vertical grid lines" selected="true">
                             <buttonStateListeners>
-                                <bxml:script>
                                 <![CDATA[
                                 function stateChanged(button, previousState) {
                                     tablePane.getStyles().put("showVerticalGridLines",
                                         button.isSelected());
                                 }
                                 ]]>
-                                </bxml:script>
                             </buttonStateListeners>
                         </Checkbox>
 
@@ -130,14 +126,12 @@ limitations under the License.
                             </spinnerData>
 
                             <spinnerSelectionListeners>
-                                <bxml:script>
                                 <![CDATA[
                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
                                     tablePane.getStyles().put("horizontalSpacing",
                                         spinner.getSelectedItem());
                                 }
                                 ]]>
-                                </bxml:script>
                             </spinnerSelectionListeners>
                         </Spinner>
 
@@ -148,14 +142,12 @@ limitations under the License.
                             </spinnerData>
 
                             <spinnerSelectionListeners>
-                                <bxml:script>
                                 <![CDATA[
                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
                                     tablePane.getStyles().put("verticalSpacing",
                                         spinner.getSelectedItem());
                                 }
                                 ]]>
-                                </bxml:script>
                             </spinnerSelectionListeners>
                         </Spinner>
 
@@ -166,14 +158,12 @@ limitations under the License.
                             </spinnerData>
 
                             <spinnerSelectionListeners>
-                                <bxml:script>
                                 <![CDATA[
                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
                                     tablePane.getStyles().put("padding",
                                         spinner.getSelectedItem());
                                 }
                                 ]]>
-                                </bxml:script>
                             </spinnerSelectionListeners>
                         </Spinner>
                     </Form.Section>

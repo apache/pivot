@@ -23,17 +23,17 @@ limitations under the License.
     <BoxPane styles="{padding:8}">
         <TextInput bxml:id="textInput">
             <componentKeyListeners>
-            <![CDATA[
-            importPackage(java.lang);
-            importPackage(org.apache.pivot.wtk);
+                <![CDATA[
+                importPackage(java.lang);
+                importPackage(org.apache.pivot.wtk);
 
-            function keyPressed(component, keyCode, keyLocation) {
-                if (keyCode == Keyboard.KeyCode.S
-                    && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                    System.out.println("You pressed Control-S!");
+                function keyPressed(component, keyCode, keyLocation) {
+                    if (keyCode == Keyboard.KeyCode.S
+                        && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                        System.out.println("You pressed Control-S!");
+                    }
                 }
-            }
-            ]]>
+                ]]>
             </componentKeyListeners>
         </TextInput>
     </BoxPane>

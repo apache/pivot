@@ -38,7 +38,6 @@ limitations under the License.
                 <bxml:define>
                     <ButtonGroup bxml:id="decoratorButtonGroup">
                         <buttonGroupListeners>
-                            <bxml:script>
                             <![CDATA[
                             function selectionChanged(buttonGroup) {
                                 var selection = buttonGroup.getSelection();
@@ -53,7 +52,6 @@ limitations under the License.
                                 }
                             }
                             ]]>
-                            </bxml:script>
                         </buttonGroupListeners>
                     </ButtonGroup>
                 </bxml:define>

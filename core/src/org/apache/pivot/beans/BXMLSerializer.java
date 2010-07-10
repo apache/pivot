@@ -550,9 +550,20 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 case WRITABLE_PROPERTY:
-                case LISTENER_LIST_PROPERTY:
-                case SCRIPT: {
+                case LISTENER_LIST_PROPERTY: {
                     element.value = text;
+                    break;
+                }
+
+                case SCRIPT: {
+                    // TODO This is for WTKX compatibility; remove when WTKX support is dropped
+                    // and move SCRIPT up to the previous block
+                    if (element.parent.type == Element.Type.LISTENER_LIST_PROPERTY) {
+                        element.parent.value = text;
+                    } else {
+                        element.value = text;
+                    }
+
                     break;
                 }
 

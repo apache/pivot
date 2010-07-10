@@ -30,7 +30,6 @@ limitations under the License.
         <Label bxml:id="barLabel"/>
         <PushButton buttonData="Click Me">
             <buttonPressListeners>
-                <bxml:script>
                 <![CDATA[
                 function buttonPressed(button) {
                     testFrame.open(window);
@@ -38,11 +37,11 @@ limitations under the License.
                     java.lang.System.out.println(label2.getText());
                 }
                 ]]>
-                </bxml:script>
-                <bxml:define>
-                    <Label bxml:id="label2" text="World"/>
-                </bxml:define>
             </buttonPressListeners>
+
+            <bxml:define>
+                <Label bxml:id="label2" text="World"/>
+            </bxml:define>
         </PushButton>
     </BoxPane>
 </Window>

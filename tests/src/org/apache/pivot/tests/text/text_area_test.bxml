@@ -69,7 +69,6 @@ limitations under the License.
             <TablePane.Row height="-1">
                 <Checkbox buttonData="Wrap Text">
                     <buttonStateListeners>
-                        <bxml:script>
                         <![CDATA[
                         importClass(org.apache.pivot.wtk.ScrollPane);
                         function stateChanged(button, previousState) {
@@ -85,7 +84,6 @@ limitations under the License.
                             textAreaScrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
                         }
                         ]]>
-                        </bxml:script>
                     </buttonStateListeners>
                 </Checkbox>
             </TablePane.Row>
