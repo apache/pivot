@@ -130,6 +130,7 @@ limitations under the License.
             <mkdir dir="@{project}/${folder.bin}"/>
             <javac destDir="@{project}/${folder.bin}"
                 includejavaruntime="true"
+                includeantruntime="true"
                 deprecation="${compiler.deprecation}"
                 debug="${compiler.debug}"
                 target="${compiler.target}"
