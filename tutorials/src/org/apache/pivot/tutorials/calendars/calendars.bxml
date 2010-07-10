@@ -16,22 +16,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<calendars:Calendars title="Calendars" maximized="true"
+<Window title="Calendars" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
-    xmlns:calendars="org.apache.pivot.tutorials.calendars"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:8}">
         <Form>
             <Form.Section>
                 <Border Form.label="Calendar" styles="{color:10}">
-                    <Calendar bxml:id="calendar"/>
+                    <Calendar bxml:id="calendar" selectedDate="${calendarButton.selectedDate}">
+                        <calendarSelectionListeners>
+                            function selectedDateChanged(calendar, previousSelectedDate) {
+                                calendar.year = calendar.selectedDate.year;
+                                calendar.month = calendar.selectedDate.month;
+                            }
+                        </calendarSelectionListeners>
+                    </Calendar>
                 </Border>
-                <CalendarButton bxml:id="calendarButton" Form.label="Calendar button"/>
+                <CalendarButton bxml:id="calendarButton" Form.label="Calendar button"
+                    selectedDate="${calendar.selectedDate}"/>
             </Form.Section>
             <Form.Section>
-                <Label bxml:id="selectedDateLabel" Form.label="Selected date"/>
+                <Label bxml:id="selectedDateLabel" Form.label="Selected date"
+                    text="${calendar.selectedDate}"/>
             </Form.Section>
         </Form>
     </Border>
-</calendars:Calendars>
+</Window>
 
