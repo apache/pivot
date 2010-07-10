@@ -20,30 +20,32 @@ limitations under the License.
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:binding="org.apache.pivot.demos.binding"
     xmlns="org.apache.pivot.wtk">
-    <Form>
-        <Form.Section heading="One-Way Binding">
-            <TextInput bxml:id="textInput" Form.label="Text Input"/>
-            <Label bxml:id="textInputLabel" Form.label="Text" text="${textInput.text}"/>
-        </Form.Section>
+    <Border>
+        <Form>
+            <Form.Section heading="One-Way Binding">
+                <TextInput bxml:id="textInput" Form.label="Text Input"/>
+                <Label bxml:id="textInputLabel" Form.label="Text" text="${textInput.text}"/>
+            </Form.Section>
 
-        <Form.Section heading="Two-Way Binding">
-            <TextInput bxml:id="textInput1" Form.label="Text Input 1" text="${textInput2.text}"/>
-            <TextInput bxml:id="textInput2" Form.label="Text Input 2" text="${textInput1.text}"/>
-        </Form.Section>
+            <Form.Section heading="Two-Way Binding">
+                <TextInput bxml:id="textInput1" Form.label="Text Input 1" text="${textInput2.text}"/>
+                <TextInput bxml:id="textInput2" Form.label="Text Input 2" text="${textInput1.text}"/>
+            </Form.Section>
 
-        <Form.Section heading="Style Binding">
-            <ColorChooserButton bxml:id="colorChooserButton" Form.label="Color Chooser Button"
-                selectedColor="#000000"/>
-            <Label bxml:id="colorChooserLabel" Form.label="Selected Color"
-                text="${colorChooserButton.selectedColor}">
-                <styles color="${colorChooserButton.selectedColor}"/>
-            </Label>
-        </Form.Section>
+            <Form.Section heading="Style Binding">
+                <ColorChooserButton bxml:id="colorChooserButton" Form.label="Color Chooser Button"
+                    selectedColor="#000000"/>
+                <Label bxml:id="colorChooserLabel" Form.label="Selected Color"
+                    text="${colorChooserButton.selectedColor}">
+                    <styles color="${colorChooserButton.selectedColor}"/>
+                </Label>
+            </Form.Section>
 
-        <Form.Section heading="Manual Binding">
-            <ListButton bxml:id="listButton" Form.label="List Button"
-                listData="['Zero', 'One', 'Two', 'Three']" selectedIndex="0"/>
-            <Label bxml:id="listButtonLabel" Form.label="Selected Index"/>
-        </Form.Section>
-    </Form>
+            <Form.Section heading="Manual Binding">
+                <ListButton bxml:id="listButton" Form.label="List Button"
+                    listData="['Zero', 'One', 'Two', 'Three']" selectedIndex="0"/>
+                <Label bxml:id="listButtonLabel" Form.label="Selected Index"/>
+            </Form.Section>
+        </Form>
+    </Border>
 </binding:NamespaceBindingDemo>

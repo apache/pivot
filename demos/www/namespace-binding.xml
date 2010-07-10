@@ -18,30 +18,28 @@ limitations under the License.
 
 <document>
     <properties>
-        <title>Demos</title>
+        <title>Namespace Binding</title>
+        <description>
+            Demonstrates dynamic property binding in Pivot.
+        </description>
     </properties>
 
     <body>
         <p>
-            A collection of Pivot demos. All demos require
-            <a href="http://www.java.com/">Java 6</a> or greater.
+            This application demonstrates Pivot's ability to dynamically bind component properties
+            to namespace values including script variables and other component properties.
         </p>
-        <document-item id="kitchen-sink"/>
-        <document-item id="stock-tracker"/>
-        <document-item id="component-explorer"/>
-        <document-item id="itunes-search"/>
-        <document-item id="decorators"/>
-        <document-item id="suggest"/>
-        <document-item id="namespace-binding"/>
-        <document-item id="xml-viewer"/>
-        <document-item id="json-viewer"/>
-        <document-item id="table-row-editor"/>
-        <document-item id="file-drag-drop"/>
-        <document-item id="large-data"/>
-        <document-item id="rss-feed"/>
-        <document-item id="dom-interaction"/>
-        <document-item id="fixed-column-table"/>
-        <document-item id="animated-clock"/>
-        <document-item id="multiselect"/>
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="480" height="360">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>demos</library>
+            </libraries>
+
+            <startup-properties>
+                <src>org/apache/pivot/demos/binding/namespace_binding_demo.bxml</src>
+            </startup-properties>
+        </application>
     </body>
 </document>
