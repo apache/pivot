@@ -57,6 +57,7 @@ import org.apache.pivot.wtk.MenuPopup;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Meter;
 import org.apache.pivot.wtk.Palette;
+import org.apache.pivot.wtk.Panel;
 import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
@@ -122,6 +123,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(MenuPopup.class, TerraMenuPopupSkin.class);
         componentSkinMap.put(Meter.class, TerraMeterSkin.class);
         componentSkinMap.put(Palette.class, TerraPaletteSkin.class);
+        componentSkinMap.put(Panel.class, TerraPanelSkin.class);
         componentSkinMap.put(Panorama.class, TerraPanoramaSkin.class);
         componentSkinMap.put(Prompt.class, TerraPromptSkin.class);
         componentSkinMap.put(PushButton.class, TerraPushButtonSkin.class);
