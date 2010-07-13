@@ -32,7 +32,6 @@ limitations under the License.
         <document-item id="itunes-search"/>
         <document-item id="decorators"/>
         <document-item id="suggest"/>
-        <document-item id="namespace-binding"/>
         <document-item id="xml-viewer"/>
         <document-item id="json-viewer"/>
         <document-item id="table-row-editor"/>

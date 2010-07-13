@@ -16,9 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<binding:NamespaceBindingDemo title="Namespace Binding Test" maximized="true"
+<databinding:PropertyBinding title="Property Binding" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
-    xmlns:binding="org.apache.pivot.demos.binding"
+    xmlns:databinding="org.apache.pivot.tutorials.databinding"
     xmlns="org.apache.pivot.wtk">
     <Border>
         <Form>
@@ -48,4 +48,4 @@ limitations under the License.
             </Form.Section>
         </Form>
     </Border>
-</binding:NamespaceBindingDemo>
+</databinding:PropertyBinding>

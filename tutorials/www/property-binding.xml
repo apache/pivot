@@ -18,7 +18,7 @@ limitations under the License.
 
 <document>
     <properties>
-        <title>Namespace Binding</title>
+        <title>Property Binding</title>
         <description>
             Demonstrates dynamic property binding in Pivot.
         </description>
@@ -34,11 +34,11 @@ limitations under the License.
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>
-                <library>demos</library>
+                <library>tutorials</library>
             </libraries>
 
             <startup-properties>
-                <src>org/apache/pivot/demos/binding/namespace_binding_demo.bxml</src>
+                <src>org/apache/pivot/tutorials/databinding/property_binding.bxml</src>
             </startup-properties>
         </application>
     </body>

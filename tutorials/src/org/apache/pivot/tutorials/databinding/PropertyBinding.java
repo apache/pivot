@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.demos.binding;
+package org.apache.pivot.tutorials.databinding;
 
 import java.net.URL;
 
@@ -24,7 +24,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Window;
 
-public class NamespaceBindingDemo extends Window implements Bindable {
+public class PropertyBinding extends Window implements Bindable {
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         // Manually bind list button selection to label text
