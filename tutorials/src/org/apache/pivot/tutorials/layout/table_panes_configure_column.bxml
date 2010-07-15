@@ -126,7 +126,7 @@ limitations under the License.
             <TablePane.Row height="24">
                 <BoxPane styles="{spacing:6,horizontalAlignment:'right'}">
                     <PushButton bxml:id="okButton" buttonData="OK"
-                        styles="/org/apache/pivot/wtk/skin/terra/command_button_styles.json"
+                        styles="/org/apache/pivot/wtk/skin/terra/command_button.styles"
                         ButtonPressListener.buttonPressed="sheet.close(true)"/>
                 </BoxPane>
             </TablePane.Row>

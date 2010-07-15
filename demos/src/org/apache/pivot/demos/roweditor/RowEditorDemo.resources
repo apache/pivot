@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{
-    title: "Row Editor Demo",
+{   title: "Row Editor Demo",
 
     headers: {
         date: "Date",
@@ -23,7 +22,7 @@
         amount: "Amount",
         description: "Description"
     },
-
+    
     formats: {
         currency: "$#,##0.00"
     }

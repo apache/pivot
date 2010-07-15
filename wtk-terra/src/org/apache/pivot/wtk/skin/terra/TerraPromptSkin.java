@@ -65,7 +65,7 @@ public class TerraPromptSkin extends TerraSheetSkin
     private static Map<String, ?> commandButtonStyles;
 
     static {
-        URL location = TerraPromptSkin.class.getResource("command_button_styles.json");
+        URL location = TerraPromptSkin.class.getResource("command_button.styles");
 
         try {
             InputStream inputStream = location.openStream();

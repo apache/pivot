@@ -14,12 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{
-    title: "Apache Pivot Component Explorer",
-
+{   title: "Apache Pivot Component Explorer",
+    
     explorerPane: {
         label: "Component Explorer",
-
         branches: {
             basic: "Labels & Image Views",
             buttons: "Buttons",

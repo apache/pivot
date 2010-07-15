@@ -42,9 +42,9 @@ limitations under the License.
         <TablePane.Row height="-1">
             <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
                 <PushButton bxml:id="okButton" buttonData="%ok"
-                    styles="@command_button_styles.json"/>
+                    styles="@command_button.styles"/>
                 <PushButton bxml:id="cancelButton" buttonData="%cancel"
-                    styles="@command_button_styles.json"/>
+                    styles="@command_button.styles"/>
             </BoxPane>
         </TablePane.Row>
     </TablePane>
