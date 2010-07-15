@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Eclipse Plugin for Apache Pivot
+Bundle-SymbolicName: org.apache.pivot.eclipse;singleton:=true
+Bundle-Version: 2.0
+Bundle-Vendor: Apache Software Foundation
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0",
+ org.eclipse.ui;bundle-version="3.5.2",
+ org.eclipse.swt;bundle-version="3.5.2",
+ org.eclipse.jface;bundle-version="3.5.2",
+ org.eclipse.debug.core;bundle-version="3.5.1",
+ org.eclipse.debug.ui;bundle-version="3.5.2",
+ org.eclipse.jdt.core;bundle-version="3.5.2",
+ org.eclipse.jdt.launching;bundle-version="3.5.1",
+ org.eclipse.jdt.debug.ui;bundle-version="3.4.1"
