@@ -19,12 +19,12 @@ limitations under the License.
 
 <plugin>
     <extension point="org.eclipse.debug.core.launchConfigurationTypes">
-        <launchConfigurationType name="Pivot Script Application" 
-            delegate="org.apache.pivot.eclipse.ScriptApplicationLaunchDelegate" 
-            id="org.apache.pivot.eclipse.scriptApplication" 
+        <launchConfigurationType name="Pivot Script Application"
+            delegate="org.apache.pivot.eclipse.ScriptApplicationLaunchDelegate"
+            id="org.apache.pivot.eclipse.scriptApplication"
             modes="run, debug"/>
     </extension>
-    
+
     <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
         <launchConfigurationTypeImage icon="org/apache/pivot/eclipse/logo-notext-16x16.gif"
             configTypeID="org.apache.pivot.eclipse.scriptApplication"
@@ -38,7 +38,7 @@ limitations under the License.
             id="org.apache.pivot.eclipse.launchConfigurationTabGroup.scriptApplication">
         </launchConfigurationTabGroup>
     </extension>
-    
+
     <extension point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut class="org.eclipse.jdt.debug.ui.launchConfigurations.JavaAppletLaunchShortcut"
             description="%AppletLaunchShortcut.description"
@@ -48,5 +48,5 @@ limitations under the License.
             label="%AppletShortcut.label"
             modes="run, debug">
         </shortcut>
-    </extension>    
+    </extension>
 </plugin>

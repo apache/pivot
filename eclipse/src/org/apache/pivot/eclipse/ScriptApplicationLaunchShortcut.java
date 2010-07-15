@@ -35,9 +35,9 @@ public class ScriptApplicationLaunchShortcut extends JavaLaunchShortcut {
         // TODO
         return null;
     }
-    
+
     @Override
-    protected IType[] findTypes(Object[] elements, IRunnableContext context) 
+    protected IType[] findTypes(Object[] elements, IRunnableContext context)
         throws InterruptedException, CoreException {
         // TODO
         return null;

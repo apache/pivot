@@ -32,7 +32,7 @@ public class ScriptApplicationTabGroup extends AbstractLaunchConfigurationTabGro
             new JavaClasspathTab(),
             new CommonTab()
         };
-        
+
         setTabs(tabs);
     }
 }

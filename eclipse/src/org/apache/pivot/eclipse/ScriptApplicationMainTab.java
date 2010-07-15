@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ScriptApplicationMainTab extends JavaLaunchTab {
     public static final String NAME = "Main";
-    
+
     @Override
     public void createControl(Composite parent) {
         // TODO
@@ -42,14 +42,14 @@ public class ScriptApplicationMainTab extends JavaLaunchTab {
 
     @Override
     public void initializeFrom(ILaunchConfiguration configuration) {
-        // TODO         
+        // TODO
     }
-    
+
     @Override
     public void performApply(ILaunchConfigurationWorkingCopy configuration) {
         // TODO
     }
-    
+
     @Override
     public boolean isValid(ILaunchConfiguration configuration) {
         // TODO
