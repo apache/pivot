@@ -642,7 +642,7 @@ public abstract class Component implements ConstrainedVisual {
     // The component's automation ID
     private String automationID;
 
-    // Event listener lists.
+    // Event listener lists
     private ComponentListenerList componentListeners = new ComponentListenerList();
     private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
     private ComponentDecoratorListenerList componentDecoratorListeners = new ComponentDecoratorListenerList();
@@ -653,8 +653,16 @@ public abstract class Component implements ConstrainedVisual {
     private ComponentKeyListenerList componentKeyListeners = new ComponentKeyListenerList();
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
 
+    /**
+     * The extension used by style definition files.
+     */
+    public static final String STYLES_EXTENSION = "styles";
+
     // The component that currently has the focus
     private static Component focusedComponent = null;
+
+    // Map of typed styles
+    private static HashMap<Class<?>, Map<String, ?>> typedStyles = new HashMap<Class<?>, Map<String,?>>();
 
     // Class event listeners
     private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
@@ -710,6 +718,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param skin
      * The new skin.
      */
+    @SuppressWarnings("unchecked")
     protected void setSkin(Skin skin) {
         if (skin == null) {
             throw new IllegalArgumentException("skin is null.");
@@ -722,6 +731,41 @@ public abstract class Component implements ConstrainedVisual {
         this.skin = skin;
         styles = new BeanAdapter(skin);
         skin.install(this);
+
+        // Apply any defined type styles
+        Class<?> type = getClass();
+
+        while (type != Object.class) {
+            if (!typedStyles.containsKey(type)) {
+                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                URL location = classLoader.getResource(type.getName().replace(".", "/") + "."
+                    + STYLES_EXTENSION);
+
+                if (location == null) {
+                    // This type does not have any styles defined
+                    typedStyles.put(type, null);
+                } else {
+                    // Load the styles
+                    JSONSerializer jsonSerializer = new JSONSerializer();
+
+                    try {
+                        typedStyles.put(type, (Map<String, ?>)jsonSerializer.readObject(location.openStream()));
+                    } catch (IOException exception) {
+                        System.err.println(exception);
+                    } catch (SerializationException exception) {
+                        System.err.println(exception);
+                    }
+                }
+            }
+
+            Map<String, ?> styles = typedStyles.get(type);
+
+            if (styles != null) {
+                setStyles(styles);
+            }
+
+            type = type.getSuperclass();
+        }
 
         invalidate();
         repaint();
