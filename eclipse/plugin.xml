@@ -26,7 +26,7 @@ limitations under the License.
     </extension>
 
     <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
-        <launchConfigurationTypeImage icon="org/apache/pivot/eclipse/logo-notext-16x16.gif"
+        <launchConfigurationTypeImage icon="icons/logo-notext-16x16.png"
             configTypeID="org.apache.pivot.eclipse.scriptApplication"
             id="org.apache.pivot.eclipse.launchConfigurationTypeImage.scriptApplication">
         </launchConfigurationTypeImage>

@@ -22,8 +22,6 @@ import org.eclipse.jdt.debug.ui.launchConfigurations.JavaLaunchTab;
 import org.eclipse.swt.widgets.Composite;
 
 public class ScriptApplicationMainTab extends JavaLaunchTab {
-    public static final String NAME = "Main";
-
     @Override
     public void createControl(Composite parent) {
         // TODO
@@ -31,8 +29,7 @@ public class ScriptApplicationMainTab extends JavaLaunchTab {
 
     @Override
     public String getName() {
-        // TODO Localize
-        return NAME;
+        return "Main"; // TODO i18n
     }
 
     @Override
