@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -193,10 +192,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
     }
 
-    // TODO Remove these when WTKXSerializer is dropped
-    private String internalNamespacePrefix;
-    private Class<? extends Annotation> bindingAnnotationClass;
-
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;
 
@@ -263,13 +258,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     public BXMLSerializer() {
-        this(BXML_PREFIX, BXML.class);
-    }
-
-    protected BXMLSerializer(String internalNamespacePrefix, Class<? extends Annotation> bindingAnnotationClass) {
-        this.internalNamespacePrefix = internalNamespacePrefix;
-        this.bindingAnnotationClass = bindingAnnotationClass;
-
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
 
@@ -550,20 +538,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 case WRITABLE_PROPERTY:
-                case LISTENER_LIST_PROPERTY: {
-                    element.value = text;
-                    break;
-                }
-
+                case LISTENER_LIST_PROPERTY:
                 case SCRIPT: {
-                    // TODO This is for WTKX compatibility; remove when WTKX support is dropped
-                    // and move SCRIPT up to the previous block
-                    if (element.parent.type == Element.Type.LISTENER_LIST_PROPERTY) {
-                        element.parent.value = text;
-                    } else {
-                        element.value = text;
-                    }
-
+                    element.value = text;
                     break;
                 }
 
@@ -596,7 +573,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         Object value = null;
 
         if (prefix != null
-            && prefix.equals(internalNamespacePrefix)) {
+            && prefix.equals(BXML_PREFIX)) {
             // The element represents a BXML operation
             if (element == null) {
                 throw new SerializationException("Invalid root element.");
@@ -688,7 +665,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         if (elementType == Element.Type.INCLUDE) {
             if (!element.properties.containsKey(INCLUDE_SRC_ATTRIBUTE)) {
                 throw new SerializationException(INCLUDE_SRC_ATTRIBUTE
-                    + " attribute is required for " + internalNamespacePrefix + ":" + INCLUDE_TAG
+                    + " attribute is required for " + BXML_PREFIX + ":" + INCLUDE_TAG
                     + " tag.");
             }
 
@@ -791,7 +768,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             String value = xmlStreamReader.getAttributeValue(i);
 
             if (prefix != null
-                && prefix.equals(internalNamespacePrefix)) {
+                && prefix.equals(BXML_PREFIX)) {
                 // The attribute represents an internal value
                 if (localName.equals(ID_ATTRIBUTE)) {
                     if (value.length() == 0
@@ -810,7 +787,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                     element.id = value;
                 } else {
-                    throw new SerializationException(internalNamespacePrefix + ":" + localName
+                    throw new SerializationException(BXML_PREFIX + ":" + localName
                         + " is not a valid attribute.");
                 }
             } else {
@@ -1352,9 +1329,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             String fieldName = field.getName();
             int fieldModifiers = field.getModifiers();
 
-            // TODO Revert to the following when support for WTKXSerializer is dropped:
-            // BXML bindingAnnotation = field.getAnnotation(BXML.class);
-            Annotation bindingAnnotation = field.getAnnotation(bindingAnnotationClass);
+            BXML bindingAnnotation = field.getAnnotation(BXML.class);
 
             if (bindingAnnotation != null) {
                 // Ensure that we can write to the field
@@ -1370,27 +1345,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     }
                 }
 
-                String id;
-                if (bindingAnnotationClass == BXML.class) {
-                    id = ((BXML)bindingAnnotation).id();
-                } else {
-                    // TODO Remove this block when support for WTKXSerializer is dropped
-                    Method idMethod;
-                    try {
-                        idMethod = bindingAnnotationClass.getMethod("id");
-                    } catch (NoSuchMethodException exception) {
-                        throw new RuntimeException(exception);
-                    }
-
-                    try {
-                        id = (String)idMethod.invoke(bindingAnnotation);
-                    } catch (IllegalAccessException exception) {
-                        throw new RuntimeException(exception);
-                    } catch (InvocationTargetException exception) {
-                        throw new RuntimeException(exception);
-                    }
-                }
-
+                String id = bindingAnnotation.id();
                 if (id.equals("\0")) {
                     id = field.getName();
                 }
