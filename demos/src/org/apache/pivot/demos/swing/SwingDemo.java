@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JInternalFrame;
@@ -38,9 +39,33 @@ import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Window;
 
 public class SwingDemo extends ApplicationContext {
+    public static class HostApplet extends JApplet {
+        private static final long serialVersionUID = 0;
+
+        @Override
+        public void init() {
+            setContentPane(desktop);
+        }
+
+        @Override
+        public void start() {
+            createFrames();
+        }
+
+        @Override
+        public void stop() {
+            desktop.removeAll();
+        }
+    }
+
     private static final long serialVersionUID = 0;
 
     private static JDesktopPane desktop = new JDesktopPane();
+
+    static {
+        // Start the callback timer
+        createTimer();
+    }
 
     public static void main(String[] args) {
         final JFrame jFrame = new JFrame("Pivot/Swing Demo");
@@ -50,9 +75,10 @@ public class SwingDemo extends ApplicationContext {
         jFrame.setSize(1024, 768);
         jFrame.setVisible(true);
 
-        // Start the callback timer
-        createTimer();
+        createFrames();
+    }
 
+    private static void createFrames() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
