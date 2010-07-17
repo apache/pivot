@@ -456,7 +456,7 @@ public class TablePane extends Container {
                 throw new IllegalArgumentException("row is null.");
             }
 
-            if (row.getTablePane() != null) {
+            if (row.tablePane != null) {
                 throw new IllegalArgumentException
                     ("row is already in use by another table pane.");
             }
@@ -552,7 +552,7 @@ public class TablePane extends Container {
                 throw new IllegalArgumentException("column is null.");
             }
 
-            if (column.getTablePane() != null) {
+            if (column.tablePane != null) {
                 throw new IllegalArgumentException
                     ("column is already in use by another table pane.");
             }

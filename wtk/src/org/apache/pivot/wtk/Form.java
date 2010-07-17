@@ -163,7 +163,7 @@ public class Form extends Container {
 
         @Override
         public void insert(Section section, int index) {
-            if (section.getForm() != null) {
+            if (section.form != null) {
                 throw new IllegalArgumentException("section already has a form.");
             }
 

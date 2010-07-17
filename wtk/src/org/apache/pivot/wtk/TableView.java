@@ -864,7 +864,7 @@ public class TableView extends Component {
                 throw new IllegalArgumentException("column is null.");
             }
 
-            if (column.getTableView() != null) {
+            if (column.tableView != null) {
                 throw new IllegalArgumentException("column is already in use by another table view.");
             }
 
