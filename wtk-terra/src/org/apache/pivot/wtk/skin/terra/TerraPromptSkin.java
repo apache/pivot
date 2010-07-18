@@ -16,15 +16,8 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.URL;
-
 import org.apache.pivot.beans.BXMLSerializer;
-import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.json.JSONSerializer;
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
@@ -41,7 +34,6 @@ import org.apache.pivot.wtk.Window;
 /**
  * Prompt skin.
  */
-@SuppressWarnings("unchecked")
 public class TerraPromptSkin extends TerraSheetSkin
     implements PromptListener {
     private ImageView typeImageView = null;
@@ -61,27 +53,6 @@ public class TerraPromptSkin extends TerraSheetSkin
             }
         }
     };
-
-    private static Map<String, ?> commandButtonStyles;
-
-    static {
-        URL location = TerraPromptSkin.class.getResource("command_button.styles");
-
-        try {
-            InputStream inputStream = location.openStream();
-
-            try {
-                JSONSerializer serializer = new JSONSerializer();
-                commandButtonStyles = (Map<String, ?>)serializer.readObject(inputStream);
-            } finally {
-                inputStream.close();
-            }
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        } catch (SerializationException exception) {
-            throw new RuntimeException(exception);
-        }
-    }
 
     @Override
     public void install(Component component) {
@@ -110,7 +81,8 @@ public class TerraPromptSkin extends TerraSheetSkin
 
         for (Object option : prompt.getOptions()) {
             PushButton optionButton = new PushButton(option);
-            optionButton.setStyles(commandButtonStyles);
+            optionButton.setStyleName(TerraPromptSkin.class.getPackage().getName()
+                + "." + TerraTheme.COMMAND_BUTTON_STYLE);
             optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
             optionButtonBoxPane.add(optionButton);
@@ -163,7 +135,8 @@ public class TerraPromptSkin extends TerraSheetSkin
         Object option = prompt.getOptions().get(index);
 
         PushButton optionButton = new PushButton(option);
-        optionButton.setStyles(commandButtonStyles);
+        optionButton.setStyleName(TerraPromptSkin.class.getPackage().getName()
+            + "." + TerraTheme.COMMAND_BUTTON_STYLE);
         optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
         optionButtonBoxPane.insert(optionButton, index);

@@ -75,9 +75,9 @@ limitations under the License.
         <TablePane.Row height="-1">
             <BoxPane styles="{fill:true, horizontalAlignment:'right'}">
                 <PushButton bxml:id="cancelButton" buttonData="%cancel"
-                    styles="/org/apache/pivot/wtk/skin/terra/command_button.styles"/>
+                    styleName="org.apache.pivot.wtk.skin.terra.commandButton"/>
                 <PushButton bxml:id="okButton" buttonData="%ok"
-                    styles="/org/apache/pivot/wtk/skin/terra/command_button.styles"/>
+                    styleName="org.apache.pivot.wtk.skin.terra.commandButton"/>
             </BoxPane>
         </TablePane.Row>
     </TablePane>

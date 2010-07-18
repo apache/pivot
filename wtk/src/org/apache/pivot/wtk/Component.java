@@ -21,7 +21,6 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Iterator;
 
 import org.apache.pivot.beans.BeanAdapter;
@@ -653,16 +652,13 @@ public abstract class Component implements ConstrainedVisual {
     private ComponentKeyListenerList componentKeyListeners = new ComponentKeyListenerList();
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
 
-    /**
-     * The extension used by style definition files.
-     */
-    public static final String STYLES_EXTENSION = "styles";
-
     // The component that currently has the focus
     private static Component focusedComponent = null;
 
-    // Map of typed styles
-    private static HashMap<Class<?>, Map<String, ?>> typedStyles = new HashMap<Class<?>, Map<String,?>>();
+    // Typed and named styles
+    private static HashMap<Class<? extends Component>, Map<String, ?>> typedStyles =
+        new HashMap<Class<? extends Component>, Map<String,?>>();
+    private static HashMap<String, Map<String, ?>> namedStyles = new HashMap<String, Map<String,?>>();
 
     // Class event listeners
     private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
@@ -736,29 +732,7 @@ public abstract class Component implements ConstrainedVisual {
         Class<?> type = getClass();
 
         while (type != Object.class) {
-            if (!typedStyles.containsKey(type)) {
-                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                URL location = classLoader.getResource(type.getName().replace(".", "/") + "."
-                    + STYLES_EXTENSION);
-
-                if (location == null) {
-                    // This type does not have any styles defined
-                    typedStyles.put(type, null);
-                } else {
-                    // Load the styles
-                    JSONSerializer jsonSerializer = new JSONSerializer();
-
-                    try {
-                        typedStyles.put(type, (Map<String, ?>)jsonSerializer.readObject(location.openStream()));
-                    } catch (IOException exception) {
-                        System.err.println(exception);
-                    } catch (SerializationException exception) {
-                        System.err.println(exception);
-                    }
-                }
-            }
-
-            Map<String, ?> styles = typedStyles.get(type);
+            Map<String, ?> styles = typedStyles.get((Class<? extends Component>)type);
 
             if (styles != null) {
                 setStyles(styles);
@@ -2500,34 +2474,79 @@ public abstract class Component implements ConstrainedVisual {
      * Applies a set of styles.
      *
      * @param styles
-     * The location of the styles to apply.
-     */
-    @SuppressWarnings("unchecked")
-    public void setStyles(URL styles) throws IOException, SerializationException {
-        if (styles == null) {
-            throw new IllegalArgumentException("styles is null.");
-        }
-
-        JSONSerializer jsonSerializer = new JSONSerializer();
-        setStyles((Map<String, ?>)jsonSerializer.readObject(styles.openStream()));
-    }
-
-    /**
-     * Applies a set of styles.
-     *
-     * @param styles
-     * The styles encoded as a JSON string.
+     * The styles encoded as a JSON map.
      */
     public void setStyles(String styles) throws IOException, SerializationException {
         if (styles == null) {
             throw new IllegalArgumentException("styles is null.");
         }
 
-        if (styles.charAt(0) == '/') {
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            setStyles(classLoader.getResource(styles.substring(1)));
+        setStyles(JSONSerializer.parseMap(styles));
+    }
+
+    /**
+     * Returns the typed style dictionary.
+     */
+    public static Map<Class<? extends Component>, Map<String, ?>> getTypedStyles() {
+        return typedStyles;
+    }
+
+    /**
+     * Returns the named style dictionary.
+     */
+    public static Map<String, Map<String, ?>> getNamedStyles() {
+        return namedStyles;
+    }
+
+    /**
+     * Applies a set of named styles.
+     *
+     * @param styleName
+     */
+    public void setStyleName(String styleName) {
+        if (styleName == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Map<String, ?> styles = namedStyles.get(styleName);
+
+        if (styles == null) {
+            System.err.println("Named style \"" + styleName + "\" does not exist.");
         } else {
-            setStyles(JSONSerializer.parseMap(styles));
+            setStyles(styles);
+        }
+    }
+
+    /**
+     * Applies a set of named styles.
+     *
+     * @param styleName
+     */
+    public void setStyleNames(Sequence<String> styleNames) {
+        if (styleNames == null) {
+            throw new IllegalArgumentException();
+        }
+
+        for (int i = 0, n = styleNames.getLength(); i < n; i++) {
+            setStyleName(styleNames.get(i));
+        }
+    }
+
+    /**
+     * Applies a set of named styles.
+     *
+     * @param styleNames
+     */
+    public void setStyleNames(String styleNames) {
+        if (styleNames == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String[] styleNameArray = styleNames.split(",");
+
+        for (int i = 0; i < styleNameArray.length; i++) {
+            String styleName = styleNameArray[i];
+            setStyleName(styleName.trim());
         }
     }
 

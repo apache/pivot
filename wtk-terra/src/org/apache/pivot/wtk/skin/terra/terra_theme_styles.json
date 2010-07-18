@@ -14,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   font:{bold:true},
-    color: 4,
-    backgroundColor: 16,
-    borderColor: 13,
-    disabledBackgroundColor: 10,
-    disabledBorderColor: 7,
-    padding: {top:3, left:4, bottom:3, right:4},
-    minimumAspectRatio: 3
+{   commandButton: {
+        font: {bold:true},
+        color: 4,
+        backgroundColor: 16,
+        borderColor: 13,
+        disabledBackgroundColor: 10,
+        disabledBorderColor: 7,
+        padding: {top:3, left:4, bottom:3, right:4},
+        minimumAspectRatio: 3
+    }
 }

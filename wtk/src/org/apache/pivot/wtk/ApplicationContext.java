@@ -50,11 +50,9 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
-import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.util.Version;
 import org.apache.pivot.wtk.Component.DecoratorSequence;
 import org.apache.pivot.wtk.effects.Decorator;
@@ -1451,8 +1449,6 @@ public abstract class ApplicationContext {
 
     static {
         jvmVersion = Version.decode(System.getProperty("java.vm.version"));
-
-        BXMLSerializer.getFileExtensions().put(Component.STYLES_EXTENSION, JSONSerializer.MIME_TYPE);
     }
 
     /**

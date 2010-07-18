@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.CalendarButton;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.ColorChooser;
 import org.apache.pivot.wtk.ColorChooserButton;
+import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.Expander;
 import org.apache.pivot.wtk.FileBrowser;
@@ -91,8 +92,11 @@ public final class TerraTheme extends Theme {
     private HashMap<MessageType, Image> messageIcons = null;
     private HashMap<MessageType, Image> smallMessageIcons = null;
 
-    public static final String LOCATION_PROPERTY = "org.apache.pivot.wtk.skin.terra.location";
+    public static final String COMMAND_BUTTON_STYLE = "commandButton";
 
+    public static final String LOCATION_PROPERTY = "location";
+
+    @SuppressWarnings("unchecked")
     public TerraTheme() {
         componentSkinMap.put(Accordion.class, TerraAccordionSkin.class);
         componentSkinMap.put(ActivityIndicator.class, TerraActivityIndicatorSkin.class);
@@ -160,8 +164,30 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class, TerraSplitPaneSkin.SplitterShadowSkin.class);
         componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
 
-        String location = null;
+        String packageName = getClass().getPackage().getName();
 
+        // Install named styles
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("terra_theme_styles.json");
+
+            try {
+                JSONSerializer serializer = new JSONSerializer();
+                Map<String, ?> terraThemeStyles = (Map<String, ?>)serializer.readObject(inputStream);
+
+                for (String name : terraThemeStyles) {
+                    Component.getNamedStyles().put(packageName + "." + name, (Map<String, ?>)terraThemeStyles.get(name));
+                }
+            } finally {
+                inputStream.close();
+            }
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        } catch (SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        // Load the color scheme
+        String location = null;
         try {
             location = System.getProperty(LOCATION_PROPERTY);
         } catch (SecurityException exception) {
@@ -172,7 +198,7 @@ public final class TerraTheme extends Theme {
             load(getClass().getResource("TerraTheme_default.json"));
         } else {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            load(classLoader.getResource(location.substring(1)));
+            load(classLoader.getResource(packageName + "." + location.substring(1)));
         }
     }
 

@@ -16,15 +16,8 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.URL;
-
 import org.apache.pivot.beans.BXMLSerializer;
-import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.json.JSONSerializer;
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.AlertListener;
 import org.apache.pivot.wtk.Button;
@@ -41,7 +34,6 @@ import org.apache.pivot.wtk.Window;
 /**
  * Alert skin.
  */
-@SuppressWarnings("unchecked")
 public class TerraAlertSkin extends TerraDialogSkin
     implements AlertListener {
     private ImageView typeImageView = null;
@@ -61,27 +53,6 @@ public class TerraAlertSkin extends TerraDialogSkin
             }
         }
     };
-
-    private static Map<String, ?> commandButtonStyles;
-
-    static {
-        URL location = TerraAlertSkin.class.getResource("command_button.styles");
-
-        try {
-            InputStream inputStream = location.openStream();
-
-            try {
-                JSONSerializer serializer = new JSONSerializer();
-                commandButtonStyles = (Map<String, ?>)serializer.readObject(inputStream);
-            } finally {
-                inputStream.close();
-            }
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        } catch (SerializationException exception) {
-            throw new RuntimeException(exception);
-        }
-    }
 
     public TerraAlertSkin() {
         setResizable(false);
@@ -117,7 +88,8 @@ public class TerraAlertSkin extends TerraDialogSkin
 
         for (Object option : alert.getOptions()) {
             PushButton optionButton = new PushButton(option);
-            optionButton.setStyles(commandButtonStyles);
+            optionButton.setStyleName(TerraAlertSkin.class.getPackage().getName()
+                + "." + TerraTheme.COMMAND_BUTTON_STYLE);
             optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
             optionButtonBoxPane.add(optionButton);
@@ -170,7 +142,8 @@ public class TerraAlertSkin extends TerraDialogSkin
         Object option = alert.getOptions().get(index);
 
         PushButton optionButton = new PushButton(option);
-        optionButton.setStyles(commandButtonStyles);
+        optionButton.setStyleName(TerraAlertSkin.class.getPackage().getName()
+            + "." + TerraTheme.COMMAND_BUTTON_STYLE);
         optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
         optionButtonBoxPane.insert(optionButton, index);
