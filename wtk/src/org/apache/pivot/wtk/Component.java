@@ -29,6 +29,7 @@ import org.apache.pivot.beans.PropertyNotFoundException;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
@@ -729,16 +730,20 @@ public abstract class Component implements ConstrainedVisual {
         skin.install(this);
 
         // Apply any defined type styles
-        Class<?> type = getClass();
+        LinkedList<Class<?>> styleTypes = new LinkedList<Class<?>>();
 
+        Class<?> type = getClass();
         while (type != Object.class) {
-            Map<String, ?> styles = typedStyles.get((Class<? extends Component>)type);
+            styleTypes.insert(type, 0);
+            type = type.getSuperclass();
+        }
+
+        for (Class<?> styleType : styleTypes) {
+            Map<String, ?> styles = typedStyles.get((Class<? extends Component>)styleType);
 
             if (styles != null) {
                 setStyles(styles);
             }
-
-            type = type.getSuperclass();
         }
 
         invalidate();

@@ -427,18 +427,18 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static HostFrame windowedHostFrame = null;
     private static HostFrame fullScreenHostFrame = null;
 
-    private static final String DEFAULT_HOST_WINDOW_TITLE = "Apache Pivot";
+    public static final String DEFAULT_HOST_WINDOW_TITLE = "Apache Pivot";
 
-    private static final String X_ARGUMENT = "x";
-    private static final String Y_ARGUMENT = "y";
-    private static final String WIDTH_ARGUMENT = "width";
-    private static final String HEIGHT_ARGUMENT = "height";
-    private static final String CENTER_ARGUMENT = "center";
-    private static final String RESIZABLE_ARGUMENT = "resizable";
-    private static final String MAXIMIZED_ARGUMENT = "maximized";
-    private static final String UNDECORATED_ARGUMENT = "undecorated";
-
-    private static final String FULL_SCREEN_ARGUMENT = "fullScreen";
+    public static final String X_ARGUMENT = "x";
+    public static final String Y_ARGUMENT = "y";
+    public static final String WIDTH_ARGUMENT = "width";
+    public static final String HEIGHT_ARGUMENT = "height";
+    public static final String CENTER_ARGUMENT = "center";
+    public static final String RESIZABLE_ARGUMENT = "resizable";
+    public static final String MAXIMIZED_ARGUMENT = "maximized";
+    public static final String UNDECORATED_ARGUMENT = "undecorated";
+    public static final String FULL_SCREEN_ARGUMENT = "fullScreen";
+    public static final String STYLESHEET_ARGUMENT = "stylesheet";
 
     public static boolean isActive() {
         return (application != null);
@@ -519,6 +519,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         boolean maximized = false;
         boolean undecorated = false;
         boolean fullScreen = false;
+        String stylesheet = null;
 
         try {
             Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
@@ -572,12 +573,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             center = Boolean.parseBoolean(value);
                         } else if (key.equals(RESIZABLE_ARGUMENT)) {
                             resizable = Boolean.parseBoolean(value);
-                        } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
-                            fullScreen = Boolean.parseBoolean(value);
                         } else if (key.equals(MAXIMIZED_ARGUMENT)) {
                             maximized = Boolean.parseBoolean(value);
                         } else if (key.equals(UNDECORATED_ARGUMENT)) {
                             undecorated = Boolean.parseBoolean(value);
+                        } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
+                            fullScreen = Boolean.parseBoolean(value);
+                        } else if (key.equals(STYLESHEET_ARGUMENT)) {
+                            stylesheet = value;
                         } else {
                             properties.put(key, value);
                         }
@@ -625,6 +628,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Start the timer
         createTimer();
+
+        // Apply stylesheet
+        if (stylesheet != null) {
+            applyStylesheet(stylesheet.substring(1));
+        }
 
         // Create the display host
         primaryDisplayHost = new DesktopDisplayHost();

@@ -40,6 +40,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -53,6 +55,9 @@ import java.util.TimerTask;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.json.JSONSerializer;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Version;
 import org.apache.pivot.wtk.Component.DecoratorSequence;
 import org.apache.pivot.wtk.effects.Decorator;
@@ -1466,6 +1471,59 @@ public abstract class ApplicationContext {
      */
     public static ResourceCacheDictionary getResourceCache() {
         return resourceCacheDictionary;
+    }
+
+    /**
+     * Adds the styles from a named stylesheet to the named or typed style collections.
+     *
+     * @param resourceName
+     */
+    @SuppressWarnings("unchecked")
+    public static void applyStylesheet(String resourceName) {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL stylesheetLocation = classLoader.getResource(resourceName);
+
+        try {
+            InputStream inputStream = stylesheetLocation.openStream();
+
+            try {
+                JSONSerializer serializer = new JSONSerializer();
+                Map<String, ?> stylesheet = (Map<String, ?>)serializer.readObject(inputStream);
+
+                for (String name : stylesheet) {
+                    Map<String, ?> styles = (Map<String, ?>)stylesheet.get(name);
+
+                    int i = name.lastIndexOf('.') + 1;
+                    if (Character.isUpperCase(name.charAt(i))) {
+                        // Assume the current package if none specified
+                        if (!name.contains(".")) {
+                            name = ApplicationContext.class.getPackage().getName() + "." + name;
+                        }
+
+                        Class<?> type = null;
+                        try {
+                            type = Class.forName(name);
+                        } catch (ClassNotFoundException exception) {
+                            // No-op
+                        }
+
+                        if (type != null
+                            && Component.class.isAssignableFrom(type)) {
+                            Component.getTypedStyles().put((Class<? extends Component>)type, styles);
+                        }
+                    } else {
+                        Component.getNamedStyles().put(name, styles);
+                    }
+                }
+            } finally {
+                inputStream.close();
+            }
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        } catch (SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+
     }
 
     /**
