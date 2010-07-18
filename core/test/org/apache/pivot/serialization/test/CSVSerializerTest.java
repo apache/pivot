@@ -237,4 +237,21 @@ public class CSVSerializerTest {
     public void testStreamReader() {
         // TODO
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testInlineKeys() throws IOException, SerializationException {
+        StringBuilder buf = new StringBuilder();
+        buf.append("A \t, B ,C \n");
+        buf.append("a1,b1,c1\n");
+
+        StringReader reader = new StringReader(buf.toString());
+
+        CSVSerializer serializer = new CSVSerializer();
+        List<?> result = serializer.readObject(reader);
+        Dictionary<String, Object> row = (Dictionary<String, Object>)result.get(0);
+        assertEquals(row.get("A"), "a1");
+        assertEquals(row.get("B"), "b1");
+        assertEquals(row.get("C"), "c1");
+    }
 }
