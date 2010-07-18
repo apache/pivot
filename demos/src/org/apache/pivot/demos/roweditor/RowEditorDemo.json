@@ -22,7 +22,7 @@
         amount: "Amount",
         description: "Description"
     },
-    
+
     formats: {
         currency: "$#,##0.00"
     }

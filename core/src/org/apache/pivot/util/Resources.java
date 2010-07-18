@@ -40,7 +40,6 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     private Map<String, Object> resourceMap = null;
 
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
-    public static final String RESOURCES_EXTENSION = "resources";
 
     public Resources(String baseName) throws IOException, SerializationException {
         this(null, baseName, Locale.getDefault(), Charset.forName(DEFAULT_CHARSET_NAME));
@@ -119,11 +118,11 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         this.charset = charset;
 
         String resourceName = baseName.replace('.', '/');
-        resourceMap = readJSONResource(resourceName + "." + RESOURCES_EXTENSION);
+        resourceMap = readJSONResource(resourceName + "." + JSONSerializer.JSON_EXTENSION);
 
         // Try to find resource for the language (e.g. resourceName_en)
         Map<String, Object> overrideMap = readJSONResource(resourceName + "_"
-            + locale.getLanguage() + "." + RESOURCES_EXTENSION);
+            + locale.getLanguage() + "." + JSONSerializer.JSON_EXTENSION);
         if (overrideMap != null) {
             if (resourceMap == null) {
                 resourceMap = overrideMap;
@@ -133,7 +132,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         }
 
         // Try to find resource for the entire locale (e.g. resourceName_en_GB)
-        overrideMap = readJSONResource(resourceName + "_" + locale.toString() + "." + RESOURCES_EXTENSION);
+        overrideMap = readJSONResource(resourceName + "_" + locale.toString() + "." + JSONSerializer.JSON_EXTENSION);
         if (overrideMap != null) {
             if (resourceMap == null) {
                 resourceMap = overrideMap;
