@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Element representing a numbered list.
  */
@@ -31,14 +33,27 @@ public class NumberedList extends List {
         UPPER_ROMAN
     }
 
+    private static class NumberedListListenerList extends ListenerList<NumberedListListener>
+        implements NumberedListListener {
+        @Override
+        public void styleChanged(NumberedList numberedList, Style previousStyle) {
+            for (NumberedListListener listener : this) {
+                listener.styleChanged(numberedList, previousStyle);
+            }
+        }
+    }
+
     private Style style = Style.DECIMAL;
 
+    private NumberedListListenerList numberedListListeners = new NumberedListListenerList();
+    
     public NumberedList() {
         super();
     }
 
     public NumberedList(NumberedList numberedList, boolean recursive) {
         super(numberedList, recursive);
+        this.style = numberedList.style;
     }
 
     public Style getStyle() {
@@ -50,13 +65,19 @@ public class NumberedList extends List {
             throw new IllegalArgumentException("style is null.");
         }
 
-        this.style = style;
-
-        // TODO Fire event
+        Style previousStyle = this.style;
+        if (previousStyle != style) {
+            this.style = style;
+            numberedListListeners.styleChanged(this, previousStyle);
+        }
     }
 
     @Override
     public NumberedList duplicate(boolean recursive) {
         return new NumberedList(this, recursive);
+    }
+    
+    public ListenerList<NumberedListListener> getNumberedListListeners() {
+        return numberedListListeners;
     }
 }

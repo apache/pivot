@@ -46,6 +46,7 @@ public abstract class Block extends Element {
 
     public Block(Block blockElement, boolean recursive) {
         super(blockElement, recursive);
+        this.horizontalAlignment = blockElement.horizontalAlignment;
     }
 
     public HorizontalAlignment getHorizontalAlignment() {

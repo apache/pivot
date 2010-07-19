@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Element representing a bulleted list.
  */
@@ -24,13 +26,22 @@ public class BulletedList extends List {
      * List bullet styles.
      */
     public enum Style {
-        CIRCLE,
-        CIRCLE_OUTLINE,
-        SQUARE,
-        SQUARE_OUTLINE
+        CIRCLE, CIRCLE_OUTLINE, SQUARE, SQUARE_OUTLINE
+    }
+
+    private static class BulletedListListenerList extends ListenerList<BulletedListListener>
+        implements BulletedListListener {
+        @Override
+        public void styleChanged(BulletedList bulletedList, Style previousStyle) {
+            for (BulletedListListener listener : this) {
+                listener.styleChanged(bulletedList, previousStyle);
+            }
+        }
     }
 
     private Style style = Style.CIRCLE;
+
+    private BulletedListListenerList bulletedListListeners = new BulletedListListenerList();
 
     public BulletedList() {
         super();
@@ -38,6 +49,7 @@ public class BulletedList extends List {
 
     public BulletedList(BulletedList bulletedList, boolean recursive) {
         super(bulletedList, recursive);
+        this.style = bulletedList.style;
     }
 
     public Style getStyle() {
@@ -49,13 +61,19 @@ public class BulletedList extends List {
             throw new IllegalArgumentException("style is null.");
         }
 
-        this.style = style;
-
-        // TODO Fire event
+        Style previousStyle = this.style;
+        if (previousStyle != style) {
+            this.style = style;
+            bulletedListListeners.styleChanged(this, previousStyle);
+        }
     }
 
     @Override
     public BulletedList duplicate(boolean recursive) {
         return new BulletedList(this, recursive);
+    }
+
+    public ListenerList<BulletedListListener> getBulletedListListeners() {
+        return bulletedListListeners;
     }
 }

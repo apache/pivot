@@ -19,8 +19,6 @@ package org.apache.pivot.wtk.text;
 
 /**
  * Element representing an inline range of styled characters.
- * <p>
- * TODO Add text alignment enum/property.
  */
 public class Span extends Element {
     public Span() {
