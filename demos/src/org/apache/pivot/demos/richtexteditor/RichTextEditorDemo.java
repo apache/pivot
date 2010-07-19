@@ -41,6 +41,7 @@ import org.apache.pivot.wtk.ColorChooserButtonSelectionListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FileBrowserSheet;
+import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
 import org.apache.pivot.wtk.ListView;
@@ -55,6 +56,7 @@ import org.apache.pivot.wtk.content.NumericSpinnerData;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
+import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.TextNode;
 
 /**
@@ -86,6 +88,12 @@ public class RichTextEditorDemo implements Application {
     private ListButton fontSizeListButton = null;
     @BXML
     private Checkbox wrapTextCheckbox = null;
+    @BXML
+    private PushButton alignLeftButton= null;
+    @BXML
+    private PushButton alignCentreButton= null;
+    @BXML
+    private PushButton alignRightButton= null;
 
     private File loadedFile = null;
 
@@ -330,6 +338,28 @@ public class RichTextEditorDemo implements Application {
                 textarea.getStyles().put("wrapText", wrapTextCheckbox.isSelected());
             }
         });
+        
+        alignLeftButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                applyAlignmentStyle(HorizontalAlignment.LEFT);
+            }
+        });
+        
+        alignCentreButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                applyAlignmentStyle(HorizontalAlignment.CENTER);
+            }
+        });
+        
+        alignRightButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                applyAlignmentStyle(HorizontalAlignment.RIGHT);
+            }
+        });
+        
         window.open(display);
         textarea.requestFocus();
     }
@@ -338,6 +368,17 @@ public class RichTextEditorDemo implements Application {
         void apply(org.apache.pivot.wtk.text.Span span);
     }
 
+    private void applyAlignmentStyle(HorizontalAlignment horizontalAlignment) {
+        Node node = textarea.getDocument().getDescendantAt(textarea.getSelectionStart());
+        while (node != null && !(node instanceof Paragraph)) {
+            node = node.getParent();
+        }
+        if (node != null) {
+            Paragraph paragraph = (Paragraph) node;
+            paragraph.setHorizontalAlignment(horizontalAlignment);
+        }
+    }
+    
     /** debugging tools */
     @SuppressWarnings("unused")
     private void dumpDocument() {

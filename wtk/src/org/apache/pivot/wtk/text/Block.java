@@ -16,17 +16,55 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.HorizontalAlignment;
+
 /**
  * Abstract base class for block elements.
  * <p>
- * TODO Add horizontal alignment, margin, and line spacing properties.
+ * TODO Add margin, and line spacing properties.
  */
 public abstract class Block extends Element {
+
+    private static class BlockListenerList extends ListenerList<BlockListener> implements
+        BlockListener {
+        @Override
+        public void horizontalAlignmentChanged(Block block, HorizontalAlignment previousHorizontalAlignment) {
+            for (BlockListener listener : this) {
+                listener.horizontalAlignmentChanged(block, previousHorizontalAlignment);
+            }
+        }
+    }
+
+    private HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
+
+    private BlockListenerList blockListeners = new BlockListenerList();
+
     public Block() {
         super();
     }
 
     public Block(Block blockElement, boolean recursive) {
         super(blockElement, recursive);
+    }
+
+    public HorizontalAlignment getHorizontalAlignment() {
+        return horizontalAlignment;
+    }
+
+    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+        if (horizontalAlignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
+        }
+        
+        HorizontalAlignment previousHorizontalAlignment = this.horizontalAlignment;
+        if (previousHorizontalAlignment != horizontalAlignment) {
+            this.horizontalAlignment = horizontalAlignment;
+            blockListeners.horizontalAlignmentChanged(this, previousHorizontalAlignment);
+        }
+    }
+
+    public ListenerList<BlockListener> getBlockListeners() {
+        return blockListeners;
     }
 }

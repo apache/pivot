@@ -22,11 +22,14 @@ import java.awt.font.LineMetrics;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.FocusTraversalDirection;
+import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Platform;
+import org.apache.pivot.wtk.text.Block;
+import org.apache.pivot.wtk.text.BlockListener;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.Paragraph;
 
-class TextAreaSkinParagraphView extends TextAreaSkinElementView {
+class TextAreaSkinParagraphView extends TextAreaSkinElementView implements BlockListener {
 
     private static final int PARAGRAPH_TERMINATOR_WIDTH = 4;
 
@@ -48,6 +51,14 @@ class TextAreaSkinParagraphView extends TextAreaSkinElementView {
         this.textAreaSkin = textAreaSkin;
     }
 
+    @Override
+    protected void attach() {
+        super.attach();
+        
+        Block block = (Block)getNode();
+        block.getBlockListeners().add(this);
+    }
+    
     @Override
     public void invalidate() {
         super.invalidate();
@@ -126,9 +137,14 @@ class TextAreaSkinParagraphView extends TextAreaSkinElementView {
                     row.height = Math.max(row.height, nodeView.getHeight());
                 }
 
-                // TODO Align horizontally when Elements support a horizontal
-                // alignment property
-                x = 0;
+                if (paragraph.getHorizontalAlignment() == HorizontalAlignment.LEFT) {
+                    x = 0;
+                } else if (paragraph.getHorizontalAlignment() == HorizontalAlignment.CENTER) {
+                    x = (width - row.width) / 2;
+                } else {
+                    // right alignment
+                    x = width - row.width;
+                }
                 for (TextAreaSkinNodeView nodeView : row.nodeViews) {
                     // TODO Align to baseline
                     int y = row.height - nodeView.getHeight();
@@ -337,5 +353,10 @@ class TextAreaSkinParagraphView extends TextAreaSkinElementView {
         }
 
         return bounds;
+    }
+    
+    @Override
+    public void horizontalAlignmentChanged(Block block, HorizontalAlignment previousHorizontalAlignment) {
+        invalidate();
     }
 }

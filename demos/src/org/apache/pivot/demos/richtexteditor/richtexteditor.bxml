@@ -45,6 +45,12 @@ limitations under the License.
                     <ListButton bxml:id="fontFamilyListButton"/>
                     <ListButton bxml:id="fontSizeListButton"/>
                     <Checkbox bxml:id="wrapTextCheckbox" buttonData="Wrap Text" selected="false"/>
+	                <FlowPane>
+                    	<Label text="Horizontal Align"/>
+		                <PushButton bxml:id="alignLeftButton" buttonData="Left"/>
+		                <PushButton bxml:id="alignCentreButton" buttonData="Centre"/>
+		                <PushButton bxml:id="alignRightButton" buttonData="Right"/>
+    	            </FlowPane>
                 </FlowPane>
             </TablePane.Row>
             <TablePane.Row height="-1">
