@@ -73,6 +73,18 @@ public abstract class Element extends Node
                 listener.foregroundColorChanged(element, previousForegroundColor);
             }
         }
+        @Override
+        public void underlineChanged(Element element) {
+            for (ElementListener listener : this) {
+                listener.underlineChanged(element);
+            }
+        }
+        @Override
+        public void strikethroughChanged(Element element) {
+            for (ElementListener listener : this) {
+                listener.strikethroughChanged(element);
+            }
+        }
     }
 
     private int characterCount = 0;
@@ -80,6 +92,8 @@ public abstract class Element extends Node
     private java.awt.Font font;
     private Color foregroundColor;
     private Color backgroundColor;
+    private boolean underline;
+    private boolean strikethrough;
 
     private ElementListenerList elementListeners = new ElementListenerList();
 
@@ -87,6 +101,11 @@ public abstract class Element extends Node
     }
 
     public Element(Element element, boolean recursive) {
+        this.font = element.getFont();
+        this.foregroundColor = element.getForegroundColor();
+        this.backgroundColor = element.getBackgroundColor();
+        this.underline = element.isUnderline();
+        this.strikethrough = element.isStrikethrough();
         if (recursive) {
             for (Node node : element) {
                 add(node.duplicate(true));
@@ -708,6 +727,30 @@ public abstract class Element extends Node
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
+    public boolean isUnderline() {
+        return underline;
+    }
+
+    public void setUnderline(boolean underline) {
+        boolean previousUnderline = this.underline;
+        if (previousUnderline != underline) {
+            this.underline = underline;
+            elementListeners.underlineChanged(this);
+        }
+    }
+    
+    public boolean isStrikethrough() {
+        return strikethrough;
+    }
+
+    public void setStrikethrough(boolean strikethrough) {
+        boolean previousStrikethrough = this.strikethrough;
+        if (previousStrikethrough != strikethrough) {
+            this.strikethrough = strikethrough;
+            elementListeners.strikethroughChanged(this);
+        }
+    }
+    
     public ListenerList<ElementListener> getElementListeners() {
         return elementListeners;
     }

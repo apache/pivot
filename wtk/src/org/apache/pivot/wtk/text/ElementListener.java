@@ -25,6 +25,7 @@ import org.apache.pivot.collections.Sequence;
  * Element listener interface.
  */
 public interface ElementListener {
+    
     public class Adapter implements ElementListener {
         @Override
         public void nodeInserted(Element element, int index) {
@@ -41,7 +42,14 @@ public interface ElementListener {
         @Override
         public void foregroundColorChanged(Element element, Color previousForegroundColor) {
         }
+        @Override
+        public void underlineChanged(Element element) {
+        }
+        @Override
+        public void strikethroughChanged(Element element) {
+        }
     }
+    
     /**
      * Called when a node has been inserted into an element.
      *
@@ -84,4 +92,17 @@ public interface ElementListener {
      */
     public void foregroundColorChanged(Element element, Color previousForegroundColor);
 
+    /**
+     * Called when underline style has changed.
+     *
+     * @param element
+     */
+    public void underlineChanged(Element element);
+    
+    /**
+     * Called when strikethrough style has changed.
+     *
+     * @param element
+     */
+    public void strikethroughChanged(Element element);
 }

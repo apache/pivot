@@ -164,6 +164,10 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = getEffectiveFont().getLineMetrics("", fontRenderContext);
             float ascent = lm.getAscent();
+            int strikethroughX = Math.round(lm.getAscent() + lm.getStrikethroughOffset());
+            int underlineX = Math.round(lm.getAscent() + lm.getUnderlineOffset());
+            boolean underline = getEffectiveUnderline();
+            boolean strikethrough = getEffectiveStrikethrough();
 
             graphics.setFont(getEffectiveFont());
 
@@ -174,12 +178,12 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
             int documentOffset = getDocumentOffset();
             Span characterRange = new Span(documentOffset, documentOffset + getCharacterCount() - 1);
 
+            int width = getWidth();
+            int height = getHeight();
+            
             if (selectionLength > 0
                 && characterRange.intersects(selectionRange)) {
                 // Determine the selection bounds
-                int width = getWidth();
-                int height = getHeight();
-
                 int x0;
                 if (selectionRange.start > characterRange.start) {
                     Bounds leadingSelectionBounds = getCharacterBounds(selectionRange.start - documentOffset);
@@ -207,6 +211,12 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
                 textGraphics.setColor(getEffectiveForegroundColor());
                 textGraphics.clip(unselectedArea);
                 textGraphics.drawGlyphVector(glyphVector, 0, ascent);
+                if (underline) {
+                    textGraphics.drawLine(x0, underlineX, x1 - x0, underlineX);
+                }
+                if (strikethrough) {
+                    textGraphics.drawLine(x0, strikethroughX, x1 - x0, strikethroughX);
+                }
                 textGraphics.dispose();
 
                 // Paint the selection
@@ -222,11 +232,23 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
                     textArea.isEditable() ? selectionColor : textAreaSkin.getInactiveSelectionColor());
                 selectedTextGraphics.clip(selection.getBounds());
                 selectedTextGraphics.drawGlyphVector(glyphVector, 0, ascent);
+                if (underline) {
+                    selectedTextGraphics.drawLine(0, underlineX, width, underlineX);
+                }
+                if (strikethrough) {
+                    selectedTextGraphics.drawLine(0, strikethroughX, width, strikethroughX);
+                }
                 selectedTextGraphics.dispose();
             } else {
                 // Draw the text
                 graphics.setColor(getEffectiveForegroundColor());
                 graphics.drawGlyphVector(glyphVector, 0, ascent);
+                if (underline) {
+                    graphics.drawLine(0, underlineX, width, underlineX);
+                }
+                if (strikethrough) {
+                    graphics.drawLine(0, strikethroughX, width, strikethroughX);
+                }
             }
         }
     }
@@ -315,6 +337,32 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
         return foregroundColor;
     }
 
+    private boolean getEffectiveUnderline() {
+        // run up the tree until we find an element's style to apply
+        Element element = getNode().getParent();
+        while (element != null) {
+            if (element.isUnderline()) {
+                return true;
+            }
+
+            element = element.getParent();
+        }
+        return false;
+    }
+    
+    private boolean getEffectiveStrikethrough() {
+        // run up the tree until we find an element's style to apply
+        Element element = getNode().getParent();
+        while (element != null) {
+            if (element.isStrikethrough()) {
+                return true;
+            }
+
+            element = element.getParent();
+        }
+        return false;
+    }
+    
     @Override
     public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
         int offset = -1;

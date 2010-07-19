@@ -31,6 +31,8 @@ limitations under the License.
                     <Label text="  "/> <!-- spacer -->
                     <PushButton bxml:id="boldButton" buttonData="Bold"/>
                     <PushButton bxml:id="italicButton" buttonData="Italic"/>
+                    <PushButton bxml:id="underlineButton" buttonData="Underline"/>
+                    <PushButton bxml:id="strikethroughButton" buttonData="Strikethrough"/>
                     <ListButton bxml:id="fontFamilyListButton"/>
                     <ListButton bxml:id="fontSizeListButton"/>
                     <Checkbox bxml:id="wrapTextCheckbox" buttonData="Wrap Text" selected="false"/>

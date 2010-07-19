@@ -70,6 +70,10 @@ public class RichTextEditorDemo implements Application {
     @BXML
     private PushButton italicButton = null;
     @BXML
+    private PushButton underlineButton = null;
+    @BXML
+    private PushButton strikethroughButton = null;
+    @BXML
     private ListButton fontFamilyListButton = null;
     @BXML
     private ListButton fontSizeListButton = null;
@@ -245,6 +249,32 @@ public class RichTextEditorDemo implements Application {
             }
         });
 
+        underlineButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                org.apache.pivot.wtk.Span span = textarea.getSelection();
+                applyStyle(textarea.getDocument(), span, new StyleApplicator() {
+                    @Override
+                    public void apply(org.apache.pivot.wtk.text.Span span) {
+                        span.setUnderline(!span.isUnderline());
+                    }
+                });
+            }
+        });
+        
+        strikethroughButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                org.apache.pivot.wtk.Span span = textarea.getSelection();
+                applyStyle(textarea.getDocument(), span, new StyleApplicator() {
+                    @Override
+                    public void apply(org.apache.pivot.wtk.text.Span span) {
+                        span.setStrikethrough(!span.isStrikethrough());
+                    }
+                });
+            }
+        });
+        
         ListButtonSelectionListener fontButtonPressListener = new ListButtonSelectionListener() {
             @Override
             public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
