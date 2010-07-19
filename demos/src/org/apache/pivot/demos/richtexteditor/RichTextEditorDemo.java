@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.demos.richtexteditor;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
@@ -35,6 +36,8 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Checkbox;
+import org.apache.pivot.wtk.ColorChooserButton;
+import org.apache.pivot.wtk.ColorChooserButtonSelectionListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FileBrowserSheet;
@@ -73,6 +76,10 @@ public class RichTextEditorDemo implements Application {
     private PushButton underlineButton = null;
     @BXML
     private PushButton strikethroughButton = null;
+    @BXML
+    private ColorChooserButton foregroundColorChooserButton = null;
+    @BXML
+    private ColorChooserButton backgroundColorChooserButton = null;
     @BXML
     private ListButton fontFamilyListButton = null;
     @BXML
@@ -200,8 +207,7 @@ public class RichTextEditorDemo implements Application {
         boldButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                org.apache.pivot.wtk.Span span = textarea.getSelection();
-                applyStyle(textarea.getDocument(), span, new StyleApplicator() {
+                applyStyleToSelection(new StyleApplicator() {
                     @Override
                     public void apply(org.apache.pivot.wtk.text.Span span) {
                         if (span.getFont() != null) {
@@ -226,8 +232,7 @@ public class RichTextEditorDemo implements Application {
         italicButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                org.apache.pivot.wtk.Span span = textarea.getSelection();
-                applyStyle(textarea.getDocument(), span, new StyleApplicator() {
+                applyStyleToSelection(new StyleApplicator() {
                     @Override
                     public void apply(org.apache.pivot.wtk.text.Span span) {
                         if (span.getFont() != null) {
@@ -252,8 +257,7 @@ public class RichTextEditorDemo implements Application {
         underlineButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                org.apache.pivot.wtk.Span span = textarea.getSelection();
-                applyStyle(textarea.getDocument(), span, new StyleApplicator() {
+                applyStyleToSelection(new StyleApplicator() {
                     @Override
                     public void apply(org.apache.pivot.wtk.text.Span span) {
                         span.setUnderline(!span.isUnderline());
@@ -261,12 +265,11 @@ public class RichTextEditorDemo implements Application {
                 });
             }
         });
-        
+
         strikethroughButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                org.apache.pivot.wtk.Span span = textarea.getSelection();
-                applyStyle(textarea.getDocument(), span, new StyleApplicator() {
+                applyStyleToSelection(new StyleApplicator() {
                     @Override
                     public void apply(org.apache.pivot.wtk.text.Span span) {
                         span.setStrikethrough(!span.isStrikethrough());
@@ -274,16 +277,43 @@ public class RichTextEditorDemo implements Application {
                 });
             }
         });
+
+        foregroundColorChooserButton.getColorChooserButtonSelectionListeners().add(
+            new ColorChooserButtonSelectionListener() {
+                @Override
+                public void selectedColorChanged(ColorChooserButton colorChooserButton,
+                    Color previousSelectedColor) {
+                    applyStyleToSelection(new StyleApplicator() {
+                        @Override
+                        public void apply(org.apache.pivot.wtk.text.Span span) {
+                            span.setForegroundColor(foregroundColorChooserButton.getSelectedColor());
+                        }
+                    });
+                }
+            });
+
+        backgroundColorChooserButton.getColorChooserButtonSelectionListeners().add(
+            new ColorChooserButtonSelectionListener() {
+                @Override
+                public void selectedColorChanged(ColorChooserButton colorChooserButton,
+                    Color previousSelectedColor) {
+                    applyStyleToSelection(new StyleApplicator() {
+                        @Override
+                        public void apply(org.apache.pivot.wtk.text.Span span) {
+                            span.setBackgroundColor(backgroundColorChooserButton.getSelectedColor());
+                        }
+                    });
+                }
+            });
         
         ListButtonSelectionListener fontButtonPressListener = new ListButtonSelectionListener() {
             @Override
             public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
-                org.apache.pivot.wtk.Span span = textarea.getSelection();
                 int selectedFontSize = (Integer)fontSizeListButton.getSelectedItem();
                 String selectedFontFamily = (String)fontFamilyListButton.getSelectedItem();
                 final Font derivedFont = Font.decode(selectedFontFamily + " " + selectedFontSize);
 
-                applyStyle(textarea.getDocument(), span, new StyleApplicator() {
+                applyStyleToSelection(new StyleApplicator() {
                     @Override
                     public void apply(org.apache.pivot.wtk.text.Span span) {
                         span.setFont(derivedFont);
@@ -346,6 +376,14 @@ public class RichTextEditorDemo implements Application {
         }
     }
 
+    private void applyStyleToSelection(StyleApplicator styleApplicator) {
+        org.apache.pivot.wtk.Span span = textarea.getSelection();
+        if (span == null) {
+            return;
+        }
+        applyStyle(textarea.getDocument(), span, styleApplicator);
+    }
+        
     private void applyStyle(Document document, org.apache.pivot.wtk.Span selectionSpan,
         StyleApplicator styleApplicator) {
         // I can't apply the styles while iterating over the tree, because I
