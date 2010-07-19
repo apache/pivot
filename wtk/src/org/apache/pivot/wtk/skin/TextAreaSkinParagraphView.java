@@ -54,11 +54,11 @@ class TextAreaSkinParagraphView extends TextAreaSkinElementView implements Block
     @Override
     protected void attach() {
         super.attach();
-        
+
         Block block = (Block)getNode();
         block.getBlockListeners().add(this);
     }
-    
+
     @Override
     public void invalidate() {
         super.invalidate();
@@ -354,7 +354,7 @@ class TextAreaSkinParagraphView extends TextAreaSkinElementView implements Block
 
         return bounds;
     }
-    
+
     @Override
     public void horizontalAlignmentChanged(Block block, HorizontalAlignment previousHorizontalAlignment) {
         invalidate();

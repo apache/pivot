@@ -180,7 +180,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
 
             int width = getWidth();
             int height = getHeight();
-            
+
             if (selectionLength > 0
                 && characterRange.intersects(selectionRange)) {
                 // Determine the selection bounds
@@ -349,7 +349,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
         }
         return false;
     }
-    
+
     private boolean getEffectiveStrikethrough() {
         // run up the tree until we find an element's style to apply
         Element element = getNode().getParent();
@@ -362,7 +362,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
         }
         return false;
     }
-    
+
     @Override
     public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
         int offset = -1;

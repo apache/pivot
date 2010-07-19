@@ -57,7 +57,7 @@ public abstract class Block extends Element {
         if (horizontalAlignment == null) {
             throw new IllegalArgumentException("horizontalAlignment is null.");
         }
-        
+
         HorizontalAlignment previousHorizontalAlignment = this.horizontalAlignment;
         if (previousHorizontalAlignment != horizontalAlignment) {
             this.horizontalAlignment = horizontalAlignment;

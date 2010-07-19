@@ -25,7 +25,7 @@ import org.apache.pivot.collections.Sequence;
  * Element listener interface.
  */
 public interface ElementListener {
-    
+
     public class Adapter implements ElementListener {
         @Override
         public void nodeInserted(Element element, int index) {
@@ -49,7 +49,7 @@ public interface ElementListener {
         public void strikethroughChanged(Element element) {
         }
     }
-    
+
     /**
      * Called when a node has been inserted into an element.
      *
@@ -98,7 +98,7 @@ public interface ElementListener {
      * @param element
      */
     public void underlineChanged(Element element);
-    
+
     /**
      * Called when strikethrough style has changed.
      *

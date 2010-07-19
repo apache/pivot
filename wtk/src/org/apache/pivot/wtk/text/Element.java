@@ -738,7 +738,7 @@ public abstract class Element extends Node
             elementListeners.underlineChanged(this);
         }
     }
-    
+
     public boolean isStrikethrough() {
         return strikethrough;
     }
@@ -750,7 +750,7 @@ public abstract class Element extends Node
             elementListeners.strikethroughChanged(this);
         }
     }
-    
+
     public ListenerList<ElementListener> getElementListeners() {
         return elementListeners;
     }

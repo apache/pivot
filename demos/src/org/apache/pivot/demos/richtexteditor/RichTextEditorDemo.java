@@ -313,7 +313,7 @@ public class RichTextEditorDemo implements Application {
                     });
                 }
             });
-        
+
         ListButtonSelectionListener fontButtonPressListener = new ListButtonSelectionListener() {
             @Override
             public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
@@ -338,28 +338,28 @@ public class RichTextEditorDemo implements Application {
                 textarea.getStyles().put("wrapText", wrapTextCheckbox.isSelected());
             }
         });
-        
+
         alignLeftButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
                 applyAlignmentStyle(HorizontalAlignment.LEFT);
             }
         });
-        
+
         alignCentreButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
                 applyAlignmentStyle(HorizontalAlignment.CENTER);
             }
         });
-        
+
         alignRightButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
                 applyAlignmentStyle(HorizontalAlignment.RIGHT);
             }
         });
-        
+
         window.open(display);
         textarea.requestFocus();
     }
@@ -378,7 +378,7 @@ public class RichTextEditorDemo implements Application {
             paragraph.setHorizontalAlignment(horizontalAlignment);
         }
     }
-    
+
     /** debugging tools */
     @SuppressWarnings("unused")
     private void dumpDocument() {
@@ -424,7 +424,7 @@ public class RichTextEditorDemo implements Application {
         }
         applyStyle(textarea.getDocument(), span, styleApplicator);
     }
-        
+
     private void applyStyle(Document document, org.apache.pivot.wtk.Span selectionSpan,
         StyleApplicator styleApplicator) {
         // I can't apply the styles while iterating over the tree, because I

@@ -30,7 +30,7 @@ public interface BulletedListListener {
 
     /**
      * Called when the list style has changed.
-     * 
+     *
      * @param bulletedList
      * @param previousStyle
      */

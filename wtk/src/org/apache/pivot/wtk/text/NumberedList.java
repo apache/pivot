@@ -46,7 +46,7 @@ public class NumberedList extends List {
     private Style style = Style.DECIMAL;
 
     private NumberedListListenerList numberedListListeners = new NumberedListListenerList();
-    
+
     public NumberedList() {
         super();
     }
@@ -76,7 +76,7 @@ public class NumberedList extends List {
     public NumberedList duplicate(boolean recursive) {
         return new NumberedList(this, recursive);
     }
-    
+
     public ListenerList<NumberedListListener> getNumberedListListeners() {
         return numberedListListeners;
     }

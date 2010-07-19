@@ -231,7 +231,7 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
     public void foregroundColorChanged(Element element, Color previousForegroundColor) {
         invalidate();
     }
-    
+
     @Override
     public void underlineChanged(Element element) {
         invalidate();
@@ -241,7 +241,7 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
     public void strikethroughChanged(Element element) {
         invalidate();
     }
-    
+
     @Override
     public Iterator<TextAreaSkinNodeView> iterator() {
         return new ImmutableIterator<TextAreaSkinNodeView>(nodeViews.iterator());
