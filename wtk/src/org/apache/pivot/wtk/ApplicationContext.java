@@ -73,6 +73,7 @@ public abstract class ApplicationContext {
         private static final long serialVersionUID = -815713849595314026L;
 
         private Display display = new Display(this);
+        private AWTEvent currentAWTEvent = null;
 
         private Component focusedComponent = null;
 
@@ -297,6 +298,10 @@ public abstract class ApplicationContext {
 
         public Display getDisplay() {
             return display;
+        }
+
+        public AWTEvent getCurrentAWTEvent() {
+            return currentAWTEvent;
         }
 
         public double getScale() {
@@ -657,7 +662,12 @@ public abstract class ApplicationContext {
 
         @Override
         protected void processEvent(AWTEvent event) {
+            currentAWTEvent = event;
+
             super.processEvent(event);
+
+            currentAWTEvent = null;
+
             display.validate();
         }
 
