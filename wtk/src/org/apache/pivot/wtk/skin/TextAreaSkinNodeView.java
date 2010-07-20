@@ -193,7 +193,11 @@ abstract class TextAreaSkinNodeView implements Visual, NodeListener {
         return node.getCharacterCount();
     }
 
+    /**
+     * Used by TextAreaSkinParagraphView when it breaks child nodes into multiple views.
+     */
     public abstract TextAreaSkinNodeView getNext();
+    
     public abstract int getInsertionPoint(int x, int y);
     public abstract int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction);
     public abstract int getRowIndex(int offset);

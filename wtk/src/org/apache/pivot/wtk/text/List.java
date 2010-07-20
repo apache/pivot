@@ -25,7 +25,7 @@ public abstract class List extends Block {
     /**
      * Element representing a list item.
      */
-    public class Item extends Element {
+    public static class Item extends Element {
         public Item() {
             super();
         }

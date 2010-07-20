@@ -26,7 +26,10 @@ public class BulletedList extends List {
      * List bullet styles.
      */
     public enum Style {
-        CIRCLE, CIRCLE_OUTLINE, SQUARE, SQUARE_OUTLINE
+        /** unicode character 0x2022 aka. "BULLET" */ 
+        CIRCLE, 
+        /** unicode character 0x25e6 aka. "WHITE BULLET" */ 
+        CIRCLE_OUTLINE
     }
 
     private static class BulletedListListenerList extends ListenerList<BulletedListListener>
@@ -68,6 +71,14 @@ public class BulletedList extends List {
         }
     }
 
+    public final void setStyle(String style) {
+        if (style == null) {
+            throw new IllegalArgumentException("style is null.");
+        }
+
+        setStyle(Style.valueOf(style.toUpperCase()));
+    }
+    
     @Override
     public BulletedList duplicate(boolean recursive) {
         return new BulletedList(this, recursive);

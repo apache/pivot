@@ -16,36 +16,35 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import org.apache.pivot.wtk.text.Document;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.text.Block;
+import org.apache.pivot.wtk.text.BlockListener;
 
-/**
- * Document view.
- */
-class TextAreaSkinDocumentView extends TextAreaSkinVerticalElementView {
+abstract class TextAreaSkinBlockView extends TextAreaSkinElementView implements
+    BlockListener {
 
-    public TextAreaSkinDocumentView(TextAreaSkin textAreaSkin, Document document) {
-        super(textAreaSkin, document);
-    }
-
-    @Override
-    public void repaint(int x, int y, int width, int height) {
-        super.repaint(x, y, width, height);
-
-        textAreaSkin.repaintComponent(x, y, width, height);
-    }
-
-    @Override
-    public void invalidate() {
-        super.invalidate();
-        textAreaSkin.invalidateComponent();
+    public TextAreaSkinBlockView(Block block) {
+        super(block);
     }
     
     @Override
-    public void validate() {
-        if (!isValid()) {
-            verticalValidate();
-            super.validate();
-        }
-    }
+    protected void attach() {
+        super.attach();
 
+        Block block = (Block)getNode();
+        block.getBlockListeners().add(this);
+    }
+    
+    @Override
+    protected void detach() {
+        super.detach();
+
+        Block block = (Block)getNode();
+        block.getBlockListeners().remove(this);
+    }
+    
+    @Override
+    public void horizontalAlignmentChanged(Block block, HorizontalAlignment previousHorizontalAlignment) {
+        invalidate();
+    }
 }

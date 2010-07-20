@@ -35,7 +35,7 @@ class TextAreaSkinSpanView extends TextAreaSkinElementView {
     public void validate() {
         if (!isValid()) {
             // I have to re-create my children here instead of in attach(), because that is how ParagraphView works,
-            // and ParagraphView is always my super-node.
+            // and ParagraphView is always my parent node.
 
             // Clear all existing views
             remove(0, getLength());
@@ -46,16 +46,14 @@ class TextAreaSkinSpanView extends TextAreaSkinElementView {
                 add(textAreaSkin.createNodeView(node));
             }
 
+            // TODO like TextAreaSkinTextNodeView, I need to implement line-breaking
+            
             int breakWidth = getBreakWidth();
 
             int width = 0;
             int height = 0;
 
-            int i = 0;
-            int n = getLength();
-
-            while (i < n) {
-                TextAreaSkinNodeView nodeView = get(i++);
+            for (TextAreaSkinNodeView nodeView : this) {
                 nodeView.setBreakWidth(breakWidth);
                 nodeView.validate();
 

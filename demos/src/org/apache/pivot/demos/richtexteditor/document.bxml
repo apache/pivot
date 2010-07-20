@@ -30,4 +30,81 @@ limitations under the License.
     <Paragraph foregroundColor="red">abcd</Paragraph>
     <Paragraph backgroundColor="red">abcd</Paragraph>
     <Paragraph>abcd</Paragraph>
+    <NumberedList style="decimal">
+      <List.Item>
+	    <Paragraph>item1</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item2</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item3</Paragraph>
+      </List.Item>
+    </NumberedList>
+    <NumberedList style="lower_alpha">
+      <List.Item>
+	    <Paragraph>item1</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item2</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item3</Paragraph>
+      </List.Item>
+    </NumberedList>
+    <NumberedList style="upper_alpha">
+      <List.Item>
+	    <Paragraph>item1</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item2</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item3</Paragraph>
+      </List.Item>
+    </NumberedList>
+    <NumberedList style="lower_roman">
+      <List.Item>
+	    <Paragraph>item1</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item2</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item3</Paragraph>
+      </List.Item>
+    </NumberedList>
+    <NumberedList style="upper_roman">
+      <List.Item>
+	    <Paragraph>item1</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item2</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item3</Paragraph>
+      </List.Item>
+    </NumberedList>
+    <BulletedList style="CIRCLE">
+      <List.Item>
+	    <Paragraph>item1</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item2</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item3</Paragraph>
+      </List.Item>
+    </BulletedList>
+    <BulletedList style="CIRCLE_OUTLINE">
+      <List.Item>
+	    <Paragraph>item1</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item2</Paragraph>
+      </List.Item>
+      <List.Item>
+	    <Paragraph>item3</Paragraph>
+      </List.Item>
+    </BulletedList>
 </Document>

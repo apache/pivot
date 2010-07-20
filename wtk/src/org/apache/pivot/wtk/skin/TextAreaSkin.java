@@ -41,10 +41,13 @@ import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TextAreaListener;
 import org.apache.pivot.wtk.TextAreaSelectionListener;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.text.BulletedList;
 import org.apache.pivot.wtk.text.ComponentNode;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.ImageNode;
+import org.apache.pivot.wtk.text.List;
 import org.apache.pivot.wtk.text.Node;
+import org.apache.pivot.wtk.text.NumberedList;
 import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.TextNode;
 
@@ -1082,6 +1085,12 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
             nodeView = new TextAreaSkinComponentNodeView((ComponentNode)node);
         } else if (node instanceof org.apache.pivot.wtk.text.Span) {
             nodeView = new TextAreaSkinSpanView(this, (org.apache.pivot.wtk.text.Span)node);
+        } else if (node instanceof NumberedList) {
+            nodeView = new TextAreaSkinNumberedListView(this, (NumberedList)node);
+        } else if (node instanceof BulletedList) {
+            nodeView = new TextAreaSkinBulletedListView(this, (BulletedList)node);
+        } else if (node instanceof List.Item) {
+            nodeView = new TextAreaSkinListItemView(this, (List.Item)node);
         } else {
             throw new IllegalArgumentException("Unsupported node type: "
                 + node.getClass().getName());

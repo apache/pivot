@@ -24,12 +24,10 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Platform;
-import org.apache.pivot.wtk.text.Block;
-import org.apache.pivot.wtk.text.BlockListener;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.Paragraph;
 
-class TextAreaSkinParagraphView extends TextAreaSkinElementView implements BlockListener {
+class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
 
     private static final int PARAGRAPH_TERMINATOR_WIDTH = 4;
 
@@ -52,14 +50,6 @@ class TextAreaSkinParagraphView extends TextAreaSkinElementView implements Block
     }
 
     @Override
-    protected void attach() {
-        super.attach();
-
-        Block block = (Block)getNode();
-        block.getBlockListeners().add(this);
-    }
-
-    @Override
     public void invalidate() {
         super.invalidate();
         terminatorBounds = null;
@@ -68,6 +58,9 @@ class TextAreaSkinParagraphView extends TextAreaSkinElementView implements Block
     @Override
     public void validate() {
         if (!isValid()) {
+            // Remove and re-create the child views, because of line-breaking, a single TextNode
+            // may be added as many TextAreaSkinTextNodeView's.
+        		
             // Break the views into multiple rows
             int breakWidth = getBreakWidth();
 
@@ -355,8 +348,4 @@ class TextAreaSkinParagraphView extends TextAreaSkinElementView implements Block
         return bounds;
     }
 
-    @Override
-    public void horizontalAlignmentChanged(Block block, HorizontalAlignment previousHorizontalAlignment) {
-        invalidate();
-    }
 }

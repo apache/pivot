@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.text.ComponentNode;
 import org.apache.pivot.wtk.text.ComponentNodeListener;
 
-public class TextAreaSkinComponentNodeView extends TextAreaSkinNodeView implements ComponentNodeListener {
+class TextAreaSkinComponentNodeView extends TextAreaSkinNodeView implements ComponentNodeListener {
 
     private final ComponentListener myComponentListener = new ComponentListener.Adapter() {
         @Override

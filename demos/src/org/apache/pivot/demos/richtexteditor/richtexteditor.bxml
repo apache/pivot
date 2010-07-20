@@ -25,7 +25,7 @@ limitations under the License.
                 <TablePane.Column width="1*"/>
             </columns>
             <TablePane.Row height="-1">
-                <FlowPane styles="{padding:1, horizontalSpacing:10, alignToBaseline:true}">
+                <FlowPane styles="{padding:1, alignToBaseline:true}">
                     <PushButton bxml:id="openFileButton" buttonData="Open File"/>
                     <PushButton bxml:id="saveFileButton" buttonData="Save File"/>
                     <Label text="  "/> <!-- spacer -->
@@ -34,23 +34,21 @@ limitations under the License.
                     <PushButton bxml:id="underlineButton" buttonData="Underline"/>
                     <PushButton bxml:id="strikethroughButton" buttonData="Strikethrough"/>
                     <Label text="  "/> <!-- spacer -->
-                    <FlowPane>
-                        <Label text="Foreground"/>
-                        <ColorChooserButton bxml:id="foregroundColorChooserButton" selectedColor="#000000"/>
-                    </FlowPane>
-                    <FlowPane>
-                        <Label text="Background"/>
-                        <ColorChooserButton bxml:id="backgroundColorChooserButton" selectedColor="#ffffff"/>
-                    </FlowPane>
+                	<Label text="Foreground"/>
+                	<ColorChooserButton bxml:id="foregroundColorChooserButton" selectedColor="#000000"/>
+                	<Label text="Background"/>
+                	<ColorChooserButton bxml:id="backgroundColorChooserButton" selectedColor="#ffffff"/>
+                    <Label text="  "/> <!-- spacer -->
+                	<Label text="Font"/>
                     <ListButton bxml:id="fontFamilyListButton"/>
                     <ListButton bxml:id="fontSizeListButton"/>
+                    <Label text="  "/> <!-- spacer -->
+                	<Label text="Horizontal Align"/>
+	                <PushButton bxml:id="alignLeftButton" buttonData="Left"/>
+	                <PushButton bxml:id="alignCentreButton" buttonData="Centre"/>
+	                <PushButton bxml:id="alignRightButton" buttonData="Right"/>
+                    <Label text="  "/> <!-- spacer -->
                     <Checkbox bxml:id="wrapTextCheckbox" buttonData="Wrap Text" selected="false"/>
-                    <FlowPane>
-                        <Label text="Horizontal Align"/>
-                        <PushButton bxml:id="alignLeftButton" buttonData="Left"/>
-                        <PushButton bxml:id="alignCentreButton" buttonData="Centre"/>
-                        <PushButton bxml:id="alignRightButton" buttonData="Right"/>
-                    </FlowPane>
                 </FlowPane>
             </TablePane.Row>
             <TablePane.Row height="-1">
