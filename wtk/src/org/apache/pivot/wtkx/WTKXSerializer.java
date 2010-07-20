@@ -994,7 +994,7 @@ public class WTKXSerializer implements Serializer<Object>, Dictionary<String, Ob
                         URL scriptLocation;
                         if (src.charAt(0) == '/') {
                             ClassLoader classLoader = ThreadUtilities.getClassLoader();
-                            scriptLocation = classLoader.getResource(src);
+                            scriptLocation = classLoader.getResource(src.substring(1));
                         } else {
                             scriptLocation = new URL(location, src);
                         }
