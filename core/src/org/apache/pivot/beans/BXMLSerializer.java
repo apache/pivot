@@ -1153,7 +1153,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         URL scriptLocation;
                         if (src.charAt(0) == '/') {
                             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                            scriptLocation = classLoader.getResource(src);
+                            scriptLocation = classLoader.getResource(src.substring(1));
                         } else {
                             scriptLocation = new URL(location, src);
                         }

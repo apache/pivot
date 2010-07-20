@@ -130,7 +130,7 @@ public class SwingDemo extends ApplicationContext {
 
         // Open and select the internal frame
         internalFrame.setLocation(50, 50);
-        internalFrame.setSize(640, 480);
+        internalFrame.setSize(480, 360);
         internalFrame.setVisible(true);
     }
 
@@ -162,7 +162,7 @@ public class SwingDemo extends ApplicationContext {
 
         // Open and select the internal frame
         internalFrame.setLocation(240, 100);
-        internalFrame.setSize(640, 480);
+        internalFrame.setSize(480, 360);
         internalFrame.setVisible(true);
 
         try {

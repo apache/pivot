@@ -807,8 +807,6 @@ public abstract class ApplicationContext {
                 try {
                     switch (eventID) {
                         case MouseEvent.MOUSE_PRESSED: {
-                            requestFocus();
-
                             mouseOwner.mouseDown(button, x, y);
 
                             if (button == Mouse.Button.LEFT) {

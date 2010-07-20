@@ -241,7 +241,9 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     @Override
     public void focusedChanged(Component component, Component obverseComponent) {
-        // No-op
+        if (component.isFocused()) {
+            component.scrollAreaToVisible(0, 0, component.getWidth(), component.getHeight());
+        }
     }
 
     // Component mouse events
@@ -315,18 +317,9 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
             FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
                 FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
 
-            Component previousFocusedComponent = Component.getFocusedComponent();
-            previousFocusedComponent.transferFocus(direction);
+            component.transferFocus(direction);
 
-            Component focusedComponent = Component.getFocusedComponent();
-
-            if (previousFocusedComponent != focusedComponent) {
-                // Ensure that the focused component is visible if it is in a viewport
-                focusedComponent.scrollAreaToVisible(0, 0, focusedComponent.getWidth(),
-                    focusedComponent.getHeight());
-
-                consumed = true;
-            }
+            consumed = true;
         }
 
         return consumed;

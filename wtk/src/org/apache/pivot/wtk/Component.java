@@ -2282,7 +2282,7 @@ public abstract class Component implements ConstrainedVisual {
      * If <tt>focused</tt> is true, the component that has lost the focus;
      * otherwise, the component that has gained the focus.
      */
-    private void setFocused(boolean focused, Component obverseComponent) {
+    protected void setFocused(boolean focused, Component obverseComponent) {
         if (focused) {
             parent.descendantGainedFocus(this, obverseComponent);
         } else {
@@ -2302,6 +2302,11 @@ public abstract class Component implements ConstrainedVisual {
     public boolean requestFocus() {
         if (isFocusable()) {
             setFocusedComponent(this);
+
+            ApplicationContext.DisplayHost displayHost = getDisplay().getDisplayHost();
+            if (!displayHost.isFocusOwner()) {
+                displayHost.requestFocusInWindow();
+            }
         }
 
         return isFocused();
