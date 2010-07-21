@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<sheets:EditGreetingSheet title="%title"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:sheets="org.apache.pivot.examples.sheets"
+    xmlns="org.apache.pivot.wtk">
+    <TablePane styles="{verticalSpacing:8}">
+        <columns>
+            <TablePane.Column width="1*"/>
+        </columns>
+
+        <TablePane.Row>
+            <Form bxml:id="form">
+                <Form.Section>
+                    <TextInput bxml:id="greetingTextInput" Form.label="%greeting" textKey="greeting"/>
+                </Form.Section>
+            </Form>
+        </TablePane.Row>
+
+        <TablePane.Row>
+            <BoxPane styles="{horizontalAlignment:'right'}">
+                <PushButton bxml:id="cancelButton" buttonData="%cancel"
+                    styleName="org.apache.pivot.wtk.skin.terra.commandButton"/>
+                <PushButton bxml:id="okButton" buttonData="%ok"
+                    styleName="org.apache.pivot.wtk.skin.terra.commandButton"/>
+            </BoxPane>
+        </TablePane.Row>
+    </TablePane>
+</sheets:EditGreetingSheet>
+

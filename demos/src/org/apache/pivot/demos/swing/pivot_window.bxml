@@ -19,22 +19,24 @@ limitations under the License.
 <Window title="Pivot Window" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <BoxPane orientation="vertical" styles="{padding:8, spacing:8}">
-        <Label text="Hello from Pivot!" styles="{font:{bold:true}}"/>
-        <PushButton buttonData="PushButton"/>
-        <Checkbox buttonData="Checkbox" selected="true"/>
+    <ScrollPane>
+        <BoxPane orientation="vertical" styles="{padding:8, spacing:8}">
+            <Label text="Hello from Pivot!" styles="{font:{bold:true}}"/>
+            <PushButton buttonData="PushButton"/>
+            <Checkbox buttonData="Checkbox" selected="true"/>
 
-        <Border>
-            <BoxPane orientation="vertical" styles="{padding:4, spacing:4}">
-                <bxml:define>
-                    <ButtonGroup bxml:id="buttonGroup"/>
-                </bxml:define>
-                <RadioButton buttonData="RadioButton 1" buttonGroup="$buttonGroup" selected="true"/>
-                <RadioButton buttonData="RadioButton 2" buttonGroup="$buttonGroup"/>
-                <RadioButton buttonData="RadioButton 3" buttonGroup="$buttonGroup"/>
-            </BoxPane>
-        </Border>
+            <Border>
+                <BoxPane orientation="vertical" styles="{padding:4, spacing:4}">
+                    <bxml:define>
+                        <ButtonGroup bxml:id="buttonGroup"/>
+                    </bxml:define>
+                    <RadioButton buttonData="RadioButton 1" buttonGroup="$buttonGroup" selected="true"/>
+                    <RadioButton buttonData="RadioButton 2" buttonGroup="$buttonGroup"/>
+                    <RadioButton buttonData="RadioButton 3" buttonGroup="$buttonGroup"/>
+                </BoxPane>
+            </Border>
 
-        <ActivityIndicator preferredWidth="32" preferredHeight="32" active="true"/>
-    </BoxPane>
+            <ActivityIndicator preferredWidth="32" preferredHeight="32" active="true"/>
+        </BoxPane>
+    </ScrollPane>
 </Window>

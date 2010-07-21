@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
@@ -126,12 +127,13 @@ public class SwingDemo extends ApplicationContext {
         jProgressBar.setIndeterminate(true);
         box.add(jProgressBar);
 
-        internalFrame.add(box);
+        internalFrame.add(new JScrollPane(box));
 
         // Open and select the internal frame
         internalFrame.setLocation(50, 50);
         internalFrame.setSize(480, 360);
         internalFrame.setVisible(true);
+        internalFrame.setResizable(true);
     }
 
     private static void createPivotFrame() {
@@ -164,6 +166,7 @@ public class SwingDemo extends ApplicationContext {
         internalFrame.setLocation(240, 100);
         internalFrame.setSize(480, 360);
         internalFrame.setVisible(true);
+        internalFrame.setResizable(true);
 
         try {
             internalFrame.setSelected(true);

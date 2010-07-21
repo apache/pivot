@@ -458,7 +458,18 @@ public class Form extends Container {
     }
 
     /**
-     * Returns the number of fields that are flagged with a given flag type.
+     * Clears all field flags.
+     */
+    public void clearFlags() {
+        for (Section section : sections) {
+            for (Component field : section) {
+                setFlag(field, (Flag)null);
+            }
+        }
+    }
+
+    /**
+     * Returns the number of fields that are flagged with a given message type.
      *
      * @param messageType
      * The message type to count, or <tt>null</tt> to return the count of all

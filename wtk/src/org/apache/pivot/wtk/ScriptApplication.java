@@ -48,7 +48,7 @@ public class ScriptApplication implements Application {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL location = classLoader.getResource(src);
+        URL location = classLoader.getResource(src.substring(1));
 
         if (location == null) {
             File file = new File(src);
