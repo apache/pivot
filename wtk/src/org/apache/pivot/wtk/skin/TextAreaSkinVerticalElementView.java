@@ -32,7 +32,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
         super(element);
         this.textAreaSkin = textAreaSkin;
     }
-    
+
     @Override
     protected void attach() {
         super.attach();
@@ -86,7 +86,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
     public TextAreaSkinNodeView getNext() {
         return null;
     }
-    
+
     @Override
     public int getInsertionPoint(int x, int y) {
         int offset = -1;

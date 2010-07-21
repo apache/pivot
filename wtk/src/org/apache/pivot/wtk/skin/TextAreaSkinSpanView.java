@@ -47,7 +47,7 @@ class TextAreaSkinSpanView extends TextAreaSkinElementView {
             }
 
             // TODO like TextAreaSkinTextNodeView, I need to implement line-breaking
-            
+
             int breakWidth = getBreakWidth();
 
             int width = 0;

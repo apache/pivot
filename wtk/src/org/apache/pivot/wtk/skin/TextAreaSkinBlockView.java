@@ -26,7 +26,7 @@ abstract class TextAreaSkinBlockView extends TextAreaSkinElementView implements
     public TextAreaSkinBlockView(Block block) {
         super(block);
     }
-    
+
     @Override
     protected void attach() {
         super.attach();
@@ -34,7 +34,7 @@ abstract class TextAreaSkinBlockView extends TextAreaSkinElementView implements
         Block block = (Block)getNode();
         block.getBlockListeners().add(this);
     }
-    
+
     @Override
     protected void detach() {
         super.detach();
@@ -42,7 +42,7 @@ abstract class TextAreaSkinBlockView extends TextAreaSkinElementView implements
         Block block = (Block)getNode();
         block.getBlockListeners().remove(this);
     }
-    
+
     @Override
     public void horizontalAlignmentChanged(Block block, HorizontalAlignment previousHorizontalAlignment) {
         invalidate();

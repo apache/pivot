@@ -39,7 +39,7 @@ class TextAreaSkinDocumentView extends TextAreaSkinVerticalElementView {
         super.invalidate();
         textAreaSkin.invalidateComponent();
     }
-    
+
     @Override
     public void validate() {
         if (!isValid()) {

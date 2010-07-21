@@ -60,7 +60,7 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
         if (!isValid()) {
             // Remove and re-create the child views, because of line-breaking, a single TextNode
             // may be added as many TextAreaSkinTextNodeView's.
-        		
+
             // Break the views into multiple rows
             int breakWidth = getBreakWidth();
 

@@ -25,22 +25,22 @@ class TextAreaSkinListItemView extends TextAreaSkinVerticalElementView {
 
     private TextNode indexTextNode;
     private TextAreaSkinTextNodeView indexTextNodeView;
-    
+
     public TextAreaSkinListItemView(TextAreaSkin textAreaSkin, org.apache.pivot.wtk.text.List.Item listItem) {
         super(textAreaSkin, listItem);
-        
+
         this.indexTextNode = new TextNode("");
     }
-    
+
     @Override
     protected void attach() {
         super.attach();
-        
+
         // add an extra TextNodeView to render the index text
-        indexTextNodeView = new TextAreaSkinTextNodeView(textAreaSkin, indexTextNode); 
+        indexTextNodeView = new TextAreaSkinTextNodeView(textAreaSkin, indexTextNode);
         insert(indexTextNodeView, 0);
     }
-    
+
     public void setIndexText(String indexText) {
         indexTextNode.setText(indexText);
         indexTextNodeView.validate();
@@ -53,7 +53,7 @@ class TextAreaSkinListItemView extends TextAreaSkinVerticalElementView {
 
             indexTextNodeView.validate();
             indexTextNodeView.setLocation(0, 0);
-            
+
             int breakWidth = getBreakWidth() - indexTextNodeView.getWidth();
             int itemsWidth = 0;
             int itemsY = 0;
@@ -61,7 +61,7 @@ class TextAreaSkinListItemView extends TextAreaSkinVerticalElementView {
             // skip the first item, it's the indexText nodeView
             Iterator<TextAreaSkinNodeView> iterator = this.iterator();
             iterator.next();
-            
+
             for ( ; iterator.hasNext(); ) {
                 TextAreaSkinNodeView nodeView = iterator.next();
                 nodeView.setBreakWidth(breakWidth);
@@ -72,7 +72,7 @@ class TextAreaSkinListItemView extends TextAreaSkinVerticalElementView {
                 itemsWidth = Math.max(itemsWidth, nodeView.getWidth());
                 itemsY += nodeView.getHeight();
             }
-            
+
             int width = itemsWidth + indexTextNodeView.getWidth();
             int height = Math.max(itemsY, indexTextNodeView.getHeight());
 
@@ -81,7 +81,7 @@ class TextAreaSkinListItemView extends TextAreaSkinVerticalElementView {
             super.validate();
         }
     }
-    
+
     public int getIndexTextWidth() {
         return indexTextNodeView.getWidth();
     }

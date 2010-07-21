@@ -26,9 +26,9 @@ public class BulletedList extends List {
      * List bullet styles.
      */
     public enum Style {
-        /** unicode character 0x2022 aka. "BULLET" */ 
-        CIRCLE, 
-        /** unicode character 0x25e6 aka. "WHITE BULLET" */ 
+        /** unicode character 0x2022 aka. "BULLET" */
+        CIRCLE,
+        /** unicode character 0x25e6 aka. "WHITE BULLET" */
         CIRCLE_OUTLINE
     }
 
@@ -78,7 +78,7 @@ public class BulletedList extends List {
 
         setStyle(Style.valueOf(style.toUpperCase()));
     }
-    
+
     @Override
     public BulletedList duplicate(boolean recursive) {
         return new BulletedList(this, recursive);

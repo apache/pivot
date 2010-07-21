@@ -40,7 +40,7 @@ class TextAreaSkinBulletedListView extends TextAreaSkinListView implements Bulle
         BulletedList bulletedList = (BulletedList)getNode();
         bulletedList.getBulletedListListeners().remove(this);
     }
-    
+
     @Override
     public void validate() {
         if (!isValid()) {

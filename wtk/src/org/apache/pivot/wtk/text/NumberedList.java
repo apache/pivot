@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk.text;
 
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.wtk.FileBrowserSheet.Mode;
 
 /**
  * Element representing a numbered list.
@@ -80,7 +79,7 @@ public class NumberedList extends List {
 
         setStyle(Style.valueOf(style.toUpperCase()));
     }
-    
+
     @Override
     public NumberedList duplicate(boolean recursive) {
         return new NumberedList(this, recursive);
