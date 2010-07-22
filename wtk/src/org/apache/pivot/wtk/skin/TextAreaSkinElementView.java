@@ -224,22 +224,22 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
 
     @Override
     public void backgroundColorChanged(Element element, Color previousBackgroundColor) {
-        invalidate();
+        repaint();
     }
 
     @Override
     public void foregroundColorChanged(Element element, Color previousForegroundColor) {
-        invalidate();
+        repaint();
     }
 
     @Override
     public void underlineChanged(Element element) {
-        invalidate();
+        repaint();
     }
 
     @Override
     public void strikethroughChanged(Element element) {
-        invalidate();
+        repaint();
     }
 
     @Override

@@ -137,8 +137,6 @@ class TextAreaSkinImageNodeView extends TextAreaSkinNodeView implements ImageNod
 
     @Override
     public void regionUpdated(Image image, int x, int y, int width, int height) {
-        // TODO Repaint the corresponding area of the component (add a repaint()
-        // method to NodeView to facilitate this as well as paint-only updates
-        // such as color changes)
+        repaint(x, y, width, height);
     }
 }
