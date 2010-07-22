@@ -20,8 +20,6 @@ import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSONSerializer;
@@ -381,22 +379,22 @@ public final class Time implements Comparable<Time>, Serializable {
      * A string in the form of <tt>[hh]:[mm]:[ss]</tt> or
      * <tt>[hh]:[mm]:[ss].[nnn]</tt> (e.g. 17:19:20 or 17:19:20.412).
      */
-
     public static Time decode(String value) {
-        Pattern pattern = Pattern.compile("^(\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3}))?$");
-        Matcher matcher = pattern.matcher(value);
+        String[] components = value.split(":");
 
-        if (!matcher.matches()) {
+        if (components.length != 3) {
             throw new IllegalArgumentException("Invalid time format: " + value);
         }
 
-        int hour = Integer.parseInt(matcher.group(1));
-        int minute = Integer.parseInt(matcher.group(2));
-        int second = Integer.parseInt(matcher.group(3));
+        int hour = Integer.parseInt(components[0]);
+        int minute = Integer.parseInt(components[1]);
 
+        String[] secondComponents = components[2].split("\\.");
+
+        int second = Integer.parseInt(secondComponents[0]);
         int millisecond;
-        if (matcher.groupCount() == 5) {
-            millisecond = Integer.parseInt(matcher.group(4).substring(1));
+        if (secondComponents.length > 1) {
+            millisecond = Integer.parseInt(secondComponents[1]);
         } else {
             millisecond = 0;
         }

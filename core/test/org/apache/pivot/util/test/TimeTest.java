@@ -42,5 +42,20 @@ public class TimeTest {
         System.out.println(time.add(-Time.MILLISECONDS_PER_DAY - 1));
         System.out.println(time.add(1000));
         System.out.println(time.add(-1000));
+
+        time = Time.decode("00:00:00.000");
+        System.out.println(time);
+
+        time = Time.decode("00:00:00.00");
+        System.out.println(time);
+
+        time = Time.decode("00:00:00");
+        System.out.println(time);
+
+        try {
+            time = Time.decode("00:00");
+        } catch (IllegalArgumentException exception) {
+            System.out.println(exception);
+        }
     }
 }

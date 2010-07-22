@@ -20,8 +20,6 @@ import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSONSerializer;
@@ -434,16 +432,15 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23).
      */
     public static CalendarDate decode(String value) {
-        Pattern pattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
-        Matcher matcher = pattern.matcher(value);
+        String[] components = value.split("-");
 
-        if (!matcher.matches()) {
+        if (components.length != 3) {
             throw new IllegalArgumentException("Invalid date format: " + value);
         }
 
-        int year = Integer.parseInt(matcher.group(1));
-        int month = Integer.parseInt(matcher.group(2)) - 1;
-        int day = Integer.parseInt(matcher.group(3)) - 1;
+        int year = Integer.parseInt(components[0]);
+        int month = Integer.parseInt(components[1]) - 1;
+        int day = Integer.parseInt(components[2]) - 1;
 
         return new CalendarDate(year, month, day);
     }

@@ -22,7 +22,7 @@ limitations under the License.
     <bxml:define>
         <Window bxml:id="secondaryDisplayWindow" title="Secondary Display Window" maximized="true">
             <BoxPane orientation="vertical" styles="{padding:8}">
-                <Label text="I am a secondary display!"/>
+                <Label text="I am a modal secondary display!"/>
                 <PushButton buttonData="Close">
                     <buttonPressListeners>
                         function buttonPressed(button) {
