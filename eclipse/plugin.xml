@@ -16,37 +16,50 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
 <plugin>
-    <extension point="org.eclipse.debug.core.launchConfigurationTypes">
-        <launchConfigurationType name="Pivot Script Application"
-            delegate="org.apache.pivot.eclipse.ScriptApplicationLaunchDelegate"
-            id="org.apache.pivot.eclipse.scriptApplication"
-            modes="run, debug"/>
-    </extension>
-
-    <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
-        <launchConfigurationTypeImage icon="icons/logo-notext-16x16.png"
-            configTypeID="org.apache.pivot.eclipse.scriptApplication"
-            id="org.apache.pivot.eclipse.launchConfigurationTypeImage.scriptApplication">
-        </launchConfigurationTypeImage>
-    </extension>
-
-    <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
-        <launchConfigurationTabGroup type="org.apache.pivot.eclipse.scriptApplication"
-            class="org.apache.pivot.eclipse.ScriptApplicationTabGroup"
-            id="org.apache.pivot.eclipse.launchConfigurationTabGroup.scriptApplication">
-        </launchConfigurationTabGroup>
+    <extension point="org.eclipse.debug.ui.launchShortcuts">
+        <shortcut class="org.apache.pivot.eclipse.PivotApplicationLaunchShortcut"
+            icon="icons/logo-notext-16x16.png"
+            label="Pivot Application"
+            id="org.apache.pivot.eclipse.pivotApplicationLaunchShortcut"
+            modes="run, debug">
+            <contextualLaunch>
+                <enablement>
+                    <with variable="selection">
+                        <count value="1"/>
+                        <iterate>
+                            <and>
+                                <instanceof value="org.eclipse.jdt.core.IJavaElement"/>
+                                <test property="org.eclipse.jdt.launching.extendsInterface"
+                                    args="org.apache.pivot.wtk.Application"/>
+                            </and>
+                        </iterate>
+                    </with>
+                </enablement>
+            </contextualLaunch>
+        </shortcut>
     </extension>
 
     <extension point="org.eclipse.debug.ui.launchShortcuts">
-      <shortcut class="org.eclipse.jdt.debug.ui.launchConfigurations.JavaAppletLaunchShortcut"
-            description="%AppletLaunchShortcut.description"
-            helpContextId="org.eclipse.jdt.debug.ui.shortcut_java_applet"
-            icon="$nl$/icons/full/etool16/java_applet.gif"
-            id="org.eclipse.jdt.debug.ui.javaAppletShortcut"
-            label="%AppletShortcut.label"
+        <shortcut class="org.apache.pivot.eclipse.PivotScriptApplicationLaunchShortcut"
+            icon="icons/logo-notext-16x16.png"
+            label="Pivot Script Application"
+            id="org.apache.pivot.eclipse.pivotScriptApplicationLaunchShortcut"
             modes="run, debug">
+            <contextualLaunch>
+                <enablement>
+                    <with variable="selection">
+                        <count value="1"/>
+                        <iterate>
+                            <and>
+                                <instanceof value="org.eclipse.core.resources.IFile"/>
+                                <test property="org.eclipse.debug.ui.matchesPattern"
+                                    value="*.bxml"/>
+                            </and>
+                        </iterate>
+                    </with>
+                </enablement>
+            </contextualLaunch>
         </shortcut>
     </extension>
 </plugin>

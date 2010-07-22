@@ -17,13 +17,16 @@
 package org.apache.pivot.eclipse;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaLaunchShortcut;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.operation.IRunnableContext;
 
-public class ScriptApplicationLaunchShortcut extends JavaLaunchShortcut {
+public class PivotApplicationLaunchShortcut extends JavaLaunchShortcut {
     @Override
     protected ILaunchConfiguration createConfiguration(IType type) {
         // TODO
@@ -32,8 +35,8 @@ public class ScriptApplicationLaunchShortcut extends JavaLaunchShortcut {
 
     @Override
     protected ILaunchConfigurationType getConfigurationType() {
-        // TODO
-        return null;
+        ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+        return launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
     }
 
     @Override
@@ -45,19 +48,16 @@ public class ScriptApplicationLaunchShortcut extends JavaLaunchShortcut {
 
     @Override
     protected String getTypeSelectionTitle() {
-        // TODO
-        return null;
+        return "Select Type"; // TODO i18n
     }
 
     @Override
     protected String getEditorEmptyMessage() {
-        // TODO
-        return null;
+        return "Editor does not contain a launchable type."; // TODO i18n
     }
 
     @Override
     protected String getSelectionEmptyMessage() {
-        // TODO
-        return null;
+        return "Selection does not contain a launchable type."; // TODO i18n
     }
 }
