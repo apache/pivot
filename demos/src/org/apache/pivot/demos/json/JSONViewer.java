@@ -77,6 +77,15 @@ public class JSONViewer implements Application {
         window.setTitle(WINDOW_TITLE);
         window.open(display);
         window.requestFocus();
+
+        if (System.in.available() > 0) {
+            JSONSerializer jsonSerializer = new JSONSerializer();
+            try {
+                setValue(jsonSerializer.readObject(System.in));
+            } catch (Exception exception) {
+                // No-op
+            }
+        }
     }
 
     @Override

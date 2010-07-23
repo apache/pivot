@@ -85,6 +85,15 @@ public class XMLViewer implements Application {
         window.setTitle(WINDOW_TITLE);
         window.open(display);
         window.requestFocus();
+
+        if (System.in.available() > 0) {
+            XMLSerializer xmlSerializer = new XMLSerializer();
+            try {
+                setDocument(xmlSerializer.readObject(System.in));
+            } catch (Exception exception) {
+                // No-op
+            }
+        }
     }
 
     @Override
