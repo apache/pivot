@@ -43,6 +43,7 @@ class TextAreaSkinListItemView extends TextAreaSkinVerticalElementView {
 
     public void setIndexText(String indexText) {
         indexTextNode.setText(indexText);
+        indexTextNodeView.setBreakWidth(Integer.MAX_VALUE);
         indexTextNodeView.validate();
         indexTextNodeView.setLocation(0, 0);
     }

@@ -45,7 +45,6 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
     private final TextAreaSkin textAreaSkin;
 
     private int start;
-
     private int length = 0;
     private GlyphVector glyphVector = null;
     private TextAreaSkinTextNodeView next = null;

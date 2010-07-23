@@ -17,11 +17,14 @@
 package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
+import org.apache.pivot.wtk.text.TextNode;
 
+/**
+ * Span node view.
+ */
 class TextAreaSkinSpanView extends TextAreaSkinElementView {
 
     private final TextAreaSkin textAreaSkin;
@@ -33,101 +36,95 @@ class TextAreaSkinSpanView extends TextAreaSkinElementView {
 
     @Override
     public void validate() {
+
         if (!isValid()) {
-            // I have to re-create my children here instead of in attach(), because that is how ParagraphView works,
+            // I have to re-create my children here instead of in attach(),
+            // because that is how ParagraphView works,
             // and ParagraphView is always my parent node.
 
             // Clear all existing views
             remove(0, getLength());
 
-            // Attach child node views
             org.apache.pivot.wtk.text.Span span = (org.apache.pivot.wtk.text.Span)getNode();
-            for (Node node : span) {
-                add(textAreaSkin.createNodeView(node));
+
+            // for now, assume that span contains at most one child, and
+            // that child is a TextNode
+            if (span.getLength() > 1) {
+                throw new IllegalStateException();
             }
 
-            // TODO like TextAreaSkinTextNodeView, I need to implement line-breaking
+            if (span.getLength() == 0) {
+                setSize(0, 0);
+            } else {
 
-            int breakWidth = getBreakWidth();
+                // create and attach child node views
+                add(new TextAreaSkinTextNodeView(textAreaSkin, (TextNode)span.get(0), 0));
 
-            int width = 0;
-            int height = 0;
+                int breakWidth = getBreakWidth();
 
-            for (TextAreaSkinNodeView nodeView : this) {
+                TextAreaSkinNodeView nodeView = get(0);
                 nodeView.setBreakWidth(breakWidth);
                 nodeView.validate();
 
-                nodeView.setLocation(0, height);
-
-                width = Math.max(width, nodeView.getWidth());
-                height += nodeView.getHeight();
+                setSize(nodeView.getWidth(), nodeView.getHeight());
             }
+        }
 
-            setSize(width, height);
+        super.validate();
+    }
 
-            super.validate();
+    @Override
+    public int getCharacterCount() {
+        if (getLength() == 0) {
+            return 0;
+        } else {
+            return get(0).getCharacterCount();
+        }
+    }
+
+    @Override
+    public TextAreaSkinNodeView getNext() {
+        if (getLength() == 0) {
+            return null;
+        } else {
+            return get(0).getNext();
         }
     }
 
     @Override
     public int getInsertionPoint(int x, int y) {
-        int offset = -1;
-
-        for (int i = 0, n = getLength(); i < n; i++) {
-            TextAreaSkinNodeView nodeView = get(i);
-            Bounds nodeViewBounds = nodeView.getBounds();
-
-            if (y >= nodeViewBounds.y
-                && y < nodeViewBounds.y + nodeViewBounds.height) {
-                offset = nodeView.getInsertionPoint(x - nodeView.getX(), y - nodeView.getY())
-                    + nodeView.getOffset();
-                break;
-            }
+        if (getLength() == 0) {
+            return -1;
+        } else {
+            return get(0).getInsertionPoint(x, y);
         }
-
-        return offset;
-    }
-
-    @Override
-    public TextAreaSkinNodeView getNext() {
-        return null;
     }
 
     @Override
     public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
-        // TODO Auto-generated method stub
-        return 0;
+        if (getLength() == 0) {
+            return -1;
+        } else {
+            return get(0).getNextInsertionPoint(x, from, direction);
+        }
     }
 
     @Override
     public int getRowCount() {
-        int rowCount = 0;
-
-        for (TextAreaSkinNodeView nodeView : this) {
-            rowCount += nodeView.getRowCount();
+        if (getLength() == 0) {
+            return 0;
+        } else {
+            return get(0).getRowCount();
         }
-
-        return rowCount;
     }
 
     @Override
     public int getRowIndex(int offset) {
-        int rowIndex = 0;
-
-        for (TextAreaSkinNodeView nodeView : this) {
-            int nodeViewOffset = nodeView.getOffset();
-            int characterCount = nodeView.getCharacterCount();
-
-            if (offset >= nodeViewOffset
-                && offset < nodeViewOffset + characterCount) {
-                rowIndex += nodeView.getRowIndex(offset - nodeView.getOffset());
-                break;
-            }
-
-            rowIndex += nodeView.getRowCount();
+        if (getLength() == 0) {
+            return 0;
+        } else {
+            return get(0).getRowIndex(offset);
         }
-
-        return rowIndex;
     }
 
     @Override
