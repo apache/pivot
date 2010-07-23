@@ -31,6 +31,7 @@ public class ScriptApplication implements Application {
 
     public static final String SRC_KEY = "src";
     public static final String RESOURCES_KEY = "resources";
+    public static final String STYLESHEET_KEY = "stylesheet";
 
     @Override
     public void startup(Display display, Map<String, String> properties)
@@ -56,10 +57,16 @@ public class ScriptApplication implements Application {
             throw new IllegalArgumentException("Cannot find source file \"" + src + "\".");
         }
 
-        // Load the resources
-        Resources resources = null;
+        Resources resources;
         if (properties.containsKey(RESOURCES_KEY)) {
             resources = new Resources(properties.get(RESOURCES_KEY));
+        } else {
+            resources = null;
+        }
+
+        if (properties.containsKey(STYLESHEET_KEY)) {
+            String stylesheet = properties.get(STYLESHEET_KEY);
+            ApplicationContext.applyStylesheet(stylesheet.substring(1));
         }
 
         // Load the file and open the window

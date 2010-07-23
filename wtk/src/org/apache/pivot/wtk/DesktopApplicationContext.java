@@ -438,7 +438,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
     public static final String MAXIMIZED_ARGUMENT = "maximized";
     public static final String UNDECORATED_ARGUMENT = "undecorated";
     public static final String FULL_SCREEN_ARGUMENT = "fullScreen";
-    public static final String STYLESHEET_ARGUMENT = "stylesheet";
 
     public static boolean isActive() {
         return (application != null);
@@ -519,7 +518,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
         boolean maximized = false;
         boolean undecorated = false;
         boolean fullScreen = false;
-        String stylesheet = null;
 
         try {
             Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
@@ -579,8 +577,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             undecorated = Boolean.parseBoolean(value);
                         } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
                             fullScreen = Boolean.parseBoolean(value);
-                        } else if (key.equals(STYLESHEET_ARGUMENT)) {
-                            stylesheet = value;
                         } else {
                             properties.put(key, value);
                         }
@@ -628,11 +624,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Start the timer
         createTimer();
-
-        // Apply stylesheet
-        if (stylesheet != null) {
-            applyStylesheet(stylesheet.substring(1));
-        }
 
         // Create the display host
         primaryDisplayHost = new DesktopDisplayHost();

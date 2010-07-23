@@ -131,12 +131,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     }
                 }
 
-                // Apply stylesheet
-                String stylesheetParameter = getParameter(STYLESHEET_PARAMETER);
-                if (stylesheetParameter != null) {
-                    applyStylesheet(stylesheetParameter.substring(1));
-                }
-
                 // Create the display host
                 displayHost = new DisplayHost();
                 setLayout(new java.awt.BorderLayout());
@@ -233,7 +227,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
         public static final String APPLICATION_CLASS_NAME_PARAMETER = "application_class_name";
         public static final String STARTUP_PROPERTIES_PARAMETER = "startup_properties";
         public static final String SYSTEM_PROPERTIES_PARAMETER = "system_properties";
-        public static final String STYLESHEET_PARAMETER = "stylesheet";
 
         public Application getApplication() {
             return application;
