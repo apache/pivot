@@ -35,17 +35,11 @@ public class ScriptApplication implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
+        // Get the location of the source file
         String src = properties.get(SRC_KEY);
         if (src == null) {
             throw new IllegalArgumentException(SRC_KEY + " argument is required.");
         }
-
-        Resources resources = null;
-        if (properties.containsKey(RESOURCES_KEY)) {
-            resources = new Resources(properties.get(RESOURCES_KEY));
-        }
-
-        BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL location = classLoader.getResource(src.substring(1));
@@ -62,7 +56,14 @@ public class ScriptApplication implements Application {
             throw new IllegalArgumentException("Cannot find source file \"" + src + "\".");
         }
 
-        bxmlSerializer.getNamespace().put("location", location);
+        // Load the resources
+        Resources resources = null;
+        if (properties.containsKey(RESOURCES_KEY)) {
+            resources = new Resources(properties.get(RESOURCES_KEY));
+        }
+
+        // Load the file and open the window
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window)bxmlSerializer.readObject(location, resources);
         window.open(display);
     }
