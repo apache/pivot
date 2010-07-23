@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSONSerializer;
@@ -200,6 +202,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
     };
 
     private static final int GREGORIAN_CUTOVER_YEAR = 1582;
+    private static final Pattern PATTERN = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
 
     /**
      * Creates a new <tt>CalendarDate</tt> representing the current day in the
@@ -432,15 +435,15 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23).
      */
     public static CalendarDate decode(String value) {
-        String[] components = value.split("-");
+        Matcher matcher = PATTERN.matcher(value);
 
-        if (components.length != 3) {
+        if (!matcher.matches()) {
             throw new IllegalArgumentException("Invalid date format: " + value);
         }
 
-        int year = Integer.parseInt(components[0]);
-        int month = Integer.parseInt(components[1]) - 1;
-        int day = Integer.parseInt(components[2]) - 1;
+        int year = Integer.parseInt(matcher.group(1));
+        int month = Integer.parseInt(matcher.group(2)) - 1;
+        int day = Integer.parseInt(matcher.group(3)) - 1;
 
         return new CalendarDate(year, month, day);
     }

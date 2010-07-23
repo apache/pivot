@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSONSerializer;
@@ -203,6 +205,8 @@ public final class Time implements Comparable<Time>, Serializable {
     public static final int MILLISECONDS_PER_HOUR = 60 * MILLISECONDS_PER_MINUTE;
     public static final int MILLISECONDS_PER_DAY = 24 * MILLISECONDS_PER_HOUR;
 
+    private static final Pattern PATTERN = Pattern.compile("^(\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3}))?$");
+
     public Time() {
         this(new GregorianCalendar());
     }
@@ -380,24 +384,19 @@ public final class Time implements Comparable<Time>, Serializable {
      * <tt>[hh]:[mm]:[ss].[nnn]</tt> (e.g. 17:19:20 or 17:19:20.412).
      */
     public static Time decode(String value) {
-        String[] components = value.split(":");
+        Matcher matcher = PATTERN.matcher(value);
 
-        if (components.length != 3) {
+        if (!matcher.matches()) {
             throw new IllegalArgumentException("Invalid time format: " + value);
         }
 
-        int hour = Integer.parseInt(components[0]);
-        int minute = Integer.parseInt(components[1]);
+        int hour = Integer.parseInt(matcher.group(1));
+        int minute = Integer.parseInt(matcher.group(2));
+        int second = Integer.parseInt(matcher.group(3));
 
-        String[] secondComponents = components[2].split("\\.");
-
-        int second = Integer.parseInt(secondComponents[0]);
-        int millisecond;
-        if (secondComponents.length > 1) {
-            millisecond = Integer.parseInt(secondComponents[1]);
-        } else {
-            millisecond = 0;
-        }
+        String millisecondSequence = matcher.group(4);
+        int millisecond = (millisecondSequence == null) ?
+            0 : Integer.parseInt(millisecondSequence.substring(1));
 
         return new Time(hour, minute, second, millisecond);
     }
