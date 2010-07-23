@@ -29,7 +29,9 @@ limitations under the License.
                         <count value="1"/>
                         <iterate>
                             <and>
-                                <instanceof value="org.eclipse.jdt.core.IJavaElement"/>
+                                <adapt type="org.eclipse.jdt.core.IJavaElement">
+                                    <test property="org.eclipse.jdt.core.isInJavaProject"/>
+                                </adapt>
                                 <test property="org.eclipse.jdt.launching.extendsInterface"
                                     args="org.apache.pivot.wtk.Application"/>
                             </and>
