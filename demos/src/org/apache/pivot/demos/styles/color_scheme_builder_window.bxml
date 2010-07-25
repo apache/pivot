@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<styles:ColorSchemeBuilderWindow title="Color Scheme Builder" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:styles="org.apache.pivot.demos.styles"
+    xmlns="org.apache.pivot.wtk">
+    <Border>
+        <TablePane bxml:id="mainTablePane" styles="{padding:8, horizontalSpacing:8}">
+            <columns>
+                <TablePane.Column width="-1"/>
+                <TablePane.Column width="1*"/>
+            </columns>
+
+            <TablePane.Row height="1*">
+                <TablePane styles="{verticalSpacing:4}">
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                    </columns>
+
+                    <TablePane.Row>
+                        <TablePane bxml:id="colorChooserTablePane" styles="{horizontalSpacing:4, verticalSpacing:4}">
+                            <columns>
+                                <TablePane.Column width="-1"/>
+                                <TablePane.Column width="-1"/>
+                            </columns>
+                        </TablePane>
+                    </TablePane.Row>
+
+                    <TablePane.Row>
+                        <Separator/>
+                    </TablePane.Row>
+
+                    <TablePane.Row>
+                        <TablePane bxml:id="colorPaletteTablePane" styles="{horizontalSpacing:4, verticalSpacing:4}"/>
+                    </TablePane.Row>
+
+                    <TablePane.Row height="1*">
+                        <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
+                            <PushButton bxml:id="exportButton" buttonData="Export"/>
+                        </BoxPane>
+                    </TablePane.Row>
+                </TablePane>
+
+                <Border bxml:id="sampleContentBorder" styles="{thickness:0}"/>
+            </TablePane.Row>
+        </TablePane>
+    </Border>
+</styles:ColorSchemeBuilderWindow>

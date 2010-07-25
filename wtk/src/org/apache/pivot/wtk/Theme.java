@@ -64,8 +64,7 @@ public abstract class Theme {
     public static final String ITALIC_KEY = "italic";
 
     /**
-     * The service provider name with which the current theme will be determined
-     * (see {@link Service#getProvider(String) Service.getProvider()}).
+     * The service provider name (see {@link Service#getProvider(String)}).
      */
     public static final String PROVIDER_NAME = "org.apache.pivot.wtk.Theme";
 

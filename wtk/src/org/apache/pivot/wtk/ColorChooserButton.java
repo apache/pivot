@@ -155,7 +155,9 @@ public class ColorChooserButton extends Button {
     public void setSelectedColor(Color selectedColor) {
         Color previousSelectedColor = this.selectedColor;
 
-        if (previousSelectedColor != selectedColor) {
+        if (previousSelectedColor != selectedColor
+            && (previousSelectedColor == null
+                || !previousSelectedColor.equals(selectedColor))) {
             this.selectedColor = selectedColor;
             colorChooserButtonSelectionListeners.selectedColorChanged(this,
                 previousSelectedColor);
@@ -163,11 +165,10 @@ public class ColorChooserButton extends Button {
     }
 
     /**
-     * Sets the selected color to the color represented by the specified color
-     * string.
+     * Sets the selected color.
      *
      * @param selectedColor
-     * A string representing a color
+     * A string representing a color.
      */
     public final void setSelectedColor(String selectedColor) {
         if (selectedColor == null) {

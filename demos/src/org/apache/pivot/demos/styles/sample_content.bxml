@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<TabPane selectedIndex="0"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk">
+    <Border TabPane.label="Tab 1">
+        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+            <TablePane styles="{padding:8, horizontalSpacing:12}">
+                <columns>
+                    <TablePane.Column/>
+                    <TablePane.Column width="1*"/>
+                </columns>
+
+                <TablePane.Row>
+                    <TablePane styles="{horizontalSpacing:4, verticalSpacing:8}">
+                        <columns>
+                            <TablePane.Column/>
+                            <TablePane.Column/>
+                        </columns>
+
+                        <TablePane.Row>
+                            <FlowPane>
+                                <PushButton buttonData="Push Button"/>
+                            </FlowPane>
+
+                            <FlowPane>
+                                <PushButton buttonData="Push Button" enabled="false"/>
+                            </FlowPane>
+                        </TablePane.Row>
+
+                        <TablePane.Row>
+                            <Checkbox buttonData="Checkbox" selected="true"/>
+                            <Checkbox buttonData="Checkbox" selected="true" enabled="false"/>
+                        </TablePane.Row>
+
+                        <TablePane.Row>
+                            <RadioButton buttonData="Radio Button" selected="true"/>
+                            <RadioButton buttonData="Radio Button" selected="true" enabled="false"/>
+                        </TablePane.Row>
+
+                        <TablePane.Row>
+                            <LinkButton buttonData="Link Button"/>
+                            <LinkButton buttonData="Link Button" enabled="false"/>
+                        </TablePane.Row>
+
+                        <TablePane.Row>
+                            <TextInput text="Text Input" textSize="10"/>
+                            <TextInput text="Text Input" textSize="10" enabled="false"/>
+                        </TablePane.Row>
+
+                        <TablePane.Row>
+                            <Separator TablePane.columnSpan="2" heading="Separator"/>
+                        </TablePane.Row>
+
+                        <TablePane.Row>
+                            <Border TablePane.columnSpan="2" styles="{color:10}">
+                                <ScrollPane horizontalScrollBarPolicy="fill" preferredHeight="80">
+                                    <TableView>
+                                        <columns>
+                                            <TableView.Column name="a" headerData="A" width="1*"/>
+                                            <TableView.Column name="b" headerData="B" width="1*"/>
+                                            <TableView.Column name="c" headerData="C" width="1*"/>
+                                        </columns>
+                                        <tableData xmlns="org.apache.pivot.collections">
+                                            <ArrayList>
+                                                <HashMap a="1" b="2" c="3"/>
+                                                <HashMap a="4" b="5" c="6"/>
+                                                <HashMap a="7" b="8" c="9"/>
+                                                <HashMap a="10" b="11" c="12"/>
+                                                <HashMap a="13" b="14" c="15"/>
+                                                <HashMap a="1" b="2" c="3"/>
+                                                <HashMap a="4" b="5" c="6"/>
+                                                <HashMap a="7" b="8" c="9"/>
+                                                <HashMap a="10" b="11" c="12"/>
+                                                <HashMap a="13" b="14" c="15"/>
+                                            </ArrayList>
+                                        </tableData>
+                                    </TableView>
+                                </ScrollPane>
+                            </Border>
+                        </TablePane.Row>
+
+                        <TablePane.Row>
+                            <Accordion>
+                                <Label text="Un" Accordion.label="One"/>
+                                <Label text="Deux" Accordion.label="Two"/>
+                                <Label text="Trois" Accordion.label="Three" enabled="false"/>
+                            </Accordion>
+
+                            <BoxPane orientation="vertical" styles="{fill:true}">
+                                <Expander title="Expander">
+                                    <Label text="Content"/>
+                                </Expander>
+                            </BoxPane>
+                        </TablePane.Row>
+                    </TablePane>
+
+                    <BoxPane orientation="vertical" styles="{fill:true, spacing:8}">
+                        <Border styles="{padding:4}">
+                            <Form styles="{verticalSpacing:8}">
+                                <Form.Section>
+                                    <Label text="Form error">
+                                        <Form.flag>
+                                            <Form.Flag messageType="error" message="Error message"/>
+                                        </Form.flag>
+                                    </Label>
+                                    <Label text="Form warning">
+                                        <Form.flag>
+                                            <Form.Flag messageType="warning" message="Warning message"/>
+                                        </Form.flag>
+                                    </Label>
+                                    <Label text="Form question">
+                                        <Form.flag>
+                                            <Form.Flag messageType="question" message="Question message"/>
+                                        </Form.flag>
+                                    </Label>
+                                    <Label text="Form info">
+                                        <Form.flag>
+                                            <Form.Flag messageType="info" message="Info message"/>
+                                        </Form.flag>
+                                    </Label>
+                                </Form.Section>
+                            </Form>
+                        </Border>
+
+                        <BoxPane orientation="vertical">
+                            <PushButton buttonData="Show Alert"
+                                ButtonPressListener.buttonPressed="org.apache.pivot.wtk.Alert.alert('This is an alert.',
+                                    arguments[0].window);"/>
+                            <PushButton buttonData="Show Prompt"
+                                ButtonPressListener.buttonPressed="org.apache.pivot.wtk.Prompt.prompt('This is a prompt.',
+                                    arguments[0].window);"/>
+                        </BoxPane>
+                    </BoxPane>
+                </TablePane.Row>
+            </TablePane>
+        </ScrollPane>
+    </Border>
+
+    <Border TabPane.label="Tab 2" styles="{padding:8}">
+    </Border>
+
+    <Border TabPane.label="Tab 3" styles="{padding:8}">
+    </Border>
+</TabPane>

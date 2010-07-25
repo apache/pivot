@@ -116,25 +116,27 @@ public class ColorChooser extends Container {
     }
 
     /**
-     * Sets the currently selected color.
+     * Sets the selected color.
      *
      * @param selectedColor
-     * The selected color, or <tt>null</tt> to specify no selection
+     * The color to select, or <tt>null</tt> to clear the selection.
      */
     public void setSelectedColor(Color selectedColor) {
         Color previousSelectedColor = this.selectedColor;
 
-        if (selectedColor != previousSelectedColor) {
+        if (previousSelectedColor != selectedColor
+            && (previousSelectedColor == null
+                || !previousSelectedColor.equals(selectedColor))) {
             this.selectedColor = selectedColor;
             colorChooserSelectionListeners.selectedColorChanged(this, previousSelectedColor);
         }
     }
 
     /**
-     * Sets the currently selected color.
+     * Sets the selected color.
      *
      * @param selectedColor
-     * The selected color
+     * The color to select, or <tt>null</tt> to clear the selection.
      */
     public void setSelectedColor(String selectedColor) {
         if (selectedColor == null) {

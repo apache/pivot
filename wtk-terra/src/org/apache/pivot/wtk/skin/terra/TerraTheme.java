@@ -92,9 +92,8 @@ public final class TerraTheme extends Theme {
     private HashMap<MessageType, Image> messageIcons = null;
     private HashMap<MessageType, Image> smallMessageIcons = null;
 
-    public static final String COMMAND_BUTTON_STYLE = "commandButton";
-
     public static final String LOCATION_PROPERTY = "location";
+    public static final String COMMAND_BUTTON_STYLE = "commandButton";
 
     @SuppressWarnings("unchecked")
     public TerraTheme() {
@@ -166,6 +165,21 @@ public final class TerraTheme extends Theme {
 
         String packageName = getClass().getPackage().getName();
 
+        // Load the color scheme
+        String location = null;
+        try {
+            location = System.getProperty(LOCATION_PROPERTY);
+        } catch (SecurityException exception) {
+            // No-op
+        }
+
+        if (location == null) {
+            load(getClass().getResource("TerraTheme_default.json"));
+        } else {
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            load(classLoader.getResource(packageName + "." + location.substring(1)));
+        }
+
         // Install named styles
         try {
             InputStream inputStream = getClass().getResourceAsStream("terra_theme_styles.json");
@@ -184,21 +198,6 @@ public final class TerraTheme extends Theme {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {
             throw new RuntimeException(exception);
-        }
-
-        // Load the color scheme
-        String location = null;
-        try {
-            location = System.getProperty(LOCATION_PROPERTY);
-        } catch (SecurityException exception) {
-            // No-op
-        }
-
-        if (location == null) {
-            load(getClass().getResource("TerraTheme_default.json"));
-        } else {
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            load(classLoader.getResource(packageName + "." + location.substring(1)));
         }
     }
 
@@ -235,10 +234,10 @@ public final class TerraTheme extends Theme {
             } finally {
                 inputStream.close();
             }
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        } catch (SerializationException ex) {
-            throw new RuntimeException(ex);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        } catch (SerializationException exception) {
+            throw new RuntimeException(exception);
         }
     }
 
@@ -271,34 +270,112 @@ public final class TerraTheme extends Theme {
      */
     @Override
     public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException();
+        }
+
         this.font = font;
     }
 
     /**
-     * Gets the color found at the specified index in the theme's color
-     * palette.
+     * Gets a value from the theme's color palette.
      *
      * @param index
-     * A color palette index, from 0 to 23.
      */
     public Color getColor(int index) {
         return colors.get(index);
     }
 
     /**
+     * Sets a value in the theme's color palette.
+     *
+     * @param index
+     * @param color
+     */
+    public void setColor(int index, Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException();
+        }
+
+        colors.update(index, color);
+    }
+
+    /**
+     * Gets a base color from the theme's color palette.
+     *
+     * @param index
+     */
+    public Color getBaseColor(int index) {
+        return colors.get(index * 3 + 1);
+    }
+
+    /**
+     * Sets a base color in the theme's color palette.
+     *
+     * @param index
+     * @param baseColor
+     */
+    public void setBaseColor(int index, Color baseColor) {
+        if (baseColor == null) {
+            throw new IllegalArgumentException();
+        }
+
+        int offset = index * 3;
+        colors.update(offset, darken(baseColor));
+        colors.update(offset + 1, baseColor);
+        colors.update(offset + 2, brighten(baseColor));
+    }
+
+    /**
      * Gets the image that this theme uses to represent messages of the
      * specified type.
+     *
+     * @param messageType
      */
     public Image getMessageIcon(MessageType messageType) {
         return messageIcons.get(messageType);
     }
 
     /**
-     * Gets the "small" image that this theme uses to represent messages of the
+     * Sets the image that this theme uses to represent messages of the
      * specified type.
+     *
+     * @param messageType
+     * @param messageIcon
+     */
+    public void setMessageIcon(MessageType messageType, Image messageIcon) {
+        if (messageType == null
+            || messageIcon == null) {
+            throw new IllegalArgumentException();
+        }
+
+        messageIcons.put(messageType, messageIcon);
+    }
+
+    /**
+     * Gets the small image that this theme uses to represent messages of the
+     * specified type.
+     *
+     * @param messageType
      */
     public Image getSmallMessageIcon(MessageType messageType) {
         return smallMessageIcons.get(messageType);
+    }
+
+    /**
+     * Sets the small image that this theme uses to represent messages of the
+     * specified type.
+     *
+     * @param messageType
+     * @param smallMessageIcon
+     */
+    public void setSmallMessageIcon(MessageType messageType, Image smallMessageIcon) {
+        if (messageType == null
+            || smallMessageIcon == null) {
+            throw new IllegalArgumentException();
+        }
+
+        smallMessageIcons.put(messageType, smallMessageIcon);
     }
 
     /**
