@@ -293,7 +293,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 selectionBounds = selectionBounds.union(getRowBounds(rangeEnd));
 
                 Bounds visibleSelectionBounds = tableView.getVisibleArea(selectionBounds);
-                if (visibleSelectionBounds.height < selectionBounds.height) {
+                if (visibleSelectionBounds != null
+                    && visibleSelectionBounds.height < selectionBounds.height) {
                     tableView.scrollAreaToVisible(selectionBounds);
                 }
             }

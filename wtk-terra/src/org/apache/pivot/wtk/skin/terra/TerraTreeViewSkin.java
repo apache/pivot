@@ -1536,7 +1536,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
             if (nodeBounds != null) {
                 Bounds visibleSelectionBounds = treeView.getVisibleArea(nodeBounds);
-                if (visibleSelectionBounds.height < nodeBounds.height) {
+                if (visibleSelectionBounds != null
+                    && visibleSelectionBounds.height < nodeBounds.height) {
                     treeView.scrollAreaToVisible(nodeBounds);
                 }
             }

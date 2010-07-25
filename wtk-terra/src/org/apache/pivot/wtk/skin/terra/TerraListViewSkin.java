@@ -268,7 +268,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 selectionBounds = selectionBounds.union(getItemBounds(rangeEnd));
 
                 Bounds visibleSelectionBounds = listView.getVisibleArea(selectionBounds);
-                if (visibleSelectionBounds.height < selectionBounds.height) {
+                if (visibleSelectionBounds != null
+                    && visibleSelectionBounds.height < selectionBounds.height) {
                     listView.scrollAreaToVisible(selectionBounds);
                 }
             }
