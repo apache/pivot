@@ -25,21 +25,21 @@ import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.Clipboard;
 import org.apache.pivot.wtk.ColorChooserButton;
 import org.apache.pivot.wtk.ColorChooserButtonSelectionListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.LocalManifest;
 import org.apache.pivot.wtk.PushButton;
-import org.apache.pivot.wtk.Sheet;
-import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.SpinnerSelectionListener;
 import org.apache.pivot.wtk.TablePane;
@@ -53,21 +53,19 @@ import org.apache.pivot.wtk.skin.terra.TerraTheme;
 public class ColorSchemeBuilderWindow extends Window implements Bindable {
     @BXML private TablePane colorChooserTablePane = null;
     @BXML private TablePane colorPaletteTablePane = null;
-    @BXML private PushButton exportButton = null;
+    @BXML private PushButton copyToClipboardButton = null;
     @BXML private Border sampleContentBorder = null;
 
     private ArrayList<ColorChooserButton> colorChooserButtons = new ArrayList<ColorChooserButton>();
 
-    private FileBrowserSheet fileBrowserSheet = new FileBrowserSheet(FileBrowserSheet.Mode.SAVE_AS);
-
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
+        createColorPalette();
 
         for (int i = 0; i < 8; i++) {
             final ColorChooserButton colorChooserButton = new ColorChooserButton();
-            colorChooserButton.setSelectedColor(terraTheme.getBaseColor(i));
             colorChooserButtons.add(colorChooserButton);
+            colorChooserButton.setSelectedColor(Color.BLACK);
 
             NumericSpinnerData colorSpinnerData = new NumericSpinnerData(0, 255);
             SpinnerItemRenderer colorSpinnerItemRenderer = new SpinnerItemRenderer();
@@ -115,7 +113,19 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                     greenSpinner.setSelectedItem(selectedColor.getGreen());
                     blueSpinner.setSelectedItem(selectedColor.getBlue());
 
-                    updateTheme();
+                    // Update the theme
+                    TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
+                    int i = colorChooserButtons.indexOf(colorChooserButton);
+                    terraTheme.setBaseColor(i, colorChooserButtons.get(i).getSelectedColor());
+
+                    // Update the palette
+                    int offset = i * 3;
+                    for (int j = 0; j < 3; j++) {
+                        Component colorPaletteCell = colorPaletteTablePane.getRows().get(i).get(j);
+                        colorPaletteCell.getStyles().put("backgroundColor", offset + j);
+                    }
+
+                    reloadContent();
                 }
             };
 
@@ -135,15 +145,16 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             redSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
             greenSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
             blueSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
+
+            // Initialize the button color with the theme default
+            TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
+            colorChooserButton.setSelectedColor(terraTheme.getBaseColor(i));
         }
 
-        // Build color palette
-        createColorPalette();
-
-        exportButton.getButtonPressListeners().add(new ButtonPressListener() {
+        copyToClipboardButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                export();
+                copyToClipboard();
             }
         });
 
@@ -192,21 +203,6 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         return border;
     }
 
-    private void updateTheme() {
-        TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
-        for (int i = 0; i < 8; i++) {
-            terraTheme.setBaseColor(i, colorChooserButtons.get(i).getSelectedColor());
-
-            int offset = i * 3;
-            for (int j = 0; j < 3; j++) {
-                Component colorPaletteCell = colorPaletteTablePane.getRows().get(i).get(j);
-                colorPaletteCell.getStyles().put("backgroundColor", offset + j);
-            }
-        }
-
-        reloadContent();
-    }
-
     private void reloadContent() {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
@@ -221,12 +217,20 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         }
     }
 
-    private void export() {
-        fileBrowserSheet.open(this, new SheetCloseListener() {
-            @Override
-            public void sheetClosed(Sheet sheet) {
-                // TODO
-            }
-        });
+    private void copyToClipboard() {
+        ArrayList<String> colors = new ArrayList<String>(8);
+        for (int i = 0; i < 8; i++) {
+            ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
+            Color color = colorChooserButton.getSelectedColor();
+            colors.add(String.format("#%02X%02X%02X",
+                color.getRed(),
+                color.getGreen(),
+                color.getBlue()));
+        }
+
+        LocalManifest clipboardContent = new LocalManifest();
+        clipboardContent.putText(JSONSerializer.toString(colors));
+
+        Clipboard.setContent(clipboardContent);
     }
 }

@@ -31,7 +31,7 @@ limitations under the License.
             provide text input auto-complete suggestions. This example queries the Yahoo! search
             API to get the list of suggestions.
         </p>
-        <application class="org.apache.pivot.demos.suggest.SuggestionDemo" width="480" height="280">
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="480" height="280">
             <libraries signed="true">
                 <library>core</library>
                 <library>web</library>
@@ -39,6 +39,9 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>demos</library>
             </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/demos/suggest/suggestion_demo.bxml</src>
+            </startup-properties>
         </application>
     </body>
 </document>

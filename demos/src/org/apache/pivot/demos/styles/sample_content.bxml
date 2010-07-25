@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <Border TabPane.label="Tab 1">
-        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" styles="{backgroundColor:null}">
             <TablePane styles="{padding:8, horizontalSpacing:12}">
                 <columns>
                     <TablePane.Column/>
@@ -71,7 +71,7 @@ limitations under the License.
                         <TablePane.Row>
                             <Border TablePane.columnSpan="2" styles="{color:10}">
                                 <ScrollPane horizontalScrollBarPolicy="fill" preferredHeight="80">
-                                    <TableView>
+                                    <TableView selectedIndex="0">
                                         <columns>
                                             <TableView.Column name="a" headerData="A" width="1*"/>
                                             <TableView.Column name="b" headerData="B" width="1*"/>

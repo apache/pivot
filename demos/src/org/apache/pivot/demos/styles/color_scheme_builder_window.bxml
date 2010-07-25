@@ -52,7 +52,7 @@ limitations under the License.
 
                     <TablePane.Row height="1*">
                         <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
-                            <PushButton bxml:id="exportButton" buttonData="Export"/>
+                            <PushButton bxml:id="copyToClipboardButton" buttonData="Copy"/>
                         </BoxPane>
                     </TablePane.Row>
                 </TablePane>

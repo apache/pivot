@@ -30,7 +30,7 @@ limitations under the License.
             Demonstrates how to create a table with fixed columns in Pivot. Fixed columns are
             handy when displaying tables with many columns.
         </p>
-        <application class="org.apache.pivot.demos.tables.FixedColumnTable"
+        <application class="org.apache.pivot.wtk.ScriptApplication"
             width="300" height="170">
             <libraries>
                 <library>core</library>
@@ -38,6 +38,9 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>demos</library>
             </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/demos/tables/fixed_column_table_demo.bxml</src>
+            </startup-properties>
         </application>
     </body>
 </document>

@@ -18,29 +18,23 @@ limitations under the License.
 
 <document>
     <properties>
-        <title>RSS Feed</title>
+        <title>Color Scheme Builder</title>
         <description>
-            Demonstrates how to build a simple RSS client in Pivot.
+            Allows users to create and preview custom color schemes for Pivot applications.
         </description>
     </properties>
 
     <body>
         <p>
-            This application demonstrates how to build a simple RSS client in Pivot. It uses a
-            custom list view item renderer to present the news data. Double-clicking an item in
-            the list will open the article in a new window.
+            Allows users to create and preview custom color schemes for Pivot applications.
         </p>
-        <application class="org.apache.pivot.wtk.ScriptApplication" width="480" height="360">
-            <libraries>
+        <application class="org.apache.pivot.demos.styles.ColorSchemeBuilder" width="640" height="480">
+            <libraries signed="true">
                 <library>core</library>
-                <library>web</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>
                 <library>demos</library>
             </libraries>
-            <startup-properties>
-                <src>/org/apache/pivot/demos/rss/rss_feed_demo.bxml</src>
-            </startup-properties>
         </application>
     </body>
 </document>

@@ -30,10 +30,11 @@ limitations under the License.
         <document-item id="stock-tracker"/>
         <document-item id="component-explorer"/>
         <document-item id="itunes-search"/>
-        <document-item id="decorators"/>
         <document-item id="suggest"/>
+        <document-item id="color-scheme-builder"/>
         <document-item id="xml-viewer"/>
         <document-item id="json-viewer"/>
+        <document-item id="decorators"/>
         <document-item id="table-row-editor"/>
         <document-item id="file-drag-drop"/>
         <document-item id="large-data"/>

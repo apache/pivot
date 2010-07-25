@@ -29,8 +29,7 @@ limitations under the License.
             This sample application demonstrates the use of a slide transition to bring up a table
             view row editor.
         </p>
-        <application class="org.apache.pivot.wtk.ScriptApplication"
-            width="480" height="200">
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="480" height="200">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -38,7 +37,7 @@ limitations under the License.
                 <library>demos</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/demos/roweditor/row_editor_demo.wtkx</src>
+                <src>/org/apache/pivot/demos/roweditor/row_editor_demo.bxml</src>
                 <resources>org.apache.pivot.demos.roweditor.RowEditorDemo</resources>
             </startup-properties>
         </application>
