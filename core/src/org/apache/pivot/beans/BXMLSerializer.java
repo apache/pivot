@@ -199,12 +199,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private URL location = null;
     private Resources resources = null;
 
-    private String language = DEFAULT_LANGUAGE;
-
     private XMLStreamReader xmlStreamReader = null;
     private Element element = null;
 
     private Object root = null;
+    private String language = null;
 
     private LinkedList<Attribute> namespaceBindingAttributes = new LinkedList<Attribute>();
 
@@ -233,7 +232,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     public static final String SCRIPT_TAG = "script";
     public static final String SCRIPT_SRC_ATTRIBUTE = "src";
-    public static final String SCRIPT_LANGUAGE_ATTRIBUTE = "language";
 
     public static final String DEFINE_TAG = "define";
 
@@ -358,7 +356,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
 
         root = null;
-        language = DEFAULT_LANGUAGE;
+        language = null;
 
         // Parse the XML stream
         try {
@@ -501,11 +499,15 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         return object;
     }
 
-    private void processProcessingInstruction() {
+    private void processProcessingInstruction() throws SerializationException {
         String piTarget = xmlStreamReader.getPITarget();
         String piData = xmlStreamReader.getPIData();
 
         if (piTarget.equals(LANGUAGE_PROCESSING_INSTRUCTION)) {
+            if (language != null) {
+                throw new SerializationException("Language already set.");
+            }
+
             language = piData;
         }
     }
@@ -553,6 +555,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     private void processStartElement() throws IOException, SerializationException {
+        // Initialize the page language
+        if (language == null) {
+            language = DEFAULT_LANGUAGE;
+        }
+
         // Get element properties
         String namespaceURI = xmlStreamReader.getNamespaceURI();
         String prefix = xmlStreamReader.getPrefix();
@@ -803,8 +810,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     }
 
                     case SCRIPT: {
-                        property = (localName.equals(SCRIPT_SRC_ATTRIBUTE)
-                            || localName.equals(SCRIPT_LANGUAGE_ATTRIBUTE));
+                        property = (localName.equals(SCRIPT_SRC_ATTRIBUTE));
                         break;
                     }
                 }
@@ -1084,6 +1090,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 // Evaluate the script
                 String script = (String)element.value;
                 ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
+                if (scriptEngine == null) {
+                    throw new SerializationException("Script engine for \"" + language + "\" not found.");
+                }
 
                 // Don't pollute the engine namespace with the listener functions
                 scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
@@ -1175,11 +1184,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 if (element.value != null) {
-                    String language = this.language;
-                    if (element.properties.containsKey(SCRIPT_LANGUAGE_ATTRIBUTE)) {
-                        language = element.properties.get(SCRIPT_LANGUAGE_ATTRIBUTE);
-                    }
-
                     // Evaluate the script
                     String script = (String)element.value;
                     ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
