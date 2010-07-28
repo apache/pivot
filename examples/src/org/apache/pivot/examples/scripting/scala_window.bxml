@@ -16,38 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window bxml:id="window" title="JavaScript Window" maximized="true"
+<scripting:ScalaWindow title="Scala Window" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:scripting="org.apache.pivot.examples.scripting"
     xmlns="org.apache.pivot.wtk">
-    <bxml:script>
-    <![CDATA[
-    importPackage(org.apache.pivot.wtk);
-
-    function sayHello() {
-        Alert.alert("Hello from JavaScript!", window);
-    }
-    ]]>
-    </bxml:script>
-
-    <windowStateListeners>
-    <![CDATA[
-    function windowOpened() {
-        sayHelloButton.requestFocus();
-    }
-    ]]>
-    </windowStateListeners>
-
     <BoxPane orientation="vertical"
         styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-        <Label text="This is a JavaScript window."/>
-        <PushButton bxml:id="sayHelloButton" buttonData="Say Hello">
-            <buttonPressListeners>
-            <![CDATA[
-            function buttonPressed() {
-                sayHello();
-            }
-            ]]>
-            </buttonPressListeners>
-        </PushButton>
+        <Label text="This is a Scala window."/>
+        <PushButton bxml:id="sayHelloButton" buttonData="Say Hello"/>
     </BoxPane>
-</Window>
+</scripting:ScalaWindow>
