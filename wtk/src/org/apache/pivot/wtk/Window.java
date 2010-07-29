@@ -280,13 +280,13 @@ public class Window extends Container {
         public int getLength() {
             return iconImageList.getLength();
         }
-        
+
         @Override
         public Iterator<Image> iterator() {
             return new ImmutableIterator<Image>(iconImageList.iterator());
         }
     }
-    
+
     private static class WindowListenerList extends ListenerList<WindowListener>
         implements WindowListener {
         @Override
@@ -302,14 +302,14 @@ public class Window extends Container {
                 listener.iconAdded(window, addedIcon);
             }
         }
-        
+
         @Override
         public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
             for (WindowListener listener : this) {
                 listener.iconsRemoved(window, index, removed);
             }
         }
-        
+
         @Override
         public void contentChanged(Window window, Component previousContent) {
             for (WindowListener listener : this) {
@@ -776,7 +776,7 @@ public class Window extends Container {
     public IconImageSequence getIcons() {
         return iconImageSequence;
     }
-    
+
     /**
      * Sets the window's icon by URL.
      * <p>

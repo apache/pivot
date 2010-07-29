@@ -355,7 +355,7 @@ limitations under the License.
         <compile project="core"/>
     </target>
 
-    <target name="demos" depends="core, wtk, web">
+    <target name="demos" depends="core, wtk, wtk-terra, web">
         <compile project="demos"/>
     </target>
 

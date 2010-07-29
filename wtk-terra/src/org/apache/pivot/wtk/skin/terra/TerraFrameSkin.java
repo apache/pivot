@@ -817,7 +817,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             iconImageView.setImage((Image)null);
         }
     }
-    
+
     @Override
     public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
         if (window.getIcons().getLength() > 0) {

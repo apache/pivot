@@ -81,7 +81,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             public void iconAdded(Window window, Image addedIcon) {
                 updateFrameTitleBar();
             }
-            
+
             @Override
             public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
                 updateFrameTitleBar();

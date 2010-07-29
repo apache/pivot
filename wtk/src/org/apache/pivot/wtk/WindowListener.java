@@ -34,7 +34,7 @@ public interface WindowListener {
         @Override
         public void iconAdded(Window window, Image addedIcon) {
         }
-        
+
         @Override
         public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
         }
@@ -67,7 +67,7 @@ public interface WindowListener {
      * @param addedIcon
      */
     public void iconAdded(Window window, Image addedIcon);
-    
+
     /**
      * Called when a window's icon has changed.
      *

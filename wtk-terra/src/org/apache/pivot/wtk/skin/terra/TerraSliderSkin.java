@@ -528,11 +528,11 @@ public class TerraSliderSkin extends SliderSkin {
         this.tickSpacing = tickSpacing;
         repaintComponent();
     }
-    
+
     public void setTickSpacing(Number tickSpacing) {
         setTickSpacing(tickSpacing == null ? null : tickSpacing.intValue());
     }
-    
+
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         thumb.requestFocus();

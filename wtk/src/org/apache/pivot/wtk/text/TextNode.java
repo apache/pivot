@@ -133,7 +133,7 @@ public final class TextNode extends Node {
         if (text == null) {
             throw new IllegalArgumentException("text is null.");
         }
-        
+
         this.text = text;
     }
 

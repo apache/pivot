@@ -131,12 +131,12 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
     public void iconAdded(Window window, Image addedIcon) {
         // No-op
     }
-    
+
     @Override
     public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
         // No-op
     }
-    
+
     @Override
     public void contentChanged(Window window, Component previousContent) {
         invalidateComponent();
