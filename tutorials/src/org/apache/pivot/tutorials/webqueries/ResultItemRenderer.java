@@ -54,23 +54,23 @@ public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer
 
     @Override
     public String toString(Object item) {
-        return JSON.getString(item, "title");
+        return JSON.get(item, "title");
     }
 
     @Override
     public void render(Object item, int index, ListView listView, boolean selected,
         boolean checked, boolean highlighted, boolean disabled) {
         if (item != null) {
-            titleLabel.setText(JSON.getString(item, "title"));
-            phoneLabel.setText(JSON.getString(item, "Phone"));
+            titleLabel.setText((String)JSON.get(item, "title"));
+            phoneLabel.setText((String)JSON.get(item, "Phone"));
 
-            Map<String, ?> location = JSON.getMap(item, "['y:location']");
+            Map<String, ?> location = JSON.get(item, "['y:location']");
             if (location == null) {
                 addressLabel.setText(null);
             } else {
-                String street = JSON.getString(location, "street");
-                String city = JSON.getString(location, "city");
-                String state = JSON.getString(location, "state");
+                String street = JSON.get(location, "street");
+                String city = JSON.get(location, "city");
+                String state = JSON.get(location, "state");
                 addressLabel.setText(street + ", " + city + " " + state);
             }
         }

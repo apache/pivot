@@ -19,8 +19,6 @@ package org.apache.pivot.json;
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.collections.List;
-import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 
 /**
@@ -41,7 +39,7 @@ public class JSON {
      *
      * @see #get(Object, Sequence)
      */
-    public static Object get(Object root, String path) {
+    public static <T> T get(Object root, String path) {
         if (root == null) {
             throw new IllegalArgumentException("root is null.");
         }
@@ -54,25 +52,7 @@ public class JSON {
     }
 
     /**
-     * Returns the value at the given path.
-     *
-     * @param root
-     * The root object.
-     *
-     * @param keys
-     * The path to the value.
-     *
-     * @return
-     * The value at the given path.
-     *
-     * @see #get(Object, Sequence, int)
-     */
-    public static Object get(Object root, Sequence<String> keys) {
-        return get(root, keys, keys.getLength());
-    }
-
-    /**
-     * Returns the value at a given depth along a path.
+     * Returns the value at a given index along a path.
      *
      * @param root
      * The root object; must be an instance of {@link org.apache.pivot.collections.Map}
@@ -82,13 +62,13 @@ public class JSON {
      * The path to the value, as a set of keys.
      *
      * @return
-     * The value at the given depth along the given path.
+     * The value at the given path.
      */
     @SuppressWarnings("unchecked")
-    public static Object get(Object root, Sequence<String> keys, int depth) {
+    public static <T> T get(Object root, Sequence<String> keys) {
         Object value = root;
 
-        for (int i = 0; i < depth; i++) {
+        for (int i = 0, n = keys.getLength(); i < n; i++) {
             String key = keys.get(i);
 
             if (value instanceof Sequence<?>) {
@@ -112,133 +92,7 @@ public class JSON {
             }
         }
 
-        return value;
-    }
-
-    /**
-     * Returns the value at the given path as a string.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #get(Object, String)
-     */
-    public static String getString(Object root, String path) {
-        return (String)get(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a number.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #get(Object, String)
-     */
-    public static Number getNumber(Object root, String path) {
-        return (Number)get(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a short.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #get(Object, String)
-     */
-    public static Short getShort(Object root, String path) {
-        Number number = getNumber(root, path);
-        return (number == null) ? null : number.shortValue();
-    }
-
-    /**
-     * Returns the value at the given path as an integer.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #get(Object, String)
-     */
-    public static Integer getInteger(Object root, String path) {
-        Number number = getNumber(root, path);
-        return (number == null) ? null : number.intValue();
-    }
-
-    /**
-     * Returns the value at the given path as a long.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #get(Object, String)
-     */
-    public static Long getLong(Object root, String path) {
-        Number number = getNumber(root, path);
-        return (number == null) ? null : number.longValue();
-    }
-
-    /**
-     * Returns the value at the given path as a float.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #get(Object, String)
-     */
-    public static Float getFloat(Object root, String path) {
-        Number number = getNumber(root, path);
-        return (number == null) ? null : number.floatValue();
-    }
-
-    /**
-     * Returns the value at the given path as a double.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #get(Object, String)
-     */
-    public static Double getDouble(Object root, String path) {
-        Number number = getNumber(root, path);
-        return (number == null) ? null : number.doubleValue();
-    }
-
-    /**
-     * Returns the value at the given path as a boolean.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #get(Object, String)
-     */
-    public static Boolean getBoolean(Object root, String path) {
-        return (Boolean)get(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a list.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #get(Object, String)
-     */
-    public static List<?> getList(Object root, String path) {
-        return (List<?>)get(root, path);
-    }
-
-    /**
-     * Returns the value at the given path as a map.
-     *
-     * @param root
-     * @param path
-     *
-     * @see #get(Object, String)
-     */
-    @SuppressWarnings("unchecked")
-    public static Map<String, ?> getMap(Object root, String path) {
-        return (Map<String, ?>)get(root, path);
+        return (T)value;
     }
 
     /**
@@ -252,7 +106,7 @@ public class JSON {
      * The value previously associated with the path.
      */
     @SuppressWarnings("unchecked")
-    public static Object put(Object root, String path, Object value) {
+    public static <T> T put(Object root, String path, T value) {
         if (root == null) {
             throw new IllegalArgumentException("root is null.");
         }
@@ -285,7 +139,7 @@ public class JSON {
             previousValue = dictionary.put(key, value);
         }
 
-        return previousValue;
+        return (T)previousValue;
     }
 
     /**
@@ -298,7 +152,7 @@ public class JSON {
      * The value that was removed.
      */
     @SuppressWarnings("unchecked")
-    public static Object remove(Object root, String path) {
+    public static <T> T remove(Object root, String path) {
         if (root == null) {
             throw new IllegalArgumentException("root is null.");
         }
@@ -331,7 +185,7 @@ public class JSON {
             previousValue = dictionary.remove(key);
         }
 
-        return previousValue;
+        return (T)previousValue;
     }
 
     /**

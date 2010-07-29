@@ -79,9 +79,8 @@ public class NamespaceBinding {
         this.sourcePath = sourcePath;
 
         Sequence<String> sourceKeys = JSON.parse(sourcePath);
-        int sourceKeyCount = sourceKeys.getLength();
-
-        source = JSON.get(namespace, sourceKeys, sourceKeyCount - 1);
+        sourceKey = sourceKeys.remove(sourceKeys.getLength() - 1, 1).get(0);
+        source = JSON.get(namespace, sourceKeys);
 
         if (source instanceof Map<?, ?>) {
             sourceMap = (Map<String, Object>)source;
@@ -90,8 +89,6 @@ public class NamespaceBinding {
             sourceMap = new BeanAdapter(source);
             sourceMonitor = new BeanMonitor(source);
         }
-
-        sourceKey = sourceKeys.get(sourceKeyCount - 1);
 
         if (!sourceMap.containsKey(sourceKey)) {
             throw new IllegalArgumentException("Source property \"" + sourcePath
@@ -107,17 +104,14 @@ public class NamespaceBinding {
         this.targetPath = targetPath;
 
         Sequence<String> targetKeys = JSON.parse(targetPath);
-        int targetKeyCount = targetKeys.getLength();
-
-        target = JSON.get(namespace, targetKeys, targetKeyCount - 1);
+        targetKey = targetKeys.remove(targetKeys.getLength() - 1, 1).get(0);
+        target = JSON.get(namespace, targetKeys);
 
         if (target instanceof Dictionary<?, ?>) {
             targetDictionary = (Dictionary<String, Object>)target;
         } else {
             targetDictionary = new BeanAdapter(target);
         }
-
-        targetKey = targetKeys.get(targetKeyCount - 1);
 
         if (!targetDictionary.containsKey(targetKey)) {
             throw new IllegalArgumentException("Target property \"" + targetPath

@@ -343,8 +343,8 @@ public class StockTrackerWindow extends Window implements Bindable {
 
                                 int index = 0;
                                 for (Object stock : stocksTableView.getTableData()) {
-                                    String symbol = JSON.getString(stock, "symbol");
-                                    String selectedSymbol = JSON.getString(selectedStock, "symbol");
+                                    String symbol = JSON.get(stock, "symbol");
+                                    String selectedSymbol = JSON.get(selectedStock, "symbol");
 
                                     if (symbol.equals(selectedSymbol)) {
                                         stocksTableView.addSelectedIndex(index);

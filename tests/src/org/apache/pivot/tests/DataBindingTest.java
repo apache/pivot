@@ -38,7 +38,7 @@ public class DataBindingTest implements Application {
         @Override
         public void render(Object data, Button button, boolean highlighted) {
             if (data != null) {
-                data = JSON.getString(data, "text");
+                data = JSON.get(data, "text");
             }
 
             super.render(data, button, highlighted);
@@ -46,7 +46,7 @@ public class DataBindingTest implements Application {
 
         @Override
         public String toString(Object data) {
-            return JSON.getString(data, "text");
+            return JSON.get(data, "text");
         }
     }
 
@@ -55,7 +55,7 @@ public class DataBindingTest implements Application {
         public void render(Object item, int index, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled) {
             if (item != null) {
-                item = JSON.getString(item, "text");
+                item = JSON.get(item, "text");
             }
 
             super.render(item, index, listView, selected, checked, highlighted, disabled);
@@ -63,7 +63,7 @@ public class DataBindingTest implements Application {
 
         @Override
         public String toString(Object item) {
-            return JSON.getString(item, "text");
+            return JSON.get(item, "text");
         }
     }
 
@@ -71,7 +71,7 @@ public class DataBindingTest implements Application {
         @Override
         public void render(Object item, Spinner spinner) {
             if (item != null) {
-                item = JSON.getString(item, "text");
+                item = JSON.get(item, "text");
             }
 
             super.render(item, spinner);
@@ -79,7 +79,7 @@ public class DataBindingTest implements Application {
 
         @Override
         public String toString(Object item) {
-            return JSON.getString(item, "text");
+            return JSON.get(item, "text");
         }
     }
 

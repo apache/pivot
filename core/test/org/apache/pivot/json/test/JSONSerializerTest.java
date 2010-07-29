@@ -59,7 +59,7 @@ public class JSONSerializerTest {
 
         assertTrue(o1.equals(o2));
 
-        List<?> d = JSON.getList(o1, "d");
+        List<?> d = JSON.get(o1, "d");
         d.remove(0, 1);
 
         assertFalse(o1.equals(o2));
