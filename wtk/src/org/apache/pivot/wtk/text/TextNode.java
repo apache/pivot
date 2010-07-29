@@ -118,7 +118,7 @@ public final class TextNode extends Node {
         }
     }
 
-    private StringBuilder textBuilder;
+    private String text;
     private TextNodeListenerList textNodeListeners = new TextNodeListenerList();
 
     public TextNode() {
@@ -133,27 +133,29 @@ public final class TextNode extends Node {
         if (text == null) {
             throw new IllegalArgumentException("text is null.");
         }
-
-        textBuilder = new StringBuilder(text);
+        
+        this.text = text;
     }
 
     public void insertText(char character, int index) {
         insertText(Character.toString(character), index);
     }
 
-    public void insertText(String text, int index) {
-        if (text == null) {
+    public void insertText(String insertText, int index) {
+        if (insertText == null) {
             throw new IllegalArgumentException("text is null.");
         }
 
         if (index < 0
-            || index > textBuilder.length()) {
+            || index > text.length()) {
             throw new IndexOutOfBoundsException();
         }
 
-        int characterCount = text.length();
+        int characterCount = insertText.length();
         if (characterCount > 0) {
-            textBuilder.insert(index, text);
+            StringBuilder textBuilder = new StringBuilder(text);
+            textBuilder.insert(index, insertText);
+            text = textBuilder.toString();
             rangeInserted(index, characterCount);
             textNodeListeners.charactersInserted(this, index, characterCount);
         }
@@ -161,40 +163,42 @@ public final class TextNode extends Node {
 
     public String removeText(int index, int count) {
         if (index < 0
-            || index + count > textBuilder.length()) {
+            || index + count > text.length()) {
             throw new IndexOutOfBoundsException();
         }
 
-        String text;
+        String removedText;
         if (count == 0) {
-            text = "";
+            removedText = "";
         } else {
             int start = index;
             int end = index + count;
 
-            text = textBuilder.substring(start, end);
+            removedText = text.substring(start, end);
+            StringBuilder textBuilder = new StringBuilder(text);
             textBuilder.delete(start, end);
-            textNodeListeners.charactersRemoved(this, index, text);
+            text = textBuilder.toString();
+            textNodeListeners.charactersRemoved(this, index, removedText);
 
             rangeRemoved(index, count);
         }
 
-        return text;
+        return removedText;
     }
 
     @Override
     public char getCharacterAt(int index) {
         if (index < 0
-            || index >= textBuilder.length()) {
+            || index >= text.length()) {
             throw new IndexOutOfBoundsException();
         }
 
-        return textBuilder.charAt(index);
+        return text.charAt(index);
     }
 
     @Override
     public int getCharacterCount() {
-        return textBuilder.length();
+        return text.length();
     }
 
     public CharacterIterator getCharacterIterator() {
@@ -210,7 +214,7 @@ public final class TextNode extends Node {
     }
 
     public String getText() {
-        return textBuilder.toString();
+        return text;
     }
 
     public void setText(String text) {
@@ -223,7 +227,7 @@ public final class TextNode extends Node {
     }
 
     public String getSubstring(int start, int end) {
-        return textBuilder.substring(start, end);
+        return text.substring(start, end);
     }
 
     @Override
@@ -255,15 +259,15 @@ public final class TextNode extends Node {
         }
 
         if (offset < 0
-            || offset + characterCount > textBuilder.length()) {
+            || offset + characterCount > text.length()) {
             throw new IndexOutOfBoundsException();
         }
 
         int start = offset;
         int end = offset + characterCount;
 
-        String text = textBuilder.substring(start, end);
-        TextNode textNode = new TextNode(text);
+        String rangeText = text.substring(start, end);
+        TextNode textNode = new TextNode(rangeText);
 
         return textNode;
     }
