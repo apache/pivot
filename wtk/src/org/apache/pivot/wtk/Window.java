@@ -398,7 +398,7 @@ public class Window extends Container {
     protected void setParent(Container parent) {
         if (parent != null
             && (!(parent instanceof Display))) {
-            throw new IllegalArgumentException("Window parent must be null or display.");
+            throw new IllegalArgumentException("Window parent must be null or display, cannot be " + parent);
         }
 
         if (parent == null
