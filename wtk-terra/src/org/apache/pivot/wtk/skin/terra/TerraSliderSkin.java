@@ -251,6 +251,7 @@ public class TerraSliderSkin extends SliderSkin {
     private Color buttonBorderColor;
     private int thumbWidth;
     private int thumbHeight;
+    private Integer tickSpacing;
 
     // Derived colors
     private Color buttonBevelColor;
@@ -354,8 +355,30 @@ public class TerraSliderSkin extends SliderSkin {
             RenderingHints.VALUE_ANTIALIAS_ON);
         if (slider.getOrientation() == Orientation.HORIZONTAL) {
             graphics.fillRect(0, (height - trackWidth) / 2, width, trackWidth);
+            if (tickSpacing != null) {
+                int start = slider.getStart();
+                int end = slider.getEnd();
+                int value = start;
+                while (value <= end) {
+                    float ratio = (float)(value - start) / (end - start);
+                    int x = (int) (width * ratio);
+                    graphics.drawLine(x, height / 3, x, height * 2 / 3);
+                    value += tickSpacing;
+                }
+            }
         } else {
             graphics.fillRect((width - trackWidth) / 2, 0, trackWidth, height);
+            if (tickSpacing != null) {
+                int start = slider.getStart();
+                int end = slider.getEnd();
+                int value = start;
+                while (value <= end) {
+                    float ratio = (float)(value - start) / (end - start);
+                    int y = (int) (height * ratio);
+                    graphics.drawLine(width / 3, y, width * 2 / 3, y);
+                    value += tickSpacing;
+                }
+            }
         }
 
         if (thumb.isFocused()) {
@@ -497,6 +520,19 @@ public class TerraSliderSkin extends SliderSkin {
         setThumbHeight(thumbHeight.intValue());
     }
 
+    public Integer getTickSpacing() {
+        return tickSpacing;
+    }
+
+    public void setTickSpacing(Integer tickSpacing) {
+        this.tickSpacing = tickSpacing;
+        repaintComponent();
+    }
+    
+    public void setTickSpacing(Number tickSpacing) {
+        setTickSpacing(tickSpacing == null ? null : tickSpacing.intValue());
+    }
+    
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         thumb.requestFocus();

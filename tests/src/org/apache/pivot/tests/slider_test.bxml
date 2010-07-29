@@ -18,8 +18,8 @@ limitations under the License.
 
 <BoxPane xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <Slider bxml:id="slider1" range="{start:-100, end:100}" value="0"/>
+    <Slider bxml:id="slider1" range="{start:-100, end:100}" value="0" styles="{ tickSpacing:10}"/>
     <Label bxml:id="valueLabel1" text="0"/>
-    <Slider bxml:id="slider2" range="{start:-100, end:100}" value="0" orientation="vertical"/>
+    <Slider bxml:id="slider2" range="{start:-100, end:100}" value="0" orientation="vertical" styles="{ tickSpacing:10}"/>
     <Label bxml:id="valueLabel2" text="0"/>
 </BoxPane>
