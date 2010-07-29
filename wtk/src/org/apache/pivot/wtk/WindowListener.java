@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.media.Image;
 
 /**
@@ -31,7 +32,11 @@ public interface WindowListener {
         }
 
         @Override
-        public void iconChanged(Window window, Image previousIcon) {
+        public void iconAdded(Window window, Image addedIcon) {
+        }
+        
+        @Override
+        public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
         }
 
         @Override
@@ -59,9 +64,18 @@ public interface WindowListener {
      * Called when a window's icon has changed.
      *
      * @param window
-     * @param previousIcon
+     * @param addedIcon
      */
-    public void iconChanged(Window window, Image previousIcon);
+    public void iconAdded(Window window, Image addedIcon);
+    
+    /**
+     * Called when a window's icon has changed.
+     *
+     * @param window
+     * @param index
+     * @param removed
+     */
+    public void iconsRemoved(Window window, int index, Sequence<Image> removed);
 
     /**
      * Called when a window's content component has changed.

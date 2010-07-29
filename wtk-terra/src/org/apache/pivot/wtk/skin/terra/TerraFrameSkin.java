@@ -25,6 +25,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -329,7 +330,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         frame.add(resizeHandle);
 
-        iconChanged(frame, null);
+        iconAdded(frame, null);
         titleChanged(frame, null);
         activeChanged(frame, null);
         maximizedChanged(frame);
@@ -807,10 +808,25 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     }
 
     @Override
-    public void iconChanged(Window window, Image previousIcon) {
-        Image icon = window.getIcon();
-        iconImageView.setVisible(icon != null);
-        iconImageView.setImage(icon);
+    public void iconAdded(Window window, Image addedIcon) {
+        if (window.getIcons().getLength() > 0) {
+            iconImageView.setVisible(true);
+            iconImageView.setImage(window.getIcons().get(0));
+        } else {
+            iconImageView.setVisible(false);
+            iconImageView.setImage((Image)null);
+        }
+    }
+    
+    @Override
+    public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
+        if (window.getIcons().getLength() > 0) {
+            iconImageView.setVisible(true);
+            iconImageView.setImage(window.getIcons().get(0));
+        } else {
+            iconImageView.setVisible(false);
+            iconImageView.setImage((Image)null);
+        }
     }
 
     @Override

@@ -23,6 +23,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -77,7 +78,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
 
             @Override
-            public void iconChanged(Window window, Image previousIcon) {
+            public void iconAdded(Window window, Image addedIcon) {
+                updateFrameTitleBar();
+            }
+            
+            @Override
+            public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
                 updateFrameTitleBar();
             }
         };
@@ -148,10 +154,16 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         } else {
                             ((TitledWindow)hostWindow).setTitle(DesktopDisplayHost.this.rootOwner.getTitle());
 
-                            Image icon = DesktopDisplayHost.this.rootOwner.getIcon();
-                            if (icon instanceof Picture) {
-                                Picture rootPicture = (Picture)icon;
-                                hostWindow.setIconImage(rootPicture.getBufferedImage());
+                            java.util.ArrayList<BufferedImage> pictures = new java.util.ArrayList<BufferedImage>();
+                            for (Image icon : DesktopDisplayHost.this.rootOwner.getIcons()) {
+                                if (icon instanceof Picture) {
+                                    pictures.add(((Picture) icon).getBufferedImage());
+                                }
+                            }
+                            if (pictures.size() == 1) {
+                                hostWindow.setIconImage(pictures.get(0));
+                            } else if (pictures.size() > 1) {
+                                hostWindow.setIconImages(pictures);
                             }
                         }
 

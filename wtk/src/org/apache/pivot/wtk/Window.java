@@ -17,11 +17,13 @@
 package org.apache.pivot.wtk;
 
 import java.net.URL;
+import java.util.Iterator;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
@@ -226,6 +228,65 @@ public class Window extends Container {
         }
     }
 
+    public class IconImageSequence implements Sequence<Image>, Iterable<Image> {
+        @Override
+        public int add(Image image) {
+            int index = iconImageList.add(image);
+
+            windowListeners.iconAdded(Window.this, image);
+
+            return index;
+        }
+
+        @Override
+        public void insert(Image image, int index) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Image update(int index, Image image) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int remove(Image image) {
+            int index = indexOf(image);
+
+            if (index >= 0) {
+               remove(index, 1);
+            }
+
+            return index;
+        }
+
+        @Override
+        public Sequence<Image> remove(int index, int count) {
+            Sequence<Image> removed = iconImageList.remove(index, count);
+            windowListeners.iconsRemoved(Window.this, index, removed);
+            return removed;
+        }
+
+        @Override
+        public Image get(int index) {
+            return iconImageList.get(index);
+        }
+
+        @Override
+        public int indexOf(Image image) {
+            return iconImageList.indexOf(image);
+        }
+
+        @Override
+        public int getLength() {
+            return iconImageList.getLength();
+        }
+        
+        @Override
+        public Iterator<Image> iterator() {
+            return new ImmutableIterator<Image>(iconImageList.iterator());
+        }
+    }
+    
     private static class WindowListenerList extends ListenerList<WindowListener>
         implements WindowListener {
         @Override
@@ -236,12 +297,19 @@ public class Window extends Container {
         }
 
         @Override
-        public void iconChanged(Window window, Image previousIcon) {
+        public void iconAdded(Window window, Image addedIcon) {
             for (WindowListener listener : this) {
-                listener.iconChanged(window, previousIcon);
+                listener.iconAdded(window, addedIcon);
             }
         }
-
+        
+        @Override
+        public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
+            for (WindowListener listener : this) {
+                listener.iconsRemoved(window, index, removed);
+            }
+        }
+        
         @Override
         public void contentChanged(Window window, Component previousContent) {
             for (WindowListener listener : this) {
@@ -368,7 +436,8 @@ public class Window extends Container {
     private HashMap<Keyboard.KeyStroke, Action> actionMap = new HashMap<Keyboard.KeyStroke, Action>();
 
     private String title = null;
-    private Image icon = null;
+    private ArrayList<Image> iconImageList = new ArrayList<Image>();
+    private IconImageSequence iconImageSequence = new IconImageSequence();
     private Component content = null;
     private Component focusDescendant = null;
 
@@ -702,30 +771,12 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the window's icon.
-     *
-     * @return
-     * The window's icon, or <tt>null</tt> if the window has no icon.
+     * Returns the icons for this window.
      */
-    public Image getIcon() {
-        return icon;
+    public IconImageSequence getIcons() {
+        return iconImageSequence;
     }
-
-    /**
-     * Sets the window's icon.
-     *
-     * @param icon
-     * The window's icon, or <tt>null</tt> for no icon.
-     */
-    public void setIcon(Image icon) {
-        Image previousIcon = this.icon;
-
-        if (previousIcon != icon) {
-            this.icon = icon;
-            windowListeners.iconChanged(this, previousIcon);
-        }
-    }
-
+    
     /**
      * Sets the window's icon by URL.
      * <p>
@@ -753,7 +804,8 @@ public class Window extends Container {
             ApplicationContext.getResourceCache().put(iconURL, icon);
         }
 
-        setIcon(icon);
+        getIcons().remove(0, getIcons().getLength());
+        getIcons().add(icon);
     }
 
     /**
