@@ -371,6 +371,10 @@ The following components are licensed under the Creative Commons Attribution
      tutorials/src/org/apache/pivot/tutorials/star.png
      tutorials/src/org/apache/pivot/tutorials/stocktracker/add.png
      tutorials/src/org/apache/pivot/tutorials/stocktracker/delete.png
+     tutorials/src/org/apache/pivot/tutorials/webqueries/add.png
+     tutorials/src/org/apache/pivot/tutorials/webqueries/delete.png
+     tutorials/src/org/apache/pivot/tutorials/webqueries/pencil.png
+     tutorials/src/org/apache/pivot/tutorials/webqueries/pencil_add.png
      tutorials/src/org/apache/pivot/tutorials/windows/application_form.png
      wtk-terra/src/org/apache/pivot/wtk/skin/terra/drive.png
      wtk-terra/src/org/apache/pivot/wtk/skin/terra/folder_add.png
