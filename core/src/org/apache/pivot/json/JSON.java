@@ -39,6 +39,7 @@ public class JSON {
      *
      * @see #get(Object, Sequence)
      */
+    @SuppressWarnings("unchecked")
     public static <T> T get(Object root, String path) {
         if (root == null) {
             throw new IllegalArgumentException("root is null.");
@@ -48,7 +49,7 @@ public class JSON {
             throw new IllegalArgumentException("path is null.");
         }
 
-        return get(root, parse(path));
+        return (T)get(root, parse(path));
     }
 
     /**

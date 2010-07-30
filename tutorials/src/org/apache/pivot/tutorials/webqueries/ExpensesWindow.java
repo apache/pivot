@@ -238,7 +238,7 @@ public class ExpensesWindow extends Window implements Bindable {
     @SuppressWarnings("unchecked")
     private void updateSelectedExpense() {
         Object expense = expenseTableView.getSelectedRow();
-        final int id = JSON.get(expense, "id");
+        final Integer id = JSON.get(expense, "id");
 
         expenseSheet.load(expense);
         expenseSheet.open(this, new SheetCloseListener() {
@@ -291,7 +291,7 @@ public class ExpensesWindow extends Window implements Bindable {
     @SuppressWarnings("unchecked")
     private void deleteSelectedExpense() {
         Object expense = expenseTableView.getSelectedRow();
-        final int id = JSON.get(expense, "id");
+        final Integer id = JSON.get(expense, "id");
 
         deleteConfirmationPrompt.open(this, new SheetCloseListener() {
             @Override
