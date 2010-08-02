@@ -22,7 +22,8 @@ Release Notes for Pivot 1.5.1:
     * [PIVOT-521] - Add support for binding JSON structures to Java Beans
 
 ** Improvement
-    * [PIVOT-513] - allow instance creation customization when reading WTKX files by creating an instance creation factory method inside the serializer class
+    * [PIVOT-513] - allow instance creation customization when reading WTKX files by creating an
+      instance creation factory method inside the serializer class
     * [PIVOT-522] - Add a URL setter for ListButton's "listData" property
     * [PIVOT-527] - add getCurrentElement() to WTKXSerializer
     * [PIVOT-528] - Allow Dictionary values to be specified using elements in WTKX
@@ -31,9 +32,11 @@ Release Notes for Pivot 1.5.1:
 
 ** Bug
     * [PIVOT-507] - Listener registration issues in menu items containing sub-menus
-    * [PIVOT-510] - If window was last on secondary monitor, if you launch without a secondary monitor it still tries to display on secondary monitor
+    * [PIVOT-510] - If window was last on secondary monitor, if you launch without a secondary
+      monitor it still tries to display on secondary monitor
     * [PIVOT-515] - org.apache.pivot.collections.ArrayList bounds checking issue
     * [PIVOT-518] - Serialization of "structs" fails
     * [PIVOT-519] - CSVSerializer does not trim values
-    * [PIVOT-533] - org.apache.pivot.collections.Sequence.Tree - add, get, insert, remove & update methods do not handle empty Paths
-
+    * [PIVOT-533] - org.apache.pivot.collections.Sequence.Tree - add, get, insert, remove & update
+      methods do not handle empty Paths
+    * [PIVOT-582] - IllegalArgumentException : width is negative when using Form Heading
