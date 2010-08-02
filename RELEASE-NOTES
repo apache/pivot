@@ -36,4 +36,4 @@ Release Notes for Pivot 1.5.1:
     * [PIVOT-518] - Serialization of "structs" fails
     * [PIVOT-519] - CSVSerializer does not trim values
     * [PIVOT-533] - org.apache.pivot.collections.Sequence.Tree - add, get, insert, remove & update methods do not handle empty Paths
-
+    * [PIVOT-582] - IllegalArgumentException : width is negative when using Form Heading

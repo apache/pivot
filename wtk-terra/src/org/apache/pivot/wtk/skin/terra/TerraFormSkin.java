@@ -729,7 +729,7 @@ public class TerraFormSkin extends ContainerSkin
                 && !showFirstSectionHeading) {
                 separator.setVisible(false);
             } else {
-                int separatorWidth = width - (padding.left + padding.right);
+                int separatorWidth = Math.max(width - (padding.left + padding.right), 0);
                 separator.setVisible(true);
                 separator.setSize(separatorWidth, separator.getPreferredHeight(separatorWidth));
                 separator.setLocation(padding.left, rowY);
