@@ -44,6 +44,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.util.StreamReaderDelegate;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
@@ -627,7 +628,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                     try {
                         Class<?> type = Class.forName(className);
-                        value = type.newInstance();
+                        value = newTypedObject(type);
                     } catch (ClassNotFoundException exception) {
                         throw new SerializationException(exception);
                     } catch (InstantiationException exception) {
@@ -680,7 +681,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             Resources resources = this.resources;
             if (element.properties.containsKey(INCLUDE_RESOURCES_ATTRIBUTE)) {
-                resources = new Resources(resources, element.properties.get(INCLUDE_RESOURCES_ATTRIBUTE));
+                resources = new Resources(resources,
+                    element.properties.get(INCLUDE_RESOURCES_ATTRIBUTE));
             }
 
             String mimeType = null;
@@ -717,7 +719,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             Serializer<?> serializer;
             try {
-                serializer = serializerClass.newInstance();
+                serializer = newIncludeSerializer(serializerClass);
             } catch (InstantiationException exception) {
                 throw new SerializationException(exception);
             } catch (IllegalAccessException exception) {
@@ -1365,6 +1367,58 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
             }
         }
+    }
+
+    /**
+     * Creates a new serializer to be used on a nested include. The base
+     * implementation simply calls {@code Class.newInstance()}. Subclasses may
+     * override this method to provide an alternate instantiation mechanism,
+     * such as dependency-injected construction.
+     *
+     * @param type
+     * The type of serializer being requested.
+     */
+    protected Serializer<?> newIncludeSerializer(Class<? extends Serializer<?>> type)
+        throws InstantiationException, IllegalAccessException {
+        return type.newInstance();
+    }
+
+    /**
+     * Creates a new typed object as part of the deserialization process.
+     * The base implementation simply calls {@code Class.newInstance()}.
+     * Subclasses may override this method to provide an alternate instantiation
+     * mechanism, such as dependency-injected construction.
+     *
+     * @param type
+     * The type of object being requested.
+     */
+    protected Object newTypedObject(Class<?> type)
+        throws InstantiationException, IllegalAccessException {
+        return type.newInstance();
+    }
+
+    /**
+     * Gets a read-only version of the xml stream reader that's being used by
+     * this serializer. Subclasses can use this to access information about the
+     * current event.
+     */
+    protected final XMLStreamReader getXMLStreamReader() {
+        return new StreamReaderDelegate(xmlStreamReader) {
+            @Override
+            public void close() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public int next() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public int nextTag() {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 
     /**
