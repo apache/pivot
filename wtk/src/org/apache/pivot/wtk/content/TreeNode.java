@@ -26,6 +26,8 @@ import org.apache.pivot.wtk.media.Image;
  * Default tree node implementation.
  */
 public class TreeNode {
+    private TreeBranch parent = null;
+
     private Image icon = null;
     private String text = null;
 
@@ -44,6 +46,14 @@ public class TreeNode {
     public TreeNode(Image icon, String text) {
         this.icon = icon;
         this.text = text;
+    }
+
+    public TreeBranch getParent() {
+        return parent;
+    }
+
+    protected void setParent(TreeBranch parent) {
+        this.parent = parent;
     }
 
     public Image getIcon() {

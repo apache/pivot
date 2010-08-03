@@ -27,7 +27,6 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.media.Image;
 
-
 /**
  * Default tree branch implementation.
  */
@@ -69,20 +68,49 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     @Override
     public int add(TreeNode treeNode) {
+        if (treeNode == null) {
+            throw new IllegalArgumentException("treeNode is null.");
+        }
+
+        if (treeNode.getParent() != null) {
+            throw new IllegalArgumentException("treeNode already has a parent.");
+        }
+
         int index = treeNodes.add(treeNode);
+        treeNode.setParent(this);
         listListeners.itemInserted(this, index);
+
         return index;
     }
 
     @Override
     public void insert(TreeNode treeNode, int index) {
+        if (treeNode == null) {
+            throw new IllegalArgumentException("treeNode is null.");
+        }
+
+        if (treeNode.getParent() != null) {
+            throw new IllegalArgumentException("treeNode already has a parent.");
+        }
+
         treeNodes.insert(treeNode, index);
+        treeNode.setParent(this);
         listListeners.itemInserted(this, index);
     }
 
     @Override
     public TreeNode update(int index, TreeNode treeNode) {
+        if (treeNode == null) {
+            throw new IllegalArgumentException("treeNode is null.");
+        }
+
+        if (treeNode.getParent() != null) {
+            throw new IllegalArgumentException("treeNode already has a parent.");
+        }
+
         TreeNode previousTreeNode = treeNodes.update(index, treeNode);
+        previousTreeNode.setParent(null);
+        treeNode.setParent(this);
         listListeners.itemUpdated(this, index, previousTreeNode);
 
         return previousTreeNode;
@@ -102,6 +130,11 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     public Sequence<TreeNode> remove(int index, int count) {
         Sequence<TreeNode> removed = treeNodes.remove(index, count);
         if (count > 0) {
+            for (int i = 0, n = removed.getLength(); i < n; i++ ) {
+                TreeNode treeNode = removed.get(i);
+                treeNode.setParent(null);
+            }
+
             listListeners.itemsRemoved(this, index, removed);
         }
 
@@ -111,6 +144,11 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     @Override
     public void clear() {
         if (getLength() > 0) {
+            for (int i = 0, n = treeNodes.getLength(); i < n; i++) {
+                TreeNode treeNode = treeNodes.get(i);
+                treeNode.setParent(null);
+            }
+
             treeNodes.clear();
             listListeners.listCleared(this);
         }
