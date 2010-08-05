@@ -396,11 +396,6 @@ public class CSVSerializer implements Serializer<List<?>> {
             c = reader.read();
         }
 
-        // Trim the value
-        if (value != null) {
-            value = value.trim();
-        }
-
         return value;
     }
 
