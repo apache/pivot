@@ -20,7 +20,6 @@ import java.util.Iterator;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
@@ -55,7 +54,6 @@ public class Menu extends Container {
 
         private Section section = null;
 
-        private String name = null;
         private Menu menu = null;
         private boolean active = false;
 
@@ -242,6 +240,13 @@ public class Menu extends Container {
                     listener.itemsRemoved(section, index, removed);
                 }
             }
+
+            @Override
+            public void nameChanged(Menu.Section section, String previousName) {
+                for (SectionListener listener : this) {
+                    listener.nameChanged(section, previousName);
+                }
+            }
         }
 
         private Menu menu = null;
@@ -253,6 +258,19 @@ public class Menu extends Container {
 
         public Menu getMenu() {
             return menu;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            String previousName = this.name;
+
+            if (name != previousName) {
+                this.name = name;
+                sectionListeners.nameChanged(this, previousName);
+            }
         }
 
         @Override
@@ -357,6 +375,14 @@ public class Menu extends Container {
          * @param removed
          */
         public void itemsRemoved(Section section, int index, Sequence<Item> removed);
+
+        /**
+         * Called when a section's name has changed.
+         *
+         * @param section
+         * @param previousName
+         */
+        public void nameChanged(Section section, String previousName);
     }
 
     /**
@@ -381,27 +407,6 @@ public class Menu extends Container {
             }
 
             sections.insert(section, index);
-
-            if (section.name != null) {
-                if (sectionMap.containsKey(section.name)) {
-                    throw new IllegalArgumentException("A menu section named \"" + section.name
-                        + "\" already exists.");
-                }
-
-                sectionMap.put(section.name, section);
-            }
-
-            for (Item item : section) {
-                if (item.name != null) {
-                    if (itemMap.containsKey(item.name)) {
-                        throw new IllegalArgumentException("A menu item named \"" + item.name
-                            + "\" already exists.");
-                    }
-
-                    itemMap.put(item.name, item);
-                }
-            }
-
             section.menu = Menu.this;
 
             for (int i = 0, n = section.getLength(); i < n; i++) {
@@ -432,17 +437,6 @@ public class Menu extends Container {
 
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Section section = removed.get(i);
-
-                if (section.name != null) {
-                    sectionMap.remove(section.name);
-                }
-
-                for (Item item : section) {
-                    if (item.name != null) {
-                        itemMap.remove(item.name);
-                    }
-                }
-
                 section.menu = null;
 
                 for (Item item : section) {
@@ -519,9 +513,6 @@ public class Menu extends Container {
     private ArrayList<Section> sections = new ArrayList<Section>();
     private SectionSequence sectionSequence = new SectionSequence();
 
-    private HashMap<String, Section> sectionMap = new HashMap<String, Section>();
-    private HashMap<String, Item> itemMap = new HashMap<String, Item>();
-
     private Item activeItem = null;
 
     private MenuListenerList menuListeners = new MenuListenerList();
@@ -540,32 +531,6 @@ public class Menu extends Container {
 
     public SectionSequence getSections() {
         return sectionSequence;
-    }
-
-    /**
-     * Retrieves a named section.
-     *
-     * @param name
-     *
-     * @return
-     * The section with the given name, or <tt>null</tt> if the name does not
-     * exist.
-     */
-    public Section getSection(String name) {
-        return sectionMap.get(name);
-    }
-
-    /**
-     * Retrieves a named item.
-     *
-     * @param name
-     *
-     * @return
-     * The item with the given name, or <tt>null</tt> if the name does not
-     * exist.
-     */
-    public Item getItem(String name) {
-        return itemMap.get(name);
     }
 
     public Item getActiveItem() {

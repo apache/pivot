@@ -617,6 +617,11 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     @Override
+    public void nameChanged(Menu.Section section, String previousName) {
+        // No-op
+    }
+
+    @Override
     public void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
         // No-op
     }
