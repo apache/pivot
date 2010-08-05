@@ -17,8 +17,6 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.wtk.content.TableViewHeaderDataRenderer;
-
 
 /**
  * Component representing a table view header.
@@ -31,47 +29,6 @@ public class TableViewHeader extends Component {
         NONE,
         SINGLE_COLUMN,
         MULTI_COLUMN
-    }
-
-    /**
-     * Table view header data renderer interface.
-     */
-    public interface DataRenderer extends Renderer {
-        /**
-         * Prepares the renderer for layout or paint.
-         *
-         * @param data
-         * The data to render, or <tt>null</tt> if called to calculate preferred
-         * height for skins that assume a fixed renderer height.
-         *
-         * @param columnIndex
-         * The index of the column being rendered.
-         *
-         * @param tableViewHeader
-         * The host component.
-         *
-         * @param columnName
-         * The name of the column being rendered.
-         *
-         * @param highlighted
-         * If <tt>true</tt>, the item is highlighted.
-         */
-        public void render(Object data, int columnIndex, TableViewHeader tableViewHeader,
-            String columnName, boolean highlighted);
-
-        /**
-         * Converts table view header data to a string representation.
-         *
-         * @param item
-         *
-         * @return
-         * The data's string representation, or <tt>null</tt> if the data does not
-         * have a string representation.
-         * <p>
-         * Note that this method may be called often during keyboard navigation, so
-         * implementations should avoid unnecessary string allocations.
-         */
-        public String toString(Object item);
     }
 
     /**
@@ -94,14 +51,6 @@ public class TableViewHeader extends Component {
         }
 
         @Override
-        public void dataRendererChanged(TableViewHeader tableViewHeader,
-            TableViewHeader.DataRenderer previousDataRenderer) {
-            for (TableViewHeaderListener listener : this) {
-                listener.dataRendererChanged(tableViewHeader, previousDataRenderer);
-            }
-        }
-
-        @Override
         public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
             for (TableViewHeaderListener listener : this) {
                 listener.sortModeChanged(tableViewHeader, previousSortMode);
@@ -120,7 +69,6 @@ public class TableViewHeader extends Component {
     }
 
     private TableView tableView;
-    private DataRenderer dataRenderer;
     private SortMode sortMode = SortMode.NONE;
 
     private TableViewHeaderListenerList tableViewHeaderListeners = new TableViewHeaderListenerList();
@@ -131,9 +79,7 @@ public class TableViewHeader extends Component {
     }
 
     public TableViewHeader(TableView tableView) {
-        setDataRenderer(new TableViewHeaderDataRenderer());
         installThemeSkin(TableViewHeader.class);
-
         setTableView(tableView);
     }
 
@@ -157,22 +103,6 @@ public class TableViewHeader extends Component {
         if (previousTableView != tableView) {
             this.tableView = tableView;
             tableViewHeaderListeners.tableViewChanged(this, previousTableView);
-        }
-    }
-
-    public DataRenderer getDataRenderer() {
-        return dataRenderer;
-    }
-
-    public void setDataRenderer(DataRenderer dataRenderer) {
-        if (dataRenderer == null) {
-            throw new IllegalArgumentException("dataRenderer is null.");
-        }
-
-        DataRenderer previousDataRenderer = this.dataRenderer;
-        if (previousDataRenderer != dataRenderer) {
-            this.dataRenderer = dataRenderer;
-            tableViewHeaderListeners.dataRendererChanged(this, previousDataRenderer);
         }
     }
 

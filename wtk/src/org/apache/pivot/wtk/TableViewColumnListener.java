@@ -44,6 +44,11 @@ public interface TableViewColumnListener {
         }
 
         @Override
+        public void columnHeaderDataRendererChanged(TableView.Column column,
+            TableView.HeaderDataRenderer previousColumnHeaderDataRenderer) {
+        }
+
+        @Override
         public void columnWidthChanged(TableView.Column column, int previousWidth,
             boolean previousRelative) {
         }
@@ -95,6 +100,15 @@ public interface TableViewColumnListener {
      * @param previousHeaderData
      */
     public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData);
+
+    /**
+     * Called when a column's header data renderer has changed.
+     *
+     * @param column
+     * @param previousHeaderDataRenderer
+     */
+    public void columnHeaderDataRendererChanged(TableView.Column column,
+        TableView.HeaderDataRenderer previousHeaderDataRenderer);
 
     /**
      * Called when a column's width has changed.

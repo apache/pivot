@@ -38,6 +38,7 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
+import org.apache.pivot.wtk.content.TableViewHeaderDataRenderer;
 
 /**
  * Component that displays a sequence of rows partitioned into columns,
@@ -53,6 +54,7 @@ public class TableView extends Component {
 
         private String name = null;
         private Object headerData = null;
+        private HeaderDataRenderer headerDataRenderer = DEFAULT_HEADER_DATA_RENDERER;
         private int width = 0;
         private int minimumWidth = 0;
         private int maximumWidth = Integer.MAX_VALUE;
@@ -61,6 +63,7 @@ public class TableView extends Component {
         private CellRenderer cellRenderer = DEFAULT_CELL_RENDERER;
 
         private static final CellRenderer DEFAULT_CELL_RENDERER = new TableViewCellRenderer();
+        private static final HeaderDataRenderer DEFAULT_HEADER_DATA_RENDERER = new TableViewHeaderDataRenderer();
 
         /**
          * Default column width.
@@ -201,6 +204,36 @@ public class TableView extends Component {
                 if (tableView != null) {
                     tableView.tableViewColumnListeners.columnHeaderDataChanged(this,
                         previousHeaderData);
+                }
+            }
+        }
+
+        /**
+         * Returns the column header data renderer.
+         *
+         * @return
+         */
+        public HeaderDataRenderer getHeaderDataRenderer() {
+            return headerDataRenderer;
+        }
+
+        /**
+         * Sets the column header data renderer.
+         *
+         * @param headerDataRenderer
+         */
+        public void setHeaderDataRenderer(HeaderDataRenderer headerDataRenderer) {
+            if (headerDataRenderer == null) {
+                throw new IllegalArgumentException("headerDataRenderer is null.");
+            }
+
+            HeaderDataRenderer previousHeaderDataRenderer = this.headerDataRenderer;
+            if (previousHeaderDataRenderer != headerDataRenderer) {
+                this.headerDataRenderer = headerDataRenderer;
+
+                if (tableView != null) {
+                    tableView.tableViewColumnListeners.columnHeaderDataRendererChanged(this,
+                        previousHeaderDataRenderer);
                 }
             }
         }
@@ -509,6 +542,47 @@ public class TableView extends Component {
          * implementations should avoid unnecessary string allocations.
          */
         public String toString(Object row, String columnName);
+    }
+
+    /**
+     * Table view header data renderer interface.
+     */
+    public interface HeaderDataRenderer extends Renderer {
+        /**
+         * Prepares the renderer for layout or paint.
+         *
+         * @param data
+         * The data to render, or <tt>null</tt> if called to calculate preferred
+         * height for skins that assume a fixed renderer height.
+         *
+         * @param columnIndex
+         * The index of the column being rendered.
+         *
+         * @param tableViewHeader
+         * The host component.
+         *
+         * @param columnName
+         * The name of the column being rendered.
+         *
+         * @param highlighted
+         * If <tt>true</tt>, the item is highlighted.
+         */
+        public void render(Object data, int columnIndex, TableViewHeader tableViewHeader,
+            String columnName, boolean highlighted);
+
+        /**
+         * Converts table view header data to a string representation.
+         *
+         * @param item
+         *
+         * @return
+         * The data's string representation, or <tt>null</tt> if the data does not
+         * have a string representation.
+         * <p>
+         * Note that this method may be called often during keyboard navigation, so
+         * implementations should avoid unnecessary string allocations.
+         */
+        public String toString(Object item);
     }
 
     /**
@@ -1055,6 +1129,14 @@ public class TableView extends Component {
         public void columnHeaderDataChanged(Column column, Object previousHeaderData) {
             for (TableViewColumnListener listener : this) {
                 listener.columnHeaderDataChanged(column, previousHeaderData);
+            }
+        }
+
+        @Override
+        public void columnHeaderDataRendererChanged(TableView.Column column,
+            TableView.HeaderDataRenderer previousHeaderDataRenderer) {
+            for (TableViewColumnListener listener : this) {
+                listener.columnHeaderDataRendererChanged(column, previousHeaderDataRenderer);
             }
         }
 

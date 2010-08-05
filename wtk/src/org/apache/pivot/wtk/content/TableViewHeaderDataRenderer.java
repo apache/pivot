@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
@@ -33,7 +34,7 @@ import org.apache.pivot.wtk.media.Image;
  * Default table view header data renderer.
  */
 public class TableViewHeaderDataRenderer extends BoxPane
-    implements TableViewHeader.DataRenderer {
+    implements TableView.HeaderDataRenderer {
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();
 
@@ -72,10 +73,6 @@ public class TableViewHeaderDataRenderer extends BoxPane
                 text = data.toString();
             }
         }
-
-        // Left-align the content
-        getStyles().put("horizontalAlignment", (text == null) ?
-            HorizontalAlignment.CENTER : HorizontalAlignment.LEFT);
 
         // Update the icon image view
         imageView.setImage(icon);

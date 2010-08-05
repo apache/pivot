@@ -188,12 +188,12 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
         if (tableView != null) {
             TableView.ColumnSequence columns = tableView.getColumns();
-            TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
 
             for (int i = 0, n = columns.getLength(); i < n; i++) {
                 TableView.Column column = columns.get(i);
-                dataRenderer.render(column.getHeaderData(), i, tableViewHeader, column.getName(), false);
-                preferredHeight = Math.max(preferredHeight, dataRenderer.getPreferredHeight(-1));
+                TableView.HeaderDataRenderer headerDataRenderer = column.getHeaderDataRenderer();
+                headerDataRenderer.render(column.getHeaderData(), i, tableViewHeader, column.getName(), false);
+                preferredHeight = Math.max(preferredHeight, headerDataRenderer.getPreferredHeight(-1));
             }
 
             // Include the bottom border
@@ -220,12 +220,12 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             int rowHeight = getPreferredHeight(width) - 1;
 
             TableView.ColumnSequence columns = tableView.getColumns();
-            TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
 
             for (int i = 0, n = columns.getLength(); i < n; i++) {
                 TableView.Column column = columns.get(i);
-                dataRenderer.render(column.getHeaderData(), i, tableViewHeader, column.getName(), false);
-                baseline = Math.max(baseline, dataRenderer.getBaseline(headerWidths.get(i), rowHeight));
+                TableView.HeaderDataRenderer headerDataRenderer = column.getHeaderDataRenderer();
+                headerDataRenderer.render(column.getHeaderData(), i, tableViewHeader, column.getName(), false);
+                baseline = Math.max(baseline, headerDataRenderer.getBaseline(headerWidths.get(i), rowHeight));
             }
         }
 
@@ -278,7 +278,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
         if (tableView != null) {
             TableView.ColumnSequence columns = tableView.getColumns();
-            TableViewHeader.DataRenderer dataRenderer = tableViewHeader.getDataRenderer();
 
             int headerX = 0;
             for (int columnIndex = 0, columnCount = columns.getLength();
@@ -295,12 +294,13 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                 // Paint the header data
                 Object headerData = column.getHeaderData();
-                dataRenderer.render(headerData, columnIndex, tableViewHeader, column.getName(), false);
-                dataRenderer.setSize(headerWidth, height - 1);
+                TableView.HeaderDataRenderer headerDataRenderer = column.getHeaderDataRenderer();
+                headerDataRenderer.render(headerData, columnIndex, tableViewHeader, column.getName(), false);
+                headerDataRenderer.setSize(headerWidth, height - 1);
 
                 Graphics2D rendererGraphics = (Graphics2D)graphics.create(headerX, 0,
                     headerWidth, height - 1);
-                dataRenderer.paint(rendererGraphics);
+                headerDataRenderer.paint(rendererGraphics);
                 rendererGraphics.dispose();
 
                 // Draw the sort image
@@ -325,7 +325,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 if (sortImage != null) {
                     int sortImageMargin = sortImage.getWidth() + SORT_INDICATOR_PADDING * 2;
 
-                    if (headerWidth >= dataRenderer.getPreferredWidth(-1) + sortImageMargin) {
+                    if (headerWidth >= headerDataRenderer.getPreferredWidth(-1) + sortImageMargin) {
                         Graphics2D sortImageGraphics = (Graphics2D)graphics.create();
                         sortImageGraphics.translate(headerX + headerWidth - sortImageMargin,
                             (height - sortImage.getHeight()) / 2);
@@ -818,12 +818,6 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public void dataRendererChanged(TableViewHeader tableViewHeader,
-        TableViewHeader.DataRenderer previousDataRenderer) {
-        invalidateComponent();
-    }
-
-    @Override
     public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
         // No-op
     }
@@ -846,6 +840,12 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
     @Override
     public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData) {
+        invalidateComponent();
+    }
+
+    @Override
+    public void columnHeaderDataRendererChanged(TableView.Column column,
+        TableView.HeaderDataRenderer previousHeaderDataRenderer) {
         invalidateComponent();
     }
 

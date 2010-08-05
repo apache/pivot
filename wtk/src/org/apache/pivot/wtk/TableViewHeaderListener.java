@@ -31,11 +31,6 @@ public interface TableViewHeaderListener {
         }
 
         @Override
-        public void dataRendererChanged(TableViewHeader tableViewHeader,
-            TableViewHeader.DataRenderer previousDataRenderer) {
-        }
-
-        @Override
         public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
         }
     }
@@ -47,15 +42,6 @@ public interface TableViewHeaderListener {
      * @param previousTableView
      */
     public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView);
-
-    /**
-     * Called when a table view header's data renderer has changed.
-     *
-     * @param tableViewHeader
-     * @param previousDataRenderer
-     */
-    public void dataRendererChanged(TableViewHeader tableViewHeader,
-        TableViewHeader.DataRenderer previousDataRenderer);
 
     /**
      * Called when a table view header's sort mode has changed.

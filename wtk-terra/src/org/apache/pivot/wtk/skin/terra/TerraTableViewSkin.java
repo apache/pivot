@@ -1426,6 +1426,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
+    public void columnHeaderDataRendererChanged(TableView.Column column,
+        TableView.HeaderDataRenderer previousHeaderDataRenderer) {
+        // No-op
+    }
+
+    @Override
     public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative)  {
         if (column.getWidth() == -1) {
             defaultWidthColumnCount++;
