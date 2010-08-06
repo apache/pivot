@@ -30,7 +30,7 @@ limitations under the License.
                 <content:ButtonData text="A" icon="@anchor.png"/>
             </Accordion.headerData>
         </Label>
-        <Label Accordion.headerData="B" text="World"/>
+        <Label Accordion.headerData="B" Accordion.tooltipText="12345" text="World"/>
         <Label Accordion.headerData="C" text="From" enabled="false"/>
         <Label Accordion.headerData="D" text="Pivot"/>
     </Accordion>

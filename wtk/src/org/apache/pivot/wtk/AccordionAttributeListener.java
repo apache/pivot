@@ -27,6 +27,10 @@ public interface AccordionAttributeListener {
         @Override
         public void headerDataChanged(Accordion accordion, Component component, Object previousHeaderData) {
         }
+
+        @Override
+        public void tooltipTextChanged(Accordion accordion, Component component, String previousTooltipText) {
+        }
     }
 
     /**
@@ -37,4 +41,13 @@ public interface AccordionAttributeListener {
      * @param previousHeaderData
      */
     public void headerDataChanged(Accordion accordion, Component component, Object previousHeaderData);
+
+    /**
+     * Called when a panel's tooltip text has changed.
+     *
+     * @param accordion
+     * @param component
+     * @param previousTooltipText
+     */
+    public void tooltipTextChanged(Accordion accordion, Component component, String previousTooltipText);
 }

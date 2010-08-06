@@ -63,6 +63,26 @@ public class TerraAccordionSkin extends ContainerSkin
         }
 
         @Override
+        public Object getButtonData() {
+            return Accordion.getHeaderData((Component)super.getButtonData());
+        }
+
+        @Override
+        public void setButtonData(Object buttonData) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String getTooltipText() {
+            return Accordion.getTooltipText((Component)super.getButtonData());
+        }
+
+        @Override
+        public void setTooltipText(String tooltipText) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
         public void setToggleButton(boolean toggleButton) {
             throw new UnsupportedOperationException();
         }
@@ -86,8 +106,7 @@ public class TerraAccordionSkin extends ContainerSkin
 
             Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
             Button.DataRenderer headerDataRenderer = accordion.getHeaderDataRenderer();
-            headerDataRenderer.render(Accordion.getHeaderData((Component)panelHeader.getButtonData()),
-                panelHeader, false);
+            headerDataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
 
             int preferredWidth = headerDataRenderer.getPreferredWidth(-1)
                 + buttonPadding.left + buttonPadding.right + 2;
@@ -101,8 +120,7 @@ public class TerraAccordionSkin extends ContainerSkin
 
             Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
             Button.DataRenderer headerDataRenderer = accordion.getHeaderDataRenderer();
-            headerDataRenderer.render(Accordion.getHeaderData((Component)panelHeader.getButtonData()),
-                panelHeader, false);
+            headerDataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
 
             // Include padding and border in constraint
             int contentWidth = width;
@@ -123,8 +141,7 @@ public class TerraAccordionSkin extends ContainerSkin
 
             Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
             Button.DataRenderer headerDataRenderer = accordion.getHeaderDataRenderer();
-            headerDataRenderer.render(Accordion.getHeaderData((Component)panelHeader.getButtonData()),
-                panelHeader, false);
+            headerDataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
 
             Dimensions preferredContentSize = headerDataRenderer.getPreferredSize();
 
@@ -143,8 +160,7 @@ public class TerraAccordionSkin extends ContainerSkin
 
             Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
             Button.DataRenderer headerDataRenderer = accordion.getHeaderDataRenderer();
-            headerDataRenderer.render(Accordion.getHeaderData((Component)panelHeader.getButtonData()),
-                panelHeader, false);
+            headerDataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
 
             int clientWidth = Math.max(width - (buttonPadding.left + buttonPadding.right + 2), 0);
             int clientHeight = Math.max(height - (buttonPadding.top + buttonPadding.bottom + 2), 0);
@@ -177,8 +193,7 @@ public class TerraAccordionSkin extends ContainerSkin
             // Paint the content
             Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
             Button.DataRenderer headerDataRenderer = accordion.getHeaderDataRenderer();
-            headerDataRenderer.render(Accordion.getHeaderData((Component)panelHeader.getButtonData()),
-                panelHeader, highlighted);
+            headerDataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
             headerDataRenderer.setSize(Math.max(width - (buttonPadding.left + buttonPadding.right + 2), 0),
                 Math.max(getHeight() - (buttonPadding.top + buttonPadding.bottom + 2), 0));
 
@@ -891,5 +906,10 @@ public class TerraAccordionSkin extends ContainerSkin
     @Override
     public void headerDataChanged(Accordion accordion, Component component, Object previousHeaderData) {
         invalidateComponent();
+    }
+
+    @Override
+    public void tooltipTextChanged(Accordion accordion, Component component, String previousTooltipText) {
+        // No-op
     }
 }
