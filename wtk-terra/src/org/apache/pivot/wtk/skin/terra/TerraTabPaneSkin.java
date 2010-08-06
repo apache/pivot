@@ -123,7 +123,8 @@ public class TerraTabPaneSkin extends ContainerSkin
         public void press() {
             // If the tab pane is collapsible, toggle the button selection;
             // otherwise, select it
-            setSelected(collapsible ? !isSelected() : true);
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
+            setSelected(tabPane.isCollapsible() ? !isSelected() : true);
             super.press();
         }
     }
@@ -150,6 +151,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         @Override
         public Dimensions getPreferredSize() {
             TabButton tabButton = (TabButton)getComponent();
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
 
             Button.DataRenderer dataRenderer = tabButton.getDataRenderer();
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
@@ -166,6 +168,11 @@ public class TerraTabPaneSkin extends ContainerSkin
                     preferredHeight = preferredContentSize.height
                         + buttonPadding.top + buttonPadding.bottom + 2;
 
+                    if (tabPane.isCloseable()
+                        && tabButton.isSelected()) {
+                        preferredWidth += CLOSE_TRIGGER_SIZE + buttonSpacing;
+                    }
+
                     break;
                 }
 
@@ -175,6 +182,11 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     preferredHeight = preferredContentSize.width
                         + buttonPadding.left + buttonPadding.right + 2;
+
+                    if (tabPane.isCloseable()
+                        && tabButton.isSelected()) {
+                        preferredHeight += CLOSE_TRIGGER_SIZE + buttonSpacing;
+                    }
 
                     break;
                 }
@@ -206,6 +218,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         @Override
         public void paint(Graphics2D graphics) {
             TabButton tabButton = (TabButton)getComponent();
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
 
             boolean active = (selectionChangeTransition != null
                 && selectionChangeTransition.tab == tabButton.tab);
@@ -263,9 +276,6 @@ public class TerraTabPaneSkin extends ContainerSkin
                 }
             }
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_OFF);
-
             if (!(tabButton.isSelected()
                 || active)) {
                 // Draw divider
@@ -287,23 +297,39 @@ public class TerraTabPaneSkin extends ContainerSkin
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
 
             Graphics2D contentGraphics = (Graphics2D)graphics.create();
+            contentGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_OFF);
 
             switch (tabOrientation) {
                 case HORIZONTAL: {
-                    dataRenderer.setSize(Math.max(getWidth() - (buttonPadding.left + buttonPadding.right + 2), 0),
+                    int contentWidth = getWidth() - (buttonPadding.left + buttonPadding.right + 2);
+                    if (tabPane.isCloseable()
+                        && tabButton.isSelected()) {
+                        contentWidth -= (CLOSE_TRIGGER_SIZE + buttonSpacing);
+                    }
+
+                    dataRenderer.setSize(Math.max(contentWidth, 0),
                         Math.max(getHeight() - (buttonPadding.top + buttonPadding.bottom + 2), 0));
 
                     contentGraphics.translate(buttonPadding.left + 1, buttonPadding.top + 1);
+
                     break;
                 }
 
                 case VERTICAL: {
-                    dataRenderer.setSize(Math.max(getHeight() - (buttonPadding.top + buttonPadding.bottom + 2), 0),
+                    int contentWidth = getHeight() - (buttonPadding.top + buttonPadding.bottom + 2);
+                    if (tabPane.isCloseable()
+                        && tabButton.isSelected()) {
+                        contentWidth -= (CLOSE_TRIGGER_SIZE + buttonSpacing);
+                    }
+
+                    dataRenderer.setSize(Math.max(contentWidth, 0),
                         Math.max(getWidth() - (buttonPadding.left + buttonPadding.right + 2), 0));
 
                     contentGraphics.translate(buttonPadding.top + 1, buttonPadding.left + 1);
                     contentGraphics.rotate(-Math.PI / 2d);
                     contentGraphics.translate(-dataRenderer.getWidth(), 0);
+
                     break;
                 }
             }
@@ -312,6 +338,31 @@ public class TerraTabPaneSkin extends ContainerSkin
             dataRenderer.paint(contentGraphics);
 
             contentGraphics.dispose();
+
+            // Draw the close trigger
+            if (tabPane.isCloseable()
+                && tabButton.isSelected()) {
+                graphics.setStroke(new BasicStroke(2.5f));
+
+                int x = 0;
+                int y = 0;
+                switch (tabOrientation) {
+                    case HORIZONTAL: {
+                        x = width - (buttonPadding.right + CLOSE_TRIGGER_SIZE + 1);
+                        y = (height - CLOSE_TRIGGER_SIZE) / 2;
+                        break;
+                    }
+
+                    case VERTICAL: {
+                        x = (width - CLOSE_TRIGGER_SIZE) / 2;
+                        y = height - (buttonPadding.bottom + CLOSE_TRIGGER_SIZE + 1);
+                        break;
+                    }
+                }
+
+                graphics.draw(new Line2D.Double(x, y, x + CLOSE_TRIGGER_SIZE - 1, y + CLOSE_TRIGGER_SIZE - 1));
+                graphics.draw(new Line2D.Double(x, y + CLOSE_TRIGGER_SIZE - 1, x + CLOSE_TRIGGER_SIZE - 1, y));
+            }
         }
 
         @Override
@@ -339,6 +390,12 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         public Color getDisabledColor() {
             return disabledButtonColor;
+        }
+
+        @Override
+        public void stateChanged(Button button, Button.State previousState) {
+            super.stateChanged(button, previousState);
+            invalidateComponent();
         }
     }
 
@@ -418,11 +475,11 @@ public class TerraTabPaneSkin extends ContainerSkin
     private Color buttonColor;
     private Color disabledButtonColor;
     private Insets buttonPadding;
+    private int buttonSpacing;
 
     private Color activeButtonBevelColor;
     private Color inactiveButtonBevelColor;
 
-    private boolean collapsible = false;
     private Orientation tabOrientation = Orientation.HORIZONTAL;
 
     private SelectionChangeTransition selectionChangeTransition = null;
@@ -442,6 +499,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     public static final int CORNER_RADIUS = 4;
     public static final int GRADIENT_BEVEL_THICKNESS = 8;
+    private static final int CLOSE_TRIGGER_SIZE = 6;
 
     public TerraTabPaneSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -453,6 +511,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         buttonColor = theme.getColor(1);
         disabledButtonColor = theme.getColor(7);
         buttonPadding = new Insets(3, 4, 3, 4);
+        buttonSpacing = 6;
 
         activeButtonBevelColor = TerraTheme.brighten(activeTabColor);
         inactiveButtonBevelColor = TerraTheme.brighten(inactiveTabColor);
@@ -924,13 +983,13 @@ public class TerraTabPaneSkin extends ContainerSkin
             Bounds contentBounds = new Bounds(x, y, width, height);
 
             graphics.setPaint(activeTabColor);
+
+            // Paint the background
             graphics.fillRect(contentBounds.x, contentBounds.y,
                 contentBounds.width, contentBounds.height);
 
             // Draw the border
             graphics.setPaint(borderColor);
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
             graphics.draw(new Rectangle2D.Double(contentBounds.x + 0.5, contentBounds.y + 0.5,
                 contentBounds.width - 1, contentBounds.height - 1));
         }
@@ -1180,14 +1239,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         setTabOrientation(Orientation.valueOf(tabOrientation.toUpperCase()));
     }
 
-    public boolean isCollapsible() {
-        return collapsible;
-    }
-
-    public void setCollapsible(boolean collapsible) {
-        this.collapsible = collapsible;
-    }
-
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
@@ -1322,7 +1373,23 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     @Override
     public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer) {
-        buttonBoxPane.invalidate();
+        for (Component tabButton : buttonBoxPane) {
+            tabButton.invalidate();
+        }
+    }
+
+    @Override
+    public void closeableChanged(TabPane tabPane) {
+        Button selectedTabButton = tabButtonGroup.getSelection();
+
+        if (selectedTabButton != null) {
+            selectedTabButton.invalidate();
+        }
+    }
+
+    @Override
+    public void collapsibleChanged(TabPane tabPane) {
+        // No-op
     }
 
     // Tab pane selection events
@@ -1424,14 +1491,15 @@ public class TerraTabPaneSkin extends ContainerSkin
 
         if (selectedIndex == -1
             || previousSelectedIndex == -1) {
-            invalidateComponent();
+            buttonBoxPane.invalidate();
         }
     }
 
     // Tab pane attribute events
     @Override
     public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
-        buttonBoxPane.invalidate();
+        int i = tabPane.getTabs().indexOf(component);
+        buttonBoxPane.get(i).invalidate();
     }
 
     @Override

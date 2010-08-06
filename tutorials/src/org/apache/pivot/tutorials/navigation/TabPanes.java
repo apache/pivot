@@ -70,7 +70,7 @@ public class TabPanes extends Window implements Bindable {
     }
 
     private void updateTabPane() {
-        tabPane.getStyles().put("collapsible", collapsibleCheckbox.isSelected());
+        tabPane.setCollapsible(collapsibleCheckbox.isSelected());
 
         if (horizontalRadioButton.isSelected()) {
             tabPane.getStyles().put("tabOrientation", Orientation.HORIZONTAL);

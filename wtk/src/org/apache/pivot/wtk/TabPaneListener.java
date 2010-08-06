@@ -41,6 +41,14 @@ public interface TabPaneListener {
         @Override
         public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer) {
         }
+
+        @Override
+        public void closeableChanged(TabPane tabPane) {
+        }
+
+        @Override
+        public void collapsibleChanged(TabPane tabPane) {
+        }
     }
 
     /**
@@ -75,4 +83,18 @@ public interface TabPaneListener {
      * @param previousTabDataRenderer
      */
     public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer);
+
+    /**
+     * Called when a tab pane's closeable property has changed.
+     *
+     * @param tabPane
+     */
+    public void closeableChanged(TabPane tabPane);
+
+    /**
+     * Called when a tab pane's collapsible property has changed.
+     *
+     * @param tabPane
+     */
+    public void collapsibleChanged(TabPane tabPane);
 }

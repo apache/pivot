@@ -162,6 +162,20 @@ public class TabPane extends Container {
                 listener.tabDataRendererChanged(tabPane, previousTabDataRenderer);
             }
         }
+
+        @Override
+        public void closeableChanged(TabPane tabPane) {
+            for (TabPaneListener listener : this) {
+                listener.closeableChanged(tabPane);
+            }
+        }
+
+        @Override
+        public void collapsibleChanged(TabPane tabPane) {
+            for (TabPaneListener listener : this) {
+                listener.collapsibleChanged(tabPane);
+            }
+        }
     }
 
     private static class TabPaneSelectionListenerList extends ListenerList<TabPaneSelectionListener>
@@ -214,6 +228,8 @@ public class TabPane extends Container {
     private Component corner = null;
     private int selectedIndex = -1;
     private Button.DataRenderer tabDataRenderer = DEFAULT_TAB_DATA_RENDERER;
+    private boolean closeable = false;
+    private boolean collapsible = false;
 
     private TabPaneListenerList tabPaneListeners = new TabPaneListenerList();
     private TabPaneSelectionListenerList tabPaneSelectionListeners = new TabPaneSelectionListenerList();
@@ -297,6 +313,28 @@ public class TabPane extends Container {
         if (previousTabDataRenderer != tabDataRenderer) {
             this.tabDataRenderer = tabDataRenderer;
             tabPaneListeners.tabDataRendererChanged(this, previousTabDataRenderer);
+        }
+    }
+
+    public boolean isCloseable() {
+        return closeable;
+    }
+
+    public void setCloseable(boolean closeable) {
+        if (this.closeable != closeable) {
+            this.closeable = closeable;
+            tabPaneListeners.closeableChanged(this);
+        }
+    }
+
+    public boolean isCollapsible() {
+        return collapsible;
+    }
+
+    public void setCollapsible(boolean collapsible) {
+        if (this.collapsible != collapsible) {
+            this.collapsible = collapsible;
+            tabPaneListeners.collapsibleChanged(this);
         }
     }
 

@@ -834,7 +834,9 @@ public class TerraAccordionSkin extends ContainerSkin
 
     @Override
     public void headerDataRendererChanged(Accordion accordion, Button.DataRenderer previousHeaderDataRenderer) {
-        invalidateComponent();
+        for (Component panelHeader : panelHeaders) {
+            panelHeader.invalidate();
+        }
     }
 
     // Accordion selection events
@@ -913,7 +915,8 @@ public class TerraAccordionSkin extends ContainerSkin
     // Accordion attribute events
     @Override
     public void headerDataChanged(Accordion accordion, Component component, Object previousHeaderData) {
-        invalidateComponent();
+        int i = accordion.getPanels().indexOf(component);
+        panelHeaders.get(i).invalidate();
     }
 
     @Override

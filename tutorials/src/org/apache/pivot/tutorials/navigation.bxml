@@ -60,7 +60,7 @@ limitations under the License.
                     </TablePane.Row>
 
                     <TablePane.Row height="-1">
-                        <TabPane selectedIndex="-1" styles="{tabOrientation:'horizontal', collapsible:true}"
+                        <TabPane selectedIndex="-1" collapsible="true" styles="{tabOrientation:'horizontal'}"
                             tooltipText="Click a tab to expand/collapse">
                             <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                 <TabPane.tabData>
@@ -113,7 +113,7 @@ limitations under the License.
                             </Label>
                         </TabPane>
 
-                        <TabPane selectedIndex="-1" styles="{tabOrientation:'vertical', collapsible:true}"
+                        <TabPane selectedIndex="-1" collapsible="true" styles="{tabOrientation:'vertical'}"
                             tooltipText="Click a tab to expand/collapse">
                             <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                 <TabPane.tabData>

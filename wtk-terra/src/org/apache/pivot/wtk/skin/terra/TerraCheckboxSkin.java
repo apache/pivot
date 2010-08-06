@@ -229,15 +229,6 @@ public class TerraCheckboxSkin extends CheckboxSkin {
                 m + offsetX, n + offsetY);
             graphics.drawLine(m + offsetX, n + offsetY,
                 (m + n) + offsetX, offsetY);
-
-            /*
-            // Draw an "X"
-            int checkSize = (CHECKBOX_SIZE - (CHECKMARK_SIZE - 1)) / 2;
-            graphics.draw(new Line2D.Double(checkSize, checkSize,
-                checkSize + CHECKMARK_SIZE - 1, checkSize + CHECKMARK_SIZE - 1));
-            graphics.draw(new Line2D.Double(checkSize, checkSize + CHECKMARK_SIZE - 1,
-                checkSize + CHECKMARK_SIZE - 1, checkSize));
-            */
         } else {
             if (state == Button.State.MIXED) {
                 graphics.setColor(buttonSelectionColor);
