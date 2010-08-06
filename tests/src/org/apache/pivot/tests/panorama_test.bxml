@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<TabPane selectedIndex="0"
+<TabPane closeable="true" selectedIndex="0"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <Label TabPane.tabData="Tab 1" TabPane.tooltipText="Tooltip 1" preferredWidth="320" preferredHeight="240" text="Tab 1"/>

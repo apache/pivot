@@ -670,16 +670,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
                     int width = getWidth();
                     int height = getHeight();
 
-                    // TODO
-                    /*
-                    if (listButton.isSplit()) {
-                        Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
-                            TRIGGER_WIDTH + 1, Math.max(height, 0));
-                        if (!triggerBounds.contains(mouseDownX, mouseDownY)) {
-                            return;
-                        }
-                    }
-                    */
+                    // TODO If this is a split button, check for mouse down over the trigger?
+                    // Or should we do this in mouseDown()?
 
                     // Adjust for list size
                     int listSize = listButton.getListSize();

@@ -375,7 +375,14 @@ public class TerraTabPaneSkin extends ContainerSkin
             boolean consumed = super.mouseClick(component, button, x, y, count);
 
             TabButton tabButton = (TabButton)getComponent();
-            tabButton.press();
+
+            if (tabButton.isSelected()
+                && getCloseTriggerBounds().contains(x, y)) {
+                TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
+                tabPane.getTabs().remove(tabButton.tab);
+            } else {
+                tabButton.press();
+            }
 
             return consumed;
         }
@@ -396,6 +403,12 @@ public class TerraTabPaneSkin extends ContainerSkin
         public void stateChanged(Button button, Button.State previousState) {
             super.stateChanged(button, previousState);
             invalidateComponent();
+        }
+
+        public Bounds getCloseTriggerBounds() {
+            return new Bounds(getWidth() - (CLOSE_TRIGGER_SIZE + buttonPadding.right + 1),
+                (getHeight() - CLOSE_TRIGGER_SIZE) / 2,
+                CLOSE_TRIGGER_SIZE, CLOSE_TRIGGER_SIZE);
         }
     }
 
@@ -1359,8 +1372,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             tabButton.setButtonGroup(null);
 
             // Stop listening for state changes on the tab
-            Component tab = (Component)tabButton.getButtonData();
-            tab.getComponentStateListeners().remove(tabStateListener);
+            tabButton.tab.getComponentStateListeners().remove(tabStateListener);
         }
 
         invalidateComponent();

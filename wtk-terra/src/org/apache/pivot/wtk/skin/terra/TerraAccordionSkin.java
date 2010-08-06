@@ -822,8 +822,7 @@ public class TerraAccordionSkin extends ContainerSkin
             panelHeader.setButtonGroup(null);
 
             // Stop listening for state changes on the panel
-            Component panel = (Component)panelHeader.getButtonData();
-            panel.getComponentStateListeners().remove(panelStateListener);
+            panelHeader.panel.getComponentStateListeners().remove(panelStateListener);
 
             // Remove the header
             accordion.remove(panelHeader);
