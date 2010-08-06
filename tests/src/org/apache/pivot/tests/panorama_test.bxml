@@ -19,15 +19,15 @@ limitations under the License.
 <TabPane selectedIndex="0"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <Label TabPane.tooltipText="Tooltip1" TabPane.label="Tab 1" preferredWidth="320" preferredHeight="240" text="Tab 1"/>
-    <Label TabPane.label="Tab 2" preferredWidth="320" preferredHeight="240" text="Tab 2"/>
-    <Label TabPane.label="Tab 3" preferredWidth="320" preferredHeight="240" text="Tab 3"/>
-    <Label TabPane.label="Tab 4" preferredWidth="320" preferredHeight="240" text="Tab 4"/>
-    <Label TabPane.label="Tab 5" preferredWidth="320" preferredHeight="240" text="Tab 5"/>
-    <Label TabPane.label="Tab 6" preferredWidth="320" preferredHeight="240" text="Tab 6"/>
-    <Label TabPane.label="Tab 7" preferredWidth="320" preferredHeight="240" text="Tab 7"/>
-    <Label TabPane.label="Tab 8" preferredWidth="320" preferredHeight="240" text="Tab 8"/>
-    <Label TabPane.label="Tab 9" preferredWidth="320" preferredHeight="240" text="Tab 9"/>
-    <Label TabPane.label="Tab 10" preferredWidth="320" preferredHeight="240" text="Tab 10"/>
+    <Label TabPane.tabData="Tab 1" TabPane.tooltipText="Tooltip 1" preferredWidth="320" preferredHeight="240" text="Tab 1"/>
+    <Label TabPane.tabData="Tab 2" TabPane.tooltipText="Tooltip 2" preferredWidth="320" preferredHeight="240" text="Tab 2"/>
+    <Label TabPane.tabData="Tab 3" preferredWidth="320" preferredHeight="240" text="Tab 3"/>
+    <Label TabPane.tabData="Tab 4" preferredWidth="320" preferredHeight="240" text="Tab 4"/>
+    <Label TabPane.tabData="Tab 5" preferredWidth="320" preferredHeight="240" text="Tab 5"/>
+    <Label TabPane.tabData="Tab 6" preferredWidth="320" preferredHeight="240" text="Tab 6"/>
+    <Label TabPane.tabData="Tab 7" preferredWidth="320" preferredHeight="240" text="Tab 7"/>
+    <Label TabPane.tabData="Tab 8" preferredWidth="320" preferredHeight="240" text="Tab 8"/>
+    <Label TabPane.tabData="Tab 9" preferredWidth="320" preferredHeight="240" text="Tab 9"/>
+    <Label TabPane.tabData="Tab 10" preferredWidth="320" preferredHeight="240" text="Tab 10"/>
 </TabPane>
 

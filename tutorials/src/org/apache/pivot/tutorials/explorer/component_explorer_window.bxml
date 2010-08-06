@@ -26,7 +26,7 @@ limitations under the License.
         <SplitPane bxml:id="splitPane" orientation="horizontal" splitRatio="0.25">
             <left>
                 <TabPane>
-                    <Border TabPane.label="%explorerPane.label">
+                    <Border TabPane.tabData="%explorerPane.label">
                         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                             <TreeView bxml:id="treeView">
                                 <nodeRenderer>
@@ -359,13 +359,13 @@ limitations under the License.
                         <SplitPane orientation="horizontal" splitRatio="0.5">
                             <left>
                                 <TabPane>
-                                    <Border TabPane.label="%contentPane.visualizationLabel">
+                                    <Border TabPane.tabData="%contentPane.visualizationLabel">
                                         <ScrollPane bxml:id="contentScrollPane">
                                             <Border bxml:id="contentPane"
                                                 styles="{thickness:0, padding:6}"/>
                                         </ScrollPane>
                                     </Border>
-                                    <Border TabPane.label="%contentPane.bxmlSourceLabel">
+                                    <Border TabPane.tabData="%contentPane.bxmlSourceLabel">
                                         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
                                             verticalScrollBarPolicy="fill_to_capacity">
                                             <TextArea bxml:id="sourceTextArea"
@@ -450,7 +450,7 @@ limitations under the License.
                             </left>
                             <right>
                                 <TabPane bxml:id="inspectorTabPane">
-                                    <Border TabPane.label="%inspectorPane.propertiesLabel">
+                                    <Border TabPane.tabData="%inspectorPane.propertiesLabel">
                                         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                                             <CardPane styles="{padding:10}">
                                                 <tools:ComponentPropertyInspector
@@ -458,7 +458,7 @@ limitations under the License.
                                             </CardPane>
                                         </ScrollPane>
                                     </Border>
-                                    <Border TabPane.label="%inspectorPane.stylesLabel">
+                                    <Border TabPane.tabData="%inspectorPane.stylesLabel">
                                         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                                                 <CardPane styles="{padding:10}">
                                                     <tools:ComponentStyleInspector
@@ -473,7 +473,7 @@ limitations under the License.
                     <bottom>
                         <TabPane>
                             <tools:EventLogger bxml:id="eventLogger"
-                                TabPane.label="%eventLoggerPane.label"/>
+                                TabPane.tabData="%eventLoggerPane.label"/>
                             <corner>
                                 <BoxPane styles="{padding:{right:6},
                                     horizontalAlignment:'right', fill:true}">

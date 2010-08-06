@@ -200,10 +200,9 @@ public class Accordion extends Container {
         }
     }
 
-    private int selectedIndex = -1;
-
     private ArrayList<Component> panels = new ArrayList<Component>();
     private PanelSequence panelSequence = new PanelSequence();
+    private int selectedIndex = -1;
     private Button.DataRenderer headerDataRenderer = DEFAULT_HEADER_DATA_RENDERER;
 
     private AccordionListenerList accordionListeners = new AccordionListenerList();

@@ -55,8 +55,10 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 public class TerraAccordionSkin extends ContainerSkin
     implements AccordionListener, AccordionSelectionListener, AccordionAttributeListener {
     protected class PanelHeader extends Button {
+        private final Component panel;
+
         public PanelHeader(Component panel) {
-            super(panel);
+            this.panel = panel;
             super.setToggleButton(true);
 
             setSkin(new PanelHeaderSkin());
@@ -64,7 +66,7 @@ public class TerraAccordionSkin extends ContainerSkin
 
         @Override
         public Object getButtonData() {
-            return Accordion.getHeaderData((Component)super.getButtonData());
+            return Accordion.getHeaderData(panel);
         }
 
         @Override
@@ -73,8 +75,19 @@ public class TerraAccordionSkin extends ContainerSkin
         }
 
         @Override
+        public Button.DataRenderer getDataRenderer() {
+            Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
+            return accordion.getHeaderDataRenderer();
+        }
+
+        @Override
+        public void setDataRenderer(Button.DataRenderer dataRenderer) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
         public String getTooltipText() {
-            return Accordion.getTooltipText((Component)super.getButtonData());
+            return Accordion.getTooltipText(panel);
         }
 
         @Override
@@ -104,11 +117,10 @@ public class TerraAccordionSkin extends ContainerSkin
         public int getPreferredWidth(int height) {
             PanelHeader panelHeader = (PanelHeader)getComponent();
 
-            Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
-            Button.DataRenderer headerDataRenderer = accordion.getHeaderDataRenderer();
-            headerDataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
+            Button.DataRenderer dataRenderer = panelHeader.getDataRenderer();
+            dataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
 
-            int preferredWidth = headerDataRenderer.getPreferredWidth(-1)
+            int preferredWidth = dataRenderer.getPreferredWidth(-1)
                 + buttonPadding.left + buttonPadding.right + 2;
 
             return preferredWidth;
@@ -118,9 +130,8 @@ public class TerraAccordionSkin extends ContainerSkin
         public int getPreferredHeight(int width) {
             PanelHeader panelHeader = (PanelHeader)getComponent();
 
-            Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
-            Button.DataRenderer headerDataRenderer = accordion.getHeaderDataRenderer();
-            headerDataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
+            Button.DataRenderer dataRenderer = panelHeader.getDataRenderer();
+            dataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
 
             // Include padding and border in constraint
             int contentWidth = width;
@@ -129,7 +140,7 @@ public class TerraAccordionSkin extends ContainerSkin
                     + buttonPadding.right + 2), 0);
             }
 
-            int preferredHeight = headerDataRenderer.getPreferredHeight(contentWidth)
+            int preferredHeight = dataRenderer.getPreferredHeight(contentWidth)
                 + buttonPadding.top + buttonPadding.bottom + 2;
 
             return preferredHeight;
@@ -139,11 +150,10 @@ public class TerraAccordionSkin extends ContainerSkin
         public Dimensions getPreferredSize() {
             PanelHeader panelHeader = (PanelHeader)getComponent();
 
-            Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
-            Button.DataRenderer headerDataRenderer = accordion.getHeaderDataRenderer();
-            headerDataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
+            Button.DataRenderer dataRenderer = panelHeader.getDataRenderer();
+            dataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
 
-            Dimensions preferredContentSize = headerDataRenderer.getPreferredSize();
+            Dimensions preferredContentSize = dataRenderer.getPreferredSize();
 
             int preferredWidth = preferredContentSize.width
                 + buttonPadding.left + buttonPadding.right + 2;
@@ -158,14 +168,13 @@ public class TerraAccordionSkin extends ContainerSkin
         public int getBaseline(int width, int height) {
             PanelHeader panelHeader = (PanelHeader)getComponent();
 
-            Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
-            Button.DataRenderer headerDataRenderer = accordion.getHeaderDataRenderer();
-            headerDataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
+            Button.DataRenderer dataRenderer = panelHeader.getDataRenderer();
+            dataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
 
             int clientWidth = Math.max(width - (buttonPadding.left + buttonPadding.right + 2), 0);
             int clientHeight = Math.max(height - (buttonPadding.top + buttonPadding.bottom + 2), 0);
 
-            int baseline = headerDataRenderer.getBaseline(clientWidth, clientHeight);
+            int baseline = dataRenderer.getBaseline(clientWidth, clientHeight);
 
             if (baseline != -1) {
                 baseline += buttonPadding.top + 1;
@@ -191,16 +200,15 @@ public class TerraAccordionSkin extends ContainerSkin
             GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
             // Paint the content
-            Accordion accordion = (Accordion)TerraAccordionSkin.this.getComponent();
-            Button.DataRenderer headerDataRenderer = accordion.getHeaderDataRenderer();
-            headerDataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
-            headerDataRenderer.setSize(Math.max(width - (buttonPadding.left + buttonPadding.right + 2), 0),
+            Button.DataRenderer dataRenderer = panelHeader.getDataRenderer();
+            dataRenderer.render(panelHeader.getButtonData(), panelHeader, false);
+            dataRenderer.setSize(Math.max(width - (buttonPadding.left + buttonPadding.right + 2), 0),
                 Math.max(getHeight() - (buttonPadding.top + buttonPadding.bottom + 2), 0));
 
             Graphics2D contentGraphics = (Graphics2D)graphics.create();
             contentGraphics.translate(buttonPadding.left + 1, buttonPadding.top + 1);
-            contentGraphics.clipRect(0, 0, headerDataRenderer.getWidth(), headerDataRenderer.getHeight());
-            headerDataRenderer.paint(contentGraphics);
+            contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
+            dataRenderer.paint(contentGraphics);
             contentGraphics.dispose();
         }
 
@@ -826,7 +834,7 @@ public class TerraAccordionSkin extends ContainerSkin
 
     @Override
     public void headerDataRendererChanged(Accordion accordion, Button.DataRenderer previousHeaderDataRenderer) {
-        // No-op
+        invalidateComponent();
     }
 
     // Accordion selection events

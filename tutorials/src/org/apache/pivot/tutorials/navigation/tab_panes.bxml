@@ -36,31 +36,45 @@ limitations under the License.
                             </BoxPane>
                         </corner>
 
-                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.label="Bell"
-                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                        <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <TabPane.tabData>
+                                <content:ButtonData icon="org/apache/pivot/tutorials/bell.png"
+                                    text="Bell"/>
+                            </TabPane.tabData>
                             <Border styles="{padding:2}">
                                 <Label text="240x180" preferredWidth="240" preferredHeight="180"
                                     styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                             </Border>
                         </BoxPane>
 
-                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.label="Clock"
-                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                        <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <TabPane.tabData>
+                                <content:ButtonData icon="org/apache/pivot/tutorials/clock.png"
+                                    text="Clock"/>
+                            </TabPane.tabData>
                             <Border styles="{padding:2}">
                                 <Label text="320x240" preferredWidth="320" preferredHeight="240"
                                     styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                             </Border>
                         </BoxPane>
 
-                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.label="House"
-                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                        <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <TabPane.tabData>
+                                <content:ButtonData icon="org/apache/pivot/tutorials/house.png"
+                                    text="House"/>
+                            </TabPane.tabData>
                             <Border styles="{padding:2}">
                                 <Label text="480x360" preferredWidth="480" preferredHeight="360"
                                     styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
                             </Border>
                         </BoxPane>
 
-                        <BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.label="Star" enabled="false"/>
+                        <BoxPane enabled="false">
+                            <TabPane.tabData>
+                                <content:ButtonData icon="org/apache/pivot/tutorials/star.png"
+                                    text="Star"/>
+                            </TabPane.tabData>
+                        </BoxPane>
                     </TabPane>
                 </BoxPane>
             </Border>

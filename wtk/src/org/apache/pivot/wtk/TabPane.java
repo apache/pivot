@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-import java.net.URL;
 import java.util.Iterator;
 
 import org.apache.pivot.beans.DefaultProperty;
@@ -25,8 +24,7 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.util.concurrent.TaskExecutionException;
-import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.content.ButtonDataRenderer;
 
 /**
  * Container that provides access to a set of components via selectable tabs,
@@ -131,10 +129,8 @@ public class TabPane extends Container {
     }
 
     private enum Attribute {
-        LABEL,
-        ICON,
-        CLOSEABLE,
-        TOOLTIP;
+        TAB_DATA,
+        TOOLTIP_TEXT;
     }
 
     private static class TabPaneListenerList extends ListenerList<TabPaneListener>
@@ -157,6 +153,13 @@ public class TabPane extends Container {
         public void cornerChanged(TabPane tabPane, Component previousCorner) {
             for (TabPaneListener listener : this) {
                 listener.cornerChanged(tabPane, previousCorner);
+            }
+        }
+
+        @Override
+        public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer) {
+            for (TabPaneListener listener : this) {
+                listener.tabDataRendererChanged(tabPane, previousTabDataRenderer);
             }
         }
     }
@@ -192,23 +195,9 @@ public class TabPane extends Container {
     private static class TabPaneAttributeListenerList extends ListenerList<TabPaneAttributeListener>
         implements TabPaneAttributeListener {
         @Override
-        public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
+        public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
             for (TabPaneAttributeListener listener : this) {
-                listener.labelChanged(tabPane, component, previousLabel);
-            }
-        }
-
-        @Override
-        public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
-            for (TabPaneAttributeListener listener : this) {
-                listener.iconChanged(tabPane, component, previousIcon);
-            }
-        }
-
-        @Override
-        public void closeableChanged(TabPane tabPane, Component component) {
-            for (TabPaneAttributeListener listener : this) {
-                listener.closeableChanged(tabPane, component);
+                listener.tabDataChanged(tabPane, component, previousTabData);
             }
         }
 
@@ -220,48 +209,21 @@ public class TabPane extends Container {
         }
     }
 
-    private int selectedIndex = -1;
-
     private ArrayList<Component> tabs = new ArrayList<Component>();
     private TabSequence tabSequence = new TabSequence();
-
     private Component corner = null;
+    private int selectedIndex = -1;
+    private Button.DataRenderer tabDataRenderer = DEFAULT_TAB_DATA_RENDERER;
 
     private TabPaneListenerList tabPaneListeners = new TabPaneListenerList();
     private TabPaneSelectionListenerList tabPaneSelectionListeners = new TabPaneSelectionListenerList();
     private TabPaneAttributeListenerList tabPaneAttributeListeners = new TabPaneAttributeListenerList();
 
+    private static final Button.DataRenderer DEFAULT_TAB_DATA_RENDERER = new ButtonDataRenderer();
+
     public TabPane() {
         super();
         installThemeSkin(TabPane.class);
-    }
-
-    public int getSelectedIndex() {
-        return selectedIndex;
-    }
-
-    public void setSelectedIndex(int selectedIndex) {
-        if (selectedIndex < -1
-            || selectedIndex > tabs.getLength() - 1) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        int previousSelectedIndex = this.selectedIndex;
-
-        if (previousSelectedIndex != selectedIndex) {
-            Vote vote = tabPaneSelectionListeners.previewSelectedIndexChange(this, selectedIndex);
-
-            if (vote == Vote.APPROVE) {
-                this.selectedIndex = selectedIndex;
-                tabPaneSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
-            } else {
-                tabPaneSelectionListeners.selectedIndexChangeVetoed(this, vote);
-            }
-        }
-    }
-
-    public Component getSelectedTab() {
-        return (selectedIndex == -1) ? null : tabs.get(selectedIndex);
     }
 
     public TabSequence getTabs() {
@@ -294,6 +256,50 @@ public class TabPane extends Container {
         }
     }
 
+    public int getSelectedIndex() {
+        return selectedIndex;
+    }
+
+    public void setSelectedIndex(int selectedIndex) {
+        if (selectedIndex < -1
+            || selectedIndex > tabs.getLength() - 1) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        int previousSelectedIndex = this.selectedIndex;
+
+        if (previousSelectedIndex != selectedIndex) {
+            Vote vote = tabPaneSelectionListeners.previewSelectedIndexChange(this, selectedIndex);
+
+            if (vote == Vote.APPROVE) {
+                this.selectedIndex = selectedIndex;
+                tabPaneSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
+            } else {
+                tabPaneSelectionListeners.selectedIndexChangeVetoed(this, vote);
+            }
+        }
+    }
+
+    public Component getSelectedTab() {
+        return (selectedIndex == -1) ? null : tabs.get(selectedIndex);
+    }
+
+    public Button.DataRenderer getTabDataRenderer() {
+        return tabDataRenderer;
+    }
+
+    public void setTabDataRenderer(Button.DataRenderer tabDataRenderer) {
+        if (tabDataRenderer == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Button.DataRenderer previousTabDataRenderer = this.tabDataRenderer;
+        if (previousTabDataRenderer != tabDataRenderer) {
+            this.tabDataRenderer = tabDataRenderer;
+            tabPaneListeners.tabDataRendererChanged(this, previousTabDataRenderer);
+        }
+    }
+
     @Override
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
@@ -321,107 +327,30 @@ public class TabPane extends Container {
         return tabPaneAttributeListeners;
     }
 
-    public static String getLabel(Component component) {
-        return (String)component.getAttribute(Attribute.LABEL);
+    public static Object getTabData(Component component) {
+        return component.getAttribute(Attribute.TAB_DATA);
     }
 
-    public static void setLabel(Component component, String label) {
-        String previousLabel = (String)component.setAttribute(Attribute.LABEL, label);
+    public static void setTabData(Component component, Object tabData) {
+        Object previousTabData = component.setAttribute(Attribute.TAB_DATA, tabData);
 
-        if (previousLabel != label) {
+        if (previousTabData != tabData) {
             Container parent = component.getParent();
 
             if (parent instanceof TabPane) {
                 TabPane tabPane = (TabPane)parent;
-                tabPane.tabPaneAttributeListeners.labelChanged(tabPane, component, previousLabel);
+                tabPane.tabPaneAttributeListeners.tabDataChanged(tabPane, component,
+                    previousTabData);
             }
         }
     }
 
-    public static Image getIcon(Component component) {
-        return (Image)component.getAttribute(Attribute.ICON);
-    }
-
-    public static void setIcon(Component component, Image icon) {
-        Image previousIcon = (Image)component.setAttribute(Attribute.ICON, icon);
-
-        if (previousIcon != icon) {
-            Container parent = component.getParent();
-
-            if (parent instanceof TabPane) {
-                TabPane tabPane = (TabPane)parent;
-                tabPane.tabPaneAttributeListeners.iconChanged(tabPane, component, previousIcon);
-            }
-        }
-    }
-
-    public static final void setIcon(Component component, URL icon) {
-        if (icon == null) {
-            throw new IllegalArgumentException("icon is null.");
-        }
-
-        Image iconImage = (Image)ApplicationContext.getResourceCache().get(icon);
-
-        if (iconImage == null) {
-            try {
-                iconImage = Image.load(icon);
-            } catch (TaskExecutionException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-
-            ApplicationContext.getResourceCache().put(icon, iconImage);
-        }
-
-        setIcon(component, iconImage);
-    }
-
-    public static final void setIcon(Component component, String icon) {
-        if (icon == null) {
-            throw new IllegalArgumentException("icon is null.");
-        }
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setIcon(component, classLoader.getResource(icon));
-    }
-
-    public static boolean isCloseable(Component component) {
-        Boolean value = (Boolean)component.getAttribute(Attribute.CLOSEABLE);
-        return (value == null) ? false : value;
-    }
-
-    public static void setCloseable(Component component, boolean closeable) {
-        Boolean previousValue = (Boolean)component.setAttribute(Attribute.CLOSEABLE, closeable);
-        boolean previousCloseable = (previousValue == null) ? false : previousValue;
-
-        if (previousCloseable != closeable) {
-            Container parent = component.getParent();
-
-            if (parent instanceof TabPane) {
-                TabPane tabPane = (TabPane)parent;
-                tabPane.tabPaneAttributeListeners.closeableChanged(tabPane, component);
-            }
-        }
-    }
-
-    /**
-     * Returns the tab component's tooltip text.
-     *
-     * @return
-     * The tab component's tooltip text, or <tt>null</tt> if no tooltip is
-     * specified.
-     */
     public static String getTooltipText(Component component) {
-        return (String)component.getAttribute(Attribute.TOOLTIP);
+        return (String)component.getAttribute(Attribute.TOOLTIP_TEXT);
     }
 
-    /**
-     * Sets the tab component's tooltip text.
-     *
-     * @param tooltipText
-     * The tab component's tooltip text, or <tt>null</tt> for no tooltip.
-     */
     public static void setTooltipText(Component component, String tooltipText) {
-        String previousTooltipText = (String)component.setAttribute(Attribute.TOOLTIP, tooltipText);
+        String previousTooltipText = (String)component.setAttribute(Attribute.TOOLTIP_TEXT, tooltipText);
 
         if (previousTooltipText != tooltipText) {
             Container parent = component.getParent();

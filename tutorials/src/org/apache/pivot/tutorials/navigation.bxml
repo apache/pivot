@@ -39,30 +39,47 @@ limitations under the License.
 
                     <TablePane.Row height="1*">
                         <TabPane selectedIndex="0" styles="{tabOrientation:'horizontal'}">
-                            <Label TabPane.icon="@bell.png" TabPane.label="Bell" text="Basic"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                            <Label TabPane.icon="@clock.png" TabPane.label="Clock" text="Basic"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                            <Label TabPane.icon="@house.png" TabPane.label="House" text="Basic"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                            <Label text="Basic" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@bell.png" text="Bell"/>
+                                </TabPane.tabData>
+                            </Label>
+
+                            <Label text="Basic" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@clock.png" text="Clock"/>
+                                </TabPane.tabData>
+                            </Label>
+
+                            <Label text="Basic" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@house.png" text="House"/>
+                                </TabPane.tabData>
+                            </Label>
                         </TabPane>
                     </TablePane.Row>
 
                     <TablePane.Row height="-1">
                         <TabPane selectedIndex="-1" styles="{tabOrientation:'horizontal', collapsible:true}"
                             tooltipText="Click a tab to expand/collapse">
-                            <BoxPane TabPane.icon="@anchor.png" TabPane.label="Anchor"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@anchor.png" text="Anchor"/>
+                                </TabPane.tabData>
                                 <Label text="Collapsible"/>
                             </BoxPane>
 
-                            <BoxPane TabPane.icon="@cup.png" TabPane.label="Cup"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@cup.png" text="Cup"/>
+                                </TabPane.tabData>
                                 <Label text="Collapsible"/>
                             </BoxPane>
 
-                            <BoxPane TabPane.icon="@star.png" TabPane.label="Star"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@star.png" text="Star"/>
+                                </TabPane.tabData>
                                 <Label text="Collapsible"/>
                             </BoxPane>
                         </TabPane>
@@ -77,28 +94,45 @@ limitations under the License.
 
                     <TablePane.Row height="-1">
                         <TabPane selectedIndex="0" styles="{tabOrientation:'vertical'}">
-                            <Label TabPane.icon="@bell.png" TabPane.label="Bell" text="Basic"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                            <Label TabPane.icon="@clock.png" TabPane.label="Clock" text="Basic"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                            <Label TabPane.icon="@house.png" TabPane.label="House" text="Basic"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                            <Label text="Basic" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@bell.png" text="Bell"/>
+                                </TabPane.tabData>
+                            </Label>
+
+                            <Label text="Basic" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@clock.png" text="Clock"/>
+                                </TabPane.tabData>
+                            </Label>
+
+                            <Label text="Basic" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@house.png" text="House"/>
+                                </TabPane.tabData>
+                            </Label>
                         </TabPane>
 
                         <TabPane selectedIndex="-1" styles="{tabOrientation:'vertical', collapsible:true}"
                             tooltipText="Click a tab to expand/collapse">
-                            <BoxPane TabPane.icon="@anchor.png" TabPane.label="Anchor"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@anchor.png" text="Anchor"/>
+                                </TabPane.tabData>
                                 <Label text="Collapsible"/>
                             </BoxPane>
 
-                            <BoxPane TabPane.icon="@cup.png" TabPane.label="Cup"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@cup.png" text="Cup"/>
+                                </TabPane.tabData>
                                 <Label text="Collapsible"/>
                             </BoxPane>
 
-                            <BoxPane TabPane.icon="@star.png" TabPane.label="Star"
-                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <TabPane.tabData>
+                                    <content:ButtonData icon="@star.png" text="Star"/>
+                                </TabPane.tabData>
                                 <Label text="Collapsible"/>
                             </BoxPane>
                         </TabPane>

@@ -23,6 +23,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
@@ -51,14 +52,11 @@ import org.apache.pivot.wtk.TabPaneListener;
 import org.apache.pivot.wtk.TabPaneSelectionListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
-import org.apache.pivot.wtk.content.ButtonData;
-import org.apache.pivot.wtk.content.ButtonDataRenderer;
 import org.apache.pivot.wtk.effects.ClipDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.effects.easing.Easing;
 import org.apache.pivot.wtk.effects.easing.Quadratic;
-import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ButtonSkin;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
@@ -71,13 +69,44 @@ public class TerraTabPaneSkin extends ContainerSkin
      * Tab button component.
      */
     public class TabButton extends Button {
-        public TabButton(Component tab) {
-            super(tab);
+        private final Component tab;
 
+        public TabButton(Component tab) {
+            this.tab = tab;
             super.setToggleButton(true);
-            setDataRenderer(DEFAULT_DATA_RENDERER);
 
             setSkin(new TabButtonSkin());
+        }
+
+        @Override
+        public Object getButtonData() {
+            return TabPane.getTabData(tab);
+        }
+
+        @Override
+        public void setButtonData(Object buttonData) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Button.DataRenderer getDataRenderer() {
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
+            return tabPane.getTabDataRenderer();
+        }
+
+        @Override
+        public void setDataRenderer(Button.DataRenderer dataRenderer) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String getTooltipText() {
+            return TabPane.getTooltipText(tab);
+        }
+
+        @Override
+        public void setTooltipText(String tooltipText) {
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -178,9 +207,8 @@ public class TerraTabPaneSkin extends ContainerSkin
         public void paint(Graphics2D graphics) {
             TabButton tabButton = (TabButton)getComponent();
 
-            Component tab = (Component)tabButton.getButtonData();
             boolean active = (selectionChangeTransition != null
-                && selectionChangeTransition.tab == tab);
+                && selectionChangeTransition.tab == tabButton.tab);
 
             Color backgroundColor, buttonBevelColor;
             if (tabButton.isSelected()
@@ -414,15 +442,6 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     public static final int CORNER_RADIUS = 4;
     public static final int GRADIENT_BEVEL_THICKNESS = 8;
-
-    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer() {
-        @Override
-        public void render(Object data, Button button, boolean highlighted) {
-            Component tab = (Component)data;
-            super.render(new ButtonData(TabPane.getIcon(tab), TabPane.getLabel(tab)),
-                button, highlighted);
-        }
-    };
 
     public TerraTabPaneSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -910,10 +929,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             // Draw the border
             graphics.setPaint(borderColor);
-
-            // TODO Don't use drawRect() here; use Rectangle2D
-            GraphicsUtilities.drawRect(graphics, contentBounds.x, contentBounds.y,
-                contentBounds.width, contentBounds.height);
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+            graphics.draw(new Rectangle2D.Double(contentBounds.x + 0.5, contentBounds.y + 0.5,
+                contentBounds.width - 1, contentBounds.height - 1));
         }
     }
 
@@ -1301,6 +1320,11 @@ public class TerraTabPaneSkin extends ContainerSkin
         invalidateComponent();
     }
 
+    @Override
+    public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer) {
+        buttonBoxPane.invalidate();
+    }
+
     // Tab pane selection events
     @Override
     public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
@@ -1406,35 +1430,12 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     // Tab pane attribute events
     @Override
-    public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
-        int i = tabPane.getTabs().indexOf(component);
-        buttonBoxPane.get(i).invalidate();
-
-        invalidateComponent();
-    }
-
-    @Override
-    public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
-        int i = tabPane.getTabs().indexOf(component);
-        buttonBoxPane.get(i).invalidate();
-
-        invalidateComponent();
-    }
-
-    @Override
-    public void closeableChanged(TabPane tabPane, Component component) {
-        int i = tabPane.getTabs().indexOf(component);
-        buttonBoxPane.get(i).invalidate();
-
-        invalidateComponent();
+    public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
+        buttonBoxPane.invalidate();
     }
 
     @Override
     public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
-        int i = tabPane.getTabs().indexOf(component);
-        buttonBoxPane.get(i).setTooltipText(TabPane.getTooltipText(component));
-        buttonBoxPane.get(i).invalidate();
-
-        invalidateComponent();
+        // No-op
     }
 }

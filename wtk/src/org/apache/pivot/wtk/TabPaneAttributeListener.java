@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.wtk.media.Image;
-
 /**
  * Tab pane attribute listener interface.
  */
@@ -27,48 +25,22 @@ public interface TabPaneAttributeListener {
      */
     public static class Adapter implements TabPaneAttributeListener {
         @Override
-        public void labelChanged(TabPane tabPane, Component component, String previousLabel) {
+        public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
         }
 
         @Override
-        public void iconChanged(TabPane tabPane, Component component, Image previousIcon) {
-        }
-
-        @Override
-        public void closeableChanged(TabPane tabPane, Component component) {
-        }
-
-        @Override
-        public void tooltipTextChanged(TabPane tabPane, Component component,
-            String previousTooltipText) {
+        public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
         }
     }
 
     /**
-     * Called when a tab's label attribute has changed.
+     * Called when a tab's tab data attribute has changed.
      *
      * @param tabPane
      * @param component
      * @param previousLabel
      */
-    public void labelChanged(TabPane tabPane, Component component, String previousLabel);
-
-    /**
-     * Called when a tab's icon attribute has changed.
-     *
-     * @param tabPane
-     * @param component
-     * @param previousIcon
-     */
-    public void iconChanged(TabPane tabPane, Component component, Image previousIcon);
-
-    /**
-     * Called when a tab's closeable attribute has changed.
-     *
-     * @param tabPane
-     * @param component
-     */
-    public void closeableChanged(TabPane tabPane, Component component);
+    public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData);
 
     /**
      * Called when a tab's tooltipText attribute has changed.

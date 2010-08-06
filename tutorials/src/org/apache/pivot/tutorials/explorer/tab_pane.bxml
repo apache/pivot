@@ -17,34 +17,41 @@ limitations under the License.
 -->
 
 <TabPane xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <BoxPane TabPane.icon="@bell.png"
-        TabPane.label="Bell"
-        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+    <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+        <TabPane.tabData>
+            <content:ButtonData icon="@bell.png" text="Bell"/>
+        </TabPane.tabData>
         <Border styles="{padding:2}">
             <Label text="120x90" preferredWidth="120" preferredHeight="90"
                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
         </Border>
     </BoxPane>
 
-    <BoxPane TabPane.icon="@clock.png"
-        TabPane.label="Clock"
-        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+    <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+        <TabPane.tabData>
+            <content:ButtonData icon="@clock.png" text="Clock"/>
+        </TabPane.tabData>
         <Border styles="{padding:2}">
             <Label text="240x180" preferredWidth="240" preferredHeight="180"
                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
         </Border>
     </BoxPane>
 
-    <BoxPane TabPane.icon="@house.png"
-        TabPane.label="House"
-        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+    <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+        <TabPane.tabData>
+            <content:ButtonData icon="@house.png" text="House"/>
+        </TabPane.tabData>
         <Border styles="{padding:2}">
             <Label text="320x240" preferredWidth="320" preferredHeight="240"
                 styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
         </Border>
     </BoxPane>
 
-    <BoxPane TabPane.icon="@star.png"
-        TabPane.label="Star" enabled="false"/>
+    <BoxPane enabled="false">
+        <TabPane.tabData>
+            <content:ButtonData icon="@star.png" text="Star"/>
+        </TabPane.tabData>
+    </BoxPane>
 </TabPane>

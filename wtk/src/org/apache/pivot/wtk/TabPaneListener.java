@@ -37,6 +37,10 @@ public interface TabPaneListener {
         @Override
         public void cornerChanged(TabPane tabPane, Component previousCorner) {
         }
+
+        @Override
+        public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer) {
+        }
     }
 
     /**
@@ -57,11 +61,18 @@ public interface TabPaneListener {
     public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs);
 
     /**
-     * Called when a tab pane's corner component (the component in the free
-     * space next to the tabs) has changed.
+     * Called when a tab pane's corner component has changed.
      *
      * @param tabPane
      * @param previousCorner
      */
     public void cornerChanged(TabPane tabPane, Component previousCorner);
+
+    /**
+     * Called when a tab pane's tab data renderer has changed.
+     *
+     * @param tabPane
+     * @param previousTabDataRenderer
+     */
+    public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer);
 }
