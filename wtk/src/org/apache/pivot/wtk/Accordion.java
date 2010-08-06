@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-import java.net.URL;
 import java.util.Iterator;
 
 import org.apache.pivot.beans.DefaultProperty;
@@ -25,14 +24,11 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.util.concurrent.TaskExecutionException;
-import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.content.AccordionHeaderDataRenderer;
 
 /**
  * Component that provides access to a set of components via selectable headers.
  * Only one component is visible at a time.
- * <p>
- * TODO Add a getPanelAt() method that delegates to the skin.
  */
 @DefaultProperty("panels")
 public class Accordion extends Container {
@@ -131,8 +127,7 @@ public class Accordion extends Container {
     }
 
     private enum Attribute {
-        LABEL,
-        ICON;
+        HEADER_DATA;
     }
 
     private static class AccordionListenerList extends ListenerList<AccordionListener>
@@ -148,6 +143,13 @@ public class Accordion extends Container {
         public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels) {
             for (AccordionListener listener : this) {
                 listener.panelsRemoved(accordion, index, panels);
+            }
+        }
+
+        @Override
+        public void headerDataRendererChanged(Accordion accordion, Button.DataRenderer previousHeaderDataRenderer) {
+            for (AccordionListener listener : this) {
+                listener.headerDataRendererChanged(accordion, previousHeaderDataRenderer);
             }
         }
     }
@@ -183,16 +185,9 @@ public class Accordion extends Container {
     private static class AccordionAttributeListenerList extends ListenerList<AccordionAttributeListener>
         implements AccordionAttributeListener {
         @Override
-        public void labelChanged(Accordion accordion, Component component, String previousLabel) {
+        public void headerDataChanged(Accordion accordion, Component component, Object previousHeaderData) {
             for (AccordionAttributeListener listener : this) {
-                listener.labelChanged(accordion, component, previousLabel);
-            }
-        }
-
-        @Override
-        public void iconChanged(Accordion accordion, Component component, Image previousIcon) {
-            for (AccordionAttributeListener listener : this) {
-                listener.iconChanged(accordion, component, previousIcon);
+                listener.headerDataChanged(accordion, component, previousHeaderData);
             }
         }
     }
@@ -201,10 +196,13 @@ public class Accordion extends Container {
 
     private ArrayList<Component> panels = new ArrayList<Component>();
     private PanelSequence panelSequence = new PanelSequence();
+    private Button.DataRenderer headerDataRenderer = DEFAULT_HEADER_DATA_RENDERER;
 
     private AccordionListenerList accordionListeners = new AccordionListenerList();
     private AccordionSelectionListenerList accordionSelectionListeners = new AccordionSelectionListenerList();
     private AccordionAttributeListenerList accordionAttributeListeners = new AccordionAttributeListenerList();
+
+    private static final Button.DataRenderer DEFAULT_HEADER_DATA_RENDERER = new AccordionHeaderDataRenderer();
 
     public Accordion() {
         installThemeSkin(Accordion.class);
@@ -242,6 +240,22 @@ public class Accordion extends Container {
         return (selectedIndex == -1) ? null : panels.get(selectedIndex);
     }
 
+    public Button.DataRenderer getHeaderDataRenderer() {
+        return headerDataRenderer;
+    }
+
+    public void setHeaderDataRenderer(Button.DataRenderer headerDataRenderer) {
+        if (headerDataRenderer == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Button.DataRenderer previousHeaderDataRenderer = this.headerDataRenderer;
+        if (previousHeaderDataRenderer != headerDataRenderer) {
+            this.headerDataRenderer = headerDataRenderer;
+            accordionListeners.headerDataRendererChanged(this, previousHeaderDataRenderer);
+        }
+    }
+
     @Override
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
@@ -268,68 +282,21 @@ public class Accordion extends Container {
         return accordionAttributeListeners;
     }
 
-    public static String getLabel(Component component) {
-        return (String)component.getAttribute(Attribute.LABEL);
+    public static Object getHeaderData(Component component) {
+        return component.getAttribute(Attribute.HEADER_DATA);
     }
 
-    public static void setLabel(Component component, String label) {
-        String previousLabel = (String)component.setAttribute(Attribute.LABEL, label);
+    public static void setHeaderData(Component component, Object headerData) {
+        String previousHeaderData = (String)component.setAttribute(Attribute.HEADER_DATA, headerData);
 
-        if (previousLabel != label) {
+        if (previousHeaderData != headerData) {
             Container parent = component.getParent();
 
             if (parent instanceof Accordion) {
                 Accordion accordion = (Accordion)parent;
-                accordion.accordionAttributeListeners.labelChanged(accordion, component,
-                    previousLabel);
+                accordion.accordionAttributeListeners.headerDataChanged(accordion, component,
+                    previousHeaderData);
             }
         }
-    }
-
-    public static Image getIcon(Component component) {
-        return (Image)component.getAttribute(Attribute.ICON);
-    }
-
-    public static void setIcon(Component component, Image icon) {
-        Image previousIcon = (Image)component.setAttribute(Attribute.ICON, icon);
-
-        if (previousIcon != icon) {
-            Container parent = component.getParent();
-
-            if (parent instanceof Accordion) {
-                Accordion accordion = (Accordion)parent;
-                accordion.accordionAttributeListeners.iconChanged(accordion, component,
-                    previousIcon);
-            }
-        }
-    }
-
-    public static final void setIcon(Component component, URL icon) {
-        if (icon == null) {
-            throw new IllegalArgumentException("icon is null.");
-        }
-
-        Image iconImage = (Image)ApplicationContext.getResourceCache().get(icon);
-
-        if (iconImage == null) {
-            try {
-                iconImage = Image.load(icon);
-            } catch (TaskExecutionException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-
-            ApplicationContext.getResourceCache().put(icon, iconImage);
-        }
-
-        setIcon(component, iconImage);
-    }
-
-    public static final void setIcon(Component component, String icon) {
-        if (icon == null) {
-            throw new IllegalArgumentException("icon is null.");
-        }
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setIcon(component, classLoader.getResource(icon));
     }
 }

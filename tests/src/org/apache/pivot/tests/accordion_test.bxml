@@ -18,11 +18,20 @@ limitations under the License.
 
 <Frame title="Accordion Test"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <Accordion>
-        <Label Accordion.label="A" text="Hello"/>
-        <Label Accordion.label="B" text="World"/>
-        <Label Accordion.label="C" text="From" enabled="false"/>
-        <Label Accordion.label="D" text="Pivot"/>
+        <headerDataRenderer>
+            <content:AccordionHeaderDataRenderer/>
+        </headerDataRenderer>
+
+        <Label text="Hello">
+            <Accordion.headerData>
+                <content:ButtonData text="A" icon="@anchor.png"/>
+            </Accordion.headerData>
+        </Label>
+        <Label Accordion.headerData="B" text="World"/>
+        <Label Accordion.headerData="C" text="From" enabled="false"/>
+        <Label Accordion.headerData="D" text="Pivot"/>
     </Accordion>
 </Frame>

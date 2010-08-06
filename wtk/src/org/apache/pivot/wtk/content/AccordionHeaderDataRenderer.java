@@ -14,27 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtk;
+package org.apache.pivot.wtk.content;
+
+import org.apache.pivot.wtk.HorizontalAlignment;
 
 /**
- * Accordion attribute listener interface.
+ * Default accordion header data renderer.
  */
-public interface AccordionAttributeListener {
-    /**
-     * Accordion attribute listener adapter.
-     */
-    public static class Adapter implements AccordionAttributeListener {
-        @Override
-        public void headerDataChanged(Accordion accordion, Component component, Object previousHeaderData) {
-        }
+public class AccordionHeaderDataRenderer extends ButtonDataRenderer {
+    public AccordionHeaderDataRenderer() {
+        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
     }
-
-    /**
-     * Called when a panel's header data attribute has changed.
-     *
-     * @param accordion
-     * @param component
-     * @param previousHeaderData
-     */
-    public void headerDataChanged(Accordion accordion, Component component, Object previousHeaderData);
 }

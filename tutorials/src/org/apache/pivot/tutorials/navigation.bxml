@@ -134,11 +134,11 @@ limitations under the License.
         <BoxPane orientation="vertical" styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:6}">
             <Label text="Accordion" styles="{font:{bold:true}}"/>
             <Accordion selectedIndex="1" preferredWidth="110" preferredHeight="180">
-                <Label Accordion.label="One" text="Un"
+                <Label Accordion.headerData="One" text="Un"
                   styles="{horizontalAlignment:'center', verticalAlignment:'top', font:{italic:true}}"/>
-                <Label Accordion.label="Two" text="Deux"
+                <Label Accordion.headerData="Two" text="Deux"
                   styles="{horizontalAlignment:'center', verticalAlignment:'center', font:{italic:true}}"/>
-                <Label Accordion.label="Three" text="Trois"
+                <Label Accordion.headerData="Three" text="Trois"
                   styles="{horizontalAlignment:'center', verticalAlignment:'bottom', font:{italic:true}}"/>
             </Accordion>
         </BoxPane>

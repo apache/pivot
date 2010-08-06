@@ -19,8 +19,8 @@ limitations under the License.
 <Accordion preferredWidth="150"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <Label Accordion.label="A" text="Hello"/>
-    <Label Accordion.label="B" text="World"/>
-    <Label Accordion.label="C" text="From" enabled="false"/>
-    <Label Accordion.label="D" text="Pivot"/>
+    <Label Accordion.headerData="A" text="Hello"/>
+    <Label Accordion.headerData="B" text="World"/>
+    <Label Accordion.headerData="C" text="From" enabled="false"/>
+    <Label Accordion.headerData="D" text="Pivot"/>
 </Accordion>

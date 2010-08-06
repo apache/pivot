@@ -98,9 +98,9 @@ limitations under the License.
 
                         <TablePane.Row>
                             <Accordion>
-                                <Label text="Un" Accordion.label="One"/>
-                                <Label text="Deux" Accordion.label="Two"/>
-                                <Label text="Trois" Accordion.label="Three" enabled="false"/>
+                                <Label text="Un" Accordion.headerData="One"/>
+                                <Label text="Deux" Accordion.headerData="Two"/>
+                                <Label text="Trois" Accordion.headerData="Three" enabled="false"/>
                             </Accordion>
 
                             <BoxPane orientation="vertical" styles="{fill:true}">

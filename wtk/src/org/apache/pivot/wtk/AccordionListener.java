@@ -33,6 +33,10 @@ public interface AccordionListener {
         @Override
         public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed) {
         }
+
+        @Override
+        public void headerDataRendererChanged(Accordion accordion, Button.DataRenderer previousHeaderDataRenderer) {
+        }
     }
 
     /**
@@ -51,4 +55,12 @@ public interface AccordionListener {
      * @param removed
      */
     public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed);
+
+    /**
+     * Called when an accordion's header data renderer has changed.
+     *
+     * @param accordion
+     * @param previousHeaderDataRenderer
+     */
+    public void headerDataRendererChanged(Accordion accordion, Button.DataRenderer previousHeaderDataRenderer);
 }

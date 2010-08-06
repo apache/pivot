@@ -21,9 +21,9 @@ limitations under the License.
     xmlns:navigation="org.apache.pivot.tutorials.navigation"
     xmlns="org.apache.pivot.wtk">
     <Accordion bxml:id="accordion" styles="{padding:0}">
-        <bxml:include bxml:id="shippingPanel" src="shipping.bxml" Accordion.label="Shipping Information"/>
-        <bxml:include bxml:id="paymentPanel" src="payment.bxml" Accordion.label="Payment Information"/>
-        <bxml:include bxml:id="summaryPanel" src="summary.bxml" Accordion.label="Summary &amp; Confirmation"/>
+        <bxml:include bxml:id="shippingPanel" src="shipping.bxml" Accordion.headerData="Shipping Information"/>
+        <bxml:include bxml:id="paymentPanel" src="payment.bxml" Accordion.headerData="Payment Information"/>
+        <bxml:include bxml:id="summaryPanel" src="summary.bxml" Accordion.headerData="Summary &amp; Confirmation"/>
     </Accordion>
 </navigation:Accordions>
 
