@@ -206,7 +206,7 @@ public class Prompt extends Sheet {
                 optionSequence.add(options.get(i));
             }
 
-            setSelectedOption(0);
+            setSelectedOptionIndex(0);
         }
 
         setTitle((String)resources.get("defaultTitle"));

@@ -901,7 +901,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             Prompt prompt = new Prompt(MessageType.QUESTION, "Please select your favorite icon:",
                                 options, body);
                             prompt.setTitle("Select Icon");
-                            prompt.setSelectedOption(0);
+                            prompt.setSelectedOptionIndex(0);
                             prompt.getDecorators().update(0, new ReflectionDecorator());
                             prompt.open(window);
                         } else {

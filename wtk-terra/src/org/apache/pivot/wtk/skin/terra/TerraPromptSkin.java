@@ -48,7 +48,7 @@ public class TerraPromptSkin extends TerraSheetSkin
 
             if (optionIndex >= 0) {
                 Prompt prompt = (Prompt)getComponent();
-                prompt.setSelectedOption(optionIndex);
+                prompt.setSelectedOptionIndex(optionIndex);
                 prompt.close(true);
             }
         }

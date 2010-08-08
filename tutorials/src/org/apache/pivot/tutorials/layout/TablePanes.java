@@ -183,7 +183,7 @@ public class TablePanes extends Window implements Bindable {
                 body.getStyles().put("wrapText", true);
 
                 final Prompt prompt = new Prompt(MessageType.QUESTION, message, options, body);
-                prompt.setSelectedOption(0);
+                prompt.setSelectedOptionIndex(0);
 
                 prompt.open(TablePanes.this, new SheetCloseListener() {
                     @Override
@@ -266,7 +266,7 @@ public class TablePanes extends Window implements Bindable {
                 body.getStyles().put("wrapText", true);
 
                 final Prompt prompt = new Prompt(MessageType.QUESTION, message, options, body);
-                prompt.setSelectedOption(0);
+                prompt.setSelectedOptionIndex(0);
 
                 prompt.open(TablePanes.this, new SheetCloseListener() {
                     @Override
