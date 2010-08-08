@@ -33,8 +33,14 @@ limitations under the License.
         <BoxPane styles="{horizontalAlignment:'right', backgroundColor:11,
             padding:4}">
             <PushButton bxml:id="nextButton" buttonData="Next"
-                styles="{minimumAspectRatio:3}"/>
+                styles="{minimumAspectRatio:3}">
+                <buttonPressListeners>
+                function buttonPressed(button) {
+                    var accordion = button.getAncestor("org.apache.pivot.wtk.Accordion");
+                    accordion.selectedIndex += 1;
+                }
+                </buttonPressListeners>
+            </PushButton>
         </BoxPane>
     </TablePane.Row>
 </TablePane>
-

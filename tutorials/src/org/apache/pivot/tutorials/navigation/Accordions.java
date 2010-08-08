@@ -25,93 +25,53 @@ import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Accordion;
 import org.apache.pivot.wtk.AccordionSelectionListener;
-import org.apache.pivot.wtk.ActivityIndicator;
-import org.apache.pivot.wtk.Button;
-import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.Label;
-import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
 public class Accordions extends Window implements Bindable {
     private Accordion accordion = null;
-    private PushButton shippingNextButton = null;
-    private PushButton paymentNextButton = null;
-    private PushButton confirmOrderButton = null;
-    private ActivityIndicator activityIndicator = null;
-    private Label processingOrderLabel = null;
-
-    private AccordionSelectionListener accordionSelectionListener = new AccordionSelectionListener() {
-        private int selectedIndex = -1;
-
-        @Override
-        public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
-            this.selectedIndex = selectedIndex;
-
-            // Enable the next panel or disable the previous panel so the
-            // transition looks smoother
-            if (selectedIndex != -1) {
-                int previousSelectedIndex = accordion.getSelectedIndex();
-                if (selectedIndex > previousSelectedIndex) {
-                    accordion.getPanels().get(selectedIndex).setEnabled(true);
-                } else {
-                    accordion.getPanels().get(previousSelectedIndex).setEnabled(false);
-                }
-
-            }
-
-            return Vote.APPROVE;
-        }
-
-        @Override
-        public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
-            if (reason == Vote.DENY
-                && selectedIndex != -1) {
-                Component panel = accordion.getPanels().get(selectedIndex);
-                panel.setEnabled(!panel.isEnabled());
-            }
-        }
-
-        @Override
-        public void selectedIndexChanged(Accordion accordion, int previousSelection) {
-            updateAccordion();
-        }
-    };
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         accordion = (Accordion)namespace.get("accordion");
-        shippingNextButton = (PushButton)namespace.get("shippingPanel.nextButton");
-        paymentNextButton = (PushButton)namespace.get("paymentPanel.nextButton");
-        confirmOrderButton = (PushButton)namespace.get("summaryPanel.confirmOrderButton");
-        activityIndicator = (ActivityIndicator)namespace.get("summaryPanel.activityIndicator");
-        processingOrderLabel = (Label)namespace.get("summaryPanel.processingOrderLabel");
+        accordion.getAccordionSelectionListeners().add(new AccordionSelectionListener() {
+            private int selectedIndex = -1;
 
-        accordion.getAccordionSelectionListeners().add(accordionSelectionListener);
-
-        ButtonPressListener nextButtonPressListener = new ButtonPressListener() {
             @Override
-            public void buttonPressed(Button button) {
-                accordion.setSelectedIndex(accordion.getSelectedIndex() + 1);
+            public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
+                this.selectedIndex = selectedIndex;
+
+                // Enable the next panel or disable the previous panel so the
+                // transition looks smoother
+                if (selectedIndex != -1) {
+                    int previousSelectedIndex = accordion.getSelectedIndex();
+                    if (selectedIndex > previousSelectedIndex) {
+                        accordion.getPanels().get(selectedIndex).setEnabled(true);
+                    } else {
+                        accordion.getPanels().get(previousSelectedIndex).setEnabled(false);
+                    }
+
+                }
+
+                return Vote.APPROVE;
             }
-        };
 
-        shippingNextButton.getButtonPressListeners().add(nextButtonPressListener);
-
-        paymentNextButton.getButtonPressListeners().add(nextButtonPressListener);
-
-        confirmOrderButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
-            public void buttonPressed(Button button) {
-                // Pretend to submit or cancel the order
-                activityIndicator.setActive(!activityIndicator.isActive());
-                processingOrderLabel.setVisible(activityIndicator.isActive());
-                updateConfirmOrderButton();
+            public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
+                if (reason == Vote.DENY
+                    && selectedIndex != -1) {
+                    Component panel = accordion.getPanels().get(selectedIndex);
+                    panel.setEnabled(!panel.isEnabled());
+                }
+            }
+
+            @Override
+            public void selectedIndexChanged(Accordion accordion, int previousSelection) {
+                updateAccordion();
             }
         });
 
         updateAccordion();
-        updateConfirmOrderButton();
     }
 
     private void updateAccordion() {
@@ -120,14 +80,6 @@ public class Accordions extends Window implements Bindable {
         Sequence<Component> panels = accordion.getPanels();
         for (int i = 0, n = panels.getLength(); i < n; i++) {
             panels.get(i).setEnabled(i <= selectedIndex);
-        }
-    }
-
-    private void updateConfirmOrderButton() {
-        if (activityIndicator.isActive()) {
-            confirmOrderButton.setButtonData("Cancel");
-        } else {
-            confirmOrderButton.setButtonData("Confirm Order");
         }
     }
 }

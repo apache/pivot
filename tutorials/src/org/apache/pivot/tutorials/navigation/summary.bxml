@@ -18,6 +18,12 @@ limitations under the License.
 
 <TablePane xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
+    <bxml:script>
+    function updateConfirmOrderButtonData() {
+        confirmOrderButton.buttonData = (activityIndicator.active) ? "Cancel" : "Confirm Order";
+    }
+    </bxml:script>
+
     <columns>
         <TablePane.Column width="1*"/>
     </columns>
@@ -42,13 +48,32 @@ limitations under the License.
 
             <BoxPane orientation="vertical"
                 styles="{horizontalAlignment:'center', spacing:12, padding:{top:12}}">
-                <PushButton bxml:id="confirmOrderButton" styles="{minimumAspectRatio:3}"/>
+                <PushButton bxml:id="confirmOrderButton" styles="{minimumAspectRatio:3}">
+                    <buttonPressListeners>
+                    function buttonPressed(button) {
+                        activityIndicator.active = !activityIndicator.active;
+                        processingOrderLabel.visible = activityIndicator.active;
+                    }
+                    </buttonPressListeners>
+                </PushButton>
+
                 <ActivityIndicator bxml:id="activityIndicator" styles="{color:16}"
-                    preferredWidth="48" preferredHeight="48"/>
+                    preferredWidth="48" preferredHeight="48">
+                    <activityIndicatorListeners>
+                    function activeChanged(activityIndicator) {
+                        updateConfirmOrderButtonData();
+                    }
+                    </activityIndicatorListeners>
+                </ActivityIndicator>
+
                 <Label bxml:id="processingOrderLabel" text="Pretending to process order..." visible="false"
                     styles="{font:{italic:true}}"/>
             </BoxPane>
         </BoxPane>
     </TablePane.Row>
+
+    <bxml:script>
+    updateConfirmOrderButtonData();
+    </bxml:script>
 </TablePane>
 
