@@ -527,6 +527,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         @Override
+        public void tooltipDelayChanged(Component component, int previousTooltipDelay) {
+            // No-op
+        }
+
+        @Override
         public void dragSourceChanged(Component component, DragSource previousDragSource) {
             // No-op
         }

@@ -337,6 +337,13 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         @Override
+        public void tooltipDelayChanged(Component component, int previousTooltipDelay) {
+            for (ComponentListener listener : this) {
+                listener.tooltipDelayChanged(component, previousTooltipDelay);
+            }
+        }
+
+        @Override
         public void dragSourceChanged(Component component, DragSource previousDragSource) {
             for (ComponentListener listener : this) {
                 listener.dragSourceChanged(component, previousDragSource);
@@ -613,8 +620,9 @@ public abstract class Component implements ConstrainedVisual {
     // The cursor that is displayed over the component
     private Cursor cursor = null;
 
-    // The tooltip text
+    // The tooltip text and delay
     private String tooltipText = null;
+    private int tooltipDelay = 1000;
 
     // The component's drag source
     private DragSource dragSource = null;
@@ -1511,7 +1519,7 @@ public abstract class Component implements ConstrainedVisual {
      */
     public boolean contains(int x, int y) {
         // TODO
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -2242,6 +2250,31 @@ public abstract class Component implements ConstrainedVisual {
         if (previousTooltipText != tooltipText) {
             this.tooltipText = tooltipText;
             componentListeners.tooltipTextChanged(this, previousTooltipText);
+        }
+    }
+
+    /**
+     * Returns the component's tooltip delay.
+     *
+     * @return
+     * The tooltip delay, in milliseconds.
+     */
+    public int getTooltipDelay() {
+        return tooltipDelay;
+    }
+
+    /**
+     * Sets the component's tooltip delay.
+     *
+     * @param tooltipDelay
+     * The tooltip delay, in milliseconds.
+     */
+    public void setTooltipDelay(int tooltipDelay) {
+        int previousTooltipDelay = this.tooltipDelay;
+
+        if (previousTooltipDelay != tooltipDelay) {
+            this.tooltipDelay = tooltipDelay;
+            componentListeners.tooltipDelayChanged(this, previousTooltipDelay);
         }
     }
 

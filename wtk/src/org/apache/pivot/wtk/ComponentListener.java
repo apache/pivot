@@ -64,6 +64,10 @@ public interface ComponentListener {
         }
 
         @Override
+        public void tooltipDelayChanged(Component component, int previousTooltipDelay) {
+        }
+
+        @Override
         public void dragSourceChanged(Component component, DragSource previousDragSource) {
         }
 
@@ -159,6 +163,14 @@ public interface ComponentListener {
      * @param previousTooltipText
      */
     public void tooltipTextChanged(Component component, String previousTooltipText);
+
+    /**
+     * Called when a component's tooltip delay has changed.
+     *
+     * @param component
+     * @param previousTooltipDelay
+     */
+    public void tooltipDelayChanged(Component component, int previousTooltipDelay);
 
     /**
      * Called when a component's drag source has changed.

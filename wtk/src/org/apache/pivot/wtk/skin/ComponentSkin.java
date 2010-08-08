@@ -88,8 +88,6 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     private ShowTooltipCallback showTooltipCallback = new ShowTooltipCallback();
     private ApplicationContext.ScheduledCallback scheduledShowTooltipCallback = null;
 
-    public static final int SHOW_TOOLTIP_TIMEOUT = 1000;
-
     @Override
     public int getWidth() {
         return width;
@@ -210,7 +208,10 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     @Override
     public void tooltipTextChanged(Component component, String previousTooltipText) {
-        // TODO Handle change here instead of in ShowTooltipCallback?
+    }
+
+    @Override
+    public void tooltipDelayChanged(Component component, int previousTooltipDelay) {
     }
 
     @Override
@@ -254,7 +255,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
         if (getComponent().getTooltipText() != null) {
             scheduledShowTooltipCallback =
-                ApplicationContext.scheduleCallback(showTooltipCallback, SHOW_TOOLTIP_TIMEOUT);
+                ApplicationContext.scheduleCallback(showTooltipCallback, component.getTooltipDelay());
         }
 
         return false;
