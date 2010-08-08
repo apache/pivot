@@ -98,7 +98,7 @@ public class TerraPromptSkin extends TerraSheetSkin
         super.windowOpened(window);
 
         Prompt prompt = (Prompt)window;
-        int index = prompt.getSelectedOption();
+        int index = prompt.getSelectedOptionIndex();
 
         if (index >= 0) {
             optionButtonBoxPane.get(index).requestFocus();
@@ -149,7 +149,7 @@ public class TerraPromptSkin extends TerraSheetSkin
 
     @Override
     public void selectedOptionChanged(Prompt prompt, int previousSelectedOption) {
-        int index = prompt.getSelectedOption();
+        int index = prompt.getSelectedOptionIndex();
 
         if (prompt.isOpen()
             && index >= 0) {

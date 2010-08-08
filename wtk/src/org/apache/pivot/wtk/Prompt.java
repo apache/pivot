@@ -56,8 +56,8 @@ public class Prompt extends Sheet {
 
             options.insert(option, index);
 
-            if (selectedOption >= index) {
-                selectedOption++;
+            if (selectedOptionIndex >= index) {
+                selectedOptionIndex++;
             }
 
             promptListeners.optionInserted(Prompt.this, index);
@@ -83,11 +83,11 @@ public class Prompt extends Sheet {
             Sequence<Object> removed = options.remove(index, count);
 
             if (removed.getLength() > 0) {
-                if (selectedOption >= index) {
-                    if (selectedOption < index + count) {
-                        selectedOption = -1;
+                if (selectedOptionIndex >= index) {
+                    if (selectedOptionIndex < index + count) {
+                        selectedOptionIndex = -1;
                     } else {
-                        selectedOption -= count;
+                        selectedOptionIndex -= count;
                     }
                 }
 
@@ -169,7 +169,7 @@ public class Prompt extends Sheet {
 
     private ArrayList<Object> options = new ArrayList<Object>();
     private OptionSequence optionSequence = new OptionSequence();
-    private int selectedOption = -1;
+    private int selectedOptionIndex = -1;
 
     private PromptListenerList promptListeners = new PromptListenerList();
 
@@ -270,22 +270,30 @@ public class Prompt extends Sheet {
         }
     }
 
-    public int getSelectedOption() {
-        return selectedOption;
+    public int getSelectedOptionIndex() {
+        return selectedOptionIndex;
     }
 
-    public void setSelectedOption(int selectedOption) {
+    public void setSelectedOptionIndex(int selectedOption) {
         if (selectedOption < -1
             || selectedOption > options.getLength() - 1) {
             throw new IndexOutOfBoundsException();
         }
 
-        int previousSelectedOption = this.selectedOption;
+        int previousSelectedOption = this.selectedOptionIndex;
 
         if (selectedOption != previousSelectedOption) {
-            this.selectedOption = selectedOption;
+            this.selectedOptionIndex = selectedOption;
             promptListeners.selectedOptionChanged(this, previousSelectedOption);
         }
+    }
+
+    public Object getSelectedOption() {
+        return (selectedOptionIndex == -1) ? null : options.get(selectedOptionIndex);
+    }
+
+    public void setSelectedOption(Object selectedOption) {
+        setSelectedOptionIndex(options.indexOf(selectedOption));
     }
 
     public ListenerList<PromptListener> getPromptListeners() {

@@ -24,7 +24,7 @@ limitations under the License.
     <bxml:define>
         <Prompt bxml:id="confirmCloseTabPrompt" title="Confirm Close Tab"
             message="Really close this tab?"
-            options="['Cancel', 'OK']" selectedOption="1"/>
+            options="['Cancel', 'OK']" selectedOptionIndex="1"/>
     </bxml:define>
 
     <TablePane styles="{padding:8, horizontalSpacing:6}">

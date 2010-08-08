@@ -55,7 +55,7 @@ public class ShutdownTest implements Application {
                     Alert alert = (Alert)dialog;
 
                     if (alert.getResult()) {
-                        if (alert.getSelectedOption() == 1) {
+                        if (alert.getSelectedOptionIndex() == 1) {
                             cancelShutdown = false;
                             DesktopApplicationContext.exit();
                         }

@@ -188,7 +188,7 @@ public class TablePanes extends Window implements Bindable {
                 prompt.open(TablePanes.this, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
-                        if (prompt.getResult() && prompt.getSelectedOption() == 0) {
+                        if (prompt.getResult() && prompt.getSelectedOptionIndex() == 0) {
                             int rowIndex = tablePane.getRowAt(contextMenuHandler.getY());
                             tablePane.getRows().remove(rowIndex, 1);
                         }
@@ -271,7 +271,7 @@ public class TablePanes extends Window implements Bindable {
                 prompt.open(TablePanes.this, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
-                        if (prompt.getResult() && prompt.getSelectedOption() == 0) {
+                        if (prompt.getResult() && prompt.getSelectedOptionIndex() == 0) {
                             int columnIndex = tablePane.getColumnAt(contextMenuHandler.getX());
 
                             // Remove the component at that index from each row

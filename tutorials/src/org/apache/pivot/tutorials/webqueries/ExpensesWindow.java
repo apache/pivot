@@ -297,7 +297,7 @@ public class ExpensesWindow extends Window implements Bindable {
             @Override
             public void sheetClosed(Sheet sheet) {
                 if (sheet.getResult()
-                    && ((Prompt)sheet).getSelectedOption() == 1) {
+                    && ((Prompt)sheet).getSelectedOptionIndex() == 1) {
                     // DELETE expense from server and then remove from table
                     Expenses expensesApplication = Expenses.getInstance();
                     DeleteQuery deleteExpenseQuery = new DeleteQuery(expensesApplication.getHostname(),

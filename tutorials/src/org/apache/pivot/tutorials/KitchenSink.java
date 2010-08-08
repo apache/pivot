@@ -861,7 +861,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             Alert alert = new Alert(MessageType.QUESTION, "Please select your favorite icon:",
                                 options, body);
                             alert.setTitle("Select Icon");
-                            alert.setSelectedOption(0);
+                            alert.setSelectedOptionIndex(0);
                             alert.getDecorators().update(0, new ReflectionDecorator());
                             alert.open(window);
                         } else {

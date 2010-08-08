@@ -48,7 +48,7 @@ public class TerraAlertSkin extends TerraDialogSkin
 
             if (optionIndex >= 0) {
                 Alert alert = (Alert)getComponent();
-                alert.setSelectedOption(optionIndex);
+                alert.setSelectedOptionIndex(optionIndex);
                 alert.close(true);
             }
         }
@@ -105,7 +105,7 @@ public class TerraAlertSkin extends TerraDialogSkin
         super.windowOpened(window);
 
         Alert alert = (Alert)window;
-        int index = alert.getSelectedOption();
+        int index = alert.getSelectedOptionIndex();
 
         if (index >= 0) {
             optionButtonBoxPane.get(index).requestFocus();
@@ -156,7 +156,7 @@ public class TerraAlertSkin extends TerraDialogSkin
 
     @Override
     public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
-        int index = alert.getSelectedOption();
+        int index = alert.getSelectedOptionIndex();
 
         if (alert.isOpen()
             && index >= 0) {

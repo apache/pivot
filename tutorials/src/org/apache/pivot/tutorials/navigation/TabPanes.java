@@ -65,7 +65,7 @@ public class TabPanes extends Window implements Bindable {
                         @Override
                         public void sheetClosed(Sheet sheet) {
                             if (confirmCloseTabPrompt.getResult()
-                                && confirmCloseTabPrompt.getSelectedOption() == 1) {
+                                && confirmCloseTabPrompt.getSelectedOptionIndex() == 1) {
                                 confirmCloseTab = false;
 
                                 int n = tabPane.getTabs().getLength();
