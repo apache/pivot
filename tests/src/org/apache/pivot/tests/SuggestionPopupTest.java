@@ -49,7 +49,7 @@ public class SuggestionPopupTest implements Application {
             @Override
             public void charactersInserted(TextInput textInput, int index, int count) {
                 ArrayList<String> suggestions = new ArrayList<String>("One", "Two", "Three", "Four", "Five");
-                suggestionPopup.setSuggestions(suggestions);
+                suggestionPopup.setSuggestionData(suggestions);
                 suggestionPopup.open(textInput, new SuggestionPopupCloseListener() {
                     @Override
                     public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {

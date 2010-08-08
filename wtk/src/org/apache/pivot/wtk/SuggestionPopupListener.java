@@ -27,8 +27,8 @@ public interface SuggestionPopupListener {
      */
     public static class Adapter implements SuggestionPopupListener {
         @Override
-        public void suggestionsChanged(SuggestionPopup suggestionPopup,
-            List<?> previousSuggestions) {
+        public void suggestionDataChanged(SuggestionPopup suggestionPopup,
+            List<?> previousSuggestionData) {
         }
 
         @Override
@@ -46,9 +46,9 @@ public interface SuggestionPopupListener {
      * Called when a suggestion popup's suggestions have changed.
      *
      * @param suggestionPopup
-     * @param previousSuggestions
+     * @param previousSuggestionData
      */
-    public void suggestionsChanged(SuggestionPopup suggestionPopup, List<?> previousSuggestions);
+    public void suggestionDataChanged(SuggestionPopup suggestionPopup, List<?> previousSuggestionData);
 
     /**
      * Called when a suggestion popup's item renderer has changed.

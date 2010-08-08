@@ -150,7 +150,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
         suggestionPopup.setContent(suggestionListViewBorder);
 
-        suggestionListView.setListData(suggestionPopup.getSuggestions());
+        suggestionListView.setListData(suggestionPopup.getSuggestionData());
         suggestionListView.setItemRenderer(suggestionPopup.getSuggestionRenderer());
 
         // Attach the drop-shadow decorator
@@ -290,9 +290,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     @Override
-    public void suggestionsChanged(SuggestionPopup suggestionPopup,
-        List<?> previousSuggestions) {
-        suggestionListView.setListData(suggestionPopup.getSuggestions());
+    public void suggestionDataChanged(SuggestionPopup suggestionPopup,
+        List<?> previousSuggestionData) {
+        suggestionListView.setListData(suggestionPopup.getSuggestionData());
     }
 
     @Override

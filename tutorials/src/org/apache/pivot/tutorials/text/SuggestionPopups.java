@@ -108,7 +108,7 @@ public class SuggestionPopups extends Window implements Bindable {
                 }
 
                 if (suggestions.getLength() > 0) {
-                    suggestionPopup.setSuggestions(suggestions);
+                    suggestionPopup.setSuggestionData(suggestions);
                     suggestionPopup.open(textInput);
                 }
             }

@@ -111,7 +111,7 @@ public class SuggestionDemo extends Window implements Bindable {
                         || suggestions.getLength() == 0) {
                         suggestionPopup.close();
                     } else {
-                        suggestionPopup.setSuggestions(suggestions);
+                        suggestionPopup.setSuggestionData(suggestions);
                         suggestionPopup.open(textInput, new SuggestionPopupCloseListener() {
                             @Override
                             public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {

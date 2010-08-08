@@ -16,8 +16,12 @@
  */
 package org.apache.pivot.wtk;
 
+import java.util.Comparator;
+
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.ListListener;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
@@ -29,10 +33,10 @@ public class SuggestionPopup extends Window {
     private static class SuggestionPopupListenerList extends ListenerList<SuggestionPopupListener>
         implements SuggestionPopupListener {
         @Override
-        public void suggestionsChanged(SuggestionPopup suggestionPopup,
-            List<?> previousSuggestions) {
+        public void suggestionDataChanged(SuggestionPopup suggestionPopup,
+            List<?> previousSuggestionData) {
             for (SuggestionPopupListener listener : this) {
-                listener.suggestionsChanged(suggestionPopup, previousSuggestions);
+                listener.suggestionDataChanged(suggestionPopup, previousSuggestionData);
             }
         }
 
@@ -84,13 +88,63 @@ public class SuggestionPopup extends Window {
     private TextInput textInput = null;
     private SuggestionPopupCloseListener suggestionPopupCloseListener = null;
 
-    private List<?> suggestions;
+    private List<?> suggestionData;
     private ListView.ItemRenderer suggestionRenderer;
     private int selectedIndex = -1;
 
     private boolean result = false;
 
     private boolean closing = false;
+
+    private ListListener<Object> suggestionDataListener = new ListListener<Object>() {
+        @Override
+        public void itemInserted(List<Object> list, int index) {
+            int previousSelectedIndex = selectedIndex;
+
+            if (index <= selectedIndex) {
+                selectedIndex++;
+            }
+
+            if (selectedIndex != previousSelectedIndex) {
+                suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+            }
+        }
+
+        @Override
+        public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
+            int previousSelectedIndex = selectedIndex;
+
+            int count = items.getLength();
+            if (index + count <= selectedIndex) {
+                selectedIndex--;
+            } else if (index <= selectedIndex) {
+                selectedIndex = -1;
+            }
+
+            if (selectedIndex != previousSelectedIndex) {
+                suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+            }
+        }
+
+        @Override
+        public void itemUpdated(List<Object> list, int index, Object previousItem) {
+            // No-op
+        }
+
+        @Override
+        public void listCleared(List<Object> list) {
+            // All items were removed; clear the selection and notify
+            // listeners
+            selectedIndex = -1;
+            suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+        }
+
+        @Override
+        public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
+            selectedIndex = -1;
+            suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+        }
+    };
 
     private SuggestionPopupListenerList suggestionPopupListeners = new SuggestionPopupListenerList();
     private SuggestionPopupStateListenerList suggestionPopupStateListeners = new SuggestionPopupStateListenerList();
@@ -103,7 +157,7 @@ public class SuggestionPopup extends Window {
 
     public SuggestionPopup(List<?> suggestions) {
         setSuggestionRenderer(DEFAULT_SUGGESTION_RENDERER);
-        setSuggestions(suggestions);
+        setSuggestionData(suggestions);
 
         installThemeSkin(SuggestionPopup.class);
     }
@@ -118,8 +172,8 @@ public class SuggestionPopup extends Window {
     /**
      * Returns the list of suggestions presented by the popup.
      */
-    public List<?> getSuggestions() {
-        return suggestions;
+    public List<?> getSuggestionData() {
+        return suggestionData;
     }
 
     /**
@@ -127,16 +181,33 @@ public class SuggestionPopup extends Window {
      *
      * @param suggestions
      */
-    public void setSuggestions(List<?> suggestions) {
-        if (suggestions == null) {
-            throw new IllegalArgumentException();
+    @SuppressWarnings("unchecked")
+    public void setSuggestionData(List<?> suggestionData) {
+        if (suggestionData == null) {
+            throw new IllegalArgumentException("suggestionData is null.");
         }
 
-        List<?> previousSuggestions = this.suggestions;
+        List<?> previousSuggestionData = this.suggestionData;
 
-        if (previousSuggestions != suggestions) {
-            this.suggestions = suggestions;
-            suggestionPopupListeners.suggestionsChanged(this, previousSuggestions);
+        if (previousSuggestionData != suggestionData) {
+            int previousSelectedIndex = selectedIndex;
+
+            if (previousSuggestionData != null) {
+                // Clear any existing selection
+                selectedIndex = -1;
+
+                ((List<Object>)previousSuggestionData).getListListeners().remove(suggestionDataListener);
+            }
+
+            ((List<Object>)suggestionData).getListListeners().add(suggestionDataListener);
+
+            // Update the list data and fire change event
+            this.suggestionData = suggestionData;
+            suggestionPopupListeners.suggestionDataChanged(this, previousSuggestionData);
+
+            if (selectedIndex != previousSelectedIndex) {
+                suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+            }
         }
     }
 
@@ -181,7 +252,7 @@ public class SuggestionPopup extends Window {
      */
     public void setSelectedIndex(int selectedIndex) {
         if (selectedIndex < -1
-            || selectedIndex >= suggestions.getLength()) {
+            || selectedIndex >= suggestionData.getLength()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -204,7 +275,7 @@ public class SuggestionPopup extends Window {
         Object item = null;
 
         if (index >= 0) {
-            item = suggestions.get(index);
+            item = suggestionData.get(index);
         }
 
         return item;
