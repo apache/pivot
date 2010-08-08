@@ -22,7 +22,6 @@ import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
-import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
@@ -34,13 +33,9 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
-import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.DragSource;
-import org.apache.pivot.wtk.DropTarget;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Keyboard;
-import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.ScrollPane;
@@ -99,8 +94,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
     }
 
-    private class EditorPopup extends Window implements ContainerMouseListener,
-        ComponentListener, TableViewListener, TableViewRowListener {
+    private class EditorPopup extends Window {
         // Fields that determine what is being edited
         private final TableView tableView;
         private final int rowIndex;
@@ -116,6 +110,110 @@ public class TableViewRowEditor implements TableView.RowEditor {
         private boolean saving = false;
 
         private ScrollPane tableViewScrollPane = null;
+
+        private ContainerMouseListener displayContainerMouseListener = new ContainerMouseListener.Adapter() {
+            @Override
+            public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+                if (!opening
+                    && !closing) {
+                    // If the event occurred outside the popup, close the popup
+                    Display display = (Display)container;
+                    Window window = (Window)display.getComponentAt(x, y);
+
+                    if (window != EditorPopup.this &&
+                        (window == null || !isOwner(window))) {
+                        saveChanges();
+                    }
+                }
+
+                return opening;
+            }
+
+            @Override
+            public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+                int scrollAmount, int wheelRotation, int x, int y) {
+                boolean consumed = false;
+
+                // If the event occurred outside the popup, consume the event
+                Display display = (Display)container;
+                Window window = (Window)display.getComponentAt(x, y);
+
+                if (window != EditorPopup.this &&
+                    (window == null || !isOwner(window))) {
+                    consumed = true;
+                }
+
+                return consumed;
+            }
+        };
+
+        private ComponentListener tableViewComponentListener = new ComponentListener.Adapter() {
+            @Override
+            public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+                // Re-position the editor popup
+                ApplicationContext.queueCallback(new Runnable() {
+                    @Override
+                    public void run() {
+                        reposition();
+                    }
+                });
+            }
+
+            @Override
+            public void locationChanged(Component component, int previousX, int previousY) {
+                // Re-position the editor popup
+                ApplicationContext.queueCallback(new Runnable() {
+                    @Override
+                    public void run() {
+                        reposition();
+                    }
+                });
+            }
+
+            @Override
+            public void visibleChanged(Component component) {
+                cancelEdit();
+            }
+        };
+
+        private TableViewListener tableViewListener = new TableViewListener.Adapter() {
+            @Override
+            public void tableDataChanged(TableView tableView, List<?> previousTableData) {
+                cancelEdit();
+            }
+
+            @Override
+            public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
+                cancelEdit();
+            }
+        };
+
+        private TableViewRowListener tableViewRowListener = new TableViewRowListener() {
+            @Override
+            public void rowInserted(TableView tableView, int index) {
+                cancelEdit();
+            }
+
+            @Override
+            public void rowsRemoved(TableView tableView, int index, int count) {
+                cancelEdit();
+            }
+
+            @Override
+            public void rowUpdated(TableView tableView, int index) {
+                cancelEdit();
+            }
+
+            @Override
+            public void rowsCleared(TableView tableView) {
+                cancelEdit();
+            }
+
+            @Override
+            public void rowsSorted(TableView tableView) {
+                cancelEdit();
+            }
+        };
 
         @SuppressWarnings("unchecked")
         public EditorPopup(TableView tableView, int rowIndex, int columnIndex) {
@@ -217,10 +315,10 @@ public class TableViewRowEditor implements TableView.RowEditor {
             if (!isOpen()) {
                 super.open(display, owner);
 
-                display.getContainerMouseListeners().add(this);
-                tableView.getComponentListeners().add(this);
-                tableView.getTableViewListeners().add(this);
-                tableView.getTableViewRowListeners().add(this);
+                display.getContainerMouseListeners().add(displayContainerMouseListener);
+                tableView.getComponentListeners().add(tableViewComponentListener);
+                tableView.getTableViewListeners().add(tableViewListener);
+                tableView.getTableViewRowListeners().add(tableViewRowListener);
 
                 // Scroll the editor to match that of the table view
                 if (tableViewScrollPane != null) {
@@ -261,7 +359,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 // Close once we've transitioned back to the image card
                 if (cardPane.getSelectedIndex() == IMAGE_CARD_INDEX) {
                     Display display = getDisplay();
-                    display.getContainerMouseListeners().remove(this);
+                    display.getContainerMouseListeners().remove(displayContainerMouseListener);
 
                     Window owner = getOwner();
 
@@ -289,9 +387,9 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 } else if (!closing) {
                     closing = true;
 
-                    tableView.getComponentListeners().remove(this);
-                    tableView.getTableViewListeners().remove(this);
-                    tableView.getTableViewRowListeners().remove(this);
+                    tableView.getComponentListeners().remove(tableViewComponentListener);
+                    tableView.getTableViewListeners().remove(tableViewListener);
+                    tableView.getTableViewRowListeners().remove(tableViewRowListener);
 
                     // Disable the table pane to prevent interaction while closing
                     tablePane.setEnabled(false);
@@ -415,195 +513,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 boolean enabled = (editorComponent.getUserData().get(DISABLED_KEY) == null);
                 editorComponent.setEnabled(enabled && columnWidth > 0);
             }
-        }
-
-        // ContainerMouseListener methods
-
-        @Override
-        public boolean mouseMove(Container container, int x, int y) {
-            return false;
-        }
-
-        @Override
-        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            if (!opening
-                && !closing) {
-                // If the event occurred outside the popup, close the popup
-                Display display = (Display)container;
-                Window window = (Window)display.getComponentAt(x, y);
-
-                if (window != this &&
-                    (window == null || !isOwner(window))) {
-                    saveChanges();
-                }
-            }
-
-            return opening;
-        }
-
-        @Override
-        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
-            // No-op
-            return false;
-        }
-
-        @Override
-        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
-            int scrollAmount, int wheelRotation, int x, int y) {
-            boolean consumed = false;
-
-            // If the event occurred outside the popup, consume the event
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
-
-            if (window != this &&
-                (window == null || !isOwner(window))) {
-                consumed = true;
-            }
-
-            return consumed;
-        }
-
-        // ComponentListener methods
-
-        @Override
-        public void parentChanged(Component component, Container previousParent) {
-            // No-op
-        }
-
-        @Override
-        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            // Re-position the editor popup
-            ApplicationContext.queueCallback(new Runnable() {
-                @Override
-                public void run() {
-                    reposition();
-                }
-            });
-        }
-
-        @Override
-        public void preferredSizeChanged(Component component, int previousPreferredWidth,
-            int previousPreferredHeight) {
-            // No-op
-        }
-
-        @Override
-        public void widthLimitsChanged(Component component, int previousMinimumWidth,
-            int previousMaximumWidth) {
-            // No-op
-        }
-
-        @Override
-        public void heightLimitsChanged(Component component, int previousMinimumHeight,
-            int previousMaximumHeight) {
-            // No-op
-        }
-
-        @Override
-        public void locationChanged(Component component, int previousX, int previousY) {
-            // Re-position the editor popup
-            ApplicationContext.queueCallback(new Runnable() {
-                @Override
-                public void run() {
-                    reposition();
-                }
-            });
-        }
-
-        @Override
-        public void visibleChanged(Component component) {
-            cancelEdit();
-        }
-
-        @Override
-        public void cursorChanged(Component component, Cursor previousCursor) {
-            // No-op
-        }
-
-        @Override
-        public void tooltipTextChanged(Component component, String previousTooltipText) {
-            // No-op
-        }
-
-        @Override
-        public void tooltipDelayChanged(Component component, int previousTooltipDelay) {
-            // No-op
-        }
-
-        @Override
-        public void dragSourceChanged(Component component, DragSource previousDragSource) {
-            // No-op
-        }
-
-        @Override
-        public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
-            // No-op
-        }
-
-        @Override
-        public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
-            // No-op
-        }
-
-        @Override
-        public void nameChanged(Component component, String previousName) {
-            // No-op
-        }
-
-        // TableViewListener methods
-
-        @Override
-        public void tableDataChanged(TableView tableView, List<?> previousTableData) {
-            cancelEdit();
-        }
-
-        @Override
-        public void columnSourceChanged(TableView tableView, TableView previousColumnSource) {
-            // No-op
-        }
-
-        @Override
-        public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
-            cancelEdit();
-        }
-
-        @Override
-        public void selectModeChanged(TableView tableView,
-            TableView.SelectMode previousSelectMode) {
-            // No-op
-        }
-
-        @Override
-        public void disabledRowFilterChanged(TableView tableView,
-            Filter<?> previousDisabledRowFilter) {
-            // No-op
-        }
-
-        // TableViewRowListener methods
-        @Override
-        public void rowInserted(TableView tableView, int index) {
-            cancelEdit();
-        }
-
-        @Override
-        public void rowsRemoved(TableView tableView, int index, int count) {
-            cancelEdit();
-        }
-
-        @Override
-        public void rowUpdated(TableView tableView, int index) {
-            cancelEdit();
-        }
-
-        @Override
-        public void rowsCleared(TableView tableView) {
-            cancelEdit();
-        }
-
-        @Override
-        public void rowsSorted(TableView tableView) {
-            cancelEdit();
         }
     }
 
