@@ -76,7 +76,7 @@ limitations under the License.
                             </Border>
                         </BoxPane>
 
-                        <BoxPane enabled="true">
+                        <BoxPane enabled="false">
                             <TabPane.tabData>
                                 <content:ButtonData icon="org/apache/pivot/tutorials/star.png"
                                     text="Star"/>
@@ -93,8 +93,8 @@ limitations under the License.
 
             <Border styles="{padding:2}">
                 <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
-                    <Checkbox bxml:id="closeableCheckbox" buttonData="Closeable" selected="true"/>
-                    <Checkbox bxml:id="collapsibleCheckbox" buttonData="Collapsible" selected="true"/>
+                    <Checkbox bxml:id="closeableCheckbox" buttonData="Closeable"/>
+                    <Checkbox bxml:id="collapsibleCheckbox" buttonData="Collapsible"/>
 
                     <Label text="Tab orientation:"/>
                     <bxml:define>

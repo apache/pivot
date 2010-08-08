@@ -407,9 +407,10 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         public Bounds getCloseTriggerBounds() {
-            return new Bounds(getWidth() - (CLOSE_TRIGGER_SIZE + buttonPadding.right + 1),
-                (getHeight() - CLOSE_TRIGGER_SIZE) / 2,
-                CLOSE_TRIGGER_SIZE, CLOSE_TRIGGER_SIZE);
+            // Include an extra 2 pixels around the trigger for ease of use
+            return new Bounds(getWidth() - (CLOSE_TRIGGER_SIZE + buttonPadding.right + 1) - 2,
+                (getHeight() - CLOSE_TRIGGER_SIZE) / 2 - 2,
+                CLOSE_TRIGGER_SIZE + 4, CLOSE_TRIGGER_SIZE + 4);
         }
     }
 
