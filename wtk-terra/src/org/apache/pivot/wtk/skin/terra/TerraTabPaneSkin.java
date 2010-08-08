@@ -221,7 +221,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
 
             boolean active = (selectionChangeTransition != null
-                && selectionChangeTransition.tab == tabButton.tab);
+                && selectionChangeTransition.getTab() == tabButton.tab);
 
             Color backgroundColor, buttonBevelColor;
             if (tabButton.isSelected()
@@ -407,10 +407,26 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
 
         public Bounds getCloseTriggerBounds() {
+            Bounds bounds = null;
+
             // Include an extra 2 pixels around the trigger for ease of use
-            return new Bounds(getWidth() - (CLOSE_TRIGGER_SIZE + buttonPadding.right + 1) - 2,
-                (getHeight() - CLOSE_TRIGGER_SIZE) / 2 - 2,
-                CLOSE_TRIGGER_SIZE + 4, CLOSE_TRIGGER_SIZE + 4);
+            switch (tabOrientation) {
+                case HORIZONTAL: {
+                    bounds = new Bounds(getWidth() - (CLOSE_TRIGGER_SIZE + buttonPadding.right + 1) - 2,
+                        (getHeight() - CLOSE_TRIGGER_SIZE) / 2 - 2,
+                        CLOSE_TRIGGER_SIZE + 4, CLOSE_TRIGGER_SIZE + 4);
+                    break;
+                }
+
+                case VERTICAL: {
+                    bounds = new Bounds((getWidth() - CLOSE_TRIGGER_SIZE) / 2 - 2,
+                        getHeight() - (CLOSE_TRIGGER_SIZE + buttonPadding.bottom + 1) - 2,
+                        CLOSE_TRIGGER_SIZE + 4, CLOSE_TRIGGER_SIZE + 4);
+                    break;
+                }
+            }
+
+            return bounds;
         }
     }
 
@@ -418,16 +434,21 @@ public class TerraTabPaneSkin extends ContainerSkin
      * Selection change transition.
      */
     public class SelectionChangeTransition extends Transition {
-        public final Component tab;
+        public final int index;
         public final boolean expand;
 
         private Easing easing = new Quadratic();
 
-        public SelectionChangeTransition(Component tab, boolean expand) {
+        public SelectionChangeTransition(int index, boolean expand) {
             super(SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE, false);
 
-            this.tab = tab;
+            this.index = index;
             this.expand = expand;
+        }
+
+        public Component getTab() {
+            TabPane tabPane = (TabPane)getComponent();
+            return tabPane.getTabs().get(index);
         }
 
         public float getScale() {
@@ -449,10 +470,10 @@ public class TerraTabPaneSkin extends ContainerSkin
             TabPane tabPane = (TabPane)getComponent();
 
             if (expand) {
-                tab.setVisible(true);
+                getTab().setVisible(true);
             }
 
-            tab.getDecorators().add(clipDecorator);
+            getTab().getDecorators().add(clipDecorator);
             tabPane.setEnabled(false);
 
             super.start(transitionListener);
@@ -463,10 +484,10 @@ public class TerraTabPaneSkin extends ContainerSkin
             TabPane tabPane = (TabPane)getComponent();
 
             if (!expand) {
-                tab.setVisible(false);
+                getTab().setVisible(false);
             }
 
-            tab.getDecorators().remove(clipDecorator);
+            getTab().getDecorators().remove(clipDecorator);
             tabPane.setEnabled(true);
 
             super.stop();
@@ -992,9 +1013,14 @@ public class TerraTabPaneSkin extends ContainerSkin
             }
         }
 
-        TabButton selectedTabButton = (TabButton)tabButtonGroup.getSelection();
-        if (selectedTabButton != null
-            || selectionChangeTransition != null) {
+        TabButton activeTabButton;
+        if (selectionChangeTransition == null) {
+            activeTabButton = (TabButton)tabButtonGroup.getSelection();
+        } else {
+            activeTabButton = (TabButton)tabButtonBoxPane.get(selectionChangeTransition.index);
+        }
+
+        if (activeTabButton != null) {
             Bounds contentBounds = new Bounds(x, y, width, height);
 
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -1022,12 +1048,12 @@ public class TerraTabPaneSkin extends ContainerSkin
                 case HORIZONTAL: {
                     graphics.draw(new Line2D.Double(left, top, left, bottom));
 
-                    if (selectedTabButton == null) {
+                    if (activeTabButton == null) {
                         graphics.draw(new Line2D.Double(left, top, right, top));
                     } else {
-                        Point selectedTabButtonLocation = selectedTabButton.mapPointToAncestor(tabPane, 0, 0);
+                        Point selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane, 0, 0);
                         graphics.draw(new Line2D.Double(left, top, selectedTabButtonLocation.x + 0.5, top));
-                        graphics.draw(new Line2D.Double(selectedTabButtonLocation.x + selectedTabButton.getWidth() - 0.5,
+                        graphics.draw(new Line2D.Double(selectedTabButtonLocation.x + activeTabButton.getWidth() - 0.5,
                             top, right, top));
                     }
 
@@ -1037,12 +1063,12 @@ public class TerraTabPaneSkin extends ContainerSkin
                 case VERTICAL: {
                     graphics.draw(new Line2D.Double(left, top, right, top));
 
-                    if (selectedTabButton == null) {
+                    if (activeTabButton == null) {
                         graphics.draw(new Line2D.Double(left, top, left, bottom));
                     } else {
-                        Point selectedTabButtonLocation = selectedTabButton.mapPointToAncestor(tabPane, 0, 0);
+                        Point selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane, 0, 0);
                         graphics.draw(new Line2D.Double(left, top, left, selectedTabButtonLocation.y + 0.5));
-                        graphics.draw(new Line2D.Double(left, selectedTabButtonLocation.y + selectedTabButton.getHeight() - 0.5,
+                        graphics.draw(new Line2D.Double(left, selectedTabButtonLocation.y + activeTabButton.getHeight() - 0.5,
                             left, bottom));
                     }
 
@@ -1470,13 +1496,11 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                 if (selectedIndex == -1) {
                     // Collapse
-                    Component tab = tabPane.getTabs().get(previousSelectedIndex);
-                    selectionChangeTransition = new SelectionChangeTransition(tab, false);
+                    selectionChangeTransition = new SelectionChangeTransition(previousSelectedIndex, false);
                 } else {
                     if (previousSelectedIndex == -1) {
                         // Expand
-                        Component tab = tabPane.getTabs().get(selectedIndex);
-                        selectionChangeTransition = new SelectionChangeTransition(tab, true);
+                        selectionChangeTransition = new SelectionChangeTransition(selectedIndex, true);
                     }
                 }
 
@@ -1491,7 +1515,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                             int selectedIndex;
                             if (selectionChangeTransition.expand) {
-                                selectedIndex = tabPane.getTabs().indexOf(selectionChangeTransition.tab);
+                                selectedIndex = selectionChangeTransition.index;
                             } else {
                                 selectedIndex = -1;
                             }
