@@ -58,11 +58,19 @@ public class Accordion extends Container {
             panels.insert(panel, index);
 
             // Update the selection
+            int previousSelectedIndex = selectedIndex;
+
             if (selectedIndex >= index) {
                 selectedIndex++;
             }
 
+            // Fire insert event
             accordionListeners.panelInserted(Accordion.this, index);
+
+            // Fire selection change event, if necessary
+            if (selectedIndex != previousSelectedIndex) {
+                accordionSelectionListeners.selectedIndexChanged(Accordion.this, selectedIndex);
+            }
         }
 
         @Override
@@ -86,6 +94,8 @@ public class Accordion extends Container {
             Sequence<Component> removed = panels.remove(index, count);
 
             // Update the selection
+            int previousSelectedIndex = selectedIndex;
+
             if (selectedIndex >= index) {
                 if (selectedIndex < index + count) {
                     selectedIndex = -1;
@@ -94,12 +104,18 @@ public class Accordion extends Container {
                 }
             }
 
+            // Fire remove event
             accordionListeners.panelsRemoved(Accordion.this, index, removed);
 
             // Remove the panels from the component list
             for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Component panel = removed.get(i);
                 Accordion.this.remove(panel);
+            }
+
+            // Fire selection change event, if necessary
+            if (selectedIndex != previousSelectedIndex) {
+                accordionSelectionListeners.selectedIndexChanged(Accordion.this, selectedIndex);
             }
 
             return removed;

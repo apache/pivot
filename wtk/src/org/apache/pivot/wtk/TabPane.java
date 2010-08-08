@@ -58,11 +58,19 @@ public class TabPane extends Container {
             tabs.insert(tab, index);
 
             // Update the selection
+            int previousSelectedIndex = selectedIndex;
+
             if (selectedIndex >= index) {
                 selectedIndex++;
             }
 
+            // Fire insert event
             tabPaneListeners.tabInserted(TabPane.this, index);
+
+            // Fire selection change event, if necessary
+            if (selectedIndex != previousSelectedIndex) {
+                tabPaneSelectionListeners.selectedIndexChanged(TabPane.this, selectedIndex);
+            }
         }
 
         @Override
@@ -90,6 +98,8 @@ public class TabPane extends Container {
                 removed = tabs.remove(index, count);
 
                 // Update the selection
+                int previousSelectedIndex = selectedIndex;
+
                 if (selectedIndex >= index) {
                     if (selectedIndex < index + count) {
                         selectedIndex = -1;
@@ -98,12 +108,18 @@ public class TabPane extends Container {
                     }
                 }
 
+                // Fire remove event
                 tabPaneListeners.tabsRemoved(TabPane.this, index, removed);
 
                 // Remove the tabs from the component list
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
                     Component tab = removed.get(i);
                     TabPane.this.remove(tab);
+                }
+
+                // Fire selection change event, if necessary
+                if (selectedIndex != previousSelectedIndex) {
+                    tabPaneSelectionListeners.selectedIndexChanged(TabPane.this, selectedIndex);
                 }
             } else {
                 removed = null;

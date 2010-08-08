@@ -19,6 +19,12 @@ limitations under the License.
 <TabPane closeable="true" selectedIndex="0"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
+    <tabPaneSelectionListeners>
+    function selectedIndexChanged(tabPane, previousSelectedIndex) {
+        java.lang.System.out.println(tabPane.selectedIndex + ", " + previousSelectedIndex);
+    }
+    </tabPaneSelectionListeners>
+
     <Label TabPane.tabData="Tab 1" TabPane.tooltipText="Tooltip 1" preferredWidth="320" preferredHeight="240" text="Tab 1"/>
     <Label TabPane.tabData="Tab 2" TabPane.tooltipText="Tooltip 2" preferredWidth="320" preferredHeight="240" text="Tab 2"/>
     <Label TabPane.tabData="Tab 3" preferredWidth="320" preferredHeight="240" text="Tab 3"/>

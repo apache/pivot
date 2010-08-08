@@ -649,7 +649,14 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     BeanAdapter beanAdapter = new BeanAdapter(element.value);
 
                     if (beanAdapter.isReadOnly(localName)) {
-                        if (ListenerList.class.isAssignableFrom(beanAdapter.getType(localName))) {
+                        Class<?> propertyType = beanAdapter.getType(localName);
+                        if (propertyType == null) {
+                            throw new SerializationException("\"" + localName
+                                + "\" is not a valid property of element "
+                                + element.name + ".");
+                        }
+
+                        if (ListenerList.class.isAssignableFrom(propertyType)) {
                             elementType = Element.Type.LISTENER_LIST_PROPERTY;
                         } else {
                             elementType = Element.Type.READ_ONLY_PROPERTY;
