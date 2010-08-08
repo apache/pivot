@@ -27,15 +27,6 @@ public interface WindowStateListener {
      */
     public static class Adapter implements WindowStateListener {
         @Override
-        public Vote previewWindowOpen(Window window, Display display) {
-            return Vote.APPROVE;
-        }
-
-        @Override
-        public void windowOpenVetoed(Window window, Vote reason) {
-        }
-
-        @Override
         public void windowOpened(Window window) {
         }
 
@@ -52,22 +43,6 @@ public interface WindowStateListener {
         public void windowClosed(Window window, Display display, Window owner) {
         }
     }
-
-    /**
-     * Called to preview a window open event.
-     *
-     * @param window
-     * @param display
-     */
-    public Vote previewWindowOpen(Window window, Display display);
-
-    /**
-     * Called when a window open event has been vetoed.
-     *
-     * @param window
-     * @param reason
-     */
-    public void windowOpenVetoed(Window window, Vote reason);
 
     /**
      * Called when a window has opened.

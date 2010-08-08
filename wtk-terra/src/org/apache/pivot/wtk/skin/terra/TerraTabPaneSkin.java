@@ -375,10 +375,11 @@ public class TerraTabPaneSkin extends ContainerSkin
             boolean consumed = super.mouseClick(component, button, x, y, count);
 
             TabButton tabButton = (TabButton)getComponent();
+            TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
 
-            if (tabButton.isSelected()
+            if (tabPane.isCloseable()
+                && tabButton.isSelected()
                 && getCloseTriggerBounds().contains(x, y)) {
-                TabPane tabPane = (TabPane)TerraTabPaneSkin.this.getComponent();
                 tabPane.getTabs().remove(tabButton.tab);
             } else {
                 tabButton.press();
@@ -1011,16 +1012,42 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             graphics.setPaint(borderColor);
 
-            // Draw the left, right, and bottom borders
-            graphics.draw(new Line2D.Double(left, top, left, bottom));
+            // Draw the right and bottom borders
             graphics.draw(new Line2D.Double(right, top, right, bottom));
             graphics.draw(new Line2D.Double(left, bottom, right, bottom));
 
-            // Draw the top border
-            Point selectedTabButtonLocation = selectedTabButton.mapPointToAncestor(tabPane, 0, 0);
-            graphics.draw(new Line2D.Double(left, top, selectedTabButtonLocation.x + 0.5, top));
-            graphics.draw(new Line2D.Double(selectedTabButtonLocation.x + selectedTabButton.getWidth() - 0.5,
-                top, right, top));
+            // Draw the left and top borders
+            switch (tabOrientation) {
+                case HORIZONTAL: {
+                    graphics.draw(new Line2D.Double(left, top, left, bottom));
+
+                    if (selectedTabButton == null) {
+                        graphics.draw(new Line2D.Double(left, top, right, top));
+                    } else {
+                        Point selectedTabButtonLocation = selectedTabButton.mapPointToAncestor(tabPane, 0, 0);
+                        graphics.draw(new Line2D.Double(left, top, selectedTabButtonLocation.x + 0.5, top));
+                        graphics.draw(new Line2D.Double(selectedTabButtonLocation.x + selectedTabButton.getWidth() - 0.5,
+                            top, right, top));
+                    }
+
+                    break;
+                }
+
+                case VERTICAL: {
+                    graphics.draw(new Line2D.Double(left, top, right, top));
+
+                    if (selectedTabButton == null) {
+                        graphics.draw(new Line2D.Double(left, top, left, bottom));
+                    } else {
+                        Point selectedTabButtonLocation = selectedTabButton.mapPointToAncestor(tabPane, 0, 0);
+                        graphics.draw(new Line2D.Double(left, top, left, selectedTabButtonLocation.y + 0.5));
+                        graphics.draw(new Line2D.Double(left, selectedTabButtonLocation.y + selectedTabButton.getHeight() - 0.5,
+                            left, bottom));
+                    }
+
+                    break;
+                }
+            }
         }
     }
 
@@ -1375,6 +1402,16 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     @Override
+    public Vote previewRemoveTabs(TabPane tabPane, int index, int count) {
+        return Vote.APPROVE;
+    }
+
+    @Override
+    public void removeTabsVetoed(TabPane tabPane, Vote vote) {
+        // No-op
+    }
+
+    @Override
     public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> removed) {
         if (selectionChangeTransition != null) {
             selectionChangeTransition.end();
@@ -1425,51 +1462,55 @@ public class TerraTabPaneSkin extends ContainerSkin
     public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
         Vote vote;
 
-        if (tabPane.isShowing()
-            && selectionChangeTransition == null) {
-            int previousSelectedIndex = tabPane.getSelectedIndex();
+        if (tabPane.isCollapsible()) {
+            if (tabPane.isShowing()
+                && selectionChangeTransition == null) {
+                int previousSelectedIndex = tabPane.getSelectedIndex();
 
-            if (selectedIndex == -1) {
-                // Collapse
-                Component tab = tabPane.getTabs().get(previousSelectedIndex);
-                selectionChangeTransition = new SelectionChangeTransition(tab, false);
-            } else {
-                if (previousSelectedIndex == -1) {
-                    // Expand
-                    Component tab = tabPane.getTabs().get(selectedIndex);
-                    selectionChangeTransition = new SelectionChangeTransition(tab, true);
+                if (selectedIndex == -1) {
+                    // Collapse
+                    Component tab = tabPane.getTabs().get(previousSelectedIndex);
+                    selectionChangeTransition = new SelectionChangeTransition(tab, false);
+                } else {
+                    if (previousSelectedIndex == -1) {
+                        // Expand
+                        Component tab = tabPane.getTabs().get(selectedIndex);
+                        selectionChangeTransition = new SelectionChangeTransition(tab, true);
+                    }
+                }
+
+                if (selectionChangeTransition != null) {
+                    selectionChangeTransition.start(new TransitionListener() {
+                        @Override
+                        public void transitionCompleted(Transition transition) {
+                            TabPane tabPane = (TabPane)getComponent();
+
+                            SelectionChangeTransition selectionChangeTransition =
+                                (SelectionChangeTransition)transition;
+
+                            int selectedIndex;
+                            if (selectionChangeTransition.expand) {
+                                selectedIndex = tabPane.getTabs().indexOf(selectionChangeTransition.tab);
+                            } else {
+                                selectedIndex = -1;
+                            }
+
+                            tabPane.setSelectedIndex(selectedIndex);
+
+                            TerraTabPaneSkin.this.selectionChangeTransition = null;
+                        }
+                    });
                 }
             }
 
-            if (selectionChangeTransition != null) {
-                selectionChangeTransition.start(new TransitionListener() {
-                    @Override
-                    public void transitionCompleted(Transition transition) {
-                        TabPane tabPane = (TabPane)getComponent();
-
-                        SelectionChangeTransition selectionChangeTransition =
-                            (SelectionChangeTransition)transition;
-
-                        int selectedIndex;
-                        if (selectionChangeTransition.expand) {
-                            selectedIndex = tabPane.getTabs().indexOf(selectionChangeTransition.tab);
-                        } else {
-                            selectedIndex = -1;
-                        }
-
-                        tabPane.setSelectedIndex(selectedIndex);
-
-                        TerraTabPaneSkin.this.selectionChangeTransition = null;
-                    }
-                });
+            if (selectionChangeTransition == null
+                || !selectionChangeTransition.isRunning()) {
+                vote = Vote.APPROVE;
+            } else {
+                vote = Vote.DEFER;
             }
-        }
-
-        if (selectionChangeTransition == null
-            || !selectionChangeTransition.isRunning()) {
-            vote = Vote.APPROVE;
         } else {
-            vote = Vote.DEFER;
+            vote = Vote.APPROVE;
         }
 
         return vote;

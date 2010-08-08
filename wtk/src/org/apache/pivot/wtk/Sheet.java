@@ -99,10 +99,6 @@ public class Sheet extends Window {
         this.sheetCloseListener = sheetCloseListener;
 
         super.open(display, owner);
-
-        if (!isOpen()) {
-            this.sheetCloseListener = null;
-        }
     }
 
     @Override

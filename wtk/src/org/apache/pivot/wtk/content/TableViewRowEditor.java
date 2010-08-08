@@ -217,42 +217,40 @@ public class TableViewRowEditor implements TableView.RowEditor {
             if (!isOpen()) {
                 super.open(display, owner);
 
-                if (isOpen()) {
-                    display.getContainerMouseListeners().add(this);
-                    tableView.getComponentListeners().add(this);
-                    tableView.getTableViewListeners().add(this);
-                    tableView.getTableViewRowListeners().add(this);
+                display.getContainerMouseListeners().add(this);
+                tableView.getComponentListeners().add(this);
+                tableView.getTableViewListeners().add(this);
+                tableView.getTableViewRowListeners().add(this);
 
-                    // Scroll the editor to match that of the table view
-                    if (tableViewScrollPane != null) {
-                        scrollPane.setScrollLeft(tableViewScrollPane.getScrollLeft());
-                    }
-
-                    // Set the opening flag
-                    opening = true;
-
-                    // Give the editor focus after the transition has completed.
-                    // When the transition starts, the row image is the selected
-                    // card. so we have to wait until the selected index changes
-                    // to give focus to the appropriate editor component
-                    cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
-                        @Override
-                        public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
-                            // Clear the opening flag
-                            opening = false;
-
-                            // Focus the initial editor component
-                            Component focusComponent = tablePane.getCellComponent(0, columnIndex);
-                            focusComponent.requestFocus();
-
-                            // Remove this listener
-                            cardPane.getCardPaneListeners().remove(this);
-                        }
-                    });
-
-                    // Transition to the editor card
-                    cardPane.setSelectedIndex(EDITOR_CARD_INDEX);
+                // Scroll the editor to match that of the table view
+                if (tableViewScrollPane != null) {
+                    scrollPane.setScrollLeft(tableViewScrollPane.getScrollLeft());
                 }
+
+                // Set the opening flag
+                opening = true;
+
+                // Give the editor focus after the transition has completed.
+                // When the transition starts, the row image is the selected
+                // card. so we have to wait until the selected index changes
+                // to give focus to the appropriate editor component
+                cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+                    @Override
+                    public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+                        // Clear the opening flag
+                        opening = false;
+
+                        // Focus the initial editor component
+                        Component focusComponent = tablePane.getCellComponent(0, columnIndex);
+                        focusComponent.requestFocus();
+
+                        // Remove this listener
+                        cardPane.getCardPaneListeners().remove(this);
+                    }
+                });
+
+                // Transition to the editor card
+                cardPane.setSelectedIndex(EDITOR_CARD_INDEX);
             }
         }
 

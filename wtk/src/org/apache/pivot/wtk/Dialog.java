@@ -184,10 +184,6 @@ public class Dialog extends Frame {
         result = false;
 
         super.open(display, owner);
-
-        if (!isOpen()) {
-            this.dialogCloseListener = null;
-        }
     }
 
     @Override

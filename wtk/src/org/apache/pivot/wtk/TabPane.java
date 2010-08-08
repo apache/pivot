@@ -29,8 +29,6 @@ import org.apache.pivot.wtk.content.ButtonDataRenderer;
 /**
  * Container that provides access to a set of components via selectable tabs,
  * only one of which is visible at a time.
- * <p>
- * TODO Add a getTabAt() method that delegates to the skin.
  */
 @DefaultProperty("tabs")
 public class TabPane extends Container {
@@ -84,24 +82,32 @@ public class TabPane extends Container {
 
         @Override
         public Sequence<Component> remove(int index, int count) {
-            // Remove the tabs from the tab list
-            Sequence<Component> removed = tabs.remove(index, count);
+            Sequence<Component> removed;
 
-            // Update the selection
-            if (selectedIndex >= index) {
-                if (selectedIndex < index + count) {
-                    selectedIndex = -1;
-                } else {
-                    selectedIndex -= count;
+            Vote vote = tabPaneListeners.previewRemoveTabs(TabPane.this, index, count);
+            if (vote == Vote.APPROVE) {
+                // Remove the tabs from the tab list
+                removed = tabs.remove(index, count);
+
+                // Update the selection
+                if (selectedIndex >= index) {
+                    if (selectedIndex < index + count) {
+                        selectedIndex = -1;
+                    } else {
+                        selectedIndex -= count;
+                    }
                 }
-            }
 
-            tabPaneListeners.tabsRemoved(TabPane.this, index, removed);
+                tabPaneListeners.tabsRemoved(TabPane.this, index, removed);
 
-            // Remove the tabs from the component list
-            for (int i = 0, n = removed.getLength(); i < n; i++) {
-                Component tab = removed.get(i);
-                TabPane.this.remove(tab);
+                // Remove the tabs from the component list
+                for (int i = 0, n = removed.getLength(); i < n; i++) {
+                    Component tab = removed.get(i);
+                    TabPane.this.remove(tab);
+                }
+            } else {
+                removed = null;
+                tabPaneListeners.removeTabsVetoed(TabPane.this, vote);
             }
 
             return removed;
@@ -143,9 +149,27 @@ public class TabPane extends Container {
         }
 
         @Override
+        public Vote previewRemoveTabs(TabPane tabPane, int index, int count) {
+            Vote vote = Vote.APPROVE;
+
+            for (TabPaneListener listener : this) {
+                vote = vote.tally(listener.previewRemoveTabs(tabPane, index, count));
+            }
+
+            return vote;
+        }
+
+        @Override
         public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
             for (TabPaneListener listener : this) {
                 listener.tabsRemoved(tabPane, index, tabs);
+            }
+        }
+
+        @Override
+        public void removeTabsVetoed(TabPane tabPane, Vote reason) {
+            for (TabPaneListener listener : this) {
+                listener.removeTabsVetoed(tabPane, reason);
             }
         }
 

@@ -130,10 +130,6 @@ public class MenuPopup extends Window {
         setLocation(x, y);
 
         super.open(display, owner);
-
-        if (!isOpen()) {
-            contextMenu = false;
-        }
     }
 
     @Override

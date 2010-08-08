@@ -18,8 +18,15 @@ limitations under the License.
 
 <navigation:TabPanes title="Tab Panes" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
     xmlns:navigation="org.apache.pivot.tutorials.navigation"
     xmlns="org.apache.pivot.wtk">
+    <bxml:define>
+        <Prompt bxml:id="confirmCloseTabPrompt" title="Confirm Close Tab"
+            message="Really close this tab?"
+            options="['Cancel', 'OK']" selectedOption="1"/>
+    </bxml:define>
+
     <TablePane styles="{padding:8, horizontalSpacing:6}">
         <columns>
             <TablePane.Column width="1*"/>
@@ -32,7 +39,7 @@ limitations under the License.
                     <TabPane bxml:id="tabPane">
                         <corner>
                             <BoxPane bxml:id="cornerBoxPane" styles="{horizontalAlignment:'right'}">
-                                <TextInput/>
+                                <TextInput textSize="10"/>
                             </BoxPane>
                         </corner>
 
@@ -69,11 +76,16 @@ limitations under the License.
                             </Border>
                         </BoxPane>
 
-                        <BoxPane enabled="false">
+                        <BoxPane enabled="true">
                             <TabPane.tabData>
                                 <content:ButtonData icon="org/apache/pivot/tutorials/star.png"
                                     text="Star"/>
                             </TabPane.tabData>
+
+                            <Border styles="{padding:2}">
+                                <Label text="480x360 (disabled)" preferredWidth="480" preferredHeight="360"
+                                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                            </Border>
                         </BoxPane>
                     </TabPane>
                 </BoxPane>
@@ -81,9 +93,10 @@ limitations under the License.
 
             <Border styles="{padding:2}">
                 <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
-                    <Checkbox bxml:id="collapsibleCheckbox" buttonData="Collapsible"/>
-                    <Label text="Tab orientation:"/>
+                    <Checkbox bxml:id="closeableCheckbox" buttonData="Closeable" selected="true"/>
+                    <Checkbox bxml:id="collapsibleCheckbox" buttonData="Collapsible" selected="true"/>
 
+                    <Label text="Tab orientation:"/>
                     <bxml:define>
                         <ButtonGroup bxml:id="tabOrientation"/>
                     </bxml:define>

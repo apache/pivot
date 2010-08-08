@@ -154,16 +154,6 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
 
     // Window state events
     @Override
-    public Vote previewWindowOpen(Window window, Display display) {
-        return Vote.APPROVE;
-    }
-
-    @Override
-    public void windowOpenVetoed(Window window, Vote reason) {
-        // No-op
-    }
-
-    @Override
     public void windowOpened(Window window) {
         // No-op
     }

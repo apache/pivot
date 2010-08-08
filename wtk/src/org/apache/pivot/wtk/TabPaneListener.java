@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Vote;
 
 /**
  * Tab pane listener interface.
@@ -28,6 +29,15 @@ public interface TabPaneListener {
     public static class Adapter implements TabPaneListener {
         @Override
         public void tabInserted(TabPane tabPane, int index) {
+        }
+
+        @Override
+        public Vote previewRemoveTabs(TabPane tabPane, int index, int count) {
+            return Vote.APPROVE;
+        }
+
+        @Override
+        public void removeTabsVetoed(TabPane tabPane, Vote vote) {
         }
 
         @Override
@@ -58,6 +68,23 @@ public interface TabPaneListener {
      * @param index
      */
     public void tabInserted(TabPane tabPane, int index);
+
+    /**
+     * Called to preview a tab removal.
+     *
+     * @param tabPane
+     * @param index
+     * @param count
+     */
+    public Vote previewRemoveTabs(TabPane tabPane, int index, int count);
+
+    /**
+     * Called when a tab removal has been vetoed.
+     *
+     * @param tabPane
+     * @param reason
+     */
+    public void removeTabsVetoed(TabPane tabPane, Vote reason);
 
     /**
      * Called when a tab has been removed from a tab pane's tab sequence.

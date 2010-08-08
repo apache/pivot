@@ -251,11 +251,6 @@ public class SuggestionPopup extends Window {
         result = false;
 
         super.open(textInput.getWindow());
-
-        if (!isOpen()) {
-            this.textInput = null;
-            this.suggestionPopupCloseListener = null;
-        }
     }
 
     @Override

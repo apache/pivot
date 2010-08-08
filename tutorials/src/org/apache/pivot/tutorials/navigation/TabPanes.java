@@ -21,29 +21,75 @@ import java.net.URL;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.RadioButton;
+import org.apache.pivot.wtk.Sheet;
+import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.TabPane;
+import org.apache.pivot.wtk.TabPaneListener;
 import org.apache.pivot.wtk.Window;
 
 public class TabPanes extends Window implements Bindable {
+    private Prompt confirmCloseTabPrompt = null;
     private TabPane tabPane = null;
+    private Checkbox closeableCheckbox = null;
     private Checkbox collapsibleCheckbox = null;
     private RadioButton horizontalRadioButton = null;
     private RadioButton verticalRadioButton = null;
     private BoxPane cornerBoxPane = null;
 
+    private boolean confirmCloseTab = true;
+
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+        confirmCloseTabPrompt = (Prompt)namespace.get("confirmCloseTabPrompt");
         tabPane = (TabPane)namespace.get("tabPane");
+        closeableCheckbox = (Checkbox)namespace.get("closeableCheckbox");
         collapsibleCheckbox = (Checkbox)namespace.get("collapsibleCheckbox");
         horizontalRadioButton = (RadioButton)namespace.get("horizontalRadioButton");
         verticalRadioButton = (RadioButton)namespace.get("verticalRadioButton");
         cornerBoxPane = (BoxPane)namespace.get("cornerBoxPane");
+
+        tabPane.getTabPaneListeners().add(new TabPaneListener.Adapter() {
+            @Override
+            public Vote previewRemoveTabs(final TabPane tabPane, final int index, final int count) {
+                Vote vote;
+                if (confirmCloseTab) {
+                    confirmCloseTabPrompt.open(TabPanes.this, new SheetCloseListener() {
+                        @Override
+                        public void sheetClosed(Sheet sheet) {
+                            if (confirmCloseTabPrompt.getResult()
+                                && confirmCloseTabPrompt.getSelectedOption() == 1) {
+                                confirmCloseTab = false;
+
+                                int n = tabPane.getTabs().getLength();
+                                if (index < n - 1) {
+                                    tabPane.setSelectedIndex(index + 1);
+                                } else {
+                                    tabPane.setSelectedIndex(index - 1);
+                                }
+
+                                tabPane.getTabs().remove(index, count);
+
+                                confirmCloseTab = true;
+                            }
+                        }
+                    });
+
+                    vote = Vote.DENY;
+                } else {
+                    vote = Vote.APPROVE;
+                }
+
+                return vote;
+            }
+        });
 
         ButtonStateListener checkboxStateListener = new ButtonStateListener() {
             @Override
@@ -52,6 +98,7 @@ public class TabPanes extends Window implements Bindable {
             }
         };
 
+        closeableCheckbox.getButtonStateListeners().add(checkboxStateListener);
         collapsibleCheckbox.getButtonStateListeners().add(checkboxStateListener);
 
         ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
@@ -70,6 +117,7 @@ public class TabPanes extends Window implements Bindable {
     }
 
     private void updateTabPane() {
+        tabPane.setCloseable(closeableCheckbox.isSelected());
         tabPane.setCollapsible(collapsibleCheckbox.isSelected());
 
         if (horizontalRadioButton.isSelected()) {
