@@ -54,11 +54,17 @@ public class TerraPromptSkin extends TerraSheetSkin
         }
     };
 
+    public TerraPromptSkin() {
+        setResizable(true);
+    }
+
     @Override
     public void install(Component component) {
         super.install(component);
 
         Prompt prompt = (Prompt)component;
+        prompt.setPreferredWidth(300);
+
         prompt.getPromptListeners().add(this);
 
         // Load the prompt content

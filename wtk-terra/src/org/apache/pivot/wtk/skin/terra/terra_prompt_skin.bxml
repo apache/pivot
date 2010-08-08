@@ -25,8 +25,7 @@ limitations under the License.
 
     <TablePane.Row height="1*">
         <Border styles="{padding:12, backgroundColor:4, color:7}">
-            <TablePane preferredWidth="280"
-                styles="{horizontalSpacing:12, verticalSpacing:12}">
+            <TablePane styles="{horizontalSpacing:12, verticalSpacing:12}">
                 <columns>
                     <TablePane.Column width="-1"/>
                     <TablePane.Column width="1*"/>

@@ -55,8 +55,6 @@ public class TerraAlertSkin extends TerraDialogSkin
     };
 
     public TerraAlertSkin() {
-        setResizable(false);
-
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor(theme.getColor(9));
     }
@@ -66,6 +64,8 @@ public class TerraAlertSkin extends TerraDialogSkin
         super.install(component);
 
         Alert alert = (Alert)component;
+        alert.setPreferredWidth(300);
+
         alert.getAlertListeners().add(this);
 
         // Load the alert content
