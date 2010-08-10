@@ -154,7 +154,6 @@ public class ListButton extends Button {
         @Override
         public void itemInserted(List<Object> list, int index) {
             int previousSelectedIndex = selectedIndex;
-
             if (index <= selectedIndex) {
                 selectedIndex++;
             }
@@ -166,13 +165,15 @@ public class ListButton extends Button {
 
         @Override
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
-            int previousSelectedIndex = selectedIndex;
-
             int count = items.getLength();
-            if (index + count <= selectedIndex) {
-                selectedIndex--;
-            } else if (index <= selectedIndex) {
-                selectedIndex = -1;
+
+            int previousSelectedIndex = selectedIndex;
+            if (selectedIndex >= index) {
+                if (selectedIndex < index + count) {
+                    selectedIndex = -1;
+                } else {
+                    selectedIndex -= count;
+                }
             }
 
             if (selectedIndex != previousSelectedIndex) {
@@ -187,8 +188,6 @@ public class ListButton extends Button {
 
         @Override
         public void listCleared(List<Object> list) {
-            // All items were removed; clear the selection and notify
-            // listeners
             selectedIndex = -1;
             listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
         }

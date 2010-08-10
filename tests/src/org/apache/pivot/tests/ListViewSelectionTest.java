@@ -117,17 +117,7 @@ public class ListViewSelectionTest implements Application {
         dumpSelection();
         verifySelection(4);
 
-        listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
-            @Override
-            public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
-                // No-op
-            }
-
-            @Override
-            public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
-                // No-op
-            }
-
+        listView.getListViewSelectionListeners().add(new ListViewSelectionListener.Adapter() {
             @Override
             public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
                 System.out.println("Selection changed");

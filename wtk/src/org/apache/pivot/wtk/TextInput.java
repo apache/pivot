@@ -236,19 +236,19 @@ public class TextInput extends Component {
         if (previousText != text) {
             this.text = text;
 
-            // Store previous text valid flag, selection start/length
-            boolean previousTextValid = textValid;
+            // Update selection
             int previousSelectionStart = selectionStart;
             int previousSelectionLength = selectionLength;
-
-            // Update the text valid flag and selection state
-            textValid = (validator == null) ? true : validator.isValid(text);
             selectionStart = text.length();
             selectionLength = 0;
 
+            // Update the valid flag
+            boolean previousTextValid = textValid;
+            textValid = (validator == null) ? true : validator.isValid(text);
+
+            // Fire change events
             textInputTextListeners.textChanged(this, previousText);
 
-            // Fire additional events as needed
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
             }
@@ -306,20 +306,20 @@ public class TextInput extends Component {
             textBuilder.append(this.text.substring(selectionStart));
             this.text = textBuilder.toString();
 
-            // Store previous text valid flag, selection start/length
-            boolean previousTextValid = textValid;
+            // Update selection
             int previousSelectionStart = selectionStart;
             int previousSelectionLength = selectionLength;
-
-            // Update the text valid flag and selection state
-            textValid = (validator == null) ? true : validator.isValid(text);
             selectionStart += text.length();
             selectionLength = 0;
 
+            // Update the valid flag
+            boolean previousTextValid = textValid;
+            textValid = (validator == null) ? true : validator.isValid(text);
+
+            // Fire change events
             textInputTextListeners.charactersInserted(TextInput.this, selectionStart, text.length());
             textInputTextListeners.textChanged(TextInput.this, null);
 
-            // Fire additional events as needed
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
             }
@@ -341,7 +341,10 @@ public class TextInput extends Component {
      */
     public void delete(boolean backspace) {
         if (text.length() > 0) {
-            // Remove the character
+            // Determine count and update the selection
+            int previousSelectionStart = selectionStart;
+            int previousSelectionLength = selectionLength;
+
             int count;
             if (selectionLength > 0) {
                 count = selectionLength;
@@ -354,12 +357,8 @@ public class TextInput extends Component {
                 count = 1;
             }
 
-            // Store previous text valid flag, selection start/length
+            // Update the valid flag
             boolean previousTextValid = textValid;
-            int previousSelectionStart = selectionStart;
-            int previousSelectionLength = selectionLength;
-
-            // Update the text valid flag and selection state
             textValid = (validator == null) ? true : validator.isValid(text);
 
             char[] removed = new char[count];
@@ -370,10 +369,10 @@ public class TextInput extends Component {
                 text = textBuilder.toString();
             }
 
+            // Fire change events
             textInputTextListeners.charactersRemoved(TextInput.this, selectionStart, removed);
             textInputTextListeners.textChanged(TextInput.this, null);
 
-            // Fire additional events as needed
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
             }

@@ -210,8 +210,6 @@ public class TableView extends Component {
 
         /**
          * Returns the column header data renderer.
-         *
-         * @return
          */
         public HeaderDataRenderer getHeaderDataRenderer() {
             return headerDataRenderer;
@@ -1517,7 +1515,7 @@ public class TableView extends Component {
             tableViewListeners.tableDataChanged(this, previousTableData);
 
             if (cleared > 0) {
-                tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
+                tableViewSelectionListeners.selectedRangesChanged(this, getSelectedRanges());
             }
         }
     }
@@ -1923,13 +1921,7 @@ public class TableView extends Component {
      * Clears the selection.
      */
     public void clearSelection() {
-        if (selectedRanges.getLength() > 0) {
-            Sequence<Span> previousSelectedRanges = selectedRanges.toList();
-            selectedRanges = new ListSelection();
-
-            tableViewSelectionListeners.selectedRangesChanged(this,
-                previousSelectedRanges);
-        }
+        setSelectedRanges(new ArrayList<Span>(0));
     }
 
     /**

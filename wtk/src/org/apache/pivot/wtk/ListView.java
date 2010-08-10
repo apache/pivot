@@ -836,7 +836,7 @@ public class ListView extends Component {
             listViewListeners.listDataChanged(this, previousListData);
 
             if (cleared > 0) {
-                listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
+                listViewSelectionListeners.selectedRangesChanged(this, getSelectedRanges());
             }
         }
     }
@@ -1265,13 +1265,7 @@ public class ListView extends Component {
      * Clears the selection.
      */
     public void clearSelection() {
-        if (selectedRanges.getLength() > 0) {
-            Sequence<Span> previousSelectedRanges = selectedRanges.toList();
-            selectedRanges = new ListSelection();
-
-            listViewSelectionListeners.selectedRangesChanged(this,
-                previousSelectedRanges);
-        }
+        setSelectedRanges(new ArrayList<Span>(0));
     }
 
     /**

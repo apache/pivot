@@ -1560,4 +1560,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             validateSelection = true;
         }
     }
+
+    public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+        // No-op
+    }
 }

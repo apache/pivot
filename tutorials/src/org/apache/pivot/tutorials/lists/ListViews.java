@@ -37,7 +37,7 @@ public class ListViews extends Window implements Bindable {
         selectionLabel = (Label)namespace.get("selectionLabel");
         listView = (ListView)namespace.get("listView");
 
-        listView.getListViewSelectionListeners().add(        new ListViewSelectionListener() {
+        listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
             @Override
             public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
                 updateSelection(listView);
