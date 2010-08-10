@@ -349,6 +349,18 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         });
     }
 
+    /**
+     * Deserializes an object hierarchy from a BXML resource.
+     * <p>
+     * This is the base version of the method. It does not set the "location" or "resources"
+     * properties. Callers that wish to use this version of the method to load BXML that uses
+     * location or resource resolution must manually set these properties via a call to
+     * {@link #setLocation(URL)} or {@link #setResources(Resources)}, respectively, before calling
+     * this method.
+     *
+     * @return
+     * The deserialized object hierarchy.
+     */
     @Override
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
@@ -452,12 +464,38 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         return root;
     }
 
+    /**
+     * Deserializes an object hierarchy from a BXML resource.
+     *
+     * @see #readObject(Class, String, boolean)
+     */
     public final Object readObject(Class<?> baseType, String resourceName)
         throws IOException, SerializationException {
         return readObject(baseType, resourceName, false);
     }
 
-    public Object readObject(Class<?> baseType, String resourceName, boolean localize)
+    /**
+     * Deserializes an object hierarchy from a BXML resource.
+     * <p>
+     * The location of the resource is determined by a call to
+     * {@link Class#getResource(String)} on the given base type, passing the given
+     * resource name as an argument. If the resources is localized, the base type
+     * is also used as the base name of the resource bundle.
+     *
+     * @param baseType
+     * The base type.
+     *
+     * @param resourceName
+     * The name of the BXML resource.
+     *
+     * @param localize
+     * If <tt>true</tt>, the deserialized resource will be localized using the resource
+     * bundle specified by the base type. Otherwise, it will not be localized, and any
+     * use of the resource resolution operator will result in a serialization exception.
+     *
+     * @see #readObject(URL, Resources)
+     */
+    public final Object readObject(Class<?> baseType, String resourceName, boolean localize)
         throws IOException, SerializationException {
         if (baseType == null) {
             throw new IllegalArgumentException("baseType is null.");
@@ -471,12 +509,36 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             localize ? new Resources(baseType.getName()) : null);
     }
 
+    /**
+     * Deserializes an object hierarchy from a BXML resource.
+     * <p>
+     * This version of the method does not set the "resources" property. Callers
+     * that wish to use this version of the method to load BXML that uses resource
+     * resolution must manually set this property via a call to
+     * {@link #setResources(Resources)} before calling this method.
+     *
+     * @param location
+     * The location of the BXML resource.
+     *
+     * @see #readObject(URL, Resources)
+     */
     public final Object readObject(URL location)
         throws IOException, SerializationException {
         return readObject(location, null);
     }
 
-    public Object readObject(URL location, Resources resources)
+    /**
+     * Deserializes an object hierarchy from a BXML resource.
+     *
+     * @param location
+     * The location of the BXML resource.
+     *
+     * @param resources
+     * The resources that will be used to localize the deserialized resource.
+     *
+     * #see readObject(InputStream)
+     */
+    public final Object readObject(URL location, Resources resources)
         throws IOException, SerializationException {
         if (location == null) {
             throw new IllegalArgumentException("location is null.");
