@@ -583,26 +583,8 @@ public class TerraTabPaneSkin extends ContainerSkin
         tabPane.getTabPaneSelectionListeners().add(this);
         tabPane.getTabPaneAttributeListeners().add(this);
 
-        // Add the tab buttons
+        // Add the tab button container
         tabPane.add(tabButtonPanorama);
-
-        Sequence<Component> tabs = tabPane.getTabs();
-        int selectedIndex = tabPane.getSelectedIndex();
-
-        for (int i = 0, n = tabs.getLength(); i < n; i++) {
-            Component tab = tabs.get(i);
-            tab.setVisible(i == selectedIndex);
-
-            TabButton tabButton = new TabButton(tab);
-            tabButton.setButtonGroup(tabButtonGroup);
-            tabButtonBoxPane.add(tabButton);
-
-            // Listen for state changes on the tab
-            tabButton.setEnabled(tab.isEnabled());
-            tab.getComponentStateListeners().add(tabStateListener);
-        }
-
-        selectedIndexChanged(tabPane, -1);
     }
 
     @Override
@@ -1424,8 +1406,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         if (tabPane.getTabs().getLength() == 1) {
             tabPane.setSelectedIndex(0);
         }
-
-        invalidateComponent();
     }
 
     @Override
@@ -1454,8 +1434,6 @@ public class TerraTabPaneSkin extends ContainerSkin
             // Stop listening for state changes on the tab
             tabButton.tab.getComponentStateListeners().remove(tabStateListener);
         }
-
-        invalidateComponent();
     }
 
     @Override
@@ -1557,35 +1535,39 @@ public class TerraTabPaneSkin extends ContainerSkin
     @Override
     public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
         int selectedIndex = tabPane.getSelectedIndex();
-        if (selectedIndex == -1) {
-            Button button = tabButtonGroup.getSelection();
-            if (button != null) {
-                button.setSelected(false);
-            }
-        } else {
-            final Button button = (Button)tabButtonBoxPane.get(selectedIndex);
-            button.setSelected(true);
 
-            Component selectedTab = tabPane.getTabs().get(selectedIndex);
-            selectedTab.setVisible(true);
-            selectedTab.requestFocus();
-
-            ApplicationContext.queueCallback(new Runnable(){
-                @Override
-                public void run() {
-                    button.scrollAreaToVisible(0, 0, button.getWidth(), button.getHeight());
+        if (selectedIndex != previousSelectedIndex) {
+            // This was not an indirect selection change
+            if (selectedIndex == -1) {
+                Button button = tabButtonGroup.getSelection();
+                if (button != null) {
+                    button.setSelected(false);
                 }
-            });
-        }
+            } else {
+                final Button button = (Button)tabButtonBoxPane.get(selectedIndex);
+                button.setSelected(true);
 
-        if (previousSelectedIndex != -1) {
-            Component previousSelectedTab = tabPane.getTabs().get(previousSelectedIndex);
-            previousSelectedTab.setVisible(false);
-        }
+                Component selectedTab = tabPane.getTabs().get(selectedIndex);
+                selectedTab.setVisible(true);
+                selectedTab.requestFocus();
 
-        if (selectedIndex == -1
-            || previousSelectedIndex == -1) {
-            tabButtonBoxPane.invalidate();
+                ApplicationContext.queueCallback(new Runnable(){
+                    @Override
+                    public void run() {
+                        button.scrollAreaToVisible(0, 0, button.getWidth(), button.getHeight());
+                    }
+                });
+            }
+
+            if (previousSelectedIndex != -1) {
+                Component previousSelectedTab = tabPane.getTabs().get(previousSelectedIndex);
+                previousSelectedTab.setVisible(false);
+            }
+
+            if (selectedIndex == -1
+                || previousSelectedIndex == -1) {
+                tabButtonBoxPane.invalidate();
+            }
         }
     }
 

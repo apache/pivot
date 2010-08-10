@@ -895,20 +895,23 @@ public class TerraAccordionSkin extends ContainerSkin
     public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
         int selectedIndex = accordion.getSelectedIndex();
 
-        if (selectedIndex == -1) {
-            Button button = panelHeaderGroup.getSelection();
-            if (button != null) {
-                button.setSelected(false);
+        if (selectedIndex != previousSelectedIndex) {
+            // This was not an indirect selection change
+            if (selectedIndex == -1) {
+                Button button = panelHeaderGroup.getSelection();
+                if (button != null) {
+                    button.setSelected(false);
+                }
+            } else {
+                Button button = panelHeaders.get(selectedIndex);
+                button.setSelected(true);
+
+                Component selectedPanel = accordion.getPanels().get(selectedIndex);
+                selectedPanel.requestFocus();
             }
-        } else {
-            Button button = panelHeaders.get(selectedIndex);
-            button.setSelected(true);
 
-            Component selectedPanel = accordion.getPanels().get(selectedIndex);
-            selectedPanel.requestFocus();
+            invalidateComponent();
         }
-
-        invalidateComponent();
     }
 
     // Accordion attribute events

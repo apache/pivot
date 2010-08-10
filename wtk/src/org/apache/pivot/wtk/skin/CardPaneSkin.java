@@ -750,20 +750,24 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     @Override
     public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
         int selectedIndex = cardPane.getSelectedIndex();
-        if (selectedIndex != -1) {
-            Component selectedCard = cardPane.get(selectedIndex);
-            selectedCard.setVisible(true);
-        }
 
-        if (previousSelectedIndex != -1) {
-            Component previousSelectedCard = cardPane.get(previousSelectedIndex);
-            previousSelectedCard.setVisible(false);
-        }
+        if (selectedIndex != previousSelectedIndex) {
+            // This was not an indirect selection change
+            if (selectedIndex != -1) {
+                Component selectedCard = cardPane.get(selectedIndex);
+                selectedCard.setVisible(true);
+            }
 
-        if (selectedIndex == -1
-            || previousSelectedIndex == -1
-            || sizeToSelection) {
-            invalidateComponent();
+            if (previousSelectedIndex != -1) {
+                Component previousSelectedCard = cardPane.get(previousSelectedIndex);
+                previousSelectedCard.setVisible(false);
+            }
+
+            if (selectedIndex == -1
+                || previousSelectedIndex == -1
+                || sizeToSelection) {
+                invalidateComponent();
+            }
         }
     }
 }
