@@ -2572,7 +2572,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Applies a set of named styles.
      *
-     * @param styleName
+     * @param styleNames
      */
     public void setStyleNames(Sequence<String> styleNames) {
         if (styleNames == null) {

@@ -38,7 +38,7 @@ public interface TabPaneAttributeListener {
      *
      * @param tabPane
      * @param component
-     * @param previousLabel
+     * @param previousTabData
      */
     public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData);
 

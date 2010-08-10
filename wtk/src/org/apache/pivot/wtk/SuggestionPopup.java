@@ -179,7 +179,7 @@ public class SuggestionPopup extends Window {
     /**
      * Sets the list of suggestions presented by the popup.
      *
-     * @param suggestions
+     * @param suggestionData
      */
     @SuppressWarnings("unchecked")
     public void setSuggestionData(List<?> suggestionData) {
