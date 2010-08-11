@@ -178,7 +178,7 @@ public final class TerraTheme extends Theme {
             load(getClass().getResource("TerraTheme_default.json"));
         } else {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            load(classLoader.getResource(packageName + "." + location.substring(1)));
+            load(classLoader.getResource(location.substring(1)));
         }
 
         // Install named styles
