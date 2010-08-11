@@ -302,14 +302,18 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     @Override
-    public void selectedIndexChanged(SuggestionPopup suggestionPopup,
-        int previousSelectedIndex) {
-        TextInput textInput = suggestionPopup.getTextInput();
+    public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex) {
+        int selectedIndex = suggestionPopup.getSelectedIndex();
 
-        Object suggestion = suggestionPopup.getSelectedSuggestion();
-        if (suggestion != null) {
-            ListView.ItemRenderer suggestionRenderer = suggestionPopup.getSuggestionRenderer();
-            textInput.setText(suggestionRenderer.toString(suggestion));
+        if (selectedIndex != previousSelectedIndex) {
+            // This was not an indirect selection change
+            TextInput textInput = suggestionPopup.getTextInput();
+
+            Object suggestion = suggestionPopup.getSelectedSuggestion();
+            if (suggestion != null) {
+                ListView.ItemRenderer suggestionRenderer = suggestionPopup.getSuggestionRenderer();
+                textInput.setText(suggestionRenderer.toString(suggestion));
+            }
         }
     }
 

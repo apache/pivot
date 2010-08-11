@@ -358,12 +358,14 @@ public abstract class ListButtonSkin extends ButtonSkin
     // List button selection events
     @Override
     public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
-        // Set the selected item as the button data
         int selectedIndex = listButton.getSelectedIndex();
 
-        Object buttonData = (selectedIndex == -1) ? null : listButton.getListData().get(selectedIndex);
-        listButton.setButtonData(buttonData);
+        if (selectedIndex != previousSelectedIndex) {
+            // This was not an indirect selection change
+            Object buttonData = (selectedIndex == -1) ? null : listButton.getListData().get(selectedIndex);
+            listButton.setButtonData(buttonData);
 
-        listView.setSelectedIndex(selectedIndex);
+            listView.setSelectedIndex(selectedIndex);
+        }
     }
 }

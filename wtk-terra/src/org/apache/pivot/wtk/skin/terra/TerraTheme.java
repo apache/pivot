@@ -168,7 +168,8 @@ public final class TerraTheme extends Theme {
         // Load the color scheme
         String location = null;
         try {
-            location = System.getProperty(LOCATION_PROPERTY);
+            String locationKey = getClass().getPackage().getName() + "." + LOCATION_PROPERTY;
+            location = System.getProperty(locationKey);
         } catch (SecurityException exception) {
             // No-op
         }
