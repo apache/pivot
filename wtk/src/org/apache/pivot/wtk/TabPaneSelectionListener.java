@@ -44,7 +44,10 @@ public interface TabPaneSelectionListener {
      * Called to preview a selected index change.
      *
      * @param tabPane
+     * The source of the event.
+     *
      * @param selectedIndex
+     * The index that will be selected.
      */
     public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex);
 
@@ -52,7 +55,10 @@ public interface TabPaneSelectionListener {
      * Called when a selected index change has been vetoed.
      *
      * @param tabPane
+     * The source of the event.
+     *
      * @param reason
+     * The reason the event was vetoed.
      */
     public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason);
 
@@ -60,7 +66,11 @@ public interface TabPaneSelectionListener {
      * Called when a tab pane's selected index has changed.
      *
      * @param tabPane
+     * The source of the event.
+     *
      * @param previousSelectedIndex
+     * If the selection changed directly, contains the index that was previously
+     * selected. Otherwise, contains the current selection.
      */
     public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex);
 }

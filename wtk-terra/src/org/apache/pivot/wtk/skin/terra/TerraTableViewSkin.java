@@ -1522,42 +1522,45 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-        if (tableView.isValid()) {
-            // Repaint the area occupied by the previous selection
-            if (previousSelectedRanges != null
-                && previousSelectedRanges.getLength() > 0) {
-                int rangeStart = previousSelectedRanges.get(0).start;
-                int rangeEnd = previousSelectedRanges.get(previousSelectedRanges.getLength() - 1).end;
+        if (previousSelectedRanges != null
+            && previousSelectedRanges != tableView.getSelectedRanges()) {
+            if (tableView.isValid()) {
+                // Repaint the area occupied by the previous selection
+                if (previousSelectedRanges != null
+                    && previousSelectedRanges.getLength() > 0) {
+                    int rangeStart = previousSelectedRanges.get(0).start;
+                    int rangeEnd = previousSelectedRanges.get(previousSelectedRanges.getLength() - 1).end;
 
-                Bounds previousSelectionBounds = getRowBounds(rangeStart);
-                previousSelectionBounds = previousSelectionBounds.union(getRowBounds(rangeEnd));
+                    Bounds previousSelectionBounds = getRowBounds(rangeStart);
+                    previousSelectionBounds = previousSelectionBounds.union(getRowBounds(rangeEnd));
 
-                repaintComponent(previousSelectionBounds);
-            }
-
-            // Repaint the area occupied by the current selection
-            Sequence<Span> selectedRanges = tableView.getSelectedRanges();
-            if (selectedRanges.getLength() > 0) {
-                int rangeStart = selectedRanges.get(0).start;
-                int rangeEnd = selectedRanges.get(selectedRanges.getLength() - 1).end;
-
-                Bounds selectionBounds = getRowBounds(rangeStart);
-                selectionBounds = selectionBounds.union(getRowBounds(rangeEnd));
-
-                repaintComponent(selectionBounds);
-
-                // Ensure that the selection is visible
-                Bounds visibleSelectionBounds = tableView.getVisibleArea(selectionBounds);
-                if (visibleSelectionBounds != null
-                    && visibleSelectionBounds.height < selectionBounds.height) {
-                    // TODO Repainting the entire component is a workaround for PIVOT-490
-                    repaintComponent();
-
-                    tableView.scrollAreaToVisible(selectionBounds);
+                    repaintComponent(previousSelectionBounds);
                 }
+
+                // Repaint the area occupied by the current selection
+                Sequence<Span> selectedRanges = tableView.getSelectedRanges();
+                if (selectedRanges.getLength() > 0) {
+                    int rangeStart = selectedRanges.get(0).start;
+                    int rangeEnd = selectedRanges.get(selectedRanges.getLength() - 1).end;
+
+                    Bounds selectionBounds = getRowBounds(rangeStart);
+                    selectionBounds = selectionBounds.union(getRowBounds(rangeEnd));
+
+                    repaintComponent(selectionBounds);
+
+                    // Ensure that the selection is visible
+                    Bounds visibleSelectionBounds = tableView.getVisibleArea(selectionBounds);
+                    if (visibleSelectionBounds != null
+                        && visibleSelectionBounds.height < selectionBounds.height) {
+                        // TODO Repainting the entire component is a workaround for PIVOT-490
+                        repaintComponent();
+
+                        tableView.scrollAreaToVisible(selectionBounds);
+                    }
+                }
+            } else {
+                validateSelection = true;
             }
-        } else {
-            validateSelection = true;
         }
     }
 

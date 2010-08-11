@@ -1203,40 +1203,43 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
-        if (listView.isValid()) {
-            // Repaint the area occupied by the previous selection
-            if (previousSelectedRanges != null
-                && previousSelectedRanges.getLength() > 0) {
-                int rangeStart = previousSelectedRanges.get(0).start;
-                int rangeEnd = previousSelectedRanges.get(previousSelectedRanges.getLength() - 1).end;
+        if (previousSelectedRanges != null
+            && previousSelectedRanges != listView.getSelectedRanges()) {
+            if (listView.isValid()) {
+                // Repaint the area occupied by the previous selection
+                if (previousSelectedRanges != null
+                    && previousSelectedRanges.getLength() > 0) {
+                    int rangeStart = previousSelectedRanges.get(0).start;
+                    int rangeEnd = previousSelectedRanges.get(previousSelectedRanges.getLength() - 1).end;
 
-                Bounds previousSelectionBounds = getItemBounds(rangeStart);
-                previousSelectionBounds = previousSelectionBounds.union(getItemBounds(rangeEnd));
-                repaintComponent(previousSelectionBounds);
-            }
-
-            // Repaint the area occupied by the current selection
-            Sequence<Span> selectedRanges = listView.getSelectedRanges();
-            if (selectedRanges.getLength() > 0) {
-                int rangeStart = selectedRanges.get(0).start;
-                int rangeEnd = selectedRanges.get(selectedRanges.getLength() - 1).end;
-
-                Bounds selectionBounds = getItemBounds(rangeStart);
-                selectionBounds = selectionBounds.union(getItemBounds(rangeEnd));
-                repaintComponent(selectionBounds);
-
-                // Ensure that the selection is visible
-                Bounds visibleSelectionBounds = listView.getVisibleArea(selectionBounds);
-                if (visibleSelectionBounds != null
-                    && visibleSelectionBounds.height < selectionBounds.height) {
-                    // TODO Repainting the entire component is a workaround for PIVOT-490
-                    repaintComponent();
-
-                    listView.scrollAreaToVisible(selectionBounds);
+                    Bounds previousSelectionBounds = getItemBounds(rangeStart);
+                    previousSelectionBounds = previousSelectionBounds.union(getItemBounds(rangeEnd));
+                    repaintComponent(previousSelectionBounds);
                 }
+
+                // Repaint the area occupied by the current selection
+                Sequence<Span> selectedRanges = listView.getSelectedRanges();
+                if (selectedRanges.getLength() > 0) {
+                    int rangeStart = selectedRanges.get(0).start;
+                    int rangeEnd = selectedRanges.get(selectedRanges.getLength() - 1).end;
+
+                    Bounds selectionBounds = getItemBounds(rangeStart);
+                    selectionBounds = selectionBounds.union(getItemBounds(rangeEnd));
+                    repaintComponent(selectionBounds);
+
+                    // Ensure that the selection is visible
+                    Bounds visibleSelectionBounds = listView.getVisibleArea(selectionBounds);
+                    if (visibleSelectionBounds != null
+                        && visibleSelectionBounds.height < selectionBounds.height) {
+                        // TODO Repainting the entire component is a workaround for PIVOT-490
+                        repaintComponent();
+
+                        listView.scrollAreaToVisible(selectionBounds);
+                    }
+                }
+            } else {
+                validateSelection = true;
             }
-        } else {
-            validateSelection = true;
         }
     }
 }
