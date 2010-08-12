@@ -456,7 +456,12 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         // Bind the root to the namespace
         if (root instanceof Bindable) {
-            bind(root);
+            Class<?> type = root.getClass();
+            while (Bindable.class.isAssignableFrom(type)) {
+                bind(root, type);
+                type = type.getSuperclass();
+            }
+
             Bindable bindable = (Bindable)root;
             bindable.initialize(namespace, location, resources);
         }
