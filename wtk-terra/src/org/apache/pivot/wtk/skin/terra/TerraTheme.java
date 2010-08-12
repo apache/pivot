@@ -174,21 +174,25 @@ public final class TerraTheme extends Theme {
             // No-op
         }
 
+
+        URL locationURL;
         if (location == null) {
-            load(getClass().getResource("TerraTheme_default.json"));
+            locationURL = getClass().getResource("TerraTheme_default.json");
         } else {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            String locationResource;
-            if (location.startsWith("/"))
-                locationResource = location.substring(1);
-            else
-                locationResource = packageName.replace('.', '/') + "/" + location;
-            URL locationURL = classLoader.getResource(locationResource);
-            if (locationURL == null) {
-                System.err.println("Unable to retrieve startup TerraTheme colors: \"" + locationResource + "\"");
+
+            if (location.startsWith("/")) {
+                locationURL = classLoader.getResource(location.substring(1));
+            } else {
+                locationURL = classLoader.getResource(packageName.replace('.', '/') + "/" + location);
             }
-            load(locationURL);
         }
+
+        if (locationURL == null) {
+            throw new RuntimeException("Unable to locate color scheme resource " + location + ".");
+        }
+
+        load(locationURL);
 
         // Install named styles
         try {
