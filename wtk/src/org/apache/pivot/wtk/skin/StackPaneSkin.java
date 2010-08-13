@@ -92,8 +92,8 @@ public class StackPaneSkin extends ContainerSkin {
         // minus padding
         StackPane stackPane = (StackPane)getComponent();
 
-        int width = getWidth() - (padding.left + padding.right);
-        int height = getHeight() - (padding.top + padding.bottom);
+        int width = Math.max(getWidth() - (padding.left + padding.right), 0);
+        int height = Math.max(getHeight() - (padding.top + padding.bottom), 0);
 
         for (Component component : stackPane) {
             component.setLocation(padding.left, padding.top);
