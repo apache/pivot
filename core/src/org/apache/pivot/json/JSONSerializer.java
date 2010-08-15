@@ -50,7 +50,7 @@ import org.apache.pivot.serialization.Serializer;
  */
 public class JSONSerializer implements Serializer<Object> {
     private Charset charset;
-    private Class<?> type;
+    private Type type;
 
     private int c = -1;
     private boolean alwaysDelimitMapKeys = false;
@@ -69,11 +69,11 @@ public class JSONSerializer implements Serializer<Object> {
         this(charset, Object.class);
     }
 
-    public JSONSerializer(Class<?> type) {
+    public JSONSerializer(Type type) {
         this(Charset.forName(DEFAULT_CHARSET_NAME), type);
     }
 
-    public JSONSerializer(Charset charset, Class<?> type) {
+    public JSONSerializer(Charset charset, Type type) {
         if (charset == null) {
             throw new IllegalArgumentException("charset is null.");
         }
@@ -92,7 +92,7 @@ public class JSONSerializer implements Serializer<Object> {
     /**
      * Returns the type of the object that will be returned by {@link #readObject(Reader)}.
      */
-    public Class<?> getType() {
+    public Type getType() {
         return type;
     }
 
