@@ -52,7 +52,7 @@ public class Expense {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type = type.trim();
     }
 
     public Double getAmount() {
@@ -72,6 +72,6 @@ public class Expense {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description.trim();
     }
 }
