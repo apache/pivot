@@ -1668,7 +1668,8 @@ public class TableView extends Component {
             throw new IllegalArgumentException("selectedRanges is null.");
         }
 
-        if (selectMode == SelectMode.NONE) {
+        // when we're in mode NONE, the only thing we can do is to clear the selection
+        if (selectMode == SelectMode.NONE && selectedRanges.getLength() > 0) {
             throw new IllegalArgumentException("Selection is not enabled.");
         }
 
