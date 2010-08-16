@@ -1281,48 +1281,53 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         TableView tableView = (TableView)getComponent();
+        TableView.SelectMode selectMode = tableView.getSelectMode();
 
         switch (keyCode) {
             case Keyboard.KeyCode.UP: {
-                int index = tableView.getFirstSelectedIndex();
-
-                do {
-                    index--;
-                } while (index >= 0
-                    && tableView.isRowDisabled(index));
-
-                if (index >= 0) {
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                        && tableView.getSelectMode() == TableView.SelectMode.MULTI) {
-                        tableView.addSelectedIndex(index);
-                    } else {
-                        tableView.setSelectedIndex(index);
+                if (selectMode != TableView.SelectMode.NONE) {
+                    int index = tableView.getFirstSelectedIndex();
+    
+                    do {
+                        index--;
+                    } while (index >= 0
+                        && tableView.isRowDisabled(index));
+    
+                    if (index >= 0) {
+                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                            && tableView.getSelectMode() == TableView.SelectMode.MULTI) {
+                            tableView.addSelectedIndex(index);
+                        } else {
+                            tableView.setSelectedIndex(index);
+                        }
                     }
+    
+                    consumed = true;
                 }
-
-                consumed = true;
                 break;
             }
 
             case Keyboard.KeyCode.DOWN: {
-                int index = tableView.getLastSelectedIndex();
-                int count = tableView.getTableData().getLength();
-
-                do {
-                    index++;
-                } while (index < count
-                    && tableView.isRowDisabled(index));
-
-                if (index < count) {
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                        && tableView.getSelectMode() == TableView.SelectMode.MULTI) {
-                        tableView.addSelectedIndex(index);
-                    } else {
-                        tableView.setSelectedIndex(index);
+                if (selectMode != TableView.SelectMode.NONE) {
+                    int index = tableView.getLastSelectedIndex();
+                    int count = tableView.getTableData().getLength();
+    
+                    do {
+                        index++;
+                    } while (index < count
+                        && tableView.isRowDisabled(index));
+    
+                    if (index < count) {
+                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                            && tableView.getSelectMode() == TableView.SelectMode.MULTI) {
+                            tableView.addSelectedIndex(index);
+                        } else {
+                            tableView.setSelectedIndex(index);
+                        }
                     }
+    
+                    consumed = true;
                 }
-
-                consumed = true;
                 break;
             }
         }
