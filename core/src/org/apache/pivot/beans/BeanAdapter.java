@@ -150,9 +150,7 @@ public class BeanAdapter implements Map<String, Object> {
 
     private static final String ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT =
         "Unable to access property \"%s\" for type %s.";
-    private static final String INVOCATION_TARGET_EXCEPTION_MESSAGE_FORMAT =
-        "Error getting or setting property \"%s\" for type %s.";
-
+    
     /**
      * Creates a new bean dictionary.
      *
@@ -231,7 +229,7 @@ public class BeanAdapter implements Map<String, Object> {
                     throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                         key, bean.getClass().getName()), exception);
                 } catch (InvocationTargetException exception) {
-                    throw new RuntimeException(String.format(INVOCATION_TARGET_EXCEPTION_MESSAGE_FORMAT,
+                    throw new RuntimeException(String.format("Error getting property \"%s\" for type %s.",
                         key, bean.getClass().getName()), exception.getCause());
                 }
             }
@@ -317,8 +315,8 @@ public class BeanAdapter implements Map<String, Object> {
                 throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                     key, bean.getClass().getName()), exception);
             } catch (InvocationTargetException exception) {
-                throw new RuntimeException(String.format(INVOCATION_TARGET_EXCEPTION_MESSAGE_FORMAT,
-                    key, bean.getClass().getName()), exception.getCause());
+                throw new RuntimeException(String.format("Error setting property \"%s\" for type %s to value \"%s\"",
+                    key, bean.getClass().getName(), "" + value), exception.getCause());
             }
         }
 
