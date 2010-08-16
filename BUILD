@@ -12,7 +12,7 @@ Project Set-Up
 * Ensure that JUnit is on your Ant classpath (set the CLASSPATH environment
   variable accordingly):
 
-  http://ant.apache.org/manual/OptionalTasks/junit.html
+  http://ant.apache.org/manual/Tasks/junit.html
 
 * Ensure that the LiveConnect APIs are on your classpath (set the CLASSPATH
   environment variable accordingly):
