@@ -350,42 +350,15 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     protected class SpinButtonSkin extends ComponentSkin {
         private boolean highlighted = false;
         private boolean pressed = false;
-        private float minimumAspectRatio = 0.3f;
-        private static final int BUTTON_MARGIN_WIDTH = 3; 
-        private static final int BUTTON_MARGIN_HEIGHT = 1; 
 
         @Override
         public int getPreferredWidth(int height) {
-            int preferredWidth = BUTTON_IMAGE_SIZE + (BUTTON_MARGIN_WIDTH * 2);
-            
-            if (height == -1) {
-                
-            } else {
-                // Adjust for preferred aspect ratio
-                if ((float) preferredWidth / (float) height < minimumAspectRatio) {
-                    preferredWidth = (int) (height * minimumAspectRatio);
-                }
-            }
-            
-            return preferredWidth;
+            return BUTTON_IMAGE_SIZE + 6;
         }
 
         @Override
         public int getPreferredHeight(int width) {
-            return BUTTON_IMAGE_SIZE + (BUTTON_MARGIN_HEIGHT * 1);
-        }
-        
-        @Override
-        public Dimensions getPreferredSize() {
-            int preferredWidth = BUTTON_IMAGE_SIZE + (BUTTON_MARGIN_WIDTH * 2);
-            int preferredHeight = BUTTON_IMAGE_SIZE + (BUTTON_MARGIN_HEIGHT * 2);
-            
-            // Adjust for preferred aspect ratio
-            if ((float) preferredWidth / (float) preferredHeight < minimumAspectRatio) {
-                preferredWidth = (int) (preferredHeight * minimumAspectRatio);
-            }
-            
-            return new Dimensions(preferredWidth, preferredHeight);
+            return BUTTON_IMAGE_SIZE + 2;
         }
 
         @Override
@@ -408,14 +381,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
             // Paint the image
             SpinButtonImage buttonImage = (SpinButtonImage)spinButton.getButtonImage();
-            // centre the image
-            graphics.translate(BUTTON_MARGIN_WIDTH, BUTTON_MARGIN_HEIGHT);
-            // scale the arrow to fit
-            float scaleX = (float)width / (float)BUTTON_IMAGE_SIZE;
-            float scaleY = (float)height / (float)BUTTON_IMAGE_SIZE;
-            if (scaleX > 1 && scaleY > 1) {
-                graphics.scale(scaleX, scaleY);
-            }
+            graphics.translate((width - BUTTON_IMAGE_SIZE) / 2,
+                (height - BUTTON_IMAGE_SIZE) / 2);
             buttonImage.paint(graphics);
         }
 
@@ -555,7 +522,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
     private static AutomaticSpinner automaticSpinner = new AutomaticSpinner();
 
-    private static final int BUTTON_IMAGE_SIZE = 5;
+    public static final int BUTTON_IMAGE_SIZE = 5;
 
     public TerraSpinnerSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
