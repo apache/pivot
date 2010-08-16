@@ -971,48 +971,53 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         ListView listView = (ListView)getComponent();
+        ListView.SelectMode selectMode = listView.getSelectMode();
 
         switch (keyCode) {
             case Keyboard.KeyCode.UP: {
-                int index = listView.getFirstSelectedIndex();
-
-                do {
-                    index--;
-                } while (index >= 0
-                    && listView.isItemDisabled(index));
-
-                if (index >= 0) {
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                        && listView.getSelectMode() == ListView.SelectMode.MULTI) {
-                        listView.addSelectedIndex(index);
-                    } else {
-                        listView.setSelectedIndex(index);
+                if (selectMode != ListView.SelectMode.NONE) {
+                    int index = listView.getFirstSelectedIndex();
+    
+                    do {
+                        index--;
+                    } while (index >= 0
+                        && listView.isItemDisabled(index));
+    
+                    if (index >= 0) {
+                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                            && listView.getSelectMode() == ListView.SelectMode.MULTI) {
+                            listView.addSelectedIndex(index);
+                        } else {
+                            listView.setSelectedIndex(index);
+                        }
                     }
+    
+                    consumed = true;
                 }
-
-                consumed = true;
                 break;
             }
 
             case Keyboard.KeyCode.DOWN: {
-                int index = listView.getLastSelectedIndex();
-                int count = listView.getListData().getLength();
-
-                do {
-                    index++;
-                } while (index < count
-                    && listView.isItemDisabled(index));
-
-                if (index < count) {
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                        && listView.getSelectMode() == ListView.SelectMode.MULTI) {
-                        listView.addSelectedIndex(index);
-                    } else {
-                        listView.setSelectedIndex(index);
+                if (selectMode != ListView.SelectMode.NONE) {
+                    int index = listView.getLastSelectedIndex();
+                    int count = listView.getListData().getLength();
+    
+                    do {
+                        index++;
+                    } while (index < count
+                        && listView.isItemDisabled(index));
+    
+                    if (index < count) {
+                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                            && listView.getSelectMode() == ListView.SelectMode.MULTI) {
+                            listView.addSelectedIndex(index);
+                        } else {
+                            listView.setSelectedIndex(index);
+                        }
                     }
+    
+                    consumed = true;
                 }
-
-                consumed = true;
                 break;
             }
         }

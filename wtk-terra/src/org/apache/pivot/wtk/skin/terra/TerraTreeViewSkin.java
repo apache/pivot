@@ -1761,10 +1761,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     && newSelectedNode.isDisabled());
 
                 if (newSelectedNode != null) {
-                    treeView.setSelectedPath(newSelectedNode.getPath());
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                        && treeView.getSelectMode() == TreeView.SelectMode.MULTI) {
+                        treeView.addSelectedPath(newSelectedNode.getPath());
+                    } else {
+                        treeView.setSelectedPath(newSelectedNode.getPath());
+                    }
                     treeView.scrollAreaToVisible(getNodeBounds(newSelectedNode));
-                    consumed = true;
                 }
+                consumed = true;
             }
 
             break;
@@ -1791,10 +1796,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     && newSelectedNode.isDisabled());
 
                 if (newSelectedNode != null) {
-                    treeView.setSelectedPath(newSelectedNode.getPath());
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                        && treeView.getSelectMode() == TreeView.SelectMode.MULTI) {
+                        treeView.addSelectedPath(newSelectedNode.getPath());
+                    } else {
+                        treeView.setSelectedPath(newSelectedNode.getPath());
+                    }
                     treeView.scrollAreaToVisible(getNodeBounds(newSelectedNode));
-                    consumed = true;
                 }
+                consumed = true;
             }
 
             break;
