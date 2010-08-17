@@ -21,6 +21,19 @@ package org.apache.pivot.wtk;
  */
 public interface SpinnerSelectionListener {
     /**
+     * Spinner selection listener adapter.
+     */
+    public static class Adapter implements SpinnerSelectionListener {
+        @Override
+        public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
+        }
+
+        @Override
+        public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
+        }
+    }
+
+    /**
      * Called when a spinner's selected index has changed.
      *
      * @param spinner
@@ -31,4 +44,15 @@ public interface SpinnerSelectionListener {
      * selected. Otherwise, contains the current selection.
      */
     public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex);
+
+    /**
+     * Called when a spinners's selected item has changed.
+     *
+     * @param spinner
+     * The source of the event.
+     *
+     * @param previousSelectedItem
+     * The item that was previously selected.
+     */
+    public void selectedItemChanged(Spinner spinner, Object previousSelectedItem);
 }

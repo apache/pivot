@@ -858,11 +858,11 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     // SpinnerSelectionListener methods
     @Override
     public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
-        int selectedIndex = spinner.getSelectedIndex();
+        // No-op
+    }
 
-        if (selectedIndex != previousSelectedIndex) {
-            // This was not an indirect selection change
-            invalidateContent();
-        }
+    @Override
+    public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
+        invalidateContent();
     }
 }

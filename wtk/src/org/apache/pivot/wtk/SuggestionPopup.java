@@ -47,14 +47,6 @@ public class SuggestionPopup extends Window {
                 listener.suggestionRendererChanged(suggestionPopup, previousSuggestionRenderer);
             }
         }
-
-        @Override
-        public void selectedIndexChanged(SuggestionPopup suggestionPopup,
-            int previousSelectedIndex) {
-            for (SuggestionPopupListener listener : this) {
-                listener.selectedIndexChanged(suggestionPopup, previousSelectedIndex);
-            }
-        }
     }
 
     private static class SuggestionPopupItemListenerList extends ListenerList<SuggestionPopupItemListener>
@@ -91,6 +83,24 @@ public class SuggestionPopup extends Window {
         public void itemsSorted(SuggestionPopup suggestionPopup) {
             for (SuggestionPopupItemListener listener : this) {
                 listener.itemsSorted(suggestionPopup);
+            }
+        }
+    }
+
+    private static class SuggestionPopupSelectionListenerList extends ListenerList<SuggestionPopupSelectionListener>
+        implements SuggestionPopupSelectionListener {
+        @Override
+        public void selectedIndexChanged(SuggestionPopup suggestionPopup,
+            int previousSelectedIndex) {
+            for (SuggestionPopupSelectionListener listener : this) {
+                listener.selectedIndexChanged(suggestionPopup, previousSelectedIndex);
+            }
+        }
+
+        @Override
+        public void selectedSuggestionChanged(SuggestionPopup suggestionPopup, Object previousSelectedSuggestion) {
+            for (SuggestionPopupSelectionListener listener : this) {
+                listener.selectedSuggestionChanged(suggestionPopup, previousSelectedSuggestion);
             }
         }
     }
@@ -146,25 +156,34 @@ public class SuggestionPopup extends Window {
             suggestionPopupItemListeners.itemInserted(SuggestionPopup.this, index);
 
             if (selectedIndex != previousSelectedIndex) {
-                suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
             }
         }
 
         @Override
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
-            int previousSelectedIndex = selectedIndex;
-
             int count = items.getLength();
-            if (index + count <= selectedIndex) {
-                selectedIndex--;
-            } else if (index <= selectedIndex) {
-                selectedIndex = -1;
+
+            int previousSelectedIndex = selectedIndex;
+            Object previousSelectedSuggestion = getSelectedSuggestion();
+
+            if (selectedIndex >= index) {
+                if (selectedIndex < index + count) {
+                    selectedIndex = -1;
+                } else {
+                    selectedIndex -= count;
+                }
             }
 
             suggestionPopupItemListeners.itemsRemoved(SuggestionPopup.this, index, count);
 
             if (selectedIndex != previousSelectedIndex) {
-                suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+            }
+
+            Object selectedSuggestion = getSelectedSuggestion();
+            if (selectedSuggestion != previousSelectedSuggestion) {
+                suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this, selectedSuggestion);
             }
         }
 
@@ -175,21 +194,34 @@ public class SuggestionPopup extends Window {
 
         @Override
         public void listCleared(List<Object> list) {
+            int previousSelectedIndex = selectedIndex;
             selectedIndex = -1;
+
             suggestionPopupItemListeners.itemsCleared(SuggestionPopup.this);
-            suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+
+            if (previousSelectedIndex != selectedIndex) {
+                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+                suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this, getSelectedSuggestion());
+            }
         }
 
         @Override
         public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
+            int previousSelectedIndex = selectedIndex;
             selectedIndex = -1;
+
             suggestionPopupItemListeners.itemsSorted(SuggestionPopup.this);
-            suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+
+            if (previousSelectedIndex != selectedIndex) {
+                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+                suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this, getSelectedSuggestion());
+            }
         }
     };
 
     private SuggestionPopupListenerList suggestionPopupListeners = new SuggestionPopupListenerList();
     private SuggestionPopupItemListenerList suggestionPopupItemListeners = new SuggestionPopupItemListenerList();
+    private SuggestionPopupSelectionListenerList suggestionPopupSelectionListeners = new SuggestionPopupSelectionListenerList();
     private SuggestionPopupStateListenerList suggestionPopupStateListeners = new SuggestionPopupStateListenerList();
 
     private static final ListView.ItemRenderer DEFAULT_SUGGESTION_RENDERER = new ListViewItemRenderer();
@@ -249,7 +281,8 @@ public class SuggestionPopup extends Window {
             suggestionPopupListeners.suggestionDataChanged(this, previousSuggestionData);
 
             if (selectedIndex != previousSelectedIndex) {
-                suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+                suggestionPopupSelectionListeners.selectedIndexChanged(this, selectedIndex);
+                suggestionPopupSelectionListeners.selectedSuggestionChanged(this, getSelectedSuggestion());
             }
         }
     }
@@ -303,16 +336,12 @@ public class SuggestionPopup extends Window {
 
         if (previousSelectedIndex != selectedIndex) {
             this.selectedIndex = selectedIndex;
-            suggestionPopupListeners.selectedIndexChanged(this, previousSelectedIndex);
+            suggestionPopupSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
+            suggestionPopupSelectionListeners.selectedSuggestionChanged(this, (previousSelectedIndex == -1) ?
+                null : suggestionData.get(previousSelectedIndex));
         }
     }
 
-    /**
-     * Returns the current selection.
-     *
-     * @return
-     * The currently selected suggestion, or <tt>null</tt> if nothing is selected.
-     */
     public Object getSelectedSuggestion() {
         int index = getSelectedIndex();
         Object item = null;
@@ -322,6 +351,11 @@ public class SuggestionPopup extends Window {
         }
 
         return item;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setSelectedSuggestion(Object suggestion) {
+        setSelectedIndex((suggestion == null) ? -1 : ((List<Object>)suggestionData).indexOf(suggestion));
     }
 
     @Override
@@ -422,6 +456,10 @@ public class SuggestionPopup extends Window {
 
     public ListenerList<SuggestionPopupItemListener> getSuggestionPopupItemListeners() {
         return suggestionPopupItemListeners;
+    }
+
+    public ListenerList<SuggestionPopupSelectionListener> getSuggestionPopupSelectionListeners() {
+        return suggestionPopupSelectionListeners;
     }
 
     public ListenerList<SuggestionPopupStateListener> getSuggestionPopupStateListeners() {

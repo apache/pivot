@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.SuggestionPopupListener;
+import org.apache.pivot.wtk.SuggestionPopupSelectionListener;
 import org.apache.pivot.wtk.SuggestionPopupStateListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Theme;
@@ -53,7 +54,7 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  * Terra suggestion popup skin.
  */
 public class TerraSuggestionPopupSkin extends WindowSkin
-    implements SuggestionPopupListener, SuggestionPopupStateListener {
+    implements SuggestionPopupListener, SuggestionPopupSelectionListener, SuggestionPopupStateListener {
     private Border suggestionListViewBorder = new Border();
     private ListView suggestionListView = new ListView();
 
@@ -146,6 +147,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
         SuggestionPopup suggestionPopup = (SuggestionPopup)component;
         suggestionPopup.getSuggestionPopupListeners().add(this);
+        suggestionPopup.getSuggestionPopupSelectionListeners().add(this);
         suggestionPopup.getSuggestionPopupStateListeners().add(this);
 
         suggestionPopup.setContent(suggestionListViewBorder);
@@ -303,17 +305,17 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
     @Override
     public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex) {
-        int selectedIndex = suggestionPopup.getSelectedIndex();
+        // No-op
+    }
 
-        if (selectedIndex != previousSelectedIndex) {
-            // This was not an indirect selection change
-            TextInput textInput = suggestionPopup.getTextInput();
+    @Override
+    public void selectedSuggestionChanged(SuggestionPopup suggestionPopup, Object previousSelectedSuggestion) {
+        TextInput textInput = suggestionPopup.getTextInput();
 
-            Object suggestion = suggestionPopup.getSelectedSuggestion();
-            if (suggestion != null) {
-                ListView.ItemRenderer suggestionRenderer = suggestionPopup.getSuggestionRenderer();
-                textInput.setText(suggestionRenderer.toString(suggestion));
-            }
+        Object suggestion = suggestionPopup.getSelectedSuggestion();
+        if (suggestion != null) {
+            ListView.ItemRenderer suggestionRenderer = suggestionPopup.getSuggestionRenderer();
+            textInput.setText(suggestionRenderer.toString(suggestion));
         }
     }
 

@@ -199,6 +199,13 @@ public class Spinner extends Container {
                 listener.selectedIndexChanged(spinner, previousSelectedIndex);
             }
         }
+
+        @Override
+        public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
+            for (SpinnerSelectionListener listener : this) {
+                listener.selectedItemChanged(spinner, previousSelectedItem);
+            }
+        }
     }
 
     private static class SpinnerBindingListenerList extends ListenerList<SpinnerBindingListener>
@@ -283,6 +290,8 @@ public class Spinner extends Container {
             int count = items.getLength();
 
             int previousSelectedIndex = selectedIndex;
+            Object previousSelectedItem = getSelectedItem();
+
             if (selectedIndex >= index) {
                 if (selectedIndex < index + count) {
                     selectedIndex = -1;
@@ -291,11 +300,15 @@ public class Spinner extends Container {
                 }
             }
 
-            // Notify listeners that items were removed
             spinnerItemListeners.itemsRemoved(Spinner.this, index, count);
 
             if (selectedIndex != previousSelectedIndex) {
                 spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
+            }
+
+            Object selectedItem = getSelectedItem();
+            if (selectedItem != previousSelectedItem) {
+                spinnerSelectionListeners.selectedItemChanged(Spinner.this, selectedItem);
             }
         }
 
@@ -306,18 +319,28 @@ public class Spinner extends Container {
 
         @Override
         public void listCleared(List<Object> list) {
-            // All items were removed; clear the selection and notify
-            // listeners
+            int previousSelectedIndex = selectedIndex;
             selectedIndex = -1;
+
             spinnerItemListeners.itemsCleared(Spinner.this);
-            spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
+
+            if (previousSelectedIndex != selectedIndex) {
+                spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
+                spinnerSelectionListeners.selectedItemChanged(Spinner.this, getSelectedItem());
+            }
         }
 
         @Override
         public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
+            int previousSelectedIndex = selectedIndex;
             selectedIndex = -1;
+
             spinnerItemListeners.itemsSorted(Spinner.this);
-            spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
+
+            if (previousSelectedIndex != selectedIndex) {
+                spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
+                spinnerSelectionListeners.selectedItemChanged(Spinner.this, getSelectedItem());
+            }
         }
     };
 
@@ -388,6 +411,7 @@ public class Spinner extends Container {
 
             if (selectedIndex != previousSelectedIndex) {
                 spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
+                spinnerSelectionListeners.selectedItemChanged(this, getSelectedItem());
             }
         }
     }
@@ -472,11 +496,18 @@ public class Spinner extends Container {
      * The index to select, or <tt>-1</tt> to clear the selection.
      */
     public void setSelectedIndex(int selectedIndex) {
+        if (selectedIndex < -1
+            || selectedIndex >= spinnerData.getLength()) {
+            throw new IndexOutOfBoundsException();
+        }
+
         int previousSelectedIndex = this.selectedIndex;
 
         if (previousSelectedIndex != selectedIndex) {
             this.selectedIndex = selectedIndex;
             spinnerSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
+            spinnerSelectionListeners.selectedItemChanged(this, (previousSelectedIndex == -1) ?
+                null : spinnerData.get(previousSelectedIndex));
         }
     }
 

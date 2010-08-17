@@ -16,41 +16,40 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.collections.List;
-
 /**
- * Suggestion popup listener interface.
+ * Suggestion popup selection listener interface.
  */
-public interface SuggestionPopupListener {
+public interface SuggestionPopupSelectionListener {
     /**
-     * Suggestion popup listener adapter.
+     * Suggestion popup selection listener adapter.
      */
-    public static class Adapter implements SuggestionPopupListener {
+    public static class Adapter implements SuggestionPopupSelectionListener {
         @Override
-        public void suggestionDataChanged(SuggestionPopup suggestionPopup,
-            List<?> previousSuggestionData) {
+        public void selectedIndexChanged(SuggestionPopup suggestionPopup,
+            int previousSelectedIndex) {
         }
 
         @Override
-        public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-            ListView.ItemRenderer previousSuggestionRenderer) {
+        public void selectedSuggestionChanged(SuggestionPopup suggestionPopup, Object previousSelectedSuggestion) {
         }
     }
 
     /**
-     * Called when a suggestion popup's suggestions have changed.
+     * Called when a suggestion popup's selected index has changed.
      *
      * @param suggestionPopup
-     * @param previousSuggestionData
+     * @param previousSelectedIndex
      */
-    public void suggestionDataChanged(SuggestionPopup suggestionPopup, List<?> previousSuggestionData);
+    public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex);
 
     /**
-     * Called when a suggestion popup's item renderer has changed.
+     * Called when a suggestion popup's selected suggestion has changed.
      *
      * @param suggestionPopup
-     * @param previousSuggestionRenderer
+     * The source of the event.
+     *
+     * @param previousSelectedSuggestion
+     * The suggestion that was previously selected.
      */
-    public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-        ListView.ItemRenderer previousSuggestionRenderer);
+    public void selectedSuggestionChanged(SuggestionPopup suggestionPopup, Object previousSelectedSuggestion);
 }
