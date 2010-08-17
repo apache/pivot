@@ -71,6 +71,44 @@ public class ListButton extends Button {
         }
     }
 
+    private static class ListButtonItemListenerList extends ListenerList<ListButtonItemListener>
+        implements ListButtonItemListener {
+        @Override
+        public void itemInserted(ListButton listButton, int index) {
+            for (ListButtonItemListener listener : this) {
+                listener.itemInserted(listButton, index);
+            }
+        }
+
+        @Override
+        public void itemsRemoved(ListButton listButton, int index, int count) {
+            for (ListButtonItemListener listener : this) {
+                listener.itemsRemoved(listButton, index, count);
+            }
+        }
+
+        @Override
+        public void itemUpdated(ListButton listButton, int index) {
+            for (ListButtonItemListener listener : this) {
+                listener.itemUpdated(listButton, index);
+            }
+        }
+
+        @Override
+        public void itemsCleared(ListButton listButton) {
+            for (ListButtonItemListener listener : this) {
+                listener.itemsCleared(listButton);
+            }
+        }
+
+        @Override
+        public void itemsSorted(ListButton listButton) {
+            for (ListButtonItemListener listener : this) {
+                listener.itemsSorted(listButton);
+            }
+        }
+    }
+
     private static class ListButtonSelectionListenerList extends ListenerList<ListButtonSelectionListener>
         implements ListButtonSelectionListener {
         @Override
@@ -165,6 +203,8 @@ public class ListButton extends Button {
                 selectedIndex++;
             }
 
+            listButtonItemListeners.itemInserted(ListButton.this, index);
+
             if (selectedIndex != previousSelectedIndex) {
                 listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
             }
@@ -185,6 +225,8 @@ public class ListButton extends Button {
                 }
             }
 
+            listButtonItemListeners.itemsRemoved(ListButton.this, index, count);
+
             if (selectedIndex != previousSelectedIndex) {
                 listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
             }
@@ -197,13 +239,15 @@ public class ListButton extends Button {
 
         @Override
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
-            // No-op
+            listButtonItemListeners.itemUpdated(ListButton.this, index);
         }
 
         @Override
         public void listCleared(List<Object> list) {
             int previousSelectedIndex = selectedIndex;
             selectedIndex = -1;
+
+            listButtonItemListeners.itemsCleared(ListButton.this);
 
             if (previousSelectedIndex != selectedIndex) {
                 listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
@@ -216,6 +260,8 @@ public class ListButton extends Button {
             int previousSelectedIndex = selectedIndex;
             selectedIndex = -1;
 
+            listButtonItemListeners.itemsSorted(ListButton.this);
+
             if (previousSelectedIndex != selectedIndex) {
                 listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
                 listButtonSelectionListeners.selectedItemChanged(ListButton.this, getSelectedItem());
@@ -224,6 +270,7 @@ public class ListButton extends Button {
     };
 
     private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
+    private ListButtonItemListenerList listButtonItemListeners = new ListButtonItemListenerList();
     private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
     private ListButtonBindingListenerList listButtonBindingListeners = new ListButtonBindingListenerList();
 
@@ -712,6 +759,13 @@ public class ListButton extends Button {
      */
     public ListenerList<ListButtonListener> getListButtonListeners() {
         return listButtonListeners;
+    }
+
+    /**
+     * Returns the list button item listener list.
+     */
+    public ListenerList<ListButtonItemListener> getListButtonItemListeners() {
+        return listButtonItemListeners;
     }
 
     /**

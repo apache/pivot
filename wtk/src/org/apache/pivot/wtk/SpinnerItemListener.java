@@ -46,7 +46,7 @@ public interface SpinnerItemListener {
     }
 
     /**
-     * Called when an item is inserted into the spinner data.
+     * Called when an item is inserted into a spinner's data.
      *
      * @param spinner
      * @param index
@@ -54,7 +54,7 @@ public interface SpinnerItemListener {
     public void itemInserted(Spinner spinner, int index);
 
     /**
-     * Called when items are removed from the spinner data.
+     * Called when items are removed from a spinner's data.
      *
      * @param spinner
      * @param index
@@ -63,7 +63,7 @@ public interface SpinnerItemListener {
     public void itemsRemoved(Spinner spinner, int index, int count);
 
     /**
-     * Called when an item is updated within the spinner data.
+     * Called when an item is updated within a spinner's data.
      *
      * @param spinner
      * @param index
@@ -71,14 +71,14 @@ public interface SpinnerItemListener {
     public void itemUpdated(Spinner spinner, int index);
 
     /**
-     * Called when the spinner data has been cleared.
+     * Called when a spinner's data has been cleared.
      *
      * @param spinner
      */
     public void itemsCleared(Spinner spinner);
 
     /**
-     * Called when the spinner data is sorted.
+     * Called when a spinner's data is sorted.
      *
      * @param spinner
      */

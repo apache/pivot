@@ -57,6 +57,44 @@ public class SuggestionPopup extends Window {
         }
     }
 
+    private static class SuggestionPopupItemListenerList extends ListenerList<SuggestionPopupItemListener>
+        implements SuggestionPopupItemListener {
+        @Override
+        public void itemInserted(SuggestionPopup suggestionPopup, int index) {
+            for (SuggestionPopupItemListener listener : this) {
+                listener.itemInserted(suggestionPopup, index);
+            }
+        }
+
+        @Override
+        public void itemsRemoved(SuggestionPopup suggestionPopup, int index, int count) {
+            for (SuggestionPopupItemListener listener : this) {
+                listener.itemsRemoved(suggestionPopup, index, count);
+            }
+        }
+
+        @Override
+        public void itemUpdated(SuggestionPopup suggestionPopup, int index) {
+            for (SuggestionPopupItemListener listener : this) {
+                listener.itemUpdated(suggestionPopup, index);
+            }
+        }
+
+        @Override
+        public void itemsCleared(SuggestionPopup suggestionPopup) {
+            for (SuggestionPopupItemListener listener : this) {
+                listener.itemsCleared(suggestionPopup);
+            }
+        }
+
+        @Override
+        public void itemsSorted(SuggestionPopup suggestionPopup) {
+            for (SuggestionPopupItemListener listener : this) {
+                listener.itemsSorted(suggestionPopup);
+            }
+        }
+    }
+
     private static class SuggestionPopupStateListenerList extends ListenerList<SuggestionPopupStateListener>
         implements SuggestionPopupStateListener {
         @Override
@@ -105,6 +143,8 @@ public class SuggestionPopup extends Window {
                 selectedIndex++;
             }
 
+            suggestionPopupItemListeners.itemInserted(SuggestionPopup.this, index);
+
             if (selectedIndex != previousSelectedIndex) {
                 suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
             }
@@ -121,6 +161,8 @@ public class SuggestionPopup extends Window {
                 selectedIndex = -1;
             }
 
+            suggestionPopupItemListeners.itemsRemoved(SuggestionPopup.this, index, count);
+
             if (selectedIndex != previousSelectedIndex) {
                 suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
             }
@@ -128,25 +170,26 @@ public class SuggestionPopup extends Window {
 
         @Override
         public void itemUpdated(List<Object> list, int index, Object previousItem) {
-            // No-op
+            suggestionPopupItemListeners.itemUpdated(SuggestionPopup.this, index);
         }
 
         @Override
         public void listCleared(List<Object> list) {
-            // All items were removed; clear the selection and notify
-            // listeners
             selectedIndex = -1;
+            suggestionPopupItemListeners.itemsCleared(SuggestionPopup.this);
             suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
         }
 
         @Override
         public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
             selectedIndex = -1;
+            suggestionPopupItemListeners.itemsSorted(SuggestionPopup.this);
             suggestionPopupListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
         }
     };
 
     private SuggestionPopupListenerList suggestionPopupListeners = new SuggestionPopupListenerList();
+    private SuggestionPopupItemListenerList suggestionPopupItemListeners = new SuggestionPopupItemListenerList();
     private SuggestionPopupStateListenerList suggestionPopupStateListeners = new SuggestionPopupStateListenerList();
 
     private static final ListView.ItemRenderer DEFAULT_SUGGESTION_RENDERER = new ListViewItemRenderer();
@@ -375,6 +418,10 @@ public class SuggestionPopup extends Window {
 
     public ListenerList<SuggestionPopupListener> getSuggestionPopupListeners() {
         return suggestionPopupListeners;
+    }
+
+    public ListenerList<SuggestionPopupItemListener> getSuggestionPopupItemListeners() {
+        return suggestionPopupItemListeners;
     }
 
     public ListenerList<SuggestionPopupStateListener> getSuggestionPopupStateListeners() {
