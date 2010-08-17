@@ -20,13 +20,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.json.JSON;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonGroup;
@@ -361,6 +365,8 @@ public class TerraCalendarSkin extends CalendarSkin {
 
     private Button.DataRenderer dateButtonDataRenderer = new DateButtonDataRenderer();
 
+    private int weekdayCharacterIndex;
+
     private CalendarDate today = null;
 
     private Font font;
@@ -373,7 +379,6 @@ public class TerraCalendarSkin extends CalendarSkin {
     private Color dividerColor;
     private int padding = 4;
 
-    // Derived colors
     private Color selectionBevelColor;
 
     public TerraCalendarSkin() {
@@ -506,6 +511,17 @@ public class TerraCalendarSkin extends CalendarSkin {
 
             calendarTablePane.getRows().add(calendarRow);
         }
+
+        Resources resources;
+        try {
+            resources = new Resources(TerraCalendarSkin.class.getName());
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        } catch (SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        weekdayCharacterIndex = JSON.get(resources, "weekdayCharacterIndex");
     }
 
     @Override
@@ -577,7 +593,7 @@ public class TerraCalendarSkin extends CalendarSkin {
             Label label = (Label)row.get(i);
             gregorianCalendar.set(java.util.Calendar.DAY_OF_WEEK, firstDayOfWeek + i);
             String text = monthFormat.format(gregorianCalendar.getTime());
-            text = Character.toString(text.charAt(0));
+            text = Character.toString(text.charAt(weekdayCharacterIndex));
             label.setText(text);
         }
     }
@@ -707,6 +723,16 @@ public class TerraCalendarSkin extends CalendarSkin {
         }
 
         this.font = font;
+
+        monthSpinner.getStyles().put("font", font);
+        yearSpinner.getStyles().put("font", font);
+
+        TablePane.Row row = calendarTablePane.getRows().get(1);
+        for (int i = 0; i < 7; i++) {
+            Label label = (Label)row.get(i);
+            label.getStyles().put("font", font);
+        }
+
         invalidateComponent();
     }
 
@@ -910,7 +936,7 @@ public class TerraCalendarSkin extends CalendarSkin {
 
     @Override
     public void localeChanged(Calendar calendar, Locale previousLocale) {
-        invalidateComponent(); // TODO Necessary?
+        invalidateComponent();
 
         updateLabels();
         updateCalendar();
