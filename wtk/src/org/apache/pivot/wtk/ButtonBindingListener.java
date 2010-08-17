@@ -47,6 +47,18 @@ public interface ButtonBindingListener {
         @Override
         public void stateBindMappingChanged(Button button, Button.StateBindMapping previousStateBindMapping) {
         }
+        
+        @Override
+        public void buttonDataKeyChanged(Button button, String previousStateKey) {
+        }
+
+        @Override
+        public void buttonDataBindTypeChanged(Button button, BindType previousStateBindType) {
+        }
+
+        @Override
+        public void buttonDataBindMappingChanged(Button button, Button.ButtonDataBindMapping previousButtonDataBindMapping) {
+        }
     }
 
     /**
@@ -96,4 +108,28 @@ public interface ButtonBindingListener {
      * @param previousStateBindMapping
      */
     public void stateBindMappingChanged(Button button, Button.StateBindMapping previousStateBindMapping);
+    
+    /**
+     * Called when a button's buttonData key has changed.
+     *
+     * @param button
+     * @param previousButtonDataKey
+     */
+    public void buttonDataKeyChanged(Button button, String previousButtonDataKey);
+
+    /**
+     * Called when a button's buttonData bind type has changed.
+     *
+     * @param button
+     * @param previousButtonDataBindType
+     */
+    public void buttonDataBindTypeChanged(Button button, BindType previousButtonDataBindType);
+
+    /**
+     * Called when a button's buttonData bind mapping has changed.
+     *
+     * @param button
+     * @param previousButtonDataBindMapping
+     */
+    public void buttonDataBindMappingChanged(Button button, Button.ButtonDataBindMapping previousButtonDataBindMapping);
 }

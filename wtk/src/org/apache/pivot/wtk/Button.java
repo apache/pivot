@@ -108,6 +108,27 @@ public abstract class Button extends Component {
         public Object valueOf(State state);
     }
 
+    /**
+     * Translates between button buttonData and context data during data binding.
+     */
+    public interface ButtonDataBindMapping {
+        /**
+         * Converts a context value to a button state during a
+         * {@link Component#load(Object)} operation.
+         *
+         * @param value
+         */
+        public Object toData(Object value);
+
+        /**
+         * Converts a buttonData to a context value during a
+         * {@link Component#store(Object)} operation.
+         *
+         * @param buttonData
+         */
+        public Object valueOf(Object buttonData);
+    }
+    
     private static class ButtonListenerList extends ListenerList<ButtonListener>
         implements ButtonListener {
         @Override
@@ -216,6 +237,27 @@ public abstract class Button extends Component {
                 listener.stateBindMappingChanged(button, previousStateBindMapping);
             }
         }
+        
+        @Override
+        public void buttonDataKeyChanged(Button button, String previousStateKey) {
+            for (ButtonBindingListener listener : this) {
+                listener.buttonDataKeyChanged(button, previousStateKey);
+            }
+        }
+
+        @Override
+        public void buttonDataBindTypeChanged(Button button, BindType previousStateBindType) {
+            for (ButtonBindingListener listener : this) {
+                listener.buttonDataBindTypeChanged(button, previousStateBindType);
+            }
+        }
+
+        @Override
+        public void buttonDataBindMappingChanged(Button button, Button.ButtonDataBindMapping previousButtonDataBindMapping) {
+            for (ButtonBindingListener listener : this) {
+                listener.buttonDataBindMappingChanged(button, previousButtonDataBindMapping);
+            }
+        }
     }
 
     private Object buttonData = null;
@@ -243,6 +285,10 @@ public abstract class Button extends Component {
     private String stateKey = null;
     private BindType stateBindType = BindType.BOTH;
     private StateBindMapping stateBindMapping = null;
+    
+    private String buttonDataKey = null;
+    private BindType buttonDataBindType = BindType.BOTH;
+    private ButtonDataBindMapping buttonDataBindMapping = null;
 
     private ButtonListenerList buttonListeners = new ButtonListenerList();
     private ButtonStateListenerList buttonStateListeners = new ButtonStateListenerList();
@@ -641,6 +687,19 @@ public abstract class Button extends Component {
         }
     }
 
+    public ButtonDataBindMapping getButtonDataBindMapping() {
+        return buttonDataBindMapping;
+    }
+
+    public void setButtonDataBindMapping(ButtonDataBindMapping buttonDataBindMapping) {
+        ButtonDataBindMapping previousButtonDataBindMapping = this.buttonDataBindMapping;
+
+        if (previousButtonDataBindMapping != buttonDataBindMapping) {
+            this.buttonDataBindMapping = buttonDataBindMapping;
+            buttonBindingListeners.buttonDataBindMappingChanged(this, previousButtonDataBindMapping);
+        }
+    }
+    
     @Override
     public void load(Object context) {
         if (toggleButton) {
@@ -686,6 +745,19 @@ public abstract class Button extends Component {
                 }
             }
         }
+        if (buttonDataKey != null
+            && JSON.containsKey(context, buttonDataKey)
+            && buttonDataBindType != BindType.STORE) {
+            Object value = JSON.get(context, buttonDataKey);
+
+            Object buttonData = value;
+
+            if (buttonDataBindMapping != null) {
+                value = buttonDataBindMapping.toData(value);
+            }
+            
+            setButtonData(buttonData);
+        }
     }
 
     @Override
@@ -706,6 +778,11 @@ public abstract class Button extends Component {
                         isSelected() : selectedBindMapping.valueOf(isSelected()));
                 }
             }
+        }
+        if (buttonDataKey != null
+            && buttonDataBindType != BindType.LOAD) {
+            JSON.put(context, buttonDataKey, (buttonDataBindMapping == null) ?
+                buttonData : buttonDataBindMapping.valueOf(buttonData));
         }
     }
 
