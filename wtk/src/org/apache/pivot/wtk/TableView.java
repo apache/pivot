@@ -1961,7 +1961,9 @@ public class TableView extends Component {
      * Clears the selection.
      */
     public void clearSelection() {
-        setSelectedRanges(new ArrayList<Span>(0));
+        if (selectedRanges.getLength() > 0) {
+            setSelectedRanges(new ArrayList<Span>(0));
+        }
     }
 
     /**

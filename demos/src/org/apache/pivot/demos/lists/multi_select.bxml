@@ -16,12 +16,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<lists:MultiSelect title="Multiple Selection Demo" maximized="true"
+<Window title="Multiple Selection Demo" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
-    xmlns:lists="org.apache.pivot.demos.lists"
     xmlns="org.apache.pivot.wtk">
+    <windowStateListeners>
+    function windowOpened(window) {
+        dataListView.requestFocus();
+    }
+    </windowStateListeners>
+
     <TablePane styles="{horizontalSpacing:8}">
         <columns>
             <TablePane.Column width="1*"/>
@@ -31,10 +36,17 @@ limitations under the License.
         <TablePane.Row height="1*">
             <Border styles="{color:10}">
                 <ScrollPane horizontalScrollBarPolicy="fill">
-                    <ListView bxml:id="dataListView" selectMode="multi">
+                    <ListView bxml:id="dataListView" selectMode="multi" checkmarksEnabled="true">
                         <listData>
                             <content:NumericSpinnerData lowerBound="0" upperBound="31" increment="1"/>
                         </listData>
+
+                        <listViewSelectionListeners>
+                        importPackage(org.apache.pivot.collections);
+                        function selectedRangesChanged(listView, previousSelectedRanges) {
+                            selectionListView.listData = new ArrayList(dataListView.selectedRanges);
+                        }
+                        </listViewSelectionListeners>
                     </ListView>
                 </ScrollPane>
             </Border>
@@ -45,4 +57,4 @@ limitations under the License.
             </Border>
         </TablePane.Row>
     </TablePane>
-</lists:MultiSelect>
+</Window>

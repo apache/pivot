@@ -64,8 +64,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     private boolean variableItemHeight;
     private Insets checkboxPadding = new Insets(2, 2, 2, 0);
 
-    private int highlightedIndex = -1;
-    private int editIndex = -1;
+    private int highlightIndex = -1;
+    private int selectIndex = -1;
 
     private ArrayList<Integer> itemBoundaries = null;
     private int fixedItemHeight;
@@ -335,7 +335,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         // Paint the item content
         for (int itemIndex = itemStart; itemIndex <= itemEnd; itemIndex++) {
             Object item = listData.get(itemIndex);
-            boolean highlighted = (itemIndex == highlightedIndex
+            boolean highlighted = (itemIndex == highlightIndex
                 && listView.getSelectMode() != ListView.SelectMode.NONE);
             boolean selected = listView.isItemSelected(itemIndex);
             boolean disabled = listView.isItemDisabled(itemIndex);
@@ -414,11 +414,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             }
         } else {
             index = (y / fixedItemHeight);
-        }
 
-        List<Object> listData = (List<Object>)listView.getListData();
-        if (index >= listData.getLength()) {
-            index = -1;
+            List<Object> listData = (List<Object>)listView.getListData();
+            if (index >= listData.getLength()) {
+                index = -1;
+            }
         }
 
         return index;
@@ -797,18 +797,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         ListView listView = (ListView)getComponent();
 
-        int previousHighlightedIndex = this.highlightedIndex;
-        highlightedIndex = getItemAt(y);
+        int previousHighlightIndex = this.highlightIndex;
+        highlightIndex = getItemAt(y);
 
-        if (previousHighlightedIndex != highlightedIndex
+        if (previousHighlightIndex != highlightIndex
             && listView.getSelectMode() != ListView.SelectMode.NONE
             && showHighlight) {
-            if (previousHighlightedIndex != -1) {
-                repaintComponent(getItemBounds(previousHighlightedIndex));
+            if (previousHighlightIndex != -1) {
+                repaintComponent(getItemBounds(previousHighlightIndex));
             }
 
-            if (highlightedIndex != -1) {
-                repaintComponent(getItemBounds(highlightedIndex));
+            if (highlightIndex != -1) {
+                repaintComponent(getItemBounds(highlightIndex));
             }
         }
 
@@ -821,42 +821,35 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         ListView listView = (ListView)getComponent();
 
-        if (highlightedIndex != -1
+        if (highlightIndex != -1
             && listView.getSelectMode() != ListView.SelectMode.NONE
             && showHighlight) {
-            Bounds itemBounds = getItemBounds(highlightedIndex);
+            Bounds itemBounds = getItemBounds(highlightIndex);
             repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height);
         }
 
-        highlightedIndex = -1;
-        editIndex = -1;
+        highlightIndex = -1;
+        selectIndex = -1;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
         ListView listView = (ListView)getComponent();
-        List<Object> listData = (List<Object>)listView.getListData();
-
         int itemIndex = getItemAt(y);
 
         if (itemIndex != -1
-            && itemIndex < listData.getLength()
             && !listView.isItemDisabled(itemIndex)) {
             int itemY = getItemBounds(itemIndex).y;
 
             if (!(listView.getCheckmarksEnabled()
-                && x > checkboxPadding.left
-                && x < checkboxPadding.left + CHECKBOX.getWidth()
-                && y > itemY + checkboxPadding.top
-                && y < itemY + checkboxPadding.top + CHECKBOX.getHeight())) {
+                && isMouseOverCheckbox(itemY, x, y))) {
                 ListView.SelectMode selectMode = listView.getSelectMode();
 
                 if (button == Mouse.Button.RIGHT) {
-                    if (!listView.isItemSelected(itemIndex)
-                        && selectMode != ListView.SelectMode.NONE) {
+                    if (selectMode != ListView.SelectMode.NONE
+                        && !listView.isItemSelected(itemIndex)) {
                         listView.setSelectedIndex(itemIndex);
                     }
                 } else {
@@ -888,14 +881,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         }
                     } else {
                         if (selectMode != ListView.SelectMode.NONE) {
-                            if (listView.isItemSelected(itemIndex)
-                                && listView.isFocused()) {
-                                // Edit the item
-                                editIndex = itemIndex;
+                            if (listView.isItemSelected(itemIndex)) {
+                                selectIndex = itemIndex;
+                            } else {
+                                listView.setSelectedIndex(itemIndex);
                             }
-
-                            // Select the item
-                            listView.setSelectedIndex(itemIndex);
                         }
                     }
                 }
@@ -908,42 +898,55 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
+
+        ListView listView = (ListView)getComponent();
+        if (selectIndex != -1
+            && listView.getFirstSelectedIndex() != listView.getLastSelectedIndex()) {
+            listView.setSelectedIndex(selectIndex);
+            selectIndex = -1;
+        }
+
+        return consumed;
+    }
+
+    @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         ListView listView = (ListView)getComponent();
-
-        List<Object> listData = (List<Object>)listView.getListData();
-
         int itemIndex = getItemAt(y);
 
-        if (itemIndex < listData.getLength()
-            && !listView.isItemDisabled(itemIndex)) {
+        if (!listView.isItemDisabled(itemIndex)) {
             int itemY = getItemBounds(itemIndex).y;
 
             if (listView.getCheckmarksEnabled()
                 && !listView.isCheckmarkDisabled(itemIndex)
-                && x > checkboxPadding.left
-                && x < checkboxPadding.left + CHECKBOX.getWidth()
-                && y > itemY + checkboxPadding.top
-                && y < itemY + checkboxPadding.top + CHECKBOX.getHeight()) {
+                && isMouseOverCheckbox(itemY, x, y)) {
                 listView.setItemChecked(itemIndex, !listView.isItemChecked(itemIndex));
             } else {
-                if (editIndex != -1
+                if (selectIndex != -1
                     && count == 1) {
                     ListView.ItemEditor itemEditor = listView.getItemEditor();
 
                     if (itemEditor != null) {
-                        itemEditor.editItem(listView, editIndex);
+                        itemEditor.editItem(listView, selectIndex);
                     }
                 }
-
-                editIndex = -1;
             }
         }
 
+        selectIndex = -1;
+
         return consumed;
+    }
+
+    private boolean isMouseOverCheckbox(int itemY, int x, int y) {
+        return (x > checkboxPadding.left
+            && x < checkboxPadding.left + CHECKBOX.getWidth()
+            && y > itemY + checkboxPadding.top
+            && y < itemY + checkboxPadding.top + CHECKBOX.getHeight());
     }
 
     @Override
@@ -951,10 +954,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         int wheelRotation, int x, int y) {
         ListView listView = (ListView)getComponent();
 
-        if (highlightedIndex != -1) {
-            Bounds itemBounds = getItemBounds(highlightedIndex);
+        if (highlightIndex != -1) {
+            Bounds itemBounds = getItemBounds(highlightIndex);
 
-            highlightedIndex = -1;
+            highlightIndex = -1;
 
             if (listView.getSelectMode() != ListView.SelectMode.NONE
                 && showHighlight) {
@@ -1025,13 +1028,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         // Clear the highlight
-        if (highlightedIndex != -1
+        if (highlightIndex != -1
             && listView.getSelectMode() != ListView.SelectMode.NONE
             && showHighlight) {
-            repaintComponent(getItemBounds(highlightedIndex));
+            repaintComponent(getItemBounds(highlightIndex));
         }
 
-        highlightedIndex = -1;
+        highlightIndex = -1;
 
         return consumed;
     }

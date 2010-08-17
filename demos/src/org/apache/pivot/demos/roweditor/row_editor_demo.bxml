@@ -41,7 +41,7 @@ limitations under the License.
 
     <Border styles="{color:7}">
         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-            <TableView bxml:id="tableView" selectMode="single">
+            <TableView bxml:id="tableView" selectMode="multi">
                 <columns>
                     <TableView.Column name="date" width="87" headerData="%headers.date"/>
                     <TableView.Column name="type" width="125" headerData="%headers.type"/>

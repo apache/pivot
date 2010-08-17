@@ -81,8 +81,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private int fixedRowHeight = -1;
     private int defaultWidthColumnCount = 0;
 
-    private int highlightedIndex = -1;
-    private int editIndex = -1;
+    private int highlightIndex = -1;
+    private int selectIndex = -1;
 
     private boolean validateSelection = false;
 
@@ -400,7 +400,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         // Paint the row content
         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
             Object rowData = tableData.get(rowIndex);
-            boolean rowHighlighted = (rowIndex == highlightedIndex
+            boolean rowHighlighted = (rowIndex == highlightIndex
                 && tableView.getSelectMode() != TableView.SelectMode.NONE);
             boolean rowSelected = tableView.isRowSelected(rowIndex);
             boolean rowDisabled = tableView.isRowDisabled(rowIndex);
@@ -570,7 +570,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         TableView tableView = (TableView)getComponent();
-        List<Object> tableData = (List<Object>)tableView.getTableData();
 
         int rowIndex;
         if (variableRowHeight) {
@@ -584,10 +583,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
         } else {
             rowIndex = (y / (fixedRowHeight + 1));
-        }
 
-        if (rowIndex >= tableData.getLength()) {
-            rowIndex = -1;
+            List<Object> tableData = (List<Object>)tableView.getTableData();
+            if (rowIndex >= tableData.getLength()) {
+                rowIndex = -1;
+            }
         }
 
         return rowIndex;
@@ -1140,18 +1140,18 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         TableView tableView = (TableView)getComponent();
 
-        int previousHighlightedIndex = this.highlightedIndex;
-        highlightedIndex = getRowAt(y);
+        int previousHighlightIndex = this.highlightIndex;
+        highlightIndex = getRowAt(y);
 
-        if (previousHighlightedIndex != highlightedIndex
+        if (previousHighlightIndex != highlightIndex
             && tableView.getSelectMode() != TableView.SelectMode.NONE
             && showHighlight) {
-            if (previousHighlightedIndex != -1) {
-                repaintComponent(getRowBounds(previousHighlightedIndex));
+            if (previousHighlightIndex != -1) {
+                repaintComponent(getRowBounds(previousHighlightIndex));
             }
 
-            if (highlightedIndex != -1) {
-                repaintComponent(getRowBounds(highlightedIndex));
+            if (highlightIndex != -1) {
+                repaintComponent(getRowBounds(highlightIndex));
             }
         }
 
@@ -1164,14 +1164,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         TableView tableView = (TableView)getComponent();
 
-        if (highlightedIndex != -1
+        if (highlightIndex != -1
             && tableView.getSelectMode() != TableView.SelectMode.NONE
             && showHighlight) {
-            repaintComponent(getRowBounds(highlightedIndex));
+            repaintComponent(getRowBounds(highlightIndex));
         }
 
-        highlightedIndex = -1;
-        editIndex = -1;
+        highlightIndex = -1;
+        selectIndex = -1;
     }
 
     @Override
@@ -1186,8 +1186,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             TableView.SelectMode selectMode = tableView.getSelectMode();
 
             if (button == Mouse.Button.RIGHT) {
-                if (!tableView.isRowSelected(rowIndex)
-                    && selectMode != TableView.SelectMode.NONE) {
+                if (selectMode != TableView.SelectMode.NONE
+                    && !tableView.isRowSelected(rowIndex)) {
                     tableView.setSelectedIndex(rowIndex);
                 }
             } else {
@@ -1219,14 +1219,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     }
                 } else {
                     if (selectMode != TableView.SelectMode.NONE) {
-                        if (tableView.isRowSelected(rowIndex)
-                            && tableView.isFocused()) {
-                            // Edit the row
-                            editIndex = rowIndex;
+                        if (tableView.isRowSelected(rowIndex)) {
+                            selectIndex = rowIndex;
+                        } else {
+                            tableView.setSelectedIndex(rowIndex);
                         }
-
-                        // Select the row
-                        tableView.setSelectedIndex(rowIndex);
                     }
                 }
             }
@@ -1238,21 +1235,35 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
+
+        TableView tableView = (TableView)getComponent();
+        if (selectIndex != -1
+            && tableView.getFirstSelectedIndex() != tableView.getLastSelectedIndex()) {
+            tableView.setSelectedIndex(selectIndex);
+            selectIndex = -1;
+        }
+
+        return consumed;
+    }
+
+    @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         TableView tableView = (TableView)getComponent();
-        if (editIndex != -1
+        if (selectIndex != -1
             && count == 2) {
             TableView.RowEditor rowEditor = tableView.getRowEditor();
 
             if (rowEditor != null
                 && !rowEditor.isEditing()) {
-                rowEditor.editRow(tableView, editIndex, getColumnAt(x));
+                rowEditor.editRow(tableView, selectIndex, getColumnAt(x));
             }
         }
 
-        editIndex = -1;
+        selectIndex = -1;
 
         return consumed;
     }
@@ -1262,10 +1273,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         int wheelRotation, int x, int y) {
         TableView tableView = (TableView)getComponent();
 
-        if (highlightedIndex != -1) {
-            Bounds rowBounds = getRowBounds(highlightedIndex);
+        if (highlightIndex != -1) {
+            Bounds rowBounds = getRowBounds(highlightIndex);
 
-            highlightedIndex = -1;
+            highlightIndex = -1;
 
             if (tableView.getSelectMode() != TableView.SelectMode.NONE
                 && showHighlight) {
@@ -1335,13 +1346,13 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         // Clear the highlight
-        if (highlightedIndex != -1
+        if (highlightIndex != -1
             && tableView.getSelectMode() != TableView.SelectMode.NONE
             && showHighlight) {
-            repaintComponent(getRowBounds(highlightedIndex));
+            repaintComponent(getRowBounds(highlightIndex));
         }
 
-        highlightedIndex = -1;
+        highlightIndex = -1;
 
         return consumed;
     }
