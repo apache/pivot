@@ -18,7 +18,6 @@ package org.apache.pivot.tutorials.localization;
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.util.Locale;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
@@ -32,13 +31,9 @@ import org.apache.pivot.wtk.Window;
 public class Localization implements Application {
     private Window window = null;
 
-    public static final String LANGUAGE_KEY = "language";
-
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        String language = properties.get(LANGUAGE_KEY);
-        Locale locale = (language == null) ? Locale.getDefault() : new Locale(language);
-        Resources resources = new Resources(getClass().getName(), locale);
+        Resources resources = new Resources(getClass().getName());
 
         Theme theme = Theme.getTheme();
         Font font = theme.getFont();
