@@ -113,15 +113,15 @@ public abstract class Button extends Component {
      */
     public interface ButtonDataBindMapping {
         /**
-         * Converts a context value to a button state during a
+         * Converts a context value to button data during a
          * {@link Component#load(Object)} operation.
          *
          * @param value
          */
-        public Object toData(Object value);
+        public Object toButtonData(Object value);
 
         /**
-         * Converts a buttonData to a context value during a
+         * Converts button data to a context value during a
          * {@link Component#store(Object)} operation.
          *
          * @param buttonData
@@ -751,7 +751,7 @@ public abstract class Button extends Component {
             && buttonDataBindType != BindType.STORE) {
             Object value = JSON.get(context, buttonDataKey);
             setButtonData((buttonDataBindMapping == null) ?
-                value : buttonDataBindMapping.toData(value));
+                value : buttonDataBindMapping.toButtonData(value));
         }
     }
 
