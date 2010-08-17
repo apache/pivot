@@ -215,7 +215,6 @@ public class ListButton extends Button {
             int count = items.getLength();
 
             int previousSelectedIndex = selectedIndex;
-            Object previousSelectedItem = getSelectedItem();
 
             if (selectedIndex >= index) {
                 if (selectedIndex < index + count) {
@@ -229,11 +228,11 @@ public class ListButton extends Button {
 
             if (selectedIndex != previousSelectedIndex) {
                 listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
-            }
 
-            Object selectedItem = getSelectedItem();
-            if (selectedItem != previousSelectedItem) {
-                listButtonSelectionListeners.selectedItemChanged(ListButton.this, selectedItem);
+                if (selectedIndex == -1) {
+                    listButtonSelectionListeners.selectedItemChanged(ListButton.this,
+                        items.get(previousSelectedIndex - index));
+                }
             }
         }
 
@@ -257,14 +256,16 @@ public class ListButton extends Button {
 
         @Override
         public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
-            int previousSelectedIndex = selectedIndex;
-            selectedIndex = -1;
+            if (list.getComparator() != null) {
+                int previousSelectedIndex = selectedIndex;
+                selectedIndex = -1;
 
-            listButtonItemListeners.itemsSorted(ListButton.this);
+                listButtonItemListeners.itemsSorted(ListButton.this);
 
-            if (previousSelectedIndex != selectedIndex) {
-                listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
-                listButtonSelectionListeners.selectedItemChanged(ListButton.this, getSelectedItem());
+                if (previousSelectedIndex != selectedIndex) {
+                    listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
+                    listButtonSelectionListeners.selectedItemChanged(ListButton.this, getSelectedItem());
+                }
             }
         }
     };

@@ -1571,6 +1571,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
     }
 
+    @Override
     public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
         // No-op
     }

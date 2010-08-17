@@ -1249,4 +1249,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             }
         }
     }
+
+    @Override
+    public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
+        // No-op
+    }
 }

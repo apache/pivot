@@ -1227,6 +1227,13 @@ public class TableView extends Component {
                 listener.selectedRangesChanged(tableView, previousSelection);
             }
         }
+
+        @Override
+        public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+            for (TableViewSelectionListener listener : this) {
+                listener.selectedRowChanged(tableView, previousSelectedRow);
+            }
+        }
     }
 
     private static class TableViewSortListenerList extends ListenerList<TableViewSortListener>
@@ -1374,6 +1381,14 @@ public class TableView extends Component {
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
             int count = items.getLength();
 
+            int previousSelectedIndex;
+            if (selectMode == SelectMode.SINGLE
+                && selectedRanges.getLength() > 0) {
+                previousSelectedIndex = selectedRanges.get(0).start;
+            } else {
+                previousSelectedIndex = -1;
+            }
+
             // Decrement selected ranges
             int updated = selectedRanges.removeIndexes(index, count);
 
@@ -1382,6 +1397,11 @@ public class TableView extends Component {
 
             if (updated > 0) {
                 tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
+
+                if (selectMode == SelectMode.SINGLE) {
+                    tableViewSelectionListeners.selectedRowChanged(TableView.this,
+                        items.get(previousSelectedIndex - index));
+                }
             }
         }
 
@@ -1392,8 +1412,6 @@ public class TableView extends Component {
 
         @Override
         public void listCleared(List<Object> list) {
-            // All items were removed; clear the selection and notify
-            // listeners
             int cleared = selectedRanges.getLength();
             selectedRanges.clear();
 
@@ -1401,20 +1419,27 @@ public class TableView extends Component {
 
             if (cleared > 0) {
                 tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
+
+                if (selectMode == SelectMode.SINGLE) {
+                    tableViewSelectionListeners.selectedRowChanged(TableView.this, null);
+                }
             }
         }
 
         @Override
         public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
-            int cleared = selectedRanges.getLength();
-
             if (list.getComparator() != null) {
+                int cleared = selectedRanges.getLength();
                 selectedRanges.clear();
                 tableViewRowListeners.rowsSorted(TableView.this);
-            }
 
-            if (cleared > 0) {
-                tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
+                if (cleared > 0) {
+                    tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
+
+                    if (selectMode == SelectMode.SINGLE) {
+                        tableViewSelectionListeners.selectedRowChanged(TableView.this, null);
+                    }
+                }
             }
         }
     };
@@ -1516,6 +1541,10 @@ public class TableView extends Component {
 
             if (cleared > 0) {
                 tableViewSelectionListeners.selectedRangesChanged(this, getSelectedRanges());
+
+                if (selectMode == SelectMode.SINGLE) {
+                    tableViewSelectionListeners.selectedRowChanged(this, getSelectedRow());
+                }
             }
         }
     }
@@ -1674,6 +1703,7 @@ public class TableView extends Component {
             throw new IllegalArgumentException("Selection is not enabled.");
         }
 
+        Object previousSelectedRow;
         if (selectMode == SelectMode.SINGLE) {
             int n = selectedRanges.getLength();
 
@@ -1688,6 +1718,10 @@ public class TableView extends Component {
                     throw new IllegalArgumentException("Selected range length is greater than 1.");
                 }
             }
+
+            previousSelectedRow = getSelectedRow();
+        } else {
+            previousSelectedRow = null;
         }
 
         // Update the selection
@@ -1712,6 +1746,10 @@ public class TableView extends Component {
 
         // Notify listeners
         tableViewSelectionListeners.selectedRangesChanged(this, previousSelectedRanges);
+
+        if (selectMode == SelectMode.SINGLE) {
+            tableViewSelectionListeners.selectedRowChanged(this, previousSelectedRow);
+        }
 
         return getSelectedRanges();
     }

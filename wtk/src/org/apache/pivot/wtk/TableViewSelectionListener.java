@@ -37,6 +37,10 @@ public interface TableViewSelectionListener {
         @Override
         public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
         }
+
+        @Override
+        public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+        }
     }
 
     /**
@@ -79,4 +83,15 @@ public interface TableViewSelectionListener {
      * contains the current selection. Otherwise, contains <tt>null</tt>.
      */
     public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges);
+
+    /**
+     * Called when a table view's selected item has changed.
+     *
+     * @param tableView
+     * The source of the event.
+     *
+     * @param previousSelectedRow
+     * The row that was previously selected.
+     */
+    public void selectedRowChanged(TableView tableView, Object previousSelectedRow);
 }

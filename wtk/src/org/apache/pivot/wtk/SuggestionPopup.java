@@ -165,7 +165,6 @@ public class SuggestionPopup extends Window {
             int count = items.getLength();
 
             int previousSelectedIndex = selectedIndex;
-            Object previousSelectedSuggestion = getSelectedSuggestion();
 
             if (selectedIndex >= index) {
                 if (selectedIndex < index + count) {
@@ -179,11 +178,11 @@ public class SuggestionPopup extends Window {
 
             if (selectedIndex != previousSelectedIndex) {
                 suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
-            }
 
-            Object selectedSuggestion = getSelectedSuggestion();
-            if (selectedSuggestion != previousSelectedSuggestion) {
-                suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this, selectedSuggestion);
+                if (selectedIndex == -1) {
+                    suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this,
+                        items.get(previousSelectedIndex - index));
+                }
             }
         }
 
@@ -207,14 +206,16 @@ public class SuggestionPopup extends Window {
 
         @Override
         public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
-            int previousSelectedIndex = selectedIndex;
-            selectedIndex = -1;
+            if (list.getComparator() != null) {
+                int previousSelectedIndex = selectedIndex;
+                selectedIndex = -1;
 
-            suggestionPopupItemListeners.itemsSorted(SuggestionPopup.this);
+                suggestionPopupItemListeners.itemsSorted(SuggestionPopup.this);
 
-            if (previousSelectedIndex != selectedIndex) {
-                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
-                suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this, getSelectedSuggestion());
+                if (previousSelectedIndex != selectedIndex) {
+                    suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+                    suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this, getSelectedSuggestion());
+                }
             }
         }
     };

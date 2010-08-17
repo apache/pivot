@@ -50,7 +50,15 @@ public class ListViews extends Window implements Bindable {
 
             @Override
             public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
-                updateSelection(listView);
+                if (previousSelectedRanges != null
+                    && previousSelectedRanges != listView.getSelectedRanges()) {
+                    updateSelection(listView);
+                }
+            }
+
+            @Override
+            public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
+                // No-op
             }
 
             private void updateSelection(ListView listView) {

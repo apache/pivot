@@ -694,17 +694,24 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             @Override
             @SuppressWarnings("unchecked")
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-                updatingSelection = true;
+                if (previousSelectedRanges != null) {
+                    updatingSelection = true;
 
-                Sequence<File> files = (Sequence<File>)tableView.getSelectedRows();
-                for (int i = 0, n = files.getLength(); i < n; i++) {
-                    File file = files.get(i);
-                    files.update(i, file);
+                    Sequence<File> files = (Sequence<File>)tableView.getSelectedRows();
+                    for (int i = 0, n = files.getLength(); i < n; i++) {
+                        File file = files.get(i);
+                        files.update(i, file);
+                    }
+
+                    fileBrowser.setSelectedFiles(files);
+
+                    updatingSelection = false;
                 }
+            }
 
-                fileBrowser.setSelectedFiles(files);
-
-                updatingSelection = false;
+            @Override
+            public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+                // No-op
             }
         });
 

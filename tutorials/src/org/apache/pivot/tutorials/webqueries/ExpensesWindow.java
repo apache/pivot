@@ -25,7 +25,6 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Resources;
@@ -43,7 +42,6 @@ import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
-import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TaskAdapter;
@@ -141,7 +139,7 @@ public class ExpensesWindow extends Window implements Bindable {
         // Attach event listeners
         expenseTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
             @Override
-            public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+            public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
                 int selectedIndex = expenseTableView.getSelectedIndex();
                 editSelectedExpenseAction.setEnabled(selectedIndex != -1);
                 deleteSelectedExpenseAction.setEnabled(selectedIndex != -1);

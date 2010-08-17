@@ -63,11 +63,17 @@ public class FixedColumnTableDemo extends Window implements Bindable {
 
             @Override
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-                if (!synchronizingSelection) {
+                if (previousSelectedRanges != null
+                    && !synchronizingSelection) {
                     synchronizingSelection = true;
                     fixedTableView.setSelectedRanges(tableView.getSelectedRanges());
                     synchronizingSelection = false;
                 }
+            }
+
+            @Override
+            public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+                // No-op
             }
         });
 
@@ -92,11 +98,17 @@ public class FixedColumnTableDemo extends Window implements Bindable {
 
             @Override
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-                if (!synchronizingSelection) {
+                if (previousSelectedRanges != null
+                    && !synchronizingSelection) {
                     synchronizingSelection = true;
                     primaryTableView.setSelectedRanges(tableView.getSelectedRanges());
                     synchronizingSelection = false;
                 }
+            }
+
+            @Override
+            public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+                // No-op
             }
         });
 

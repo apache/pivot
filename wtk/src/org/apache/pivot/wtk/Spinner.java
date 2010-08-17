@@ -290,7 +290,6 @@ public class Spinner extends Container {
             int count = items.getLength();
 
             int previousSelectedIndex = selectedIndex;
-            Object previousSelectedItem = getSelectedItem();
 
             if (selectedIndex >= index) {
                 if (selectedIndex < index + count) {
@@ -304,11 +303,11 @@ public class Spinner extends Container {
 
             if (selectedIndex != previousSelectedIndex) {
                 spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
-            }
 
-            Object selectedItem = getSelectedItem();
-            if (selectedItem != previousSelectedItem) {
-                spinnerSelectionListeners.selectedItemChanged(Spinner.this, selectedItem);
+                if (selectedIndex == -1) {
+                    spinnerSelectionListeners.selectedItemChanged(Spinner.this,
+                        items.get(previousSelectedIndex - index));
+                }
             }
         }
 
@@ -332,14 +331,16 @@ public class Spinner extends Container {
 
         @Override
         public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
-            int previousSelectedIndex = selectedIndex;
-            selectedIndex = -1;
+            if (list.getComparator() != null) {
+                int previousSelectedIndex = selectedIndex;
+                selectedIndex = -1;
 
-            spinnerItemListeners.itemsSorted(Spinner.this);
+                spinnerItemListeners.itemsSorted(Spinner.this);
 
-            if (previousSelectedIndex != selectedIndex) {
-                spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
-                spinnerSelectionListeners.selectedItemChanged(Spinner.this, getSelectedItem());
+                if (previousSelectedIndex != selectedIndex) {
+                    spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
+                    spinnerSelectionListeners.selectedItemChanged(Spinner.this, getSelectedItem());
+                }
             }
         }
     };

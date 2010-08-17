@@ -52,7 +52,8 @@ public interface ListButtonSelectionListener {
      * The source of the event.
      *
      * @param previousSelectedItem
-     * The item that was previously selected.
+     * The item that was previously selected, or <tt>null</tt> if the previous selection
+     * cannot be determined.
      */
     public void selectedItemChanged(ListButton listButton, Object previousSelectedItem);
 }

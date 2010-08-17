@@ -21,7 +21,6 @@ import java.awt.Font;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
-import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
@@ -37,7 +36,6 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
-import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.SuggestionPopupListener;
 import org.apache.pivot.wtk.SuggestionPopupSelectionListener;
@@ -124,7 +122,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
     private ListViewSelectionListener listViewSelectionListener = new ListViewSelectionListener.Adapter() {
         @Override
-        public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+        public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
             int index = suggestionListView.getSelectedIndex();
 
             SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();

@@ -543,6 +543,13 @@ public class ListView extends Component {
                 listener.selectedRangesChanged(listView, previousSelection);
             }
         }
+
+        @Override
+        public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
+            for (ListViewSelectionListener listener : this) {
+                listener.selectedItemChanged(listView, previousSelectedItem);
+            }
+        }
     }
 
     private static class ListViewBindingListenerList extends ListenerList<ListViewBindingListener>
@@ -696,6 +703,14 @@ public class ListView extends Component {
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
             int count = items.getLength();
 
+            int previousSelectedIndex;
+            if (selectMode == SelectMode.SINGLE
+                && selectedRanges.getLength() > 0) {
+                previousSelectedIndex = selectedRanges.get(0).start;
+            } else {
+                previousSelectedIndex = -1;
+            }
+
             // Decrement selected ranges
             int updated = selectedRanges.removeIndexes(index, count);
 
@@ -725,6 +740,11 @@ public class ListView extends Component {
 
             if (updated > 0) {
                 listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
+
+                if (selectMode == SelectMode.SINGLE) {
+                    listViewSelectionListeners.selectedItemChanged(ListView.this,
+                        items.get(previousSelectedIndex - index));
+                }
             }
         }
 
@@ -735,8 +755,6 @@ public class ListView extends Component {
 
         @Override
         public void listCleared(List<Object> list) {
-            // All items were removed; clear the selection and notify
-            // listeners
             int cleared = selectedRanges.getLength();
             selectedRanges.clear();
             checkedIndexes.clear();
@@ -745,21 +763,29 @@ public class ListView extends Component {
 
             if (cleared > 0) {
                 listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
+
+                if (selectMode == SelectMode.SINGLE) {
+                    listViewSelectionListeners.selectedItemChanged(ListView.this, null);
+                }
             }
         }
 
         @Override
         public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
-            int cleared = selectedRanges.getLength();
-
             if (list.getComparator() != null) {
+                int cleared = selectedRanges.getLength();
                 selectedRanges.clear();
                 checkedIndexes.clear();
-                listViewItemListeners.itemsSorted(ListView.this);
-            }
 
-            if (cleared > 0) {
-                listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
+                listViewItemListeners.itemsSorted(ListView.this);
+
+                if (cleared > 0) {
+                    listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
+
+                    if (selectMode == SelectMode.SINGLE) {
+                        listViewSelectionListeners.selectedItemChanged(ListView.this, null);
+                    }
+                }
             }
         }
     };
@@ -836,6 +862,10 @@ public class ListView extends Component {
 
             if (cleared > 0) {
                 listViewSelectionListeners.selectedRangesChanged(this, getSelectedRanges());
+
+                if (selectMode == SelectMode.SINGLE) {
+                    listViewSelectionListeners.selectedItemChanged(this, getSelectedItem());
+                }
             }
         }
     }
@@ -1017,6 +1047,7 @@ public class ListView extends Component {
             throw new IllegalArgumentException("Selection is not enabled.");
         }
 
+        Object previousSelectedItem;
         if (selectMode == SelectMode.SINGLE) {
             int n = selectedRanges.getLength();
 
@@ -1031,6 +1062,10 @@ public class ListView extends Component {
                     throw new IllegalArgumentException("Selected range length is greater than 1.");
                 }
             }
+
+            previousSelectedItem = getSelectedItem();
+        } else {
+            previousSelectedItem = null;
         }
 
         // Update the selection
@@ -1055,6 +1090,10 @@ public class ListView extends Component {
 
         // Notify listeners
         listViewSelectionListeners.selectedRangesChanged(this, previousSelectedRanges);
+
+        if (selectMode == SelectMode.SINGLE) {
+            listViewSelectionListeners.selectedItemChanged(this, previousSelectedItem);
+        }
 
         return getSelectedRanges();
     }

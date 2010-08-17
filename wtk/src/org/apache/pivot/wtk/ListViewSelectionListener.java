@@ -37,6 +37,10 @@ public interface ListViewSelectionListener {
         @Override
         public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
         }
+
+        @Override
+        public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
+        }
     }
 
     /**
@@ -79,4 +83,15 @@ public interface ListViewSelectionListener {
      * contains the current selection. Otherwise, contains <tt>null</tt>.
      */
     public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges);
+
+    /**
+     * Called when a list view's selected item has changed.
+     *
+     * @param listView
+     * The source of the event.
+     *
+     * @param previousSelectedItem
+     * The item that was previously selected.
+     */
+    public void selectedItemChanged(ListView listView, Object previousSelectedItem);
 }
