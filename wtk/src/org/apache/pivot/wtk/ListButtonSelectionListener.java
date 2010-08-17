@@ -21,6 +21,19 @@ package org.apache.pivot.wtk;
  */
 public interface ListButtonSelectionListener {
     /**
+     * List button selection listener adapter.
+     */
+    public static class Adapter implements ListButtonSelectionListener {
+        @Override
+        public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+        }
+
+        @Override
+        public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+        }
+    }
+
+    /**
      * Called when a list button's selected index has changed.
      *
      * @param listButton
@@ -31,4 +44,15 @@ public interface ListButtonSelectionListener {
      * selected. Otherwise, contains the current selection.
      */
     public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex);
+
+    /**
+     * Called when a list button's selected item has changed.
+     *
+     * @param listButton
+     * The source of the event.
+     *
+     * @param previousSelectedItem
+     * The item that was previously selected.
+     */
+    public void selectedItemChanged(ListButton listButton, Object previousSelectedItem);
 }

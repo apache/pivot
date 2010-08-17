@@ -314,9 +314,9 @@ public class RichTextEditorDemo implements Application {
                 }
             });
 
-        ListButtonSelectionListener fontButtonPressListener = new ListButtonSelectionListener() {
+        ListButtonSelectionListener fontButtonPressListener = new ListButtonSelectionListener.Adapter() {
             @Override
-            public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+            public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
                 int selectedFontSize = (Integer)fontSizeListButton.getSelectedItem();
                 String selectedFontFamily = (String)fontFamilyListButton.getSelectedItem();
                 final Font derivedFont = Font.decode(selectedFontFamily + " " + selectedFontSize);

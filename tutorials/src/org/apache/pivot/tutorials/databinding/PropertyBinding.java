@@ -29,7 +29,7 @@ public class PropertyBinding extends Window implements Bindable {
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         // Manually bind list button selection to label text
         NamespaceBinding namespaceBinding = new NamespaceBinding(namespace,
-            "listButton.selectedIndex", "listButtonLabel.text");
+            "listButton.selectedItem", "listButtonLabel.text");
         namespaceBinding.bind();
     }
 }

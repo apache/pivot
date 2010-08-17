@@ -150,7 +150,7 @@ public class BeanAdapter implements Map<String, Object> {
 
     private static final String ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT =
         "Unable to access property \"%s\" for type %s.";
-    
+
     /**
      * Creates a new bean dictionary.
      *

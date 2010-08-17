@@ -1287,12 +1287,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             case Keyboard.KeyCode.UP: {
                 if (selectMode != TableView.SelectMode.NONE) {
                     int index = tableView.getFirstSelectedIndex();
-    
+
                     do {
                         index--;
                     } while (index >= 0
                         && tableView.isRowDisabled(index));
-    
+
                     if (index >= 0) {
                         if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                             && tableView.getSelectMode() == TableView.SelectMode.MULTI) {
@@ -1301,9 +1301,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                             tableView.setSelectedIndex(index);
                         }
                     }
-    
+
                     consumed = true;
                 }
+
                 break;
             }
 
@@ -1311,12 +1312,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 if (selectMode != TableView.SelectMode.NONE) {
                     int index = tableView.getLastSelectedIndex();
                     int count = tableView.getTableData().getLength();
-    
+
                     do {
                         index++;
                     } while (index < count
                         && tableView.isRowDisabled(index));
-    
+
                     if (index < count) {
                         if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                             && tableView.getSelectMode() == TableView.SelectMode.MULTI) {
@@ -1325,9 +1326,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                             tableView.setSelectedIndex(index);
                         }
                     }
-    
+
                     consumed = true;
                 }
+
                 break;
             }
         }

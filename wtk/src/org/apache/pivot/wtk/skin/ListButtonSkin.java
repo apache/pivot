@@ -368,4 +368,9 @@ public abstract class ListButtonSkin extends ButtonSkin
             listView.setSelectedIndex(selectedIndex);
         }
     }
+
+    @Override
+    public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+        // No-op
+    }
 }

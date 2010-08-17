@@ -435,7 +435,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         section.add(listButton);
         Form.setLabel(listButton, key);
 
-        listButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
+        listButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener.Adapter() {
             private boolean updating = false;
 
             @Override

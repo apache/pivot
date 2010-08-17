@@ -79,6 +79,13 @@ public class ListButton extends Button {
                 listener.selectedIndexChanged(listButton, previousSelectedIndex);
             }
         }
+
+        @Override
+        public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+            for (ListButtonSelectionListener listener : this) {
+                listener.selectedItemChanged(listButton, previousSelectedItem);
+            }
+        }
     }
 
     private static class ListButtonBindingListenerList extends ListenerList<ListButtonBindingListener>
@@ -168,6 +175,8 @@ public class ListButton extends Button {
             int count = items.getLength();
 
             int previousSelectedIndex = selectedIndex;
+            Object previousSelectedItem = getSelectedItem();
+
             if (selectedIndex >= index) {
                 if (selectedIndex < index + count) {
                     selectedIndex = -1;
@@ -179,6 +188,11 @@ public class ListButton extends Button {
             if (selectedIndex != previousSelectedIndex) {
                 listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
             }
+
+            Object selectedItem = getSelectedItem();
+            if (selectedItem != previousSelectedItem) {
+                listButtonSelectionListeners.selectedItemChanged(ListButton.this, selectedItem);
+            }
         }
 
         @Override
@@ -188,14 +202,24 @@ public class ListButton extends Button {
 
         @Override
         public void listCleared(List<Object> list) {
+            int previousSelectedIndex = selectedIndex;
             selectedIndex = -1;
-            listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
+
+            if (previousSelectedIndex != selectedIndex) {
+                listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
+                listButtonSelectionListeners.selectedItemChanged(ListButton.this, getSelectedItem());
+            }
         }
 
         @Override
         public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
+            int previousSelectedIndex = selectedIndex;
             selectedIndex = -1;
-            listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
+
+            if (previousSelectedIndex != selectedIndex) {
+                listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
+                listButtonSelectionListeners.selectedItemChanged(ListButton.this, getSelectedItem());
+            }
         }
     };
 
@@ -416,6 +440,8 @@ public class ListButton extends Button {
         if (previousSelectedIndex != selectedIndex) {
             this.selectedIndex = selectedIndex;
             listButtonSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
+            listButtonSelectionListeners.selectedItemChanged(this, (previousSelectedIndex == -1) ?
+                null : listData.get(previousSelectedIndex));
         }
     }
 
