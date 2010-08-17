@@ -1365,7 +1365,7 @@ public class ListView extends Component {
 
         if (previousSelectMode != selectMode) {
             // Clear any current selection
-            selectedRanges = new ListSelection();
+            clearSelection();
 
             // Update the selection mode
             this.selectMode = selectMode;
