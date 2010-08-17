@@ -128,7 +128,7 @@ public abstract class Button extends Component {
          */
         public Object valueOf(Object buttonData);
     }
-    
+
     private static class ButtonListenerList extends ListenerList<ButtonListener>
         implements ButtonListener {
         @Override
@@ -237,7 +237,7 @@ public abstract class Button extends Component {
                 listener.stateBindMappingChanged(button, previousStateBindMapping);
             }
         }
-        
+
         @Override
         public void buttonDataKeyChanged(Button button, String previousStateKey) {
             for (ButtonBindingListener listener : this) {
@@ -285,7 +285,7 @@ public abstract class Button extends Component {
     private String stateKey = null;
     private BindType stateBindType = BindType.BOTH;
     private StateBindMapping stateBindMapping = null;
-    
+
     private String buttonDataKey = null;
     private BindType buttonDataBindType = BindType.BOTH;
     private ButtonDataBindMapping buttonDataBindMapping = null;
@@ -699,7 +699,7 @@ public abstract class Button extends Component {
             buttonBindingListeners.buttonDataBindMappingChanged(this, previousButtonDataBindMapping);
         }
     }
-    
+
     @Override
     public void load(Object context) {
         if (toggleButton) {
@@ -745,18 +745,13 @@ public abstract class Button extends Component {
                 }
             }
         }
+
         if (buttonDataKey != null
             && JSON.containsKey(context, buttonDataKey)
             && buttonDataBindType != BindType.STORE) {
             Object value = JSON.get(context, buttonDataKey);
-
-            Object buttonData = value;
-
-            if (buttonDataBindMapping != null) {
-                value = buttonDataBindMapping.toData(value);
-            }
-            
-            setButtonData(buttonData);
+            setButtonData((buttonDataBindMapping == null) ?
+                value : buttonDataBindMapping.toData(value));
         }
     }
 
@@ -779,6 +774,7 @@ public abstract class Button extends Component {
                 }
             }
         }
+
         if (buttonDataKey != null
             && buttonDataBindType != BindType.LOAD) {
             JSON.put(context, buttonDataKey, (buttonDataBindMapping == null) ?
