@@ -35,7 +35,6 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 
-
 /**
  * Component that displays a sequence of items, optionally allowing a user
  * to select or check one or more items.
@@ -1012,7 +1011,9 @@ public class ListView extends Component {
             throw new IllegalArgumentException("selectedRanges is null.");
         }
 
-        if (selectMode == SelectMode.NONE) {
+        // When we're in mode NONE, the only thing we can do is to clear the selection
+        if (selectMode == SelectMode.NONE
+            && selectedRanges.getLength() > 0) {
             throw new IllegalArgumentException("Selection is not enabled.");
         }
 
