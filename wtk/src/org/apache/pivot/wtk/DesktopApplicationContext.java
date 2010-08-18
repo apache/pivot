@@ -593,9 +593,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
         try {
             Class<?> applicationClass = Class.forName(applicationClassName);
             application = (Application)applicationClass.newInstance();
-        } catch(Exception exception) {
-            Alert.alert(MessageType.ERROR, exception.getMessage(),
-                primaryDisplayHost.getDisplay());
+        } catch(ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } catch (InstantiationException exception) {
+            exception.printStackTrace();
+        } catch (IllegalAccessException exception) {
             exception.printStackTrace();
         }
 
@@ -606,6 +608,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
             // Initialize OS-specific extensions
             initializeOSExtensions();
 
+            // Show the appropriate host window
+            setFullScreen(fullScreen);
+
             // Start the application
             try {
                 application.startup(primaryDisplayHost.getDisplay(),
@@ -614,9 +619,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 displayException(exception);
             }
         }
-
-        // Show the appropriate host window
-        setFullScreen(fullScreen);
     }
 
     private static void initializeOSExtensions() {
