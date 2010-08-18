@@ -1146,12 +1146,11 @@ public abstract class ApplicationContext {
                 keyboardModifiers |= Keyboard.Modifier.SHIFT.getMask();
             }
 
-            if ((modifiersEx & KeyEvent.CTRL_DOWN_MASK) > 0) {
-                // Ignore Alt-Graphics key presses
-                if ((modifiersEx & KeyEvent.ALT_DOWN_MASK) == 0
-                    || awtKeyLocation == KeyEvent.KEY_LOCATION_RIGHT) {
-                    keyboardModifiers |= Keyboard.Modifier.CTRL.getMask();
-                }
+            // Ignore Control when Alt-Graphics is pressed
+            if ((modifiersEx & KeyEvent.CTRL_DOWN_MASK) > 0
+                && ((modifiersEx & KeyEvent.ALT_DOWN_MASK) == 0
+                    || awtKeyLocation == KeyEvent.KEY_LOCATION_RIGHT)) {
+                keyboardModifiers |= Keyboard.Modifier.CTRL.getMask();
             }
 
             if ((modifiersEx & KeyEvent.ALT_DOWN_MASK) > 0) {
