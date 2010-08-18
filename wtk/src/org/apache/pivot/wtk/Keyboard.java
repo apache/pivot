@@ -35,10 +35,6 @@ public final class Keyboard {
         public int getMask() {
             return 1 << ordinal();
         }
-
-        public boolean isSelected(int modifiers) {
-            return ((modifiers & getMask()) > 0);
-        }
     }
 
     /**
@@ -98,19 +94,19 @@ public final class Keyboard {
         public String toString() {
             int awtModifiers = 0x00;
 
-            if (Modifier.META.isSelected(modifiers)) {
+            if (isPressed(Modifier.META)) {
                 awtModifiers |= KeyEvent.META_DOWN_MASK;
             }
 
-            if (Modifier.CTRL.isSelected(modifiers)) {
+            if (isPressed(Modifier.CTRL)) {
                 awtModifiers |= KeyEvent.CTRL_DOWN_MASK;
             }
 
-            if (Modifier.ALT.isSelected(modifiers)) {
+            if (isPressed(Modifier.ALT)) {
                 awtModifiers |= KeyEvent.ALT_DOWN_MASK;
             }
 
-            if (Modifier.SHIFT.isSelected(modifiers)) {
+            if (isPressed(Modifier.SHIFT)) {
                 awtModifiers |= KeyEvent.SHIFT_DOWN_MASK;
             }
 
@@ -270,7 +266,7 @@ public final class Keyboard {
      * <tt>true</tt> if the modifier is pressed; <tt>false</tt>, otherwise.
      */
     public static boolean isPressed(Modifier modifier) {
-        return modifier.isSelected(getModifiers());
+        return (modifiers & modifier.getMask()) > 0;
     }
 
     /**

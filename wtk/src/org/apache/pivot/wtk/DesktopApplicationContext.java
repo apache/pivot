@@ -615,7 +615,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             try {
                 application.startup(primaryDisplayHost.getDisplay(),
                     new ImmutableMap<String, String>(properties));
-            } catch(Exception exception) {
+            } catch (Exception exception) {
                 displayException(exception);
             }
         }

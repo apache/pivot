@@ -33,10 +33,6 @@ public final class Mouse {
         public int getMask() {
             return 1 << ordinal();
         }
-
-        public boolean isSelected(int buttons) {
-            return ((buttons & getMask()) > 0);
-        }
     }
 
     /**
@@ -71,7 +67,7 @@ public final class Mouse {
      * <tt>true</tt> if the button is pressed; <tt>false</tt>, otherwise.
      */
     public static boolean isPressed(Button button) {
-        return button.isSelected(getButtons());
+        return (buttons & button.getMask()) > 0;
     }
 
     /**
