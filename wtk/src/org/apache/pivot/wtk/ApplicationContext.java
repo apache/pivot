@@ -1137,16 +1137,21 @@ public abstract class ApplicationContext {
         protected void processKeyEvent(KeyEvent event) {
             super.processKeyEvent(event);
 
+            int modifiersEx = event.getModifiersEx();
+            int awtKeyLocation = event.getKeyLocation();
+
             // Set the keyboard modifier state
             int keyboardModifiers = 0;
-
-            int modifiersEx = event.getModifiersEx();
             if ((modifiersEx & KeyEvent.SHIFT_DOWN_MASK) > 0) {
                 keyboardModifiers |= Keyboard.Modifier.SHIFT.getMask();
             }
 
             if ((modifiersEx & KeyEvent.CTRL_DOWN_MASK) > 0) {
-                keyboardModifiers |= Keyboard.Modifier.CTRL.getMask();
+                // Ignore Alt-Graphics key presses
+                if ((modifiersEx & KeyEvent.ALT_DOWN_MASK) == 0
+                    || awtKeyLocation == KeyEvent.KEY_LOCATION_RIGHT) {
+                    keyboardModifiers |= Keyboard.Modifier.CTRL.getMask();
+                }
             }
 
             if ((modifiersEx & KeyEvent.ALT_DOWN_MASK) > 0) {
@@ -1161,7 +1166,7 @@ public abstract class ApplicationContext {
 
             // Get the key location
             Keyboard.KeyLocation keyLocation = null;
-            switch (event.getKeyLocation()) {
+            switch (awtKeyLocation) {
                 case KeyEvent.KEY_LOCATION_STANDARD: {
                     keyLocation = Keyboard.KeyLocation.STANDARD;
                     break;
