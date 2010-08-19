@@ -25,8 +25,10 @@ limitations under the License.
     <property name="folder.www" value="www"/>
 
     <property name="example.path" value="org/apache/pivot/examples/deployment"/>
+    <property name="example.jar" value="${folder.lib}/deployment-example.jar"/>
     <property name="example.war" value="${folder.lib}/deployment-example.war"/>
     <property name="example.exe" value="deployment-example.exe"/>
+    <property name="example.zip" value="deployment-example.zip"/>
     <property name="example.app" value="Deployment Example.app"/>
 
     <!-- Define the launch4j task -->
@@ -37,12 +39,12 @@ limitations under the License.
     <condition property="isMac">
         <os family="mac"/>
     </condition>
-  
+
     <!-- Compile the example application -->
     <target name="compile">
         <echo message="Compiling..."/>
         <ant target="compile"/>
-        
+
         <mkdir dir="${ant.project.name}/${folder.bin}"/>
         <javac srcDir="${ant.project.name}/${folder.src}"
             destDir="${ant.project.name}/${folder.bin}"
@@ -62,11 +64,13 @@ limitations under the License.
     <target name="package" depends="compile">
         <echo message="Packaging..."/>
         <ant target="package"/>
-        
-        <jar destfile="${folder.lib}/deployment-example.jar">
-            <dirset dir="${ant.project.name}/${folder.bin}"/>
+
+        <jar destfile="${example.jar}">
+            <fileset dir="${ant.project.name}/${folder.bin}"/>
             <fileset dir="${ant.project.name}/${folder.src}">
+                <include name="${example.path}/**"/>
                 <exclude name="**/*.java"/>
+                <exclude name="web.xml"/>
             </fileset>
         </jar>
     </target>
@@ -79,6 +83,7 @@ limitations under the License.
         <delete dir="${ant.project.name}/${folder.www}"/>
         <delete file="${example.war}"/>
         <delete file="${example.exe}"/>
+        <delete file="${example.zip}"/>
         <delete dir="${example.app}"/>
     </target>
 
@@ -87,7 +92,7 @@ limitations under the License.
     <!-- Package example application for deployment via web browser -->
     <target name="deploy-applet" depends="package">
         <echo message="Generating WAR file..."/>
-        
+
         <mkdir dir="${ant.project.name}/${folder.www}"/>
         <mkdir dir="${ant.project.name}/${folder.www}/lib"/>
 
@@ -99,10 +104,9 @@ limitations under the License.
                 <include name="pivot-wtk-terra-${version}.jar"/>
             </fileset>
         </copy>
-        
+
         <!-- Copy the example JAR -->
-        <copy file="${folder.lib}/deployment-example.jar"
-            todir="${ant.project.name}/${folder.www}/lib"/>
+        <copy file="${example.jar}" todir="${ant.project.name}/${folder.www}/lib"/>
 
         <!-- Generate the host page -->
         <copy file="${ant.project.name}/${folder.src}/${example.path}/index.html"
@@ -122,18 +126,24 @@ limitations under the License.
     <!-- Package example application for deployment via Windows executable -->
     <target name="deploy-windows" depends="package">
         <echo message="Generating Windows executable..."/>
-        
+
         <launch4j>
-            <config headerType="gui" jar="${folder.lib}/deployment-example.jar" 
+            <config headerType="gui" jar="${example.jar}"
                 outfile="${example.exe}">
-                <classPath mainClass="org.apache.pivot.examples.deployment.DeploymentExample">
-                    <cp>${folder.lib}/pivot-core-${version}.jar</cp>
-                    <cp>${folder.lib}/pivot-wtk-${version}.jar</cp>
-                    <cp>${folder.lib}/pivot-wtk-terra-${version}.jar</cp>
-                </classPath>
+                <classPath mainClass="org.apache.pivot.examples.deployment.DeploymentExample"
+                    cp="${folder.lib}/pivot-core-${version}.jar;${folder.lib}/pivot-wtk-${version}.jar;${folder.lib}/pivot-wtk-terra-${version}.jar"/>
                 <jre minVersion="1.6.0"/>
             </config>
         </launch4j>
+
+        <zip destfile="${example.zip}">
+            <fileset dir=".">
+                <include name="${example.exe}"/>
+                <include name="${folder.lib}/pivot-core-${version}.jar"/>
+                <include name="${folder.lib}/pivot-wtk-${version}.jar"/>
+                <include name="${folder.lib}/pivot-wtk-terra-${version}.jar"/>
+            </fileset>
+        </zip>
     </target>
 
     <!-- Package example application for deployment via Mac OS X bundle -->
