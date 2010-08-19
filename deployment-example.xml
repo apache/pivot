@@ -154,6 +154,7 @@ JarBundler requires Mac OS X. See the project home page for installation instruc
 
         <launch4j>
             <config headerType="gui" jar="${folder.lib}/${example.jar}"
+                icon="${ant.project.name}/${folder.src}/${example.path}/logo-notext-256x256.ico"
                 outfile="${example.exe}">
                 <classPath mainClass="org.apache.pivot.examples.deployment.DeploymentExample"
                     cp="${folder.lib}/pivot-core-${version}.jar;${folder.lib}/pivot-wtk-${version}.jar;${folder.lib}/pivot-wtk-terra-${version}.jar"/>
@@ -179,7 +180,8 @@ JarBundler requires Mac OS X. See the project home page for installation instruc
 
         <jarbundler dir="."
             name="${example.name}"
-            mainclass="org.apache.pivot.examples.deployment.DeploymentExample">
+            mainclass="org.apache.pivot.examples.deployment.DeploymentExample"
+            icon="${ant.project.name}/${folder.src}/${example.path}/logo-notext-256x256.icns">
             <jarfileset dir="${folder.lib}">
                 <include name="${example.jar}"/>
                 <include name="pivot-core-${version}.jar"/>

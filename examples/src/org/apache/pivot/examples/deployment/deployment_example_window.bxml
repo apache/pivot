@@ -23,6 +23,13 @@ limitations under the License.
         spacing:12}">
         <Label text="Welcome to Apache Pivot!" styles="{font:{size:16}}"/>
         <ImageView image="@logo-256x256.png"/>
+        <PushButton buttonData="Say Hello">
+            <buttonPressListeners>
+            function buttonPressed(button) {
+                org.apache.pivot.wtk.Prompt.prompt("Hello from Pivot!", button.window);
+            }
+            </buttonPressListeners>
+        </PushButton>
     </BoxPane>
 </Window>
 
