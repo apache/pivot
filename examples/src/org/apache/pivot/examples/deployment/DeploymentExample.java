@@ -3,7 +3,6 @@ package org.apache.pivot.examples.deployment;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
@@ -32,9 +31,5 @@ public class DeploymentExample implements Application {
 
     @Override
     public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(DeploymentExample.class, args);
     }
 }

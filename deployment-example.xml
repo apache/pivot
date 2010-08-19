@@ -153,10 +153,12 @@ JarBundler requires Mac OS X. See the project home page for installation instruc
             classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>
 
         <launch4j>
-            <config headerType="gui" jar="${folder.lib}/${example.jar}"
+            <config headerType="gui"
+                jar="${folder.lib}/${example.jar}"
                 icon="${ant.project.name}/${folder.src}/${example.path}/logo-notext-256x256.ico"
+                cmdLine="org.apache.pivot.examples.deployment.DeploymentExample"
                 outfile="${example.exe}">
-                <classPath mainClass="org.apache.pivot.examples.deployment.DeploymentExample"
+                <classPath mainClass="org.apache.pivot.wtk.DesktopApplicationContext"
                     cp="${folder.lib}/pivot-core-${version}.jar;${folder.lib}/pivot-wtk-${version}.jar;${folder.lib}/pivot-wtk-terra-${version}.jar"/>
                 <jre minVersion="1.6.0"/>
             </config>
@@ -180,7 +182,8 @@ JarBundler requires Mac OS X. See the project home page for installation instruc
 
         <jarbundler dir="."
             name="${example.name}"
-            mainclass="org.apache.pivot.examples.deployment.DeploymentExample"
+            mainclass="org.apache.pivot.wtk.DesktopApplicationContext"
+            arguments="org.apache.pivot.examples.deployment.DeploymentExample"
             icon="${ant.project.name}/${folder.src}/${example.path}/logo-notext-256x256.icns">
             <jarfileset dir="${folder.lib}">
                 <include name="${example.jar}"/>
