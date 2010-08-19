@@ -25,19 +25,28 @@ limitations under the License.
     <property name="folder.www" value="www"/>
 
     <property name="example.path" value="org/apache/pivot/examples/deployment"/>
+    <property name="example.war" value="${folder.lib}/deployment-example.war"/>
+    <property name="example.exe" value="deployment-example.exe"/>
+    <property name="example.app" value="Deployment Example.app"/>
 
-    <!--
-    TODO Demonstrate three means of deployment:
-    1) Applet
-    2) Windows .exe
-    3) Mac OS X bundle
-    -->
+    <!-- Define the launch4j task -->
+    <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
+        classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>
+
+    <!-- Define a condition that checks for Mac OS X -->
+    <condition property="isMac">
+        <os family="mac"/>
+    </condition>
+  
+    <!-- Compile the example application -->
     <target name="compile">
-        <ant target="package"/>
-
+        <echo message="Compiling..."/>
+        <ant target="compile"/>
+        
         <mkdir dir="${ant.project.name}/${folder.bin}"/>
         <javac srcDir="${ant.project.name}/${folder.src}"
             destDir="${ant.project.name}/${folder.bin}"
+            classpath="core/${folder.bin}:wtk/${folder.bin}"
             includejavaruntime="true"
             includeantruntime="true"
             deprecation="true"
@@ -46,24 +55,39 @@ limitations under the License.
             encoding="UTF-8"
             failonerror="true">
             <include name="${example.path}/**"/>
-            <classpath>
-                <fileset dir="lib" includes="*.jar"/>
-            </classpath>
         </javac>
     </target>
 
+    <!-- Generate the example JAR -->
+    <target name="package" depends="compile">
+        <echo message="Packaging..."/>
+        <ant target="package"/>
+        
+        <jar destfile="${folder.lib}/deployment-example.jar">
+            <dirset dir="${ant.project.name}/${folder.bin}"/>
+            <fileset dir="${ant.project.name}/${folder.src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Clean up -->
     <target name="clean">
         <ant target="clean"/>
-        <delete dir="${ant.project.name}/${folder.bin}"/>
 
-        <!-- TODO Delete generated .war, .exe, and .app files/directories -->
+        <delete dir="${ant.project.name}/${folder.bin}"/>
         <delete dir="${ant.project.name}/${folder.www}"/>
+        <delete file="${example.war}"/>
+        <delete file="${example.exe}"/>
+        <delete dir="${example.app}"/>
     </target>
 
     <target name="deploy" depends="deploy-applet, deploy-windows, deploy-osx"/>
 
-    <!-- Packages example application for deployment via web browser -->
-    <target name="deploy-applet" depends="compile">
+    <!-- Package example application for deployment via web browser -->
+    <target name="deploy-applet" depends="package">
+        <echo message="Generating WAR file..."/>
+        
         <mkdir dir="${ant.project.name}/${folder.www}"/>
         <mkdir dir="${ant.project.name}/${folder.www}/lib"/>
 
@@ -75,14 +99,10 @@ limitations under the License.
                 <include name="pivot-wtk-terra-${version}.jar"/>
             </fileset>
         </copy>
-
-        <!-- Generate the example JAR -->
-        <jar destfile="${ant.project.name}/${folder.www}/lib/deployment-example.jar">
-            <fileset dir="${ant.project.name}/${folder.bin}"/>
-            <fileset dir="${ant.project.name}/${folder.src}">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </jar>
+        
+        <!-- Copy the example JAR -->
+        <copy file="${folder.lib}/deployment-example.jar"
+            todir="${ant.project.name}/${folder.www}/lib"/>
 
         <!-- Generate the host page -->
         <copy file="${ant.project.name}/${folder.src}/${example.path}/index.html"
@@ -93,17 +113,31 @@ limitations under the License.
         </copy>
 
         <!-- Generate the WAR file -->
-        <war destfile="${folder.lib}/deployment-example.war"
+        <war destfile="${example.war}"
             webxml="${ant.project.name}/${folder.src}/${example.path}/web.xml">
             <fileset dir="${ant.project.name}/${folder.www}"/>
         </war>
     </target>
 
-    <!-- Packages example application for deployment via Windows executable -->
-    <target name="deploy-windows" depends="compile">
+    <!-- Package example application for deployment via Windows executable -->
+    <target name="deploy-windows" depends="package">
+        <echo message="Generating Windows executable..."/>
+        
+        <launch4j>
+            <config headerType="gui" jar="${folder.lib}/deployment-example.jar" 
+                outfile="${example.exe}">
+                <classPath mainClass="org.apache.pivot.examples.deployment.DeploymentExample">
+                    <cp>${folder.lib}/pivot-core-${version}.jar</cp>
+                    <cp>${folder.lib}/pivot-wtk-${version}.jar</cp>
+                    <cp>${folder.lib}/pivot-wtk-terra-${version}.jar</cp>
+                </classPath>
+                <jre minVersion="1.6.0"/>
+            </config>
+        </launch4j>
     </target>
 
-    <!-- Packages example application for deployment via Mac OS X bundle -->
-    <target name="deploy-osx" depends="compile">
+    <!-- Package example application for deployment via Mac OS X bundle -->
+    <target name="deploy-osx" if="isMac" depends="package">
+        <echo message="Generating OS X application bundle..."/>
     </target>
 </project>
