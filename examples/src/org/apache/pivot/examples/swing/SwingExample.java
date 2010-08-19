@@ -39,7 +39,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Window;
 
-public class SwingDemo extends ApplicationContext {
+public class SwingExample extends ApplicationContext {
     public static class HostApplet extends JApplet {
         private static final long serialVersionUID = 0;
 
@@ -152,7 +152,7 @@ public class SwingDemo extends ApplicationContext {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         Window window;
         try {
-            window = (Window)bxmlSerializer.readObject(SwingDemo.class.getResource("pivot_window.bxml"));
+            window = (Window)bxmlSerializer.readObject(SwingExample.class.getResource("pivot_window.bxml"));
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<project name="examples" default="deploy">
+    <property file="build.properties"/>
+
+    <property name="folder.src" value="src"/>
+    <property name="folder.bin" value="ant-bin"/>
+    <property name="folder.lib" value="lib"/>
+    <property name="folder.www" value="www"/>
+
+    <property name="example.path" value="org/apache/pivot/examples/deployment"/>
+
+    <!--
+    TODO Demonstrate three means of deployment:
+    1) Applet
+    2) Windows .exe
+    3) Mac OS X bundle
+    -->
+    <target name="compile">
+        <ant target="package"/>
+
+        <mkdir dir="${ant.project.name}/${folder.bin}"/>
+        <javac srcDir="${ant.project.name}/${folder.src}"
+            destDir="${ant.project.name}/${folder.bin}"
+            includejavaruntime="true"
+            includeantruntime="true"
+            deprecation="true"
+            debug="true"
+            target="1.6"
+            encoding="UTF-8"
+            failonerror="true">
+            <include name="${example.path}/**"/>
+            <classpath>
+                <fileset dir="lib" includes="*.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="clean">
+        <ant target="clean"/>
+        <delete dir="${ant.project.name}/${folder.bin}"/>
+
+        <!-- TODO Delete generated .war, .exe, and .app files/directories -->
+        <delete dir="${ant.project.name}/${folder.www}"/>
+    </target>
+
+    <target name="deploy" depends="deploy-applet, deploy-windows, deploy-osx"/>
+
+    <!-- Packages example application for deployment via web browser -->
+    <target name="deploy-applet" depends="compile">
+        <mkdir dir="${ant.project.name}/${folder.www}"/>
+        <mkdir dir="${ant.project.name}/${folder.www}/lib"/>
+
+        <!-- Copy the platform JARs -->
+        <copy todir="${ant.project.name}/${folder.www}/lib">
+            <fileset dir="${folder.lib}">
+                <include name="pivot-core-${version}.jar"/>
+                <include name="pivot-wtk-${version}.jar"/>
+                <include name="pivot-wtk-terra-${version}.jar"/>
+            </fileset>
+        </copy>
+
+        <!-- Generate the example JAR -->
+        <jar destfile="${ant.project.name}/${folder.www}/lib/deployment-example.jar">
+            <fileset dir="${ant.project.name}/${folder.bin}"/>
+            <fileset dir="${ant.project.name}/${folder.src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
+
+        <!-- Generate the host page -->
+        <copy file="${ant.project.name}/${folder.src}/${example.path}/index.html"
+            tofile="${ant.project.name}/${folder.www}/index.html">
+            <filterset>
+                <filter token="version" value="${version}"/>
+            </filterset>
+        </copy>
+
+        <!-- Generate the WAR file -->
+        <war destfile="${folder.lib}/deployment-example.war"
+            webxml="${ant.project.name}/${folder.src}/${example.path}/web.xml">
+            <fileset dir="${ant.project.name}/${folder.www}"/>
+        </war>
+    </target>
+
+    <!-- Packages example application for deployment via Windows executable -->
+    <target name="deploy-windows" depends="compile">
+    </target>
+
+    <!-- Packages example application for deployment via Mac OS X bundle -->
+    <target name="deploy-osx" depends="compile">
+    </target>
+</project>
