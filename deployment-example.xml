@@ -16,7 +16,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<project name="examples" default="deploy">
+<!--
+This build script demonstrates several ways to package a Pivot application. Each method can
+demonstrated by calling the appropriate build target:
+
+1) As an applet deployed via a Java EE web archive (WAR) file ("deploy-applet").
+
+2) As a Windows executable ("deploy-windows"). This target requires Launch4J, available from
+http://launch4j.sourceforge.net/index.html. This software is distributed under the BSD license.
+
+The software can be installed anywhere; however, the location of the installation directory must
+be specified as a command-line argument when executing Ant:
+
+  -Dlaunch4j.dir=<full path to installation directory>
+
+The example executable requires the presence of a previously installed JRE; however, Launch4J
+can alternatively be configured to bundle a JRE in the resulting executable.
+
+3) As a Mac OS X application bundle ("deploy-osx"). This target requires JarBundler, available
+from http://informagen.com/JarBundler/. This software is distributed under the GNU GPL license.
+
+JarBundler requires Mac OS X. See the project home page for installation instructions.
+-->
+
+<project name="examples" default="compile">
     <property file="build.properties"/>
 
     <property name="folder.src" value="src"/>
@@ -24,21 +47,17 @@ limitations under the License.
     <property name="folder.lib" value="lib"/>
     <property name="folder.www" value="www"/>
 
+    <property name="example.name" value="Deployment Example"/>
     <property name="example.path" value="org/apache/pivot/examples/deployment"/>
-    <property name="example.jar" value="${folder.lib}/deployment-example.jar"/>
-    <property name="example.war" value="${folder.lib}/deployment-example.war"/>
+
+    <property name="example.jar" value="deployment-example.jar"/>
+    <property name="example.war" value="deployment-example.war"/>
+
     <property name="example.exe" value="deployment-example.exe"/>
-    <property name="example.zip" value="deployment-example.zip"/>
-    <property name="example.app" value="Deployment Example.app"/>
+    <property name="example-windows.zip" value="deployment-example-windows.zip"/>
 
-    <!-- Define the launch4j task -->
-    <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
-        classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>
-
-    <!-- Define a condition that checks for Mac OS X -->
-    <condition property="isMac">
-        <os family="mac"/>
-    </condition>
+    <property name="example.app" value="${example.name}.app"/>
+    <property name="example-osx.tar.gz" value="deployment-example-osx.tar.gz"/>
 
     <!-- Compile the example application -->
     <target name="compile">
@@ -65,7 +84,7 @@ limitations under the License.
         <echo message="Packaging..."/>
         <ant target="package"/>
 
-        <jar destfile="${example.jar}">
+        <jar destfile="${folder.lib}/${example.jar}">
             <fileset dir="${ant.project.name}/${folder.bin}"/>
             <fileset dir="${ant.project.name}/${folder.src}">
                 <include name="${example.path}/**"/>
@@ -80,11 +99,14 @@ limitations under the License.
         <ant target="clean"/>
 
         <delete dir="${ant.project.name}/${folder.bin}"/>
+
         <delete dir="${ant.project.name}/${folder.www}"/>
-        <delete file="${example.war}"/>
+
         <delete file="${example.exe}"/>
-        <delete file="${example.zip}"/>
+        <delete file="${example-windows.zip}"/>
+
         <delete dir="${example.app}"/>
+        <delete file="${example-osx.tar.gz}"/>
     </target>
 
     <target name="deploy" depends="deploy-applet, deploy-windows, deploy-osx"/>
@@ -106,7 +128,7 @@ limitations under the License.
         </copy>
 
         <!-- Copy the example JAR -->
-        <copy file="${example.jar}" todir="${ant.project.name}/${folder.www}/lib"/>
+        <copy file="${folder.lib}/${example.jar}" todir="${ant.project.name}/${folder.www}/lib"/>
 
         <!-- Generate the host page -->
         <copy file="${ant.project.name}/${folder.src}/${example.path}/index.html"
@@ -117,7 +139,7 @@ limitations under the License.
         </copy>
 
         <!-- Generate the WAR file -->
-        <war destfile="${example.war}"
+        <war destfile="${folder.lib}/${example.war}"
             webxml="${ant.project.name}/${folder.src}/${example.path}/web.xml">
             <fileset dir="${ant.project.name}/${folder.www}"/>
         </war>
@@ -127,8 +149,11 @@ limitations under the License.
     <target name="deploy-windows" depends="package">
         <echo message="Generating Windows executable..."/>
 
+        <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
+            classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>
+
         <launch4j>
-            <config headerType="gui" jar="${example.jar}"
+            <config headerType="gui" jar="${folder.lib}/${example.jar}"
                 outfile="${example.exe}">
                 <classPath mainClass="org.apache.pivot.examples.deployment.DeploymentExample"
                     cp="${folder.lib}/pivot-core-${version}.jar;${folder.lib}/pivot-wtk-${version}.jar;${folder.lib}/pivot-wtk-terra-${version}.jar"/>
@@ -136,18 +161,37 @@ limitations under the License.
             </config>
         </launch4j>
 
-        <zip destfile="${example.zip}">
-            <fileset dir=".">
+        <zip destfile="${example-windows.zip}">
+            <zipfileset dir=".">
                 <include name="${example.exe}"/>
                 <include name="${folder.lib}/pivot-core-${version}.jar"/>
                 <include name="${folder.lib}/pivot-wtk-${version}.jar"/>
                 <include name="${folder.lib}/pivot-wtk-terra-${version}.jar"/>
-            </fileset>
+            </zipfileset>
         </zip>
     </target>
 
     <!-- Package example application for deployment via Mac OS X bundle -->
-    <target name="deploy-osx" if="isMac" depends="package">
+    <target name="deploy-osx" depends="package">
         <echo message="Generating OS X application bundle..."/>
+
+        <taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler"/>
+
+        <jarbundler dir="."
+            name="${example.name}"
+            mainclass="org.apache.pivot.examples.deployment.DeploymentExample">
+            <jarfileset dir="${folder.lib}">
+                <include name="${example.jar}"/>
+                <include name="pivot-core-${version}.jar"/>
+                <include name="pivot-wtk-${version}.jar"/>
+                <include name="pivot-wtk-terra-${version}.jar"/>
+            </jarfileset>
+        </jarbundler>
+
+        <exec executable="tar">
+            <arg value="cvzf"/>
+            <arg value="${example-osx.tar.gz}"/>
+            <arg value="${example.app}"/>
+        </exec>
     </target>
 </project>
