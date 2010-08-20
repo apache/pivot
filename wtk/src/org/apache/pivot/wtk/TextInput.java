@@ -144,14 +144,15 @@ public class TextInput extends Component {
         }
     }
 
-    private static class TextInputSelectionListenerList extends ListenerList<TextInputSelectionListener>
+    private static class TextInputSelectionListenerList
+        extends ListenerList<TextInputSelectionListener>
         implements TextInputSelectionListener {
         @Override
         public void selectionChanged(TextInput textInput,
-            int previousSelectionStart, int previousSelectionEnd) {
+            int previousSelectionStart, int previousSelectionLength) {
             for (TextInputSelectionListener listener : this) {
                 listener.selectionChanged(textInput,
-                    previousSelectionStart, previousSelectionEnd);
+                    previousSelectionStart, previousSelectionLength);
             }
         }
     }
@@ -255,7 +256,8 @@ public class TextInput extends Component {
 
             if (selectionStart != previousSelectionStart
                 || selectionLength != previousSelectionLength) {
-                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+                textInputSelectionListeners.selectionChanged(this, previousSelectionStart,
+                    previousSelectionLength);
             }
         }
     }
@@ -317,7 +319,8 @@ public class TextInput extends Component {
             textValid = (validator == null) ? true : validator.isValid(text);
 
             // Fire change events
-            textInputTextListeners.charactersInserted(TextInput.this, selectionStart, text.length());
+            textInputTextListeners.charactersInserted(TextInput.this, previousSelectionStart,
+                text.length());
             textInputTextListeners.textChanged(TextInput.this, null);
 
             if (textValid != previousTextValid) {
@@ -326,7 +329,8 @@ public class TextInput extends Component {
 
             if (selectionStart != previousSelectionStart
                 || selectionLength != previousSelectionLength) {
-                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+                textInputSelectionListeners.selectionChanged(this, previousSelectionStart,
+                    previousSelectionLength);
             }
         }
     }
@@ -379,7 +383,8 @@ public class TextInput extends Component {
 
             if (selectionStart != previousSelectionStart
                 || selectionLength != previousSelectionLength) {
-                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+                textInputSelectionListeners.selectionChanged(this, previousSelectionStart,
+                    previousSelectionLength);
             }
         }
     }
