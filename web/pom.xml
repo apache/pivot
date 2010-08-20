@@ -23,10 +23,10 @@ limitations under the License.
     <parent>
         <groupId>org.apache.pivot</groupId>
         <artifactId>pivot</artifactId>
-        <version>${version}</version>
+        <version>@VERSION@</version>
     </parent>
     <artifactId>pivot-web</artifactId>
-    <version>${version}</version>
+    <version>@VERSION@</version>
     <packaging>jar</packaging>
     <name>Apache Pivot Web</name>
     <description>Apache Pivot Web Library</description>
@@ -34,7 +34,7 @@ limitations under the License.
         <dependency>
             <groupId>org.apache.pivot</groupId>
             <artifactId>pivot-core</artifactId>
-            <version>${version}</version>
+            <version>@VERSION@</version>
         </dependency>
     </dependencies>
 </project>

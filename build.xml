@@ -648,33 +648,46 @@ limitations under the License.
 
     <!-- Installs JARs to local Maven repository -->
     <target name="maven-install" depends="clean, package, package-sources">
-        <artifact:install file="pom.xml">
+        <mkdir dir="maven-install"/>
+
+        <copy todir="maven-install">
+            <fileset dir=".">
+                <include name="**/pom.xml"/>
+            </fileset>
+            <filterset>
+                <filter token="VERSION" value="${version}"/>
+            </filterset>
+        </copy>
+
+        <artifact:install file="maven-install/pom.xml">
             <artifact:pom file="pom.xml"/>
         </artifact:install>
         <artifact:install file="lib/${jar.core}">
-            <artifact:pom file="core/pom.xml"/>
+            <artifact:pom file="maven-install/core/pom.xml"/>
             <attach file="lib/${jar.core.sources}" classifier="sources" />
         </artifact:install>
         <artifact:install file="lib/${jar.web}">
-            <artifact:pom file="web/pom.xml"/>
+            <artifact:pom file="maven-install/web/pom.xml"/>
             <attach file="lib/${jar.web.sources}" classifier="sources" />
         </artifact:install>
         <artifact:install file="lib/${jar.web-server}">
-            <artifact:pom file="web/pom.xml"/>
+            <artifact:pom file="maven-install/web-server/pom.xml"/>
             <attach file="lib/${jar.web-server.sources}" classifier="sources" />
         </artifact:install>
         <artifact:install file="lib/${jar.wtk}">
-            <artifact:pom file="wtk/pom.xml"/>
+            <artifact:pom file="maven-install/wtk/pom.xml"/>
             <attach file="lib/${jar.wtk.sources}" classifier="sources" />
         </artifact:install>
         <artifact:install file="lib/${jar.wtk-terra}">
-            <artifact:pom file="wtk-terra/pom.xml"/>
+            <artifact:pom file="maven-install/wtk-terra/pom.xml"/>
             <attach file="lib/${jar.wtk-terra.sources}" classifier="sources" />
         </artifact:install>
         <artifact:install file="lib/${jar.charts}">
-            <artifact:pom file="charts/pom.xml"/>
+            <artifact:pom file="maven-install/charts/pom.xml"/>
             <attach file="lib/${jar.charts.sources}" classifier="sources" />
         </artifact:install>
+
+        <delete dir="maven-install"/>
     </target>
 
     <!-- Remove trailing white space in all source files -->
