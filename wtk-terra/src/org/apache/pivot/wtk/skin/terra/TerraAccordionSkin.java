@@ -319,7 +319,7 @@ public class TerraAccordionSkin extends ContainerSkin
         borderColor = theme.getColor(7);
         padding = new Insets(4);
         buttonFont = theme.getFont().deriveFont(Font.BOLD);
-        buttonColor = theme.getColor(13);
+        buttonColor = theme.getColor(12);
         disabledButtonColor = theme.getColor(7);
         buttonBackgroundColor = theme.getColor(10);
         buttonPadding = new Insets(3, 4, 3, 4);

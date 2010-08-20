@@ -64,7 +64,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
         buttonColor = theme.getColor(4);
         buttonBorderColor = theme.getColor(7);
-        buttonSelectionColor = theme.getColor(13);
+        buttonSelectionColor = theme.getColor(15);
         disabledButtonColor = theme.getColor(3);
         disabledButtonBorderColor = theme.getColor(7);
         disabledButtonSelectionColor = theme.getColor(7);

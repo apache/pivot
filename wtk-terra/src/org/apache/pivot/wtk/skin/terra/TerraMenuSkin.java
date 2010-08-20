@@ -61,7 +61,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
         activeColor = theme.getColor(4);
-        activeBackgroundColor = theme.getColor(13);
+        activeBackgroundColor = theme.getColor(14);
         marginColor = theme.getColor(11);
         marginColor = new Color(marginColor.getRed(), marginColor.getGreen(),
             marginColor.getBlue(), 228);

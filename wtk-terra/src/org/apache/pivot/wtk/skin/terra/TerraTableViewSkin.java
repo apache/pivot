@@ -93,7 +93,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         disabledColor = theme.getColor(7);
         backgroundColor = theme.getColor(4);
         selectionColor = theme.getColor(4);
-        selectionBackgroundColor = theme.getColor(13);
+        selectionBackgroundColor = theme.getColor(14);
         inactiveSelectionColor = theme.getColor(1);
         inactiveSelectionBackgroundColor = theme.getColor(9);
         highlightBackgroundColor = theme.getColor(10);
