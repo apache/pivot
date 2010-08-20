@@ -756,7 +756,7 @@ public class JSONSerializer implements Serializer<Object> {
             if (object instanceof Map<?, ?>) {
                 map = (Map<String, Object>)object;
             } else {
-                map = new BeanAdapter(object);
+                map = new BeanAdapter(object, true);
             }
 
             writer.append("{");
