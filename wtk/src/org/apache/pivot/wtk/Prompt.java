@@ -199,16 +199,7 @@ public class Prompt extends Sheet {
         setMessageType(messageType);
         setMessage(message);
         setBody(body);
-
-        if (options != null
-            && options.getLength() > 0) {
-            for (int i = 0, n = options.getLength(); i < n; i++) {
-                optionSequence.add(options.get(i));
-            }
-
-            setSelectedOptionIndex(0);
-        }
-
+        setOptions(options);
         setTitle((String)resources.get("defaultTitle"));
 
         installThemeSkin(Prompt.class);
@@ -228,6 +219,14 @@ public class Prompt extends Sheet {
             this.messageType = messageType;
             promptListeners.messageTypeChanged(this, previousMessageType);
         }
+    }
+
+    public void setMessageType(String messageType) {
+        if (messageType == null) {
+            throw new IllegalArgumentException("messageType is null.");
+        }
+
+        setMessageType(MessageType.valueOf(messageType.toUpperCase()));
     }
 
     public String getMessage() {
@@ -258,13 +257,21 @@ public class Prompt extends Sheet {
         return optionSequence;
     }
 
-    public void setOptions(String options) {
+    public void setOptions(Sequence<?> options) {
         optionSequence.remove(0, optionSequence.getLength());
 
-        try {
-            for (Object option : JSONSerializer.parseList(options)) {
-                optionSequence.add(option);
+        if (options != null) {
+            for (int i = 0, n = options.getLength(); i < n; i++) {
+                optionSequence.add(options.get(i));
             }
+
+            setSelectedOptionIndex(0);
+        }
+    }
+
+    public void setOptions(String options) {
+        try {
+            setOptions(JSONSerializer.parseList(options));
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
         }
