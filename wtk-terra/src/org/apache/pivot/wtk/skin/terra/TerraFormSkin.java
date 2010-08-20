@@ -345,8 +345,8 @@ public class TerraFormSkin extends ContainerSkin
 
         questionIcon = theme.getSmallMessageIcon(MessageType.QUESTION);
         questionMessageColor = theme.getColor(4);
-        questionMessageBackgroundColor = theme.getColor(16);
-        questionHighlightColor = theme.getColor(15);
+        questionMessageBackgroundColor = theme.getColor(14);
+        questionHighlightColor = theme.getColor(13);
 
         infoIcon = theme.getSmallMessageIcon(MessageType.INFO);
         infoMessageColor = theme.getColor(1);

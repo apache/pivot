@@ -252,7 +252,7 @@ public class TerraExpanderSkin extends ExpanderSkin
         titleRow.add(titleBoxPane);
         titleRow.add(buttonBoxPane);
 
-        titleLabel.getStyles().put("color", theme.getColor(15));
+        titleLabel.getStyles().put("color", theme.getColor(13));
 
         Font titleFont = theme.getFont().deriveFont(Font.BOLD);
         titleLabel.getStyles().put("font", titleFont);

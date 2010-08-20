@@ -71,7 +71,7 @@ limitations under the License.
                         <TablePane.Row>
                             <Border TablePane.columnSpan="2" styles="{color:10}">
                                 <ScrollPane horizontalScrollBarPolicy="fill" preferredHeight="80">
-                                    <TableView selectedIndex="0">
+                                    <TableView bxml:id="tableView" selectedIndex="0">
                                         <columns>
                                             <TableView.Column name="a" headerData="A" width="1*"/>
                                             <TableView.Column name="b" headerData="B" width="1*"/>
@@ -92,6 +92,10 @@ limitations under the License.
                                             </ArrayList>
                                         </tableData>
                                     </TableView>
+
+                                    <columnHeader>
+                                        <TableViewHeader tableView="$tableView"/>
+                                    </columnHeader>
                                 </ScrollPane>
                             </Border>
                         </TablePane.Row>

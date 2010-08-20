@@ -17,8 +17,8 @@
 {   commandButton: {
         font: {bold:true},
         color: 4,
-        backgroundColor: 16,
-        borderColor: 13,
+        backgroundColor: 17,
+        borderColor: 15,
         disabledBackgroundColor: 10,
         disabledBorderColor: 7,
         padding: {top:3, left:4, bottom:3, right:4},

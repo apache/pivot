@@ -243,8 +243,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         setBackgroundColor(theme.getColor(10));
 
         titleBarColor = theme.getColor(4);
-        titleBarBackgroundColor = theme.getColor(16);
-        titleBarBorderColor = theme.getColor(13);
+        titleBarBackgroundColor = theme.getColor(17);
+        titleBarBorderColor = theme.getColor(15);
         inactiveTitleBarColor = theme.getColor(7);
         inactiveTitleBarBackgroundColor = theme.getColor(9);
         inactiveTitleBarBorderColor = theme.getColor(7);
