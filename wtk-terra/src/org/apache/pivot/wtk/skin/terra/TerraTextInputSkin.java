@@ -1039,8 +1039,9 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             && character != 0x7F
             && !Keyboard.isPressed(Keyboard.Modifier.META)) {
             TextInput textInput = (TextInput)getComponent();
+            int selectionLength = textInput.getSelectionLength();
 
-            if (textInput.getSelectionLength() == 0
+            if (selectionLength == 0
                 && textInput.getTextLength() == textInput.getMaximumLength()) {
                 Toolkit.getDefaultToolkit().beep();
             } else {
@@ -1049,9 +1050,12 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                 if (validator != null
                     && strictValidation) {
-                    StringBuilder buf = new StringBuilder(textInput.getText());
+                    String text = textInput.getText();
                     int selectionStart = textInput.getSelectionStart();
-                    buf.insert(selectionStart, character);
+
+                    StringBuilder buf = new StringBuilder(text.substring(0, selectionStart));
+                    buf.append(character);
+                    buf.append(text.substring(selectionStart + selectionLength));
 
                     if (validator.isValid(buf.toString())) {
                         textInput.insert(character);

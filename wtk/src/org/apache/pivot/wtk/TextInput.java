@@ -256,8 +256,7 @@ public class TextInput extends Component {
 
             if (selectionStart != previousSelectionStart
                 || selectionLength != previousSelectionLength) {
-                textInputSelectionListeners.selectionChanged(this, previousSelectionStart,
-                    previousSelectionLength);
+                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
             }
         }
     }
@@ -316,7 +315,7 @@ public class TextInput extends Component {
 
             // Update the valid flag
             boolean previousTextValid = textValid;
-            textValid = (validator == null) ? true : validator.isValid(text);
+            textValid = (validator == null) ? true : validator.isValid(this.text);
 
             // Fire change events
             textInputTextListeners.charactersInserted(TextInput.this, previousSelectionStart,
@@ -329,8 +328,7 @@ public class TextInput extends Component {
 
             if (selectionStart != previousSelectionStart
                 || selectionLength != previousSelectionLength) {
-                textInputSelectionListeners.selectionChanged(this, previousSelectionStart,
-                    previousSelectionLength);
+                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
             }
         }
     }
@@ -361,10 +359,6 @@ public class TextInput extends Component {
                 count = 1;
             }
 
-            // Update the valid flag
-            boolean previousTextValid = textValid;
-            textValid = (validator == null) ? true : validator.isValid(text);
-
             char[] removed = new char[count];
             if (selectionStart < text.length()) {
                 StringBuilder textBuilder = new StringBuilder(text.substring(0, selectionStart));
@@ -372,6 +366,10 @@ public class TextInput extends Component {
                 text.getChars(selectionStart, selectionStart + count, removed, 0);
                 text = textBuilder.toString();
             }
+
+            // Update the valid flag
+            boolean previousTextValid = textValid;
+            textValid = (validator == null) ? true : validator.isValid(text);
 
             // Fire change events
             textInputTextListeners.charactersRemoved(TextInput.this, selectionStart, removed);
@@ -383,8 +381,7 @@ public class TextInput extends Component {
 
             if (selectionStart != previousSelectionStart
                 || selectionLength != previousSelectionLength) {
-                textInputSelectionListeners.selectionChanged(this, previousSelectionStart,
-                    previousSelectionLength);
+                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
             }
         }
     }
