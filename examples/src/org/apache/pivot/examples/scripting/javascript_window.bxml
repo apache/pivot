@@ -24,7 +24,7 @@ limitations under the License.
     importPackage(org.apache.pivot.wtk);
 
     function sayHello() {
-        Alert.alert("Hello from JavaScript!", window);
+        Prompt.prompt("Hello from JavaScript!", window);
     }
     ]]>
     </bxml:script>

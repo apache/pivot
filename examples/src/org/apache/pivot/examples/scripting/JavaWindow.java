@@ -22,10 +22,10 @@ import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
-import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
@@ -33,7 +33,8 @@ public class JavaWindow extends Window implements Bindable {
     @BXML private PushButton sayHelloButton = null;
 
     @Override
-    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location,
+        Resources resources) {
         sayHelloButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
@@ -50,6 +51,6 @@ public class JavaWindow extends Window implements Bindable {
     }
 
     private void sayHello() {
-        Alert.alert("Hello from Java!", this);
+        Prompt.prompt("Hello from Java!", this);
     }
 }

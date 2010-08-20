@@ -21,17 +21,18 @@ import java.net.URL;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
-import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.Window;
 
 class ScalaWindow extends Window with Bindable {
     private var sayHelloButton:PushButton = null;
     
-    override def initialize(namespace: Map[String, Object], location:URL, resources:Resources) {
+    override def initialize(namespace: Map[String, Object], location:URL, 
+        resources:Resources) {
         sayHelloButton = namespace.get("sayHelloButton").asInstanceOf[PushButton];
         
         sayHelloButton.getButtonPressListeners().add(new ButtonPressListener {
@@ -48,6 +49,6 @@ class ScalaWindow extends Window with Bindable {
     }
     
     private def sayHello() {
-        Alert.alert("Hello from Scala!", this);
+        Prompt.prompt("Hello from Scala!", this);
     }
 }

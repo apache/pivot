@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<filebrowsing:FileBrowsing title="File Browser Sheets" maximized="true"
+<filebrowsing:FileBrowsing title="File Browsing" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:filebrowsing="org.apache.pivot.tutorials.filebrowsing"
     xmlns="org.apache.pivot.wtk">

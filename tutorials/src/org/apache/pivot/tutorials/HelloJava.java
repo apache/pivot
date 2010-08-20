@@ -21,7 +21,6 @@ import java.awt.Font;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
@@ -33,6 +32,8 @@ public class HelloJava implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) {
+        window = new Window();
+
         Label label = new Label();
         label.setText("Hello World!");
         label.getStyles().put("font", new Font("Arial", Font.BOLD, 24));
@@ -42,10 +43,10 @@ public class HelloJava implements Application {
         label.getStyles().put("verticalAlignment",
             VerticalAlignment.CENTER);
 
-        window = new Window();
         window.setContent(label);
         window.setTitle("Hello World!");
         window.setMaximized(true);
+
         window.open(display);
     }
 
@@ -64,9 +65,5 @@ public class HelloJava implements Application {
 
     @Override
     public void resume() {
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(HelloJava.class, args);
     }
 }
