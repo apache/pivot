@@ -68,6 +68,7 @@ limitations under the License.
     <property name="jar.charts.sources" value="${ant.project.name}-charts-${version}-sources.jar" />
     <property name="jar.core.sources" value="${ant.project.name}-core-${version}-sources.jar" />
     <property name="jar.web.sources" value="${ant.project.name}-web-${version}-sources.jar" />
+    <property name="jar.web-server.sources" value="${ant.project.name}-web-server-${version}-sources.jar" />
     <property name="jar.wtk.sources" value="${ant.project.name}-wtk-${version}-sources.jar" />
     <property name="jar.wtk-terra.sources" value="${ant.project.name}-wtk-terra-${version}-sources.jar" />
 
@@ -131,6 +132,7 @@ limitations under the License.
             <mkdir dir="@{project}/${folder.bin}"/>
             <javac destDir="@{project}/${folder.bin}"
                 includejavaruntime="true"
+                includeantruntime="true"
                 deprecation="${compiler.deprecation}"
                 debug="${compiler.debug}"
                 target="${compiler.target}"
@@ -294,7 +296,8 @@ limitations under the License.
     <target name="package-sources" description="Packages all projects into JAR files" depends="trim-whitespace">
         <package-sources project="charts" jarFile="${jar.charts.sources}" title="Charts"/>
         <package-sources project="core" jarFile="${jar.core.sources}" title="Core"/>
-        <package-sources project="web" jarFile="${jar.web.sources}" title="Web Queries"/>
+        <package-sources project="web" jarFile="${jar.web.sources}" title="Web"/>
+        <package-sources project="web-server" jarFile="${jar.web-server.sources}" title="Web Server"/>
         <package-sources project="wtk" jarFile="${jar.wtk.sources}" title="WTK"/>
         <package-sources project="wtk-terra" jarFile="${jar.wtk-terra.sources}" title="WTK Terra Theme Provider"/>
     </target>
@@ -665,6 +668,10 @@ limitations under the License.
         <artifact:install file="lib/${jar.web}">
             <artifact:pom file="web/pom.xml"/>
             <attach file="lib/${jar.web.sources}" classifier="sources" />
+        </artifact:install>
+        <artifact:install file="lib/${jar.web-server}">
+            <artifact:pom file="web-server/pom.xml"/>
+            <attach file="lib/${jar.web-server.sources}" classifier="sources" />
         </artifact:install>
         <artifact:install file="lib/${jar.wtk}">
             <artifact:pom file="wtk/pom.xml"/>
