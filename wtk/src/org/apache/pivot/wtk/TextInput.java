@@ -144,12 +144,11 @@ public class TextInput extends Component {
         }
     }
 
-    private static class TextInputSelectionListenerList
-        extends ListenerList<TextInputSelectionListener>
+    private static class TextInputSelectionListenerList extends ListenerList<TextInputSelectionListener>
         implements TextInputSelectionListener {
         @Override
-        public void selectionChanged(TextInput textInput,
-            int previousSelectionStart, int previousSelectionLength) {
+        public void selectionChanged(TextInput textInput, int previousSelectionStart,
+            int previousSelectionLength) {
             for (TextInputSelectionListener listener : this) {
                 listener.selectionChanged(textInput,
                     previousSelectionStart, previousSelectionLength);
@@ -174,7 +173,7 @@ public class TextInput extends Component {
         }
 
         @Override
-        public void textBindMappingChanged(TextInput textInput, TextInput.TextBindMapping previousTextBindMapping) {
+        public void textBindMappingChanged(TextInput textInput, TextBindMapping previousTextBindMapping) {
             for (TextInputBindingListener listener : this) {
                 listener.textBindMappingChanged(textInput, previousTextBindMapping);
             }
@@ -318,9 +317,8 @@ public class TextInput extends Component {
             textValid = (validator == null) ? true : validator.isValid(this.text);
 
             // Fire change events
-            textInputTextListeners.charactersInserted(TextInput.this, previousSelectionStart,
-                text.length());
-            textInputTextListeners.textChanged(TextInput.this, null);
+            textInputTextListeners.charactersInserted(this, previousSelectionStart, text.length());
+            textInputTextListeners.textChanged(this, null);
 
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
@@ -372,8 +370,8 @@ public class TextInput extends Component {
             textValid = (validator == null) ? true : validator.isValid(text);
 
             // Fire change events
-            textInputTextListeners.charactersRemoved(TextInput.this, selectionStart, removed);
-            textInputTextListeners.textChanged(TextInput.this, null);
+            textInputTextListeners.charactersRemoved(this, selectionStart, removed);
+            textInputTextListeners.textChanged(this, null);
 
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
@@ -503,8 +501,8 @@ public class TextInput extends Component {
             this.selectionStart = selectionStart;
             this.selectionLength = selectionLength;
 
-            textInputSelectionListeners.selectionChanged(this,
-                previousSelectionStart, previousSelectionLength);
+            textInputSelectionListeners.selectionChanged(this, previousSelectionStart,
+                previousSelectionLength);
         }
     }
 

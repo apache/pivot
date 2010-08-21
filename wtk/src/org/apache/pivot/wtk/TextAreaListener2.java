@@ -17,16 +17,34 @@
 package org.apache.pivot.wtk;
 
 /**
- * Text area selection listener interface.
+ * Text area listener interface.
  */
-public interface TextAreaSelectionListener {
+public interface TextAreaListener2 {
     /**
-     * Called when a text area's selection state has changed.
+     * Text area listener adapter.
+     */
+    public static class Adapter implements TextAreaListener2 {
+        @Override
+        public void maximumLengthChanged(TextArea2 textArea, int previousMaximumLength) {
+        }
+
+        @Override
+        public void editableChanged(TextArea2 textArea) {
+        }
+    }
+
+    /**
+     * Called when a text area's maximum length has changed.
      *
      * @param textArea
-     * @param previousSelectionStart
-     * @param previousSelectionLength
+     * @param previousMaximumLength
      */
-    public void selectionChanged(TextArea textArea, int previousSelectionStart,
-        int previousSelectionLength);
+    public void maximumLengthChanged(TextArea2 textArea, int previousMaximumLength);
+
+    /**
+     * Called when a text area's editable state has changed.
+     *
+     * @param textArea
+     */
+    public void editableChanged(TextArea2 textArea);
 }
