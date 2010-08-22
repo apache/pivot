@@ -197,6 +197,27 @@ public abstract class Button extends Component {
     private static class ButtonBindingListenerList extends ListenerList<ButtonBindingListener>
         implements ButtonBindingListener {
         @Override
+        public void buttonDataKeyChanged(Button button, String previousButtonDataKey) {
+            for (ButtonBindingListener listener : this) {
+                listener.buttonDataKeyChanged(button, previousButtonDataKey);
+            }
+        }
+
+        @Override
+        public void buttonDataBindTypeChanged(Button button, BindType previousDataBindType) {
+            for (ButtonBindingListener listener : this) {
+                listener.buttonDataBindTypeChanged(button, previousDataBindType);
+            }
+        }
+
+        @Override
+        public void buttonDataBindMappingChanged(Button button, Button.ButtonDataBindMapping previousButtonDataBindMapping) {
+            for (ButtonBindingListener listener : this) {
+                listener.buttonDataBindMappingChanged(button, previousButtonDataBindMapping);
+            }
+        }
+
+        @Override
         public void selectedKeyChanged(Button button, String previousSelectedKey) {
             for (ButtonBindingListener listener : this) {
                 listener.selectedKeyChanged(button, previousSelectedKey);
@@ -235,27 +256,6 @@ public abstract class Button extends Component {
         public void stateBindMappingChanged(Button button, Button.StateBindMapping previousStateBindMapping) {
             for (ButtonBindingListener listener : this) {
                 listener.stateBindMappingChanged(button, previousStateBindMapping);
-            }
-        }
-
-        @Override
-        public void buttonDataKeyChanged(Button button, String previousStateKey) {
-            for (ButtonBindingListener listener : this) {
-                listener.buttonDataKeyChanged(button, previousStateKey);
-            }
-        }
-
-        @Override
-        public void buttonDataBindTypeChanged(Button button, BindType previousStateBindType) {
-            for (ButtonBindingListener listener : this) {
-                listener.buttonDataBindTypeChanged(button, previousStateBindType);
-            }
-        }
-
-        @Override
-        public void buttonDataBindMappingChanged(Button button, Button.ButtonDataBindMapping previousButtonDataBindMapping) {
-            for (ButtonBindingListener listener : this) {
-                listener.buttonDataBindMappingChanged(button, previousButtonDataBindMapping);
             }
         }
     }
@@ -585,6 +585,48 @@ public abstract class Button extends Component {
         }
     }
 
+    public String getButtonDataKey() {
+        return buttonDataKey;
+    }
+
+    public void setButtonDataKey(String buttonDataKey) {
+        String previousButtonDataKey = this.buttonDataKey;
+        if (previousButtonDataKey != buttonDataKey) {
+            this.buttonDataKey = buttonDataKey;
+            buttonBindingListeners.buttonDataKeyChanged(this, previousButtonDataKey);
+        }
+    }
+
+    public BindType getButtonDataBindType() {
+        return buttonDataBindType;
+    }
+
+    public void setButtonDataBindType(BindType buttonDataBindType) {
+        if (buttonDataBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousButtonDataBindType = this.buttonDataBindType;
+
+        if (previousButtonDataBindType != buttonDataBindType) {
+            this.buttonDataBindType = buttonDataBindType;
+            buttonBindingListeners.buttonDataBindTypeChanged(this, previousButtonDataBindType);
+        }
+    }
+
+    public ButtonDataBindMapping getButtonDataBindMapping() {
+        return buttonDataBindMapping;
+    }
+
+    public void setButtonDataBindMapping(ButtonDataBindMapping buttonDataBindMapping) {
+        ButtonDataBindMapping previousButtonDataBindMapping = this.buttonDataBindMapping;
+
+        if (previousButtonDataBindMapping != buttonDataBindMapping) {
+            this.buttonDataBindMapping = buttonDataBindMapping;
+            buttonBindingListeners.buttonDataBindMappingChanged(this, previousButtonDataBindMapping);
+        }
+    }
+
     public String getSelectedKey() {
         return selectedKey;
     }
@@ -684,19 +726,6 @@ public abstract class Button extends Component {
         if (previousStateBindMapping != stateBindMapping) {
             this.stateBindMapping = stateBindMapping;
             buttonBindingListeners.stateBindMappingChanged(this, previousStateBindMapping);
-        }
-    }
-
-    public ButtonDataBindMapping getButtonDataBindMapping() {
-        return buttonDataBindMapping;
-    }
-
-    public void setButtonDataBindMapping(ButtonDataBindMapping buttonDataBindMapping) {
-        ButtonDataBindMapping previousButtonDataBindMapping = this.buttonDataBindMapping;
-
-        if (previousButtonDataBindMapping != buttonDataBindMapping) {
-            this.buttonDataBindMapping = buttonDataBindMapping;
-            buttonBindingListeners.buttonDataBindMappingChanged(this, previousButtonDataBindMapping);
         }
     }
 
