@@ -813,6 +813,10 @@ public abstract class Button extends Component {
 
     @Override
     public void clear() {
+        if (buttonDataKey != null) {
+            setButtonData(null);
+        }
+
         if (selectedKey != null
             || stateKey != null) {
             setSelected(false);
