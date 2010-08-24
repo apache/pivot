@@ -40,11 +40,16 @@ public class NamespaceBinding {
     private Dictionary<String, Object> targetDictionary;
     private String targetKey;
 
+    private boolean updating = false;
+
     private MapListener<String, Object> sourceMapListener = new MapListener.Adapter<String, Object>() {
         @Override
         public void valueUpdated(Map<String, Object> map, String key, Object previousValue) {
-            if (key.equals(sourceKey)) {
+            if (key.equals(sourceKey)
+                && !updating) {
+                updating = true;
                 targetDictionary.put(targetKey, sourceMap.get(sourceKey));
+                updating = false;
             }
         }
     };
@@ -52,8 +57,11 @@ public class NamespaceBinding {
     private PropertyChangeListener sourcePropertyChangeListener = new PropertyChangeListener() {
         @Override
         public void propertyChanged(Object bean, String propertyName) {
-            if (propertyName.equals(sourceKey)) {
+            if (propertyName.equals(sourceKey)
+                && !updating) {
+                updating = true;
                 targetDictionary.put(targetKey, sourceMap.get(sourceKey));
+                updating = false;
             }
         }
     };
