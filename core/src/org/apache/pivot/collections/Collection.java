@@ -30,6 +30,10 @@ public interface Collection<T> extends Iterable<T> {
 
     /**
      * Tests the emptiness of the collection.
+     *
+     * @return
+     * <tt>true</tt> if the collection contains no elements; <tt>false</tt>,
+     * otherwise.
      */
     public boolean isEmpty();
 
