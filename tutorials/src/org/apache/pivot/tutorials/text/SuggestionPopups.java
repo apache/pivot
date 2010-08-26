@@ -25,7 +25,7 @@ import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputTextListener;
+import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.Window;
 
 public class SuggestionPopups extends Window implements Bindable {
@@ -95,7 +95,7 @@ public class SuggestionPopups extends Window implements Bindable {
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         stateTextInput = (TextInput)namespace.get("stateTextInput");
-        stateTextInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
+        stateTextInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void charactersInserted(TextInput textInput, int index, int count) {
                 String text = textInput.getText();

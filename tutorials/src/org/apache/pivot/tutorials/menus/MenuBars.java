@@ -35,14 +35,14 @@ import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputSelectionListener;
-import org.apache.pivot.wtk.TextInputTextListener;
+import org.apache.pivot.wtk.TextInputContentListener;
 
 public class MenuBars extends Frame implements Bindable {
     @BXML private FileBrowserSheet fileBrowserSheet;
     @BXML private TabPane tabPane = null;
 
     private MenuHandler menuHandler = new MenuHandler.Adapter() {
-        TextInputTextListener textInputTextListener = new TextInputTextListener.Adapter() {
+        TextInputContentListener textInputTextListener = new TextInputContentListener.Adapter() {
             @Override
             public void textChanged(TextInput textInput, String previousText) {
                 updateActionState(textInput);

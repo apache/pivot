@@ -40,7 +40,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputTextListener;
+import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.Window;
 
 /**
@@ -100,7 +100,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         bxmlSerializer.bind(this, TerraFileBrowserSheetSkin.class);
 
-        saveAsTextInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
+        saveAsTextInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textChanged(TextInput textInput, String previousText) {
                 updateOKButtonState();

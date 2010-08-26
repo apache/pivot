@@ -17,30 +17,30 @@
 package org.apache.pivot.wtk;
 
 /**
- * Text area text listener interface.
+ * Text input text listener.
  */
-public interface TextAreaTextListener2 {
+public interface TextInputContentListener {
     /**
      * Text input text listener adapter.
      */
-    public static class Adapter implements TextAreaTextListener2 {
+    public static class Adapter implements TextInputContentListener {
         @Override
-        public void charactersInserted(TextArea2 textArea, int index, int count) {
+        public void charactersInserted(TextInput textInput, int index, int count) {
         }
 
         @Override
-        public void charactersRemoved(TextArea2 textArea, int index, char[] characters) {
+        public void charactersRemoved(TextInput textInput, int index, char[] characters) {
         }
 
         @Override
-        public void textChanged(TextArea2 textArea, String previousText) {
+        public void textChanged(TextInput textInput, String previousText) {
         }
     }
 
     /**
-     * Called when characters have been inserted into a text area.
+     * Called when characters have been inserted into a text input.
      *
-     * @param textArea
+     * @param textInput
      * The source of the event.
      *
      * @param index
@@ -49,12 +49,12 @@ public interface TextAreaTextListener2 {
      * @param count
      * The number of characters that were inserted.
      */
-    public void charactersInserted(TextArea2 textArea, int index, int count);
+    public void charactersInserted(TextInput textInput, int index, int count);
 
     /**
-     * Called when characters have been removed from a text area.
+     * Called when characters have been removed from a text input.
      *
-     * @param textArea
+     * @param textInput
      * The source of the event.
      *
      * @param index
@@ -63,17 +63,16 @@ public interface TextAreaTextListener2 {
      * @param characters
      * The characters that were removed.
      */
-    public void charactersRemoved(TextArea2 textArea, int index, char[] characters);
+    public void charactersRemoved(TextInput textInput, int index, char[] characters);
 
     /**
-     * Called when a text area's text has changed.
+     * Called when a text input's text has changed.
      *
-     * @param textArea
+     * @param textInput
      * The source of the event.
      *
      * @param previousText
      * If the text changed directly, the previous text value. Otherwise, <tt>null</tt>.
      */
-    public void textChanged(TextArea2 textArea, String previousText);
-
+    public void textChanged(TextInput textInput, String previousText);
 }

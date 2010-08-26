@@ -48,7 +48,7 @@ import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.TextInputSelectionListener;
-import org.apache.pivot.wtk.TextInputTextListener;
+import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ComponentSkin;
@@ -58,7 +58,7 @@ import org.apache.pivot.wtk.validation.Validator;
  * Text input skin.
  */
 public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
-    TextInputListener, TextInputTextListener, TextInputSelectionListener {
+    TextInputListener, TextInputContentListener, TextInputSelectionListener {
     private class BlinkCaretCallback implements Runnable {
         @Override
         public void run() {

@@ -67,7 +67,7 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputTextListener;
+import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
@@ -649,7 +649,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
         });
 
-        searchTextInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
+        searchTextInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textChanged(TextInput textInput, String previousText) {
                 String text = textInput.getText().trim();

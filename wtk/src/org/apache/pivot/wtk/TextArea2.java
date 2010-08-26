@@ -122,25 +122,25 @@ public class TextArea2 extends Component {
         }
     }
 
-    private static class TextAreaTextListenerList extends ListenerList<TextAreaTextListener2>
-        implements TextAreaTextListener2 {
+    private static class TextAreaContentListenerList extends ListenerList<TextAreaContentListener2>
+        implements TextAreaContentListener2 {
         @Override
         public void charactersInserted(TextArea2 textArea, int index, int count) {
-            for (TextAreaTextListener2 listener : this) {
+            for (TextAreaContentListener2 listener : this) {
                 listener.charactersInserted(textArea, index, count);
             }
         }
 
         @Override
         public void charactersRemoved(TextArea2 textArea, int index, char[] characters) {
-            for (TextAreaTextListener2 listener : this) {
+            for (TextAreaContentListener2 listener : this) {
                 listener.charactersRemoved(textArea, index, characters);
             }
         }
 
         @Override
         public void textChanged(TextArea2 textArea, String previousText) {
-            for (TextAreaTextListener2 listener : this) {
+            for (TextAreaContentListener2 listener : this) {
                 listener.textChanged(textArea, previousText);
             }
         }
@@ -195,7 +195,7 @@ public class TextArea2 extends Component {
     private TextBindMapping textBindMapping = null;
 
     private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
-    private TextAreaTextListenerList textAreaTextListeners = new TextAreaTextListenerList();
+    private TextAreaContentListenerList textAreaContentListeners = new TextAreaContentListenerList();
     private TextAreaSelectionListenerList textAreaSelectionListeners = new TextAreaSelectionListenerList();
     private TextAreaBindingListenerList textAreaBindingListeners = new TextAreaBindingListenerList();
 
@@ -620,8 +620,8 @@ public class TextArea2 extends Component {
         return textAreaListeners;
     }
 
-    public ListenerList<TextAreaTextListener2> getTextAreaCharacterListeners() {
-        return textAreaTextListeners;
+    public ListenerList<TextAreaContentListener2> getTextAreaCharacterListeners() {
+        return textAreaContentListeners;
     }
 
     public ListenerList<TextAreaSelectionListener2> getTextAreaSelectionListeners() {

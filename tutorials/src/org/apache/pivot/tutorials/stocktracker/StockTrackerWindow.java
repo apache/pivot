@@ -57,7 +57,7 @@ import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputTextListener;
+import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowComparator;
 
@@ -209,7 +209,7 @@ public class StockTrackerWindow extends Window implements Bindable {
         });
 
         // Add symbol text input event handlers
-        symbolTextInput.getTextInputTextListeners().add(new TextInputTextListener.Adapter() {
+        symbolTextInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textChanged(TextInput textInput, String previousText) {
                 addSymbolAction.setEnabled(textInput.getTextLength() > 0);

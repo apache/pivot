@@ -120,25 +120,25 @@ public class TextInput extends Component {
         }
     }
 
-    private static class TextInputTextListenerList extends ListenerList<TextInputTextListener>
-        implements TextInputTextListener {
+    private static class TextInputContentListenerList extends ListenerList<TextInputContentListener>
+        implements TextInputContentListener {
         @Override
         public void charactersInserted(TextInput textInput, int index, int count) {
-            for (TextInputTextListener listener : this) {
+            for (TextInputContentListener listener : this) {
                 listener.charactersInserted(textInput, index, count);
             }
         }
 
         @Override
         public void charactersRemoved(TextInput textInput, int index, char[] characters) {
-            for (TextInputTextListener listener : this) {
+            for (TextInputContentListener listener : this) {
                 listener.charactersRemoved(textInput, index, characters);
             }
         }
 
         @Override
         public void textChanged(TextInput textInput, String previousText) {
-            for (TextInputTextListener listener : this) {
+            for (TextInputContentListener listener : this) {
                 listener.textChanged(textInput, previousText);
             }
         }
@@ -198,7 +198,7 @@ public class TextInput extends Component {
     private boolean textValid = true;
 
     private TextInputListenerList textInputListeners = new TextInputListenerList();
-    private TextInputTextListenerList textInputTextListeners = new TextInputTextListenerList();
+    private TextInputContentListenerList textInputContentListeners = new TextInputContentListenerList();
     private TextInputSelectionListenerList textInputSelectionListeners = new TextInputSelectionListenerList();
     private TextInputBindingListenerList textInputBindingListeners = new TextInputBindingListenerList();
 
@@ -247,7 +247,7 @@ public class TextInput extends Component {
             textValid = (validator == null) ? true : validator.isValid(text);
 
             // Fire change events
-            textInputTextListeners.textChanged(this, previousText);
+            textInputContentListeners.textChanged(this, previousText);
 
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
@@ -317,8 +317,8 @@ public class TextInput extends Component {
             textValid = (validator == null) ? true : validator.isValid(this.text);
 
             // Fire change events
-            textInputTextListeners.charactersInserted(this, previousSelectionStart, text.length());
-            textInputTextListeners.textChanged(this, null);
+            textInputContentListeners.charactersInserted(this, previousSelectionStart, text.length());
+            textInputContentListeners.textChanged(this, null);
 
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
@@ -370,8 +370,8 @@ public class TextInput extends Component {
             textValid = (validator == null) ? true : validator.isValid(text);
 
             // Fire change events
-            textInputTextListeners.charactersRemoved(this, selectionStart, removed);
-            textInputTextListeners.textChanged(this, null);
+            textInputContentListeners.charactersRemoved(this, selectionStart, removed);
+            textInputContentListeners.textChanged(this, null);
 
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
@@ -817,8 +817,8 @@ public class TextInput extends Component {
     /**
      * Returns the text input text listener list.
      */
-    public ListenerList<TextInputTextListener> getTextInputTextListeners() {
-        return textInputTextListeners;
+    public ListenerList<TextInputContentListener> getTextInputTextListeners() {
+        return textInputContentListeners;
     }
 
     /**
