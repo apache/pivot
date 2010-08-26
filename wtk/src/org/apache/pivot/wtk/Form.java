@@ -612,4 +612,8 @@ public class Form extends Container {
 
         setFlag(component, Flag.decode(flag));
     }
+
+    public static final void clearFlag(Component component) {
+        setFlag(component, (Flag)null);
+    }
 }
