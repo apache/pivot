@@ -16,91 +16,12 @@
  */
 package org.apache.pivot.wtk.text;
 
-import java.text.CharacterIterator;
-
 import org.apache.pivot.util.ListenerList;
 
 /**
  * Node representing a sequence of characters.
  */
 public final class TextNode extends Node {
-    private class TextNodeCharacterIterator implements CharacterIterator {
-        private final int beginIndex;
-        private final int endIndex;
-
-        private int index;
-
-        public TextNodeCharacterIterator(int beginIndex, int endIndex) {
-            this.beginIndex = beginIndex;
-            this.endIndex = endIndex;
-
-            index = 0;
-        }
-
-        public TextNodeCharacterIterator(TextNodeCharacterIterator textNodeCharacterIterator) {
-            beginIndex = textNodeCharacterIterator.beginIndex;
-            endIndex = textNodeCharacterIterator.endIndex;
-            index = textNodeCharacterIterator.index;
-        }
-
-        @Override
-        public char first() {
-            return setIndex(beginIndex);
-        }
-
-        @Override
-        public char last() {
-            return setIndex(getCharacterCount() == 0 ? endIndex : endIndex - 1);
-        }
-
-        @Override
-        public char next() {
-            return setIndex(index < endIndex ? index + 1 : DONE);
-        }
-
-        @Override
-        public char previous() {
-            return setIndex(index > beginIndex ? index - 1 : DONE);
-        }
-
-        @Override
-        public char current() {
-            return (index < endIndex) ? getCharacterAt(index) : DONE;
-        }
-
-        @Override
-        public int getBeginIndex() {
-            return beginIndex;
-        }
-
-        @Override
-        public int getEndIndex() {
-            return endIndex;
-        }
-
-        @Override
-        public int getIndex() {
-            return index;
-        }
-
-        @Override
-        public char setIndex(int index) {
-            if (index < beginIndex
-                || index > endIndex) {
-                throw new IndexOutOfBoundsException();
-            }
-
-            this.index = index;
-
-            return current();
-        }
-
-        @Override
-        public Object clone() {
-            return new TextNodeCharacterIterator(this);
-        }
-    }
-
     private static class TextNodeListenerList extends ListenerList<TextNodeListener>
         implements TextNodeListener {
         @Override
@@ -111,14 +32,14 @@ public final class TextNode extends Node {
         }
 
         @Override
-        public void charactersRemoved(TextNode textNode, int index, String characters) {
+        public void charactersRemoved(TextNode textNode, int index, int count) {
             for (TextNodeListener listener : this) {
-                listener.charactersRemoved(textNode, index, characters);
+                listener.charactersRemoved(textNode, index, count);
             }
         }
     }
 
-    private String text;
+    private StringBuilder characters = new StringBuilder();
     private TextNodeListenerList textNodeListeners = new TextNodeListenerList();
 
     public TextNode() {
@@ -134,87 +55,15 @@ public final class TextNode extends Node {
             throw new IllegalArgumentException("text is null.");
         }
 
-        this.text = text;
+        characters = new StringBuilder(text);
     }
 
-    public void insertText(char character, int index) {
-        insertText(Character.toString(character), index);
-    }
-
-    public void insertText(String insertText, int index) {
-        if (insertText == null) {
-            throw new IllegalArgumentException("text is null.");
-        }
-
-        if (index < 0
-            || index > text.length()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        int characterCount = insertText.length();
-        if (characterCount > 0) {
-            StringBuilder textBuilder = new StringBuilder(text);
-            textBuilder.insert(index, insertText);
-            text = textBuilder.toString();
-            rangeInserted(index, characterCount);
-            textNodeListeners.charactersInserted(this, index, characterCount);
-        }
-    }
-
-    public String removeText(int index, int count) {
-        if (index < 0
-            || index + count > text.length()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        String removedText;
-        if (count == 0) {
-            removedText = "";
-        } else {
-            int start = index;
-            int end = index + count;
-
-            removedText = text.substring(start, end);
-            StringBuilder textBuilder = new StringBuilder(text);
-            textBuilder.delete(start, end);
-            text = textBuilder.toString();
-            textNodeListeners.charactersRemoved(this, index, removedText);
-
-            rangeRemoved(index, count);
-        }
-
-        return removedText;
-    }
-
-    @Override
-    public char getCharacterAt(int index) {
-        if (index < 0
-            || index >= text.length()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        return text.charAt(index);
-    }
-
-    @Override
-    public int getCharacterCount() {
-        return text.length();
-    }
-
-    public CharacterIterator getCharacterIterator() {
-        return getCharacterIterator(0, getCharacterCount());
-    }
-
-    public CharacterIterator getCharacterIterator(int beginIndex) {
-        return getCharacterIterator(beginIndex, getCharacterCount());
-    }
-
-    public CharacterIterator getCharacterIterator(int beginIndex, int endIndex) {
-        return new TextNodeCharacterIterator(beginIndex, endIndex);
+    public CharSequence getCharacters() {
+        return characters;
     }
 
     public String getText() {
-        return text;
+        return characters.toString();
     }
 
     public void setText(String text) {
@@ -226,8 +75,59 @@ public final class TextNode extends Node {
         insertText(text, 0);
     }
 
+    public void insertText(char text, int index) {
+        insertText(Character.toString(text), index);
+    }
+
+    public void insertText(String text, int index) {
+        if (text == null) {
+            throw new IllegalArgumentException("text is null.");
+        }
+
+        if (index < 0
+            || index > characters.length()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        int characterCount = text.length();
+        if (characterCount > 0) {
+            characters.insert(index, text);
+            rangeInserted(index, characterCount);
+            textNodeListeners.charactersInserted(this, index, characterCount);
+        }
+    }
+
+    public void removeText(int index, int count) {
+        if (index < 0
+            || index + count > characters.length()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (count > 0) {
+            characters.delete(index, index + count);
+
+            textNodeListeners.charactersRemoved(this, index, count);
+            rangeRemoved(index, count);
+        }
+    }
+
     public String getSubstring(int start, int end) {
-        return text.substring(start, end);
+        return characters.substring(start, end);
+    }
+
+    @Override
+    public char getCharacterAt(int index) {
+        if (index < 0
+            || index >= characters.length()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        return characters.charAt(index);
+    }
+
+    @Override
+    public int getCharacterCount() {
+        return characters.length();
     }
 
     @Override
@@ -246,7 +146,8 @@ public final class TextNode extends Node {
             throw new IllegalArgumentException("characterCount is negative.");
         }
 
-        String removed = removeText(offset, characterCount);
+        String removed = characters.substring(offset, offset + characterCount);
+        removeText(offset, characterCount);
         TextNode range = new TextNode(removed);
 
         return range;
@@ -259,14 +160,14 @@ public final class TextNode extends Node {
         }
 
         if (offset < 0
-            || offset + characterCount > text.length()) {
+            || offset + characterCount > characters.length()) {
             throw new IndexOutOfBoundsException();
         }
 
         int start = offset;
         int end = offset + characterCount;
 
-        String rangeText = text.substring(start, end);
+        String rangeText = characters.substring(start, end);
         TextNode textNode = new TextNode(rangeText);
 
         return textNode;

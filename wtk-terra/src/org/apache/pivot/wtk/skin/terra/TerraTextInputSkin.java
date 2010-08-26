@@ -30,9 +30,9 @@ import java.awt.font.LineMetrics;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.text.CharSequenceCharacterIterator;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -228,21 +228,19 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         glyphVector = null;
 
-        int n = textInput.getCharacters().length();
+        CharSequence characters = textInput.getCharacters();
+        int n = characters.length();
         if (n > 0) {
-            String text;
             if (textInput.isPassword()) {
-                StringBuilder buf = new StringBuilder(n);
+                StringBuilder passwordBuilder = new StringBuilder(n);
                 for (int i = 0; i < n; i++) {
-                    buf.append(BULLET);
+                    passwordBuilder.append(BULLET);
                 }
 
-                text = buf.toString();
-            } else {
-                text = textInput.getText();
+                characters = passwordBuilder;
             }
 
-            CharacterIterator ci = new StringCharacterIterator(text);
+            CharacterIterator ci = new CharSequenceCharacterIterator(characters);
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             glyphVector = font.createGlyphVector(fontRenderContext, ci);

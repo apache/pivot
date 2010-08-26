@@ -27,7 +27,7 @@ public class TextNodeAdapter extends NodeAdapter {
         }
 
         @Override
-        public void charactersRemoved(TextNode textNode, int index, String characters) {
+        public void charactersRemoved(TextNode textNode, int index, int count) {
             update(textNode);
         }
     };

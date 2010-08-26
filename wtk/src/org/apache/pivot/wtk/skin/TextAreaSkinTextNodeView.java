@@ -28,6 +28,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.text.CharacterIterator;
 
+import org.apache.pivot.text.CharSequenceCharacterIterator;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Platform;
@@ -91,7 +92,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
             int breakWidth = getBreakWidth();
-            CharacterIterator ci = textNode.getCharacterIterator(start);
+            CharacterIterator ci = new CharSequenceCharacterIterator(textNode.getCharacters(), start);
 
             float lineWidth = 0;
             int lastWhitespaceIndex = -1;
@@ -134,7 +135,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
             }
 
             glyphVector = getEffectiveFont().createGlyphVector(fontRenderContext,
-                textNode.getCharacterIterator(start, end));
+                new CharSequenceCharacterIterator(textNode.getCharacters(), start, end));
 
             if (end < ci.getEndIndex()) {
                 length = end - start;
@@ -421,7 +422,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
     }
 
     @Override
-    public void charactersRemoved(TextNode textNode, int index, String characters) {
+    public void charactersRemoved(TextNode textNode, int index, int count) {
         invalidate();
     }
 

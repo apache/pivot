@@ -34,7 +34,7 @@ public interface TextNodeListener {
      *
      * @param textNode
      * @param index
-     * @param characters
+     * @param count
      */
-    public void charactersRemoved(TextNode textNode, int index, String characters);
+    public void charactersRemoved(TextNode textNode, int index, int count);
 }
