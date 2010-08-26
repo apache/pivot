@@ -290,7 +290,7 @@ public class TextInput extends Component {
             throw new IllegalArgumentException();
         }
 
-        if (this.text.length() + text.length() > maximumLength) {
+        if (this.text.length() + text.length() - selectionLength > maximumLength) {
             throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
         }
 
