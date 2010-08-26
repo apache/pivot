@@ -24,10 +24,11 @@ import org.apache.pivot.wtk.Mouse;
  * Abstract base class for link button skins.
  */
 public abstract class LinkButtonSkin extends ButtonSkin {
-    /**
-     * @return
-     * <tt>false</tt>; link buttons are not focusable.
-     */
+    @Override
+    public boolean isOpaque() {
+        return false;
+    }
+
     @Override
     public boolean isFocusable() {
         return false;

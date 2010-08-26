@@ -26,6 +26,11 @@ import org.apache.pivot.wtk.RadioButton;
  */
 public abstract class RadioButtonSkin extends ButtonSkin {
     @Override
+    public boolean isOpaque() {
+        return false;
+    }
+
+    @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
