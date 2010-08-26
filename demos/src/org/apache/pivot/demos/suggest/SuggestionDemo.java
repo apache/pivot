@@ -55,12 +55,12 @@ public class SuggestionDemo extends Window implements Bindable {
 
         textInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
             @Override
-            public void charactersInserted(TextInput textInput, int index, int count) {
+            public void textInserted(TextInput textInput, int index, int count) {
                 getSuggestions();
             }
 
             @Override
-            public void charactersRemoved(TextInput textInput, int index, char[] characters) {
+            public void textRemoved(TextInput textInput, int index, int count) {
                 if (suggestionQuery != null) {
                     suggestionQuery.abort();
                 }

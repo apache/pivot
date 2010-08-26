@@ -81,7 +81,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             switch (scrollDirection) {
                 case FORWARD: {
-                    if (selectionEnd < textInput.getTextLength() - 1) {
+                    if (selectionEnd < textInput.getCharacters().length() - 1) {
                         selectionEnd++;
                         textInput.setSelection(selectionStart, selectionEnd - selectionStart + 1);
                         scrollCharacterToVisible(selectionEnd);
@@ -228,7 +228,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         glyphVector = null;
 
-        int n = textInput.getTextLength();
+        int n = textInput.getCharacters().length();
         if (n > 0) {
             String text;
             if (textInput.isPassword()) {
@@ -1028,7 +1028,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         if (button == Mouse.Button.LEFT
             && count > 1) {
             TextInput textInput = (TextInput)getComponent();
-            textInput.setSelection(0, textInput.getTextLength());
+            textInput.setSelection(0, textInput.getCharacters().length());
         }
 
         return super.mouseClick(component, button, x, y, count);
@@ -1047,7 +1047,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             int selectionLength = textInput.getSelectionLength();
 
             if (selectionLength == 0
-                && textInput.getTextLength() == textInput.getMaximumLength()) {
+                && textInput.getCharacters().length() == textInput.getMaximumLength()) {
                 Toolkit.getDefaultToolkit().beep();
             } else {
                 Validator validator = textInput.getValidator();
@@ -1104,7 +1104,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     }
 
                     if (index >= 0
-                        && index < textInput.getTextLength()) {
+                        && index < textInput.getCharacters().length()) {
                         buf.deleteCharAt(index);
                     }
                 }
@@ -1157,7 +1157,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             textInput.setSelection(selectionStart, selectionLength);
 
-            if (textInput.getTextLength() > 0) {
+            if (textInput.getCharacters().length() > 0) {
                 scrollCharacterToVisible(selectionStart);
             } else {
                 setScrollLeft(0);
@@ -1169,11 +1169,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
                 && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                 // Add all subsequent text to the selection
-                selectionLength = textInput.getTextLength() - selectionStart;
+                selectionLength = textInput.getCharacters().length() - selectionStart;
                 consumed = true;
             } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Add the next character to the selection
-                if (selectionStart + selectionLength < textInput.getTextLength()) {
+                if (selectionStart + selectionLength < textInput.getCharacters().length()) {
                     selectionLength++;
                 }
 
@@ -1181,7 +1181,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                 // Clear the selection and move the caret to the end of
                 // the text
-                selectionStart = textInput.getTextLength();
+                selectionStart = textInput.getCharacters().length();
                 selectionLength = 0;
                 consumed = true;
             } else {
@@ -1190,7 +1190,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 selectionStart += selectionLength;
 
                 if (selectionLength == 0
-                    && selectionStart < textInput.getTextLength()) {
+                    && selectionStart < textInput.getCharacters().length()) {
                     selectionStart++;
                     consumed = true;
                 }
@@ -1200,7 +1200,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             textInput.setSelection(selectionStart, selectionLength);
 
-            if (textInput.getTextLength() > 0) {
+            if (textInput.getCharacters().length() > 0) {
                 scrollCharacterToVisible(selectionStart + selectionLength - 1);
             } else {
                 scrollLeft = 0;
@@ -1219,17 +1219,17 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             // Move the caret to the end of the text
             if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 int selectionStart = textInput.getSelectionStart();
-                textInput.setSelection(selectionStart, textInput.getTextLength()
+                textInput.setSelection(selectionStart, textInput.getCharacters().length()
                     - selectionStart);
             } else {
-                textInput.setSelection(textInput.getTextLength(), 0);
+                textInput.setSelection(textInput.getCharacters().length(), 0);
             }
 
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.A
             && Keyboard.isPressed(commandModifier)) {
             // Select all
-            textInput.setSelection(0, textInput.getTextLength());
+            textInput.setSelection(0, textInput.getCharacters().length());
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.X
             && Keyboard.isPressed(commandModifier)) {
@@ -1287,7 +1287,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             if (textInput.getSelectionLength() == 0) {
                 int selectionStart = textInput.getSelectionStart();
-                if (selectionStart < textInput.getTextLength()) {
+                if (selectionStart < textInput.getCharacters().length()) {
                     scrollCharacterToVisible(selectionStart);
                 }
 
@@ -1343,17 +1343,17 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     // Text input character events
     @Override
-    public void charactersInserted(TextInput textInput, int index, int count) {
+    public void textInserted(TextInput textInput, int index, int count) {
         // No-op
     }
 
     @Override
-    public void charactersRemoved(TextInput textInput, int index, char[] characters) {
+    public void textRemoved(TextInput textInput, int index, int count) {
         // No-op
     }
 
     @Override
-    public void textChanged(TextInput textInput, String previousText) {
+    public void textChanged(TextInput textInput) {
         layout();
         repaintComponent();
     }
@@ -1397,7 +1397,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int selectionStart = textInput.getSelectionStart();
         int selectionLength = textInput.getSelectionLength();
 
-        int n = textInput.getTextLength();
+        int n = textInput.getCharacters().length();
 
         Bounds leadingSelectionBounds;
         if (selectionStart < n) {

@@ -47,7 +47,7 @@ public class SuggestionPopupTest implements Application {
 
         textInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
             @Override
-            public void charactersInserted(TextInput textInput, int index, int count) {
+            public void textInserted(TextInput textInput, int index, int count) {
                 ArrayList<String> suggestions = new ArrayList<String>("One", "Two", "Three", "Four", "Five");
                 suggestionPopup.setSuggestionData(suggestions);
                 suggestionPopup.open(textInput, new SuggestionPopupCloseListener() {
@@ -64,7 +64,7 @@ public class SuggestionPopupTest implements Application {
             }
 
             @Override
-            public void charactersRemoved(TextInput textInput, int index, char[] characters) {
+            public void textRemoved(TextInput textInput, int index, int count) {
                 suggestionPopup.close();
             }
         });

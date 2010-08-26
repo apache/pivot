@@ -95,7 +95,7 @@ public class TextInputs extends Window implements Bindable {
         stateTextInput = (TextInput)namespace.get("stateTextInput");
         stateTextInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
             @Override
-            public void charactersInserted(final TextInput textInput, int index, int count) {
+            public void textInserted(final TextInput textInput, int index, int count) {
                 String text = textInput.getText();
 
                 int i = ArrayList.binarySearch(states, text,

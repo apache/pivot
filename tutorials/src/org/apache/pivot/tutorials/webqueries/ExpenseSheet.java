@@ -85,7 +85,7 @@ public class ExpenseSheet extends Sheet implements Bindable {
                 Form.setFlag(typeListButton, (Form.Flag)null);
             }
 
-            if (amountTextInput.getTextLength() == 0) {
+            if (amountTextInput.getCharacters().length() == 0) {
                 Form.setFlag(amountTextInput, new Form.Flag(MessageType.ERROR,
                     (String)resources.get("amountRequired")));
                 errorCount++;

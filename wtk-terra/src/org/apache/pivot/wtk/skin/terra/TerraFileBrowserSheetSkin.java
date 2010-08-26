@@ -102,7 +102,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         saveAsTextInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
             @Override
-            public void textChanged(TextInput textInput, String previousText) {
+            public void textChanged(TextInput textInput) {
                 updateOKButtonState();
             }
         });
@@ -394,7 +394,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
 
             case SAVE_AS: {
-                okButton.setEnabled(saveAsTextInput.getTextLength() > 0);
+                okButton.setEnabled(saveAsTextInput.getCharacters().length() > 0);
                 break;
             }
 

@@ -25,31 +25,31 @@ public interface TextAreaContentListener2 {
      */
     public static class Adapter implements TextAreaContentListener2 {
         @Override
-        public void charactersInserted(TextArea2 textArea, int index, int count) {
+        public void textInserted(TextArea2 textArea, int index, int count) {
         }
 
         @Override
-        public void charactersRemoved(TextArea2 textArea, int index, char[] characters) {
+        public void textRemoved(TextArea2 textArea, int index, int count) {
         }
 
         @Override
-        public void textChanged(TextArea2 textArea, String previousText) {
+        public void textChanged(TextArea2 textArea) {
         }
     }
 
     /**
-     * Called when characters have been inserted into a text area.
+     * Called when text has been inserted into a text area.
      *
      * @param textArea
      * The source of the event.
      *
      * @param index
-     * The index at which characters were inserted.
+     * The index at which the text was inserted.
      *
      * @param count
      * The number of characters that were inserted.
      */
-    public void charactersInserted(TextArea2 textArea, int index, int count);
+    public void textInserted(TextArea2 textArea, int index, int count);
 
     /**
      * Called when characters have been removed from a text area.
@@ -58,22 +58,18 @@ public interface TextAreaContentListener2 {
      * The source of the event.
      *
      * @param index
-     * The index at which characters were removed.
+     * The index from which the text was removed.
      *
      * @param characters
-     * The characters that were removed.
+     * The number of characters that were removed.
      */
-    public void charactersRemoved(TextArea2 textArea, int index, char[] characters);
+    public void textRemoved(TextArea2 textArea, int index, int count);
 
     /**
      * Called when a text area's text has changed.
      *
      * @param textArea
      * The source of the event.
-     *
-     * @param previousText
-     * If the text changed directly, the previous text value. Otherwise, <tt>null</tt>.
      */
-    public void textChanged(TextArea2 textArea, String previousText);
-
+    public void textChanged(TextArea2 textArea);
 }

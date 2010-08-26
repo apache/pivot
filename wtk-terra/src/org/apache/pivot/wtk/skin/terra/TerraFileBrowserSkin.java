@@ -651,7 +651,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         searchTextInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
             @Override
-            public void textChanged(TextInput textInput, String previousText) {
+            public void textChanged(TextInput textInput) {
                 String text = textInput.getText().trim();
                 if (text.length() == 0) {
                     text = null;

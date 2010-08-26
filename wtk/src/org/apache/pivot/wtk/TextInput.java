@@ -123,23 +123,23 @@ public class TextInput extends Component {
     private static class TextInputContentListenerList extends ListenerList<TextInputContentListener>
         implements TextInputContentListener {
         @Override
-        public void charactersInserted(TextInput textInput, int index, int count) {
+        public void textInserted(TextInput textInput, int index, int count) {
             for (TextInputContentListener listener : this) {
-                listener.charactersInserted(textInput, index, count);
+                listener.textInserted(textInput, index, count);
             }
         }
 
         @Override
-        public void charactersRemoved(TextInput textInput, int index, char[] characters) {
+        public void textRemoved(TextInput textInput, int index, int count) {
             for (TextInputContentListener listener : this) {
-                listener.charactersRemoved(textInput, index, characters);
+                listener.textRemoved(textInput, index, count);
             }
         }
 
         @Override
-        public void textChanged(TextInput textInput, String previousText) {
+        public void textChanged(TextInput textInput) {
             for (TextInputContentListener listener : this) {
-                listener.textChanged(textInput, previousText);
+                listener.textChanged(textInput);
             }
         }
     }
@@ -218,6 +218,10 @@ public class TextInput extends Component {
         super.setSkin(skin);
     }
 
+    public CharSequence getCharacters() {
+        return text;
+    }
+
     public String getText() {
         return text;
     }
@@ -247,7 +251,7 @@ public class TextInput extends Component {
             textValid = (validator == null) ? true : validator.isValid(text);
 
             // Fire change events
-            textInputContentListeners.textChanged(this, previousText);
+            textInputContentListeners.textChanged(this);
 
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
@@ -258,13 +262,6 @@ public class TextInput extends Component {
                 textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
             }
         }
-    }
-
-    /**
-     * Returns the length of the text in the text input.
-     */
-    public int getTextLength() {
-        return text.length();
     }
 
     /**
@@ -317,8 +314,8 @@ public class TextInput extends Component {
             textValid = (validator == null) ? true : validator.isValid(this.text);
 
             // Fire change events
-            textInputContentListeners.charactersInserted(this, previousSelectionStart, text.length());
-            textInputContentListeners.textChanged(this, null);
+            textInputContentListeners.textInserted(this, previousSelectionStart, text.length());
+            textInputContentListeners.textChanged(this);
 
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
@@ -357,11 +354,9 @@ public class TextInput extends Component {
                 count = 1;
             }
 
-            char[] removed = new char[count];
             if (selectionStart < text.length()) {
                 StringBuilder textBuilder = new StringBuilder(text.substring(0, selectionStart));
                 textBuilder.append(text.substring(selectionStart + count));
-                text.getChars(selectionStart, selectionStart + count, removed, 0);
                 text = textBuilder.toString();
             }
 
@@ -370,8 +365,8 @@ public class TextInput extends Component {
             textValid = (validator == null) ? true : validator.isValid(text);
 
             // Fire change events
-            textInputContentListeners.charactersRemoved(this, selectionStart, removed);
-            textInputContentListeners.textChanged(this, null);
+            textInputContentListeners.textRemoved(this, selectionStart, count);
+            textInputContentListeners.textChanged(this);
 
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);

@@ -16,9 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-import java.awt.Toolkit;
-import java.io.IOException;
-
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 
@@ -125,23 +122,23 @@ public class TextArea2 extends Component {
     private static class TextAreaContentListenerList extends ListenerList<TextAreaContentListener2>
         implements TextAreaContentListener2 {
         @Override
-        public void charactersInserted(TextArea2 textArea, int index, int count) {
+        public void textInserted(TextArea2 textArea, int index, int count) {
             for (TextAreaContentListener2 listener : this) {
-                listener.charactersInserted(textArea, index, count);
+                listener.textInserted(textArea, index, count);
             }
         }
 
         @Override
-        public void charactersRemoved(TextArea2 textArea, int index, char[] characters) {
+        public void textRemoved(TextArea2 textArea, int index, int count) {
             for (TextAreaContentListener2 listener : this) {
-                listener.charactersRemoved(textArea, index, characters);
+                listener.textRemoved(textArea, index, count);
             }
         }
 
         @Override
-        public void textChanged(TextArea2 textArea, String previousText) {
+        public void textChanged(TextArea2 textArea) {
             for (TextAreaContentListener2 listener : this) {
-                listener.textChanged(textArea, previousText);
+                listener.textChanged(textArea);
             }
         }
     }
@@ -182,8 +179,6 @@ public class TextArea2 extends Component {
         }
     }
 
-    private StringBuilder textBuilder = new StringBuilder();
-
     private int selectionStart = 0;
     private int selectionLength = 0;
 
@@ -213,6 +208,11 @@ public class TextArea2 extends Component {
         super.setSkin(skin);
     }
 
+    public CharSequence getCharacters() {
+        // TODO
+        return null;
+    }
+
     /**
      * Returns the text content of the text area.
      *
@@ -220,7 +220,8 @@ public class TextArea2 extends Component {
      * A string containing a copy of the text area's text content.
      */
     public String getText() {
-        return textBuilder.toString();
+        // TODO
+        return null;
     }
 
     /**
@@ -229,34 +230,6 @@ public class TextArea2 extends Component {
      * @param text
      */
     public void setText(String text) {
-        // TODO Validate length, fire events, etc.
-        textBuilder = new StringBuilder(text);
-    }
-
-    /**
-     * Returns the character at a given offset.
-     *
-     * @param offset
-     */
-    public char getCharacter(int offset) {
-        return textBuilder.charAt(offset);
-    }
-
-    /**
-     * Returns the number of characters in the text area's text content.
-     */
-    public int getCharacterCount() {
-        return textBuilder.length();
-    }
-
-    /**
-     * Inserts a text string into the text input's content. The text replaces the
-     * current selection.
-     *
-     * @param text
-     * The text to insert.
-     */
-    public void insert(String text) {
         // TODO
     }
 
@@ -265,59 +238,20 @@ public class TextArea2 extends Component {
      * the text input.
      */
     public void cut() {
-        copy();
-        delete(false);
+        // TODO
     }
 
     /**
      * Places any selected text on the clipboard.
      */
     public void copy() {
-        // Copy selection to clipboard
-        String selectedText = getSelectedText();
-
-        if (selectedText.length() > 0) {
-            LocalManifest clipboardContent = new LocalManifest();
-            clipboardContent.putText(selectedText);
-            Clipboard.setContent(clipboardContent);
-        }
+        // TODO
     }
 
     /**
      * Inserts text from the clipboard into the text input.
      */
     public void paste() {
-        Manifest clipboardContent = Clipboard.getContent();
-
-        if (clipboardContent != null
-            && clipboardContent.containsText()) {
-            // Paste the string representation of the content
-            String text = null;
-            try {
-                text = clipboardContent.getText();
-            } catch(IOException exception) {
-                // No-op
-            }
-
-            if (text != null) {
-                if ((this.textBuilder.length() + text.length()) > maximumLength) {
-                    Toolkit.getDefaultToolkit().beep();
-                } else {
-                    insert(text);
-                }
-            }
-        }
-    }
-
-    /**
-     * Deletes the current selection.
-     *
-     * @param backspace
-     * If the current selection length is <tt>0</tt>, moves the caret back
-     * character position before deleting; if the selection length is greater
-     * than <tt>0</tt>, this argument is ignored.
-     */
-    public void delete(boolean backspace) {
         // TODO
     }
 
@@ -372,26 +306,7 @@ public class TextArea2 extends Component {
      * The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
-        if (selectionLength < 0) {
-            throw new IllegalArgumentException("selectionLength is negative.");
-        }
-
-        if (selectionStart < 0
-            || selectionStart + selectionLength > textBuilder.length()) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        int previousSelectionStart = this.selectionStart;
-        int previousSelectionLength = this.selectionLength;
-
-        if (previousSelectionStart != selectionStart
-            || previousSelectionLength != selectionLength) {
-            this.selectionStart = selectionStart;
-            this.selectionLength = selectionLength;
-
-            textAreaSelectionListeners.selectionChanged(this, previousSelectionStart,
-                previousSelectionLength);
-        }
+        // TODO
     }
 
     /**
@@ -413,7 +328,7 @@ public class TextArea2 extends Component {
      * Selects all text.
      */
     public void selectAll() {
-        setSelection(0, textBuilder.length());
+        setSelection(0, getCharacters().length());
     }
 
     /**
@@ -430,7 +345,7 @@ public class TextArea2 extends Component {
      * A string containing a copy of the selected text.
      */
     public String getSelectedText() {
-        return textBuilder.substring(selectionStart, selectionStart + selectionLength);
+        return getCharacters().subSequence(selectionStart, selectionStart + selectionLength).toString();
     }
 
     /**
@@ -458,9 +373,10 @@ public class TextArea2 extends Component {
 
         if (previousMaximumLength != maximumLength) {
             // Truncate the text, if necessary
-            int characterCount = textBuilder.length();
+            int characterCount = getCharacters().length();
             if (characterCount > maximumLength) {
-                textBuilder = new StringBuilder(textBuilder.substring(0, maximumLength));
+                // TODO Delete characters beyond max. length (need to fire event; do via
+                // call to delete, or fire here?)
             }
 
             this.maximumLength = maximumLength;
