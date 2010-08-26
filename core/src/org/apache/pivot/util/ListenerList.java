@@ -140,6 +140,36 @@ public abstract class ListenerList<T> implements Iterable<T> {
         }
     }
 
+    /**
+     * Tests the existence of a listener in the list.
+     *
+     * @param listener
+     *
+     * @return
+     * <tt>true</tt> if the listener exists in the list; <tt>false</tt>,
+     * otherwise.
+     */
+    public boolean contains(T listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("listener is null.");
+        }
+
+        Node node = first;
+        while (node != null
+            && node.listener != listener) {
+            node = node.next;
+        }
+
+        return (node != null);
+    }
+
+    /**
+     * Tests the emptiness of the list.
+     *
+     * @return
+     * <tt>true</tt> if the list contains no listeners; <tt>false</tt>,
+     * otherwise.
+     */
     public boolean isEmpty() {
         return (first == null);
     }
