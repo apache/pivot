@@ -29,10 +29,7 @@ import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.collections.FilteredList;
-import org.apache.pivot.collections.FilteredListListener;
 import org.apache.pivot.collections.List;
-import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.text.FileSizeFormat;
@@ -552,8 +549,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @BXML private ScrollPane fileScrollPane = null;
     @BXML private TableView fileTableView = null;
 
-    private FilteredList<File> files = new FilteredList<File>(new IncludeFileFilter());
-
     private boolean keyboardFolderTraversalEnabled = true;
     private boolean hideDisabledFiles = false;
 
@@ -639,7 +634,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     searchTextInput.setText("");
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                    if (files.getLength() > 0) {
+                    if (fileTableView.getTableData().getLength() > 0) {
                         fileTableView.setSelectedIndex(0);
                         fileTableView.requestFocus();
                     }
@@ -652,26 +647,18 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         searchTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textChanged(TextInput textInput) {
-                String text = textInput.getText().trim();
-                if (text.length() == 0) {
-                    text = null;
-                }
-
-                Filter<File> excludeFileFilter = null;
-                if (hideDisabledFiles) {
-                    excludeFileFilter = fileBrowser.getDisabledFileFilter();
-                }
-
-                files.setFilter(new IncludeFileFilter(text, excludeFileFilter));
+                refreshFileList();
             }
         });
 
         fileTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
             @Override
+            @SuppressWarnings("unchecked")
             public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
                 updatingSelection = true;
 
                 for (int i = rangeStart; i <= rangeEnd; i++) {
+                    List<File> files = (List<File>)fileTableView.getTableData();
                     File file = files.get(i);
                     fileBrowser.addSelectedFile(file);
                 }
@@ -680,10 +667,12 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
 
             @Override
+            @SuppressWarnings("unchecked")
             public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
                 updatingSelection = true;
 
                 for (int i = rangeStart; i <= rangeEnd; i++) {
+                    List<File> files = (List<File>)fileTableView.getTableData();
                     File file = files.get(i);
                     fileBrowser.removeSelectedFile(file);
                 }
@@ -717,15 +706,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         fileTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
-            @SuppressWarnings("unchecked")
             public void sortChanged(TableView tableView) {
-                TableView.SortDictionary sort = tableView.getSort();
-
-                if (!sort.isEmpty()) {
-                    Dictionary.Pair<String, SortDirection> pair = tableView.getSort().get(0);
-                    List<File> files = (List<File>)tableView.getTableData();
-                    files.setComparator(new FileComparator(pair.key, pair.value));
-                }
+                sortFileList();
             }
         });
 
@@ -743,7 +725,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     if (index != -1
                         && index == this.index
                         && fileTableView.isRowSelected(index)) {
-                        File file = files.get(index);
+                        File file = (File)fileTableView.getTableData().get(index);
 
                         if (file.isDirectory()) {
                             fileBrowser.setRootDirectory(file);
@@ -755,23 +737,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 return consumed;
             }
         });
-
-        files.getListListeners().add(new ListListener.Adapter<File>() {
-            @Override
-            public void comparatorChanged(List<File> list, Comparator<File> previousComparator) {
-                fileBrowser.clearSelection();
-            }
-        });
-
-        files.getFilteredListListeners().add(new FilteredListListener.Adapter<File>() {
-            @Override
-            public void filterChanged(FilteredList<File> filteredList,
-                Filter<File> previousFilter) {
-                fileBrowser.clearSelection();
-            }
-        });
-
-        fileTableView.setTableData(files);
 
         fileBrowser.setFocusTraversalPolicy(new IndexFocusTraversalPolicy() {
             @Override
@@ -829,7 +794,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
             int index = fileTableView.getRowAt(location.y);
             if (index != -1) {
-                file = files.get(index);
+                file = (File)fileTableView.getTableData().get(index);
             }
         }
 
@@ -850,19 +815,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     public void setHideDisabledFiles(boolean hideDisabledFiles) {
         this.hideDisabledFiles = hideDisabledFiles;
-
-        String text = searchTextInput.getText().trim();
-        if (text.length() == 0) {
-            text = null;
-        }
-
-        Filter<File> excludeFileFilter = null;
-        if (hideDisabledFiles) {
-            FileBrowser fileBrowser = (FileBrowser)getComponent();
-            excludeFileFilter = fileBrowser.getDisabledFileFilter();
-        }
-
-        files.setFilter(new IncludeFileFilter(text, excludeFileFilter));
+        refreshFileList();
     }
 
     @Override
@@ -965,8 +918,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
+            List<File> files = (List<File>)fileTableView.getTableData();
             int index = files.indexOf(file);
             if (index != -1) {
                 fileTableView.addSelectedIndex(index);
@@ -975,8 +930,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
+            List<File> files = (List<File>)fileTableView.getTableData();
             int index = files.indexOf(file);
             if (index != -1) {
                 fileTableView.removeSelectedIndex(index);
@@ -985,6 +942,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
         if (!updatingSelection) {
             Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
@@ -993,6 +951,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
                 File selectedFile = selectedFiles.get(i);
 
+                List<File> files = (List<File>)fileTableView.getTableData();
                 int index = files.indexOf(selectedFile);
                 if (index != -1) {
                     selectedRanges.add(new Span(index, index));
@@ -1005,31 +964,46 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     @Override
     public void multiSelectChanged(FileBrowser fileBrowser) {
-        fileTableView.setSelectMode(fileBrowser.isMultiSelect() ?
-            TableView.SelectMode.MULTI : TableView.SelectMode.SINGLE);
+        fileTableView.setSelectMode(fileBrowser.isMultiSelect() ? TableView.SelectMode.MULTI :
+            TableView.SelectMode.SINGLE);
     }
 
     @Override
-    public void disabledFileFilterChanged(FileBrowser fileBrowser,
-        Filter<File> previousDisabledFileFilter) {
-        Filter<File> disabledFileFilter = fileBrowser.getDisabledFileFilter();
-
-        fileTableView.setDisabledRowFilter(disabledFileFilter);
-
-        if (hideDisabledFiles) {
-            String text = searchTextInput.getText().trim();
-            if (text.length() == 0) {
-                text = null;
-            }
-
-            files.setFilter(new IncludeFileFilter(text, disabledFileFilter));
-        }
+    public void disabledFileFilterChanged(FileBrowser fileBrowser, Filter<File> previousDisabledFileFilter) {
+        fileTableView.setDisabledRowFilter(fileBrowser.getDisabledFileFilter());
+        refreshFileList();
     }
 
     private void refreshFileList() {
         FileBrowser fileBrowser = (FileBrowser)getComponent();
         File rootDirectory = fileBrowser.getRootDirectory();
+        File[] files = rootDirectory.listFiles(HIDDEN_FILE_FILTER);
 
-        files.setSource(new ArrayList<File>(rootDirectory.listFiles(HIDDEN_FILE_FILTER)));
+        String text = searchTextInput.getText().trim();
+        IncludeFileFilter includeFileFilter = new IncludeFileFilter(text.length() == 0 ? null : text,
+            hideDisabledFiles ? fileBrowser.getDisabledFileFilter() : null);
+
+        ArrayList<File> filteredFiles = new ArrayList<File>();
+
+        for (int i = 0; i < files.length; i++) {
+            File file = files[i];
+            if (includeFileFilter.include(file)) {
+                filteredFiles.add(file);
+            }
+        }
+
+        fileTableView.setTableData(filteredFiles);
+        sortFileList();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void sortFileList() {
+        TableView.SortDictionary sort = fileTableView.getSort();
+
+        if (!sort.isEmpty()) {
+            Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
+            List<File> files = (List<File>)fileTableView.getTableData();
+            files.setComparator(new FileComparator(pair.key, pair.value));
+        }
     }
 }
