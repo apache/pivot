@@ -306,12 +306,12 @@ public class TextInput extends Component {
             throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
         }
 
-        // Insert the text
         if (text.length() > 0) {
             Vote vote = textInputContentListeners.previewInsertText(this, text, index);
 
             if (vote == Vote.APPROVE) {
-                characters.insert(selectionStart, text);
+                // Insert the text
+                characters.insert(index, text);
 
                 // Update selection
                 int previousSelectionStart = selectionStart;
@@ -342,11 +342,11 @@ public class TextInput extends Component {
     }
 
     public void removeText(int index, int count) {
-        // Remove the text
         if (count > 0) {
             Vote vote = textInputContentListeners.previewRemoveText(this, index, count);
 
             if (vote == Vote.APPROVE) {
+                // Remove the text
                 characters.delete(index, index + count);
 
                 // Update the selection
@@ -591,14 +591,21 @@ public class TextInput extends Component {
         int previousMaximumLength = this.maximumLength;
 
         if (previousMaximumLength != maximumLength) {
-            // Truncate the text, if necessary
-            int characterCount = characters.length();
-            if (characterCount > maximumLength) {
-                characters.delete(maximumLength, characterCount);
-            }
+            int previousTextLength = characters.length();
 
             this.maximumLength = maximumLength;
+
+            // Truncate the text, if necessary
+            if (previousTextLength > maximumLength) {
+                characters.delete(maximumLength, previousTextLength);
+            }
+
+            // Fire change events
             textInputListeners.maximumLengthChanged(this, previousMaximumLength);
+
+            if (characters.length() != previousTextLength) {
+                textInputContentListeners.textChanged(this);
+            }
         }
     }
 
