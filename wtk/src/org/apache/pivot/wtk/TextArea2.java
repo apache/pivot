@@ -16,6 +16,9 @@
  */
 package org.apache.pivot.wtk;
 
+import java.awt.Toolkit;
+import java.io.IOException;
+
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 
@@ -179,6 +182,8 @@ public class TextArea2 extends Component {
         }
     }
 
+    private CharSequence characters = null; // TODO
+
     private int selectionStart = 0;
     private int selectionLength = 0;
 
@@ -220,8 +225,7 @@ public class TextArea2 extends Component {
      * A string containing a copy of the text area's text content.
      */
     public String getText() {
-        // TODO
-        return null;
+        return characters.toString();
     }
 
     /**
@@ -230,7 +234,82 @@ public class TextArea2 extends Component {
      * @param text
      */
     public void setText(String text) {
-        // TODO
+        if (text == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (text.length() > maximumLength) {
+            throw new IllegalArgumentException("Text length is greater than maximum length.");
+        }
+
+        // TODO Create new text buffers
+
+        // Update selection
+        int previousSelectionStart = selectionStart;
+        int previousSelectionLength = selectionLength;
+        selectionStart = text.length();
+        selectionLength = 0;
+
+        // Fire change events
+        textAreaContentListeners.textChanged(this);
+
+        if (selectionStart != previousSelectionStart
+            || selectionLength != previousSelectionLength) {
+            textAreaSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+        }
+    }
+
+    public void insertText(String text, int index) {
+        if (text == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (characters.length() + text.length() > maximumLength) {
+            throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
+        }
+
+        // Insert the text
+        if (text.length() > 0) {
+            // TODO Insert the text
+            // characters.insert(index, text);
+
+            // Update selection
+            int previousSelectionStart = selectionStart;
+            int previousSelectionLength = selectionLength;
+            selectionStart = index + text.length();
+            selectionLength = 0;
+
+            // Fire change events
+            textAreaContentListeners.textInserted(this, previousSelectionStart, text.length());
+            textAreaContentListeners.textChanged(this);
+
+            if (selectionStart != previousSelectionStart
+                || selectionLength != previousSelectionLength) {
+                textAreaSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+            }
+        }
+    }
+
+    public void removeText(int index, int count) {
+        if (count > 0) {
+            // TODO Remove the text
+            // characters.delete(index, index + count);
+
+            // Update the selection
+            int previousSelectionStart = selectionStart;
+            int previousSelectionLength = selectionLength;
+            selectionStart = index;
+            selectionLength = 0;
+
+            // Fire change events
+            textAreaContentListeners.textRemoved(this, selectionStart, count);
+            textAreaContentListeners.textChanged(this);
+
+            if (selectionStart != previousSelectionStart
+                || selectionLength != previousSelectionLength) {
+                textAreaSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+            }
+        }
     }
 
     /**
@@ -238,21 +317,48 @@ public class TextArea2 extends Component {
      * the text input.
      */
     public void cut() {
-        // TODO
+        copy();
+        removeText(selectionStart, selectionLength);
     }
 
     /**
      * Places any selected text on the clipboard.
      */
     public void copy() {
-        // TODO
+        // Copy selection to clipboard
+        String selectedText = getSelectedText();
+
+        if (selectedText.length() > 0) {
+            LocalManifest clipboardContent = new LocalManifest();
+            clipboardContent.putText(selectedText);
+            Clipboard.setContent(clipboardContent);
+        }
     }
 
     /**
      * Inserts text from the clipboard into the text input.
      */
     public void paste() {
-        // TODO
+        Manifest clipboardContent = Clipboard.getContent();
+
+        if (clipboardContent != null
+            && clipboardContent.containsText()) {
+            // Paste the string representation of the content
+            String text = null;
+            try {
+                text = clipboardContent.getText();
+            } catch(IOException exception) {
+                // No-op
+            }
+
+            if (text != null) {
+                if ((characters.length() + text.length()) > maximumLength) {
+                    Toolkit.getDefaultToolkit().beep();
+                } else {
+                    insertText(text, selectionStart);
+                }
+            }
+        }
     }
 
     public void undo() {
@@ -306,7 +412,26 @@ public class TextArea2 extends Component {
      * The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
-        // TODO
+        if (selectionLength < 0) {
+            throw new IllegalArgumentException("selectionLength is negative.");
+        }
+
+        if (selectionStart < 0
+            || selectionStart + selectionLength > characters.length()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        int previousSelectionStart = this.selectionStart;
+        int previousSelectionLength = this.selectionLength;
+
+        if (previousSelectionStart != selectionStart
+            || previousSelectionLength != selectionLength) {
+            this.selectionStart = selectionStart;
+            this.selectionLength = selectionLength;
+
+            textAreaSelectionListeners.selectionChanged(this, previousSelectionStart,
+                previousSelectionLength);
+        }
     }
 
     /**
@@ -328,7 +453,7 @@ public class TextArea2 extends Component {
      * Selects all text.
      */
     public void selectAll() {
-        setSelection(0, getCharacters().length());
+        setSelection(0, characters.length());
     }
 
     /**
@@ -345,7 +470,7 @@ public class TextArea2 extends Component {
      * A string containing a copy of the selected text.
      */
     public String getSelectedText() {
-        return getCharacters().subSequence(selectionStart, selectionStart + selectionLength).toString();
+        return characters.subSequence(selectionStart, selectionStart + selectionLength).toString();
     }
 
     /**
@@ -372,15 +497,21 @@ public class TextArea2 extends Component {
         int previousMaximumLength = this.maximumLength;
 
         if (previousMaximumLength != maximumLength) {
-            // Truncate the text, if necessary
-            int characterCount = getCharacters().length();
-            if (characterCount > maximumLength) {
-                // TODO Delete characters beyond max. length (need to fire event; do via
-                // call to delete, or fire here?)
-            }
+            int previousTextLength = characters.length();
 
             this.maximumLength = maximumLength;
+
+            // TODO Truncate the text, if necessary
+            if (previousTextLength > maximumLength) {
+                // characters.delete(maximumLength, previousTextLength);
+            }
+
+            // Fire change events
             textAreaListeners.maximumLengthChanged(this, previousMaximumLength);
+
+            if (characters.length() != previousTextLength) {
+                textAreaContentListeners.textChanged(this);
+            }
         }
     }
 
