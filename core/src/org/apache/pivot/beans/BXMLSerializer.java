@@ -193,6 +193,40 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
     }
 
+    private static class ScriptBindMapping implements NamespaceBinding.BindMapping {
+        private ScriptEngine scriptEngine;
+        private String functionName;
+
+        public ScriptBindMapping(ScriptEngine scriptEngine, String functionName) {
+            this.scriptEngine = scriptEngine;
+            this.functionName = functionName;
+        }
+
+        public Object evaluate(Object value) {
+            Bindings bindings = scriptEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
+            if (bindings.containsKey(functionName)) {
+                Invocable invocable;
+                try {
+                    invocable = (Invocable)scriptEngine;
+                } catch (ClassCastException exception) {
+                    throw new RuntimeException(exception);
+                }
+
+                try {
+                    value = invocable.invokeFunction(functionName, value);
+                } catch (NoSuchMethodException exception) {
+                    throw new RuntimeException(exception);
+                } catch (ScriptException exception) {
+                    throw new RuntimeException(exception);
+                }
+            } else {
+                throw new RuntimeException("Mapping function \"" + functionName + "\" is not defined.");
+            }
+
+            return value;
+        }
+    };
+
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;
 
@@ -205,6 +239,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     private Object root = null;
     private String language = null;
+    private int nextID = 0;
 
     private LinkedList<Attribute> namespaceBindingAttributes = new LinkedList<Attribute>();
 
@@ -218,6 +253,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     public static final String NAMESPACE_BINDING_PREFIX = OBJECT_REFERENCE_PREFIX + "{";
     public static final String NAMESPACE_BINDING_SUFFIX = "}";
+    public static final String BIND_MAPPING_DELIMITER = ":";
+    public static final String INTERNAL_ID_PREFIX = "$";
 
     public static final String LANGUAGE_PROCESSING_INSTRUCTION = "language";
 
@@ -422,16 +459,28 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             Element element = attribute.element;
             String sourcePath = (String)attribute.value;
 
+            NamespaceBinding.BindMapping bindMapping;
+            int i = sourcePath.indexOf(BIND_MAPPING_DELIMITER);
+            if (i == -1) {
+                bindMapping = null;
+            } else {
+                String bindFunction = sourcePath.substring(0, i);
+                sourcePath = sourcePath.substring(i + 1);
+                bindMapping = new ScriptBindMapping(scriptEngineManager.getEngineByName(language), bindFunction);
+            }
+
             switch (element.type) {
                 case INSTANCE:
                 case INCLUDE: {
                     // Bind to <element ID>.<attribute name>
                     if (element.id == null) {
-                        throw new SerializationException("Bind target does not have an ID.");
+                        element.id = INTERNAL_ID_PREFIX + Integer.toString(nextID++);
+                        namespace.put(element.id, element.value);
                     }
 
                     String targetPath = element.id + "." + attribute.name;
-                    NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath);
+                    NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath,
+                        bindMapping);
                     namespaceBinding.bind();
 
                     break;
@@ -440,11 +489,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 case READ_ONLY_PROPERTY: {
                     // Bind to <parent element ID>.<element name>.<attribute name>
                     if (element.parent.id == null) {
-                        throw new SerializationException("Bind target does not have an ID.");
+                        element.parent.id = INTERNAL_ID_PREFIX + Integer.toString(nextID++);
+                        namespace.put(element.parent.id, element.parent.value);
                     }
 
                     String targetPath = element.parent.id + "." + element.name + "." + attribute.name;
-                    NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath);
+                    NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath,
+                        bindMapping);
                     namespaceBinding.bind();
 
                     break;
@@ -1472,7 +1523,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     /**
-     * Gets a read-only version of the xml stream reader that's being used by
+     * Gets a read-only version of the XML stream reader that's being used by
      * this serializer. Subclasses can use this to access information about the
      * current event.
      */

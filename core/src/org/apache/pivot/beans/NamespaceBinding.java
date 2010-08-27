@@ -27,6 +27,18 @@ import org.apache.pivot.json.JSON;
  * property within a namespace.
  */
 public class NamespaceBinding {
+    /**
+     * Namespace bind mapping interface.
+     */
+    public interface BindMapping {
+        /**
+         * Transforms a source value during a bind operation.
+         *
+         * @param value
+         */
+        public Object evaluate(Object value);
+    }
+
     private Map<String, Object> namespace;
 
     private String sourcePath;
@@ -40,6 +52,8 @@ public class NamespaceBinding {
     private Dictionary<String, Object> targetDictionary;
     private String targetKey;
 
+    private BindMapping bindMapping;
+
     private boolean updating = false;
 
     private MapListener<String, Object> sourceMapListener = new MapListener.Adapter<String, Object>() {
@@ -48,7 +62,7 @@ public class NamespaceBinding {
             if (key.equals(sourceKey)
                 && !updating) {
                 updating = true;
-                targetDictionary.put(targetKey, sourceMap.get(sourceKey));
+                targetDictionary.put(targetKey, getMappedSourceValue());
                 updating = false;
             }
         }
@@ -60,14 +74,19 @@ public class NamespaceBinding {
             if (propertyName.equals(sourceKey)
                 && !updating) {
                 updating = true;
-                targetDictionary.put(targetKey, sourceMap.get(sourceKey));
+                targetDictionary.put(targetKey, getMappedSourceValue());
                 updating = false;
             }
         }
     };
 
-    @SuppressWarnings("unchecked")
     public NamespaceBinding(Map<String, Object> namespace, String sourcePath, String targetPath) {
+        this(namespace, sourcePath, targetPath, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public NamespaceBinding(Map<String, Object> namespace, String sourcePath, String targetPath,
+        BindMapping bindMapping) {
         if (namespace == null) {
             throw new IllegalArgumentException();
         }
@@ -126,8 +145,11 @@ public class NamespaceBinding {
                 + "\" does not exist.");
         }
 
+        // Set the bind mapping
+        this.bindMapping = bindMapping;
+
         // Perform the initial set from source to target
-        targetDictionary.put(targetKey, sourceMap.get(sourceKey));
+        targetDictionary.put(targetKey, getMappedSourceValue());
     }
 
     /**
@@ -177,6 +199,25 @@ public class NamespaceBinding {
      */
     public String getTargetKey() {
         return targetKey;
+    }
+
+    /**
+     * Returns the bind mapping.
+     *
+     * @return
+     * The bind mapping to use during binding, or <tt>null</tt> if no bind
+     * mapping is specified.
+     */
+    public BindMapping getBindMapping() {
+        return bindMapping;
+    }
+
+    /**
+     * Returns the current source value with any bind mapping applied.
+     */
+    public Object getMappedSourceValue() {
+        Object sourceValue = sourceMap.get(sourceKey);
+        return (bindMapping == null) ? sourceValue : bindMapping.evaluate(sourceValue);
     }
 
     /**

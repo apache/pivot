@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.databinding;
 
+import java.awt.Color;
 import java.net.URL;
 
 import org.apache.pivot.beans.Bindable;
@@ -27,9 +28,25 @@ import org.apache.pivot.wtk.Window;
 public class PropertyBinding extends Window implements Bindable {
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        // Manually bind list button selection to label text
-        NamespaceBinding namespaceBinding = new NamespaceBinding(namespace,
-            "listButton.selectedItem", "listButtonLabel.text");
-        namespaceBinding.bind();
+        // Bind list button selection to label text
+        NamespaceBinding namespaceBinding1 = new NamespaceBinding(namespace,
+            "listButton.selectedItem", "listButtonLabel1.text");
+
+        namespaceBinding1.bind();
+
+        // Bind list button selection to label text with bind mapping
+        NamespaceBinding namespaceBinding2 = new NamespaceBinding(namespace,
+            "listButton.selectedItem", "listButtonLabel2.text", new NamespaceBinding.BindMapping() {
+            @Override
+            public Object evaluate(Object value) {
+                return value.toString().toUpperCase();
+            }
+        });
+
+        namespaceBinding2.bind();
+    }
+
+    public static String toHex(Color color) {
+        return String.format("#%02X%02X%02X", color.getRed(), color.getBlue(), color.getGreen());
     }
 }
