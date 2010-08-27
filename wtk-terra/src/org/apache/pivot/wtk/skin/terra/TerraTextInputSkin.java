@@ -1057,12 +1057,12 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                     if (validator != null
                         && strictValidation) {
-	                      String text = textInput.getText();
-	                      int selectionStart = textInput.getSelectionStart();
+                          String text = textInput.getText();
+                          int selectionStart = textInput.getSelectionStart();
 
-	                      StringBuilder buf = new StringBuilder(text.substring(0, selectionStart));
-	                      buf.append(character);
-	                      buf.append(text.substring(selectionStart + selectionLength));
+                          StringBuilder buf = new StringBuilder(text.substring(0, selectionStart));
+                          buf.append(character);
+                          buf.append(text.substring(selectionStart + selectionLength));
 
                         if (validator.isValid(buf.toString())) {
                             textInput.insert(character);

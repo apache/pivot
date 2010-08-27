@@ -20,8 +20,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Iterator;
 
-import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.sql.ResultList;
@@ -73,13 +73,9 @@ public class ResultListTest {
                 new ResultList.Field("s"),
                 new ResultList.Field("b"));
 
-            List.ItemIterator<Map<String, Object>> iterator = resultList.iterator();
+            Iterator<Map<String, Object>> iterator = resultList.iterator();
             while (iterator.hasNext()) {
                 out.println(JSONSerializer.toString(iterator.next()));
-            }
-
-            while(iterator.hasPrevious()) {
-                out.println(JSONSerializer.toString(iterator.previous()));
             }
         } finally {
             if (connection != null) {
