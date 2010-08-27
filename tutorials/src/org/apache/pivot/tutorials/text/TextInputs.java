@@ -93,7 +93,7 @@ public class TextInputs extends Window implements Bindable {
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         stateTextInput = (TextInput)namespace.get("stateTextInput");
-        stateTextInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
+        stateTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textInserted(final TextInput textInput, int index, int count) {
                 String text = textInput.getText();

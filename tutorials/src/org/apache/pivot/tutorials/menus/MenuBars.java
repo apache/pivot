@@ -65,7 +65,7 @@ public class MenuBars extends Frame implements Bindable {
                 updateActionState(textInput);
                 Action.getNamedActions().get("paste").setEnabled(true);
 
-                textInput.getTextInputTextListeners().add(textInputTextListener);
+                textInput.getTextInputContentListeners().add(textInputTextListener);
                 textInput.getTextInputSelectionListeners().add(textInputSelectionListener);
             } else {
                 Action.getNamedActions().get("cut").setEnabled(false);
@@ -78,7 +78,7 @@ public class MenuBars extends Frame implements Bindable {
         public void cleanupMenuBar(Component component, MenuBar menuBar) {
             if (component instanceof TextInput) {
                 TextInput textInput = (TextInput)component;
-                textInput.getTextInputTextListeners().remove(textInputTextListener);
+                textInput.getTextInputContentListeners().remove(textInputTextListener);
                 textInput.getTextInputSelectionListeners().remove(textInputSelectionListener);
             }
         }

@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.Vote;
+
 /**
  * Text input text listener.
  */
@@ -25,7 +27,25 @@ public interface TextInputContentListener {
      */
     public static class Adapter implements TextInputContentListener {
         @Override
+        public Vote previewInsertText(TextInput textInput, String text, int index) {
+            return Vote.APPROVE;
+        }
+
+        @Override
+        public void insertTextVetoed(TextInput textInput, Vote reason) {
+        }
+
+        @Override
         public void textInserted(TextInput textInput, int index, int count) {
+        }
+
+        @Override
+        public Vote previewRemoveText(TextInput textInput, int index, int count) {
+            return Vote.APPROVE;
+        }
+
+        @Override
+        public void removeTextVetoed(TextInput textInput, Vote reason) {
         }
 
         @Override
@@ -36,6 +56,31 @@ public interface TextInputContentListener {
         public void textChanged(TextInput textInput) {
         }
     }
+
+    /**
+     * Called to preview a text insertion.
+     *
+     * @param textInput
+     * The source of the event.
+     *
+     * @param text
+     * The text that will be inserted.
+     *
+     * @param index
+     * The index at which the text will be inserted.
+     */
+    public Vote previewInsertText(TextInput textInput, String text, int index);
+
+    /**
+     * Called when a text insertion has been vetoed.
+     *
+     * @param textInput
+     * The source of the event.
+     *
+     * @param reason
+     * The reason the event was vetoed.
+     */
+    public void insertTextVetoed(TextInput textInput, Vote reason);
 
     /**
      * Called when text has been inserted into a text input.
@@ -50,6 +95,28 @@ public interface TextInputContentListener {
      * The number of characters that were inserted.
      */
     public void textInserted(TextInput textInput, int index, int count);
+
+    /**
+     * Called to preview a text removal.
+     *
+     * @param textInput
+     * The source of the event.
+     *
+     * @param index
+     * The starting index from which the text will be removed.
+     */
+    public Vote previewRemoveText(TextInput textInput, int index, int count);
+
+    /**
+     * Called when a text removal has been vetoed.
+     *
+     * @param textInput
+     * The source of the event.
+     *
+     * @param reason
+     * The reason the event was vetoed.
+     */
+    public void removeTextVetoed(TextInput textInput, Vote reason);
 
     /**
      * Called when text has been removed from a text input.

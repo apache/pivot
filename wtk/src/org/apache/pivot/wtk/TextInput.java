@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.validation.Validator;
 
 /**
@@ -123,9 +124,45 @@ public class TextInput extends Component {
     private static class TextInputContentListenerList extends ListenerList<TextInputContentListener>
         implements TextInputContentListener {
         @Override
+        public Vote previewInsertText(TextInput textInput, String text, int index) {
+            Vote vote = Vote.APPROVE;
+
+            for (TextInputContentListener listener : this) {
+                vote = vote.tally(listener.previewInsertText(textInput, text, index));
+            }
+
+            return vote;
+        }
+
+        @Override
+        public void insertTextVetoed(TextInput textInput, Vote reason) {
+            for (TextInputContentListener listener : this) {
+                listener.insertTextVetoed(textInput, reason);
+            }
+        }
+
+        @Override
         public void textInserted(TextInput textInput, int index, int count) {
             for (TextInputContentListener listener : this) {
                 listener.textInserted(textInput, index, count);
+            }
+        }
+
+        @Override
+        public Vote previewRemoveText(TextInput textInput, int index, int count) {
+            Vote vote = Vote.APPROVE;
+
+            for (TextInputContentListener listener : this) {
+                vote = vote.tally(listener.previewRemoveText(textInput, index, count));
+            }
+
+            return vote;
+        }
+
+        @Override
+        public void removeTextVetoed(TextInput textInput, Vote reason) {
+            for (TextInputContentListener listener : this) {
+                listener.removeTextVetoed(textInput, reason);
             }
         }
 
@@ -271,29 +308,35 @@ public class TextInput extends Component {
 
         // Insert the text
         if (text.length() > 0) {
-            characters.insert(selectionStart, text);
+            Vote vote = textInputContentListeners.previewInsertText(this, text, index);
 
-            // Update selection
-            int previousSelectionStart = selectionStart;
-            int previousSelectionLength = selectionLength;
-            selectionStart = index + text.length();
-            selectionLength = 0;
+            if (vote == Vote.APPROVE) {
+                characters.insert(selectionStart, text);
 
-            // Update the valid flag
-            boolean previousTextValid = textValid;
-            textValid = (validator == null) ? true : validator.isValid(getText());
+                // Update selection
+                int previousSelectionStart = selectionStart;
+                int previousSelectionLength = selectionLength;
+                selectionStart = index + text.length();
+                selectionLength = 0;
 
-            // Fire change events
-            textInputContentListeners.textInserted(this, previousSelectionStart, text.length());
-            textInputContentListeners.textChanged(this);
+                // Update the valid flag
+                boolean previousTextValid = textValid;
+                textValid = (validator == null) ? true : validator.isValid(getText());
 
-            if (textValid != previousTextValid) {
-                textInputListeners.textValidChanged(this);
-            }
+                // Fire change events
+                textInputContentListeners.textInserted(this, previousSelectionStart, text.length());
+                textInputContentListeners.textChanged(this);
 
-            if (selectionStart != previousSelectionStart
-                || selectionLength != previousSelectionLength) {
-                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+                if (textValid != previousTextValid) {
+                    textInputListeners.textValidChanged(this);
+                }
+
+                if (selectionStart != previousSelectionStart
+                    || selectionLength != previousSelectionLength) {
+                    textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+                }
+            } else {
+                textInputContentListeners.insertTextVetoed(this, vote);
             }
         }
     }
@@ -301,29 +344,35 @@ public class TextInput extends Component {
     public void removeText(int index, int count) {
         // Remove the text
         if (count > 0) {
-            characters.delete(index, index + count);
+            Vote vote = textInputContentListeners.previewRemoveText(this, index, count);
 
-            // Update the selection
-            int previousSelectionStart = selectionStart;
-            int previousSelectionLength = selectionLength;
-            selectionStart = index;
-            selectionLength = 0;
+            if (vote == Vote.APPROVE) {
+                characters.delete(index, index + count);
 
-            // Update the valid flag
-            boolean previousTextValid = textValid;
-            textValid = (validator == null) ? true : validator.isValid(getText());
+                // Update the selection
+                int previousSelectionStart = selectionStart;
+                int previousSelectionLength = selectionLength;
+                selectionStart = index;
+                selectionLength = 0;
 
-            // Fire change events
-            textInputContentListeners.textRemoved(this, selectionStart, count);
-            textInputContentListeners.textChanged(this);
+                // Update the valid flag
+                boolean previousTextValid = textValid;
+                textValid = (validator == null) ? true : validator.isValid(getText());
 
-            if (textValid != previousTextValid) {
-                textInputListeners.textValidChanged(this);
-            }
+                // Fire change events
+                textInputContentListeners.textRemoved(this, selectionStart, count);
+                textInputContentListeners.textChanged(this);
 
-            if (selectionStart != previousSelectionStart
-                || selectionLength != previousSelectionLength) {
-                textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+                if (textValid != previousTextValid) {
+                    textInputListeners.textValidChanged(this);
+                }
+
+                if (selectionStart != previousSelectionStart
+                    || selectionLength != previousSelectionLength) {
+                    textInputSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
+                }
+            } else {
+                textInputContentListeners.removeTextVetoed(this, vote);
             }
         }
     }
@@ -764,7 +813,7 @@ public class TextInput extends Component {
     /**
      * Returns the text input text listener list.
      */
-    public ListenerList<TextInputContentListener> getTextInputTextListeners() {
+    public ListenerList<TextInputContentListener> getTextInputContentListeners() {
         return textInputContentListeners;
     }
 

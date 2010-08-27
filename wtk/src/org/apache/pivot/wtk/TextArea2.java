@@ -536,7 +536,7 @@ public class TextArea2 extends Component {
         return textAreaListeners;
     }
 
-    public ListenerList<TextAreaContentListener2> getTextAreaCharacterListeners() {
+    public ListenerList<TextAreaContentListener2> getTextAreaContentListeners() {
         return textAreaContentListeners;
     }
 

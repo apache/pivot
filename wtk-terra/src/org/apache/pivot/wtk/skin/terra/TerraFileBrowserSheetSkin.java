@@ -100,7 +100,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         bxmlSerializer.bind(this, TerraFileBrowserSheetSkin.class);
 
-        saveAsTextInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
+        saveAsTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textChanged(TextInput textInput) {
                 updateOKButtonState();

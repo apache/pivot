@@ -33,6 +33,7 @@ import java.text.CharacterIterator;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.text.CharSequenceCharacterIterator;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -182,7 +183,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         TextInput textInput = (TextInput)component;
         textInput.getTextInputListeners().add(this);
-        textInput.getTextInputTextListeners().add(this);
+        textInput.getTextInputContentListeners().add(this);
         textInput.getTextInputSelectionListeners().add(this);
 
         textInput.setCursor(Cursor.TEXT);
@@ -1294,7 +1295,27 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     // Text input character events
     @Override
+    public Vote previewInsertText(TextInput textInput, String text, int index) {
+        return Vote.APPROVE;
+    }
+
+    @Override
+    public void insertTextVetoed(TextInput textInput, Vote reason) {
+        // No-op
+    }
+
+    @Override
     public void textInserted(TextInput textInput, int index, int count) {
+        // No-op
+    }
+
+    @Override
+    public Vote previewRemoveText(TextInput textInput, int index, int count) {
+        return Vote.APPROVE;
+    }
+
+    @Override
+    public void removeTextVetoed(TextInput textInput, Vote reason) {
         // No-op
     }
 

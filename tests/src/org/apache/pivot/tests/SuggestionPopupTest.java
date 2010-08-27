@@ -45,7 +45,7 @@ public class SuggestionPopupTest implements Application {
             "suggestion_popup_test.bxml");
         bxmlSerializer.bind(this);
 
-        textInput.getTextInputTextListeners().add(new TextInputContentListener.Adapter() {
+        textInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textInserted(TextInput textInput, int index, int count) {
                 ArrayList<String> suggestions = new ArrayList<String>("One", "Two", "Three", "Four", "Five");
