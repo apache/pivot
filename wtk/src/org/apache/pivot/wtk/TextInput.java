@@ -367,7 +367,7 @@ public class TextInput extends Component {
         }
 
         // Insert the text
-        if (textNode.getCharacterCount() + text.length() > maximumLength) {
+        if (textNode.getCharacterCount() + text.length() - selectionLength > maximumLength) {
             throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
         }
 
