@@ -146,8 +146,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     private Insets padding;
 
-    private boolean strictValidation = false;
-
     private Dimensions averageCharacterSize;
 
     private static final int SCROLL_RATE = 50;
@@ -908,14 +906,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         setPadding(Insets.decode(padding));
     }
 
-    public boolean isStrictValidation() {
-        return strictValidation;
-    }
-
-    public void setStrictValidation(boolean strictValidation) {
-        this.strictValidation = strictValidation;
-    }
-
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -1048,26 +1038,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 && textInput.getCharacters().length() == textInput.getMaximumLength()) {
                 Toolkit.getDefaultToolkit().beep();
             } else {
-                Validator validator = textInput.getValidator();
-                boolean strictValidation = isStrictValidation();
-
-                if (validator != null
-                    && strictValidation) {
-                    String text = textInput.getText();
-                    int selectionStart = textInput.getSelectionStart();
-
-                    StringBuilder buf = new StringBuilder(text.substring(0, selectionStart));
-                    buf.append(character);
-                    buf.append(text.substring(selectionStart + selectionLength));
-
-                    if (validator.isValid(buf.toString())) {
-                        textInput.insert(character);
-                    } else {
-                        Toolkit.getDefaultToolkit().beep();
-                    }
-                } else {
-                    textInput.insert(character);
-                }
+                textInput.removeText(textInput.getSelectionStart(), textInput.getSelectionLength());
+                textInput.insertText(Character.toString(character), textInput.getSelectionStart());
             }
         }
 
@@ -1083,37 +1055,18 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
         if (keyCode == Keyboard.KeyCode.DELETE
             || keyCode == Keyboard.KeyCode.BACKSPACE) {
-            boolean backspace = (keyCode == Keyboard.KeyCode.DELETE ? false : true);
-
-            Validator validator = textInput.getValidator();
-            boolean strictValidation = isStrictValidation();
-
-            if (validator != null
-                && strictValidation) {
-                StringBuilder buf = new StringBuilder(textInput.getText());
-                int index = textInput.getSelectionStart();
-                int count = textInput.getSelectionLength();
-
-                if (count > 0) {
-                    buf.delete(index, index + count);
-                } else {
-                    if (backspace) {
-                        index--;
-                    }
-
-                    if (index >= 0
-                        && index < textInput.getCharacters().length()) {
-                        buf.deleteCharAt(index);
-                    }
+            int index = textInput.getSelectionStart();
+            int count = textInput.getSelectionLength();
+            if (count == 0) {
+                if (keyCode == Keyboard.KeyCode.BACKSPACE) {
+                    index--;
                 }
 
-                if (validator.isValid(buf.toString())) {
-                    textInput.delete(backspace);
-                } else {
-                    Toolkit.getDefaultToolkit().beep();
-                }
-            } else {
-                textInput.delete(backspace);
+                count = 1;
+            }
+
+            if (index >= 0) {
+                textInput.removeText(index, count);
             }
 
             consumed = true;

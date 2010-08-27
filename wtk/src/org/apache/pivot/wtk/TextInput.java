@@ -260,46 +260,23 @@ public class TextInput extends Component {
         }
     }
 
-    /**
-     * Inserts a single character into the text input's content. The character
-     * replaces the current selection.
-     *
-     * @param character
-     * The character to insert.
-     */
-    public void insert(char character) {
-        insert(Character.toString(character));
-    }
-
-    /**
-     * Inserts a text string into the text input's content. The text replaces the
-     * current selection.
-     *
-     * @param text
-     * The text to insert.
-     */
-    public void insert(String text) {
+    public void insertText(String text, int index) {
         if (text == null) {
             throw new IllegalArgumentException();
         }
 
-        if (characters.length() + text.length() - selectionLength > maximumLength) {
+        if (characters.length() + text.length() > maximumLength) {
             throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
-        }
-
-        if (selectionLength > 0) {
-            delete(false);
         }
 
         // Insert the text
         if (text.length() > 0) {
-            // Insert the text
             characters.insert(selectionStart, text);
 
             // Update selection
             int previousSelectionStart = selectionStart;
             int previousSelectionLength = selectionLength;
-            selectionStart += text.length();
+            selectionStart = index + text.length();
             selectionLength = 0;
 
             // Update the valid flag
@@ -321,35 +298,16 @@ public class TextInput extends Component {
         }
     }
 
-    /**
-     * Deletes the current selection.
-     *
-     * @param backspace
-     * If the current selection length is <tt>0</tt>, moves the caret back
-     * character position before deleting; if the selection length is greater
-     * than <tt>0</tt>, this argument is ignored.
-     */
-    public void delete(boolean backspace) {
-        if (characters.length() > 0) {
-            // Determine count and update the selection
+    public void removeText(int index, int count) {
+        // Remove the text
+        if (count > 0) {
+            characters.delete(index, index + count);
+
+            // Update the selection
             int previousSelectionStart = selectionStart;
             int previousSelectionLength = selectionLength;
-
-            int count;
-            if (selectionLength > 0) {
-                count = selectionLength;
-                selectionLength = 0;
-            } else {
-                if (backspace) {
-                    selectionStart--;
-                }
-
-                count = 1;
-            }
-
-            if (selectionStart < characters.length()) {
-                characters.delete(selectionStart, selectionStart + count);
-            }
+            selectionStart = index;
+            selectionLength = 0;
 
             // Update the valid flag
             boolean previousTextValid = textValid;
@@ -376,7 +334,7 @@ public class TextInput extends Component {
      */
     public void cut() {
         copy();
-        delete(false);
+        removeText(selectionStart, selectionLength);
     }
 
     /**
@@ -413,7 +371,7 @@ public class TextInput extends Component {
                 if ((characters.length() + text.length()) > maximumLength) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
-                    insert(text);
+                    insertText(text, selectionStart);
                 }
             }
         }
