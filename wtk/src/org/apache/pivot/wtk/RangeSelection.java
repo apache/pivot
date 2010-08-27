@@ -25,33 +25,28 @@ import org.apache.pivot.collections.immutable.ImmutableList;
 /**
  * Class for managing a set of indexed range selections.
  */
-class ListSelection {
+public class RangeSelection {
+    // The coalesced selected ranges
     private ArrayList<Span> selectedRanges = new ArrayList<Span>();
 
-    /**
-     * Comparator that determines the index of the first intersecting range.
-     */
-    public static final Comparator<Span> START_COMPARATOR = new Comparator<Span>() {
+    // Comparator that determines the index of the first intersecting range.
+    private static final Comparator<Span> START_COMPARATOR = new Comparator<Span>() {
         @Override
         public int compare(Span range1, Span range2) {
             return (range1.end - range2.start);
         }
     };
 
-    /**
-     * Comparator that determines the index of the last intersecting range.
-     */
-    public static final Comparator<Span> END_COMPARATOR = new Comparator<Span>() {
+    // Comparator that determines the index of the last intersecting range.
+    private static final Comparator<Span> END_COMPARATOR = new Comparator<Span>() {
         @Override
         public int compare(Span range1, Span range2) {
             return (range1.start - range2.end);
         }
     };
 
-    /**
-     * Comparator that determines if two ranges intersect.
-     */
-    public static final Comparator<Span> INTERSECTION_COMPARATOR = new Comparator<Span>() {
+    // Comparator that determines if two ranges intersect.
+    private static final Comparator<Span> INTERSECTION_COMPARATOR = new Comparator<Span>() {
         @Override
         public int compare(Span range1, Span range2) {
             return (range1.start > range2.end) ? 1 : (range2.start > range1.end) ? -1 : 0;
@@ -243,6 +238,9 @@ class ListSelection {
         return removedRanges;
     }
 
+    /**
+     * Clears the selection.
+     */
     public void clear() {
         selectedRanges.clear();
     }
@@ -266,7 +264,7 @@ class ListSelection {
     /**
      * Returns an immutable wrapper around the selected ranges.
      */
-    public ImmutableList<Span> toList() {
+    public ImmutableList<Span> getSelectedRanges() {
         return new ImmutableList<Span>(selectedRanges);
     }
 
@@ -386,6 +384,15 @@ class ListSelection {
         return updated;
     }
 
+    /**
+     * Ensures that the start value is less than or equal to the end value.
+     *
+     * @param start
+     * @param end
+     *
+     * @return
+     * A span containing the normalized range.
+     */
     public static Span normalize(int start, int end) {
         return new Span(Math.min(start, end), Math.max(start, end));
     }

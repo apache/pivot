@@ -36,7 +36,7 @@ limitations under the License.
         <TablePane.Row height="1*">
             <Border styles="{color:10}">
                 <ScrollPane horizontalScrollBarPolicy="fill">
-                    <ListView bxml:id="dataListView" selectMode="multi" checkmarksEnabled="true">
+                    <ListView bxml:id="dataListView" selectMode="multi">
                         <listData>
                             <content:NumericSpinnerData lowerBound="0" upperBound="31" increment="1"/>
                         </listData>

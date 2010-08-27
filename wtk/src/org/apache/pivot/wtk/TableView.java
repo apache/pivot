@@ -1342,7 +1342,7 @@ public class TableView extends Component {
 
     private RowEditor rowEditor = null;
 
-    private ListSelection selectedRanges = new ListSelection();
+    private RangeSelection rangeSelection = new RangeSelection();
     private SelectMode selectMode = SelectMode.SINGLE;
 
     private HashMap<String, SortDirection> sortMap = new HashMap<String, SortDirection>();
@@ -1367,7 +1367,7 @@ public class TableView extends Component {
         @Override
         public void itemInserted(List<Object> list, int index) {
             // Increment selected ranges
-            int updated = selectedRanges.insertIndex(index);
+            int updated = rangeSelection.insertIndex(index);
 
             // Notify listeners that items were inserted
             tableViewRowListeners.rowInserted(TableView.this, index);
@@ -1383,14 +1383,14 @@ public class TableView extends Component {
 
             int previousSelectedIndex;
             if (selectMode == SelectMode.SINGLE
-                && selectedRanges.getLength() > 0) {
-                previousSelectedIndex = selectedRanges.get(0).start;
+                && rangeSelection.getLength() > 0) {
+                previousSelectedIndex = rangeSelection.get(0).start;
             } else {
                 previousSelectedIndex = -1;
             }
 
             // Decrement selected ranges
-            int updated = selectedRanges.removeIndexes(index, count);
+            int updated = rangeSelection.removeIndexes(index, count);
 
             // Notify listeners that items were removed
             tableViewRowListeners.rowsRemoved(TableView.this, index, count);
@@ -1412,8 +1412,8 @@ public class TableView extends Component {
 
         @Override
         public void listCleared(List<Object> list) {
-            int cleared = selectedRanges.getLength();
-            selectedRanges.clear();
+            int cleared = rangeSelection.getLength();
+            rangeSelection.clear();
 
             tableViewRowListeners.rowsCleared(TableView.this);
 
@@ -1429,8 +1429,8 @@ public class TableView extends Component {
         @Override
         public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
-                int cleared = selectedRanges.getLength();
-                selectedRanges.clear();
+                int cleared = rangeSelection.getLength();
+                rangeSelection.clear();
                 tableViewRowListeners.rowsSorted(TableView.this);
 
                 if (cleared > 0) {
@@ -1525,8 +1525,8 @@ public class TableView extends Component {
             int cleared;
             if (previousTableData != null) {
                 // Clear any existing selection
-                cleared = selectedRanges.getLength();
-                selectedRanges.clear();
+                cleared = rangeSelection.getLength();
+                rangeSelection.clear();
 
                 ((List<Object>)previousTableData).getListListeners().remove(tableDataListener);
             } else {
@@ -1640,7 +1640,7 @@ public class TableView extends Component {
             throw new IllegalStateException("Table view is not in single-select mode.");
         }
 
-        return (selectedRanges.getLength() == 0) ? -1 : selectedRanges.get(0).start;
+        return (rangeSelection.getLength() == 0) ? -1 : rangeSelection.get(0).start;
     }
 
     /**
@@ -1679,7 +1679,7 @@ public class TableView extends Component {
      * selection state will be reflected in the list, but events will not be fired.
      */
     public ImmutableList<Span> getSelectedRanges() {
-        return selectedRanges.toList();
+        return rangeSelection.getSelectedRanges();
     }
 
     /**
@@ -1725,9 +1725,9 @@ public class TableView extends Component {
         }
 
         // Update the selection
-        Sequence<Span> previousSelectedRanges = this.selectedRanges.toList();
+        Sequence<Span> previousSelectedRanges = this.rangeSelection.getSelectedRanges();
 
-        ListSelection listSelection = new ListSelection();
+        RangeSelection listSelection = new RangeSelection();
         for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
             Span range = selectedRanges.get(i);
 
@@ -1742,7 +1742,7 @@ public class TableView extends Component {
             listSelection.addRange(range.start, range.end);
         }
 
-        this.selectedRanges = listSelection;
+        this.rangeSelection = listSelection;
 
         // Notify listeners
         tableViewSelectionListeners.selectedRangesChanged(this, previousSelectedRanges);
@@ -1800,7 +1800,7 @@ public class TableView extends Component {
      * The first selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getFirstSelectedIndex() {
-        return (selectedRanges.getLength() > 0) ? selectedRanges.get(0).start : -1;
+        return (rangeSelection.getLength() > 0) ? rangeSelection.get(0).start : -1;
     }
 
     /**
@@ -1810,8 +1810,8 @@ public class TableView extends Component {
      * The last selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getLastSelectedIndex() {
-        return (selectedRanges.getLength() > 0) ?
-            selectedRanges.get(selectedRanges.getLength() - 1).end : -1;
+        return (rangeSelection.getLength() > 0) ?
+            rangeSelection.get(rangeSelection.getLength() - 1).end : -1;
     }
 
     /**
@@ -1850,7 +1850,7 @@ public class TableView extends Component {
             throw new IndexOutOfBoundsException();
         }
 
-        Sequence<Span> addedRanges = selectedRanges.addRange(start, end);
+        Sequence<Span> addedRanges = rangeSelection.addRange(start, end);
 
         int n = addedRanges.getLength();
         for (int i = 0; i < n; i++) {
@@ -1918,7 +1918,7 @@ public class TableView extends Component {
             throw new IndexOutOfBoundsException();
         }
 
-        Sequence<Span> removedRanges = selectedRanges.removeRange(start, end);
+        Sequence<Span> removedRanges = rangeSelection.removeRange(start, end);
 
         int n = removedRanges.getLength();
         for (int i = 0; i < n; i++) {
@@ -1961,7 +1961,7 @@ public class TableView extends Component {
      * Clears the selection.
      */
     public void clearSelection() {
-        if (selectedRanges.getLength() > 0) {
+        if (rangeSelection.getLength() > 0) {
             setSelectedRanges(new ArrayList<Span>(0));
         }
     }
@@ -1980,7 +1980,7 @@ public class TableView extends Component {
             throw new IndexOutOfBoundsException();
         }
 
-        return (selectedRanges.containsIndex(index));
+        return (rangeSelection.containsIndex(index));
     }
 
     public Object getSelectedRow() {
@@ -2002,8 +2002,8 @@ public class TableView extends Component {
     public Sequence<?> getSelectedRows() {
         ArrayList<Object> rows = new ArrayList<Object>();
 
-        for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
-            Span range = selectedRanges.get(i);
+        for (int i = 0, n = rangeSelection.getLength(); i < n; i++) {
+            Span range = rangeSelection.get(i);
 
             for (int index = range.start; index <= range.end; index++) {
                 Object row = tableData.get(index);
