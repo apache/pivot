@@ -114,6 +114,13 @@ public class TextInput extends Component {
         }
 
         @Override
+        public void strictValidationChanged(TextInput textInput) {
+            for (TextInputListener listener : this) {
+                listener.strictValidationChanged(textInput);
+            }
+        }
+
+        @Override
         public void textValidChanged(TextInput textInput) {
             for (TextInputListener listener : this) {
                 listener.textValidChanged(textInput);
@@ -232,6 +239,7 @@ public class TextInput extends Component {
     private TextBindMapping textBindMapping = null;
 
     private Validator validator = null;
+    private boolean strictValidation = false;
     private boolean textValid = true;
 
     private TextInputListenerList textInputListeners = new TextInputListenerList();
@@ -795,6 +803,26 @@ public class TextInput extends Component {
             if (textValid != previousTextValid) {
                 textInputListeners.textValidChanged(this);
             }
+        }
+    }
+
+    /**
+     * Returns the text input's strict validation flag.
+     */
+    public boolean isStrictValidation() {
+        return strictValidation;
+    }
+
+    /**
+     * Sets the text input's strict validation flag. When enabled, only valid text will be
+     * accepted by the text input.
+     *
+     * @param strictValidation
+     */
+    public void setStrictValidation(boolean strictValidation) {
+        if (this.strictValidation != strictValidation) {
+            this.strictValidation = strictValidation;
+            textInputListeners.strictValidationChanged(this);
         }
     }
 

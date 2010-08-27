@@ -56,7 +56,8 @@ limitations under the License.
                         <ListButton bxml:id="typeListButton" Form.label="%type" listData="@types.json"
                             selectedItemKey="type"/>
 
-                        <TextInput bxml:id="amountTextInput" Form.label="%amount" textKey="amount">
+                        <TextInput bxml:id="amountTextInput" Form.label="%amount" strictValidation="true"
+                            textKey="amount">
                             <validator>
                                 <webqueries:AmountValidator/>
                             </validator>
