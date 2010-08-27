@@ -62,7 +62,7 @@ public class NamespaceBinding {
             if (key.equals(sourceKey)
                 && !updating) {
                 updating = true;
-                targetDictionary.put(targetKey, getMappedSourceValue());
+                targetDictionary.put(targetKey, getTransformedSourceValue());
                 updating = false;
             }
         }
@@ -74,7 +74,7 @@ public class NamespaceBinding {
             if (propertyName.equals(sourceKey)
                 && !updating) {
                 updating = true;
-                targetDictionary.put(targetKey, getMappedSourceValue());
+                targetDictionary.put(targetKey, getTransformedSourceValue());
                 updating = false;
             }
         }
@@ -149,7 +149,7 @@ public class NamespaceBinding {
         this.bindMapping = bindMapping;
 
         // Perform the initial set from source to target
-        targetDictionary.put(targetKey, getMappedSourceValue());
+        targetDictionary.put(targetKey, getTransformedSourceValue());
     }
 
     /**
@@ -215,7 +215,7 @@ public class NamespaceBinding {
     /**
      * Returns the current source value with any bind mapping applied.
      */
-    public Object getMappedSourceValue() {
+    public Object getTransformedSourceValue() {
         Object sourceValue = sourceMap.get(sourceKey);
         return (bindMapping == null) ? sourceValue : bindMapping.evaluate(sourceValue);
     }
