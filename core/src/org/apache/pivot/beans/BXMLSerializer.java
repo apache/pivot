@@ -1010,13 +1010,10 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                     if (value.charAt(0) == RESOURCE_KEY_PREFIX) {
                                         attribute.value = value;
                                     } else {
-                                        if (resources == null) {
-                                            throw new IllegalStateException("Resource bundle is undefined.");
-                                        }
-
-                                        attribute.value = JSON.get(resources, value);
-
-                                        if (attribute.value == null) {
+                                        if (resources != null
+                                            && JSON.containsKey(resources, value)) {
+                                            attribute.value = JSON.get(resources, value);
+                                        } else {
                                             attribute.value = value;
                                         }
                                     }
