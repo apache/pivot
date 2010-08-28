@@ -52,21 +52,24 @@ public class JSONSerializer implements Serializer<Object> {
     private Charset charset;
     private Type type;
 
-    private int c = -1;
     private boolean alwaysDelimitMapKeys = false;
     private boolean verbose = false;
 
+    private int c = -1;
+
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
+    public static final Type DEFAULT_TYPE = Object.class;
+
     public static final String JSON_EXTENSION = "json";
     public static final String MIME_TYPE = "application/json";
     public static final int BUFFER_SIZE = 2048;
 
     public JSONSerializer() {
-        this(Charset.forName(DEFAULT_CHARSET_NAME), Object.class);
+        this(Charset.forName(DEFAULT_CHARSET_NAME), DEFAULT_TYPE);
     }
 
     public JSONSerializer(Charset charset) {
-        this(charset, Object.class);
+        this(charset, DEFAULT_TYPE);
     }
 
     public JSONSerializer(Type type) {
@@ -76,6 +79,10 @@ public class JSONSerializer implements Serializer<Object> {
     public JSONSerializer(Charset charset, Type type) {
         if (charset == null) {
             throw new IllegalArgumentException("charset is null.");
+        }
+
+        if (type == null) {
+            throw new IllegalArgumentException("type is null.");
         }
 
         this.charset = charset;

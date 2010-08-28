@@ -307,17 +307,15 @@ public class StockTrackerWindow extends Window implements Bindable {
             getQuery.getParameters().put("s", symbolsArgument);
             getQuery.getParameters().put("f", "snl1ohgc1v");
 
-            CSVSerializer quoteSerializer = new CSVSerializer();
-            quoteSerializer.setItemClass(StockQuote.class);
-
-            quoteSerializer.getKeys().add("symbol");
-            quoteSerializer.getKeys().add("companyName");
-            quoteSerializer.getKeys().add("value");
-            quoteSerializer.getKeys().add("openingValue");
-            quoteSerializer.getKeys().add("highValue");
-            quoteSerializer.getKeys().add("lowValue");
-            quoteSerializer.getKeys().add("change");
-            quoteSerializer.getKeys().add("volume");
+            CSVSerializer quoteSerializer = new CSVSerializer(StockQuote.class);
+            quoteSerializer.setKeys("symbol",
+                "companyName",
+                "value",
+                "openingValue",
+                "highValue",
+                "lowValue",
+                "change",
+                "volume");
 
             getQuery.setSerializer(quoteSerializer);
 

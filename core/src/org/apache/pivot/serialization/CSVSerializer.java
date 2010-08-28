@@ -26,10 +26,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.NoSuchElementException;
 
 import org.apache.pivot.beans.BeanAdapter;
+import org.apache.pivot.collections.ArrayAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
@@ -83,61 +86,93 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     private Charset charset;
+    private Type itemType;
 
-    int c = -1;
     private ArrayList<String> keys = new ArrayList<String>();
-    private Class<?> itemClass = HashMap.class;
+
     private boolean writeKeys = false;
     private boolean verbose = false;
 
+    int c = -1;
+
     public static final String DEFAULT_CHARSET_NAME = "ISO-8859-1";
+    public static final Type DEFAULT_ITEM_TYPE = HashMap.class;
+
     public static final String CSV_EXTENSION = "csv";
     public static final String MIME_TYPE = "text/csv";
     public static final int BUFFER_SIZE = 2048;
 
     public CSVSerializer() {
-        this(Charset.forName(DEFAULT_CHARSET_NAME));
+        this(Charset.forName(DEFAULT_CHARSET_NAME), DEFAULT_ITEM_TYPE);
     }
 
     public CSVSerializer(Charset charset) {
+        this(charset, DEFAULT_ITEM_TYPE);
+    }
+
+    public CSVSerializer(Type itemType) {
+        this(Charset.forName(DEFAULT_CHARSET_NAME), itemType);
+    }
+
+    public CSVSerializer(Charset charset, Type itemType) {
         if (charset == null) {
             throw new IllegalArgumentException("charset is null.");
         }
 
+        if (itemType == null) {
+            throw new IllegalArgumentException("itemType is null.");
+        }
+
         this.charset = charset;
+        this.itemType = itemType;
     }
 
+    /**
+     * Returns the character set used to encode/decode the CSV data.
+     */
     public Charset getCharset() {
         return charset;
     }
 
     /**
-     * Returns a sequence representing the fields that will be read or written
-     * by this serializer.
+     * Returns the type of the item that will be instantiated by the serializer
+     * during a read operation.
+     */
+    public Type getItemType() {
+        return itemType;
+    }
+
+    /**
+     * Returns the keys that will be read or written by this serializer.
      */
     public Sequence<String> getKeys() {
         return keys;
     }
 
     /**
-     * Returns the item class that will be instantiated by the serializer during
-     * a read operation.
+     * Sets the keys that will be read or written by this serializer.
+     *
+     * @param keys
      */
-    public Class<?> getItemClass() {
-        return itemClass;
+    public void setKeys(Sequence<String> keys) {
+        if (keys == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.keys = new ArrayList<String>(keys);
     }
 
     /**
-     * Sets the item class that will be instantiated by the serializer during
-     * a read operation. The class must implement the {@link Dictionary}
-     * interface.
+     * Sets the keys that will be read or written by this serializer.
+     *
+     * @param keys
      */
-    public void setItemClass(Class<?> itemClass) {
-        if (itemClass == null) {
-            throw new IllegalArgumentException("itemClass is null.");
+    public void setKeys(String... keys) {
+        if (keys == null) {
+            throw new IllegalArgumentException();
         }
 
-        this.itemClass = itemClass;
+        setKeys(new ArrayAdapter<String>(keys));
     }
 
     /**
@@ -306,7 +341,14 @@ public class CSVSerializer implements Serializer<List<?>> {
             Dictionary<String, Object> itemDictionary;
 
             try {
-                item = itemClass.newInstance();
+                if (itemType instanceof ParameterizedType) {
+                    ParameterizedType parameterizedItemType = (ParameterizedType)itemType;
+                    Class<?> rawItemType = (Class<?>)parameterizedItemType.getRawType();
+                    item = rawItemType.newInstance();
+                } else {
+                    Class<?> classItemType = (Class<?>)itemType;
+                    item = classItemType.newInstance();
+                }
 
                 if (item instanceof Dictionary<?, ?>) {
                     itemDictionary = (Dictionary<String, Object>)item;

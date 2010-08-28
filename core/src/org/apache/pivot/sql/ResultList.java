@@ -180,34 +180,41 @@ public class ResultList implements List<Map<String, Object>> {
    }
 
    private ResultSet resultSet;
-   private ArrayList<Field> fields;
+
+   private ArrayList<Field> fields = new ArrayList<Field>();
 
    private ListListenerList<Map<String, Object>> listListeners = new ListListenerList<Map<String,Object>>();
 
-   public ResultList(ResultSet resultSet, Field... fields) {
-       this(resultSet, new ArrayAdapter<Field>(fields));
-   }
-
-   public ResultList(ResultSet resultSet, Sequence<Field> fields) {
+   public ResultList(ResultSet resultSet) {
        if (resultSet == null) {
            throw new IllegalArgumentException();
        }
 
+       this.resultSet = resultSet;
+   }
+
+   public ResultSet getResultSet() {
+       return resultSet;
+   }
+
+   public Sequence<Field> getFields() {
+       return fields;
+   }
+
+   public void setFields(Sequence<Field> fields) {
        if (fields == null) {
            throw new IllegalArgumentException();
        }
 
-       this.resultSet = resultSet;
        this.fields = new ArrayList<Field>(fields);
    }
 
+   public void setFields(Field... fields) {
+       if (fields == null) {
+           throw new IllegalArgumentException();
+       }
 
-   public Field getField(int index) {
-       return fields.get(index);
-   }
-
-   public int getFieldCount() {
-       return fields.getLength();
+       setFields(new ArrayAdapter<Field>(fields));
    }
 
    @Override

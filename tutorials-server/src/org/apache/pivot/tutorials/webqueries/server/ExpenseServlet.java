@@ -44,18 +44,14 @@ public class ExpenseServlet extends QueryServlet {
     @Override
     @SuppressWarnings("unchecked")
     public void init() throws ServletException {
-        CSVSerializer csvSerializer = new CSVSerializer();
-        csvSerializer.getKeys().add("date");
-        csvSerializer.getKeys().add("type");
-        csvSerializer.getKeys().add("amount");
-        csvSerializer.getKeys().add("description");
-        csvSerializer.setItemClass(Expense.class);
+        CSVSerializer expenseSerializer = new CSVSerializer(Expense.class);
+        expenseSerializer.setKeys("date", "type", "amount", "description");
 
         // Load the initial expense data
         InputStream inputStream = ExpenseServlet.class.getResourceAsStream("expenses.csv");
 
         try {
-            expenses = (List<Expense>)csvSerializer.readObject(inputStream);
+            expenses = (List<Expense>)expenseSerializer.readObject(inputStream);
         } catch (IOException exception) {
             throw new ServletException(exception);
         } catch (SerializationException exception) {

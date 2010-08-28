@@ -42,24 +42,24 @@ public class ResultListTest {
             ResultList resultList;
 
             resultSet = statement.executeQuery("SELECT * FROM result_list_test");
-            resultList = new ResultList(resultSet,
-                new ResultList.Field("i"),
+            resultList = new ResultList(resultSet);
+            resultList.setFields(new ResultList.Field("i"),
                 new ResultList.Field("f"),
                 new ResultList.Field("s"),
                 new ResultList.Field("b"));
             out.println(JSONSerializer.toString(resultList));
 
             resultSet = statement.executeQuery("SELECT * FROM result_list_test");
-            resultList = new ResultList(resultSet,
-                new ResultList.Field("i", "integer"),
+            resultList = new ResultList(resultSet);
+            resultList.setFields(new ResultList.Field("i", "integer"),
                 new ResultList.Field("f", "float"),
                 new ResultList.Field("s", "string"),
                 new ResultList.Field("b", "boolean"));
             out.println(JSONSerializer.toString(resultList));
 
             resultSet = statement.executeQuery("SELECT * FROM result_list_test");
-            resultList = new ResultList(resultSet,
-                new ResultList.Field("i", "integer", Integer.class),
+            resultList = new ResultList(resultSet);
+            resultList.setFields(new ResultList.Field("i", "integer", Integer.class),
                 new ResultList.Field("f", "float", Float.class),
                 new ResultList.Field("s", "string", String.class),
                 new ResultList.Field("b", "boolean", Boolean.class));
@@ -67,8 +67,8 @@ public class ResultListTest {
 
             // Test forward and backward iteration
             resultSet = statement.executeQuery("SELECT * FROM result_list_test");
-            resultList = new ResultList(resultSet,
-                new ResultList.Field("i"),
+            resultList = new ResultList(resultSet);
+            resultList.setFields(new ResultList.Field("i"),
                 new ResultList.Field("f"),
                 new ResultList.Field("s"),
                 new ResultList.Field("b"));
