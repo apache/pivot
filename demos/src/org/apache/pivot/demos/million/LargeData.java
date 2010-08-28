@@ -80,10 +80,7 @@ public class LargeData implements Application {
                     inputStream = fileURL.openStream();
 
                     CSVSerializer csvSerializer = new CSVSerializer();
-                    csvSerializer.getKeys().add("c0");
-                    csvSerializer.getKeys().add("c1");
-                    csvSerializer.getKeys().add("c2");
-                    csvSerializer.getKeys().add("c3");
+                    csvSerializer.setKeys("c0", "c1", "c2", "c3");
 
                     CSVSerializer.StreamIterator streamIterator = csvSerializer.getStreamIterator(inputStream);
 
@@ -144,20 +141,11 @@ public class LargeData implements Application {
     private Label statusLabel = null;
     private TableView tableView = null;
 
-    private CSVSerializer csvSerializer;
     private int pageSize = 0;
 
     private volatile boolean abort = false;
 
     private static final String BASE_PATH_KEY = "basePath";
-
-    public LargeData() {
-        csvSerializer = new CSVSerializer();
-        csvSerializer.getKeys().add("c0");
-        csvSerializer.getKeys().add("c1");
-        csvSerializer.getKeys().add("c2");
-        csvSerializer.getKeys().add("c3");
-    }
 
     @Override
     public void startup(Display display, Map<String, String> properties)

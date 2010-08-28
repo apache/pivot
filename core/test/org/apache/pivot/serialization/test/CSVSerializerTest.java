@@ -45,9 +45,7 @@ public class CSVSerializerTest {
         StringReader reader = new StringReader(buf.toString());
 
         CSVSerializer serializer = new CSVSerializer();
-        serializer.getKeys().add("A");
-        serializer.getKeys().add("B");
-        serializer.getKeys().add("C");
+        serializer.setKeys("A", "B", "C");
 
         List<?> result = serializer.readObject(reader);
         Dictionary<String, Object> row;
@@ -86,9 +84,7 @@ public class CSVSerializerTest {
         StringReader reader = new StringReader(buf.toString());
 
         CSVSerializer serializer = new CSVSerializer();
-        serializer.getKeys().add("A");
-        serializer.getKeys().add("B");
-        serializer.getKeys().add("C");
+        serializer.setKeys("A", "B", "C");
 
         List<?> result = serializer.readObject(reader);
 
@@ -107,9 +103,7 @@ public class CSVSerializerTest {
         StringReader reader = new StringReader(buf.toString());
 
         CSVSerializer serializer = new CSVSerializer();
-        serializer.getKeys().add("A");
-        serializer.getKeys().add("B");
-        serializer.getKeys().add("C");
+        serializer.setKeys("A", "B", "C");
 
         List<?> result = serializer.readObject(reader);
 
@@ -128,9 +122,7 @@ public class CSVSerializerTest {
         StringReader reader = new StringReader(buf.toString());
 
         CSVSerializer serializer = new CSVSerializer();
-        serializer.getKeys().add("A");
-        serializer.getKeys().add("B");
-        serializer.getKeys().add("C");
+        serializer.setKeys("A", "B", "C");
 
         List<?> result = serializer.readObject(reader);
 
@@ -158,9 +150,7 @@ public class CSVSerializerTest {
         StringWriter writer = new StringWriter();
 
         CSVSerializer serializer = new CSVSerializer();
-        serializer.getKeys().add("A");
-        serializer.getKeys().add("B");
-        serializer.getKeys().add("C");
+        serializer.setKeys("A", "B", "C");
 
         serializer.writeObject(items, writer);
 
@@ -180,9 +170,7 @@ public class CSVSerializerTest {
         StringWriter writer = new StringWriter();
 
         CSVSerializer serializer = new CSVSerializer();
-        serializer.getKeys().add("A");
-        serializer.getKeys().add("B");
-        serializer.getKeys().add("C");
+        serializer.setKeys("A", "B", "C");
 
         serializer.writeObject(items, writer);
 
@@ -202,9 +190,7 @@ public class CSVSerializerTest {
         StringWriter writer = new StringWriter();
 
         CSVSerializer serializer = new CSVSerializer();
-        serializer.getKeys().add("A");
-        serializer.getKeys().add("B");
-        serializer.getKeys().add("C");
+        serializer.setKeys("A", "B", "C");
 
         serializer.writeObject(items, writer);
 
@@ -224,9 +210,7 @@ public class CSVSerializerTest {
         StringWriter writer = new StringWriter();
 
         CSVSerializer serializer = new CSVSerializer();
-        serializer.getKeys().add("A");
-        serializer.getKeys().add("B");
-        serializer.getKeys().add("C");
+        serializer.setKeys("A", "B", "C");
 
         serializer.writeObject(items, writer);
 
