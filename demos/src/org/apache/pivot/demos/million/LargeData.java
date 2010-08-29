@@ -25,110 +25,96 @@ import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.io.IOTask;
+import org.apache.pivot.serialization.CSVSerializerListener;
 import org.apache.pivot.serialization.CSVSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.concurrent.Task;
+import org.apache.pivot.util.concurrent.TaskListener;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
-import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSortListener;
+import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowComparator;
 
 public class LargeData implements Application {
-    private class LoadDataCallback implements Runnable {
-        private class AddRowsCallback implements Runnable {
-            private ArrayList<Object> page;
-
-            public AddRowsCallback(ArrayList<Object> page) {
-                this.page = page;
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void run() {
-                List<Object> tableData = (List<Object>)tableView.getTableData();
-                for (Object item : page) {
-                    tableData.add(item);
-                }
-            }
-        }
-
+    private class LoadDataTask extends IOTask<Void> {
         private URL fileURL;
 
-        public LoadDataCallback(URL fileURL) {
+        public LoadDataTask(URL fileURL) {
             this.fileURL = fileURL;
         }
 
         @Override
-        public void run() {
-            Exception fault = null;
-
-            long t0 = System.currentTimeMillis();
-
-            int i = 0;
+        public Void execute() throws TaskExecutionException {
             try {
                 InputStream inputStream = null;
 
                 try {
-                    inputStream = fileURL.openStream();
+                    inputStream = new MonitoredInputStream(fileURL.openStream());
 
                     CSVSerializer csvSerializer = new CSVSerializer();
                     csvSerializer.setKeys("c0", "c1", "c2", "c3");
+                    csvSerializer.getCSVSerializerListeners().add(new CSVSerializerListener.Adapter() {
+                        private ArrayList<Object> page = new ArrayList<Object>(pageSize);
 
-                    CSVSerializer.StreamIterator streamIterator = csvSerializer.getStreamIterator(inputStream);
+                        @Override
+                        public void endList(CSVSerializer csvSerializer) {
+                            if (page.getLength() > 0) {
+                                ApplicationContext.queueCallback(new AddRowsCallback(page));
+                            }
+                        }
 
-                    ArrayList<Object> page = new ArrayList<Object>(pageSize);
-                    while (streamIterator.hasNext()
-                        && !abort) {
-                        Object item = streamIterator.next();
-                        if (item != null) {
+                        @Override
+                        public void readItem(CSVSerializer csvSerializer, Object item) {
                             page.add(item);
-                        }
-                        i++;
 
-                        if (!streamIterator.hasNext()
-                            || page.getLength() == pageSize) {
-                            ApplicationContext.queueCallback(new AddRowsCallback(page));
-                            page = new ArrayList<Object>(pageSize);
+                            if (page.getLength() == pageSize) {
+                                ApplicationContext.queueCallback(new AddRowsCallback(page));
+                                page = new ArrayList<Object>(pageSize);
+                            }
                         }
-                    }
+                    });
+
+                    csvSerializer.readObject(inputStream);
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();
                     }
                 }
             } catch(IOException exception) {
-                fault = exception;
+                throw new TaskExecutionException(exception);
             } catch(SerializationException exception) {
-                fault = exception;
+                throw new TaskExecutionException(exception);
             }
 
-            long t1 = System.currentTimeMillis();
+            return null;
+        }
+    }
 
-            final String status;
-            if (abort) {
-                status = "Aborted";
-            } else if (fault != null) {
-                status = fault.toString();
-            } else {
-                status = "Read " + i + " rows in " + (t1 - t0) + "ms";
+    private class AddRowsCallback implements Runnable {
+        private ArrayList<Object> page;
+
+        public AddRowsCallback(ArrayList<Object> page) {
+            this.page = page;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void run() {
+            List<Object> tableData = (List<Object>)tableView.getTableData();
+            for (Object item : page) {
+                tableData.add(item);
             }
-
-            ApplicationContext.queueCallback(new Runnable() {
-                @Override
-                public void run() {
-                    statusLabel.setText(status);
-                    loadDataButton.setEnabled(true);
-                    cancelButton.setEnabled(false);
-                }
-            });
         }
     }
 
@@ -142,14 +128,12 @@ public class LargeData implements Application {
     private TableView tableView = null;
 
     private int pageSize = 0;
-
-    private volatile boolean abort = false;
+    private LoadDataTask loadDataTask = null;
 
     private static final String BASE_PATH_KEY = "basePath";
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         basePath = properties.get(BASE_PATH_KEY);
         if (basePath == null) {
             throw new IllegalArgumentException(BASE_PATH_KEY + " is required.");
@@ -176,7 +160,7 @@ public class LargeData implements Application {
         cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                abort = true;
+                loadDataTask.abort();
 
                 loadDataButton.setEnabled(true);
                 cancelButton.setEnabled(false);
@@ -218,8 +202,6 @@ public class LargeData implements Application {
     }
 
     private void loadData() {
-        abort = false;
-
         int index = fileListButton.getSelectedIndex();
         int capacity = (int)Math.pow(10, index + 1);
         tableView.setTableData(new ArrayList<Object>(capacity));
@@ -240,15 +222,31 @@ public class LargeData implements Application {
         if (fileURL != null) {
             statusLabel.setText("Loading " + fileURL);
 
-            LoadDataCallback callback = new LoadDataCallback(fileURL);
-            Thread thread = new Thread(callback);
-            thread.setDaemon(true);
-            thread.setPriority(Thread.MIN_PRIORITY);
-            thread.start();
-        }
-    }
+            final long t0 = System.currentTimeMillis();
 
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(LargeData.class, args);
+            loadDataTask = new LoadDataTask(fileURL);
+            loadDataTask.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+                @Override
+                public void taskExecuted(Task<Void> task) {
+                    long t1 = System.currentTimeMillis();
+
+                    statusLabel.setText("Read " + tableView.getTableData().getLength() + " rows in "
+                        + (t1 - t0) + "ms");
+                    loadDataButton.setEnabled(true);
+                    cancelButton.setEnabled(false);
+
+                    loadDataTask = null;
+                }
+
+                @Override
+                public void executeFailed(Task<Void> task) {
+                    statusLabel.setText(task.getFault().toString());
+                    loadDataButton.setEnabled(true);
+                    cancelButton.setEnabled(false);
+
+                    loadDataTask = null;
+                }
+            }));
+        }
     }
 }

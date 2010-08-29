@@ -60,7 +60,7 @@ public interface TextAreaContentListener2 {
      * @param index
      * The index from which the text was removed.
      *
-     * @param characters
+     * @param count
      * The number of characters that were removed.
      */
     public void textRemoved(TextArea2 textArea, int index, int count);

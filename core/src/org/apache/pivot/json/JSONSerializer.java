@@ -43,12 +43,79 @@ import org.apache.pivot.io.EchoReader;
 import org.apache.pivot.io.EchoWriter;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Implementation of the {@link Serializer} interface that reads data from
  * and writes data to a JavaScript Object Notation (JSON) file.
  */
 public class JSONSerializer implements Serializer<Object> {
+    private static class JSONSerializerListenerList extends ListenerList<JSONSerializerListener>
+        implements JSONSerializerListener {
+        @Override
+        public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value) {
+            for (JSONSerializerListener listener : this) {
+                listener.beginDictionary(jsonSerializer, value);
+            }
+        }
+
+        @Override
+        public void endDictionary(JSONSerializer jsonSerializer) {
+            for (JSONSerializerListener listener : this) {
+                listener.endDictionary(jsonSerializer);
+            }
+        }
+
+        @Override
+        public void readKey(JSONSerializer jsonSerializer, String key) {
+            for (JSONSerializerListener listener : this) {
+                listener.readKey(jsonSerializer, key);
+            }
+        }
+
+        @Override
+        public void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value) {
+            for (JSONSerializerListener listener : this) {
+                listener.beginSequence(jsonSerializer, value);
+            }
+        }
+
+        @Override
+        public void endSequence(JSONSerializer jsonSerializer) {
+            for (JSONSerializerListener listener : this) {
+                listener.endSequence(jsonSerializer);
+            }
+        }
+
+        @Override
+        public void readString(JSONSerializer jsonSerializer, String value) {
+            for (JSONSerializerListener listener : this) {
+                listener.readString(jsonSerializer, value);
+            }
+        }
+
+        @Override
+        public void readNumber(JSONSerializer jsonSerializer, Number value) {
+            for (JSONSerializerListener listener : this) {
+                listener.readNumber(jsonSerializer, value);
+            }
+        }
+
+        @Override
+        public void readBoolean(JSONSerializer jsonSerializer, Boolean value) {
+            for (JSONSerializerListener listener : this) {
+                listener.readBoolean(jsonSerializer, value);
+            }
+        }
+
+        @Override
+        public void readNull(JSONSerializer jsonSerializer) {
+            for (JSONSerializerListener listener : this) {
+                listener.readNull(jsonSerializer);
+            }
+        }
+    }
+
     private Charset charset;
     private Type type;
 
@@ -56,6 +123,8 @@ public class JSONSerializer implements Serializer<Object> {
     private boolean verbose = false;
 
     private int c = -1;
+
+    private JSONSerializerListenerList jsonSerializerListeners = null;
 
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
     public static final Type DEFAULT_TYPE = Object.class;
@@ -169,14 +238,17 @@ public class JSONSerializer implements Serializer<Object> {
      * The reader from which data will be read.
      *
      * @return
-     * One of the following types, depending on the content of the stream:
+     * One of the following types, depending on the content of the stream
+     * and the value of {@link #getType()}:
      *
      * <ul>
+     * <li>pivot.collections.Dictionary</li>
+     * <li>pivot.collections.Sequence</li>
      * <li>java.lang.String</li>
      * <li>java.lang.Number</li>
      * <li>java.lang.Boolean</li>
-     * <li>pivot.collections.List</li>
-     * <li>pivot.collections.Map</li>
+     * <li><tt>null</tt></li>
+     * <li>A JavaBean object</li>
      * </ul>
      */
     public Object readObject(Reader reader)
@@ -214,17 +286,17 @@ public class JSONSerializer implements Serializer<Object> {
         }
 
         if (c == 'n') {
-            object = readNull(reader);
+            object = readNullValue(reader);
         } else if (c == '"' || c == '\'') {
-            object = readString(reader, type);
+            object = readStringValue(reader, type);
         } else if (c == '+' || c == '-' || Character.isDigit(c)) {
-            object = readNumber(reader, type);
+            object = readNumberValue(reader, type);
         } else if (c == 't' || c == 'f') {
-            object = readBoolean(reader, type);
+            object = readBooleanValue(reader, type);
         } else if (c == '[') {
-            object = readList(reader, type);
+            object = readListValue(reader, type);
         } else if (c == '{') {
-            object = readMap(reader, type);
+            object = readMapValue(reader, type);
         } else {
             throw new SerializationException("Unexpected character in input stream.");
         }
@@ -278,7 +350,7 @@ public class JSONSerializer implements Serializer<Object> {
         }
     }
 
-    private Object readNull(Reader reader)
+    private Object readNullValue(Reader reader)
         throws IOException, SerializationException {
         String nullString = "null";
 
@@ -298,10 +370,15 @@ public class JSONSerializer implements Serializer<Object> {
             throw new SerializationException("Incomplete null value in input stream.");
         }
 
+        // Notify the listeners
+        if (jsonSerializerListeners != null) {
+            jsonSerializerListeners.readNull(this);
+        }
+
         return null;
     }
 
-    private Object readString(Reader reader, Type type)
+    private String readString(Reader reader)
         throws IOException, SerializationException {
         if (!(type instanceof Class<?>)) {
             throw new SerializationException("Cannot convert string to " + type + ".");
@@ -363,10 +440,22 @@ public class JSONSerializer implements Serializer<Object> {
         // Move to the next character after the delimiter
         c = reader.read();
 
-        return BeanAdapter.coerce(stringBuilder.toString(), (Class<?>)type);
+        return stringBuilder.toString();
     }
 
-    private Object readNumber(Reader reader, Type type)
+    private Object readStringValue(Reader reader, Type type)
+        throws IOException, SerializationException {
+        String string = readString(reader);
+
+        // Notify the listeners
+        if (jsonSerializerListeners != null) {
+            jsonSerializerListeners.readString(this, string);
+        }
+
+        return BeanAdapter.coerce(string, (Class<?>)type);
+    }
+
+    private Object readNumberValue(Reader reader, Type type)
         throws IOException, SerializationException {
         if (!(type instanceof Class<?>)) {
             throw new SerializationException("Cannot convert number to " + type + ".");
@@ -405,10 +494,15 @@ public class JSONSerializer implements Serializer<Object> {
             number = Double.parseDouble(stringBuilder.toString()) * (negative ? -1.0d : 1.0d);
         }
 
+        // Notify the listeners
+        if (jsonSerializerListeners != null) {
+            jsonSerializerListeners.readNumber(this, number);
+        }
+
         return BeanAdapter.coerce(number, (Class<?>)type);
     }
 
-    private Object readBoolean(Reader reader, Type type)
+    private Object readBooleanValue(Reader reader, Type type)
         throws IOException, SerializationException {
         if (!(type instanceof Class<?>)) {
             throw new SerializationException("Cannot convert number to " + type + ".");
@@ -431,11 +525,19 @@ public class JSONSerializer implements Serializer<Object> {
             throw new SerializationException("Incomplete boolean value in input stream.");
         }
 
-        return BeanAdapter.coerce(Boolean.parseBoolean(text), (Class<?>)type);
+        // Get the boolean value
+        Boolean value = Boolean.parseBoolean(text);
+
+        // Notify the listeners
+        if (jsonSerializerListeners != null) {
+            jsonSerializerListeners.readBoolean(this, value);
+        }
+
+        return BeanAdapter.coerce(value, (Class<?>)type);
     }
 
     @SuppressWarnings("unchecked")
-    private Object readList(Reader reader, Type type)
+    private Object readListValue(Reader reader, Type type)
         throws IOException, SerializationException {
         Sequence<Object> sequence;
         Type itemType;
@@ -480,6 +582,11 @@ public class JSONSerializer implements Serializer<Object> {
             }
         }
 
+        // Notify the listeners
+        if (jsonSerializerListeners != null) {
+            jsonSerializerListeners.beginSequence(this, sequence);
+        }
+
         // Move to the next character after '['
         c = reader.read();
         skipWhitespaceAndComments(reader);
@@ -503,11 +610,16 @@ public class JSONSerializer implements Serializer<Object> {
         // Move to the next character after ']'
         c = reader.read();
 
+        // Notify the listeners
+        if (jsonSerializerListeners != null) {
+            jsonSerializerListeners.endSequence(this);
+        }
+
         return sequence;
     }
 
     @SuppressWarnings("unchecked")
-    private Object readMap(Reader reader, Type type)
+    private Object readMapValue(Reader reader, Type type)
         throws IOException, SerializationException {
         Dictionary<String, Object> dictionary;
         Type valueType;
@@ -561,6 +673,11 @@ public class JSONSerializer implements Serializer<Object> {
             }
         }
 
+        // Notify the listeners
+        if (jsonSerializerListeners != null) {
+            jsonSerializerListeners.beginDictionary(this, dictionary);
+        }
+
         // Move to the next character after '{'
         c = reader.read();
         skipWhitespaceAndComments(reader);
@@ -570,11 +687,11 @@ public class JSONSerializer implements Serializer<Object> {
 
             if (c == '"' || c == '\'') {
                 // The key is a delimited string
-                key = (String)readString(reader, String.class);
+                key = readString(reader);
             } else {
                 // The key is an undelimited string; it must adhere to Java
                 // identifier syntax
-                StringBuilder keyStringBuilder = new StringBuilder();
+                StringBuilder keyBuilder = new StringBuilder();
 
                 if (!Character.isJavaIdentifierStart(c)) {
                     throw new SerializationException("Illegal identifier start character.");
@@ -586,7 +703,7 @@ public class JSONSerializer implements Serializer<Object> {
                         throw new SerializationException("Illegal identifier character.");
                     }
 
-                    keyStringBuilder.append((char)c);
+                    keyBuilder.append((char)c);
                     c = reader.read();
                 }
 
@@ -594,12 +711,17 @@ public class JSONSerializer implements Serializer<Object> {
                     throw new SerializationException("Unexpected end of input stream.");
                 }
 
-                key = keyStringBuilder.toString();
+                key = keyBuilder.toString();
             }
 
             if (key == null
                 || key.length() == 0) {
                 throw new SerializationException("\"" + key + "\" is not a valid key.");
+            }
+
+            // Notify listeners
+            if (jsonSerializerListeners != null) {
+                jsonSerializerListeners.readKey(this, key);
             }
 
             skipWhitespaceAndComments(reader);
@@ -629,6 +751,11 @@ public class JSONSerializer implements Serializer<Object> {
 
         // Move to the first character after '}'
         c = reader.read();
+
+        // Notify the listeners
+        if (jsonSerializerListeners != null) {
+            jsonSerializerListeners.endDictionary(this);
+        }
 
         return (dictionary instanceof BeanAdapter) ? ((BeanAdapter)dictionary).getBean() : dictionary;
     }
@@ -665,11 +792,12 @@ public class JSONSerializer implements Serializer<Object> {
      * The object to serialize. Must be one of the following types:
      *
      * <ul>
+     * <li>pivot.collections.Map</li>
+     * <li>pivot.collections.List</li>
      * <li>java.lang.String</li>
      * <li>java.lang.Number</li>
      * <li>java.lang.Boolean</li>
-     * <li>pivot.collections.List</li>
-     * <li>pivot.collections.Map</li>
+     * <li><tt>null</tt></li>
      * </ul>
      *
      * @param writer
@@ -1080,5 +1208,13 @@ public class JSONSerializer implements Serializer<Object> {
         } catch(SerializationException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    public ListenerList<JSONSerializerListener> getJSONSerializerListeners() {
+        if (jsonSerializerListeners == null) {
+            jsonSerializerListeners = new JSONSerializerListenerList();
+        }
+
+        return jsonSerializerListeners;
     }
 }

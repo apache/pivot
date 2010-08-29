@@ -24,6 +24,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.serialization.CSVSerializerListener;
 import org.apache.pivot.serialization.CSVSerializer;
 import org.apache.pivot.serialization.SerializationException;
 
@@ -46,8 +47,22 @@ public class CSVSerializerTest {
 
         CSVSerializer serializer = new CSVSerializer();
         serializer.setKeys("A", "B", "C");
+        serializer.getCSVSerializerListeners().add(new CSVSerializerListener() {
+            public void beginList(CSVSerializer csvSerializer, List<?> list) {
+                System.out.println("Begin list: " + list);
+            }
+
+            public void endList(CSVSerializer csvSerializer) {
+                System.out.println("End list");
+            }
+
+            public void readItem(CSVSerializer csvSerializer, Object item) {
+                System.out.println("Read item: " + item);
+            }
+        });
 
         List<?> result = serializer.readObject(reader);
+
         Dictionary<String, Object> row;
 
         // Test the first row

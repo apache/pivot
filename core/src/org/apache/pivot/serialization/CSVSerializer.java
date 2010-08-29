@@ -29,7 +29,6 @@ import java.io.Writer;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import java.util.NoSuchElementException;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayAdapter;
@@ -40,48 +39,34 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.EchoReader;
 import org.apache.pivot.io.EchoWriter;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Implementation of the {@link Serializer} interface that reads data from
  * and writes data to a comma-separated value (CSV) file.
  */
 public class CSVSerializer implements Serializer<List<?>> {
-    /**
-     * Allows a caller to retrieve the contents of a CSV stream iteratively.
-     */
-    public class StreamIterator {
-        private Reader reader;
-
-        private StreamIterator(Reader reader) throws IOException {
-            this.reader = reader;
-
-            // Move to the first character
-            c = reader.read();
-        }
-
-        public boolean hasNext() {
-            return (c != -1);
-        }
-
-        public Object next() throws IOException, SerializationException {
-            if (c == -1) {
-                throw new NoSuchElementException();
+    private static class CSVSerializerListenerList extends ListenerList<CSVSerializerListener>
+        implements CSVSerializerListener {
+        @Override
+        public void beginList(CSVSerializer csvSerializer, List<?> list) {
+            for (CSVSerializerListener listener : this) {
+                listener.beginList(csvSerializer, list);
             }
-
-            Object item = readItem(reader);
-            if (item != null) {
-                // Move to next line
-                while (c != -1
-                    && (c == '\r' || c == '\n')) {
-                    c = reader.read();
-                }
-            }
-
-            return item;
         }
 
-        public void remove() {
-            throw new UnsupportedOperationException();
+        @Override
+        public void endList(CSVSerializer csvSerializer) {
+            for (CSVSerializerListener listener : this) {
+                listener.endList(csvSerializer);
+            }
+        }
+
+        @Override
+        public void readItem(CSVSerializer csvSerializer, Object item) {
+            for (CSVSerializerListener listener : this) {
+                listener.readItem(csvSerializer, item);
+            }
         }
     }
 
@@ -93,7 +78,9 @@ public class CSVSerializer implements Serializer<List<?>> {
     private boolean writeKeys = false;
     private boolean verbose = false;
 
-    int c = -1;
+    private int c = -1;
+
+    private CSVSerializerListenerList csvSerializerListeners = null;
 
     public static final String DEFAULT_CHARSET_NAME = "ISO-8859-1";
     public static final Type DEFAULT_ITEM_TYPE = HashMap.class;
@@ -271,7 +258,12 @@ public class CSVSerializer implements Serializer<List<?>> {
             }
         }
 
+        // Create the list and notify the listeners
         ArrayList<Object> items = new ArrayList<Object>();
+
+        if (csvSerializerListeners != null) {
+            csvSerializerListeners.beginList(this, items);
+        }
 
         // Move to the first character
         c = lineNumberReader.read();
@@ -299,36 +291,12 @@ public class CSVSerializer implements Serializer<List<?>> {
             throw exception;
         }
 
+        // Notify the listeners
+        if (csvSerializerListeners != null) {
+            csvSerializerListeners.endList(this);
+        }
+
         return items;
-    }
-
-    /**
-     * Reads values from a comma-separated value stream.
-     *
-     * @param inputStream
-     * The input stream from which data will be read.
-     *
-     * @see #getStreamIterator(Reader)
-     */
-    public StreamIterator getStreamIterator(InputStream inputStream) throws IOException {
-        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset),
-            BUFFER_SIZE);
-        return getStreamIterator(reader);
-    }
-
-    /**
-     * Reads values from a comma-separated value stream.
-     *
-     * @param reader
-     * The reader from which data will be read.
-     *
-     * @return
-     * A stream iterator on the data read from the CSV file. The list items are
-     * instances of Dictionary<String, Object> populated by mapping columns in
-     * the CSV file to keys in the key sequence.
-     */
-    public StreamIterator getStreamIterator(Reader reader) throws IOException {
-        return new StreamIterator(reader);
     }
 
     @SuppressWarnings("unchecked")
@@ -384,6 +352,11 @@ public class CSVSerializer implements Serializer<List<?>> {
                 }
 
                 itemDictionary.put(key, value);
+            }
+
+            // Notify the listeners
+            if (csvSerializerListeners != null) {
+                csvSerializerListeners.readItem(this, item);
             }
         }
 
@@ -565,5 +538,13 @@ public class CSVSerializer implements Serializer<List<?>> {
     @Override
     public String getMIMEType(List<?> objects) {
         return MIME_TYPE + "; charset=" + charset.name();
+    }
+
+    public ListenerList<CSVSerializerListener> getCSVSerializerListeners() {
+        if (csvSerializerListeners == null) {
+            csvSerializerListeners = new CSVSerializerListenerList();
+        }
+
+        return csvSerializerListeners;
     }
 }

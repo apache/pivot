@@ -314,7 +314,7 @@ public abstract class Query<V> extends IOTask<V> {
      * query.
      *
      * @param serializer
-     *            The serializer (must be non-null).
+     * The serializer (must be non-null).
      */
     public void setSerializer(Serializer<?> serializer) {
         if (serializer == null) {

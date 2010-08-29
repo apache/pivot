@@ -21,8 +21,10 @@ import java.io.IOException;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.xml.Element;
+import org.apache.pivot.xml.TextNode;
 import org.apache.pivot.xml.XML;
 import org.apache.pivot.xml.XMLSerializer;
+import org.apache.pivot.xml.XMLSerializerListener;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -87,7 +89,27 @@ public class XMLSerializerTest {
     @Test
     public void equalsTest() throws IOException, SerializationException {
         XMLSerializer xmlSerializer = new XMLSerializer();
+        XMLSerializerListener xmlSerializerListener = new XMLSerializerListener() {
+            @Override
+            public void beginElement(XMLSerializer xmlSerializer, Element element) {
+                System.out.println("Begin element: " + element);
+            }
+
+            @Override
+            public void endElement(XMLSerializer xmlSerializer) {
+                System.out.println("End element");
+            }
+
+            @Override
+            public void readTextNode(XMLSerializer xmlSerializer, TextNode textNode) {
+                System.out.println("Read text node: " + textNode);
+            }
+        };
+
+        xmlSerializer.getXMLSerializerListeners().add(xmlSerializerListener);
         Element root1 = xmlSerializer.readObject(getClass().getResourceAsStream("sample.xml"));
+
+        xmlSerializer.getXMLSerializerListeners().remove(xmlSerializerListener);
         Element root2 = xmlSerializer.readObject(getClass().getResourceAsStream("sample.xml"));
 
         assertTrue(root1.equals(root2));

@@ -36,12 +36,39 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Reads and writes XML data.
  */
 public class XMLSerializer implements Serializer<Element> {
+    private static class XMLSerializerListenerList extends ListenerList<XMLSerializerListener>
+        implements XMLSerializerListener {
+        @Override
+        public void beginElement(XMLSerializer xmlSerializer, Element element) {
+            for (XMLSerializerListener listener : this) {
+                listener.beginElement(xmlSerializer, element);
+            }
+        }
+
+        @Override
+        public void endElement(XMLSerializer xmlSerializer) {
+            for (XMLSerializerListener listener : this) {
+                listener.endElement(xmlSerializer);
+            }
+        }
+
+        @Override
+        public void readTextNode(XMLSerializer xmlSerializer, TextNode textNode) {
+            for (XMLSerializerListener listener : this) {
+                listener.readTextNode(xmlSerializer, textNode);
+            }
+        }
+    }
+
     private Charset charset = null;
+
+    private XMLSerializerListenerList xmlSerializerListeners = null;
 
     public static final String XMLNS_ATTRIBUTE_PREFIX = "xmlns";
 
@@ -51,11 +78,7 @@ public class XMLSerializer implements Serializer<Element> {
     public static final int BUFFER_SIZE = 2048;
 
     public XMLSerializer() {
-        this(DEFAULT_CHARSET_NAME);
-    }
-
-    public XMLSerializer(String charsetName) {
-        this(charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName));
+        this(Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
     public XMLSerializer(Charset charset) {
@@ -105,8 +128,14 @@ public class XMLSerializer implements Serializer<Element> {
                 switch (event) {
                     case XMLStreamConstants.CHARACTERS: {
                         if (!xmlStreamReader.isWhiteSpace()) {
-                            String text = xmlStreamReader.getText();
-                            current.add(new TextNode(text));
+                            TextNode textNode = new TextNode(xmlStreamReader.getText());
+
+                            // Notify listeners
+                            if (xmlSerializerListeners != null) {
+                                xmlSerializerListeners.readTextNode(this, textNode);
+                            }
+
+                            current.add(textNode);
                         }
 
                         break;
@@ -157,12 +186,22 @@ public class XMLSerializer implements Serializer<Element> {
                             current.add(element);
                         }
 
+                        // Notify listeners
+                        if (xmlSerializerListeners != null) {
+                            xmlSerializerListeners.beginElement(this, element);
+                        }
+
                         current = element;
 
                         break;
                     }
 
                     case XMLStreamConstants.END_ELEMENT: {
+                        // Notify listeners
+                        if (xmlSerializerListeners != null) {
+                            xmlSerializerListeners.endElement(this);
+                        }
+
                         // Move up the stack
                         current = current.getParent();
 
@@ -285,5 +324,13 @@ public class XMLSerializer implements Serializer<Element> {
     @Override
     public String getMIMEType(Element object) {
         return MIME_TYPE;
+    }
+
+    public ListenerList<XMLSerializerListener> getXMLSerializerListeners() {
+        if (xmlSerializerListeners == null) {
+            xmlSerializerListeners = new XMLSerializerListenerList();
+        }
+
+        return xmlSerializerListeners;
     }
 }

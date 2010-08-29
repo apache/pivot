@@ -22,9 +22,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
+import org.apache.pivot.json.JSONSerializerListener;
 import org.apache.pivot.serialization.SerializationException;
 import org.junit.Test;
 
@@ -54,7 +57,57 @@ public class JSONSerializerTest {
     @Test
     public void testEquals() throws IOException, SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
+        JSONSerializerListener jsonSerializerListener = new JSONSerializerListener() {
+            @Override
+            public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value) {
+                System.out.println("Begin dictionary: " + value);
+            }
+
+            @Override
+            public void endDictionary(JSONSerializer jsonSerializer) {
+                System.out.println("End dictionary");
+            }
+
+            @Override
+            public void readKey(JSONSerializer jsonSerializer, String key) {
+                System.out.println("Read key: " + key);
+            }
+
+            @Override
+            public void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value) {
+                System.out.println("Begin sequence: " + value);
+            }
+
+            @Override
+            public void endSequence(JSONSerializer jsonSerializer) {
+                System.out.println("End sequence");
+            }
+
+            @Override
+            public void readString(JSONSerializer jsonSerializer, String value) {
+                System.out.println("Read string: " + value);
+            }
+
+            @Override
+            public void readNumber(JSONSerializer jsonSerializer, Number value) {
+                System.out.println("Read number: " + value);
+            }
+
+            @Override
+            public void readBoolean(JSONSerializer jsonSerializer, Boolean value) {
+                System.out.println("Read boolean: " + value);
+            }
+
+            @Override
+            public void readNull(JSONSerializer jsonSerializer) {
+                System.out.println("Read null");
+            }
+        };
+
+        jsonSerializer.getJSONSerializerListeners().add(jsonSerializerListener);
         Object o1 = jsonSerializer.readObject(getClass().getResourceAsStream("sample.json"));
+
+        jsonSerializer.getJSONSerializerListeners().remove(jsonSerializerListener);
         Object o2 = jsonSerializer.readObject(getClass().getResourceAsStream("sample.json"));
 
         assertTrue(o1.equals(o2));
