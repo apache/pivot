@@ -1301,24 +1301,23 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     // Text input character events
     @Override
     public Vote previewInsertText(TextInput textInput, String text, int index) {
-        Vote vote;
+        Vote vote = Vote.APPROVE;
+
         if (textInput.isStrictValidation()) {
             Validator validator = textInput.getValidator();
-            StringBuilder textBuilder = new StringBuilder();
+            if (validator != null) {
+                StringBuilder textBuilder = new StringBuilder();
 
-            CharSequence characters = textInput.getCharacters();
-            textBuilder.append(characters.subSequence(0, index));
-            textBuilder.append(text);
-            textBuilder.append(characters.subSequence(index, characters.length()));
+                CharSequence characters = textInput.getCharacters();
+                textBuilder.append(characters.subSequence(0, index));
+                textBuilder.append(text);
+                textBuilder.append(characters.subSequence(index, characters.length()));
 
-            if (validator.isValid(textBuilder.toString())) {
-                vote = Vote.APPROVE;
-            } else {
-                vote = Vote.DENY;
-                Toolkit.getDefaultToolkit().beep();
+                if (!validator.isValid(textBuilder.toString())) {
+                    vote = Vote.DENY;
+                    Toolkit.getDefaultToolkit().beep();
+                }
             }
-        } else {
-            vote = Vote.APPROVE;
         }
 
         return vote;
@@ -1336,20 +1335,19 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     @Override
     public Vote previewRemoveText(TextInput textInput, int index, int count) {
-        Vote vote;
+        Vote vote = Vote.APPROVE;
+
         if (textInput.isStrictValidation()) {
             Validator validator = textInput.getValidator();
-            StringBuilder textBuilder = new StringBuilder(textInput.getCharacters());
-            textBuilder.delete(index, index + count);
+            if (validator != null) {
+                StringBuilder textBuilder = new StringBuilder(textInput.getCharacters());
+                textBuilder.delete(index, index + count);
 
-            if (validator.isValid(textBuilder.toString())) {
-                vote = Vote.APPROVE;
-            } else {
-                vote = Vote.DENY;
-                Toolkit.getDefaultToolkit().beep();
+                if (!validator.isValid(textBuilder.toString())) {
+                    vote = Vote.DENY;
+                    Toolkit.getDefaultToolkit().beep();
+                }
             }
-        } else {
-            vote = Vote.APPROVE;
         }
 
         return vote;
