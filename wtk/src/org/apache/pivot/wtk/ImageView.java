@@ -412,6 +412,13 @@ public class ImageView extends Component {
         }
     }
 
+    @Override
+    public void clear() {
+        if (imageKey != null) {
+            setImage((Image)null);
+        }
+    }
+
     /**
      * Returns the image view listener list.
      */
