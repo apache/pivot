@@ -105,8 +105,10 @@ public class TerraDialogSkin extends TerraFrameSkin
     @Override
     public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
         Dialog dialog = (Dialog)container;
-        Window rootOwner = dialog.getRootOwner();
-        rootOwner.moveToFront();
+        if (!dialog.isTopMost()) {
+            Window rootOwner = dialog.getRootOwner();
+            rootOwner.moveToFront();
+        }
 
         return super.mouseDown(container, button, x, y);
     }

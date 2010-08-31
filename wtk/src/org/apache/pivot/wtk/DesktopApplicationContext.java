@@ -154,16 +154,17 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         } else {
                             ((TitledWindow)hostWindow).setTitle(DesktopDisplayHost.this.rootOwner.getTitle());
 
-                            java.util.ArrayList<BufferedImage> pictures = new java.util.ArrayList<BufferedImage>();
+                            java.util.ArrayList<BufferedImage> iconImages = new java.util.ArrayList<BufferedImage>();
                             for (Image icon : DesktopDisplayHost.this.rootOwner.getIcons()) {
                                 if (icon instanceof Picture) {
-                                    pictures.add(((Picture) icon).getBufferedImage());
+                                    iconImages.add(((Picture) icon).getBufferedImage());
                                 }
                             }
-                            if (pictures.size() == 1) {
-                                hostWindow.setIconImage(pictures.get(0));
-                            } else if (pictures.size() > 1) {
-                                hostWindow.setIconImages(pictures);
+
+                            if (iconImages.size() == 1) {
+                                hostWindow.setIconImage(iconImages.get(0));
+                            } else if (iconImages.size() > 1) {
+                                hostWindow.setIconImages(iconImages);
                             }
                         }
 

@@ -23,6 +23,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -35,7 +36,6 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
-import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewColumnListener;
@@ -265,13 +265,15 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             borderColor = disabledBorderColor;
         }
 
+        // Paint the background
         graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
             width / 2f, height, backgroundColor));
         graphics.fillRect(0, 0, width, height);
 
         // Paint the border
         graphics.setPaint(borderColor);
-        GraphicsUtilities.drawLine(graphics, 0, height - 1, width, Orientation.HORIZONTAL);
+        graphics.setStroke(new BasicStroke(1));
+        graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5, height - 0.5));
 
         // Paint the content
         TableView tableView = tableViewHeader.getTableView();
@@ -289,7 +291,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 if (columnIndex == pressedHeaderIndex) {
                     graphics.setPaint(new GradientPaint(width / 2f, 0, pressedBevelColor,
                         width / 2f, height, backgroundColor));
-                    graphics.fillRect(0, 0, width, height);
+                    graphics.fillRect(headerX, 0, headerWidth, height - 1);
                 }
 
                 // Paint the header data
@@ -340,7 +342,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 if (columnIndex < columnCount - 1
                     || includeTrailingVerticalGridLine) {
                     graphics.setPaint(borderColor);
-                    GraphicsUtilities.drawLine(graphics, headerX, 0, height, Orientation.VERTICAL);
+                    graphics.draw(new Line2D.Double(headerX + 0.5, 0.5, headerX + 0.5, height - 0.5));
                 }
 
                 headerX++;
@@ -705,7 +707,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                         resizeHeaderIndex = headerIndex;
                     } else if (headersPressable) {
                         pressedHeaderIndex = headerIndex;
-                        repaintComponent(getHeaderBounds(pressedHeaderIndex));
+                        repaintComponent(headerBounds);
                     }
                 }
             }

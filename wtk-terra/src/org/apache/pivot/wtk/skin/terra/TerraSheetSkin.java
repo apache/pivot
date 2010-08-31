@@ -424,8 +424,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     @Override
     public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
         Sheet sheet = (Sheet)container;
-        Window owner = sheet.getOwner();
-        owner.moveToFront();
+        if (!sheet.isTopMost()) {
+            Window owner = sheet.getOwner();
+            owner.moveToFront();
+        }
 
         boolean consumed = super.mouseDown(container, button, x, y);
 

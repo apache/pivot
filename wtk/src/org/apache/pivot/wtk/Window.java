@@ -945,6 +945,22 @@ public class Window extends Container {
     }
 
     /**
+     * Determines if this is the top-most window.
+     */
+    public boolean isTopMost() {
+        Display display = getDisplay();
+        return display.get(display.getLength() - 1) == this;
+    }
+
+    /**
+     * Determines if this is the bottom-most window.
+     */
+    public boolean isBottomMost() {
+        Display display = getDisplay();
+        return display.get(0) == this;
+    }
+
+    /**
      * Moves the window to the top of the window stack. All owned windows are
      * subsequently moved to the front, ensuring that this window's owned windows
      * remain on top of it. If the window does not have any owned windows,
