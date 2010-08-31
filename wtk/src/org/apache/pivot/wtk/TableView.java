@@ -523,14 +523,14 @@ public class TableView extends Component {
          * @param disabled
          * If <tt>true</tt>, the row is disabled.
          */
-        public void render(Object row, int rowIndex, int columnIndex,
-            TableView tableView, String columnName,
-            boolean selected, boolean highlighted, boolean disabled);
+        public void render(Object row, int rowIndex, int columnIndex, TableView tableView,
+            String columnName, boolean selected, boolean highlighted, boolean disabled);
 
         /**
          * Converts table view cell data to a string representation.
          *
          * @param row
+         * @param columnName
          *
          * @return
          * The cell data's string representation, or <tt>null</tt> if the data does not

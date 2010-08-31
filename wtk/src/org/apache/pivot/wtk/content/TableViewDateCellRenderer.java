@@ -24,8 +24,6 @@ import java.util.Date;
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.CalendarDate;
-import org.apache.pivot.wtk.TableView;
-
 
 /**
  * Default renderer for table view cells that contain date data. Renders
@@ -54,41 +52,29 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void render(Object row, int rowIndex, int columnIndex,
-        TableView tableView, String columnName,
-        boolean selected, boolean highlighted, boolean disabled) {
-        renderStyles(tableView, selected, disabled);
-
-        String formattedDate = null;
-
-        if (row != null) {
-            // Get the row and cell data
-            if (columnName != null) {
-                Dictionary<String, Object> rowData;
-                if (row instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)row;
-                } else {
-                    rowData = new BeanAdapter(row);
-                }
-
-                Object cellData = rowData.get(columnName);
-
-                if (cellData != null) {
-                    if (cellData instanceof Date) {
-                        formattedDate = dateFormat.format((Date)cellData);
-                    } else if (cellData instanceof Long) {
-                        formattedDate = dateFormat.format(new Date((Long)cellData));
-                    } else if (cellData instanceof Calendar) {
-                        formattedDate = dateFormat.format(((Calendar)cellData).getTime());
-                    } else if (cellData instanceof CalendarDate) {
-                        formattedDate = dateFormat.format(((CalendarDate)cellData).toCalendar().getTime());
-                    } else {
-                        System.err.println(getClass().getName() + " cannot render " + cellData);
-                    }
-                }
-            }
+    public String toString(Object row, String columnName) {
+        Dictionary<String, Object> dictionary;
+        if (row instanceof Dictionary<?, ?>) {
+            dictionary = (Dictionary<String, Object>)row;
+        } else {
+            dictionary = new BeanAdapter(row);
         }
 
-        setText(formattedDate);
+        Object cellData = dictionary.get(columnName);
+
+        String string;
+        if (cellData instanceof Date) {
+            string = dateFormat.format((Date)cellData);
+        } else if (cellData instanceof Long) {
+            string = dateFormat.format(new Date((Long)cellData));
+        } else if (cellData instanceof Calendar) {
+            string = dateFormat.format(((Calendar)cellData).getTime());
+        } else if (cellData instanceof CalendarDate) {
+            string = dateFormat.format(((CalendarDate)cellData).toCalendar().getTime());
+        } else {
+            string = (cellData == null) ? null : cellData.toString();
+        }
+
+        return string;
     }
 }

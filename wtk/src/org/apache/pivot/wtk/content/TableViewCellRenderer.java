@@ -27,7 +27,6 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.VerticalAlignment;
 
-
 /**
  * Default table cell renderer. Renders cell contents as a string.
  */
@@ -47,30 +46,19 @@ public class TableViewCellRenderer extends Label
         validate();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
         boolean selected, boolean highlighted, boolean disabled) {
         renderStyles(tableView, selected, disabled);
 
-        if (row != null) {
-            // Get the row and cell data
-            Object cellData = null;
-
-            if (columnName != null) {
-                Dictionary<String, Object> rowData;
-                if (row instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)row;
-                } else {
-                    rowData = new BeanAdapter(row);
-                }
-
-                cellData = rowData.get(columnName);
-            }
-
-            setText(cellData == null ? null : cellData.toString());
+        String text = null;
+        if (row != null
+            && columnName != null) {
+            text = toString(row, columnName);
         }
+
+        setText(text);
     }
 
     protected void renderStyles(TableView tableView, boolean rowSelected, boolean rowDisabled) {
@@ -98,21 +86,17 @@ public class TableViewCellRenderer extends Label
         styles.put("color", color);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public String toString(Object row, String columnName) {
-        // Get the row and cell data
-        Object cellData = null;
-
-        if (columnName != null) {
-            Dictionary<String, Object> rowData;
-            if (row instanceof Dictionary<?, ?>) {
-                rowData = (Dictionary<String, Object>)row;
-            } else {
-                rowData = new BeanAdapter(row);
-            }
-
-            cellData = rowData.get(columnName);
+        Dictionary<String, Object> dictionary;
+        if (row instanceof Dictionary<?, ?>) {
+            dictionary = (Dictionary<String, Object>)row;
+        } else {
+            dictionary = new BeanAdapter(row);
         }
+
+        Object cellData = dictionary.get(columnName);
 
         return (cellData == null) ? null : cellData.toString();
     }

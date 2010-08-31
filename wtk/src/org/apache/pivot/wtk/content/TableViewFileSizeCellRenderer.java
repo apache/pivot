@@ -21,7 +21,6 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.text.FileSizeFormat;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
-import org.apache.pivot.wtk.TableView;
 
 /**
  * Default renderer for table view cells that contain file size data. Renders
@@ -38,34 +37,23 @@ public class TableViewFileSizeCellRenderer extends TableViewCellRenderer {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void render(Object row, int rowIndex, int columnIndex,
-        TableView tableView, String columnName,
-        boolean selected, boolean highlighted, boolean disabled) {
-        renderStyles(tableView, selected, disabled);
-
-        if (row != null) {
-            String formattedFileSize = null;
-
-            // Get the row and cell data
-            if (columnName != null) {
-                Dictionary<String, Object> rowData;
-                if (row instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)row;
-                } else {
-                    rowData = new BeanAdapter(row);
-                }
-
-                Object cellData = rowData.get(columnName);
-
-                if (cellData instanceof Number) {
-                    formattedFileSize = FileSizeFormat.getInstance().format(cellData);
-                } else {
-                    System.err.println("Data for \"" + columnName + "\" is not an instance of "
-                        + Number.class.getName());
-                }
-            }
-
-            setText(formattedFileSize);
+    public String toString(Object row, String columnName) {
+        Dictionary<String, Object> dictionary;
+        if (row instanceof Dictionary<?, ?>) {
+            dictionary = (Dictionary<String, Object>)row;
+        } else {
+            dictionary = new BeanAdapter(row);
         }
+
+        Object cellData = dictionary.get(columnName);
+
+        String string;
+        if (cellData instanceof Number) {
+            string = FileSizeFormat.getInstance().format(cellData);
+        } else {
+            string = (cellData == null) ? null : cellData.toString();
+        }
+
+        return string;
     }
 }

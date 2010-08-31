@@ -23,7 +23,6 @@ import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
-import org.apache.pivot.wtk.TableView;
 
 /**
  * Default renderer for table view cells that contain numeric data. Renders
@@ -60,35 +59,23 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void render(Object row, int rowIndex, int columnIndex,
-        TableView tableView, String columnName,
-        boolean selected, boolean highlighted, boolean disabled) {
-        renderStyles(tableView, selected, disabled);
-
-        String formattedNumber = null;
-
-        if (row != null
-            && columnName != null) {
-            // Get the row and cell data
-            Dictionary<String, Object> rowData;
-            if (row instanceof Dictionary<?, ?>) {
-                rowData = (Dictionary<String, Object>)row;
-            } else {
-                rowData = new BeanAdapter(row);
-            }
-
-            Object cellData = rowData.get(columnName);
-
-            if (cellData != null) {
-                if (cellData instanceof Number) {
-                    formattedNumber = numberFormat.format(cellData);
-                } else {
-                    System.err.println("Data for \"" + columnName + "\" is a "
-                        + cellData.getClass().getName() + ", not a " + Number.class.getName());
-                }
-            }
+    public String toString(Object row, String columnName) {
+        Dictionary<String, Object> dictionary;
+        if (row instanceof Dictionary<?, ?>) {
+            dictionary = (Dictionary<String, Object>)row;
+        } else {
+            dictionary = new BeanAdapter(row);
         }
 
-        setText(formattedNumber);
+        Object cellData = dictionary.get(columnName);
+
+        String string;
+        if (cellData instanceof Number) {
+            string = numberFormat.format(cellData);
+        } else {
+            string = (cellData == null) ? null : cellData.toString();
+        }
+
+        return string;
     }
 }

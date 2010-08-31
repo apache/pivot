@@ -30,8 +30,7 @@ import org.apache.pivot.wtk.TextArea;
  * Renders cell contents as a string using a text area (which supports line feeds,
  * which the default label-based table view cell renderer does not).
  */
-public class TableViewTextAreaCellRenderer extends TextArea
-    implements TableView.CellRenderer {
+public class TableViewTextAreaCellRenderer extends TextArea implements TableView.CellRenderer {
     public TableViewTextAreaCellRenderer() {
         getStyles().put("margin", new Insets(2));
     }
@@ -45,30 +44,19 @@ public class TableViewTextAreaCellRenderer extends TextArea
         validate();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
         boolean selected, boolean highlighted, boolean disabled) {
         renderStyles(tableView, selected, disabled);
 
-        if (row != null) {
-            Object cellData = null;
-
-            // Get the row and cell data
-            if (columnName != null) {
-                Dictionary<String, Object> rowData;
-                if (row instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)row;
-                } else {
-                    rowData = new BeanAdapter(row);
-                }
-
-                cellData = rowData.get(columnName);
-            }
-
-            setText(cellData == null ? null : cellData.toString());
+        String text = null;
+        if (row != null
+            && columnName != null) {
+            text = toString(row, columnName);
         }
+
+        setText(text);
     }
 
     protected void renderStyles(TableView tableView, boolean rowSelected, boolean rowDisabled) {
@@ -96,22 +84,17 @@ public class TableViewTextAreaCellRenderer extends TextArea
         styles.put("color", color);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public String toString(Object row, String columnName) {
-        Object cellData = null;
-
-        // Get the row and cell data
-        if (columnName != null) {
-            Dictionary<String, Object> rowData;
-            if (row instanceof Dictionary<?, ?>) {
-                rowData = (Dictionary<String, Object>)row;
-            } else {
-                rowData = new BeanAdapter(row);
-            }
-
-            cellData = rowData.get(columnName);
+        Dictionary<String, Object> dictionary;
+        if (row instanceof Dictionary<?, ?>) {
+            dictionary = (Dictionary<String, Object>)row;
+        } else {
+            dictionary = new BeanAdapter(row);
         }
 
+        Object cellData = dictionary.get(columnName);
         return (cellData == null) ? null : cellData.toString();
     }
 }
