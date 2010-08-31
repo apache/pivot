@@ -739,9 +739,9 @@ public class Window extends Container {
     /**
      * Sets the window's icon by URL.
      * <p>
-     * <b>Note</b>: Using this signature will cause an entry to be added in the
-     * application context's {@linkplain ApplicationContext#getResourceCache()
-     * resource cache} if one does not already exist.
+     * If the icon already exists in the application context resource cache,
+     * the cached value will be used. Otherwise, the icon will be loaded
+     * synchronously and added to the cache.
      *
      * @param iconURL
      * The location of the icon to set.
@@ -770,21 +770,19 @@ public class Window extends Container {
     /**
      * Sets the window's icon by {@linkplain ClassLoader#getResource(String)
      * resource name}.
-     * <p>
-     * <b>Note</b>: Using this signature will cause an entry to be added in the
-     * application context's {@linkplain ApplicationContext#getResourceCache()
-     * resource cache} if one does not already exist.
      *
-     * @param icon
+     * @param iconName
      * The resource name of the icon to set.
+     *
+     * @see #setIcon(URL)
      */
-    public void setIcon(String icon) {
-        if (icon == null) {
-            throw new IllegalArgumentException("icon is null.");
+    public void setIcon(String iconName) {
+        if (iconName == null) {
+            throw new IllegalArgumentException("iconName is null.");
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setIcon(classLoader.getResource(icon));
+        setIcon(classLoader.getResource(iconName));
     }
 
     public Component getContent() {

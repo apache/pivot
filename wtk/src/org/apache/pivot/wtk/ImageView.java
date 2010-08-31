@@ -39,12 +39,42 @@ public class ImageView extends Component {
      */
     public interface ImageBindMapping {
         /**
+         * Defines the supported load type mappings.
+         */
+        public enum Type {
+            IMAGE,
+            URL,
+            NAME
+        }
+
+        /**
+         * Returns the load type supported by this mapping.
+         */
+        public Type getType();
+
+        /**
          * Converts a value from the bind context to an image representation
          * during a {@link Component#load(Object)} operation.
          *
          * @param value
          */
         public Image toImage(Object value);
+
+        /**
+         * Converts a value from the bind context to an image location during
+         * a {@link Component#load(Object)} operation.
+         *
+         * @param value
+         */
+        public URL toImageURL(Object value);
+
+        /**
+         * Converts a value from the bind context to an image resource name
+         * during a {@link Component#load(Object)} operation.
+         *
+         * @param value
+         */
+        public String toImageName(Object value);
 
         /**
          * Converts a text string to a value to be stored in the bind context
@@ -159,9 +189,9 @@ public class ImageView extends Component {
     /**
      * Sets the image view's current image by URL.
      * <p>
-     * <b>Note</b>: Using this signature will cause an entry to be added in the
-     * application context's {@linkplain ApplicationContext#getResourceCache()
-     * resource cache} if one does not already exist.
+     * If the icon already exists in the application context resource cache,
+     * the cached value will be used. Otherwise, the icon will be loaded
+     * synchronously and added to the cache.
      *
      * @param imageURL
      * The location of the image to set.
@@ -230,21 +260,19 @@ public class ImageView extends Component {
     /**
      * Sets the image view's image by {@linkplain ClassLoader#getResource(String)
      * resource name}.
-     * <p>
-     * <b>Note</b>: Using this signature will cause an entry to be added in the
-     * application context's {@linkplain ApplicationContext#getResourceCache()
-     * resource cache} if one does not already exist.
      *
-     * @param image
+     * @param imageName
      * The resource name of the image to set.
+     *
+     * @see #setImage(URL)
      */
-    public final void setImage(String image) {
+    public final void setImage(String imageName) {
         if (image == null) {
             throw new IllegalArgumentException("image is null.");
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setImage(classLoader.getResource(image));
+        setImage(classLoader.getResource(imageName));
     }
 
     /**
@@ -342,19 +370,35 @@ public class ImageView extends Component {
             && imageBindType != BindType.STORE) {
             Object value = JSON.get(context, imageKey);
 
-            if (imageBindMapping == null) {
-                if (value instanceof Image) {
-                    setImage((Image)value);
-                } else if (value instanceof URL) {
-                    setImage((URL)value);
-                } else if (value instanceof String) {
-                    setImage((String)value);
-                } else {
-                    throw new IllegalArgumentException(getClass().getName() + " can't bind to "
-                        + value + ".");
+            if (imageBindMapping != null) {
+                switch (imageBindMapping.getType()) {
+                    case IMAGE: {
+                        value = imageBindMapping.toImage(value);
+                        break;
+                    }
+
+                    case URL: {
+                        value = imageBindMapping.toImageURL(value);
+                        break;
+                    }
+
+                    case NAME: {
+                        value = imageBindMapping.toImageName(value);
+                        break;
+                    }
                 }
+            }
+
+            if (value == null
+                || value instanceof Image) {
+                setImage((Image)value);
+            } else if (value instanceof URL) {
+                setImage((URL)value);
+            } else if (value instanceof String) {
+                setImage((String)value);
             } else {
-                setImage(imageBindMapping.toImage(value));
+                throw new IllegalArgumentException(getClass().getName() + " can't bind to "
+                    + value + ".");
             }
         }
     }

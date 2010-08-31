@@ -76,9 +76,9 @@ public class ImageNode extends Node {
     /**
      * Sets the image node's current image by URL.
      * <p>
-     * <b>Note</b>: Using this signature will cause an entry to be added in the
-     * application context's {@linkplain ApplicationContext#getResourceCache()
-     * resource cache} if one does not already exist.
+     * If the icon already exists in the application context resource cache,
+     * the cached value will be used. Otherwise, the icon will be loaded
+     * synchronously and added to the cache.
      *
      * @param imageURL
      * The location of the image to set.
@@ -106,21 +106,19 @@ public class ImageNode extends Node {
     /**
      * Sets the image node's icon by {@linkplain ClassLoader#getResource(String)
      * resource name}.
-     * <p>
-     * <b>Note</b>: Using this signature will cause an entry to be added in the
-     * application context's {@linkplain ApplicationContext#getResourceCache()
-     * resource cache} if one does not already exist.
      *
-     * @param image
+     * @param imageName
      * The resource name of the image to set.
+     *
+     * @see #setImage(URL)
      */
-    public void setImage(String image) {
+    public void setImage(String imageName) {
         if (image == null) {
             throw new IllegalArgumentException("image is null.");
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setImage(classLoader.getResource(image));
+        setImage(classLoader.getResource(imageName));
     }
 
     @Override

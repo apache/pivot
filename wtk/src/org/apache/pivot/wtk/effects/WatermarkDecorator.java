@@ -198,12 +198,12 @@ public class WatermarkDecorator implements Decorator {
      * Sets the image that will be painted over this decorator's component by
      * URL.
      * <p>
-     * <b>Note</b>: Using this signature will cause an entry to be added in the
-     * application context's {@linkplain ApplicationContext#getResourceCache()
-     * resource cache} if one does not already exist.
+     * If the icon already exists in the application context resource cache,
+     * the cached value will be used. Otherwise, the icon will be loaded
+     * synchronously and added to the cache.
      *
      * @param imageURL
-     * This location of the image to set.
+     * The location of the image to set.
      */
     public void setImage(URL imageURL) {
         if (imageURL == null) {
@@ -227,21 +227,19 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the image that will be painted over this decorator's component.
-     * <p>
-     * <b>Note</b>: Using this signature will cause an entry to be added in the
-     * application context's {@linkplain ApplicationContext#getResourceCache()
-     * resource cache} if one does not already exist.
      *
-     * @param image
-     * This decorator's image
+     * @param imageName
+     * The resource name of the image to set.
+     *
+     * @see #setImage(URL)
      */
-    public void setImage(String image) {
-        if (image == null) {
-            throw new IllegalArgumentException("image is null.");
+    public void setImage(String imageName) {
+        if (imageName == null) {
+            throw new IllegalArgumentException("imageName is null.");
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setImage(classLoader.getResource(image));
+        setImage(classLoader.getResource(imageName));
     }
 
     /**
