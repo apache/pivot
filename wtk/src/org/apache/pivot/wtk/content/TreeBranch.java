@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.content;
 
+import java.net.URL;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -25,8 +26,10 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.ThreadUtilities;
+import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Default tree branch implementation.
@@ -65,6 +68,58 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     public void setExpandedIcon(Image expandedIcon) {
         this.expandedIcon = expandedIcon;
+    }
+
+    /**
+     * Sets the tree branch's expanded icon by URL.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
+     *
+     * @param expandedIconURL
+     * The location of the expanded icon to set.
+     */
+    public void setExpandedIcon(URL expandedIconURL) {
+        if (expandedIconURL == null) {
+            throw new IllegalArgumentException("expandedIconURL is null.");
+        }
+
+        Image icon = (Image)ApplicationContext.getResourceCache().get(expandedIconURL);
+
+        if (icon == null) {
+            try {
+                icon = Image.load(expandedIconURL);
+            } catch (TaskExecutionException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+
+            ApplicationContext.getResourceCache().put(expandedIconURL, icon);
+        }
+
+        setExpandedIcon(icon);
+    }
+
+    /**
+     * Sets the tree branch's expanded icon by {@linkplain ClassLoader#getResource(String)
+     * resource name}.
+     * <p>
+     * <b>Note</b>: Using this signature will cause an entry to be added in the
+     * application context's {@linkplain ApplicationContext#getResourceCache()
+     * resource cache} if one does not already exist.
+     *
+     * @param expandedIconURL
+     * The resource name of the expanded icon to set.
+     *
+     * @see #setExpandedIcon(URL)
+     */
+    public void setExpandedIcon(String expandedIconName) {
+        if (expandedIconName == null) {
+            throw new IllegalArgumentException("expandedIconName is null.");
+        }
+
+        ClassLoader classLoader = ThreadUtilities.getClassLoader();
+        setExpandedIcon(classLoader.getResource(expandedIconName));
     }
 
     @Override
