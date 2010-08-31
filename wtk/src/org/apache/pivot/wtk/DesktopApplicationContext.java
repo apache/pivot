@@ -573,6 +573,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
             windowedHostFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         }
 
+        // Create the full-screen host frame
+        fullScreenHostFrame = new HostFrame();
+        fullScreenHostFrame.setUndecorated(true);
+
         // Add a key listener to the display host to toggle between full-screen
         // and windowed mode
         primaryDisplayHost.addKeyListener(new KeyAdapter() {
@@ -585,10 +589,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 }
             }
         });
-
-        // Create the full-screen host frame
-        fullScreenHostFrame = new HostFrame();
-        fullScreenHostFrame.setUndecorated(true);
 
         // Load the application
         try {
@@ -612,13 +612,19 @@ public final class DesktopApplicationContext extends ApplicationContext {
             // Show the appropriate host window
             setFullScreen(fullScreen);
 
-            // Start the application
-            try {
-                application.startup(primaryDisplayHost.getDisplay(),
-                    new ImmutableMap<String, String>(properties));
-            } catch (Exception exception) {
-                displayException(exception);
-            }
+            // Start the application in a callback to allow the host window to
+            // open first
+            queueCallback(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        application.startup(primaryDisplayHost.getDisplay(),
+                            new ImmutableMap<String, String>(properties));
+                    } catch (Exception exception) {
+                        displayException(exception);
+                    }
+                }
+            });
         }
     }
 

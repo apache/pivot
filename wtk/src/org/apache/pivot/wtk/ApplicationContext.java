@@ -683,21 +683,7 @@ public abstract class ApplicationContext {
                         display.setSize(Math.max((int)Math.ceil(getWidth() / scale), 0),
                             Math.max((int)Math.ceil(getHeight() / scale), 0));
                     }
-                    break;
-                }
 
-                case ComponentEvent.COMPONENT_MOVED: {
-                    // No-op
-                    break;
-                }
-
-                case ComponentEvent.COMPONENT_SHOWN: {
-                    // No-op
-                    break;
-                }
-
-                case ComponentEvent.COMPONENT_HIDDEN: {
-                    // No-op
                     break;
                 }
             }
