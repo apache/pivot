@@ -28,16 +28,16 @@ public class Label extends Component {
      */
     public interface TextBindMapping {
         /**
-         * Converts a value from the bind context to a text representation during a
-         * {@link Component#load(Object)} operation.
+         * Converts a value from the bind context to a text representation
+         * during a {@link Component#load(Object)} operation.
          *
          * @param value
          */
         public String toString(Object value);
 
         /**
-         * Converts a text string to a value to be stored in the bind context during a
-         * {@link Component#store(Object)} operation.
+         * Converts a text string to a value to be stored in the bind context
+         * during a {@link Component#store(Object)} operation.
          *
          * @param text
          */
@@ -180,9 +180,7 @@ public class Label extends Component {
             Object value = JSON.get(context, textKey);
 
             if (textBindMapping == null) {
-                if (value != null) {
-                    value = value.toString();
-                }
+                value = (value == null) ? null : value.toString();
             } else {
                 value = textBindMapping.toString(value);
             }

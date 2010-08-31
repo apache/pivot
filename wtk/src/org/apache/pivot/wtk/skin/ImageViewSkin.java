@@ -389,9 +389,4 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     public void asynchronousChanged(ImageView imageView) {
         // No-op
     }
-
-    @Override
-    public void imageKeyChanged(ImageView imageView, String previousImageKey) {
-        // No-op
-    }
 }

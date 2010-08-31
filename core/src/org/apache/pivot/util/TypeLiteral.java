@@ -46,7 +46,7 @@ public class TypeLiteral<T> {
      */
     protected TypeLiteral() {
         Type superclass = getClass().getGenericSuperclass();
-        if (superclass instanceof Class) {
+        if (superclass instanceof Class<?>) {
             throw new RuntimeException("Missing type parameter.");
         }
 

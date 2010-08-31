@@ -34,6 +34,27 @@ import org.apache.pivot.wtk.media.Image;
  */
 @DefaultProperty("image")
 public class ImageView extends Component {
+    /**
+     * Translates between image and context data during data binding.
+     */
+    public interface ImageBindMapping {
+        /**
+         * Converts a value from the bind context to an image representation
+         * during a {@link Component#load(Object)} operation.
+         *
+         * @param value
+         */
+        public Image toImage(Object value);
+
+        /**
+         * Converts a text string to a value to be stored in the bind context
+         * during a {@link Component#store(Object)} operation.
+         *
+         * @param text
+         */
+        public Object valueOf(Image image);
+    }
+
     private static class ImageViewListenerList extends ListenerList<ImageViewListener>
         implements ImageViewListener {
         @Override
@@ -49,11 +70,30 @@ public class ImageView extends Component {
                 listener.asynchronousChanged(imageView);
             }
         }
+    }
 
+    private static class ImageViewBindingListenerList extends ListenerList<ImageViewBindingListener>
+        implements ImageViewBindingListener {
         @Override
         public void imageKeyChanged(ImageView imageView, String previousImageKey) {
-            for (ImageViewListener listener : this) {
+            for (ImageViewBindingListener listener : this) {
                 listener.imageKeyChanged(imageView, previousImageKey);
+            }
+        }
+
+        @Override
+        public void imageBindTypeChanged(ImageView imageView,
+            BindType previousImageBindType) {
+            for (ImageViewBindingListener listener : this) {
+                listener.imageBindTypeChanged(imageView, previousImageBindType);
+            }
+        }
+
+        @Override
+        public void imageBindMappingChanged(ImageView imageView,
+            ImageView.ImageBindMapping previousImageBindMapping) {
+            for (ImageViewBindingListener listener : this) {
+                listener.imageBindMappingChanged(imageView, previousImageBindMapping);
             }
         }
     }
@@ -61,8 +101,11 @@ public class ImageView extends Component {
     private Image image = null;
     private boolean asynchronous = false;
     private String imageKey = null;
+    private BindType imageBindType = BindType.BOTH;
+    private ImageBindMapping imageBindMapping = null;
 
     private ImageViewListenerList imageViewListeners = new ImageViewListenerList();
+    private ImageViewBindingListenerList imageViewBindingListeners = new ImageViewBindingListenerList();
 
     // Maintains a mapping of image URL to image views that should be notified when
     // an asynchronously loaded image is available
@@ -250,43 +293,92 @@ public class ImageView extends Component {
 
         if (previousImageKey != imageKey) {
             this.imageKey = imageKey;
-            imageViewListeners.imageKeyChanged(this, previousImageKey);
+            imageViewBindingListeners.imageKeyChanged(this, previousImageKey);
+        }
+    }
+
+    public BindType getImageBindType() {
+        return imageBindType;
+    }
+
+    public void setImageBindType(BindType imageBindType) {
+        if (imageBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        BindType previousImageBindType = this.imageBindType;
+
+        if (previousImageBindType != imageBindType) {
+            this.imageBindType = imageBindType;
+            imageViewBindingListeners.imageBindTypeChanged(this, previousImageBindType);
+        }
+    }
+
+    public final void setImageBindType(String textBindType) {
+        if (textBindType == null) {
+            throw new IllegalArgumentException();
+        }
+
+        setImageBindType(BindType.valueOf(textBindType.toUpperCase()));
+    }
+
+    public ImageBindMapping getImageBindMapping() {
+        return imageBindMapping;
+    }
+
+    public void setImageBindMapping(ImageBindMapping imageBindMapping) {
+        ImageBindMapping previousImageBindMapping = this.imageBindMapping;
+
+        if (previousImageBindMapping != imageBindMapping) {
+            this.imageBindMapping = imageBindMapping;
+            imageViewBindingListeners.imageBindMappingChanged(this, previousImageBindMapping);
         }
     }
 
     @Override
     public void load(Object context) {
         if (imageKey != null
-            && JSON.containsKey(context, imageKey)) {
+            && JSON.containsKey(context, imageKey)
+            && imageBindType != BindType.STORE) {
             Object value = JSON.get(context, imageKey);
-            if (value instanceof Image) {
-                setImage((Image)value);
-            } else if (value instanceof URL) {
-                setImage((URL)value);
-            } else if (value instanceof String) {
-                setImage((String)value);
+
+            if (imageBindMapping == null) {
+                if (value instanceof Image) {
+                    setImage((Image)value);
+                } else if (value instanceof URL) {
+                    setImage((URL)value);
+                } else if (value instanceof String) {
+                    setImage((String)value);
+                } else {
+                    throw new IllegalArgumentException(getClass().getName() + " can't bind to "
+                        + value + ".");
+                }
             } else {
-                throw new IllegalArgumentException(getClass().getName() + " can't bind to "
-                    + value + ".");
+                setImage(imageBindMapping.toImage(value));
             }
         }
     }
 
     @Override
     public void store(Object context) {
-        if (isEnabled()
-            && imageKey != null) {
-            JSON.put(context, imageKey, getImage());
+        if (imageKey != null
+            && imageBindType != BindType.LOAD) {
+            JSON.put(context, imageKey, (imageBindMapping == null) ?
+                image : imageBindMapping.valueOf(image));
         }
     }
 
     /**
      * Returns the image view listener list.
-     *
-     * @return
-     * The image view listener list.
      */
     public ListenerList<ImageViewListener> getImageViewListeners() {
         return imageViewListeners;
+    }
+
+    /**
+     * Returns the image view binding listener list.
+     */
+    public ListenerList<ImageViewBindingListener> getImageViewBindingListeners() {
+        return imageViewBindingListeners;
     }
 }
