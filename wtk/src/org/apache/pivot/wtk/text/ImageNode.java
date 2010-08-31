@@ -113,8 +113,8 @@ public class ImageNode extends Node {
      * @see #setImage(URL)
      */
     public void setImage(String imageName) {
-        if (image == null) {
-            throw new IllegalArgumentException("image is null.");
+        if (imageName == null) {
+            throw new IllegalArgumentException("imageName is null.");
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();

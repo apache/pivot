@@ -267,8 +267,8 @@ public class ImageView extends Component {
      * @see #setImage(URL)
      */
     public final void setImage(String imageName) {
-        if (image == null) {
-            throw new IllegalArgumentException("image is null.");
+        if (imageName == null) {
+            throw new IllegalArgumentException("imageName is null.");
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
