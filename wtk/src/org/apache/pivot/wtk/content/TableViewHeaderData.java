@@ -57,9 +57,9 @@ public class TableViewHeaderData {
     /**
      * Sets the header data's icon by URL.
      * <p>
-     * <b>Note</b>: Using this signature will cause an entry to be added in the
-     * application context's {@linkplain ApplicationContext#getResourceCache()
-     * resource cache} if one does not already exist.
+     * If the icon already exists in the application context resource cache,
+     * the cached value will be used. Otherwise, the icon will be loaded
+     * synchronously and added to the cache.
      *
      * @param iconURL
      * The location of the icon to set.
@@ -87,13 +87,11 @@ public class TableViewHeaderData {
     /**
      * Sets the header data's icon by {@linkplain ClassLoader#getResource(String)
      * resource name}.
-     * <p>
-     * <b>Note</b>: Using this signature will cause an entry to be added in the
-     * application context's {@linkplain ApplicationContext#getResourceCache()
-     * resource cache} if one does not already exist.
      *
      * @param iconName
      * The resource name of the icon to set.
+     *
+     * @see #setIcon(URL)
      */
     public void setIcon(String iconName) {
         if (iconName == null) {
