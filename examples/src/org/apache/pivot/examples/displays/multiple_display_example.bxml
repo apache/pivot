@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window bxml:id="primaryDisplayWindow" title="Multiple Display Demo" maximized="true"
+<Window bxml:id="primaryDisplayWindow" title="Multiple Display Example" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <bxml:define>
