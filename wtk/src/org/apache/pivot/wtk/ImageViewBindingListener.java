@@ -51,7 +51,7 @@ public interface ImageViewBindingListener {
     /**
      * Called when a image views's image bind type has changed.
      *
-     * @param label
+     * @param imageView
      * @param previousImageBindType
      */
     public void imageBindTypeChanged(ImageView imageView,
@@ -60,7 +60,7 @@ public interface ImageViewBindingListener {
     /**
      * Called when an image view's text bind mapping has changed.
      *
-     * @param image
+     * @param imageView
      * @param previousImageBindMapping
      */
     public void imageBindMappingChanged(ImageView imageView,

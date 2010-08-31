@@ -50,7 +50,7 @@ public class ImageView extends Component {
          * Converts a text string to a value to be stored in the bind context
          * during a {@link Component#store(Object)} operation.
          *
-         * @param text
+         * @param image
          */
         public Object valueOf(Image image);
     }

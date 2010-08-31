@@ -91,7 +91,7 @@ public class ListItem {
      * @param iconName
      * The resource name of the icon to set.
      *
-     * @see setIcon(URL)
+     * @see #setIcon(URL)
      */
     public void setIcon(String iconName) {
         if (iconName == null) {

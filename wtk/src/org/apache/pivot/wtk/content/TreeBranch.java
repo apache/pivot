@@ -103,7 +103,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
      * Sets the tree branch's expanded icon by {@linkplain ClassLoader#getResource(String)
      * resource name}.
      *
-     * @param expandedIconURL
+     * @param expandedIconName
      * The resource name of the expanded icon to set.
      *
      * @see #setExpandedIcon(URL)
