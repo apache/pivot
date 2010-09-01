@@ -345,8 +345,13 @@ public final class Time implements Comparable<Time>, Serializable {
 
     @Override
     public int hashCode() {
-        Integer hashKey = hour + minute + second + millisecond;
-        return hashKey.hashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + hour;
+        result = prime * result + minute;
+        result = prime * result + second;
+        result = prime * result + millisecond;
+        return result;
     }
 
     @Override

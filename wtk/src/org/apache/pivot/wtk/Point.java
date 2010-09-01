@@ -85,8 +85,7 @@ public final class Point implements Serializable {
 
     @Override
     public int hashCode() {
-        // TODO This may not be the most optimal hashing function
-        return x * y;
+        return 31 * x  + y;
     }
 
     @Override

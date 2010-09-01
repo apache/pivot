@@ -459,10 +459,10 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     @Override
     public int hashCode() {
-        int hashCode = 0;
+        int hashCode = 1;
 
         for (K key : this) {
-            hashCode += key.hashCode();
+            hashCode = 31 * hashCode + key.hashCode();
         }
 
         return hashCode;

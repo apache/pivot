@@ -160,8 +160,13 @@ public final class CornerRadii implements Serializable {
 
     @Override
     public int hashCode() {
-        // TODO This may not be the most optimal hashing function
-        return (topLeft * topRight) ^ (bottomLeft * bottomRight);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + topLeft;
+        result = prime * result + topRight;
+        result = prime * result + bottomLeft;
+        result = prime * result + bottomRight;
+        return result;
     }
 
     @Override

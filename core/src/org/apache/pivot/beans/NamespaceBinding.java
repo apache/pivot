@@ -260,7 +260,12 @@ public class NamespaceBinding {
 
     @Override
     public int hashCode() {
-        return (source.hashCode() * sourceKey.hashCode()
-            + target.hashCode() * targetKey.hashCode());
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + source.hashCode();
+        result = prime * result + sourceKey.hashCode();
+        result = prime * result + target.hashCode();
+        result = prime * result + targetKey.hashCode();
+        return result;
     }
 }

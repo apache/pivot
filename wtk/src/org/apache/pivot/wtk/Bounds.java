@@ -224,9 +224,15 @@ public final class Bounds implements Serializable {
 
     @Override
     public int hashCode() {
-        // TODO This may not be the most optimal hashing function
-        return (x * y) ^ (width * height);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + height;
+        result = prime * result + width;
+        result = prime * result + x;
+        result = prime * result + y;
+        return result;
     }
+
 
     public java.awt.Rectangle toRectangle() {
         return new java.awt.Rectangle(x, y, width, height);

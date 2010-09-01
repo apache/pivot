@@ -112,8 +112,13 @@ public final class Insets implements Serializable {
 
     @Override
     public int hashCode() {
-        // TODO This may not be the most optimal hashing function
-        return (top * left) ^ (bottom * right);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + top;
+        result = prime * result + left;
+        result = prime * result + bottom;
+        result = prime * result + right;
+        return result;
     }
 
     @Override

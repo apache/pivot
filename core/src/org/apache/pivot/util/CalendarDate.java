@@ -398,8 +398,12 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      */
     @Override
     public int hashCode() {
-        Integer hashKey = year + month + day;
-        return hashKey.hashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + year;
+        result = prime * result + month;
+        result = prime * result + day;
+        return result;
     }
 
     /**

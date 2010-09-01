@@ -213,10 +213,10 @@ public class HashSet<E> implements Set<E>, Serializable {
 
     @Override
     public int hashCode() {
-        int hashCode = 0;
+        int hashCode = 1;
 
         for (E element : this) {
-            hashCode += element.hashCode();
+            hashCode = 31 * hashCode + element.hashCode();
         }
 
         return hashCode;

@@ -148,14 +148,13 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
 
         @Override
         public int hashCode() {
-            int hashCode = 0;
+            final int prime = 31;
+            int result = 1;
             if (namespacePrefix != null) {
-                hashCode += namespacePrefix.hashCode();
+                result = 31 * result + namespacePrefix.hashCode();
             }
-
-            hashCode += localName.hashCode() + value.hashCode();
-
-            return hashCode;
+            result = prime * result + localName.hashCode();
+            return result;
         }
 
         @Override
@@ -981,14 +980,15 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
 
     @Override
     public int hashCode() {
-        int hashCode = 0;
+        final int prime = 31;
+        int result = 1;
         if (namespacePrefix != null) {
-            hashCode += namespacePrefix.hashCode();
+            result = 31 * result + namespacePrefix.hashCode();
         }
-
-        hashCode += localName.hashCode() + attributes.hashCode() + nodes.hashCode();
-
-        return hashCode;
+        result = prime * result + localName.hashCode();
+        result = prime * result + attributes.hashCode();
+        result = prime * result + nodes.hashCode();
+        return result;
     }
 
     @Override

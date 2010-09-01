@@ -81,8 +81,7 @@ public final class Dimensions implements Serializable {
 
     @Override
     public int hashCode() {
-        // TODO This may not be the most optimal hashing function
-        return width * height;
+        return 31 * width + height;
     }
 
     @Override
