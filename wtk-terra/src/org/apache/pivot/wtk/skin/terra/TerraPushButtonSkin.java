@@ -271,6 +271,14 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         return true;
     }
 
+    @Override
+    public boolean isOpaque() {
+        PushButton pushButton = (PushButton)getComponent();
+        return (!toolbar
+            || highlighted
+            || pushButton.isFocused());
+    }
+
     public Font getFont() {
         return font;
     }
