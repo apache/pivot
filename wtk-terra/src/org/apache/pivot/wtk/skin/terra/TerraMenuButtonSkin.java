@@ -308,6 +308,14 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         return true;
     }
 
+    @Override
+    public boolean isOpaque() {
+        MenuButton menuButton = (MenuButton)getComponent();
+        return (!toolbar
+            || highlighted
+            || menuButton.isFocused());
+    }
+
     public Font getFont() {
         return font;
     }
