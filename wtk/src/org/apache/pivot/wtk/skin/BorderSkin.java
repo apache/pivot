@@ -138,8 +138,34 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     @Override
     public Dimensions getPreferredSize() {
-        // TODO Optimize
-        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+        int preferredWidth = 0;
+        int preferredHeight = 0;
+
+        Border border = (Border)getComponent();
+        int topThickness = thickness;
+
+        String title = border.getTitle();
+        if (title != null
+            && title.length() > 0) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            Rectangle2D headingBounds = font.getStringBounds(title, fontRenderContext);
+            preferredWidth = (int)Math.ceil(headingBounds.getWidth());
+
+            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
+            topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
+        }
+
+        Component content = border.getContent();
+        if (content != null) {
+            Dimensions preferredSize = content.getPreferredSize();
+            preferredWidth += preferredSize.width;
+            preferredHeight += preferredSize.height;
+        }
+
+        preferredWidth += (padding.left + padding.right) + (thickness * 2);
+        preferredHeight += (padding.top + padding.bottom) + (topThickness + thickness);
+
+        return new Dimensions(preferredWidth, preferredHeight);
     }
 
     @Override
