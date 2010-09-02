@@ -18,10 +18,8 @@ package org.apache.pivot.wtk;
 
 import java.awt.Toolkit;
 import java.io.IOException;
-import java.text.CharacterIterator;
 
 import org.apache.pivot.json.JSON;
-import org.apache.pivot.text.CharSequenceCharacterIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.validation.Validator;
@@ -39,22 +37,15 @@ public class TextInput extends Component {
          * Returns the insertion point for a given location.
          *
          * @param x
-         *
-         * @return
-         * The insertion point for the given location.
          */
         public int getInsertionPoint(int x);
 
         /**
-         * Returns the bounds of the character at a given offset within the
-         * document.
+         * Returns the bounds of the character at a given index.
          *
-         * @param offset
-         *
-         * @return
-         * The bounds of the character at the given offset.
+         * @param index
          */
-        public Bounds getCharacterBounds(int offset);
+        public Bounds getCharacterBounds(int index);
     }
 
     /**
@@ -226,7 +217,7 @@ public class TextInput extends Component {
         }
     }
 
-    private StringBuilder textBuilder = new StringBuilder();
+    private StringBuilder characters = new StringBuilder();
 
     private int selectionStart = 0;
     private int selectionLength = 0;
@@ -285,7 +276,7 @@ public class TextInput extends Component {
      * A string containing a copy of the text area's text content.
      */
     public String getText(int beginIndex, int endIndex) {
-        return textBuilder.substring(beginIndex, endIndex);
+        return characters.substring(beginIndex, endIndex);
     }
 
     public void setText(String text) {
@@ -297,7 +288,7 @@ public class TextInput extends Component {
             throw new IllegalArgumentException("Text length is greater than maximum length.");
         }
 
-        textBuilder = new StringBuilder(text);
+        characters = new StringBuilder(text);
 
         // Update selection
         int previousSelectionStart = selectionStart;
@@ -327,7 +318,7 @@ public class TextInput extends Component {
             throw new IllegalArgumentException();
         }
 
-        if (textBuilder.length() + text.length() > maximumLength) {
+        if (characters.length() + text.length() > maximumLength) {
             throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
         }
 
@@ -336,7 +327,7 @@ public class TextInput extends Component {
 
             if (vote == Vote.APPROVE) {
                 // Insert the text
-                textBuilder.insert(index, text);
+                characters.insert(index, text);
 
                 // Update selection
                 int previousSelectionStart = selectionStart;
@@ -372,7 +363,7 @@ public class TextInput extends Component {
 
             if (vote == Vote.APPROVE) {
                 // Remove the text
-                textBuilder.delete(index, index + count);
+                characters.delete(index, index + count);
 
                 // Update the selection
                 int previousSelectionStart = selectionStart;
@@ -403,24 +394,17 @@ public class TextInput extends Component {
     }
 
     /**
+     * Returns a character sequence representing the text input's content.
+     */
+    public CharSequence getCharacters() {
+        return characters;
+    }
+
+    /**
      * Returns the number of characters in the text input.
      */
     public int getCharacterCount() {
-        return textBuilder.length();
-    }
-
-    /**
-     * Returns a character iterator over the text input's content.
-     */
-    public CharacterIterator getCharacterIterator() {
-        return getCharacterIterator(0, getCharacterCount());
-    }
-
-    /**
-     * Returns a character iterator over a portion the text input's content.
-     */
-    public CharacterIterator getCharacterIterator(int beginIndex, int endIndex) {
-        return new CharSequenceCharacterIterator(textBuilder, beginIndex, endIndex);
+        return characters.length();
     }
 
     /**
@@ -463,7 +447,7 @@ public class TextInput extends Component {
             }
 
             if (text != null) {
-                if ((textBuilder.length() + text.length()) > maximumLength) {
+                if ((characters.length() + text.length()) > maximumLength) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
                     insertText(text, selectionStart);
@@ -528,7 +512,7 @@ public class TextInput extends Component {
         }
 
         if (selectionStart < 0
-            || selectionStart + selectionLength > textBuilder.length()) {
+            || selectionStart + selectionLength > characters.length()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -564,7 +548,7 @@ public class TextInput extends Component {
      * Selects all text.
      */
     public void selectAll() {
-        setSelection(0, textBuilder.length());
+        setSelection(0, characters.length());
     }
 
     /**
@@ -637,19 +621,18 @@ public class TextInput extends Component {
         int previousMaximumLength = this.maximumLength;
 
         if (previousMaximumLength != maximumLength) {
-            int previousTextLength = textBuilder.length();
-
             this.maximumLength = maximumLength;
 
             // Truncate the text, if necessary
-            if (previousTextLength > maximumLength) {
-                textBuilder.delete(maximumLength, previousTextLength);
+            int previousCharacterCount = characters.length();
+            if (previousCharacterCount > maximumLength) {
+                characters.delete(maximumLength, previousCharacterCount);
             }
 
             // Fire change events
             textInputListeners.maximumLengthChanged(this, previousMaximumLength);
 
-            if (textBuilder.length() != previousTextLength) {
+            if (characters.length() != previousCharacterCount) {
                 textInputContentListeners.textChanged(this);
             }
         }
@@ -805,9 +788,9 @@ public class TextInput extends Component {
         return textInputSkin.getInsertionPoint(x);
     }
 
-    public Bounds getCharacterBounds(int offset) {
+    public Bounds getCharacterBounds(int index) {
         TextInput.Skin textInputSkin = (TextInput.Skin)getSkin();
-        return textInputSkin.getCharacterBounds(offset);
+        return textInputSkin.getCharacterBounds(index);
     }
 
     /**

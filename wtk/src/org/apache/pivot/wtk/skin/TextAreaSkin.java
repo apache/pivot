@@ -399,6 +399,35 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
         }
     }
 
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        this.font = font;
+        invalidateComponent();
+    }
+
+    public final void setFont(String font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(decodeFont(font));
+    }
+
+    public final void setFont(Dictionary<String, ?> font) {
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
+
+        setFont(Theme.deriveFont(font));
+    }
+
     public Color getColor() {
         return color;
     }
@@ -439,35 +468,6 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
         }
 
         setColor(GraphicsUtilities.decodeColor(inactiveColor));
-    }
-
-    public Font getFont() {
-        return font;
-    }
-
-    public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
-        this.font = font;
-        invalidateComponent();
-    }
-
-    public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
-        setFont(decodeFont(font));
-    }
-
-    public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
-        setFont(Theme.deriveFont(font));
     }
 
     public Color getSelectionColor() {
@@ -608,6 +608,7 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
             }
         }
     }
+
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);

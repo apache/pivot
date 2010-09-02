@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
-import java.text.CharacterIterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.json.JSON;
@@ -43,52 +42,37 @@ public class TextArea2 extends Component {
          *
          * @param x
          * @param y
-         *
-         * @return
-         * The insertion point for the given location.
          */
         public int getInsertionPoint(int x, int y);
 
         /**
-         * Returns the next insertion point given an x coordinate and a character offset.
+         * Returns the next insertion point given an x coordinate and a
+         * character index.
          *
          * @param x
          * @param from
          * @param direction
-         *
-         * @return
-         * The next insertion point.
          */
         public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction);
 
         /**
-         * Returns the row index of the character at a given offset within the document.
+         * Returns the row index of the character at a given index.
          *
-         * @param offset
-         *
-         * @return
-         * The row index of the character at the given offset.
+         * @param index
          */
-        public int getRowIndex(int offset);
+        public int getRowIndex(int index);
 
         /**
-         * Returns the total number of rows in the document.
-         *
-         * @return
-         * The number of rows in the document.
+         * Returns the total number of rows in the text area.
          */
         public int getRowCount();
 
         /**
-         * Returns the bounds of the character at a given offset within the
-         * document.
+         * Returns the bounds of the character at a given index.
          *
-         * @param offset
-         *
-         * @return
-         * The bounds of the character at the given offset.
+         * @param index
          */
-        public Bounds getCharacterBounds(int offset);
+        public Bounds getCharacterBounds(int index);
     }
 
     /**
@@ -190,7 +174,7 @@ public class TextArea2 extends Component {
     }
 
     private ArrayList<StringBuilder> paragraphs = null;
-    private int length = 0;
+    private int characterCount = 0;
 
     private int selectionStart = 0;
     private int selectionLength = 0;
@@ -207,6 +191,8 @@ public class TextArea2 extends Component {
     private TextAreaSelectionListenerList textAreaSelectionListeners = new TextAreaSelectionListenerList();
     private TextAreaBindingListenerList textAreaBindingListeners = new TextAreaBindingListenerList();
 
+    private static final int INITIAL_PARAGRAPH_CAPACITY = 256;
+
     public TextArea2() {
         setText("");
 
@@ -221,11 +207,6 @@ public class TextArea2 extends Component {
         }
 
         super.setSkin(skin);
-    }
-
-    public CharacterIterator getCharacters() {
-        // TODO
-        return null;
     }
 
     /**
@@ -248,8 +229,49 @@ public class TextArea2 extends Component {
      * A string containing a copy of the text area's text content.
      */
     public String getText(int beginIndex, int endIndex) {
-        // TODO
-        return null;
+        if (beginIndex > endIndex) {
+            throw new IllegalArgumentException();
+        }
+
+        if (beginIndex < 0
+            || endIndex > characterCount) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        StringBuilder textBuilder = new StringBuilder(endIndex - beginIndex);
+
+        // Determine the start of the range
+        int paragraphIndex = 0;
+        int characterOffset = 0;
+
+        StringBuilder paragraph = paragraphs.get(paragraphIndex);
+        int paragraphLength = paragraph.length();
+
+        while (characterOffset + paragraphLength < beginIndex) {
+            characterOffset += paragraphLength;
+
+            paragraph = paragraphs.get(++paragraphIndex);
+            paragraphLength = paragraph.length();
+        }
+
+        characterOffset = beginIndex - characterOffset;
+
+        // Walk from begin index to end index copying characters into text builder
+        for (int index = beginIndex; index < endIndex; index++) {
+            textBuilder.append(paragraph.charAt(characterOffset++));
+
+            if (characterOffset == paragraphLength) {
+                if (index != endIndex - 1) {
+                    textBuilder.append('\n');
+                }
+
+                paragraph = paragraphs.get(++paragraphIndex);
+                paragraphLength = paragraph.length();
+                characterOffset = 0;
+            }
+        }
+
+        return textBuilder.toString();
     }
 
     /**
@@ -296,20 +318,20 @@ public class TextArea2 extends Component {
 
         // Construct the paragraph list
         paragraphs = new ArrayList<StringBuilder>();
-        length = 0;
+        characterCount = 0;
 
-        StringBuilder paragraph = new StringBuilder();
+        StringBuilder paragraph = new StringBuilder(INITIAL_PARAGRAPH_CAPACITY);
 
         int c = textReader.read();
         while (c != -1) {
             if (c == '\n') {
                 paragraphs.add(paragraph);
-                paragraph = new StringBuilder();
+                paragraph = new StringBuilder(INITIAL_PARAGRAPH_CAPACITY);
             } else {
                 paragraph.append(c);
             }
 
-            length++;
+            characterCount++;
 
             c = textReader.read();
         }
@@ -319,7 +341,7 @@ public class TextArea2 extends Component {
         // Update selection
         int previousSelectionStart = selectionStart;
         int previousSelectionLength = selectionLength;
-        selectionStart = length;
+        selectionStart = characterCount;
         selectionLength = 0;
 
         // Fire change events
@@ -336,13 +358,63 @@ public class TextArea2 extends Component {
             throw new IllegalArgumentException();
         }
 
-        if (length + text.length() > maximumLength) {
+        if (index < 0
+            || index > characterCount) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (characterCount + text.length() > maximumLength) {
             throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
         }
 
-        // Insert the text
         if (text.length() > 0) {
-            // TODO (don't forget to update length)
+            // Determine the insertion point
+            int paragraphIndex, characterOffset;
+            if (index == characterCount) {
+                paragraphIndex = paragraphs.getLength() - 1;
+                characterOffset = paragraphs.get(paragraphIndex).length();
+            } else {
+                paragraphIndex = 0;
+                characterOffset = 0;
+
+                int paragraphCount = paragraphs.getLength();
+                while (paragraphIndex < paragraphCount) {
+                    StringBuilder paragraph = paragraphs.get(paragraphIndex);
+                    int paragraphLength = paragraph.length();
+
+                    if (characterOffset + paragraphLength > index) {
+                        break;
+                    } else {
+                        characterOffset += paragraphLength;
+                        paragraphIndex++;
+                    }
+                }
+
+                characterOffset = index - characterOffset;
+            }
+
+            // Insert the text
+            StringBuilder textBuilder = new StringBuilder();
+
+            for (int i = 0, n = text.length(); i < n; i++) {
+                char c = text.charAt(i);
+
+                if (c == '\n') {
+                    StringBuilder paragraph = paragraphs.get(paragraphIndex);
+                    paragraph.insert(characterOffset, textBuilder);
+
+                    characterOffset += textBuilder.length();
+                    textBuilder = new StringBuilder(paragraph.substring(characterOffset));
+                    paragraphs.insert(textBuilder, ++paragraphIndex);
+                } else {
+                    textBuilder.append(c);
+                }
+            }
+
+            StringBuilder paragraph = paragraphs.get(paragraphIndex);
+            paragraph.insert(characterOffset, textBuilder);
+
+            characterCount += text.length();
 
             // Update selection
             int previousSelectionStart = selectionStart;
@@ -363,7 +435,12 @@ public class TextArea2 extends Component {
 
     public void removeText(int index, int count) {
         if (count > 0) {
-            // TODO (don't forget to update length)
+            // TODO Identify begin paragraph index/offset
+            // TODO Identify end paragraph index/offset
+            // TODO Remove leading/trailing characters
+            // TODO Removing any intervening paragraphs
+
+            characterCount -= count;
 
             // Update the selection
             int previousSelectionStart = selectionStart;
@@ -383,26 +460,27 @@ public class TextArea2 extends Component {
     }
 
     /**
+     * Returns a character sequence representing a paragraph's content.
+     *
+     * @param index
+     */
+    public CharSequence getParagraph(int index) {
+        return paragraphs.get(index);
+    }
+
+    /**
+     * Returns the number of paragraphs in the text area.
+     */
+    public int getParagraphCount() {
+        return paragraphs.getLength();
+    }
+
+    /**
      * Returns the number of characters in the text area, including line break
      * characters.
      */
     public int getCharacterCount() {
-        return length;
-    }
-
-    /**
-     * Returns a character iterator over the text area's content.
-     */
-    public CharacterIterator getCharacterIterator() {
-        return getCharacterIterator(0, getCharacterCount());
-    }
-
-    /**
-     * Returns a character iterator over a portion the text area's content.
-     */
-    public CharacterIterator getCharacterIterator(int beginIndex, int endIndex) {
-        // TODO
-        return null;
+        return characterCount;
     }
 
     /**
@@ -445,7 +523,7 @@ public class TextArea2 extends Component {
             }
 
             if (text != null) {
-                if ((length + text.length()) > maximumLength) {
+                if ((characterCount + text.length()) > maximumLength) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
                     insertText(text, selectionStart);
@@ -510,7 +588,7 @@ public class TextArea2 extends Component {
         }
 
         if (selectionStart < 0
-            || selectionStart + selectionLength > length) {
+            || selectionStart + selectionLength > characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -546,7 +624,7 @@ public class TextArea2 extends Component {
      * Selects all text.
      */
     public void selectAll() {
-        setSelection(0, length);
+        setSelection(0, characterCount);
     }
 
     /**
@@ -590,19 +668,20 @@ public class TextArea2 extends Component {
         int previousMaximumLength = this.maximumLength;
 
         if (previousMaximumLength != maximumLength) {
-            int previousTextLength = length;
-
             this.maximumLength = maximumLength;
 
             // Truncate the text, if necessary
-            if (previousTextLength > maximumLength) {
-                // TODO (don't forget to update length)
+            int previousCharacterCount = characterCount;
+            if (previousCharacterCount > maximumLength) {
+                // TODO
+
+                characterCount = maximumLength;
             }
 
             // Fire change events
             textAreaListeners.maximumLengthChanged(this, previousMaximumLength);
 
-            if (length != previousTextLength) {
+            if (characterCount != previousCharacterCount) {
                 textAreaContentListeners.textChanged(this);
             }
         }
@@ -741,9 +820,9 @@ public class TextArea2 extends Component {
         return textAreaSkin.getNextInsertionPoint(x, from, direction);
     }
 
-    public int getRowIndex(int offset) {
+    public int getRowIndex(int index) {
         TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
-        return textAreaSkin.getRowIndex(offset);
+        return textAreaSkin.getRowIndex(index);
     }
 
     public int getRowCount() {
@@ -751,9 +830,9 @@ public class TextArea2 extends Component {
         return textAreaSkin.getRowCount();
     }
 
-    public Bounds getCharacterBounds(int offset) {
+    public Bounds getCharacterBounds(int index) {
         TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
-        return textAreaSkin.getCharacterBounds(offset);
+        return textAreaSkin.getCharacterBounds(index);
     }
 
     public ListenerList<TextAreaListener2> getTextAreaListeners() {
