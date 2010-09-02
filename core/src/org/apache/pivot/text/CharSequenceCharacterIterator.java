@@ -25,7 +25,8 @@ public class CharSequenceCharacterIterator implements CharacterIterator {
     private CharSequence charSequence;
     private int beginIndex;
     private int endIndex;
-    private int index;
+
+    private int index = -1;
 
     public CharSequenceCharacterIterator(CharSequence charSequence) {
         this(charSequence, 0);
@@ -48,6 +49,10 @@ public class CharSequenceCharacterIterator implements CharacterIterator {
             endIndex = charSequence.length();
         }
 
+        if (beginIndex > endIndex) {
+            throw new IllegalArgumentException();
+        }
+
         if (beginIndex < 0
             || endIndex > charSequence.length()) {
             throw new IndexOutOfBoundsException();
@@ -62,7 +67,7 @@ public class CharSequenceCharacterIterator implements CharacterIterator {
         this.beginIndex = beginIndex;
         this.endIndex = endIndex;
 
-        index = 0;
+        setIndex(index);
     }
 
     @Override

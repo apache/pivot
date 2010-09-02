@@ -29,7 +29,6 @@ import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import java.text.CharacterIterator;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.text.CharSequenceCharacterIterator;
@@ -229,17 +228,19 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         int n = textInput.getCharacterCount();
         if (n > 0) {
-            CharacterIterator ci;
+            CharSequence characters;
             if (textInput.isPassword()) {
                 StringBuilder passwordBuilder = new StringBuilder(n);
                 for (int i = 0; i < n; i++) {
                     passwordBuilder.append(BULLET);
                 }
 
-                ci = new CharSequenceCharacterIterator(passwordBuilder);
+                characters = passwordBuilder;
             } else {
-                ci = textInput.getCharacterIterator();
+                characters = textInput.getCharacters();
             }
+
+            CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(characters);
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             glyphVector = font.createGlyphVector(fontRenderContext, ci);
@@ -445,11 +446,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return offset;
     }
 
-    public Bounds getCharacterBounds(int offset) {
+    public Bounds getCharacterBounds(int index) {
         Bounds characterBounds = null;
 
         if (glyphVector != null) {
-            Shape glyphBounds = glyphVector.getGlyphLogicalBounds(offset);
+            Shape glyphBounds = glyphVector.getGlyphLogicalBounds(index);
             Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
             int x = (int)Math.floor(glyphBounds2D.getX()) + padding.left - scrollLeft + 1;
