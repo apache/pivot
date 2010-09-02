@@ -104,8 +104,26 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
 
     @Override
     public Dimensions getPreferredSize() {
-        // TODO Optimize
-        return new Dimensions(getPreferredWidth(-1), getPreferredHeight(-1));
+        int preferredWidth = 0;
+        int preferredHeight = thickness;
+
+        Separator separator = (Separator)getComponent();
+        String heading = separator.getHeading();
+
+        if (heading != null
+            && heading.length() > 0) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            Rectangle2D headingBounds = font.getStringBounds(heading, fontRenderContext);
+            LineMetrics lm = font.getLineMetrics(heading, fontRenderContext);
+            preferredWidth = (int)Math.ceil(headingBounds.getWidth());
+            preferredHeight = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
+                + lm.getLeading()), preferredHeight);
+        }
+
+        preferredHeight += (padding.top + padding.bottom);
+        preferredWidth += (padding.left + padding.right);
+
+        return new Dimensions(preferredWidth, preferredHeight);
     }
 
     @Override
