@@ -57,7 +57,7 @@ limitations under the License.
                     <TablePane.Row height="1*">
                         <Border styles="{color:10}">
                             <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
-                                <TextArea text="@text_area.txt"/>
+                                <TextArea text="@sample.txt"/>
                             </ScrollPane>
                         </Border>
                     </TablePane.Row>

@@ -54,14 +54,14 @@ limitations under the License.
                                     ]]>
                                 </componentKeyListeners>
 
-                                <textInputTextListeners>
+                                <textInputContentListeners>
                                     <![CDATA[
                                     function textChanged(textInput) {
                                         var term = termTextInput.getText();
                                         searchButton.setEnabled(term.length() > 0);
                                     }
                                     ]]>
-                                </textInputTextListeners>
+                                </textInputContentListeners>
                             </TextInput>
 
                             <PushButton bxml:id="searchButton" enabled="false"

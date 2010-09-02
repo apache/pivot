@@ -75,7 +75,7 @@ public class EditGreetingSheet extends Sheet implements Bindable {
         form.clearFlags();
 
         if (result) {
-            if (greetingTextInput.getCharacters().length() == 0) {
+            if (greetingTextInput.getCharacterCount() == 0) {
                 Form.setFlag(greetingTextInput, new Form.Flag(MessageType.ERROR,
                     (String)resources.get("greetingRequired")));
             }

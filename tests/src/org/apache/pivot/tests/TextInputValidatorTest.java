@@ -43,7 +43,7 @@ public class TextInputValidatorTest implements Application {
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = new Window((Component)bxmlSerializer.readObject(
-            getClass().getResource("textInputValidator_test.bxml")));
+            getClass().getResource("text_input_validator_test.bxml")));
         textinputFloatRange = (TextInput)bxmlSerializer.getNamespace().get("textinputFloatRange");
         textinputIntRange = (TextInput)bxmlSerializer.getNamespace().get("textinputIntRange");
         textinputDateRegex = (TextInput)bxmlSerializer.getNamespace().get("textinputDateRegex");

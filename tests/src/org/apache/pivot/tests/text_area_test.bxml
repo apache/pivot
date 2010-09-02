@@ -16,23 +16,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="TextInput Event Test" maximized="true"
+<Window title="Text Area Test" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <BoxPane orientation="vertical">
-        <TextInput bxml:id="textInput">
-            <textInputContentListeners>
-            importClass(org.apache.pivot.util.Vote);
+    <windowStateListeners>
+    function windowOpened(window) {
+        textArea.insertText(",", 3);
+    }
+    </windowStateListeners>
 
-            function previewInsertText(textInput, text, index) {
-                return (text == "e") ? Vote.DENY : Vote.APPROVE;
-            }
-
-            function previewRemoveText(textInput, index, count) {
-                var text = textInput.getText(index, index + count);
-                return (text == "f") ? Vote.DENY : Vote.APPROVE;
-            }
-            </textInputContentListeners>
-        </TextInput>
-    </BoxPane>
+    <ScrollPane>
+        <TextArea2 bxml:id="textArea" text="ABC"/>
+    </ScrollPane>
 </Window>

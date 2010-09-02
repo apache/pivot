@@ -54,7 +54,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
     @Override
     public Dimensions getPreferredSize() {
         // TODO
-        return null;
+        return new Dimensions(0, 0);
     }
 
     @Override

@@ -18,7 +18,14 @@ package org.apache.pivot.wtk;
 
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.net.URL;
+import java.text.CharacterIterator;
 
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 
@@ -182,7 +189,8 @@ public class TextArea2 extends Component {
         }
     }
 
-    private CharSequence characters = null; // TODO
+    private ArrayList<StringBuilder> paragraphs = null;
+    private int length = 0;
 
     private int selectionStart = 0;
     private int selectionLength = 0;
@@ -200,6 +208,8 @@ public class TextArea2 extends Component {
     private TextAreaBindingListenerList textAreaBindingListeners = new TextAreaBindingListenerList();
 
     public TextArea2() {
+        setText("");
+
         installThemeSkin(TextArea2.class);
     }
 
@@ -213,7 +223,7 @@ public class TextArea2 extends Component {
         super.setSkin(skin);
     }
 
-    public CharSequence getCharacters() {
+    public CharacterIterator getCharacters() {
         // TODO
         return null;
     }
@@ -225,7 +235,21 @@ public class TextArea2 extends Component {
      * A string containing a copy of the text area's text content.
      */
     public String getText() {
-        return characters.toString();
+        return getText(0, getCharacterCount());
+    }
+
+    /**
+     * Returns a portion of the text content of the text input.
+     *
+     * @param beginIndex
+     * @param endIndex
+     *
+     * @return
+     * A string containing a copy of the text area's text content.
+     */
+    public String getText(int beginIndex, int endIndex) {
+        // TODO
+        return null;
     }
 
     /**
@@ -242,12 +266,60 @@ public class TextArea2 extends Component {
             throw new IllegalArgumentException("Text length is greater than maximum length.");
         }
 
-        // TODO Create new text buffers
+        try {
+            setText(new StringReader(text));
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    public void setText(URL textURL) throws IOException {
+        if (textURL == null) {
+            throw new IllegalArgumentException();
+        }
+
+        InputStream inputStream = null;
+        try {
+            inputStream = textURL.openStream();
+            setText(new InputStreamReader(inputStream));
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+    }
+
+    public void setText(Reader textReader) throws IOException {
+        if (textReader == null) {
+            throw new IllegalArgumentException();
+        }
+
+        // Construct the paragraph list
+        paragraphs = new ArrayList<StringBuilder>();
+        length = 0;
+
+        StringBuilder paragraph = new StringBuilder();
+
+        int c = textReader.read();
+        while (c != -1) {
+            if (c == '\n') {
+                paragraphs.add(paragraph);
+                paragraph = new StringBuilder();
+            } else {
+                paragraph.append(c);
+            }
+
+            length++;
+
+            c = textReader.read();
+        }
+
+        paragraphs.add(paragraph);
 
         // Update selection
         int previousSelectionStart = selectionStart;
         int previousSelectionLength = selectionLength;
-        selectionStart = text.length();
+        selectionStart = length;
         selectionLength = 0;
 
         // Fire change events
@@ -264,14 +336,13 @@ public class TextArea2 extends Component {
             throw new IllegalArgumentException();
         }
 
-        if (characters.length() + text.length() > maximumLength) {
+        if (length + text.length() > maximumLength) {
             throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
         }
 
         // Insert the text
         if (text.length() > 0) {
-            // TODO Insert the text
-            // characters.insert(index, text);
+            // TODO (don't forget to update length)
 
             // Update selection
             int previousSelectionStart = selectionStart;
@@ -292,8 +363,7 @@ public class TextArea2 extends Component {
 
     public void removeText(int index, int count) {
         if (count > 0) {
-            // TODO Remove the text
-            // characters.delete(index, index + count);
+            // TODO (don't forget to update length)
 
             // Update the selection
             int previousSelectionStart = selectionStart;
@@ -310,6 +380,29 @@ public class TextArea2 extends Component {
                 textAreaSelectionListeners.selectionChanged(this, selectionStart, selectionLength);
             }
         }
+    }
+
+    /**
+     * Returns the number of characters in the text area, including line break
+     * characters.
+     */
+    public int getCharacterCount() {
+        return length;
+    }
+
+    /**
+     * Returns a character iterator over the text area's content.
+     */
+    public CharacterIterator getCharacterIterator() {
+        return getCharacterIterator(0, getCharacterCount());
+    }
+
+    /**
+     * Returns a character iterator over a portion the text area's content.
+     */
+    public CharacterIterator getCharacterIterator(int beginIndex, int endIndex) {
+        // TODO
+        return null;
     }
 
     /**
@@ -352,7 +445,7 @@ public class TextArea2 extends Component {
             }
 
             if (text != null) {
-                if ((characters.length() + text.length()) > maximumLength) {
+                if ((length + text.length()) > maximumLength) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
                     insertText(text, selectionStart);
@@ -417,7 +510,7 @@ public class TextArea2 extends Component {
         }
 
         if (selectionStart < 0
-            || selectionStart + selectionLength > characters.length()) {
+            || selectionStart + selectionLength > length) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -453,7 +546,7 @@ public class TextArea2 extends Component {
      * Selects all text.
      */
     public void selectAll() {
-        setSelection(0, characters.length());
+        setSelection(0, length);
     }
 
     /**
@@ -470,7 +563,7 @@ public class TextArea2 extends Component {
      * A string containing a copy of the selected text.
      */
     public String getSelectedText() {
-        return characters.subSequence(selectionStart, selectionStart + selectionLength).toString();
+        return getText(selectionStart, selectionStart + selectionLength);
     }
 
     /**
@@ -497,19 +590,19 @@ public class TextArea2 extends Component {
         int previousMaximumLength = this.maximumLength;
 
         if (previousMaximumLength != maximumLength) {
-            int previousTextLength = characters.length();
+            int previousTextLength = length;
 
             this.maximumLength = maximumLength;
 
-            // TODO Truncate the text, if necessary
+            // Truncate the text, if necessary
             if (previousTextLength > maximumLength) {
-                // characters.delete(maximumLength, previousTextLength);
+                // TODO (don't forget to update length)
             }
 
             // Fire change events
             textAreaListeners.maximumLengthChanged(this, previousMaximumLength);
 
-            if (characters.length() != previousTextLength) {
+            if (length != previousTextLength) {
                 textAreaContentListeners.textChanged(this);
             }
         }
