@@ -26,8 +26,6 @@ public class Document extends Block {
 
     public Document(Document document, boolean recursive) {
         super(document, recursive);
-
-        // TODO?
     }
 
     @Override
