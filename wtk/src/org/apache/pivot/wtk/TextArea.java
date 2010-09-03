@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.Sequence;
@@ -910,7 +911,7 @@ public class TextArea extends Container {
             throw new IllegalArgumentException();
         }
 
-        setTextBindType(BindType.valueOf(textBindType.toUpperCase()));
+        setTextBindType(BindType.valueOf(textBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public TextBindMapping getTextBindMapping() {

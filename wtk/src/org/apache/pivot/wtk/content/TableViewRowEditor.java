@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.content;
 
 import java.awt.Graphics2D;
+import java.util.Locale;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
@@ -587,7 +588,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
             throw new IllegalArgumentException();
         }
 
-        setEditEffect(CardPaneSkin.SelectionChangeEffect.valueOf(editEffect.toUpperCase()));
+        setEditEffect(CardPaneSkin.SelectionChangeEffect.valueOf(editEffect.toUpperCase(Locale.ENGLISH)));
     }
 
     /**

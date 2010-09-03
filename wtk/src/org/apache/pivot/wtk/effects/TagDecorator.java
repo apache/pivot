@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.effects;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.Locale;
 
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -90,7 +91,7 @@ public class TagDecorator implements Decorator {
             throw new IllegalArgumentException("horizontalAlignment is null.");
         }
 
-        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase()));
+        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase(Locale.ENGLISH)));
     }
 
     public VerticalAlignment getVerticalAlignment() {
@@ -110,7 +111,7 @@ public class TagDecorator implements Decorator {
             throw new IllegalArgumentException("verticalAlignment is null.");
         }
 
-        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase()));
+        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase(Locale.ENGLISH)));
     }
 
     public int getXOffset() {

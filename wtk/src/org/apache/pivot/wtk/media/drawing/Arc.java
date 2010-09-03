@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.media.drawing;
 
 import java.awt.geom.Arc2D;
+import java.util.Locale;
 
 import org.apache.pivot.util.ListenerList;
 
@@ -171,7 +172,7 @@ public class Arc extends Shape2D {
             throw new IllegalArgumentException("type is null.");
         }
 
-        setType(Type.valueOf(type.toUpperCase()));
+        setType(Type.valueOf(type.toUpperCase(Locale.ENGLISH)));
     }
 
     @Override

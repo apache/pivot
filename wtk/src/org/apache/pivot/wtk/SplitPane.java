@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.util.Locale;
+
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 
@@ -246,7 +248,7 @@ public class SplitPane extends Container {
             throw new IllegalArgumentException("orientation is null.");
         }
 
-        setOrientation(Orientation.valueOf(orientation.toUpperCase()));
+        setOrientation(Orientation.valueOf(orientation.toUpperCase(Locale.ENGLISH)));
     }
 
     public Region getPrimaryRegion() {
@@ -269,7 +271,7 @@ public class SplitPane extends Container {
             throw new IllegalArgumentException("primaryRegion is null.");
         }
 
-        setPrimaryRegion(Region.valueOf(primaryRegion.toUpperCase()));
+        setPrimaryRegion(Region.valueOf(primaryRegion.toUpperCase(Locale.ENGLISH)));
     }
 
     public float getSplitRatio() {
@@ -323,7 +325,7 @@ public class SplitPane extends Container {
             throw new IllegalArgumentException("resizeMode is null.");
         }
 
-        setResizeMode(ResizeMode.valueOf(resizeMode.toUpperCase()));
+        setResizeMode(ResizeMode.valueOf(resizeMode.toUpperCase(Locale.ENGLISH)));
     }
 
     @Override

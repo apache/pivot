@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.util.Locale;
+
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.util.ListenerList;
 
@@ -183,7 +185,7 @@ public class Slider extends Container {
             throw new IllegalArgumentException("orientation is null.");
         }
 
-        setOrientation(Orientation.valueOf(orientation.toUpperCase()));
+        setOrientation(Orientation.valueOf(orientation.toUpperCase(Locale.ENGLISH)));
     }
 
     public ListenerList<SliderListener> getSliderListeners() {

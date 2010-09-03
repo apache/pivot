@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.util.Locale;
+
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 
@@ -481,7 +483,7 @@ public abstract class Button extends Component {
             throw new IllegalArgumentException("state is null.");
         }
 
-        setState(State.valueOf(state.toUpperCase()));
+        setState(State.valueOf(state.toUpperCase(Locale.ENGLISH)));
     }
 
     /**
@@ -662,7 +664,7 @@ public abstract class Button extends Component {
             throw new IllegalArgumentException();
         }
 
-        setSelectedBindType(BindType.valueOf(selectedBindType.toUpperCase()));
+        setSelectedBindType(BindType.valueOf(selectedBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public SelectedBindMapping getSelectedBindMapping() {
@@ -713,7 +715,7 @@ public abstract class Button extends Component {
             throw new IllegalArgumentException();
         }
 
-        setStateBindType(BindType.valueOf(stateBindType.toUpperCase()));
+        setStateBindType(BindType.valueOf(stateBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public StateBindMapping getStateBindMapping() {
@@ -744,7 +746,7 @@ public abstract class Button extends Component {
                         state = (State)value;
                     } else if (stateBindMapping == null) {
                         if (value != null) {
-                            state = State.valueOf(value.toString().toUpperCase());
+                            state = State.valueOf(value.toString().toUpperCase(Locale.ENGLISH));
                         }
                     } else {
                         state = stateBindMapping.toState(value);

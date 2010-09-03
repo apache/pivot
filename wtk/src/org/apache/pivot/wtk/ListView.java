@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
+import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
@@ -1428,7 +1429,7 @@ public class ListView extends Component {
             throw new IllegalArgumentException("selectMode is null.");
         }
 
-        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase()));
+        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase(Locale.ENGLISH)));
     }
 
     /**
@@ -1662,7 +1663,7 @@ public class ListView extends Component {
             throw new IllegalArgumentException();
         }
 
-        setListDataBindType(BindType.valueOf(listDataBindType.toUpperCase()));
+        setListDataBindType(BindType.valueOf(listDataBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public ListDataBindMapping getListDataBindMapping() {
@@ -1712,7 +1713,7 @@ public class ListView extends Component {
             throw new IllegalArgumentException();
         }
 
-        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase()));
+        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public ItemBindMapping getSelectedItemBindMapping() {
@@ -1762,7 +1763,7 @@ public class ListView extends Component {
             throw new IllegalArgumentException();
         }
 
-        setSelectedItemsBindType(BindType.valueOf(selectedItemsBindType.toUpperCase()));
+        setSelectedItemsBindType(BindType.valueOf(selectedItemsBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public ItemBindMapping getSelectedItemsBindMapping() {

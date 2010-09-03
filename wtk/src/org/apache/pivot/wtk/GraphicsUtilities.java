@@ -24,13 +24,13 @@ import java.awt.Paint;
 import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
+import java.util.Locale;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.wtk.Orientation;
 
 /**
  * Contains utility methods dealing with the Java2D API.
@@ -179,7 +179,7 @@ public final class GraphicsUtilities {
             throw new IllegalArgumentException();
         }
 
-        value = value.toLowerCase();
+        value = value.toLowerCase(Locale.ENGLISH);
 
         Color color;
         if (value.startsWith("0x")) {
@@ -250,7 +250,7 @@ public final class GraphicsUtilities {
         }
 
         Paint paint;
-        switch(PaintType.valueOf(paintType.toUpperCase())) {
+        switch(PaintType.valueOf(paintType.toUpperCase(Locale.ENGLISH))) {
             case SOLID_COLOR: {
                 String color = JSON.get(dictionary, COLOR_KEY);
                 paint = decodeColor(color);

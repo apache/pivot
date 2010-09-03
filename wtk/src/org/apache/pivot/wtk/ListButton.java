@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
+import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
@@ -608,7 +609,7 @@ public class ListButton extends Button {
             throw new IllegalArgumentException();
         }
 
-        setListDataBindType(BindType.valueOf(listDataBindType.toUpperCase()));
+        setListDataBindType(BindType.valueOf(listDataBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public ListDataBindMapping getListDataBindMapping() {
@@ -658,7 +659,7 @@ public class ListButton extends Button {
             throw new IllegalArgumentException();
         }
 
-        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase()));
+        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public ListView.ItemBindMapping getSelectedItemBindMapping() {

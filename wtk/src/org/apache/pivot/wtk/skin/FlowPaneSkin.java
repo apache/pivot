@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk.skin;
 
+import java.util.Locale;
+
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Component;
@@ -353,7 +355,7 @@ public class FlowPaneSkin extends ContainerSkin {
             throw new IllegalArgumentException("alignment is null.");
         }
 
-        setAlignment(HorizontalAlignment.valueOf(alignment.toUpperCase()));
+        setAlignment(HorizontalAlignment.valueOf(alignment.toUpperCase(Locale.ENGLISH)));
     }
 
     public Insets getPadding() {

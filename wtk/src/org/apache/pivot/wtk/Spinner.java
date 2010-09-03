@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import java.util.Comparator;
+import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
@@ -562,7 +563,7 @@ public class Spinner extends Container {
             throw new IllegalArgumentException();
         }
 
-        setSpinnerDataBindType(BindType.valueOf(spinnerDataBindType.toUpperCase()));
+        setSpinnerDataBindType(BindType.valueOf(spinnerDataBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public SpinnerDataBindMapping getSpinnerDataBindMapping() {
@@ -612,7 +613,7 @@ public class Spinner extends Container {
             throw new IllegalArgumentException();
         }
 
-        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase()));
+        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public ItemBindMapping getSelectedItemBindMapping() {

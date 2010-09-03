@@ -30,6 +30,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -631,7 +632,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static void initializeOSExtensions() {
         String osName = System.getProperty("os.name");
 
-        if (osName.toLowerCase().startsWith("mac os x")) {
+        if (osName.toLowerCase(Locale.ENGLISH).startsWith("mac os x")) {
             try {
                 // Get the EAWT classes and methods
                 Class<?> eawtApplicationClass = Class.forName("com.apple.eawt.Application");

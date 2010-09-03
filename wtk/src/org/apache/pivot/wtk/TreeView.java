@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import java.util.Comparator;
+import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
@@ -1282,7 +1283,7 @@ public class TreeView extends Component {
             throw new IllegalArgumentException("selectMode is null.");
         }
 
-        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase()));
+        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase(Locale.ENGLISH)));
     }
 
     /**

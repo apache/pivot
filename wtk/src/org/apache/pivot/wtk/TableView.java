@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
@@ -2076,7 +2077,7 @@ public class TableView extends Component {
             throw new IllegalArgumentException("selectMode is null.");
         }
 
-        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase()));
+        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase(Locale.ENGLISH)));
     }
 
     /**
@@ -2165,7 +2166,7 @@ public class TableView extends Component {
 
             Dictionary.Pair<String, SortDirection> pair =
                 new Dictionary.Pair<String, SortDirection>((String)map.get(COLUMN_NAME_KEY),
-                    SortDirection.valueOf(((String)map.get(SORT_DIRECTION_KEY)).toUpperCase()));
+                    SortDirection.valueOf(((String)map.get(SORT_DIRECTION_KEY)).toUpperCase(Locale.ENGLISH)));
             sort.add(pair);
         }
 
@@ -2266,7 +2267,7 @@ public class TableView extends Component {
             throw new IllegalArgumentException();
         }
 
-        setTableDataBindType(BindType.valueOf(tableDataBindType.toUpperCase()));
+        setTableDataBindType(BindType.valueOf(tableDataBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public TableDataBindMapping getTableDataBindMapping() {
@@ -2316,7 +2317,7 @@ public class TableView extends Component {
             throw new IllegalArgumentException();
         }
 
-        setSelectedRowBindType(BindType.valueOf(selectedRowBindType.toUpperCase()));
+        setSelectedRowBindType(BindType.valueOf(selectedRowBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public SelectedRowBindMapping getSelectedRowBindMapping() {
@@ -2366,7 +2367,7 @@ public class TableView extends Component {
             throw new IllegalArgumentException();
         }
 
-        setSelectedRowsBindType(BindType.valueOf(selectedRowsBindType.toUpperCase()));
+        setSelectedRowsBindType(BindType.valueOf(selectedRowsBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public SelectedRowBindMapping getSelectedRowsBindMapping() {

@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.media.drawing;
 
 import java.awt.geom.Path2D;
+import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
@@ -530,7 +531,7 @@ public class Path extends Shape2D implements Sequence<Path.Operation> {
     }
 
     public final void setWindingRule(String windingRule) {
-        setWindingRule(WindingRule.valueOf(windingRule.toUpperCase()));
+        setWindingRule(WindingRule.valueOf(windingRule.toUpperCase(Locale.ENGLISH)));
     }
 
     /**

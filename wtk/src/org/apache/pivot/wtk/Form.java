@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
@@ -318,7 +319,7 @@ public class Form extends Container {
                 throw new IllegalArgumentException();
             }
 
-            setMessageType(MessageType.valueOf(messageType.toUpperCase()));
+            setMessageType(MessageType.valueOf(messageType.toUpperCase(Locale.ENGLISH)));
         }
 
         /**
@@ -356,7 +357,7 @@ public class Form extends Container {
                 throw new IllegalArgumentException(MESSAGE_TYPE_KEY + " is required.");
             }
 
-            Flag value = new Flag(MessageType.valueOf(messageType.toUpperCase()),
+            Flag value = new Flag(MessageType.valueOf(messageType.toUpperCase(Locale.ENGLISH)),
                 (String)map.get(MESSAGE_KEY));
 
             return value;

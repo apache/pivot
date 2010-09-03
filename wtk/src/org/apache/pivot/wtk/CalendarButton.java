@@ -391,7 +391,7 @@ public class CalendarButton extends Button {
             throw new IllegalArgumentException();
         }
 
-        setSelectedDateBindType(BindType.valueOf(selectedDateBindType.toUpperCase()));
+        setSelectedDateBindType(BindType.valueOf(selectedDateBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public Calendar.SelectedDateBindMapping getSelectedDateBindMapping() {

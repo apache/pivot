@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.json.JSON;
@@ -760,7 +761,7 @@ public class TextArea2 extends Component {
             throw new IllegalArgumentException();
         }
 
-        setTextBindType(BindType.valueOf(textBindType.toUpperCase()));
+        setTextBindType(BindType.valueOf(textBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public TextBindMapping getTextBindMapping() {

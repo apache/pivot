@@ -24,19 +24,20 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Locale;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonGroupListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
@@ -1301,7 +1302,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             throw new IllegalArgumentException("tabOrientation is null.");
         }
 
-        setTabOrientation(Orientation.valueOf(tabOrientation.toUpperCase()));
+        setTabOrientation(Orientation.valueOf(tabOrientation.toUpperCase(Locale.ENGLISH)));
     }
 
     @Override

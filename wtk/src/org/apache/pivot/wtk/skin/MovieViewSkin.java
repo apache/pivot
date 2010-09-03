@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.skin;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
+import java.util.Locale;
 
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -225,7 +226,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
             throw new IllegalArgumentException("horizontalAlignment is null.");
         }
 
-        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase()));
+        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase(Locale.ENGLISH)));
     }
 
     public VerticalAlignment getVerticalAlignment() {
@@ -250,7 +251,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
             throw new IllegalArgumentException("verticalAlignment is null.");
         }
 
-        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase()));
+        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase(Locale.ENGLISH)));
     }
 
     // MovieViewListener methods

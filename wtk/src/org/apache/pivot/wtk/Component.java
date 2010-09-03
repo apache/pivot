@@ -22,6 +22,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.beans.IDProperty;
@@ -2223,7 +2224,7 @@ public abstract class Component implements ConstrainedVisual {
         if (cursor == null) {
             setCursor((Cursor)null);
         } else {
-            setCursor(Cursor.valueOf(cursor.toUpperCase()));
+            setCursor(Cursor.valueOf(cursor.toUpperCase(Locale.ENGLISH)));
         }
     }
 

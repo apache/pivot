@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
@@ -273,7 +274,7 @@ public final class TerraTheme extends Theme {
                 throw new RuntimeException(exception);
             }
 
-            messageIcons.put(MessageType.valueOf(messageIconType.toUpperCase()), messageIcon);
+            messageIcons.put(MessageType.valueOf(messageIconType.toUpperCase(Locale.ENGLISH)), messageIcon);
         }
     }
 

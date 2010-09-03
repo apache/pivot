@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.util.Locale;
+
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -66,7 +68,7 @@ public class BoxPane extends Container {
             throw new IllegalArgumentException();
         }
 
-        setOrientation(Orientation.valueOf(orientation.toUpperCase()));
+        setOrientation(Orientation.valueOf(orientation.toUpperCase(Locale.ENGLISH)));
     }
 
     public ListenerList<BoxPaneListener> getBoxPaneListeners() {

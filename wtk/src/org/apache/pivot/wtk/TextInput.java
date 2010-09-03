@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.util.Locale;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
@@ -733,7 +734,7 @@ public class TextInput extends Component {
             throw new IllegalArgumentException();
         }
 
-        setTextBindType(BindType.valueOf(textBindType.toUpperCase()));
+        setTextBindType(BindType.valueOf(textBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public TextBindMapping getTextBindMapping() {

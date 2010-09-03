@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
+import java.util.Locale;
 
 /**
  * Class representing the system keyboard.
@@ -126,12 +127,12 @@ public final class Keyboard {
             for (int i = 0, n = keys.length; i < n; i++) {
                 if (i < n - 1) {
                     // Modifier
-                    Modifier modifier = Modifier.valueOf(keys[i].toUpperCase());
+                    Modifier modifier = Modifier.valueOf(keys[i].toUpperCase(Locale.ENGLISH));
                     modifiers |= modifier.getMask();
                 } else {
                     // Keycode
                     try {
-                        Field keyCodeField = KeyCode.class.getField(keys[i].toUpperCase());
+                        Field keyCodeField = KeyCode.class.getField(keys[i].toUpperCase(Locale.ENGLISH));
                         keyCode = (Integer)keyCodeField.get(null);
                     } catch(Exception exception) {
                         throw new IllegalArgumentException(exception);

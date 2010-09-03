@@ -359,7 +359,7 @@ public class Calendar extends Container {
             throw new IllegalArgumentException();
         }
 
-        setSelectedDateBindType(BindType.valueOf(selectedDateBindType.toUpperCase()));
+        setSelectedDateBindType(BindType.valueOf(selectedDateBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public SelectedDateBindMapping getSelectedDateBindMapping() {

@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.util.Locale;
+
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -108,7 +110,7 @@ public class Meter extends Component {
             throw new IllegalArgumentException("orientation is null.");
         }
 
-        setOrientation(Orientation.valueOf(orientation.toUpperCase()));
+        setOrientation(Orientation.valueOf(orientation.toUpperCase(Locale.ENGLISH)));
     }
 
     public ListenerList<MeterListener> getMeterListeners() {

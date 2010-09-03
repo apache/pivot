@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
@@ -226,7 +227,7 @@ public class Prompt extends Sheet {
             throw new IllegalArgumentException("messageType is null.");
         }
 
-        setMessageType(MessageType.valueOf(messageType.toUpperCase()));
+        setMessageType(MessageType.valueOf(messageType.toUpperCase(Locale.ENGLISH)));
     }
 
     public String getMessage() {

@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk.skin;
 
+import java.util.Locale;
+
 import org.apache.pivot.wtk.text.NumberedList;
 import org.apache.pivot.wtk.text.NumberedListListener;
 import org.apache.pivot.wtk.text.NumberedList.Style;
@@ -101,13 +103,13 @@ class TextAreaSkinNumberedListView extends TextAreaSkinListView implements Numbe
                         listItemView.setIndexText(index + ". ");
                         break;
                     case LOWER_ALPHA:
-                        listItemView.setIndexText(int2alpha(index).toLowerCase() + ". ");
+                        listItemView.setIndexText(int2alpha(index).toLowerCase(Locale.ENGLISH) + ". ");
                         break;
                     case UPPER_ALPHA:
                         listItemView.setIndexText(int2alpha(index) + ". ");
                         break;
                     case LOWER_ROMAN:
-                        listItemView.setIndexText(int2roman(index).toLowerCase() + ". ");
+                        listItemView.setIndexText(int2roman(index).toLowerCase(Locale.ENGLISH) + ". ");
                         break;
                     case UPPER_ROMAN:
                         listItemView.setIndexText(int2roman(index) + ". ");

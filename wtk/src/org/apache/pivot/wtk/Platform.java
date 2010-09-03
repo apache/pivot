@@ -21,6 +21,7 @@ import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Locale;
 
 import org.apache.pivot.wtk.Keyboard.Modifier;
 
@@ -37,7 +38,7 @@ public class Platform {
     private static final String KEYSTROKE_MODIFIER_SEPARATOR;
 
     static {
-        String osName = System.getProperty("os.name").toLowerCase();
+        String osName = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
 
         if (osName.startsWith("mac os x")) {
             COMMAND_MODIFIER = Modifier.META;
