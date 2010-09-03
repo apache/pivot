@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.media.Image;
 public class TreeNode {
     private Image icon = null;
     private String text = null;
+    private Object userData = null;
 
     public TreeNode() {
         this(null, null);
@@ -112,5 +113,13 @@ public class TreeNode {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Object getUserData() {
+        return userData;
+    }
+
+    public void setUserData(Object userData) {
+        this.userData = userData;
     }
 }
