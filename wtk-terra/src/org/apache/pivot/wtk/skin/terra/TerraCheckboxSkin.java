@@ -161,7 +161,8 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
         // Paint the content
         Button.DataRenderer dataRenderer = checkbox.getDataRenderer();
-        dataRenderer.render(checkbox.getButtonData(), checkbox, false);
+        Object buttonData = checkbox.getButtonData();
+        dataRenderer.render(buttonData, checkbox, false);
         dataRenderer.setSize(Math.max(width - (CHECKBOX_SIZE + spacing * 2), 0), height);
 
         Graphics2D contentGraphics = (Graphics2D)graphics.create();
@@ -172,18 +173,27 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
         // Paint the focus state
         if (checkbox.isFocused()) {
-            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+            if (buttonData == null) {
+                Color focusColor = new Color(buttonSelectionColor.getRed(),
+                    buttonSelectionColor.getGreen(),
+                    buttonSelectionColor.getBlue(), 0x44);
+                graphics.setColor(focusColor);
+                graphics.fillRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
+            } else {
+                BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
+                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
-            graphics.setStroke(dashStroke);
-            graphics.setColor(buttonBorderColor);
+                graphics.setStroke(dashStroke);
+                graphics.setColor(buttonBorderColor);
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.draw(new Rectangle2D.Double(CHECKBOX_SIZE + 1, 0.5,
-                dataRenderer.getWidth() + spacing * 2 - 2,
-                dataRenderer.getHeight() - 1));
+                Rectangle2D focusRectangle = new Rectangle2D.Double(CHECKBOX_SIZE + 1, 0.5,
+                    dataRenderer.getWidth() + spacing * 2 - 2,
+                    dataRenderer.getHeight() - 1);
+                graphics.draw(focusRectangle);
+            }
         }
     }
 
