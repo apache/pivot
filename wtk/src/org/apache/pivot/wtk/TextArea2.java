@@ -23,16 +23,109 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
+import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 /**
  * A component that allows a user to enter multiple lines of unformatted text.
  */
 public class TextArea2 extends Component {
+    /**
+     * Class representing a paragraph of text.
+     */
+    public final class Paragraph {
+        private StringBuilder characters;
+
+        private Paragraph() {
+            characters = new StringBuilder(INITIAL_PARAGRAPH_CAPACITY);
+        }
+
+        public CharSequence getCharacters() {
+            return characters;
+        }
+
+        public void insertText(String text, int index) {
+            characters.insert(index, text);
+
+            // TODO Fire event
+            // TODO Update selection state
+        }
+
+        public void removeText(int index, int count) {
+            characters.delete(index, index + count);
+
+            // TODO Fire event
+            // TODO Update selection state
+        }
+
+        public int getOffset() {
+            // TODO
+            return -1;
+        }
+
+        // TODO Add listener list accessor
+    }
+
+    /**
+     * Paragraph listener interface.
+     */
+    public interface ParagraphListener {
+        /**
+         * Paragraph listener interface adapter.
+         */
+        public static class Adapter implements ParagraphListener {
+            @Override
+            public void textInserted(Paragraph paragraph, int index, int count) {
+            }
+
+            @Override
+            public void textRemoved(Paragraph paragraph, int index, int count) {
+            }
+        }
+
+        /**
+         * Called when text has been inserted into a paragraph.
+         *
+         * @param paragraph
+         * The source of the event.
+         *
+         * @param index
+         * The index at which the text was inserted.
+         *
+         * @param count
+         * The number of characters that were inserted.
+         */
+        public void textInserted(Paragraph paragraph, int index, int count);
+
+        /**
+         * Called when characters have been removed from a paragraph.
+         *
+         * @param paragraph
+         * The source of the event.
+         *
+         * @param index
+         * The index from which the text was removed.
+         *
+         * @param count
+         * The number of characters that were removed.
+         */
+        public void textRemoved(Paragraph paragraph, int index, int count);
+    }
+
+    /**
+     * Enum representing a scroll direction.
+     */
+    public enum ScrollDirection {
+        UP,
+        DOWN
+    }
+
     /**
      * Text area skin interface. Text area skins are required to implement
      * this.
@@ -54,7 +147,7 @@ public class TextArea2 extends Component {
          * @param from
          * @param direction
          */
-        public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction);
+        public int getNextInsertionPoint(int x, int from, ScrollDirection direction);
 
         /**
          * Returns the row index of the character at a given index.
@@ -97,6 +190,51 @@ public class TextArea2 extends Component {
         public Object valueOf(String text);
     }
 
+    public final class ParagraphSequence implements Sequence<Paragraph>, Iterable<Paragraph> {
+        public int add(Paragraph paragraph) {
+            // TODO
+            return -1;
+        }
+
+        public void insert(Paragraph paragraph, int index) {
+            // TODO
+        }
+
+        public Paragraph update(int index, Paragraph paragraph) {
+            // TODO
+            return null;
+        }
+
+        public int remove(Paragraph paragraph){
+            // TODO
+            return -1;
+        }
+
+        public Sequence<Paragraph> remove(int index, int count) {
+            // TODO
+            return null;
+        }
+
+        public Paragraph get(int index) {
+            // TODO
+            return null;
+        }
+
+        public int indexOf(Paragraph paragraph) {
+            // TODO
+            return -1;
+        }
+
+        public int getLength() {
+            // TODO
+            return -1;
+        }
+
+        public Iterator<Paragraph> iterator() {
+            return new ImmutableIterator<Paragraph>(paragraphs.iterator());
+        }
+    }
+
     private static class TextAreaListenerList extends ListenerList<TextAreaListener2>
         implements TextAreaListener2 {
         @Override
@@ -117,16 +255,16 @@ public class TextArea2 extends Component {
     private static class TextAreaContentListenerList extends ListenerList<TextAreaContentListener2>
         implements TextAreaContentListener2 {
         @Override
-        public void textInserted(TextArea2 textArea, int index, int count) {
+        public void paragraphInserted(TextArea2 textArea, int index) {
             for (TextAreaContentListener2 listener : this) {
-                listener.textInserted(textArea, index, count);
+                listener.paragraphInserted(textArea, index);
             }
         }
 
         @Override
-        public void textRemoved(TextArea2 textArea, int index, int count) {
+        public void paragraphsRemoved(TextArea2 textArea, int index, Sequence<TextArea2.Paragraph> removed) {
             for (TextAreaContentListener2 listener : this) {
-                listener.textRemoved(textArea, index, count);
+                listener.paragraphsRemoved(textArea, index, removed);
             }
         }
 
@@ -174,7 +312,9 @@ public class TextArea2 extends Component {
         }
     }
 
-    private ArrayList<StringBuilder> paragraphs = null;
+    private ArrayList<Paragraph> paragraphs = new ArrayList<Paragraph>();
+    private ParagraphSequence paragraphSequence = new ParagraphSequence();
+
     private int characterCount = 0;
 
     private int selectionStart = 0;
@@ -195,8 +335,6 @@ public class TextArea2 extends Component {
     private static final int INITIAL_PARAGRAPH_CAPACITY = 256;
 
     public TextArea2() {
-        setText("");
-
         installThemeSkin(TextArea2.class);
     }
 
@@ -241,36 +379,7 @@ public class TextArea2 extends Component {
 
         StringBuilder textBuilder = new StringBuilder(endIndex - beginIndex);
 
-        // Determine the start of the range
-        int paragraphIndex = 0;
-        int characterOffset = 0;
-
-        StringBuilder paragraph = paragraphs.get(paragraphIndex);
-        int paragraphLength = paragraph.length();
-
-        while (characterOffset + paragraphLength < beginIndex) {
-            characterOffset += paragraphLength;
-
-            paragraph = paragraphs.get(++paragraphIndex);
-            paragraphLength = paragraph.length();
-        }
-
-        characterOffset = beginIndex - characterOffset;
-
-        // Walk from begin index to end index copying characters into text builder
-        for (int index = beginIndex; index < endIndex; index++) {
-            textBuilder.append(paragraph.charAt(characterOffset++));
-
-            if (characterOffset == paragraphLength) {
-                if (index != endIndex - 1) {
-                    textBuilder.append('\n');
-                }
-
-                paragraph = paragraphs.get(++paragraphIndex);
-                paragraphLength = paragraph.length();
-                characterOffset = 0;
-            }
-        }
+        // TODO
 
         return textBuilder.toString();
     }
@@ -318,26 +427,12 @@ public class TextArea2 extends Component {
         }
 
         // Construct the paragraph list
-        paragraphs = new ArrayList<StringBuilder>();
+        paragraphs.clear();
         characterCount = 0;
 
-        StringBuilder paragraph = new StringBuilder(INITIAL_PARAGRAPH_CAPACITY);
+        // TODO
 
-        int c = textReader.read();
-        while (c != -1) {
-            if (c == '\n') {
-                paragraphs.add(paragraph);
-                paragraph = new StringBuilder(INITIAL_PARAGRAPH_CAPACITY);
-            } else {
-                paragraph.append(c);
-            }
-
-            characterCount++;
-
-            c = textReader.read();
-        }
-
-        paragraphs.add(paragraph);
+        // TODO set characterCount
 
         // Update selection
         int previousSelectionStart = selectionStart;
@@ -369,53 +464,7 @@ public class TextArea2 extends Component {
         }
 
         if (text.length() > 0) {
-            // Determine the insertion point
-            int paragraphIndex, characterOffset;
-            if (index == characterCount) {
-                paragraphIndex = paragraphs.getLength() - 1;
-                characterOffset = paragraphs.get(paragraphIndex).length();
-            } else {
-                paragraphIndex = 0;
-                characterOffset = 0;
-
-                int paragraphCount = paragraphs.getLength();
-                while (paragraphIndex < paragraphCount) {
-                    StringBuilder paragraph = paragraphs.get(paragraphIndex);
-                    int paragraphLength = paragraph.length();
-
-                    if (characterOffset + paragraphLength > index) {
-                        break;
-                    } else {
-                        characterOffset += paragraphLength;
-                        paragraphIndex++;
-                    }
-                }
-
-                characterOffset = index - characterOffset;
-            }
-
-            // Insert the text
-            StringBuilder textBuilder = new StringBuilder();
-
-            for (int i = 0, n = text.length(); i < n; i++) {
-                char c = text.charAt(i);
-
-                if (c == '\n') {
-                    StringBuilder paragraph = paragraphs.get(paragraphIndex);
-                    paragraph.insert(characterOffset, textBuilder);
-
-                    characterOffset += textBuilder.length();
-                    textBuilder = new StringBuilder(paragraph.substring(characterOffset));
-                    paragraphs.insert(textBuilder, ++paragraphIndex);
-                } else {
-                    textBuilder.append(c);
-                }
-            }
-
-            StringBuilder paragraph = paragraphs.get(paragraphIndex);
-            paragraph.insert(characterOffset, textBuilder);
-
-            characterCount += text.length();
+            // TODO
 
             // Update selection
             int previousSelectionStart = selectionStart;
@@ -424,7 +473,6 @@ public class TextArea2 extends Component {
             selectionLength = 0;
 
             // Fire change events
-            textAreaContentListeners.textInserted(this, previousSelectionStart, text.length());
             textAreaContentListeners.textChanged(this);
 
             if (selectionStart != previousSelectionStart
@@ -436,10 +484,7 @@ public class TextArea2 extends Component {
 
     public void removeText(int index, int count) {
         if (count > 0) {
-            // TODO Identify begin paragraph index/offset
-            // TODO Identify end paragraph index/offset
-            // TODO Remove leading/trailing characters
-            // TODO Removing any intervening paragraphs
+            // TODO
 
             characterCount -= count;
 
@@ -450,7 +495,6 @@ public class TextArea2 extends Component {
             selectionLength = 0;
 
             // Fire change events
-            textAreaContentListeners.textRemoved(this, selectionStart, count);
             textAreaContentListeners.textChanged(this);
 
             if (selectionStart != previousSelectionStart
@@ -461,19 +505,31 @@ public class TextArea2 extends Component {
     }
 
     /**
-     * Returns a character sequence representing a paragraph's content.
-     *
-     * @param index
+     * Returns the text area's paragraph sequence.
      */
-    public CharSequence getParagraph(int index) {
-        return paragraphs.get(index);
+    public ParagraphSequence getParagraphs() {
+        return paragraphSequence;
     }
 
     /**
-     * Returns the number of paragraphs in the text area.
+     * Returns the index of the paragraph containing a given character index.
+     *
+     * @param index
      */
-    public int getParagraphCount() {
-        return paragraphs.getLength();
+    public int getParagraphAt(int index) {
+        // TODO Be sure to return paragraph corresponding to terminator character,
+        // including implicit final terminator
+        return -1;
+    }
+
+    /**
+     * Returns the character at a given index.
+     *
+     * @param index
+     */
+    public char getCharacterAt(int index) {
+        // TODO
+        return 0x00;
     }
 
     /**
@@ -812,27 +868,27 @@ public class TextArea2 extends Component {
     }
 
     public int getInsertionPoint(int x, int y) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea2.Skin textAreaSkin = (TextArea2.Skin)getSkin();
         return textAreaSkin.getInsertionPoint(x, y);
     }
 
-    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+    public int getNextInsertionPoint(int x, int from, ScrollDirection direction) {
+        TextArea2.Skin textAreaSkin = (TextArea2.Skin)getSkin();
         return textAreaSkin.getNextInsertionPoint(x, from, direction);
     }
 
     public int getRowIndex(int index) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea2.Skin textAreaSkin = (TextArea2.Skin)getSkin();
         return textAreaSkin.getRowIndex(index);
     }
 
     public int getRowCount() {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea2.Skin textAreaSkin = (TextArea2.Skin)getSkin();
         return textAreaSkin.getRowCount();
     }
 
     public Bounds getCharacterBounds(int index) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea2.Skin textAreaSkin = (TextArea2.Skin)getSkin();
         return textAreaSkin.getCharacterBounds(index);
     }
 

@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.collections.Sequence;
+
 /**
  * Text area text listener interface.
  */
@@ -25,11 +27,11 @@ public interface TextAreaContentListener2 {
      */
     public static class Adapter implements TextAreaContentListener2 {
         @Override
-        public void textInserted(TextArea2 textArea, int index, int count) {
+        public void paragraphInserted(TextArea2 textArea, int index) {
         }
 
         @Override
-        public void textRemoved(TextArea2 textArea, int index, int count) {
+        public void paragraphsRemoved(TextArea2 textArea, int index, Sequence<TextArea2.Paragraph> removed) {
         }
 
         @Override
@@ -38,32 +40,31 @@ public interface TextAreaContentListener2 {
     }
 
     /**
-     * Called when text has been inserted into a text area.
+     * Called when a paragraph has been inserted into a text area's paragraph
+     * sequence.
      *
      * @param textArea
      * The source of the event.
      *
      * @param index
-     * The index at which the text was inserted.
-     *
-     * @param count
-     * The number of characters that were inserted.
+     * The index at which the paragraph was inserted.
      */
-    public void textInserted(TextArea2 textArea, int index, int count);
+    public void paragraphInserted(TextArea2 textArea, int index);
 
     /**
-     * Called when characters have been removed from a text area.
+     * Called when paragraphs have been removed from a text area's paragraph
+     * sequence.
      *
      * @param textArea
      * The source of the event.
      *
      * @param index
-     * The index from which the text was removed.
+     * The starting index from which the paragraphs were removed.
      *
-     * @param count
-     * The number of characters that were removed.
+     * @param removed
+     * The paragraphs that were removed.
      */
-    public void textRemoved(TextArea2 textArea, int index, int count);
+    public void paragraphsRemoved(TextArea2 textArea, int index, Sequence<TextArea2.Paragraph> removed);
 
     /**
      * Called when a text area's text has changed.
