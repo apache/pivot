@@ -123,6 +123,9 @@ public class Platform {
         return java.awt.dnd.DragSource.getDragThreshold();
     }
 
+    /**
+     * Returns the system command modifier key. This is normally the CTRL or META key.
+     */
     public static Modifier getCommandModifier() {
         return COMMAND_MODIFIER;
     }
