@@ -75,11 +75,14 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         RadioButton radioButton = (RadioButton)getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
 
-        dataRenderer.render(radioButton.getButtonData(), radioButton, false);
+        int preferredWidth = BUTTON_DIAMETER;
 
-        int preferredWidth = BUTTON_DIAMETER
-            + dataRenderer.getPreferredWidth(height)
-            + spacing * 2;
+        Object buttonData = radioButton.getButtonData();
+        if (buttonData != null) {
+            dataRenderer.render(buttonData, radioButton, false);
+            preferredWidth += dataRenderer.getPreferredWidth(height)
+                + spacing * 2;
+        }
 
         return preferredWidth;
     }
@@ -89,14 +92,19 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         RadioButton radioButton = (RadioButton)getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
 
-        dataRenderer.render(radioButton.getButtonData(), radioButton, false);
+        int preferredHeight = BUTTON_DIAMETER;
 
-        if (width != -1) {
-            width = Math.max(width - (BUTTON_DIAMETER + spacing), 0);
+        Object buttonData = radioButton.getButtonData();
+        if (buttonData != null) {
+            if (width != -1) {
+                width = Math.max(width - (BUTTON_DIAMETER + spacing), 0);
+            }
+
+            dataRenderer.render(buttonData, radioButton, false);
+
+            preferredHeight = Math.max(preferredHeight,
+                dataRenderer.getPreferredHeight(width));
         }
-
-        int preferredHeight = Math.max(BUTTON_DIAMETER,
-            dataRenderer.getPreferredHeight(width));
 
         return preferredHeight;
     }
@@ -106,14 +114,19 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         RadioButton radioButton = (RadioButton)getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
 
-        dataRenderer.render(radioButton.getButtonData(), radioButton, false);
+        int preferredWidth = BUTTON_DIAMETER;
+        int preferredHeight = BUTTON_DIAMETER;
 
-        int preferredWidth = BUTTON_DIAMETER
-            + dataRenderer.getPreferredWidth(-1)
-            + spacing * 2;
+        Object buttonData = radioButton.getButtonData();
+        if (buttonData != null) {
+            dataRenderer.render(buttonData, radioButton, false);
+            preferredWidth += dataRenderer.getPreferredWidth(-1)
+                + spacing * 2;
 
-        int preferredHeight = Math.max(BUTTON_DIAMETER,
-            dataRenderer.getPreferredHeight(-1));
+            preferredHeight = Math.max(preferredHeight,
+                dataRenderer.getPreferredHeight(-1));
+        }
+
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -147,7 +160,8 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
         // Paint the content
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
-        dataRenderer.render(radioButton.getButtonData(), radioButton, false);
+        Object buttonData = radioButton.getButtonData();
+        dataRenderer.render(buttonData, radioButton, false);
         dataRenderer.setSize(Math.max(width - (BUTTON_DIAMETER + spacing * 2), 0), height);
 
         Graphics2D contentGraphics = (Graphics2D)graphics.create();
@@ -158,18 +172,27 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
         // Paint the focus state
         if (radioButton.isFocused()) {
-            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+            if (buttonData == null) {
+                Color focusColor = new Color(buttonSelectionColor.getRed(),
+                    buttonSelectionColor.getGreen(),
+                    buttonSelectionColor.getBlue(), 0x44);
+                graphics.setColor(focusColor);
+                graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
+            } else {
+                BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
+                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
-            graphics.setStroke(dashStroke);
-            graphics.setColor(buttonBorderColor);
+                graphics.setStroke(dashStroke);
+                graphics.setColor(buttonBorderColor);
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
 
-            graphics.draw(new Rectangle2D.Double(BUTTON_DIAMETER + 1, 0.5,
-                dataRenderer.getWidth() + spacing * 2 - 2,
-                dataRenderer.getHeight() - 1));
+                Rectangle2D focusRectangle = new Rectangle2D.Double(BUTTON_DIAMETER + 1, 0.5,
+                    dataRenderer.getWidth() + spacing * 2 - 2,
+                    dataRenderer.getHeight() - 1);
+                graphics.draw(focusRectangle);
+            }
         }
     }
 
@@ -182,11 +205,6 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
             BUTTON_DIAMETER - 3, BUTTON_DIAMETER - 3);
 
         if (enabled) {
-            /*
-            buttonPaint = new GradientPaint(BUTTON_DIAMETER / 2, 0, TerraTheme.darken(buttonColor),
-                BUTTON_DIAMETER / 2, BUTTON_DIAMETER / 2, buttonColor);
-            */
-
             buttonPaint = new RadialGradientPaint((float)buttonBackgroundCircle.getCenterX(),
                 (float)buttonBackgroundCircle.getCenterY(),
                 (float)buttonBackgroundCircle.getWidth() * 2 / 3,
