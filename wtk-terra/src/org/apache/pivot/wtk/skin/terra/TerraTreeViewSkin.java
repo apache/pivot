@@ -1633,17 +1633,25 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                                 treeView.setSelectedPath(path);
                             }
                         } else {
+                            Keyboard.Modifier commandModifier = Platform.getCommandModifier();
                             if (selectMode == TreeView.SelectMode.SINGLE) {
-                                if (nodeInfo.isSelected()
-                                    && treeView.isFocused()) {
-                                    // Edit the node
-                                    editNode = nodeInfo;
+                                if (Keyboard.isPressed(commandModifier)) {
+                                    if (nodeInfo.isSelected()) {
+                                        treeView.clearSelection();
+                                    } else {
+                                        treeView.setSelectedPath(path);
+                                    }
                                 } else {
-                                    // Select the node
-                                    treeView.setSelectedPath(path);
+                                    if (nodeInfo.isSelected()
+                                        && treeView.isFocused()) {
+                                        // Edit the node
+                                        editNode = nodeInfo;
+                                    } else {
+                                        // Select the node
+                                        treeView.setSelectedPath(path);
+                                    }
                                 }
                             } else if (selectMode == TreeView.SelectMode.MULTI) {
-                                Keyboard.Modifier commandModifier = Platform.getCommandModifier();
                                 if (Keyboard.isPressed(commandModifier)) {
                                     if (nodeInfo.isSelected()) {
                                         treeView.removeSelectedPath(path);
