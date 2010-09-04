@@ -75,11 +75,7 @@ public final class TextNode extends Node {
         insertText(text, 0);
     }
 
-    public void insertText(char text, int index) {
-        insertText(Character.toString(text), index);
-    }
-
-    public void insertText(String text, int index) {
+    public void insertText(CharSequence text, int index) {
         if (text == null) {
             throw new IllegalArgumentException("text is null.");
         }

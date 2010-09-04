@@ -27,7 +27,7 @@ public interface TextInputContentListener {
      */
     public static class Adapter implements TextInputContentListener {
         @Override
-        public Vote previewInsertText(TextInput textInput, String text, int index) {
+        public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
             return Vote.APPROVE;
         }
 
@@ -69,7 +69,7 @@ public interface TextInputContentListener {
      * @param index
      * The index at which the text will be inserted.
      */
-    public Vote previewInsertText(TextInput textInput, String text, int index);
+    public Vote previewInsertText(TextInput textInput, CharSequence text, int index);
 
     /**
      * Called when a text insertion has been vetoed.

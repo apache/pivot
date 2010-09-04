@@ -125,7 +125,7 @@ public class TextInput extends Component {
     private static class TextInputContentListenerList extends ListenerList<TextInputContentListener>
         implements TextInputContentListener {
         @Override
-        public Vote previewInsertText(TextInput textInput, String text, int index) {
+        public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
             Vote vote = Vote.APPROVE;
 
             for (TextInputContentListener listener : this) {
@@ -314,7 +314,7 @@ public class TextInput extends Component {
         }
     }
 
-    public void insertText(String text, int index) {
+    public void insertText(CharSequence text, int index) {
         if (text == null) {
             throw new IllegalArgumentException();
         }

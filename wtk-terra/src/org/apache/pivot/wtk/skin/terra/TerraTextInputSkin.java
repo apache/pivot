@@ -1301,7 +1301,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     // Text input character events
     @Override
-    public Vote previewInsertText(TextInput textInput, String text, int index) {
+    public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
         Vote vote = Vote.APPROVE;
 
         if (textInput.isStrictValidation()) {

@@ -39,19 +39,23 @@ public class TextArea2 extends Component {
     /**
      * Class representing a paragraph of text.
      */
-    public final class Paragraph {
-        private StringBuilder characters;
-
-        private Paragraph() {
-            characters = new StringBuilder(INITIAL_PARAGRAPH_CAPACITY);
-        }
+    public static final class Paragraph {
+        private StringBuilder characters = new StringBuilder(INITIAL_PARAGRAPH_CAPACITY);
+        private TextArea2 textArea = null;
+        private int offset = -1;
 
         public CharSequence getCharacters() {
             return characters;
         }
 
-        public void insertText(String text, int index) {
+        public TextArea2 getTextArea() {
+            return textArea;
+        }
+
+        public void insertText(CharSequence text, int index) {
             characters.insert(index, text);
+
+            // TODO Perform offset bookkeeping
 
             // TODO Fire event
             // TODO Update selection state
@@ -60,13 +64,14 @@ public class TextArea2 extends Component {
         public void removeText(int index, int count) {
             characters.delete(index, index + count);
 
+            // TODO Perform offset bookkeeping
+
             // TODO Fire event
             // TODO Update selection state
         }
 
         public int getOffset() {
-            // TODO
-            return -1;
+            return offset;
         }
 
         // TODO Add listener list accessor
@@ -197,12 +202,14 @@ public class TextArea2 extends Component {
         }
 
         public void insert(Paragraph paragraph, int index) {
-            // TODO
+            // TODO Ensure that paragraph.textArea is null
+
+            // TODO Set paragraph.textArea to TextArea2.this
+            // TODO Perform offset bookkeeping
         }
 
         public Paragraph update(int index, Paragraph paragraph) {
-            // TODO
-            return null;
+            throw new UnsupportedOperationException();
         }
 
         public int remove(Paragraph paragraph){
@@ -211,7 +218,8 @@ public class TextArea2 extends Component {
         }
 
         public Sequence<Paragraph> remove(int index, int count) {
-            // TODO
+            // TODO For each removed paragraph, set paragraph.textArea to null
+            // TODO Perform offset bookkeeping
             return null;
         }
 
@@ -517,8 +525,11 @@ public class TextArea2 extends Component {
      * @param index
      */
     public int getParagraphAt(int index) {
+        // TODO Search backwards from end to simplify logic
+
         // TODO Be sure to return paragraph corresponding to terminator character,
         // including implicit final terminator
+
         return -1;
     }
 
@@ -528,7 +539,10 @@ public class TextArea2 extends Component {
      * @param index
      */
     public char getCharacterAt(int index) {
-        // TODO
+        // TODO Call getParagraphAt(), then get character offset from
+        // index - <paragraph offset>; be sure to return appropriate terminator
+        // character, either for paragraph or implicit final terminator
+
         return 0x00;
     }
 
