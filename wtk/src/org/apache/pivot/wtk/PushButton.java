@@ -44,7 +44,7 @@ public class PushButton extends Button {
         setToggleButton(toggleButton);
         setDataRenderer(DEFAULT_DATA_RENDERER);
 
-        installThemeSkin(PushButton.class);
+        installSkin(PushButton.class);
     }
 
     @Override

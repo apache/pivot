@@ -22,6 +22,6 @@ package org.apache.pivot.wtk;
  */
 public class StackPane extends Container {
     public StackPane() {
-        installThemeSkin(StackPane.class);
+        installSkin(StackPane.class);
     }
 }

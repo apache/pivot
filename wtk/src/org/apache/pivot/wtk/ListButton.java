@@ -316,7 +316,7 @@ public class ListButton extends Button {
         setItemRenderer(DEFAULT_ITEM_RENDERER);
         setListData(listData);
 
-        installThemeSkin(ListButton.class);
+        installSkin(ListButton.class);
     }
 
     @Override

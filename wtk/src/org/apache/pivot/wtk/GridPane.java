@@ -259,7 +259,7 @@ public class GridPane extends Container {
      */
     public static class Filler extends Component {
         public Filler() {
-            installThemeSkin(Filler.class);
+            installSkin(Filler.class);
         }
     }
 
@@ -337,7 +337,7 @@ public class GridPane extends Container {
 
         setColumnCount(columnCount);
 
-        installThemeSkin(GridPane.class);
+        installSkin(GridPane.class);
     }
 
     @Override

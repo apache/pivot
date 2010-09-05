@@ -40,7 +40,7 @@ public class Checkbox extends Button {
 
         setDataRenderer(DEFAULT_DATA_RENDERER);
 
-        installThemeSkin(Checkbox.class);
+        installSkin(Checkbox.class);
     }
 
     @Override

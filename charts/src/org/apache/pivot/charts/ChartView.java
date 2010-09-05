@@ -400,7 +400,7 @@ public abstract class ChartView extends Component {
     private ChartViewSeriesListenerList chartViewSeriesListeners = new ChartViewSeriesListenerList();
 
     public static final String DEFAULT_SERIES_NAME_KEY = "name";
-    public static final String PROVIDER_NAME = "org.apache.pivot.charts.Provider";
+    public static final String PROVIDER_NAME = Provider.class.getName();
 
     private static Provider provider = null;
 
@@ -423,8 +423,11 @@ public abstract class ChartView extends Component {
         setShowLegend(showLegend);
     }
 
-    protected final void installChartSkin(Class<? extends ChartView> chartViewClass) {
-        Class<? extends org.apache.pivot.wtk.Skin> skinClass = provider.getSkinClass(chartViewClass);
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void installSkin(Class<? extends Component> componentClass) {
+        Class<? extends org.apache.pivot.wtk.Skin> skinClass =
+            provider.getSkinClass((Class<? extends ChartView>)componentClass);
 
         try {
             setSkin(skinClass.newInstance());

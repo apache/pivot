@@ -29,6 +29,6 @@ public class Tooltip extends Window {
     public Tooltip(Component content) {
         super(content);
 
-        installThemeSkin(Tooltip.class);
+        installSkin(Tooltip.class);
     }
 }

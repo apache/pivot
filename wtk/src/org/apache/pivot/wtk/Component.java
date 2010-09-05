@@ -766,7 +766,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param componentClass
      */
     @SuppressWarnings("unchecked")
-    protected final void installThemeSkin(Class<? extends Component> componentClass) {
+    protected void installSkin(Class<? extends Component> componentClass) {
         // Walk up component hierarchy from this type; if we find a match
         // and the super class equals the given component class, install
         // the skin. Otherwise, ignore - it will be installed later by a
@@ -774,7 +774,8 @@ public abstract class Component implements ConstrainedVisual {
         Class<?> type = getClass();
 
         Theme theme = Theme.getTheme();
-        Class<? extends org.apache.pivot.wtk.Skin> skinClass = theme.getSkinClass((Class<? extends Component>)type);
+        Class<? extends org.apache.pivot.wtk.Skin> skinClass =
+            theme.getSkinClass((Class<? extends Component>)type);
 
         while (skinClass == null
             && type != componentClass

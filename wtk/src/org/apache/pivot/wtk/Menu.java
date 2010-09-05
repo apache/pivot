@@ -69,7 +69,7 @@ public class Menu extends Container {
             super(buttonData);
 
             setDataRenderer(DEFAULT_DATA_RENDERER);
-            installThemeSkin(Item.class);
+            installSkin(Item.class);
         }
 
         @Override
@@ -519,7 +519,7 @@ public class Menu extends Container {
     private MenuItemSelectionListenerList menuItemSelectionListeners = new MenuItemSelectionListenerList();
 
     public Menu() {
-        installThemeSkin(Menu.class);
+        installSkin(Menu.class);
     }
 
     /**

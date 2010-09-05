@@ -368,7 +368,7 @@ public class Spinner extends Container {
         setItemRenderer(new SpinnerItemRenderer());
         setSpinnerData(spinnerData);
 
-        installThemeSkin(Spinner.class);
+        installSkin(Spinner.class);
     }
 
     /**

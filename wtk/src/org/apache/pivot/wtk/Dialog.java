@@ -104,7 +104,7 @@ public class Dialog extends Frame {
         super(title, content);
         this.modal = modal;
 
-        installThemeSkin(Dialog.class);
+        installSkin(Dialog.class);
     }
 
     public boolean isModal() {

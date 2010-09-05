@@ -441,7 +441,7 @@ public class Window extends Container {
 
     public Window(Component content) {
         setContent(content);
-        installThemeSkin(Window.class);
+        installSkin(Window.class);
     }
 
     @Override

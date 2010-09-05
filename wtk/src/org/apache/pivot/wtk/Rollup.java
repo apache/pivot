@@ -105,7 +105,7 @@ public class Rollup extends Container {
     public Rollup(boolean expanded, Component content) {
         this.expanded = expanded;
 
-        installThemeSkin(Rollup.class);
+        installSkin(Rollup.class);
 
         if (content != null) {
             setContent(content);

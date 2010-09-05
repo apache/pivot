@@ -228,7 +228,7 @@ public class Accordion extends Container {
     private static final Button.DataRenderer DEFAULT_HEADER_DATA_RENDERER = new AccordionHeaderDataRenderer();
 
     public Accordion() {
-        installThemeSkin(Accordion.class);
+        installSkin(Accordion.class);
     }
 
     public PanelSequence getPanels() {

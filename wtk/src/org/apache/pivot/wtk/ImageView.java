@@ -159,7 +159,7 @@ public class ImageView extends Component {
     public ImageView(Image image) {
         setImage(image);
 
-        installThemeSkin(ImageView.class);
+        installSkin(ImageView.class);
     }
 
     /**

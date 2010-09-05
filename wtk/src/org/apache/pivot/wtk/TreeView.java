@@ -1083,7 +1083,7 @@ public class TreeView extends Component {
      */
     public TreeView(List<?> treeData) {
         setTreeData(treeData);
-        installThemeSkin(TreeView.class);
+        installSkin(TreeView.class);
     }
 
     /**

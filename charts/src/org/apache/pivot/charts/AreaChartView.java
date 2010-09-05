@@ -21,6 +21,6 @@ package org.apache.pivot.charts;
  */
 public class AreaChartView extends ChartView {
     public AreaChartView() {
-        installChartSkin(AreaChartView.class);
+        installSkin(AreaChartView.class);
     }
 }

@@ -58,7 +58,7 @@ public class CardPane extends Container {
     private CardPaneListenerList cardPaneListeners = new CardPaneListenerList();
 
     public CardPane() {
-        installThemeSkin(CardPane.class);
+        installSkin(CardPane.class);
     }
 
     /**

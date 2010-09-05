@@ -108,7 +108,7 @@ public class ColorChooserButton extends Button {
         super(buttonData);
 
         setDataRenderer(DEFAULT_DATA_RENDERER);
-        installThemeSkin(ColorChooserButton.class);
+        installSkin(ColorChooserButton.class);
     }
 
     @Override

@@ -105,7 +105,7 @@ public class ColorChooser extends Container {
         new ColorChooserBindingListenerList();
 
     public ColorChooser() {
-        installThemeSkin(ColorChooser.class);
+        installSkin(ColorChooser.class);
     }
 
     /**

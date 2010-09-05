@@ -155,7 +155,7 @@ public class ScrollBar extends Container {
 
         this.orientation = orientation;
 
-        installThemeSkin(ScrollBar.class);
+        installSkin(ScrollBar.class);
     }
 
     public Orientation getOrientation() {

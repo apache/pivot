@@ -203,7 +203,7 @@ public class Prompt extends Sheet {
         setOptions(options);
         setTitle((String)resources.get("defaultTitle"));
 
-        installThemeSkin(Prompt.class);
+        installSkin(Prompt.class);
     }
 
     public MessageType getMessageType() {

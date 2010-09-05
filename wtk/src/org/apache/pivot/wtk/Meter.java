@@ -59,7 +59,7 @@ public class Meter extends Component {
 
     public Meter(Orientation orientation) {
         this.orientation = orientation;
-        installThemeSkin(Meter.class);
+        installSkin(Meter.class);
     }
 
     public double getPercentage() {

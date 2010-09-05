@@ -621,7 +621,7 @@ public class TablePane extends Container {
      */
     public static final class Filler extends Component {
         public Filler() {
-            installThemeSkin(Filler.class);
+            installSkin(Filler.class);
         }
     }
 
@@ -767,7 +767,7 @@ public class TablePane extends Container {
         this.rows = new ArrayList<Row>();
         this.columns = new ArrayList<Column>(columns);
 
-        installThemeSkin(TablePane.class);
+        installSkin(TablePane.class);
     }
 
     @Override

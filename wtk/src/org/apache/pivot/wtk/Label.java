@@ -96,7 +96,7 @@ public class Label extends Component {
     public Label(String text) {
         this.text = text;
 
-        installThemeSkin(Label.class);
+        installSkin(Label.class);
     }
 
     public String getText() {

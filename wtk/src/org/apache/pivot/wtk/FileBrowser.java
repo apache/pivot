@@ -94,7 +94,7 @@ public class FileBrowser extends Container {
         String userHome = System.getProperty("user.home");
         rootDirectory = new File(userHome);
 
-        installThemeSkin(FileBrowser.class);
+        installSkin(FileBrowser.class);
     }
 
     /**

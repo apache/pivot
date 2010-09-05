@@ -81,7 +81,7 @@ public class TableViewHeader extends Component {
     }
 
     public TableViewHeader(TableView tableView) {
-        installThemeSkin(TableViewHeader.class);
+        installSkin(TableViewHeader.class);
         setTableView(tableView);
     }
 

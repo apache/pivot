@@ -107,7 +107,7 @@ public class ScrollPane extends Viewport {
 
             this.placement = placement;
 
-            installThemeSkin(Corner.class);
+            installSkin(Corner.class);
         }
 
         public Placement getPlacement() {
@@ -141,7 +141,7 @@ public class ScrollPane extends Viewport {
         this.horizontalScrollBarPolicy = horizontalScrollBarPolicy;
         this.verticalScrollBarPolicy = verticalScrollBarPolicy;
 
-        installThemeSkin(ScrollPane.class);
+        installSkin(ScrollPane.class);
     }
 
     public ScrollBarPolicy getHorizontalScrollBarPolicy() {

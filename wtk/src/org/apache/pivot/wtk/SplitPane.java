@@ -132,7 +132,7 @@ public class SplitPane extends Container {
     public SplitPane(Orientation orientation, Component topLeft, Component bottomRight) {
         this.orientation = orientation;
 
-        installThemeSkin(SplitPane.class);
+        installSkin(SplitPane.class);
 
         setTopLeft(topLeft);
         setBottomRight(bottomRight);

@@ -21,6 +21,6 @@ package org.apache.pivot.charts;
  */
 public class BarChartView extends ChartView {
     public BarChartView() {
-        installChartSkin(BarChartView.class);
+        installSkin(BarChartView.class);
     }
 }

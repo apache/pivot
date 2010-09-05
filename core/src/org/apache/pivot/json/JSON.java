@@ -26,7 +26,7 @@ import org.apache.pivot.collections.Sequence;
  */
 public class JSON {
     /**
-     * Returns the value at the given path.
+     * Returns the value at a given path.
      *
      * @param root
      * The root object.
@@ -41,55 +41,47 @@ public class JSON {
      */
     @SuppressWarnings("unchecked")
     public static <T> T get(Object root, String path) {
-        if (root == null) {
-            throw new IllegalArgumentException("root is null.");
-        }
-
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
         return (T)get(root, parse(path));
     }
 
     /**
-     * Returns the value at a given index along a path.
+     * Returns the value at a given path.
      *
      * @param root
-     * The root object; must be an instance of {@link org.apache.pivot.collections.Map}
-     * or {@link org.apache.pivot.collections.List} or a Java bean object.
+     * The root object.
      *
      * @param keys
-     * The path to the value, as a set of keys.
+     * The path to the value as a sequence of keys.
      *
      * @return
      * The value at the given path.
      */
     @SuppressWarnings("unchecked")
     public static <T> T get(Object root, Sequence<String> keys) {
+        if (root == null) {
+            throw new IllegalArgumentException("root is null.");
+        }
+
+        if (keys == null) {
+            throw new IllegalArgumentException("keys is null.");
+        }
+
         Object value = root;
 
         for (int i = 0, n = keys.getLength(); i < n; i++) {
             String key = keys.get(i);
 
-            if (value instanceof Sequence<?>) {
+            BeanAdapter beanAdapter = new BeanAdapter(value);
+            if (beanAdapter.containsKey(key)) {
+                value = beanAdapter.get(key);
+            } else if (value instanceof Sequence<?>) {
                 Sequence<Object> sequence = (Sequence<Object>)value;
                 value = sequence.get(Integer.parseInt(key));
+            } else if (value instanceof Dictionary<?, ?>) {
+                Dictionary<String, Object> dictionary = (Dictionary<String, Object>)value;
+                value = dictionary.get(key);
             } else {
-                Dictionary<String, Object> dictionary;
-                if (value instanceof Dictionary<?, ?>) {
-                    dictionary = (Dictionary<String, Object>)value;
-                    value = dictionary.get(key);
-                } else {
-                    dictionary = new BeanAdapter(value);
-                }
-
-                if (dictionary.containsKey(key)) {
-                    value = dictionary.get(key);
-                } else {
-                    value = null;
-                    break;
-                }
+                throw new IllegalArgumentException("Property \"" + key + "\" not found.");
             }
         }
 
@@ -112,32 +104,26 @@ public class JSON {
             throw new IllegalArgumentException("root is null.");
         }
 
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        Object previousValue;
-
         Sequence<String> keys = parse(path);
         if (keys.getLength() == 0) {
-            throw new IllegalArgumentException("Bad path.");
+            throw new IllegalArgumentException("Path is empty.");
         }
 
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
-
         Object parent = get(root, keys);
-        if (parent instanceof Sequence<?>) {
+        BeanAdapter beanAdapter = new BeanAdapter(parent);
+
+        Object previousValue;
+        if (beanAdapter.containsKey(key)) {
+            previousValue = beanAdapter.put(key, value);
+        } else if (parent instanceof Sequence<?>) {
             Sequence<Object> sequence = (Sequence<Object>)parent;
             previousValue = sequence.update(Integer.parseInt(key), value);
-        } else {
-            Dictionary<String, Object> dictionary;
-            if (parent instanceof Dictionary<?, ?>) {
-                dictionary = (Dictionary<String, Object>)parent;
-            } else {
-                dictionary = new BeanAdapter(parent);
-            }
-
+        } else if (parent instanceof Dictionary<?, ?>) {
+            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
             previousValue = dictionary.put(key, value);
+        } else {
+            throw new IllegalArgumentException("Property \"" + key + "\" not found.");
         }
 
         return (T)previousValue;
@@ -158,32 +144,23 @@ public class JSON {
             throw new IllegalArgumentException("root is null.");
         }
 
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        Object previousValue;
-
         Sequence<String> keys = parse(path);
         if (keys.getLength() == 0) {
-            throw new IllegalArgumentException("Bad path.");
+            throw new IllegalArgumentException("Path is empty.");
         }
 
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
-
         Object parent = get(root, keys);
+
+        Object previousValue;
         if (parent instanceof Sequence<?>) {
             Sequence<Object> sequence = (Sequence<Object>)parent;
             previousValue = sequence.remove(Integer.parseInt(key), 1).get(0);
-        } else {
-            Dictionary<String, Object> dictionary;
-            if (parent instanceof Dictionary<?, ?>) {
-                dictionary = (Dictionary<String, Object>)parent;
-            } else {
-                dictionary = new BeanAdapter(parent);
-            }
-
+        } else if (parent instanceof Dictionary<?, ?>) {
+            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
             previousValue = dictionary.remove(key);
+        } else {
+            throw new IllegalArgumentException("Property \"" + key + "\" not found.");
         }
 
         return (T)previousValue;
@@ -204,32 +181,26 @@ public class JSON {
             throw new IllegalArgumentException("root is null.");
         }
 
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        boolean containsKey;
-
         Sequence<String> keys = parse(path);
         if (keys.getLength() == 0) {
-            throw new IllegalArgumentException("Bad path.");
+            throw new IllegalArgumentException("Path is empty.");
         }
 
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
-
         Object parent = get(root, keys);
-        if (parent instanceof Sequence<?>) {
-            Sequence<Object> sequence = (Sequence<Object>)parent;
-            containsKey = (sequence.getLength() > Integer.parseInt(key));
-        } else {
-            Dictionary<String, Object> dictionary;
-            if (parent instanceof Dictionary<?, ?>) {
-                dictionary = (Dictionary<String, Object>)parent;
-            } else {
-                dictionary = new BeanAdapter(parent);
-            }
+        BeanAdapter beanAdapter = new BeanAdapter(parent);
 
-            containsKey = dictionary.containsKey(key);
+        boolean containsKey = beanAdapter.containsKey(key);
+        if (!containsKey) {
+            if (parent instanceof Sequence<?>) {
+                Sequence<Object> sequence = (Sequence<Object>)parent;
+                containsKey = (sequence.getLength() > Integer.parseInt(key));
+            } else if (parent instanceof Dictionary<?, ?>) {
+                Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
+                containsKey = dictionary.containsKey(key);
+            } else {
+                throw new IllegalArgumentException("Property \"" + key + "\" not found.");
+            }
         }
 
         return containsKey;
@@ -241,6 +212,10 @@ public class JSON {
      * @param path
      */
     public static Sequence<String> parse(String path) {
+        if (path == null) {
+            throw new IllegalArgumentException("path is null.");
+        }
+
         ArrayList<String> keys = new ArrayList<String>();
 
         int i = 0;

@@ -213,7 +213,7 @@ public class Alert extends Dialog {
         setOptions(options);
         setTitle((String)resources.get("defaultTitle"));
 
-        installThemeSkin(Alert.class);
+        installSkin(Alert.class);
     }
 
     public MessageType getMessageType() {

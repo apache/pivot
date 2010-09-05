@@ -445,7 +445,7 @@ public class Form extends Container {
     public Form() {
         super();
 
-        installThemeSkin(Form.class);
+        installSkin(Form.class);
     }
 
     /**

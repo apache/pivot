@@ -150,7 +150,7 @@ public class CalendarButton extends Button {
         this.month = month;
 
         setDataRenderer(DEFAULT_DATA_RENDERER);
-        installThemeSkin(CalendarButton.class);
+        installSkin(CalendarButton.class);
 
         setSelectedDate(new CalendarDate());
     }

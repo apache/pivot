@@ -55,7 +55,8 @@ public class TextArea2 extends Component {
         public void insertText(CharSequence text, int index) {
             characters.insert(index, text);
 
-            // TODO Perform offset bookkeeping
+            // TODO Perform offset bookkeeping (need to get index of this
+            // paragraph so we can update subsequent paragraphs)
 
             // TODO Fire event
             // TODO Update selection state
@@ -64,7 +65,8 @@ public class TextArea2 extends Component {
         public void removeText(int index, int count) {
             characters.delete(index, index + count);
 
-            // TODO Perform offset bookkeeping
+            // TODO Perform offset bookkeeping (need to get index of this
+            // paragraph so we can update subsequent paragraphs)
 
             // TODO Fire event
             // TODO Update selection state
@@ -343,7 +345,7 @@ public class TextArea2 extends Component {
     private static final int INITIAL_PARAGRAPH_CAPACITY = 256;
 
     public TextArea2() {
-        installThemeSkin(TextArea2.class);
+        installSkin(TextArea2.class);
     }
 
     @Override

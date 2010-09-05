@@ -284,7 +284,7 @@ public class TextArea extends Container {
     private TextAreaBindingListenerList textAreaBindingListeners = new TextAreaBindingListenerList();
 
     public TextArea() {
-        installThemeSkin(TextArea.class);
+        installSkin(TextArea.class);
     }
 
     @Override

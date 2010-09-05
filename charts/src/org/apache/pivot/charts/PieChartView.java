@@ -21,6 +21,6 @@ package org.apache.pivot.charts;
  */
 public class PieChartView extends ChartView {
     public PieChartView() {
-        installChartSkin(PieChartView.class);
+        installSkin(PieChartView.class);
     }
 }

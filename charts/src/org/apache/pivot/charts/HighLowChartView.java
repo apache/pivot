@@ -21,6 +21,6 @@ package org.apache.pivot.charts;
  */
 public class HighLowChartView extends ChartView {
     public HighLowChartView() {
-        installChartSkin(HighLowChartView.class);
+        installSkin(HighLowChartView.class);
     }
 }

@@ -279,7 +279,7 @@ public class TabPane extends Container {
 
     public TabPane() {
         super();
-        installThemeSkin(TabPane.class);
+        installSkin(TabPane.class);
     }
 
     public TabSequence getTabs() {

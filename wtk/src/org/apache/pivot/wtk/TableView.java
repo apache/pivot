@@ -1469,7 +1469,7 @@ public class TableView extends Component {
      */
     public TableView(List<?> tableData) {
         setTableData(tableData);
-        installThemeSkin(TableView.class);
+        installSkin(TableView.class);
     }
 
     @Override

@@ -235,7 +235,7 @@ public class SuggestionPopup extends Window {
         setSuggestionRenderer(DEFAULT_SUGGESTION_RENDERER);
         setSuggestionData(suggestions);
 
-        installThemeSkin(SuggestionPopup.class);
+        installSkin(SuggestionPopup.class);
     }
 
     /**

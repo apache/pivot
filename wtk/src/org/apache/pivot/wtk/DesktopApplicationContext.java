@@ -24,11 +24,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.prefs.BackingStoreException;
@@ -362,6 +360,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
     public static final String MAXIMIZED_ARGUMENT = "maximized";
     public static final String UNDECORATED_ARGUMENT = "undecorated";
     public static final String FULL_SCREEN_ARGUMENT = "fullScreen";
+    public static final String ORIGIN_ARGUMENT = "origin";
+
+    private static final String INVALID_PROPERTY_FORMAT_MESSAGE = "\"%s\" is not a valid startup "
+        + "property (expected format is \"--name=value\").";
+    private static final String INVALID_PROPERTY_VALUE_MESSAGE = "\"%s\" is not a valid value for "
+        + "startup property \"%s\".";
 
     public static boolean isActive() {
         return (application != null);
@@ -468,9 +472,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
             System.err.println("Unable to retrieve startup preferences: " + exception);
         }
 
-        final String STARTUP_PROPERTY_WARNING = "\"%s\" is not a valid startup property (expected"
-            + " format is \"--name=value\").";
-
         for (int i = 1, n = args.length; i < n; i++) {
             String arg = args[i];
 
@@ -501,48 +502,19 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             undecorated = Boolean.parseBoolean(value);
                         } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
                             fullScreen = Boolean.parseBoolean(value);
+                        } else if (key.equals(ORIGIN_ARGUMENT)) {
+                            origin = new URL(value);
                         } else {
                             properties.put(key, value);
                         }
-                    } catch (NumberFormatException exception) {
-                        System.err.println("\"" + value + "\" is not a valid value for startup"
-                            + " property \"" + key + "\".");
+                    } catch (Exception exception) {
+                        System.err.println(String.format(INVALID_PROPERTY_VALUE_MESSAGE, value, key));
                     }
                 } else {
-                    System.err.println(String.format(STARTUP_PROPERTY_WARNING, arg));
+                    System.err.println(String.format(INVALID_PROPERTY_FORMAT_MESSAGE, arg));
                 }
             } else {
-                System.err.println(String.format(STARTUP_PROPERTY_WARNING, arg));
-            }
-        }
-
-        // Set the origin
-        try {
-            // Load the JNLP classes dynamically because they are only available
-            // when run via javaws
-            Class<?> serviceManagerClass = Class.forName("javax.jnlp.ServiceManager");
-            Method lookupMethod = serviceManagerClass.getMethod("lookup", String.class);
-            Object basicService = lookupMethod.invoke(null, "javax.jnlp.BasicService");
-
-            Class<?> basicServiceClass = Class.forName("javax.jnlp.BasicService");
-            Method getCodeBaseMethod = basicServiceClass.getMethod("getCodeBase");
-            URL codeBase = (URL)getCodeBaseMethod.invoke(basicService);
-
-            if (codeBase != null) {
-                origin = new URL(codeBase.getProtocol(), codeBase.getHost(), codeBase.getPort(), "");
-            }
-        } catch (Exception exception) {
-            // No-op
-        }
-
-        if (origin == null) {
-            // Could not obtain origin from JNLP; use user's home directory
-            File userHome = new File(System.getProperty("user.home"));
-
-            try {
-                origin = userHome.toURI().toURL();
-            } catch(MalformedURLException exception) {
-                // No-op
+                System.err.println(String.format(INVALID_PROPERTY_FORMAT_MESSAGE, arg));
             }
         }
 

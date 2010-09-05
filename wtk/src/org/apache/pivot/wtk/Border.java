@@ -51,7 +51,7 @@ public class Border extends Container {
     }
 
     public Border(Component content) {
-        installThemeSkin(Border.class);
+        installSkin(Border.class);
 
         setContent(content);
     }

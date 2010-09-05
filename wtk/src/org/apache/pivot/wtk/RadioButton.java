@@ -49,7 +49,7 @@ public class RadioButton extends Button {
         setButtonGroup(buttonGroup);
         setDataRenderer(DEFAULT_DATA_RENDERER);
 
-        installThemeSkin(RadioButton.class);
+        installSkin(RadioButton.class);
     }
 
     @Override

@@ -21,6 +21,6 @@ package org.apache.pivot.charts;
  */
 public class LineChartView extends ChartView {
     public LineChartView() {
-        installChartSkin(LineChartView.class);
+        installSkin(LineChartView.class);
     }
 }

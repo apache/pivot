@@ -67,7 +67,7 @@ public class MenuBar extends Container {
             super(buttonData);
 
             setDataRenderer(DEFAULT_DATA_RENDERER);
-            installThemeSkin(Item.class);
+            installSkin(Item.class);
         }
 
         @Override
@@ -290,7 +290,7 @@ public class MenuBar extends Container {
     private MenuBarListenerList menuBarListeners = new MenuBarListenerList();
 
     public MenuBar() {
-        installThemeSkin(MenuBar.class);
+        installSkin(MenuBar.class);
     }
 
     public ItemSequence getItems() {
