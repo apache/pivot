@@ -95,7 +95,8 @@ public class TextArea2 extends Component {
             int count = text.length();
 
             if (count > 0) {
-                if (textArea.characterCount + count > textArea.maximumLength) {
+                if (textArea != null
+                    && textArea.characterCount + count > textArea.maximumLength) {
                     throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
                 }
 
@@ -297,12 +298,10 @@ public class TextArea2 extends Component {
                 throw new IllegalArgumentException("paragraph is already in use by another text area.");
             }
 
-            // Determine insertion count
-            CharSequence characters = paragraph.getCharacters();
-            int characterCount = characters.length();
+            // Determine insertion count, including terminator character
+            int characterCount = paragraph.characters.length();
 
-            // Include terminator character
-            if (index < getLength() - 1) {
+            if (getLength() > 0) {
                 characterCount++;
             }
 
@@ -310,23 +309,30 @@ public class TextArea2 extends Component {
                 throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
             }
 
-            paragraphs.insert(paragraph, index);
-            paragraph.textArea = TextArea2.this;
+            // Set the paragraph offset
+            if (index == paragraphs.getLength()) {
+                paragraph.offset = TextArea2.this.characterCount;
 
-            // Update offsets and character count
-            if (index == 0) {
-                paragraph.offset = 0;
+                // Include terminator character
+                if (index > 0) {
+                    paragraph.offset++;
+                }
             } else {
                 paragraph.offset = paragraphs.get(index).offset;
             }
 
+            // Insert the paragraph
+            paragraphs.insert(paragraph, index);
+            paragraph.textArea = TextArea2.this;
+
+            // Update offsets and character count
             updateParagraphOffsets(index + 1, characterCount);
             TextArea2.this.characterCount += characterCount;
 
             // Update selection state
             int previousSelectionStart = selectionStart;
             int previousSelectionLength = selectionLength;
-            selectionStart = paragraph.offset + characters.length();
+            selectionStart = paragraph.offset + paragraph.characters.length();
             selectionLength = 0;
 
             // Fire change events
@@ -359,20 +365,15 @@ public class TextArea2 extends Component {
             if (count > 0) {
                 int characterCount = 0;
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
-                    removed.get(i).textArea = null;
-
-                    // Update character count
                     Paragraph paragraph = removed.get(i);
-                    CharSequence characters = paragraph.getCharacters();
-                    characterCount += characters.length();
-
-                    // Include terminator character
-                    if (index + i < getLength() - 1) {
-                        characterCount++;
-                    }
+                    paragraph.textArea = null;
+                    paragraph.offset = -1;
+                    characterCount += paragraph.characters.length();
                 }
 
-                // Update offsets and character count
+                // Update offsets and character count, including terminator characters
+                characterCount -= count - 1;
+
                 updateParagraphOffsets(index, -characterCount);
                 TextArea2.this.characterCount -= characterCount;
 
@@ -561,21 +562,20 @@ public class TextArea2 extends Component {
         // Get paragraph and character offset at beginIndex
         int paragraphIndex = getParagraphAt(beginIndex);
         Paragraph paragraph = paragraphs.get(paragraphIndex);
-        CharSequence characters = paragraph.getCharacters();
 
         int characterOffset = beginIndex - paragraph.offset;
 
         // Read characters until endIndex is reached, appending to text builder
         // and moving to next paragraph as needed
         for (int i = 0; i < count; i++) {
-            textBuilder.append(characters.charAt(characterOffset++));
+            textBuilder.append(paragraph.characters.charAt(characterOffset++));
 
-            if (characterOffset == characters.length()) {
+            if (characterOffset == paragraph.characters.length()
+                && i < count - 1) {
                 textBuilder.append('\n');
+                i++;
 
                 paragraph = paragraphs.get(++paragraphIndex);
-                characters = paragraph.getCharacters();
-
                 characterOffset = 0;
             }
         }
@@ -591,10 +591,6 @@ public class TextArea2 extends Component {
     public void setText(String text) {
         if (text == null) {
             throw new IllegalArgumentException();
-        }
-
-        if (text.length() > maximumLength) {
-            throw new IllegalArgumentException("Text length is greater than maximum length.");
         }
 
         try {
@@ -634,7 +630,7 @@ public class TextArea2 extends Component {
         int c = textReader.read();
         while (c != -1) {
             if (++characterCount > maximumLength) {
-                throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
+                throw new IllegalArgumentException("Text length is greater than maximum length.");
             }
 
             if (c == '\n') {
@@ -681,10 +677,9 @@ public class TextArea2 extends Component {
 
                 if (c == '\n') {
                     // Split paragraph at current offset
-                    CharSequence characters = paragraph.getCharacters();
-                    int count = characters.length();
+                    int count = paragraph.characters.length();
 
-                    CharSequence trailingCharacters = characters.subSequence(characterOffset, count);
+                    CharSequence trailingCharacters = paragraph.characters.subSequence(characterOffset, count);
                     paragraph.removeText(characterOffset, count);
                     paragraph.insertText(textBuilder, characterOffset);
 
@@ -726,10 +721,10 @@ public class TextArea2 extends Component {
             endParagraph.removeText(0, (index + count) - endParagraph.offset);
 
             // Remove intervening paragraphs
-            paragraphSequence.remove(beginParagraphIndex, endParagraphIndex - beginParagraphIndex);
+            paragraphSequence.remove(beginParagraphIndex, (endParagraphIndex - 1) - beginParagraphIndex);
 
             // Remove leading text
-            beginParagraph.removeText(index - beginParagraph.offset, beginParagraph.getCharacters().length());
+            beginParagraph.removeText(index - beginParagraph.offset, beginParagraph.characters.length());
         }
     }
 
@@ -783,9 +778,9 @@ public class TextArea2 extends Component {
         Paragraph paragraph = paragraphs.get(paragraphIndex);
 
         int characterOffset = index - paragraph.offset;
-        CharSequence characters = paragraph.getCharacters();
 
-        return (characterOffset == characters.length()) ? '\n' : characters.charAt(characterOffset);
+        return (characterOffset == paragraph.characters.length()) ?
+            '\n' : paragraph.characters.charAt(characterOffset);
     }
 
     /**

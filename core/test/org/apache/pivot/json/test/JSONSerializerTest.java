@@ -106,6 +106,7 @@ public class JSONSerializerTest {
 
         jsonSerializer.getJSONSerializerListeners().add(jsonSerializerListener);
         Object o1 = jsonSerializer.readObject(getClass().getResourceAsStream("sample.json"));
+        assertEquals(JSON.get(o1, "count"), 6);
 
         jsonSerializer.getJSONSerializerListeners().remove(jsonSerializerListener);
         Object o2 = jsonSerializer.readObject(getClass().getResourceAsStream("sample.json"));

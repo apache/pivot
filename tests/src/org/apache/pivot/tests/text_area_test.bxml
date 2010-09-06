@@ -21,11 +21,26 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <windowStateListeners>
     function windowOpened(window) {
-        textArea.insertText(",", 3);
+        textArea.insertText("Hello\nWorld", 5);
+        textArea.insertText("Foo\n", 11);
+        textArea.removeText(2, 5);
     }
     </windowStateListeners>
 
     <ScrollPane>
-        <TextArea2 bxml:id="textArea" text="ABC"/>
+        <TextArea2 bxml:id="textArea" text="@sample.txt">
+            <textAreaContentListeners>
+            <![CDATA[
+            function textChanged(textArea) {
+                java.lang.System.out.println(textArea.text + "\n-");
+
+                for (var i = 0, n = textArea.paragraphs.length; i < n; i++) {
+                    var paragraph = textArea.paragraphs.get(i);
+                    java.lang.System.out.println("[" + i + "] " + paragraph.offset);
+                }
+            }
+            ]]>
+            </textAreaContentListeners>
+        </TextArea2>
     </ScrollPane>
 </Window>
