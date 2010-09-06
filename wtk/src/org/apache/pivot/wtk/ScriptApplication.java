@@ -66,7 +66,10 @@ public class ScriptApplication implements Application {
 
         if (properties.containsKey(STYLESHEET_KEY)) {
             String stylesheet = properties.get(STYLESHEET_KEY);
-            ApplicationContext.applyStylesheet(stylesheet.substring(1));
+            if (stylesheet.startsWith("/")) {
+                stylesheet = stylesheet.substring(1);
+            }
+            ApplicationContext.applyStylesheet(stylesheet);
         }
 
         // Load the file and open the window

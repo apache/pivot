@@ -72,7 +72,7 @@ public abstract class ApplicationContext {
     public static class DisplayHost extends java.awt.Component {
         private static final long serialVersionUID = -815713849595314026L;
 
-        private Display display = new Display(this);
+        private transient Display display = new Display(this);
         private AWTEvent currentAWTEvent = null;
 
         private Component focusedComponent = null;
@@ -1520,6 +1520,8 @@ public abstract class ApplicationContext {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {
             throw new RuntimeException(exception);
+        } catch (NullPointerException exception) {
+            throw new RuntimeException("Unable to locate style sheet resource \"" + resourceName + "\".");
         }
 
     }
