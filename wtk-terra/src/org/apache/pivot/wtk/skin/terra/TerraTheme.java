@@ -192,7 +192,7 @@ public final class TerraTheme extends Theme {
         }
 
         if (locationURL == null) {
-            throw new RuntimeException("Unable to locate color scheme resource " + location + ".");
+            throw new RuntimeException("Unable to locate color scheme resource \"" + location + "\".");
         }
 
         load(locationURL);
