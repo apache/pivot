@@ -1479,7 +1479,11 @@ public abstract class ApplicationContext {
     @SuppressWarnings("unchecked")
     public static void applyStylesheet(String resourceName) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
         URL stylesheetLocation = classLoader.getResource(resourceName);
+        if (stylesheetLocation == null) {
+            throw new RuntimeException("Unable to locate style sheet resource \"" + resourceName + "\".");
+        }
 
         try {
             InputStream inputStream = stylesheetLocation.openStream();
@@ -1520,10 +1524,7 @@ public abstract class ApplicationContext {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {
             throw new RuntimeException(exception);
-        } catch (NullPointerException exception) {
-            throw new RuntimeException("Unable to locate style sheet resource \"" + resourceName + "\".");
         }
-
     }
 
     /**

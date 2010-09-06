@@ -66,10 +66,13 @@ public class ScriptApplication implements Application {
 
         if (properties.containsKey(STYLESHEET_KEY)) {
             String stylesheet = properties.get(STYLESHEET_KEY);
-            if (stylesheet.startsWith("/")) {
-                stylesheet = stylesheet.substring(1);
+
+            if (!stylesheet.startsWith("/")) {
+                throw new IllegalArgumentException("Value for " + STYLESHEET_KEY
+                    + " argument must start with a slash character.");
             }
-            ApplicationContext.applyStylesheet(stylesheet);
+
+            ApplicationContext.applyStylesheet(stylesheet.substring(1));
         }
 
         // Load the file and open the window
