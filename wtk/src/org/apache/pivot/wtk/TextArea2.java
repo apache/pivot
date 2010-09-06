@@ -92,6 +92,11 @@ public class TextArea2 extends Component {
                 throw new IllegalArgumentException();
             }
 
+            if (index < 0
+                || index > characters.length()) {
+                throw new IndexOutOfBoundsException();
+            }
+
             int count = text.length();
 
             if (count > 0) {
@@ -126,7 +131,16 @@ public class TextArea2 extends Component {
             }
         }
 
+        public void removeText(int index) {
+            removeText(index, characters.length() - index);
+        }
+
         public void removeText(int index, int count) {
+            if (index < 0
+                || index + count > characters.length()) {
+                throw new IndexOutOfBoundsException();
+            }
+
             if (count > 0) {
                 characters.delete(index, index + count);
 
@@ -724,7 +738,7 @@ public class TextArea2 extends Component {
             paragraphSequence.remove(beginParagraphIndex, (endParagraphIndex - 1) - beginParagraphIndex);
 
             // Remove leading text
-            beginParagraph.removeText(index - beginParagraph.offset, beginParagraph.characters.length());
+            beginParagraph.removeText(index - beginParagraph.offset);
         }
     }
 
