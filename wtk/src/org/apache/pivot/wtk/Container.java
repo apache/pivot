@@ -127,10 +127,10 @@ public abstract class Container extends Component
 
     @Override
     public final int add(Component component) {
-        int i = getLength();
-        insert(component, i);
+        int index = getLength();
+        insert(component, index);
 
-        return i;
+        return index;
     }
 
     @Override

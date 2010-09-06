@@ -199,15 +199,27 @@ public class TextArea2 extends Component {
 
     public final class ParagraphSequence implements Sequence<Paragraph>, Iterable<Paragraph> {
         public int add(Paragraph paragraph) {
-            // TODO
-            return -1;
+            int index = getLength();
+            insert(paragraph, index);
+
+            return index;
         }
 
         public void insert(Paragraph paragraph, int index) {
-            // TODO Ensure that paragraph.textArea is null
+            if (paragraph == null) {
+                throw new IllegalArgumentException("paragraph is null.");
+            }
 
-            // TODO Set paragraph.textArea to TextArea2.this
+            if (paragraph.textArea != null) {
+                throw new IllegalArgumentException("paragraph is already in use by another text area.");
+            }
+
+            paragraphs.insert(paragraph, index);
+            paragraph.textArea = TextArea2.this;
+
             // TODO Perform offset bookkeeping
+
+            textAreaContentListeners.paragraphInserted(TextArea2.this, index);
         }
 
         public Paragraph update(int index, Paragraph paragraph) {
@@ -215,8 +227,12 @@ public class TextArea2 extends Component {
         }
 
         public int remove(Paragraph paragraph){
-            // TODO
-            return -1;
+            int index = indexOf(paragraph);
+            if (index != -1) {
+                remove(index, 1);
+            }
+
+            return index;
         }
 
         public Sequence<Paragraph> remove(int index, int count) {
@@ -389,7 +405,9 @@ public class TextArea2 extends Component {
 
         StringBuilder textBuilder = new StringBuilder(endIndex - beginIndex);
 
-        // TODO
+        // TODO Get paragraph at beginIndex; get character offset
+        // TODO Read characters until endIndex is reached, appending to text builder
+        // and moving to next paragraph as needed
 
         return textBuilder.toString();
     }
@@ -440,7 +458,11 @@ public class TextArea2 extends Component {
         paragraphs.clear();
         characterCount = 0;
 
-        // TODO
+        // TODO Create a new paragraph
+
+        // TODO While not '\n', append characters to paragraph
+        // TODO When '\n' is reached, append paragraph to paragraphs and create new paragraph
+        // TODO When EOF is reached, append current paragraph to paragraphs
 
         // TODO set characterCount
 
@@ -474,7 +496,12 @@ public class TextArea2 extends Component {
         }
 
         if (text.length() > 0) {
-            // TODO
+            // TODO Get paragraph # at index
+            // TODO Create a string builder and begin reading chars into it
+            // TODO When '\n' is reached, insert text into current paragraph at current offset
+            // and split paragraph as needed
+
+            // TODO When EOF is reached, insert text into current paragraph
 
             // Update selection
             int previousSelectionStart = selectionStart;
@@ -494,7 +521,10 @@ public class TextArea2 extends Component {
 
     public void removeText(int index, int count) {
         if (count > 0) {
-            // TODO
+            // TODO Get paragraph #, offset at index
+            // TODO Count forward to determine end paragraph #, offset
+            // TODO Remove leading chars and trailing chars
+            // TODO Remove intervening paragraphs
 
             characterCount -= count;
 
@@ -746,7 +776,9 @@ public class TextArea2 extends Component {
             // Truncate the text, if necessary
             int previousCharacterCount = characterCount;
             if (previousCharacterCount > maximumLength) {
-                // TODO
+                // TODO Get paragraph #, offset at maximumLength
+                // TODO Remove any trailing characters
+                // TODO Remove any trailing paragraphs
 
                 characterCount = maximumLength;
             }

@@ -41,10 +41,10 @@ public class Accordion extends Container {
 
         @Override
         public int add(Component panel) {
-            int i = getLength();
-            insert(panel, i);
+            int index = getLength();
+            insert(panel, index);
 
-            return i;
+            return index;
         }
 
         @Override

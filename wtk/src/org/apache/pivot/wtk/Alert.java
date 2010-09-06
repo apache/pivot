@@ -43,10 +43,10 @@ public class Alert extends Dialog {
 
         @Override
         public int add(Object option) {
-            int i = getLength();
-            insert(option, i);
+            int index = getLength();
+            insert(option, index);
 
-            return i;
+            return index;
         }
 
         @Override

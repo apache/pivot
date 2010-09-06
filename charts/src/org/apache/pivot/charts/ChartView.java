@@ -157,10 +157,10 @@ public abstract class ChartView extends Component {
     public final class CategorySequence implements Sequence<Category> {
         @Override
         public int add(Category category) {
-            int i = getLength();
-            insert(category, i);
+            int index = getLength();
+            insert(category, index);
 
-            return i;
+            return index;
         }
 
         @Override

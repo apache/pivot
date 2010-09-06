@@ -50,10 +50,10 @@ public class GridPane extends Container {
 
         @Override
         public int add(Component component) {
-            int i = getLength();
-            insert(component, i);
+            int index = getLength();
+            insert(component, index);
 
-            return i;
+            return index;
         }
 
         @Override
@@ -168,10 +168,10 @@ public class GridPane extends Container {
 
         @Override
         public int add(Row row) {
-            int i = getLength();
-            insert(row, i);
+            int index = getLength();
+            insert(row, index);
 
-            return i;
+            return index;
         }
 
         @Override

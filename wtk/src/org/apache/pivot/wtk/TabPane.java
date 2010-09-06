@@ -41,10 +41,10 @@ public class TabPane extends Container {
 
         @Override
         public int add(Component tab) {
-            int i = getLength();
-            insert(tab, i);
+            int index = getLength();
+            insert(tab, index);
 
-            return i;
+            return index;
         }
 
         @Override

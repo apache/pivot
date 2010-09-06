@@ -538,10 +538,10 @@ public class Path extends Shape2D implements Sequence<Path.Operation> {
      * {@inheritDoc}
      */
     public final int add(Operation operation) {
-        int i = getLength();
-        insert(operation, i);
+        int index = getLength();
+        insert(operation, index);
 
-        return i;
+        return index;
     }
 
     /**

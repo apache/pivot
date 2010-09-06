@@ -157,10 +157,10 @@ public abstract class Component implements ConstrainedVisual {
         Iterable<Decorator> {
         @Override
         public int add(Decorator decorator) {
-            int i = getLength();
-            insert(decorator, i);
+            int index = getLength();
+            insert(decorator, index);
 
-            return i;
+            return index;
         }
 
         @Override

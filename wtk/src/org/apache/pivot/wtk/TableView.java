@@ -925,10 +925,10 @@ public class TableView extends Component {
     public final class ColumnSequence implements Sequence<Column>, Iterable<Column> {
         @Override
         public int add(Column column) {
-            int i = getLength();
-            insert(column, i);
+            int index = getLength();
+            insert(column, index);
 
-            return i;
+            return index;
         }
 
         @Override
