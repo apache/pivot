@@ -139,7 +139,7 @@ public abstract class Element extends Node
                 }
             } else {
                 // Merge the range contents into this element
-                int index = getIndexAt(offset);
+                int index = getNodeAt(offset);
                 Node leadingSegment = get(index);
 
                 Node trailingSegment;
@@ -181,8 +181,8 @@ public abstract class Element extends Node
         if (characterCount > 0) {
             Element element = (Element)range;
 
-            int start = getIndexAt(offset);
-            int end = getIndexAt(offset + characterCount - 1);
+            int start = getNodeAt(offset);
+            int end = getNodeAt(offset + characterCount - 1);
 
             if (start == end) {
                 // The range is entirely contained by one child node
@@ -269,8 +269,8 @@ public abstract class Element extends Node
 
         if (characterCount > 0) {
 
-            int start = getIndexAt(offset);
-            int end = getIndexAt(offset + characterCount - 1);
+            int start = getNodeAt(offset);
+            int end = getNodeAt(offset + characterCount - 1);
 
             if (start == end) {
                 // The range is entirely contained by one child node
@@ -331,7 +331,7 @@ public abstract class Element extends Node
 
     @Override
     public char getCharacterAt(int offset) {
-        Node node = getNodeAt(offset);
+        Node node = nodes.get(getNodeAt(offset));
         return node.getCharacterAt(offset - node.getOffset());
     }
 
@@ -493,20 +493,20 @@ public abstract class Element extends Node
      * @return
      * The index of the child node at the given offset.
      */
-    public int getIndexAt(int offset) {
+    public int getNodeAt(int offset) {
         if (offset < 0
             || offset >= characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
-        int i = 0;
-        int n = nodes.getLength();
-        while (i < n
-            && offset >= nodes.get(i).getOffset()) {
-            i++;
+        int i = nodes.getLength() - 1;
+        Node node = nodes.get(i);
+
+        while (node.getOffset() > offset) {
+            node = nodes.get(--i);
         }
 
-        return i - 1;
+        return i;
     }
 
     /**
@@ -520,7 +520,7 @@ public abstract class Element extends Node
     public Sequence<Integer> getPathAt(int offset) {
         Sequence<Integer> path;
 
-        int index = getIndexAt(offset);
+        int index = getNodeAt(offset);
         Node node = get(index);
 
         if (node instanceof Element) {
@@ -536,26 +536,6 @@ public abstract class Element extends Node
     }
 
     /**
-     * Determines the child node at a given offset.
-     *
-     * @param offset
-     *
-     * @return
-     * The child node at the given offset.
-     */
-    public Node getNodeAt(int offset) {
-        if (offset < 0
-            || offset >= characterCount) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        int index = getIndexAt(offset);
-        Node node = nodes.get(index);
-
-        return node;
-    }
-
-    /**
      * Determines the descendant node at a given offset.
      *
      * @param offset
@@ -564,7 +544,7 @@ public abstract class Element extends Node
      * The descendant node at the given offset.
      */
     public Node getDescendantAt(int offset) {
-        Node descendant = getNodeAt(offset);
+        Node descendant = nodes.get(getNodeAt(offset));
 
         if (descendant instanceof Element) {
             Element element = (Element)descendant;
@@ -579,7 +559,7 @@ public abstract class Element extends Node
         this.characterCount += characterCount;
 
         // Update the offsets of consecutive nodes
-        int index = getIndexAt(offset);
+        int index = getNodeAt(offset);
 
         for (int i = index + 1, n = nodes.getLength(); i < n; i++) {
             Node node = nodes.get(i);
@@ -595,7 +575,7 @@ public abstract class Element extends Node
 
         // Update the offsets of consecutive nodes, if any
         if (offset < this.characterCount) {
-            int index = getIndexAt(offset);
+            int index = getNodeAt(offset);
 
             for (int i = index + 1, n = nodes.getLength(); i < n; i++) {
                 Node node = nodes.get(i);

@@ -624,18 +624,17 @@ public class TextInput extends Component {
         if (previousMaximumLength != maximumLength) {
             this.maximumLength = maximumLength;
 
-            // Truncate the text, if necessary
-            int previousCharacterCount = characters.length();
-            if (previousCharacterCount > maximumLength) {
-                characters.delete(maximumLength, previousCharacterCount);
-            }
+            // Truncate the text, if necessary (do not allow listeners to vote on this change)
+            int length = characters.length();
 
-            // Fire change events
-            textInputListeners.maximumLengthChanged(this, previousMaximumLength);
-
-            if (characters.length() != previousCharacterCount) {
+            if (length > maximumLength) {
+                int count = length - maximumLength;
+                characters.delete(maximumLength, length);
+                textInputContentListeners.textRemoved(this, maximumLength, count);
                 textInputContentListeners.textChanged(this);
             }
+
+            textInputListeners.maximumLengthChanged(this, previousMaximumLength);
         }
     }
 
