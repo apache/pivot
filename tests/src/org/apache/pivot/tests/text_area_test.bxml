@@ -24,6 +24,9 @@ limitations under the License.
         textArea.insertText("Hello\nWorld", 5);
         textArea.insertText("Foo\n", 11);
         textArea.removeText(2, 5);
+
+        java.lang.System.out.println("textArea.selectionStart = " + textArea.selectionStart);
+        textArea.removeText(textArea.selectionStart, 1);
     }
     </windowStateListeners>
 

@@ -386,7 +386,9 @@ public class TextArea2 extends Component {
                 }
 
                 // Update offsets and character count, including terminator characters
-                characterCount -= count - 1;
+                if (getLength() > 0) {
+                    characterCount += count;
+                }
 
                 updateParagraphOffsets(index, -characterCount);
                 TextArea2.this.characterCount -= characterCount;
@@ -581,11 +583,13 @@ public class TextArea2 extends Component {
 
         // Read characters until endIndex is reached, appending to text builder
         // and moving to next paragraph as needed
-        for (int i = 0; i < count; i++) {
+        int i = 0;
+        while (i < count) {
             textBuilder.append(paragraph.characters.charAt(characterOffset++));
+            i++;
 
             if (characterOffset == paragraph.characters.length()
-                && i < count - 1) {
+                && i < characterCount) {
                 textBuilder.append('\n');
                 i++;
 
@@ -731,14 +735,19 @@ public class TextArea2 extends Component {
                 beginParagraph = paragraphs.get(--beginParagraphIndex);
             }
 
-            // Remove trailing text
-            endParagraph.removeText(0, (index + count) - endParagraph.offset);
+            if (beginParagraphIndex == endParagraphIndex) {
+                // The removal affects only a single paragraph
+                beginParagraph.removeText(index - beginParagraph.offset, count);
+            } else {
+                // The removal spans paragraphs; remove any intervening paragraphs and
+                // merge the leading and trailing segments
+                String trailingText = endParagraph.characters.substring((index + count) - endParagraph.offset);
 
-            // Remove intervening paragraphs
-            paragraphSequence.remove(beginParagraphIndex, (endParagraphIndex - 1) - beginParagraphIndex);
+                paragraphSequence.remove(beginParagraphIndex + 1, endParagraphIndex - beginParagraphIndex);
 
-            // Remove leading text
-            beginParagraph.removeText(index - beginParagraph.offset);
+                beginParagraph.removeText(index - beginParagraph.offset);
+                beginParagraph.insertText(trailingText, beginParagraph.characters.length());
+            }
         }
     }
 
