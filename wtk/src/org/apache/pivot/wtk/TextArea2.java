@@ -772,7 +772,7 @@ public class TextArea2 extends Component {
      */
     public int getParagraphAt(int index) {
         if (index < 0
-            || index > characterCount - 1) {
+            || index > characterCount) {
             throw new IndexOutOfBoundsException();
         }
 

@@ -19,11 +19,17 @@ limitations under the License.
 <Window title="Text Area Test" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
+    <windowStateListeners>
+    function windowOpened(window) {
+        textArea.requestFocus();
+    }
+    </windowStateListeners>
+
     <BoxPane orientation="vertical" styles="{padding:8}">
         <Border>
-            <TextArea2 bxml:id="textArea" text="@sample.txt"
+            <TextArea2 bxml:id="textArea" text="ABCD&#x000A;"
                 preferredWidth="240"
-                styles="{margin:12, backgroundColor:'#eeeeee', wrapText:true}"/>
+                styles="{margin:8, backgroundColor:'#eeeeee', wrapText:true, horizontalAlignment:'left'}"/>
         </Border>
     </BoxPane>
 </Window>

@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.Transparency;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
@@ -111,16 +112,21 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
         @Override
         public void paint(Graphics2D graphics) {
             // Draw the text
-            // TODO Only paint visible glyphs
             int width = getWidth();
 
-            if (glyphVectors.getLength() > 0) {
+            // TODO Only paint visible glyphs
+
+            // TODO Paint text using selection color when appropriate
+
+            int n = glyphVectors.getLength();
+
+            if (n > 0) {
                 FontRenderContext fontRenderContext = Platform.getFontRenderContext();
                 LineMetrics lm = font.getLineMetrics("", fontRenderContext);
                 float ascent = lm.getAscent();
 
                 float y = 0;
-                for (int i = 0, n = glyphVectors.getLength(); i < n; i++) {
+                for (int i = 0; i < n; i++) {
                     GlyphVector glyphVector = glyphVectors.get(i);
 
                     Rectangle2D textBounds = glyphVector.getLogicalBounds();
@@ -229,6 +235,49 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
             Rectangle2D textBounds = glyphVector.getLogicalBounds();
             width = Math.max(width, (float)textBounds.getWidth());
             height += textBounds.getHeight();
+        }
+
+        public Bounds getCharacterBounds(int index) {
+            Bounds characterBounds = null;
+
+            int n = glyphVectors.getLength();
+
+            if (n > 0) {
+                int characterCount = paragraph.getCharacters().length();
+
+                int lineIndex = n - 1;
+                GlyphVector glyphVector = glyphVectors.get(lineIndex);
+
+                int x, width;
+                if (index == characterCount) {
+                    // This is the terminator character
+                    Rectangle2D glyphVectorBounds = glyphVector.getLogicalBounds();
+                    x = (int)Math.floor(glyphVectorBounds.getWidth());
+                    width = 4; // TODO Does this really need a width?
+                } else {
+                    int lineOffset = characterCount - glyphVector.getNumGlyphs();
+
+                    while (lineOffset > index) {
+                        glyphVector = glyphVectors.get(--lineIndex);
+                        lineOffset -= glyphVector.getNumGlyphs();
+                    }
+
+                    Shape glyphBounds = glyphVector.getGlyphLogicalBounds(index - lineOffset);
+                    Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
+
+                    x = (int)Math.floor(glyphBounds2D.getX());
+                    width = (int)Math.ceil(glyphBounds2D.getWidth());
+                }
+
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+                LineMetrics lm = font.getLineMetrics("", fontRenderContext);
+                float lineHeight = lm.getAscent() + lm.getDescent();
+
+                characterBounds = new Bounds(x, (int)Math.floor(lineIndex * lineHeight),
+                    width, (int)Math.ceil(lineHeight));
+            }
+
+            return characterBounds;
         }
 
         @Override
@@ -421,7 +470,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
                 }
 
                 case RIGHT: {
-                    paragraphView.x = width - (paragraphView.getWidth() - margin.right);
+                    paragraphView.x = width - (paragraphView.getWidth() + margin.right);
                     break;
                 }
 
@@ -435,8 +484,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
             y += paragraphView.getHeight();
         }
 
-        // TODO
-        // updateSelection();
+        updateSelection();
         caretX = caret.x;
 
         if (textArea.isFocused()) {
@@ -457,17 +505,31 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
 
     @Override
     public void paint(Graphics2D graphics) {
+        TextArea2 textArea = (TextArea2)getComponent();
         int width = getWidth();
         int height = getHeight();
 
+        // Draw the background
         if (backgroundColor != null) {
             graphics.setPaint(backgroundColor);
             graphics.fillRect(0, 0, width, height);
         }
 
-        // TODO Paint selection state
+        // Draw the caret/selection
+        if (selection == null) {
+            if (caretOn
+                && textArea.isFocused()) {
+                graphics.setColor(textArea.isEditable() ? color : inactiveColor);
+                graphics.fill(caret);
+            }
+        } else {
+            graphics.setColor(textArea.isFocused()
+                && textArea.isEditable() ?
+                selectionBackgroundColor : inactiveSelectionBackgroundColor);
+            graphics.fill(selection);
+        }
 
-        // Draw text
+        // Draw the text
         graphics.setFont(font);
         graphics.setPaint(color);
 
@@ -511,12 +573,15 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
     }
 
     public Bounds getCharacterBounds(int index) {
-        // TODO Check for paragraph terminators including implicit final terminator
+        TextArea2 textArea = (TextArea2)getComponent();
+        int paragraphIndex = textArea.getParagraphAt(index);
+        ParagraphView paragraphView = paragraphViews.get(paragraphIndex);
+        Bounds characterBounds = paragraphView.getCharacterBounds(index -
+            paragraphView.paragraph.getOffset());
 
-        // TODO Translate returned bounds based on horizontal alignment and view's
-        // y-coordinate
-
-        return null;
+        return new Bounds(characterBounds.x + paragraphView.x,
+            characterBounds.y + paragraphView.y,
+            characterBounds.width, characterBounds.height);
     }
 
     private void scrollCharacterToVisible(int offset) {
@@ -830,7 +895,10 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
         TextArea2 textArea = (TextArea2)getComponent();
         if (textArea.isFocused()
             && textArea.getSelectionLength() == 0) {
-            scrollCharacterToVisible(textArea.getSelectionStart());
+            if (textArea.isValid()) {
+                scrollCharacterToVisible(textArea.getSelectionStart());
+            }
+
             showCaret(true);
         } else {
             showCaret(false);
@@ -883,7 +951,30 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
     @Override
     public void selectionChanged(TextArea2 textArea, int previousSelectionStart,
         int previousSelectionLength) {
-        // TODO
+        // If the text area is valid, repaint the selection state; otherwise,
+        // the selection will be updated in layout()
+        if (textArea.isValid()) {
+            if (selection == null) {
+                // Repaint previous caret bounds
+                textArea.repaint(caret.x, caret.y, caret.width, caret.height);
+            } else {
+                // Repaint previous selection bounds
+                Rectangle bounds = selection.getBounds();
+                textArea.repaint(bounds.x, bounds.y, bounds.width, bounds.height);
+            }
+
+            updateSelection();
+
+            if (selection == null) {
+                showCaret(textArea.isFocused());
+            } else {
+                showCaret(false);
+
+                // Repaint current selection bounds
+                Rectangle bounds = selection.getBounds();
+                textArea.repaint(bounds.x, bounds.y, bounds.width, bounds.height);
+            }
+        }
     }
 
     private void updateSelection() {
