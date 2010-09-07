@@ -304,10 +304,6 @@ public final class TerraTheme extends Theme {
      * @param index
      */
     public Color getColor(int index) {
-        if (index < 0 || index >= colors.getLength()) {
-            throw new IllegalArgumentException("Index not in range [0, " + (colors.getLength() -1) + "]");
-        }
-
         return colors.get(index);
     }
 
@@ -318,9 +314,6 @@ public final class TerraTheme extends Theme {
      * @param color
      */
     public void setColor(int index, Color color) {
-        if (index < 0 || index >= colors.getLength()) {
-            throw new IllegalArgumentException("Index not in range [0, " + (colors.getLength() -1) + "]");
-        }
         if (color == null) {
             throw new IllegalArgumentException();
         }
