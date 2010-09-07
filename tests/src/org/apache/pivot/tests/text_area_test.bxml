@@ -30,20 +30,23 @@ limitations under the License.
     }
     </windowStateListeners>
 
-    <ScrollPane>
-        <TextArea2 bxml:id="textArea" text="@sample.txt">
-            <textAreaContentListeners>
-            <![CDATA[
-            function textChanged(textArea) {
-                java.lang.System.out.println(textArea.text + "\n-");
+    <BoxPane orientation="vertical" styles="{padding:8}">
+        <Border>
+            <TextArea2 bxml:id="textArea" text="@sample.txt" preferredWidth="320"
+                styles="{backgroundColor:'#eeeeee', wrapText:true}">
+                <textAreaContentListeners>
+                <![CDATA[
+                function textChanged(textArea) {
+                    java.lang.System.out.println(textArea.text + "\n-");
 
-                for (var i = 0, n = textArea.paragraphs.length; i < n; i++) {
-                    var paragraph = textArea.paragraphs.get(i);
-                    java.lang.System.out.println("[" + i + "] " + paragraph.offset);
+                    for (var i = 0, n = textArea.paragraphs.length; i < n; i++) {
+                        var paragraph = textArea.paragraphs.get(i);
+                        java.lang.System.out.println("[" + i + "] " + paragraph.offset);
+                    }
                 }
-            }
-            ]]>
-            </textAreaContentListeners>
-        </TextArea2>
-    </ScrollPane>
+                ]]>
+                </textAreaContentListeners>
+            </TextArea2>
+        </Border>
+    </BoxPane>
 </Window>

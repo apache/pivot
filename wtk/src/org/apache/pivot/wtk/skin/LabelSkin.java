@@ -243,13 +243,19 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
                     int start = 0;
                     int i = 0;
+
+                    // NOTE We use a character iterator here only because it is the most
+                    // efficient way to measure the character bounds (as of Java 6, the version
+                    // of Font#getStringBounds() that takes a String performs a string copy,
+                    // whereas the version that takes a character iterator does not)
+                    StringCharacterIterator ci = new StringCharacterIterator(text);
                     while (i < n) {
                         char c = text.charAt(i);
                         if (Character.isWhitespace(c)) {
                             lastWhitespaceIndex = i;
                         }
 
-                        Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1, fontRenderContext);
+                        Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
                         lineWidth += characterBounds.getWidth();
 
                         if (lineWidth > width
@@ -341,7 +347,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                 float lineWidth = (float)textBounds.getWidth();
 
                 float x = 0;
-                switch(horizontalAlignment) {
+                switch (horizontalAlignment) {
                     case LEFT: {
                         x = padding.left;
                         break;

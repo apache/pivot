@@ -21,17 +21,23 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Transparency;
+import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.awt.font.LineMetrics;
 import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
+import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.text.CharSequenceCharacterIterator;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
@@ -54,13 +60,15 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
     public class ParagraphView implements Visual, TextArea2.ParagraphListener {
         private TextArea2.Paragraph paragraph;
 
+        private int x = 0;
+        private int y = 0;
         private int width = 0;
         private int height = 0;
 
         private int breakWidth = Integer.MAX_VALUE;
 
         private boolean valid = false;
-        private ArrayList<GlyphVector> rows = new ArrayList<GlyphVector>();
+        private ArrayList<GlyphVector> glyphVectors = new ArrayList<GlyphVector>();
 
         public ParagraphView(TextArea2.Paragraph paragraph) {
             this.paragraph = paragraph;
@@ -102,11 +110,44 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
 
         @Override
         public void paint(Graphics2D graphics) {
-            // Iterate over rows and paint each
+            // Draw the text
             // TODO Only paint visible glyphs
-            for (GlyphVector line : rows) {
-                // TODO
-                graphics.drawGlyphVector(line, 0, 0);
+            int width = getWidth();
+
+            if (glyphVectors.getLength() > 0) {
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+                LineMetrics lm = font.getLineMetrics("", fontRenderContext);
+                float ascent = lm.getAscent();
+
+                float y = 0;
+                for (int i = 0, n = glyphVectors.getLength(); i < n; i++) {
+                    GlyphVector glyphVector = glyphVectors.get(i);
+
+                    Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                    float lineWidth = (float)textBounds.getWidth();
+
+                    float x = 0;
+                    switch (horizontalAlignment) {
+                        case LEFT: {
+                            x = margin.left;
+                            break;
+                        }
+
+                        case RIGHT: {
+                            x = width - (lineWidth + margin.right);
+                            break;
+                        }
+
+                        case CENTER: {
+                            x = (width - lineWidth) / 2;
+                            break;
+                        }
+                    }
+
+                    graphics.drawGlyphVector(glyphVector, x, y + ascent);
+
+                    y += textBounds.getHeight();
+                }
             }
         }
 
@@ -115,11 +156,77 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
         }
 
         public void validate() {
+            // TODO Validate from invalid offset rather than 0
+
             if (!valid) {
-                // TODO Re-layout glyphs and recalculate size
-                rows = new ArrayList<GlyphVector>();
+                glyphVectors = new ArrayList<GlyphVector>();
                 width = 0;
                 height = 0;
+
+                // Re-layout glyphs and recalculate size
+                CharSequence characters = paragraph.getCharacters();
+                int n = characters.length();
+
+                if (n > 0) {
+                    FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
+                    float lineWidth = 0;
+                    int lastWhitespaceIndex = -1;
+
+                    int start = 0;
+                    int i = 0;
+
+                    // NOTE We use a character iterator here only because it is the most
+                    // efficient way to measure the character bounds (as of Java 6, the version
+                    // of Font#getStringBounds() that takes a String performs a string copy,
+                    // whereas the version that takes a character iterator does not)
+                    CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(characters);
+                    while (i < n) {
+                        char c = characters.charAt(i);
+                        if (Character.isWhitespace(c)) {
+                            lastWhitespaceIndex = i;
+                        }
+
+                        Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
+                        lineWidth += characterBounds.getWidth();
+
+                        if (lineWidth > breakWidth
+                            && lastWhitespaceIndex != -1) {
+                            i = lastWhitespaceIndex;
+
+                            lineWidth = 0;
+                            lastWhitespaceIndex = -1;
+
+                            // Append the current line
+                            if ((i - 1) - start >= 0) {
+                                CharSequenceCharacterIterator line =
+                                    new CharSequenceCharacterIterator(characters, start, i, start);
+                                GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
+                                glyphVectors.add(glyphVector);
+
+                                Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                                width = Math.max(width, (int)Math.ceil(textBounds.getWidth()));
+                                height += textBounds.getHeight();
+                            }
+
+                            start = i + 1;
+                        }
+
+                        i++;
+                    }
+
+                    // Append the final line
+                    if ((i - 1) - start >= 0) {
+                        CharSequenceCharacterIterator line =
+                            new CharSequenceCharacterIterator(characters, start, i, start);
+                        GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
+                        glyphVectors.add(glyphVector);
+
+                        Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                        width = Math.max(width, (int)Math.ceil(textBounds.getWidth()));
+                        height += textBounds.getHeight();
+                    }
+                }
             }
 
             valid = true;
@@ -215,8 +322,9 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
     private Color selectionBackgroundColor;
     private Color inactiveSelectionColor;
     private Color inactiveSelectionBackgroundColor;
-    private Insets margin = new Insets(4);
-    private boolean wrapText = true;
+    private HorizontalAlignment horizontalAlignment;
+    private Insets margin;
+    private boolean wrapText;
 
     private ArrayList<ParagraphView> paragraphViews = new ArrayList<ParagraphView>();
 
@@ -230,6 +338,9 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
         selectionBackgroundColor = Color.BLACK;
         inactiveSelectionColor = Color.LIGHT_GRAY;
         inactiveSelectionBackgroundColor = Color.BLACK;
+        horizontalAlignment = HorizontalAlignment.LEFT;
+        margin = new Insets(4);
+        wrapText = true;
     }
 
     @Override
@@ -293,20 +404,83 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
 
     @Override
     public void layout() {
+        TextArea2 textArea = (TextArea2)getComponent();
         int width = getWidth();
+
+        int y = margin.top;
 
         for (ParagraphView paragraphView : paragraphViews) {
             paragraphView.setBreakWidth(width);
 
-            // TODO Set location
+            // Set location
+            switch (horizontalAlignment) {
+                case LEFT: {
+                    paragraphView.x = 0;
+                    break;
+                }
+
+                case RIGHT: {
+                    paragraphView.x = width - paragraphView.getWidth();
+                    break;
+                }
+
+                case CENTER: {
+                    paragraphView.x = (width - paragraphView.getWidth()) / 2;
+                    break;
+                }
+            }
+
+            paragraphView.y = y;
+            y += paragraphView.getHeight();
         }
+
+        // TODO
+        // updateSelection();
+        caretX = caret.x;
+
+        if (textArea.isFocused()) {
+            scrollCharacterToVisible(textArea.getSelectionStart());
+        }
+
+        showCaret(textArea.isFocused()
+            && textArea.getSelectionLength() == 0);
+    }
+
+    @Override
+    public int getBaseline(int width, int height) {
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        LineMetrics lm = font.getLineMetrics("", fontRenderContext);
+
+        return Math.round(margin.top + lm.getAscent());
     }
 
     @Override
     public void paint(Graphics2D graphics) {
+        int width = getWidth();
+        int height = getHeight();
+
+        if (backgroundColor != null) {
+            graphics.setPaint(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+        }
+
         // TODO Paint selection state
-        // TODO Walk paragraph view list and translate graphics/paint each view (only
-        // paint visible views)
+
+        // Draw text
+        graphics.setFont(font);
+        graphics.setPaint(color);
+
+        graphics.translate(0, margin.top);
+
+        for (int i = 0, n = paragraphViews.getLength(); i < n; i++) {
+            ParagraphView paragraphView = paragraphViews.get(i);
+
+            graphics.translate(paragraphView.x, 0);
+            paragraphView.paint(graphics);
+            graphics.translate(-paragraphView.x, 0);
+
+            graphics.translate(0, paragraphView.getHeight());
+        }
     }
 
     @Override
@@ -337,6 +511,10 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
 
     public Bounds getCharacterBounds(int index) {
         // TODO Check for paragraph terminators including implicit final terminator
+
+        // TODO Translate returned bounds based on horizontal alignment and view's
+        // y-coordinate
+
         return null;
     }
 
@@ -522,6 +700,27 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
         setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
 
+    public HorizontalAlignment getHorizontalAlignment() {
+        return horizontalAlignment;
+    }
+
+    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+        if (horizontalAlignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
+        }
+
+        this.horizontalAlignment = horizontalAlignment;
+        repaintComponent();
+    }
+
+    public final void setHorizontalAlignment(String horizontalAlignment) {
+        if (horizontalAlignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
+        }
+
+        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase(Locale.ENGLISH)));
+    }
+
     public Insets getMargin() {
         return margin;
     }
@@ -641,27 +840,43 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
 
     @Override
     public void maximumLengthChanged(TextArea2 textArea, int previousMaximumLength) {
-        // TODO
+        // No-op
     }
 
     @Override
     public void editableChanged(TextArea2 textArea) {
-        // TODO
+        // No-op
     }
 
     @Override
     public void paragraphInserted(TextArea2 textArea, int index) {
-        // TODO Create paragraph view and add as paragraph listener
+        // Create paragraph view and add as paragraph listener
+        TextArea2.Paragraph paragraph = textArea.getParagraphs().get(index);
+        ParagraphView paragraphView = new ParagraphView(paragraph);
+        paragraph.getParagraphListeners().add(paragraphView);
+
+        // Insert view
+        paragraphViews.insert(paragraphView, index);
     }
 
     @Override
     public void paragraphsRemoved(TextArea2 textArea, int index, Sequence<TextArea2.Paragraph> removed) {
-        // TODO Remove paragraph views and remove as paragraph listeners
+        // Remove paragraph views as paragraph listeners
+        int count = removed.getLength();
+
+        for (int i = 0; i < count; i++) {
+            TextArea2.Paragraph paragraph = removed.get(i);
+            ParagraphView paragraphView = paragraphViews.get(i + index);
+            paragraph.getParagraphListeners().remove(paragraphView);
+        }
+
+        // Remove views
+        paragraphViews.remove(index, count);
     }
 
     @Override
     public void textChanged(TextArea2 textArea) {
-        // TODO
+        // No-op
     }
 
     @Override
