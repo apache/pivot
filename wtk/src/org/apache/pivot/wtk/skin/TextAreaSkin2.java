@@ -62,8 +62,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
 
         private int x = 0;
         private int y = 0;
-        private int width = 0;
-        private int height = 0;
+        private float width = 0;
+        private float height = 0;
 
         private int breakWidth = Integer.MAX_VALUE;
 
@@ -81,13 +81,13 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
         @Override
         public int getWidth() {
             validate();
-            return width;
+            return (int)Math.ceil(width);
         }
 
         @Override
         public int getHeight() {
             validate();
-            return height;
+            return (int)Math.ceil(height);
         }
 
         public int getBreakWidth() {
@@ -129,12 +129,12 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
                     float x = 0;
                     switch (horizontalAlignment) {
                         case LEFT: {
-                            x = margin.left;
+                            x = 0;
                             break;
                         }
 
                         case RIGHT: {
-                            x = width - (lineWidth + margin.right);
+                            x = width - lineWidth;
                             break;
                         }
 
@@ -190,46 +190,45 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
                         Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
                         lineWidth += characterBounds.getWidth();
 
-                        if (lineWidth > breakWidth
-                            && lastWhitespaceIndex != -1) {
-                            i = lastWhitespaceIndex;
-
-                            lineWidth = 0;
-                            lastWhitespaceIndex = -1;
-
-                            // Append the current line
-                            if ((i - 1) - start >= 0) {
-                                CharSequenceCharacterIterator line =
-                                    new CharSequenceCharacterIterator(characters, start, i, start);
-                                GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
-                                glyphVectors.add(glyphVector);
-
-                                Rectangle2D textBounds = glyphVector.getLogicalBounds();
-                                width = Math.max(width, (int)Math.ceil(textBounds.getWidth()));
-                                height += textBounds.getHeight();
+                        if (lineWidth > breakWidth) {
+                            if (lastWhitespaceIndex == -1) {
+                                if (start == i) {
+                                    appendLine(characters, start, start + 1, fontRenderContext);
+                                } else {
+                                    appendLine(characters, start, i, fontRenderContext);
+                                    i--;
+                                }
+                            } else {
+                                appendLine(characters, start, lastWhitespaceIndex, fontRenderContext);
+                                i = lastWhitespaceIndex;
                             }
 
                             start = i + 1;
+
+                            lineWidth = 0;
+                            lastWhitespaceIndex = -1;
                         }
 
                         i++;
                     }
 
-                    // Append the final line
-                    if ((i - 1) - start >= 0) {
-                        CharSequenceCharacterIterator line =
-                            new CharSequenceCharacterIterator(characters, start, i, start);
-                        GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
-                        glyphVectors.add(glyphVector);
-
-                        Rectangle2D textBounds = glyphVector.getLogicalBounds();
-                        width = Math.max(width, (int)Math.ceil(textBounds.getWidth()));
-                        height += textBounds.getHeight();
-                    }
+                    appendLine(characters, start, i, fontRenderContext);
                 }
             }
 
             valid = true;
+        }
+
+        private void appendLine(CharSequence characters, int start, int i,
+            FontRenderContext fontRenderContext) {
+            CharSequenceCharacterIterator line =
+                new CharSequenceCharacterIterator(characters, start, i, start);
+            GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
+            glyphVectors.add(glyphVector);
+
+            Rectangle2D textBounds = glyphVector.getLogicalBounds();
+            width = Math.max(width, (float)textBounds.getWidth());
+            height += textBounds.getHeight();
         }
 
         @Override
@@ -405,22 +404,24 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
     @Override
     public void layout() {
         TextArea2 textArea = (TextArea2)getComponent();
+
         int width = getWidth();
+        int breakWidth = (wrapText) ? Math.max(width - (margin.left + margin.right), 0) : Integer.MAX_VALUE;
 
         int y = margin.top;
 
         for (ParagraphView paragraphView : paragraphViews) {
-            paragraphView.setBreakWidth(width);
+            paragraphView.setBreakWidth(breakWidth);
 
             // Set location
             switch (horizontalAlignment) {
                 case LEFT: {
-                    paragraphView.x = 0;
+                    paragraphView.x = margin.left;
                     break;
                 }
 
                 case RIGHT: {
-                    paragraphView.x = width - paragraphView.getWidth();
+                    paragraphView.x = width - (paragraphView.getWidth() - margin.right);
                     break;
                 }
 

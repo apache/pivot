@@ -19,34 +19,11 @@ limitations under the License.
 <Window title="Text Area Test" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <windowStateListeners>
-    function windowOpened(window) {
-        textArea.insertText("Hello\nWorld", 5);
-        textArea.insertText("Foo\n", 11);
-        textArea.removeText(2, 5);
-
-        java.lang.System.out.println("textArea.selectionStart = " + textArea.selectionStart);
-        textArea.removeText(textArea.selectionStart, 1);
-    }
-    </windowStateListeners>
-
     <BoxPane orientation="vertical" styles="{padding:8}">
         <Border>
-            <TextArea2 bxml:id="textArea" text="@sample.txt" preferredWidth="320"
-                styles="{backgroundColor:'#eeeeee', wrapText:true}">
-                <textAreaContentListeners>
-                <![CDATA[
-                function textChanged(textArea) {
-                    java.lang.System.out.println(textArea.text + "\n-");
-
-                    for (var i = 0, n = textArea.paragraphs.length; i < n; i++) {
-                        var paragraph = textArea.paragraphs.get(i);
-                        java.lang.System.out.println("[" + i + "] " + paragraph.offset);
-                    }
-                }
-                ]]>
-                </textAreaContentListeners>
-            </TextArea2>
+            <TextArea2 bxml:id="textArea" text="@sample.txt"
+                preferredWidth="240"
+                styles="{margin:12, backgroundColor:'#eeeeee', wrapText:true}"/>
         </Border>
     </BoxPane>
 </Window>

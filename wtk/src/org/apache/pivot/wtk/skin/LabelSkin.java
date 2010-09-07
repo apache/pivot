@@ -60,7 +60,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     private boolean wrapText;
 
     private ArrayList<GlyphVector> glyphVectors = null;
-    private float textHeight = -1;
+    private float textHeight = 0;
 
     public LabelSkin() {
         Theme theme = Theme.getTheme();
@@ -260,45 +260,32 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
                         if (lineWidth > width
                             && lastWhitespaceIndex != -1) {
-                            i = lastWhitespaceIndex;
+                            appendLine(text, start, lastWhitespaceIndex, fontRenderContext);
 
+                            i = lastWhitespaceIndex;
+                            start = i + 1;
                             lineWidth = 0;
                             lastWhitespaceIndex = -1;
-
-                            // Append the current line
-                            if ((i - 1) - start >= 0) {
-                                StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
-                                GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
-                                glyphVectors.add(glyphVector);
-
-                                Rectangle2D textBounds = glyphVector.getLogicalBounds();
-                                textHeight += textBounds.getHeight();
-                            }
-
-                            start = i + 1;
                         }
 
                         i++;
                     }
 
-                    // Append the final line
-                    if ((i - 1) - start >= 0) {
-                        StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
-                        GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
-                        glyphVectors.add(glyphVector);
-
-                        Rectangle2D textBounds = glyphVector.getLogicalBounds();
-                        textHeight += textBounds.getHeight();
-                    }
+                    appendLine(text, start, i, fontRenderContext);
                 } else {
-                    GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, text);
-                    glyphVectors.add(glyphVector);
-
-                    Rectangle2D textBounds = glyphVector.getLogicalBounds();
-                    textHeight += textBounds.getHeight();
+                    appendLine(text, 0, text.length(), fontRenderContext);
                 }
             }
         }
+    }
+
+    private void appendLine(String text, int start, int i, FontRenderContext fontRenderContext) {
+        StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
+        GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
+        glyphVectors.add(glyphVector);
+
+        Rectangle2D textBounds = glyphVector.getLogicalBounds();
+        textHeight += textBounds.getHeight();
     }
 
     @Override
