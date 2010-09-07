@@ -170,56 +170,53 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
                 height = 0;
 
                 // Re-layout glyphs and recalculate size
+                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
                 CharSequence characters = paragraph.getCharacters();
                 int n = characters.length();
 
-                if (n > 0) {
-                    FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+                int i = 0;
+                int start = 0;
+                float lineWidth = 0;
+                int lastWhitespaceIndex = -1;
 
-                    float lineWidth = 0;
-                    int lastWhitespaceIndex = -1;
-
-                    int start = 0;
-                    int i = 0;
-
-                    // NOTE We use a character iterator here only because it is the most
-                    // efficient way to measure the character bounds (as of Java 6, the version
-                    // of Font#getStringBounds() that takes a String performs a string copy,
-                    // whereas the version that takes a character iterator does not)
-                    CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(characters);
-                    while (i < n) {
-                        char c = characters.charAt(i);
-                        if (Character.isWhitespace(c)) {
-                            lastWhitespaceIndex = i;
-                        }
-
-                        Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
-                        lineWidth += characterBounds.getWidth();
-
-                        if (lineWidth > breakWidth) {
-                            if (lastWhitespaceIndex == -1) {
-                                if (start == i) {
-                                    appendLine(characters, start, start + 1, fontRenderContext);
-                                } else {
-                                    appendLine(characters, start, i, fontRenderContext);
-                                    i--;
-                                }
-                            } else {
-                                appendLine(characters, start, lastWhitespaceIndex, fontRenderContext);
-                                i = lastWhitespaceIndex;
-                            }
-
-                            start = i + 1;
-
-                            lineWidth = 0;
-                            lastWhitespaceIndex = -1;
-                        }
-
-                        i++;
+                // NOTE We use a character iterator here only because it is the most
+                // efficient way to measure the character bounds (as of Java 6, the version
+                // of Font#getStringBounds() that takes a String performs a string copy,
+                // whereas the version that takes a character iterator does not)
+                CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(characters);
+                while (i < n) {
+                    char c = characters.charAt(i);
+                    if (Character.isWhitespace(c)) {
+                        lastWhitespaceIndex = i;
                     }
 
-                    appendLine(characters, start, i, fontRenderContext);
+                    Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
+                    lineWidth += characterBounds.getWidth();
+
+                    if (lineWidth > breakWidth) {
+                        if (lastWhitespaceIndex == -1) {
+                            if (start == i) {
+                                appendLine(characters, start, start + 1, fontRenderContext);
+                            } else {
+                                appendLine(characters, start, i, fontRenderContext);
+                                i--;
+                            }
+                        } else {
+                            appendLine(characters, start, lastWhitespaceIndex, fontRenderContext);
+                            i = lastWhitespaceIndex;
+                        }
+
+                        start = i + 1;
+
+                        lineWidth = 0;
+                        lastWhitespaceIndex = -1;
+                    }
+
+                    i++;
                 }
+
+                appendLine(characters, start, i, fontRenderContext);
             }
 
             valid = true;
