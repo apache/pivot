@@ -1040,7 +1040,9 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 && textInput.getCharacterCount() == textInput.getMaximumLength()) {
                 Toolkit.getDefaultToolkit().beep();
             } else {
-                textInput.removeText(textInput.getSelectionStart(), textInput.getSelectionLength());
+                // NOTE We call getSelectionStart() explicitly here in case the remove
+                // event is vetoed
+                textInput.removeText(textInput.getSelectionStart(), selectionLength);
                 textInput.insertText(Character.toString(character), textInput.getSelectionStart());
             }
         }
@@ -1053,21 +1055,22 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         TextInput textInput = (TextInput)getComponent();
-
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-        if (keyCode == Keyboard.KeyCode.DELETE
-            || keyCode == Keyboard.KeyCode.BACKSPACE) {
-            int index = textInput.getSelectionStart();
-            int count = textInput.getSelectionLength();
-            if (count == 0) {
-                if (keyCode == Keyboard.KeyCode.BACKSPACE) {
-                    index--;
-                }
 
-                count = 1;
-            }
+        if (keyCode == Keyboard.KeyCode.DELETE) {
+            int index = textInput.getSelectionStart();
 
             if (index >= 0) {
+                int count = Math.max(textInput.getSelectionLength(), 1);
+                textInput.removeText(index, count);
+            }
+
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
+            int index = textInput.getSelectionStart() - 1;
+
+            if (index >= 0) {
+                int count = Math.max(textInput.getSelectionLength(), 1);
                 textInput.removeText(index, count);
             }
 

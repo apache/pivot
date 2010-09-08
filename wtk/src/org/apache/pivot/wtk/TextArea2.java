@@ -99,34 +99,32 @@ public class TextArea2 extends Component {
 
             int count = text.length();
 
-            if (count > 0) {
-                if (textArea != null
-                    && textArea.characterCount + count > textArea.maximumLength) {
-                    throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
-                }
+            if (textArea != null
+                && textArea.characterCount + count > textArea.maximumLength) {
+                throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
+            }
 
-                characters.insert(index, text);
+            characters.insert(index, text);
 
-                if (textArea != null) {
-                    // Update offsets and character count
-                    textArea.updateParagraphOffsets(textArea.paragraphs.indexOf(this) + 1, count);
-                    textArea.characterCount += count;
+            if (textArea != null) {
+                // Update offsets and character count
+                textArea.updateParagraphOffsets(textArea.paragraphs.indexOf(this) + 1, count);
+                textArea.characterCount += count;
 
-                    // Update selection state
-                    int previousSelectionStart = textArea.selectionStart;
-                    int previousSelectionLength = textArea.selectionLength;
-                    textArea.selectionStart = offset + index + count;
-                    textArea.selectionLength = 0;
+                // Update selection state
+                int previousSelectionStart = textArea.selectionStart;
+                int previousSelectionLength = textArea.selectionLength;
+                textArea.selectionStart = offset + index + count;
+                textArea.selectionLength = 0;
 
-                    // Fire change events
-                    paragraphListeners.textInserted(this, index, count);
-                    textArea.textAreaContentListeners.textChanged(textArea);
+                // Fire change events
+                paragraphListeners.textInserted(this, index, count);
+                textArea.textAreaContentListeners.textChanged(textArea);
 
-                    if (textArea.selectionStart != previousSelectionStart
-                        || textArea.selectionLength != previousSelectionLength) {
-                        textArea.textAreaSelectionListeners.selectionChanged(textArea,
-                            textArea.selectionStart, textArea.selectionLength);
-                    }
+                if (textArea.selectionStart != previousSelectionStart
+                    || textArea.selectionLength != previousSelectionLength) {
+                    textArea.textAreaSelectionListeners.selectionChanged(textArea,
+                        textArea.selectionStart, textArea.selectionLength);
                 }
             }
         }
@@ -141,29 +139,27 @@ public class TextArea2 extends Component {
                 throw new IndexOutOfBoundsException();
             }
 
-            if (count > 0) {
-                characters.delete(index, index + count);
+            characters.delete(index, index + count);
 
-                if (textArea != null) {
-                    // Update offsets and character count
-                    textArea.updateParagraphOffsets(textArea.paragraphs.indexOf(this) + 1, -count);
-                    textArea.characterCount -= count;
+            if (textArea != null) {
+                // Update offsets and character count
+                textArea.updateParagraphOffsets(textArea.paragraphs.indexOf(this) + 1, -count);
+                textArea.characterCount -= count;
 
-                    // Update selection state
-                    int previousSelectionStart = textArea.selectionStart;
-                    int previousSelectionLength = textArea.selectionLength;
-                    textArea.selectionStart = offset + index;
-                    textArea.selectionLength = 0;
+                // Update selection state
+                int previousSelectionStart = textArea.selectionStart;
+                int previousSelectionLength = textArea.selectionLength;
+                textArea.selectionStart = offset + index;
+                textArea.selectionLength = 0;
 
-                    // Fire change events
-                    paragraphListeners.textRemoved(this, index, count);
-                    textArea.textAreaContentListeners.textChanged(textArea);
+                // Fire change events
+                paragraphListeners.textRemoved(this, index, count);
+                textArea.textAreaContentListeners.textChanged(textArea);
 
-                    if (textArea.selectionStart != previousSelectionStart
-                        || textArea.selectionLength != previousSelectionLength) {
-                        textArea.textAreaSelectionListeners.selectionChanged(textArea,
-                            textArea.selectionStart, textArea.selectionLength);
-                    }
+                if (textArea.selectionStart != previousSelectionStart
+                    || textArea.selectionLength != previousSelectionLength) {
+                    textArea.textAreaSelectionListeners.selectionChanged(textArea,
+                        textArea.selectionStart, textArea.selectionLength);
                 }
             }
         }
@@ -698,7 +694,7 @@ public class TextArea2 extends Component {
                     int count = paragraph.characters.length();
 
                     CharSequence trailingCharacters = paragraph.characters.subSequence(characterOffset, count);
-                    paragraph.removeText(characterOffset, count);
+                    paragraph.removeText(characterOffset, count - characterOffset);
                     paragraph.insertText(textBuilder, characterOffset);
 
                     paragraph = new Paragraph();
@@ -752,9 +748,11 @@ public class TextArea2 extends Component {
     }
 
     private void updateParagraphOffsets(int from, int count) {
-        for (int i = from, n = paragraphs.getLength(); i < n; i++) {
-            Paragraph paragraph = paragraphs.get(i);
-            paragraph.offset += count;
+        if (count > 0) {
+            for (int i = from, n = paragraphs.getLength(); i < n; i++) {
+                Paragraph paragraph = paragraphs.get(i);
+                paragraph.offset += count;
+            }
         }
     }
 
