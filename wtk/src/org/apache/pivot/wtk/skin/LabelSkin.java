@@ -238,11 +238,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                 if (wrapText) {
                     int width = getWidth() - (padding.left + padding.right);
 
+                    int i = 0;
+                    int start = 0;
                     float lineWidth = 0;
                     int lastWhitespaceIndex = -1;
-
-                    int start = 0;
-                    int i = 0;
 
                     // NOTE We use a character iterator here only because it is the most
                     // efficient way to measure the character bounds (as of Java 6, the version
@@ -260,7 +259,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
                         if (lineWidth > width
                             && lastWhitespaceIndex != -1) {
-                            appendLine(text, start, lastWhitespaceIndex, fontRenderContext);
+                            appendLine(text, start, lastWhitespaceIndex + 1, fontRenderContext);
 
                             i = lastWhitespaceIndex;
                             start = i + 1;
@@ -279,8 +278,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         }
     }
 
-    private void appendLine(String text, int start, int i, FontRenderContext fontRenderContext) {
-        StringCharacterIterator line = new StringCharacterIterator(text, start, i, start);
+    private void appendLine(String text, int start, int end, FontRenderContext fontRenderContext) {
+        StringCharacterIterator line = new StringCharacterIterator(text, start, end, start);
         GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
         glyphVectors.add(glyphVector);
 

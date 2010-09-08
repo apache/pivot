@@ -203,7 +203,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
                                 i--;
                             }
                         } else {
-                            appendLine(characters, start, lastWhitespaceIndex, fontRenderContext);
+                            appendLine(characters, start, lastWhitespaceIndex + 1, fontRenderContext);
                             i = lastWhitespaceIndex;
                         }
 
@@ -222,10 +222,10 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
             valid = true;
         }
 
-        private void appendLine(CharSequence characters, int start, int i,
+        private void appendLine(CharSequence characters, int start, int end,
             FontRenderContext fontRenderContext) {
             CharSequenceCharacterIterator line =
-                new CharSequenceCharacterIterator(characters, start, i, start);
+                new CharSequenceCharacterIterator(characters, start, end, start);
             GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
             glyphVectors.add(glyphVector);
 
@@ -237,42 +237,41 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
         public Bounds getCharacterBounds(int index) {
             Bounds characterBounds = null;
 
-            int n = glyphVectors.getLength();
+            CharSequence characters = paragraph.getCharacters();
+            int characterCount = characters.length();
 
-            if (n > 0) {
-                int characterCount = paragraph.getCharacters().length();
+            int lineIndex = glyphVectors.getLength() - 1;
+            GlyphVector glyphVector = glyphVectors.get(lineIndex);
 
-                int lineIndex = n - 1;
-                GlyphVector glyphVector = glyphVectors.get(lineIndex);
+            int x, width;
+            if (index == characterCount) {
+                // This is the terminator character
+                Rectangle2D glyphVectorBounds = glyphVector.getLogicalBounds();
+                x = (int)Math.floor(glyphVectorBounds.getWidth());
+                width = PARAGRAPH_TERMINATOR_WIDTH;
 
-                int x, width;
-                if (index == characterCount) {
-                    // This is the terminator character
-                    Rectangle2D glyphVectorBounds = glyphVector.getLogicalBounds();
-                    x = (int)Math.floor(glyphVectorBounds.getWidth());
-                    width = 4; // TODO Does this really need a width?
-                } else {
-                    int lineOffset = characterCount - glyphVector.getNumGlyphs();
+            } else {
+                // This is a visible character
+                int lineOffset = characterCount - glyphVector.getNumGlyphs();
 
-                    while (lineOffset > index) {
-                        glyphVector = glyphVectors.get(--lineIndex);
-                        lineOffset -= glyphVector.getNumGlyphs();
-                    }
-
-                    Shape glyphBounds = glyphVector.getGlyphLogicalBounds(index - lineOffset);
-                    Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
-
-                    x = (int)Math.floor(glyphBounds2D.getX());
-                    width = (int)Math.ceil(glyphBounds2D.getWidth());
+                while (lineOffset > index) {
+                    glyphVector = glyphVectors.get(--lineIndex);
+                    lineOffset -= glyphVector.getNumGlyphs();
                 }
 
-                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-                LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-                float lineHeight = lm.getAscent() + lm.getDescent();
+                Shape glyphBounds = glyphVector.getGlyphLogicalBounds(index - lineOffset);
+                Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-                characterBounds = new Bounds(x, (int)Math.floor(lineIndex * lineHeight),
-                    width, (int)Math.ceil(lineHeight));
+                x = (int)Math.floor(glyphBounds2D.getX());
+                width = (int)Math.ceil(glyphBounds2D.getWidth());
             }
+
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
+            float lineHeight = lm.getAscent() + lm.getDescent();
+
+            characterBounds = new Bounds(x, (int)Math.floor(lineIndex * lineHeight),
+                width, (int)Math.ceil(lineHeight));
 
             return characterBounds;
         }
@@ -372,6 +371,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
     private boolean wrapText;
 
     private ArrayList<ParagraphView> paragraphViews = new ArrayList<ParagraphView>();
+
+    private static final int PARAGRAPH_TERMINATOR_WIDTH = 2;
 
     public TextAreaSkin2() {
         Theme theme = Theme.getTheme();

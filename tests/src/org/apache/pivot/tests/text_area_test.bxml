@@ -21,14 +21,14 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <windowStateListeners>
     function windowOpened(window) {
+        textArea.setSelection(0, 0);
         textArea.requestFocus();
     }
     </windowStateListeners>
 
     <BoxPane orientation="vertical" styles="{padding:8}">
         <Border>
-            <TextArea2 bxml:id="textArea" text="ABCD&#x000A;"
-                preferredWidth="240"
+            <TextArea2 bxml:id="textArea" text="@sample.txt" preferredWidth="320"
                 styles="{margin:8, backgroundColor:'#eeeeee', wrapText:true, horizontalAlignment:'left'}"/>
         </Border>
     </BoxPane>
