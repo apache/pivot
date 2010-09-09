@@ -24,8 +24,8 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.FocusTraversalPolicy;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
@@ -129,6 +129,11 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
 
     @Override
     public void iconAdded(Window window, Image addedIcon) {
+        // No-op
+    }
+
+    @Override
+    public void iconInserted(Window window, Image addedIcon, int index) {
         // No-op
     }
 
