@@ -515,7 +515,7 @@ limitations under the License.
             include, which prevents naming collisions with the parent file. If the
             <tt>&lt;wtkx:include&gt;</tt> tag itself is given an ID, the contents of the include's
             namespace can be accessed externally via JSON path syntax. For example, given the
-            following root WTKX, the <tt>Labekl</tt> instance can be accessed via the path
+            following root WTKX, the <tt>Label</tt> instance can be accessed via the path
             "content.label":
         </p>
 
