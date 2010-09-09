@@ -1016,6 +1016,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
             int selectionStart = textArea.getSelectionStart();
             int selectionLength = textArea.getSelectionLength();
 
+            // TODO Combine Control and Shift key behavior
             if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Add the previous character to the selection
                 if (selectionStart > 0) {
@@ -1059,6 +1060,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
             int selectionStart = textArea.getSelectionStart();
             int selectionLength = textArea.getSelectionLength();
 
+            // TODO Combine Control and Shift key behavior
             if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Add the next character to the selection
                 if (selectionStart + selectionLength < textArea.getCharacterCount()) {
@@ -1093,7 +1095,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin,
                     selectionStart += selectionLength - 1;
                 }
 
-                if (selectionStart < textArea.getCharacterCount() - 1) {
+                if (selectionStart < textArea.getCharacterCount()) {
                     selectionStart++;
                 }
 

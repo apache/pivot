@@ -38,7 +38,8 @@ limitations under the License.
 
                 <textAreaSelectionListeners>
                 function selectionChanged(textArea, previousSelectionStart, previousSelectionLength) {
-                    java.lang.System.out.println(textArea.selectionStart + ", " + textArea.selectionLength);
+                    java.lang.System.out.println("selection = " + textArea.selectionStart
+                        + ", " + textArea.selectionLength);
                 }
                 </textAreaSelectionListeners>
             </TextArea2>
