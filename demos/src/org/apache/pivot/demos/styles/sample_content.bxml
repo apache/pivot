@@ -151,6 +151,11 @@ limitations under the License.
                                 ButtonPressListener.buttonPressed="org.apache.pivot.wtk.Prompt.prompt('This is a prompt.',
                                     arguments[0].window);"/>
                         </BoxPane>
+
+                        <Border>
+                            <TextArea preferredWidth="200"
+                                text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."/>
+                        </Border>
                     </BoxPane>
                 </TablePane.Row>
             </TablePane>

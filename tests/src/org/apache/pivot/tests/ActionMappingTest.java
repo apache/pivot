@@ -21,6 +21,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
@@ -34,14 +35,14 @@ public class ActionMappingTest implements Application {
     public void startup(Display display, Map<String, String> properties) throws Exception {
         Action.getNamedActions().put("action1", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 Alert.alert(MessageType.INFO, "Action 1 performed.", window);
             }
         });
 
         Action.getNamedActions().put("action2", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 Alert.alert(MessageType.INFO, "Action 2 performed.", window);
             }
         });

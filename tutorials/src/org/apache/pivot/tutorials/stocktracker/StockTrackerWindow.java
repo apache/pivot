@@ -80,7 +80,7 @@ public class StockTrackerWindow extends Window implements Bindable {
     private Action addSymbolAction = new Action(false) {
         @Override
         @SuppressWarnings("unchecked")
-        public void perform() {
+        public void perform(Component source) {
             String symbol = symbolTextInput.getText().toUpperCase();
             if (symbols.indexOf(symbol) == -1) {
                 symbols.add(symbol);
@@ -101,7 +101,7 @@ public class StockTrackerWindow extends Window implements Bindable {
     // Action invoke to remove selected symbols
     private Action removeSymbolsAction = new Action(false) {
         @Override
-        public void perform() {
+        public void perform(Component source) {
             int selectedIndex = stocksTableView.getFirstSelectedIndex();
             int selectionLength = stocksTableView.getLastSelectedIndex() - selectedIndex + 1;
             stocksTableView.getTableData().remove(selectedIndex, selectionLength);
@@ -123,7 +123,7 @@ public class StockTrackerWindow extends Window implements Bindable {
     // Action invoked to refresh the symbol table view
     private Action refreshTableAction = new Action() {
         @Override
-        public void perform() {
+        public void perform(Component source) {
             refreshTable();
         }
     };
@@ -198,7 +198,7 @@ public class StockTrackerWindow extends Window implements Bindable {
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.DELETE
                     || keyCode == Keyboard.KeyCode.BACKSPACE) {
-                    removeSymbolsAction.perform();
+                    removeSymbolsAction.perform(component);
                 } else if (keyCode == Keyboard.KeyCode.A
                     && Keyboard.isPressed(Platform.getCommandModifier())) {
                     stocksTableView.selectAll();
@@ -221,7 +221,7 @@ public class StockTrackerWindow extends Window implements Bindable {
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     if (addSymbolAction.isEnabled()) {
-                        addSymbolAction.perform();
+                        addSymbolAction.perform(component);
                     }
                 }
 

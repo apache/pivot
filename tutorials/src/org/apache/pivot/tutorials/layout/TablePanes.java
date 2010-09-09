@@ -92,7 +92,7 @@ public class TablePanes extends Window implements Bindable {
 
         namedActions.put("configureCell", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 Sheet sheet;
 
@@ -117,7 +117,7 @@ public class TablePanes extends Window implements Bindable {
 
         namedActions.put("configureRow", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 Sheet sheet;
 
@@ -141,7 +141,7 @@ public class TablePanes extends Window implements Bindable {
 
         namedActions.put("insertRow", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 Sheet sheet;
 
@@ -176,7 +176,7 @@ public class TablePanes extends Window implements Bindable {
 
         namedActions.put("removeRow", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 ArrayList<String> options = new ArrayList<String>("OK", "Cancel");
                 String message = "Remove Row?";
                 Label body = new Label("Are you sure you want to remove the row?");
@@ -199,7 +199,7 @@ public class TablePanes extends Window implements Bindable {
 
         namedActions.put("configureColumn", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 Sheet sheet;
 
@@ -223,7 +223,7 @@ public class TablePanes extends Window implements Bindable {
 
         namedActions.put("insertColumn", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 Sheet sheet;
 
@@ -259,7 +259,7 @@ public class TablePanes extends Window implements Bindable {
 
         namedActions.put("removeColumn", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 ArrayList<String> options = new ArrayList<String>("OK", "Cancel");
                 String message = "Remove Column?";
                 Label body = new Label("Are you sure you want to remove the column?");

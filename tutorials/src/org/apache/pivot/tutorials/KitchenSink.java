@@ -302,7 +302,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     }
 
                     @Override
-                    public void perform() {
+                    public void perform(Component source) {
                         Button selectedItem = imageMenuGroup.getSelection();
 
                         String imageName = (String)selectedItem.getUserData().get("image");

@@ -1132,7 +1132,7 @@ public class Window extends Container {
         Action action = actionMap.get(keyStroke);
         if (action != null
             && action.isEnabled()) {
-            action.perform();
+            action.perform(this);
         }
 
         return consumed;

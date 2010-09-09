@@ -1104,16 +1104,37 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     /**
-     * Converts a object to a JSON string representation.
+     * Converts a object to a JSON string representation. The map keys will always
+     * be quote-delimited.
      *
      * @param value
      * The object to convert.
      *
      * @return
      * The resulting JSON string.
+     *
+     * @see #toString(Object, boolean)
      */
     public static String toString(Object value) throws SerializationException {
+        return toString(value, false);
+    }
+
+    /**
+     * Converts a object to a JSON string representation.
+     *
+     * @param value
+     * The object to convert.
+     *
+     * @param alwaysDelimitMapKeys
+     * A flag indicating whether or not map keys will always be quote-delimited.
+     *
+     * @return
+     * The resulting JSON string.
+     */
+    public static String toString(Object value, boolean alwaysDelimitMapKeys) throws SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
+        jsonSerializer.setAlwaysDelimitMapKeys(alwaysDelimitMapKeys);
+
         StringWriter writer = new StringWriter();
 
         try {
@@ -1123,91 +1144,6 @@ public class JSONSerializer implements Serializer<Object> {
         }
 
         return writer.toString();
-    }
-
-    /**
-     * Converts a string to a JSON string representation.
-     *
-     * @param value
-     * The object to convert.
-     *
-     * @return
-     * The resulting JSON string.
-     */
-    public static String toString(String value) {
-        try {
-            return toString((Object)value);
-        } catch(SerializationException exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-
-    /**
-     * Converts a number to a JSON string representation.
-     *
-     * @param value
-     * The object to convert.
-     *
-     * @return
-     * The resulting JSON string.
-     */
-    public static String toString(Number value) {
-        try {
-            return toString((Object)value);
-        } catch(SerializationException exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-
-    /**
-     * Converts a boolean to a JSON string representation.
-     *
-     * @param value
-     * The object to convert.
-     *
-     * @return
-     * The resulting JSON string.
-     */
-    public static String toString(Boolean value) {
-        try {
-            return toString((Object)value);
-        } catch(SerializationException exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-
-    /**
-     * Converts a list to a JSON string representation.
-     *
-     * @param value
-     * The object to convert.
-     *
-     * @return
-     * The resulting JSON string.
-     */
-    public static String toString(List<?> value) {
-        try {
-            return toString((Object)value);
-        } catch(SerializationException exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-
-    /**
-     * Converts a map to a JSON string representation.
-     *
-     * @param value
-     * The object to convert.
-     *
-     * @return
-     * The resulting JSON string.
-     */
-    public static String toString(Map<String, ?> value) {
-        try {
-            return toString((Object)value);
-        } catch(SerializationException exception) {
-            throw new RuntimeException(exception);
-        }
     }
 
     public ListenerList<JSONSerializerListener> getJSONSerializerListeners() {

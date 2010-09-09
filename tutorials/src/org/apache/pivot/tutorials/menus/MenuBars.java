@@ -92,7 +92,7 @@ public class MenuBars extends Frame implements Bindable {
     public MenuBars() {
         Action.getNamedActions().put("fileNew", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 bxmlSerializer.getNamespace().put("menuHandler", menuHandler);
 
@@ -113,14 +113,14 @@ public class MenuBars extends Frame implements Bindable {
 
         Action.getNamedActions().put("fileOpen", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 fileBrowserSheet.open(MenuBars.this);
             }
         });
 
         Action.getNamedActions().put("cut", new Action(false) {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 TextInput textInput = (TextInput)MenuBars.this.getFocusDescendant();
                 textInput.cut();
             }
@@ -128,7 +128,7 @@ public class MenuBars extends Frame implements Bindable {
 
         Action.getNamedActions().put("copy", new Action(false) {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 TextInput textInput = (TextInput)MenuBars.this.getFocusDescendant();
                 textInput.copy();
             }
@@ -136,7 +136,7 @@ public class MenuBars extends Frame implements Bindable {
 
         Action.getNamedActions().put("paste", new Action(false) {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 TextInput textInput = (TextInput)MenuBars.this.getFocusDescendant();
                 textInput.paste();
             }

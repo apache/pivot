@@ -46,12 +46,16 @@ public class JSONSerializerTest {
 
     @Test(expected=RuntimeException.class)
     public void testInvalidNumbers() {
-        JSONSerializer.toString(Float.NaN);
-        JSONSerializer.toString(Float.NEGATIVE_INFINITY);
-        JSONSerializer.toString(Float.POSITIVE_INFINITY);
-        JSONSerializer.toString(Double.NaN);
-        JSONSerializer.toString(Double.NEGATIVE_INFINITY);
-        JSONSerializer.toString(Double.POSITIVE_INFINITY);
+        try {
+            JSONSerializer.toString(Float.NaN);
+            JSONSerializer.toString(Float.NEGATIVE_INFINITY);
+            JSONSerializer.toString(Float.POSITIVE_INFINITY);
+            JSONSerializer.toString(Double.NaN);
+            JSONSerializer.toString(Double.NEGATIVE_INFINITY);
+            JSONSerializer.toString(Double.POSITIVE_INFINITY);
+        } catch (SerializationException exception) {
+            // No-op
+        }
     }
 
     @Test

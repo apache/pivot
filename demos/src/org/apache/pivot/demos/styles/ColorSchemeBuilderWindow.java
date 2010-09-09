@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.LocalManifest;
+import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.SpinnerSelectionListener;
@@ -229,7 +230,12 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         }
 
         LocalManifest clipboardContent = new LocalManifest();
-        clipboardContent.putText(JSONSerializer.toString(colors));
+
+        try {
+            clipboardContent.putText(JSONSerializer.toString(colors));
+        } catch (SerializationException exception) {
+            Prompt.prompt(exception.getMessage(), this);
+        }
 
         Clipboard.setContent(clipboardContent);
     }

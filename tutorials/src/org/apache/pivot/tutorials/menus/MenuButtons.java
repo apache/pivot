@@ -25,6 +25,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Window;
@@ -43,7 +44,7 @@ public class MenuButtons extends Window implements Bindable {
     public MenuButtons() {
         Action.getNamedActions().put("newCircle", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 Ellipse ellipse = new Ellipse();
                 ellipse.setSize(50, 50);
 
@@ -57,7 +58,7 @@ public class MenuButtons extends Window implements Bindable {
 
         Action.getNamedActions().put("newSquare", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 Rectangle rectangle = new Rectangle();
                 rectangle.setSize(50, 50);
 
@@ -71,7 +72,7 @@ public class MenuButtons extends Window implements Bindable {
 
         Action.getNamedActions().put("newText", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 Text text = new Text();
                 text.setText("ABC");
                 text.setFont("Arial BOLD 24");
