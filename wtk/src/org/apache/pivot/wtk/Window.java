@@ -240,7 +240,9 @@ public class Window extends Container {
 
         @Override
         public void insert(Image image, int index) {
-            throw new UnsupportedOperationException();
+            iconImageList.insert(image, index);
+
+            windowListeners.iconInserted(Window.this, image, index);
         }
 
         @Override
@@ -300,6 +302,13 @@ public class Window extends Container {
         public void iconAdded(Window window, Image addedIcon) {
             for (WindowListener listener : this) {
                 listener.iconAdded(window, addedIcon);
+            }
+        }
+
+        @Override
+        public void iconInserted(Window window, Image addedIcon, int index) {
+            for (WindowListener listener : this) {
+                listener.iconInserted(window, addedIcon, index);
             }
         }
 
