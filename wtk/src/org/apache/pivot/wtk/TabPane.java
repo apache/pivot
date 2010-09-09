@@ -367,6 +367,34 @@ public class TabPane extends Container {
         }
     }
 
+    /**
+     * @return <tt>true</tt> if the TabPane is collapsible and no tab is
+     * selected; <tt>false</tt>, otherwise.
+     *
+     * @see #isCollapsible()
+     * @see #getSelectedIndex()
+     */
+    public boolean isCollapsed() {
+        return collapsible && (selectedIndex == -1);
+    }
+
+    /**
+     * Collapse or expand the TabPane (if it is collapsible).
+     *
+     * @param collapsed <tt>true</tt> to collapse, <tt>false</tt> to expand and
+     * select the first tab. Use {@link #setSelectedIndex(int)} to expand and
+     * select a specific Tab.
+     *
+     * @see #isCollapsible()
+     * @see #setSelectedIndex(int)
+     */
+    public void setCollapsed(boolean collapsed) {
+        if (collapsible && (isCollapsed() != collapsed)) {
+            int index = (collapsed || tabs.getLength() == 0) ? -1 : 0;
+            setSelectedIndex(index);
+        }
+    }
+
     public boolean isCollapsible() {
         return collapsible;
     }
