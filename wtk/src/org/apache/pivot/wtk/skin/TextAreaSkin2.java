@@ -406,11 +406,11 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             switch (scrollDirection) {
                 case UP: {
                     // Get previous offset
-                    int offset = getNextInsertionPoint(mouseX, selectionStart, scrollDirection);
+                    int index = getNextInsertionPoint(mouseX, selectionStart, scrollDirection);
 
-                    if (offset != -1) {
-                        textArea.setSelection(offset, selectionEnd - offset + 1);
-                        scrollCharacterToVisible(offset + 1);
+                    if (index != -1) {
+                        textArea.setSelection(index, selectionEnd - index + 1);
+                        scrollCharacterToVisible(index + 1);
                     }
 
                     break;
@@ -418,17 +418,17 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
                 case DOWN: {
                     // Get next offset
-                    int offset = getNextInsertionPoint(mouseX, selectionEnd, scrollDirection);
+                    int index = getNextInsertionPoint(mouseX, selectionEnd, scrollDirection);
 
-                    if (offset != -1) {
+                    if (index != -1) {
                         // If the next character is a paragraph terminator, increment
                         // the selection
-                        if (textArea.getCharacterAt(offset) == '\n') {
-                            offset++;
+                        if (textArea.getCharacterAt(index) == '\n') {
+                            index++;
                         }
 
-                        textArea.setSelection(selectionStart, offset - selectionStart);
-                        scrollCharacterToVisible(offset - 1);
+                        textArea.setSelection(selectionStart, index - selectionStart);
+                        scrollCharacterToVisible(index - 1);
                     }
 
                     break;
@@ -745,9 +745,9 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             characterBounds.width, characterBounds.height);
     }
 
-    private void scrollCharacterToVisible(int offset) {
+    private void scrollCharacterToVisible(int index) {
         TextArea2 textArea = (TextArea2) getComponent();
-        Bounds characterBounds = getCharacterBounds(offset);
+        Bounds characterBounds = getCharacterBounds(index);
 
         if (characterBounds != null) {
             textArea.scrollAreaToVisible(characterBounds.x, characterBounds.y,
@@ -1017,14 +1017,14 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 }
 
                 scrollDirection = null;
-                int offset = getInsertionPoint(x, y);
+                int index = getInsertionPoint(x, y);
 
-                if (offset != -1) {
+                if (index != -1) {
                     // Select the range
-                    if (offset > anchor) {
-                        textArea.setSelection(anchor, offset - anchor);
+                    if (index > anchor) {
+                        textArea.setSelection(anchor, index - anchor);
                     } else {
-                        textArea.setSelection(offset, anchor - offset);
+                        textArea.setSelection(index, anchor - index);
                     }
                 }
             } else {
@@ -1263,19 +1263,19 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         } else if (keyCode == Keyboard.KeyCode.UP) {
             int selectionStart = textArea.getSelectionStart();
 
-            int offset = getNextInsertionPoint(caretX, selectionStart, TextArea2.ScrollDirection.UP);
+            int index = getNextInsertionPoint(caretX, selectionStart, TextArea2.ScrollDirection.UP);
 
-            if (offset != -1) {
+            if (index != -1) {
                 int selectionLength;
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                     int selectionEnd = selectionStart + textArea.getSelectionLength() - 1;
-                    selectionLength = selectionEnd - offset + 1;
+                    selectionLength = selectionEnd - index + 1;
                 } else {
                     selectionLength = 0;
                 }
 
-                textArea.setSelection(offset, selectionLength);
-                scrollCharacterToVisible(offset);
+                textArea.setSelection(index, selectionLength);
+                scrollCharacterToVisible(index);
             }
 
             consumed = true;
@@ -1299,18 +1299,18 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                     x = trailingSelectionBounds.x + trailingSelectionBounds.width;
                 }
 
-                int offset = getNextInsertionPoint(x, from, TextArea2.ScrollDirection.DOWN);
+                int index = getNextInsertionPoint(x, from, TextArea2.ScrollDirection.DOWN);
 
-                if (offset != -1) {
+                if (index != -1) {
                     // If the next character is a paragraph terminator and is
                     // not the final terminator character, increment the selection
-                    if (offset < textArea.getCharacterCount() - 1
-                        && textArea.getCharacterAt(offset) == '\n') {
-                        offset++;
+                    if (index < textArea.getCharacterCount() - 1
+                        && textArea.getCharacterAt(index) == '\n') {
+                        index++;
                     }
 
-                    textArea.setSelection(selectionStart, offset - selectionStart);
-                    scrollCharacterToVisible(offset);
+                    textArea.setSelection(selectionStart, index - selectionStart);
+                    scrollCharacterToVisible(index);
                 }
             } else {
                 int from;
@@ -1322,11 +1322,11 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                     from = selectionStart + selectionLength - 1;
                 }
 
-                int offset = getNextInsertionPoint(caretX, from, TextArea2.ScrollDirection.DOWN);
+                int index = getNextInsertionPoint(caretX, from, TextArea2.ScrollDirection.DOWN);
 
-                if (offset != -1) {
-                    textArea.setSelection(offset, 0);
-                    scrollCharacterToVisible(offset);
+                if (index != -1) {
+                    textArea.setSelection(index, 0);
+                    scrollCharacterToVisible(index);
                 }
             }
 
