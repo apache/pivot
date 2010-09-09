@@ -392,7 +392,8 @@ public class TextArea2 extends Component {
                 // Update selection state
                 int previousSelectionStart = selectionStart;
                 int previousSelectionLength = selectionLength;
-                selectionStart = (paragraphs.getLength() > 0) ? paragraphs.get(index).offset : 0;
+                selectionStart = (index == paragraphs.getLength()) ?
+                    TextArea2.this.characterCount : paragraphs.get(index).offset;
                 selectionLength = 0;
 
                 // Fire change events
@@ -748,7 +749,7 @@ public class TextArea2 extends Component {
     }
 
     private void updateParagraphOffsets(int from, int count) {
-        if (count > 0) {
+        if (count != 0) {
             for (int i = from, n = paragraphs.getLength(); i < n; i++) {
                 Paragraph paragraph = paragraphs.get(i);
                 paragraph.offset += count;
