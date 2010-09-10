@@ -28,7 +28,7 @@ limitations under the License.
 
     <BoxPane orientation="vertical" styles="{padding:8}">
         <Border>
-            <TextArea2 bxml:id="textArea" text="abcdef&#x000A;ghij&#x000A;klmno&#x000A;p" preferredWidth="320"
+            <TextArea2 bxml:id="textArea" text="@sample.txt" preferredWidth="320"
                 styles="{margin:8, backgroundColor:'#eeeeee', wrapText:true, horizontalAlignment:'left'}">
                 <textAreaContentListeners>
                 function textChanged(textArea) {

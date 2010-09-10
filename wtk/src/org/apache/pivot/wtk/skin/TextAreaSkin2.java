@@ -26,6 +26,7 @@ import java.awt.Transparency;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.util.Locale;
@@ -44,6 +45,7 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
+import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextArea2;
 import org.apache.pivot.wtk.TextAreaListener2;
 import org.apache.pivot.wtk.TextAreaContentListener2;
@@ -127,49 +129,90 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
         @Override
         public void paint(Graphics2D graphics) {
-            // Draw the text
+            TextArea2 textArea = (TextArea2)getComponent();
+
+            int selectionStart = textArea.getSelectionStart();
+            int selectionLength = textArea.getSelectionLength();
+            Span selectionRange = new Span(selectionStart, selectionStart + selectionLength - 1);
+
+            int paragraphOffset = paragraph.getOffset();
+            Span characterRange = new Span(paragraphOffset, paragraphOffset
+                + paragraph.getCharacters().length() - 1);
+
+            if (selectionLength > 0
+                && characterRange.intersects(selectionRange)) {
+                boolean focused = textArea.isFocused();
+
+                // Determine the selected and unselected areas
+                Area selectedArea = selection.createTransformedArea(AffineTransform.getTranslateInstance(-x, -y));
+                Area unselectedArea = new Area();
+                unselectedArea.add(new Area(new Rectangle2D.Float(0, 0, width, height)));
+                unselectedArea.subtract(new Area(selectedArea));
+
+                // Paint the unselected text
+                Graphics2D unselectedGraphics = (Graphics2D)graphics.create();
+                unselectedGraphics.clip(unselectedArea);
+                paint(unselectedGraphics, focused, false);
+                unselectedGraphics.dispose();
+
+                // Paint the selected text
+                Graphics2D selectedGraphics = (Graphics2D)graphics.create();
+                selectedGraphics.clip(selectedArea);
+                paint(selectedGraphics, focused, true);
+                selectedGraphics.dispose();
+            } else {
+                paint(graphics, textArea.isFocused(), false);
+            }
+        }
+
+        private void paint(Graphics2D graphics, boolean focused, boolean selected) {
             int width = getWidth();
 
-            // TODO Only paint visible glyphs
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
+            float ascent = lm.getAscent();
+            float rowHeight = ascent + lm.getDescent();
 
-            // TODO Paint text using selection color when appropriate
+            Rectangle clipBounds = graphics.getClipBounds();
 
-            int n = rows.getLength();
+            float rowY = 0;
+            for (int i = 0, n = rows.getLength(); i < n; i++) {
+                Row row = rows.get(i);
 
-            if (n > 0) {
-                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-                LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-                float ascent = lm.getAscent();
+                Rectangle2D textBounds = row.glyphVector.getLogicalBounds();
+                float rowWidth = (float)textBounds.getWidth();
 
-                float rowY = 0;
-                for (int i = 0; i < n; i++) {
-                    Row row = rows.get(i);
-
-                    Rectangle2D textBounds = row.glyphVector.getLogicalBounds();
-                    float rowWidth = (float)textBounds.getWidth();
-
-                    float rowX = 0;
-                    switch (horizontalAlignment) {
-                        case LEFT: {
-                            rowX = 0;
-                            break;
-                        }
-
-                        case RIGHT: {
-                            rowX = width - rowWidth;
-                            break;
-                        }
-
-                        case CENTER: {
-                            rowX = (width - rowWidth) / 2;
-                            break;
-                        }
+                float rowX = 0;
+                switch (horizontalAlignment) {
+                    case LEFT: {
+                        rowX = 0;
+                        break;
                     }
 
-                    graphics.drawGlyphVector(row.glyphVector, rowX, rowY + ascent);
+                    case RIGHT: {
+                        rowX = width - rowWidth;
+                        break;
+                    }
 
-                    rowY += textBounds.getHeight();
+                    case CENTER: {
+                        rowX = (width - rowWidth) / 2;
+                        break;
+                    }
                 }
+
+                if (clipBounds.intersects(new Rectangle2D.Float(rowX, rowY, rowWidth, rowHeight))) {
+                    if (selected) {
+                        // TODO
+                        graphics.setPaint(focused ? selectionColor : inactiveSelectionColor);
+
+                        graphics.drawGlyphVector(row.glyphVector, rowX, rowY + ascent);
+                    } else {
+                        graphics.setPaint(color);
+                        graphics.drawGlyphVector(row.glyphVector, rowX, rowY + ascent);
+                    }
+                }
+
+                rowY += textBounds.getHeight();
             }
         }
 
@@ -178,8 +221,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         }
 
         public void validate() {
-            // TODO Validate from invalid offset rather than 0
-
+            // TODO Validate from known invalid offset rather than 0, so we don't need to
+            // recalculate all glyph vectors
             if (!valid) {
                 rows = new ArrayList<Row>();
                 width = 0;
@@ -255,9 +298,9 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         public int getInsertionPoint(int x, int y) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-            float lineHeight = lm.getAscent() + lm.getDescent();
+            float rowHeight = lm.getAscent() + lm.getDescent();
 
-            int i = (int)Math.floor((float)y / lineHeight);
+            int i = (int)Math.floor((float)y / rowHeight);
 
             return getRowInsertionPoint(i, x);
         }
@@ -390,10 +433,10 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-            float lineHeight = lm.getAscent() + lm.getDescent();
+            float rowHeight = lm.getAscent() + lm.getDescent();
 
-            characterBounds = new Bounds(x, (int)Math.floor(rowIndex * lineHeight), width,
-                (int)Math.ceil(lineHeight));
+            characterBounds = new Bounds(x, (int)Math.floor(rowIndex * rowHeight), width,
+                (int)Math.ceil(rowHeight));
 
             return characterBounds;
         }
@@ -489,6 +532,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     private Color selectionBackgroundColor;
     private Color inactiveSelectionColor;
     private Color inactiveSelectionBackgroundColor;
+
+    // TODO Rename to alignment? Or fix FlowPane/Text shape?
     private HorizontalAlignment horizontalAlignment;
     private Insets margin;
     private boolean wrapText;
@@ -657,8 +702,6 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
         // Draw the text
         graphics.setFont(font);
-        graphics.setPaint(color);
-
         graphics.translate(0, margin.top);
 
         for (int i = 0, n = paragraphViews.getLength(); i < n; i++) {
@@ -696,13 +739,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             for (int i = 0, n = paragraphViews.getLength(); i < n; i++) {
                 ParagraphView paragraphView = paragraphViews.get(i);
 
-                // TODO We can do this more efficiently than by creating a Bounds object
-                // (possibly just compare y-coordinates)
-                Bounds paragraphViewBounds = new Bounds(paragraphView.x, paragraphView.y,
-                    paragraphView.getWidth(), paragraphView.getHeight());
-
-                if (y >= paragraphViewBounds.y
-                    && y < paragraphViewBounds.y + paragraphViewBounds.height) {
+                if (y >= paragraphView.y
+                    && y < paragraphView.y + paragraphView.getHeight()) {
                     index = paragraphView.getInsertionPoint(x - paragraphView.x, y - paragraphView.y)
                         + paragraphView.paragraph.getOffset();
                     break;
