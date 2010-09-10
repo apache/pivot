@@ -259,7 +259,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
                         if (lineWidth > width
                             && lastWhitespaceIndex != -1) {
-                            appendLine(text, start, lastWhitespaceIndex + 1, fontRenderContext);
+                            appendLine(text, start, lastWhitespaceIndex, fontRenderContext);
 
                             i = lastWhitespaceIndex;
                             start = i + 1;

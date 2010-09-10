@@ -25,7 +25,6 @@ import java.awt.Transparency;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Area;
-import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -35,7 +34,6 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
-import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
@@ -129,7 +127,6 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     private Color selectionBackgroundColor;
     private Color inactiveSelectionColor;
     private Color inactiveSelectionBackgroundColor;
-    private HorizontalAlignment alignment;
     private Insets margin;
     private boolean wrapText;
 
@@ -147,7 +144,6 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         selectionBackgroundColor = Color.BLACK;
         inactiveSelectionColor = Color.LIGHT_GRAY;
         inactiveSelectionBackgroundColor = Color.BLACK;
-        alignment = HorizontalAlignment.LEFT;
         margin = new Insets(4);
         wrapText = true;
     }
@@ -224,25 +220,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         int rowOffset = 0;
         for (TextAreaSkinParagraphView2 paragraphView : paragraphViews) {
             paragraphView.setBreakWidth(breakWidth);
-
-            // Set location
-            switch (alignment) {
-                case LEFT: {
-                    paragraphView.setX(margin.left);
-                    break;
-                }
-
-                case RIGHT: {
-                    paragraphView.setX(width - (paragraphView.getWidth() + margin.right));
-                    break;
-                }
-
-                case CENTER: {
-                    paragraphView.setX((width - paragraphView.getWidth()) / 2);
-                    break;
-                }
-            }
-
+            paragraphView.setX(margin.left);
             paragraphView.setY(y);
             y += paragraphView.getHeight();
 
@@ -603,27 +581,6 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         }
 
         setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
-    }
-
-    public HorizontalAlignment getAlignment() {
-        return alignment;
-    }
-
-    public void setAlignment(HorizontalAlignment alignment) {
-        if (alignment == null) {
-            throw new IllegalArgumentException("alignment is null.");
-        }
-
-        this.alignment = alignment;
-        repaintComponent();
-    }
-
-    public final void setHorizontalAlignment(String alignment) {
-        if (alignment == null) {
-            throw new IllegalArgumentException("alignment is null.");
-        }
-
-        setAlignment(HorizontalAlignment.valueOf(alignment.toUpperCase(Locale.ENGLISH)));
     }
 
     public Insets getMargin() {

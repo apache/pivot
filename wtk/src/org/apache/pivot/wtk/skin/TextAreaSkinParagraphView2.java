@@ -30,7 +30,6 @@ import java.awt.geom.Rectangle2D;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.text.CharSequenceCharacterIterator;
 import org.apache.pivot.wtk.Bounds;
-import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextArea2;
@@ -167,8 +166,6 @@ class TextAreaSkinParagraphView2 implements Visual, TextArea2.ParagraphListener 
     }
 
     private void paint(Graphics2D graphics, boolean focused, boolean selected) {
-        int width = getWidth();
-
         Font font = textAreaSkin.getFont();
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
@@ -183,27 +180,7 @@ class TextAreaSkinParagraphView2 implements Visual, TextArea2.ParagraphListener 
 
             Rectangle2D textBounds = row.glyphVector.getLogicalBounds();
             float rowWidth = (float)textBounds.getWidth();
-
-            float rowX = 0;
-            HorizontalAlignment alignment = textAreaSkin.getAlignment();
-            switch (alignment) {
-                case LEFT: {
-                    rowX = 0;
-                    break;
-                }
-
-                case RIGHT: {
-                    rowX = width - rowWidth;
-                    break;
-                }
-
-                case CENTER: {
-                    rowX = (width - rowWidth) / 2;
-                    break;
-                }
-            }
-
-            if (clipBounds.intersects(new Rectangle2D.Float(rowX, rowY, rowWidth, rowHeight))) {
+            if (clipBounds.intersects(new Rectangle2D.Float(0, rowY, rowWidth, rowHeight))) {
                 if (selected) {
                     graphics.setPaint(focused ?
                         textAreaSkin.getSelectionColor() : textAreaSkin.getInactiveSelectionColor());
@@ -212,7 +189,7 @@ class TextAreaSkinParagraphView2 implements Visual, TextArea2.ParagraphListener 
                         textAreaSkin.getColor() : textAreaSkin.getInactiveColor());
                 }
 
-                graphics.drawGlyphVector(row.glyphVector, rowX, rowY + ascent);
+                graphics.drawGlyphVector(row.glyphVector, 0, rowY + ascent);
             }
 
             rowY += textBounds.getHeight();
@@ -336,28 +313,6 @@ class TextAreaSkinParagraphView2 implements Visual, TextArea2.ParagraphListener 
 
         Rectangle2D glyphVectorBounds = row.glyphVector.getLogicalBounds();
         float rowWidth = (float)glyphVectorBounds.getWidth();
-
-        // Translate x to glyph vector coordinates
-        float rowX = 0;
-        HorizontalAlignment alignment = textAreaSkin.getAlignment();
-        switch (alignment) {
-            case LEFT: {
-                rowX = 0;
-                break;
-            }
-
-            case RIGHT: {
-                rowX = width - rowWidth;
-                break;
-            }
-
-            case CENTER: {
-                rowX = (width - rowWidth) / 2;
-                break;
-            }
-        }
-
-        x -= rowX;
 
         int index;
         if (x < 0) {
