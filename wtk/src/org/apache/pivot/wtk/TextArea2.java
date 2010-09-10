@@ -392,6 +392,9 @@ public class TextArea2 extends Component {
                 // Update selection state
                 int previousSelectionStart = selectionStart;
                 int previousSelectionLength = selectionLength;
+
+                // TODO This logic appears flawed - try calling setText() on a text area that
+                // already has paragraphs to reproduce
                 selectionStart = (index == paragraphs.getLength()) ?
                     TextArea2.this.characterCount : paragraphs.get(index).offset;
                 selectionLength = 0;

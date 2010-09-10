@@ -793,24 +793,24 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         } else if (keyCode == Keyboard.KeyCode.DELETE) {
             int index = textArea.getSelectionStart();
 
-            if (index >= 0) {
+            if (index < textArea.getCharacterCount()) {
                 int count = Math.max(textArea.getSelectionLength(), 1);
                 textArea.removeText(index, count);
-            }
 
-            consumed = true;
+                consumed = true;
+            }
         } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
             int index = textArea.getSelectionStart();
-            if (index > 0) {
-                index--;
-            }
+            int count = textArea.getSelectionLength();
 
-            if (index >= 0) {
-                int count = Math.max(textArea.getSelectionLength(), 1);
+            if (count == 0
+                && index > 0) {
+                textArea.removeText(index - 1, 1);
+                consumed = true;
+            } else {
                 textArea.removeText(index, count);
+                consumed = true;
             }
-
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.HOME
             || (keyCode == Keyboard.KeyCode.LEFT
                 && Keyboard.isPressed(commandModifier))) {
@@ -934,16 +934,18 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 selectionLength = 0;
             }
 
-            textArea.setSelection(selectionStart, selectionLength);
-            scrollCharacterToVisible(selectionStart + selectionLength);
+            if (selectionStart <= textArea.getCharacterCount()) {
+                textArea.setSelection(selectionStart, selectionLength);
+                scrollCharacterToVisible(selectionStart + selectionLength);
 
-            caretX = caret.x;
+                caretX = caret.x;
 
-            if (selection != null) {
-                caretX += selection.getBounds2D().getWidth();
+                if (selection != null) {
+                    caretX += selection.getBounds2D().getWidth();
+                }
+
+                consumed = true;
             }
-
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.UP) {
             int selectionStart = textArea.getSelectionStart();
 
