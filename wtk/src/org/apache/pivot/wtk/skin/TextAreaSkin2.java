@@ -781,6 +781,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
         TextArea2 textArea = (TextArea2)getComponent();
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+        Keyboard.Modifier wordNavigationModifier = Platform.getWordNavigationModifier();
 
         if (keyCode == Keyboard.KeyCode.ENTER
             && textArea.isEditable()) {
@@ -807,41 +808,75 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             }
 
             consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.HOME
+            || (keyCode == Keyboard.KeyCode.LEFT
+                && Keyboard.isPressed(commandModifier))) {
+            // TODO Move the caret to the beginning of the line
+            // (we need the row offset)
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                textArea.setSelection(0, textArea.getSelectionStart());
+            } else {
+                textArea.setSelection(0, 0);
+            }
+            scrollCharacterToVisible(0);
+
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.END
+            || (keyCode == Keyboard.KeyCode.RIGHT
+                && Keyboard.isPressed(commandModifier))) {
+            // TODO Move the caret to the end of the text
+            // (we need the row offset and length)
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                int selectionStart = textArea.getSelectionStart();
+                textArea.setSelection(selectionStart, textArea.getCharacterCount() - selectionStart);
+            } else {
+                textArea.setSelection(textArea.getCharacterCount() - 1, 0);
+            }
+            scrollCharacterToVisible(textArea.getCharacterCount() - 1);
+
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
             int selectionStart = textArea.getSelectionStart();
             int selectionLength = textArea.getSelectionLength();
 
-            // TODO Combine Control and Shift key behavior
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+            if (Keyboard.isPressed(wordNavigationModifier)) {
+                // Move the caret to the start of the next word to the left
+                if (selectionStart > 0) {
+                    // Skip over any space immediately to the left
+                    int index = selectionStart;
+                    while (index > 0
+                        && Character.isWhitespace(textArea.getCharacterAt(index - 1))) {
+                        index--;
+                    }
+
+                    // Skip over any word-letters to the left
+                    while (index > 0
+                        && !Character.isWhitespace(textArea.getCharacterAt(index - 1))) {
+                        index--;
+                    }
+
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        selectionLength += selectionStart - index;
+                    } else {
+                        selectionLength = 0;
+                    }
+
+                    selectionStart = index;
+                }
+            } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Add the previous character to the selection
                 if (selectionStart > 0) {
                     selectionStart--;
                     selectionLength++;
                 }
-            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                // Move the caret to the start of the next word to our left
-                if (selectionStart > 0) {
-                    // Skip over any space immediately to the left
-                    while (selectionStart > 0
-                        && Character.isWhitespace(textArea.getCharacterAt(selectionStart - 1))) {
-                        selectionStart--;
-                    }
-
-                    // Skip over any word-letters to our left
-                    while (selectionStart > 0
-                        && !Character.isWhitespace(textArea.getCharacterAt(selectionStart - 1))) {
-                        selectionStart--;
-                    }
-
-                    selectionLength = 0;
-                }
             } else {
-                // Clear the selection and move the caret back by one character
+                // Move the caret back by one character
                 if (selectionLength == 0
                     && selectionStart > 0) {
                     selectionStart--;
                 }
 
+                // Clear the selection
                 selectionLength = 0;
             }
 
@@ -855,49 +890,54 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             int selectionStart = textArea.getSelectionStart();
             int selectionLength = textArea.getSelectionLength();
 
-            // TODO Combine Control and Shift key behavior
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+            if (Keyboard.isPressed(wordNavigationModifier)) {
+                // Move the caret to the start of the next word to the right
+                if (selectionStart < textArea.getCharacterCount()) {
+                    int index = selectionStart + selectionLength;
+
+                    // Skip over any space immediately to the right
+                    while (index < textArea.getCharacterCount()
+                        && Character.isWhitespace(textArea.getCharacterAt(index))) {
+                        index++;
+                    }
+
+                    // Skip over any word-letters to the right
+                    while (index < textArea.getCharacterCount()
+                        && !Character.isWhitespace(textArea.getCharacterAt(index))) {
+                        index++;
+                    }
+
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        selectionLength = index - selectionStart;
+                    } else {
+                        selectionStart = index;
+                        selectionLength = 0;
+                    }
+                }
+            } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Add the next character to the selection
                 if (selectionStart + selectionLength < textArea.getCharacterCount()) {
                     selectionLength++;
                 }
-
-                textArea.setSelection(selectionStart, selectionLength);
-                scrollCharacterToVisible(selectionStart + selectionLength);
-            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                // Move the caret to the start of the next word to our right
-                if (selectionStart < textArea.getCharacterCount()) {
-                    // first, skip over any word-letters to our right
-                    while (selectionStart < textArea.getCharacterCount() - 1
-                        && !Character.isWhitespace(textArea.getCharacterAt(selectionStart))) {
-                        selectionStart++;
-                    }
-                    // then, skip over any space immediately to our right
-                    while (selectionStart < textArea.getCharacterCount() - 1
-                        && Character.isWhitespace(textArea.getCharacterAt(selectionStart))) {
-                        selectionStart++;
-                    }
-
-                    textArea.setSelection(selectionStart, 0);
-                    scrollCharacterToVisible(selectionStart);
-
-                    caretX = caret.x;
-                }
             } else {
-                // Clear the selection and move the caret forward by one
-                // character
-                if (selectionLength > 0) {
-                    selectionStart += selectionLength - 1;
-                }
-
-                if (selectionStart < textArea.getCharacterCount()) {
+                // Move the caret forward by one character
+                if (selectionLength == 0) {
                     selectionStart++;
+                } else {
+                    selectionStart += selectionLength;
                 }
 
-                textArea.setSelection(selectionStart, 0);
-                scrollCharacterToVisible(selectionStart);
+                // Clear the selection
+                selectionLength = 0;
+            }
 
-                caretX = caret.x;
+            textArea.setSelection(selectionStart, selectionLength);
+            scrollCharacterToVisible(selectionStart + selectionLength);
+
+            caretX = caret.x;
+
+            if (selection != null) {
+                caretX += selection.getBounds2D().getWidth();
             }
 
             consumed = true;
@@ -997,27 +1037,6 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.HOME) {
-            // Move the caret to the beginning of the text
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                textArea.setSelection(0, textArea.getSelectionStart());
-            } else {
-                textArea.setSelection(0, 0);
-            }
-            scrollCharacterToVisible(0);
-
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.END) {
-            // Move the caret to the end of the text
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                int selectionStart = textArea.getSelectionStart();
-                textArea.setSelection(selectionStart, textArea.getCharacterCount() - selectionStart);
-            } else {
-                textArea.setSelection(textArea.getCharacterCount() - 1, 0);
-            }
-            scrollCharacterToVisible(textArea.getCharacterCount() - 1);
-
-            consumed = true;
         } else {
             consumed = super.keyPressed(component, keyCode, keyLocation);
         }

@@ -35,6 +35,7 @@ public class Platform {
     private static final int DEFAULT_CURSOR_BLINK_RATE = 600;
 
     private static final Modifier COMMAND_MODIFIER;
+    private static final Modifier WORD_NAVIGATION_MODIFIER;
     private static final String KEYSTROKE_MODIFIER_SEPARATOR;
 
     static {
@@ -42,9 +43,11 @@ public class Platform {
 
         if (osName.startsWith("mac os x")) {
             COMMAND_MODIFIER = Modifier.META;
+            WORD_NAVIGATION_MODIFIER = Modifier.ALT;
             KEYSTROKE_MODIFIER_SEPARATOR = "";
         } else {
             COMMAND_MODIFIER = Modifier.CTRL;
+            WORD_NAVIGATION_MODIFIER = Modifier.CTRL;
             KEYSTROKE_MODIFIER_SEPARATOR = "-";
         }
 
@@ -125,12 +128,22 @@ public class Platform {
     }
 
     /**
-     * Returns the system command modifier key. This is normally the CTRL or META key.
+     * Returns the system command modifier key.
      */
     public static Modifier getCommandModifier() {
         return COMMAND_MODIFIER;
     }
 
+    /**
+     * Returns the word navigation modifier key.
+     */
+    public static Modifier getWordNavigationModifier() {
+        return WORD_NAVIGATION_MODIFIER;
+    }
+
+    /**
+     * Returns the keystroke modifier separator text.
+     */
     public static String getKeyStrokeModifierSeparator() {
         return KEYSTROKE_MODIFIER_SEPARATOR;
     }
