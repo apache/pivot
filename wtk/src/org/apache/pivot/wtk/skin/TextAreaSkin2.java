@@ -829,7 +829,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             }
         } else if (keyCode == Keyboard.KeyCode.HOME
             || (keyCode == Keyboard.KeyCode.LEFT
-                && Keyboard.isPressed(commandModifier))) {
+                && Keyboard.isPressed(Keyboard.Modifier.META))) {
             // Move the caret to the beginning of the line
             int selectionStart = textArea.getSelectionStart();
             int selectionLength = textArea.getSelectionLength();
@@ -849,7 +849,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             }
         } else if (keyCode == Keyboard.KeyCode.END
             || (keyCode == Keyboard.KeyCode.RIGHT
-                && Keyboard.isPressed(commandModifier))) {
+                && Keyboard.isPressed(Keyboard.Modifier.META))) {
             // Move the caret to the end of the line
             int selectionStart = textArea.getSelectionStart();
             int selectionLength = textArea.getSelectionLength();
