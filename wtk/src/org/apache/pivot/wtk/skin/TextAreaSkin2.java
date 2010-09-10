@@ -139,34 +139,34 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 LineMetrics lm = font.getLineMetrics("", fontRenderContext);
                 float ascent = lm.getAscent();
 
-                float y = 0;
+                float rowY = 0;
                 for (int i = 0; i < n; i++) {
                     Row row = rows.get(i);
 
                     Rectangle2D textBounds = row.glyphVector.getLogicalBounds();
-                    float lineWidth = (float)textBounds.getWidth();
+                    float rowWidth = (float)textBounds.getWidth();
 
-                    float x = 0;
+                    float rowX = 0;
                     switch (horizontalAlignment) {
                         case LEFT: {
-                            x = 0;
+                            rowX = 0;
                             break;
                         }
 
                         case RIGHT: {
-                            x = width - lineWidth;
+                            rowX = width - rowWidth;
                             break;
                         }
 
                         case CENTER: {
-                            x = (width - lineWidth) / 2;
+                            rowX = (width - rowWidth) / 2;
                             break;
                         }
                     }
 
-                    graphics.drawGlyphVector(row.glyphVector, x, y + ascent);
+                    graphics.drawGlyphVector(row.glyphVector, rowX, rowY + ascent);
 
-                    y += textBounds.getHeight();
+                    rowY += textBounds.getHeight();
                 }
             }
         }
@@ -191,7 +191,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
                 int i = 0;
                 int start = 0;
-                float lineWidth = 0;
+                float rowWidth = 0;
                 int lastWhitespaceIndex = -1;
 
                 // NOTE We use a character iterator here only because it is the most
@@ -207,9 +207,9 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
                     Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1,
                         fontRenderContext);
-                    lineWidth += characterBounds.getWidth();
+                    rowWidth += characterBounds.getWidth();
 
-                    if (lineWidth > breakWidth) {
+                    if (rowWidth > breakWidth) {
                         if (lastWhitespaceIndex == -1) {
                             if (start == i) {
                                 appendLine(characters, start, start + 1, fontRenderContext);
@@ -225,7 +225,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
                         start = i + 1;
 
-                        lineWidth = 0;
+                        rowWidth = 0;
                         lastWhitespaceIndex = -1;
                     }
 
@@ -288,7 +288,26 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             float rowWidth = (float)glyphVectorBounds.getWidth();
 
             // Translate x to glyph vector coordinates
-            x -= (width - rowWidth);
+            // TODO Should we simply cache the x-coordinate in layout()?
+            float rowX = 0;
+            switch (horizontalAlignment) {
+                case LEFT: {
+                    rowX = 0;
+                    break;
+                }
+
+                case RIGHT: {
+                    rowX = width - rowWidth;
+                    break;
+                }
+
+                case CENTER: {
+                    rowX = (width - rowWidth) / 2;
+                    break;
+                }
+            }
+
+            x -= rowX;
 
             int index;
             if (x < 0) {
@@ -666,6 +685,9 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             index = -1;
             for (int i = 0, n = paragraphViews.getLength(); i < n; i++) {
                 ParagraphView paragraphView = paragraphViews.get(i);
+
+                // TODO We can do this more efficiently than by creating a Bounds object
+                // (possibly just compare y-coordinates)
                 Bounds paragraphViewBounds = new Bounds(paragraphView.x, paragraphView.y,
                     paragraphView.getWidth(), paragraphView.getHeight());
 
