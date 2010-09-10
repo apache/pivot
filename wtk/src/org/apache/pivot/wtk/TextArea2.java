@@ -258,6 +258,22 @@ public class TextArea2 extends Component {
         public int getRowAt(int index);
 
         /**
+         * Returns the index of the first character in the row containing
+         * a given character index.
+         *
+         * @param index
+         */
+        public int getRowOffset(int index);
+
+        /**
+         * Returns the number of characters in the row containing a given
+         * character index.
+         *
+         * @param index
+         */
+        public int getRowLength(int index);
+
+        /**
          * Returns the total number of rows in the text area.
          */
         public int getRowCount();
@@ -1145,6 +1161,16 @@ public class TextArea2 extends Component {
     public int getRowAt(int index) {
         TextArea2.Skin textAreaSkin = (TextArea2.Skin)getSkin();
         return textAreaSkin.getRowAt(index);
+    }
+
+    public int getRowOffset(int index) {
+        TextArea2.Skin textAreaSkin = (TextArea2.Skin)getSkin();
+        return textAreaSkin.getRowOffset(index);
+    }
+
+    public int getRowLength(int index) {
+        TextArea2.Skin textAreaSkin = (TextArea2.Skin)getSkin();
+        return textAreaSkin.getRowLength(index);
     }
 
     public int getRowCount() {

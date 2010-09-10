@@ -28,21 +28,28 @@ limitations under the License.
 
     <BoxPane orientation="vertical" styles="{padding:8}">
         <Border>
-            <TextArea2 bxml:id="textArea" text="ABC DEF&#x000A;GH IJKL" preferredWidth="48"
+            <TextArea2 bxml:id="textArea" text="@sample.txt" preferredWidth="320"
                 styles="{margin:8, backgroundColor:'#eeeeee', wrapText:true}">
                 <textAreaContentListeners>
                 function textChanged(textArea) {
-                    java.lang.System.out.println("length = " + textArea.characterCount);
+                    // java.lang.System.out.println("length = " + textArea.characterCount);
                 }
                 </textAreaContentListeners>
 
                 <textAreaSelectionListeners>
                 function selectionChanged(textArea, previousSelectionStart, previousSelectionLength) {
-                    java.lang.System.out.println("selection = " + textArea.selectionStart
-                        + ", " + textArea.selectionLength);
+                    // java.lang.System.out.println("selection = " + textArea.selectionStart + ", " + textArea.selectionLength);
                 }
                 </textAreaSelectionListeners>
             </TextArea2>
         </Border>
+
+        <PushButton buttonData="Clear">
+            <buttonPressListeners>
+            function buttonPressed(button) {
+                textArea.text = "";
+            }
+            </buttonPressListeners>
+        </PushButton>
     </BoxPane>
 </Window>

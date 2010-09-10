@@ -376,6 +376,21 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             + paragraphView.getRowOffset();
     }
 
+    public int getRowOffset(int index) {
+        TextArea2 textArea = (TextArea2)getComponent();
+        TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
+
+        return paragraphView.getRowOffset(index - paragraphView.getParagraph().getOffset())
+            + paragraphView.getParagraph().getOffset();
+    }
+
+    public int getRowLength(int index) {
+        TextArea2 textArea = (TextArea2)getComponent();
+        TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
+
+        return paragraphView.getRowLength(index - paragraphView.getParagraph().getOffset());
+    }
+
     @Override
     public int getRowCount() {
         int rowCount = 0;
@@ -815,32 +830,56 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         } else if (keyCode == Keyboard.KeyCode.HOME
             || (keyCode == Keyboard.KeyCode.LEFT
                 && Keyboard.isPressed(commandModifier))) {
-            // TODO Move the caret to the beginning of the line
-            // (we need the row offset)
+            // Move the caret to the beginning of the line
+            int selectionStart = textArea.getSelectionStart();
+            int selectionLength = textArea.getSelectionLength();
+            int rowOffset = getRowOffset(selectionStart);
+
             if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                textArea.setSelection(0, textArea.getSelectionStart());
-            } else {
-                textArea.setSelection(0, 0);
+                selectionLength += selectionStart - rowOffset;
             }
 
-            scrollCharacterToVisible(0);
+            if (selectionStart >= 0) {
+                textArea.setSelection(rowOffset, selectionLength);
+                scrollCharacterToVisible(rowOffset);
 
-            consumed = true;
+                caretX = caret.x;
+
+                consumed = true;
+            }
         } else if (keyCode == Keyboard.KeyCode.END
             || (keyCode == Keyboard.KeyCode.RIGHT
                 && Keyboard.isPressed(commandModifier))) {
-            // TODO Move the caret to the end of the text
-            // (we need the row offset and length)
+            // Move the caret to the end of the line
+            int selectionStart = textArea.getSelectionStart();
+            int selectionLength = textArea.getSelectionLength();
+
+            int index = selectionStart + selectionLength;
+            int rowOffset = getRowOffset(index);
+            int rowLength = getRowLength(index);
+
             if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                int selectionStart = textArea.getSelectionStart();
-                textArea.setSelection(selectionStart, textArea.getCharacterCount() - selectionStart);
+                selectionLength += (rowOffset + rowLength) - index;
             } else {
-                textArea.setSelection(textArea.getCharacterCount() - 1, 0);
+                selectionStart = rowOffset + rowLength;
+                if (textArea.getCharacterAt(selectionStart) != '\n') {
+                    selectionStart--;
+                }
+
+                selectionLength = 0;
             }
 
-            scrollCharacterToVisible(textArea.getCharacterCount() - 1);
+            if (selectionStart + selectionLength < textArea.getCharacterCount()) {
+                textArea.setSelection(selectionStart, selectionLength);
+                scrollCharacterToVisible(selectionStart + selectionLength);
 
-            consumed = true;
+                caretX = caret.x;
+                if (selection != null) {
+                    caretX += selection.getBounds2D().getWidth();
+                }
+
+                consumed = true;
+            }
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
             int selectionStart = textArea.getSelectionStart();
             int selectionLength = textArea.getSelectionLength();
@@ -886,12 +925,14 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 selectionLength = 0;
             }
 
-            textArea.setSelection(selectionStart, selectionLength);
-            scrollCharacterToVisible(selectionStart);
+            if (selectionStart >= 0) {
+                textArea.setSelection(selectionStart, selectionLength);
+                scrollCharacterToVisible(selectionStart);
 
-            caretX = caret.x;
+                caretX = caret.x;
 
-            consumed = true;
+                consumed = true;
+            }
         } else if (keyCode == Keyboard.KeyCode.RIGHT) {
             int selectionStart = textArea.getSelectionStart();
             int selectionLength = textArea.getSelectionLength();
@@ -922,9 +963,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 }
             } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Add the next character to the selection
-                if (selectionStart + selectionLength < textArea.getCharacterCount()) {
-                    selectionLength++;
-                }
+                selectionLength++;
             } else {
                 // Move the caret forward by one character
                 if (selectionLength == 0) {
@@ -937,12 +976,11 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 selectionLength = 0;
             }
 
-            if (selectionStart <= textArea.getCharacterCount()) {
+            if (selectionStart + selectionLength < textArea.getCharacterCount()) {
                 textArea.setSelection(selectionStart, selectionLength);
                 scrollCharacterToVisible(selectionStart + selectionLength);
 
                 caretX = caret.x;
-
                 if (selection != null) {
                     caretX += selection.getBounds2D().getWidth();
                 }

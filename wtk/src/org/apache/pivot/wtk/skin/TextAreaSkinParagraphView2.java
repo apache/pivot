@@ -362,6 +362,16 @@ class TextAreaSkinParagraphView2 implements Visual, TextArea2.ParagraphListener 
         return rowIndex;
     }
 
+    public int getRowOffset(int index) {
+        Row row = rows.get(getRowAt(index));
+        return row.offset;
+    }
+
+    public int getRowLength(int index) {
+        Row row = rows.get(getRowAt(index));
+        return row.glyphVector.getNumGlyphs();
+    }
+
     public int getRowCount() {
         return rows.getLength();
     }
