@@ -800,7 +800,10 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
-            int index = textArea.getSelectionStart() - 1;
+            int index = textArea.getSelectionStart();
+            if (index > 0) {
+                index--;
+            }
 
             if (index >= 0) {
                 int count = Math.max(textArea.getSelectionLength(), 1);

@@ -114,9 +114,8 @@ class TextAreaSkinParagraphView2 implements Visual, TextArea2.ParagraphListener 
 
     public void setBreakWidth(int breakWidth) {
         int previousBreakWidth = this.breakWidth;
-        this.breakWidth = breakWidth;
-
-        if (previousBreakWidth > breakWidth) {
+        if (previousBreakWidth != breakWidth) {
+            this.breakWidth = breakWidth;
             invalidate();
         }
     }
@@ -185,8 +184,7 @@ class TextAreaSkinParagraphView2 implements Visual, TextArea2.ParagraphListener 
                     graphics.setPaint(focused ?
                         textAreaSkin.getSelectionColor() : textAreaSkin.getInactiveSelectionColor());
                 } else {
-                    graphics.setPaint(focused ?
-                        textAreaSkin.getColor() : textAreaSkin.getInactiveColor());
+                    graphics.setPaint(textAreaSkin.getColor());
                 }
 
                 graphics.drawGlyphVector(row.glyphVector, 0, rowY + ascent);
