@@ -255,7 +255,7 @@ public class TextArea2 extends Component {
          *
          * @param index
          */
-        public int getRowIndex(int index);
+        public int getRowAt(int index);
 
         /**
          * Returns the total number of rows in the text area.
@@ -1143,9 +1143,9 @@ public class TextArea2 extends Component {
         return textAreaSkin.getNextInsertionPoint(x, from, direction);
     }
 
-    public int getRowIndex(int index) {
+    public int getRowAt(int index) {
         TextArea2.Skin textAreaSkin = (TextArea2.Skin)getSkin();
-        return textAreaSkin.getRowIndex(index);
+        return textAreaSkin.getRowAt(index);
     }
 
     public int getRowCount() {

@@ -96,13 +96,13 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         @Override
         public int getWidth() {
             validate();
-            return (int) Math.ceil(width);
+            return (int)Math.ceil(width);
         }
 
         @Override
         public int getHeight() {
             validate();
-            return (int) Math.ceil(height);
+            return (int)Math.ceil(height);
         }
 
         public int getBreakWidth() {
@@ -144,7 +144,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                     Row row = rows.get(i);
 
                     Rectangle2D textBounds = row.glyphVector.getLogicalBounds();
-                    float lineWidth = (float) textBounds.getWidth();
+                    float lineWidth = (float)textBounds.getWidth();
 
                     float x = 0;
                     switch (horizontalAlignment) {
@@ -246,7 +246,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             rows.add(new Row(glyphVector, start));
 
             Rectangle2D textBounds = glyphVector.getLogicalBounds();
-            width = Math.max(width, (float) textBounds.getWidth());
+            width = Math.max(width, (float)textBounds.getWidth());
             height += textBounds.getHeight();
         }
 
@@ -255,7 +255,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float lineHeight = lm.getAscent() + lm.getDescent();
 
-            int i = (int) Math.floor((float) y / lineHeight);
+            int i = (int)Math.floor((float)y / lineHeight);
 
             return getRowInsertionPoint(i, x);
         }
@@ -267,7 +267,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             if (from == -1) {
                 i = (direction == TextArea2.ScrollDirection.DOWN) ? -1 : n;
             } else {
-                i = getRowIndex(from);
+                i = getRowAt(from);
             }
 
             // Move to the next or previous row
@@ -285,7 +285,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             Row row = rows.get(rowIndex);
 
             Rectangle2D glyphVectorBounds = row.glyphVector.getLogicalBounds();
-            float rowWidth = (float) glyphVectorBounds.getWidth();
+            float rowWidth = (float)glyphVectorBounds.getWidth();
 
             // Translate x to glyph vector coordinates
             x -= (width - rowWidth);
@@ -321,7 +321,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             return index + row.offset;
         }
 
-        public int getRowIndex(int index) {
+        public int getRowAt(int index) {
             int rowIndex = rows.getLength() - 1;
             Row row = rows.get(rowIndex);
 
@@ -342,30 +342,32 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             CharSequence characters = paragraph.getCharacters();
             int characterCount = characters.length();
 
-            int rowIndex = rows.getLength() - 1;
-            Row row = rows.get(rowIndex);
-
-            int x, width;
+            int rowIndex, x, width;
             if (index == characterCount) {
                 // This is the terminator character
+                rowIndex = rows.getLength() - 1;
+                Row row = rows.get(rowIndex);
+
                 Rectangle2D glyphVectorBounds = row.glyphVector.getLogicalBounds();
-                x = (int) Math.floor(glyphVectorBounds.getWidth());
+                x = (int)Math.floor(glyphVectorBounds.getWidth());
                 width = PARAGRAPH_TERMINATOR_WIDTH;
             } else {
                 // This is a visible character
+                rowIndex = getRowAt(index);
+                Row row = rows.get(rowIndex);
+
                 Shape glyphBounds = row.glyphVector.getGlyphLogicalBounds(index - row.offset);
                 Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
-
-                x = (int) Math.floor(glyphBounds2D.getX());
-                width = (int) Math.ceil(glyphBounds2D.getWidth());
+                x = (int)Math.floor(glyphBounds2D.getX());
+                width = (int)Math.ceil(glyphBounds2D.getWidth());
             }
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float lineHeight = lm.getAscent() + lm.getDescent();
 
-            characterBounds = new Bounds(x, (int) Math.floor(rowIndex * lineHeight), width,
-                (int) Math.ceil(lineHeight));
+            characterBounds = new Bounds(x, (int)Math.floor(rowIndex * lineHeight), width,
+                (int)Math.ceil(lineHeight));
 
             return characterBounds;
         }
@@ -398,7 +400,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     private class ScrollSelectionCallback implements Runnable {
         @Override
         public void run() {
-            TextArea2 textArea = (TextArea2) getComponent();
+            TextArea2 textArea = (TextArea2)getComponent();
             int selectionStart = textArea.getSelectionStart();
             int selectionLength = textArea.getSelectionLength();
             int selectionEnd = selectionStart + selectionLength - 1;
@@ -489,7 +491,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     public void install(Component component) {
         super.install(component);
 
-        TextArea2 textArea = (TextArea2) component;
+        TextArea2 textArea = (TextArea2)component;
         textArea.getTextAreaListeners().add(this);
         textArea.getTextAreaContentListeners().add(this);
         textArea.getTextAreaSelectionListeners().add(this);
@@ -514,8 +516,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         int preferredHeight = 0;
 
         // Include margin in constraint
-        int breakWidth = (wrapText && width != -1) ? Math.max(width - (margin.left + margin.right),
-            0) : Integer.MAX_VALUE;
+        int breakWidth = (wrapText
+            && width != -1) ? Math.max(width - (margin.left + margin.right), 0) : Integer.MAX_VALUE;
 
         for (ParagraphView paragraphView : paragraphViews) {
             paragraphView.setBreakWidth(breakWidth);
@@ -546,7 +548,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
     @Override
     public void layout() {
-        TextArea2 textArea = (TextArea2) getComponent();
+        TextArea2 textArea = (TextArea2)getComponent();
 
         int width = getWidth();
         int breakWidth = (wrapText) ? Math.max(width - (margin.left + margin.right), 0)
@@ -586,7 +588,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             scrollCharacterToVisible(textArea.getSelectionStart());
         }
 
-        showCaret(textArea.isFocused() && textArea.getSelectionLength() == 0);
+        showCaret(textArea.isFocused()
+            && textArea.getSelectionLength() == 0);
     }
 
     @Override
@@ -599,7 +602,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
     @Override
     public void paint(Graphics2D graphics) {
-        TextArea2 textArea = (TextArea2) getComponent();
+        TextArea2 textArea = (TextArea2)getComponent();
         int width = getWidth();
         int height = getHeight();
 
@@ -611,13 +614,14 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
         // Draw the caret/selection
         if (selection == null) {
-            if (caretOn && textArea.isFocused()) {
+            if (caretOn
+                && textArea.isFocused()) {
                 graphics.setColor(textArea.isEditable() ? color : inactiveColor);
                 graphics.fill(caret);
             }
         } else {
-            graphics.setColor(textArea.isFocused() && textArea.isEditable() ? selectionBackgroundColor
-                : inactiveSelectionBackgroundColor);
+            graphics.setColor(textArea.isFocused()
+                && textArea.isEditable() ? selectionBackgroundColor : inactiveSelectionBackgroundColor);
             graphics.fill(selection);
         }
 
@@ -640,7 +644,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
     @Override
     public boolean isOpaque() {
-        return (backgroundColor != null && backgroundColor.getTransparency() == Transparency.OPAQUE);
+        return (backgroundColor != null
+            && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     @Override
@@ -657,6 +662,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             index = paragraphView.getNextInsertionPoint(x, -1, TextArea2.ScrollDirection.DOWN);
         } else {
             // Select the character at x in the row at y
+            // TODO This isn't working for multi-row paragraphs
             index = -1;
             for (int i = 0, n = paragraphViews.getLength(); i < n; i++) {
                 ParagraphView paragraphView = paragraphViews.get(i);
@@ -688,7 +694,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 index += paragraphView.paragraph.getOffset();
             }
         } else {
-            TextArea2 textArea = (TextArea2) getComponent();
+            TextArea2 textArea = (TextArea2)getComponent();
             int i = textArea.getParagraphAt(from);
 
             ParagraphView paragraphView = paragraphViews.get(i);
@@ -717,11 +723,11 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     }
 
     @Override
-    public int getRowIndex(int index) {
-        TextArea2 textArea = (TextArea2) getComponent();
+    public int getRowAt(int index) {
+        TextArea2 textArea = (TextArea2)getComponent();
         ParagraphView paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
 
-        return paragraphView.getRowIndex(index - paragraphView.paragraph.getOffset());
+        return paragraphView.getRowAt(index - paragraphView.paragraph.getOffset());
     }
 
     @Override
@@ -736,17 +742,17 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     }
 
     public Bounds getCharacterBounds(int index) {
-        TextArea2 textArea = (TextArea2) getComponent();
+        TextArea2 textArea = (TextArea2)getComponent();
         ParagraphView paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
-        Bounds characterBounds = paragraphView.getCharacterBounds(index
-            - paragraphView.paragraph.getOffset());
+        Bounds characterBounds = paragraphView.getCharacterBounds(index - paragraphView.paragraph.getOffset());
 
-        return new Bounds(characterBounds.x + paragraphView.x, characterBounds.y + paragraphView.y,
+        return new Bounds(characterBounds.x + paragraphView.x,
+            characterBounds.y + paragraphView.y,
             characterBounds.width, characterBounds.height);
     }
 
     private void scrollCharacterToVisible(int index) {
-        TextArea2 textArea = (TextArea2) getComponent();
+        TextArea2 textArea = (TextArea2)getComponent();
         Bounds characterBounds = getCharacterBounds(index);
 
         if (characterBounds != null) {
@@ -1003,13 +1009,14 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         boolean consumed = super.mouseMove(component, x, y);
 
         if (Mouse.getCapturer() == component) {
-            TextArea2 textArea = (TextArea2) getComponent();
+            TextArea2 textArea = (TextArea2)getComponent();
 
             Bounds visibleArea = textArea.getVisibleArea();
             visibleArea = new Bounds(visibleArea.x, visibleArea.y, visibleArea.width,
                 visibleArea.height);
 
-            if (y >= visibleArea.y && y < visibleArea.y + visibleArea.height) {
+            if (y >= visibleArea.y
+                && y < visibleArea.y + visibleArea.height) {
                 // Stop the scroll selection timer
                 if (scheduledScrollSelectionCallback != null) {
                     scheduledScrollSelectionCallback.cancel();
@@ -1042,7 +1049,9 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
             mouseX = x;
         } else {
-            if (Mouse.isPressed(Mouse.Button.LEFT) && Mouse.getCapturer() == null && anchor != -1) {
+            if (Mouse.isPressed(Mouse.Button.LEFT)
+                && Mouse.getCapturer() == null
+                && anchor != -1) {
                 // Capture the mouse so we can select text
                 Mouse.capture(component);
             }
@@ -1056,7 +1065,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         boolean consumed = super.mouseDown(component, button, x, y);
 
         if (button == Mouse.Button.LEFT) {
-            TextArea2 textArea = (TextArea2) component;
+            TextArea2 textArea = (TextArea2)component;
 
             anchor = getInsertionPoint(x, y);
 
@@ -1111,12 +1120,13 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     public boolean keyTyped(Component component, char character) {
         boolean consumed = super.keyTyped(component, character);
 
-        TextArea2 textArea = (TextArea2) getComponent();
+        TextArea2 textArea = (TextArea2)getComponent();
 
         if (textArea.isEditable()) {
             // Ignore characters in the control range and the ASCII delete
             // character as well as meta key presses
-            if (character > 0x1F && character != 0x7F
+            if (character > 0x1F
+                && character != 0x7F
                 && !Keyboard.isPressed(Keyboard.Modifier.META)) {
                 int selectionLength = textArea.getSelectionLength();
 
@@ -1140,10 +1150,11 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        TextArea2 textArea = (TextArea2) getComponent();
+        TextArea2 textArea = (TextArea2)getComponent();
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
 
-        if (keyCode == Keyboard.KeyCode.ENTER && textArea.isEditable()) {
+        if (keyCode == Keyboard.KeyCode.ENTER
+            && textArea.isEditable()) {
             int index = textArea.getSelectionStart();
             textArea.removeText(index, textArea.getSelectionLength());
             textArea.insertText("\n", index);
@@ -1197,7 +1208,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 }
             } else {
                 // Clear the selection and move the caret back by one character
-                if (selectionLength == 0 && selectionStart > 0) {
+                if (selectionLength == 0
+                    && selectionStart > 0) {
                     selectionStart--;
                 }
 
@@ -1335,16 +1347,19 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             if (keyCode == Keyboard.KeyCode.A) {
                 textArea.setSelection(0, textArea.getCharacterCount());
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.X && textArea.isEditable()) {
+            } else if (keyCode == Keyboard.KeyCode.X
+                && textArea.isEditable()) {
                 textArea.cut();
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.C) {
                 textArea.copy();
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.V && textArea.isEditable()) {
+            } else if (keyCode == Keyboard.KeyCode.V
+                && textArea.isEditable()) {
                 textArea.paste();
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.Z && textArea.isEditable()) {
+            } else if (keyCode == Keyboard.KeyCode.Z
+                && textArea.isEditable()) {
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                     textArea.undo();
                 } else {
@@ -1391,8 +1406,9 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
-        TextArea2 textArea = (TextArea2) getComponent();
-        if (textArea.isFocused() && textArea.getSelectionLength() == 0) {
+        TextArea2 textArea = (TextArea2)getComponent();
+        if (textArea.isFocused()
+            && textArea.getSelectionLength() == 0) {
             if (textArea.isValid()) {
                 scrollCharacterToVisible(textArea.getSelectionStart());
             }
@@ -1427,8 +1443,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     }
 
     @Override
-    public void paragraphsRemoved(TextArea2 textArea, int index,
-        Sequence<TextArea2.Paragraph> removed) {
+    public void paragraphsRemoved(TextArea2 textArea, int index, Sequence<TextArea2.Paragraph> removed) {
         // Remove paragraph views as paragraph listeners
         int count = removed.getLength();
 
@@ -1477,7 +1492,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     }
 
     private void updateSelection() {
-        TextArea2 textArea = (TextArea2) getComponent();
+        TextArea2 textArea = (TextArea2)getComponent();
 
         if (textArea.getCharacterCount() > 0) {
             // Update the caret
@@ -1495,8 +1510,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 Bounds trailingSelectionBounds = getCharacterBounds(selectionEnd);
                 selection = new Area();
 
-                int firstRowIndex = getRowIndex(selectionStart);
-                int lastRowIndex = getRowIndex(selectionEnd);
+                int firstRowIndex = getRowAt(selectionStart);
+                int lastRowIndex = getRowAt(selectionEnd);
 
                 if (firstRowIndex == lastRowIndex) {
                     selection.add(new Area(new Rectangle(leadingSelectionBounds.x,
