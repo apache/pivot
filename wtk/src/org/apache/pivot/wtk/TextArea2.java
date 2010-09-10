@@ -378,14 +378,15 @@ public class TextArea2 extends Component {
                     Paragraph paragraph = removed.get(i);
                     paragraph.textArea = null;
                     paragraph.offset = -1;
-                    characterCount += paragraph.characters.length();
+                    characterCount += paragraph.characters.length() + 1;
                 }
 
-                // Update offsets and character count, including terminator characters
-                if (getLength() > 0) {
-                    characterCount += count;
+                // Don't include the implicit final terminator in the character count
+                if (getLength() == 0) {
+                    characterCount--;
                 }
 
+                // Update offsets
                 updateParagraphOffsets(index, -characterCount);
                 TextArea2.this.characterCount -= characterCount;
 
@@ -393,8 +394,7 @@ public class TextArea2 extends Component {
                 int previousSelectionStart = selectionStart;
                 int previousSelectionLength = selectionLength;
 
-                // TODO This logic appears flawed - try calling setText() on a text area that
-                // already has paragraphs to reproduce
+                // TODO Investigate issue with setting selection to end of paragraph
                 selectionStart = (index == paragraphs.getLength()) ?
                     TextArea2.this.characterCount : paragraphs.get(index).offset;
                 selectionLength = 0;
