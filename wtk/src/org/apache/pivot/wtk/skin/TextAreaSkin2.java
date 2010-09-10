@@ -288,7 +288,6 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             float rowWidth = (float)glyphVectorBounds.getWidth();
 
             // Translate x to glyph vector coordinates
-            // TODO Should we simply cache the x-coordinate in layout()?
             float rowX = 0;
             switch (horizontalAlignment) {
                 case LEFT: {
@@ -314,6 +313,12 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 index = 0;
             } else if (x > rowWidth) {
                 index = row.glyphVector.getNumGlyphs();
+
+                // If this is not the last row, decrement the index so the insertion
+                // point remains on this line
+                if (rowIndex < rows.getLength() - 1) {
+                    index--;
+                }
             } else {
                 index = 0;
                 int n = row.glyphVector.getNumGlyphs();
@@ -681,7 +686,6 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             index = paragraphView.getNextInsertionPoint(x, -1, TextArea2.ScrollDirection.DOWN);
         } else {
             // Select the character at x in the row at y
-            // TODO This isn't working for multi-row paragraphs
             index = -1;
             for (int i = 0, n = paragraphViews.getLength(); i < n; i++) {
                 ParagraphView paragraphView = paragraphViews.get(i);
