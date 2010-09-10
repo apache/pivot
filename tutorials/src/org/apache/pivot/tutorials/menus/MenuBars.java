@@ -93,7 +93,7 @@ public class MenuBars implements Application {
     public MenuBars() {
         Action.getNamedActions().put("fileNew", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Component tab;
                 try {
@@ -121,14 +121,14 @@ public class MenuBars implements Application {
 
         Action.getNamedActions().put("fileOpen", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 fileBrowserSheet.open(window);
             }
         });
 
         Action.getNamedActions().put("cut", new Action(false) {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 TextInput textInput = (TextInput)window.getFocusDescendant();
                 textInput.cut();
             }
@@ -136,7 +136,7 @@ public class MenuBars implements Application {
 
         Action.getNamedActions().put("copy", new Action(false) {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 TextInput textInput = (TextInput)window.getFocusDescendant();
                 textInput.copy();
             }
@@ -144,7 +144,7 @@ public class MenuBars implements Application {
 
         Action.getNamedActions().put("paste", new Action(false) {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 TextInput textInput = (TextInput)window.getFocusDescendant();
                 textInput.paste();
             }

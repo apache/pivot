@@ -35,6 +35,7 @@ import org.apache.pivot.web.PutQuery;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.ActivityIndicator;
 import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Prompt;
@@ -55,14 +56,14 @@ import org.apache.pivot.wtkx.WTKXSerializer;
 public class ExpensesWindow extends Window implements Bindable {
     private class RefreshExpenseListAction extends Action {
         @Override
-        public void perform() {
+        public void perform(Component source) {
             refreshExpenseList();
         }
     }
 
     private class AddExpenseAction extends Action {
         @Override
-        public void perform() {
+        public void perform(Component source) {
             addExpense();
         }
     }
@@ -73,7 +74,7 @@ public class ExpensesWindow extends Window implements Bindable {
         }
 
         @Override
-        public void perform() {
+        public void perform(Component source) {
             updateSelectedExpense();
         }
     }
@@ -84,7 +85,7 @@ public class ExpensesWindow extends Window implements Bindable {
         }
 
         @Override
-        public void perform() {
+        public void perform(Component source) {
             deleteSelectedExpense();
         }
     }

@@ -93,7 +93,7 @@ public class TablePanes implements Application {
 
         namedActions.put("configureCell", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Sheet sheet;
 
@@ -117,7 +117,7 @@ public class TablePanes implements Application {
 
         namedActions.put("configureRow", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Sheet sheet;
 
@@ -140,7 +140,7 @@ public class TablePanes implements Application {
 
         namedActions.put("insertRow", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Sheet sheet;
 
@@ -174,7 +174,7 @@ public class TablePanes implements Application {
 
         namedActions.put("removeRow", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 ArrayList<String> options = new ArrayList<String>("OK", "Cancel");
                 String message = "Remove Row?";
                 Label body = new Label("Are you sure you want to remove the row?");
@@ -197,7 +197,7 @@ public class TablePanes implements Application {
 
         namedActions.put("configureColumn", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Sheet sheet;
 
@@ -220,7 +220,7 @@ public class TablePanes implements Application {
 
         namedActions.put("insertColumn", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 WTKXSerializer wtkxSerializer = new WTKXSerializer();
                 Sheet sheet;
 
@@ -255,7 +255,7 @@ public class TablePanes implements Application {
 
         namedActions.put("removeColumn", new Action() {
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 ArrayList<String> options = new ArrayList<String>("OK", "Cancel");
                 String message = "Remove Column?";
                 Label body = new Label("Are you sure you want to remove the column?");

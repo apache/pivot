@@ -364,7 +364,7 @@ public abstract class Button extends Component {
         buttonPressListeners.buttonPressed(this);
 
         if (action != null) {
-            action.perform();
+            action.perform(this);
         }
     }
 

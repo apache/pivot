@@ -146,8 +146,9 @@ public abstract class Action {
 
     /**
      * Performs the action.
+     * @param source TODO
      */
-    public abstract void perform();
+    public abstract void perform(Component source);
 
     public boolean isEnabled() {
         return enabled;

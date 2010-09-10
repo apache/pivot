@@ -41,7 +41,7 @@ public class ContextMenus implements Application {
             Menu.Item whatIsThisMenuItem = new Menu.Item("What is this?");
             whatIsThisMenuItem.setAction(new Action() {
                 @Override
-                public void perform() {
+                public void perform(Component source) {
                     String description = (String)descendant.getUserData().get("description");
                     String message = "This is a " + description + ".";
 

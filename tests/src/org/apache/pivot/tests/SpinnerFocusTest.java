@@ -40,7 +40,7 @@ public class SpinnerFocusTest implements Application {
             }
 
             @Override
-            public void perform() {
+            public void perform(Component source) {
                 Alert.alert("Foo", frame);
             }
         };
