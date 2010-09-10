@@ -82,6 +82,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
         private int breakWidth = Integer.MAX_VALUE;
 
+        private int rowOffset = 0;
+
         private boolean valid = false;
         private ArrayList<Row> rows = new ArrayList<Row>();
 
@@ -580,6 +582,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
         int y = margin.top;
 
+        int rowOffset = 0;
         for (ParagraphView paragraphView : paragraphViews) {
             paragraphView.setBreakWidth(breakWidth);
 
@@ -603,6 +606,9 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
             paragraphView.y = y;
             y += paragraphView.getHeight();
+
+            paragraphView.rowOffset = rowOffset;
+            rowOffset += paragraphView.getRowCount();
         }
 
         updateSelection();
@@ -753,7 +759,8 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         TextArea2 textArea = (TextArea2)getComponent();
         ParagraphView paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
 
-        return paragraphView.getRowAt(index - paragraphView.paragraph.getOffset());
+        return paragraphView.getRowAt(index - paragraphView.paragraph.getOffset())
+            + paragraphView.rowOffset;
     }
 
     @Override
