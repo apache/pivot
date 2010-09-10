@@ -119,11 +119,11 @@ class TextAreaSkinSpanView extends TextAreaSkinElementView {
     }
 
     @Override
-    public int getRowIndex(int offset) {
+    public int getRowAt(int offset) {
         if (getLength() == 0) {
             return 0;
         } else {
-            return get(0).getRowIndex(offset);
+            return get(0).getRowAt(offset);
         }
     }
 

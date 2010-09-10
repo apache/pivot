@@ -347,13 +347,13 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
     }
 
     @Override
-    public int getRowIndex(int offset) {
+    public int getRowAt(int offset) {
         int rowIndex;
 
         if (documentView == null) {
             rowIndex = -1;
         } else {
-            rowIndex = documentView.getRowIndex(offset);
+            rowIndex = documentView.getRowAt(offset);
         }
 
         return rowIndex;
@@ -1119,8 +1119,8 @@ public class TextAreaSkin extends ContainerSkin implements TextArea.Skin, TextAr
                 Bounds trailingSelectionBounds = getCharacterBounds(selectionEnd);
                 selection = new Area();
 
-                int firstRowIndex = getRowIndex(selectionStart);
-                int lastRowIndex = getRowIndex(selectionEnd);
+                int firstRowIndex = getRowAt(selectionStart);
+                int lastRowIndex = getRowAt(selectionEnd);
 
                 if (firstRowIndex == lastRowIndex) {
                     selection.add(new Area(new Rectangle(leadingSelectionBounds.x, leadingSelectionBounds.y,

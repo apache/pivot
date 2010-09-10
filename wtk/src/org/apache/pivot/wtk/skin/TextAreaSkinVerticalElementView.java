@@ -166,7 +166,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
     }
 
     @Override
-    public int getRowIndex(int offset) {
+    public int getRowAt(int offset) {
         int rowIndex = 0;
 
         for (TextAreaSkinNodeView nodeView : this) {
@@ -175,7 +175,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
 
             if (offset >= nodeViewOffset
                 && offset < nodeViewOffset + characterCount) {
-                rowIndex += nodeView.getRowIndex(offset - nodeView.getOffset());
+                rowIndex += nodeView.getRowAt(offset - nodeView.getOffset());
                 break;
             }
 

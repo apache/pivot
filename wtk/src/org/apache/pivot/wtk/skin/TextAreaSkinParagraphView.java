@@ -308,7 +308,7 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
     }
 
     @Override
-    public int getRowIndex(int offset) {
+    public int getRowAt(int offset) {
         int rowIndex = -1;
 
         if (offset == getCharacterCount() - 1) {

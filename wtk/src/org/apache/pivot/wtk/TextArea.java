@@ -81,7 +81,7 @@ public class TextArea extends Container {
          * @return
          * The row index of the character at the given offset.
          */
-        public int getRowIndex(int offset);
+        public int getRowAt(int offset);
 
         /**
          * Returns the total number of rows in the document.
@@ -971,9 +971,9 @@ public class TextArea extends Container {
         return textAreaSkin.getNextInsertionPoint(x, from, direction);
     }
 
-    public int getRowIndex(int offset) {
+    public int getRowAt(int offset) {
         TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
-        return textAreaSkin.getRowIndex(offset);
+        return textAreaSkin.getRowAt(offset);
     }
 
     public int getRowCount() {

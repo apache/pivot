@@ -200,7 +200,7 @@ abstract class TextAreaSkinNodeView implements Visual, NodeListener {
 
     public abstract int getInsertionPoint(int x, int y);
     public abstract int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction);
-    public abstract int getRowIndex(int offset);
+    public abstract int getRowAt(int offset);
     public abstract int getRowCount();
     public abstract Bounds getCharacterBounds(int offset);
 

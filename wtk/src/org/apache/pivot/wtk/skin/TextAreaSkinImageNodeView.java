@@ -97,7 +97,7 @@ class TextAreaSkinImageNodeView extends TextAreaSkinNodeView implements ImageNod
     }
 
     @Override
-    public int getRowIndex(int offset) {
+    public int getRowAt(int offset) {
         return -1;
     }
 

@@ -397,7 +397,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
     }
 
     @Override
-    public int getRowIndex(int offset) {
+    public int getRowAt(int offset) {
         return -1;
     }
 
