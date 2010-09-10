@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.media.Image;
 public class ButtonData {
     private Image icon;
     private String text;
+    private Object userData = null;
 
     public ButtonData() {
         this(null, null);
@@ -112,5 +113,13 @@ public class ButtonData {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Object getUserData() {
+        return userData;
+    }
+
+    public void setUserData(Object userData) {
+        this.userData = userData;
     }
 }
