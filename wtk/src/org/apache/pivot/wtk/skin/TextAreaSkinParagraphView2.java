@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -128,9 +127,6 @@ class TextAreaSkinParagraphView2 implements Visual, TextArea2.ParagraphListener 
 
     @Override
     public void paint(Graphics2D graphics) {
-        graphics.setColor(Color.GREEN);
-        graphics.fillRect(0, 0, getWidth(), getHeight());
-
         TextArea2 textArea = (TextArea2)textAreaSkin.getComponent();
 
         int selectionStart = textArea.getSelectionStart();
