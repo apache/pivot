@@ -20,21 +20,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
 import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.text.CharSequenceCharacterIterator;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -45,415 +40,17 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
-import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextArea2;
 import org.apache.pivot.wtk.TextAreaListener2;
 import org.apache.pivot.wtk.TextAreaContentListener2;
 import org.apache.pivot.wtk.TextAreaSelectionListener2;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Visual;
 
 /**
  * Text area skin.
  */
 public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, TextAreaListener2,
     TextAreaContentListener2, TextAreaSelectionListener2 {
-    /**
-     * Class representing a row of text within a paragraph.
-     */
-    public static class Row {
-        public final GlyphVector glyphVector;
-        public final int offset;
-
-        public Row(GlyphVector glyphVector, int offset) {
-            this.glyphVector = glyphVector;
-            this.offset = offset;
-        }
-    }
-
-    /**
-     * Paragraph view.
-     */
-    public class ParagraphView implements Visual, TextArea2.ParagraphListener {
-        private TextArea2.Paragraph paragraph;
-
-        private int x = 0;
-        private int y = 0;
-        private float width = 0;
-        private float height = 0;
-
-        private int breakWidth = Integer.MAX_VALUE;
-
-        private int rowOffset = 0;
-
-        private boolean valid = false;
-        private ArrayList<Row> rows = new ArrayList<Row>();
-
-        public ParagraphView(TextArea2.Paragraph paragraph) {
-            this.paragraph = paragraph;
-        }
-
-        public TextArea2.Paragraph getParagraph() {
-            return paragraph;
-        }
-
-        @Override
-        public int getWidth() {
-            validate();
-            return (int)Math.ceil(width);
-        }
-
-        @Override
-        public int getHeight() {
-            validate();
-            return (int)Math.ceil(height);
-        }
-
-        public int getBreakWidth() {
-            return breakWidth;
-        }
-
-        public void setBreakWidth(int breakWidth) {
-            int previousBreakWidth = this.breakWidth;
-            this.breakWidth = breakWidth;
-
-            if (previousBreakWidth > breakWidth) {
-                invalidate();
-            }
-        }
-
-        @Override
-        public int getBaseline() {
-            return -1;
-        }
-
-        @Override
-        public void paint(Graphics2D graphics) {
-            TextArea2 textArea = (TextArea2)getComponent();
-
-            int selectionStart = textArea.getSelectionStart();
-            int selectionLength = textArea.getSelectionLength();
-            Span selectionRange = new Span(selectionStart, selectionStart + selectionLength - 1);
-
-            int paragraphOffset = paragraph.getOffset();
-            Span characterRange = new Span(paragraphOffset, paragraphOffset
-                + paragraph.getCharacters().length() - 1);
-
-            if (selectionLength > 0
-                && characterRange.intersects(selectionRange)) {
-                boolean focused = textArea.isFocused();
-
-                // Determine the selected and unselected areas
-                Area selectedArea = selection.createTransformedArea(AffineTransform.getTranslateInstance(-x, -y));
-                Area unselectedArea = new Area();
-                unselectedArea.add(new Area(new Rectangle2D.Float(0, 0, width, height)));
-                unselectedArea.subtract(new Area(selectedArea));
-
-                // Paint the unselected text
-                Graphics2D unselectedGraphics = (Graphics2D)graphics.create();
-                unselectedGraphics.clip(unselectedArea);
-                paint(unselectedGraphics, focused, false);
-                unselectedGraphics.dispose();
-
-                // Paint the selected text
-                Graphics2D selectedGraphics = (Graphics2D)graphics.create();
-                selectedGraphics.clip(selectedArea);
-                paint(selectedGraphics, focused, true);
-                selectedGraphics.dispose();
-            } else {
-                paint(graphics, textArea.isFocused(), false);
-            }
-        }
-
-        private void paint(Graphics2D graphics, boolean focused, boolean selected) {
-            int width = getWidth();
-
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-            float ascent = lm.getAscent();
-            float rowHeight = ascent + lm.getDescent();
-
-            Rectangle clipBounds = graphics.getClipBounds();
-
-            float rowY = 0;
-            for (int i = 0, n = rows.getLength(); i < n; i++) {
-                Row row = rows.get(i);
-
-                Rectangle2D textBounds = row.glyphVector.getLogicalBounds();
-                float rowWidth = (float)textBounds.getWidth();
-
-                float rowX = 0;
-                switch (horizontalAlignment) {
-                    case LEFT: {
-                        rowX = 0;
-                        break;
-                    }
-
-                    case RIGHT: {
-                        rowX = width - rowWidth;
-                        break;
-                    }
-
-                    case CENTER: {
-                        rowX = (width - rowWidth) / 2;
-                        break;
-                    }
-                }
-
-                if (clipBounds.intersects(new Rectangle2D.Float(rowX, rowY, rowWidth, rowHeight))) {
-                    if (selected) {
-                        // TODO
-                        graphics.setPaint(focused ? selectionColor : inactiveSelectionColor);
-
-                        graphics.drawGlyphVector(row.glyphVector, rowX, rowY + ascent);
-                    } else {
-                        graphics.setPaint(color);
-                        graphics.drawGlyphVector(row.glyphVector, rowX, rowY + ascent);
-                    }
-                }
-
-                rowY += textBounds.getHeight();
-            }
-        }
-
-        public void invalidate() {
-            valid = false;
-        }
-
-        public void validate() {
-            // TODO Validate from known invalid offset rather than 0, so we don't need to
-            // recalculate all glyph vectors
-            if (!valid) {
-                rows = new ArrayList<Row>();
-                width = 0;
-                height = 0;
-
-                // Re-layout glyphs and recalculate size
-                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-
-                CharSequence characters = paragraph.getCharacters();
-                int n = characters.length();
-
-                int i = 0;
-                int start = 0;
-                float rowWidth = 0;
-                int lastWhitespaceIndex = -1;
-
-                // NOTE We use a character iterator here only because it is the most
-                // efficient way to measure the character bounds (as of Java 6, the version
-                // of Font#getStringBounds() that takes a String performs a string copy,
-                // whereas the version that takes a character iterator does not)
-                CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(characters);
-                while (i < n) {
-                    char c = characters.charAt(i);
-                    if (Character.isWhitespace(c)) {
-                        lastWhitespaceIndex = i;
-                    }
-
-                    Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1,
-                        fontRenderContext);
-                    rowWidth += characterBounds.getWidth();
-
-                    if (rowWidth > breakWidth) {
-                        if (lastWhitespaceIndex == -1) {
-                            if (start == i) {
-                                appendLine(characters, start, start + 1, fontRenderContext);
-                            } else {
-                                appendLine(characters, start, i, fontRenderContext);
-                                i--;
-                            }
-                        } else {
-                            appendLine(characters, start, lastWhitespaceIndex + 1,
-                                fontRenderContext);
-                            i = lastWhitespaceIndex;
-                        }
-
-                        start = i + 1;
-
-                        rowWidth = 0;
-                        lastWhitespaceIndex = -1;
-                    }
-
-                    i++;
-                }
-
-                appendLine(characters, start, i, fontRenderContext);
-            }
-
-            valid = true;
-        }
-
-        private void appendLine(CharSequence characters, int start, int end,
-            FontRenderContext fontRenderContext) {
-            CharSequenceCharacterIterator line = new CharSequenceCharacterIterator(characters,
-                start, end, start);
-            GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
-            rows.add(new Row(glyphVector, start));
-
-            Rectangle2D textBounds = glyphVector.getLogicalBounds();
-            width = Math.max(width, (float)textBounds.getWidth());
-            height += textBounds.getHeight();
-        }
-
-        public int getInsertionPoint(int x, int y) {
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-            float rowHeight = lm.getAscent() + lm.getDescent();
-
-            int i = (int)Math.floor((float)y / rowHeight);
-
-            return getRowInsertionPoint(i, x);
-        }
-
-        public int getNextInsertionPoint(int x, int from, TextArea2.ScrollDirection direction) {
-            // Identify the row that contains the from index
-            int n = rows.getLength();
-            int i;
-            if (from == -1) {
-                i = (direction == TextArea2.ScrollDirection.DOWN) ? -1 : n;
-            } else {
-                i = getRowAt(from);
-            }
-
-            // Move to the next or previous row
-            if (direction == TextArea2.ScrollDirection.DOWN) {
-                i++;
-            } else {
-                i--;
-            }
-
-            return (i < 0
-                || i >= n) ? -1 : getRowInsertionPoint(i, x);
-        }
-
-        private int getRowInsertionPoint(int rowIndex, float x) {
-            Row row = rows.get(rowIndex);
-
-            Rectangle2D glyphVectorBounds = row.glyphVector.getLogicalBounds();
-            float rowWidth = (float)glyphVectorBounds.getWidth();
-
-            // Translate x to glyph vector coordinates
-            float rowX = 0;
-            switch (horizontalAlignment) {
-                case LEFT: {
-                    rowX = 0;
-                    break;
-                }
-
-                case RIGHT: {
-                    rowX = width - rowWidth;
-                    break;
-                }
-
-                case CENTER: {
-                    rowX = (width - rowWidth) / 2;
-                    break;
-                }
-            }
-
-            x -= rowX;
-
-            int index;
-            if (x < 0) {
-                index = 0;
-            } else if (x > rowWidth) {
-                index = row.glyphVector.getNumGlyphs();
-
-                // If this is not the last row, decrement the index so the insertion
-                // point remains on this line
-                if (rowIndex < rows.getLength() - 1) {
-                    index--;
-                }
-            } else {
-                index = 0;
-                int n = row.glyphVector.getNumGlyphs();
-
-                while (index < n) {
-                    Shape glyphBounds = row.glyphVector.getGlyphLogicalBounds(index);
-                    Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
-
-                    if (glyphBounds2D.contains(x, glyphBounds2D.getY())) {
-                        // Determine the bias; if the user clicks on the right half of the
-                        // character; select the next character
-                        if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2
-                            && index < n - 1) {
-                            index++;
-                        }
-
-                        break;
-                    }
-
-                    index++;
-                }
-            }
-
-            return index + row.offset;
-        }
-
-        public int getRowAt(int index) {
-            int rowIndex = rows.getLength() - 1;
-            Row row = rows.get(rowIndex);
-
-            while (row.offset > index) {
-                row = rows.get(--rowIndex);
-            }
-
-            return rowIndex;
-        }
-
-        public int getRowCount() {
-            return rows.getLength();
-        }
-
-        public Bounds getCharacterBounds(int index) {
-            Bounds characterBounds = null;
-
-            CharSequence characters = paragraph.getCharacters();
-            int characterCount = characters.length();
-
-            int rowIndex, x, width;
-            if (index == characterCount) {
-                // This is the terminator character
-                rowIndex = rows.getLength() - 1;
-                Row row = rows.get(rowIndex);
-
-                Rectangle2D glyphVectorBounds = row.glyphVector.getLogicalBounds();
-                x = (int)Math.floor(glyphVectorBounds.getWidth());
-                width = PARAGRAPH_TERMINATOR_WIDTH;
-            } else {
-                // This is a visible character
-                rowIndex = getRowAt(index);
-                Row row = rows.get(rowIndex);
-
-                Shape glyphBounds = row.glyphVector.getGlyphLogicalBounds(index - row.offset);
-                Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
-                x = (int)Math.floor(glyphBounds2D.getX());
-                width = (int)Math.ceil(glyphBounds2D.getWidth());
-            }
-
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-            float rowHeight = lm.getAscent() + lm.getDescent();
-
-            characterBounds = new Bounds(x, (int)Math.floor(rowIndex * rowHeight), width,
-                (int)Math.ceil(rowHeight));
-
-            return characterBounds;
-        }
-
-        @Override
-        public void textInserted(TextArea2.Paragraph paragraph, int index, int count) {
-            invalidate();
-            invalidateComponent();
-        }
-
-        @Override
-        public void textRemoved(TextArea2.Paragraph paragraph, int index, int count) {
-            invalidate();
-            invalidateComponent();
-        }
-    }
-
     private class BlinkCaretCallback implements Runnable {
         @Override
         public void run() {
@@ -532,15 +129,12 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     private Color selectionBackgroundColor;
     private Color inactiveSelectionColor;
     private Color inactiveSelectionBackgroundColor;
-
-    // TODO Rename to alignment? Or fix FlowPane/Text shape?
-    private HorizontalAlignment horizontalAlignment;
+    private HorizontalAlignment alignment;
     private Insets margin;
     private boolean wrapText;
 
-    private ArrayList<ParagraphView> paragraphViews = new ArrayList<ParagraphView>();
+    private ArrayList<TextAreaSkinParagraphView2> paragraphViews = new ArrayList<TextAreaSkinParagraphView2>();
 
-    private static final int PARAGRAPH_TERMINATOR_WIDTH = 2;
     private static final int SCROLL_RATE = 30;
 
     public TextAreaSkin2() {
@@ -553,7 +147,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         selectionBackgroundColor = Color.BLACK;
         inactiveSelectionColor = Color.LIGHT_GRAY;
         inactiveSelectionBackgroundColor = Color.BLACK;
-        horizontalAlignment = HorizontalAlignment.LEFT;
+        alignment = HorizontalAlignment.LEFT;
         margin = new Insets(4);
         wrapText = true;
     }
@@ -572,7 +166,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        for (ParagraphView paragraphView : paragraphViews) {
+        for (TextAreaSkinParagraphView2 paragraphView : paragraphViews) {
             paragraphView.setBreakWidth(Integer.MAX_VALUE);
             preferredWidth = Math.max(preferredWidth, paragraphView.getWidth());
         }
@@ -590,7 +184,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         int breakWidth = (wrapText
             && width != -1) ? Math.max(width - (margin.left + margin.right), 0) : Integer.MAX_VALUE;
 
-        for (ParagraphView paragraphView : paragraphViews) {
+        for (TextAreaSkinParagraphView2 paragraphView : paragraphViews) {
             paragraphView.setBreakWidth(breakWidth);
             preferredHeight += paragraphView.getHeight();
         }
@@ -605,7 +199,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        for (ParagraphView paragraphView : paragraphViews) {
+        for (TextAreaSkinParagraphView2 paragraphView : paragraphViews) {
             paragraphView.setBreakWidth(Integer.MAX_VALUE);
             preferredWidth = Math.max(preferredWidth, paragraphView.getWidth());
             preferredHeight += paragraphView.getHeight();
@@ -628,31 +222,31 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         int y = margin.top;
 
         int rowOffset = 0;
-        for (ParagraphView paragraphView : paragraphViews) {
+        for (TextAreaSkinParagraphView2 paragraphView : paragraphViews) {
             paragraphView.setBreakWidth(breakWidth);
 
             // Set location
-            switch (horizontalAlignment) {
+            switch (alignment) {
                 case LEFT: {
-                    paragraphView.x = margin.left;
+                    paragraphView.setX(margin.left);
                     break;
                 }
 
                 case RIGHT: {
-                    paragraphView.x = width - (paragraphView.getWidth() + margin.right);
+                    paragraphView.setX(width - (paragraphView.getWidth() + margin.right));
                     break;
                 }
 
                 case CENTER: {
-                    paragraphView.x = (width - paragraphView.getWidth()) / 2;
+                    paragraphView.setX((width - paragraphView.getWidth()) / 2);
                     break;
                 }
             }
 
-            paragraphView.y = y;
+            paragraphView.setY(y);
             y += paragraphView.getHeight();
 
-            paragraphView.rowOffset = rowOffset;
+            paragraphView.setRowOffset(rowOffset);
             rowOffset += paragraphView.getRowCount();
         }
 
@@ -705,11 +299,12 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         graphics.translate(0, margin.top);
 
         for (int i = 0, n = paragraphViews.getLength(); i < n; i++) {
-            ParagraphView paragraphView = paragraphViews.get(i);
+            TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(i);
 
-            graphics.translate(paragraphView.x, 0);
+            int x = paragraphView.getX();
+            graphics.translate(x, 0);
             paragraphView.paint(graphics);
-            graphics.translate(-paragraphView.x, 0);
+            graphics.translate(-x, 0);
 
             graphics.translate(0, paragraphView.getHeight());
         }
@@ -726,23 +321,24 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         int index;
         if (y > getHeight() - margin.bottom) {
             // Select the character at x in the first row
-            ParagraphView paragraphView = paragraphViews.get(paragraphViews.getLength() - 1);
+            TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(paragraphViews.getLength() - 1);
             index = paragraphView.getNextInsertionPoint(x, -1, TextArea2.ScrollDirection.UP)
-                + paragraphView.paragraph.getOffset();
+                + paragraphView.getParagraph().getOffset();
         } else if (y < margin.top) {
             // Select the character at x in the last row
-            ParagraphView paragraphView = paragraphViews.get(0);
+            TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(0);
             index = paragraphView.getNextInsertionPoint(x, -1, TextArea2.ScrollDirection.DOWN);
         } else {
             // Select the character at x in the row at y
             index = -1;
             for (int i = 0, n = paragraphViews.getLength(); i < n; i++) {
-                ParagraphView paragraphView = paragraphViews.get(i);
+                TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(i);
 
-                if (y >= paragraphView.y
-                    && y < paragraphView.y + paragraphView.getHeight()) {
-                    index = paragraphView.getInsertionPoint(x - paragraphView.x, y - paragraphView.y)
-                        + paragraphView.paragraph.getOffset();
+                int paragraphViewY = paragraphView.getY();
+                if (y >= paragraphViewY
+                    && y < paragraphViewY + paragraphView.getHeight()) {
+                    index = paragraphView.getInsertionPoint(x - paragraphView.getX(), y - paragraphViewY)
+                        + paragraphView.getParagraph().getOffset();
                     break;
                 }
             }
@@ -757,19 +353,19 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         if (from == -1) {
             int i = (direction == TextArea2.ScrollDirection.DOWN) ? 0 : paragraphViews.getLength() - 1;
 
-            ParagraphView paragraphView = paragraphViews.get(i);
-            index = paragraphView.getNextInsertionPoint(x - paragraphView.x, -1, direction);
+            TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(i);
+            index = paragraphView.getNextInsertionPoint(x - paragraphView.getX(), -1, direction);
 
             if (index != -1) {
-                index += paragraphView.paragraph.getOffset();
+                index += paragraphView.getParagraph().getOffset();
             }
         } else {
             TextArea2 textArea = (TextArea2)getComponent();
             int i = textArea.getParagraphAt(from);
 
-            ParagraphView paragraphView = paragraphViews.get(i);
-            index = paragraphView.getNextInsertionPoint(x - paragraphView.x,
-                from - paragraphView.paragraph.getOffset(), direction);
+            TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(i);
+            index = paragraphView.getNextInsertionPoint(x - paragraphView.getX(),
+                from - paragraphView.getParagraph().getOffset(), direction);
 
             if (index == -1) {
                 // Move to the next or previous paragraph view
@@ -780,12 +376,12 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
                 }
 
                 if (paragraphView != null) {
-                    index = paragraphView.getNextInsertionPoint(x - paragraphView.x, -1, direction);
+                    index = paragraphView.getNextInsertionPoint(x - paragraphView.getX(), -1, direction);
                 }
             }
 
             if (index != -1) {
-                index += paragraphView.paragraph.getOffset();
+                index += paragraphView.getParagraph().getOffset();
             }
         }
 
@@ -795,17 +391,17 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     @Override
     public int getRowAt(int index) {
         TextArea2 textArea = (TextArea2)getComponent();
-        ParagraphView paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
+        TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
 
-        return paragraphView.getRowAt(index - paragraphView.paragraph.getOffset())
-            + paragraphView.rowOffset;
+        return paragraphView.getRowAt(index - paragraphView.getParagraph().getOffset())
+            + paragraphView.getRowOffset();
     }
 
     @Override
     public int getRowCount() {
         int rowCount = 0;
 
-        for (ParagraphView paragraphView : paragraphViews) {
+        for (TextAreaSkinParagraphView2 paragraphView : paragraphViews) {
             rowCount += paragraphView.getRowCount();
         }
 
@@ -814,12 +410,17 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
     public Bounds getCharacterBounds(int index) {
         TextArea2 textArea = (TextArea2)getComponent();
-        ParagraphView paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
-        Bounds characterBounds = paragraphView.getCharacterBounds(index - paragraphView.paragraph.getOffset());
+        TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
+        Bounds characterBounds = paragraphView.getCharacterBounds(index
+            - paragraphView.getParagraph().getOffset());
 
-        return new Bounds(characterBounds.x + paragraphView.x,
-            characterBounds.y + paragraphView.y,
+        return new Bounds(characterBounds.x + paragraphView.getX(),
+            characterBounds.y + paragraphView.getY(),
             characterBounds.width, characterBounds.height);
+    }
+
+    public Area getSelection() {
+        return selection;
     }
 
     private void scrollCharacterToVisible(int index) {
@@ -1004,25 +605,25 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
         setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
 
-    public HorizontalAlignment getHorizontalAlignment() {
-        return horizontalAlignment;
+    public HorizontalAlignment getAlignment() {
+        return alignment;
     }
 
-    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
+    public void setAlignment(HorizontalAlignment alignment) {
+        if (alignment == null) {
+            throw new IllegalArgumentException("alignment is null.");
         }
 
-        this.horizontalAlignment = horizontalAlignment;
+        this.alignment = alignment;
         repaintComponent();
     }
 
-    public final void setHorizontalAlignment(String horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
+    public final void setHorizontalAlignment(String alignment) {
+        if (alignment == null) {
+            throw new IllegalArgumentException("alignment is null.");
         }
 
-        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase(Locale.ENGLISH)));
+        setAlignment(HorizontalAlignment.valueOf(alignment.toUpperCase(Locale.ENGLISH)));
     }
 
     public Insets getMargin() {
@@ -1506,7 +1107,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
     public void paragraphInserted(TextArea2 textArea, int index) {
         // Create paragraph view and add as paragraph listener
         TextArea2.Paragraph paragraph = textArea.getParagraphs().get(index);
-        ParagraphView paragraphView = new ParagraphView(paragraph);
+        TextAreaSkinParagraphView2 paragraphView = new TextAreaSkinParagraphView2(this, paragraph);
         paragraph.getParagraphListeners().add(paragraphView);
 
         // Insert view
@@ -1520,7 +1121,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
 
         for (int i = 0; i < count; i++) {
             TextArea2.Paragraph paragraph = removed.get(i);
-            ParagraphView paragraphView = paragraphViews.get(i + index);
+            TextAreaSkinParagraphView2 paragraphView = paragraphViews.get(i + index);
             paragraph.getParagraphListeners().remove(paragraphView);
         }
 
