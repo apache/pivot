@@ -822,6 +822,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             } else {
                 textArea.setSelection(0, 0);
             }
+
             scrollCharacterToVisible(0);
 
             consumed = true;
@@ -836,6 +837,7 @@ public class TextAreaSkin2 extends ComponentSkin implements TextArea2.Skin, Text
             } else {
                 textArea.setSelection(textArea.getCharacterCount() - 1, 0);
             }
+
             scrollCharacterToVisible(textArea.getCharacterCount() - 1);
 
             consumed = true;

@@ -393,8 +393,6 @@ public class TextArea2 extends Component {
                 // Update selection state
                 int previousSelectionStart = selectionStart;
                 int previousSelectionLength = selectionLength;
-
-                // TODO Investigate issue with setting selection to end of paragraph
                 selectionStart = (index == paragraphs.getLength()) ?
                     TextArea2.this.characterCount : paragraphs.get(index).offset;
                 selectionLength = 0;
@@ -741,12 +739,10 @@ public class TextArea2 extends Component {
             } else {
                 // The removal spans paragraphs; remove any intervening paragraphs and
                 // merge the leading and trailing segments
-                String trailingText = endParagraph.characters.substring((index + count) - endParagraph.offset);
-
-                paragraphSequence.remove(beginParagraphIndex + 1, endParagraphIndex - beginParagraphIndex);
-
-                beginParagraph.removeText(index - beginParagraph.offset);
-                beginParagraph.insertText(trailingText, beginParagraph.characters.length());
+                String leadingText = beginParagraph.characters.substring(0, index - beginParagraph.offset);
+                endParagraph.removeText(0, (index + count) - endParagraph.offset);
+                paragraphSequence.remove(beginParagraphIndex, endParagraphIndex - beginParagraphIndex);
+                endParagraph.insertText(leadingText, 0);
             }
         }
     }
