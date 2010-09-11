@@ -57,6 +57,7 @@ import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.Paragraph;
+import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtk.text.TextNode;
 
 /**
@@ -157,15 +158,10 @@ public class TextPaneDemo implements Application {
                             loadedFile = fileBrowserSheet.getSelectedFile();
 
                             try {
-                                StringBuilder buf = new StringBuilder();
-                                BufferedReader reader = new BufferedReader(new FileReader(
-                                    loadedFile));
-                                while (reader.ready()) {
-                                    buf.append(reader.readLine());
-                                    buf.append("\n");
-                                }
+                                BufferedReader reader = new BufferedReader(new FileReader(loadedFile));
+                                PlainTextSerializer serializer = new PlainTextSerializer();
+                                textPane.setDocument(serializer.readObject(reader));
                                 reader.close();
-                                textPane.setText(buf.toString());
                                 window.setTitle(loadedFile.getCanonicalPath());
                             } catch (IOException ex) {
                                 ex.printStackTrace();
@@ -183,11 +179,10 @@ public class TextPaneDemo implements Application {
                 final FileBrowserSheet fileBrowserSheet = new FileBrowserSheet();
 
                 if (loadedFile != null) {
-                    fileBrowserSheet.setMode(FileBrowserSheet.Mode.SAVE_TO);
                     fileBrowserSheet.setSelectedFile(loadedFile);
-                } else {
-                    fileBrowserSheet.setMode(FileBrowserSheet.Mode.SAVE_AS);
                 }
+
+                fileBrowserSheet.setMode(FileBrowserSheet.Mode.SAVE_AS);
                 fileBrowserSheet.open(window, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
@@ -195,12 +190,11 @@ public class TextPaneDemo implements Application {
                             File selectedFile = fileBrowserSheet.getSelectedFile();
 
                             try {
-                                String buf = textPane.getText();
                                 FileWriter writer = new FileWriter(selectedFile);
-                                writer.write(buf);
+                                PlainTextSerializer serializer = new PlainTextSerializer();
+                                serializer.writeObject(textPane.getDocument(), writer);
                                 writer.close();
                                 loadedFile = selectedFile;
-                                textPane.setText(buf.toString());
                                 window.setTitle(loadedFile.getCanonicalPath());
                             } catch (IOException ex) {
                                 ex.printStackTrace();

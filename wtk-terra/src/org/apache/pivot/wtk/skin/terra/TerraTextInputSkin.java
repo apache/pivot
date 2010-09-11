@@ -1060,21 +1060,24 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         if (keyCode == Keyboard.KeyCode.DELETE) {
             int index = textInput.getSelectionStart();
 
-            if (index >= 0) {
+            if (index < textInput.getCharacterCount()) {
                 int count = Math.max(textInput.getSelectionLength(), 1);
                 textInput.removeText(index, count);
-            }
 
-            consumed = true;
+                consumed = true;
+            }
         } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
-            int index = textInput.getSelectionStart() - 1;
+            int index = textInput.getSelectionStart();
+            int count = textInput.getSelectionLength();
 
-            if (index >= 0) {
-                int count = Math.max(textInput.getSelectionLength(), 1);
+            if (count == 0
+                && index > 0) {
+                textInput.removeText(index - 1, 1);
+                consumed = true;
+            } else {
                 textInput.removeText(index, count);
+                consumed = true;
             }
-
-            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();

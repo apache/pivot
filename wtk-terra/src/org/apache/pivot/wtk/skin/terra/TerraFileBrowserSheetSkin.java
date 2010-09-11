@@ -266,7 +266,8 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             vote = super.previewSheetClose(sheet, result);
         }
 
-        if (vote == Vote.APPROVE) {
+        if (vote == Vote.APPROVE
+            && result) {
             updatingSelection = true;
 
             FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)sheet;

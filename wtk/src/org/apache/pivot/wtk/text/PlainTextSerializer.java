@@ -27,9 +27,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
-
 
 /**
  * Implementation of the {@link Serializer} interface that reads and writes
@@ -58,8 +56,7 @@ public class PlainTextSerializer implements Serializer<Document> {
     }
 
     @Override
-    public Document readObject(InputStream inputStream) throws IOException,
-        SerializationException {
+    public Document readObject(InputStream inputStream) throws IOException {
         Reader reader = new InputStreamReader(inputStream, charset);
         Document document = readObject(reader);
 
@@ -81,19 +78,16 @@ public class PlainTextSerializer implements Serializer<Document> {
     }
 
     @Override
-    public void writeObject(Document document, OutputStream outputStream)
-        throws IOException, SerializationException {
+    public void writeObject(Document document, OutputStream outputStream) throws IOException {
         Writer writer = new OutputStreamWriter(outputStream, charset);
         writeObject(document, writer);
     }
 
-    public void writeObject(Document document, Writer writer)
-        throws IOException, SerializationException {
+    public void writeObject(Document document, Writer writer) throws IOException {
         writeValue(document, writer);
     }
 
-    private void writeValue(Object object, Writer writer)
-        throws IOException, SerializationException {
+    private void writeValue(Object object, Writer writer) throws IOException {
         if (writer == null) {
             throw new IllegalArgumentException("writer is null.");
         }

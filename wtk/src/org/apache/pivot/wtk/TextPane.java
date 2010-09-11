@@ -17,16 +17,11 @@
 package org.apache.pivot.wtk;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.URL;
-import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.json.JSON;
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.text.ComponentNode;
@@ -111,27 +106,6 @@ public class TextPane extends Container {
         public Bounds getCharacterBounds(int offset);
     }
 
-    /**
-     * Translates between text and context data during data binding.
-     */
-    public interface TextBindMapping {
-        /**
-         * Converts a value from the bind context to a text representation during a
-         * {@link Component#load(Object)} operation.
-         *
-         * @param value
-         */
-        public String toString(Object value);
-
-        /**
-         * Converts a text string to a value to be stored in the bind context during a
-         * {@link Component#store(Object)} operation.
-         *
-         * @param text
-         */
-        public Object valueOf(String text);
-    }
-
     private static class TextPaneListenerList extends ListenerList<TextPaneListener>
         implements TextPaneListener {
         @Override
@@ -177,40 +151,12 @@ public class TextPane extends Container {
         }
     }
 
-    private static class TextPaneBindingListenerList extends ListenerList<TextPaneBindingListener>
-        implements TextPaneBindingListener {
-        @Override
-        public void textKeyChanged(TextPane textPane, String previousTextKey) {
-            for (TextPaneBindingListener listener : this) {
-                listener.textKeyChanged(textPane, previousTextKey);
-            }
-        }
-
-        @Override
-        public void textBindTypeChanged(TextPane textPane, BindType previousTextBindType) {
-            for (TextPaneBindingListener listener : this) {
-                listener.textBindTypeChanged(textPane, previousTextBindType);
-            }
-        }
-
-        @Override
-        public void textBindMappingChanged(TextPane textPane, TextBindMapping previousTextBindMapping) {
-            for (TextPaneBindingListener listener : this) {
-                listener.textBindMappingChanged(textPane, previousTextBindMapping);
-            }
-        }
-    }
-
     private Document document = null;
 
     private int selectionStart = 0;
     private int selectionLength = 0;
 
     private boolean editable = true;
-
-    private String textKey = null;
-    private BindType textBindType = BindType.BOTH;
-    private TextBindMapping textBindMapping = null;
 
     private ComponentNodeListener componentNodeListener = new ComponentNodeListener() {
         @Override
@@ -289,7 +235,6 @@ public class TextPane extends Container {
     private TextPaneListenerList textPaneListeners = new TextPaneListenerList();
     private TextPaneCharacterListenerList textPaneCharacterListeners = new TextPaneCharacterListenerList();
     private TextPaneSelectionListenerList textPaneSelectionListeners = new TextPaneSelectionListenerList();
-    private TextPaneBindingListenerList textPaneBindingListeners = new TextPaneBindingListenerList();
 
     public TextPane() {
         installSkin(TextPane.class);
@@ -362,70 +307,6 @@ public class TextPane extends Container {
                 add(((ComponentNode) childNode).getComponent());
             }
         }
-    }
-
-    public String getText() {
-        String text = null;
-        Document document = getDocument();
-
-        if (document != null) {
-            try {
-                PlainTextSerializer serializer = new PlainTextSerializer();
-                StringWriter writer = new StringWriter();
-                serializer.writeObject(document, writer);
-                text = writer.toString();
-            } catch(SerializationException exception) {
-                throw new RuntimeException(exception);
-            } catch(IOException exception) {
-                throw new RuntimeException(exception);
-            }
-        }
-
-        return text;
-    }
-
-    public void setText(String text) {
-        Document document = null;
-
-        if (text != null
-            && text.length() > 0) {
-            try {
-                PlainTextSerializer serializer = new PlainTextSerializer();
-                StringReader reader = new StringReader(text);
-                document = serializer.readObject(reader);
-            } catch(IOException exception) {
-                throw new RuntimeException(exception);
-            }
-        } else {
-            document = new Document();
-            document.add(new Paragraph(""));
-        }
-
-        setDocument(document);
-    }
-
-    public void setText(URL text) {
-        PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
-
-        Document document = null;
-        InputStream inputStream = null;
-
-        try {
-            try {
-                inputStream = text.openStream();
-                document = plainTextSerializer.readObject(inputStream);
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            }
-        } catch (IOException exception) {
-            throw new IllegalArgumentException(exception);
-        } catch (SerializationException exception) {
-            throw new IllegalArgumentException(exception);
-        }
-
-        setDocument(document);
     }
 
     public void insert(char character) {
@@ -621,8 +502,6 @@ public class TextPane extends Container {
                 StringWriter writer = new StringWriter();
                 serializer.writeObject(selection, writer);
                 selectedText = writer.toString();
-            } catch(SerializationException exception) {
-                throw new RuntimeException(exception);
             } catch(IOException exception) {
                 throw new RuntimeException(exception);
             }
@@ -836,8 +715,6 @@ public class TextPane extends Container {
                 StringWriter writer = new StringWriter();
                 serializer.writeObject(selection, writer);
                 selectedText = writer.toString();
-            } catch(SerializationException exception) {
-                throw new RuntimeException(exception);
             } catch(IOException exception) {
                 throw new RuntimeException(exception);
             }
@@ -869,103 +746,6 @@ public class TextPane extends Container {
             this.editable = editable;
 
             textPaneListeners.editableChanged(this);
-        }
-    }
-
-    /**
-     * Returns the text pane's text key.
-     *
-     * @return
-     * The text key, or <tt>null</tt> if no text key is set.
-     */
-    public String getTextKey() {
-        return textKey;
-    }
-
-    /**
-     * Sets the text pane's text key.
-     *
-     * @param textKey
-     * The text key, or <tt>null</tt> to clear the binding.
-     */
-    public void setTextKey(String textKey) {
-        String previousTextKey = this.textKey;
-
-        if (previousTextKey != textKey) {
-            this.textKey = textKey;
-            textPaneBindingListeners.textKeyChanged(this, previousTextKey);
-        }
-    }
-
-    public BindType getTextBindType() {
-        return textBindType;
-    }
-
-    public void setTextBindType(BindType textBindType) {
-        if (textBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        BindType previousTextBindType = this.textBindType;
-
-        if (previousTextBindType != textBindType) {
-            this.textBindType = textBindType;
-            textPaneBindingListeners.textBindTypeChanged(this, previousTextBindType);
-        }
-    }
-
-    public final void setTextBindType(String textBindType) {
-        if (textBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setTextBindType(BindType.valueOf(textBindType.toUpperCase(Locale.ENGLISH)));
-    }
-
-    public TextBindMapping getTextBindMapping() {
-        return textBindMapping;
-    }
-
-    public void setTextBindMapping(TextBindMapping textBindMapping) {
-        TextBindMapping previousTextBindMapping = this.textBindMapping;
-
-        if (previousTextBindMapping != textBindMapping) {
-            this.textBindMapping = textBindMapping;
-            textPaneBindingListeners.textBindMappingChanged(this, previousTextBindMapping);
-        }
-    }
-
-    @Override
-    public void load(Object context) {
-        if (textKey != null
-            && JSON.containsKey(context, textKey)
-            && textBindType != BindType.STORE) {
-            Object value = JSON.get(context, textKey);
-
-            if (textBindMapping == null) {
-                value = (value == null) ? "" : value.toString();
-            } else {
-                value = textBindMapping.toString(value);
-            }
-
-            setText((String)value);
-        }
-    }
-
-    @Override
-    public void store(Object context) {
-        if (textKey != null
-            && textBindType != BindType.LOAD) {
-            String text = getText();
-            JSON.put(context, textKey, (textBindMapping == null) ?
-                text : textBindMapping.valueOf(text));
-        }
-    }
-
-    @Override
-    public void clear() {
-        if (textKey != null) {
-            setText("");
         }
     }
 
@@ -1004,9 +784,5 @@ public class TextPane extends Container {
 
     public ListenerList<TextPaneSelectionListener> getTextPaneSelectionListeners() {
         return textPaneSelectionListeners;
-    }
-
-    public ListenerList<TextPaneBindingListener> getTextPaneBindingListeners() {
-        return textPaneBindingListeners;
     }
 }

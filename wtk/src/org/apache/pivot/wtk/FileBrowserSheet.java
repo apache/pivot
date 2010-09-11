@@ -168,6 +168,10 @@ public class FileBrowserSheet extends Sheet {
         if (file == null) {
             clearSelection();
         } else {
+            if (file.isAbsolute()) {
+                setRootDirectory(file.getParentFile());
+            }
+
             setSelectedFiles(new ArrayList<File>(file));
         }
     }
@@ -212,6 +216,14 @@ public class FileBrowserSheet extends Sheet {
 
             if (file == null) {
                 throw new IllegalArgumentException("file is null.");
+            }
+
+            if (!file.isAbsolute()) {
+                file = new File(rootDirectory, file.getPath());
+            }
+
+            if (!file.getParentFile().equals(rootDirectory)) {
+                throw new IllegalArgumentException();
             }
 
             fileList.add(file);

@@ -206,6 +206,10 @@ public class FileBrowser extends Container {
         if (file == null) {
             clearSelection();
         } else {
+            if (file.isAbsolute()) {
+                setRootDirectory(file.getParentFile());
+            }
+
             setSelectedFiles(new ArrayList<File>(file));
         }
     }
@@ -252,12 +256,12 @@ public class FileBrowser extends Container {
                 throw new IllegalArgumentException("file is null.");
             }
 
-            if (file.isAbsolute()) {
-                if (!file.getParentFile().equals(rootDirectory)) {
-                    throw new IllegalArgumentException("file is not a descendant of root directory.");
-                }
-            } else {
+            if (!file.isAbsolute()) {
                 file = new File(rootDirectory, file.getPath());
+            }
+
+            if (!file.getParentFile().equals(rootDirectory)) {
+                throw new IllegalArgumentException();
             }
 
             fileList.add(file);
