@@ -1134,6 +1134,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
         // Insert view
         paragraphViews.insert(paragraphView, index);
+
+        invalidateComponent();
     }
 
     @Override
@@ -1149,6 +1151,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
         // Remove views
         paragraphViews.remove(index, count);
+
+        invalidateComponent();
     }
 
     @Override
@@ -1188,49 +1192,55 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     private void updateSelection() {
         TextArea textArea = (TextArea)getComponent();
 
-        // Update the caret
-        int selectionStart = textArea.getSelectionStart();
+        if (textArea.getParagraphs().getLength() > 0) {
+            // Update the caret
+            int selectionStart = textArea.getSelectionStart();
 
-        Bounds leadingSelectionBounds = getCharacterBounds(selectionStart);
-        caret = leadingSelectionBounds.toRectangle();
-        caret.width = 1;
+            Bounds leadingSelectionBounds = getCharacterBounds(selectionStart);
+            caret = leadingSelectionBounds.toRectangle();
+            caret.width = 1;
 
-        // Update the selection
-        int selectionLength = textArea.getSelectionLength();
+            // Update the selection
+            int selectionLength = textArea.getSelectionLength();
 
-        if (selectionLength > 0) {
-            int selectionEnd = selectionStart + selectionLength - 1;
-            Bounds trailingSelectionBounds = getCharacterBounds(selectionEnd);
-            selection = new Area();
+            if (selectionLength > 0) {
+                int selectionEnd = selectionStart + selectionLength - 1;
+                Bounds trailingSelectionBounds = getCharacterBounds(selectionEnd);
+                selection = new Area();
 
-            int firstRowIndex = getRowAt(selectionStart);
-            int lastRowIndex = getRowAt(selectionEnd);
+                int firstRowIndex = getRowAt(selectionStart);
+                int lastRowIndex = getRowAt(selectionEnd);
 
-            if (firstRowIndex == lastRowIndex) {
-                selection.add(new Area(new Rectangle(leadingSelectionBounds.x,
-                    leadingSelectionBounds.y, trailingSelectionBounds.x
-                        + trailingSelectionBounds.width - leadingSelectionBounds.x,
-                    trailingSelectionBounds.y + trailingSelectionBounds.height
-                        - leadingSelectionBounds.y)));
-            } else {
-                int width = getWidth();
+                if (firstRowIndex == lastRowIndex) {
+                    selection.add(new Area(new Rectangle(leadingSelectionBounds.x,
+                        leadingSelectionBounds.y, trailingSelectionBounds.x
+                            + trailingSelectionBounds.width - leadingSelectionBounds.x,
+                        trailingSelectionBounds.y + trailingSelectionBounds.height
+                            - leadingSelectionBounds.y)));
+                } else {
+                    int width = getWidth();
 
-                selection.add(new Area(new Rectangle(leadingSelectionBounds.x,
-                    leadingSelectionBounds.y, width - margin.right - leadingSelectionBounds.x,
-                    leadingSelectionBounds.height)));
+                    selection.add(new Area(new Rectangle(leadingSelectionBounds.x,
+                        leadingSelectionBounds.y, width - margin.right - leadingSelectionBounds.x,
+                        leadingSelectionBounds.height)));
 
-                if (lastRowIndex - firstRowIndex > 0) {
-                    selection.add(new Area(new Rectangle(margin.left, leadingSelectionBounds.y
-                        + leadingSelectionBounds.height, width - (margin.left + margin.right),
-                        trailingSelectionBounds.y
-                            - (leadingSelectionBounds.y + leadingSelectionBounds.height))));
+                    if (lastRowIndex - firstRowIndex > 0) {
+                        selection.add(new Area(new Rectangle(margin.left, leadingSelectionBounds.y
+                            + leadingSelectionBounds.height, width - (margin.left + margin.right),
+                            trailingSelectionBounds.y
+                                - (leadingSelectionBounds.y + leadingSelectionBounds.height))));
+                    }
+
+                    selection.add(new Area(new Rectangle(margin.left, trailingSelectionBounds.y,
+                        trailingSelectionBounds.x + trailingSelectionBounds.width - margin.left,
+                        trailingSelectionBounds.height)));
                 }
-
-                selection.add(new Area(new Rectangle(margin.left, trailingSelectionBounds.y,
-                    trailingSelectionBounds.x + trailingSelectionBounds.width - margin.left,
-                    trailingSelectionBounds.height)));
+            } else {
+                selection = null;
             }
         } else {
+            // Clear the caret and the selection
+            caret = new Rectangle();
             selection = null;
         }
     }

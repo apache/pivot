@@ -140,6 +140,7 @@ class TextAreaSkinParagraphView implements Visual, TextArea.ParagraphListener {
         if (selectionLength > 0
             && characterRange.intersects(selectionRange)) {
             boolean focused = textArea.isFocused();
+            boolean editable = textArea.isEditable();
 
             // Determine the selected and unselected areas
             Area selection = textAreaSkin.getSelection();
@@ -151,20 +152,20 @@ class TextAreaSkinParagraphView implements Visual, TextArea.ParagraphListener {
             // Paint the unselected text
             Graphics2D unselectedGraphics = (Graphics2D)graphics.create();
             unselectedGraphics.clip(unselectedArea);
-            paint(unselectedGraphics, focused, false);
+            paint(unselectedGraphics, focused, editable, false);
             unselectedGraphics.dispose();
 
             // Paint the selected text
             Graphics2D selectedGraphics = (Graphics2D)graphics.create();
             selectedGraphics.clip(selectedArea);
-            paint(selectedGraphics, focused, true);
+            paint(selectedGraphics, focused, editable, true);
             selectedGraphics.dispose();
         } else {
-            paint(graphics, textArea.isFocused(), false);
+            paint(graphics, textArea.isFocused(), textArea.isEditable(), false);
         }
     }
 
-    private void paint(Graphics2D graphics, boolean focused, boolean selected) {
+    private void paint(Graphics2D graphics, boolean focused, boolean editable, boolean selected) {
         Font font = textAreaSkin.getFont();
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
@@ -181,7 +182,7 @@ class TextAreaSkinParagraphView implements Visual, TextArea.ParagraphListener {
             float rowWidth = (float)textBounds.getWidth();
             if (clipBounds.intersects(new Rectangle2D.Float(0, rowY, rowWidth, rowHeight))) {
                 if (selected) {
-                    graphics.setPaint(focused ?
+                    graphics.setPaint(focused && editable ?
                         textAreaSkin.getSelectionColor() : textAreaSkin.getInactiveSelectionColor());
                 } else {
                     graphics.setPaint(textAreaSkin.getColor());
