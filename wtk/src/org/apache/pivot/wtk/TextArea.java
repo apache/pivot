@@ -467,8 +467,8 @@ public class TextArea extends Component {
     }
 
     private class RemoveTextEdit implements Edit {
-        private final String text;
         private final int index;
+        private final CharSequence text;
 
         public RemoveTextEdit(int index, int count) {
             this.index = index;
@@ -580,6 +580,7 @@ public class TextArea extends Component {
     private TextAreaBindingListenerList textAreaBindingListeners = new TextAreaBindingListenerList();
 
     private static final int INITIAL_PARAGRAPH_CAPACITY = 256;
+    private static final int MAXIMUM_EDIT_HISTORY_LENGTH = 30;
 
     public TextArea() {
         installSkin(TextArea.class);
@@ -637,17 +638,16 @@ public class TextArea extends Component {
         // and moving to next paragraph as needed
         int i = 0;
         while (i < count) {
-            textBuilder.append(paragraph.characters.charAt(characterOffset++));
-            i++;
-
             if (characterOffset == paragraph.characters.length()
                 && i < characterCount) {
                 textBuilder.append('\n');
-                i++;
-
                 paragraph = paragraphs.get(++paragraphIndex);
                 characterOffset = 0;
+            } else {
+                textBuilder.append(paragraph.characters.charAt(characterOffset++));
             }
+
+            i++;
         }
 
         return textBuilder.toString();
@@ -715,6 +715,9 @@ public class TextArea extends Component {
 
         paragraphs.add(paragraph);
 
+        // Clear the edit history
+        editHistory.clear();
+
         // Update content
         paragraphSequence.remove(0, paragraphSequence.getLength());
 
@@ -773,7 +776,7 @@ public class TextArea extends Component {
 
             // Add an insert history item
             if (addToEditHistory) {
-                editHistory.add(new InsertTextEdit(text, index));
+                addHistoryItem(new InsertTextEdit(text, index));
             }
         }
     }
@@ -791,7 +794,7 @@ public class TextArea extends Component {
         if (count > 0) {
             // Add a remove history item
             if (addToEditHistory) {
-                editHistory.add(new RemoveTextEdit(index, count));
+                addHistoryItem(new RemoveTextEdit(index, count));
             }
 
             // Identify the leading and trailing paragraph indexes
@@ -939,6 +942,14 @@ public class TextArea extends Component {
         if (n > 0) {
             Edit edit = editHistory.remove(n - 1, 1).get(0);
             edit.undo();
+        }
+    }
+
+    private void addHistoryItem(Edit edit) {
+        editHistory.add(edit);
+
+        if (editHistory.getLength() > MAXIMUM_EDIT_HISTORY_LENGTH) {
+            editHistory.remove(0, 1);
         }
     }
 

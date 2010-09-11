@@ -90,8 +90,8 @@ public class TextInput extends Component {
     }
 
     private class RemoveTextEdit implements Edit {
-        private final String text;
         private final int index;
+        private final String text;
 
         public RemoveTextEdit(int index, int count) {
             this.index = index;
@@ -278,6 +278,8 @@ public class TextInput extends Component {
 
     public static final int DEFAULT_TEXT_SIZE = 16;
 
+    private static final int MAXIMUM_EDIT_HISTORY_LENGTH = 30;
+
     public TextInput() {
         installSkin(TextInput.class);
     }
@@ -337,7 +339,7 @@ public class TextInput extends Component {
         textValid = (validator == null) ? true : validator.isValid(text);
 
         // Clear the edit history
-        editHistory = new LinkedList<Edit>();
+        editHistory.clear();
 
         // Fire change events
         textInputContentListeners.textChanged(this);
@@ -374,7 +376,7 @@ public class TextInput extends Component {
 
                 // Add an insert history item
                 if (addToEditHistory) {
-                    editHistory.add(new InsertTextEdit(text, index));
+                    addHistoryItem(new InsertTextEdit(text, index));
                 }
 
                 // Update selection
@@ -416,7 +418,7 @@ public class TextInput extends Component {
             if (vote == Vote.APPROVE) {
                 // Add a remove history item
                 if (addToEditHistory) {
-                    editHistory.add(new RemoveTextEdit(index, count));
+                    addHistoryItem(new RemoveTextEdit(index, count));
                 }
 
                 // Remove the text
@@ -519,6 +521,14 @@ public class TextInput extends Component {
         if (n > 0) {
             Edit edit = editHistory.remove(n - 1, 1).get(0);
             edit.undo();
+        }
+    }
+
+    private void addHistoryItem(Edit edit) {
+        editHistory.add(edit);
+
+        if (editHistory.getLength() > MAXIMUM_EDIT_HISTORY_LENGTH) {
+            editHistory.remove(0, 1);
         }
     }
 
