@@ -20,6 +20,7 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.Locale;
 
+import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
@@ -68,6 +69,38 @@ public class TextInput extends Component {
          * @param text
          */
         public Object valueOf(String text);
+    }
+
+    private interface Edit {
+        public void undo();
+    }
+
+    private class InsertTextEdit implements Edit {
+        private final int index;
+        private final int count;
+
+        public InsertTextEdit(CharSequence text, int index) {
+            this.index = index;
+            count = text.length();
+        }
+
+        public void undo() {
+            removeText(index, count, false);
+        }
+    }
+
+    private class RemoveTextEdit implements Edit {
+        private final String text;
+        private final int index;
+
+        public RemoveTextEdit(int index, int count) {
+            this.index = index;
+            text = getText(index, index + count);
+        }
+
+        public void undo() {
+            insertText(text, index, false);
+        }
     }
 
     private static class TextInputListenerList extends ListenerList<TextInputListener>
@@ -236,6 +269,8 @@ public class TextInput extends Component {
     private boolean strictValidation = false;
     private boolean textValid = true;
 
+    private LinkedList<Edit> editHistory = new LinkedList<Edit>();
+
     private TextInputListenerList textInputListeners = new TextInputListenerList();
     private TextInputContentListenerList textInputContentListeners = new TextInputContentListenerList();
     private TextInputSelectionListenerList textInputSelectionListeners = new TextInputSelectionListenerList();
@@ -301,6 +336,9 @@ public class TextInput extends Component {
         boolean previousTextValid = textValid;
         textValid = (validator == null) ? true : validator.isValid(text);
 
+        // Clear the edit history
+        editHistory = new LinkedList<Edit>();
+
         // Fire change events
         textInputContentListeners.textChanged(this);
 
@@ -315,6 +353,10 @@ public class TextInput extends Component {
     }
 
     public void insertText(CharSequence text, int index) {
+        insertText(text, index, true);
+    }
+
+    private void insertText(CharSequence text, int index, boolean addToEditHistory) {
         if (text == null) {
             throw new IllegalArgumentException();
         }
@@ -329,6 +371,11 @@ public class TextInput extends Component {
             if (vote == Vote.APPROVE) {
                 // Insert the text
                 characters.insert(index, text);
+
+                // Add an insert history item
+                if (addToEditHistory) {
+                    editHistory.add(new InsertTextEdit(text, index));
+                }
 
                 // Update selection
                 int previousSelectionStart = selectionStart;
@@ -359,10 +406,19 @@ public class TextInput extends Component {
     }
 
     public void removeText(int index, int count) {
+        removeText(index, count, true);
+    }
+
+    private void removeText(int index, int count, boolean addToEditHistory) {
         if (count > 0) {
             Vote vote = textInputContentListeners.previewRemoveText(this, index, count);
 
             if (vote == Vote.APPROVE) {
+                // Add a remove history item
+                if (addToEditHistory) {
+                    editHistory.add(new RemoveTextEdit(index, count));
+                }
+
                 // Remove the text
                 characters.delete(index, index + count);
 
@@ -459,11 +515,11 @@ public class TextInput extends Component {
     }
 
     public void undo() {
-        // TODO
-    }
-
-    public void redo() {
-        // TODO
+        int n = editHistory.getLength();
+        if (n > 0) {
+            Edit edit = editHistory.remove(n - 1, 1).get(0);
+            edit.undo();
+        }
     }
 
     /**

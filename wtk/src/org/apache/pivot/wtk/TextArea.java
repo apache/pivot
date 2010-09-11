@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ImmutableIterator;
@@ -307,6 +308,9 @@ public class TextArea extends Component {
         public Object valueOf(String text);
     }
 
+    /**
+     * Text area paragraph sequence.
+     */
     public final class ParagraphSequence implements Sequence<Paragraph>, Iterable<Paragraph> {
         public int add(Paragraph paragraph) {
             int index = getLength();
@@ -444,6 +448,38 @@ public class TextArea extends Component {
         }
     }
 
+    private interface Edit {
+        public void undo();
+    }
+
+    private class InsertTextEdit implements Edit {
+        private final int index;
+        private final int count;
+
+        public InsertTextEdit(CharSequence text, int index) {
+            this.index = index;
+            count = text.length();
+        }
+
+        public void undo() {
+            removeText(index, count, false);
+        }
+    }
+
+    private class RemoveTextEdit implements Edit {
+        private final String text;
+        private final int index;
+
+        public RemoveTextEdit(int index, int count) {
+            this.index = index;
+            text = getText(index, index + count);
+        }
+
+        public void undo() {
+            insertText(text, index, false);
+        }
+    }
+
     private static class TextAreaListenerList extends ListenerList<TextAreaListener>
         implements TextAreaListener {
         @Override
@@ -535,6 +571,8 @@ public class TextArea extends Component {
     private String textKey = null;
     private BindType textBindType = BindType.BOTH;
     private TextBindMapping textBindMapping = null;
+
+    private LinkedList<Edit> editHistory = new LinkedList<Edit>();
 
     private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
     private TextAreaContentListenerList textAreaContentListeners = new TextAreaContentListenerList();
@@ -686,6 +724,10 @@ public class TextArea extends Component {
     }
 
     public void insertText(CharSequence text, int index) {
+        insertText(text, index, true);
+    }
+
+    private void insertText(CharSequence text, int index, boolean addToEditHistory) {
         if (text == null) {
             throw new IllegalArgumentException();
         }
@@ -728,16 +770,30 @@ public class TextArea extends Component {
             }
 
             paragraph.insertText(textBuilder, characterOffset);
+
+            // Add an insert history item
+            if (addToEditHistory) {
+                editHistory.add(new InsertTextEdit(text, index));
+            }
         }
     }
 
     public void removeText(int index, int count) {
+        removeText(index, count, true);
+    }
+
+    private void removeText(int index, int count, boolean addToEditHistory) {
         if (index < 0
             || index + count > characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
         if (count > 0) {
+            // Add a remove history item
+            if (addToEditHistory) {
+                editHistory.add(new RemoveTextEdit(index, count));
+            }
+
             // Identify the leading and trailing paragraph indexes
             int endParagraphIndex = getParagraphAt(index + count);
             Paragraph endParagraph = paragraphs.get(endParagraphIndex);
@@ -879,11 +935,11 @@ public class TextArea extends Component {
     }
 
     public void undo() {
-        // TODO
-    }
-
-    public void redo() {
-        // TODO
+        int n = editHistory.getLength();
+        if (n > 0) {
+            Edit edit = editHistory.remove(n - 1, 1).get(0);
+            edit.undo();
+        }
     }
 
     /**

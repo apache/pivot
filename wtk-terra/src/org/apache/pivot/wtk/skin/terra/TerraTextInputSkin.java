@@ -1212,9 +1212,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 textInput.paste();
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.Z) {
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    textInput.redo();
-                } else {
+                if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                     textInput.undo();
                 }
 
