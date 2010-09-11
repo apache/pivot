@@ -29,9 +29,9 @@ import org.apache.pivot.wtk.text.NodeListener;
 /**
  * Abstract base class for node views.
  */
-abstract class TextAreaSkinNodeView implements Visual, NodeListener {
+abstract class TextPaneSkinNodeView implements Visual, NodeListener {
     private Node node = null;
-    private TextAreaSkinElementView parent = null;
+    private TextPaneSkinElementView parent = null;
 
     private int width = 0;
     private int height = 0;
@@ -42,7 +42,7 @@ abstract class TextAreaSkinNodeView implements Visual, NodeListener {
 
     private boolean valid = false;
 
-    public TextAreaSkinNodeView(Node node) {
+    public TextPaneSkinNodeView(Node node) {
         this.node = node;
     }
 
@@ -50,11 +50,11 @@ abstract class TextAreaSkinNodeView implements Visual, NodeListener {
         return node;
     }
 
-    public TextAreaSkinElementView getParent() {
+    public TextPaneSkinElementView getParent() {
         return parent;
     }
 
-    protected void setParent(TextAreaSkinElementView parent) {
+    protected void setParent(TextPaneSkinElementView parent) {
         this.parent = parent;
     }
 
@@ -196,7 +196,7 @@ abstract class TextAreaSkinNodeView implements Visual, NodeListener {
     /**
      * Used by TextAreaSkinParagraphView when it breaks child nodes into multiple views.
      */
-    public abstract TextAreaSkinNodeView getNext();
+    public abstract TextPaneSkinNodeView getNext();
 
     public abstract int getInsertionPoint(int x, int y);
     public abstract int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction);

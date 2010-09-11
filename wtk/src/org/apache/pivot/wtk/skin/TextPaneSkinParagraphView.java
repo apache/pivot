@@ -27,26 +27,26 @@ import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.Paragraph;
 
-class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
+class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
     private static final int PARAGRAPH_TERMINATOR_WIDTH = 4;
 
-    private final TextAreaSkin textAreaSkin;
+    private final TextPaneSkin textPaneSkin;
 
     private class Row {
         public int x = 0;
         public int y = 0;
         public int width = 0;
         public int height = 0;
-        public ArrayList<TextAreaSkinNodeView> nodeViews = new ArrayList<TextAreaSkinNodeView>();
+        public ArrayList<TextPaneSkinNodeView> nodeViews = new ArrayList<TextPaneSkinNodeView>();
     }
 
     private ArrayList<Row> rows = null;
     private Bounds terminatorBounds = new Bounds(0, 0, 0, 0);
 
-    public TextAreaSkinParagraphView(TextAreaSkin textAreaSkin, Paragraph paragraph) {
+    public TextPaneSkinParagraphView(TextPaneSkin textPaneSkin, Paragraph paragraph) {
         super(paragraph);
-        this.textAreaSkin = textAreaSkin;
+        this.textPaneSkin = textPaneSkin;
     }
 
     @Override
@@ -59,7 +59,7 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
     public void validate() {
         if (!isValid()) {
             // Remove and re-create the child views, because of line-breaking, a single TextNode
-            // may be added as many TextAreaSkinTextNodeView's.
+            // may be added as many TextPaneSkinTextNodeView's.
 
             // Break the views into multiple rows
             int breakWidth = getBreakWidth();
@@ -69,7 +69,7 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
 
             Row row = new Row();
             for (Node node : paragraph) {
-                TextAreaSkinNodeView nodeView = textAreaSkin.createNodeView(node);
+                TextPaneSkinNodeView nodeView = textPaneSkin.createNodeView(node);
 
                 nodeView.setBreakWidth(Math.max(breakWidth - (row.width
                     + PARAGRAPH_TERMINATOR_WIDTH), 0));
@@ -126,7 +126,7 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
                 width = Math.max(width, row.width);
 
                 // Determine the row height
-                for (TextAreaSkinNodeView nodeView : row.nodeViews) {
+                for (TextPaneSkinNodeView nodeView : row.nodeViews) {
                     row.height = Math.max(row.height, nodeView.getHeight());
                 }
 
@@ -138,7 +138,7 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
                     // right alignment
                     x = width - row.width;
                 }
-                for (TextAreaSkinNodeView nodeView : row.nodeViews) {
+                for (TextPaneSkinNodeView nodeView : row.nodeViews) {
                     // TODO Align to baseline
                     int y = row.height - nodeView.getHeight();
 
@@ -153,7 +153,7 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
 
             // Recalculate terminator bounds
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = textAreaSkin.getFont().getLineMetrics("", 0, 0, fontRenderContext);
+            LineMetrics lm = textPaneSkin.getFont().getLineMetrics("", 0, 0, fontRenderContext);
             int terminatorHeight = (int)Math.ceil(lm.getHeight());
 
             int terminatorY;
@@ -181,14 +181,14 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
     protected void setSkinLocation(int skinX, int skinY) {
         for (int i = 0, n = rows.getLength(); i < n; i++) {
             Row row = rows.get(i);
-            for (TextAreaSkinNodeView nodeView : row.nodeViews) {
+            for (TextPaneSkinNodeView nodeView : row.nodeViews) {
                 nodeView.setSkinLocation(skinX + nodeView.getX(), skinY + nodeView.getY());
             }
         }
     }
 
     @Override
-    public TextAreaSkinNodeView getNext() {
+    public TextPaneSkinNodeView getNext() {
         return null;
     }
 
@@ -204,17 +204,17 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
                 if (y >= row.y
                     && y < row.y + row.height) {
                     if (x < row.x) {
-                        TextAreaSkinNodeView firstNodeView = row.nodeViews.get(0);
+                        TextPaneSkinNodeView firstNodeView = row.nodeViews.get(0);
                         offset = firstNodeView.getOffset();
                     } else if (x > row.x + row.width - 1) {
-                        TextAreaSkinNodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+                        TextPaneSkinNodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
                         offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount();
 
                         if (offset < getCharacterCount() - 1) {
                             offset--;
                         }
                     } else {
-                        for (TextAreaSkinNodeView nodeView : row.nodeViews) {
+                        for (TextPaneSkinNodeView nodeView : row.nodeViews) {
                             Bounds nodeViewBounds = nodeView.getBounds();
 
                             if (nodeViewBounds.contains(x, y)) {
@@ -258,8 +258,8 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
                     i = 0;
                     while (i < n) {
                         Row row = rows.get(i);
-                        TextAreaSkinNodeView firstNodeView = row.nodeViews.get(0);
-                        TextAreaSkinNodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+                        TextPaneSkinNodeView firstNodeView = row.nodeViews.get(0);
+                        TextPaneSkinNodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
                         if (from >= firstNodeView.getOffset()
                             && from < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {
                             break;
@@ -282,7 +282,7 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
                 // Find the node view that contains x and get the insertion point from it
                 Row row = rows.get(i);
 
-                for (TextAreaSkinNodeView nodeView : row.nodeViews) {
+                for (TextPaneSkinNodeView nodeView : row.nodeViews) {
                     Bounds bounds = nodeView.getBounds();
                     if (x >= bounds.x
                         && x < bounds.x + bounds.width) {
@@ -294,7 +294,7 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
 
                 if (offset == -1) {
                     // No node view contained the x position; move to the end of the row
-                    TextAreaSkinNodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+                    TextPaneSkinNodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
                     offset = lastNodeView.getOffset() + lastNodeView.getCharacterCount();
 
                     if (offset < getCharacterCount() - 1) {
@@ -316,8 +316,8 @@ class TextAreaSkinParagraphView extends TextAreaSkinBlockView {
         } else {
             for (int i = 0, n = rows.getLength(); i < n; i++) {
                 Row row = rows.get(i);
-                TextAreaSkinNodeView firstNodeView = row.nodeViews.get(0);
-                TextAreaSkinNodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
+                TextPaneSkinNodeView firstNodeView = row.nodeViews.get(0);
+                TextPaneSkinNodeView lastNodeView = row.nodeViews.get(row.nodeViews.getLength() - 1);
 
                 if (offset >= firstNodeView.getOffset()
                     && offset < lastNodeView.getOffset() + lastNodeView.getCharacterCount()) {

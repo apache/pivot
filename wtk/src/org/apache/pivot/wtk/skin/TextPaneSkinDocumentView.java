@@ -21,23 +21,23 @@ import org.apache.pivot.wtk.text.Document;
 /**
  * Document view.
  */
-class TextAreaSkinDocumentView extends TextAreaSkinVerticalElementView {
+class TextPaneSkinDocumentView extends TextPaneSkinVerticalElementView {
 
-    public TextAreaSkinDocumentView(TextAreaSkin textAreaSkin, Document document) {
-        super(textAreaSkin, document);
+    public TextPaneSkinDocumentView(TextPaneSkin textPaneSkin, Document document) {
+        super(textPaneSkin, document);
     }
 
     @Override
     public void repaint(int x, int y, int width, int height) {
         super.repaint(x, y, width, height);
 
-        textAreaSkin.repaintComponent(x, y, width, height);
+        textPaneSkin.repaintComponent(x, y, width, height);
     }
 
     @Override
     public void invalidate() {
         super.invalidate();
-        textAreaSkin.invalidateComponent();
+        textPaneSkin.invalidateComponent();
     }
 
     @Override

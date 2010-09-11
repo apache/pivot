@@ -19,10 +19,10 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.wtk.text.BulletedList;
 import org.apache.pivot.wtk.text.BulletedListListener;
 
-class TextAreaSkinBulletedListView extends TextAreaSkinListView implements BulletedListListener {
+class TextPaneSkinBulletedListView extends TextPaneSkinListView implements BulletedListListener {
 
-    public TextAreaSkinBulletedListView(TextAreaSkin textAreaSkin, BulletedList bulletedList) {
-        super(textAreaSkin, bulletedList);
+    public TextPaneSkinBulletedListView(TextPaneSkin textPaneSkin, BulletedList bulletedList) {
+        super(textPaneSkin, bulletedList);
     }
 
     @Override
@@ -47,8 +47,8 @@ class TextAreaSkinBulletedListView extends TextAreaSkinListView implements Bulle
 
             BulletedList bulletedList = (BulletedList)getNode();
 
-            for (TextAreaSkinNodeView nodeView : this) {
-                TextAreaSkinListItemView listItemView = (TextAreaSkinListItemView)nodeView;
+            for (TextPaneSkinNodeView nodeView : this) {
+                TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
 
                 switch (bulletedList.getStyle()) {
                     case CIRCLE:
@@ -61,8 +61,8 @@ class TextAreaSkinBulletedListView extends TextAreaSkinListView implements Bulle
             }
 
             this.maxIndexTextWidth = 0;
-            for (TextAreaSkinNodeView nodeView : this) {
-                TextAreaSkinListItemView listItemView = (TextAreaSkinListItemView)nodeView;
+            for (TextPaneSkinNodeView nodeView : this) {
+                TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
                 this.maxIndexTextWidth = Math.max(this.maxIndexTextWidth,
                     listItemView.getIndexTextWidth());
             }

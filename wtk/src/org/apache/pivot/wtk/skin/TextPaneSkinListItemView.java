@@ -21,13 +21,13 @@ import java.util.Iterator;
 import org.apache.pivot.wtk.text.TextNode;
 
 
-class TextAreaSkinListItemView extends TextAreaSkinVerticalElementView {
+class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
 
     private TextNode indexTextNode;
-    private TextAreaSkinTextNodeView indexTextNodeView;
+    private TextPaneSkinTextNodeView indexTextNodeView;
 
-    public TextAreaSkinListItemView(TextAreaSkin textAreaSkin, org.apache.pivot.wtk.text.List.Item listItem) {
-        super(textAreaSkin, listItem);
+    public TextPaneSkinListItemView(TextPaneSkin textPaneSkin, org.apache.pivot.wtk.text.List.Item listItem) {
+        super(textPaneSkin, listItem);
 
         this.indexTextNode = new TextNode("");
     }
@@ -37,7 +37,7 @@ class TextAreaSkinListItemView extends TextAreaSkinVerticalElementView {
         super.attach();
 
         // add an extra TextNodeView to render the index text
-        indexTextNodeView = new TextAreaSkinTextNodeView(textAreaSkin, indexTextNode);
+        indexTextNodeView = new TextPaneSkinTextNodeView(textPaneSkin, indexTextNode);
         insert(indexTextNodeView, 0);
     }
 
@@ -60,11 +60,11 @@ class TextAreaSkinListItemView extends TextAreaSkinVerticalElementView {
             int itemsY = 0;
 
             // skip the first item, it's the indexText nodeView
-            Iterator<TextAreaSkinNodeView> iterator = this.iterator();
+            Iterator<TextPaneSkinNodeView> iterator = this.iterator();
             iterator.next();
 
             for ( ; iterator.hasNext(); ) {
-                TextAreaSkinNodeView nodeView = iterator.next();
+                TextPaneSkinNodeView nodeView = iterator.next();
                 nodeView.setBreakWidth(breakWidth);
                 nodeView.validate();
 

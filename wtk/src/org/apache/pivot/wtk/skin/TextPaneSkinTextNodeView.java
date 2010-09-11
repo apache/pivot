@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
-import org.apache.pivot.wtk.TextArea;
+import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.text.TextNodeListener;
@@ -41,21 +41,21 @@ import org.apache.pivot.wtk.text.TextNodeListener;
 /**
  * Text node view.
  */
-class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeListener {
-    private final TextAreaSkin textAreaSkin;
+class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeListener {
+    private final TextPaneSkin textPaneSkin;
 
     private int start;
     private int length = 0;
     private GlyphVector glyphVector = null;
-    private TextAreaSkinTextNodeView next = null;
+    private TextPaneSkinTextNodeView next = null;
 
-    public TextAreaSkinTextNodeView(TextAreaSkin textAreaSkin, TextNode textNode) {
-        this(textAreaSkin, textNode, 0);
+    public TextPaneSkinTextNodeView(TextPaneSkin textPaneSkin, TextNode textNode) {
+        this(textPaneSkin, textNode, 0);
     }
 
-    public TextAreaSkinTextNodeView(TextAreaSkin textAreaSkin, TextNode textNode, int start) {
+    public TextPaneSkinTextNodeView(TextPaneSkin textPaneSkin, TextNode textNode, int start) {
         super(textNode);
-        this.textAreaSkin = textAreaSkin;
+        this.textPaneSkin = textPaneSkin;
         this.start = start;
     }
 
@@ -112,7 +112,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
             }
 
             int end;
-            if (textAreaSkin.getWrapText()) {
+            if (textPaneSkin.getWrapText()) {
                 if (textNode.getCharacterCount() == 0) {
                     end = start;
                 } else {
@@ -138,7 +138,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
 
             if (end < ci.getEndIndex()) {
                 length = end - start;
-                next = new TextAreaSkinTextNodeView(textAreaSkin, textNode, end);
+                next = new TextPaneSkinTextNodeView(textPaneSkin, textNode, end);
             } else {
                 length = ci.getEndIndex() - start;
             }
@@ -158,7 +158,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
     @Override
     public void paint(Graphics2D graphics) {
         if (glyphVector != null) {
-            TextArea textArea = (TextArea)textAreaSkin.getComponent();
+            TextPane textPane = (TextPane)textPaneSkin.getComponent();
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = getEffectiveFont().getLineMetrics("", fontRenderContext);
@@ -170,8 +170,8 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
 
             graphics.setFont(getEffectiveFont());
 
-            int selectionStart = textArea.getSelectionStart();
-            int selectionLength = textArea.getSelectionLength();
+            int selectionStart = textPane.getSelectionStart();
+            int selectionLength = textPane.getSelectionLength();
             Span selectionRange = new Span(selectionStart, selectionStart + selectionLength - 1);
 
             int documentOffset = getDocumentOffset();
@@ -220,15 +220,15 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
 
                 // Paint the selection
                 Color selectionColor;
-                if (textArea.isFocused()) {
-                    selectionColor = textAreaSkin.getSelectionColor();
+                if (textPane.isFocused()) {
+                    selectionColor = textPaneSkin.getSelectionColor();
                 } else {
-                    selectionColor = textAreaSkin.getInactiveSelectionColor();
+                    selectionColor = textPaneSkin.getInactiveSelectionColor();
                 }
 
                 Graphics2D selectedTextGraphics = (Graphics2D)graphics.create();
-                selectedTextGraphics.setColor(textArea.isFocused() &&
-                    textArea.isEditable() ? selectionColor : textAreaSkin.getInactiveSelectionColor());
+                selectedTextGraphics.setColor(textPane.isFocused() &&
+                    textPane.isEditable() ? selectionColor : textPaneSkin.getInactiveSelectionColor());
                 selectedTextGraphics.clip(selection.getBounds());
                 selectedTextGraphics.drawGlyphVector(glyphVector, 0, ascent);
                 if (underline) {
@@ -263,7 +263,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
     }
 
     @Override
-    public TextAreaSkinNodeView getNext() {
+    public TextPaneSkinNodeView getNext() {
         return next;
     }
 
@@ -312,7 +312,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
         }
         // if we find nothing, use the default font
         if (element == null) {
-            font = textAreaSkin.getFont();
+            font = textPaneSkin.getFont();
         }
         return font;
     }
@@ -331,7 +331,7 @@ class TextAreaSkinTextNodeView extends TextAreaSkinNodeView implements TextNodeL
         }
         // if we find nothing, use the default color
         if (element == null) {
-            foregroundColor = textAreaSkin.getColor();
+            foregroundColor = textPaneSkin.getColor();
         }
         return foregroundColor;
     }

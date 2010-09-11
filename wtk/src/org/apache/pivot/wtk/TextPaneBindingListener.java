@@ -19,45 +19,45 @@ package org.apache.pivot.wtk;
 /**
  * Text area binding listener interface.
  */
-public interface TextAreaBindingListener {
+public interface TextPaneBindingListener {
     /**
      * Text area binding listener adapter.
      */
-    public static class Adapter implements TextAreaBindingListener {
+    public static class Adapter implements TextPaneBindingListener {
         @Override
-        public void textKeyChanged(TextArea textArea, String previousTextKey) {
+        public void textKeyChanged(TextPane textPane, String previousTextKey) {
         }
 
         @Override
-        public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
+        public void textBindTypeChanged(TextPane textPane, BindType previousTextBindType) {
         }
 
         @Override
-        public void textBindMappingChanged(TextArea textArea, TextArea.TextBindMapping previousTextBindMapping) {
+        public void textBindMappingChanged(TextPane textPane, TextPane.TextBindMapping previousTextBindMapping) {
         }
     }
 
     /**
-     * Called when a text area's text key has changed.
+     * Called when a text pane's text key has changed.
      *
-     * @param textArea
+     * @param textPane
      * @param previousTextKey
      */
-    public void textKeyChanged(TextArea textArea, String previousTextKey);
+    public void textKeyChanged(TextPane textPane, String previousTextKey);
 
     /**
-     * Called when a text area's text bind type has changed.
+     * Called when a text pane's text bind type has changed.
      *
-     * @param textArea
+     * @param textPane
      * @param previousTextBindType
      */
-    public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType);
+    public void textBindTypeChanged(TextPane textPane, BindType previousTextBindType);
 
     /**
-     * Called when a text area's text bind mapping has changed.
+     * Called when a text pane's text bind mapping has changed.
      *
-     * @param textArea
+     * @param textPane
      * @param previousTextBindMapping
      */
-    public void textBindMappingChanged(TextArea textArea, TextArea.TextBindMapping previousTextBindMapping);
+    public void textBindMappingChanged(TextPane textPane, TextPane.TextBindMapping previousTextBindMapping);
 }

@@ -25,12 +25,12 @@ import org.apache.pivot.wtk.text.Node;
 /**
  * Some of the classes in the text hierarchy are very similar in layout ie. they lay their children out vertically. This class groups that functionality.
  */
-abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
-    protected final TextAreaSkin textAreaSkin;
+abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
+    protected final TextPaneSkin textPaneSkin;
 
-    public TextAreaSkinVerticalElementView(TextAreaSkin textAreaSkin, Element element) {
+    public TextPaneSkinVerticalElementView(TextPaneSkin textPaneSkin, Element element) {
         super(element);
-        this.textAreaSkin = textAreaSkin;
+        this.textPaneSkin = textPaneSkin;
     }
 
     @Override
@@ -40,7 +40,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
         // Attach child node views
         Element element = (Element)getNode();
         for (Node node : element) {
-            add(textAreaSkin.createNodeView(node));
+            add(textPaneSkin.createNodeView(node));
         }
     }
 
@@ -62,7 +62,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
         int width = 0;
         int height = 0;
 
-        for (TextAreaSkinNodeView nodeView : this) {
+        for (TextPaneSkinNodeView nodeView : this) {
             nodeView.setBreakWidth(breakWidth);
             nodeView.validate();
 
@@ -77,13 +77,13 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
 
     @Override
     protected void setSkinLocation(int skinX, int skinY) {
-        for (TextAreaSkinNodeView nodeView : this) {
+        for (TextPaneSkinNodeView nodeView : this) {
             nodeView.setSkinLocation(skinX, skinY + nodeView.getY());
         }
     }
 
     @Override
-    public TextAreaSkinNodeView getNext() {
+    public TextPaneSkinNodeView getNext() {
         return null;
     }
 
@@ -92,7 +92,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
         int offset = -1;
 
         for (int i = 0, n = getLength(); i < n; i++) {
-            TextAreaSkinNodeView nodeView = get(i);
+            TextPaneSkinNodeView nodeView = get(i);
             Bounds nodeViewBounds = nodeView.getBounds();
 
             if (y >= nodeViewBounds.y
@@ -113,7 +113,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
         if (getLength() > 0) {
             if (from == -1) {
                 int i = (direction == FocusTraversalDirection.FORWARD) ? 0 : getLength() - 1;
-                TextAreaSkinNodeView nodeView = get(i);
+                TextPaneSkinNodeView nodeView = get(i);
                 offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction);
 
                 if (offset != -1) {
@@ -125,7 +125,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
                 int i = 0;
 
                 while (i < n) {
-                    TextAreaSkinNodeView nodeView = get(i);
+                    TextPaneSkinNodeView nodeView = get(i);
                     int nodeViewOffset = nodeView.getOffset();
                     int characterCount = nodeView.getCharacterCount();
 
@@ -138,7 +138,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
                 }
 
                 if (i < n) {
-                    TextAreaSkinNodeView nodeView = get(i);
+                    TextPaneSkinNodeView nodeView = get(i);
                     offset = nodeView.getNextInsertionPoint(x - nodeView.getX(),
                         from - nodeView.getOffset(), direction);
 
@@ -169,7 +169,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
     public int getRowAt(int offset) {
         int rowIndex = 0;
 
-        for (TextAreaSkinNodeView nodeView : this) {
+        for (TextPaneSkinNodeView nodeView : this) {
             int nodeViewOffset = nodeView.getOffset();
             int characterCount = nodeView.getCharacterCount();
 
@@ -189,7 +189,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
     public int getRowCount() {
         int rowCount = 0;
 
-        for (TextAreaSkinNodeView nodeView : this) {
+        for (TextPaneSkinNodeView nodeView : this) {
             rowCount += nodeView.getRowCount();
         }
 
@@ -200,7 +200,7 @@ abstract class TextAreaSkinVerticalElementView extends TextAreaSkinElementView {
     public void nodeInserted(Element element, int index) {
         super.nodeInserted(element, index);
 
-        insert(textAreaSkin.createNodeView(element.get(index)), index);
+        insert(textPaneSkin.createNodeView(element.get(index)), index);
     }
 
     @Override

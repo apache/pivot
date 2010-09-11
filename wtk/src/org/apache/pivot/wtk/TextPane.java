@@ -44,9 +44,9 @@ import org.apache.pivot.wtk.text.TextNode;
  * formatted) text.
  */
 @DefaultProperty("document")
-public class TextArea extends Container {
+public class TextPane extends Container {
     /**
-     * Text area skin interface. Text area skins are required to implement
+     * Text pane skin interface. Text pane skins are required to implement
      * this.
      */
     public interface Skin {
@@ -124,71 +124,71 @@ public class TextArea extends Container {
         public Object valueOf(String text);
     }
 
-    private static class TextAreaListenerList extends ListenerList<TextAreaListener>
-        implements TextAreaListener {
+    private static class TextPaneListenerList extends ListenerList<TextPaneListener>
+        implements TextPaneListener {
         @Override
-        public void documentChanged(TextArea textArea, Document previousText) {
-            for (TextAreaListener listener : this) {
-                listener.documentChanged(textArea, previousText);
+        public void documentChanged(TextPane textPane, Document previousText) {
+            for (TextPaneListener listener : this) {
+                listener.documentChanged(textPane, previousText);
             }
         }
 
         @Override
-        public void editableChanged(TextArea textArea) {
-            for (TextAreaListener listener : this) {
-                listener.editableChanged(textArea);
-            }
-        }
-    }
-
-    private static class TextAreaCharacterListenerList extends ListenerList<TextAreaCharacterListener>
-        implements TextAreaCharacterListener {
-        @Override
-        public void charactersInserted(TextArea textArea, int index, int count) {
-            for (TextAreaCharacterListener listener : this) {
-                listener.charactersInserted(textArea, index, count);
-            }
-        }
-
-        @Override
-        public void charactersRemoved(TextArea textArea, int index, int count) {
-            for (TextAreaCharacterListener listener : this) {
-                listener.charactersRemoved(textArea, index, count);
+        public void editableChanged(TextPane textPane) {
+            for (TextPaneListener listener : this) {
+                listener.editableChanged(textPane);
             }
         }
     }
 
-    private static class TextAreaSelectionListenerList extends ListenerList<TextAreaSelectionListener>
-        implements TextAreaSelectionListener {
+    private static class TextPaneCharacterListenerList extends ListenerList<TextPaneCharacterListener>
+        implements TextPaneCharacterListener {
         @Override
-        public void selectionChanged(TextArea textArea,
+        public void charactersInserted(TextPane textPane, int index, int count) {
+            for (TextPaneCharacterListener listener : this) {
+                listener.charactersInserted(textPane, index, count);
+            }
+        }
+
+        @Override
+        public void charactersRemoved(TextPane textPane, int index, int count) {
+            for (TextPaneCharacterListener listener : this) {
+                listener.charactersRemoved(textPane, index, count);
+            }
+        }
+    }
+
+    private static class TextPaneSelectionListenerList extends ListenerList<TextPaneSelectionListener>
+        implements TextPaneSelectionListener {
+        @Override
+        public void selectionChanged(TextPane textPane,
             int previousSelectionStart, int previousSelectionLength) {
-            for (TextAreaSelectionListener listener : this) {
-                listener.selectionChanged(textArea, previousSelectionStart, previousSelectionLength);
+            for (TextPaneSelectionListener listener : this) {
+                listener.selectionChanged(textPane, previousSelectionStart, previousSelectionLength);
             }
         }
     }
 
-    private static class TextAreaBindingListenerList extends ListenerList<TextAreaBindingListener>
-        implements TextAreaBindingListener {
+    private static class TextPaneBindingListenerList extends ListenerList<TextPaneBindingListener>
+        implements TextPaneBindingListener {
         @Override
-        public void textKeyChanged(TextArea textArea, String previousTextKey) {
-            for (TextAreaBindingListener listener : this) {
-                listener.textKeyChanged(textArea, previousTextKey);
+        public void textKeyChanged(TextPane textPane, String previousTextKey) {
+            for (TextPaneBindingListener listener : this) {
+                listener.textKeyChanged(textPane, previousTextKey);
             }
         }
 
         @Override
-        public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
-            for (TextAreaBindingListener listener : this) {
-                listener.textBindTypeChanged(textArea, previousTextBindType);
+        public void textBindTypeChanged(TextPane textPane, BindType previousTextBindType) {
+            for (TextPaneBindingListener listener : this) {
+                listener.textBindTypeChanged(textPane, previousTextBindType);
             }
         }
 
         @Override
-        public void textBindMappingChanged(TextArea textArea, TextBindMapping previousTextBindMapping) {
-            for (TextAreaBindingListener listener : this) {
-                listener.textBindMappingChanged(textArea, previousTextBindMapping);
+        public void textBindMappingChanged(TextPane textPane, TextBindMapping previousTextBindMapping) {
+            for (TextPaneBindingListener listener : this) {
+                listener.textBindMappingChanged(textPane, previousTextBindMapping);
             }
         }
     }
@@ -208,8 +208,8 @@ public class TextArea extends Container {
         @Override
         public void componentChanged(ComponentNode componentNode, Component previousComponent) {
             // @TODO need to insert this at the correct index
-            TextArea.super.remove(previousComponent);
-            TextArea.super.add(componentNode.getComponent());
+            TextPane.super.remove(previousComponent);
+            TextPane.super.add(componentNode.getComponent());
         }
     };
 
@@ -232,7 +232,7 @@ public class TextArea extends Container {
                 }
             }
 
-            textAreaCharacterListeners.charactersInserted(TextArea.this, offset, characterCount);
+            textPaneCharacterListeners.charactersInserted(TextPane.this, offset, characterCount);
         }
 
         public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
@@ -241,7 +241,7 @@ public class TextArea extends Container {
                 if (descendant instanceof ComponentNode) {
                     ComponentNode componentNode = (ComponentNode) descendant;
                     componentNode.getComponentNodeListeners().remove(componentNodeListener);
-                    TextArea.super.remove(componentNode.getComponent());
+                    TextPane.super.remove(componentNode.getComponent());
                 }
             }
         }
@@ -252,7 +252,7 @@ public class TextArea extends Container {
             if (descendant instanceof ComponentNode) {
                 ComponentNode componentNode = (ComponentNode) descendant;
                 componentNode.getComponentNodeListeners().add(componentNodeListener);
-                TextArea.super.add(componentNode.getComponent());
+                TextPane.super.add(componentNode.getComponent());
             }
         }
 
@@ -274,39 +274,39 @@ public class TextArea extends Container {
                 }
             }
 
-            textAreaCharacterListeners.charactersRemoved(TextArea.this, offset, characterCount);
+            textPaneCharacterListeners.charactersRemoved(TextPane.this, offset, characterCount);
         }
     };
 
-    private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
-    private TextAreaCharacterListenerList textAreaCharacterListeners = new TextAreaCharacterListenerList();
-    private TextAreaSelectionListenerList textAreaSelectionListeners = new TextAreaSelectionListenerList();
-    private TextAreaBindingListenerList textAreaBindingListeners = new TextAreaBindingListenerList();
+    private TextPaneListenerList textPaneListeners = new TextPaneListenerList();
+    private TextPaneCharacterListenerList textPaneCharacterListeners = new TextPaneCharacterListenerList();
+    private TextPaneSelectionListenerList textPaneSelectionListeners = new TextPaneSelectionListenerList();
+    private TextPaneBindingListenerList textPaneBindingListeners = new TextPaneBindingListenerList();
 
-    public TextArea() {
-        installSkin(TextArea.class);
+    public TextPane() {
+        installSkin(TextPane.class);
     }
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof TextArea.Skin)) {
+        if (!(skin instanceof TextPane.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
-                + TextArea.Skin.class.getName());
+                + TextPane.Skin.class.getName());
         }
 
         super.setSkin(skin);
     }
 
     /**
-     * Returns the document that backs the text area.
+     * Returns the document that backs the text pane.
      */
     public Document getDocument() {
         return document;
     }
 
     /**
-     * Sets the document that backs the text area.
-     * Documents are not shareable across multiple TextAreas;
+     * Sets the document that backs the text pane.
+     * Documents are not shareable across multiple TextPanes;
      * because a Document may contain Components, and a Component may only be in one Container at a time.
      *
      * @param document
@@ -330,7 +330,7 @@ public class TextArea extends Container {
             selectionStart = 0;
             selectionLength = 0;
 
-            textAreaListeners.documentChanged(this, previousDocument);
+            textPaneListeners.documentChanged(this, previousDocument);
         }
     }
 
@@ -772,7 +772,7 @@ public class TextArea extends Container {
             this.selectionStart = selectionStart;
             this.selectionLength = selectionLength;
 
-            textAreaSelectionListeners.selectionChanged(this,
+            textPaneSelectionListeners.selectionChanged(this,
                 previousSelectionStart, previousSelectionLength);
         }
     }
@@ -839,14 +839,14 @@ public class TextArea extends Container {
     }
 
     /**
-     * Returns the text area's editable flag.
+     * Returns the text pane's editable flag.
      */
     public boolean isEditable() {
         return editable;
     }
 
     /**
-     * Sets the text area's editable flag.
+     * Sets the text pane's editable flag.
      *
      * @param editable
      */
@@ -860,12 +860,12 @@ public class TextArea extends Container {
 
             this.editable = editable;
 
-            textAreaListeners.editableChanged(this);
+            textPaneListeners.editableChanged(this);
         }
     }
 
     /**
-     * Returns the text area's text key.
+     * Returns the text pane's text key.
      *
      * @return
      * The text key, or <tt>null</tt> if no text key is set.
@@ -875,7 +875,7 @@ public class TextArea extends Container {
     }
 
     /**
-     * Sets the text area's text key.
+     * Sets the text pane's text key.
      *
      * @param textKey
      * The text key, or <tt>null</tt> to clear the binding.
@@ -885,7 +885,7 @@ public class TextArea extends Container {
 
         if (previousTextKey != textKey) {
             this.textKey = textKey;
-            textAreaBindingListeners.textKeyChanged(this, previousTextKey);
+            textPaneBindingListeners.textKeyChanged(this, previousTextKey);
         }
     }
 
@@ -902,7 +902,7 @@ public class TextArea extends Container {
 
         if (previousTextBindType != textBindType) {
             this.textBindType = textBindType;
-            textAreaBindingListeners.textBindTypeChanged(this, previousTextBindType);
+            textPaneBindingListeners.textBindTypeChanged(this, previousTextBindType);
         }
     }
 
@@ -923,7 +923,7 @@ public class TextArea extends Container {
 
         if (previousTextBindMapping != textBindMapping) {
             this.textBindMapping = textBindMapping;
-            textAreaBindingListeners.textBindMappingChanged(this, previousTextBindMapping);
+            textPaneBindingListeners.textBindMappingChanged(this, previousTextBindMapping);
         }
     }
 
@@ -962,43 +962,43 @@ public class TextArea extends Container {
     }
 
     public int getInsertionPoint(int x, int y) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
-        return textAreaSkin.getInsertionPoint(x, y);
+        TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
+        return textPaneSkin.getInsertionPoint(x, y);
     }
 
     public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
-        return textAreaSkin.getNextInsertionPoint(x, from, direction);
+        TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
+        return textPaneSkin.getNextInsertionPoint(x, from, direction);
     }
 
     public int getRowAt(int offset) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
-        return textAreaSkin.getRowAt(offset);
+        TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
+        return textPaneSkin.getRowAt(offset);
     }
 
     public int getRowCount() {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
-        return textAreaSkin.getRowCount();
+        TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
+        return textPaneSkin.getRowCount();
     }
 
     public Bounds getCharacterBounds(int offset) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
-        return textAreaSkin.getCharacterBounds(offset);
+        TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
+        return textPaneSkin.getCharacterBounds(offset);
     }
 
-    public ListenerList<TextAreaListener> getTextAreaListeners() {
-        return textAreaListeners;
+    public ListenerList<TextPaneListener> getTextPaneListeners() {
+        return textPaneListeners;
     }
 
-    public ListenerList<TextAreaCharacterListener> getTextAreaCharacterListeners() {
-        return textAreaCharacterListeners;
+    public ListenerList<TextPaneCharacterListener> getTextPaneCharacterListeners() {
+        return textPaneCharacterListeners;
     }
 
-    public ListenerList<TextAreaSelectionListener> getTextAreaSelectionListeners() {
-        return textAreaSelectionListeners;
+    public ListenerList<TextPaneSelectionListener> getTextPaneSelectionListeners() {
+        return textPaneSelectionListeners;
     }
 
-    public ListenerList<TextAreaBindingListener> getTextAreaBindingListeners() {
-        return textAreaBindingListeners;
+    public ListenerList<TextPaneBindingListener> getTextPaneBindingListeners() {
+        return textPaneBindingListeners;
     }
 }

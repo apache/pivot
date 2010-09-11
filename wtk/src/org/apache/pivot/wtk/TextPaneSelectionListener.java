@@ -17,16 +17,16 @@
 package org.apache.pivot.wtk;
 
 /**
- * Text area selection listener interface.
+ * Text pane selection listener interface.
  */
-public interface TextAreaSelectionListener {
+public interface TextPaneSelectionListener {
     /**
-     * Called when a text area's selection state has changed.
+     * Called when a text pane's selection state has changed.
      *
-     * @param textArea
+     * @param textPane
      * @param previousSelectionStart
      * @param previousSelectionLength
      */
-    public void selectionChanged(TextArea textArea, int previousSelectionStart,
+    public void selectionChanged(TextPane textPane, int previousSelectionStart,
         int previousSelectionLength);
 }

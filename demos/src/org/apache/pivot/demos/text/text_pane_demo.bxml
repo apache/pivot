@@ -59,9 +59,9 @@ limitations under the License.
                     <ScrollPane horizontalScrollBarPolicy="fill"
                         verticalScrollBarPolicy="fill_to_capacity"
                         preferredHeight="240">
-                        <TextArea bxml:id="textarea" styles="{margin:10, wrapText:false}">
+                        <TextPane bxml:id="textPane" styles="{margin:10, wrapText:false}">
                            <bxml:include src="document.bxml"/>
-                        </TextArea>
+                        </TextPane>
                     </ScrollPane>
                 </Border>
             </TablePane.Row>

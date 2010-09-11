@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.text.ComponentNode;
 import org.apache.pivot.wtk.text.ComponentNodeListener;
 
-class TextAreaSkinComponentNodeView extends TextAreaSkinNodeView implements ComponentNodeListener {
+class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements ComponentNodeListener {
 
     private final ComponentListener myComponentListener = new ComponentListener.Adapter() {
         @Override
@@ -34,7 +34,7 @@ class TextAreaSkinComponentNodeView extends TextAreaSkinNodeView implements Comp
         }
     };
 
-    public TextAreaSkinComponentNodeView(ComponentNode componentNode) {
+    public TextPaneSkinComponentNodeView(ComponentNode componentNode) {
         super(componentNode);
     }
 
@@ -96,7 +96,7 @@ class TextAreaSkinComponentNodeView extends TextAreaSkinNodeView implements Comp
     }
 
     @Override
-    public TextAreaSkinNodeView getNext() {
+    public TextPaneSkinNodeView getNext() {
         return null;
     }
 

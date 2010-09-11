@@ -39,7 +39,7 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Manifest;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.TableView;
-import org.apache.pivot.wtk.TextArea;
+import org.apache.pivot.wtk.TextArea2;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
@@ -60,7 +60,7 @@ public class XMLViewer implements Application {
     @BXML private CardPane propertiesCardPane = null;
     @BXML private TableView namespacesTableView = null;
     @BXML private TableView attributesTableView = null;
-    @BXML private TextArea textArea = null;
+    @BXML private TextArea2 textArea = null;
 
     private OverlayDecorator promptDecorator = new OverlayDecorator();
 

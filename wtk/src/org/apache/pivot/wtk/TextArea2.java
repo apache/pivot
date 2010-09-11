@@ -551,7 +551,7 @@ public class TextArea2 extends Component {
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
         if (!(skin instanceof TextArea2.Skin)) {
             throw new IllegalArgumentException("Skin class must implement "
-                + TextArea.Skin.class.getName());
+                + TextArea2.Skin.class.getName());
         }
 
         super.setSkin(skin);

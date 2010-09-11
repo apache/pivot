@@ -16,37 +16,38 @@
  */
 package org.apache.pivot.wtk;
 
-import org.apache.pivot.wtk.text.Document;
-
 /**
- * Text area listener interface.
+ * Text pane character listener interface.
  */
-public interface TextAreaListener {
+public interface TextPaneCharacterListener {
     /**
-     * Text area listener adapter.
+     * Text pane character listener adapter.
      */
-    public static class Adapter implements TextAreaListener {
+    public static class Adapter implements TextPaneCharacterListener {
         @Override
-        public void documentChanged(TextArea textArea, Document previousDocument) {
+        public void charactersInserted(TextPane textPane, int index, int count) {
         }
 
         @Override
-        public void editableChanged(TextArea textArea) {
+        public void charactersRemoved(TextPane textPane, int index, int count) {
         }
     }
 
     /**
-     * Called when a text area's document has changed.
+     * Called when characters have been inserted into a text pane.
      *
-     * @param textArea
-     * @param previousDocument
+     * @param textPane
+     * @param index
+     * @param count
      */
-    public void documentChanged(TextArea textArea, Document previousDocument);
+    public void charactersInserted(TextPane textPane, int index, int count);
 
     /**
-     * Called when a text area's editable state has changed.
+     * Called when characters have been removed from a text pane.
      *
-     * @param textArea
+     * @param textPane
+     * @param index
+     * @param count
      */
-    public void editableChanged(TextArea textArea);
+    public void charactersRemoved(TextPane textPane, int index, int count);
 }

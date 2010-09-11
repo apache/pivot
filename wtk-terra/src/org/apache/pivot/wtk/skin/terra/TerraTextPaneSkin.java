@@ -17,13 +17,13 @@
 package org.apache.pivot.wtk.skin.terra;
 
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.skin.TextAreaSkin;
+import org.apache.pivot.wtk.skin.TextPaneSkin;
 
 /**
  * Terra text area skin.
  */
-public class TerraTextAreaSkin extends TextAreaSkin {
-    public TerraTextAreaSkin() {
+public class TerraTextPaneSkin extends TextPaneSkin {
+    public TerraTextPaneSkin() {
         setColor(1);
         setInactiveColor(7);
         setSelectionColor(4);

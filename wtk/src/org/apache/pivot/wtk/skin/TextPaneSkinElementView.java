@@ -33,11 +33,11 @@ import org.apache.pivot.wtk.text.Node;
 /**
  * Abstract base class for element views.
  */
-abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
-    implements Sequence<TextAreaSkinNodeView>, Iterable<TextAreaSkinNodeView>, ElementListener {
-    private ArrayList<TextAreaSkinNodeView> nodeViews = new ArrayList<TextAreaSkinNodeView>();
+abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
+    implements Sequence<TextPaneSkinNodeView>, Iterable<TextPaneSkinNodeView>, ElementListener {
+    private ArrayList<TextPaneSkinNodeView> nodeViews = new ArrayList<TextPaneSkinNodeView>();
 
-    public TextAreaSkinElementView(Element element) {
+    public TextPaneSkinElementView(Element element) {
         super(element);
     }
 
@@ -59,7 +59,7 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
         element.getElementListeners().remove(this);
 
         // Detach child node views
-        for (TextAreaSkinNodeView nodeView : this) {
+        for (TextPaneSkinNodeView nodeView : this) {
             nodeView.detach();
         }
 
@@ -67,7 +67,7 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
     }
 
     @Override
-    public int add(TextAreaSkinNodeView nodeView) {
+    public int add(TextPaneSkinNodeView nodeView) {
         int index = getLength();
         insert(nodeView, index);
 
@@ -75,7 +75,7 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
     }
 
     @Override
-    public void insert(TextAreaSkinNodeView nodeView, int index) {
+    public void insert(TextPaneSkinNodeView nodeView, int index) {
         nodeView.setParent(this);
         nodeView.attach();
 
@@ -83,12 +83,12 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
     }
 
     @Override
-    public TextAreaSkinNodeView update(int index, TextAreaSkinNodeView nodeView) {
+    public TextPaneSkinNodeView update(int index, TextPaneSkinNodeView nodeView) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int remove(TextAreaSkinNodeView nodeView) {
+    public int remove(TextPaneSkinNodeView nodeView) {
         int index = indexOf(nodeView);
         if (index != -1) {
             remove(index, 1);
@@ -98,11 +98,11 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
     }
 
     @Override
-    public Sequence<TextAreaSkinNodeView> remove(int index, int count) {
-        Sequence<TextAreaSkinNodeView> removed = nodeViews.remove(index, count);
+    public Sequence<TextPaneSkinNodeView> remove(int index, int count) {
+        Sequence<TextPaneSkinNodeView> removed = nodeViews.remove(index, count);
 
         for (int i = 0, n = removed.getLength(); i < n; i++) {
-            TextAreaSkinNodeView nodeView = removed.get(i);
+            TextPaneSkinNodeView nodeView = removed.get(i);
             nodeView.setParent(null);
             nodeView.detach();
         }
@@ -111,12 +111,12 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
     }
 
     @Override
-    public TextAreaSkinNodeView get(int index) {
+    public TextPaneSkinNodeView get(int index) {
         return nodeViews.get(index);
     }
 
     @Override
-    public int indexOf(TextAreaSkinNodeView nodeView) {
+    public int indexOf(TextPaneSkinNodeView nodeView) {
         return nodeViews.indexOf(nodeView);
     }
 
@@ -134,7 +134,7 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
             paintBounds = paintBounds.intersect(new Bounds(clipBounds));
         }
 
-        for (TextAreaSkinNodeView nodeView : nodeViews) {
+        for (TextPaneSkinNodeView nodeView : nodeViews) {
             Bounds nodeViewBounds = nodeView.getBounds();
 
             // Only paint node views that intersect the current clip rectangle
@@ -184,7 +184,7 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
         Bounds characterBounds = null;
 
         for (int i = 0, n = nodeViews.getLength(); i < n; i++) {
-            TextAreaSkinNodeView nodeView = nodeViews.get(i);
+            TextPaneSkinNodeView nodeView = nodeViews.get(i);
             int nodeViewOffset = nodeView.getOffset();
             int characterCount = nodeView.getCharacterCount();
 
@@ -243,7 +243,7 @@ abstract class TextAreaSkinElementView extends TextAreaSkinNodeView
     }
 
     @Override
-    public Iterator<TextAreaSkinNodeView> iterator() {
-        return new ImmutableIterator<TextAreaSkinNodeView>(nodeViews.iterator());
+    public Iterator<TextPaneSkinNodeView> iterator() {
+        return new ImmutableIterator<TextPaneSkinNodeView>(nodeViews.iterator());
     }
 }

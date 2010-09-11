@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.tutorials.explorer;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
@@ -44,12 +42,10 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 import org.apache.pivot.wtk.SplitPane;
-import org.apache.pivot.wtk.TextArea;
+import org.apache.pivot.wtk.TextArea2;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.text.Document;
-import org.apache.pivot.wtk.text.PlainTextSerializer;
 
 public class ComponentExplorerWindow extends Window implements Bindable {
     private String classProperty;
@@ -58,7 +54,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
     private TreeView treeView = null;
     private ScrollPane contentScrollPane = null;
     private Border contentPane = null;
-    private TextArea sourceTextArea = null;
+    private TextArea2 sourceTextArea = null;
     private ComponentPropertyInspector componentPropertyInspector = null;
     private ComponentStyleInspector componentStyleInspector = null;
     private EventLogger eventLogger = null;
@@ -84,7 +80,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
         treeView = (TreeView)namespace.get("treeView");
         contentScrollPane = (ScrollPane)namespace.get("contentScrollPane");
         contentPane = (Border)namespace.get("contentPane");
-        sourceTextArea = (TextArea)namespace.get("sourceTextArea");
+        sourceTextArea = (TextArea2)namespace.get("sourceTextArea");
         componentPropertyInspector = (ComponentPropertyInspector)namespace.get("componentPropertyInspector");
         componentStyleInspector = (ComponentStyleInspector)namespace.get("componentStyleInspector");
         eventLogger = (EventLogger)namespace.get("eventLogger");
@@ -113,24 +109,11 @@ public class ComponentExplorerWindow extends Window implements Bindable {
                     ComponentNode componentNode = (ComponentNode)node;
                     URL url = componentNode.getSrc();
 
-                    Document document = null;
-
                     try {
-                        PlainTextSerializer plainTextSerializer = new PlainTextSerializer("UTF-8");
-                        InputStream inputStream = new BufferedInputStream(url.openStream());
-
-                        try {
-                            document = plainTextSerializer.readObject(inputStream);
-                        } finally {
-                            inputStream.close();
-                        }
+                        sourceTextArea.setText(url);
                     } catch (IOException exception) {
                         throw new RuntimeException(exception);
-                    } catch (SerializationException exception) {
-                        throw new RuntimeException(exception);
                     }
-
-                    sourceTextArea.setDocument(document);
 
                     BXMLSerializer bxmlSerializer = new BXMLSerializer();
                     try {

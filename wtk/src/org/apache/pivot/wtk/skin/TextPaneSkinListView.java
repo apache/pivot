@@ -2,12 +2,12 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.wtk.text.List;
 
-class TextAreaSkinListView extends TextAreaSkinVerticalElementView {
+class TextPaneSkinListView extends TextPaneSkinVerticalElementView {
 
     protected int maxIndexTextWidth;
 
-    public TextAreaSkinListView(TextAreaSkin textAreaSkin, List list) {
-        super(textAreaSkin, list);
+    public TextPaneSkinListView(TextPaneSkin textPaneSkin, List list) {
+        super(textPaneSkin, list);
     }
 
     public int getMaxIndexTextWidth() {

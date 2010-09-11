@@ -25,8 +25,8 @@ import org.apache.pivot.wtk.media.ImageListener;
 import org.apache.pivot.wtk.text.ImageNode;
 import org.apache.pivot.wtk.text.ImageNodeListener;
 
-class TextAreaSkinImageNodeView extends TextAreaSkinNodeView implements ImageNodeListener, ImageListener {
-    public TextAreaSkinImageNodeView(ImageNode imageNode) {
+class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNodeListener, ImageListener {
+    public TextPaneSkinImageNodeView(ImageNode imageNode) {
         super(imageNode);
     }
 
@@ -82,7 +82,7 @@ class TextAreaSkinImageNodeView extends TextAreaSkinNodeView implements ImageNod
     }
 
     @Override
-    public TextAreaSkinNodeView getNext() {
+    public TextPaneSkinNodeView getNext() {
         return null;
     }
 

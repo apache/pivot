@@ -14,30 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tests.text;
+package org.apache.pivot.wtk.skin;
 
-import org.apache.pivot.wtk.text.ComponentNode;
+import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.text.Block;
+import org.apache.pivot.wtk.text.BlockListener;
 
-public class ComponentNodeAdapter extends NodeAdapter {
-    private String text;
+abstract class TextPaneSkinBlockView extends TextPaneSkinElementView implements
+    BlockListener {
 
-    public ComponentNodeAdapter(ComponentNode textNode) {
-        super(textNode);
-
-        update(textNode);
+    public TextPaneSkinBlockView(Block block) {
+        super(block);
     }
 
     @Override
-    public String getText() {
-        return text;
+    protected void attach() {
+        super.attach();
+
+        Block block = (Block)getNode();
+        block.getBlockListeners().add(this);
     }
 
-    private void update(ComponentNode textNode) {
-        text = ""+textNode.getComponent().getClass();
+    @Override
+    protected void detach() {
+        super.detach();
 
-        ElementAdapter parent = getParent();
-        if (parent != null) {
-            parent.update(parent.indexOf(ComponentNodeAdapter.this));
-        }
+        Block block = (Block)getNode();
+        block.getBlockListeners().remove(this);
+    }
+
+    @Override
+    public void horizontalAlignmentChanged(Block block, HorizontalAlignment previousHorizontalAlignment) {
+        invalidate();
     }
 }

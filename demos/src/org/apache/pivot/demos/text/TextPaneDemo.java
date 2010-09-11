@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.demos.richtexteditor;
+package org.apache.pivot.demos.text;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -48,7 +48,7 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
-import org.apache.pivot.wtk.TextArea;
+import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
@@ -60,12 +60,12 @@ import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.TextNode;
 
 /**
- * Demonstrates the use of the rich-text functionality in TextArea.
+ * Demonstrates the use of the rich-text functionality in TextPane.
  */
-public class RichTextEditorDemo implements Application {
+public class TextPaneDemo implements Application {
     private Window window = null;
     @BXML
-    private TextArea textarea = null;
+    private TextPane textPane = null;
     @BXML
     private PushButton openFileButton = null;
     @BXML
@@ -97,14 +97,14 @@ public class RichTextEditorDemo implements Application {
 
     private File loadedFile = null;
 
-    public RichTextEditorDemo() {
+    public TextPaneDemo() {
     }
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(RichTextEditorDemo.class, "richtexteditor.bxml");
-        bxmlSerializer.bind(this, RichTextEditorDemo.class);
+        window = (Window)bxmlSerializer.readObject(TextPaneDemo.class, "text_pane_demo.bxml");
+        bxmlSerializer.bind(this, TextPaneDemo.class);
 
         window.setTitle("Apache Pivot Rich Text Editor Demo");
 
@@ -165,7 +165,7 @@ public class RichTextEditorDemo implements Application {
                                     buf.append("\n");
                                 }
                                 reader.close();
-                                textarea.setText(buf.toString());
+                                textPane.setText(buf.toString());
                                 window.setTitle(loadedFile.getCanonicalPath());
                             } catch (IOException ex) {
                                 ex.printStackTrace();
@@ -195,12 +195,12 @@ public class RichTextEditorDemo implements Application {
                             File selectedFile = fileBrowserSheet.getSelectedFile();
 
                             try {
-                                String buf = textarea.getText();
+                                String buf = textPane.getText();
                                 FileWriter writer = new FileWriter(selectedFile);
                                 writer.write(buf);
                                 writer.close();
                                 loadedFile = selectedFile;
-                                textarea.setText(buf.toString());
+                                textPane.setText(buf.toString());
                                 window.setTitle(loadedFile.getCanonicalPath());
                             } catch (IOException ex) {
                                 ex.printStackTrace();
@@ -335,7 +335,7 @@ public class RichTextEditorDemo implements Application {
         wrapTextCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                textarea.getStyles().put("wrapText", wrapTextCheckbox.isSelected());
+                textPane.getStyles().put("wrapText", wrapTextCheckbox.isSelected());
             }
         });
 
@@ -361,7 +361,7 @@ public class RichTextEditorDemo implements Application {
         });
 
         window.open(display);
-        textarea.requestFocus();
+        textPane.requestFocus();
     }
 
     private interface StyleApplicator {
@@ -369,7 +369,7 @@ public class RichTextEditorDemo implements Application {
     }
 
     private void applyAlignmentStyle(HorizontalAlignment horizontalAlignment) {
-        Node node = textarea.getDocument().getDescendantAt(textarea.getSelectionStart());
+        Node node = textPane.getDocument().getDescendantAt(textPane.getSelectionStart());
         while (node != null && !(node instanceof Paragraph)) {
             node = node.getParent();
         }
@@ -382,7 +382,7 @@ public class RichTextEditorDemo implements Application {
     /** debugging tools */
     @SuppressWarnings("unused")
     private void dumpDocument() {
-        dumpDocumentNode(textarea.getDocument(), System.out, 0);
+        dumpDocumentNode(textPane.getDocument(), System.out, 0);
     }
 
     /** debugging tools */
@@ -418,11 +418,11 @@ public class RichTextEditorDemo implements Application {
     }
 
     private void applyStyleToSelection(StyleApplicator styleApplicator) {
-        org.apache.pivot.wtk.Span span = textarea.getSelection();
+        org.apache.pivot.wtk.Span span = textPane.getSelection();
         if (span == null) {
             return;
         }
-        applyStyle(textarea.getDocument(), span, styleApplicator);
+        applyStyle(textPane.getDocument(), span, styleApplicator);
     }
 
     private void applyStyle(Document document, org.apache.pivot.wtk.Span selectionSpan,
@@ -433,8 +433,8 @@ public class RichTextEditorDemo implements Application {
         List<Node> nodeList = new ArrayList<Node>();
         collectNodes(document, nodeList);
 
-        final int selectionStart = textarea.getSelectionStart();
-        final int selectionLength = textarea.getSelectionLength();
+        final int selectionStart = textPane.getSelectionStart();
+        final int selectionLength = textPane.getSelectionLength();
 
         for (Node node : nodeList) {
             if (node instanceof org.apache.pivot.wtk.text.Span) {
@@ -462,7 +462,7 @@ public class RichTextEditorDemo implements Application {
         }
 
         // maintain the selected range
-        textarea.setSelection(selectionStart, selectionLength);
+        textPane.setSelection(selectionStart, selectionLength);
     }
 
     private void applyStyleToTextNode(org.apache.pivot.wtk.Span selectionSpan,
@@ -616,6 +616,6 @@ public class RichTextEditorDemo implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(RichTextEditorDemo.class, args);
+        DesktopApplicationContext.main(TextPaneDemo.class, args);
     }
 }

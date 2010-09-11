@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.text.NumberedList;
 import org.apache.pivot.wtk.text.NumberedListListener;
 import org.apache.pivot.wtk.text.NumberedList.Style;
 
-class TextAreaSkinNumberedListView extends TextAreaSkinListView implements NumberedListListener {
+class TextPaneSkinNumberedListView extends TextPaneSkinListView implements NumberedListListener {
 
     private static class RomanValue {
         public final int integerVal;
@@ -68,8 +68,8 @@ class TextAreaSkinNumberedListView extends TextAreaSkinListView implements Numbe
         return (char)('A' + n - 1) + "";
     }
 
-    public TextAreaSkinNumberedListView(TextAreaSkin textAreaSkin, NumberedList numberedList) {
-        super(textAreaSkin, numberedList);
+    public TextPaneSkinNumberedListView(TextPaneSkin textPaneSkin, NumberedList numberedList) {
+        super(textPaneSkin, numberedList);
     }
 
     @Override
@@ -95,8 +95,8 @@ class TextAreaSkinNumberedListView extends TextAreaSkinListView implements Numbe
             NumberedList numberedList = (NumberedList)getNode();
 
             int index = 1;
-            for (TextAreaSkinNodeView nodeView : this) {
-                TextAreaSkinListItemView listItemView = (TextAreaSkinListItemView)nodeView;
+            for (TextPaneSkinNodeView nodeView : this) {
+                TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
 
                 switch (numberedList.getStyle()) {
                     case DECIMAL:
@@ -120,8 +120,8 @@ class TextAreaSkinNumberedListView extends TextAreaSkinListView implements Numbe
             }
 
             this.maxIndexTextWidth = 0;
-            for (TextAreaSkinNodeView nodeView : this) {
-                TextAreaSkinListItemView listItemView = (TextAreaSkinListItemView)nodeView;
+            for (TextPaneSkinNodeView nodeView : this) {
+                TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
                 this.maxIndexTextWidth = Math.max(this.maxIndexTextWidth,
                     listItemView.getIndexTextWidth());
             }

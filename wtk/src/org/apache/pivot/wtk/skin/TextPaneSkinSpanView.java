@@ -25,13 +25,13 @@ import org.apache.pivot.wtk.text.TextNode;
 /**
  * Span node view.
  */
-class TextAreaSkinSpanView extends TextAreaSkinElementView {
+class TextPaneSkinSpanView extends TextPaneSkinElementView {
 
-    private final TextAreaSkin textAreaSkin;
+    private final TextPaneSkin textPaneSkin;
 
-    public TextAreaSkinSpanView(TextAreaSkin textAreaSkin, org.apache.pivot.wtk.text.Span span) {
+    public TextPaneSkinSpanView(TextPaneSkin textPaneSkin, org.apache.pivot.wtk.text.Span span) {
         super(span);
-        this.textAreaSkin = textAreaSkin;
+        this.textPaneSkin = textPaneSkin;
     }
 
     @Override
@@ -58,11 +58,11 @@ class TextAreaSkinSpanView extends TextAreaSkinElementView {
             } else {
 
                 // create and attach child node views
-                add(new TextAreaSkinTextNodeView(textAreaSkin, (TextNode)span.get(0), 0));
+                add(new TextPaneSkinTextNodeView(textPaneSkin, (TextNode)span.get(0), 0));
 
                 int breakWidth = getBreakWidth();
 
-                TextAreaSkinNodeView nodeView = get(0);
+                TextPaneSkinNodeView nodeView = get(0);
                 nodeView.setBreakWidth(breakWidth);
                 nodeView.validate();
 
@@ -83,7 +83,7 @@ class TextAreaSkinSpanView extends TextAreaSkinElementView {
     }
 
     @Override
-    public TextAreaSkinNodeView getNext() {
+    public TextPaneSkinNodeView getNext() {
         if (getLength() == 0) {
             return null;
         } else {
@@ -129,7 +129,7 @@ class TextAreaSkinSpanView extends TextAreaSkinElementView {
 
     @Override
     protected void setSkinLocation(int skinX, int skinY) {
-        for (TextAreaSkinNodeView nodeView : this) {
+        for (TextPaneSkinNodeView nodeView : this) {
             nodeView.setSkinLocation(skinX, skinY + nodeView.getY());
         }
     }
@@ -139,7 +139,7 @@ class TextAreaSkinSpanView extends TextAreaSkinElementView {
         super.nodeInserted(element, index);
 
         org.apache.pivot.wtk.text.Span span = (org.apache.pivot.wtk.text.Span)getNode();
-        insert(textAreaSkin.createNodeView(span.get(index)), index);
+        insert(textPaneSkin.createNodeView(span.get(index)), index);
     }
 
     @Override
