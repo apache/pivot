@@ -1076,9 +1076,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
             } else if (keyCode == Keyboard.KeyCode.Z
                 && textArea.isEditable()) {
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    textArea.undo();
-                } else {
                     textArea.redo();
+                } else {
+                    textArea.undo();
                 }
 
                 consumed = true;

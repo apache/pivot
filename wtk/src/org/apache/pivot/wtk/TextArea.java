@@ -871,6 +871,7 @@ public class TextArea extends Component {
                 if ((characterCount + text.length()) > maximumLength) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
+                    removeText(selectionStart, selectionLength);
                     insertText(text, selectionStart);
                 }
             }

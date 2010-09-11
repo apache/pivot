@@ -1078,6 +1078,29 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 textInput.removeText(index, count);
                 consumed = true;
             }
+        } else if (keyCode == Keyboard.KeyCode.HOME
+            || (keyCode == Keyboard.KeyCode.LEFT
+                && Keyboard.isPressed(Keyboard.Modifier.META))) {
+            // Move the caret to the beginning of the text
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                textInput.setSelection(0, textInput.getSelectionStart());
+            } else {
+                textInput.setSelection(0, 0);
+            }
+
+            consumed = true;
+        } else if (keyCode == Keyboard.KeyCode.END
+            || (keyCode == Keyboard.KeyCode.RIGHT
+                && Keyboard.isPressed(Keyboard.Modifier.META))) {
+            // Move the caret to the end of the text
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                int selectionStart = textInput.getSelectionStart();
+                textInput.setSelection(selectionStart, textInput.getCharacterCount() - selectionStart);
+            } else {
+                textInput.setSelection(textInput.getCharacterCount(), 0);
+            }
+
+            consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
@@ -1165,53 +1188,38 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 scrollLeft = 0;
                 updateSelection();
             }
-        } else if (keyCode == Keyboard.KeyCode.HOME) {
-            // Move the caret to the beginning of the text
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                textInput.setSelection(0, textInput.getSelectionStart());
-            } else {
-                textInput.setSelection(0, 0);
-            }
+        } else if (Keyboard.isPressed(commandModifier)) {
+            if (keyCode == Keyboard.KeyCode.A) {
+                textInput.setSelection(0, textInput.getCharacterCount());
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.X) {
+                if (textInput.isPassword()) {
+                    Toolkit.getDefaultToolkit().beep();
+                } else {
+                    textInput.cut();
+                }
 
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.END) {
-            // Move the caret to the end of the text
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                int selectionStart = textInput.getSelectionStart();
-                textInput.setSelection(selectionStart, textInput.getCharacterCount()
-                    - selectionStart);
-            } else {
-                textInput.setSelection(textInput.getCharacterCount(), 0);
-            }
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.C) {
+                if (textInput.isPassword()) {
+                    Toolkit.getDefaultToolkit().beep();
+                } else {
+                    textInput.copy();
+                }
 
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.A
-            && Keyboard.isPressed(commandModifier)) {
-            // Select all
-            textInput.setSelection(0, textInput.getCharacterCount());
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.X
-            && Keyboard.isPressed(commandModifier)) {
-            if (textInput.isPassword()) {
-                Toolkit.getDefaultToolkit().beep();
-            } else {
-                textInput.cut();
-            }
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.V) {
+                textInput.paste();
+                consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.Z) {
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    textInput.redo();
+                } else {
+                    textInput.undo();
+                }
 
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.C
-            && Keyboard.isPressed(commandModifier)) {
-            if (textInput.isPassword()) {
-                Toolkit.getDefaultToolkit().beep();
-            } else {
-                textInput.copy();
+                consumed = true;
             }
-
-            consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.V
-            && Keyboard.isPressed(commandModifier)) {
-            textInput.paste();
-            consumed = true;
         } else {
             consumed = super.keyPressed(component, keyCode, keyLocation);
         }
