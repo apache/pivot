@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.TableView;
-import org.apache.pivot.wtk.TextArea2;
+import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowEditor;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
@@ -42,7 +42,7 @@ public class TableViewTest2 implements Application {
         tableViewRowEditor.setEditEffect(CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);
         tableView.setRowEditor(tableViewRowEditor);
 
-        TextArea2 textArea = new TextArea2();
+        TextArea textArea = new TextArea();
         textArea.setTextKey("value");
         tableViewRowEditor.getCellEditors().put("value", textArea);
 

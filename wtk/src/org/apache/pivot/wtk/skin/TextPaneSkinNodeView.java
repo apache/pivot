@@ -19,8 +19,8 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
@@ -194,12 +194,12 @@ abstract class TextPaneSkinNodeView implements Visual, NodeListener {
     }
 
     /**
-     * Used by TextAreaSkinParagraphView when it breaks child nodes into multiple views.
+     * Used by TextPaneSkinParagraphView when it breaks child nodes into multiple views.
      */
     public abstract TextPaneSkinNodeView getNext();
 
     public abstract int getInsertionPoint(int x, int y);
-    public abstract int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction);
+    public abstract int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction);
     public abstract int getRowAt(int offset);
     public abstract int getRowCount();
     public abstract Bounds getCharacterBounds(int offset);

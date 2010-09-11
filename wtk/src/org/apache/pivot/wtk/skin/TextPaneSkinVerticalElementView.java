@@ -18,7 +18,7 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
-import org.apache.pivot.wtk.FocusTraversalDirection;
+import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
 
@@ -107,12 +107,12 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
     }
 
     @Override
-    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+    public int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction) {
         int offset = -1;
 
         if (getLength() > 0) {
             if (from == -1) {
-                int i = (direction == FocusTraversalDirection.FORWARD) ? 0 : getLength() - 1;
+                int i = (direction == TextPane.ScrollDirection.DOWN) ? 0 : getLength() - 1;
                 TextPaneSkinNodeView nodeView = get(i);
                 offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction);
 
@@ -144,7 +144,7 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
 
                     if (offset == -1) {
                         // Move to the next or previous node view
-                        if (direction == FocusTraversalDirection.FORWARD) {
+                        if (direction == TextPane.ScrollDirection.DOWN) {
                             nodeView = (i < n - 1) ? get(i + 1) : null;
                         } else {
                             nodeView = (i > 0) ? get(i - 1) : null;

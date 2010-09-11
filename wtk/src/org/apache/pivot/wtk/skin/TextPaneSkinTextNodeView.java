@@ -30,7 +30,6 @@ import java.text.CharacterIterator;
 
 import org.apache.pivot.text.CharSequenceCharacterIterator;
 import org.apache.pivot.wtk.Bounds;
-import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextPane;
@@ -363,7 +362,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+    public int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction) {
         int offset = -1;
 
         if (from == -1) {

@@ -17,7 +17,7 @@
 package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.wtk.FocusTraversalDirection;
+import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.TextNode;
@@ -101,7 +101,7 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     }
 
     @Override
-    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+    public int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction) {
         if (getLength() == 0) {
             return -1;
         } else {

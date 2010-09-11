@@ -77,7 +77,7 @@ import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewHeader;
-import org.apache.pivot.wtk.TextArea2;
+import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Theme;
@@ -147,7 +147,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TableViewHeader.class, TerraTableViewHeaderSkin.class);
         componentSkinMap.put(TableView.class, TerraTableViewSkin.class);
         componentSkinMap.put(TabPane.class, TerraTabPaneSkin.class);
-        componentSkinMap.put(TextArea2.class, TerraTextAreaSkin2.class);
+        componentSkinMap.put(TextArea.class, TerraTextAreaSkin.class);
         componentSkinMap.put(TextPane.class, TerraTextPaneSkin.class);
         componentSkinMap.put(TextInput.class, TerraTextInputSkin.class);
         componentSkinMap.put(Tooltip.class, TerraTooltipSkin.class);

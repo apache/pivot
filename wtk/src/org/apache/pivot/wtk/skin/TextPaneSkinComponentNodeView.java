@@ -21,7 +21,7 @@ import java.awt.Graphics2D;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
-import org.apache.pivot.wtk.FocusTraversalDirection;
+import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.ComponentNode;
 import org.apache.pivot.wtk.text.ComponentNodeListener;
 
@@ -106,7 +106,7 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
     }
 
     @Override
-    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+    public int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction) {
         return (from == -1) ? 0 : -1;
     }
 

@@ -42,7 +42,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 import org.apache.pivot.wtk.SplitPane;
-import org.apache.pivot.wtk.TextArea2;
+import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.Window;
@@ -54,7 +54,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
     private TreeView treeView = null;
     private ScrollPane contentScrollPane = null;
     private Border contentPane = null;
-    private TextArea2 sourceTextArea = null;
+    private TextArea sourceTextArea = null;
     private ComponentPropertyInspector componentPropertyInspector = null;
     private ComponentStyleInspector componentStyleInspector = null;
     private EventLogger eventLogger = null;
@@ -80,7 +80,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
         treeView = (TreeView)namespace.get("treeView");
         contentScrollPane = (ScrollPane)namespace.get("contentScrollPane");
         contentPane = (Border)namespace.get("contentPane");
-        sourceTextArea = (TextArea2)namespace.get("sourceTextArea");
+        sourceTextArea = (TextArea)namespace.get("sourceTextArea");
         componentPropertyInspector = (ComponentPropertyInspector)namespace.get("componentPropertyInspector");
         componentStyleInspector = (ComponentStyleInspector)namespace.get("componentStyleInspector");
         eventLogger = (EventLogger)namespace.get("eventLogger");

@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
@@ -77,7 +76,19 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             int selectionEnd = selectionStart + selectionLength - 1;
 
             switch (scrollDirection) {
-                case FORWARD: {
+                case UP: {
+                    // Get previous offset
+                    int offset = getNextInsertionPoint(mouseX, selectionStart, scrollDirection);
+
+                    if (offset != -1) {
+                        textPane.setSelection(offset, selectionEnd - offset + 1);
+                        scrollCharacterToVisible(offset + 1);
+                    }
+
+                    break;
+                }
+
+                case DOWN: {
                     // Get next offset
                     int offset = getNextInsertionPoint(mouseX, selectionEnd, scrollDirection);
 
@@ -92,18 +103,6 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
                         textPane.setSelection(selectionStart, offset - selectionStart);
                         scrollCharacterToVisible(offset - 1);
-                    }
-
-                    break;
-                }
-
-                case BACKWARD: {
-                    // Get previous offset
-                    int offset = getNextInsertionPoint(mouseX, selectionStart, scrollDirection);
-
-                    if (offset != -1) {
-                        textPane.setSelection(offset, selectionEnd - offset + 1);
-                        scrollCharacterToVisible(offset + 1);
                     }
 
                     break;
@@ -125,7 +124,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     private boolean caretOn = false;
 
     private int anchor = -1;
-    private FocusTraversalDirection scrollDirection = null;
+    private TextPane.ScrollDirection scrollDirection = null;
     private int mouseX = -1;
 
     private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
@@ -322,9 +321,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             x = Math.min(documentView.getWidth() - 1, Math.max(x - margin.left, 0));
 
             if (y < margin.top) {
-                offset = documentView.getNextInsertionPoint(x, -1, FocusTraversalDirection.FORWARD);
+                offset = documentView.getNextInsertionPoint(x, -1, TextPane.ScrollDirection.DOWN);
             } else if (y > documentView.getHeight() + margin.top) {
-                offset = documentView.getNextInsertionPoint(x, -1, FocusTraversalDirection.BACKWARD);
+                offset = documentView.getNextInsertionPoint(x, -1, TextPane.ScrollDirection.UP);
             } else {
                 offset = documentView.getInsertionPoint(x, y - margin.top);
             }
@@ -334,7 +333,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     @Override
-    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+    public int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction) {
         int offset;
 
         if (documentView == null) {
@@ -641,7 +640,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 }
             } else {
                 if (scheduledScrollSelectionCallback == null) {
-                    scrollDirection = (y < visibleArea.y) ? FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
+                    scrollDirection = (y < visibleArea.y) ? TextPane.ScrollDirection.UP : TextPane.ScrollDirection.DOWN;
 
                     scheduledScrollSelectionCallback =
                         ApplicationContext.scheduleRecurringCallback(scrollSelectionCallback,
@@ -865,7 +864,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             } else if (keyCode == Keyboard.KeyCode.UP) {
                 int selectionStart = textPane.getSelectionStart();
 
-                int offset = getNextInsertionPoint(caretX, selectionStart, FocusTraversalDirection.BACKWARD);
+                int offset = getNextInsertionPoint(caretX, selectionStart, TextPane.ScrollDirection.UP);
 
                 if (offset == -1) {
                     offset = 0;
@@ -903,7 +902,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                         x = trailingSelectionBounds.x + trailingSelectionBounds.width;
                     }
 
-                    int offset = getNextInsertionPoint(x, from, FocusTraversalDirection.FORWARD);
+                    int offset = getNextInsertionPoint(x, from, TextPane.ScrollDirection.DOWN);
 
                     if (offset == -1) {
                         offset = documentView.getCharacterCount() - 1;
@@ -928,7 +927,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                         from = selectionStart + selectionLength - 1;
                     }
 
-                    int offset = getNextInsertionPoint(caretX, from, FocusTraversalDirection.FORWARD);
+                    int offset = getNextInsertionPoint(caretX, from, TextPane.ScrollDirection.DOWN);
 
                     if (offset == -1) {
                         offset = documentView.getCharacterCount() - 1;

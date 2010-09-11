@@ -21,9 +21,9 @@ import java.awt.font.LineMetrics;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.wtk.Bounds;
-import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Platform;
+import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.Paragraph;
 
@@ -238,7 +238,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     }
 
     @Override
-    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+    public int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction) {
         int offset = -1;
 
         int n = rows.getLength();
@@ -249,7 +249,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         } else {
             int i;
             if (from == -1) {
-                i = (direction == FocusTraversalDirection.FORWARD) ? -1 : rows.getLength();
+                i = (direction == TextPane.ScrollDirection.DOWN) ? -1 : rows.getLength();
             } else {
                 // Find the row that contains offset
                 if (from == getCharacterCount() - 1) {
@@ -271,7 +271,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             }
 
             // Move to the next or previous row
-            if (direction == FocusTraversalDirection.FORWARD) {
+            if (direction == TextPane.ScrollDirection.DOWN) {
                 i++;
             } else {
                 i--;

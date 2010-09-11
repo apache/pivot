@@ -46,6 +46,14 @@ import org.apache.pivot.wtk.text.TextNode;
 @DefaultProperty("document")
 public class TextPane extends Container {
     /**
+     * Enum representing a scroll direction.
+     */
+    public enum ScrollDirection {
+        UP,
+        DOWN
+    }
+
+    /**
      * Text pane skin interface. Text pane skins are required to implement
      * this.
      */
@@ -71,7 +79,7 @@ public class TextPane extends Container {
          * @return
          * The next insertion point.
          */
-        public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction);
+        public int getNextInsertionPoint(int x, int from, ScrollDirection direction);
 
         /**
          * Returns the row index of the character at a given offset within the document.
@@ -966,7 +974,7 @@ public class TextPane extends Container {
         return textPaneSkin.getInsertionPoint(x, y);
     }
 
-    public int getNextInsertionPoint(int x, int from, FocusTraversalDirection direction) {
+    public int getNextInsertionPoint(int x, int from, ScrollDirection direction) {
         TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
         return textPaneSkin.getNextInsertionPoint(x, from, direction);
     }

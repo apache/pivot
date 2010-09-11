@@ -28,7 +28,7 @@ limitations under the License.
 
     <BoxPane orientation="vertical" styles="{padding:8}">
         <Border>
-            <TextArea2 bxml:id="textArea" text="@sample.txt" preferredWidth="320"
+            <TextArea bxml:id="textArea" text="@sample.txt" preferredWidth="320"
                 styles="{margin:8, backgroundColor:'#eeeeee', wrapText:true}">
                 <textAreaContentListeners>
                 function textChanged(textArea) {
@@ -41,7 +41,7 @@ limitations under the License.
                     // java.lang.System.out.println("selection = " + textArea.selectionStart + ", " + textArea.selectionLength);
                 }
                 </textAreaSelectionListeners>
-            </TextArea2>
+            </TextArea>
         </Border>
 
         <PushButton buttonData="Clear">

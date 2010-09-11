@@ -24,13 +24,13 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.TableView;
-import org.apache.pivot.wtk.TextPane;
+import org.apache.pivot.wtk.TextArea;
 
 /**
  * Renders cell contents as a string using a text area (which supports line feeds,
  * which the default label-based table view cell renderer does not).
  */
-public class TableViewTextAreaCellRenderer extends TextPane implements TableView.CellRenderer {
+public class TableViewTextAreaCellRenderer extends TextArea implements TableView.CellRenderer {
     public TableViewTextAreaCellRenderer() {
         getStyles().put("margin", new Insets(2));
     }
