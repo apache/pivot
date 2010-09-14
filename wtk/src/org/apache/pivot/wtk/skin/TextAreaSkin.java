@@ -1351,7 +1351,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin,
 
             if (selection == null) {
                 TextArea textArea = (TextArea)getComponent();
-                textArea.repaint(caret.x, caret.y, caret.width, caret.height, true);
+                textArea.repaint(caret.x, caret.y, caret.width, caret.height);
             }
         }
     }
