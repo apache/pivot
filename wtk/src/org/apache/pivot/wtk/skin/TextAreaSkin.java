@@ -139,7 +139,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         Theme theme = Theme.getTheme();
         font = theme.getFont();
         color = Color.BLACK;
-        backgroundColor = Color.WHITE;
+        backgroundColor = null;
         inactiveColor = Color.GRAY;
         selectionColor = Color.LIGHT_GRAY;
         selectionBackgroundColor = Color.BLACK;
