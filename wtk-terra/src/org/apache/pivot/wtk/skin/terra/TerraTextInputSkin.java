@@ -67,7 +67,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             if (caret != null) {
                 TextInput textInput = (TextInput)getComponent();
-                textInput.repaint(caret.x, caret.y, caret.width, caret.height, true);
+                textInput.repaint(caret.x, caret.y, caret.width, caret.height);
             }
         }
     }
