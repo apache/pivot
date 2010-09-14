@@ -521,7 +521,7 @@ public class TerraCalendarSkin extends CalendarSkin {
             throw new RuntimeException(exception);
         }
 
-        weekdayCharacterIndex = (Integer)JSON.get(resources, "weekdayCharacterIndex");
+        weekdayCharacterIndex = JSON.getInt(resources, "weekdayCharacterIndex");
     }
 
     @Override

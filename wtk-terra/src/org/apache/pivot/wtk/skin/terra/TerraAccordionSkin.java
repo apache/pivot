@@ -291,7 +291,6 @@ public class TerraAccordionSkin extends ContainerSkin
     private Color buttonBackgroundColor;
     private Insets buttonPadding;
 
-    // Derived colors
     private Color buttonBevelColor;
 
     private SelectionChangeTransition selectionChangeTransition = null;
@@ -653,6 +652,64 @@ public class TerraAccordionSkin extends ContainerSkin
         }
 
         setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
+    }
+
+    public final void setButtonColor(int buttonColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setButtonColor(theme.getColor(buttonColor));
+    }
+
+    public Color getDisabledButtonColor() {
+        return disabledButtonColor;
+    }
+
+    public void setDisabledButtonColor(Color disabledButtonColor) {
+        if (disabledButtonColor == null) {
+            throw new IllegalArgumentException("disabledButtonColor is null.");
+        }
+
+        this.disabledButtonColor = disabledButtonColor;
+        repaintComponent();
+    }
+
+    public final void setDisabledButtonColor(String disabledButtonColor) {
+        if (disabledButtonColor == null) {
+            throw new IllegalArgumentException("disabledButtonColor is null.");
+        }
+
+        setDisabledButtonColor(GraphicsUtilities.decodeColor(disabledButtonColor));
+    }
+
+    public final void setDisabledButtonColor(int disabledButtonColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledButtonColor(theme.getColor(disabledButtonColor));
+    }
+
+    public Color getButtonBackgroundColor() {
+        return buttonBackgroundColor;
+    }
+
+    public void setButtonBackgroundColor(Color buttonBackgroundColor) {
+        if (buttonBackgroundColor == null) {
+            throw new IllegalArgumentException("buttonBackgroundColor is null.");
+        }
+
+        this.buttonBackgroundColor = buttonBackgroundColor;
+        buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
+        repaintComponent();
+    }
+
+    public final void setButtonBackgroundColor(String buttonBackgroundColor) {
+        if (buttonBackgroundColor == null) {
+            throw new IllegalArgumentException("buttonBackgroundColor is null.");
+        }
+
+        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
+    }
+
+    public final void setButtonBackgroundColor(int buttonBackgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setButtonBackgroundColor(theme.getColor(buttonBackgroundColor));
     }
 
     public Insets getButtonPadding() {

@@ -258,10 +258,10 @@ public final class GraphicsUtilities {
             }
 
             case GRADIENT: {
-                float startX = (Float)JSON.get(dictionary, START_X_KEY);
-                float startY = (Float)JSON.get(dictionary, START_Y_KEY);
-                float endX = (Float)JSON.get(dictionary, END_X_KEY);
-                float endY = (Float)JSON.get(dictionary, END_Y_KEY);
+                float startX = JSON.getFloat(dictionary, START_X_KEY);
+                float startY = JSON.getFloat(dictionary, START_Y_KEY);
+                float endX = JSON.getFloat(dictionary, END_X_KEY);
+                float endY = JSON.getFloat(dictionary, END_Y_KEY);
                 Color startColor = decodeColor((String)JSON.get(dictionary, START_COLOR_KEY));
                 Color endColor = decodeColor((String)JSON.get(dictionary, END_COLOR_KEY));
                 paint = new GradientPaint(startX, startY, startColor, endX, endY, endColor);
@@ -269,10 +269,10 @@ public final class GraphicsUtilities {
             }
 
             case LINEAR_GRADIENT: {
-                float startX = (Float)JSON.get(dictionary, START_X_KEY);
-                float startY = (Float)JSON.get(dictionary, START_Y_KEY);
-                float endX = (Float)JSON.get(dictionary, END_X_KEY);
-                float endY = (Float)JSON.get(dictionary, END_Y_KEY);
+                float startX = JSON.getFloat(dictionary, START_X_KEY);
+                float startY = JSON.getFloat(dictionary, START_Y_KEY);
+                float endX = JSON.getFloat(dictionary, END_X_KEY);
+                float endY = JSON.getFloat(dictionary, END_Y_KEY);
 
                 List<Dictionary<String, ?>> stops =
                     (List<Dictionary<String, ?>>)JSON.get(dictionary, STOPS_KEY);
@@ -283,7 +283,7 @@ public final class GraphicsUtilities {
                 for (int i = 0; i < n; i++) {
                     Dictionary<String, ?> stop = stops.get(i);
 
-                    float offset = (Float)JSON.get(stop, OFFSET_KEY);
+                    float offset = JSON.getFloat(stop, OFFSET_KEY);
                     fractions[i] = offset;
 
                     Color color = decodeColor((String)JSON.get(stop, COLOR_KEY));
@@ -295,9 +295,9 @@ public final class GraphicsUtilities {
             }
 
             case RADIAL_GRADIENT: {
-                float centerX = (Float)JSON.get(dictionary, CENTER_X_KEY);
-                float centerY = (Float)JSON.get(dictionary, CENTER_Y_KEY);
-                float radius = (Float)JSON.get(dictionary, RADIUS_KEY);
+                float centerX = JSON.getFloat(dictionary, CENTER_X_KEY);
+                float centerY = JSON.getFloat(dictionary, CENTER_Y_KEY);
+                float radius = JSON.getFloat(dictionary, RADIUS_KEY);
 
                 List<Dictionary<String, ?>> stops =
                     (List<Dictionary<String, ?>>)JSON.get(dictionary, STOPS_KEY);
@@ -308,7 +308,7 @@ public final class GraphicsUtilities {
                 for (int i = 0; i < n; i++) {
                     Dictionary<String, ?> stop = stops.get(i);
 
-                    float offset = (Float)JSON.get(stop, OFFSET_KEY);
+                    float offset = JSON.getFloat(stop, OFFSET_KEY);
                     fractions[i] = offset;
 
                     Color color = decodeColor((String)JSON.get(stop, COLOR_KEY));

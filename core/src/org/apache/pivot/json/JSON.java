@@ -88,6 +88,36 @@ public class JSON {
         return (T)value;
     }
 
+    public static byte getByte(Object root, String path) {
+        Number value = get(root, path);
+        return value.byteValue();
+    }
+
+    public static short getShort(Object root, String path) {
+        Number value = get(root, path);
+        return value.shortValue();
+    }
+
+    public static int getInt(Object root, String path) {
+        Number value = get(root, path);
+        return value.intValue();
+    }
+
+    public static long getLong(Object root, String path) {
+        Number value = get(root, path);
+        return value.longValue();
+    }
+
+    public static float getFloat(Object root, String path) {
+        Number value = get(root, path);
+        return value.floatValue();
+    }
+
+    public static double getDouble(Object root, String path) {
+        Number value = get(root, path);
+        return value.doubleValue();
+    }
+
     /**
      * Sets the value at the given path.
      *
