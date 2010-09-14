@@ -62,7 +62,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
             if (selection == null) {
                 TextPane textPane = (TextPane)getComponent();
-                textPane.repaint(caret.x, caret.y, caret.width, caret.height, true);
+                textPane.repaint(caret.x, caret.y, caret.width, caret.height);
             }
         }
     }
