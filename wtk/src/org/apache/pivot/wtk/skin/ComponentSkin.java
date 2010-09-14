@@ -320,7 +320,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
             Component focusedComponent = component.transferFocus(direction);
 
             // Ensure that the focused component is visible
-            if (component != focusedComponent) {
+            if (component != focusedComponent
+                && focusedComponent != null) {
                 focusedComponent.scrollAreaToVisible(0, 0, focusedComponent.getWidth(),
                     focusedComponent.getHeight());
             }
