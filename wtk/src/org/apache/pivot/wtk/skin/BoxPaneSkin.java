@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import java.util.Locale;
-
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.BoxPaneListener;
@@ -464,14 +462,6 @@ public class BoxPaneSkin extends ContainerSkin
         invalidateComponent();
     }
 
-    public final void setHorizontalAlignment(String horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
-
-        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase(Locale.ENGLISH)));
-    }
-
     public VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
     }
@@ -483,14 +473,6 @@ public class BoxPaneSkin extends ContainerSkin
 
         this.verticalAlignment = verticalAlignment;
         invalidateComponent();
-    }
-
-    public final void setVerticalAlignment(String verticalAlignment) {
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
-
-        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase(Locale.ENGLISH)));
     }
 
     public Insets getPadding() {

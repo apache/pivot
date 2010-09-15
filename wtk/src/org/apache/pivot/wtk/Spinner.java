@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk;
 
 import java.util.Comparator;
-import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
@@ -558,14 +557,6 @@ public class Spinner extends Container {
         }
     }
 
-    public final void setSpinnerDataBindType(String spinnerDataBindType) {
-        if (spinnerDataBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setSpinnerDataBindType(BindType.valueOf(spinnerDataBindType.toUpperCase(Locale.ENGLISH)));
-    }
-
     public SpinnerDataBindMapping getSpinnerDataBindMapping() {
         return spinnerDataBindMapping;
     }
@@ -606,14 +597,6 @@ public class Spinner extends Container {
             this.selectedItemBindType = selectedItemBindType;
             spinnerBindingListeners.selectedItemBindTypeChanged(this, previousSelectedItemBindType);
         }
-    }
-
-    public final void setSelectedItemBindType(String selectedItemBindType) {
-        if (selectedItemBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public ItemBindMapping getSelectedItemBindMapping() {

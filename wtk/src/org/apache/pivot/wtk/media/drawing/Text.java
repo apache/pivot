@@ -26,7 +26,6 @@ import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
 import java.text.StringCharacterIterator;
-import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.json.JSONSerializer;
@@ -162,14 +161,6 @@ public class Text extends Shape {
             update();
             textListeners.alignmentChanged(this, previousAlignment);
         }
-    }
-
-    public final void setAlignment(String alignment) {
-        if (alignment == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setAlignment(HorizontalAlignment.valueOf(alignment.toUpperCase(Locale.ENGLISH)));
     }
 
     @Override

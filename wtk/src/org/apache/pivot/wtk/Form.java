@@ -310,19 +310,6 @@ public class Form extends Container {
         }
 
         /**
-         * Sets the flag's message type.
-         *
-         * @param messageType
-         */
-        public void setMessageType(String messageType) {
-            if (messageType == null) {
-                throw new IllegalArgumentException();
-            }
-
-            setMessageType(MessageType.valueOf(messageType.toUpperCase(Locale.ENGLISH)));
-        }
-
-        /**
          * Returns the flag message.
          *
          * @return

@@ -53,14 +53,6 @@ public class Ruler extends Component {
         }
     }
 
-    public void setOrientation(String orientation) {
-        if (orientation == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setOrientation(Orientation.valueOf(orientation.toUpperCase()));
-    }
-
     public ListenerList<RulerListener> getRulerListeners() {
         return rulerListeners;
     }

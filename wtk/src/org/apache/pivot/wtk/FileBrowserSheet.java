@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk;
 
 import java.io.File;
-import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
@@ -112,14 +111,6 @@ public class FileBrowserSheet extends Sheet {
             this.mode = mode;
             fileBrowserSheetListeners.modeChanged(this, previousMode);
         }
-    }
-
-    public final void setMode(String mode) {
-        if (mode == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setMode(Mode.valueOf(mode.toUpperCase(Locale.ENGLISH)));
     }
 
     public File getRootDirectory() {

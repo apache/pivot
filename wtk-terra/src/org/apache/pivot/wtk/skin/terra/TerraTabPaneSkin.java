@@ -24,7 +24,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.awt.geom.RoundRectangle2D;
-import java.util.Locale;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
@@ -1287,14 +1286,6 @@ public class TerraTabPaneSkin extends ContainerSkin
                 break;
             }
         }
-    }
-
-    public void setTabOrientation(String tabOrientation) {
-        if (tabOrientation == null) {
-            throw new IllegalArgumentException("tabOrientation is null.");
-        }
-
-        setTabOrientation(Orientation.valueOf(tabOrientation.toUpperCase(Locale.ENGLISH)));
     }
 
     @Override

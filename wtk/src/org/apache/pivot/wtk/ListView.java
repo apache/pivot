@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
-import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
@@ -1418,21 +1417,6 @@ public class ListView extends Component {
     }
 
     /**
-     * Sets the selection mode.
-     *
-     * @param selectMode
-     *
-     * @see #setSelectMode(org.apache.pivot.wtk.ListView.SelectMode)
-     */
-    public void setSelectMode(String selectMode) {
-        if (selectMode == null) {
-            throw new IllegalArgumentException("selectMode is null.");
-        }
-
-        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase(Locale.ENGLISH)));
-    }
-
-    /**
      * Returns the current check mode.
      */
     public boolean getCheckmarksEnabled() {
@@ -1658,14 +1642,6 @@ public class ListView extends Component {
         }
     }
 
-    public final void setListDataBindType(String listDataBindType) {
-        if (listDataBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setListDataBindType(BindType.valueOf(listDataBindType.toUpperCase(Locale.ENGLISH)));
-    }
-
     public ListDataBindMapping getListDataBindMapping() {
         return listDataBindMapping;
     }
@@ -1708,14 +1684,6 @@ public class ListView extends Component {
         }
     }
 
-    public final void setSelectedItemBindType(String selectedItemBindType) {
-        if (selectedItemBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setSelectedItemBindType(BindType.valueOf(selectedItemBindType.toUpperCase(Locale.ENGLISH)));
-    }
-
     public ItemBindMapping getSelectedItemBindMapping() {
         return selectedItemBindMapping;
     }
@@ -1756,14 +1724,6 @@ public class ListView extends Component {
             this.selectedItemsBindType = selectedItemsBindType;
             listViewBindingListeners.selectedItemsBindTypeChanged(this, previousSelectedItemsBindType);
         }
-    }
-
-    public final void setSelectedItemsBindType(String selectedItemsBindType) {
-        if (selectedItemsBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setSelectedItemsBindType(BindType.valueOf(selectedItemsBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public ItemBindMapping getSelectedItemsBindMapping() {

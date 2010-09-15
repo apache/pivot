@@ -354,14 +354,6 @@ public class Calendar extends Container {
         }
     }
 
-    public final void setSelectedDateBindType(String selectedDateBindType) {
-        if (selectedDateBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setSelectedDateBindType(BindType.valueOf(selectedDateBindType.toUpperCase(Locale.ENGLISH)));
-    }
-
     public SelectedDateBindMapping getSelectedDateBindMapping() {
         return selectedDateBindMapping;
     }

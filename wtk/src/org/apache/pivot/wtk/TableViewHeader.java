@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-import java.util.Locale;
-
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -122,14 +120,6 @@ public class TableViewHeader extends Component {
             this.sortMode = sortMode;
             tableViewHeaderListeners.sortModeChanged(this, previousSortMode);
         }
-    }
-
-    public void setSortMode(String sortMode) {
-        if (sortMode == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setSortMode(SortMode.valueOf(sortMode.toUpperCase(Locale.ENGLISH)));
     }
 
     public void pressHeader(int index) {

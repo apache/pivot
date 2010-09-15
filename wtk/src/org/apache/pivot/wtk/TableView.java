@@ -2072,14 +2072,6 @@ public class TableView extends Component {
         }
     }
 
-    public void setSelectMode(String selectMode) {
-        if (selectMode == null) {
-            throw new IllegalArgumentException("selectMode is null.");
-        }
-
-        setSelectMode(SelectMode.valueOf(selectMode.toUpperCase(Locale.ENGLISH)));
-    }
-
     /**
      * Returns the table view's sort dictionary.
      */
@@ -2262,14 +2254,6 @@ public class TableView extends Component {
         }
     }
 
-    public final void setTableDataBindType(String tableDataBindType) {
-        if (tableDataBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setTableDataBindType(BindType.valueOf(tableDataBindType.toUpperCase(Locale.ENGLISH)));
-    }
-
     public TableDataBindMapping getTableDataBindMapping() {
         return tableDataBindMapping;
     }
@@ -2312,14 +2296,6 @@ public class TableView extends Component {
         }
     }
 
-    public final void setSelectedRowBindType(String selectedRowBindType) {
-        if (selectedRowBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setSelectedRowBindType(BindType.valueOf(selectedRowBindType.toUpperCase(Locale.ENGLISH)));
-    }
-
     public SelectedRowBindMapping getSelectedRowBindMapping() {
         return selectedRowBindMapping;
     }
@@ -2360,14 +2336,6 @@ public class TableView extends Component {
             this.selectedRowsBindType = selectedRowsBindType;
             tableViewBindingListeners.selectedRowsBindTypeChanged(this, previousSelectedRowsBindType);
         }
-    }
-
-    public final void setSelectedRowsBindType(String selectedRowsBindType) {
-        if (selectedRowsBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setSelectedRowsBindType(BindType.valueOf(selectedRowsBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public SelectedRowBindMapping getSelectedRowsBindMapping() {

@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk.content;
 
 import java.awt.Graphics2D;
-import java.util.Locale;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
@@ -572,23 +571,6 @@ public class TableViewRowEditor implements TableView.RowEditor {
      */
     public void setEditEffect(CardPaneSkin.SelectionChangeEffect editEffect) {
         this.editEffect = editEffect;
-    }
-
-    /**
-     * Sets the effect that this editor uses when changing from a read-only
-     * row to an editable row.
-     *
-     * @param editEffect
-     * The edit effect, or <tt>null</tt> to not use an effect.
-     *
-     * @see #setEditEffect(CardPaneSkin.SelectionChangeEffect)
-     */
-    public void setEditEffect(String editEffect) {
-        if (editEffect == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setEditEffect(CardPaneSkin.SelectionChangeEffect.valueOf(editEffect.toUpperCase(Locale.ENGLISH)));
     }
 
     /**

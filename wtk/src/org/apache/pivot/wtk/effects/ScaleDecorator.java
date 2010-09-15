@@ -20,7 +20,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
-import java.util.Locale;
 
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -205,25 +204,6 @@ public class ScaleDecorator implements Decorator {
     }
 
     /**
-     * Sets the horizontal alignment of the decorator. A left alignment will
-     * paint the component's left edge at the component's x-coordinate. A right
-     * alignment will paint the component's right edge along the right side
-     * of the component's bounding box. A center or justified alignment will
-     * paint the scaled component centered with respect to the component's
-     * bounding box.
-     *
-     * @param horizontalAlignment
-     * The horizontal alignment
-     */
-    public final void setHorizontalAlignment(String horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
-
-        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase(Locale.ENGLISH)));
-    }
-
-    /**
      * Gets the vertical alignment of the decorator. A top alignment will
      * paint the component's top edge at the component's y-coordinate. A bottom
      * alignment will paint the component's bottom edge along the bottom side
@@ -255,25 +235,6 @@ public class ScaleDecorator implements Decorator {
         }
 
         this.verticalAlignment = verticalAlignment;
-    }
-
-    /**
-     * Sets the vertical alignment of the decorator. A top alignment will
-     * paint the component's top edge at the component's y-coordinate. A bottom
-     * alignment will paint the component's bottom edge along the bottom side
-     * of the component's bounding box. A center or justified alignment will
-     * paint the scaled component centered with respect to the component's
-     * bounding box.
-     *
-     * @param verticalAlignment
-     * The vertical alignment
-     */
-    public final void setVerticalAlignment(String verticalAlignment) {
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
-
-        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase(Locale.ENGLISH)));
     }
 
     /**

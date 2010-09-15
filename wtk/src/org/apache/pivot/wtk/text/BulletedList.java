@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.wtk.text;
 
-import java.util.Locale;
-
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -71,14 +69,6 @@ public class BulletedList extends List {
             this.style = style;
             bulletedListListeners.styleChanged(this, previousStyle);
         }
-    }
-
-    public final void setStyle(String style) {
-        if (style == null) {
-            throw new IllegalArgumentException("style is null.");
-        }
-
-        setStyle(Style.valueOf(style.toUpperCase(Locale.ENGLISH)));
     }
 
     @Override

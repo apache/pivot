@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
@@ -341,14 +340,6 @@ public class ImageView extends Component {
             this.imageBindType = imageBindType;
             imageViewBindingListeners.imageBindTypeChanged(this, previousImageBindType);
         }
-    }
-
-    public final void setImageBindType(String textBindType) {
-        if (textBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setImageBindType(BindType.valueOf(textBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public ImageBindMapping getImageBindMapping() {

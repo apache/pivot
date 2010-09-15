@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import java.util.Locale;
-
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Vote;
@@ -558,14 +556,6 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         }
 
         this.selectionChangeEffect = selectionChangeEffect;
-    }
-
-    public void setSelectionChangeEffect(String selectionChangeEffect) {
-        if (selectionChangeEffect == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setSelectionChangeEffect(SelectionChangeEffect.valueOf(selectionChangeEffect.toUpperCase(Locale.ENGLISH)));
     }
 
     public int getSelectionChangeDuration() {

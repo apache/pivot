@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-import java.util.Locale;
-
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 
@@ -162,14 +160,6 @@ public class ScrollPane extends Viewport {
         }
     }
 
-    public void setHorizontalScrollBarPolicy(String horizontalScrollBarPolicy) {
-        if (horizontalScrollBarPolicy == null) {
-            throw new IllegalArgumentException("horizontalScrollBarPolicy is null.");
-        }
-
-        setHorizontalScrollBarPolicy(ScrollBarPolicy.valueOf(horizontalScrollBarPolicy.toUpperCase(Locale.ENGLISH)));
-    }
-
     public ScrollBarPolicy getVerticalScrollBarPolicy() {
         return verticalScrollBarPolicy;
     }
@@ -186,14 +176,6 @@ public class ScrollPane extends Viewport {
             scrollPaneListeners.verticalScrollBarPolicyChanged(this,
                 previousVerticalScrollBarPolicy);
         }
-    }
-
-    public void setVerticalScrollBarPolicy(String verticalScrollBarPolicy) {
-        if (verticalScrollBarPolicy == null) {
-            throw new IllegalArgumentException("verticalScrollBarPolicy is null.");
-        }
-
-        setVerticalScrollBarPolicy(ScrollBarPolicy.valueOf(verticalScrollBarPolicy.toUpperCase(Locale.ENGLISH)));
     }
 
     public Component getRowHeader() {

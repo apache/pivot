@@ -24,7 +24,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Iterator;
-import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.LinkedList;
@@ -1159,14 +1158,6 @@ public class TextArea extends Component {
             this.textBindType = textBindType;
             textAreaBindingListeners.textBindTypeChanged(this, previousTextBindType);
         }
-    }
-
-    public final void setTextBindType(String textBindType) {
-        if (textBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setTextBindType(BindType.valueOf(textBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public TextBindMapping getTextBindMapping() {

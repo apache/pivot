@@ -45,19 +45,11 @@ public class ComponentNode extends TreeNode {
         this.horizontalScrollBarPolicy = horizontalScrollBarPolicy;
     }
 
-    public void setHorizontalScrollBarPolicy(String horizontalScrollBarPolicy) {
-        setHorizontalScrollBarPolicy(ScrollBarPolicy.valueOf(horizontalScrollBarPolicy.toUpperCase()));
-    }
-
     public ScrollBarPolicy getVerticalScrollBarPolicy() {
         return verticalScrollBarPolicy;
     }
 
     public void setVerticalScrollBarPolicy(ScrollBarPolicy verticalScrollBarPolicy) {
         this.verticalScrollBarPolicy = verticalScrollBarPolicy;
-    }
-
-    public void setVerticalScrollBarPolicy(String verticalScrollBarPolicy) {
-        setVerticalScrollBarPolicy(ScrollBarPolicy.valueOf(verticalScrollBarPolicy.toUpperCase()));
     }
 }

@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
-import java.util.Locale;
 
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -321,14 +320,6 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         repaintComponent();
     }
 
-    public final void setHorizontalAlignment(String horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
-
-        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase(Locale.ENGLISH)));
-    }
-
     public VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
     }
@@ -341,14 +332,6 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         this.verticalAlignment = verticalAlignment;
         layout();
         repaintComponent();
-    }
-
-    public final void setVerticalAlignment(String verticalAlignment) {
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
-
-        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase(Locale.ENGLISH)));
     }
 
     public boolean getFill() {

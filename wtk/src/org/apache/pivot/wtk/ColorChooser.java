@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk;
 
 import java.awt.Color;
-import java.util.Locale;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
@@ -182,14 +181,6 @@ public class ColorChooser extends Container {
             colorChooserBindingListeners.selectedColorBindTypeChanged(this,
                 previousSelectedColorBindType);
         }
-    }
-
-    public final void setSelectedColorBindType(String selectedColorBindType) {
-        if (selectedColorBindType == null) {
-            throw new IllegalArgumentException();
-        }
-
-        setSelectedColorBindType(BindType.valueOf(selectedColorBindType.toUpperCase(Locale.ENGLISH)));
     }
 
     public SelectedColorBindMapping getSelectedColorBindMapping() {

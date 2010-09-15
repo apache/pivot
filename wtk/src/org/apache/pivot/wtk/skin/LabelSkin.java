@@ -27,7 +27,6 @@ import java.awt.font.LineMetrics;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.text.StringCharacterIterator;
-import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -470,14 +469,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         repaintComponent();
     }
 
-    public final void setTextDecoration(String textDecoration) {
-        if (textDecoration == null) {
-            throw new IllegalArgumentException("textDecoration is null.");
-        }
-
-        setTextDecoration(TextDecoration.valueOf(textDecoration.toUpperCase(Locale.ENGLISH)));
-    }
-
     public HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
     }
@@ -491,14 +482,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         repaintComponent();
     }
 
-    public final void setHorizontalAlignment(String horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
-
-        setHorizontalAlignment(HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase(Locale.ENGLISH)));
-    }
-
     public VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
     }
@@ -510,14 +493,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
         this.verticalAlignment = verticalAlignment;
         repaintComponent();
-    }
-
-    public final void setVerticalAlignment(String verticalAlignment) {
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
-
-        setVerticalAlignment(VerticalAlignment.valueOf(verticalAlignment.toUpperCase(Locale.ENGLISH)));
     }
 
     public Insets getPadding() {
