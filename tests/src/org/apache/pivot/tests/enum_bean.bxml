@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!--
+Tests the setting of bean enum properties without requiring the enum
+constant name to be specified in a case sensitive manner.
+
+There is also no requirement for the bean itself to have anything other
+than a standard setter methods. ie, No overloaded String setter method is
+required in order to handle the Enum.valueOf(String) aspect of the coercion.
+-->
+<EnumBean
+    xmlns="org.apache.pivot.tests"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+
+    arcType="chord"
+    bindType="load"
+    bufferedImageSerializerFormat="png"
+    bulletedListStyle="circle"
+    buttonState="mixed"
+    cursor="crosshair"
+    dropAction="copy"
+    fileBrowserSheetMode="open"
+    focusTraversalDirection="backward"
+    horizontalAlignment="center"
+    imageBindMappingType="image"
+    interpolation="bicubic"
+    keyLocation="keypad"
+    listViewSelectMode="multi"
+    messageType="error"
+    modifier="alt"
+    mouseButton="left"
+    mouseScrollType="block"
+    nodeCheckState="checked"
+    numberedListStyle="decimal"
+    orientation="horizontal"
+    paintType="gradient"
+    placement="bottom_left"
+    queryMethod="delete"
+    scrollBarPolicy="always"
+    selectionChangeEffect="crossfade"
+    scrollDirection="down"
+    sortDirection="ascending"
+    sortMode="multi_column"
+    splitPaneRegion="bottom_right"
+    splitPaneResizeMode="primary_region"
+    tableViewSelectMode="multi"
+    testMessage="goodbye"
+    textDecoration="strikethrough"
+    treeViewSelectMode="multi"
+    verticalAlignment="bottom"
+    vote="approve">
+
+    <arcType>chord</arcType>
+    <arcType>open</arcType>
+    <arcType>pie</arcType>
+
+    <bindType>load</bindType>
+    <bindType>store</bindType>
+    <bindType>both</bindType>
+
+    <bufferedImageSerializerFormat>png</bufferedImageSerializerFormat>
+    <bufferedImageSerializerFormat>jpeg</bufferedImageSerializerFormat>
+    <bufferedImageSerializerFormat>bmp</bufferedImageSerializerFormat>
+    <bufferedImageSerializerFormat>wbmp</bufferedImageSerializerFormat>
+    <bufferedImageSerializerFormat>gif</bufferedImageSerializerFormat>
+
+    <bulletedListStyle>circle</bulletedListStyle>
+    <bulletedListStyle>circle_outline</bulletedListStyle>
+
+    <buttonState>mixed</buttonState>
+    <buttonState>selected</buttonState>
+    <buttonState>unselected</buttonState>
+
+    <cursor>crosshair</cursor>
+    <cursor>default</cursor>
+    <cursor>hand</cursor>
+    <cursor>move</cursor>
+    <cursor>resize_east</cursor>
+    <cursor>resize_north</cursor>
+    <cursor>resize_north_east</cursor>
+    <cursor>resize_north_west</cursor>
+    <cursor>resize_south</cursor>
+    <cursor>resize_south_east</cursor>
+    <cursor>resize_south_west</cursor>
+    <cursor>resize_west</cursor>
+    <cursor>text</cursor>
+    <cursor>wait</cursor>
+
+    <dropAction>copy</dropAction>
+    <dropAction>link</dropAction>
+    <dropAction>move</dropAction>
+
+    <fileBrowserSheetMode>open</fileBrowserSheetMode>
+    <fileBrowserSheetMode>open_multiple</fileBrowserSheetMode>
+    <fileBrowserSheetMode>save_as</fileBrowserSheetMode>
+    <fileBrowserSheetMode>save_to</fileBrowserSheetMode>
+
+    <focusTraversalDirection>backward</focusTraversalDirection>
+    <focusTraversalDirection>forward</focusTraversalDirection>
+
+    <horizontalAlignment>center</horizontalAlignment>
+    <horizontalAlignment>left</horizontalAlignment>
+    <horizontalAlignment>right</horizontalAlignment>
+
+    <imageBindMappingType>image</imageBindMappingType>
+    <imageBindMappingType>name</imageBindMappingType>
+    <imageBindMappingType>url</imageBindMappingType>
+
+    <interpolation>bicubic</interpolation>
+    <interpolation>bilinear</interpolation>
+    <interpolation>nearest_neighbor</interpolation>
+
+    <keyLocation>keypad</keyLocation>
+    <keyLocation>left</keyLocation>
+    <keyLocation>right</keyLocation>
+    <keyLocation>standard</keyLocation>
+
+    <listViewSelectMode>multi</listViewSelectMode>
+    <listViewSelectMode>none</listViewSelectMode>
+    <listViewSelectMode>single</listViewSelectMode>
+
+    <messageType>error</messageType>
+    <messageType>info</messageType>
+    <messageType>question</messageType>
+    <messageType>warning</messageType>
+
+    <modifier>alt</modifier>
+    <modifier>ctrl</modifier>
+    <modifier>meta</modifier>
+    <modifier>shift</modifier>
+
+    <mouseButton>left</mouseButton>
+    <mouseButton>middle</mouseButton>
+    <mouseButton>right</mouseButton>
+
+    <mouseScrollType>block</mouseScrollType>
+    <mouseScrollType>unit</mouseScrollType>
+
+    <nodeCheckState>checked</nodeCheckState>
+    <nodeCheckState>mixed</nodeCheckState>
+    <nodeCheckState>unchecked</nodeCheckState>
+
+    <numberedListStyle>decimal</numberedListStyle>
+    <numberedListStyle>lower_alpha</numberedListStyle>
+    <numberedListStyle>upper_alpha</numberedListStyle>
+    <numberedListStyle>lower_roman</numberedListStyle>
+    <numberedListStyle>upper_roman</numberedListStyle>
+
+    <orientation>horizontal</orientation>
+    <orientation>vertical</orientation>
+
+    <paintType>gradient</paintType>
+    <paintType>linear_gradient</paintType>
+    <paintType>radial_gradient</paintType>
+    <paintType>solid_color</paintType>
+
+    <placement>bottom_left</placement>
+    <placement>bottom_right</placement>
+    <placement>top_left</placement>
+    <placement>top_right</placement>
+
+    <queryMethod>delete</queryMethod>
+    <queryMethod>get</queryMethod>
+    <queryMethod>post</queryMethod>
+    <queryMethod>put</queryMethod>
+
+    <scrollBarPolicy>always</scrollBarPolicy>
+    <scrollBarPolicy>auto</scrollBarPolicy>
+    <scrollBarPolicy>fill</scrollBarPolicy>
+    <scrollBarPolicy>fill_to_capacity</scrollBarPolicy>
+    <scrollBarPolicy>never</scrollBarPolicy>
+
+    <selectionChangeEffect>crossfade</selectionChangeEffect>
+    <selectionChangeEffect>horizontal_flip</selectionChangeEffect>
+    <selectionChangeEffect>horizontal_slide</selectionChangeEffect>
+    <selectionChangeEffect>vertical_flip</selectionChangeEffect>
+    <selectionChangeEffect>vertical_slide</selectionChangeEffect>
+    <selectionChangeEffect>zoom</selectionChangeEffect>
+
+    <scrollDirection>down</scrollDirection>
+    <scrollDirection>up</scrollDirection>
+
+    <sortDirection>ascending</sortDirection>
+    <sortDirection>descending</sortDirection>
+
+    <sortMode>multi_column</sortMode>
+    <sortMode>none</sortMode>
+    <sortMode>single_column</sortMode>
+
+    <splitPaneRegion>bottom_right</splitPaneRegion>
+    <splitPaneRegion>top_left</splitPaneRegion>
+
+    <splitPaneResizeMode>primary_region</splitPaneResizeMode>
+    <splitPaneResizeMode>split_ratio</splitPaneResizeMode>
+
+    <tableViewSelectMode>multi</tableViewSelectMode>
+    <tableViewSelectMode>none</tableViewSelectMode>
+    <tableViewSelectMode>single</tableViewSelectMode>
+
+    <testMessage>goodbye</testMessage>
+    <testMessage>hello</testMessage>
+
+    <textDecoration>strikethrough</textDecoration>
+    <textDecoration>underline</textDecoration>
+
+    <treeViewSelectMode>multi</treeViewSelectMode>
+    <treeViewSelectMode>none</treeViewSelectMode>
+    <treeViewSelectMode>single</treeViewSelectMode>
+
+    <verticalAlignment>bottom</verticalAlignment>
+    <verticalAlignment>center</verticalAlignment>
+    <verticalAlignment>top</verticalAlignment>
+
+    <vote>approve</vote>
+    <vote>defer</vote>
+    <vote>deny</vote>
+
+    <windingRule>even_odd</windingRule>
+    <windingRule>non_zero</windingRule>
+
+</EnumBean>

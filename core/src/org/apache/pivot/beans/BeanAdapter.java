@@ -21,8 +21,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 import org.apache.pivot.collections.Map;
@@ -148,6 +150,7 @@ public class BeanAdapter implements Map<String, Object> {
     public static final String SET_PREFIX = "set";
     public static final String FIELD_PREFIX = "~";
 
+    private static final String ENUM_VALUE_OF_METHOD_NAME = "valueOf";
     private static final String ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT =
         "Unable to access property \"%s\" for type %s.";
 
@@ -841,6 +844,8 @@ public class BeanAdapter implements Map<String, Object> {
             if (type.isAssignableFrom(value.getClass())) {
                 // Value doesn't need coercion
                 coercedValue = value;
+            } else if (type.isEnum() && value instanceof String) {
+                coercedValue = coerceEnum(value, type);
             } else {
                 // Coerce the value to the requested type
                 if (type == Boolean.class
@@ -901,5 +906,66 @@ public class BeanAdapter implements Map<String, Object> {
         }
 
         return (T)coercedValue;
+    }
+
+    /**
+     * Attempt to coerce a String to an instance of a supplied enum class.
+     * <p>
+     * The supplied String will be converted to upper case using
+     * <code>Locale.ENGLISH</code> before being used in an invocation of
+     * <code>T.valueOf(String)</code>.
+     * <p>
+     * Depends on the existence of a <code>public static T valueOf(String
+     * name)</code> method as defined in the <a href=
+     * "http://java.sun.com/docs/books/jls/third_edition/html/classes.html#8.9"
+     * >Java Language Specification</a>.
+     *
+     * @param <T> Coercion target type.
+     * @param value String to be coerced.
+     * @param type Target enum class.
+     * @return The coerced value.
+     */
+    @SuppressWarnings("unchecked")
+    private static <T> T coerceEnum(Object value, Class<? extends T> type) {
+        if (type == null || !type.isEnum()) {
+            throw new IllegalArgumentException(String.format(
+                "Supplied Class is not an Enum. Class=%s", (type == null ? null : type.getName())));
+        }
+        if (!(value instanceof String)) {
+            throw new IllegalArgumentException(String.format(
+                "Non-null String value must be supplied for enum coercion.  Value=%s",
+                (value == null ? null : value.getClass().getName())));
+        }
+
+        // Find and invoke the valueOf(String) method, with an upper case
+        // version of the supplied String
+        T coercedValue = null;
+        try {
+            Method valueOfMethod = type.getMethod(ENUM_VALUE_OF_METHOD_NAME, String.class);
+            if (valueOfMethod != null) {
+                String valueString = ((String) value).toUpperCase(Locale.ENGLISH);
+                    coercedValue = (T) valueOfMethod.invoke(null, valueString);
+            }
+        }
+        // Nothing to be gained by handling the getMethod() & invoke()
+        // Exceptions separately
+        catch (IllegalAccessException e) {
+            throwCoerceEnumException(value, type, e);
+        } catch (InvocationTargetException e) {
+            throwCoerceEnumException(value, type, e);
+        } catch (SecurityException e) {
+            throwCoerceEnumException(value, type, e);
+        } catch (NoSuchMethodException e) {
+            throwCoerceEnumException(value, type, e);
+        }
+
+        return coercedValue;
+    }
+
+    private static void throwCoerceEnumException(Object value, Class<?> type, Throwable cause) {
+        String message = String.format(
+            "Unable to coerce %s (\"%s\") to %s.\nValid enum constants - %s",
+            value.getClass().getName(), value, type, Arrays.toString(type.getEnumConstants()));
+        throw new IllegalArgumentException(message, cause);
     }
 }
