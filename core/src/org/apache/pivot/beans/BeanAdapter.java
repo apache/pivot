@@ -926,7 +926,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return The coerced value.
      */
     @SuppressWarnings("unchecked")
-    private static <T> T coerceEnum(Object value, Class<? extends T> type) {
+    public static <T> T coerceEnum(Object value, Class<? extends T> type) {
         if (type == null || !type.isEnum()) {
             throw new IllegalArgumentException(String.format(
                 "Supplied Class is not an Enum. Class=%s", (type == null ? null : type.getName())));
