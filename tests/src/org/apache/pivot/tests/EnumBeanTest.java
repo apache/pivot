@@ -43,19 +43,40 @@ public class EnumBeanTest {
         BeanAdapter ba = new BeanAdapter(enumBean);
 
         ba.put("~orientationField", Orientation.HORIZONTAL);
-        dump(enumBean, ba);
-
+        dumpField(enumBean, ba);
         ba.put("~orientationField", "vertical");
-        dump(enumBean, ba);
+        dumpField(enumBean, ba);
+
+        ba.put("orientation", Orientation.HORIZONTAL);
+        dumpSetter(enumBean, ba);
+        ba.put("orientation", Orientation.VERTICAL);
+        dumpSetter(enumBean, ba);
+        ba.put("orientation", null);
+        dumpSetter(enumBean, ba);
+
+        // Force an error to check the IllegalArgumentException message
+        // ba.put("orientation", Vote.APPROVE);
     }
 
-    private static void dump(EnumBean enumBean, BeanAdapter ba) {
+    private static void dumpField(EnumBean enumBean, BeanAdapter ba) {
         Object value = enumBean.orientationField;
         System.out.println(String.format("\n%-40s %-20s %s", "Direct field access", value,
             (value == null) ? "[null]" : value.getClass().getName()));
 
         value = ba.get("~orientationField");
-        System.out.println(String.format("%-40s %-20s %s", "~orientationField", value,
+        System.out.println(String.format("%-40s %-20s %s",
+            "BeanAdapter.get(\"~orientationField\")", value, (value == null) ? "[null]"
+                : value.getClass().getName()));
+    }
+
+    private static void dumpSetter(EnumBean enumBean, BeanAdapter ba) {
+        Object value = enumBean.getOrientation();
+        System.out.println(String.format("\n%-40s %-20s %s", "Direct from getter", value,
+            (value == null) ? "[null]" : value.getClass().getName()));
+
+        value = ba.get("orientation");
+        System.out.println(String.format("%-40s %-20s %s", "BeanAdapter.get(\"orientation\")",
+            value,
             (value == null) ? "[null]" : value.getClass().getName()));
     }
 }
