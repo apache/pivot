@@ -220,6 +220,12 @@ public class TerraCalendarSkin extends CalendarSkin {
             return consumed;
         }
 
+        /**
+         * {@link Keyboard.KeyCode#ENTER} 'presses' the button.<br>
+         * {@link Keyboard.KeyCode#UP}, {@link Keyboard.KeyCode#DOWN},
+         * {@link Keyboard.KeyCode#LEFT} & {@link Keyboard.KeyCode#RIGHT}
+         * navigate around the date grid.
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;

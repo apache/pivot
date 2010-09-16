@@ -78,6 +78,13 @@ public abstract class PushButtonSkin extends ButtonSkin {
         return consumed;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#SPACE} repaints the component to reflect the
+     * pressed state.
+     *
+     * @see #keyReleased(Component, int,
+     * org.apache.pivot.wtk.Keyboard.KeyLocation)
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;

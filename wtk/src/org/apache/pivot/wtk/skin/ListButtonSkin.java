@@ -242,6 +242,15 @@ public abstract class ListButtonSkin extends ButtonSkin
         return consumed;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#SPACE} repaints the component to reflect the
+     * pressed state.<br>
+     * {@link Keyboard.KeyCode#UP} selects the previous enabled list item.<br>
+     * {@link Keyboard.KeyCode#DOWN} selects the next enabled list item.
+     *
+     * @see #keyReleased(Component, int,
+     * org.apache.pivot.wtk.Keyboard.KeyLocation)
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
