@@ -43,6 +43,9 @@ import org.apache.pivot.wtk.TableViewListener;
 import org.apache.pivot.wtk.TableViewRowListener;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
+import org.apache.pivot.wtk.TableView.SelectMode;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -1295,6 +1298,18 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         return super.mouseWheel(component, scrollType, scrollAmount, wheelRotation, x, y);
     }
 
+    /**
+     * {@link KeyCode#UP UP} Selects the previous enabled row when select mode
+     * is not {@link SelectMode#NONE}<br>
+     * {@link KeyCode#DOWN DOWN} Selects the next enabled row when select mode
+     * is not {@link SelectMode#NONE}<p>
+     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the 
+     * selection size by including the previous enabled row when select mode
+     * is {@link SelectMode#MULTI}<br>
+     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases the 
+     * selection size by including the next enabled row when select mode is
+     * {@link SelectMode#MULTI}
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);

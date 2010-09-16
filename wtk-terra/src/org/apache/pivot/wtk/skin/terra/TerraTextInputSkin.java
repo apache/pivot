@@ -46,11 +46,13 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.TextInputSelectionListener;
-import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.validation.Validator;
 
@@ -1050,6 +1052,56 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return consumed;
     }
 
+    /**
+     * {@link KeyCode#DELETE DELETE} Delete the character after the caret or
+     * the entire selection if there is one.<br>
+     * {@link KeyCode#BACKSPACE BACKSPACE} Delete the character before the 
+     * caret or the entire selection if there is one.<p>
+     * {@link KeyCode#HOME HOME} Move the caret to the beginning of the text.
+     * <br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#META META} Move the caret 
+     * to the beginning of the text.<p>
+     * {@link KeyCode#HOME HOME} + {@link Modifier#SHIFT SHIFT} Select from 
+     * the caret to the beginning of the text.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#META META} +
+     * {@link Modifier#SHIFT SHIFT} Select from the caret to the beginning of
+     * the text.<p>
+     * {@link KeyCode#END END} Move the caret to the end of the text.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#META META} Move the caret
+     * to the end of the text.<p>
+     * {@link KeyCode#END END} + {@link Modifier#SHIFT SHIFT} Select from the 
+     * caret to the end of the text.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#META META} +
+     * {@link Modifier#SHIFT SHIFT} Select from the caret to the end of the
+     * text.<p>
+     * {@link KeyCode#LEFT LEFT} Clear the selection and move the caret back 
+     * by one character.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#SHIFT SHIFT} Add the 
+     * previous character to the selection.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#CTRL CTRL} Clear the 
+     * selection and move the caret to the beginning of the text.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#CTRL CTRL} +
+     * {@link Modifier#SHIFT SHIFT} Add all preceding text to the selection.
+     * <p>
+     * {@link KeyCode#RIGHT RIGHT} Clear the selection and move the caret
+     * forward by one character.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#SHIFT SHIFT} Add the next
+     * character to the selection.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#CTRL CTRL} Clear the 
+     * selection and move the caret to the end of the text.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#CTRL CTRL} +
+     * {@link Modifier#SHIFT SHIFT} Add all subsequent text to the selection.
+     * <p>
+     * CommandModifier + {@link KeyCode#A A} Select all.<br>
+     * CommandModifier + {@link KeyCode#X X} Cut selection to clipboard (if 
+     * not a password TextInput).<br>
+     * CommandModifier + {@link KeyCode#C C} Copy selection to clipboard (if
+     * not a password TextInput).<br>
+     * CommandModifier + {@link KeyCode#V V} Paste from clipboard.<br>
+     * CommandModifier + {@link KeyCode#Z Z} Undo.
+     *
+     * @see Platform#getCommandModifier()
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);

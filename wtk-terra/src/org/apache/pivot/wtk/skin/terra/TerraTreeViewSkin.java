@@ -49,6 +49,9 @@ import org.apache.pivot.wtk.TreeViewListener;
 import org.apache.pivot.wtk.TreeViewNodeListener;
 import org.apache.pivot.wtk.TreeViewNodeStateListener;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
+import org.apache.pivot.wtk.TreeView.SelectMode;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -1741,6 +1744,18 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         return super.mouseWheel(component, scrollType, scrollAmount, wheelRotation, x, y);
     }
 
+    /**
+     * {@link KeyCode#UP UP} Selects the previous enabled node when select mode
+     * is not {@link SelectMode#NONE}<br>
+     * {@link KeyCode#DOWN DOWN} Selects the next enabled node when select mode
+     * is not {@link SelectMode#NONE}<p>
+     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the 
+     * selection size by including the previous enabled node when select  mode 
+     * is {@link SelectMode#MULTI}<br>
+     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases the 
+     * selection size by including the next enabled node when select mode is
+     * {@link SelectMode#MULTI}
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
@@ -1877,8 +1892,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     /**
-     * {@link Keyboard.KeyCode#SPACE} toggles check mark selection when select
-     * mode is {@link TreeView.SelectMode#SINGLE}
+     * {@link KeyCode#SPACE SPACE} toggles check mark selection when select
+     * mode is {@link SelectMode#SINGLE}
      */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

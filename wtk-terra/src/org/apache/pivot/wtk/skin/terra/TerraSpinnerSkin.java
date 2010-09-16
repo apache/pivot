@@ -38,6 +38,7 @@ import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.SpinnerListener;
 import org.apache.pivot.wtk.SpinnerSelectionListener;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.skin.ContainerSkin;
@@ -255,6 +256,10 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             repaintComponent();
         }
 
+        /**
+         * {@link KeyCode#UP UP} Select the previous spinner item.<br>
+         * {@link KeyCode#DOWN DOWN} Select the next spinner item.
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode,
             Keyboard.KeyLocation keyLocation) {

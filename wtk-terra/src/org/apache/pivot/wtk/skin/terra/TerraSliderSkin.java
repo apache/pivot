@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.skin.SliderSkin;
 
@@ -215,6 +216,12 @@ public class TerraSliderSkin extends SliderSkin {
             return super.mouseClick(component, button, x, y, count);
         }
 
+        /**
+         * {@link KeyCode#LEFT LEFT} or {@link KeyCode#DOWN DOWN} Decrement 
+         * the slider's value.<br>
+         * {@link KeyCode#RIGHT RIGHT} or {@link KeyCode#UP UP} Increment 
+         * the slider's value.
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = super.keyPressed(component, keyCode, keyLocation);
