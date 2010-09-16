@@ -180,6 +180,9 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         border.getStyles().put("color", borderColor);
     }
 
+    /**
+     * {@link Keyboard.KeyCode#ESCAPE} Close the menu popup.
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);

@@ -113,6 +113,12 @@ public class TerraDialogSkin extends TerraFrameSkin
         return super.mouseDown(container, button, x, y);
     }
 
+    /**
+     * {@link Keyboard.KeyCode#ENTER} Close the dialog with a 'result' of
+     * true.<br>
+     * {@link Keyboard.KeyCode#ESCAPE} Close the dialog with a 'result' of
+     * false.
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;

@@ -387,6 +387,15 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         invalidateComponent();
     }
 
+    /**
+     * {@link Keyboard.KeyCode#UP} Select the previous enabled menu item.<br>
+     * {@link Keyboard.KeyCode#DOWN} Select the next enabled menu item.<br>
+     * {@link Keyboard.KeyCode#LEFT} Close the current sub-menu.<br>
+     * {@link Keyboard.KeyCode#RIGHT} Open the sub-menu of the current menu
+     * item.<br>
+     * {@link Keyboard.KeyCode#ENTER} 'presses' the active menu item if it
+     * does not have a sub-menu.
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);

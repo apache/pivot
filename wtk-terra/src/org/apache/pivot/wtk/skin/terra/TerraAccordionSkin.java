@@ -729,6 +729,20 @@ public class TerraAccordionSkin extends ContainerSkin
         setButtonPadding(new Insets(buttonPadding));
     }
 
+    /**
+     * Key presses have no effect if the event has already been consumed.<p>
+     * CommandModifier + {@link Keyboard.KeyCode#KEYPAD_1} to
+     * {@link Keyboard.KeyCode#KEYPAD_9} or<br>
+     * CommandModifier + {@link Keyboard.KeyCode#N1} to
+     * {@link Keyboard.KeyCode#N9} select the (enabled) panel at index
+     * 0 to 8 respectively<p>
+     * {@link Keyboard.Modifier#ALT} + {@link Keyboard.KeyCode#UP} select the
+     * next enabled panel.<br>
+     * {@link Keyboard.Modifier#ALT} + {@link Keyboard.KeyCode#DOWN} select
+     * the previous enabled panel.
+     *
+     * @see {@link Platform#getCommandModifier()
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);

@@ -28,8 +28,8 @@ import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
-import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListView;
@@ -222,6 +222,17 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         return true;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#ENTER} Close the suggestion popup with a 'result'
+     * of true.<br>
+     * {@link Keyboard.KeyCode#TAB} Close the suggestion popup with a 'result'
+     * of true, and transfer focus forwards from the TextInput.<br>
+     * {@link Keyboard.KeyCode#TAB} + {@link Keyboard.Modifier#SHIFT} Close the
+     * suggestion popup with a 'result' of true, and transfer focus backwards
+     * from the TextInput.<br>
+     * {@link Keyboard.KeyCode#ESCAPE} Close the suggestion popup with a 'result'
+     * of false.
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();

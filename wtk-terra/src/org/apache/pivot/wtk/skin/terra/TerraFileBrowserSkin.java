@@ -818,6 +818,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         refreshFileList();
     }
 
+    /**
+     * {@link Keyboard.KeyCode#ENTER} change into the selected directory if
+     * {@link #keyboardFolderTraversalEnabled} is true.<br>
+     * {@link Keyboard.KeyCode#DELETE} or {@link Keyboard.KeyCode#BACKSPACE}
+     * change into the parent of the current directory.<br>
+     * {@link Keyboard.KeyCode#F5} refresh the file list.
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);

@@ -455,6 +455,12 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         return consumed;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#ENTER} Close the sheet with a 'result' of
+     * true.<br>
+     * {@link Keyboard.KeyCode#ESCAPE} Close the sheet with a 'result' of
+     * false.
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;

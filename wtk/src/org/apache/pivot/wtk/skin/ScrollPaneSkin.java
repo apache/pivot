@@ -416,6 +416,18 @@ public class ScrollPaneSkin extends ContainerSkin
         return consumed;
     }
 
+    /**
+     * Key presses have no effect if the event has already been consumed.<p>
+     * {@link Keyboard.KeyCode#UP} Scroll up a single scroll unit.<br>
+     * {@link Keyboard.KeyCode#DOWN} Scroll down a single scroll unit.<br>
+     * {@link Keyboard.KeyCode#LEFT} Scroll left a single scroll unit.<br>
+     * {@link Keyboard.KeyCode#RIGHT} Scroll right a single scroll unit.<br>
+     * {@link Keyboard.KeyCode#PAGE_UP} Scroll up a single scroll block.<br>
+     * {@link Keyboard.KeyCode#PAGE_DOWN} Scroll down a single scroll block.
+     *
+     * @see ScrollBar#getBlockIncrement()
+     * @see ScrollBar#getUnitIncrement()
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);

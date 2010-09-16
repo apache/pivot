@@ -1288,6 +1288,16 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Key presses have no effect if the event has already been consumed.<p>
+     * CommandModifier + {@link Keyboard.KeyCode#KEYPAD_1} to
+     * {@link Keyboard.KeyCode#KEYPAD_9} or<br>
+     * CommandModifier + {@link Keyboard.KeyCode#N1} to
+     * {@link Keyboard.KeyCode#N9} select the  (enabled) tab at index
+     * 0 to 8 respectively<p>
+     *
+     * @see {@link Platform#getCommandModifier()
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
