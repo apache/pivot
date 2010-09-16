@@ -23,8 +23,8 @@ import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
-import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonListener;
@@ -302,6 +302,10 @@ public abstract class ListButtonSkin extends ButtonSkin
         return consumed;
     }
 
+    /**
+     * Select the next enabled list item where the first character of the
+     * rendered text matches the typed key (case insensitive).
+     */
     @Override
     public boolean keyTyped(Component component, char character) {
         boolean consumed = super.keyTyped(component, character);

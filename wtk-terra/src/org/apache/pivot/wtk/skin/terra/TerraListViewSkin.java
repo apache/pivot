@@ -1073,6 +1073,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return consumed;
     }
 
+    /**
+     * Select the next enabled list item where the first character of the
+     * rendered text matches the typed key (case insensitive).
+     */
     @Override
     public boolean keyTyped(Component component, char character) {
         boolean consumed = super.keyTyped(component, character);

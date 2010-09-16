@@ -32,10 +32,10 @@ import org.apache.pivot.wtk.ComponentStateListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropTarget;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MenuHandler;
@@ -307,6 +307,12 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         return false;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#TAB} transfers focus
+     * {@link FocusTraversalDirection#FORWARD}<br> {@link Keyboard.KeyCode#TAB}+
+     * {@link Keyboard.Modifier#SHIFT} transfers focus
+     * {@link FocusTraversalDirection#BACKWARD}
+     */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;

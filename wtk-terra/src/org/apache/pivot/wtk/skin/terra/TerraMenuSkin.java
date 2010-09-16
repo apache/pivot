@@ -529,6 +529,10 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         return consumed;
     }
 
+    /**
+     * Select the next enabled menu item where the first character of the
+     * rendered text matches the typed key (case insensitive).
+     */
     @Override
     public boolean keyTyped(Component component, char character) {
         boolean consumed = super.keyTyped(component, character);

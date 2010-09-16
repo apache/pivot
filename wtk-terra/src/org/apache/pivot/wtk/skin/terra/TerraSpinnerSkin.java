@@ -292,6 +292,10 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             return consumed;
         }
 
+        /**
+         * Select the next spinner item where the first character of the
+         * rendered text matches the typed key (case insensitive).
+         */
         @Override
         public boolean keyTyped(Component component, char character) {
             boolean consumed = super.keyTyped(component, character);
