@@ -43,6 +43,8 @@ import org.apache.pivot.wtk.SuggestionPopupStateListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -223,14 +225,14 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     /**
-     * {@link Keyboard.KeyCode#ENTER} Close the suggestion popup with a 'result'
-     * of true.<br>
-     * {@link Keyboard.KeyCode#TAB} Close the suggestion popup with a 'result'
-     * of true, and transfer focus forwards from the TextInput.<br>
-     * {@link Keyboard.KeyCode#TAB} + {@link Keyboard.Modifier#SHIFT} Close the
+     * {@link KeyCode#ENTER ENTER} Close the suggestion popup with a 'result' of
+     * true.<br>
+     * {@link KeyCode#TAB TAB} Close the suggestion popup with a 'result' of
+     * true, and transfer focus forwards from the TextInput.<br>
+     * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Close the
      * suggestion popup with a 'result' of true, and transfer focus backwards
      * from the TextInput.<br>
-     * {@link Keyboard.KeyCode#ESCAPE} Close the suggestion popup with a 'result'
+     * {@link KeyCode#ESCAPE ESCAPE} Close the suggestion popup with a 'result'
      * of false.
      */
     @Override

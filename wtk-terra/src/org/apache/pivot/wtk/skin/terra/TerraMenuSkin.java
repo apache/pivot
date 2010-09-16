@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Menu.Item;
 import org.apache.pivot.wtk.Menu.Section;
 import org.apache.pivot.wtk.skin.ContainerSkin;
@@ -388,12 +389,12 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     /**
-     * {@link Keyboard.KeyCode#UP} Select the previous enabled menu item.<br>
-     * {@link Keyboard.KeyCode#DOWN} Select the next enabled menu item.<br>
-     * {@link Keyboard.KeyCode#LEFT} Close the current sub-menu.<br>
-     * {@link Keyboard.KeyCode#RIGHT} Open the sub-menu of the current menu
+     * {@link KeyCode#UP UP} Select the previous enabled menu item.<br>
+     * {@link KeyCode#DOWN DOWN} Select the next enabled menu item.<br>
+     * {@link KeyCode#LEFT LEFT} Close the current sub-menu.<br>
+     * {@link KeyCode#RIGHT RIGHT} Open the sub-menu of the current menu
      * item.<br>
-     * {@link Keyboard.KeyCode#ENTER} 'presses' the active menu item if it
+     * {@link KeyCode#ENTER ENTER} 'presses' the active menu item if it
      * does not have a sub-menu.
      */
     @Override
@@ -519,7 +520,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     /**
-     * {@link Keyboard.KeyCode#SPACE} 'presses' the active menu item if it does
+     * {@link KeyCode#SPACE SPACE} 'presses' the active menu item if it does
      * not have a sub-menu.
      */
     @Override

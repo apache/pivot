@@ -51,6 +51,7 @@ import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.SpinnerSelectionListener;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 import org.apache.pivot.wtk.content.NumericSpinnerData;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
@@ -221,10 +222,10 @@ public class TerraCalendarSkin extends CalendarSkin {
         }
 
         /**
-         * {@link Keyboard.KeyCode#ENTER} 'presses' the button.<br>
-         * {@link Keyboard.KeyCode#UP}, {@link Keyboard.KeyCode#DOWN},
-         * {@link Keyboard.KeyCode#LEFT} & {@link Keyboard.KeyCode#RIGHT}
-         * navigate around the date grid.
+         * {@link KeyCode#ENTER ENTER} 'presses' the button.<br>
+         * {@link KeyCode#UP UP}, {@link KeyCode#DOWN DOWN},
+         * {@link KeyCode#LEFT LEFT} & {@link KeyCode#RIGHT RIGHT} Navigate
+         * around the date grid.
          */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
@@ -319,7 +320,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         }
 
         /**
-         * {@link Keyboard.KeyCode#SPACE} 'presses' the button.
+         * {@link KeyCode#SPACE SPACE} 'presses' the button.
          */
         @Override
         public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Abstract base class for list button skins.
@@ -244,10 +245,10 @@ public abstract class ListButtonSkin extends ButtonSkin
     }
 
     /**
-     * {@link Keyboard.KeyCode#SPACE} repaints the component to reflect the
-     * pressed state and opens the popup.<br>
-     * {@link Keyboard.KeyCode#UP} selects the previous enabled list item.<br>
-     * {@link Keyboard.KeyCode#DOWN} selects the next enabled list item.
+     * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
+     * state and opens the popup.<br>
+     * {@link KeyCode#UP UP} Selects the previous enabled list item.<br>
+     * {@link KeyCode#DOWN DOWN} Selects the next enabled list item.
      *
      * @see #keyReleased(Component, int,
      * org.apache.pivot.wtk.Keyboard.KeyLocation)
@@ -306,6 +307,9 @@ public abstract class ListButtonSkin extends ButtonSkin
         return consumed;
     }
 
+    /**
+     * {@link KeyCode#SPACE SPACE} 'presses' the button.
+     */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;

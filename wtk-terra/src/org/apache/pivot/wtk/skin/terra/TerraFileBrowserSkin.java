@@ -66,6 +66,7 @@ import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.VerticalAlignment;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
 
@@ -819,11 +820,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     /**
-     * {@link Keyboard.KeyCode#ENTER} change into the selected directory if
+     * {@link KeyCode#ENTER ENTER} Change into the selected directory if
      * {@link #keyboardFolderTraversalEnabled} is true.<br>
-     * {@link Keyboard.KeyCode#DELETE} or {@link Keyboard.KeyCode#BACKSPACE}
-     * change into the parent of the current directory.<br>
-     * {@link Keyboard.KeyCode#F5} refresh the file list.
+     * {@link KeyCode#DELETE DELETE} or {@link KeyCode#BACKSPACE BACKSPACE}
+     * Change into the parent of the current directory.<br>
+     * {@link KeyCode#F5 F5} Refresh the file list.
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
@@ -859,8 +860,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     /**
-     * {@link Keyboard.KeyCode#F} + {@link Platform#getCommandModifier()} passes
-     * focus to the search TextInput.
+     * CommandModifier + {@link KeyCode#F F} Transfers focus to the search
+     * TextInput.
+     *
+     * @see Platform#getCommandModifier()
      */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

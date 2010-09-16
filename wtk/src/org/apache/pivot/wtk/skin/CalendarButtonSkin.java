@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Abstract base class for calendar button skins.
@@ -247,9 +248,9 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     }
 
     /**
-     * {@link Keyboard.KeyCode#SPACE} repaints the component to reflect the
-     * pressed state.
-     *
+     * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
+     * state.
+     * 
      * @see #keyReleased(Component, int,
      * org.apache.pivot.wtk.Keyboard.KeyLocation)
      */
@@ -276,7 +277,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     }
 
     /**
-     * {@link Keyboard.KeyCode#SPACE} 'presses' the button.
+     * {@link KeyCode#SPACE SPACE} 'presses' the button.
      */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

@@ -41,6 +41,8 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.effects.ClipDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -731,17 +733,16 @@ public class TerraAccordionSkin extends ContainerSkin
 
     /**
      * Key presses have no effect if the event has already been consumed.<p>
-     * CommandModifier + {@link Keyboard.KeyCode#KEYPAD_1} to
-     * {@link Keyboard.KeyCode#KEYPAD_9} or<br>
-     * CommandModifier + {@link Keyboard.KeyCode#N1} to
-     * {@link Keyboard.KeyCode#N9} select the (enabled) panel at index
-     * 0 to 8 respectively<p>
-     * {@link Keyboard.Modifier#ALT} + {@link Keyboard.KeyCode#UP} select the
-     * next enabled panel.<br>
-     * {@link Keyboard.Modifier#ALT} + {@link Keyboard.KeyCode#DOWN} select
-     * the previous enabled panel.
-     *
-     * @see {@link Platform#getCommandModifier()
+     * CommandModifier + {@link KeyCode#KEYPAD_1 KEYPAD_1} to
+     * {@link KeyCode#KEYPAD_9 KEYPAD_9}<br>or CommandModifier +
+     * {@link KeyCode#N1 1} to {@link KeyCode#N9 9} Select the (enabled) pane at
+     * index 0 to 8 respectively<p>
+     * {@link Modifier#ALT ALT} + {@link KeyCode#UP UP} Select the next enabled
+     * panel.<br>
+     * {@link Modifier#ALT ALT} + {@link KeyCode#DOWN DOWN} Select the previous
+     * enabled panel.
+     * 
+     * @see Platform#getCommandModifier()
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

@@ -20,6 +20,7 @@ import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Abstract base class for checkbox skins.
@@ -43,7 +44,7 @@ public abstract class CheckboxSkin extends ButtonSkin {
     }
 
     /**
-     * {@link Keyboard.KeyCode#SPACE} 'presses' the button.
+     * {@link KeyCode#SPACE SPACE} 'presses' the button.
      */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

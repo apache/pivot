@@ -52,6 +52,7 @@ import org.apache.pivot.wtk.TabPaneListener;
 import org.apache.pivot.wtk.TabPaneSelectionListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.effects.ClipDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -1290,13 +1291,12 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     /**
      * Key presses have no effect if the event has already been consumed.<p>
-     * CommandModifier + {@link Keyboard.KeyCode#KEYPAD_1} to
-     * {@link Keyboard.KeyCode#KEYPAD_9} or<br>
-     * CommandModifier + {@link Keyboard.KeyCode#N1} to
-     * {@link Keyboard.KeyCode#N9} select the  (enabled) tab at index
-     * 0 to 8 respectively<p>
+     * CommandModifier + {@link KeyCode#KEYPAD_1 KEYPAD_1} to
+     * {@link KeyCode#KEYPAD_9 KEYPAD_9}<br>or CommandModifier +
+     * {@link KeyCode#N1 1} to {@link KeyCode#N9 9} Select the (enabled) tab at
+     * index 0 to 8 respectively<p>
      *
-     * @see {@link Platform#getCommandModifier()
+     * @see Platform#getCommandModifier()
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

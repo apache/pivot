@@ -35,6 +35,7 @@ import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.ScrollPaneListener;
 import org.apache.pivot.wtk.Viewport;
 import org.apache.pivot.wtk.ViewportListener;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.ScrollPane.Corner;
 import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 
@@ -418,12 +419,12 @@ public class ScrollPaneSkin extends ContainerSkin
 
     /**
      * Key presses have no effect if the event has already been consumed.<p>
-     * {@link Keyboard.KeyCode#UP} Scroll up a single scroll unit.<br>
-     * {@link Keyboard.KeyCode#DOWN} Scroll down a single scroll unit.<br>
-     * {@link Keyboard.KeyCode#LEFT} Scroll left a single scroll unit.<br>
-     * {@link Keyboard.KeyCode#RIGHT} Scroll right a single scroll unit.<br>
-     * {@link Keyboard.KeyCode#PAGE_UP} Scroll up a single scroll block.<br>
-     * {@link Keyboard.KeyCode#PAGE_DOWN} Scroll down a single scroll block.
+     * {@link KeyCode#UP UP} Scroll up a single scroll unit.<br>
+     * {@link KeyCode#DOWN DOWN} Scroll down a single scroll unit.<br>
+     * {@link KeyCode#LEFT LEFT} Scroll left a single scroll unit.<br>
+     * {@link KeyCode#RIGHT RIGHT} Scroll right a single scroll unit.<br>
+     * {@link KeyCode#PAGE_UP PAGE_UP} Scroll up a single scroll block.<br>
+     * {@link KeyCode#PAGE_DOWN PAGE_DOWN} Scroll down a single scroll block.
      *
      * @see ScrollBar#getBlockIncrement()
      * @see ScrollBar#getUnitIncrement()

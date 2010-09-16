@@ -37,6 +37,7 @@ import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -181,7 +182,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     }
 
     /**
-     * {@link Keyboard.KeyCode#ESCAPE} Close the menu popup.
+     * {@link KeyCode#ESCAPE ESCAPE} Close the menu popup.
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

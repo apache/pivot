@@ -41,6 +41,7 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetStateListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Mouse.Button;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
@@ -456,10 +457,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     /**
-     * {@link Keyboard.KeyCode#ENTER} Close the sheet with a 'result' of
-     * true.<br>
-     * {@link Keyboard.KeyCode#ESCAPE} Close the sheet with a 'result' of
-     * false.
+     * {@link KeyCode#ENTER ENTER} Close the sheet with a 'result' of true.<br>
+     * {@link KeyCode#ESCAPE ESCAPE} Close the sheet with a 'result' of false.
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

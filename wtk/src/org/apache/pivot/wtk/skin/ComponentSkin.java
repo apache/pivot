@@ -45,6 +45,8 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Skin;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Tooltip;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 
 /**
  * Abstract base class for component skins.
@@ -308,10 +310,9 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     /**
-     * {@link Keyboard.KeyCode#TAB} transfers focus
-     * {@link FocusTraversalDirection#FORWARD}<br> {@link Keyboard.KeyCode#TAB}
-     * + {@link Keyboard.Modifier#SHIFT} transfers focus
-     * {@link FocusTraversalDirection#BACKWARD}
+     * {@link KeyCode#TAB TAB} Transfers focus forwards<br>
+     * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Transfers focus
+     * backwards
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

@@ -29,6 +29,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Dialog skin.
@@ -114,10 +115,8 @@ public class TerraDialogSkin extends TerraFrameSkin
     }
 
     /**
-     * {@link Keyboard.KeyCode#ENTER} Close the dialog with a 'result' of
-     * true.<br>
-     * {@link Keyboard.KeyCode#ESCAPE} Close the dialog with a 'result' of
-     * false.
+     * {@link KeyCode#ENTER ENTER} Close the dialog with a 'result' of true.<br>
+     * {@link KeyCode#ESCAPE ESCAPE} Close the dialog with a 'result' of false.
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
