@@ -39,12 +39,6 @@ import org.apache.pivot.wtk.WindowStateListener;
 
 /**
  * Abstract base class for calendar button skins.
- * <p>
- * TODO Rather than blindly closing when a mouse down is received, we could
- * instead cache the selection state in the popup's container mouse down event
- * and compare it to the current state in component mouse down. If different,
- * we close the popup. This would also tie this base class less tightly to its
- * concrete subclasses.
  */
 public abstract class CalendarButtonSkin extends ButtonSkin
     implements CalendarButton.Skin, CalendarButtonListener, CalendarButtonSelectionListener {

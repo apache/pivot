@@ -33,7 +33,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
     private final TextPaneSkin textPaneSkin;
 
-    private class Row {
+    private static class Row {
         public int x = 0;
         public int y = 0;
         public int width = 0;

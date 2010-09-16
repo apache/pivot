@@ -36,12 +36,6 @@ import org.apache.pivot.wtk.WindowStateListener;
 
 /**
  * Abstract base class for list button skins.
- * <p>
- * TODO Rather than blindly closing when a mouse down is received, we could
- * instead cache the selection state in the popup's container mouse down event
- * and compare it to the current state in component mouse down. If different,
- * we close the popup. This would also tie this base class less tightly to its
- * concrete subclasses.
  */
 public abstract class ListButtonSkin extends ButtonSkin
     implements ListButton.Skin, ListButtonListener, ListButtonSelectionListener {
@@ -184,13 +178,18 @@ public abstract class ListButtonSkin extends ButtonSkin
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        listViewPopup.close();
         pressed = false;
+        repaintComponent();
+
+        listViewPopup.close();
     }
 
     @Override
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
+
+        pressed = false;
+        repaintComponent();
 
         // Close the popup if focus was transferred to a component whose
         // window is not the popup
@@ -198,8 +197,6 @@ public abstract class ListButtonSkin extends ButtonSkin
             && !listViewPopup.containsFocus()) {
             listViewPopup.close();
         }
-
-        pressed = false;
     }
 
     // Component mouse events
@@ -208,6 +205,7 @@ public abstract class ListButtonSkin extends ButtonSkin
         super.mouseOut(component);
 
         pressed = false;
+        repaintComponent();
     }
 
     @Override
@@ -217,26 +215,30 @@ public abstract class ListButtonSkin extends ButtonSkin
         pressed = true;
         repaintComponent();
 
+        if (listViewPopup.isOpen()) {
+            listViewPopup.close();
+        } else {
+            listViewPopup.open(component.getWindow());
+        }
+
         return consumed;
     }
 
     @Override
     public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-        boolean consumed = super.mouseUp(component, button, x, y);
-
         pressed = false;
         repaintComponent();
 
-        return consumed;
+        return super.mouseUp(component, button, x, y);
     }
 
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
+        // TODO Only press if this is a repeatable button and the user clicked on the
+        // content area (not the trigger) (call abstract isMouseOverTrigger() method?)
         ListButton listButton = (ListButton)getComponent();
-
-        listButton.requestFocus();
         listButton.press();
 
         return consumed;
@@ -244,7 +246,7 @@ public abstract class ListButtonSkin extends ButtonSkin
 
     /**
      * {@link Keyboard.KeyCode#SPACE} repaints the component to reflect the
-     * pressed state.<br>
+     * pressed state and opens the popup.<br>
      * {@link Keyboard.KeyCode#UP} selects the previous enabled list item.<br>
      * {@link Keyboard.KeyCode#DOWN} selects the next enabled list item.
      *
@@ -258,7 +260,13 @@ public abstract class ListButtonSkin extends ButtonSkin
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = true;
             repaintComponent();
-            consumed = true;
+
+            // TODO Only open if the list button is not repeatable
+            if (listViewPopup.isOpen()) {
+                listViewPopup.close();
+            } else {
+                listViewPopup.open(component.getWindow());
+            }
         } else if (keyCode == Keyboard.KeyCode.UP) {
             ListButton listButton = (ListButton)getComponent();
             int index = listButton.getSelectedIndex();
@@ -273,18 +281,24 @@ public abstract class ListButtonSkin extends ButtonSkin
                 consumed = true;
             }
         } else if (keyCode == Keyboard.KeyCode.DOWN) {
-            ListButton listButton = (ListButton)getComponent();
-            int index = listButton.getSelectedIndex();
-            int count = listButton.getListData().getLength();
+            if (Keyboard.isPressed(Keyboard.Modifier.ALT)) {
+                listViewPopup.open(component.getWindow());
 
-            do {
-                index++;
-            } while (index < count
-                && listView.isItemDisabled(index));
-
-            if (index < count) {
-                listButton.setSelectedIndex(index);
                 consumed = true;
+            } else {
+                ListButton listButton = (ListButton)getComponent();
+                int index = listButton.getSelectedIndex();
+                int count = listButton.getListData().getLength();
+
+                do {
+                    index++;
+                } while (index < count
+                    && listView.isItemDisabled(index));
+
+                if (index < count) {
+                    listButton.setSelectedIndex(index);
+                    consumed = true;
+                }
             }
         } else {
             consumed = super.keyPressed(component, keyCode, keyLocation);
@@ -293,9 +307,6 @@ public abstract class ListButtonSkin extends ButtonSkin
         return consumed;
     }
 
-    /**
-     * {@link Keyboard.KeyCode#SPACE} 'presses' the button.
-     */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;

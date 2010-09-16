@@ -53,7 +53,82 @@ import org.apache.pivot.wtk.skin.ListButtonSkin;
  * Terra list button skin.
  */
 public class TerraListButtonSkin extends ListButtonSkin {
-    private WindowStateListener listViewPopupStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener listViewPopupStateListener = new WindowStateListener() {
+        @Override
+        public void windowOpened(Window window) {
+            // Determine the popup's location and preferred size, relative to the button
+            ListButton listButton = (ListButton)getComponent();
+            Display display = listButton.getDisplay();
+
+            if (display != null) {
+                int width = getWidth();
+                int height = getHeight();
+
+                // Adjust for list size
+                int listSize = listButton.getListSize();
+                if (listSize == -1) {
+                    listViewBorder.setPreferredHeight(-1);
+                } else {
+                    if (!listViewBorder.isPreferredHeightSet()) {
+                        ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
+                        int borderHeight = itemRenderer.getPreferredHeight(-1) * listSize + 2;
+
+                        if (listViewBorder.getPreferredHeight() > borderHeight) {
+                            listViewBorder.setPreferredHeight(borderHeight);
+                        } else {
+                            listViewBorder.setPreferredHeight(-1);
+                        }
+                    }
+                }
+
+                // Ensure that the popup remains within the bounds of the display
+                Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);
+
+                Dimensions displaySize = display.getSize();
+
+                listViewPopup.setPreferredSize(-1, -1);
+                Dimensions popupSize = listViewPopup.getPreferredSize();
+                int popupWidth = Math.max(popupSize.width, listButton.getWidth() - TRIGGER_WIDTH - 1);
+                int popupHeight = popupSize.height;
+
+                int x = buttonLocation.x;
+                if (popupWidth > width
+                    && x + popupWidth > displaySize.width) {
+                    x = buttonLocation.x + width - popupWidth;
+                }
+
+                int y = buttonLocation.y + height - 1;
+                if (y + popupSize.height > displaySize.height) {
+                    if (buttonLocation.y - popupSize.height > 0) {
+                        y = buttonLocation.y - popupSize.height + 1;
+                    } else {
+                        popupHeight = displaySize.height - y;
+                    }
+                } else {
+                    popupHeight = -1;
+                }
+
+                listViewPopup.setLocation(x, y);
+                listViewPopup.setPreferredSize(popupWidth, popupHeight);
+
+                ApplicationContext.queueCallback(new Runnable() {
+                    @Override
+                    public void run() {
+                        int selectedIndex = listView.getSelectedIndex();
+
+                        if (selectedIndex >= 0) {
+                            Bounds itemBounds = listView.getItemBounds(selectedIndex);
+                            listView.scrollAreaToVisible(itemBounds);
+                        }
+                    }
+                });
+
+                repaintComponent();
+
+                listView.requestFocus();
+            }
+        }
+
         @Override
         public Vote previewWindowClose(final Window window) {
             Vote vote = Vote.APPROVE;
@@ -90,6 +165,11 @@ public class TerraListButtonSkin extends ListButtonSkin {
         @Override
         public void windowClosed(Window window, Display display, Window owner) {
             closeTransition = null;
+
+            repaintComponent();
+
+            ListButton listButton = (ListButton)getComponent();
+            listButton.requestFocus();
         }
     };
 
@@ -651,91 +731,5 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
     public void setListHighlightBackgroundColor(Object listHighlightBackgroundColor) {
         listView.getStyles().put("highlightBackgroundColor", listHighlightBackgroundColor);
-    }
-
-    // Button events
-    @Override
-    public void buttonPressed(Button button) {
-        if (listViewPopup.isOpen()) {
-            listViewPopup.close();
-        } else {
-            ListButton listButton = (ListButton)button;
-
-            if (listButton.getListData().getLength() > 0) {
-                // Determine the popup's location and preferred size, relative
-                // to the button
-                Display display = listButton.getDisplay();
-
-                if (display != null) {
-                    int width = getWidth();
-                    int height = getHeight();
-
-                    // TODO If this is a split button, check for mouse down over the trigger?
-                    // Or should we do this in mouseDown()?
-
-                    // Adjust for list size
-                    int listSize = listButton.getListSize();
-                    if (listSize == -1) {
-                        listViewBorder.setPreferredHeight(-1);
-                    } else {
-                        if (!listViewBorder.isPreferredHeightSet()) {
-                            ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
-                            int borderHeight = itemRenderer.getPreferredHeight(-1) * listSize + 2;
-
-                            if (listViewBorder.getPreferredHeight() > borderHeight) {
-                                listViewBorder.setPreferredHeight(borderHeight);
-                            } else {
-                                listViewBorder.setPreferredHeight(-1);
-                            }
-                        }
-                    }
-
-                    // Ensure that the popup remains within the bounds of the display
-                    Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);
-
-                    Dimensions displaySize = display.getSize();
-
-                    listViewPopup.setPreferredSize(-1, -1);
-                    Dimensions popupSize = listViewPopup.getPreferredSize();
-                    int popupWidth = Math.max(popupSize.width, listButton.getWidth() - TRIGGER_WIDTH - 1);
-                    int popupHeight = popupSize.height;
-
-                    int x = buttonLocation.x;
-                    if (popupWidth > width
-                        && x + popupWidth > displaySize.width) {
-                        x = buttonLocation.x + width - popupWidth;
-                    }
-
-                    int y = buttonLocation.y + height - 1;
-                    if (y + popupSize.height > displaySize.height) {
-                        if (buttonLocation.y - popupSize.height > 0) {
-                            y = buttonLocation.y - popupSize.height + 1;
-                        } else {
-                            popupHeight = displaySize.height - y;
-                        }
-                    } else {
-                        popupHeight = -1;
-                    }
-
-                    listViewPopup.setLocation(x, y);
-                    listViewPopup.setPreferredSize(popupWidth, popupHeight);
-                    listViewPopup.open(listButton.getWindow());
-
-                    ApplicationContext.queueCallback(new Runnable() {
-                        @Override
-                        public void run() {
-                            int selectedIndex = listView.getSelectedIndex();
-
-                            if (selectedIndex >= 0) {
-                                Bounds itemBounds = listView.getItemBounds(selectedIndex);
-                                listView.scrollAreaToVisible(itemBounds);
-                            }
-                        }
-                    });
-
-                    listView.requestFocus();
-                }
-            }
-        }
     }
 }
