@@ -26,6 +26,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
@@ -39,6 +40,8 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
+import org.apache.pivot.wtk.effects.Transition;
+import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.skin.ColorChooserButtonSkin;
 
 /**
@@ -90,7 +93,40 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         }
 
         @Override
+        public Vote previewWindowClose(final Window window) {
+            Vote vote = Vote.APPROVE;
+
+            if (closeTransition == null) {
+                closeTransition = new FadeWindowTransition(window, CLOSE_TRANSITION_DURATION,
+                    CLOSE_TRANSITION_RATE, dropShadowDecorator);
+
+                closeTransition.start(new TransitionListener() {
+                    @Override
+                    public void transitionCompleted(Transition transition) {
+                        window.close();
+                    }
+                });
+
+                vote = Vote.DEFER;
+            } else {
+                vote = (closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+            }
+
+            return vote;
+        }
+
+        @Override
+        public void windowCloseVetoed(Window window, Vote reason) {
+            if (reason == Vote.DENY && closeTransition != null) {
+                closeTransition.stop();
+                closeTransition = null;
+            }
+        }
+
+        @Override
         public void windowClosed(Window window, Display display, Window owner) {
+            closeTransition = null;
+
             repaintComponent();
             getComponent().requestFocus();
         }
@@ -111,10 +147,14 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
     private Color pressedBevelColor;
     private Color disabledBevelColor;
 
+    private Transition closeTransition = null;
     private DropShadowDecorator dropShadowDecorator = null;
 
     private static final int CORNER_RADIUS = 4;
     private static final int TRIGGER_WIDTH = 10;
+
+    private static final int CLOSE_TRANSITION_DURATION = 250;
+    private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraColorChooserButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -225,7 +265,8 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
         if (colorChooserButton.isEnabled()) {
             backgroundColor = this.backgroundColor;
-            bevelColor = (pressed || colorChooserPopup.isOpen()) ? pressedBevelColor : this.bevelColor;
+            bevelColor = (pressed || (colorChooserPopup.isOpen() && closeTransition == null)) ?
+                pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {
             backgroundColor = disabledBackgroundColor;

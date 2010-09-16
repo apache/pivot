@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin.terra;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 import org.apache.pivot.wtk.ColorChooser;
 import org.apache.pivot.wtk.Component;
@@ -70,18 +71,26 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
             int width = getWidth();
             int height = getHeight();
 
-            // Paint the hue spectrum
-            for (int y = 0; y < height; y++) {
-                Color color = Color.getHSBColor(1f - (y / (float)height), 1f, 1f);
-                graphics.setColor(color);
-                graphics.fillRect(0, y, width, 1);
+            if (hueSpectrumImage == null) {
+                hueSpectrumImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D hueSpectrumImageGraphics = hueSpectrumImage.createGraphics();
+
+                // Paint the hue spectrum
+                for (int y = 0; y < height; y++) {
+                    Color color = Color.getHSBColor(1f - (y / (float)height), 1f, 1f);
+                    hueSpectrumImageGraphics.setColor(color);
+                    hueSpectrumImageGraphics.fillRect(0, y, width, 1);
+                }
+
+                hueSpectrumImageGraphics.dispose();
             }
+
+            graphics.drawImage(hueSpectrumImage, 0, 0, null);
 
             // Mark the selected hue
             float hue = hueChooser.getHue();
-            graphics.setXORMode(Color.getHSBColor(1 - hue, 1f, 1f));
+            graphics.setColor(Color.BLACK);
             graphics.fillRect(0, Math.min((int)(height * (1f - hue)), height - 1), width, 1);
-            graphics.setPaintMode();
         }
 
         @Override
@@ -210,24 +219,36 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
             int width = getWidth();
             int height = getHeight();
 
-            // Paint the saturation/value spectrum
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    Color color = Color.getHSBColor(hueChooser.getHue(), 1f - (y / (float)height),
-                        x / (float)width);
-                    graphics.setColor(color);
-                    graphics.fillRect(x, y, 1, 1);
+            float hue = hueChooser.getHue();
+
+            if (saturationValueImage == null) {
+                saturationValueImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D saturationValueImageGraphics = saturationValueImage.createGraphics();
+
+                // Paint the saturation/value spectrum
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        Color color = Color.getHSBColor(hue, 1f - (y / (float)height),
+                            x / (float)width);
+                        saturationValueImageGraphics.setColor(color);
+                        saturationValueImageGraphics.fillRect(x, y, 1, 1);
+                    }
                 }
+
+                saturationValueImageGraphics.dispose();
             }
 
+            graphics.drawImage(saturationValueImage, 0, 0, null);
+
             // Mark the selected saturation/value
-            float hue = hueChooser.getHue();
-            float saturation = saturationValueChooser.getSaturation();
-            float value = saturationValueChooser.getValue();
-            graphics.setXORMode(Color.getHSBColor(hue, 0f, 0f));
-            graphics.fillRect(0, Math.min((int)(height * (1f - saturation)), height - 1), width, 1);
-            graphics.fillRect(Math.min((int)(width * value), width - 1), 0, 1, height);
-            graphics.setPaintMode();
+            if (!getComponent().getWindow().isClosing()) {
+                float saturation = saturationValueChooser.getSaturation();
+                float value = saturationValueChooser.getValue();
+                graphics.setColor(Color.WHITE);
+                graphics.setXORMode(Color.getHSBColor(hue, 0f, 0f));
+                graphics.fillRect(0, Math.min((int)(height * (1f - saturation)), height - 1), width, 1);
+                graphics.fillRect(Math.min((int)(width * value), width - 1), 0, 1, height);
+            }
         }
 
         @Override
@@ -314,6 +335,9 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
     private SaturationValueChooser saturationValueChooser = new SaturationValueChooser();
     private HueChooser hueChooser = new HueChooser();
 
+    private BufferedImage saturationValueImage = null;
+    private BufferedImage hueSpectrumImage = null;
+
     private boolean updating = false;
 
     public TerraColorChooserSkin() {
@@ -357,6 +381,9 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
     public void layout() {
         tablePane.setSize(getWidth(), getHeight());
         tablePane.setLocation(0, 0);
+
+        saturationValueImage = null;
+        hueSpectrumImage = null;
     }
 
     public int getSpacing() {
@@ -381,6 +408,8 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
 
     @Override
     public void selectedColorChanged(ColorChooser colorChooser, Color previousSelectedColor) {
+        saturationValueImage = null;
+
         if (!updating) {
             Color color = colorChooser.getSelectedColor();
 

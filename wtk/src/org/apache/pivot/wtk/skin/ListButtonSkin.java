@@ -107,9 +107,8 @@ public abstract class ListButtonSkin extends ButtonSkin
             display.getContainerMouseListeners().remove(displayMouseListener);
 
             Window componentWindow = getComponent().getWindow();
-            if (componentWindow != null) {
-                // The list button may have been detached from the component
-                // hierarchy while our transition was running
+            if (componentWindow != null
+                && !componentWindow.isClosing()) {
                 componentWindow.moveToFront();
             }
         }

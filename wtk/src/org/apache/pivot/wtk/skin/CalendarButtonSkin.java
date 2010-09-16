@@ -104,7 +104,12 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         @Override
         public void windowClosed(Window window, Display display, Window owner) {
             display.getContainerMouseListeners().remove(displayMouseListener);
-            getComponent().getWindow().moveToFront();
+
+            Window componentWindow = getComponent().getWindow();
+            if (componentWindow != null
+                && !componentWindow.isClosing()) {
+                componentWindow.moveToFront();
+            }
         }
     };
 

@@ -271,8 +271,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
         if (calendarButton.isEnabled()) {
             backgroundColor = this.backgroundColor;
-            bevelColor = (pressed || (calendarPopup.isOpen()
-                && closeTransition == null)) ? pressedBevelColor : this.bevelColor;
+            bevelColor = (pressed || (calendarPopup.isOpen() && closeTransition == null)) ?
+                pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {
             backgroundColor = disabledBackgroundColor;
