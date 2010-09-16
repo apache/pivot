@@ -43,8 +43,8 @@ import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.FileBrowser;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
@@ -851,6 +851,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         return consumed;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#F} + {@link Platform#getCommandModifier()} passes
+     * focus to the search TextInput.
+     */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);

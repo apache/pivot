@@ -30,8 +30,8 @@ import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
-import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
@@ -260,6 +260,9 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         return consumed;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#SPACE} 'presses' the button.
+     */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;

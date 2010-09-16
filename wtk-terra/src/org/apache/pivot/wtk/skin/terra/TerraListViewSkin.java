@@ -1047,6 +1047,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return consumed;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#SPACE} toggles check mark selection when select
+     * mode is {@link ListView.SelectMode#SINGLE}
+     */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);

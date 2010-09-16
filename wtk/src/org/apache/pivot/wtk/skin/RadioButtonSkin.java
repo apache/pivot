@@ -42,6 +42,9 @@ public abstract class RadioButtonSkin extends ButtonSkin {
         return consumed;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#SPACE} 'presses' the button.
+     */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;

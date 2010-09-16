@@ -509,6 +509,10 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         return consumed;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#SPACE} 'presses' the active menu item if it does
+     * not have a sub-menu.
+     */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);

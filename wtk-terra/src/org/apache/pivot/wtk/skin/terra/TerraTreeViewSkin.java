@@ -1876,6 +1876,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         return consumed;
     }
 
+    /**
+     * {@link Keyboard.KeyCode#SPACE} toggles check mark selection when select
+     * mode is {@link TreeView.SelectMode#SINGLE}
+     */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;

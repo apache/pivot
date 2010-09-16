@@ -309,8 +309,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     /**
      * {@link Keyboard.KeyCode#TAB} transfers focus
-     * {@link FocusTraversalDirection#FORWARD}<br> {@link Keyboard.KeyCode#TAB}+
-     * {@link Keyboard.Modifier#SHIFT} transfers focus
+     * {@link FocusTraversalDirection#FORWARD}<br> {@link Keyboard.KeyCode#TAB}
+     * + {@link Keyboard.Modifier#SHIFT} transfers focus
      * {@link FocusTraversalDirection#BACKWARD}
      */
     @Override
