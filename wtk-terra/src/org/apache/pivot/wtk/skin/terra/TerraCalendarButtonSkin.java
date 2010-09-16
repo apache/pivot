@@ -46,7 +46,9 @@ import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.skin.CalendarButtonSkin;
 
 /**
- * Terra calendar button skin. TODO Calendar pass-through styles.
+ * Terra calendar button skin.
+ * <p>
+ * TODO Calendar pass-through styles.
  */
 public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private WindowStateListener calendarPopupStateListener = new WindowStateListener() {
@@ -131,8 +133,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         public void windowClosed(Window window, Display display, Window owner) {
             closeTransition = null;
 
-            CalendarButton calendarButton = (CalendarButton)getComponent();
-            calendarButton.requestFocus();
+            repaintComponent();
+            getComponent().requestFocus();
         }
     };
 
@@ -157,7 +159,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private static final int CORNER_RADIUS = 4;
     private static final int TRIGGER_WIDTH = 10;
 
-    private static final int CLOSE_TRANSITION_DURATION = 150;
+    private static final int CLOSE_TRANSITION_DURATION = 250;
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraCalendarButtonSkin() {
@@ -269,8 +271,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
         if (calendarButton.isEnabled()) {
             backgroundColor = this.backgroundColor;
-            bevelColor = (pressed || (calendarPopup.isOpen() && closeTransition == null)) ? pressedBevelColor
-                : this.bevelColor;
+            bevelColor = (pressed || (calendarPopup.isOpen()
+                && closeTransition == null)) ? pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {
             backgroundColor = disabledBackgroundColor;

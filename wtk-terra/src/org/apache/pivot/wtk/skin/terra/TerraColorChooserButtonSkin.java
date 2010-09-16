@@ -36,6 +36,8 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.ColorChooserButton;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.skin.ColorChooserButtonSkin;
 
@@ -43,6 +45,57 @@ import org.apache.pivot.wtk.skin.ColorChooserButtonSkin;
  * Terra color chooser button skin.
  */
 public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
+    private WindowStateListener colorChooserPopupStateListener = new WindowStateListener.Adapter() {
+        @Override
+        public void windowOpened(Window window) {
+            ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+
+            // Determine the popup's location and preferred size, relative
+            // to the button
+            Display display = colorChooserButton.getDisplay();
+
+            if (display != null) {
+                int width = getWidth();
+                int height = getHeight();
+
+                // Ensure that the popup remains within the bounds of the display
+                Point buttonLocation = colorChooserButton.mapPointToAncestor(display, 0, 0);
+
+                Dimensions displaySize = display.getSize();
+
+                colorChooserPopup.setPreferredSize(-1, -1);
+                Dimensions popupSize = colorChooserPopup.getPreferredSize();
+                int popupWidth = Math.max(popupSize.width,
+                    colorChooserButton.getWidth() - TRIGGER_WIDTH - 1);
+                int popupHeight = popupSize.height;
+
+                int x = buttonLocation.x;
+                if (popupWidth > width
+                    && x + popupWidth > displaySize.width) {
+                    x = buttonLocation.x + width - popupWidth;
+                }
+
+                int y = buttonLocation.y + height - 1;
+                if (y + popupSize.height > displaySize.height) {
+                    y = buttonLocation.y - popupSize.height + 1;
+                }
+
+                colorChooser.setSelectedColor(colorChooserButton.getSelectedColor());
+
+                colorChooserPopup.setLocation(x, y);
+                colorChooserPopup.setPreferredSize(popupWidth, popupHeight);
+                colorChooserPopup.open(colorChooserButton.getWindow());
+                colorChooserPopup.requestFocus();
+            }
+        }
+
+        @Override
+        public void windowClosed(Window window, Display display, Window owner) {
+            repaintComponent();
+            getComponent().requestFocus();
+        }
+    };
+
     private Border colorChooserBorder;
 
     private Font font;
@@ -79,6 +132,8 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         bevelColor = TerraTheme.brighten(backgroundColor);
         pressedBevelColor = TerraTheme.darken(backgroundColor);
         disabledBevelColor = disabledBackgroundColor;
+
+        colorChooserPopup.getWindowStateListeners().add(colorChooserPopupStateListener);
 
         // Create the border
         colorChooserBorder = new Border(colorChooser);
@@ -170,8 +225,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
         if (colorChooserButton.isEnabled()) {
             backgroundColor = this.backgroundColor;
-            bevelColor = (pressed || colorChooserPopup.isOpen())
-                ? pressedBevelColor : this.bevelColor;
+            bevelColor = (pressed || colorChooserPopup.isOpen()) ? pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {
             backgroundColor = disabledBackgroundColor;
@@ -460,57 +514,5 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         }
 
         setPadding(Insets.decode(padding));
-    }
-
-    // ButtonPressListener methods
-
-    @Override
-    public void buttonPressed(Button button) {
-        ColorChooserButton colorChooserButton = (ColorChooserButton)button;
-
-        if (colorChooserPopup.isOpen()) {
-            colorChooserPopup.close();
-
-            Color color = colorChooser.getSelectedColor();
-            colorChooserButton.setSelectedColor(color);
-        } else {
-                // Determine the popup's location and preferred size, relative
-                // to the button
-                Display display = colorChooserButton.getDisplay();
-
-                if (display != null) {
-                    int width = getWidth();
-                    int height = getHeight();
-
-                    // Ensure that the popup remains within the bounds of the display
-                    Point buttonLocation = colorChooserButton.mapPointToAncestor(display, 0, 0);
-
-                    Dimensions displaySize = display.getSize();
-
-                    colorChooserPopup.setPreferredSize(-1, -1);
-                    Dimensions popupSize = colorChooserPopup.getPreferredSize();
-                    int popupWidth = Math.max(popupSize.width,
-                        colorChooserButton.getWidth() - TRIGGER_WIDTH - 1);
-                    int popupHeight = popupSize.height;
-
-                    int x = buttonLocation.x;
-                    if (popupWidth > width
-                        && x + popupWidth > displaySize.width) {
-                        x = buttonLocation.x + width - popupWidth;
-                    }
-
-                    int y = buttonLocation.y + height - 1;
-                    if (y + popupSize.height > displaySize.height) {
-                        y = buttonLocation.y - popupSize.height + 1;
-                    }
-
-                    colorChooser.setSelectedColor(colorChooserButton.getSelectedColor());
-
-                    colorChooserPopup.setLocation(x, y);
-                    colorChooserPopup.setPreferredSize(popupWidth, popupHeight);
-                    colorChooserPopup.open(colorChooserButton.getWindow());
-                    colorChooserPopup.requestFocus();
-            }
-        }
     }
 }

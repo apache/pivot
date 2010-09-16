@@ -126,7 +126,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         }
     };
 
-    private static final int CLOSE_TRANSITION_DURATION = 200;
+    private static final int CLOSE_TRANSITION_DURATION = 250;
     private static final int CLOSE_TRANSITION_RATE = 30;
 
     public TerraMenuPopupSkin() {

@@ -199,13 +199,18 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        colorChooserPopup.close();
         pressed = false;
+        repaintComponent();
+
+        colorChooserPopup.close();
     }
 
     @Override
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
+
+        pressed = false;
+        repaintComponent();
 
         // Close the popup if focus was transferred to a component whose
         // window is not the popup
@@ -213,8 +218,6 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
             && !colorChooserPopup.containsFocus()) {
             colorChooserPopup.close();
         }
-
-        pressed = false;
     }
 
     // ComponentMouseListener methods
@@ -224,6 +227,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
         super.mouseOut(component);
 
         pressed = false;
+        repaintComponent();
     }
 
     // ComponentMouseButtonListener methods
@@ -234,6 +238,12 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
 
         pressed = true;
         repaintComponent();
+
+        if (colorChooserPopup.isOpen()) {
+            colorChooserPopup.close();
+        } else {
+            colorChooserPopup.open(component.getWindow());
+        }
 
         return consumed;
     }
@@ -253,8 +263,6 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
-
-        colorChooserButton.requestFocus();
         colorChooserButton.press();
 
         return consumed;
@@ -276,6 +284,13 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = true;
             repaintComponent();
+
+            if (colorChooserPopup.isOpen()) {
+                colorChooserPopup.close();
+            } else {
+                colorChooserPopup.open(component.getWindow());
+            }
+
             consumed = true;
         } else {
             consumed = super.keyPressed(component, keyCode, keyLocation);

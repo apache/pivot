@@ -167,9 +167,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             closeTransition = null;
 
             repaintComponent();
-
-            ListButton listButton = (ListButton)getComponent();
-            listButton.requestFocus();
+            getComponent().requestFocus();
         }
     };
 
