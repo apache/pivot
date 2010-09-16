@@ -171,7 +171,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     }
 
     // CalendarButton.Skin methods
-
     public Window getCalendarPopup() {
         return calendarPopup;
     }
@@ -181,13 +180,18 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        calendarPopup.close();
         pressed = false;
+        repaintComponent();
+
+        calendarPopup.close();
     }
 
     @Override
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
+
+        pressed = false;
+        repaintComponent();
 
         // Close the popup if focus was transferred to a component whose
         // window is not the popup
@@ -195,8 +199,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             && !calendarPopup.containsFocus()) {
             calendarPopup.close();
         }
-
-        pressed = false;
     }
 
     // Component mouse events
@@ -205,6 +207,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         super.mouseOut(component);
 
         pressed = false;
+        repaintComponent();
     }
 
     @Override
@@ -213,6 +216,12 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
         pressed = true;
         repaintComponent();
+
+        if (calendarPopup.isOpen()) {
+            calendarPopup.close();
+        } else {
+            calendarPopup.open(component.getWindow());
+        }
 
         return consumed;
     }
@@ -232,8 +241,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         CalendarButton calendarButton = (CalendarButton)getComponent();
-
-        calendarButton.requestFocus();
         calendarButton.press();
 
         return consumed;
@@ -253,6 +260,13 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = true;
             repaintComponent();
+
+            if (calendarPopup.isOpen()) {
+                calendarPopup.close();
+            } else {
+                calendarPopup.open(component.getWindow());
+            }
+
             consumed = true;
         } else {
             consumed = super.keyPressed(component, keyCode, keyLocation);

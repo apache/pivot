@@ -168,7 +168,6 @@ public abstract class ListButtonSkin extends ButtonSkin
     }
 
     // ListButton.Skin methods
-
     public Window getListViewPopup() {
         return listViewPopup;
     }
