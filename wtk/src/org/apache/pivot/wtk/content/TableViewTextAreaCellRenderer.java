@@ -56,7 +56,7 @@ public class TableViewTextAreaCellRenderer extends TextArea implements TableView
             text = toString(row, columnName);
         }
 
-        setText(text);
+        setText(text == null ? "" : text);
     }
 
     protected void renderStyles(TableView tableView, boolean rowSelected, boolean rowDisabled) {

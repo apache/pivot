@@ -40,12 +40,12 @@ import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.ScrollPane;
-import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 import org.apache.pivot.wtk.SplitPane;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 
 public class ComponentExplorerWindow extends Window implements Bindable {
     private String classProperty;
@@ -160,7 +160,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
                         break;
                     }
                 } else {
-                    sourceTextArea.setText((String)null);
+                    sourceTextArea.setText("");
                 }
 
                 contentPane.setContent(component);
