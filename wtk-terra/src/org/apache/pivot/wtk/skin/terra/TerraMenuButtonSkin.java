@@ -66,6 +66,52 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
         @Override
+        public void windowOpened(Window window) {
+            MenuButton menuButton = (MenuButton)getComponent();
+
+            // Determine the popup's location and preferred size, relative
+            // to the button
+            Display display = menuButton.getDisplay();
+
+            if (display != null) {
+                int width = getWidth();
+                int height = getHeight();
+
+                // Ensure that the popup remains within the bounds of the display
+                Point buttonLocation = menuButton.mapPointToAncestor(display, 0, 0);
+
+                Dimensions displaySize = display.getSize();
+                menuPopup.setPreferredSize(-1, -1);
+                Dimensions popupSize = menuPopup.getPreferredSize();
+                int popupWidth = Math.max(popupSize.width, menuButton.getWidth());
+                int popupHeight = popupSize.height;
+
+                int x = buttonLocation.x;
+                if (popupWidth > width
+                    && x + popupWidth > displaySize.width) {
+                    x = buttonLocation.x + width - popupWidth;
+                }
+
+                int y = buttonLocation.y + height - 1;
+                if (y + popupSize.height > displaySize.height) {
+                    if (buttonLocation.y - popupSize.height > 0) {
+                        y = buttonLocation.y - popupSize.height + 1;
+                    } else {
+                        popupHeight = displaySize.height - y;
+                    }
+                } else {
+                    popupHeight = -1;
+                }
+
+                menuPopup.setLocation(x, y);
+                menuPopup.setPreferredSize(popupWidth, popupHeight);
+                menuPopup.open(menuButton.getWindow());
+
+                menuPopup.requestFocus();
+            }
+        }
+
+        @Override
         public void windowClosed(Window window, Display display, Window owner) {
             repaintComponent();
         }
@@ -642,58 +688,5 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         return super.mouseClick(component, button, x, y, count);
-    }
-
-    // Button events
-    @Override
-    public void buttonPressed(Button button) {
-        if (menuPopup.isOpen()) {
-            menuPopup.close();
-        } else {
-            MenuButton menuButton = (MenuButton)getComponent();
-
-            // Determine the popup's location and preferred size, relative
-            // to the button
-            Window window = menuButton.getWindow();
-
-            if (window != null) {
-                int width = getWidth();
-                int height = getHeight();
-
-                Display display = menuButton.getDisplay();
-
-                // Ensure that the popup remains within the bounds of the display
-                Point buttonLocation = menuButton.mapPointToAncestor(display, 0, 0);
-
-                Dimensions displaySize = display.getSize();
-                menuPopup.setPreferredSize(-1, -1);
-                Dimensions popupSize = menuPopup.getPreferredSize();
-                int popupWidth = Math.max(popupSize.width, menuButton.getWidth());
-                int popupHeight = popupSize.height;
-
-                int x = buttonLocation.x;
-                if (popupWidth > width
-                    && x + popupWidth > displaySize.width) {
-                    x = buttonLocation.x + width - popupWidth;
-                }
-
-                int y = buttonLocation.y + height - 1;
-                if (y + popupSize.height > displaySize.height) {
-                    if (buttonLocation.y - popupSize.height > 0) {
-                        y = buttonLocation.y - popupSize.height + 1;
-                    } else {
-                        popupHeight = displaySize.height - y;
-                    }
-                } else {
-                    popupHeight = -1;
-                }
-
-                menuPopup.setLocation(x, y);
-                menuPopup.setPreferredSize(popupWidth, popupHeight);
-                menuPopup.open(menuButton.getWindow());
-
-                menuPopup.requestFocus();
-            }
-        }
     }
 }

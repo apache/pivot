@@ -91,13 +91,18 @@ public abstract class MenuButtonSkin extends ButtonSkin
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        menuPopup.close();
         pressed = false;
+        repaintComponent();
+
+        menuPopup.close();
     }
 
     @Override
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
+
+        pressed = false;
+        repaintComponent();
 
         // Close the popup if focus was transferred to a component whose
         // window is not the popup
@@ -105,8 +110,6 @@ public abstract class MenuButtonSkin extends ButtonSkin
             && !menuPopup.containsFocus()) {
             menuPopup.close();
         }
-
-        pressed = false;
     }
 
     // Component mouse events
@@ -115,17 +118,21 @@ public abstract class MenuButtonSkin extends ButtonSkin
         super.mouseOut(component);
 
         pressed = false;
+        repaintComponent();
     }
 
     @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        // TODO Consume the event if the menu button is repeatable and the event
-        // occurs over the trigger
-
         pressed = true;
         repaintComponent();
+
+        if (menuPopup.isOpen()) {
+            menuPopup.close();
+        } else {
+            menuPopup.open(component.getWindow());
+        }
 
         return consumed;
     }
@@ -166,6 +173,13 @@ public abstract class MenuButtonSkin extends ButtonSkin
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = true;
             repaintComponent();
+
+            if (menuPopup.isOpen()) {
+                menuPopup.close();
+            } else {
+                menuPopup.open(component.getWindow());
+            }
+
             consumed = true;
         } else {
             consumed = super.keyPressed(component, keyCode, keyLocation);
@@ -198,10 +212,5 @@ public abstract class MenuButtonSkin extends ButtonSkin
     @Override
     public void menuChanged(MenuButton menuButton, Menu previousMenu) {
         menuPopup.setMenu(menuButton.getMenu());
-    }
-
-    @Override
-    public void repeatableChanged(MenuButton menuButton) {
-        invalidateComponent();
     }
 }

@@ -41,13 +41,6 @@ public class MenuButton extends Button {
                 listener.menuChanged(menuButton, previousMenu);
             }
         }
-
-        @Override
-        public void repeatableChanged(MenuButton menuButton) {
-            for (MenuButtonListener listener : this) {
-                listener.repeatableChanged(menuButton);
-            }
-        }
     }
 
     /**
@@ -60,7 +53,6 @@ public class MenuButton extends Button {
     }
 
     private Menu menu = null;
-    private boolean repeatable = false;
 
     private MenuButtonListenerList menuButtonListeners = new MenuButtonListenerList();
 
@@ -108,17 +100,6 @@ public class MenuButton extends Button {
         if (previousMenu != menu) {
             this.menu = menu;
             menuButtonListeners.menuChanged(this, previousMenu);
-        }
-    }
-
-    public boolean isRepeatable() {
-        return repeatable;
-    }
-
-    public void setRepeatable(boolean repeatable) {
-        if (this.repeatable != repeatable) {
-            this.repeatable = repeatable;
-            menuButtonListeners.repeatableChanged(this);
         }
     }
 

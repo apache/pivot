@@ -21,30 +21,10 @@ package org.apache.pivot.wtk;
  */
 public interface MenuButtonListener {
     /**
-     * Menu button listener adapter.
-     */
-    public static class Adapter implements MenuButtonListener {
-        @Override
-        public void menuChanged(MenuButton menuButton, Menu previousMenu) {
-        }
-
-        @Override
-        public void repeatableChanged(MenuButton menuButton) {
-        }
-    }
-
-    /**
      * Called when a menu button's menu has changed.
      *
      * @param menuButton
      * @param previousMenu
      */
     public void menuChanged(MenuButton menuButton, Menu previousMenu);
-
-    /**
-     * Called when a menu button's repeatable flag has changed.
-     *
-     * @param menuButton
-     */
-    public void repeatableChanged(MenuButton menuButton);
 }
