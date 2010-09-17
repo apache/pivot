@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -331,8 +332,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
         if (listButton.isEnabled()) {
             color = this.color;
             backgroundColor = this.backgroundColor;
-            bevelColor = (pressed
-                || (listViewPopup.isOpen() && closeTransition == null)) ? pressedBevelColor : this.bevelColor;
+            bevelColor = (pressed || (listViewPopup.isOpen() && closeTransition == null)) ?
+                pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {
             color = disabledColor;
@@ -406,18 +407,49 @@ public class TerraListButtonSkin extends ListButtonSkin {
         triggerGraphics.setStroke(new BasicStroke(0));
         triggerGraphics.setPaint(color);
 
-        Bounds triggerBounds = new Bounds(Math.max(width - TRIGGER_WIDTH - 1, 0), 0,
-            TRIGGER_WIDTH, Math.max(height - 1, 0));
+        Bounds triggerBounds = getTriggerBounds();
         int tx = triggerBounds.x + Math.round((triggerBounds.width
-            - triggerIconShape.getBounds().width) / 2f);
+            - triggerIconShape.getBounds().width) / 2f) - 1;
         int ty = triggerBounds.y + Math.round((triggerBounds.height
-            - triggerIconShape.getBounds().height) / 2f);
+            - triggerIconShape.getBounds().height) / 2f) - 1;
         triggerGraphics.translate(tx, ty);
 
         triggerGraphics.draw(triggerIconShape);
         triggerGraphics.fill(triggerIconShape);
 
         triggerGraphics.dispose();
+
+        // Paint the trigger highlight
+        if (listButton.isRepeatable()) {
+            Point mouseLocation = listButton.getMouseLocation();
+
+            if (mouseLocation != null) {
+                graphics.setPaint(new Color(0, 0, 0, 0.25f));
+
+                if (triggerBounds.contains(mouseLocation)) {
+                    graphics.clipRect(triggerBounds.x, triggerBounds.y, triggerBounds.width, height);
+                } else {
+                    graphics.clipRect(0, 0, width - triggerBounds.width, height);
+                }
+
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+                graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
+                    CORNER_RADIUS, CORNER_RADIUS));
+
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_OFF);
+            }
+        }
+    }
+
+    @Override
+    public Bounds getTriggerBounds() {
+        int width = getWidth();
+        int height = getHeight();
+        return new Bounds(Math.max(width - (TRIGGER_WIDTH + 1), 0), 0,
+            TRIGGER_WIDTH + 1, Math.max(height, 0));
     }
 
     public Font getFont() {
@@ -729,5 +761,17 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
     public void setListHighlightBackgroundColor(Object listHighlightBackgroundColor) {
         listView.getStyles().put("highlightBackgroundColor", listHighlightBackgroundColor);
+    }
+
+    @Override
+    public boolean mouseMove(Component component, int x, int y) {
+        boolean consumed = super.mouseMove(component, x, y);
+
+        ListButton listButton = (ListButton)component;
+        if (listButton.isRepeatable()) {
+            repaintComponent();
+        }
+
+        return consumed;
     }
 }

@@ -57,6 +57,13 @@ public class ListButton extends Button {
         }
 
         @Override
+        public void repeatableChanged(ListButton listButton) {
+            for (ListButtonListener listener : this) {
+                listener.repeatableChanged(listButton);
+            }
+        }
+
+        @Override
         public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
             for (ListButtonListener listener : this) {
                 listener.disabledItemFilterChanged(listButton, previousDisabledItemFilter);
@@ -183,6 +190,7 @@ public class ListButton extends Button {
 
     private List<?> listData;
     private ListView.ItemRenderer itemRenderer;
+    private boolean repeatable = false;
     private int selectedIndex = -1;
     private Filter<?> disabledItemFilter = null;
     private int listSize = -1;
@@ -460,6 +468,24 @@ public class ListButton extends Button {
         }
     }
 
+    /**
+     * Returns the list button's repeatable flag.
+     */
+    public boolean isRepeatable() {
+        return repeatable;
+    }
+
+    /**
+     * Sets the list button's repeatable flag.
+     *
+     * @param repeatable
+     */
+    public void setRepeatable(boolean repeatable) {
+        if (this.repeatable != repeatable) {
+            this.repeatable = repeatable;
+            listButtonListeners.repeatableChanged(this);
+        }
+    }
     /**
      * Returns the current selection.
      *

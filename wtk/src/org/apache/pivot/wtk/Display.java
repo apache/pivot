@@ -25,7 +25,6 @@ import org.apache.pivot.wtk.skin.DisplaySkin;
  */
 public final class Display extends Container {
     private ApplicationContext.DisplayHost displayHost;
-    private Point mouseLocation = null;
 
     public Display(ApplicationContext.DisplayHost displayHost) {
         this.displayHost = displayHost;
@@ -102,24 +101,6 @@ public final class Display extends Container {
         }
 
         super.insert(component, index);
-    }
-
-    @Override
-    protected boolean mouseMove(int x, int y) {
-        mouseLocation = new Point(x, y);
-
-        return super.mouseMove(x, y);
-    }
-
-    @Override
-    protected void mouseOut() {
-        mouseLocation = null;
-
-        super.mouseOut();
-    }
-
-    public Point getMouseLocation() {
-        return mouseLocation;
     }
 
     @Override

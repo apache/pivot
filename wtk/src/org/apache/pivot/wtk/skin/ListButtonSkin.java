@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
@@ -172,12 +173,17 @@ public abstract class ListButtonSkin extends ButtonSkin
         return listViewPopup;
     }
 
+    public abstract Bounds getTriggerBounds();
+
     // Component state events
     @Override
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        pressed = false;
+        if (!component.isEnabled()) {
+            pressed = false;
+        }
+
         repaintComponent();
 
         listViewPopup.close();
@@ -187,14 +193,16 @@ public abstract class ListButtonSkin extends ButtonSkin
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
-        pressed = false;
         repaintComponent();
 
         // Close the popup if focus was transferred to a component whose
         // window is not the popup
-        if (!component.isFocused()
-            && !listViewPopup.containsFocus()) {
-            listViewPopup.close();
+        if (!component.isFocused()) {
+            pressed = false;
+
+            if (!listViewPopup.containsFocus()) {
+                listViewPopup.close();
+            }
         }
     }
 
@@ -214,8 +222,12 @@ public abstract class ListButtonSkin extends ButtonSkin
         pressed = true;
         repaintComponent();
 
+        ListButton listButton = (ListButton)component;
+
         if (listViewPopup.isOpen()) {
             listViewPopup.close();
+        } else if (listButton.isRepeatable() && !getTriggerBounds().contains(x, y)) {
+            listButton.requestFocus();
         } else {
             listViewPopup.open(component.getWindow());
         }
@@ -235,10 +247,10 @@ public abstract class ListButtonSkin extends ButtonSkin
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
-        // TODO Only press if this is a repeatable button and the user clicked on the
-        // content area (not the trigger) (call abstract isMouseOverTrigger() method?)
         ListButton listButton = (ListButton)getComponent();
-        listButton.press();
+        if (!listButton.isRepeatable() || !getTriggerBounds().contains(x, y)) {
+            listButton.press();
+        }
 
         return consumed;
     }
@@ -256,18 +268,18 @@ public abstract class ListButtonSkin extends ButtonSkin
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
+        ListButton listButton = (ListButton)getComponent();
+
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = true;
             repaintComponent();
 
-            // TODO Only open if the list button is not repeatable
             if (listViewPopup.isOpen()) {
                 listViewPopup.close();
-            } else {
+            } else if (!listButton.isRepeatable()){
                 listViewPopup.open(component.getWindow());
             }
         } else if (keyCode == Keyboard.KeyCode.UP) {
-            ListButton listButton = (ListButton)getComponent();
             int index = listButton.getSelectedIndex();
 
             do {
@@ -285,7 +297,6 @@ public abstract class ListButtonSkin extends ButtonSkin
 
                 consumed = true;
             } else {
-                ListButton listButton = (ListButton)getComponent();
                 int index = listButton.getSelectedIndex();
                 int count = listButton.getListData().getLength();
 
@@ -372,6 +383,11 @@ public abstract class ListButtonSkin extends ButtonSkin
     @Override
     public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
         listView.setItemRenderer(listButton.getItemRenderer());
+    }
+
+    @Override
+    public void repeatableChanged(ListButton listButton) {
+        // No-op
     }
 
     @Override

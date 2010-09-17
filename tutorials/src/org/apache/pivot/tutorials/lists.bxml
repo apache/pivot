@@ -117,7 +117,7 @@ limitations under the License.
                         <content:ListItem icon="@star.png" text="Star"/>
                     </ListButton>
 
-                    <ListButton Form.label="Color" listSize="6" selectedIndex="0">
+                    <ListButton Form.label="Repeatable" repeatable="true" listSize="6" selectedIndex="0">
                         <dataRenderer>
                             <content:ListButtonColorItemRenderer/>
                         </dataRenderer>

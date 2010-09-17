@@ -36,6 +36,10 @@ public interface ListButtonListener {
         }
 
         @Override
+        public void repeatableChanged(ListButton listButton) {
+        }
+
+        @Override
         public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
         }
 
@@ -59,6 +63,13 @@ public interface ListButtonListener {
      * @param previousItemRenderer
      */
     public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer);
+
+    /**
+     * Called when a list button's repeatable flag has changed.
+     *
+     * @param listButton
+     */
+    public void repeatableChanged(ListButton listButton);
 
     /**
      * Called when a list button's disabled item filter has changed.

@@ -614,8 +614,8 @@ public abstract class Component implements ConstrainedVisual {
     // The component's enabled flag
     private boolean enabled = true;
 
-    // The component's mouse-over flag
-    private boolean mouseOver = false;
+    // The current mouse location
+    private Point mouseLocation = null;
 
     // The cursor that is displayed over the component
     private Cursor cursor = null;
@@ -1551,7 +1551,7 @@ public abstract class Component implements ConstrainedVisual {
                 }
 
                 // Ensure that the mouse out event is processed
-                if (mouseOver) {
+                if (isMouseOver()) {
                     mouseOut();
                 }
             }
@@ -2144,7 +2144,7 @@ public abstract class Component implements ConstrainedVisual {
                 }
 
                 // Ensure that the mouse out event is processed
-                if (mouseOver) {
+                if (isMouseOver()) {
                     mouseOut();
                 }
             }
@@ -2184,7 +2184,18 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>false</tt>, otherwise.
      */
     public boolean isMouseOver() {
-        return mouseOver;
+        return (mouseLocation != null);
+    }
+
+    /**
+     * Returns the current mouse location in the component's coordinate space.
+     *
+     * @return
+     * The current mouse location, or <tt>null</tt> if the mouse is not
+     * currently positioned over this component.
+     */
+    public Point getMouseLocation() {
+        return mouseLocation;
     }
 
     /**
@@ -2212,7 +2223,7 @@ public abstract class Component implements ConstrainedVisual {
         if (previousCursor != cursor) {
             this.cursor = cursor;
 
-            if (mouseOver) {
+            if (isMouseOver()) {
                 Mouse.setCursor(this);
             }
 
@@ -2680,6 +2691,7 @@ public abstract class Component implements ConstrainedVisual {
         boolean consumed = false;
 
         if (isEnabled()) {
+            mouseLocation = new Point(x, y);
             consumed = componentMouseListeners.mouseMove(this, x, y);
         }
 
@@ -2688,14 +2700,13 @@ public abstract class Component implements ConstrainedVisual {
 
     protected void mouseOver() {
         if (isEnabled()) {
-            mouseOver = true;
             componentMouseListeners.mouseOver(this);
         }
     }
 
     protected void mouseOut() {
         if (isEnabled()) {
-            mouseOver = false;
+            mouseLocation = null;
             componentMouseListeners.mouseOut(this);
         }
     }
