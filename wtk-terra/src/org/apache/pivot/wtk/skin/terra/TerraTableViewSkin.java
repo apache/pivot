@@ -1303,10 +1303,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
      * is not {@link SelectMode#NONE}<br>
      * {@link KeyCode#DOWN DOWN} Selects the next enabled row when select mode
      * is not {@link SelectMode#NONE}<p>
-     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the 
+     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the
      * selection size by including the previous enabled row when select mode
      * is {@link SelectMode#MULTI}<br>
-     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases the 
+     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases the
      * selection size by including the next enabled row when select mode is
      * {@link SelectMode#MULTI}
      */

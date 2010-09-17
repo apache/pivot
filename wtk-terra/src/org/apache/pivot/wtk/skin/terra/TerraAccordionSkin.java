@@ -741,7 +741,7 @@ public class TerraAccordionSkin extends ContainerSkin
      * panel.<br>
      * {@link Modifier#ALT ALT} + {@link KeyCode#DOWN DOWN} Select the previous
      * enabled panel.
-     * 
+     *
      * @see Platform#getCommandModifier()
      */
     @Override

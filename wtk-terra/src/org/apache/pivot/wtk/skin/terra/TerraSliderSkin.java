@@ -217,9 +217,9 @@ public class TerraSliderSkin extends SliderSkin {
         }
 
         /**
-         * {@link KeyCode#LEFT LEFT} or {@link KeyCode#DOWN DOWN} Decrement 
+         * {@link KeyCode#LEFT LEFT} or {@link KeyCode#DOWN DOWN} Decrement
          * the slider's value.<br>
-         * {@link KeyCode#RIGHT RIGHT} or {@link KeyCode#UP UP} Increment 
+         * {@link KeyCode#RIGHT RIGHT} or {@link KeyCode#UP UP} Increment
          * the slider's value.
          */
         @Override
