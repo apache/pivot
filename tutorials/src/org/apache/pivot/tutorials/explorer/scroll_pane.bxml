@@ -17,16 +17,16 @@ limitations under the License.
 -->
 
 <ScrollPane xmlns:bxml="http://pivot.apache.org/bxml"
-    xmlns:navigation="org.apache.pivot.tutorials.explorer.navigation"
+    xmlns:explorer="org.apache.pivot.tutorials.explorer"
     xmlns="org.apache.pivot.wtk">
     <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
         tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
 
     <columnHeader>
-        <navigation:Ruler orientation="horizontal"/>
+        <explorer:Ruler orientation="horizontal"/>
     </columnHeader>
 
     <rowHeader>
-        <navigation:Ruler orientation="vertical"/>
+        <explorer:Ruler orientation="vertical"/>
     </rowHeader>
 </ScrollPane>

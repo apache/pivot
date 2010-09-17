@@ -2727,6 +2727,8 @@ public abstract class Component implements ConstrainedVisual {
 
     protected void mouseOver() {
         if (isEnabled()) {
+            mouseLocation = new Point(-1, -1);
+
             componentMouseListeners.mouseOver(this);
         }
     }

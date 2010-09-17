@@ -186,6 +186,8 @@ public class TerraSliderSkin extends SliderSkin {
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = super.mouseDown(component, button, x, y);
 
+            component.requestFocus();
+
             if (button == Mouse.Button.LEFT) {
                 dragOffset = new Point(x, y);
                 Mouse.capture(component);
@@ -208,12 +210,6 @@ public class TerraSliderSkin extends SliderSkin {
             }
 
             return consumed;
-        }
-
-        @Override
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            component.requestFocus();
-            return super.mouseClick(component, button, x, y, count);
         }
 
         /**
@@ -258,7 +254,7 @@ public class TerraSliderSkin extends SliderSkin {
     private Color buttonBorderColor;
     private int thumbWidth;
     private int thumbHeight;
-    private Integer tickSpacing;
+    private int tickSpacing;
 
     // Derived colors
     private Color buttonBevelColor;
@@ -279,6 +275,8 @@ public class TerraSliderSkin extends SliderSkin {
 
         thumbWidth = 8;
         thumbHeight = 16;
+
+        tickSpacing = -1;
     }
 
     @Override
@@ -362,7 +360,7 @@ public class TerraSliderSkin extends SliderSkin {
             RenderingHints.VALUE_ANTIALIAS_ON);
         if (slider.getOrientation() == Orientation.HORIZONTAL) {
             graphics.fillRect(0, (height - trackWidth) / 2, width, trackWidth);
-            if (tickSpacing != null) {
+            if (tickSpacing != -1) {
                 int start = slider.getStart();
                 int end = slider.getEnd();
                 int value = start;
@@ -375,7 +373,7 @@ public class TerraSliderSkin extends SliderSkin {
             }
         } else {
             graphics.fillRect((width - trackWidth) / 2, 0, trackWidth, height);
-            if (tickSpacing != null) {
+            if (tickSpacing != -1) {
                 int start = slider.getStart();
                 int end = slider.getEnd();
                 int value = start;
@@ -428,6 +426,7 @@ public class TerraSliderSkin extends SliderSkin {
         if (trackWidth < 0) {
             throw new IllegalArgumentException("trackWidth is negative.");
         }
+
         this.trackWidth = trackWidth;
         repaintComponent();
     }
@@ -527,17 +526,21 @@ public class TerraSliderSkin extends SliderSkin {
         setThumbHeight(thumbHeight.intValue());
     }
 
-    public Integer getTickSpacing() {
+    public int getTickSpacing() {
         return tickSpacing;
     }
 
-    public void setTickSpacing(Integer tickSpacing) {
+    public void setTickSpacing(int tickSpacing) {
         this.tickSpacing = tickSpacing;
         repaintComponent();
     }
 
     public void setTickSpacing(Number tickSpacing) {
-        setTickSpacing(tickSpacing == null ? null : tickSpacing.intValue());
+        if (tickSpacing == null) {
+            throw new IllegalArgumentException("tickSpacing is null.");
+        }
+
+        setTickSpacing(tickSpacing.intValue());
     }
 
     @Override
