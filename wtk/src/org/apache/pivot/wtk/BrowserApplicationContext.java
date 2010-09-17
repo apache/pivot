@@ -151,28 +151,25 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 }
 
                 hostApplets.add(HostApplet.this);
+
+                // Load the application
+                String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
+                if (applicationClassName == null) {
+                    System.err.println(APPLICATION_CLASS_NAME_PARAMETER + " paramter is required.");
+                } else {
+                    try {
+                        Class<?> applicationClass = Class.forName(applicationClassName);
+                        application = (Application)applicationClass.newInstance();
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                }
             }
         }
 
         private class StartCallback implements Runnable {
             @Override
             public void run() {
-                // Load the application
-                String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
-                if (applicationClassName == null) {
-                    Alert.alert(MessageType.ERROR, "Application class name is required.",
-                        displayHost.getDisplay());
-                } else {
-                    try {
-                        Class<?> applicationClass = Class.forName(applicationClassName);
-                        application = (Application)applicationClass.newInstance();
-                    } catch (Throwable throwable) {
-                        Alert.alert(MessageType.ERROR, throwable.getMessage(),
-                            displayHost.getDisplay());
-                        throwable.printStackTrace();
-                    }
-                }
-
                 // Start the application
                 if (application != null) {
                     try {
@@ -286,15 +283,17 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
             String message = exception.getClass().getName();
 
-            Label body = null;
+            TextArea body = null;
             String bodyText = exception.getMessage();
             if (bodyText != null
                 && bodyText.length() > 0) {
-                body = new Label(bodyText);
-                body.getStyles().put("wrapText", true);
+                body = new TextArea();
+                body.setText(bodyText);
+                body.setEditable(false);
             }
 
-            Alert.alert(MessageType.ERROR, message, body, displayHost.getDisplay());
+            Alert alert = new Alert(MessageType.ERROR, message, null, body);
+            alert.open(displayHost.getDisplay());
         }
     }
 

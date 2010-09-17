@@ -192,14 +192,11 @@ public class Prompt extends Sheet {
     }
 
     public Prompt(MessageType messageType, String message, Sequence<?> options, Component body) {
-        if (messageType == null) {
-            messageType = MessageType.INFO;
-        }
-
-        setMessageType(messageType);
+        setMessageType((messageType == null) ? MessageType.INFO : messageType);
         setMessage(message);
+        setOptions((options == null) ? new ArrayList<Object>(resources.get("defaultOption")) : options);
         setBody(body);
-        setOptions(options);
+
         setTitle((String)resources.get("defaultTitle"));
 
         installSkin(Prompt.class);
@@ -318,8 +315,7 @@ public class Prompt extends Sheet {
 
     public static void prompt(MessageType messageType, String message, Component body, Window owner,
         SheetCloseListener sheetCloseListener) {
-        Prompt prompt = new Prompt(messageType, message,
-            new ArrayList<Object>(resources.get("defaultOption")), body);
+        Prompt prompt = new Prompt(messageType, message, null, body);
         prompt.open(owner, sheetCloseListener);
     }
 }

@@ -187,29 +187,26 @@ public class Alert extends Dialog {
         this(null, null, null);
     }
 
-    public Alert(MessageType type, String message, Sequence<?> options) {
-        this(type, message, options, true);
+    public Alert(MessageType messageType, String message, Sequence<?> options) {
+        this(messageType, message, options, true);
     }
 
-    public Alert(MessageType type, String message, Sequence<?> options, boolean modal) {
-        this(type, message, options, null, modal);
+    public Alert(MessageType messageType, String message, Sequence<?> options, boolean modal) {
+        this(messageType, message, options, null, modal);
     }
 
-    public Alert(MessageType type, String message, Sequence<?> options, Component body) {
-        this(type, message, options, body, true);
+    public Alert(MessageType messageType, String message, Sequence<?> options, Component body) {
+        this(messageType, message, options, body, true);
     }
 
     public Alert(MessageType messageType, String message, Sequence<?> options, Component body, boolean modal) {
         super(modal);
 
-        if (messageType == null) {
-            messageType = MessageType.INFO;
-        }
-
-        setMessageType(messageType);
+        setMessageType((messageType == null) ? MessageType.INFO : messageType);
         setMessage(message);
+        setOptions((options == null) ? new ArrayList<Object>(resources.get("defaultOption")) : options);
         setBody(body);
-        setOptions(options);
+
         setTitle((String)resources.get("defaultTitle"));
 
         installSkin(Alert.class);
@@ -309,26 +306,6 @@ public class Alert extends Dialog {
         return alertListeners;
     }
 
-    public static void alert(String message, Display display) {
-        alert(MessageType.INFO, message, null, display, null);
-    }
-
-    public static void alert(MessageType messageType, String message, Display display) {
-        alert(messageType, message, null, display, null);
-    }
-
-    public static void alert(MessageType messageType, String message, Component body, Display display) {
-        alert(messageType, message, body, display, null);
-    }
-
-    public static void alert(MessageType messageType, String message, Component body, Display display,
-        DialogCloseListener dialogCloseListener) {
-        Alert alert = new Alert(messageType, message,
-            new ArrayList<Object>(resources.get("defaultOption")), body);
-        alert.setModal(false);
-        alert.open(display, dialogCloseListener);
-    }
-
     public static void alert(String message, Window owner) {
         alert(MessageType.INFO, message, null, owner, null);
     }
@@ -348,8 +325,7 @@ public class Alert extends Dialog {
 
     public static void alert(MessageType messageType, String message, Component body, Window owner,
         DialogCloseListener dialogCloseListener) {
-        Alert alert = new Alert(messageType, message,
-            new ArrayList<Object>(resources.get("defaultOption")), body);
+        Alert alert = new Alert(messageType, message, null, body);
         alert.open(owner.getDisplay(), owner, dialogCloseListener);
     }
 }

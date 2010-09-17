@@ -664,15 +664,17 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         String message = exception.getClass().getName();
 
-        Label body = null;
+        TextArea body = null;
         String bodyText = exception.getMessage();
         if (bodyText != null
             && bodyText.length() > 0) {
-            body = new Label(bodyText);
-            body.getStyles().put("wrapText", true);
+            body = new TextArea();
+            body.setText(bodyText);
+            body.setEditable(false);
         }
 
-        Alert.alert(MessageType.ERROR, message, body, primaryDisplayHost.getDisplay());
+        Alert alert = new Alert(MessageType.ERROR, message, null, body);
+        alert.open(primaryDisplayHost.getDisplay());
     }
 
     /**
