@@ -75,7 +75,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             LISTENER_LIST_PROPERTY,
             INCLUDE,
             SCRIPT,
-            DEFINE
+            DEFINE,
+            REFERENCE
         }
 
         public final Element parent;
@@ -272,6 +273,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     public static final String SCRIPT_SRC_ATTRIBUTE = "src";
 
     public static final String DEFINE_TAG = "define";
+
+    public static final String REFERENCE_TAG = "reference";
+    public static final String REFERENCE_ID_ATTRIBUTE = "id";
 
     public static final String DEFAULT_LANGUAGE = "javascript";
 
@@ -711,6 +715,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 elementType = Element.Type.SCRIPT;
             } else if (localName.equals(DEFINE_TAG)) {
                 elementType = Element.Type.DEFINE;
+            } else if (localName.equals(REFERENCE_TAG)) {
+                elementType = Element.Type.REFERENCE;
             } else {
                 throw new SerializationException("Invalid element.");
             }
@@ -794,8 +800,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         element = new Element(element, elementType, name, propertyClass, value);
         processAttributes();
 
-        // If the element is an include, load it
         if (elementType == Element.Type.INCLUDE) {
+            // Load the include
             if (!element.properties.containsKey(INCLUDE_SRC_ATTRIBUTE)) {
                 throw new SerializationException(INCLUDE_SRC_ATTRIBUTE
                     + " attribute is required for " + BXML_PREFIX + ":" + INCLUDE_TAG
@@ -878,6 +884,20 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             } finally {
                 inputStream.close();
             }
+        } else if (element.type == Element.Type.REFERENCE) {
+            // Dereference the value
+            if (!element.properties.containsKey(REFERENCE_ID_ATTRIBUTE)) {
+                throw new SerializationException(REFERENCE_ID_ATTRIBUTE
+                    + " attribute is required for " + BXML_PREFIX + ":" + REFERENCE_TAG
+                    + " tag.");
+            }
+
+            String id = element.properties.get(REFERENCE_ID_ATTRIBUTE);
+            if (!namespace.containsKey(id)) {
+                throw new SerializationException("A value with ID \"" + id + "\" does not exist.");
+            }
+
+            element.value = namespace.get(id);
         }
 
         // If the element has an ID, add the value to the namespace
@@ -939,6 +959,10 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     case SCRIPT: {
                         property = (localName.equals(SCRIPT_SRC_ATTRIBUTE));
                         break;
+                    }
+
+                    case REFERENCE: {
+                        property = (localName.equals(REFERENCE_ID_ATTRIBUTE));
                     }
                 }
 
@@ -1050,7 +1074,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private void processEndElement() throws SerializationException {
         switch (element.type) {
             case INSTANCE:
-            case INCLUDE: {
+            case INCLUDE:
+            case REFERENCE: {
                 // Apply attributes
                 for (Attribute attribute : element.attributes) {
                     if (attribute.propertyClass == null) {
