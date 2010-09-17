@@ -134,7 +134,7 @@ public class RESTDemoServlet extends QueryServlet {
     }
 
     @Override
-    protected Serializer<?> createSerializer(Path path) throws QueryException {
+    protected Serializer<?> createSerializer(Query.Method method, Path path) throws QueryException {
         return new JSONSerializer();
     }
 }
