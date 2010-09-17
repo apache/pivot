@@ -20,7 +20,6 @@ import java.awt.Font;
 
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
@@ -29,6 +28,7 @@ import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.ComponentMouseWheelListener;
 import org.apache.pivot.wtk.ComponentStateListener;
+import org.apache.pivot.wtk.ComponentTooltipListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
@@ -53,42 +53,11 @@ import org.apache.pivot.wtk.Keyboard.Modifier;
  */
 public abstract class ComponentSkin implements Skin, ComponentListener,
     ComponentStateListener, ComponentMouseListener, ComponentMouseButtonListener,
-    ComponentMouseWheelListener, ComponentKeyListener {
-    private class ShowTooltipCallback implements Runnable {
-        @Override
-        public void run() {
-            Component component = getComponent();
-            String tooltipText = component.getTooltipText();
-
-            // The tooltip text may have been cleared while the timeout was
-            // outstanding; if so, don't display the tooltip
-            if (tooltipText != null) {
-                final Tooltip tooltip = new Tooltip(new Label(tooltipText));
-
-                Point location = component.getDisplay().getMouseLocation();
-                int x = location.x;
-                int y = location.y;
-
-                // Ensure that the tooltip stays on screen
-                Display display = component.getDisplay();
-                int tooltipHeight = tooltip.getPreferredHeight();
-                if (y + tooltipHeight > display.getHeight()) {
-                    y -= tooltipHeight;
-                }
-
-                tooltip.setLocation(x + 16, y);
-                tooltip.open(component.getWindow());
-            }
-        }
-    }
-
+    ComponentMouseWheelListener, ComponentKeyListener, ComponentTooltipListener {
     private Component component = null;
 
     private int width = 0;
     private int height = 0;
-
-    private ShowTooltipCallback showTooltipCallback = new ShowTooltipCallback();
-    private ApplicationContext.ScheduledCallback scheduledShowTooltipCallback = null;
 
     @Override
     public int getWidth() {
@@ -131,6 +100,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         component.getComponentMouseButtonListeners().add(this);
         component.getComponentMouseWheelListeners().add(this);
         component.getComponentKeyListeners().add(this);
+        component.getComponentTooltipListeners().add(this);
 
         this.component = component;
     }
@@ -250,16 +220,6 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     // Component mouse events
     @Override
     public boolean mouseMove(Component component, int x, int y) {
-        if (scheduledShowTooltipCallback != null) {
-            scheduledShowTooltipCallback.cancel();
-            scheduledShowTooltipCallback = null;
-        }
-
-        if (getComponent().getTooltipText() != null) {
-            scheduledShowTooltipCallback =
-                ApplicationContext.scheduleCallback(showTooltipCallback, component.getTooltipDelay());
-        }
-
         return false;
     }
 
@@ -269,20 +229,11 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     @Override
     public void mouseOut(Component component) {
-        if (scheduledShowTooltipCallback != null) {
-            scheduledShowTooltipCallback.cancel();
-            scheduledShowTooltipCallback = null;
-        }
     }
 
     // Component mouse button events
     @Override
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-        if (scheduledShowTooltipCallback != null) {
-            scheduledShowTooltipCallback.cancel();
-            scheduledShowTooltipCallback = null;
-        }
-
         return false;
     }
 
@@ -342,6 +293,30 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         return false;
+    }
+
+    @Override
+    public void tooltipTriggered(Component component, int x, int y) {
+        String tooltipText = component.getTooltipText();
+
+        if (tooltipText != null) {
+            Tooltip tooltip = new Tooltip(new Label(tooltipText));
+
+            Display display = component.getDisplay();
+            Point location = component.mapPointToAncestor(display, x, y);
+
+            // Ensure that the tooltip stays on screen
+            int tooltipX = location.x + 16;
+            int tooltipY = location.y;
+
+            int tooltipHeight = tooltip.getPreferredHeight();
+            if (tooltipY + tooltipHeight > display.getHeight()) {
+                tooltipY -= tooltipHeight;
+            }
+
+            tooltip.setLocation(tooltipX, tooltipY);
+            tooltip.open(component.getWindow());
+        }
     }
 
     // Utility methods

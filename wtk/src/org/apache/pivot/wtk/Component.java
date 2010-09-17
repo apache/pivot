@@ -540,6 +540,16 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
+    private static class ComponentTooltipListenerList extends ListenerList<ComponentTooltipListener>
+        implements ComponentTooltipListener {
+        @Override
+        public void tooltipTriggered(Component component, int x, int y) {
+            for (ComponentTooltipListener listener : this) {
+                listener.tooltipTriggered(component, x, y);
+            }
+        }
+    }
+
     private static class ComponentDataListenerList extends ListenerList<ComponentDataListener>
         implements ComponentDataListener {
         @Override
@@ -620,9 +630,10 @@ public abstract class Component implements ConstrainedVisual {
     // The cursor that is displayed over the component
     private Cursor cursor = null;
 
-    // The tooltip text and delay
+    // The tooltip text, delay, and trigger callback
     private String tooltipText = null;
     private int tooltipDelay = 1000;
+    private ApplicationContext.ScheduledCallback triggerTooltipCallback = null;
 
     // The component's drag source
     private DragSource dragSource = null;
@@ -659,6 +670,7 @@ public abstract class Component implements ConstrainedVisual {
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
     private ComponentMouseWheelListenerList componentMouseWheelListeners = new ComponentMouseWheelListenerList();
     private ComponentKeyListenerList componentKeyListeners = new ComponentKeyListenerList();
+    private ComponentTooltipListenerList componentTooltipListeners = new ComponentTooltipListenerList();
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
 
     // The component that currently has the focus
@@ -2692,6 +2704,21 @@ public abstract class Component implements ConstrainedVisual {
 
         if (isEnabled()) {
             mouseLocation = new Point(x, y);
+
+            if (triggerTooltipCallback != null) {
+                triggerTooltipCallback.cancel();
+                triggerTooltipCallback = null;
+            }
+
+            triggerTooltipCallback = ApplicationContext.scheduleCallback(new Runnable() {
+                @Override
+                public void run() {
+                    Point mouseLocation = getMouseLocation();
+                    componentTooltipListeners.tooltipTriggered(Component.this,
+                        mouseLocation.x, mouseLocation.y);
+                }
+            }, tooltipDelay);
+
             consumed = componentMouseListeners.mouseMove(this, x, y);
         }
 
@@ -2707,6 +2734,12 @@ public abstract class Component implements ConstrainedVisual {
     protected void mouseOut() {
         if (isEnabled()) {
             mouseLocation = null;
+
+            if (triggerTooltipCallback != null) {
+                triggerTooltipCallback.cancel();
+                triggerTooltipCallback = null;
+            }
+
             componentMouseListeners.mouseOut(this);
         }
     }
@@ -2715,6 +2748,11 @@ public abstract class Component implements ConstrainedVisual {
         boolean consumed = false;
 
         if (isEnabled()) {
+            if (triggerTooltipCallback != null) {
+                triggerTooltipCallback.cancel();
+                triggerTooltipCallback = null;
+            }
+
             consumed = componentMouseButtonListeners.mouseDown(this, button, x, y);
         }
 
@@ -2836,6 +2874,10 @@ public abstract class Component implements ConstrainedVisual {
 
     public ListenerList<ComponentKeyListener> getComponentKeyListeners() {
         return componentKeyListeners;
+    }
+
+    public ListenerList<ComponentTooltipListener> getComponentTooltipListeners() {
+        return componentTooltipListeners;
     }
 
     public ListenerList<ComponentDataListener> getComponentDataListeners() {
