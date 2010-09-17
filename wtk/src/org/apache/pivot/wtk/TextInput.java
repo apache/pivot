@@ -459,6 +459,15 @@ public class TextInput extends Component {
     }
 
     /**
+     * Returns the character at a given index.
+     *
+     * @param index
+     */
+    public char getCharacterAt(int index) {
+        return characters.charAt(index);
+    }
+
+    /**
      * Returns the number of characters in the text input.
      */
     public int getCharacterCount() {

@@ -869,7 +869,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 selectionLength = 0;
             }
 
-            if (selectionStart + selectionLength < textArea.getCharacterCount()) {
+            if (selectionStart + selectionLength <= textArea.getCharacterCount()) {
                 textArea.setSelection(selectionStart, selectionLength);
                 scrollCharacterToVisible(selectionStart + selectionLength);
 
@@ -976,7 +976,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 selectionLength = 0;
             }
 
-            if (selectionStart + selectionLength < textArea.getCharacterCount()) {
+            if (selectionStart + selectionLength <= textArea.getCharacterCount()) {
                 textArea.setSelection(selectionStart, selectionLength);
                 scrollCharacterToVisible(selectionStart + selectionLength);
 

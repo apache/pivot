@@ -333,7 +333,8 @@ public abstract class QueryServlet extends HttpServlet {
      *
      * @throws ServletException
      */
-    protected abstract Serializer<?> createSerializer(Query.Method method, Path path) throws QueryException;
+    protected abstract Serializer<?> createSerializer(Query.Method method, Path path)
+        throws QueryException;
 
     @Override
     @SuppressWarnings("unchecked")

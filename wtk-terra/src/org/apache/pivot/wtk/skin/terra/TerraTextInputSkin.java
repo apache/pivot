@@ -258,7 +258,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             } else {
                 // Scroll lead selection to visible
                 int selectionStart = textInput.getSelectionStart();
-                if (selectionStart < n
+                if (selectionStart <= n
                     && textInput.isFocused()) {
                     scrollCharacterToVisible(selectionStart);
                 }
@@ -452,15 +452,22 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         Bounds characterBounds = null;
 
         if (glyphVector != null) {
-            Shape glyphBounds = glyphVector.getGlyphLogicalBounds(index);
-            Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
+            int x, width;
+            if (index < glyphVector.getNumGlyphs()) {
+                Shape glyphBounds = glyphVector.getGlyphLogicalBounds(index);
+                Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-            int x = (int)Math.floor(glyphBounds2D.getX()) + padding.left - scrollLeft + 1;
-            int y = padding.top + 1;
-            int width = (int)Math.ceil(glyphBounds2D.getWidth());
-            int height = getHeight() - (padding.top + padding.bottom + 2);
+                x = (int)Math.floor(glyphBounds2D.getX());
+                width = (int)Math.ceil(glyphBounds2D.getWidth());
+            } else {
+                // This is the terminator character
+                Rectangle2D glyphVectorBounds = glyphVector.getLogicalBounds();
+                x = (int)Math.floor(glyphVectorBounds.getWidth());
+                width = 0;
+            }
 
-            characterBounds = new Bounds(x, y, width, height);
+            characterBounds = new Bounds(x + padding.left - scrollLeft + 1, padding.top + 1,
+                width, getHeight() - (padding.top + padding.bottom + 2));
         }
 
         return characterBounds;
@@ -1108,6 +1115,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         TextInput textInput = (TextInput)getComponent();
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+        Keyboard.Modifier wordNavigationModifier = Platform.getWordNavigationModifier();
 
         if (keyCode == Keyboard.KeyCode.DELETE) {
             int index = textInput.getSelectionStart();
@@ -1140,105 +1148,124 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 textInput.setSelection(0, 0);
             }
 
+            scrollCharacterToVisible(0);
+
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.END
             || (keyCode == Keyboard.KeyCode.RIGHT
                 && Keyboard.isPressed(Keyboard.Modifier.META))) {
             // Move the caret to the end of the text
+            int n = textInput.getCharacterCount();
+
             if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 int selectionStart = textInput.getSelectionStart();
-                textInput.setSelection(selectionStart, textInput.getCharacterCount() - selectionStart);
+                textInput.setSelection(selectionStart, n - selectionStart);
             } else {
-                textInput.setSelection(textInput.getCharacterCount(), 0);
+                textInput.setSelection(n, 0);
             }
+
+            scrollCharacterToVisible(n);
 
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
 
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                // Add all preceding text to the selection
-                selectionLength = selectionStart + selectionLength;
-                selectionStart = 0;
-                consumed = true;
+            if (Keyboard.isPressed(wordNavigationModifier)) {
+                // Move the caret to the start of the next word to the left
+                if (selectionStart > 0) {
+                    // Skip over any space immediately to the left
+                    int index = selectionStart;
+                    while (index > 0
+                        && Character.isWhitespace(textInput.getCharacterAt(index - 1))) {
+                        index--;
+                    }
+
+                    // Skip over any word-letters to the left
+                    while (index > 0
+                        && !Character.isWhitespace(textInput.getCharacterAt(index - 1))) {
+                        index--;
+                    }
+
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        selectionLength += selectionStart - index;
+                    } else {
+                        selectionLength = 0;
+                    }
+
+                    selectionStart = index;
+                }
             } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Add the previous character to the selection
                 if (selectionStart > 0) {
                     selectionStart--;
                     selectionLength++;
                 }
-
-                consumed = true;
-            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                // Clear the selection and move the caret to the beginning of
-                // the text
-                selectionStart = 0;
-                selectionLength = 0;
-                consumed = true;
             } else {
-                // Clear the selection and move the caret back by one
-                // character
+                // Move the caret back by one character
                 if (selectionLength == 0
                     && selectionStart > 0) {
                     selectionStart--;
-                    consumed = true;
                 }
 
+                // Clear the selection
                 selectionLength = 0;
             }
 
-            textInput.setSelection(selectionStart, selectionLength);
-
-            if (textInput.getCharacterCount() > 0) {
+            if (selectionStart >= 0) {
+                textInput.setSelection(selectionStart, selectionLength);
                 scrollCharacterToVisible(selectionStart);
-            } else {
-                setScrollLeft(0);
+
+                consumed = true;
             }
         } else if (keyCode == Keyboard.KeyCode.RIGHT) {
             int selectionStart = textInput.getSelectionStart();
             int selectionLength = textInput.getSelectionLength();
 
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                // Add all subsequent text to the selection
-                selectionLength = textInput.getCharacterCount() - selectionStart;
-                consumed = true;
+            if (Keyboard.isPressed(wordNavigationModifier)) {
+                // Move the caret to the start of the next word to the right
+                if (selectionStart < textInput.getCharacterCount()) {
+                    int index = selectionStart + selectionLength;
+
+                    // Skip over any space immediately to the right
+                    while (index < textInput.getCharacterCount()
+                        && Character.isWhitespace(textInput.getCharacterAt(index))) {
+                        index++;
+                    }
+
+                    // Skip over any word-letters to the right
+                    while (index < textInput.getCharacterCount()
+                        && !Character.isWhitespace(textInput.getCharacterAt(index))) {
+                        index++;
+                    }
+
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        selectionLength = index - selectionStart;
+                    } else {
+                        selectionStart = index;
+                        selectionLength = 0;
+                    }
+                }
             } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Add the next character to the selection
-                if (selectionStart + selectionLength < textInput.getCharacterCount()) {
-                    selectionLength++;
-                }
-
-                consumed = true;
-            } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
-                // Clear the selection and move the caret to the end of
-                // the text
-                selectionStart = textInput.getCharacterCount();
-                selectionLength = 0;
-                consumed = true;
+                selectionLength++;
             } else {
-                // Clear the selection and move the caret forward by one
-                // character
-                selectionStart += selectionLength;
-
-                if (selectionLength == 0
-                    && selectionStart < textInput.getCharacterCount()) {
+                // Move the caret forward by one character
+                if (selectionLength == 0) {
                     selectionStart++;
-                    consumed = true;
+                } else {
+                    selectionStart += selectionLength;
                 }
 
+                // Clear the selection
                 selectionLength = 0;
             }
 
-            textInput.setSelection(selectionStart, selectionLength);
+            if (selectionStart + selectionLength <= textInput.getCharacterCount()) {
+                textInput.setSelection(selectionStart, selectionLength);
+                scrollCharacterToVisible(selectionStart + selectionLength);
 
-            if (textInput.getCharacterCount() > 0) {
-                scrollCharacterToVisible(selectionStart + selectionLength - 1);
-            } else {
-                scrollLeft = 0;
-                updateSelection();
+                consumed = true;
             }
         } else if (Keyboard.isPressed(commandModifier)) {
             if (keyCode == Keyboard.KeyCode.A) {
