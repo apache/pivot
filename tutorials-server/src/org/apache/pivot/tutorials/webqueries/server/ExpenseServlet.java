@@ -31,6 +31,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.web.Query;
 import org.apache.pivot.web.QueryException;
+import org.apache.pivot.web.Query.Method;
 import org.apache.pivot.web.server.QueryServlet;
 
 public class ExpenseServlet extends QueryServlet {
@@ -164,7 +165,7 @@ public class ExpenseServlet extends QueryServlet {
     }
 
     @Override
-    protected Serializer<?> createSerializer(Path path) throws QueryException {
+    protected Serializer<?> createSerializer(Method method, Path path) throws QueryException {
         return new JSONSerializer(Expense.class);
     }
 }

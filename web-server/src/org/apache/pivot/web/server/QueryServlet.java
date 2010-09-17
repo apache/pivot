@@ -227,13 +227,14 @@ public abstract class QueryServlet extends HttpServlet {
 
     /**
      * Prepares a servlet for request execution. This method is called immediately
-     * prior to the {@link #validate(Path)} method.
+     * prior to the {@link #validate(Method, Path)} method.
      * <p>
      * The default implementation is a no-op.
      *
      * @throws ServletException
      */
     protected void prepare() throws ServletException {
+        // No-op
     }
 
     /**
@@ -245,6 +246,7 @@ public abstract class QueryServlet extends HttpServlet {
      * @throws ServletException
      */
     protected void dispose() throws ServletException {
+        // No-op
     }
 
     /**
@@ -253,11 +255,13 @@ public abstract class QueryServlet extends HttpServlet {
      * <p>
      * The default implementation is a no-op.
      *
+     * @param method
      * @param path
      *
      * @throws QueryException
      */
-    protected void validate(Path path) throws QueryException {
+    protected void validate(Query.Method method, Path path) throws QueryException {
+        // No-op
     }
 
     /**
@@ -324,11 +328,12 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Creates a serializer that will be used to serialize the current request data.
      *
+     * @param method
      * @param path
      *
      * @throws ServletException
      */
-    protected abstract Serializer<?> createSerializer(Path path) throws QueryException;
+    protected abstract Serializer<?> createSerializer(Query.Method method, Path path) throws QueryException;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -413,9 +418,9 @@ public abstract class QueryServlet extends HttpServlet {
         Serializer<Object> serializer = null;
 
         try {
-            validate(path);
+            validate(Query.Method.GET, path);
             result = doGet(path);
-            serializer = (Serializer<Object>)createSerializer(path);
+            serializer = (Serializer<Object>)createSerializer(Query.Method.GET, path);
         } catch (QueryException exception) {
             response.setStatus(exception.getStatus());
             response.flushBuffer();
@@ -479,11 +484,11 @@ public abstract class QueryServlet extends HttpServlet {
 
         URL location = null;
         try {
-            validate(path);
+            validate(Query.Method.POST, path);
 
             Object value = null;
             if (request.getContentLength() > 0) {
-                Serializer<?> serializer = createSerializer(path);
+                Serializer<?> serializer = createSerializer(Query.Method.POST, path);
                 value = serializer.readObject(request.getInputStream());
             }
 
@@ -515,11 +520,11 @@ public abstract class QueryServlet extends HttpServlet {
 
         boolean created = false;
         try {
-            validate(path);
+            validate(Query.Method.PUT, path);
 
             Object value = null;
             if (request.getContentLength() > 0) {
-                Serializer<?> serializer = createSerializer(path);
+                Serializer<?> serializer = createSerializer(Query.Method.PUT, path);
                 value = serializer.readObject(request.getInputStream());
             }
 
@@ -544,7 +549,7 @@ public abstract class QueryServlet extends HttpServlet {
         throws IOException, ServletException {
         try {
             Path path = getPath(request);
-            validate(path);
+            validate(Query.Method.DELETE, path);
             doDelete(path);
         } catch (QueryException exception) {
             response.setStatus(exception.getStatus());
