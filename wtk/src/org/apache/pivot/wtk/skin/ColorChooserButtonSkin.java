@@ -199,7 +199,10 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        pressed = false;
+        if (!component.isEnabled()) {
+            pressed = false;
+        }
+
         repaintComponent();
 
         colorChooserPopup.close();
@@ -209,14 +212,16 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
-        pressed = false;
         repaintComponent();
 
         // Close the popup if focus was transferred to a component whose
         // window is not the popup
-        if (!component.isFocused()
-            && !colorChooserPopup.containsFocus()) {
-            colorChooserPopup.close();
+        if (!component.isFocused()) {
+            pressed = false;
+
+            if (!colorChooserPopup.containsFocus()) {
+                colorChooserPopup.close();
+            }
         }
     }
 

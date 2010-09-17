@@ -186,7 +186,10 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        pressed = false;
+        if (!component.isEnabled()) {
+            pressed = false;
+        }
+
         repaintComponent();
 
         calendarPopup.close();
@@ -196,14 +199,16 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
-        pressed = false;
         repaintComponent();
 
         // Close the popup if focus was transferred to a component whose
         // window is not the popup
-        if (!component.isFocused()
-            && !calendarPopup.containsFocus()) {
-            calendarPopup.close();
+        if (!component.isFocused()) {
+            pressed = false;
+
+            if (!calendarPopup.containsFocus()) {
+                calendarPopup.close();
+            }
         }
     }
 

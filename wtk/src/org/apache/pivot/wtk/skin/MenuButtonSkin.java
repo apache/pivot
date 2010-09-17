@@ -95,7 +95,10 @@ public abstract class MenuButtonSkin extends ButtonSkin
     public void enabledChanged(Component component) {
         super.enabledChanged(component);
 
-        pressed = false;
+        if (!component.isEnabled()) {
+            pressed = false;
+        }
+
         repaintComponent();
 
         menuPopup.close();
@@ -105,14 +108,16 @@ public abstract class MenuButtonSkin extends ButtonSkin
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
-        pressed = false;
         repaintComponent();
 
         // Close the popup if focus was transferred to a component whose
         // window is not the popup
-        if (!component.isFocused()
-            && !menuPopup.containsFocus()) {
-            menuPopup.close();
+        if (!component.isFocused()) {
+            pressed = false;
+
+            if (!menuPopup.containsFocus()) {
+                menuPopup.close();
+            }
         }
     }
 
