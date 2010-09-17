@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 
 /**
  * Abstract base class for color chooser button skins.
@@ -69,6 +70,14 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
     }
 
     private ComponentKeyListener colorChooserPopupKeyListener = new ComponentKeyListener.Adapter() {
+        /**
+         * {@link KeyCode#ESCAPE ESCAPE} Close the popup.<br>
+         * {@link KeyCode#ENTER ENTER} Choose the selected color.<br>
+         * {@link KeyCode#TAB TAB} Choose the selected color and transfer focus
+         * forwards.<br>
+         * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Choose the
+         * selected color and transfer focus backwards.
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode,
             Keyboard.KeyLocation keyLocation) {

@@ -74,6 +74,9 @@ public class TerraTooltipSkin extends WindowSkin {
     };
 
     private ComponentKeyListener displayKeyListener = new ComponentKeyListener.Adapter() {
+        /**
+         * Close the Tooltip.
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             fade = false;

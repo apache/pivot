@@ -98,6 +98,12 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     };
 
     private ComponentKeyListener textInputKeyListener = new ComponentKeyListener.Adapter() {
+        /**
+         * {@link KeyCode#DOWN DOWN} Transfer focus to the suggestion list and
+         * select the first suggestion if no others are selected.<br>
+         * {@link KeyCode#ESCAPE ESCAPE} Close the popup with a 'result' of
+         * false.
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode,
             Keyboard.KeyLocation keyLocation) {

@@ -63,6 +63,14 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     };
 
     private ComponentKeyListener calendarPopupKeyListener = new ComponentKeyListener.Adapter() {
+        /**
+         * {@link KeyCode#ESCAPE ESCAPE} Close the popup.<br>
+         * {@link KeyCode#ENTER ENTER} Choose the selected date.<br>
+         * {@link KeyCode#TAB TAB} Choose the selected date and transfer focus
+         * forwards.<br>
+         * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Choose the
+         * selected date and transfer focus backwards.
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             CalendarButton calendarButton = (CalendarButton)getComponent();

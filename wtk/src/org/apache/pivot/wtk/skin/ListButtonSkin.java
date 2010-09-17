@@ -59,6 +59,14 @@ public abstract class ListButtonSkin extends ButtonSkin
     };
 
     private ComponentKeyListener listViewPopupKeyListener = new ComponentKeyListener.Adapter() {
+        /**
+         * {@link KeyCode#ESCAPE ESCAPE} Close the popup.<br>
+         * {@link KeyCode#ENTER ENTER} Choose the selected list item.<br>
+         * {@link KeyCode#TAB TAB} Choose the selected list item and transfer
+         * focus forwards.<br>
+         * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Choose the
+         * selected list item and transfer focus backwards.
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             ListButton listButton = (ListButton)getComponent();

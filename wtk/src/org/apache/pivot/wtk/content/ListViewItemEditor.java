@@ -37,6 +37,7 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Default list view item editor.
@@ -107,6 +108,10 @@ public class ListViewItemEditor implements ListView.ItemEditor {
     };
 
     private ComponentKeyListener textInputKeyHandler = new ComponentKeyListener.Adapter() {
+        /**
+         * {@link KeyCode#ENTER ENTER} Save the changes.<br>
+         * {@link KeyCode#ESCAPE ESCAPE} Cancel the edit.<br>
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {

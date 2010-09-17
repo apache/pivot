@@ -626,6 +626,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
         });
 
+        /**
+         * {@link KeyCode#DOWN DOWN} Transfer focus to the file list and select
+         * the first item.<br>
+         * {@link KeyCode#ESCAPE ESCAPE} Clear the search field.
+         */
         searchTextInput.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {

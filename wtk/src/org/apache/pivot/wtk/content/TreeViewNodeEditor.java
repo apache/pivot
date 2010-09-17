@@ -39,8 +39,7 @@ import org.apache.pivot.wtk.TreeViewListener;
 import org.apache.pivot.wtk.TreeViewNodeListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
-import org.apache.pivot.wtk.content.TreeNode;
-import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Default tree view node editor, which allows the user to edit the text of a
@@ -113,6 +112,10 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      * the <tt>ENTER</tt> key or the <tt>ESCAPE</tt> key, respectively.
      */
     private ComponentKeyListener textInputKeyHandler = new ComponentKeyListener.Adapter() {
+        /**
+         * {@link KeyCode#ENTER ENTER} Save the changes.<br>
+         * {@link KeyCode#ESCAPE ESCAPE} Cancel the edit.<br>
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {

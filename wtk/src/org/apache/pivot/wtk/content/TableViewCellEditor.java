@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.TableViewRowListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Default table view cell editor.
@@ -116,6 +117,10 @@ public class TableViewCellEditor implements TableView.RowEditor {
      * the <tt>ENTER</tt> key or the <tt>ESCAPE</tt> key, respectively.
      */
     private ComponentKeyListener textInputKeyHandler = new ComponentKeyListener.Adapter() {
+        /**
+         * {@link KeyCode#ENTER ENTER} Save the changes.<br>
+         * {@link KeyCode#ESCAPE ESCAPE} Cancel the edit.<br>
+         */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             if (keyCode == Keyboard.KeyCode.ENTER) {
