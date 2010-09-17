@@ -514,6 +514,8 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
                 activeItem.press();
                 consumed = true;
             }
+        } else if (keyCode == Keyboard.KeyCode.TAB) {
+            consumed = false;
         }
 
         return consumed;
