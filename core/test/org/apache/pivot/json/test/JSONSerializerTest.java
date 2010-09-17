@@ -44,18 +44,28 @@ public class JSONSerializerTest {
         assertEquals(0, emptyList.getLength());
     }
 
-    @Test(expected=RuntimeException.class)
-    public void testInvalidNumbers() {
-        try {
-            JSONSerializer.toString(Float.NaN);
-            JSONSerializer.toString(Float.NEGATIVE_INFINITY);
-            JSONSerializer.toString(Float.POSITIVE_INFINITY);
-            JSONSerializer.toString(Double.NaN);
-            JSONSerializer.toString(Double.NEGATIVE_INFINITY);
-            JSONSerializer.toString(Double.POSITIVE_INFINITY);
-        } catch (SerializationException exception) {
-            // No-op
-        }
+    public void testFloatNaN() throws SerializationException {
+        JSONSerializer.toString(Float.NaN);
+    }
+
+    public void testFloatNegativeInfinity() throws SerializationException {
+        JSONSerializer.toString(Float.NEGATIVE_INFINITY);
+    }
+
+    public void testFloatPositiveInfinity() throws SerializationException {
+        JSONSerializer.toString(Float.POSITIVE_INFINITY);
+    }
+
+    public void testDoubleNaN() throws SerializationException {
+        JSONSerializer.toString(Double.NaN);
+    }
+
+    public void testDoubleNegativeInfinity() throws SerializationException {
+        JSONSerializer.toString(Double.NEGATIVE_INFINITY);
+    }
+
+    public void testDoublePositiveInfinityN() throws SerializationException {
+        JSONSerializer.toString(Double.POSITIVE_INFINITY);
     }
 
     @Test

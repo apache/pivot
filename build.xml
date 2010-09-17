@@ -176,7 +176,7 @@ limitations under the License.
                 <formatter type="brief" usefile="false" if="test.formatter"/>
 
                 <batchtest>
-                    <fileset dir="@{project}/test" includes="**/*Test.java"/>
+                    <fileset dir="@{project}/test" includes="**/*Test*.java"/>
                 </batchtest>
             </junit>
         </sequential>
