@@ -1051,11 +1051,15 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                     if (value.charAt(0) == OBJECT_REFERENCE_PREFIX) {
                                         attribute.value = value;
                                     } else {
-                                        if (!JSON.containsKey(namespace, value)) {
-                                            throw new SerializationException("Value \"" + value + "\" is not defined.");
-                                        }
+                                        if (value.equals(BXML_PREFIX + ":" + null)) {
+                                            attribute.value = null;
+                                        } else {
+                                            if (!JSON.containsKey(namespace, value)) {
+                                                throw new SerializationException("Value \"" + value + "\" is not defined.");
+                                            }
 
-                                        attribute.value = JSON.get(namespace, value);
+                                            attribute.value = JSON.get(namespace, value);
+                                        }
                                     }
                                 } else {
                                     throw new SerializationException("Invalid object resolution argument.");

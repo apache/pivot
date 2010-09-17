@@ -515,7 +515,7 @@ public abstract class Shape {
             throw new IllegalArgumentException("fill is null.");
         }
 
-        setFill(fill.length() == 0 ? null : GraphicsUtilities.decodePaint(fill));
+        setFill(GraphicsUtilities.decodePaint(fill));
     }
 
     public Paint getStroke() {
@@ -536,7 +536,7 @@ public abstract class Shape {
             throw new IllegalArgumentException("stroke is null.");
         }
 
-        setStroke(stroke.length() == 0 ? null : GraphicsUtilities.decodePaint(stroke));
+        setStroke(GraphicsUtilities.decodePaint(stroke));
     }
 
     public int getStrokeThickness() {

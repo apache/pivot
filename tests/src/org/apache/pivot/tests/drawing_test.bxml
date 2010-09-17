@@ -24,7 +24,7 @@ limitations under the License.
         <media:Drawing>
             <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
                 <Rectangle x="0" y="0" width="120" height="60"
-                    fill="#ff0000" stroke=""/>
+                    fill="#ff0000" stroke="$bxml:null"/>
                 <Ellipse x="60" y="30" width="120" height="120"
                     fill="#00ff00" stroke="#000000" strokeThickness="20">
                     <transforms>

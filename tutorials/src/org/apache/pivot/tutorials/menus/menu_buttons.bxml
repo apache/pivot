@@ -80,7 +80,7 @@ limitations under the License.
                             <Drawing bxml:id="drawing"
                                 xmlns="org.apache.pivot.wtk.media">
                                 <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
-                                    <Rectangle bxml:id="border" stroke="" fill="#eeeeee" width="480" height="360"/>
+                                    <Rectangle bxml:id="border" stroke="$bxml:null" fill="#eeeeee" width="480" height="360"/>
                                 </Canvas>
                             </Drawing>
                         </image>

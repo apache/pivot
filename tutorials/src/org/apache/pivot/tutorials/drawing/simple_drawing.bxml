@@ -23,7 +23,7 @@ limitations under the License.
     <ImageView>
         <media:Drawing>
             <Canvas xmlns="org.apache.pivot.wtk.media.drawing">
-                <Ellipse x="0" y="0" width="240" height="240" stroke="" fill="#ffff00"/>
+                <Ellipse x="0" y="0" width="240" height="240" stroke="$bxml:null" fill="#ffff00"/>
                 <Ellipse x="70" y="60" width="30" height="40" fill="#000000"/>
                 <Ellipse x="140" y="60" width="30" height="40" fill="#000000"/>
                 <Arc x="60" y="120" width="120" height="70"
