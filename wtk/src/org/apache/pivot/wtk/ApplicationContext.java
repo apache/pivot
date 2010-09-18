@@ -1411,14 +1411,14 @@ public abstract class ApplicationContext {
     public static class QueuedCallback implements Runnable {
         private Runnable callback;
         private volatile boolean executed = false;
-        private volatile boolean canceled = false;
+        private volatile boolean cancelled = false;
 
         private QueuedCallback(Runnable callback) {
             this.callback = callback;
         }
 
         public void run() {
-            if (!canceled) {
+            if (!cancelled) {
                 try {
                     callback.run();
                 } catch (Exception exception) {
@@ -1442,7 +1442,7 @@ public abstract class ApplicationContext {
         }
 
         public boolean cancel() {
-            canceled = true;
+            cancelled = true;
             return (!executed);
         }
     }

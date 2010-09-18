@@ -71,7 +71,7 @@ public interface Application {
      * Called when the application is being shut down.
      *
      * @param optional
-     * If <tt>true</tt>, the shutdown may be canceled by returning a value of
+     * If <tt>true</tt>, the shutdown may be cancelled by returning a value of
      * <tt>true</tt>.
      *
      * @return

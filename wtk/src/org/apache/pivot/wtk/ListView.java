@@ -117,8 +117,7 @@ public class ListView extends Component {
         /**
          * Item editor listener list.
          */
-        public static class ItemEditorListenerList
-            extends ListenerList<ItemEditorListener>
+        public static class ItemEditorListenerList extends ListenerList<ItemEditorListener>
             implements ItemEditorListener {
             @Override
             public Vote previewEditItem(ItemEditor itemEditor, ListView listView,
