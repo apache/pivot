@@ -88,6 +88,7 @@ public abstract class ApplicationContext {
         private double scale = 1;
 
         private boolean paintPending = false;
+        private boolean disableVolatileBuffer = true;
         private boolean debugPaint = false;
 
         private Random random = null;
@@ -282,10 +283,16 @@ public abstract class ApplicationContext {
             }
 
             try {
-                debugPaint = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugpaint"));
-                if (debugPaint == true)
-                    random = new Random();
+                disableVolatileBuffer = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.disablevolatilebuffer"));
+            } catch (SecurityException ex) {
+                // No-op
+            }
 
+            try {
+                debugPaint = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugpaint"));
+                if (debugPaint == true) {
+                    random = new Random();
+                }
             } catch (SecurityException ex) {
                 // No-op
             }
@@ -390,7 +397,8 @@ public abstract class ApplicationContext {
             if (clipBounds != null
                 && !clipBounds.isEmpty()) {
                 try {
-                    if (!paintVolatileBuffered((Graphics2D)graphics)) {
+                    if (disableVolatileBuffer
+                        || !paintVolatileBuffered((Graphics2D)graphics)) {
                         if (!paintBuffered((Graphics2D)graphics)) {
                             paintDisplay((Graphics2D)graphics);
                         }
@@ -426,6 +434,7 @@ public abstract class ApplicationContext {
          * buffer; <tt>false</tt>, otherwise.
          */
         private boolean paintBuffered(Graphics2D graphics) {
+            System.out.println("PB");
             boolean painted = false;
 
             // Paint the display into an offscreen buffer
@@ -464,6 +473,7 @@ public abstract class ApplicationContext {
          * buffer; <tt>false</tt>, otherwise.
          */
         private boolean paintVolatileBuffered(Graphics2D graphics) {
+            System.out.println("PVB");
             boolean painted = false;
 
             // Paint the display into a volatile offscreen buffer
