@@ -434,7 +434,6 @@ public abstract class ApplicationContext {
          * buffer; <tt>false</tt>, otherwise.
          */
         private boolean paintBuffered(Graphics2D graphics) {
-            System.out.println("PB");
             boolean painted = false;
 
             // Paint the display into an offscreen buffer
@@ -473,7 +472,6 @@ public abstract class ApplicationContext {
          * buffer; <tt>false</tt>, otherwise.
          */
         private boolean paintVolatileBuffered(Graphics2D graphics) {
-            System.out.println("PVB");
             boolean painted = false;
 
             // Paint the display into a volatile offscreen buffer
