@@ -261,6 +261,11 @@ public class JSONSerializer implements Serializer<Object> {
         LineNumberReader lineNumberReader = new LineNumberReader(reader);
         c = lineNumberReader.read();
 
+        // Ignore BOM (if present)
+        if (c == 0xFEFF) {
+            c = reader.read();
+        }
+
         // Read the root value
         Object object;
         try {

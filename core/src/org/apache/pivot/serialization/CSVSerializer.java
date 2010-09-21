@@ -268,6 +268,11 @@ public class CSVSerializer implements Serializer<List<?>> {
         // Move to the first character
         c = lineNumberReader.read();
 
+        // Ignore BOM (if present)
+        if (c == 0xFEFF) {
+            c = reader.read();
+        }
+
         try {
             while (c != -1) {
                 Object item = readItem(lineNumberReader);
