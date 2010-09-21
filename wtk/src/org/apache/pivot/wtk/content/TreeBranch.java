@@ -108,7 +108,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
      * application context's {@linkplain ApplicationContext#getResourceCache()
      * resource cache} if one does not already exist.
      *
-     * @param expandedIconURL
+     * @param expandedIconName
      * The resource name of the expanded icon to set.
      *
      * @see #setExpandedIcon(URL)
