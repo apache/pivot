@@ -673,7 +673,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             body.setEditable(false);
         }
 
-        Alert alert = new Alert(MessageType.ERROR, message, null, body);
+        Alert alert = new Alert(MessageType.ERROR, message, null, body, false);
         alert.open(primaryDisplayHost.getDisplay());
     }
 

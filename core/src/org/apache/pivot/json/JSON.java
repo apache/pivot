@@ -58,10 +58,6 @@ public class JSON {
      */
     @SuppressWarnings("unchecked")
     public static <T> T get(Object root, Sequence<String> keys) {
-        if (root == null) {
-            throw new IllegalArgumentException("root is null.");
-        }
-
         if (keys == null) {
             throw new IllegalArgumentException("keys is null.");
         }
@@ -69,6 +65,10 @@ public class JSON {
         Object value = root;
 
         for (int i = 0, n = keys.getLength(); i < n; i++) {
+            if (value == null) {
+                break;
+            }
+
             String key = keys.get(i);
 
             BeanAdapter beanAdapter = new BeanAdapter(value);
@@ -141,6 +141,10 @@ public class JSON {
 
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
         Object parent = get(root, keys);
+        if (parent == null) {
+            throw new IllegalArgumentException("Invalid path.");
+        }
+
         BeanAdapter beanAdapter = new BeanAdapter(parent);
 
         Object previousValue;
@@ -181,6 +185,9 @@ public class JSON {
 
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
         Object parent = get(root, keys);
+        if (parent == null) {
+            throw new IllegalArgumentException("Invalid path.");
+        }
 
         Object previousValue;
         if (parent instanceof Sequence<?>) {
@@ -218,18 +225,24 @@ public class JSON {
 
         String key = keys.remove(keys.getLength() - 1, 1).get(0);
         Object parent = get(root, keys);
-        BeanAdapter beanAdapter = new BeanAdapter(parent);
 
-        boolean containsKey = beanAdapter.containsKey(key);
-        if (!containsKey) {
-            if (parent instanceof Sequence<?>) {
-                Sequence<Object> sequence = (Sequence<Object>)parent;
-                containsKey = (sequence.getLength() > Integer.parseInt(key));
-            } else if (parent instanceof Dictionary<?, ?>) {
-                Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
-                containsKey = dictionary.containsKey(key);
-            } else {
-                throw new IllegalArgumentException("Property \"" + key + "\" not found.");
+        boolean containsKey;
+        if (parent == null) {
+            containsKey = false;
+        } else {
+            BeanAdapter beanAdapter = new BeanAdapter(parent);
+            containsKey = beanAdapter.containsKey(key);
+
+            if (!containsKey) {
+                if (parent instanceof Sequence<?>) {
+                    Sequence<Object> sequence = (Sequence<Object>)parent;
+                    containsKey = (sequence.getLength() > Integer.parseInt(key));
+                } else if (parent instanceof Dictionary<?, ?>) {
+                    Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
+                    containsKey = dictionary.containsKey(key);
+                } else {
+                    throw new IllegalArgumentException("Property \"" + key + "\" not found.");
+                }
             }
         }
 
