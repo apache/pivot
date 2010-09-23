@@ -162,6 +162,11 @@ public class ResultList implements List<Map<String, Object>> {
                        value = null;
                    }
 
+                   if (value != null || includeNullValues) {
+                       String key = (field.key == null) ? field.columnName : field.key;
+                       item.put(key, value);
+                   }
+
                    item.put((field.key == null) ? field.columnName : field.key, value);
                }
            } catch (SQLException exception) {
@@ -180,15 +185,16 @@ public class ResultList implements List<Map<String, Object>> {
    }
 
    private ResultSet resultSet;
+   private boolean includeNullValues;
    private ArrayList<Field> fields;
 
    private ListListenerList<Map<String, Object>> listListeners = new ListListenerList<Map<String,Object>>();
 
    public ResultList(ResultSet resultSet, Field... fields) {
-       this(resultSet, new ArrayAdapter<Field>(fields));
+       this(resultSet, false, new ArrayAdapter<Field>(fields));
    }
 
-   public ResultList(ResultSet resultSet, Sequence<Field> fields) {
+   public ResultList(ResultSet resultSet, boolean includeNullValues, Sequence<Field> fields) {
        if (resultSet == null) {
            throw new IllegalArgumentException();
        }
@@ -198,9 +204,13 @@ public class ResultList implements List<Map<String, Object>> {
        }
 
        this.resultSet = resultSet;
+       this.includeNullValues = includeNullValues;
        this.fields = new ArrayList<Field>(fields);
    }
 
+   public boolean getIncludeNullValues() {
+       return includeNullValues;
+   }
 
    public Field getField(int index) {
        return fields.get(index);
