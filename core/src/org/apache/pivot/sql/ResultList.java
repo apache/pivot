@@ -162,6 +162,11 @@ public class ResultList implements List<Map<String, Object>> {
                        value = null;
                    }
 
+                   if (value != null || includeNullValues) {
+                       String key = (field.key == null) ? field.columnName : field.key;
+                       item.put(key, value);
+                   }
+
                    item.put((field.key == null) ? field.columnName : field.key, value);
                }
            } catch (SQLException exception) {
@@ -180,8 +185,8 @@ public class ResultList implements List<Map<String, Object>> {
    }
 
    private ResultSet resultSet;
-
    private ArrayList<Field> fields = new ArrayList<Field>();
+   private boolean includeNullValues = false;
 
    private ListListenerList<Map<String, Object>> listListeners = new ListListenerList<Map<String,Object>>();
 
@@ -215,6 +220,14 @@ public class ResultList implements List<Map<String, Object>> {
        }
 
        setFields(new ArrayAdapter<Field>(fields));
+   }
+
+   public boolean getIncludeNullValues() {
+       return includeNullValues;
+   }
+
+   public void setIncludeNullValues(boolean includeNullValues) {
+       this.includeNullValues = includeNullValues;
    }
 
    @Override
