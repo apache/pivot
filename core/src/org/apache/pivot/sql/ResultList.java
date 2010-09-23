@@ -163,11 +163,8 @@ public class ResultList implements List<Map<String, Object>> {
                    }
 
                    if (value != null || includeNullValues) {
-                       String key = (field.key == null) ? field.columnName : field.key;
-                       item.put(key, value);
+                       item.put((field.key == null) ? field.columnName : field.key, value);
                    }
-
-                   item.put((field.key == null) ? field.columnName : field.key, value);
                }
            } catch (SQLException exception) {
                throw new RuntimeException(exception);
