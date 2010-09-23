@@ -550,7 +550,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @BXML private ScrollPane fileScrollPane = null;
     @BXML private TableView fileTableView = null;
 
-    private boolean keyboardFolderTraversalEnabled = true;
     private boolean hideDisabledFiles = false;
 
     private boolean updatingSelection = false;
@@ -807,14 +806,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         return file;
     }
 
-    public boolean isKeyboardFolderTraversalEnabled() {
-        return keyboardFolderTraversalEnabled;
-    }
-
-    public void setKeyboardFolderTraversalEnabled(boolean keyboardFolderTraversalEnabled) {
-        this.keyboardFolderTraversalEnabled = keyboardFolderTraversalEnabled;
-    }
-
     public boolean isHideDisabledFiles() {
         return hideDisabledFiles;
     }
@@ -825,8 +816,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     /**
-     * {@link KeyCode#ENTER ENTER} Change into the selected directory if
-     * {@link #keyboardFolderTraversalEnabled} is true.<br>
+     * {@link KeyCode#ENTER ENTER} Change into the selected directory.<br>
      * {@link KeyCode#DELETE DELETE} or {@link KeyCode#BACKSPACE BACKSPACE}
      * Change into the parent of the current directory.<br>
      * {@link KeyCode#F5 F5} Refresh the file list.
@@ -837,8 +827,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         FileBrowser fileBrowser = (FileBrowser)getComponent();
 
-        if (keyCode == Keyboard.KeyCode.ENTER
-            && keyboardFolderTraversalEnabled) {
+        if (keyCode == Keyboard.KeyCode.ENTER) {
             Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
 
             if (selectedFiles.getLength() == 1) {
