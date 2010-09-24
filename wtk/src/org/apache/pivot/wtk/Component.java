@@ -676,28 +676,6 @@ public abstract class Component implements ConstrainedVisual {
     // The component that currently has the focus
     private static Component focusedComponent = null;
 
-    // Decorator to apply to the focused component
-    private static Decorator focusDecorator = null;
-
-    // Focus change listener to manage adding & removing of focusDecorator
-    private static final ComponentClassListener FOCUS_CHANGE_LISTENER = new ComponentClassListener() {
-        @Override
-        public void focusedComponentChanged(Component previousFocusedComponent) {
-            Decorator decorator = Component.getFocusDecorator();
-            if (decorator != null) {
-                if (previousFocusedComponent != null
-                    && previousFocusedComponent.getDecorators().indexOf(decorator) > -1) {
-                    previousFocusedComponent.getDecorators().remove(decorator);
-                }
-                Component focusedComponent = Component.getFocusedComponent();
-                if (focusedComponent != null
-                    && focusedComponent.getDecorators().indexOf(decorator) == -1) {
-                    focusedComponent.getDecorators().add(decorator);
-                }
-            }
-        }
-    };
-
     // Typed and named styles
     private static HashMap<Class<? extends Component>, Map<String, ?>> typedStyles =
         new HashMap<Class<? extends Component>, Map<String,?>>();
@@ -2449,40 +2427,6 @@ public abstract class Component implements ConstrainedVisual {
      */
     public static void clearFocus() {
         setFocusedComponent(null);
-    }
-
-    /**
-     * Returns the Decorator which is applied to all focused Components.
-     *
-     * @return The Decorator, or <tt>null</tt> if no Decorator has been set.
-     */
-    public static Decorator getFocusDecorator() {
-        return focusDecorator;
-    }
-
-    /**
-     * Set the Decorator to be applied to all focused Components.
-     *
-     * @param focusDecorator
-     */
-    public static void setFocusDecorator(Decorator focusDecorator) {
-        Component focusedComponent = getFocusedComponent();
-        Decorator previousFocusDecorator = Component.focusDecorator;
-        Component.focusDecorator = focusDecorator;
-        if (focusedComponent != null) {
-            if (previousFocusDecorator != null) {
-                focusedComponent.getDecorators().remove(previousFocusDecorator);
-            }
-            if (focusDecorator != null) {
-                focusedComponent.getDecorators().add(focusDecorator);
-            }
-        }
-        if (focusDecorator == null && previousFocusDecorator != null) {
-            Component.getComponentClassListeners().remove(FOCUS_CHANGE_LISTENER);
-        }
-        if (focusDecorator != null && previousFocusDecorator == null) {
-            Component.getComponentClassListeners().add(FOCUS_CHANGE_LISTENER);
-        }
     }
 
     /**
