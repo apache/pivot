@@ -59,7 +59,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         private int dy = 0;
 
         public OpenTransition(boolean reversed) {
-            super(transitionDuration, transitionRate, false, reversed);
+            super(stateTransitionDuration, stateTransitionRate, false, reversed);
         }
 
         @Override
@@ -220,8 +220,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     private DropShadowDecorator dropShadowDecorator = null;
 
-    private int transitionDuration = 300;
-    private int transitionRate = 30;
+    private int stateTransitionDuration = 300;
+    private int stateTransitionRate = 30;
 
     public TerraSheetSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -556,20 +556,20 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         invalidateComponent();
     }
 
-    public int getTransitionDuration() {
-        return transitionDuration;
+    public int getStateTransitionDuration() {
+        return stateTransitionDuration;
     }
 
-    public void setTransitionDuration(int transitionDuration) {
-        this.transitionDuration = transitionDuration;
+    public void setStateTransitionDuration(int stateTransitionDuration) {
+        this.stateTransitionDuration = stateTransitionDuration;
     }
 
-    public int getTransitionRate() {
-        return transitionRate;
+    public int getStateTransitionRate() {
+        return stateTransitionRate;
     }
 
-    public void setTransitionRate(int transitionRate) {
-        this.transitionRate = transitionRate;
+    public void setStateTransitionRate(int stateTransitionRate) {
+        this.stateTransitionRate = stateTransitionRate;
     }
 
     @Override
