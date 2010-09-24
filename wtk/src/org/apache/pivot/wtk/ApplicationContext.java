@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import java.awt.AWTEvent;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -61,6 +62,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Version;
 import org.apache.pivot.wtk.Component.DecoratorSequence;
 import org.apache.pivot.wtk.effects.Decorator;
+import org.apache.pivot.wtk.effects.ShadeDecorator;
 
 /**
  * Base class for application contexts.
@@ -292,6 +294,26 @@ public abstract class ApplicationContext {
                 debugPaint = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugpaint"));
                 if (debugPaint == true) {
                     random = new Random();
+                }
+            } catch (SecurityException ex) {
+                // No-op
+            }
+
+            try {
+                String property = System.getProperty("org.apache.pivot.wtk.debugfocuscolor");
+                if (property != null) {
+                    property = property.trim().toLowerCase();
+                    Color focusColor = null;
+                    if ("red".equals(property)) {
+                        focusColor = Color.RED;
+                    } else if ("green".equals(property)) {
+                        focusColor = Color.GREEN;
+                    } else if ("blue".equals(property)) {
+                        focusColor = Color.BLUE;
+                    }
+                    if (focusColor != null) {
+                        Component.setFocusDecorator(new ShadeDecorator(0.2f, focusColor));
+                    }
                 }
             } catch (SecurityException ex) {
                 // No-op
