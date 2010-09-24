@@ -441,7 +441,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         private Easing easing = new Quadratic();
 
         public SelectionChangeTransition(int index, boolean expand) {
-            super(SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE, false);
+            super(selectionChangeDuration, selectionChangeRate, false);
 
             this.index = index;
             this.expand = expand;
@@ -531,8 +531,8 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
     };
 
-    private static final int SELECTION_CHANGE_DURATION = 250;
-    private static final int SELECTION_CHANGE_RATE = 30;
+    private int selectionChangeDuration = 250;
+    private int selectionChangeRate = 30;
 
     public static final int CORNER_RADIUS = 4;
     public static final int GRADIENT_BEVEL_THICKNESS = 8;
@@ -1256,6 +1256,22 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     public void setButtonSpacing(int buttonSpacing) {
         tabButtonBoxPane.getStyles().put("spacing", buttonSpacing);
+    }
+
+    public int getSelectionChangeDuration() {
+        return selectionChangeDuration;
+    }
+
+    public void setSelectionChangeDuration(int selectionChangeDuration) {
+        this.selectionChangeDuration = selectionChangeDuration;
+    }
+
+    public int getSelectionChangeRate() {
+        return selectionChangeRate;
+    }
+
+    public void setSelectionChangeRate(int selectionChangeRate) {
+        this.selectionChangeRate = selectionChangeRate;
     }
 
     public Orientation getTabOrientation() {

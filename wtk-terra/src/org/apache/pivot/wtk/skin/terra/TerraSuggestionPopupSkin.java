@@ -138,8 +138,8 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         }
     };
 
-    private static final int CLOSE_TRANSITION_DURATION = 150;
-    private static final int CLOSE_TRANSITION_RATE = 30;
+    private int closeTransitionDuration = 150;
+    private int closeTransitionRate = 30;
 
     public TerraSuggestionPopupSkin () {
         suggestionListView.getStyles().put("variableItemHeight", true);
@@ -188,6 +188,22 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         }
 
         setFont(Theme.deriveFont(font));
+    }
+
+    public int getCloseTransitionDuration() {
+        return closeTransitionDuration;
+    }
+
+    public void setCloseTransitionDuration(int closeTransitionDuration) {
+        this.closeTransitionDuration = closeTransitionDuration;
+    }
+
+    public int getCloseTransitionRate() {
+        return closeTransitionRate;
+    }
+
+    public void setCloseTransitionRate(int closeTransitionRate) {
+        this.closeTransitionRate = closeTransitionRate;
     }
 
     public Color getColor() {
@@ -342,7 +358,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
             suggestionListViewBorder.setEnabled(false);
 
             closeTransition = new FadeWindowTransition(suggestionPopup,
-                CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                closeTransitionDuration, closeTransitionRate,
                 dropShadowDecorator);
 
             closeTransition.start(new TransitionListener() {

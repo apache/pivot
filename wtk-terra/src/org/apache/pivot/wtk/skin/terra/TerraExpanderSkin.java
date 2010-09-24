@@ -63,7 +63,7 @@ public class TerraExpanderSkin extends ExpanderSkin
         private Easing easing = new Quadratic();
 
         public ExpandTransition(boolean reversed) {
-            super(EXPAND_DURATION, EXPAND_RATE, false, reversed);
+            super(expandDuration, expandRate, false, reversed);
         }
 
         public float getScale() {
@@ -194,6 +194,8 @@ public class TerraExpanderSkin extends ExpanderSkin
 
     private Color titleBarBevelColor;
 
+    private int expandDuration = 250;
+    private int expandRate = 30;
     private ExpandTransition expandTransition = null;
     private ClipDecorator clipDecorator = new ClipDecorator();
 
@@ -214,9 +216,6 @@ public class TerraExpanderSkin extends ExpanderSkin
             return consumed;
         }
     };
-
-    private static final int EXPAND_DURATION = 250;
-    private static final int EXPAND_RATE = 30;
 
     public TerraExpanderSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -559,6 +558,22 @@ public class TerraExpanderSkin extends ExpanderSkin
         }
 
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+    }
+
+    public int getExpandDuration() {
+        return expandDuration;
+    }
+
+    public void setExpandDuration(int expandDuration) {
+        this.expandDuration = expandDuration;
+    }
+
+    public int getExpandRate() {
+        return expandRate;
+    }
+
+    public void setExpandRate(int expandRate) {
+        this.expandRate = expandRate;
     }
 
     public Insets getPadding() {

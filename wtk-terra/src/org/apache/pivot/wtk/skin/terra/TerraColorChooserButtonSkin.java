@@ -30,11 +30,11 @@ import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ColorChooserButton;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
-import org.apache.pivot.wtk.ColorChooserButton;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
@@ -97,8 +97,8 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
             Vote vote = Vote.APPROVE;
 
             if (closeTransition == null) {
-                closeTransition = new FadeWindowTransition(window, CLOSE_TRANSITION_DURATION,
-                    CLOSE_TRANSITION_RATE, dropShadowDecorator);
+                closeTransition = new FadeWindowTransition(window, closeTransitionDuration,
+                    closeTransitionRate, dropShadowDecorator);
 
                 closeTransition.start(new TransitionListener() {
                     @Override
@@ -153,8 +153,8 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
     private static final int CORNER_RADIUS = 4;
     private static final int TRIGGER_WIDTH = 10;
 
-    private static final int CLOSE_TRANSITION_DURATION = 250;
-    private static final int CLOSE_TRANSITION_RATE = 30;
+    private int closeTransitionDuration = 250;
+    private int closeTransitionRate = 30;
 
     public TerraColorChooserButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -384,6 +384,22 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         }
 
         setFont(Theme.deriveFont(font));
+    }
+
+    public int getCloseTransitionDuration() {
+        return closeTransitionDuration;
+    }
+
+    public void setCloseTransitionDuration(int closeTransitionDuration) {
+        this.closeTransitionDuration = closeTransitionDuration;
+    }
+
+    public int getCloseTransitionRate() {
+        return closeTransitionRate;
+    }
+
+    public void setCloseTransitionRate(int closeTransitionRate) {
+        this.closeTransitionRate = closeTransitionRate;
     }
 
     public Color getColor() {

@@ -247,7 +247,7 @@ public class TerraAccordionSkin extends ContainerSkin
         private Easing easing = new Quartic();
 
         public SelectionChangeTransition(Component fromPanel, Component toPanel) {
-            super(SELECTION_CHANGE_DURATION, SELECTION_CHANGE_RATE, false);
+            super(selectionChangeDuration, selectionChangeRate, false);
             this.fromPanel = fromPanel;
             this.toPanel = toPanel;
         }
@@ -310,8 +310,8 @@ public class TerraAccordionSkin extends ContainerSkin
 
     public static final int GRADIENT_BEVEL_THICKNESS = 4;
 
-    private static final int SELECTION_CHANGE_DURATION = 250;
-    private static final int SELECTION_CHANGE_RATE = 30;
+    private int selectionChangeDuration = 250;
+    private int selectionChangeRate = 30;
 
     public TerraAccordionSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -729,6 +729,22 @@ public class TerraAccordionSkin extends ContainerSkin
 
     public final void setButtonPadding(int buttonPadding) {
         setButtonPadding(new Insets(buttonPadding));
+    }
+
+    public int getSelectionChangeDuration() {
+        return selectionChangeDuration;
+    }
+
+    public void setSelectionChangeDuration(int selectionChangeDuration) {
+        this.selectionChangeDuration = selectionChangeDuration;
+    }
+
+    public int getSelectionChangeRate() {
+        return selectionChangeRate;
+    }
+
+    public void setSelectionChangeRate(int selectionChangeRate) {
+        this.selectionChangeRate = selectionChangeRate;
     }
 
     /**

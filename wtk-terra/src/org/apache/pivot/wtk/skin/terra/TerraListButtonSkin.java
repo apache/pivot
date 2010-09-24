@@ -136,7 +136,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
             if (closeTransition == null) {
                 closeTransition = new FadeWindowTransition(window,
-                    CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                    closeTransitionDuration, closeTransitionRate,
                     dropShadowDecorator);
 
                 closeTransition.start(new TransitionListener() {
@@ -194,8 +194,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private static final int CORNER_RADIUS = 4;
     private static final int TRIGGER_WIDTH = 14;
 
-    private static final int CLOSE_TRANSITION_DURATION = 250;
-    private static final int CLOSE_TRANSITION_RATE = 30;
+    private int closeTransitionDuration = 250;
+    private int closeTransitionRate = 30;
 
     public TerraListButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -479,6 +479,22 @@ public class TerraListButtonSkin extends ListButtonSkin {
         }
 
         setFont(Theme.deriveFont(font));
+    }
+
+    public int getCloseTransitionDuration() {
+        return closeTransitionDuration;
+    }
+
+    public void setCloseTransitionDuration(int closeTransitionDuration) {
+        this.closeTransitionDuration = closeTransitionDuration;
+    }
+
+    public int getCloseTransitionRate() {
+        return closeTransitionRate;
+    }
+
+    public void setCloseTransitionRate(int closeTransitionRate) {
+        this.closeTransitionRate = closeTransitionRate;
     }
 
     public Color getColor() {

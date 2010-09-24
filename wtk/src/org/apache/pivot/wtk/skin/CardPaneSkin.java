@@ -60,7 +60,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         public final int direction;
 
         public SelectionChangeTransition(int from, int to) {
-            super(selectionChangeDuration, SELECTION_CHANGE_RATE, false);
+            super(selectionChangeDuration, selectionChangeRate, false);
 
             this.from = from;
             this.to = to;
@@ -294,13 +294,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     private Insets padding = Insets.NONE;
     private boolean sizeToSelection = false;
     private SelectionChangeEffect selectionChangeEffect = null;
-    private int selectionChangeDuration = DEFAULT_SELECTION_CHANGE_DURATION;
+    private int selectionChangeDuration = 250;
+    private int selectionChangeRate = 30;
     private boolean circular = false;
 
     private SelectionChangeTransition selectionChangeTransition = null;
-
-    public static final int DEFAULT_SELECTION_CHANGE_DURATION = 250;
-    public static final int SELECTION_CHANGE_RATE = 30;
 
     @Override
     public void install(Component component) {
@@ -566,6 +564,13 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         this.selectionChangeDuration = selectionChangeDuration;
     }
 
+    public int getSelectionChangeRate() {
+        return selectionChangeRate;
+    }
+
+    public void setSelectionChangeRate(int selectionChangeRate) {
+        this.selectionChangeRate = selectionChangeRate;
+    }
     /**
      * Sets the circular style, which controls the direction of certain
      * transitions (transitions for which a direction makes sense) when looping

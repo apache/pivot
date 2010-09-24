@@ -93,8 +93,8 @@ public class TerraTooltipSkin extends WindowSkin {
     private Color borderColor;
     private Insets padding;
 
-    private static final int CLOSE_TRANSITION_DURATION = 500;
-    private static final int CLOSE_TRANSITION_RATE = 30;
+    private int closeTransitionDuration = 500;
+    private int closeTransitionRate = 30;
 
     public TerraTooltipSkin() {
         setBackgroundColor(new Color(0xff, 0xff, 0xe0, 0xf0));
@@ -173,6 +173,22 @@ public class TerraTooltipSkin extends WindowSkin {
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    public int getCloseTransitionDuration() {
+        return closeTransitionDuration;
+    }
+
+    public void setCloseTransitionDuration(int closeTransitionDuration) {
+        this.closeTransitionDuration = closeTransitionDuration;
+    }
+
+    public int getCloseTransitionRate() {
+        return closeTransitionRate;
+    }
+
+    public void setCloseTransitionRate(int closeTransitionRate) {
+        this.closeTransitionRate = closeTransitionRate;
+    }
+
     @Override
     public void layout() {
         Tooltip tooltip = (Tooltip)getComponent();
@@ -214,7 +230,7 @@ public class TerraTooltipSkin extends WindowSkin {
         if (fade) {
             if (closeTransition == null) {
                 closeTransition = new FadeWindowTransition(window,
-                    CLOSE_TRANSITION_DURATION, CLOSE_TRANSITION_RATE,
+                    closeTransitionDuration, closeTransitionRate,
                     dropShadowDecorator);
 
                 closeTransition.start(new TransitionListener() {
