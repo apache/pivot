@@ -300,20 +300,24 @@ public abstract class ApplicationContext {
             }
 
             try {
-                String property = System.getProperty("org.apache.pivot.wtk.debugfocuscolor");
-                if (property != null) {
-                    property = property.trim().toLowerCase();
-                    Color focusColor = null;
-                    if ("red".equals(property)) {
-                        focusColor = Color.RED;
-                    } else if ("green".equals(property)) {
-                        focusColor = Color.GREEN;
-                    } else if ("blue".equals(property)) {
-                        focusColor = Color.BLUE;
-                    }
-                    if (focusColor != null) {
-                        Component.setFocusDecorator(new ShadeDecorator(0.2f, focusColor));
-                    }
+                boolean debugFocus = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugfocus"));
+                if (debugFocus) {
+                    final Decorator focusDecorator = new ShadeDecorator(0.2f, Color.RED);
+                    ComponentClassListener focusChangeListener = new ComponentClassListener() {
+                        @Override
+                        public void focusedComponentChanged(Component previousFocusedComponent) {
+                            if (previousFocusedComponent != null
+                                && previousFocusedComponent.getDecorators().indexOf(focusDecorator) > -1) {
+                                previousFocusedComponent.getDecorators().remove(focusDecorator);
+                            }
+                            Component focusedComponent = Component.getFocusedComponent();
+                            if (focusedComponent != null
+                                && focusedComponent.getDecorators().indexOf(focusDecorator) == -1) {
+                                focusedComponent.getDecorators().add(focusDecorator);
+                            }
+                        }
+                    };
+                    Component.getComponentClassListeners().add(focusChangeListener);
                 }
             } catch (SecurityException ex) {
                 // No-op
