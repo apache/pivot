@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin;
 
 import java.awt.Color;
 
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ColorChooser;
 import org.apache.pivot.wtk.ColorChooserButton;
 import org.apache.pivot.wtk.ColorChooserButtonSelectionListener;
@@ -62,8 +63,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
         }
 
         @Override
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
-            int count) {
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             component.requestFocus();
             return super.mouseClick(component, button, x, y, count);
         }
@@ -110,12 +110,29 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
         }
     };
 
-    private WindowStateListener colorChooserPopupWindowStateListener =
-        new WindowStateListener.Adapter() {
+    private WindowStateListener colorChooserPopupWindowStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseListener);
+
+            window.requestFocus();
+        }
+
+        @Override
+        public Vote previewWindowClose(Window window) {
+            if (window.containsFocus()) {
+                getComponent().requestFocus();
+            }
+
+            return Vote.APPROVE;
+        }
+
+        @Override
+        public void windowCloseVetoed(Window window, Vote reason) {
+            if (reason == Vote.DENY) {
+                window.requestFocus();
+            }
         }
 
         @Override

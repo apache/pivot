@@ -93,8 +93,6 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
                 calendarPopup.setLocation(x, y);
                 calendarPopup.setPreferredSize(popupWidth, popupHeight);
                 calendarPopup.open(calendarButton.getWindow());
-
-                calendar.requestFocus();
             }
         }
 
@@ -132,9 +130,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         @Override
         public void windowClosed(Window window, Display display, Window owner) {
             closeTransition = null;
-
             repaintComponent();
-            getComponent().requestFocus();
         }
     };
 

@@ -125,8 +125,6 @@ public class TerraListButtonSkin extends ListButtonSkin {
                 });
 
                 repaintComponent();
-
-                listView.requestFocus();
             }
         }
 
@@ -166,9 +164,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         @Override
         public void windowClosed(Window window, Display display, Window owner) {
             closeTransition = null;
-
             repaintComponent();
-            getComponent().requestFocus();
         }
     };
 

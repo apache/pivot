@@ -106,8 +106,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
                 menuPopup.setLocation(x, y);
                 menuPopup.setPreferredSize(popupWidth, popupHeight);
                 menuPopup.open(menuButton.getWindow());
-
-                menuPopup.requestFocus();
             }
         }
 

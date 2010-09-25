@@ -20,6 +20,7 @@ import java.util.Locale;
 
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarButton;
 import org.apache.pivot.wtk.CalendarButtonListener;
@@ -102,11 +103,29 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         }
     };
 
-    private WindowStateListener calendarPopupWindowStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener calendarPopupWindowStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseListener);
+
+            window.requestFocus();
+        }
+
+        @Override
+        public Vote previewWindowClose(Window window) {
+            if (window.containsFocus()) {
+                getComponent().requestFocus();
+            }
+
+            return Vote.APPROVE;
+        }
+
+        @Override
+        public void windowCloseVetoed(Window window, Vote reason) {
+            if (reason == Vote.DENY) {
+                window.requestFocus();
+            }
         }
 
         @Override

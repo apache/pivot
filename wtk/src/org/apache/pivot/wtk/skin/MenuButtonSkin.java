@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.skin;
 
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
@@ -25,6 +26,7 @@ import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuButton;
 import org.apache.pivot.wtk.MenuButtonListener;
 import org.apache.pivot.wtk.MenuPopup;
+import org.apache.pivot.wtk.MenuPopupStateListener;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
@@ -43,6 +45,8 @@ public abstract class MenuButtonSkin extends ButtonSkin
         public void windowOpened(Window window) {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseListener);
+
+            window.requestFocus();
         }
 
         @Override
@@ -53,6 +57,24 @@ public abstract class MenuButtonSkin extends ButtonSkin
             if (componentWindow != null
                 && !componentWindow.isClosing()) {
                 componentWindow.moveToFront();
+            }
+        }
+    };
+
+    private MenuPopupStateListener menuPopupStateListener = new MenuPopupStateListener.Adapter() {
+        @Override
+        public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
+            if (menuPopup.containsFocus()) {
+                getComponent().requestFocus();
+            }
+
+            return Vote.APPROVE;
+        }
+
+        @Override
+        public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
+            if (reason == Vote.DENY) {
+                menuPopup.requestFocus();
             }
         }
     };
@@ -82,6 +104,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
         menuPopup.setMenu(menuButton.getMenu());
 
         menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
+        menuPopup.getMenuPopupStateListeners().add(menuPopupStateListener);
     }
 
     // MenuButton.Skin methods

@@ -88,7 +88,6 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
                 colorChooserPopup.setLocation(x, y);
                 colorChooserPopup.setPreferredSize(popupWidth, popupHeight);
                 colorChooserPopup.open(colorChooserButton.getWindow());
-                colorChooserPopup.requestFocus();
             }
         }
 
@@ -126,9 +125,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         @Override
         public void windowClosed(Window window, Display display, Window owner) {
             closeTransition = null;
-
             repaintComponent();
-            getComponent().requestFocus();
         }
     };
 

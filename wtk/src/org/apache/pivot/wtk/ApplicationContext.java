@@ -301,8 +301,10 @@ public abstract class ApplicationContext {
 
             try {
                 boolean debugFocus = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugfocus"));
+
                 if (debugFocus) {
                     final Decorator focusDecorator = new ShadeDecorator(0.2f, Color.RED);
+
                     ComponentClassListener focusChangeListener = new ComponentClassListener() {
                         @Override
                         public void focusedComponentChanged(Component previousFocusedComponent) {
@@ -310,13 +312,19 @@ public abstract class ApplicationContext {
                                 && previousFocusedComponent.getDecorators().indexOf(focusDecorator) > -1) {
                                 previousFocusedComponent.getDecorators().remove(focusDecorator);
                             }
+
                             Component focusedComponent = Component.getFocusedComponent();
+
                             if (focusedComponent != null
                                 && focusedComponent.getDecorators().indexOf(focusDecorator) == -1) {
                                 focusedComponent.getDecorators().add(focusDecorator);
                             }
+
+                            System.out.println("focusedComponentChanged():\n  from = " + previousFocusedComponent
+                                + "\n  to = " + focusedComponent);
                         }
                     };
+
                     Component.getComponentClassListeners().add(focusChangeListener);
                 }
             } catch (SecurityException ex) {

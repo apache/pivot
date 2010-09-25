@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
@@ -104,11 +105,29 @@ public abstract class ListButtonSkin extends ButtonSkin
         }
     };
 
-    private WindowStateListener listViewPopupWindowStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener listViewPopupWindowStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseListener);
+
+            window.requestFocus();
+        }
+
+        @Override
+        public Vote previewWindowClose(Window window) {
+            if (window.containsFocus()) {
+                getComponent().requestFocus();
+            }
+
+            return Vote.APPROVE;
+        }
+
+        @Override
+        public void windowCloseVetoed(Window window, Vote reason) {
+            if (reason == Vote.DENY) {
+                window.requestFocus();
+            }
         }
 
         @Override
