@@ -20,7 +20,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.pivot.beans.BeanAdapter;
@@ -2550,7 +2549,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param styles
      * The styles encoded as a JSON map.
      */
-    public void setStyles(String styles) throws IOException, SerializationException {
+    public void setStyles(String styles) throws SerializationException {
         if (styles == null) {
             throw new IllegalArgumentException("styles is null.");
         }
