@@ -2313,9 +2313,9 @@ public abstract class Component implements ConstrainedVisual {
      * <tt>true</tt> if the component is capable of receiving the focus
      */
     public boolean isFocusable() {
-        boolean focusable = skin.isFocusable();
+        boolean focusable = skin.isFocusable() && isEnabled();
 
-        if (focusable && isEnabled()) {
+        if (focusable) {
             Window window = getWindow();
             focusable = (window != null
                 && window.isOpen()
