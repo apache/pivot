@@ -17,3 +17,26 @@
 
 Release Notes for Pivot 1.5.2:
 
+** Bug
+    * [PIVOT-392] - Calendar issue?
+    * [PIVOT-586] - Alt+A in Polish locale incorrectly selects all text
+    * [PIVOT-601] - missing pivot-web-server artefact on local Maven repository
+    * [PIVOT-612] - TextInput validator problem when modifying selected text
+    * [PIVOT-613] - RadioButton, etc. does not correctly report opaqueness
+    * [PIVOT-630] - NPE when using ReflectionDecorator on Dialog with TextInput inside
+    * [PIVOT-648] - useless ResultList constructors due to ignored argument
+
+** Improvement
+    * [PIVOT-611] - add a method hasListener() in ListenerList object
+    * [PIVOT-614] - add a clearFlag() method in Form
+    * [PIVOT-617] - Optimize performance of ResultList
+    * [PIVOT-622] - Add setExpandedIcon() overloads to org.apache.pivot.wtk.content.TreeBranch
+    * [PIVOT-627] - Painting RadioButton with null ButtonData
+    * [PIVOT-632] - Add a source argument to Action#perform()
+    * [PIVOT-640] - Add a Query.Method argument to QueryServlet#createSerializer() and validate()
+    * [PIVOT-644] - Improve JSONSerializer to ignore a BOM at the beginning of file
+
+** Wish
+    * [PIVOT-626] - Add "userData" member to TreeNode to facilitate right-click menu handling
+      (among other things)
+
