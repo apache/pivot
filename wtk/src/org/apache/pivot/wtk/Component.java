@@ -2306,20 +2306,36 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns this component's focusability. A focusable component is capable
-     * of receiving the focus only when it is showing and enabled and its window
+     * of receiving the focus only when it is showing, unblocked, and its window
      * is not closing.
      *
      * @return
-     * <tt>true</tt> if the component is capable of receiving the focus
+     * <tt>true</tt> if the component is capable of receiving the focus;
+     * <tt>false</tt>, otherwise.
      */
     public boolean isFocusable() {
-        boolean focusable = skin.isFocusable() && isEnabled();
+        boolean focusable = skin.isFocusable();
 
         if (focusable) {
-            Window window = getWindow();
-            focusable = (window != null
-                && window.isOpen()
-                && !window.isClosing());
+            Component component = this;
+
+            while (focusable
+                && component != null
+                && !(component instanceof Window)) {
+                focusable = component.isVisible()
+                    && isEnabled();
+
+                component = component.getParent();
+                focusable &= component != null;
+            }
+
+            if (focusable) {
+                Window window = (Window)component;
+                focusable = window.isVisible()
+                    && window.isEnabled()
+                    && window.isOpen()
+                    && !window.isClosing();
+            }
         }
 
         return focusable;
