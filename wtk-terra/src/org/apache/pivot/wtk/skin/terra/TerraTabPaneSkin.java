@@ -519,6 +519,9 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     private Orientation tabOrientation = Orientation.HORIZONTAL;
 
+    private int selectionChangeDuration = DEFAULT_SELECTION_CHANGE_DURATION;
+    private int selectionChangeRate = DEFAULT_SELECTION_CHANGE_RATE;
+
     private SelectionChangeTransition selectionChangeTransition = null;
     private ClipDecorator clipDecorator = new ClipDecorator();
 
@@ -531,12 +534,12 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
     };
 
-    private int selectionChangeDuration = 250;
-    private int selectionChangeRate = 30;
 
     public static final int CORNER_RADIUS = 4;
     public static final int GRADIENT_BEVEL_THICKNESS = 8;
     private static final int CLOSE_TRIGGER_SIZE = 6;
+    private static final int DEFAULT_SELECTION_CHANGE_DURATION = 250;
+    private static final int DEFAULT_SELECTION_CHANGE_RATE = 30;
 
     public TerraTabPaneSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -1258,22 +1261,6 @@ public class TerraTabPaneSkin extends ContainerSkin
         tabButtonBoxPane.getStyles().put("spacing", buttonSpacing);
     }
 
-    public int getSelectionChangeDuration() {
-        return selectionChangeDuration;
-    }
-
-    public void setSelectionChangeDuration(int selectionChangeDuration) {
-        this.selectionChangeDuration = selectionChangeDuration;
-    }
-
-    public int getSelectionChangeRate() {
-        return selectionChangeRate;
-    }
-
-    public void setSelectionChangeRate(int selectionChangeRate) {
-        this.selectionChangeRate = selectionChangeRate;
-    }
-
     public Orientation getTabOrientation() {
         return tabOrientation;
     }
@@ -1303,6 +1290,22 @@ public class TerraTabPaneSkin extends ContainerSkin
                 break;
             }
         }
+    }
+
+    public int getSelectionChangeDuration() {
+        return selectionChangeDuration;
+    }
+
+    public void setSelectionChangeDuration(int selectionChangeDuration) {
+        this.selectionChangeDuration = selectionChangeDuration;
+    }
+
+    public int getSelectionChangeRate() {
+        return selectionChangeRate;
+    }
+
+    public void setSelectionChangeRate(int selectionChangeRate) {
+        this.selectionChangeRate = selectionChangeRate;
     }
 
     /**

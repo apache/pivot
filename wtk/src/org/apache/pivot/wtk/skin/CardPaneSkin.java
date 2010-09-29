@@ -294,11 +294,14 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     private Insets padding = Insets.NONE;
     private boolean sizeToSelection = false;
     private SelectionChangeEffect selectionChangeEffect = null;
-    private int selectionChangeDuration = 250;
-    private int selectionChangeRate = 30;
+    private int selectionChangeDuration = DEFAULT_SELECTION_CHANGE_DURATION;
+    private int selectionChangeRate = DEFAULT_SELECTION_CHANGE_RATE;
     private boolean circular = false;
 
     private SelectionChangeTransition selectionChangeTransition = null;
+
+    private static final int DEFAULT_SELECTION_CHANGE_DURATION = 250;
+    private static final int DEFAULT_SELECTION_CHANGE_RATE = 30;
 
     @Override
     public void install(Component component) {

@@ -145,6 +145,9 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private Color disabledBorderColor;
     private Insets padding;
 
+    private int closeTransitionDuration = DEFAULT_CLOSE_TRANSITION_DURATION;
+    private int closeTransitionRate = DEFAULT_CLOSE_TRANSITION_RATE;
+
     private Color bevelColor;
     private Color pressedBevelColor;
     private Color disabledBevelColor;
@@ -155,8 +158,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private static final int CORNER_RADIUS = 4;
     private static final int TRIGGER_WIDTH = 10;
 
-    private int closeTransitionDuration = 250;
-    private int closeTransitionRate = 30;
+    private static final int DEFAULT_CLOSE_TRANSITION_DURATION = 250;
+    private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraCalendarButtonSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -378,22 +381,6 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         setFont(Theme.deriveFont(font));
     }
 
-    public int getCloseTransitionDuration() {
-        return closeTransitionDuration;
-    }
-
-    public void setCloseTransitionDuration(int closeTransitionDuration) {
-        this.closeTransitionDuration = closeTransitionDuration;
-    }
-
-    public int getCloseTransitionRate() {
-        return closeTransitionRate;
-    }
-
-    public void setCloseTransitionRate(int closeTransitionRate) {
-        this.closeTransitionRate = closeTransitionRate;
-    }
-
     public Color getColor() {
         return color;
     }
@@ -593,6 +580,22 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         }
 
         setPadding(Insets.decode(padding));
+    }
+
+    public int getCloseTransitionDuration() {
+        return closeTransitionDuration;
+    }
+
+    public void setCloseTransitionDuration(int closeTransitionDuration) {
+        this.closeTransitionDuration = closeTransitionDuration;
+    }
+
+    public int getCloseTransitionRate() {
+        return closeTransitionRate;
+    }
+
+    public void setCloseTransitionRate(int closeTransitionRate) {
+        this.closeTransitionRate = closeTransitionRate;
     }
 
     // Calendar button events

@@ -389,22 +389,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         setFont(Theme.deriveFont(font));
     }
 
-    public int getCloseTransitionDuration() {
-        return (Integer) menuPopup.getStyles().get("closeTransitionDuration");
-    }
-
-    public void setCloseTransitionDuration(int closeTransitionDuration) {
-        menuPopup.getStyles().put("closeTransitionDuration", closeTransitionDuration);
-    }
-
-    public int getCloseTransitionRate() {
-        return (Integer) menuPopup.getStyles().get("closeTransitionRate");
-    }
-
-    public void setCloseTransitionRate(int closeTransitionRate) {
-        menuPopup.getStyles().put("closeTransitionRate", closeTransitionRate);
-    }
-
     public Color getColor() {
         return color;
     }
@@ -683,6 +667,22 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         repaintComponent();
+    }
+
+    public int getCloseTransitionDuration() {
+        return (Integer) menuPopup.getStyles().get("closeTransitionDuration");
+    }
+
+    public void setCloseTransitionDuration(int closeTransitionDuration) {
+        menuPopup.getStyles().put("closeTransitionDuration", closeTransitionDuration);
+    }
+
+    public int getCloseTransitionRate() {
+        return (Integer) menuPopup.getStyles().get("closeTransitionRate");
+    }
+
+    public void setCloseTransitionRate(int closeTransitionRate) {
+        menuPopup.getStyles().put("closeTransitionRate", closeTransitionRate);
     }
 
     @Override

@@ -293,6 +293,9 @@ public class TerraAccordionSkin extends ContainerSkin
     private Color buttonBackgroundColor;
     private Insets buttonPadding;
 
+    private int selectionChangeDuration = DEFAULT_SELECTION_CHANGE_DURATION;
+    private int selectionChangeRate = DEFAULT_SELECTION_CHANGE_RATE;
+
     private Color buttonBevelColor;
 
     private SelectionChangeTransition selectionChangeTransition = null;
@@ -310,8 +313,8 @@ public class TerraAccordionSkin extends ContainerSkin
 
     public static final int GRADIENT_BEVEL_THICKNESS = 4;
 
-    private int selectionChangeDuration = 250;
-    private int selectionChangeRate = 30;
+    private static final int DEFAULT_SELECTION_CHANGE_DURATION = 250;
+    private static final int DEFAULT_SELECTION_CHANGE_RATE = 30;
 
     public TerraAccordionSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();

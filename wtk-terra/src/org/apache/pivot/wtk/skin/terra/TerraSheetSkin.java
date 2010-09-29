@@ -146,6 +146,9 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private Insets padding;
     private boolean resizable;
 
+    private int stateTransitionDuration = DEFAULT_STATE_TRANSITION_DURATION;
+    private int stateTransitionRate = DEFAULT_STATE_TRANSITION_RATE;
+
     private Color bevelColor;
 
     private OpenTransition openTransition = null;
@@ -220,8 +223,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     private DropShadowDecorator dropShadowDecorator = null;
 
-    private int stateTransitionDuration = 300;
-    private int stateTransitionRate = 30;
+    private static final int DEFAULT_STATE_TRANSITION_DURATION = 300;
+    private static final int DEFAULT_STATE_TRANSITION_RATE = 30;
 
     public TerraSheetSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();

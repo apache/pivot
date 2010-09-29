@@ -77,6 +77,9 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     private DropShadowDecorator dropShadowDecorator = null;
     private Transition closeTransition = null;
 
+    private int closeTransitionDuration = DEFAULT_CLOSE_TRANSITION_DURATION;
+    private int closeTransitionRate = DEFAULT_CLOSE_TRANSITION_RATE;
+
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
@@ -127,8 +130,8 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         }
     };
 
-    private int closeTransitionDuration = 250;
-    private int closeTransitionRate = 30;
+    private static final int DEFAULT_CLOSE_TRANSITION_DURATION = 250;
+    private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraMenuPopupSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();

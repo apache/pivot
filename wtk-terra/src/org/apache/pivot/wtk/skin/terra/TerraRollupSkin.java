@@ -170,8 +170,9 @@ public class TerraRollupSkin extends RollupSkin {
     private boolean fill;
     private boolean headingToggles;
 
-    private int expandDuration = 250;
-    private int expandRate = 30;
+    private int expandDuration = DEFAULT_EXPAND_DURATION;
+    private int expandRate = DEFAULT_EXPAND_RATE;
+
     private ExpandTransition expandTransition = null;
 
     private ComponentMouseButtonListener headingMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
@@ -189,6 +190,9 @@ public class TerraRollupSkin extends RollupSkin {
             return consumed;
         }
     };
+
+    private static final int DEFAULT_EXPAND_DURATION = 250;
+    private static final int DEFAULT_EXPAND_RATE = 30;
 
     public TerraRollupSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
@@ -407,22 +411,6 @@ public class TerraRollupSkin extends RollupSkin {
         invalidateComponent();
     }
 
-    public int getExpandDuration() {
-        return expandDuration;
-    }
-
-    public void setExpandDuration(int expandDuration) {
-        this.expandDuration = expandDuration;
-    }
-
-    public int getExpandRate() {
-        return expandRate;
-    }
-
-    public void setExpandRate(int expandRate) {
-        this.expandRate = expandRate;
-    }
-
     public boolean getFill() {
         return fill;
     }
@@ -438,6 +426,22 @@ public class TerraRollupSkin extends RollupSkin {
 
     public void setHeadingToggles(boolean headingToggles) {
         this.headingToggles = headingToggles;
+    }
+
+    public int getExpandDuration() {
+        return expandDuration;
+    }
+
+    public void setExpandDuration(int expandDuration) {
+        this.expandDuration = expandDuration;
+    }
+
+    public int getExpandRate() {
+        return expandRate;
+    }
+
+    public void setExpandRate(int expandRate) {
+        this.expandRate = expandRate;
     }
 
     @Override
