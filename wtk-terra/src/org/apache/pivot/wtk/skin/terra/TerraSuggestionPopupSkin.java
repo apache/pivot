@@ -142,6 +142,8 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         suggestionListView.getListViewSelectionListeners().add(listViewSelectionListener);
 
         suggestionListViewPanorama = new Panorama(suggestionListView);
+        suggestionListViewPanorama.getStyles().put("buttonBackgroundColor",
+            suggestionListView.getStyles().get("backgroundColor"));
         suggestionListViewPanorama.getStyles().put("alwaysShowScrollButtons", true);
 
         suggestionListViewBorder = new Border(suggestionListViewPanorama);
@@ -301,6 +303,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     public void suggestionsChanged(SuggestionPopup suggestionPopup,
         List<?> previousSuggestions) {
         suggestionListView.setListData(suggestionPopup.getSuggestions());
+        suggestionListViewPanorama.setScrollTop(0);
     }
 
     @Override
