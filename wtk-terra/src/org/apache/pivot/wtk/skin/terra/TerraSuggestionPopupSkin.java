@@ -35,6 +35,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.SuggestionPopupListener;
@@ -55,8 +56,10 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  */
 public class TerraSuggestionPopupSkin extends WindowSkin
     implements SuggestionPopupListener, SuggestionPopupSelectionListener, SuggestionPopupStateListener {
-    private Border suggestionListViewBorder = new Border();
-    private ListView suggestionListView = new ListView();
+    private Panorama listViewPanorama;
+    private Border listViewBorder;
+
+    private ListView listView = new ListView();
 
     private DropShadowDecorator dropShadowDecorator = null;
     private Transition closeTransition = null;
@@ -115,9 +118,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin
             SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
 
             if (keyCode == Keyboard.KeyCode.DOWN) {
-                if (suggestionListView.getSelectedIndex() == -1
-                    && suggestionListView.getListData().getLength() > 0) {
-                    suggestionListView.setSelectedIndex(0);
+                if (listView.getSelectedIndex() == -1
+                    && listView.getListData().getLength() > 0) {
+                    listView.setSelectedIndex(0);
                 }
 
                 suggestionPopup.requestFocus();
@@ -134,7 +137,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     private ListViewSelectionListener listViewSelectionListener = new ListViewSelectionListener.Adapter() {
         @Override
         public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
-            int index = suggestionListView.getSelectedIndex();
+            int index = listView.getSelectedIndex();
 
             SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
             suggestionPopup.setSelectedIndex(index);
@@ -145,9 +148,11 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraSuggestionPopupSkin () {
-        suggestionListView.getStyles().put("variableItemHeight", true);
-        suggestionListView.getListViewSelectionListeners().add(listViewSelectionListener);
-        suggestionListViewBorder.setContent(suggestionListView);
+        listView.getStyles().put("variableItemHeight", true);
+        listView.getListViewSelectionListeners().add(listViewSelectionListener);
+
+        listViewPanorama = new Panorama(listView);
+        listViewBorder = new Border(listViewPanorama);
     }
 
     @Override
@@ -159,10 +164,10 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         suggestionPopup.getSuggestionPopupSelectionListeners().add(this);
         suggestionPopup.getSuggestionPopupStateListeners().add(this);
 
-        suggestionPopup.setContent(suggestionListViewBorder);
+        suggestionPopup.setContent(listViewBorder);
 
-        suggestionListView.setListData(suggestionPopup.getSuggestionData());
-        suggestionListView.setItemRenderer(suggestionPopup.getSuggestionRenderer());
+        listView.setListData(suggestionPopup.getSuggestionData());
+        listView.setItemRenderer(suggestionPopup.getSuggestionRenderer());
 
         // Attach the drop-shadow decorator
         dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
@@ -170,11 +175,11 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     public Font getFont() {
-        return (Font)suggestionListView.getStyles().get("font");
+        return (Font)listView.getStyles().get("font");
     }
 
     public void setFont(Font font) {
-        suggestionListView.getStyles().put("font", font);
+        listView.getStyles().put("font", font);
     }
 
     public final void setFont(String font) {
@@ -194,11 +199,11 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     public Color getColor() {
-        return (Color)suggestionListView.getStyles().get("color");
+        return (Color)listView.getStyles().get("color");
     }
 
     public void setColor(Color color) {
-        suggestionListView.getStyles().put("color", color);
+        listView.getStyles().put("color", color);
     }
 
     public final void setColor(String color) {
@@ -210,11 +215,11 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     public Color getBorderColor() {
-        return (Color)suggestionListViewBorder.getStyles().get("color");
+        return (Color)listViewBorder.getStyles().get("color");
     }
 
     public void setBorderColor(Color borderColor) {
-        suggestionListViewBorder.getStyles().put("color", borderColor);
+        listViewBorder.getStyles().put("color", borderColor);
     }
 
     public final void setBorderColor(String borderColor) {
@@ -299,15 +304,16 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
         dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
 
-        SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+        SuggestionPopup suggestionPopup = (SuggestionPopup)window;
         TextInput textInput = suggestionPopup.getTextInput();
         textInput.getComponentStateListeners().add(textInputStateListener);
         textInput.getComponentKeyListeners().add(textInputKeyListener);
 
-        // Reposition under text input
+        // Size and position the popup
         Point location = textInput.mapPointToAncestor(textInput.getDisplay(), 0, 0);
-        suggestionPopup.setLocation(location.x, location.y + textInput.getHeight() - 1);
-        suggestionPopup.setMinimumWidth(textInput.getWidth());
+        window.setLocation(location.x, location.y + textInput.getHeight() - 1);
+        window.setMinimumWidth(textInput.getWidth());
+        window.setMaximumHeight(display.getHeight() - window.getY());
     }
 
     @Override
@@ -316,7 +322,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
             && closeTransition != null) {
             closeTransition.stop();
 
-            suggestionListViewBorder.setEnabled(true);
+            listViewBorder.setEnabled(true);
             closeTransition = null;
         }
     }
@@ -330,13 +336,13 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     @Override
     public void suggestionDataChanged(SuggestionPopup suggestionPopup,
         List<?> previousSuggestionData) {
-        suggestionListView.setListData(suggestionPopup.getSuggestionData());
+        listView.setListData(suggestionPopup.getSuggestionData());
     }
 
     @Override
     public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
         ListView.ItemRenderer previousSuggestionRenderer) {
-        suggestionListView.setItemRenderer(suggestionPopup.getSuggestionRenderer());
+        listView.setItemRenderer(suggestionPopup.getSuggestionRenderer());
     }
 
     @Override
@@ -358,7 +364,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     @Override
     public Vote previewSuggestionPopupClose(final SuggestionPopup suggestionPopup, final boolean result) {
         if (closeTransition == null) {
-            suggestionListViewBorder.setEnabled(false);
+            listViewBorder.setEnabled(false);
 
             closeTransition = new FadeWindowTransition(suggestionPopup,
                 closeTransitionDuration, closeTransitionRate,
@@ -382,7 +388,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
             && closeTransition != null) {
             closeTransition.stop();
 
-            suggestionListViewBorder.setEnabled(true);
+            listViewBorder.setEnabled(true);
             closeTransition = null;
         }
     }
@@ -397,7 +403,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
         textInput.requestFocus();
 
-        suggestionListViewBorder.setEnabled(true);
+        listViewBorder.setEnabled(true);
         closeTransition = null;
     }
 }
