@@ -1102,6 +1102,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     // List view events
     @Override
     public void listDataChanged(ListView listView, List<?> previousListData) {
+        highlightedIndex = -1;
         invalidateComponent();
     }
 
