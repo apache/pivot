@@ -142,6 +142,8 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         suggestionListView.getListViewSelectionListeners().add(listViewSelectionListener);
 
         suggestionListViewPanorama = new Panorama(suggestionListView);
+        suggestionListViewPanorama.getStyles().put("alwaysShowScrollButtons", true);
+
         suggestionListViewBorder = new Border(suggestionListViewPanorama);
     }
 
