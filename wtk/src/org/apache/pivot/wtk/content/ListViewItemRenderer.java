@@ -150,6 +150,14 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         imageView.setVisible(showIcon);
     }
 
+    public boolean getFillIcon() {
+        return (Boolean)imageView.getStyles().get("fill");
+    }
+
+    public void setFillIcon(boolean fillIcon) {
+        imageView.getStyles().put("fill", fillIcon);
+    }
+
     /**
      * Gets the bounds of the text that is rendered by this renderer.
      *

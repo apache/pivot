@@ -103,6 +103,38 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
         }
     }
 
+    public int getIconWidth() {
+        return imageView.getPreferredWidth(-1);
+    }
+
+    public void setIconWidth(int iconWidth) {
+        imageView.setPreferredWidth(iconWidth);
+    }
+
+    public int getIconHeight() {
+        return imageView.getPreferredHeight(-1);
+    }
+
+    public void setIconHeight(int iconHeight) {
+        imageView.setPreferredHeight(iconHeight);
+    }
+
+    public boolean getShowIcon() {
+        return imageView.isVisible();
+    }
+
+    public void setShowIcon(boolean showIcon) {
+        imageView.setVisible(showIcon);
+    }
+
+    public boolean getFillIcon() {
+        return (Boolean)imageView.getStyles().get("fill");
+    }
+
+    public void setFillIcon(boolean fillIcon) {
+        imageView.getStyles().put("fill", fillIcon);
+    }
+
     @Override
     public String toString(Object data) {
         String string = null;

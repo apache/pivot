@@ -177,6 +177,14 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
         imageView.setVisible(showIcon);
     }
 
+    public boolean getFillIcon() {
+        return (Boolean)imageView.getStyles().get("fill");
+    }
+
+    public void setFillIcon(boolean fillIcon) {
+        imageView.getStyles().put("fill", fillIcon);
+    }
+
     /**
      * Gets the bounds of the text that is rendered by this renderer.
      *
