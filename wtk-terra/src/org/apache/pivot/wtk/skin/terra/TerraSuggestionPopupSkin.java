@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.SuggestionPopup;
@@ -54,7 +55,9 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  */
 public class TerraSuggestionPopupSkin extends WindowSkin
     implements SuggestionPopupListener, SuggestionPopupStateListener {
-    private Border suggestionListViewBorder = new Border();
+    private Panorama suggestionListViewPanorama;
+    private Border suggestionListViewBorder;
+
     private ListView suggestionListView = new ListView();
 
     private DropShadowDecorator dropShadowDecorator = null;
@@ -137,7 +140,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     public TerraSuggestionPopupSkin () {
         suggestionListView.getStyles().put("variableItemHeight", true);
         suggestionListView.getListViewSelectionListeners().add(listViewSelectionListener);
-        suggestionListViewBorder.setContent(suggestionListView);
+
+        suggestionListViewPanorama = new Panorama(suggestionListView);
+        suggestionListViewBorder = new Border(suggestionListViewPanorama);
     }
 
     @Override
@@ -261,15 +266,16 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
         dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
 
-        SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+        SuggestionPopup suggestionPopup = (SuggestionPopup)window;
         TextInput textInput = suggestionPopup.getTextInput();
         textInput.getComponentStateListeners().add(textInputStateListener);
         textInput.getComponentKeyListeners().add(textInputKeyListener);
 
-        // Reposition under text input
+        // Size and position the popup
         Point location = textInput.mapPointToAncestor(textInput.getDisplay(), 0, 0);
-        suggestionPopup.setLocation(location.x, location.y + textInput.getHeight() - 1);
-        suggestionPopup.setMinimumPreferredWidth(textInput.getWidth());
+        window.setLocation(location.x, location.y + textInput.getHeight() - 1);
+        window.setMinimumPreferredWidth(textInput.getWidth());
+        window.setMaximumPreferredHeight(display.getHeight() - window.getY());
     }
 
     @Override
