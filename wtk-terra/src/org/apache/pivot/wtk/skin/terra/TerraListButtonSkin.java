@@ -307,7 +307,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         if (listButton.isEnabled()) {
             color = this.color;
             backgroundColor = this.backgroundColor;
-            bevelColor = (pressed || (listViewPopup.isOpen() && closeTransition == null)) ?
+            bevelColor = (pressed || (listViewPopup.isOpen() && !listViewPopup.isClosing())) ?
                 pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {

@@ -244,7 +244,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
         if (colorChooserButton.isEnabled()) {
             backgroundColor = this.backgroundColor;
-            bevelColor = (pressed || (colorChooserPopup.isOpen() && closeTransition == null)) ?
+            bevelColor = (pressed || (colorChooserPopup.isOpen() && !colorChooserPopup.isClosing())) ?
                 pressedBevelColor : this.bevelColor;
             borderColor = this.borderColor;
         } else {
