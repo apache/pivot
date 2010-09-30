@@ -38,7 +38,7 @@ limitations under the License.
             </libraries>
 
             <startup-properties>
-                <src>org/apache/pivot/tutorials/databinding/property_binding.bxml</src>
+                <src>/org/apache/pivot/tutorials/databinding/property_binding.bxml</src>
             </startup-properties>
         </application>
     </body>

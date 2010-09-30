@@ -36,7 +36,7 @@ limitations under the License.
             Stock Tracker demonstrates a number of key features used by many "real world"
             applications, including UI markup, event handling, web queries, data binding, and
             localization, among others. Readers may also find it helpful to review the
-            <a href="wtkx-primer.html">WTKX Primer</a> section, which provides a detailed
+            <a href="bxml-primer.html">WTKX Primer</a> section, which provides a detailed
             description of Pivot's markup language, before browsing the tutorials themsevles.
         </p>
 
@@ -48,7 +48,7 @@ limitations under the License.
             <document-item id="sample-application"/>
             <document-item id="platform-overview"/>
             <document-item id="hello-world">
-                <document-item id="hello-wtkx"/>
+                <document-item id="hello-bxml"/>
             </document-item>
             <document-item id="component-and-container"/>
         </item-group>
@@ -143,7 +143,7 @@ limitations under the License.
         </item-group>
 
         <item-group name="Further Reading">
-            <document-item id="wtkx-primer"/>
+            <document-item id="bxml-primer"/>
         </item-group>
     </body>
 </document>

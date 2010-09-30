@@ -132,8 +132,7 @@ public class ExpensesWindow extends Window implements Bindable {
         }
 
         // Create the delete confirmation prompt
-        ArrayList<String> options = new ArrayList((String)resources.get("cancel"),
-            (String)resources.get("ok"));
+        ArrayList<String> options = new ArrayList(resources.get("cancel"), resources.get("ok"));
         deleteConfirmationPrompt = new Prompt(MessageType.QUESTION, (String)resources.get("confirmDelete"),
             options);
 

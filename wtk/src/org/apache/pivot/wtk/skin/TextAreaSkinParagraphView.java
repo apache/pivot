@@ -283,7 +283,7 @@ class TextAreaSkinParagraphView implements Visual, TextArea.ParagraphListener {
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float rowHeight = lm.getAscent() + lm.getDescent();
 
-        int i = (int)Math.floor((float)y / rowHeight);
+        int i = (int)Math.floor(y / rowHeight);
 
         return getRowInsertionPoint(i, x);
     }
