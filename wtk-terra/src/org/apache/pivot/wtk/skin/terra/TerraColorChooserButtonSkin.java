@@ -52,43 +52,20 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         @Override
         public void windowOpened(Window window) {
             ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+            colorChooser.setSelectedColor(colorChooserButton.getSelectedColor());
 
-            // Determine the popup's location and preferred size, relative
-            // to the button
+            // Size and position the popup
+            int width = getWidth();
+            int height = getHeight();
+
             Display display = colorChooserButton.getDisplay();
+            Point buttonLocation = colorChooserButton.mapPointToAncestor(display, 0, 0);
+            window.setLocation(buttonLocation.x, buttonLocation.y + height - 1);
 
-            if (display != null) {
-                int width = getWidth();
-                int height = getHeight();
+            window.setMinimumWidth(width - TRIGGER_WIDTH - 1);
+            window.setMaximumHeight(display.getHeight() - window.getY());
 
-                // Ensure that the popup remains within the bounds of the display
-                Point buttonLocation = colorChooserButton.mapPointToAncestor(display, 0, 0);
-
-                Dimensions displaySize = display.getSize();
-
-                colorChooserPopup.setPreferredSize(-1, -1);
-                Dimensions popupSize = colorChooserPopup.getPreferredSize();
-                int popupWidth = Math.max(popupSize.width,
-                    colorChooserButton.getWidth() - TRIGGER_WIDTH - 1);
-                int popupHeight = popupSize.height;
-
-                int x = buttonLocation.x;
-                if (popupWidth > width
-                    && x + popupWidth > displaySize.width) {
-                    x = buttonLocation.x + width - popupWidth;
-                }
-
-                int y = buttonLocation.y + height - 1;
-                if (y + popupSize.height > displaySize.height) {
-                    y = buttonLocation.y - popupSize.height + 1;
-                }
-
-                colorChooser.setSelectedColor(colorChooserButton.getSelectedColor());
-
-                colorChooserPopup.setLocation(x, y);
-                colorChooserPopup.setPreferredSize(popupWidth, popupHeight);
-                colorChooserPopup.open(colorChooserButton.getWindow());
-            }
+            repaintComponent();
         }
 
         @Override
@@ -120,6 +97,8 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
                 closeTransition.stop();
                 closeTransition = null;
             }
+
+            repaintComponent();
         }
 
         @Override

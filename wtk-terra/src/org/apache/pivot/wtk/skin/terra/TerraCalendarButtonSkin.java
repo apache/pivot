@@ -56,44 +56,18 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         public void windowOpened(Window window) {
             CalendarButton calendarButton = (CalendarButton)getComponent();
 
-            // Determine the popup's location and preferred size, relative
-            // to the button
+            // Size and position the popup
+            int width = getWidth();
+            int height = getHeight();
+
             Display display = calendarButton.getDisplay();
+            Point buttonLocation = calendarButton.mapPointToAncestor(display, 0, 0);
+            window.setLocation(buttonLocation.x, buttonLocation.y + height - 1);
 
-            if (display != null) {
-                int width = getWidth();
-                int height = getHeight();
+            window.setMinimumWidth(width - TRIGGER_WIDTH - 1);
+            window.setMaximumHeight(display.getHeight() - window.getY());
 
-                // Ensure that the popup remains within the bounds of the display
-                Point buttonLocation = calendarButton.mapPointToAncestor(display, 0, 0);
-
-                Dimensions displaySize = display.getSize();
-
-                calendarPopup.setPreferredSize(-1, -1);
-                Dimensions popupSize = calendarPopup.getPreferredSize();
-                int popupWidth = Math.max(popupSize.width, calendarButton.getWidth());
-                int popupHeight = popupSize.height;
-
-                int x = buttonLocation.x;
-                if (popupWidth > width && x + popupWidth > displaySize.width) {
-                    x = buttonLocation.x + width - popupWidth;
-                }
-
-                int y = buttonLocation.y + height - 1;
-                if (y + popupSize.height > displaySize.height) {
-                    if (buttonLocation.y - popupSize.height > 0) {
-                        y = buttonLocation.y - popupSize.height + 1;
-                    } else {
-                        popupHeight = displaySize.height - y;
-                    }
-                } else {
-                    popupHeight = -1;
-                }
-
-                calendarPopup.setLocation(x, y);
-                calendarPopup.setPreferredSize(popupWidth, popupHeight);
-                calendarPopup.open(calendarButton.getWindow());
-            }
+            repaintComponent();
         }
 
         @Override
@@ -125,6 +99,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
                 closeTransition.stop();
                 closeTransition = null;
             }
+
+            repaintComponent();
         }
 
         @Override
