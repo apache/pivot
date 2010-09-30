@@ -152,6 +152,10 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         listView.getListViewSelectionListeners().add(listViewSelectionListener);
 
         listViewPanorama = new Panorama(listView);
+        listViewPanorama.getStyles().put("buttonBackgroundColor",
+            listView.getStyles().get("backgroundColor"));
+        listViewPanorama.getStyles().put("alwaysShowScrollButtons", true);
+
         listViewBorder = new Border(listViewPanorama);
     }
 
