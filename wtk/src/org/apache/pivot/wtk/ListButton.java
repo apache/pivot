@@ -584,10 +584,19 @@ public class ListButton extends Button {
         }
     }
 
+    /**
+     * Returns the list size.
+     */
     public int getListSize() {
         return listSize;
     }
 
+    /**
+     * Sets the list size. If the number of items in the list exceeds this value,
+     * the list will scroll.
+     *
+     * @param listSize
+     */
     public void setListSize(int listSize) {
         if (listSize < -1) {
             throw new IllegalArgumentException("Invalid list size.");
@@ -596,7 +605,7 @@ public class ListButton extends Button {
         int previousListSize = this.listSize;
         if (previousListSize != listSize) {
             this.listSize = listSize;
-
+            listButtonListeners.listSizeChanged(this, previousListSize);
         }
     }
 

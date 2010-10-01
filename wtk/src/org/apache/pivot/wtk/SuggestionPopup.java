@@ -367,10 +367,19 @@ public class SuggestionPopup extends Window {
         setSelectedIndex((suggestion == null) ? -1 : ((List<Object>)suggestionData).indexOf(suggestion));
     }
 
+    /**
+     * Returns the list size.
+     */
     public int getListSize() {
         return listSize;
     }
 
+    /**
+     * Sets the list size. If the number of items in the list exceeds this value,
+     * the list will scroll.
+     *
+     * @param listSize
+     */
     public void setListSize(int listSize) {
         if (listSize < -1) {
             throw new IllegalArgumentException("Invalid list size.");
@@ -379,7 +388,7 @@ public class SuggestionPopup extends Window {
         int previousListSize = this.listSize;
         if (previousListSize != listSize) {
             this.listSize = listSize;
-
+            suggestionPopupListeners.listSizeChanged(this, previousListSize);
         }
     }
 
