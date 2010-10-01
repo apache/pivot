@@ -429,7 +429,7 @@ public class ListButton extends Button {
         int previousListSize = this.listSize;
         if (previousListSize != listSize) {
             this.listSize = listSize;
-
+            listButtonListeners.listSizeChanged(this, previousListSize);
         }
     }
 

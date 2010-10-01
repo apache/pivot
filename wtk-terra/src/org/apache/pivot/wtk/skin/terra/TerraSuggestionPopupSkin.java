@@ -265,12 +265,30 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     public void windowOpened(Window window) {
         super.windowOpened(window);
 
+        SuggestionPopup suggestionPopup = (SuggestionPopup)window;
+
+        // Adjust for list size
+        int listSize = suggestionPopup.getListSize();
+        if (listSize == -1) {
+            suggestionListViewBorder.setPreferredHeight(-1);
+        } else {
+            if (!suggestionListViewBorder.isPreferredHeightSet()) {
+                ListView.ItemRenderer itemRenderer = suggestionListView.getItemRenderer();
+                int borderHeight = itemRenderer.getPreferredHeight(-1) * listSize + 2;
+
+                if (suggestionListViewBorder.getPreferredHeight() > borderHeight) {
+                    suggestionListViewBorder.setPreferredHeight(borderHeight);
+                } else {
+                    suggestionListViewBorder.setPreferredHeight(-1);
+                }
+            }
+        }
+
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
 
         dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
 
-        SuggestionPopup suggestionPopup = (SuggestionPopup)window;
         TextInput textInput = suggestionPopup.getTextInput();
         textInput.getComponentStateListeners().add(textInputStateListener);
         textInput.getComponentKeyListeners().add(textInputKeyListener);
@@ -322,6 +340,11 @@ public class TerraSuggestionPopupSkin extends WindowSkin
             ListView.ItemRenderer suggestionRenderer = suggestionPopup.getSuggestionRenderer();
             textInput.setText(suggestionRenderer.toString(suggestion));
         }
+    }
+
+    @Override
+    public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize) {
+        // No-op
     }
 
     @Override

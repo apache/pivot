@@ -40,6 +40,10 @@ public interface SuggestionPopupListener {
         public void selectedIndexChanged(SuggestionPopup suggestionPopup,
             int previousSelectedIndex) {
         }
+
+        @Override
+        public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize) {
+        }
     }
 
     /**
@@ -66,4 +70,12 @@ public interface SuggestionPopupListener {
      * @param previousSelectedIndex
      */
     public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex);
+
+    /**
+     * Called when a suggestion popup's list size has changed.
+     *
+     * @param suggestionPopup
+     * @param previousListSize
+     */
+    public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize);
 }

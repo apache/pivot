@@ -51,6 +51,13 @@ public class SuggestionPopup extends Window {
                 listener.selectedIndexChanged(suggestionPopup, previousSelectedIndex);
             }
         }
+
+        @Override
+        public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize) {
+            for (SuggestionPopupListener listener : this) {
+                listener.listSizeChanged(suggestionPopup, previousListSize);
+            }
+        }
     }
 
     private static class SuggestionPopupStateListenerList extends ListenerList<SuggestionPopupStateListener>
@@ -87,6 +94,7 @@ public class SuggestionPopup extends Window {
     private List<?> suggestions;
     private ListView.ItemRenderer suggestionRenderer;
     private int selectedIndex = -1;
+    private int listSize = -1;
 
     private boolean result = false;
 
@@ -208,6 +216,22 @@ public class SuggestionPopup extends Window {
         }
 
         return item;
+    }
+
+    public int getListSize() {
+        return listSize;
+    }
+
+    public void setListSize(int listSize) {
+        if (listSize < -1) {
+            throw new IllegalArgumentException("Invalid list size.");
+        }
+
+        int previousListSize = this.listSize;
+        if (previousListSize != listSize) {
+            this.listSize = listSize;
+            suggestionPopupListeners.listSizeChanged(this, previousListSize);
+        }
     }
 
     @Override

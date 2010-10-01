@@ -126,6 +126,8 @@ public class SuggestionPopups implements Application {
 
         stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
 
+        suggestionPopup.setListSize(4);
+
         window.open(display);
         stateTextInput.requestFocus();
     }
