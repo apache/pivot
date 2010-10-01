@@ -57,15 +57,26 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
             CalendarButton calendarButton = (CalendarButton)getComponent();
 
             // Size and position the popup
-            int width = getWidth();
-            int height = getHeight();
-
             Display display = calendarButton.getDisplay();
+            Dimensions displaySize = display.getSize();
+            
             Point buttonLocation = calendarButton.mapPointToAncestor(display, 0, 0);
-            window.setLocation(buttonLocation.x, buttonLocation.y + height - 1);
+            window.setLocation(buttonLocation.x, buttonLocation.y + getHeight() - 1);
 
-            window.setMinimumWidth(width - TRIGGER_WIDTH - 1);
-            window.setMaximumHeight(display.getHeight() - window.getY());
+            int width = getWidth();
+            window.setMinimumWidth(width - TRIGGER_WIDTH - 1);            
+            
+            int popupWidth = window.getPreferredWidth();            
+            if (buttonLocation.x + popupWidth > displaySize.width) {
+                window.setX(buttonLocation.x + width - popupWidth);
+            }
+
+            int popupHeight = window.getPreferredHeight();
+            int maximumHeight = displaySize.height - window.getY();
+            if (popupHeight > maximumHeight 
+                && buttonLocation.y > maximumHeight) {
+                window.setY(buttonLocation.y - window.getPreferredHeight() + 1);
+            }
 
             repaintComponent();
         }

@@ -77,16 +77,31 @@ public class TerraListButtonSkin extends ListButtonSkin {
             }
 
             // Size and position the popup
-            int width = getWidth();
-            int height = getHeight();
-
             Display display = listButton.getDisplay();
+            Dimensions displaySize = display.getSize();
+            
             Point buttonLocation = listButton.mapPointToAncestor(display, 0, 0);
-            window.setLocation(buttonLocation.x, buttonLocation.y + height - 1);
+            window.setLocation(buttonLocation.x, buttonLocation.y + getHeight() - 1);
 
+            int width = getWidth();
             window.setMinimumWidth(width - TRIGGER_WIDTH - 1);
-            window.setMaximumHeight(display.getHeight() - window.getY());
-
+            
+            int popupWidth = window.getPreferredWidth();            
+            if (buttonLocation.x + popupWidth > displaySize.width) {
+                window.setX(buttonLocation.x + width - popupWidth);
+            }
+            
+            window.setMaximumHeight(Integer.MAX_VALUE);            
+            int popupHeight = window.getPreferredHeight();
+            int maximumHeight = displaySize.height - window.getY();
+            if (popupHeight > maximumHeight 
+                && buttonLocation.y > maximumHeight) {
+                window.setMaximumHeight(buttonLocation.y);
+                window.setY(buttonLocation.y - window.getPreferredHeight() + 1);
+            } else {
+                window.setMaximumHeight(maximumHeight); 
+            }
+            
             repaintComponent();
 
             ApplicationContext.queueCallback(new Runnable() {
