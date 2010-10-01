@@ -35,6 +35,10 @@ public interface SuggestionPopupListener {
         public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
             ListView.ItemRenderer previousSuggestionRenderer) {
         }
+
+        @Override
+        public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize) {
+        }
     }
 
     /**
@@ -53,4 +57,12 @@ public interface SuggestionPopupListener {
      */
     public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
         ListView.ItemRenderer previousSuggestionRenderer);
+
+    /**
+     * Called when a suggestion popup's list size has changed.
+     *
+     * @param suggestionPopup
+     * @param previousListSize
+     */
+    public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize);
 }

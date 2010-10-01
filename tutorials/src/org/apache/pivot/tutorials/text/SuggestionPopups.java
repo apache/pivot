@@ -118,6 +118,8 @@ public class SuggestionPopups extends Window implements Bindable {
                 suggestionPopup.close();
             }
         });
+
+        suggestionPopup.setListSize(4);
     }
 
     @Override
