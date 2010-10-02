@@ -45,16 +45,6 @@ public class Drawing extends Image {
         return diagram;
     }
 
-    public void update() {
-        try {
-            diagram.updateTime(0.0);
-        } catch (SVGException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        imageListeners.regionUpdated(this, 0, 0, getWidth(), getHeight());
-    }
-
     @Override
     public int getWidth() {
         return (int)Math.ceil(diagram.getWidth());
@@ -69,6 +59,7 @@ public class Drawing extends Image {
         int previousWidth = getWidth();
         int previousHeight = getHeight();
 
+        // TODO For some reason, this does not work until it is called twice; investigate
         SVGRoot root = diagram.getRoot();
         try {
             root.setAttribute("width", AnimationElement.AT_XML, Integer.toString(width));

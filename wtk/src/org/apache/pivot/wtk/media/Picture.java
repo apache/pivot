@@ -35,8 +35,6 @@ public class Picture extends Image {
         BICUBIC
     }
 
-    // TODO Provide API access to the raster data and fire regionInvalidated()
-    // when modified?
     private BufferedImage bufferedImage = null;
 
     private int baseline = -1;

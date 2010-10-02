@@ -131,6 +131,10 @@ public abstract class Image implements Visual {
         return new Dimensions(getWidth(), getHeight());
     }
 
+    public void update(int x, int y, int width, int height) {
+        imageListeners.regionUpdated(this, x, y, width, height);
+    }
+
     public ListenerList<ImageListener> getImageListeners() {
         return imageListeners;
     }
