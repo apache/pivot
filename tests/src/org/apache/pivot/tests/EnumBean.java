@@ -45,8 +45,6 @@ import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.BufferedImageSerializer;
 import org.apache.pivot.wtk.media.Picture;
-import org.apache.pivot.wtk.media.drawing.Arc;
-import org.apache.pivot.wtk.media.drawing.Path;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 import org.apache.pivot.wtk.text.BulletedList;
 import org.apache.pivot.wtk.text.NumberedList;
@@ -64,7 +62,6 @@ public class EnumBean {
     // Public non-static field for testing BeanAdapter#get("~orientationField");
     public Orientation orientationField;
 
-    private Arc.Type arcType;
     private BindType bindType;
     private BufferedImageSerializer.Format bufferedImageSerializerFormat;
     private BulletedList.Style bulletedListStyle;
@@ -86,7 +83,6 @@ public class EnumBean {
     private Mouse.ScrollType mouseScrollType;
     private NumberedList.Style numberedListStyle;
     private Orientation orientation;
-    private Path.WindingRule windingRule;
     private Picture.Interpolation interpolation;
     private Query.Method queryMethod;
     private ScrollPane.Corner.Placement placement;
@@ -102,14 +98,6 @@ public class EnumBean {
     private TreeView.SelectMode treeViewSelectMode;
     private VerticalAlignment verticalAlignment;
     private Vote vote;
-
-    public Arc.Type getArcType() {
-        return arcType;
-    }
-
-    public void setArcType(Arc.Type arcType) {
-        this.arcType = arcType;
-    }
 
     public BindType getBindType() {
         return bindType;
@@ -278,14 +266,6 @@ public class EnumBean {
 
     public void setOrientation(Orientation orientation) {
         this.orientation = orientation;
-    }
-
-    public Path.WindingRule getWindingRule() {
-        return windingRule;
-    }
-
-    public void setWindingRule(Path.WindingRule windingRule) {
-        this.windingRule = windingRule;
     }
 
     public Picture.Interpolation getInterpolation() {

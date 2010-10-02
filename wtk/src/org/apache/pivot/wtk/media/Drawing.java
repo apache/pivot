@@ -17,185 +17,82 @@
 package org.apache.pivot.wtk.media;
 
 import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.RenderingHints;
 
-import org.apache.pivot.beans.DefaultProperty;
-import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.wtk.Bounds;
-import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.GraphicsUtilities;
-import org.apache.pivot.wtk.media.drawing.Canvas;
-import org.apache.pivot.wtk.media.drawing.CanvasListener;
+import org.apache.pivot.wtk.media.Image;
+
+import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGElementException;
+import com.kitfox.svg.SVGException;
+import com.kitfox.svg.SVGRoot;
+import com.kitfox.svg.animation.AnimationElement;
 
 /**
- * Image representing a vector drawing.
+ * Image encapsulating an SVG diagram.
  */
-@DefaultProperty("canvas")
 public class Drawing extends Image {
-    private static class DrawingListenerList extends ListenerList<DrawingListener>
-        implements DrawingListener {
-        @Override
-        public void canvasChanged(Drawing drawing, Canvas previousCanvas) {
-            for (DrawingListener listener : this) {
-                listener.canvasChanged(drawing, previousCanvas);
-            }
+    private SVGDiagram diagram;
+
+    public Drawing(SVGDiagram diagram) {
+        if (diagram == null) {
+            throw new IllegalArgumentException();
         }
 
-        @Override
-        public void backgroundChanged(Drawing drawing, Paint previousBackground) {
-            for (DrawingListener listener : this) {
-                listener.backgroundChanged(drawing, previousBackground);
-            }
-        }
+        this.diagram = diagram;
     }
 
-    private Canvas canvas = null;
-    private Paint background = null;
-
-    private Dimensions size = null;
-
-    private int baseline = -1;
-
-    private CanvasListener canvasListener = new CanvasListener() {
-        @Override
-        public void regionUpdated(Canvas canvas, int x, int y, int width, int height) {
-            imageListeners.regionUpdated(Drawing.this, x, y, width, height);
-        }
-
-        @Override
-        public void canvasInvalidated(Canvas canvas) {
-            int previousWidth = size.width;
-            int previousHeight = size.height;
-
-            invalidate();
-
-            imageListeners.sizeChanged(Drawing.this, previousWidth, previousHeight);
-        }
-    };
-
-    private DrawingListenerList drawingListeners = new DrawingListenerList();
-
-    public Drawing() {
-        this(null);
+    public SVGDiagram getDiagram() {
+        return diagram;
     }
 
-    public Drawing(Canvas canvas) {
-        setCanvas(canvas);
+    public void update() {
+        try {
+            diagram.updateTime(0.0);
+        } catch (SVGException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        imageListeners.regionUpdated(this, 0, 0, getWidth(), getHeight());
     }
 
     @Override
     public int getWidth() {
-        validate();
-        return size.width;
+        return (int)Math.ceil(diagram.getWidth());
     }
 
     @Override
     public int getHeight() {
-        validate();
-        return size.height;
+        return (int)Math.ceil(diagram.getHeight());
     }
 
-    @Override
-    public int getBaseline() {
-        return baseline;
-    }
+    public void setSize(int width, int height) {
+        int previousWidth = getWidth();
+        int previousHeight = getHeight();
 
-    public void setBaseline(int baseline) {
-        int previousBaseline = this.baseline;
-
-        if (baseline != previousBaseline) {
-            this.baseline = baseline;
-            imageListeners.baselineChanged(this, previousBaseline);
-        }
-    }
-
-    private void invalidate() {
-        size = null;
-    }
-
-    private void validate() {
-        if (size == null) {
-            int width, height;
-            if (canvas == null) {
-                width = 0;
-                height = 0;
-            } else {
-                Bounds canvasBounds = canvas.getBounds();
-                width = Math.max(canvasBounds.x + canvasBounds.width, 0);
-                height = Math.max(canvasBounds.y + canvasBounds.height, 0);
-            }
-
-            size = new Dimensions(width, height);
-        }
-    }
-
-    public Canvas getCanvas() {
-        return canvas;
-    }
-
-    public void setCanvas(Canvas canvas) {
-        Canvas previousCanvas = this.canvas;
-
-        if (previousCanvas != canvas) {
-            this.canvas = canvas;
-
-            if (previousCanvas != null) {
-                previousCanvas.getCanvasListeners().remove(canvasListener);
-            }
-
-            if (canvas != null) {
-                canvas.getCanvasListeners().add(canvasListener);
-            }
-
-            size = null;
-
-            drawingListeners.canvasChanged(this, previousCanvas);
-        }
-    }
-
-    public Paint getBackground() {
-        return background;
-    }
-
-    public void setBackground(Paint background) {
-        Paint previousBackground = this.background;
-        if (previousBackground != background) {
-            this.background = background;
-            drawingListeners.backgroundChanged(this, previousBackground);
-        }
-    }
-
-    public final void setBackground(String background) {
-        if (background == null) {
-            throw new IllegalArgumentException("background is null.");
+        SVGRoot root = diagram.getRoot();
+        try {
+            root.setAttribute("width", AnimationElement.AT_XML, Integer.toString(width));
+            root.setAttribute("height", AnimationElement.AT_XML, Integer.toString(height));
+        } catch (SVGElementException exception) {
+            throw new RuntimeException(exception);
         }
 
-        setBackground(GraphicsUtilities.decodePaint(background));
+        try {
+            diagram.updateTime(0.0);
+        } catch (SVGException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        imageListeners.sizeChanged(this, previousWidth, previousHeight);
     }
 
     @Override
     public void paint(Graphics2D graphics) {
-        int width = getWidth();
-        int height = getHeight();
-
-        graphics.clipRect(0, 0, width, height);
-
-        if (background != null) {
-            graphics.setPaint(background);
-            graphics.fillRect(0, 0, width, height);
+        try {
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            diagram.render(graphics);
+        } catch (SVGException exception) {
+            throw new RuntimeException(exception);
         }
-
-        if (canvas != null) {
-            // TODO Make this configurable?
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-            canvas.draw(graphics);
-        }
-    }
-
-    public ListenerList<DrawingListener> getDrawingListeners() {
-        return drawingListeners;
     }
 }

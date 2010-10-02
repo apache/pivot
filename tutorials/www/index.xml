@@ -64,6 +64,7 @@ limitations under the License.
             </document-item>
             <document-item id="lists">
                 <document-item id="list-buttons"/>
+                <document-item id="repeatable-list-buttons"/>
             </document-item>
             <document-item id="text">
                 <document-item id="suggestion-popups"/>

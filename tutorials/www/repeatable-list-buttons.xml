@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<document id="repeatable-list-buttons">
+    <properties>
+        <title>Repeatable List Buttons</title>
+    </properties>
+
+    <body>
+        <p>The following example...</p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="480" height="340">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/lists/repeatable_list_buttons.wtkx</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The WTKX source for the example is...
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/lists/repeatable_list_buttons.wtkx">
+            <![CDATA[
+            ]]>
+        </source>
+
+        <p>
+            The Java source for the example is below:
+        </p>
+
+        <source type="java" location="org/apache/pivot/tutorials/lists/RepeatableListButtons.java">
+            <![CDATA[
+            ]]>
+        </source>
+    </body>
+</document>

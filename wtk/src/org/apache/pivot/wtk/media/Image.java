@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 
-import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.io.IOTask;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
@@ -31,6 +30,8 @@ import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Visual;
+
+import com.kitfox.svg.SVGDiagram;
 
 /**
  * Abstract base class for images. An image is either a bitmapped "picture"
@@ -91,14 +92,14 @@ public abstract class Image implements Visual {
                 InputStream inputStream = null;
 
                 try {
-                    // NOTE We don't open the stream until the callback
-                    // executes because this is a potentially time-consuming
-                    // operation
+                    // NOTE We don't open the stream until the callback executes because
+                    // this is a potentially time-consuming operation
                     inputStream = new MonitoredInputStream(new BufferedInputStream(location.openStream()));
 
-                    if (location.getFile().endsWith("bxml")) {
-                        BXMLSerializer serializer = new BXMLSerializer();
-                        image = (Drawing)serializer.readObject(inputStream);
+                    if (location.getFile().endsWith(SVGDiagramSerializer.SVG_EXTENSION)) {
+                        SVGDiagramSerializer serializer = new SVGDiagramSerializer();
+                        SVGDiagram diagram = serializer.readObject(inputStream);
+                        image = new Drawing(diagram);
                     } else {
                         BufferedImageSerializer serializer = new BufferedImageSerializer();
                         BufferedImage bufferedImage = serializer.readObject(inputStream);

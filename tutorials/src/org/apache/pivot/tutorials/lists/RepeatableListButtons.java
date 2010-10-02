@@ -14,27 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.wtk.media.drawing;
+package org.apache.pivot.tutorials.lists;
 
-/**
- * Canvas listener interface.
- */
-public interface CanvasListener {
-    /**
-     * Called when a region within a canvas needs to be repainted.
-     *
-     * @param canvas
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     */
-    public void regionUpdated(Canvas canvas, int x, int y, int width, int height);
+import java.net.URL;
 
-    /**
-     * Called when a canvas has been invalidated.
-     *
-     * @param canvas
-     */
-    public void canvasInvalidated(Canvas canvas);
+import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.util.Resources;
+import org.apache.pivot.wtk.Window;
+
+public class RepeatableListButtons extends Window implements Bindable {
+    @Override
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+        // TODO
+    }
 }
