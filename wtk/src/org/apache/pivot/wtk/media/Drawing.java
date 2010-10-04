@@ -59,7 +59,6 @@ public class Drawing extends Image {
         int previousWidth = getWidth();
         int previousHeight = getHeight();
 
-        // TODO For some reason, this does not work until it is called twice; investigate
         SVGRoot root = diagram.getRoot();
         try {
             root.setAttribute("width", AnimationElement.AT_XML, Integer.toString(width));
