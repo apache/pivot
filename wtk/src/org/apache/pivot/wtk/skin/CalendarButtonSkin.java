@@ -274,16 +274,6 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         return consumed;
     }
 
-    @Override
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        boolean consumed = super.mouseClick(component, button, x, y, count);
-
-        CalendarButton calendarButton = (CalendarButton)getComponent();
-        calendarButton.press();
-
-        return consumed;
-    }
-
     /**
      * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
      * state.
@@ -320,13 +310,9 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        CalendarButton calendarButton = (CalendarButton)getComponent();
-
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = false;
             repaintComponent();
-
-            calendarButton.press();
         } else {
             consumed = super.keyReleased(component, keyCode, keyLocation);
         }

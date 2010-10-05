@@ -55,6 +55,10 @@ public abstract class ListButtonSkin extends ButtonSkin
             int index = listView.getSelectedIndex();
             listButton.setSelectedIndex(index);
 
+            if (listButton.isRepeatable()) {
+                listButton.press();
+            }
+
             return true;
         }
     };
@@ -78,6 +82,10 @@ public abstract class ListButtonSkin extends ButtonSkin
 
                     int index = listView.getSelectedIndex();
                     listButton.setSelectedIndex(index);
+
+                    if (listButton.isRepeatable()) {
+                        listButton.press();
+                    }
 
                     break;
                 }
@@ -275,7 +283,7 @@ public abstract class ListButtonSkin extends ButtonSkin
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         ListButton listButton = (ListButton)getComponent();
-        if (!listButton.isRepeatable() || !getTriggerBounds().contains(x, y)) {
+        if (listButton.isRepeatable() && !getTriggerBounds().contains(x, y)) {
             listButton.press();
         }
 
@@ -357,7 +365,9 @@ public abstract class ListButtonSkin extends ButtonSkin
             pressed = false;
             repaintComponent();
 
-            listButton.press();
+            if (listButton.isRepeatable()) {
+                listButton.press();
+            }
         } else {
             consumed = super.keyReleased(component, keyCode, keyLocation);
         }

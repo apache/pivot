@@ -1478,14 +1478,8 @@ public class ListView extends Component {
     /**
      * Returns the indexes of currently checked items.
      */
-    public Sequence<Integer> getCheckedIndexes() {
-        ArrayList<Integer> checkedIndexes = new ArrayList<Integer>();
-
-        for (int i = 0, n = this.checkedIndexes.getLength(); i < n; i++) {
-            checkedIndexes.add(this.checkedIndexes.get(i));
-        }
-
-        return checkedIndexes;
+    public ImmutableList<Integer> getCheckedIndexes() {
+        return new ImmutableList<Integer>(checkedIndexes);
     }
 
     /**

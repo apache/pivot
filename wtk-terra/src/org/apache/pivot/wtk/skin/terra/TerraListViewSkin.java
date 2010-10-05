@@ -844,10 +844,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
         if (itemIndex != -1
             && !listView.isItemDisabled(itemIndex)) {
-            int itemY = getItemBounds(itemIndex).y;
-
-            if (!(listView.getCheckmarksEnabled()
-                && isMouseOverCheckbox(itemY, x, y))) {
+            if (!listView.getCheckmarksEnabled()
+                || listView.isCheckmarkDisabled(itemIndex)
+                || !getCheckboxBounds(itemIndex).contains(x, y)) {
                 ListView.SelectMode selectMode = listView.getSelectMode();
 
                 if (button == Mouse.Button.RIGHT) {
@@ -929,12 +928,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         ListView listView = (ListView)getComponent();
         int itemIndex = getItemAt(y);
 
-        if (!listView.isItemDisabled(itemIndex)) {
-            int itemY = getItemBounds(itemIndex).y;
-
+        if (itemIndex != -1
+            && !listView.isItemDisabled(itemIndex)) {
             if (listView.getCheckmarksEnabled()
                 && !listView.isCheckmarkDisabled(itemIndex)
-                && isMouseOverCheckbox(itemY, x, y)) {
+                && getCheckboxBounds(itemIndex).contains(x, y)) {
                 listView.setItemChecked(itemIndex, !listView.isItemChecked(itemIndex));
             } else {
                 if (selectIndex != -1
@@ -953,11 +951,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         return consumed;
     }
 
-    private boolean isMouseOverCheckbox(int itemY, int x, int y) {
-        return (x > checkboxPadding.left
-            && x < checkboxPadding.left + CHECKBOX.getWidth()
-            && y > itemY + checkboxPadding.top
-            && y < itemY + checkboxPadding.top + CHECKBOX.getHeight());
+    private Bounds getCheckboxBounds(int itemIndex) {
+        Bounds itemBounds = getItemBounds(itemIndex);
+
+        int checkboxHeight = CHECKBOX.getHeight();
+        return new Bounds(checkboxPadding.left,
+            itemBounds.y + (itemBounds.height - checkboxHeight) / 2,
+            CHECKBOX.getWidth(),
+            checkboxHeight);
     }
 
     @Override

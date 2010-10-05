@@ -289,16 +289,6 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
         return consumed;
     }
 
-    @Override
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        boolean consumed = super.mouseClick(component, button, x, y, count);
-
-        ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
-        colorChooserButton.press();
-
-        return consumed;
-    }
-
     // ComponentKeyListener methods
 
     /**
@@ -337,13 +327,9 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
-
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = false;
             repaintComponent();
-
-            colorChooserButton.press();
         } else {
             consumed = super.keyReleased(component, keyCode, keyLocation);
         }

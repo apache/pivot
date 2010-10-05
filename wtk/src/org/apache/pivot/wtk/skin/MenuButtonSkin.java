@@ -179,18 +179,6 @@ public abstract class MenuButtonSkin extends ButtonSkin
         return consumed;
     }
 
-    @Override
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        MenuButton menuButton = (MenuButton)getComponent();
-        menuButton.press();
-
-        if (menuPopup.isShowing()) {
-            menuPopup.requestFocus();
-        }
-
-        return true;
-    }
-
     /**
      * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
      * state.
