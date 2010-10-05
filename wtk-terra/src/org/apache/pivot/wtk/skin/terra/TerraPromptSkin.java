@@ -63,7 +63,8 @@ public class TerraPromptSkin extends TerraSheetSkin
         super.install(component);
 
         Prompt prompt = (Prompt)component;
-        prompt.setPreferredWidth(300);
+        prompt.setPreferredWidth(320);
+        prompt.setMinimumWidth(160);
 
         prompt.getPromptListeners().add(this);
 

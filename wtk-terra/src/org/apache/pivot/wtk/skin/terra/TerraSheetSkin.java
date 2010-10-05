@@ -329,7 +329,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         resizeHandle.setSize(resizeHandle.getPreferredSize());
         resizeHandle.setLocation(width - resizeHandle.getWidth() - 2,
             height - resizeHandle.getHeight() - 2);
-        resizeHandle.setVisible(resizable);
+        resizeHandle.setVisible(resizable
+            && !sheet.isMaximized()
+            && (sheet.isPreferredWidthSet()
+                || sheet.isPreferredHeightSet()));
 
         Component content = sheet.getContent();
         if (content != null) {

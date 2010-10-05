@@ -64,7 +64,8 @@ public class TerraAlertSkin extends TerraDialogSkin
         super.install(component);
 
         Alert alert = (Alert)component;
-        alert.setPreferredWidth(300);
+        alert.setPreferredWidth(320);
+        alert.setMinimumWidth(160);
 
         alert.getAlertListeners().add(this);
 
