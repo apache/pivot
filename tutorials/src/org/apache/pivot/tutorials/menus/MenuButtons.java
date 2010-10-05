@@ -21,11 +21,43 @@ import java.net.URL;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.wtk.Action;
+import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Checkbox;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.Window;
 
 public class MenuButtons extends Window implements Bindable {
+    private BoxPane componentBoxPane = null;
+
+    public MenuButtons() {
+        Action.getNamedActions().put("addPushButton", new Action() {
+            @Override
+            public void perform(Component source) {
+                componentBoxPane.add(new PushButton("Push button"));
+
+            }
+        });
+
+        Action.getNamedActions().put("addCheckbox", new Action() {
+            @Override
+            public void perform(Component source) {
+                componentBoxPane.add(new Checkbox("Checkbox"));
+            }
+        });
+
+        Action.getNamedActions().put("addRadioButton", new Action() {
+            @Override
+            public void perform(Component source) {
+                componentBoxPane.add(new RadioButton("Radio button"));
+            }
+        });
+    }
+
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        // TODO
+        componentBoxPane = (BoxPane)namespace.get("componentBoxPane");
     }
 }

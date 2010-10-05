@@ -61,17 +61,15 @@ public class ColorItem {
     }
 
     public String getName() {
-        String name = this.name;
+        return name;
+    }
 
+    public void setName(String name) {
         if (name == null) {
             name = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(),
                 color.getBlue());
         }
 
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 

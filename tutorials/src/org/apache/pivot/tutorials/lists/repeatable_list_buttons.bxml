@@ -16,9 +16,57 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<lists:ListButtons title="List Buttons" maximized="true"
+<lists:RepeatableListButtons title="Repeatable List Buttons" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
     xmlns:lists="org.apache.pivot.tutorials.lists"
     xmlns="org.apache.pivot.wtk">
-    <!-- TODO -->
-</lists:ListButtons>
+    <Border styles="{padding:8}">
+        <TablePane styles="{horizontalSpacing:4}">
+            <columns>
+                <TablePane.Column width="-1"/>
+                <TablePane.Column width="1*"/>
+            </columns>
+
+            <TablePane.Row height="1*">
+                <FlowPane>
+                    <Label text="Color:"/>
+                    <ListButton bxml:id="colorListButton" Form.label="Color"
+                        repeatable="true" action="applyColor" listSize="8"
+                        selectedIndex="0">
+                        <dataRenderer>
+                            <content:ListButtonColorItemRenderer/>
+                        </dataRenderer>
+                        <itemRenderer>
+                            <content:ListViewColorItemRenderer/>
+                        </itemRenderer>
+
+                        <content:ColorItem color="#000000" name="Black"/>
+                        <content:ColorItem color="#0000AA" name="Blue"/>
+                        <content:ColorItem color="#00AA00" name="Green"/>
+                        <content:ColorItem color="#00AAAA" name="Cyan"/>
+                        <content:ColorItem color="#AA0000" name="Red"/>
+                        <content:ColorItem color="#AA00AA" name="Magenta"/>
+                        <content:ColorItem color="#AA5500" name="Brown"/>
+                        <content:ColorItem color="#AAAAAA" name="Light Gray"/>
+                        <content:ColorItem color="#555555" name="Dark Gray"/>
+                        <content:ColorItem color="#5555FF" name="Bright Blue"/>
+                        <content:ColorItem color="#55FF55" name="Bright Green"/>
+                        <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
+                        <content:ColorItem color="#FF5555" name="Bright Red"/>
+                        <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
+                        <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
+                        <content:ColorItem color="#FFFFFF" name="White"/>
+                    </ListButton>
+                </FlowPane>
+
+                <Border>
+                    <ScrollPane>
+                        <BoxPane bxml:id="checkboxBoxPane" orientation="vertical"
+                            styles="{padding:4, spacing:4}"/>
+                    </ScrollPane>
+                </Border>
+            </TablePane.Row>
+        </TablePane>
+    </Border>
+</lists:RepeatableListButtons>

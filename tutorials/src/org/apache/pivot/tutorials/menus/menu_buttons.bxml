@@ -21,5 +21,33 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:menus="org.apache.pivot.tutorials.menus"
     xmlns="org.apache.pivot.wtk">
-    <!-- TODO -->
+    <Border styles="{padding:8}">
+        <TablePane styles="{horizontalSpacing:4}">
+            <columns>
+                <TablePane.Column width="-1"/>
+                <TablePane.Column width="1*"/>
+            </columns>
+
+            <TablePane.Row height="1*">
+                <BoxPane orientation="vertical">
+                    <MenuButton buttonData="Add Component">
+                        <Menu>
+                            <Menu.Section>
+                                <Menu.Item buttonData="Push Button" action="addPushButton"/>
+                                <Menu.Item buttonData="Checkbox" action="addCheckbox"/>
+                                <Menu.Item buttonData="Radio Button" action="addRadioButton"/>
+                            </Menu.Section>
+                        </Menu>
+                    </MenuButton>
+                </BoxPane>
+
+                <Border>
+                    <ScrollPane>
+                        <BoxPane bxml:id="componentBoxPane" orientation="vertical"
+                            styles="{padding:4, spacing:4}"/>
+                    </ScrollPane>
+                </Border>
+            </TablePane.Row>
+        </TablePane>
+    </Border>
 </menus:MenuButtons>

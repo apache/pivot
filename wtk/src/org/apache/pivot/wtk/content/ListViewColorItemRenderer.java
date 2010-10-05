@@ -80,21 +80,22 @@ public class ListViewColorItemRenderer extends ListViewItemRenderer {
         boolean checked, boolean highlighted, boolean disabled) {
         if (item != null) {
             ColorItem colorItem;
-            if (item instanceof ColorItem) {
+            if (item == null) {
+                colorItem = new ColorItem(Color.WHITE);
+            } else if (item instanceof ColorItem) {
                 colorItem = (ColorItem)item;
+            } else if (item instanceof Color) {
+                colorItem = new ColorItem((Color)item);
             } else {
-                Color color;
-                if (item instanceof Color) {
-                    color = (Color)item;
-                } else {
-                    color = GraphicsUtilities.decodeColor(item.toString());
-                }
-
-                colorItem = new ColorItem(color);
+                colorItem = new ColorItem(GraphicsUtilities.decodeColor(item.toString()));
             }
 
-            colorBadge.setColor(colorItem.getColor());
-            listItem.setText(colorItem.getName());
+            Color color = colorItem.getColor();
+            String name = colorItem.getName();
+
+            colorBadge.setColor(listView.isEnabled() ?
+                color : new Color(color.getRed(), color.getGreen(), color.getBlue(), 0x99));
+            listItem.setText(name);
         }
 
         super.render(listItem, index, listView, selected, checked, highlighted, disabled);
