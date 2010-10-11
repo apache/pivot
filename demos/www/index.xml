@@ -41,7 +41,6 @@ limitations under the License.
         <document-item id="rss-feed"/>
         <document-item id="dom-interaction"/>
         <document-item id="fixed-column-table"/>
-        <document-item id="animated-clock"/>
         <document-item id="multiselect"/>
     </body>
 </document>
