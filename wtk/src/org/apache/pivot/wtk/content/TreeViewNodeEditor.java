@@ -138,11 +138,12 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
+            boolean consumed = false;
             if (popup != window) {
-                saveChanges();
+                consumed = !saveChanges();
             }
 
-            return false;
+            return consumed;
         }
 
         @Override
@@ -295,7 +296,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void saveChanges() {
+    public boolean saveChanges() {
         if (!isEditing()) {
             throw new IllegalStateException();
         }
@@ -308,6 +309,7 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
         String text = textInput.getText();
         Vote vote = nodeEditorListeners.previewSaveChanges(this, treeView, path, text);
 
+        boolean saved = false;
         if (vote == Vote.APPROVE) {
             // Update the node data
             List<?> treeData = treeView.getTreeData();
@@ -340,9 +342,12 @@ public class TreeViewNodeEditor implements TreeView.NodeEditor {
             }
 
             nodeEditorListeners.changesSaved(this, treeView, path);
+            saved = true;
         } else if (vote == Vote.DENY) {
             nodeEditorListeners.saveChangesVetoed(this, vote);
         }
+
+        return saved;
     }
 
     /**

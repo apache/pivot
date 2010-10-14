@@ -114,6 +114,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
         private ContainerMouseListener displayContainerMouseListener = new ContainerMouseListener.Adapter() {
             @Override
             public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+                boolean consumed = opening;
+
                 if (!opening
                     && !closing) {
                     // If the event occurred outside the popup, close the popup
@@ -122,11 +124,11 @@ public class TableViewRowEditor implements TableView.RowEditor {
 
                     if (window != EditorPopup.this &&
                         (window == null || !isOwner(window))) {
-                        saveChanges();
+                        consumed = !saveChanges();
                     }
                 }
 
-                return opening;
+                return consumed;
             }
 
             @Override
@@ -433,7 +435,7 @@ public class TableViewRowEditor implements TableView.RowEditor {
         }
 
         @SuppressWarnings("unchecked")
-        public void saveChanges() {
+        public boolean saveChanges() {
             // Preview the changes
             HashMap<String, Object> changes = new HashMap<String, Object>();
             tablePane.store(changes);
@@ -472,6 +474,8 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 saving = false;
                 rowEditorListeners.saveChangesVetoed(TableViewRowEditor.this, vote);
             }
+
+            return saving;
         }
 
         public void cancelEdit() {
@@ -645,12 +649,12 @@ public class TableViewRowEditor implements TableView.RowEditor {
      * {@inheritDoc}
      */
     @Override
-    public void saveChanges() {
+    public boolean saveChanges() {
         if (editorPopup == null) {
             throw new IllegalStateException("No edit in progress.");
         }
 
-        editorPopup.saveChanges();
+        return editorPopup.saveChanges();
     }
 
     /**

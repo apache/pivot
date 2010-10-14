@@ -29,8 +29,11 @@ public interface Editor {
      * Saves an edit that is in progress by updating the appropriate data
      * object. It is up to implementations to define the behavior when
      * <tt>isEditing() == false</tt>.
+     *
+     * @return
+     * <tt>true</tt> if the changes were successfully saved; <tt>false</tt> otherwise.
      */
-    public void saveChanges();
+    public boolean saveChanges();
 
     /**
      * Cancels an edit that is in progress by reverting any edits the user has
