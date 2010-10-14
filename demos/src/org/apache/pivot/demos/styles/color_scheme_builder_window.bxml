@@ -55,6 +55,11 @@ limitations under the License.
                             <PushButton bxml:id="copyToClipboardButton" buttonData="Copy"/>
                         </BoxPane>
                     </TablePane.Row>
+                    <TablePane.Row height="1*">
+                        <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
+                            <PushButton bxml:id="resetPaletteButton" buttonData="Reset"/>
+                        </BoxPane>
+                    </TablePane.Row>
                 </TablePane>
 
                 <Border bxml:id="sampleContentBorder" styles="{thickness:0}"/>

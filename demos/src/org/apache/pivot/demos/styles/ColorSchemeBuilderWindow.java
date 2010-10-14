@@ -55,9 +55,12 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
     @BXML private TablePane colorChooserTablePane = null;
     @BXML private TablePane colorPaletteTablePane = null;
     @BXML private PushButton copyToClipboardButton = null;
+    @BXML private PushButton resetPaletteButton = null;
     @BXML private Border sampleContentBorder = null;
 
     private ArrayList<ColorChooserButton> colorChooserButtons = new ArrayList<ColorChooserButton>();
+    private ArrayList<Color> themeOriginalColors = new ArrayList<Color>(8);
+
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
@@ -149,6 +152,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
 
             // Initialize the button color with the theme default
             TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
+            themeOriginalColors.add(terraTheme.getBaseColor(i));
             colorChooserButton.setSelectedColor(terraTheme.getBaseColor(i));
         }
 
@@ -156,6 +160,13 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             @Override
             public void buttonPressed(Button button) {
                 copyToClipboard();
+            }
+        });
+
+        resetPaletteButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                resetPalette();
             }
         });
 
@@ -239,4 +250,22 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
 
         Clipboard.setContent(clipboardContent);
     }
+
+    private void resetPalette() {
+        ArrayList<String> colors = new ArrayList<String>(8);
+        for (int i = 0; i < 8; i++) {
+            ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
+
+            colorChooserButton.setSelectedColor(themeOriginalColors.get(i));
+
+            Color color = colorChooserButton.getSelectedColor();
+            colors.add(String.format("#%02X%02X%02X",
+                color.getRed(),
+                color.getGreen(),
+                color.getBlue()));
+        }
+
+        reloadContent();
+    }
+
 }
