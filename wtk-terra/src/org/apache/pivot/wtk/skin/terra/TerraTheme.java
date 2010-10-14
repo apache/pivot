@@ -405,7 +405,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Returns a brighter version of the specified color. Specifically, it
-     * increases the brightness (in the HSB color model) by the 
+     * increases the brightness (in the HSB color model) by the
      * <tt>colorMultiplier</tt> factor already set.
      */
     public static Color brighten(Color color) {
@@ -414,7 +414,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Returns a darker version of the specified color. Specifically, it
-     * decreases the brightness (in the HSB color model) by the 
+     * decreases the brightness (in the HSB color model) by the
      * <tt>colorMultiplier</tt> factor already set.
      */
     public static Color darken(Color color) {
@@ -429,7 +429,7 @@ public final class TerraTheme extends Theme {
     public static Color brighten(Color color, float adjustment) {
         return adjustBrightness(color, adjustment);
     }
-    
+
     /**
      * Returns a darker version of the specified color. Specifically, it
      * decreases the brightness (in the HSB color model) by the given
@@ -438,7 +438,7 @@ public final class TerraTheme extends Theme {
     public static Color darken(Color color, float adjustment) {
         return adjustBrightness(color, (adjustment * -1.0f));
     }
-    
+
     private static Color adjustBrightness(Color color, float adjustment) {
         float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
         hsb[2] = Math.min(Math.max(hsb[2] + adjustment, 0f), 1f);
