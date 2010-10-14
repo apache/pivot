@@ -446,17 +446,9 @@ public class TableViewRowEditor implements TableView.RowEditor {
                 saving = true;
                 List<Object> tableData = (List<Object>)tableView.getTableData();
 
-                // Get the row data, represented as a Dictionary
-                Object tableRow = tableData.get(rowIndex);
-                Dictionary<String, Object> rowData;
-                if (tableRow instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)tableRow;
-                } else {
-                    rowData = new BeanAdapter(tableRow);
-                }
-
                 // Update the row data using data binding
-                tablePane.store(rowData);
+                Object tableRow = tableData.get(rowIndex);
+                tablePane.store(tableRow);
 
                 // Modifying the table data will close this popup
                 if (tableData.getComparator() == null) {
