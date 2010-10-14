@@ -16,17 +16,17 @@
  */
 {   font: "Verdana 11",
 
-    colorMultiplier: 0.1,
+    colorMultiplier: 0.2,
 
     colors: [
-        "#404039",
-        "#ffffff",
+        "#f2f2f2",
+        "#2b2b2b",
         "#998e8a",
-        "#e6e2dc",
-        "#cc6600",
+        "#0a0a0a",
+        "#f0751c",
         "#ff7300",
         "#ffe480",
-        "#a32900"
+        "#c13719"
     ],
 
     messageIcons: {

@@ -16,6 +16,8 @@
  */
 {   font: "Verdana 11",
 
+    colorMultiplier: 0.1,
+
     colors: [
         "#000000",
         "#F4F4F4",

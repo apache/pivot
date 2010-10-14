@@ -16,14 +16,16 @@
  */
 {   font: "Verdana 11",
 
+    colorMultiplier: 0.1,
+
     colors: [
         "#3c3b37",
-        "#efebe2",
-        "#ccbfa9",
         "#f0ebe2",
-        "#3c3b37",
-        "#b9aa95",
-        "#ffe480",
+        "#ccbfa9",
+        "#ffffff",
+        "#3b3b3b",
+        "#ab9c85",
+        "#fad26c",
         "#f0583d"
     ],
 

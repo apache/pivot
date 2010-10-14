@@ -94,6 +94,8 @@ public final class TerraTheme extends Theme {
     private HashMap<MessageType, Image> messageIcons = null;
     private HashMap<MessageType, Image> smallMessageIcons = null;
 
+    private static float colorMultiplier = 0.1f;
+
     public static final String LOCATION_PROPERTY = "location";
     public static final String COMMAND_BUTTON_STYLE = "commandButton";
 
@@ -235,6 +237,8 @@ public final class TerraTheme extends Theme {
 
                 List<String> colorCodes = (List<String>)properties.get("colors");
                 colors = new ArrayList<Color>(colorCodes.getLength() * 3);
+
+                colorMultiplier = ((Double)properties.get("colorMultiplier")).floatValue();
 
                 for (String colorCode : colorCodes) {
                     Color baseColor = Color.decode(colorCode);
@@ -401,20 +405,40 @@ public final class TerraTheme extends Theme {
 
     /**
      * Returns a brighter version of the specified color. Specifically, it
-     * increases the brightness (in the HSB color model) by <tt>0.1</tt>.
+     * increases the brightness (in the HSB color model) by the 
+     * <tt>colorMultiplier</tt> factor already set.
      */
     public static Color brighten(Color color) {
-        return adjustBrightness(color, 0.1f);
+        return adjustBrightness(color, colorMultiplier);
     }
 
     /**
      * Returns a darker version of the specified color. Specifically, it
-     * decreases the brightness (in the HSB color model) by <tt>0.1</tt>.
+     * decreases the brightness (in the HSB color model) by the 
+     * <tt>colorMultiplier</tt> factor already set.
      */
     public static Color darken(Color color) {
-        return adjustBrightness(color, -0.1f);
+        return adjustBrightness(color, (colorMultiplier * -1.0f));
     }
 
+    /**
+     * Returns a brighter version of the specified color. Specifically, it
+     * increases the brightness (in the HSB color model) by the given
+     * <tt>adjustment</tt> factor (usually in the range ]0 .. 1[).
+     */
+    public static Color brighten(Color color, float adjustment) {
+        return adjustBrightness(color, adjustment);
+    }
+    
+    /**
+     * Returns a darker version of the specified color. Specifically, it
+     * decreases the brightness (in the HSB color model) by the given
+     * <tt>adjustment</tt> factor (usually in the range ]0 .. 1[).
+     */
+    public static Color darken(Color color, float adjustment) {
+        return adjustBrightness(color, (adjustment * -1.0f));
+    }
+    
     private static Color adjustBrightness(Color color, float adjustment) {
         float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
         hsb[2] = Math.min(Math.max(hsb[2] + adjustment, 0f), 1f);

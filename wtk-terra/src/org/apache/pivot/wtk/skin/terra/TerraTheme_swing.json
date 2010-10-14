@@ -19,14 +19,14 @@
     colorMultiplier: 0.1,
 
     colors: [
-        "#404039",
+        "#000000",
+        "#eeeeee",
+        "#8ea1b2",
         "#ffffff",
-        "#998e8a",
-        "#e6e2dc",
-        "#cc6600",
-        "#ff7300",
-        "#ffe480",
-        "#a32900"
+        "#7a8a99",
+        "#7a8a99",
+        "#ffff00",
+        "#ff0000"
     ],
 
     messageIcons: {
