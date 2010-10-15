@@ -172,11 +172,12 @@ public class TableViewCellEditor implements TableView.RowEditor {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
+            boolean consumed = false;
             if (popup != window) {
-                saveChanges();
+                consumed = !saveChanges();
             }
 
-            return false;
+            return consumed;
         }
 
         @Override
@@ -281,7 +282,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void saveChanges() {
+    public boolean saveChanges() {
         if (!isEditing()) {
             throw new IllegalStateException();
         }
@@ -301,6 +302,7 @@ public class TableViewCellEditor implements TableView.RowEditor {
         Vote vote = rowEditorListeners.previewSaveChanges(this, tableView, rowIndex,
             columnIndex, changes);
 
+        boolean saved = false;
         if (vote == Vote.APPROVE) {
             List<Object> tableData = (List<Object>)tableView.getTableData();
 
@@ -330,9 +332,12 @@ public class TableViewCellEditor implements TableView.RowEditor {
             }
 
             rowEditorListeners.changesSaved(this, tableView, rowIndex, columnIndex);
+            saved = true;
         } else if (vote == Vote.DENY) {
             rowEditorListeners.saveChangesVetoed(this, vote);
         }
+
+        return saved;
     }
 
     /**

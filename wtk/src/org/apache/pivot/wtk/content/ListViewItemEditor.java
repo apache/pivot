@@ -153,11 +153,12 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
+            boolean consumed = false;
             if (popup != window) {
-                saveChanges();
+                consumed = !saveChanges();
             }
 
-            return false;
+            return consumed;
         }
 
         @Override
@@ -261,7 +262,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void saveChanges() {
+    public boolean saveChanges() {
         if (!isEditing()) {
             throw new IllegalStateException();
         }
@@ -274,6 +275,7 @@ public class ListViewItemEditor implements ListView.ItemEditor {
         String text = textInput.getText();
         Vote vote = itemEditorListeners.previewSaveChanges(this, listView, index, text);
 
+        boolean saved = false;
         if (vote == Vote.APPROVE) {
             List<Object> listData = (List<Object>)listView.getListData();
             ListItem listItem = (ListItem)listData.get(index);
@@ -295,9 +297,12 @@ public class ListViewItemEditor implements ListView.ItemEditor {
             }
 
             itemEditorListeners.changesSaved(this, listView, index);
+            saved = true;
         } else if (vote == Vote.DENY) {
             itemEditorListeners.saveChangesVetoed(this, vote);
         }
+
+        return saved;
     }
 
     /**
