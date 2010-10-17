@@ -43,14 +43,15 @@ import org.apache.pivot.util.ListenerList;
  */
 public class BeanAdapter implements Map<String, Object> {
     /**
-     * Property iterator. Walks the list of methods defined by the bean and
-     * returns a value for each getter method.
+     * Property iterator. Returns a value for each getter method and public,
+     * non-final field defined by the bean.
      */
     private class PropertyIterator implements Iterator<String> {
         private Method[] methods = null;
         private Field[] fields = null;
 
-        int i = 0, j = 0;
+        private int i = 0;
+        private int j = 0;
         private String nextProperty = null;
 
         public PropertyIterator() {
@@ -123,7 +124,7 @@ public class BeanAdapter implements Map<String, Object> {
                     int modifiers = field.getModifiers();
                     if ((modifiers & Modifier.PUBLIC) != 0
                         && (modifiers & Modifier.STATIC) == 0) {
-                        nextProperty = FIELD_PREFIX + field.getName();
+                        nextProperty = field.getName();
                     }
 
                     if (nextProperty != null
@@ -148,7 +149,6 @@ public class BeanAdapter implements Map<String, Object> {
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
     public static final String SET_PREFIX = "set";
-    public static final String FIELD_PREFIX = "~";
 
     private static final String ENUM_VALUE_OF_METHOD_NAME = "valueOf";
 
@@ -214,8 +214,10 @@ public class BeanAdapter implements Map<String, Object> {
 
         Object value = null;
 
-        if (key.startsWith(FIELD_PREFIX)) {
-            Field field = getField(key.substring(1));
+        Method getterMethod = getGetterMethod(key);
+
+        if (getterMethod == null) {
+            Field field = getField(key);
 
             if (field != null) {
                 try {
@@ -226,18 +228,14 @@ public class BeanAdapter implements Map<String, Object> {
                 }
             }
         } else {
-            Method getterMethod = getGetterMethod(key);
-
-            if (getterMethod != null) {
-                try {
-                    value = getterMethod.invoke(bean, new Object[] {});
-                } catch (IllegalAccessException exception) {
-                    throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
-                        key, bean.getClass().getName()), exception);
-                } catch (InvocationTargetException exception) {
-                    throw new RuntimeException(String.format("Error getting property \"%s\" for type %s.",
-                        key, bean.getClass().getName()), exception.getCause());
-                }
+            try {
+                value = getterMethod.invoke(bean, new Object[] {});
+            } catch (IllegalAccessException exception) {
+                throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
+                    key, bean.getClass().getName()), exception);
+            } catch (InvocationTargetException exception) {
+                throw new RuntimeException(String.format("Error getting property \"%s\" for type %s.",
+                    key, bean.getClass().getName()), exception.getCause());
             }
         }
 
@@ -272,12 +270,29 @@ public class BeanAdapter implements Map<String, Object> {
             throw new IllegalArgumentException("key is empty.");
         }
 
-        if (key.startsWith(FIELD_PREFIX)) {
-            Field field = getField(key.substring(1));
+        Method setterMethod = null;
+
+        if (value != null) {
+            // Get the setter method for the value type
+            setterMethod = getSetterMethod(key, value.getClass());
+        }
+
+        if (setterMethod == null) {
+            // Get the property type and attempt to coerce the value to it
+            Class<?> propertyType = getType(key);
+
+            if (propertyType != null) {
+                setterMethod = getSetterMethod(key, propertyType);
+                value = coerce(value, propertyType);
+            }
+        }
+
+        if (setterMethod == null) {
+            Field field = getField(key);
 
             if (field == null) {
                 throw new PropertyNotFoundException("Property \"" + key + "\""
-                    + " does not exist or is final.");
+                    + " does not exist or is read-only.");
             }
 
             Class<?> fieldType = field.getType();
@@ -293,28 +308,6 @@ public class BeanAdapter implements Map<String, Object> {
                     key, bean.getClass().getName()), exception);
             }
         } else {
-            Method setterMethod = null;
-
-            if (value != null) {
-                // Get the setter method for the value type
-                setterMethod = getSetterMethod(key, value.getClass());
-            }
-
-            if (setterMethod == null) {
-                // Get the property type and attempt to coerce the value to it
-                Class<?> propertyType = getType(key);
-
-                if (propertyType != null) {
-                    setterMethod = getSetterMethod(key, propertyType);
-                    value = coerce(value, propertyType);
-                }
-            }
-
-            if (setterMethod == null) {
-                throw new PropertyNotFoundException("Property \"" + key + "\""
-                    + " does not exist or is read-only.");
-            }
-
             try {
                 setterMethod.invoke(bean, new Object[] {value});
             } catch (IllegalAccessException exception) {
@@ -324,6 +317,7 @@ public class BeanAdapter implements Map<String, Object> {
                 throw new RuntimeException(String.format("Error setting property \"%s\" for type %s to value \"%s\"",
                     key, bean.getClass().getName(), "" + value), exception.getCause());
             }
+
         }
 
         Object previousValue = null;
@@ -370,12 +364,10 @@ public class BeanAdapter implements Map<String, Object> {
             throw new IllegalArgumentException("key is empty.");
         }
 
-        boolean containsKey;
+        boolean containsKey = (getGetterMethod(key) != null);
 
-        if (key.startsWith(FIELD_PREFIX)) {
-            containsKey = (getField(key.substring(1)) != null);
-        } else {
-            containsKey = (getGetterMethod(key) != null);
+        if (!containsKey) {
+            containsKey = (getField(key) != null);
         }
 
         return containsKey;
@@ -542,17 +534,15 @@ public class BeanAdapter implements Map<String, Object> {
 
         boolean isReadOnly = true;
 
-        if (key.startsWith(FIELD_PREFIX)) {
-            Field field = getField(beanClass, key.substring(1));
+        Method getterMethod = getGetterMethod(beanClass, key);
+        if (getterMethod == null) {
+            Field field = getField(beanClass, key);
             if (field != null) {
                 isReadOnly = ((field.getModifiers() & Modifier.FINAL) != 0);
             }
         } else {
-            Method getterMethod = getGetterMethod(beanClass, key);
-            if (getterMethod != null) {
-                Method setterMethod = getSetterMethod(beanClass, key, getType(beanClass, key));
-                isReadOnly = (setterMethod == null);
-            }
+            Method setterMethod = getSetterMethod(beanClass, key, getType(beanClass, key));
+            isReadOnly = (setterMethod == null);
         }
 
         return isReadOnly;
@@ -586,18 +576,16 @@ public class BeanAdapter implements Map<String, Object> {
 
         Class<?> type = null;
 
-        if (key.startsWith(FIELD_PREFIX)) {
-            Field field = getField(beanClass, key.substring(1));
+        Method getterMethod = getGetterMethod(beanClass, key);
+
+        if (getterMethod == null) {
+            Field field = getField(beanClass, key);
 
             if (field != null) {
                 type = field.getType();
             }
         } else {
-            Method getterMethod = getGetterMethod(beanClass, key);
-
-            if (getterMethod != null) {
-                type = getterMethod.getReturnType();
-            }
+            type = getterMethod.getReturnType();
         }
 
         return type;
@@ -633,18 +621,16 @@ public class BeanAdapter implements Map<String, Object> {
 
         Type genericType = null;
 
-        if (key.startsWith(FIELD_PREFIX)) {
-            Field field = getField(beanClass, key.substring(1));
+        Method getterMethod = getGetterMethod(beanClass, key);
+
+        if (getterMethod == null) {
+            Field field = getField(beanClass, key);
 
             if (field != null) {
                 genericType = field.getGenericType();
             }
         } else {
-            Method getterMethod = getGetterMethod(beanClass, key);
-
-            if (getterMethod != null) {
-                genericType = getterMethod.getGenericReturnType();
-            }
+            genericType = getterMethod.getGenericReturnType();
         }
 
         return genericType;

@@ -59,7 +59,7 @@ import org.apache.pivot.wtk.text.NumberedList;
  */
 public class EnumBean {
 
-    // Public non-static field for testing BeanAdapter#get("~orientationField");
+    // Public non-static field for testing BeanAdapter#get("orientationField");
     public Orientation orientationField;
 
     private BindType bindType;

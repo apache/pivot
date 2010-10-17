@@ -38,13 +38,12 @@ public class EnumBeanTest {
             e.printStackTrace();
         }
 
-        // Test BeanAdapter get/put using field access prefix '~'
         EnumBean enumBean = new EnumBean();
         BeanAdapter ba = new BeanAdapter(enumBean);
 
-        ba.put("~orientationField", Orientation.HORIZONTAL);
+        ba.put("orientationField", Orientation.HORIZONTAL);
         dumpField(enumBean, ba);
-        ba.put("~orientationField", "vertical");
+        ba.put("orientationField", "vertical");
         dumpField(enumBean, ba);
 
         ba.put("orientation", Orientation.HORIZONTAL);
@@ -63,9 +62,9 @@ public class EnumBeanTest {
         System.out.println(String.format("\n%-40s %-20s %s", "Direct field access", value,
             (value == null) ? "[null]" : value.getClass().getName()));
 
-        value = ba.get("~orientationField");
+        value = ba.get("orientationField");
         System.out.println(String.format("%-40s %-20s %s",
-            "BeanAdapter.get(\"~orientationField\")", value, (value == null) ? "[null]"
+            "BeanAdapter.get(\"orientationField\")", value, (value == null) ? "[null]"
                 : value.getClass().getName()));
     }
 

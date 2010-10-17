@@ -28,7 +28,6 @@ required in order to handle the Enum.valueOf(String) aspect of the coercion.
     xmlns="org.apache.pivot.tests"
     xmlns:bxml="http://pivot.apache.org/bxml"
 
-    arcType="chord"
     bindType="load"
     bufferedImageSerializerFormat="png"
     bulletedListStyle="circle"
@@ -65,10 +64,6 @@ required in order to handle the Enum.valueOf(String) aspect of the coercion.
     treeViewSelectMode="multi"
     verticalAlignment="bottom"
     vote="approve">
-
-    <arcType>chord</arcType>
-    <arcType>open</arcType>
-    <arcType>pie</arcType>
 
     <bindType>load</bindType>
     <bindType>store</bindType>
@@ -230,8 +225,5 @@ required in order to handle the Enum.valueOf(String) aspect of the coercion.
     <vote>approve</vote>
     <vote>defer</vote>
     <vote>deny</vote>
-
-    <windingRule>even_odd</windingRule>
-    <windingRule>non_zero</windingRule>
 
 </EnumBean>
