@@ -23,7 +23,9 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <bxml:define>
         <Spinner bxml:id="dateSpinner" selectedItemKey="date">
-            <content:CalendarDateSpinnerData/>
+            <spinnerData>
+                <content:CalendarDateSpinnerData/>
+            </spinnerData>
         </Spinner>
 
         <ListButton bxml:id="typeListButton" listData="['Hotel', 'Miscellaneous', 'Meals', 'Parking', 'Travel']"
