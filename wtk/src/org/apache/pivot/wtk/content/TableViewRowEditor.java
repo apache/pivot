@@ -16,14 +16,19 @@
  */
 package org.apache.pivot.wtk.content;
 
+import java.awt.Graphics2D;
+
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.CardPane;
+import org.apache.pivot.wtk.CardPaneListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
@@ -34,12 +39,34 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Viewport;
 import org.apache.pivot.wtk.ViewportListener;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 
 /**
- * Default list view item editor.
+ * Default table view row editor.
  */
 public class TableViewRowEditor extends Window implements TableView.RowEditor {
+    private class RowImage extends Image {
+        private Bounds bounds = new Bounds(0, 0, 0, 0);
+
+        @Override
+        public int getWidth() {
+            return bounds.width;
+        }
+
+        @Override
+        public int getHeight() {
+            return bounds.height;
+        }
+
+        @Override
+        public void paint(Graphics2D graphics) {
+            graphics.translate(-bounds.x, -bounds.y);
+            graphics.clipRect(bounds.x, bounds.y, bounds.width, bounds.height);
+            tableView.paint(graphics);
+        }
+    }
+
     private TableView tableView = null;
     private int rowIndex = -1;
     private int columnIndex = -1;
@@ -48,12 +75,13 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     private ScrollPane scrollPane = new ScrollPane(ScrollPane.ScrollBarPolicy.NEVER,
         ScrollPane.ScrollBarPolicy.FILL);
+    private CardPane cardPane = new CardPane();
     private TablePane tablePane = new TablePane();
     private TablePane.Row editorRow = new TablePane.Row();
 
+    private RowImage rowImage = new RowImage();
+
     private HashMap<String, Component> cellEditors = new HashMap<String, Component>();
-    private CardPaneSkin.SelectionChangeEffect editEffect = null;
-    private int editEffectDuration = 250;
 
     private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
         @Override
@@ -81,14 +109,30 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         }
     };
 
+    private static final int IMAGE_CARD_INDEX = 0;
+    private static final int EDITOR_CARD_INDEX = 1;
+
     public TableViewRowEditor() {
         setContent(scrollPane);
-        scrollPane.setView(tablePane);
+        scrollPane.setView(cardPane);
         scrollPane.getViewportListeners().add(new ViewportListener.Adapter() {
             @Override
             public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
                 if (tableViewScrollPane != null) {
                     tableViewScrollPane.setScrollLeft(viewport.getScrollLeft());
+                }
+            }
+        });
+
+        cardPane.add(new ImageView(rowImage));
+        cardPane.add(tablePane);
+        cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+            @Override
+            public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+                if (previousSelectedIndex == IMAGE_CARD_INDEX) {
+                    editorRow.get(columnIndex).requestFocus();
+                } else {
+                    close();
                 }
             }
         });
@@ -137,7 +181,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * The edit effect, or <tt>null</tt> if no effect is being used.
      */
     public CardPaneSkin.SelectionChangeEffect getEditEffect() {
-        return editEffect;
+        return (CardPaneSkin.SelectionChangeEffect)cardPane.getStyles().get("selectionChangeEffect");
     }
 
     /**
@@ -148,7 +192,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * The edit effect, or <tt>null</tt> for no effect.
      */
     public void setEditEffect(CardPaneSkin.SelectionChangeEffect editEffect) {
-        this.editEffect = editEffect;
+        cardPane.getStyles().put("selectionChangeEffect", editEffect);
     }
 
     /**
@@ -159,7 +203,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * The effect duration in milliseconds.
      */
     public int getEditEffectDuration() {
-        return editEffectDuration;
+        return (Integer)cardPane.getStyles().get("selectionChangeDuration");
     }
 
     /**
@@ -167,10 +211,32 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * read-only row to an editable row.
      *
      * @param effectDuration
-     * Effect duration in milliseconds
+     * The effect duration in milliseconds.
      */
     public void setEditEffectDuration(int effectDuration) {
-        this.editEffectDuration = effectDuration;
+        cardPane.getStyles().put("selectionChangeDuration", effectDuration);
+    }
+
+    /**
+     * Gets the effect rate that this editor uses when changing from a
+     * read-only row to an editable row.
+     *
+     * @return
+     * The effect rate.
+     */
+    public int getEditEffectRate() {
+        return (Integer)cardPane.getStyles().get("selectionChangeRate");
+    }
+
+    /**
+     * Sets the effect duration that this editor uses when changing from a
+     * read-only row to an editable row.
+     *
+     * @param effectRate
+     * The effect rate.
+     */
+    public void setEditEffectRate(int effectRate) {
+        cardPane.getStyles().put("selectionChangeRate", effectRate);
     }
 
     @Override
@@ -217,11 +283,9 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         // Load the row data into the editor components
         tablePane.load(tableRow);
 
-        // Focus the cell corresponding to columnIndex
-        editorRow.get(columnIndex).requestFocus();
-
         // Get the row bounds
         Bounds rowBounds = tableView.getRowBounds(rowIndex);
+        rowImage.bounds = rowBounds;
 
         // Scroll to make the row as visible as possible
         tableView.scrollAreaToVisible(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
@@ -237,6 +301,9 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         if (tableViewScrollPane != null) {
             scrollPane.setScrollLeft(tableViewScrollPane.getScrollLeft());
         }
+
+        // Start the transition
+        cardPane.setSelectedIndex(EDITOR_CARD_INDEX);
     }
 
     @Override
@@ -266,24 +333,28 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
             }
         }
 
-        getOwner().moveToFront();
-        tableView.requestFocus();
+        if (cardPane.getSelectedIndex() == EDITOR_CARD_INDEX) {
+            cardPane.setSelectedIndex(IMAGE_CARD_INDEX);
+        } else {
+            getOwner().moveToFront();
+            tableView.requestFocus();
 
-        Display display = getDisplay();
-        display.getContainerMouseListeners().remove(displayMouseHandler);
+            Display display = getDisplay();
+            display.getContainerMouseListeners().remove(displayMouseHandler);
 
-        super.close();
+            super.close();
 
-        // Clear the editor components
-        TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
-        tablePaneColumns.remove(0, tablePaneColumns.getLength());
-        editorRow.remove(0, editorRow.getLength());
+            // Clear the editor components
+            TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
+            tablePaneColumns.remove(0, tablePaneColumns.getLength());
+            editorRow.remove(0, editorRow.getLength());
 
-        tableView = null;
-        rowIndex = -1;
-        columnIndex = -1;
+            tableView = null;
+            rowIndex = -1;
+            columnIndex = -1;
 
-        tableViewScrollPane = null;
+            tableViewScrollPane = null;
+        }
     }
 
     @Override
