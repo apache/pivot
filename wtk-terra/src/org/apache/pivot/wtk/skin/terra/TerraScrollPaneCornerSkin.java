@@ -22,15 +22,19 @@ import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ComponentSkin;
-
 
 /**
  * Scroll pane corner skin.
  */
 public class TerraScrollPaneCornerSkin extends ComponentSkin {
-    private Color backgroundColor = new Color(0xF0, 0xEC, 0xE7);
-    private Color color = new Color(0x81, 0x76, 0x67);
+    private Color backgroundColor;
+
+    public TerraScrollPaneCornerSkin() {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        backgroundColor = theme.getColor(11);
+    }
 
     @Override
     public boolean isFocusable() {
@@ -39,19 +43,16 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        // ScrollPane corners have no implicit preferred size.
         return 0;
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        // ScrollPane corners have no implicit preferred size.
         return 0;
     }
 
     @Override
     public Dimensions getPreferredSize() {
-        // ScrollPane corners have no implicit preferred size.
         return new Dimensions(0, 0);
     }
 
@@ -86,20 +87,8 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-        repaintComponent();
-    }
-
-    public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        setColor(GraphicsUtilities.decodeColor(color));
+    public final void setBackgroundColor(int backgroundColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setBackgroundColor(theme.getColor(backgroundColor));
     }
 }
