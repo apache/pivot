@@ -18,9 +18,11 @@ limitations under the License.
 <html>
 <head></head>
 <body>
-<p>
+
+<p style="font-weight: bold">
 Defines skin classes for the "Terra" theme.
 </p>
+
 <p>
 Terra skins get their colors from the theme's color palette, which contains
 24 indexed colors.  Most Terra skins expose a setter methods for each color
@@ -29,17 +31,74 @@ the component by referencing the theme's color palette.  The default palette
 is shown below:
 </p>
 <p>
-<img src="doc-files/palette.png" border="0"/>
+<img src="doc-files/palette.png" border="0" alt="The default color palette"/>
 <br/>
-<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<font style="font-" color="#000000" size="-1" face="arial,helvetica,sanserif">
 <i>The default color palette</i>
 </font>
 </p>
+<br/>
 
-<p>The font, color palette, and message icons are defined in a JSON file that should contain a
-<tt>Map</tt> containing the following properties:</p>
+<p>Summary of color usage in skin classes</p>
+<table border="1" cellpadding="5">
+<tr>
+<th nowrap="nowrap">Palette Index:</th>
+<th nowrap="nowrap">Usage:</th>
+</tr>
+<tr>
+<td align="right">1</td>
+<td>foreground for labels</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td>background for groups and some type of labels</td>
+</tr>
+<tr>
+<td align="right">7</td>
+<td>borders, and some disabled elements</td>
+</tr>
+<tr>
+<td align="right">10</td>
+<td>
+background in input elements, tabs, scrollbars, buttons, table headers, 
+expanders titles, etc
+</td>
+</tr>
+<tr>
+<td align="right">13</td>
+<td>
+selection, links, expanders text, labels 
+(in links, separators, accordion and expanders titles), 
+title bars and buttons in alerts
+</td>
+</tr>
+<tr>
+<td align="right">16</td>
+<td>background in option buttons</td>
+</tr>
+<tr>
+<td align="right">19</td>
+<td>selection background, form warnings</td>
+</tr>
+<tr>
+<td align="right">22</td>
+<td>errors, invalid elements, form errors</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+<tt>TerraTooltipSkin</tt> use a fixed (not from palette) color for the background, of 0xffffe0, 
+and transparency (alpha) 0xf0
+</td>
+</tr>
+</table>
+<br/>
+<br/>
 
 <p>
+The font, color palette, and message icons are defined in a JSON file that should contain a
+<tt>Map</tt> containing the following properties:
+</p>
 <table border="1" cellpadding="5">
 <tr>
 <th nowrap="nowrap">Property:</th>
@@ -52,6 +111,14 @@ is shown below:
 <td>
 The default theme font; must be understandable by
 <tt>java.awt.Font.decode()</tt>.
+</td>
+</tr>
+<tr valign="top">
+<td><tt>colorMultiplier</tt></td>
+<td><tt>Number</tt></td>
+<td>
+The default multiplication delta (+/-) for generating the darker and lighter version 
+of any "base color palette", in the range ]0 .. 1.0[.
 </td>
 </tr>
 <tr valign="top">
@@ -85,8 +152,23 @@ Names are specified as resource named relative to the <tt>TerraTheme</tt> class.
 </td>
 </tr>
 </table>
-<p>By default, the theme definition in <tt>TerraTheme_default.json</tt> is used,
+<br/>
+
+<p>
+By default, the theme definition in <tt>TerraTheme_default.json</tt> is used,
 but can be overridden via the <tt>org.apache.pivot.wtk.skin.terra.location</tt>
-property.</p>
+property.
+</p>
+<br/>
+
+<p>
+Note that to test custom color definitions, it's better to use 
+the <tt>org.apache.pivot.demos.styles.ColorSchemeBuilder</tt> demo, 
+because in "Kitchen Sink" some colors are overridden inside bxml files.
+</p>
+<br/>
+
+<hr/>
+
 </body>
 </html>
