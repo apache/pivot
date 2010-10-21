@@ -1152,9 +1152,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 if (element.parent != null) {
-                    // If the parent element has a default property, use it; otherwise, if the
-                    // parent is a sequence or a listener list, add the element to it
-                    if (element.parent.value != null) {
+                    if (element.parent.type == Element.Type.WRITABLE_PROPERTY) {
+                        // Set this as the property value; it will be applied later in the
+                        // parent's closing tag
+                        element.parent.value = element.value;
+                    } else if (element.parent.value != null) {
+                        // If the parent element has a default property, use it; otherwise, if the
+                        // parent is a sequence, add the element to it
                         Class<?> parentType = element.parent.value.getClass();
                         DefaultProperty defaultProperty = parentType.getAnnotation(DefaultProperty.class);
 
@@ -1162,9 +1166,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             if (element.parent.value instanceof Sequence<?>) {
                                 Sequence<Object> sequence = (Sequence<Object>)element.parent.value;
                                 sequence.add(element.value);
-                            } else if (element.parent.value instanceof ListenerList<?>) {
-                                ListenerList<Object> listenerList = (ListenerList<Object>)element.parent.value;
-                                listenerList.add(element.value);
+                            } else {
+                                throw new SerializationException(element.parent.value.getClass()
+                                    + " is not a sequence.");
                             }
                         } else {
                             String defaultPropertyName = defaultProperty.value();
@@ -1179,35 +1183,27 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             }
                         }
                     }
-
-                    // If the parent element is a writable property, set this as its
-                    // value; it will be applied later in the parent's closing tag
-                    if (element.parent.type == Element.Type.WRITABLE_PROPERTY) {
-                        element.parent.value = element.value;
-                    }
                 }
 
                 break;
             }
 
             case READ_ONLY_PROPERTY: {
-                if (!(element.value instanceof ListenerList<?>)) {
-                    Dictionary<String, Object> dictionary;
-                    if (element.value instanceof Dictionary<?, ?>) {
-                        dictionary = (Dictionary<String, Object>)element.value;
-                    } else {
-                        dictionary = new BeanAdapter(element.value);
+                Dictionary<String, Object> dictionary;
+                if (element.value instanceof Dictionary<?, ?>) {
+                    dictionary = (Dictionary<String, Object>)element.value;
+                } else {
+                    dictionary = new BeanAdapter(element.value);
+                }
+
+                // Process attributes looking for instance property setters
+                for (Attribute attribute : element.attributes) {
+                    if (attribute.propertyClass != null) {
+                        throw new SerializationException("Static setters are not supported"
+                            + " for read-only properties.");
                     }
 
-                    // Process attributes looking for instance property setters
-                    for (Attribute attribute : element.attributes) {
-                        if (attribute.propertyClass != null) {
-                            throw new SerializationException("Static setters are not supported"
-                                + " for read-only properties.");
-                        }
-
-                        dictionary.put(attribute.name, attribute.value);
-                    }
+                    dictionary.put(attribute.name, attribute.value);
                 }
 
                 break;
