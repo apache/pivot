@@ -583,6 +583,7 @@ public class TextArea extends Component {
 
     public TextArea() {
         installSkin(TextArea.class);
+        setText("");
     }
 
     @Override
