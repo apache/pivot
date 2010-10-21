@@ -237,10 +237,6 @@ public abstract class Task<V> {
      * throw a {@link AbortException}.
      */
     public synchronized void abort() {
-        if (taskListener == null) {
-            throw new IllegalStateException("Task is not currently pending.");
-        }
-
         abort = true;
     }
 }

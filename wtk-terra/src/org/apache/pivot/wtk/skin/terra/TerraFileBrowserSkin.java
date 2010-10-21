@@ -34,7 +34,10 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.text.FileSizeFormat;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.util.concurrent.TaskListener;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -63,6 +66,7 @@ import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TableViewSortListener;
+import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -538,6 +542,59 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+    private class RefreshFileListTask extends Task<Void> {
+        @Override
+        public Void execute() {
+            FileBrowser fileBrowser = (FileBrowser)getComponent();
+            File rootDirectory = fileBrowser.getRootDirectory();
+            File[] files = rootDirectory.listFiles(HIDDEN_FILE_FILTER);
+
+            String text = searchTextInput.getText().trim();
+            IncludeFileFilter includeFileFilter = new IncludeFileFilter(text.length() == 0 ? null : text,
+                hideDisabledFiles ? fileBrowser.getDisabledFileFilter() : null);
+
+            TableView.SortDictionary sort = fileTableView.getSort();
+
+            final FileComparator fileComparator;
+            if (sort.isEmpty()) {
+                fileComparator = null;
+            } else {
+                Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
+                fileComparator = new FileComparator(pair.key, pair.value);
+            }
+
+            for (int i = 0; i < files.length && !abort; i++) {
+                final File file = files[i];
+
+                if (includeFileFilter.include(file)) {
+                    ApplicationContext.queueCallback(new Runnable() {
+                        @Override
+                        @SuppressWarnings("unchecked")
+                        public void run() {
+                            if (!abort) {
+                                ArrayList<File> fileTableData = (ArrayList<File>)fileTableView.getTableData();
+
+                                int index;
+                                if (fileComparator == null) {
+                                    index = fileTableData.getLength();
+                                } else {
+                                    index = ArrayList.binarySearch(fileTableData, file, fileComparator);
+                                    if (index < 0) {
+                                        index = -(index + 1);
+                                    }
+                                }
+
+                                fileTableData.insert(file, index);
+                            }
+                        }
+                    });
+                }
+            }
+
+            return null;
+        }
+    }
+
     private Component content = null;
 
     @BXML private ListButton driveListButton = null;
@@ -550,9 +607,12 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @BXML private ScrollPane fileScrollPane = null;
     @BXML private TableView fileTableView = null;
 
+    private boolean keyboardFolderTraversalEnabled = true;
     private boolean hideDisabledFiles = false;
 
     private boolean updatingSelection = false;
+
+    private RefreshFileListTask refreshFileListTask = null;
 
     private static final FileFilter HIDDEN_FILE_FILTER = new FileFilter() {
         @Override
@@ -711,8 +771,15 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         fileTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
+            @SuppressWarnings("unchecked")
             public void sortChanged(TableView tableView) {
-                sortFileList();
+                TableView.SortDictionary sort = fileTableView.getSort();
+
+                if (!sort.isEmpty()) {
+                    Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
+                    List<File> files = (List<File>)fileTableView.getTableData();
+                    files.setComparator(new FileComparator(pair.key, pair.value));
+                }
             }
         });
 
@@ -806,6 +873,14 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         return file;
     }
 
+    public boolean isKeyboardFolderTraversalEnabled() {
+        return keyboardFolderTraversalEnabled;
+    }
+
+    public void setKeyboardFolderTraversalEnabled(boolean keyboardFolderTraversalEnabled) {
+        this.keyboardFolderTraversalEnabled = keyboardFolderTraversalEnabled;
+    }
+
     public boolean isHideDisabledFiles() {
         return hideDisabledFiles;
     }
@@ -816,7 +891,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     /**
-     * {@link KeyCode#ENTER ENTER} Change into the selected directory.<br>
+     * {@link KeyCode#ENTER ENTER} Change into the selected directory if
+     * {@link #keyboardFolderTraversalEnabled} is true.<br>
      * {@link KeyCode#DELETE DELETE} or {@link KeyCode#BACKSPACE BACKSPACE}
      * Change into the parent of the current directory.<br>
      * {@link KeyCode#F5 F5} Refresh the file list.
@@ -827,7 +903,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         FileBrowser fileBrowser = (FileBrowser)getComponent();
 
-        if (keyCode == Keyboard.KeyCode.ENTER) {
+        if (keyCode == Keyboard.KeyCode.ENTER
+            && keyboardFolderTraversalEnabled) {
             Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
 
             if (selectedFiles.getLength() == 1) {
@@ -983,35 +1060,28 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     private void refreshFileList() {
-        FileBrowser fileBrowser = (FileBrowser)getComponent();
-        File rootDirectory = fileBrowser.getRootDirectory();
-        File[] files = rootDirectory.listFiles(HIDDEN_FILE_FILTER);
+        // Cancel any outstanding task
+        if (refreshFileListTask != null) {
+            refreshFileListTask.abort();
+        }
 
-        String text = searchTextInput.getText().trim();
-        IncludeFileFilter includeFileFilter = new IncludeFileFilter(text.length() == 0 ? null : text,
-            hideDisabledFiles ? fileBrowser.getDisabledFileFilter() : null);
+        fileTableView.setTableData(new ArrayList<File>());
 
-        ArrayList<File> filteredFiles = new ArrayList<File>();
-
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-            if (includeFileFilter.include(file)) {
-                filteredFiles.add(file);
+        refreshFileListTask = new RefreshFileListTask();
+        refreshFileListTask.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+            @Override
+            public void taskExecuted(Task<Void> task) {
+                if (task == refreshFileListTask) {
+                    refreshFileListTask = null;
+                }
             }
-        }
 
-        fileTableView.setTableData(filteredFiles);
-        sortFileList();
-    }
-
-    @SuppressWarnings("unchecked")
-    private void sortFileList() {
-        TableView.SortDictionary sort = fileTableView.getSort();
-
-        if (!sort.isEmpty()) {
-            Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
-            List<File> files = (List<File>)fileTableView.getTableData();
-            files.setComparator(new FileComparator(pair.key, pair.value));
-        }
+            @Override
+            public void executeFailed(Task<Void> task) {
+                if (task == refreshFileListTask) {
+                    refreshFileListTask = null;
+                }
+            }
+        }));
     }
 }
