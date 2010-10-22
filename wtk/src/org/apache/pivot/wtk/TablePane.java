@@ -878,23 +878,6 @@ public class TablePane extends Container {
     }
 
     /**
-     * Sets the component at the specified cell in this table pane.
-     *
-     * @param row
-     * The row index of the cell
-     *
-     * @param column
-     * The column index of the cell
-     *
-     * @param component
-     * The component to place in the specified cell, or <tt>null</tt> to empty
-     * the cell
-     */
-    public void setCellComponent(int row, int column, Component component) {
-        rows.get(row).update(column, component);
-    }
-
-    /**
      * Overrides the base method to check whether or not a cell component is
      * being removed, and fires the appropriate event in that case.
      *
