@@ -313,6 +313,8 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     @SuppressWarnings("unchecked")
     public void close(boolean result) {
+        boolean valid = true;
+
         if (result) {
             // Update the row data
             List<Object> tableData = (List<Object>)tableView.getTableData();
@@ -320,41 +322,51 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
             Object tableRow = tableData.get(rowIndex);
             tablePane.store(tableRow);
 
-            if (tableData.getComparator() == null) {
-                tableData.update(rowIndex, tableRow);
-            } else {
-                tableData.remove(rowIndex, 1);
-                tableData.add(tableRow);
+            valid = validate(tableRow);
 
-                // Re-select the item, and make sure it's visible
-                rowIndex = tableData.indexOf(tableRow);
-                tableView.setSelectedIndex(rowIndex);
-                tableView.scrollAreaToVisible(tableView.getRowBounds(rowIndex));
+            if (valid) {
+                if (tableData.getComparator() == null) {
+                    tableData.update(rowIndex, tableRow);
+                } else {
+                    tableData.remove(rowIndex, 1);
+                    tableData.add(tableRow);
+
+                    // Re-select the item, and make sure it's visible
+                    rowIndex = tableData.indexOf(tableRow);
+                    tableView.setSelectedIndex(rowIndex);
+                    tableView.scrollAreaToVisible(tableView.getRowBounds(rowIndex));
+                }
             }
         }
 
-        if (cardPane.getSelectedIndex() == EDITOR_CARD_INDEX) {
-            cardPane.setSelectedIndex(IMAGE_CARD_INDEX);
-        } else {
-            getOwner().moveToFront();
-            tableView.requestFocus();
+        if (valid) {
+            if (cardPane.getSelectedIndex() == EDITOR_CARD_INDEX) {
+                cardPane.setSelectedIndex(IMAGE_CARD_INDEX);
+            } else {
+                getOwner().moveToFront();
+                tableView.requestFocus();
 
-            Display display = getDisplay();
-            display.getContainerMouseListeners().remove(displayMouseHandler);
+                Display display = getDisplay();
+                display.getContainerMouseListeners().remove(displayMouseHandler);
 
-            super.close();
+                super.close();
 
-            // Clear the editor components
-            TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
-            tablePaneColumns.remove(0, tablePaneColumns.getLength());
-            editorRow.remove(0, editorRow.getLength());
+                // Clear the editor components
+                TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
+                tablePaneColumns.remove(0, tablePaneColumns.getLength());
+                editorRow.remove(0, editorRow.getLength());
 
-            tableView = null;
-            rowIndex = -1;
-            columnIndex = -1;
+                tableView = null;
+                rowIndex = -1;
+                columnIndex = -1;
 
-            tableViewScrollPane = null;
+                tableViewScrollPane = null;
+            }
         }
+    }
+
+    protected boolean validate(Object tableRow) {
+        return true;
     }
 
     @Override
