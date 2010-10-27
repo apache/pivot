@@ -316,15 +316,18 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         boolean valid = true;
 
         if (result) {
-            // Update the row data
-            List<Object> tableData = (List<Object>)tableView.getTableData();
+            // Preview the changes
+            HashMap previewTableRow = new HashMap<String, Object>();
+            tablePane.store(previewTableRow);
 
-            Object tableRow = tableData.get(rowIndex);
-            tablePane.store(tableRow);
-
-            valid = validate(tableRow);
+            valid = validate(previewTableRow, rowIndex);
 
             if (valid) {
+                // Update the row data
+                List<Object> tableData = (List<Object>)tableView.getTableData();
+                Object tableRow = tableData.get(rowIndex);
+                tablePane.store(tableRow);
+
                 if (tableData.getComparator() == null) {
                     tableData.update(rowIndex, tableRow);
                 } else {
@@ -365,7 +368,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         }
     }
 
-    protected boolean validate(Object tableRow) {
+    protected boolean validate(Object tableRow, int rowIndex) {
         return true;
     }
 
