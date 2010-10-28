@@ -36,9 +36,6 @@ Distribution JARs
 * Charting (pivot-charts-2.0.jar):
   Classes for adding interactive charting capabilities to Pivot applications.
 
-* Tools (pivot-tools-2.0.jar):
-  Development tools and utility applications.
-
 To begin developing with Pivot, simply include the necessary libraries on your
 project classpath.
 
@@ -75,6 +72,11 @@ Dependencies
 
   Version 2.0 of this provider is compatible with Pivot 2.0.x. Please note that
   this provider has a dependency on JFreeChart, which is licensed under LGPL.
+
+* SVG support requires SVG Salamander, which is licensed under a dual LGPL/BSD
+  license and is available here:
+
+  https://svgsalamander.dev.java.net/
 
 * Scripting support requires a compatible script engine. See
   http://jcp.org/en/jsr/detail?id=223 or
