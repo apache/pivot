@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.wtk.BindType;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.CardPaneListener;
@@ -141,16 +142,12 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         tablePane.getRows().add(editorRow);
     }
 
-    @Override
-    public void edit(TableView tableView, int rowIndex, int columnIndex) {
-        this.tableView = tableView;
-        this.rowIndex = rowIndex;
-        this.columnIndex = columnIndex;
+    public TableView getTableView() {
+        return tableView;
+    }
 
-        Container tableViewParent = tableView.getParent();
-        tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane)tableViewParent : null;
-
-        open(tableView.getWindow());
+    public int getRowIndex() {
+        return rowIndex;
     }
 
     /**
@@ -171,6 +168,18 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      */
     public Dictionary<String, Component> getCellEditors() {
         return cellEditors;
+    }
+
+    @Override
+    public void edit(TableView tableView, int rowIndex, int columnIndex) {
+        this.tableView = tableView;
+        this.rowIndex = rowIndex;
+        this.columnIndex = columnIndex;
+
+        Container tableViewParent = tableView.getParent();
+        tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane)tableViewParent : null;
+
+        open(tableView.getWindow());
     }
 
     /**
@@ -269,10 +278,12 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
                 editorComponent = cellEditors.get(columnName);
             }
 
-            // Default to a text input editor
+            // Default to a read-only text input editor
             if (editorComponent == null) {
                 TextInput editorTextInput = new TextInput();
                 editorTextInput.setTextKey(columnName);
+                editorTextInput.setEnabled(false);
+                editorTextInput.setTextBindType(BindType.LOAD);
                 editorComponent = editorTextInput;
             }
 
@@ -313,63 +324,47 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     @SuppressWarnings("unchecked")
     public void close(boolean result) {
-        boolean valid = true;
-
         if (result) {
-            // Preview the changes
-            HashMap previewTableRow = new HashMap<String, Object>();
-            tablePane.store(previewTableRow);
+            // Update the row data
+            List<Object> tableData = (List<Object>)tableView.getTableData();
+            Object tableRow = tableData.get(rowIndex);
+            tablePane.store(tableRow);
 
-            valid = validate(previewTableRow, rowIndex);
-
-            if (valid) {
-                // Update the row data
-                List<Object> tableData = (List<Object>)tableView.getTableData();
-                Object tableRow = tableData.get(rowIndex);
-                tablePane.store(tableRow);
-
-                if (tableData.getComparator() == null) {
-                    tableData.update(rowIndex, tableRow);
-                } else {
-                    tableData.remove(rowIndex, 1);
-                    tableData.add(tableRow);
-
-                    // Re-select the item, and make sure it's visible
-                    rowIndex = tableData.indexOf(tableRow);
-                    tableView.setSelectedIndex(rowIndex);
-                    tableView.scrollAreaToVisible(tableView.getRowBounds(rowIndex));
-                }
-            }
-        }
-
-        if (valid) {
-            if (cardPane.getSelectedIndex() == EDITOR_CARD_INDEX) {
-                cardPane.setSelectedIndex(IMAGE_CARD_INDEX);
+            if (tableData.getComparator() == null) {
+                tableData.update(rowIndex, tableRow);
             } else {
-                getOwner().moveToFront();
-                tableView.requestFocus();
+                tableData.remove(rowIndex, 1);
+                tableData.add(tableRow);
 
-                Display display = getDisplay();
-                display.getContainerMouseListeners().remove(displayMouseHandler);
-
-                super.close();
-
-                // Clear the editor components
-                TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
-                tablePaneColumns.remove(0, tablePaneColumns.getLength());
-                editorRow.remove(0, editorRow.getLength());
-
-                tableView = null;
-                rowIndex = -1;
-                columnIndex = -1;
-
-                tableViewScrollPane = null;
+                // Re-select the item, and make sure it's visible
+                rowIndex = tableData.indexOf(tableRow);
+                tableView.setSelectedIndex(rowIndex);
+                tableView.scrollAreaToVisible(tableView.getRowBounds(rowIndex));
             }
         }
-    }
 
-    protected boolean validate(Object tableRow, int rowIndex) {
-        return true;
+        if (cardPane.getSelectedIndex() == EDITOR_CARD_INDEX) {
+            cardPane.setSelectedIndex(IMAGE_CARD_INDEX);
+        } else {
+            getOwner().moveToFront();
+            tableView.requestFocus();
+
+            Display display = getDisplay();
+            display.getContainerMouseListeners().remove(displayMouseHandler);
+
+            super.close();
+
+            // Clear the editor components
+            TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
+            tablePaneColumns.remove(0, tablePaneColumns.getLength());
+            editorRow.remove(0, editorRow.getLength());
+
+            tableView = null;
+            rowIndex = -1;
+            columnIndex = -1;
+
+            tableViewScrollPane = null;
+        }
     }
 
     @Override

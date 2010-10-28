@@ -69,6 +69,18 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
         setContent(textInput);
     }
 
+    public TreeView getTreeView() {
+        return treeView;
+    }
+
+    public Path getPath() {
+        return path;
+    }
+
+    public TextInput getTextInput() {
+        return textInput;
+    }
+
     @Override
     public void edit(TreeView treeView, Path path) {
         this.treeView = treeView;

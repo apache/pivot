@@ -21,26 +21,6 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:demo="org.apache.pivot.demos.roweditor"
     xmlns="org.apache.pivot.wtk">
-    <bxml:define>
-        <Spinner bxml:id="dateSpinner" selectedItemKey="date">
-            <spinnerData>
-                <content:CalendarDateSpinnerData/>
-            </spinnerData>
-        </Spinner>
-
-        <ListButton bxml:id="typeListButton" listData="['Hotel', 'Miscellaneous', 'Meals', 'Parking', 'Travel']"
-            selectedItemKey="type"/>
-
-        <TextInput bxml:id="amountTextInput" strictValidation="true" textKey="amount">
-            <validator>
-                <demo:CurrencyValidator/>
-            </validator>
-            <textBindMapping>
-                <demo:AmountBindMapping/>
-            </textBindMapping>
-        </TextInput>
-    </bxml:define>
-
     <Border styles="{color:7}">
         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
             <TableView bxml:id="tableView" selectMode="multi">
@@ -57,7 +37,35 @@ limitations under the License.
 
                 <rowEditor>
                     <content:TableViewRowEditor editEffect="horizontal_slide">
-                        <cellEditors date="$dateSpinner" type="$typeListButton" amount="$amountTextInput"/>
+                        <cellEditors>
+                            <date>
+                                <Spinner selectedItemKey="date">
+                                    <spinnerData>
+                                        <content:CalendarDateSpinnerData/>
+                                    </spinnerData>
+                                </Spinner>
+                            </date>
+
+                            <type>
+                                <ListButton listData="['Hotel', 'Miscellaneous', 'Meals', 'Parking', 'Travel']"
+                                    selectedItemKey="type"/>
+                            </type>
+
+                            <amount>
+                                <TextInput strictValidation="true" textKey="amount">
+                                    <validator>
+                                        <demo:CurrencyValidator/>
+                                    </validator>
+                                    <textBindMapping>
+                                        <demo:AmountBindMapping/>
+                                    </textBindMapping>
+                                </TextInput>
+                            </amount>
+
+                            <description>
+                                <TextInput textKey="description"/>
+                            </description>
+                        </cellEditors>
                     </content:TableViewRowEditor>
                 </rowEditor>
 

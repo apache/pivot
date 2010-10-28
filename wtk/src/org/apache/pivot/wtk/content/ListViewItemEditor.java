@@ -67,6 +67,18 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
         setContent(textInput);
     }
 
+    public ListView getListView() {
+        return listView;
+    }
+
+    public int getItemIndex() {
+        return itemIndex;
+    }
+
+    public TextInput getTextInput() {
+        return textInput;
+    }
+
     @Override
     public void edit(ListView listView, int itemIndex) {
         this.listView = listView;
