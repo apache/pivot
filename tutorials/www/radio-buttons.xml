@@ -36,7 +36,7 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/buttons/radio_buttons.bxml</src>
+                <src>/org/apache/pivot/tutorials/buttons/radio_buttons.bxml</src>
             </startup-properties>
         </application>
 

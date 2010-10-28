@@ -73,7 +73,7 @@ limitations under the License.
             responds to mouse clicks with information about where the user clicked:
         </p>
 
-        <application class="org.apache.pivot.tutorials.layout.SimpleTablePanes"
+        <application class="org.apache.pivot.wtk.ScriptApplication"
             width="560" height="340">
             <libraries>
                 <library>core</library>
@@ -81,54 +81,56 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/tutorials/layout/simple_table_panes.bxml</src>
+            </startup-properties>
         </application>
 
-        <p>The WTKX source for the application is shown below:</p>
+        <p>The BXML source for the application is shown below:</p>
 
-        <source type="xml">
+        <source type="xml" location="org/apache/pivot/tutorials/layout/simple_table_panes.bxml">
             <![CDATA[
-            <Window wtkx:id="window" title="Table Panes" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+            <layout:SimpleTablePanes bxml:id="window" title="Table Panes" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns:layout="org.apache.pivot.tutorials.layout"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <Border styles="{padding:0}">
-                        <content>
-                            <TablePane wtkx:id="tablePane" styles="{verticalSpacing:1, showHorizontalGridLines:true,
-                                horizontalSpacing:1, showVerticalGridLines:true}">
-                                <columns>
-                                    <TablePane.Column width="-1"/>
-                                    <TablePane.Column width="50"/>
-                                    <TablePane.Column width="-1"/>
-                                    <TablePane.Column width="1*"/>
-                                    <TablePane.Column width="2*"/>
-                                </columns>
+                <Border>
+                    <TablePane bxml:id="tablePane" styles="{verticalSpacing:1, showHorizontalGridLines:true,
+                        horizontalSpacing:1, showVerticalGridLines:true}">
+                        <columns>
+                            <TablePane.Column width="-1"/>
+                            <TablePane.Column width="50"/>
+                            <TablePane.Column width="-1"/>
+                            <TablePane.Column width="1*"/>
+                            <TablePane.Column width="2*"/>
+                        </columns>
 
-                                <rows>
-                                    <TablePane.Row height="-1">
-                                        <TablePane.Filler/>
-                                        <Label text="50" styles="{horizontalAlignment:'center'}"/>
-                                        <Label text="-1" styles="{horizontalAlignment:'center'}"/>
-                                        <Label text="1*" styles="{horizontalAlignment:'center'}"/>
-                                        <Label text="2*" styles="{horizontalAlignment:'center'}"/>
-                                    </TablePane.Row>
-                                    <TablePane.Row height="50">
-                                        <Label text="50" styles="{verticalAlignment:'center'}"/>
-                                    </TablePane.Row>
-                                    <TablePane.Row height="-1">
-                                        <Label text="-1" styles="{verticalAlignment:'center'}"/>
-                                    </TablePane.Row>
-                                    <TablePane.Row height="1*">
-                                        <Label text="1*" styles="{verticalAlignment:'center'}"/>
-                                    </TablePane.Row>
-                                    <TablePane.Row height="2*">
-                                        <Label text="2*" styles="{verticalAlignment:'center'}"/>
-                                    </TablePane.Row>
-                                </rows>
-                            </TablePane>
-                        </content>
-                    </Border>
-                </content>
-            </Window>
+                        <TablePane.Row height="-1">
+                            <TablePane.Filler/>
+                            <Label text="50" styles="{horizontalAlignment:'center'}"/>
+                            <Label text="-1" styles="{horizontalAlignment:'center'}"/>
+                            <Label text="1*" styles="{horizontalAlignment:'center'}"/>
+                            <Label text="2*" styles="{horizontalAlignment:'center'}"/>
+                        </TablePane.Row>
+
+                        <TablePane.Row height="50">
+                            <Label text="50" styles="{verticalAlignment:'center'}"/>
+                        </TablePane.Row>
+
+                        <TablePane.Row height="-1">
+                            <Label text="-1" styles="{verticalAlignment:'center'}"/>
+                        </TablePane.Row>
+
+                        <TablePane.Row height="1*">
+                            <Label text="1*" styles="{verticalAlignment:'center'}"/>
+                        </TablePane.Row>
+
+                        <TablePane.Row height="2*">
+                            <Label text="2*" styles="{verticalAlignment:'center'}"/>
+                        </TablePane.Row>
+                    </TablePane>
+                </Border>
+            </layout:SimpleTablePanes>
             ]]>
         </source>
 
@@ -141,13 +143,14 @@ limitations under the License.
             <![CDATA[
             package org.apache.pivot.tutorials.layout;
 
+            import java.net.URL;
+
+            import org.apache.pivot.beans.Bindable;
             import org.apache.pivot.collections.Map;
+            import org.apache.pivot.util.Resources;
             import org.apache.pivot.wtk.BoxPane;
             import org.apache.pivot.wtk.Component;
             import org.apache.pivot.wtk.ComponentMouseButtonListener;
-            import org.apache.pivot.wtk.Application;
-            import org.apache.pivot.wtk.DesktopApplicationContext;
-            import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.Label;
             import org.apache.pivot.wtk.MessageType;
             import org.apache.pivot.wtk.Mouse;
@@ -155,17 +158,13 @@ limitations under the License.
             import org.apache.pivot.wtk.Prompt;
             import org.apache.pivot.wtk.TablePane;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
-            public class SimpleTablePanes implements Application {
-                private Window window = null;
+            public class SimpleTablePanes extends Window implements Bindable {
                 private TablePane tablePane = null;
 
                 @Override
-                public void startup(Display display, Map<String, String> properties) throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    window = (Window)wtkxSerializer.readObject(this, "simple_table_panes.wtkx");
-                    tablePane = (TablePane)wtkxSerializer.get("tablePane");
+                public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+                    tablePane = (TablePane)namespace.get("tablePane");
 
                     tablePane.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
                         @Override
@@ -194,37 +193,12 @@ limitations under the License.
                                 body.add(heightLabel);
                                 body.add(widthLabel);
 
-                                Prompt.prompt(MessageType.INFO, message, body, window);
+                                Prompt.prompt(MessageType.INFO, message, body, SimpleTablePanes.this);
                             }
 
                             return false;
                         }
                     });
-
-                    window.open(display);
-                }
-
-                @Override
-                public boolean shutdown(boolean optional) {
-                    if (window != null) {
-                        window.close();
-                    }
-
-                    return false;
-                }
-
-                @Override
-                public void suspend() {
-                    // No-op
-                }
-
-                @Override
-                public void resume() {
-                    // No-op
-                }
-
-                public static void main(String[] args) {
-                    DesktopApplicationContext.main(SimpleTablePanes.class, args);
                 }
             }
             ]]>
@@ -238,7 +212,7 @@ limitations under the License.
             the effect it has on the relative columns in the grid pane.
         </p>
 
-        <application class="org.apache.pivot.tutorials.layout.TablePanes"
+        <application class="org.apache.pivot.wtk.ScriptApplication"
             width="560" height="340">
             <libraries>
                 <library>core</library>
@@ -247,7 +221,7 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/treeviews/tree_views.wtkx</src>
+                <src>/org/apache/pivot/tutorials/layout/table_panes.bxml</src>
             </startup-properties>
         </application>
     </body>

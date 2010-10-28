@@ -37,7 +37,7 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/text/text_areas.wtkx</src>
+                <src>/org/apache/pivot/tutorials/text/text_areas.bxml</src>
             </startup-properties>
         </application>
 
@@ -51,51 +51,39 @@ limitations under the License.
         </p>
 
         <p>
-            The WTKX source for this example is shown below (there is no corresponding Java source):
+            The BXML source for this example is shown below (there is no corresponding Java source):
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/text/text_areas.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/text/text_areas.bxml">
             <![CDATA[
             <Window title="Text Areas" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <Border styles="{color:10}">
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill">
-                                <view>
-                                    <TablePane styles="{padding:8, verticalSpacing:8}">
-                                        <columns>
-                                            <TablePane.Column width="1*"/>
-                                        </columns>
-                                        <rows>
-                                            <TablePane.Row height="1*">
-                                                <Border styles="{color:10}">
-                                                    <content>
-                                                        <ScrollPane horizontalScrollBarPolicy="fill"
-                                                            verticalScrollBarPolicy="fill_to_capacity"
-                                                            preferredHeight="240">
-                                                            <view>
-                                                                <TextArea text="@sample1.txt"/>
-                                                            </view>
-                                                        </ScrollPane>
-                                                    </content>
-                                                </Border>
-                                            </TablePane.Row>
-                                            <TablePane.Row height="-1">
-                                                <Border styles="{color:10}">
-                                                    <content>
-                                                        <TextArea minimumPreferredHeight="80" text="@sample2.txt"/>
-                                                    </content>
-                                                </Border>
-                                            </TablePane.Row>
-                                        </rows>
-                                    </TablePane>
-                                </view>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </content>
+                <Border styles="{color:10}">
+                    <ScrollPane horizontalScrollBarPolicy="fill">
+                        <TablePane styles="{padding:8, verticalSpacing:8}">
+                            <columns>
+                                <TablePane.Column width="1*"/>
+                            </columns>
+
+                            <TablePane.Row height="1*">
+                                <Border styles="{color:10}">
+                                    <ScrollPane horizontalScrollBarPolicy="fill"
+                                        verticalScrollBarPolicy="fill_to_capacity"
+                                        preferredHeight="240">
+                                        <TextArea text="@sample1.txt"/>
+                                    </ScrollPane>
+                                </Border>
+                            </TablePane.Row>
+
+                            <TablePane.Row height="-1">
+                                <Border styles="{color:10}">
+                                    <TextArea minimumHeight="80" text="@sample2.txt"/>
+                                </Border>
+                            </TablePane.Row>
+                        </TablePane>
+                    </ScrollPane>
+                </Border>
             </Window>
             ]]>
         </source>

@@ -24,7 +24,7 @@ limitations under the License.
     <body>
         <p>The following example demonstrates use of the <tt>ListButton</tt> component. Selecting an image name from the drop-down shows the corresponding image file in the image view on the right.</p>
 
-        <application class="org.apache.pivot.tutorials.lists.ListButtons"
+        <application class="org.apache.pivot.wtk.ScriptApplication"
             width="480" height="340">
             <libraries>
                 <library>core</library>
@@ -32,42 +32,43 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/tutorials/lists/list_buttons.bxml</src>
+            </startup-properties>
         </application>
 
         <p>
-            The WTKX source for the example is below. Like the previous example, list data is
+            The BXML source for the example is below. Like the previous example, list data is
             specified as an attribute containing a JSON array of strings; this value is used to
             load the image displayed to the right of the list button. Like <tt>ListView</tt>,
             <tt>ListButtons</tt> can also be populated programmatically using instances of
             <tt>ListItem</tt>.
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/lists/list_buttons.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/lists/list_buttons.bxml">
             <![CDATA[
-            <Window title="List Buttons" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+            <lists:ListButtons title="List Buttons" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns:lists="org.apache.pivot.tutorials.lists"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true,
-                        horizontalSpacing:1, verticalSpacing:1}">
-                        <columns>
-                            <TablePane.Column width="-1"/>
-                            <TablePane.Column width="1*"/>
-                        </columns>
-                        <rows>
-                            <TablePane.Row height="340">
-                                <BoxPane orientation="vertical" styles="{verticalAlignment:'top', padding: 4}">
-                                    <Label text="Picture:"/>
-                                    <ListButton wtkx:id="listButton"
-                                        listData="['IMG_0725_2.jpg', 'IMG_0735_2.jpg', 'IMG_0767_2.jpg']"/>
-                                </BoxPane>
+                <TablePane styles="{showHorizontalGridLines: true, showVerticalGridLines:true,
+                    horizontalSpacing:1, verticalSpacing:1}">
+                    <columns>
+                        <TablePane.Column width="-1"/>
+                        <TablePane.Column width="1*"/>
+                    </columns>
 
-                                <ImageView wtkx:id="imageView" styles="{backgroundColor:'#404040'}"/>
-                            </TablePane.Row>
-                        </rows>
-                    </TablePane>
-                </content>
-            </Window>
+                    <TablePane.Row height="340">
+                        <BoxPane orientation="vertical" styles="{verticalAlignment:'top', padding: 4}">
+                            <Label text="Picture:"/>
+                            <ListButton bxml:id="listButton"
+                                listData="['IMG_0725_2.jpg', 'IMG_0735_2.jpg', 'IMG_0767_2.jpg']"/>
+                        </BoxPane>
+
+                        <ImageView bxml:id="imageView" styles="{backgroundColor:'#404040'}"/>
+                    </TablePane.Row>
+                </TablePane>
+            </lists:ListButtons>
             ]]>
         </source>
 
@@ -80,90 +81,58 @@ limitations under the License.
             package org.apache.pivot.tutorials.lists;
 
             import java.net.URL;
+
+            import org.apache.pivot.beans.Bindable;
             import org.apache.pivot.collections.Map;
-            import org.apache.pivot.util.ThreadUtilities;
+            import org.apache.pivot.util.Resources;
             import org.apache.pivot.util.concurrent.TaskExecutionException;
-            import org.apache.pivot.wtk.Application;
             import org.apache.pivot.wtk.ApplicationContext;
-            import org.apache.pivot.wtk.DesktopApplicationContext;
-            import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.ImageView;
             import org.apache.pivot.wtk.ListButton;
             import org.apache.pivot.wtk.ListButtonSelectionListener;
             import org.apache.pivot.wtk.Window;
             import org.apache.pivot.wtk.media.Image;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
-            public class ListButtons implements Application {
-                private Window window = null;
+            public class ListButtons extends Window implements Bindable {
                 private ListButton listButton = null;
                 private ImageView imageView = null;
 
-                private ListButtonSelectionListener listButtonSelectionListener =
-                    new ListButtonSelectionListener() {
-                    @Override
-                    public void selectedIndexChanged(ListButton listButton, int previousIndex) {
-                        int index = listButton.getSelectedIndex();
+                @Override
+                public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+                    listButton = (ListButton)namespace.get("listButton");
+                    imageView = (ImageView)namespace.get("imageView");
 
-                        if (index != -1) {
-                            String item = (String)listButton.getListData().get(index);
+                    listButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener.Adapter() {
+                        @Override
+                        public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+                            Object selectedItem = listButton.getSelectedItem();
 
-                            // Get the image URL for the selected item
-                            ClassLoader classLoader = ThreadUtilities.getClassLoader();
-                            URL imageURL = classLoader.getResource("org/apache/pivot/tutorials/" + item);
+                            if (selectedItem != null) {
+                                // Get the image URL for the selected item
+                                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                                URL imageURL = classLoader.getResource("org/apache/pivot/tutorials/" + selectedItem);
 
-                            // If the image has not been added to the resource cache yet,
-                            // add it
-                            Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+                                // If the image has not been added to the resource cache yet,
+                                // add it
+                                Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
 
-                            if (image == null) {
-                                try {
-                                    image = Image.load(imageURL);
-                                } catch (TaskExecutionException exception) {
-                                    throw new RuntimeException(exception);
+                                if (image == null) {
+                                    try {
+                                        image = Image.load(imageURL);
+                                    } catch (TaskExecutionException exception) {
+                                        throw new RuntimeException(exception);
+                                    }
+
+                                    ApplicationContext.getResourceCache().put(imageURL, image);
                                 }
 
-                                ApplicationContext.getResourceCache().put(imageURL, image);
+                                // Update the image
+                                imageView.setImage(image);
                             }
-
-                            // Update the image
-                            imageView.setImage(image);
                         }
-                    }
-                };
+                    });
 
-                @Override
-                public void startup(Display display, Map<String, String> properties) throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    window = (Window)wtkxSerializer.readObject(this, "list_buttons.wtkx");
-                    listButton = (ListButton)wtkxSerializer.get("listButton");
-                    imageView = (ImageView)wtkxSerializer.get("imageView");
-
-                    listButton.getListButtonSelectionListeners().add(listButtonSelectionListener);
                     listButton.setSelectedIndex(0);
-
-                    window.open(display);
-                }
-
-                @Override
-                public boolean shutdown(boolean optional) {
-                    if (window != null) {
-                        window.close();
-                    }
-
-                    return false;
-                }
-
-                @Override
-                public void suspend() {
-                }
-
-                @Override
-                public void resume() {
-                }
-
-                public static void main(String[] args) {
-                    DesktopApplicationContext.main(ListButtons.class, args);
                 }
             }
             ]]>

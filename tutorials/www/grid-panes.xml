@@ -50,15 +50,15 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>/org/apache/pivot/tutorials/layout/grid_panes.wtkx</src>
+                <src>/org/apache/pivot/tutorials/layout/grid_panes.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The WTKX source for the application is shown below:
+            The BXML source for the application is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/layout/grid_panes.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/layout/grid_panes.bxml">
             <![CDATA[
             <Window title="Grid Panes" maximized="true"
                 xmlns:bxml="http://pivot.apache.org/bxml"

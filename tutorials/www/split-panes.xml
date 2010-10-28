@@ -70,7 +70,7 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/layout/split_panes.wtkx</src>
+                <src>/org/apache/pivot/tutorials/layout/split_panes.wtkx</src>
             </startup-properties>
         </application>
 
@@ -82,68 +82,58 @@ limitations under the License.
             <![CDATA[
             <Window title="Split Panes" maximized="true"
                 WindowStateListener.windowOpened="init();"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <wtkx:script>
-                    function init() {
-                        orientation.setSelection(horizontalOrientationButton);
-                    }
-                </wtkx:script>
+                <bxml:script>
+                function init() {
+                    orientation.setSelection(horizontalOrientationButton);
+                }
+                </bxml:script>
 
-                <content>
-                    <SplitPane wtkx:id="splitPane" orientation="horizontal" splitRatio="0.6">
-                        <left>
-                            <Border styles="{padding:6}">
-                                <content>
-                                    <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"
-                                        styles="{fill:true}"/>
-                                </content>
-                            </Border>
-                        </left>
-                        <right>
-                            <Border>
-                                <content>
-                                    <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
-                                        <wtkx:define>
-                                            <ButtonGroup wtkx:id="orientation">
-                                                <buttonGroupListeners>
-                                                    <wtkx:script>
-                                                        function selectionChanged(buttonGroup, previousSelection) {
-                                                            var selection = buttonGroup.getSelection();
-                                                            if (selection == horizontalOrientationButton) {
-                                                                splitPane.setOrientation("horizontal");
-                                                            } else {
-                                                                splitPane.setOrientation("vertical");
-                                                            }
-                                                        }
-                                                    </wtkx:script>
-                                                </buttonGroupListeners>
-                                            </ButtonGroup>
-                                        </wtkx:define>
+                <SplitPane bxml:id="splitPane" orientation="horizontal" splitRatio="0.6">
+                    <left>
+                        <Border styles="{padding:6}">
+                            <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"
+                                styles="{fill:true}"/>
+                        </Border>
+                    </left>
+                    <right>
+                        <Border>
+                            <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
+                                <bxml:define>
+                                    <ButtonGroup bxml:id="orientation">
+                                        <buttonGroupListeners>
+                                            function selectionChanged(buttonGroup, previousSelection) {
+                                                var selection = buttonGroup.getSelection();
+                                                if (selection == horizontalOrientationButton) {
+                                                    splitPane.setOrientation("horizontal");
+                                                } else {
+                                                    splitPane.setOrientation("vertical");
+                                                }
+                                            }
+                                        </buttonGroupListeners>
+                                    </ButtonGroup>
+                                </bxml:define>
 
-                                        <Label text="Orientation" styles="{font:{bold:true}}"/>
-                                        <RadioButton wtkx:id="horizontalOrientationButton"
-                                            buttonData="Horizontal" buttonGroup="$orientation"/>
-                                        <RadioButton wtkx:id="verticalOrientationButton"
-                                            buttonData="Vertical" buttonGroup="$orientation"/>
+                                <Label text="Orientation" styles="{font:{bold:true}}"/>
+                                <RadioButton bxml:id="horizontalOrientationButton"
+                                    buttonData="Horizontal" buttonGroup="$orientation"/>
+                                <RadioButton bxml:id="verticalOrientationButton"
+                                    buttonData="Vertical" buttonGroup="$orientation"/>
 
-                                        <Separator/>
+                                <Separator/>
 
-                                        <Checkbox buttonData="Use Shadow">
-                                            <buttonStateListeners>
-                                                <wtkx:script>
-                                                    function stateChanged(button, previousState) {
-                                                        splitPane.getStyles().put("useShadow", button.isSelected());
-                                                    }
-                                                </wtkx:script>
-                                            </buttonStateListeners>
-                                        </Checkbox>
-                                    </BoxPane>
-                                </content>
-                            </Border>
-                        </right>
-                    </SplitPane>
-                </content>
+                                <Checkbox buttonData="Use Shadow">
+                                    <buttonStateListeners>
+                                        function stateChanged(button, previousState) {
+                                            splitPane.getStyles().put("useShadow", button.isSelected());
+                                        }
+                                    </buttonStateListeners>
+                                </Checkbox>
+                            </BoxPane>
+                        </Border>
+                    </right>
+                </SplitPane>
             </Window>
             ]]>
         </source>

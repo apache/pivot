@@ -25,7 +25,7 @@ limitations under the License.
         <p>The following example...</p>
 
         <application class="org.apache.pivot.wtk.ScriptApplication"
-            width="480" height="340">
+            width="300" height="200">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -33,16 +33,70 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/lists/repeatable_list_buttons.wtkx</src>
+                <src>org/apache/pivot/tutorials/lists/repeatable_list_buttons.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The WTKX source for the example is...
+            The BXML source for the example is...
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/lists/repeatable_list_buttons.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/lists/repeatable_list_buttons.bxml">
             <![CDATA[
+            <lists:RepeatableListButtons title="Repeatable List Buttons" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns:content="org.apache.pivot.wtk.content"
+                xmlns:lists="org.apache.pivot.tutorials.lists"
+                xmlns="org.apache.pivot.wtk">
+                <Border styles="{padding:8}">
+                    <TablePane styles="{horizontalSpacing:4}">
+                        <columns>
+                            <TablePane.Column width="-1"/>
+                            <TablePane.Column width="1*"/>
+                        </columns>
+
+                        <TablePane.Row height="1*">
+                            <FlowPane>
+                                <Label text="Color:"/>
+                                <ListButton bxml:id="colorListButton" Form.label="Color"
+                                    repeatable="true" action="applyColor" listSize="8"
+                                    selectedIndex="0">
+                                    <dataRenderer>
+                                        <content:ListButtonColorItemRenderer/>
+                                    </dataRenderer>
+                                    <itemRenderer>
+                                        <content:ListViewColorItemRenderer/>
+                                    </itemRenderer>
+
+                                    <content:ColorItem color="#000000" name="Black"/>
+                                    <content:ColorItem color="#0000AA" name="Blue"/>
+                                    <content:ColorItem color="#00AA00" name="Green"/>
+                                    <content:ColorItem color="#00AAAA" name="Cyan"/>
+                                    <content:ColorItem color="#AA0000" name="Red"/>
+                                    <content:ColorItem color="#AA00AA" name="Magenta"/>
+                                    <content:ColorItem color="#AA5500" name="Brown"/>
+                                    <content:ColorItem color="#AAAAAA" name="Light Gray"/>
+                                    <content:ColorItem color="#555555" name="Dark Gray"/>
+                                    <content:ColorItem color="#5555FF" name="Bright Blue"/>
+                                    <content:ColorItem color="#55FF55" name="Bright Green"/>
+                                    <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
+                                    <content:ColorItem color="#FF5555" name="Bright Red"/>
+                                    <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
+                                    <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
+                                    <content:ColorItem color="#FFFFFF" name="White"/>
+                                </ListButton>
+                            </FlowPane>
+
+                            <Border>
+                                <ScrollPane>
+                                    <BoxPane bxml:id="checkboxBoxPane" orientation="vertical"
+                                        styles="{padding:4, spacing:4}"/>
+                                </ScrollPane>
+                            </Border>
+                        </TablePane.Row>
+                    </TablePane>
+                </Border>
+            </lists:RepeatableListButtons>
             ]]>
         </source>
 
@@ -52,6 +106,81 @@ limitations under the License.
 
         <source type="java" location="org/apache/pivot/tutorials/lists/RepeatableListButtons.java">
             <![CDATA[
+            package org.apache.pivot.tutorials.lists;
+
+            import java.awt.Color;
+            import java.net.URL;
+
+            import org.apache.pivot.beans.Bindable;
+            import org.apache.pivot.collections.ArrayList;
+            import org.apache.pivot.collections.Map;
+            import org.apache.pivot.util.Resources;
+            import org.apache.pivot.wtk.Action;
+            import org.apache.pivot.wtk.BoxPane;
+            import org.apache.pivot.wtk.Button;
+            import org.apache.pivot.wtk.ButtonStateListener;
+            import org.apache.pivot.wtk.Checkbox;
+            import org.apache.pivot.wtk.Component;
+            import org.apache.pivot.wtk.ListButton;
+            import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtk.Button.State;
+            import org.apache.pivot.wtk.content.ColorItem;
+
+            public class RepeatableListButtons extends Window implements Bindable {
+                private ListButton colorListButton = null;
+                private BoxPane checkboxBoxPane = null;
+
+                private int selectedCount = 0;
+
+                private Action applyColorAction = new Action() {
+                    @Override
+                    public void perform(Component source) {
+                        ColorItem colorItem = (ColorItem)colorListButton.getButtonData();
+                        Color color = colorItem.getColor();
+
+                        for (Component component : checkboxBoxPane) {
+                            Checkbox checkbox = (Checkbox)component;
+                            if (checkbox.isSelected()) {
+                                checkbox.getStyles().put("color", color);
+                                checkbox.setSelected(false);
+                            }
+                        }
+                    }
+                };
+
+                public RepeatableListButtons() {
+                    Action.getNamedActions().put("applyColor", applyColorAction);
+                    applyColorAction.setEnabled(false);
+                }
+
+                @Override
+                public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+                    colorListButton = (ListButton)namespace.get("colorListButton");
+                    checkboxBoxPane = (BoxPane)namespace.get("checkboxBoxPane");
+
+                    ButtonStateListener buttonStateListener = new ButtonStateListener() {
+                        @Override
+                        public void stateChanged(Button button, State previousState) {
+                            if (button.isSelected()) {
+                                selectedCount++;
+                            } else {
+                                selectedCount--;
+                            }
+
+                            applyColorAction.setEnabled(selectedCount > 0);
+                        }
+                    };
+
+                    ArrayList<String> numbers = new ArrayList<String>("One", "Two", "Three", "Four", "Five",
+                        "Six", "Seven", "Eight", "Nine", "Ten");
+
+                    for (String number : numbers) {
+                        Checkbox checkbox = new Checkbox(number);
+                        checkbox.getButtonStateListeners().add(buttonStateListener);
+                        checkboxBoxPane.add(checkbox);
+                    }
+                }
+            }
             ]]>
         </source>
     </body>

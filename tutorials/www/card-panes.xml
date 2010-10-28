@@ -74,7 +74,7 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>/org/apache/pivot/tutorials/?</src>
+                <src>/org/apache/pivot/tutorials/navigation/card_panes.bxml</src>
             </startup-properties>
         </application>
 

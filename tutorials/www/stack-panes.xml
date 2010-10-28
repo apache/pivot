@@ -44,28 +44,26 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/layout/stack_panes.wtkx</src>
+                <src>/org/apache/pivot/tutorials/layout/stack_panes.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The WTKX source for the example is as follows:
+            The BXML source for the example is as follows:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/layout/stack_panes.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/layout/stack_panes.bxml">
             <![CDATA[
             <Window title="Stack Panes" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <StackPane>
-                        <ImageView image="@background.png"
-                            styles="{fill:true, preserveAspectRatio:false}"/>
-                        <Label text="StackPane Demo"
-                            styles="{font:'Helvetica bold 64', color:'#ffffff', wrapText:true,
-                                horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                    </StackPane>
-                </content>
+                <StackPane>
+                    <ImageView image="@background.png"
+                        styles="{fill:true, preserveAspectRatio:false}"/>
+                    <Label text="StackPane Demo"
+                        styles="{font:'Helvetica bold 64', color:'#ffffff', wrapText:true,
+                            horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                </StackPane>
             </Window>
             ]]>
         </source>

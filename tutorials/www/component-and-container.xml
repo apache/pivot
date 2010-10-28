@@ -385,6 +385,12 @@ limitations under the License.
             </li>
             <li>
                 <p>
+                    <b>ComponentStyleListener</b> - defines events related to component
+                    styles.
+                </p>
+            </li>
+            <li>
+                <p>
                     <b>ComponentDecoratorListener</b> - defines events related to component
                     decorators.
                 </p>
@@ -409,6 +415,12 @@ limitations under the License.
                 <p>
                     <b>ComponentKeyListener</b> - defines events that are fired when the component
                     has the input focus.
+                </p>
+            </li>
+            <li>
+                <p>
+                    <b>ComponentTooltipListener</b> - defines events that are related to component
+                    tooltips.
                 </p>
             </li>
             <li>

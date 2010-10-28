@@ -33,13 +33,17 @@ limitations under the License.
             The following example application demonstrates use of the <tt>TextInput</tt> component:
         </p>
 
-        <application class="org.apache.pivot.tutorials.text.TextInputs" width="240" height="40">
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="240" height="40">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/tutorials/text/text_inputs.bxml</src>
+            </startup-properties>
         </application>
 
         <p>
@@ -50,23 +54,22 @@ limitations under the License.
             Wisconsin, and Wyoming, require two; Alaska and Alabama require 4.
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/text/text_inputs.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/text/text_inputs.bxml">
             <![CDATA[
-            <Window title="Text Inputs" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+            <text:TextInputs title="Text Inputs" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns:text="org.apache.pivot.tutorials.text"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <BoxPane styles="{padding:4, verticalAlignment:'center'}">
-                        <Label text="State:"/>
-                        <TextInput wtkx:id="stateTextInput"/>
-                    </BoxPane>
-                </content>
-            </Window>
+                <BoxPane styles="{padding:4, verticalAlignment:'center'}">
+                    <Label text="State:"/>
+                    <TextInput bxml:id="stateTextInput"/>
+                </BoxPane>
+            </text:TextInputs>
             ]]>
         </source>
 
         <p>
-            The WTKX source for this example is quite short, consisting of only a <tt>BoxPane</tt>,
+            The BXML source for this example is quite short, consisting of only a <tt>BoxPane</tt>,
             <tt>Label</tt>, and <tt>TextInput</tt>. Most of the demo's functionality is defined in
             the Java source, shown below. The application's constructor first establishes a sorted
             list of state names. In <tt>startup()</tt>, the application attaches a
@@ -80,55 +83,21 @@ limitations under the License.
             <![CDATA[
             package org.apache.pivot.tutorials.text;
 
+            import java.net.URL;
+
+            import org.apache.pivot.beans.Bindable;
             import org.apache.pivot.collections.ArrayList;
             import org.apache.pivot.collections.Map;
-            import org.apache.pivot.wtk.Application;
-            import org.apache.pivot.wtk.DesktopApplicationContext;
+            import org.apache.pivot.util.Resources;
             import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.TextInput;
-            import org.apache.pivot.wtk.TextInputCharacterListener;
+            import org.apache.pivot.wtk.TextInputContentListener;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
-            public class TextInputs implements Application {
-                private Window window = null;
+            public class TextInputs extends Window implements Bindable {
                 private TextInput stateTextInput = null;
 
                 private ArrayList<String> states;
-
-                private TextInputCharacterListener textInputCharacterListener =
-                    new TextInputCharacterListener.Adapter() {
-                    public void charactersInserted(final TextInput textInput, int index, int count) {
-                        String text = textInput.getText();
-
-                        int i = ArrayList.binarySearch(states, text,
-                            states.getComparator());
-
-                        if (i < 0) {
-                            i = -(i + 1);
-                            int n = states.getLength();
-
-                            if (i < n) {
-                                text = text.toLowerCase();
-                                final String state = states.get(i);
-
-                                if (state.toLowerCase().startsWith(text)) {
-                                    String nextState = (i == n - 1) ?
-                                        null : states.get(i + 1);
-
-                                    if (nextState == null
-                                        || !nextState.toLowerCase().startsWith(text)) {
-                                        textInput.setText(state);
-
-                                        int selectionStart = text.length();
-                                        int selectionLength = state.length() - selectionStart;
-                                        textInput.setSelection(selectionStart, selectionLength);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
 
                 public TextInputs() {
                     // Populate the lookup values, ensuring that they are sorted
@@ -188,34 +157,48 @@ limitations under the License.
                     states.add("Wyoming");
                 }
 
-                public void startup(Display display, Map<String, String> properties)
-                    throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    window = (Window)wtkxSerializer.readObject(this, "text_inputs.wtkx");
-                    stateTextInput = (TextInput)wtkxSerializer.get("stateTextInput");
+                @Override
+                public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+                    stateTextInput = (TextInput)namespace.get("stateTextInput");
+                    stateTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
+                        @Override
+                        public void textInserted(final TextInput textInput, int index, int count) {
+                            String text = textInput.getText();
 
-                    stateTextInput.getTextInputCharacterListeners().add(textInputCharacterListener);
+                            int i = ArrayList.binarySearch(states, text,
+                                states.getComparator());
 
-                    window.open(display);
+                            if (i < 0) {
+                                i = -(i + 1);
+                                int n = states.getLength();
+
+                                if (i < n) {
+                                    text = text.toLowerCase();
+                                    final String state = states.get(i);
+
+                                    if (state.toLowerCase().startsWith(text)) {
+                                        String nextState = (i == n - 1) ?
+                                            null : states.get(i + 1);
+
+                                        if (nextState == null
+                                            || !nextState.toLowerCase().startsWith(text)) {
+                                            textInput.setText(state);
+
+                                            int selectionStart = text.length();
+                                            int selectionLength = state.length() - selectionStart;
+                                            textInput.setSelection(selectionStart, selectionLength);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void open(Display display, Window owner) {
+                    super.open(display, owner);
                     stateTextInput.requestFocus();
-                }
-
-                public boolean shutdown(boolean optional) {
-                    if (window != null) {
-                        window.close();
-                    }
-
-                    return false;
-                }
-
-                public void suspend() {
-                }
-
-                public void resume() {
-                }
-
-                public static void main(String[] args) {
-                    DesktopApplicationContext.main(Text.class, args);
                 }
             }
             ]]>
