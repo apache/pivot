@@ -39,18 +39,18 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>/org/apache/pivot/tutorials/navigation/expanders.wtkx</src>
+                <src>/org/apache/pivot/tutorials/navigation/expanders.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The WTKX source for this example is as follows. It declares three expanders contained
+            The BXML source for this example is as follows. It declares three expanders contained
             in a vertical flow pane, which itself is contained in a scroll pane. The contents of
-            the expanders are defined in several external WTKX files that are included by the main
+            the expanders are defined in several external BXML files that are included by the main
             file:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/navigation/expanders.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/navigation/expanders.bxml">
             <![CDATA[
             <Window title="Expanders" maximized="true"
                 xmlns:bxml="http://pivot.apache.org/bxml"

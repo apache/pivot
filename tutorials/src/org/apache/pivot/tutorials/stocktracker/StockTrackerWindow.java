@@ -285,13 +285,13 @@ public class StockTrackerWindow extends Window implements Bindable {
         if (symbols.getLength() > 0) {
             getQuery = new GetQuery(SERVICE_HOSTNAME, SERVICE_PATH);
 
-            StringBuilder symbolsArgumentBuilder = new StringBuilder();
+            StringBuilder symbolsParameterBuilder = new StringBuilder();
             for (int i = 0, n = symbols.getLength(); i < n; i++) {
                 if (i > 0) {
-                    symbolsArgumentBuilder.append(",");
+                    symbolsParameterBuilder.append(",");
                 }
 
-                symbolsArgumentBuilder.append(symbols.get(i));
+                symbolsParameterBuilder.append(symbols.get(i));
             }
 
             // Format:
@@ -303,8 +303,8 @@ public class StockTrackerWindow extends Window implements Bindable {
             // g - low value
             // c1 - change percentage
             // v - volume
-            String symbolsArgument = symbolsArgumentBuilder.toString();
-            getQuery.getParameters().put("s", symbolsArgument);
+            String symbolsParameter = symbolsParameterBuilder.toString();
+            getQuery.getParameters().put("s", symbolsParameter);
             getQuery.getParameters().put("f", "snl1ohgc1v");
 
             CSVSerializer quoteSerializer = new CSVSerializer(StockQuote.class);

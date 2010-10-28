@@ -104,7 +104,7 @@ limitations under the License.
         <h4>Dictionary vs. BeanAdapter</h4>
 
         <p>
-            In general, uppercase elements in a WTKX file will represent instances of JavaBean
+            In general, uppercase elements in a WTKX file will represent instances of Java bean
             classes. Internally, the WTKX serializer uses an instance of
             <tt>org.apache.pivot.beans.BeanAdapter</tt> to wrap the instantiated class and
             invoke its setter methods. However, if the class name represents an object that already
@@ -129,7 +129,7 @@ limitations under the License.
         </p>
 
         <ul>
-            <li><p>A standard JavaBean property setter</p></li>
+            <li><p>A standard Java bean property setter</p></li>
             <li><p>A read-only sequence</p></li>
             <li><p>A read-only dictionary</p></li>
             <li><p>An event listener list</p></li>
@@ -140,9 +140,9 @@ limitations under the License.
             property so that it can process the element's contents correctly.
         </p>
 
-        <h4>JavaBean Property Setters</h4>
+        <h4>Java Bean Property Setters</h4>
         <p>
-            If the element represents a JavaBean property setter, the contents of the element
+            If the element represents a Java bean property setter, the contents of the element
             (which must be either a text node or a class instance element) are passed as the value
             to the setter for the property. For example, the following WTKX creates an instance of
             the <tt>Label</tt> class and sets the value of the label's "text" property to "Hello,
@@ -250,12 +250,12 @@ limitations under the License.
         </p>
 
         <ul>
-            <li><p>A standard JavaBean property setter</p></li>
+            <li><p>A standard Java bean property setter</p></li>
             <li><p>A "static" property setter (explained below)</p></li>
             <li><p>An event listener</p></li>
         </ul>
 
-        <h4>JavaBean Property Setters</h4>
+        <h4>Java Bean Property Setters</h4>
 
         <p>
             If an attribute represents a bean property setter, the attribute value is passed as the

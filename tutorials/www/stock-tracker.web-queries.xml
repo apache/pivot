@@ -97,25 +97,33 @@ limitations under the License.
         </source>
 
         <p>
-            Then, the value of the "s" argument is constructed by joining the values in the symbol
+            Then, the value of the "s" parameter is constructed by joining the values in the symbol
             list with commas, and the query arguments are applied:
         </p>
 
         <source type="java">
             <![CDATA[
-            StringBuilder symbolsArgumentBuilder = new StringBuilder();
+            StringBuilder symbolsParameterBuilder = new StringBuilder();
             for (int i = 0, n = symbols.getLength(); i < n; i++) {
                 if (i > 0) {
-                    symbolsArgumentBuilder.append(",");
+                    symbolsParameterBuilder.append(",");
                 }
 
-                symbolsArgumentBuilder.append(symbols.get(i));
+                symbolsParameterBuilder.append(symbols.get(i));
             }
 
-            String symbolsArgument = symbolsArgumentBuilder.toString();
-
-            getQuery.getArguments().put("s", symbolsArgument);
-            getQuery.getArguments().put("f", "snl1ohgc1v");
+            // Format:
+            // s - symbol
+            // n - company name
+            // l1 - most recent value
+            // o - opening value
+            // h - high value
+            // g - low value
+            // c1 - change percentage
+            // v - volume
+            String symbolsParameter = symbolsParameterBuilder.toString();
+            getQuery.getParameters().put("s", symbolsParameter);
+            getQuery.getParameters().put("f", "snl1ohgc1v");
             ]]>
         </source>
 
@@ -133,15 +141,15 @@ limitations under the License.
 
         <source type="java">
             <![CDATA[
-            CSVSerializer quoteSerializer = new CSVSerializer();
-            quoteSerializer.getKeys().add("symbol");
-            quoteSerializer.getKeys().add("companyName");
-            quoteSerializer.getKeys().add("value");
-            quoteSerializer.getKeys().add("openingValue");
-            quoteSerializer.getKeys().add("highValue");
-            quoteSerializer.getKeys().add("lowValue");
-            quoteSerializer.getKeys().add("change");
-            quoteSerializer.getKeys().add("volume");
+            CSVSerializer quoteSerializer = new CSVSerializer(StockQuote.class);
+            quoteSerializer.setKeys("symbol",
+                "companyName",
+                "value",
+                "openingValue",
+                "highValue",
+                "lowValue",
+                "change",
+                "volume");
             ]]>
         </source>
 
@@ -155,26 +163,20 @@ limitations under the License.
         </p>
 
         <p>
-            <tt>CSVSerializer</tt> will, by default, create an instance of
+            By default, <tt>CSVSerializer</tt> will create an instance of
             <tt>org.apache.pivot.collections.HashMap&lt;String, Object&gt;</tt> for each row it
             encounters in the CSV stream. However, a caller can specify the name of a different
-            class using the <tt>setItemClass()</tt> method. This avoids the performance penalty of
-            traversing the data twice: once to read it from the CSV stream and again to convert it
-            to the appropriate type:
+            class as a constructor argument to <tt>CSVSerializer</tt>. This avoids the performance
+            penalty of traversing the data twice: once to read it from the CSV stream and again to
+            convert it to the appropriate type.
         </p>
 
-        <source type="java">
-            <![CDATA[
-            quoteSerializer.setItemClass(StockQuote.class);
-            ]]>
-        </source>
-
         <p>
-            If the item class implements the <tt>pivot.collections.Dictionary</tt> interface, the
-            parsed values are <tt>put()</tt> directly into the item instance; otherwise, the item
-            is wrapped in a <tt>pivot.beans.BeanAdapter</tt> into which the values are
-            <tt>put()</tt> (<tt>BeanAdapter</tt> is a handy class that allows a caller to treat
-            a JavaBean object as if it were a dictionary).
+            If the item class implements the <tt>org.apache.pivot.collections.Dictionary</tt>
+            interface, the parsed values are <tt>put()</tt> directly into the item instance;
+            otherwise, the item is wrapped in a <tt>org.apache.pivot.beans.BeanAdapter</tt> into
+            which the values are <tt>put()</tt> (<tt>BeanAdapter</tt> is a handy class that allows
+            a caller to treat a Java bean object as if it were a dictionary).
         </p>
 
         <p>
@@ -183,8 +185,6 @@ limitations under the License.
 
         <source type="java">
             <![CDATA[
-            package pivot.tutorials.stocktracker;
-
             public class StockQuote {
                 private String symbol = null;
                 private String companyName = null;
@@ -220,7 +220,11 @@ limitations under the License.
                 }
 
                 public void setValue(String value) {
-                    setValue(Float.parseFloat(value));
+                    try {
+                        setValue(Float.parseFloat(value));
+                    } catch(NumberFormatException exception) {
+                        setValue(Float.NaN);
+                    }
                 }
 
                 public float getOpeningValue() {
@@ -232,7 +236,11 @@ limitations under the License.
                 }
 
                 public void setOpeningValue(String openingValue) {
-                    setOpeningValue(Float.parseFloat(openingValue));
+                    try {
+                        setOpeningValue(Float.parseFloat(openingValue));
+                    } catch(NumberFormatException exception) {
+                        setOpeningValue(Float.NaN);
+                    }
                 }
 
                 public float getHighValue() {
@@ -244,7 +252,11 @@ limitations under the License.
                 }
 
                 public void setHighValue(String highValue) {
-                    setHighValue(Float.parseFloat(highValue));
+                    try {
+                        setHighValue(Float.parseFloat(highValue));
+                    } catch(NumberFormatException exception) {
+                        setHighValue(Float.NaN);
+                    }
                 }
 
                 public float getLowValue() {
@@ -256,7 +268,11 @@ limitations under the License.
                 }
 
                 public void setLowValue(String lowValue) {
-                    setLowValue(Float.parseFloat(lowValue));
+                    try {
+                        setLowValue(Float.parseFloat(lowValue));
+                    } catch(NumberFormatException exception) {
+                        setLowValue(Float.NaN);
+                    }
                 }
 
                 public float getChange() {
@@ -268,7 +284,11 @@ limitations under the License.
                 }
 
                 public void setChange(String change) {
-                    setChange(Float.parseFloat(change));
+                    try {
+                        setChange(Float.parseFloat(change));
+                    } catch(NumberFormatException exception) {
+                        setChange(Float.NaN);
+                    }
                 }
 
                 public float getVolume() {
@@ -280,14 +300,18 @@ limitations under the License.
                 }
 
                 public void setVolume(String volume) {
-                    setVolume(Float.parseFloat(volume));
+                    try {
+                        setVolume(Float.parseFloat(volume));
+                    } catch(NumberFormatException exception) {
+                        setVolume(Float.NaN);
+                    }
                 }
             }
             ]]>
         </source>
 
         <p>
-            The cell renderers assigned to the columns in the WTKX file ensure that the data
+            The cell renderers assigned to the columns in the BXML file ensure that the data
             represented by this class is formatted and presented correctly.
         </p>
 
@@ -308,9 +332,9 @@ limitations under the License.
         <p>
             The argument passed to the <tt>execute()</tt> method is a <tt>TaskAdapter</tt> wrapped
             around an anonymous inner class implementation of <tt>TaskListener&lt;Object&gt;</tt>.
-            <tt>TaskListener</tt> is an interface defined in the <tt>pivot.util.concurrent</tt>
+            <tt>TaskListener</tt> is an interface defined in the <tt>org.apache.pivot.util.concurrent</tt>
             package and serves as a callback handler for asynchronous operations implemented by the
-            <tt>pivot.util.concurrent.Task</tt> class, of which <tt>GetQuery</tt> is a subclass.
+            <tt>org.apache.pivot.util.concurrent.Task</tt> class, of which <tt>GetQuery</tt> is a subclass.
             <tt>TaskAdapter</tt> is defined in the <tt>pivot.wtk</tt> package and ensures that the
             callback occurs on the UI thread (otherwise, the listener is called in the context of
             the background thread, which can produce non-deterministic results).
@@ -337,51 +361,52 @@ limitations under the License.
 
         <source type="java">
             <![CDATA[
-            @Override
-            public void taskExecuted(Task<Object> task) {
-                if (task == getQuery) {
-                    List<Object> quotes = (List<Object>)task.getResult();
+                @Override
+                public void taskExecuted(Task<Object> task) {
+                    if (task == getQuery) {
+                        List<Object> quotes = (List<Object>)task.getResult();
 
-                    // Preserve any existing sort and selection
-                    Sequence<?> selectedStocks = stocksTableView.getSelectedRows();
+                        // Preserve any existing sort and selection
+                        Sequence<?> selectedStocks = stocksTableView.getSelectedRows();
 
-                    List<Object> tableData = (List<Object>)stocksTableView.getTableData();
-                    Comparator<Object> comparator = tableData.getComparator();
-                    quotes.setComparator(comparator);
+                        List<Object> tableData = (List<Object>)stocksTableView.getTableData();
+                        Comparator<Object> comparator = tableData.getComparator();
+                        quotes.setComparator(comparator);
 
-                    stocksTableView.setTableData(quotes);
+                        stocksTableView.setTableData(quotes);
 
-                    if (selectedStocks.getLength() > 0) {
-                        // Select current indexes of selected stocks
-                        for (int i = 0, n = selectedStocks.getLength(); i < n; i++) {
-                            Object selectedStock = selectedStocks.get(i);
+                        if (selectedStocks.getLength() > 0) {
+                            // Select current indexes of selected stocks
+                            for (int i = 0, n = selectedStocks.getLength(); i < n; i++) {
+                                Object selectedStock = selectedStocks.get(i);
 
-                            int index = 0;
-                            for (Object stock : stocksTableView.getTableData()) {
-                                String symbol = JSON.getString(stock, "symbol");
-                                String selectedSymbol = JSON.getString(selectedStock, "symbol");
+                                int index = 0;
+                                for (Object stock : stocksTableView.getTableData()) {
+                                    String symbol = JSON.get(stock, "symbol");
+                                    String selectedSymbol = JSON.get(selectedStock, "symbol");
 
-                                if (symbol.equals(selectedSymbol)) {
-                                    stocksTableView.addSelectedIndex(index);
-                                    break;
+                                    if (symbol.equals(selectedSymbol)) {
+                                        stocksTableView.addSelectedIndex(index);
+                                        break;
+                                    }
+
+                                    index++;
                                 }
-
-                                index++;
+                            }
+                        } else {
+                            if (quotes.getLength() > 0) {
+                                stocksTableView.setSelectedIndex(0);
                             }
                         }
-                    } else {
-                        if (quotes.getLength() > 0) {
-                            stocksTableView.setSelectedIndex(0);
-                        }
+
+                        refreshDetail();
+
+                        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
+                            DateFormat.MEDIUM, Locale.getDefault());
+                        lastUpdateLabel.setText(dateFormat.format(new Date()));
+
+                        getQuery = null;
                     }
-
-                    refreshDetail();
-
-                    DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-                        DateFormat.MEDIUM, Locale.getDefault());
-                    lastUpdateLabel.setText(dateFormat.format(new Date()));
-
-                    getQuery = null;
                 }
             }
             ]]>
@@ -429,6 +454,7 @@ limitations under the License.
 
         <source type="java">
             <![CDATA[
+            @Override
             public void executeFailed(Task<Object> task) {
                 if (task == getQuery) {
                     System.err.println(task.getFault());

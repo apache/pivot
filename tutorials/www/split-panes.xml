@@ -70,15 +70,15 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>/org/apache/pivot/tutorials/layout/split_panes.wtkx</src>
+                <src>/org/apache/pivot/tutorials/layout/split_panes.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The WTKX for this example is shown below:
+            The BXML for this example is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/layout/split_panes.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/layout/split_panes.bxml">
             <![CDATA[
             <Window title="Split Panes" maximized="true"
                 WindowStateListener.windowOpened="init();"
@@ -139,7 +139,7 @@ limitations under the License.
         </source>
 
         <p>
-            Since this example is written entirely in WTKX and script, there is no associated Java
+            Since this example is written entirely in BXML and script, there is no associated Java
             source.
         </p>
     </body>

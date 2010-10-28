@@ -20,12 +20,14 @@ limitations under the License.
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:media="org.apache.pivot.wtk.media"
     xmlns="org.apache.pivot.wtk">
-    <Panel>
-        <PushButton buttonData="Button 1"
-            x="20" y="20" width="120" height="24"/>
-        <PushButton buttonData="Button 2"
-            x="40" y="50" width="120" height="24"/>
-        <PushButton buttonData="Button 3"
-            x="60" y="80" width="120" height="24"/>
-    </Panel>
+    <Border>
+        <Panel>
+            <PushButton buttonData="Button 1"
+                x="20" y="20" width="120" height="24"/>
+            <PushButton buttonData="Button 2"
+                x="40" y="50" width="120" height="24"/>
+            <PushButton buttonData="Button 3"
+                x="60" y="80" width="120" height="24"/>
+        </Panel>
+    </Border>
 </Window>

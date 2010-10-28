@@ -43,7 +43,7 @@ limitations under the License.
         <p>
             The <tt>Object</tt> value passed to these methods provides the "bind context". It
             may be either an implementation of the <tt>org.apache.pivot.collections.Dictionary</tt>
-            interface or a Java Bean value that can be wrapped in an instance of
+            interface or a Java bean value that can be wrapped in an instance of
             <tt>org.apache.pivot.beans.BeanAdapter</tt>, which implements <tt>Dictionary</tt>.
         </p>
 
@@ -83,34 +83,32 @@ limitations under the License.
             <![CDATA[
             <Form styles="{padding:0, fill:true, showFlagIcons:false, showFlagHighlight:false,
                 leftAlignLabels:true}">
-                <sections>
-                    <Form.Section>
-                        <wtkx:define>
-                            <stocktracker:ValueMapping wtkx:id="valueMapping"/>
-                            <stocktracker:ChangeMapping wtkx:id="changeMapping"/>
-                            <stocktracker:VolumeMapping wtkx:id="volumeMapping"/>
-                        </wtkx:define>
+                <Form.Section>
+                    <bxml:define>
+                        <stocktracker:ValueMapping bxml:id="valueMapping"/>
+                        <stocktracker:ChangeMapping bxml:id="changeMapping"/>
+                        <stocktracker:VolumeMapping bxml:id="volumeMapping"/>
+                    </bxml:define>
 
-                        <Label wtkx:id="valueLabel" Form.label="%value"
-                            textKey="value" textBindMapping="$valueMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="changeLabel" Form.label="%change"
-                            textKey="change" textBindMapping="$changeMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="openingValueLabel" Form.label="%openingValue"
-                            textKey="openingValue" textBindMapping="$valueMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="highValueLabel" Form.label="%highValue"
-                            textKey="highValue" textBindMapping="$valueMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="lowValueLabel" Form.label="%lowValue"
-                            textKey="lowValue" textBindMapping="$valueMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="volumeLabel" Form.label="%volume"
-                            textKey="volume" textBindMapping="$volumeMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                    </Form.Section>
-                </sections>
+                    <Label bxml:id="valueLabel" Form.label="%value"
+                        textKey="value" textBindMapping="$valueMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                    <Label bxml:id="changeLabel" Form.label="%change"
+                        textKey="change" textBindMapping="$changeMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                    <Label bxml:id="openingValueLabel" Form.label="%openingValue"
+                        textKey="openingValue" textBindMapping="$valueMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                    <Label bxml:id="highValueLabel" Form.label="%highValue"
+                        textKey="highValue" textBindMapping="$valueMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                    <Label bxml:id="lowValueLabel" Form.label="%lowValue"
+                        textKey="lowValue" textBindMapping="$valueMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                    <Label bxml:id="volumeLabel" Form.label="%volume"
+                        textKey="volume" textBindMapping="$volumeMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                </Form.Section>
             </Form>
             ]]>
         </source>
@@ -150,7 +148,7 @@ limitations under the License.
             Note that the <tt>load()</tt> method is actually called on the detail pane itself
             rather than on the parent container of the detail labels (an instance of <tt>Form</tt>).
             This is because the application also needs to bind to the label that contains the
-            company name, which is not a child of the <tt>Form</tt>.
+            company name, which is not a child of the <tt>Form</tt>:
         </p>
 
         <source type="xml">

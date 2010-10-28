@@ -16,12 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<document>
+<document id="property-binding">
     <properties>
         <title>Property Binding</title>
-        <description>
-            Demonstrates dynamic property binding in Pivot.
-        </description>
     </properties>
 
     <body>
@@ -29,6 +26,7 @@ limitations under the License.
             This application demonstrates Pivot's ability to dynamically bind component properties
             to namespace values including script variables and other component properties.
         </p>
+
         <application class="org.apache.pivot.wtk.ScriptApplication" width="480" height="360">
             <libraries>
                 <library>core</library>

@@ -186,9 +186,8 @@ limitations under the License.
         </source>
 
         <p>
-            Note that the application accepts a startup property named "language" to allow a caller
-            to override the default locale. The following example shows the application loaded with
-            "language" value of "de" (the applet is signed to allow the code to set the locale):
+            The following example shows the application localized in German. Note that the applet
+            is signed to allow the code to set the "user.language" system property:
         </p>
 
         <application class="org.apache.pivot.tutorials.localization.Localization"
@@ -199,9 +198,9 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
-            <startup-properties>
-                <language>de</language>
-            </startup-properties>
+            <system-properties>
+                <user.language>de</user.language>
+            </system-properties>
         </application>
 
         <p>

@@ -78,12 +78,12 @@ limitations under the License.
 
         <p>
             The Java source is as follows. The main application class defines an inner class that
-            extends the <tt>pivot.util.concurrent.Task</tt> class to simulate a background
+            extends the <tt>org.apache.pivot.util.concurrent.Task</tt> class to simulate a background
             operation. This task simply sleeps for 100ms at a time and updates the meter when it
             wakes up to reflect the current count. Since all UI updates must be performed on the
             UI thread, the task queues a callback to set the meter's percent complete; a
-            <tt>pivot.wtk.TaskAdapter</tt> is used to process the task notifications for the same
-            reason:
+            <tt>org.apache.pivot.wtk.TaskAdapter</tt> is used to process the task notifications for
+            the same reason:
         </p>
 
         <source type="java" location="org/apache/pivot/tutorials/progress/Meters.java">

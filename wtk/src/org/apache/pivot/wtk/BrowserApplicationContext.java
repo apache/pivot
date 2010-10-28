@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.Locale;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
@@ -85,6 +86,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 if (systemPropertiesParameter != null) {
                     String[] arguments = systemPropertiesParameter.split("&");
 
+                    String language = null;
+                    String region = null;
+
                     for (int i = 0, n = arguments.length; i < n; i++) {
                         String argument = arguments[i];
                         String[] property = argument.split("=");
@@ -98,10 +102,20 @@ public final class BrowserApplicationContext extends ApplicationContext {
                                 throw new RuntimeException(exception);
                             }
 
-                            System.setProperty(key, value);
+                            if (key.equals("user.language")) {
+                                language = value;
+                            } else if (key.equals("user.region")) {
+                                region = value;
+                            } else {
+                                System.setProperty(key, value);
+                            }
                         } else {
                             System.err.println(argument + " is not a valid system property.");
                         }
+                    }
+
+                    if (language != null) {
+                        Locale.setDefault((region == null) ? new Locale(language) : new Locale(language, region));
                     }
                 }
 

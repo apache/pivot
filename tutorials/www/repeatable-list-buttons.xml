@@ -33,7 +33,7 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/lists/repeatable_list_buttons.bxml</src>
+                <src>/org/apache/pivot/tutorials/lists/repeatable_list_buttons.bxml</src>
             </startup-properties>
         </application>
 

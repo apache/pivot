@@ -29,7 +29,7 @@ limitations under the License.
         </p>
 
         <ul>
-            <li>UI markup using WTKX</li>
+            <li>UI markup using BXML</li>
             <li>Event handling</li>
             <li>Web queries</li>
             <li>Data binding</li>

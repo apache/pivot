@@ -68,7 +68,7 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/boundedrange/scroll_bars.bxml</src>
+                <src>/org/apache/pivot/tutorials/boundedrange/scroll_bars.bxml</src>
             </startup-properties>
         </application>
 

@@ -82,47 +82,45 @@ limitations under the License.
 
         <p>
             As noted in earlier sections, references to these string resources can be embedded
-            directly within a WTKX file:
+            directly within a BXML file:
         </p>
 
         <source type="xml">
             <![CDATA[
             <Form styles="{padding:0, fill:true, showFlagIcons:false, showFlagHighlight:false,
                 leftAlignLabels:true}">
-                <sections>
-                    <Form.Section>
-                        <wtkx:define>
-                            <stocktracker:ValueMapping wtkx:id="valueMapping"/>
-                            <stocktracker:ChangeMapping wtkx:id="changeMapping"/>
-                            <stocktracker:VolumeMapping wtkx:id="volumeMapping"/>
-                        </wtkx:define>
+                <Form.Section>
+                    <bxml:define>
+                        <stocktracker:ValueMapping bxml:id="valueMapping"/>
+                        <stocktracker:ChangeMapping bxml:id="changeMapping"/>
+                        <stocktracker:VolumeMapping bxml:id="volumeMapping"/>
+                    </bxml:define>
 
-                        <Label wtkx:id="valueLabel" Form.label="%value"
-                            textKey="value" textBindMapping="$valueMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="changeLabel" Form.label="%change"
-                            textKey="change" textBindMapping="$valueMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="openingValueLabel" Form.label="%openingValue"
-                            textKey="openingValue" textBindMapping="$valueMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="highValueLabel" Form.label="%highValue"
-                            textKey="highValue" textBindMapping="$valueMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="lowValueLabel" Form.label="%lowValue"
-                            textKey="lowValue" textBindMapping="$changeMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                        <Label wtkx:id="volumeLabel" Form.label="%volume"
-                            textKey="volume" textBindMapping="$volumeMapping"
-                            styles="{horizontalAlignment:'right'}"/>
-                    </Form.Section>
-                </sections>
+                    <Label bxml:id="valueLabel" Form.label="%value"
+                        textKey="value" textBindMapping="$valueMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                    <Label bxml:id="changeLabel" Form.label="%change"
+                        textKey="change" textBindMapping="$changeMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                    <Label bxml:id="openingValueLabel" Form.label="%openingValue"
+                        textKey="openingValue" textBindMapping="$valueMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                    <Label bxml:id="highValueLabel" Form.label="%highValue"
+                        textKey="highValue" textBindMapping="$valueMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                    <Label bxml:id="lowValueLabel" Form.label="%lowValue"
+                        textKey="lowValue" textBindMapping="$valueMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                    <Label bxml:id="volumeLabel" Form.label="%volume"
+                        textKey="volume" textBindMapping="$volumeMapping"
+                        styles="{horizontalAlignment:'right'}"/>
+                </Form.Section>
             </Form>
             ]]>
         </source>
 
         <p>
-            The application loads the resources for the appropriate locale at startup, and the WTKX
+            The application loads the resources for the appropriate locale at startup, and the BXML
             serializer handles the details of resource substitution so the developer doesn't have
             to worry about it. The following applet demonstrates the Stock Tracker application run
             using the "fr" locale. No code changes are required; the same JAR files are used to
@@ -138,13 +136,13 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
-            <startup-properties>
-                <language>fr</language>
-            </startup-properties>
+            <system-properties>
+                <user.language>fr</user.language>
+            </system-properties>
         </application>
 
         <p>
-            Not all localization requirements can be handled by WTKX alone, however. For example,
+            Not all localization requirements can be handled by BXML alone, however. For example,
             Stock Tracker needs to manually handle the localization of the "last updated" message:
         </p>
 
@@ -157,7 +155,7 @@ limitations under the License.
         </source>
 
         <p>
-            However, most static localization can be addressed in the WTKX source itself, making it
+            However, most static localization can be addressed in the BXML source itself, making it
             very easy to build internationalized applications in Pivot.
         </p>
 

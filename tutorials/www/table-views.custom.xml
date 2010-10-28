@@ -26,7 +26,7 @@ limitations under the License.
             This example continues the theme of the previous two examples and presents the final
             standings of the top ten medal-winning countries in the 2008 Summer Olympics in a
             <tt>TableView</tt> component. However, rather than representing the data using simple
-            string-based hash maps or deserialized JSON values, this example uses a custom JavaBean
+            string-based hash maps or deserialized JSON values, this example uses a custom Java bean
             component to represent a table row. In addition to the "nation", "gold", "silver",
             "bronze", and "total" properties used in the previous examples, it also defines a
             "flag" property of type <tt>org.apache.pivot.wtk.media.Image</tt>, which is shown in

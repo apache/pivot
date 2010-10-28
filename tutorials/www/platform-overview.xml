@@ -61,7 +61,7 @@ limitations under the License.
         <ul>
             <li>
                 <tt>org.apache.pivot.beans</tt> - Classes that facilitate and simplify programmatic
-                interaction with Java Bean types.
+                interaction with Java bean types.
             </li>
             <li>
                 <tt>org.apache.pivot.collections</tt> - A set of classes and interfaces that serve

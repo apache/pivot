@@ -43,8 +43,8 @@ limitations under the License.
 
         <p>
             The following application demonstrates data binding. It allows the user to load a form
-            with address data either from a JSON file or from a JavaBean object, as well as clear
-            the form. Note that binding to a JavaBean is accomplished by wrapping the bean in an
+            with address data either from a JSON file or from a Java bean object, as well as clear
+            the form. Note that binding to a Java bean is accomplished by wrapping the bean in an
             instance of <tt>org.apache.pivot.beans.BeanAdapter</tt> before passing it to the
             <tt>load()</tt> method:
         </p>
@@ -225,7 +225,7 @@ limitations under the License.
         </source>
 
         <p>
-            The JavaBean version, which represents the same data, is composed of the following
+            The Java bean version, which represents the same data, is composed of the following
             classes:
         </p>
 

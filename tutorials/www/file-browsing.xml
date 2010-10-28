@@ -29,14 +29,14 @@ limitations under the License.
 
         <application class="org.apache.pivot.wtk.ScriptApplication"
             width="640" height="480">
-            <libraries>
+            <libraries signed="true">
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>/org/apache/pivot/tutorials/?</src>
+                <src>/org/apache/pivot/tutorials/filebrowsing/file_browsing.bxml</src>
             </startup-properties>
         </application>
 
