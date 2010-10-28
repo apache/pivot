@@ -33,7 +33,7 @@ limitations under the License.
 
         <p>
             The following example shows a basic tree view. This example specifies the tree data as
-            the contents of <tt>tree_data.wtkx</tt>. For the purpose of this example, this data is
+            the contents of <tt>tree_data.bxml</tt>. For the purpose of this example, this data is
             static. A real application could load dynamic data and use a custom renderer to present
             the raw data straight to the user.
         </p>
@@ -46,41 +46,35 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/treeviews/tree_views.wtkx</src>
+                <src>/org/apache/pivot/tutorials/treeviews/tree_views.bxml</src>
             </startup-properties>
         </application>
 
-        <p>The WTKX for this example is shown below:</p>
+        <p>The BXML for this example is shown below:</p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/treeviews/tree_views.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/treeviews/tree_views.bxml">
             <![CDATA[
             <Window title="Tree Views" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <Border>
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <TreeView>
-                                        <treeData>
-                                            <wtkx:include src="tree_data.wtkx"/>
-                                        </treeData>
-                                    </TreeView>
-                                </view>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </content>
+                <Border>
+                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                        <TreeView>
+                            <treeData>
+                                <bxml:include src="tree_data.bxml"/>
+                            </treeData>
+                        </TreeView>
+                    </ScrollPane>
+                </Border>
             </Window>
             ]]>
         </source>
 
         <p>
-            The WTKX that defines the tree data is shown below.
+            The BXML that defines the tree data is shown below.
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/treeviews/tree_data.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/treeviews/tree_data.bxml">
             <![CDATA[
             <TreeBranch xmlns="org.apache.pivot.wtk.content">
                 <TreeBranch text="Activity" icon="org/apache/pivot/tutorials/folder.png">
@@ -131,7 +125,7 @@ limitations under the License.
         </source>
 
         <p>
-            Since this example is written entirely in WTKX, there is no associated Java source.
+            Since this example is written entirely in BXML, there is no associated Java source.
         </p>
     </body>
 </document>

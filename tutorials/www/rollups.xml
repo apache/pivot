@@ -45,95 +45,85 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/navigation/rollups.wtkx</src>
+                <src>/org/apache/pivot/tutorials/navigation/rollups.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The WTKX source for this example is as follows. Note that the "fill" style is set
+            The BXML source for this example is as follows. Note that the "fill" style is set
             to <tt>true</tt> on the nested rollups - this allows the rollup content to wrap:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/navigation/rollups.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/navigation/rollups.bxml">
             <![CDATA[
             <Window title="Rollups" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <Border styles="{padding:6}">
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill">
-                                <view>
-                                    <BoxPane orientation="vertical" styles="{fill:true,
-                                        padding:{left:2, right:2}}">
-                                        <Rollup expanded="true">
-                                            <heading>
-                                                <Label text="Stocks" styles="{font:{bold:true}, color:13}"/>
-                                            </heading>
-                                            <content>
-                                                <wtkx:include src="stocks.wtkx"/>
-                                            </content>
-                                        </Rollup>
-                                        <Rollup>
-                                            <heading>
-                                                <Label text="Weather" styles="{font:{bold:true}, color:13}"/>
-                                            </heading>
-                                            <content>
-                                                <wtkx:include src="weather.wtkx"/>
-                                            </content>
-                                        </Rollup>
-                                        <Rollup>
-                                            <heading>
-                                                <Label text="Calendar" styles="{font:{bold:true}, color:13}"/>
-                                            </heading>
-                                            <content>
-                                                <Calendar/>
-                                            </content>
-                                        </Rollup>
-                                        <Rollup styles="{fill:true}">
-                                            <heading>
-                                                <Label text="Nested" styles="{font:{bold:true}, color:13}"/>
-                                            </heading>
-                                            <content>
-                                                <BoxPane orientation="vertical" styles="{fill:true}">
-                                                    <Rollup styles="{fill:true}">
-                                                        <heading>
-                                                            <Label text="Level 1"/>
-                                                        </heading>
-                                                        <content>
-                                                            <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
-                                                                styles="{wrapText:true}"/>
-                                                        </content>
-                                                    </Rollup>
+                <Border styles="{padding:6}">
+                    <ScrollPane horizontalScrollBarPolicy="fill">
+                        <BoxPane orientation="vertical" styles="{fill:true,
+                            padding:{left:2, right:2}}">
+                            <Rollup expanded="true">
+                                <heading>
+                                    <Label text="Stocks" styles="{font:{bold:true}, color:13}"/>
+                                </heading>
 
-                                                    <Rollup styles="{fill:true}">
-                                                        <heading>
-                                                            <Label text="Level 2"/>
-                                                        </heading>
-                                                        <content>
-                                                            <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
-                                                                styles="{wrapText:true}"/>
-                                                        </content>
-                                                    </Rollup>
+                                <bxml:include src="stocks.bxml"/>
+                            </Rollup>
 
-                                                    <Rollup styles="{fill:true}">
-                                                        <heading>
-                                                            <Label text="Level 3"/>
-                                                        </heading>
-                                                        <content>
-                                                            <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
-                                                                styles="{wrapText:true}"/>
-                                                        </content>
-                                                    </Rollup>
-                                                </BoxPane>
-                                            </content>
-                                        </Rollup>
-                                    </BoxPane>
-                                </view>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </content>
+                            <Rollup>
+                                <heading>
+                                    <Label text="Weather" styles="{font:{bold:true}, color:13}"/>
+                                </heading>
+
+                                <bxml:include src="weather.bxml"/>
+                            </Rollup>
+
+                            <Rollup>
+                                <heading>
+                                    <Label text="Calendar" styles="{font:{bold:true}, color:13}"/>
+                                </heading>
+
+                                <Calendar/>
+                            </Rollup>
+
+                            <Rollup styles="{fill:true}">
+                                <heading>
+                                    <Label text="Nested" styles="{font:{bold:true}, color:13}"/>
+                                </heading>
+
+                                <BoxPane orientation="vertical" styles="{fill:true}">
+                                    <Rollup styles="{fill:true}">
+                                        <heading>
+                                            <Label text="Level 1"/>
+                                        </heading>
+
+                                        <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
+                                            styles="{wrapText:true}"/>
+                                    </Rollup>
+
+                                    <Rollup styles="{fill:true}">
+                                        <heading>
+                                            <Label text="Level 2"/>
+                                        </heading>
+
+                                        <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
+                                            styles="{wrapText:true}"/>
+                                    </Rollup>
+
+                                    <Rollup styles="{fill:true}">
+                                        <heading>
+                                            <Label text="Level 3"/>
+                                        </heading>
+
+                                        <Label text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
+                                            styles="{wrapText:true}"/>
+                                    </Rollup>
+                                </BoxPane>
+                            </Rollup>
+                        </BoxPane>
+                    </ScrollPane>
+                </Border>
             </Window>
             ]]>
         </source>

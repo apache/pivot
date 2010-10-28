@@ -88,35 +88,27 @@ limitations under the License.
         <source type="xml" location="org/apache/pivot/tutorials/localization/localization.wtkx">
             <![CDATA[
             <Window title="Localization" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
                 <windowStateListeners>
-                    <wtkx:script>
                     function windowOpened(window) {
                         window.requestFocus();
                     }
-                    </wtkx:script>
                 </windowStateListeners>
 
-                <content>
-                    <Border styles="{padding:6}">
-                        <content>
-                            <Form>
-                                <sections>
-                                    <Form.Section>
-                                        <TextInput Form.label="%firstName"/>
-                                        <TextInput Form.label="%lastName"/>
-                                        <TextInput Form.label="%street"/>
-                                        <TextInput Form.label="%city"/>
-                                        <TextInput Form.label="%state" textSize="4"/>
-                                        <TextInput Form.label="%postalCode"/>
-                                        <TextInput Form.label="%country"/>
-                                    </Form.Section>
-                                </sections>
-                            </Form>
-                        </content>
-                    </Border>
-                </content>
+                <Border styles="{padding:6}">
+                    <Form>
+                        <Form.Section>
+                            <TextInput Form.label="%firstName"/>
+                            <TextInput Form.label="%lastName"/>
+                            <TextInput Form.label="%street"/>
+                            <TextInput Form.label="%city"/>
+                            <TextInput Form.label="%state" textSize="4"/>
+                            <TextInput Form.label="%postalCode"/>
+                            <TextInput Form.label="%country"/>
+                        </Form.Section>
+                    </Form>
+                </Border>
             </Window>
             ]]>
         </source>
@@ -131,8 +123,8 @@ limitations under the License.
 
             import java.awt.Font;
             import java.awt.GraphicsEnvironment;
-            import java.util.Locale;
 
+            import org.apache.pivot.beans.BXMLSerializer;
             import org.apache.pivot.collections.Map;
             import org.apache.pivot.util.Resources;
             import org.apache.pivot.wtk.Application;
@@ -140,24 +132,19 @@ limitations under the License.
             import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.Theme;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
             public class Localization implements Application {
                 private Window window = null;
 
-                public static final String LANGUAGE_KEY = "language";
-
                 @Override
                 public void startup(Display display, Map<String, String> properties) throws Exception {
-                    String language = properties.get(LANGUAGE_KEY);
-                    Locale locale = (language == null) ? Locale.getDefault() : new Locale(language);
-                    Resources resources = new Resources(getClass().getName(), locale);
+                    Resources resources = new Resources(getClass().getName());
 
                     Theme theme = Theme.getTheme();
                     Font font = theme.getFont();
 
                     // Search for a font that can support the sample string
-                    String sampleResource = resources.getString("firstName");
+                    String sampleResource = (String)resources.get("firstName");
                     if (font.canDisplayUpTo(sampleResource) != -1) {
                         Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
 
@@ -169,9 +156,8 @@ limitations under the License.
                         }
                     }
 
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer(resources);
-
-                    window = (Window)wtkxSerializer.readObject(this, "localization.wtkx");
+                    BXMLSerializer bxmlSerializer = new BXMLSerializer();
+                    window = (Window)bxmlSerializer.readObject(Localization.class.getResource("localization.bxml"), resources);
                     window.open(display);
                 }
 

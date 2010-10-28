@@ -79,6 +79,7 @@ limitations under the License.
             <![CDATA[
             package org.apache.pivot.tutorials.scripting;
 
+            import org.apache.pivot.beans.BXMLSerializer;
             import org.apache.pivot.collections.List;
             import org.apache.pivot.collections.Map;
             import org.apache.pivot.wtk.Application;
@@ -87,7 +88,6 @@ limitations under the License.
             import org.apache.pivot.wtk.DesktopApplicationContext;
             import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
             public class Scripting implements Application {
                 public static class MyButtonPressListener implements ButtonPressListener {
@@ -105,12 +105,12 @@ limitations under the License.
                 @Override
                 public void startup(Display display, Map<String, String> properties)
                     throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    wtkxSerializer.put("bar", "12345");
+                    BXMLSerializer bxmlSerializer = new BXMLSerializer();
+                    bxmlSerializer.getNamespace().put("bar", "12345");
 
-                    window = (Window)wtkxSerializer.readObject(this, "scripting.wtkx");
-                    foo = (String)wtkxSerializer.get("foo");
-                    listData = (List<?>)wtkxSerializer.get("listData");
+                    window = (Window)bxmlSerializer.readObject(Scripting.class, "scripting.bxml");
+                    foo = (String)bxmlSerializer.getNamespace().get("foo");
+                    listData = (List<?>)bxmlSerializer.getNamespace().get("listData");
 
                     System.out.println("foo = " + foo);
                     System.out.println("listData.getLength() = " + listData.getLength());
@@ -161,12 +161,10 @@ limitations under the License.
             <Window title="Scripting Demo" maximized="true"
                 WindowStateListener.windowOpened="java.lang.System.out.println('Window opened: ' + x)"
                 WindowStateListener.windowClosed="java.lang.System.out.println('Window closed: ' + y)"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns:scripting="org.apache.pivot.demos.scripting"
                 xmlns="org.apache.pivot.wtk">
-                <?language javascript?>
-
-                <wtkx:script>
+                <bxml:script>
                 importClass(java.lang.System);
                 importPackage(org.apache.pivot.wtk);
                 System.out.println("bar = " + bar);
@@ -177,37 +175,29 @@ limitations under the License.
                 function buttonClicked(button) {
                     Prompt.prompt("y = " + y, button.window);
                 }
-                </wtkx:script>
+                </bxml:script>
 
-                <wtkx:script src="example.js"/>
+                <bxml:script src="example.js"/>
 
-                <content>
-                    <Border styles="{padding:2}">
-                        <content>
-                            <BoxPane orientation="vertical" styles="{padding:6}">
-                                <PushButton buttonData="Click Me!">
-                                    <buttonPressListeners>
-                                        <wtkx:script>
-                                        importPackage(org.apache.pivot.wtk);
-                                        function buttonPressed(button) {
-                                            Prompt.prompt("x = " + x, button.getWindow());
-                                        }
-                                        </wtkx:script>
-                                    </buttonPressListeners>
-                                </PushButton>
+                <Border styles="{padding:2}">
+                    <BoxPane orientation="vertical" styles="{padding:6}">
+                        <PushButton buttonData="Click Me!">
+                            <buttonPressListeners>
+                                importPackage(org.apache.pivot.wtk);
+                                function buttonPressed(button) {
+                                    Prompt.prompt("x = " + x, button.getWindow());
+                                }
+                            </buttonPressListeners>
+                        </PushButton>
 
-                                <PushButton buttonData="No, Click Me!"
-                                    ButtonPressListener.buttonPressed="buttonClicked(arguments[0])"/>
+                        <PushButton buttonData="No, Click Me!"
+                            ButtonPressListener.buttonPressed="buttonClicked(arguments[0])"/>
 
-                                <Border styles="{color:10}">
-                                    <content>
-                                        <ListView listData="$listData" selectedIndex="0"/>
-                                    </content>
-                                </Border>
-                            </BoxPane>
-                        </content>
-                    </Border>
-                </content>
+                        <Border styles="{color:10}">
+                            <ListView listData="$listData" selectedIndex="0"/>
+                        </Border>
+                    </BoxPane>
+                </Border>
             </Window>
             ]]>
         </source>

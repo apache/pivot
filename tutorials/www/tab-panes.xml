@@ -30,7 +30,7 @@ limitations under the License.
             example demonstrates the use of the <tt>TabPane</tt> component:
         </p>
 
-        <application class="org.apache.pivot.tutorials.navigation.TabPanes"
+        <application class="org.apache.pivot.wtk.ScriptApplication"
             width="680" height="480">
             <libraries>
                 <library>core</library>
@@ -38,10 +38,13 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/navigation/tab_panes.bxml</src>
+            </startup-properties>
         </application>
 
         <p>
-            The WTKX source that produces this example is as follows. The tab pane contains three
+            The BXML source that produces this example is as follows. The tab pane contains three
             tabs, each of which are flow panes containing bordered labels at different sizes. Like
             <tt>CardPane</tt>, the preferred size of a tab pane is the maximum of the preferred
             widths and heights of the tabs, plus the size of the area allocated to the tab
@@ -59,83 +62,101 @@ limitations under the License.
             preventing the user from navigating to that tab:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/navigation/tab_panes.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/navigation/tab_panes.bxml">
             <![CDATA[
-            <Window title="Tab Panes" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+            <navigation:TabPanes title="Tab Panes" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns:content="org.apache.pivot.wtk.content"
+                xmlns:navigation="org.apache.pivot.tutorials.navigation"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <TablePane styles="{padding:8, horizontalSpacing:6}">
-                        <columns>
-                            <TablePane.Column width="1*"/>
-                            <TablePane.Column/>
-                        </columns>
-                        <rows>
-                            <TablePane.Row height="1*">
-                                <Border styles="{padding:12}">
-                                    <content>
-                                        <BoxPane>
-                                            <TabPane wtkx:id="tabPane">
-                                                <tabs>
-                                                    <BoxPane TabPane.icon="org/apache/pivot/tutorials/bell.png" TabPane.label="Bell"
-                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                                        <Border>
-                                                            <content>
-                                                                <Label text="240x180" preferredWidth="240" preferredHeight="180"
-                                                                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                                            </content>
-                                                        </Border>
-                                                    </BoxPane>
+                <bxml:define>
+                    <Prompt bxml:id="confirmCloseTabPrompt" title="Confirm Close Tab"
+                        message="Really close this tab?"
+                        options="['Cancel', 'OK']" selectedOptionIndex="1"/>
+                </bxml:define>
 
-                                                    <BoxPane TabPane.icon="org/apache/pivot/tutorials/clock.png" TabPane.label="Clock"
-                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                                        <Border>
-                                                            <content>
-                                                                <Label text="320x240" preferredWidth="320" preferredHeight="240"
-                                                                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                                            </content>
-                                                        </Border>
-                                                    </BoxPane>
+                <TablePane styles="{padding:8, horizontalSpacing:6}">
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                        <TablePane.Column/>
+                    </columns>
 
-                                                    <BoxPane TabPane.icon="org/apache/pivot/tutorials/house.png" TabPane.label="House"
-                                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                                        <Border>
-                                                            <content>
-                                                                <Label text="480x360" preferredWidth="480" preferredHeight="360"
-                                                                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                                                            </content>
-                                                        </Border>
-                                                    </BoxPane>
-
-                                                    <BoxPane TabPane.icon="org/apache/pivot/tutorials/star.png" TabPane.label="Star" enabled="false"/>
-                                                </tabs>
-                                                <corner>
-                                                    <BoxPane wtkx:id="cornerBoxPane" styles="{horizontalAlignment:'right'}">
-                                                        <TextInput/>
-                                                    </BoxPane>
-                                                </corner>
-                                            </TabPane>
+                    <TablePane.Row height="1*">
+                        <Border styles="{padding:12}">
+                            <BoxPane>
+                                <TabPane bxml:id="tabPane">
+                                    <corner>
+                                        <BoxPane bxml:id="cornerBoxPane" styles="{horizontalAlignment:'right'}">
+                                            <TextInput textSize="10"/>
                                         </BoxPane>
-                                    </content>
-                                </Border>
+                                    </corner>
 
-                                <Border>
-                                    <content>
-                                        <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
-                                            <Checkbox wtkx:id="collapsibleCheckbox" buttonData="Collapsible"/>
-                                            <Label text="Tab orientation:"/>
-                                            <RadioButton wtkx:id="horizontalRadioButton" buttonData="Horizontal" selected="true"
-                                                group="tabOrientation"/>
-                                            <RadioButton wtkx:id="verticalRadioButton" buttonData="Vertical"
-                                                group="tabOrientation"/>
-                                        </BoxPane>
-                                    </content>
-                                </Border>
-                            </TablePane.Row>
-                        </rows>
-                    </TablePane>
-                </content>
-            </Window>
+                                    <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                        <TabPane.tabData>
+                                            <content:ButtonData icon="org/apache/pivot/tutorials/bell.png"
+                                                text="Bell"/>
+                                        </TabPane.tabData>
+                                        <Border styles="{padding:2}">
+                                            <Label text="240x180" preferredWidth="240" preferredHeight="180"
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                        </Border>
+                                    </BoxPane>
+
+                                    <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                        <TabPane.tabData>
+                                            <content:ButtonData icon="org/apache/pivot/tutorials/clock.png"
+                                                text="Clock"/>
+                                        </TabPane.tabData>
+                                        <Border styles="{padding:2}">
+                                            <Label text="320x240" preferredWidth="320" preferredHeight="240"
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                        </Border>
+                                    </BoxPane>
+
+                                    <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                        <TabPane.tabData>
+                                            <content:ButtonData icon="org/apache/pivot/tutorials/house.png"
+                                                text="House"/>
+                                        </TabPane.tabData>
+                                        <Border styles="{padding:2}">
+                                            <Label text="480x360" preferredWidth="480" preferredHeight="360"
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                        </Border>
+                                    </BoxPane>
+
+                                    <BoxPane enabled="false">
+                                        <TabPane.tabData>
+                                            <content:ButtonData icon="org/apache/pivot/tutorials/star.png"
+                                                text="Star"/>
+                                        </TabPane.tabData>
+
+                                        <Border styles="{padding:2}">
+                                            <Label text="480x360 (disabled)" preferredWidth="480" preferredHeight="360"
+                                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                                        </Border>
+                                    </BoxPane>
+                                </TabPane>
+                            </BoxPane>
+                        </Border>
+
+                        <Border styles="{padding:2}">
+                            <BoxPane orientation="vertical" styles="{padding:4, spacing:6}">
+                                <Checkbox bxml:id="closeableCheckbox" buttonData="Closeable"/>
+                                <Checkbox bxml:id="collapsibleCheckbox" buttonData="Collapsible"/>
+
+                                <Label text="Tab orientation:"/>
+                                <bxml:define>
+                                    <ButtonGroup bxml:id="tabOrientation"/>
+                                </bxml:define>
+                                <RadioButton bxml:id="horizontalRadioButton" buttonData="Horizontal" selected="true"
+                                    buttonGroup="$tabOrientation"/>
+                                <RadioButton bxml:id="verticalRadioButton" buttonData="Vertical"
+                                    buttonGroup="$tabOrientation"/>
+                            </BoxPane>
+                        </Border>
+                    </TablePane.Row>
+                </TablePane>
+            </navigation:TabPanes>
             ]]>
         </source>
 
@@ -160,47 +181,93 @@ limitations under the License.
             <![CDATA[
             package org.apache.pivot.tutorials.navigation;
 
+            import java.net.URL;
+
+            import org.apache.pivot.beans.Bindable;
             import org.apache.pivot.collections.Map;
-            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.util.Resources;
+            import org.apache.pivot.util.Vote;
             import org.apache.pivot.wtk.Button;
             import org.apache.pivot.wtk.ButtonStateListener;
             import org.apache.pivot.wtk.Checkbox;
-            import org.apache.pivot.wtk.DesktopApplicationContext;
-            import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.BoxPane;
             import org.apache.pivot.wtk.Orientation;
+            import org.apache.pivot.wtk.Prompt;
             import org.apache.pivot.wtk.RadioButton;
+            import org.apache.pivot.wtk.Sheet;
+            import org.apache.pivot.wtk.SheetCloseListener;
             import org.apache.pivot.wtk.TabPane;
+            import org.apache.pivot.wtk.TabPaneListener;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
-            public class TabPanes implements Application {
-                private Window window = null;
+            public class TabPanes extends Window implements Bindable {
+                private Prompt confirmCloseTabPrompt = null;
                 private TabPane tabPane = null;
+                private Checkbox closeableCheckbox = null;
                 private Checkbox collapsibleCheckbox = null;
                 private RadioButton horizontalRadioButton = null;
                 private RadioButton verticalRadioButton = null;
                 private BoxPane cornerBoxPane = null;
 
-                public void startup(Display display, Map<String, String> properties)
-                    throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    window = (Window)wtkxSerializer.readObject(this, "tab_panes.wtkx");
-                    tabPane = (TabPane)wtkxSerializer.get("tabPane");
-                    collapsibleCheckbox = (Checkbox)wtkxSerializer.get("collapsibleCheckbox");
-                    horizontalRadioButton = (RadioButton)wtkxSerializer.get("horizontalRadioButton");
-                    verticalRadioButton = (RadioButton)wtkxSerializer.get("verticalRadioButton");
-                    cornerBoxPane = (BoxPane)wtkxSerializer.get("cornerBoxPane");
+                private boolean confirmCloseTab = true;
+
+                @Override
+                public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+                    confirmCloseTabPrompt = (Prompt)namespace.get("confirmCloseTabPrompt");
+                    tabPane = (TabPane)namespace.get("tabPane");
+                    closeableCheckbox = (Checkbox)namespace.get("closeableCheckbox");
+                    collapsibleCheckbox = (Checkbox)namespace.get("collapsibleCheckbox");
+                    horizontalRadioButton = (RadioButton)namespace.get("horizontalRadioButton");
+                    verticalRadioButton = (RadioButton)namespace.get("verticalRadioButton");
+                    cornerBoxPane = (BoxPane)namespace.get("cornerBoxPane");
+
+                    tabPane.getTabPaneListeners().add(new TabPaneListener.Adapter() {
+                        @Override
+                        public Vote previewRemoveTabs(final TabPane tabPane, final int index, final int count) {
+                            Vote vote;
+                            if (confirmCloseTab) {
+                                confirmCloseTabPrompt.open(TabPanes.this, new SheetCloseListener() {
+                                    @Override
+                                    public void sheetClosed(Sheet sheet) {
+                                        if (confirmCloseTabPrompt.getResult()
+                                            && confirmCloseTabPrompt.getSelectedOptionIndex() == 1) {
+                                            confirmCloseTab = false;
+
+                                            int n = tabPane.getTabs().getLength();
+                                            if (index < n - 1) {
+                                                tabPane.setSelectedIndex(index + 1);
+                                            } else {
+                                                tabPane.setSelectedIndex(index - 1);
+                                            }
+
+                                            tabPane.getTabs().remove(index, count);
+
+                                            confirmCloseTab = true;
+                                        }
+                                    }
+                                });
+
+                                vote = Vote.DENY;
+                            } else {
+                                vote = Vote.APPROVE;
+                            }
+
+                            return vote;
+                        }
+                    });
 
                     ButtonStateListener checkboxStateListener = new ButtonStateListener() {
+                        @Override
                         public void stateChanged(Button button, Button.State previousState) {
                             updateTabPane();
                         }
                     };
 
+                    closeableCheckbox.getButtonStateListeners().add(checkboxStateListener);
                     collapsibleCheckbox.getButtonStateListeners().add(checkboxStateListener);
 
                     ButtonStateListener radioButtonStateListener = new ButtonStateListener() {
+                        @Override
                         public void stateChanged(Button button, Button.State previousState) {
                             if (button.isSelected()) {
                                 updateTabPane();
@@ -212,26 +279,11 @@ limitations under the License.
                     verticalRadioButton.getButtonStateListeners().add(radioButtonStateListener);
 
                     updateTabPane();
-
-                    window.open(display);
-                }
-
-                public boolean shutdown(boolean optional) {
-                    if (window != null) {
-                        window.close();
-                    }
-
-                    return false;
-                }
-
-                public void suspend() {
-                }
-
-                public void resume() {
                 }
 
                 private void updateTabPane() {
-                    tabPane.getStyles().put("collapsible", collapsibleCheckbox.isSelected());
+                    tabPane.setCloseable(closeableCheckbox.isSelected());
+                    tabPane.setCollapsible(collapsibleCheckbox.isSelected());
 
                     if (horizontalRadioButton.isSelected()) {
                         tabPane.getStyles().put("tabOrientation", Orientation.HORIZONTAL);
@@ -244,10 +296,6 @@ limitations under the License.
                             tabPane.setCorner(null);
                         }
                     }
-                }
-
-                public static void main(String[] args) {
-                    DesktopApplicationContext.main(TabPanes.class, args);
                 }
             }
             ]]>

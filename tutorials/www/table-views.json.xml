@@ -37,51 +37,46 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/tableviews/json_table_view.wtkx</src>
+                <src>/org/apache/pivot/tutorials/tableviews/json_table_view.bxml</src>
             </startup-properties>
         </application>
 
-        <p>The WTKX source is as follows:</p>
+        <p>The BXML source is as follows:</p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/tableviews/json_table_view.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/tableviews/json_table_view.bxml">
             <![CDATA[
             <Window title="Table Views" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <Border>
-                        <content>
-                            <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                                <view>
-                                    <TableView wtkx:id="tableView" tableData="@standings.json"
-                                        styles="{includeTrailingVerticalGridLine:true}">
-                                        <columns>
-                                            <TableView.Column name="nation" width="180" headerData="Nation"/>
-                                            <TableView.Column name="gold" width="60" headerData="Gold"/>
-                                            <TableView.Column name="silver" width="60" headerData="Silver"/>
-                                            <TableView.Column name="bronze" width="60" headerData="Bronze"/>
-                                            <TableView.Column name="total" width="60" headerData="Total"/>
-                                        </columns>
+                <Border>
+                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                        <TableView bxml:id="tableView" styles="{includeTrailingVerticalGridLine:true}">
+                            <columns>
+                                <TableView.Column name="nation" width="180" headerData="Nation"/>
+                                <TableView.Column name="gold" width="60" headerData="Gold"/>
+                                <TableView.Column name="silver" width="60" headerData="Silver"/>
+                                <TableView.Column name="bronze" width="60" headerData="Bronze"/>
+                                <TableView.Column name="total" width="60" headerData="Total"/>
+                            </columns>
 
-                                        <tableViewSortListeners>
-                                            <wtkx:script>
-                                            function sortChanged(tableView) {
-                                                var tableData = tableView.getTableData();
-                                                tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
-                                            }
-                                            </wtkx:script>
-                                        </tableViewSortListeners>
-                                    </TableView>
-                                </view>
+                            <tableViewSortListeners>
+                                function sortChanged(tableView) {
+                                    var tableData = tableView.getTableData();
+                                    tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                                }
+                            </tableViewSortListeners>
 
-                                <columnHeader>
-                                    <TableViewHeader tableView="$tableView" sortMode="single_column"
-                                        styles="{includeTrailingVerticalGridLine:true}"/>
-                                </columnHeader>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </content>
+                            <tableData>
+                                <bxml:include src="standings.json"/>
+                            </tableData>
+                        </TableView>
+
+                        <columnHeader>
+                            <TableViewHeader tableView="$tableView" sortMode="single_column"
+                                styles="{includeTrailingVerticalGridLine:true}"/>
+                        </columnHeader>
+                    </ScrollPane>
+                </Border>
             </Window>
             ]]>
         </source>
@@ -120,15 +115,13 @@ limitations under the License.
                     by setting a comparator on the table data:
                 </p>
 
-                <source type="xml" location="org/apache/pivot/tutorials/tableviews/json_table_view.wtkx">
+                <source type="xml" location="org/apache/pivot/tutorials/tableviews/json_table_view.bxml">
                     <![CDATA[
                     <tableViewSortListeners>
-                        <wtkx:script>
                         function sortChanged(tableView) {
                             var tableData = tableView.getTableData();
                             tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
                         }
-                        </wtkx:script>
                     </tableViewSortListeners>
                     ]]>
                 </source>

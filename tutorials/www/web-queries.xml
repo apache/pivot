@@ -77,33 +77,28 @@ limitations under the License.
             </libraries>
         </application>
 
-        <p>The WTKX for the application's user interface is as follows:</p>
+        <p>The BXML for the application's user interface is as follows:</p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/webqueries/web_queries.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/webqueries/web_queries.bxml">
             <![CDATA[
             <Window title="Web Queries" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns:webqueries="org.apache.pivot.tutorials.webqueries"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <Border styles="{color:10, padding:0}">
-                        <content>
-                            <StackPane>
-                                <ScrollPane horizontalScrollBarPolicy="fill">
-                                    <view>
-                                        <ListView wtkx:id="listView">
-                                            <itemRenderer>
-                                                <webqueries:ResultItemRenderer/>
-                                            </itemRenderer>
-                                        </ListView>
-                                    </view>
-                                </ScrollPane>
-                                <Label wtkx:id="loadingLabel" text="Loading..."
-                                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
-                            </StackPane>
-                        </content>
-                    </Border>
-                </content>
+                <Border styles="{color:10}">
+                    <StackPane>
+                        <ScrollPane horizontalScrollBarPolicy="fill">
+                            <ListView bxml:id="listView">
+                                <itemRenderer>
+                                    <webqueries:ResultItemRenderer/>
+                                </itemRenderer>
+                            </ListView>
+                        </ScrollPane>
+
+                        <Label bxml:id="loadingLabel" text="Loading..."
+                            styles="{horizontalAlignment:'center', verticalAlignment:'center'}"/>
+                    </StackPane>
+                </Border>
             </Window>
             ]]>
         </source>
@@ -120,8 +115,10 @@ limitations under the License.
             <![CDATA[
             package org.apache.pivot.tutorials.webqueries;
 
+            import org.apache.pivot.beans.BXMLSerializer;
+            import org.apache.pivot.collections.List;
             import org.apache.pivot.collections.Map;
-            import org.apache.pivot.serialization.JSONSerializer;
+            import org.apache.pivot.json.JSON;
             import org.apache.pivot.util.concurrent.Task;
             import org.apache.pivot.util.concurrent.TaskListener;
             import org.apache.pivot.web.GetQuery;
@@ -132,7 +129,6 @@ limitations under the License.
             import org.apache.pivot.wtk.ListView;
             import org.apache.pivot.wtk.TaskAdapter;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
             public class WebQueries implements Application {
                 private Window window = null;
@@ -142,14 +138,14 @@ limitations under the License.
 
                 @Override
                 public void startup(Display display, Map<String, String> properties) throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    window = (Window)wtkxSerializer.readObject(this, "web_queries.wtkx");
+                    BXMLSerializer bxmlSerializer = new BXMLSerializer();
+                    window = (Window)bxmlSerializer.readObject(WebQueries.class, "web_queries.bxml");
 
-                    listView = (ListView)wtkxSerializer.get("listView");
-                    loadingLabel = (Label)wtkxSerializer.get("loadingLabel");
+                    listView = (ListView)bxmlSerializer.getNamespace().get("listView");
+                    loadingLabel = (Label)bxmlSerializer.getNamespace().get("loadingLabel");
 
                     // Execute the query:
-                    // http://pipes.yahoo.com/pipes/pipe.run?_id=43115761f2da5af5341ae2e56a93d646&amp;_render=json
+                    // http://pipes.yahoo.com/pipes/pipe.run?_id=43115761f2da5af5341ae2e56a93d646&_render=json
                     GetQuery getQuery = new GetQuery("pipes.yahoo.com", "/pipes/pipe.run");
                     getQuery.getParameters().put("_id", "43115761f2da5af5341ae2e56a93d646");
                     getQuery.getParameters().put("_render", "json");
@@ -157,7 +153,7 @@ limitations under the License.
                     getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
                         @Override
                         public void taskExecuted(Task<Object> task) {
-                            listView.setListData(JSONSerializer.getList(task.getResult(), "value.items"));
+                            listView.setListData((List<?>)JSON.get(task.getResult(), "value.items"));
                             loadingLabel.setVisible(false);
                         }
 
@@ -217,6 +213,7 @@ limitations under the License.
             import java.awt.Font;
 
             import org.apache.pivot.collections.Map;
+            import org.apache.pivot.json.JSON;
             import org.apache.pivot.wtk.BoxPane;
             import org.apache.pivot.wtk.Insets;
             import org.apache.pivot.wtk.Label;
@@ -246,22 +243,24 @@ limitations under the License.
                 }
 
                 @Override
-                @SuppressWarnings("unchecked")
+                public String toString(Object item) {
+                    return JSON.get(item, "title");
+                }
+
+                @Override
                 public void render(Object item, int index, ListView listView, boolean selected,
                     boolean checked, boolean highlighted, boolean disabled) {
                     if (item != null) {
-                        Map<String, Object> map = (Map<String, Object>)item;
+                        titleLabel.setText((String)JSON.get(item, "title"));
+                        phoneLabel.setText((String)JSON.get(item, "Phone"));
 
-                        titleLabel.setText((String)map.get("title"));
-                        phoneLabel.setText((String)map.get("Phone"));
-
-                        Map<String, Object> location = (Map<String, Object>)map.get("y:location");
+                        Map<String, ?> location = JSON.get(item, "['y:location']");
                         if (location == null) {
                             addressLabel.setText(null);
                         } else {
-                            String street = (String)location.get("street");
-                            String city = (String)location.get("city");
-                            String state = (String)location.get("state");
+                            String street = JSON.get(location, "street");
+                            String city = JSON.get(location, "city");
+                            String state = JSON.get(location, "state");
                             addressLabel.setText(street + ", " + city + " " + state);
                         }
                     }
@@ -272,7 +271,7 @@ limitations under the License.
                     addressLabel.getStyles().put("font", font);
 
                     Color color;
-                    if (listView.isEnabled() &amp;&amp; !disabled) {
+                    if (listView.isEnabled() && !disabled) {
                         if (selected) {
                             if (listView.isFocused()) {
                                 color = (Color)listView.getStyles().get("selectionColor");

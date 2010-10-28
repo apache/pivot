@@ -44,40 +44,34 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/navigation/scroll_panes.wtkx</src>
+                <src>/org/apache/pivot/tutorials/navigation/scroll_panes.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The WTKX source for this example is shown below:
+            The BXML source for this example is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/navigation/scroll_panes.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/navigation/scroll_panes.bxml">
             <![CDATA[
             <Window title="Scroll Panes" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns:navigation="org.apache.pivot.tutorials.navigation"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <Border styles="{color:10}">
-                        <content>
-                            <ScrollPane>
-                                <view>
-                                    <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
-                                        tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
-                                </view>
+                <Border styles="{color:10}">
+                    <ScrollPane>
+                        <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
+                            tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
 
-                                <columnHeader>
-                                    <navigation:Ruler orientation="horizontal"/>
-                                </columnHeader>
+                        <columnHeader>
+                            <navigation:Ruler orientation="horizontal"/>
+                        </columnHeader>
 
-                                <rowHeader>
-                                    <navigation:Ruler orientation="vertical"/>
-                                </rowHeader>
-                            </ScrollPane>
-                        </content>
-                    </Border>
-                </content>
+                        <rowHeader>
+                            <navigation:Ruler orientation="vertical"/>
+                        </rowHeader>
+                    </ScrollPane>
+                </Border>
             </Window>
             ]]>
         </source>

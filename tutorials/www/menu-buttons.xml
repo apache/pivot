@@ -29,108 +29,63 @@ limitations under the License.
         </p>
 
         <p>
-            The following sample application demonstrates the use of a menu button. The
-            application's toolbar contains a menu button containing a list of shapes, and a list
-            button containing a list of colors. Selecting an item from the shape menu button adds
-            the selected shape to the drawing shown in the application's content area:
+            The following sample application demonstrates the use of a menu button. The...
         </p>
 
-        <application class="org.apache.pivot.tutorials.menus.MenuButtons"
-            width="640" height="480">
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="360" height="240">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/tutorials/menus/menu_buttons.bxml</src>
+            </startup-properties>
         </application>
 
         <p>
-            The WTKX source for the application is as follows:
+            The BXML source for the application is as follows:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/menus/menu_buttons.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/menus/menu_buttons.bxml">
             <![CDATA[
-            <Window title="Menu Buttons" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
-                xmlns:collections="org.apache.pivot.collections"
+            <menus:MenuButtons title="Menu Buttons" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns:content="org.apache.pivot.wtk.content"
+                xmlns:menus="org.apache.pivot.tutorials.menus"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <Border styles="{padding:2}">
-                        <content>
-                            <TablePane styles="{verticalSpacing:2}">
-                                <columns>
-                                    <TablePane.Column width="1*"/>
-                                </columns>
-                                <rows>
-                                    <TablePane.Row height="-1">
-                                        <BoxPane styles="{fill:true}">
-                                            <MenuButton>
-                                                <buttonData>
-                                                    <content:ButtonData icon="@shape_square_add.png" text="New Shape"/>
-                                                </buttonData>
-                                                <menu>
-                                                    <Menu>
-                                                        <sections>
-                                                            <Menu.Section>
-                                                                <Menu.Item buttonData="Circle" action="newCircle"/>
-                                                                <Menu.Item buttonData="Square" action="newSquare"/>
-                                                                <Menu.Item buttonData="Text" action="newText"/>
-                                                            </Menu.Section>
-                                                        </sections>
-                                                    </Menu>
-                                                </menu>
-                                            </MenuButton>
+                <Border styles="{padding:8}">
+                    <TablePane styles="{horizontalSpacing:4}">
+                        <columns>
+                            <TablePane.Column width="-1"/>
+                            <TablePane.Column width="1*"/>
+                        </columns>
 
-                                            <ListButton wtkx:id="colorListButton" selectedIndex="0" styles="{listSize:6}">
-                                                <listData>
-                                                    <collections:ArrayList>
-                                                        <content:ColorItem color="#000000" name="Black"/>
-                                                        <content:ColorItem color="#0000AA" name="Blue"/>
-                                                        <content:ColorItem color="#00AA00" name="Green"/>
-                                                        <content:ColorItem color="#00AAAA" name="Cyan"/>
-                                                        <content:ColorItem color="#AA0000" name="Red"/>
-                                                        <content:ColorItem color="#AA00AA" name="Magenta"/>
-                                                        <content:ColorItem color="#AA5500" name="Brown"/>
-                                                        <content:ColorItem color="#AAAAAA" name="Light Gray"/>
-                                                        <content:ColorItem color="#555555" name="Dark Gray"/>
-                                                        <content:ColorItem color="#5555FF" name="Bright Blue"/>
-                                                        <content:ColorItem color="#55FF55" name="Bright Green"/>
-                                                        <content:ColorItem color="#55FFFF" name="Bright Cyan"/>
-                                                        <content:ColorItem color="#FF5555" name="Bright Red"/>
-                                                        <content:ColorItem color="#FF55FF" name="Bright Magenta"/>
-                                                        <content:ColorItem color="#FFFF55" name="Bright Yellow"/>
-                                                        <content:ColorItem color="#FFFFFF" name="White"/>
-                                                    </collections:ArrayList>
-                                                </listData>
-                                                <dataRenderer>
-                                                    <content:ListButtonColorItemRenderer/>
-                                                </dataRenderer>
-                                                <itemRenderer>
-                                                    <content:ListViewColorItemRenderer/>
-                                                </itemRenderer>
-                                            </ListButton>
-                                        </BoxPane>
-                                    </TablePane.Row>
-                                    <TablePane.Row height="1*">
-                                        <Border styles="{padding:2}">
-                                            <content>
-                                                <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-                                                    verticalScrollBarPolicy="fill_to_capacity">
-                                                    <view>
-                                                        <ImageView wtkx:id="imageView"/>
-                                                    </view>
-                                                </ScrollPane>
-                                            </content>
-                                        </Border>
-                                    </TablePane.Row>
-                                </rows>
-                            </TablePane>
-                        </content>
-                    </Border>
-                </content>
-            </Window>
+                        <TablePane.Row height="1*">
+                            <BoxPane orientation="vertical">
+                                <MenuButton buttonData="Add Component">
+                                    <Menu>
+                                        <Menu.Section>
+                                            <Menu.Item buttonData="Push Button" action="addPushButton"/>
+                                            <Menu.Item buttonData="Checkbox" action="addCheckbox"/>
+                                            <Menu.Item buttonData="Radio Button" action="addRadioButton"/>
+                                        </Menu.Section>
+                                    </Menu>
+                                </MenuButton>
+                            </BoxPane>
+
+                            <Border>
+                                <ScrollPane>
+                                    <BoxPane bxml:id="componentBoxPane" orientation="vertical"
+                                        styles="{padding:4, spacing:4}"/>
+                                </ScrollPane>
+                            </Border>
+                        </TablePane.Row>
+                    </TablePane>
+                </Border>
+            </menus:MenuButtons>
             ]]>
         </source>
 
@@ -143,144 +98,56 @@ limitations under the License.
             <![CDATA[
             package org.apache.pivot.tutorials.menus;
 
-            import java.awt.Color;
-            import java.awt.Paint;
+            import java.net.URL;
 
+            import org.apache.pivot.beans.Bindable;
             import org.apache.pivot.collections.Map;
+            import org.apache.pivot.util.Resources;
             import org.apache.pivot.wtk.Action;
-            import org.apache.pivot.wtk.Application;
-            import org.apache.pivot.wtk.Bounds;
-            import org.apache.pivot.wtk.DesktopApplicationContext;
-            import org.apache.pivot.wtk.Display;
-            import org.apache.pivot.wtk.ImageView;
-            import org.apache.pivot.wtk.ListButton;
-            import org.apache.pivot.wtk.Point;
+            import org.apache.pivot.wtk.BoxPane;
+            import org.apache.pivot.wtk.Checkbox;
+            import org.apache.pivot.wtk.Component;
+            import org.apache.pivot.wtk.PushButton;
+            import org.apache.pivot.wtk.RadioButton;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtk.content.ColorItem;
-            import org.apache.pivot.wtk.media.Drawing;
-            import org.apache.pivot.wtk.media.drawing.Ellipse;
-            import org.apache.pivot.wtk.media.drawing.Rectangle;
-            import org.apache.pivot.wtk.media.drawing.Shape;
-            import org.apache.pivot.wtk.media.drawing.Text;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
-            public class MenuButtons implements Application {
-                private Window window = null;
-                private ListButton colorListButton = null;
-                private ImageView imageView = null;
-
-                private Drawing drawing = null;
-
-                public static final int MAX_X = 480;
-                public static final int MAX_Y = 360;
+            public class MenuButtons extends Window implements Bindable {
+                private BoxPane componentBoxPane = null;
 
                 public MenuButtons() {
-                    Action.getNamedActions().put("newCircle", new Action() {
+                    Action.getNamedActions().put("addPushButton", new Action() {
                         @Override
-                        public void perform() {
-                            Ellipse ellipse = new Ellipse();
-                            ellipse.setSize(50, 50);
+                        public void perform(Component source) {
+                            componentBoxPane.add(new PushButton("Push button"));
 
-                            ellipse.setStroke((Paint)null);
-                            ellipse.setFill(getSelectedColor());
-                            ellipse.setOrigin(getRandomLocation(ellipse));
-
-                            drawing.getCanvas().add(ellipse);
                         }
                     });
 
-                    Action.getNamedActions().put("newSquare", new Action() {
+                    Action.getNamedActions().put("addCheckbox", new Action() {
                         @Override
-                        public void perform() {
-                            Rectangle rectangle = new Rectangle();
-                            rectangle.setSize(50, 50);
-
-                            rectangle.setStroke((Paint)null);
-                            rectangle.setFill(getSelectedColor());
-                            rectangle.setOrigin(getRandomLocation(rectangle));
-
-                            drawing.getCanvas().add(rectangle);
+                        public void perform(Component source) {
+                            componentBoxPane.add(new Checkbox("Checkbox"));
                         }
                     });
 
-                    Action.getNamedActions().put("newText", new Action() {
+                    Action.getNamedActions().put("addRadioButton", new Action() {
                         @Override
-                        public void perform() {
-                            Text text = new Text();
-                            text.setText("ABC");
-                            text.setFont("Arial BOLD 24");
-
-                            text.setFill(getSelectedColor());
-                            text.setOrigin(getRandomLocation(text));
-
-                            drawing.getCanvas().add(text);
+                        public void perform(Component source) {
+                            componentBoxPane.add(new RadioButton("Radio button"));
                         }
                     });
                 }
 
                 @Override
-                public void startup(Display display, Map<String, String> properties) throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    window = (Window)wtkxSerializer.readObject(this, "menu_buttons.wtkx");
-                    colorListButton = (ListButton)wtkxSerializer.get("colorListButton");
-                    imageView = (ImageView)wtkxSerializer.get("imageView");
-
-                    drawing = new Drawing();
-
-                    Rectangle borderRectangle = new Rectangle();
-                    borderRectangle.setSize(MAX_X, MAX_Y);
-                    borderRectangle.setStroke((Paint)null);
-                    borderRectangle.setFill("#eeeeee");
-
-                    drawing.getCanvas().add(borderRectangle);
-
-                    imageView.setImage(drawing);
-
-                    window.open(display);
-                }
-
-                @Override
-                public boolean shutdown(boolean optional) {
-                    if (window != null) {
-                        window.close();
-                    }
-
-                    return false;
-                }
-
-                @Override
-                public void suspend() {
-                }
-
-                @Override
-                public void resume() {
-                }
-
-                public Color getSelectedColor() {
-                    ColorItem colorItem = (ColorItem)colorListButton.getSelectedItem();
-                    return colorItem.getColor();
-                }
-
-                public Point getRandomLocation(Shape shape) {
-                    Bounds bounds = shape.getBounds();
-
-                    int x = (int)(Math.random() * (MAX_X - bounds.width));
-                    int y = (int)(Math.random() * (MAX_Y - bounds.height));
-
-                    return new Point(x, y);
-                }
-
-                public static void main(String[] args) {
-                    DesktopApplicationContext.main(MenuButtons.class, args);
+                public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+                    componentBoxPane = (BoxPane)namespace.get("componentBoxPane");
                 }
             }
             ]]>
         </source>
 
         <p>
-            Each action simply adds a particular shape to the drawing, setting its color based on
-            the current selection in the list button. The shapes are placed at a random location
-            that is adjusted by the shape's size to ensure that the shape remains on-screen.
+            Each action simply adds a particular component to the...
         </p>
     </body>
 </document>

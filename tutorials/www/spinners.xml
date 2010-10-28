@@ -47,7 +47,7 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/boundedrange/spinners.wtkx</src>
+                <src>/org/apache/pivot/tutorials/boundedrange/spinners.bxml</src>
             </startup-properties>
         </application>
 
@@ -61,26 +61,22 @@ limitations under the License.
         </p>
 
         <p>
-            The WTKX for this example is shown below:
+            The BXML for this example is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/boundedrange/spinners.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/boundedrange/spinners.bxml">
             <![CDATA[
             <Window title="Spinners" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns:content="org.apache.pivot.wtk.content"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <BoxPane styles="{verticalAlignment:'center'}">
-                        <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
-                            circular="true" preferredWidth="80" selectedIndex="0"/>
-                        <Spinner preferredWidth="40" selectedIndex="0">
-                            <spinnerData>
-                                <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
-                            </spinnerData>
-                        </Spinner>
-                    </BoxPane>
-                </content>
+                <BoxPane styles="{verticalAlignment:'center'}">
+                    <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
+                        circular="true" preferredWidth="80" selectedIndex="0"/>
+                    <Spinner preferredWidth="40" selectedIndex="0">
+                        <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
+                    </Spinner>
+                </BoxPane>
             </Window>
             ]]>
         </source>

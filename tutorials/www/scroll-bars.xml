@@ -68,62 +68,57 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/boundedrange/scroll_bars.wtkx</src>
+                <src>org/apache/pivot/tutorials/boundedrange/scroll_bars.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The WTKX source for this example is shown below:
+            The BXML source for this example is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/boundedrange/scroll_bars.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/boundedrange/scroll_bars.bxml">
             <![CDATA[
             <Window title="Scroll Bars" maximized="true"
                 WindowStateListener.windowOpened="init();"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <wtkx:script src="scroll_bars.js"/>
+                <bxml:script src="scroll_bars.js"/>
 
-                <content>
-                    <Border>
-                        <content>
-                            <TablePane>
-                                <columns>
-                                    <TablePane.Column width="1*"/>
-                                </columns>
-                                <rows>
-                                    <TablePane.Row>
-                                        <FlowPane styles="{padding:6}">
-                                            <wtkx:define>
-                                                <ButtonGroup wtkx:id="ranges"
-                                                    ButtonGroupListener.selectionChanged="updateRange();"/>
-                                            </wtkx:define>
-                                            <RadioButton wtkx:id="dayButton"
-                                                buttonGroup="$ranges" buttonData="Day"/>
-                                            <RadioButton wtkx:id="weekButton"
-                                                buttonGroup="$ranges" buttonData="Week"/>
-                                            <RadioButton wtkx:id="fortnightButton"
-                                                buttonGroup="$ranges" buttonData="Fortnight"/>
-                                            <RadioButton wtkx:id="monthButton"
-                                                buttonGroup="$ranges" buttonData="Month"/>
-                                        </FlowPane>
-                                    </TablePane.Row>
-                                    <TablePane.Row height="1*">
-                                        <BoxPane orientation="vertical" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}">
-                                            <Label wtkx:id="label"/>
-                                        </BoxPane>
-                                    </TablePane.Row>
-                                    <TablePane.Row>
-                                        <ScrollBar wtkx:id="scrollBar" start="0" end="60"
-                                            ScrollBarListener.scopeChanged="updateLabel();"
-                                            ScrollBarValueListener.valueChanged="updateLabel();"/>
-                                    </TablePane.Row>
-                                </rows>
-                            </TablePane>
-                        </content>
-                    </Border>
-                </content>
+                <Border>
+                    <TablePane>
+                        <columns>
+                            <TablePane.Column width="1*"/>
+                        </columns>
+
+                        <TablePane.Row>
+                            <FlowPane styles="{padding:6}">
+                                <bxml:define>
+                                    <ButtonGroup bxml:id="ranges"
+                                        ButtonGroupListener.selectionChanged="updateRange();"/>
+                                </bxml:define>
+                                <RadioButton bxml:id="dayButton"
+                                    buttonGroup="$ranges" buttonData="Day"/>
+                                <RadioButton bxml:id="weekButton"
+                                    buttonGroup="$ranges" buttonData="Week"/>
+                                <RadioButton bxml:id="fortnightButton"
+                                    buttonGroup="$ranges" buttonData="Fortnight"/>
+                                <RadioButton bxml:id="monthButton"
+                                    buttonGroup="$ranges" buttonData="Month"/>
+                            </FlowPane>
+                        </TablePane.Row>
+                        <TablePane.Row height="1*">
+                            <BoxPane orientation="vertical" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}">
+                                <Label bxml:id="label"/>
+                            </BoxPane>
+                        </TablePane.Row>
+                        <TablePane.Row>
+                            <ScrollBar bxml:id="scrollBar" start="0" end="60"
+                                ScrollBarListener.scopeChanged="updateLabel();"
+                                ScrollBarValueListener.valueChanged="updateLabel();"/>
+                        </TablePane.Row>
+                    </TablePane>
+                </Border>
             </Window>
             ]]>
         </source>
@@ -175,7 +170,7 @@ limitations under the License.
         </source>
 
         <p>
-            Since this application is written entirely in WTKX and script, there is no associated
+            Since this application is written entirely in BXML and script, there is no associated
             Java source.
         </p>
     </body>

@@ -137,39 +137,182 @@ limitations under the License.
             implementation of each method is discussed in more detail below:
         </p>
 
-        <pre class="brush:java">
-        package org.apache.pivot.tutorials.webqueries.server;
+        <source type="java" location="org/apache/pivot/tutorials/webqueries/server/ExpenseServlet.java">
+            <![CDATA[
+            package org.apache.pivot.tutorials.webqueries.server;
 
-        import java.io.IOException;
-        import java.io.InputStream;
-        import java.net.MalformedURLException;
-        import java.net.URL;
+            import java.io.IOException;
+            import java.io.InputStream;
+            import java.net.MalformedURLException;
+            import java.net.URL;
 
-        import javax.servlet.ServletException;
+            import javax.servlet.ServletException;
 
-        import org.apache.pivot.collections.HashMap;
-        import org.apache.pivot.collections.List;
-        import org.apache.pivot.json.JSONSerializer;
-        import org.apache.pivot.serialization.CSVSerializer;
-        import org.apache.pivot.serialization.SerializationException;
-        import org.apache.pivot.serialization.Serializer;
-        import org.apache.pivot.web.Query;
-        import org.apache.pivot.web.QueryException;
-        import org.apache.pivot.web.server.QueryServlet;
+            import org.apache.pivot.collections.HashMap;
+            import org.apache.pivot.collections.List;
+            import org.apache.pivot.json.JSONSerializer;
+            import org.apache.pivot.serialization.CSVSerializer;
+            import org.apache.pivot.serialization.SerializationException;
+            import org.apache.pivot.serialization.Serializer;
+            import org.apache.pivot.web.Query;
+            import org.apache.pivot.web.QueryException;
+            import org.apache.pivot.web.server.QueryServlet;
 
-        /**
-         * Servlet that implements expense management web service.
-         */
-        public class ExpenseServlet extends QueryServlet {
-            private static final long serialVersionUID = 0;
+            /**
+             * Servlet that implements expense management web service.
+             */
+            public class ExpenseServlet extends QueryServlet {
+                private static final long serialVersionUID = 0;
 
-            private List&lt;Expense&gt; expenses = null;
-            private HashMap&lt;Integer, Expense&gt; expenseMap = new HashMap&lt;Integer, Expense&gt;();
+                private List&lt;Expense&gt; expenses = null;
+                private HashMap&lt;Integer, Expense&gt; expenseMap = new HashMap&lt;Integer, Expense&gt;();
 
-            private static int nextID = 0;
+                private static int nextID = 0;
 
-            @Override
-            @SuppressWarnings("unchecked")
+                @Override
+                @SuppressWarnings("unchecked")
+                public void init() throws ServletException {
+                    CSVSerializer csvSerializer = new CSVSerializer();
+                    csvSerializer.getKeys().add("date");
+                    csvSerializer.getKeys().add("type");
+                    csvSerializer.getKeys().add("amount");
+                    csvSerializer.getKeys().add("description");
+                    csvSerializer.setItemClass(Expense.class);
+
+                    // Load the initial expense data
+                    InputStream inputStream = ExpenseServlet.class.getResourceAsStream("expenses.csv");
+
+                    try {
+                        expenses = (List&lt;Expense&gt;)csvSerializer.readObject(inputStream);
+                    } catch (IOException exception) {
+                        throw new ServletException(exception);
+                    } catch (SerializationException exception) {
+                        throw new ServletException(exception);
+                    }
+
+                    // Index the initial expenses
+                    for (Expense expense : expenses) {
+                        int id = nextID++;
+                        expense.setID(id);
+                        expenseMap.put(id, expense);
+                    }
+                }
+
+                @Override
+                protected Object doGet(Path path) throws QueryException {
+                    Object value;
+
+                    if (path.getLength() == 0) {
+                        value = expenses;
+                    } else {
+                        // Get the ID of the expense to retrieve from the path
+                        int id = Integer.parseInt(path.get(0));
+
+                        // Get the expense data from the map
+                        synchronized (this) {
+                            value = expenseMap.get(id);
+                        }
+
+                        if (value == null) {
+                            throw new QueryException(Query.Status.NOT_FOUND);
+                        }
+                    }
+
+                    return value;
+                }
+
+                @Override
+                protected URL doPost(Path path, Object value) throws QueryException {
+                    if (value == null) {
+                        throw new QueryException(Query.Status.BAD_REQUEST);
+                    }
+
+                    Expense expense = (Expense)value;
+
+                    // Add the expense to the list/map
+                    int id;
+                    synchronized (this) {
+                        id = nextID++;
+                        expense.setID(id);
+                        expenses.add(expense);
+                        expenseMap.put(id, expense);
+                    }
+
+                    // Return the location of the newly-created resource
+                    URL location = getLocation();
+                    try {
+                        location = new URL(location, Integer.toString(id));
+                    } catch (MalformedURLException exception) {
+                        throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
+                    }
+
+                    return location;
+                }
+
+                @Override
+                protected boolean doPut(Path path, Object value) throws QueryException {
+                    if (path.getLength() == 0
+                        || value == null) {
+                        throw new QueryException(Query.Status.BAD_REQUEST);
+                    }
+
+                    // Get the ID of the expense to retrieve from the path
+                    int id = Integer.parseInt(path.get(0));
+
+                    // Create the new expense and bind the data to it
+                    Expense expense = (Expense)value;
+                    expense.setID(id);
+
+                    // Update the list/map
+                    Expense previousExpense;
+                    synchronized (this) {
+                        previousExpense = expenseMap.put(id, expense);
+                        expenses.remove(previousExpense);
+                        expenses.add(expense);
+                    }
+
+                    return (previousExpense == null);
+                }
+
+                @Override
+                protected void doDelete(Path path) throws QueryException {
+                    if (path.getLength() == 0) {
+                        throw new QueryException(Query.Status.BAD_REQUEST);
+                    }
+
+                    // Get the ID of the expense to retrieve from the path
+                    int id = Integer.parseInt(path.get(0));
+
+                    // Update the list/map
+                    Expense expense;
+                    synchronized (this) {
+                        expense = expenseMap.remove(id);
+                        expenses.remove(expense);
+                    }
+
+                    if (expense == null) {
+                        throw new QueryException(Query.Status.NOT_FOUND);
+                    }
+                }
+
+                @Override
+                protected Serializer&lt;?&gt; createSerializer(Path path) throws QueryException {
+                    return new JSONSerializer(Expense.class);
+                }
+            }
+            ]]>
+        </source>
+
+        <h3>init()</h3>
+
+        <p>
+            The <tt>init()</tt> method, which is defined by <tt>QueryServlet</tt>'s base class
+            <tt>HttpServlet</tt>, is called when a servlet is first created by a servlet container.
+            <tt>ExpenseServlet</tt>'s implementation of <tt>init()</tt> is as follows:
+        </p>
+
+        <source type="java">
+            <![CDATA[
             public void init() throws ServletException {
                 CSVSerializer csvSerializer = new CSVSerializer();
                 csvSerializer.getKeys().add("date");
@@ -196,147 +339,8 @@ limitations under the License.
                     expenseMap.put(id, expense);
                 }
             }
-
-            @Override
-            protected Object doGet(Path path) throws QueryException {
-                Object value;
-
-                if (path.getLength() == 0) {
-                    value = expenses;
-                } else {
-                    // Get the ID of the expense to retrieve from the path
-                    int id = Integer.parseInt(path.get(0));
-
-                    // Get the expense data from the map
-                    synchronized (this) {
-                        value = expenseMap.get(id);
-                    }
-
-                    if (value == null) {
-                        throw new QueryException(Query.Status.NOT_FOUND);
-                    }
-                }
-
-                return value;
-            }
-
-            @Override
-            protected URL doPost(Path path, Object value) throws QueryException {
-                if (value == null) {
-                    throw new QueryException(Query.Status.BAD_REQUEST);
-                }
-
-                Expense expense = (Expense)value;
-
-                // Add the expense to the list/map
-                int id;
-                synchronized (this) {
-                    id = nextID++;
-                    expense.setID(id);
-                    expenses.add(expense);
-                    expenseMap.put(id, expense);
-                }
-
-                // Return the location of the newly-created resource
-                URL location = getLocation();
-                try {
-                    location = new URL(location, Integer.toString(id));
-                } catch (MalformedURLException exception) {
-                    throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
-                }
-
-                return location;
-            }
-
-            @Override
-            protected boolean doPut(Path path, Object value) throws QueryException {
-                if (path.getLength() == 0
-                    || value == null) {
-                    throw new QueryException(Query.Status.BAD_REQUEST);
-                }
-
-                // Get the ID of the expense to retrieve from the path
-                int id = Integer.parseInt(path.get(0));
-
-                // Create the new expense and bind the data to it
-                Expense expense = (Expense)value;
-                expense.setID(id);
-
-                // Update the list/map
-                Expense previousExpense;
-                synchronized (this) {
-                    previousExpense = expenseMap.put(id, expense);
-                    expenses.remove(previousExpense);
-                    expenses.add(expense);
-                }
-
-                return (previousExpense == null);
-            }
-
-            @Override
-            protected void doDelete(Path path) throws QueryException {
-                if (path.getLength() == 0) {
-                    throw new QueryException(Query.Status.BAD_REQUEST);
-                }
-
-                // Get the ID of the expense to retrieve from the path
-                int id = Integer.parseInt(path.get(0));
-
-                // Update the list/map
-                Expense expense;
-                synchronized (this) {
-                    expense = expenseMap.remove(id);
-                    expenses.remove(expense);
-                }
-
-                if (expense == null) {
-                    throw new QueryException(Query.Status.NOT_FOUND);
-                }
-            }
-
-            @Override
-            protected Serializer&lt;?&gt; createSerializer(Path path) throws QueryException {
-                return new JSONSerializer(Expense.class);
-            }
-        }
-        </pre>
-
-        <h3>init()</h3>
-
-        <p>
-            The <tt>init()</tt> method, which is defined by <tt>QueryServlet</tt>'s base class
-            <tt>HttpServlet</tt>, is called when a servlet is first created by a servlet container.
-            <tt>ExpenseServlet</tt>'s implementation of <tt>init()</tt> is as follows:
-        </p>
-
-        <pre class="brush:java">
-        public void init() throws ServletException {
-            CSVSerializer csvSerializer = new CSVSerializer();
-            csvSerializer.getKeys().add("date");
-            csvSerializer.getKeys().add("type");
-            csvSerializer.getKeys().add("amount");
-            csvSerializer.getKeys().add("description");
-            csvSerializer.setItemClass(Expense.class);
-
-            // Load the initial expense data
-            InputStream inputStream = ExpenseServlet.class.getResourceAsStream("expenses.csv");
-
-            try {
-                expenses = (List&lt;Expense&gt;)csvSerializer.readObject(inputStream);
-            } catch (IOException exception) {
-                throw new ServletException(exception);
-            } catch (SerializationException exception) {
-                throw new ServletException(exception);
-            }
-
-            // Index the initial expenses
-            for (Expense expense : expenses) {
-                int id = nextID++;
-                expense.setID(id);
-                expenseMap.put(id, expense);
-            }
-        }
-        </pre>
+            ]]>
+        </source>
 
         <p>
             It loads an initial list of expenses using an instance of <tt>CSVSerializer</tt>. The
@@ -360,69 +364,71 @@ limitations under the License.
             Bean class that is defined as follows:
         </p>
 
-        <pre class="brush:java">
-        package org.apache.pivot.tutorials.webqueries.server;
+        <source type="java" location="org/apache/pivot/tutorials/webqueries/server/Expense.java">
+            <![CDATA[
+            package org.apache.pivot.tutorials.webqueries.server;
 
-        public class Expense {
-            private Integer id = -1;
-            private String date = null;
-            private String type = null;
-            private Double amount = 0d;
-            private String description = null;
+            public class Expense {
+                private Integer id = -1;
+                private String date = null;
+                private String type = null;
+                private Double amount = 0d;
+                private String description = null;
 
-            public Integer getID() {
-                return id;
+                public Integer getID() {
+                    return id;
+                }
+
+                public Integer getId() {
+                    return getID();
+                }
+
+                public void setID(Integer id) {
+                    this.id = id;
+                }
+
+                public void setId(Integer id) {
+                    setID(id);
+                }
+
+                public String getDate() {
+                    return date;
+                }
+
+                public void setDate(String date) {
+                    this.date = date;
+                }
+
+                public String getType() {
+                    return type;
+                }
+
+                public void setType(String type) {
+                    this.type = type;
+                }
+
+                public Double getAmount() {
+                    return amount;
+                }
+
+                public void setAmount(Double amount) {
+                    this.amount = amount;
+                }
+
+                public final void setAmount(String amount) {
+                    setAmount(Double.parseDouble(amount));
+                }
+
+                public String getDescription() {
+                    return description;
+                }
+
+                public void setDescription(String description) {
+                    this.description = description;
+                }
             }
-
-            public Integer getId() {
-                return getID();
-            }
-
-            public void setID(Integer id) {
-                this.id = id;
-            }
-
-            public void setId(Integer id) {
-                setID(id);
-            }
-
-            public String getDate() {
-                return date;
-            }
-
-            public void setDate(String date) {
-                this.date = date;
-            }
-
-            public String getType() {
-                return type;
-            }
-
-            public void setType(String type) {
-                this.type = type;
-            }
-
-            public Double getAmount() {
-                return amount;
-            }
-
-            public void setAmount(Double amount) {
-                this.amount = amount;
-            }
-
-            public final void setAmount(String amount) {
-                setAmount(Double.parseDouble(amount));
-            }
-
-            public String getDescription() {
-                return description;
-            }
-
-            public void setDescription(String description) {
-                this.description = description;
-            }
-        }
-        </pre>
+            ]]>
+        </source>
 
         <p>
             After the list of expenses has been loaded, <tt>init()</tt> iterates over the list,
@@ -439,29 +445,31 @@ limitations under the License.
             servlet is defined as follows:
         </p>
 
-        <pre class="brush:java">
-        protected Object doGet(Path path) throws QueryException {
-            Object value;
+        <source type="java">
+            <![CDATA[
+            protected Object doGet(Path path) throws QueryException {
+                Object value;
 
-            if (path.getLength() == 0) {
-                value = expenses;
-            } else {
-                // Get the ID of the expense to retrieve from the path
-                int id = Integer.parseInt(path.get(0));
+                if (path.getLength() == 0) {
+                    value = expenses;
+                } else {
+                    // Get the ID of the expense to retrieve from the path
+                    int id = Integer.parseInt(path.get(0));
 
-                // Get the expense data from the map
-                synchronized (this) {
-                    value = expenseMap.get(id);
+                    // Get the expense data from the map
+                    synchronized (this) {
+                        value = expenseMap.get(id);
+                    }
+
+                    if (value == null) {
+                        throw new QueryException(Query.Status.NOT_FOUND);
+                    }
                 }
 
-                if (value == null) {
-                    throw new QueryException(Query.Status.NOT_FOUND);
-                }
+                return value;
             }
-
-            return value;
-        }
-        </pre>
+            ]]>
+        </source>
 
         <p>
             If the request does not contain a path, the method returns the list of all expenses.
@@ -493,34 +501,36 @@ limitations under the License.
             The <tt>doPost()</tt> method in the example looks like this:
         </p>
 
-        <pre class="brush:java">
-        protected URL doPost(Path path, Object value) throws QueryException {
-            if (value == null) {
-                throw new QueryException(Query.Status.BAD_REQUEST);
+        <source type="java">
+            <![CDATA[
+            protected URL doPost(Path path, Object value) throws QueryException {
+                if (value == null) {
+                    throw new QueryException(Query.Status.BAD_REQUEST);
+                }
+
+                Expense expense = (Expense)value;
+
+                // Add the expense to the list/map
+                int id;
+                synchronized (this) {
+                    id = nextID++;
+                    expense.setID(id);
+                    expenses.add(expense);
+                    expenseMap.put(id, expense);
+                }
+
+                // Return the location of the newly-created resource
+                URL location = getLocation();
+                try {
+                    location = new URL(location, Integer.toString(id));
+                } catch (MalformedURLException exception) {
+                    throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
+                }
+
+                return location;
             }
-
-            Expense expense = (Expense)value;
-
-            // Add the expense to the list/map
-            int id;
-            synchronized (this) {
-                id = nextID++;
-                expense.setID(id);
-                expenses.add(expense);
-                expenseMap.put(id, expense);
-            }
-
-            // Return the location of the newly-created resource
-            URL location = getLocation();
-            try {
-                location = new URL(location, Integer.toString(id));
-            } catch (MalformedURLException exception) {
-                throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
-            }
-
-            return location;
-        }
-        </pre>
+            ]]>
+        </source>
 
         <p>
             The first thing the method does is ensure that the request is valid. If the caller has
@@ -548,31 +558,33 @@ limitations under the License.
             <tt>ExpenseServlet</tt>'s implementation of <tt>doPut()</tt> is as follows:
         </p>
 
-        <pre class="brush:java">
-        protected boolean doPut(Path path, Object value) throws QueryException {
-            if (path.getLength() == 0
-                || value == null) {
-                throw new QueryException(Query.Status.BAD_REQUEST);
+        <source type="java">
+            <![CDATA[
+            protected boolean doPut(Path path, Object value) throws QueryException {
+                if (path.getLength() == 0
+                    || value == null) {
+                    throw new QueryException(Query.Status.BAD_REQUEST);
+                }
+
+                // Get the ID of the expense to retrieve from the path
+                int id = Integer.parseInt(path.get(0));
+
+                // Create the new expense and bind the data to it
+                Expense expense = (Expense)value;
+                expense.setID(id);
+
+                // Update the list/map
+                Expense previousExpense;
+                synchronized (this) {
+                    previousExpense = expenseMap.put(id, expense);
+                    expenses.remove(previousExpense);
+                    expenses.add(expense);
+                }
+
+                return (previousExpense == null);
             }
-
-            // Get the ID of the expense to retrieve from the path
-            int id = Integer.parseInt(path.get(0));
-
-            // Create the new expense and bind the data to it
-            Expense expense = (Expense)value;
-            expense.setID(id);
-
-            // Update the list/map
-            Expense previousExpense;
-            synchronized (this) {
-                previousExpense = expenseMap.put(id, expense);
-                expenses.remove(previousExpense);
-                expenses.add(expense);
-            }
-
-            return (previousExpense == null);
-        }
-        </pre>
+            ]]>
+        </source>
 
         <p>
             Like <tt>doPost()</tt>, it first validates the format of the request. In addition to a
@@ -591,27 +603,29 @@ limitations under the License.
             this method is shown below:
         </p>
 
-        <pre class="brush:java">
-        protected void doDelete(Path path) throws QueryException {
-            if (path.getLength() == 0) {
-                throw new QueryException(Query.Status.BAD_REQUEST);
-            }
+        <source type="java">
+            <![CDATA[
+            protected void doDelete(Path path) throws QueryException {
+                if (path.getLength() == 0) {
+                    throw new QueryException(Query.Status.BAD_REQUEST);
+                }
 
-            // Get the ID of the expense to retrieve from the path
-            int id = Integer.parseInt(path.get(0));
+                // Get the ID of the expense to retrieve from the path
+                int id = Integer.parseInt(path.get(0));
 
-            // Update the list/map
-            Expense expense;
-            synchronized (this) {
-                expense = expenseMap.remove(id);
-                expenses.remove(expense);
-            }
+                // Update the list/map
+                Expense expense;
+                synchronized (this) {
+                    expense = expenseMap.remove(id);
+                    expenses.remove(expense);
+                }
 
-            if (expense == null) {
-                throw new QueryException(Query.Status.NOT_FOUND);
+                if (expense == null) {
+                    throw new QueryException(Query.Status.NOT_FOUND);
+                }
             }
-        }
-        </pre>
+            ]]>
+        </source>
 
         <p>
             Like the other methods, the request is first validated; then, if the expense exists,
