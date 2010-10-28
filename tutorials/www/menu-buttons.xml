@@ -29,7 +29,9 @@ limitations under the License.
         </p>
 
         <p>
-            The following sample application demonstrates the use of a menu button. The...
+            The following sample application demonstrates the use of a menu button. Selecting an
+            option from the menu button on the left adds the corresponding component type to the
+            content area on the right:
         </p>
 
         <application class="org.apache.pivot.wtk.ScriptApplication"
@@ -145,9 +147,5 @@ limitations under the License.
             }
             ]]>
         </source>
-
-        <p>
-            Each action simply adds a particular component to the...
-        </p>
     </body>
 </document>

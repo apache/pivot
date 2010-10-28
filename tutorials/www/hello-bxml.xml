@@ -156,7 +156,7 @@ limitations under the License.
             interface. Rather, it is launched using the <tt>org.apache.pivot.wtk.ScriptApplication</tt> class.
             This class, which is included with the Pivot platform, implements the
             <tt>Application</tt> interface and takes the name of a BXML file to launch as a startup
-            property named <tt>src</tt>. The BXML file is expected to contain a root element representing a
+            property named <tt>src</tt>. The source file is expected to contain a root element representing a
             <tt>Window</tt> subclass.
         </p>
 
@@ -164,7 +164,7 @@ limitations under the License.
             The class is named <tt>ScriptApplication</tt> because it is often used to launch
             applications whose logic is defined entirely in script; however, it can actually be
             used to launch any application whose main window is defined in a single BXML file. Many
-            of the examples in the following sections are launched using this class.
+            of the examples in the following sections are executed using this class.
             Scripting is discussed in more detail in the <a href="scripting.html">Scripting</a> section.
         </p>
     </body>

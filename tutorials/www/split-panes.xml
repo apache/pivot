@@ -127,11 +127,9 @@ limitations under the License.
 
                                 <Checkbox buttonData="Use Shadow">
                                     <buttonStateListeners>
-                                        <![CDATA[
                                         function stateChanged(button, previousState) {
                                             splitPane.getStyles().put("useShadow", button.isSelected());
                                         }
-                                        ]]>
                                     </buttonStateListeners>
                                 </Checkbox>
                             </BoxPane>

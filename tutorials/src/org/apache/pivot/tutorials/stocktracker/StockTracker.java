@@ -16,8 +16,11 @@
  */
 package org.apache.pivot.tutorials.stocktracker;
 
+import java.util.Locale;
+
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -28,11 +31,17 @@ import org.apache.pivot.wtk.Display;
 public class StockTracker implements Application {
     private StockTrackerWindow window = null;
 
+    public static final String LANGUAGE_KEY = "language";
+
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
+        String language = properties.get(LANGUAGE_KEY);
+        Locale locale = (language == null) ? Locale.getDefault() : new Locale(language);
+        Resources resources = new Resources(StockTrackerWindow.class.getName(), locale);
+
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (StockTrackerWindow)bxmlSerializer.readObject(StockTrackerWindow.class,
-            "stock_tracker_window.bxml", true);
+        window = (StockTrackerWindow)bxmlSerializer.readObject(getClass().getResource("stock_tracker_window.bxml"),
+            resources);
         window.open(display);
     }
 

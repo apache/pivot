@@ -305,7 +305,7 @@ limitations under the License.
             selectors are supported. For example:
         </p>
 
-        <pre>
+        <source type="jscript">
         {  Button: {
                 color: "#aa0000"
             },
@@ -336,7 +336,7 @@ limitations under the License.
                 color: "#666666"
             }
         }
-        </pre>
+        </source>
 
         <h2>Attributes</h2>
 
@@ -354,8 +354,8 @@ limitations under the License.
             Callers can set attribute values programmatically using a static setter method of
             the <tt>Container</tt> subclass (e.g. <tt>TabPane#setLabel(Component, String)</tt>).
             Alternatively, attributes can be specified in BXML. For example, the sub-elements of
-            a <tt>TabPane</tt> can provide a "TabPane.label" attribute to specify the value that
-            should be used as the name for that component.
+            a <tt>TabPane</tt> can provide a <tt>TabPane.label</tt> attribute to specify the value
+            that should be used as the text label for that component.
          </p>
 
         <h2>Events</h2>

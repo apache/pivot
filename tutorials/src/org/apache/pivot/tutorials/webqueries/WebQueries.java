@@ -57,8 +57,13 @@ public class WebQueries implements Application {
         getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
-                listView.setListData((List<?>)JSON.get(task.getResult(), "value.items"));
-                loadingLabel.setVisible(false);
+                List<?> items = (List<?>)JSON.get(task.getResult(), "value.items");
+                if (items.getLength() > 0) {
+                    listView.setListData(items);
+                    loadingLabel.setVisible(false);
+                } else {
+                    loadingLabel.setText("No results.");
+                }
             }
 
             @Override

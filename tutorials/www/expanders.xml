@@ -76,7 +76,8 @@ limitations under the License.
         </source>
 
         <p>
-            TBD No Java
+            Since this example does not require any logic, there is no associated Java or script
+            code.
         </p>
     </body>
 </document>

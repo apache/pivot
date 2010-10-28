@@ -49,9 +49,13 @@ limitations under the License.
             <![CDATA[
             @Override
             public void startup(Display display, Map<String, String> properties) throws Exception {
+                String language = properties.get(LANGUAGE_KEY);
+                Locale locale = (language == null) ? Locale.getDefault() : new Locale(language);
+                Resources resources = new Resources(StockTrackerWindow.class.getName(), locale);
+
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
-                window = (StockTrackerWindow)bxmlSerializer.readObject(StockTrackerWindow.class,
-                    "stock_tracker_window.bxml", true);
+                window = (StockTrackerWindow)bxmlSerializer.readObject(getClass().getResource("stock_tracker_window.bxml"),
+                    resources);
                 window.open(display);
             }
             ]]>

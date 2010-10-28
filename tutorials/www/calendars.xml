@@ -23,14 +23,16 @@ limitations under the License.
 
     <body>
         <p>
-            Pivot supports two types of calendar components: a standalone <tt>Calendar</tt>
+            Pivot provides two types of calendar components: a standalone <tt>Calendar</tt>
             component that can be used anywhere within an application's user interface, and a
             <tt>CalendarButton</tt> component that, like a <a href="list-buttons.html">list
             button</a>, displays a popup calendar when pressed.
         </p>
 
         <p>
-            The following sample application demonstrates both component types:
+            The following sample application demonstrates both component types. Selecting a date
+            on one calendar automatically updates the other calendar as well as setting the text
+            of a label to the currently selected date:
         </p>
 
         <application class="org.apache.pivot.wtk.ScriptApplication"
@@ -82,8 +84,28 @@ limitations under the License.
         </source>
 
         <p>
-            TBD No Java - selection state of the <tt>Calendar</tt> and <tt>CalendarButton</tt> is
-            kept in sync via binding...
+            Note that there is no Java or script code associated with this example. The calendars
+            are kept in sync via a Pivot feature called <i>property binding</i>. This feature allows
+            a caller to declaratively create a relationship between a source and target property such
+            that changes to the source are automatically reflected in the target.
+        </p>
+
+        <p>
+            In BXML, a binding relationship is created via the "${...}" syntax shown in the sample
+            code. For example, the following markup ensures that any changes to the "calendar.selectedDate"
+            property are automatically propagated to the <tt>Label</tt>'s "text" property:
+        </p>
+
+        <source type="xml">
+            <![CDATA[
+            <Label bxml:id="selectedDateLabel" Form.label="Selected date"
+                text="${calendar.selectedDate}"/>
+            ]]>
+        </source>
+
+        <p>
+            Property binding is discussed in more detail in the
+            <a href="property_binding.html">Property Binding</a> section.
         </p>
     </body>
 </document>

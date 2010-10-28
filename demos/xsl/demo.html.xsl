@@ -100,9 +100,20 @@ limitations under the License.
             <!-- Base parameters -->
             var parameters = {
                 codebase_lookup:false,
-                java_arguments:"-Dsun.awt.noerasebackground=true -Dsun.awt.erasebackgroundonresize=true",
-                application_class_name:"<xsl:value-of select="@class"/>"
+                application_class_name:'<xsl:value-of select="@class"/>'
             };
+
+            <!-- Java arguments -->
+            var javaArguments = ["-Dsun.awt.noerasebackground=true",
+                "-Dsun.awt.erasebackgroundonresize=true"];
+
+            <xsl:if test="java-arguments">
+                <xsl:for-each select="java-arguments/*">
+                    javaArguments.push("-D<xsl:value-of select="name(.)"/>=<xsl:apply-templates/>");
+                </xsl:for-each>
+            </xsl:if>
+            
+            parameters.java_arguments = javaArguments.join(" ");
 
             <!-- Startup properties -->
             <xsl:if test="startup-properties">
@@ -111,6 +122,15 @@ limitations under the License.
                     startupProperties.push("<xsl:value-of select="name(.)"/>=<xsl:apply-templates/>");
                 </xsl:for-each>
                 parameters.startup_properties = startupProperties.join("&amp;");
+            </xsl:if>
+
+            <!-- System properties -->
+            <xsl:if test="system-properties">
+                var systemProperties = [];
+                <xsl:for-each select="system-properties/*">
+                    systemProperties.push("<xsl:value-of select="name(.)"/>=<xsl:apply-templates/>");
+                </xsl:for-each>
+                parameters.system_properties = systemProperties.join("&amp;");
             </xsl:if>
 
             deployJava.runApplet(attributes, parameters, "1.6");

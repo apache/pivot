@@ -23,8 +23,9 @@ limitations under the License.
 
     <body>
         <p>
-            This application demonstrates Pivot's ability to dynamically bind component properties
-            to namespace values including script variables and other component properties.
+            This application demonstrates Pivot's support for "property binding". This feature allows
+            a caller to declaratively create a relationship between a source and target property such
+            that changes to the source are automatically reflected in the target.
         </p>
 
         <application class="org.apache.pivot.wtk.ScriptApplication" width="480" height="360">
@@ -41,7 +42,24 @@ limitations under the License.
         </application>
 
         <p>
-            The BXML source for the example is below:
+            Property binding is most commonly used to establish a one-way relationship between a
+            source and target value; however, as shown in the example, bi-directional bindings
+            are also supported. Property relationships are established in markup using the following
+            binding syntax:
+        </p>
+
+        <p>
+            <i>targetProperty="${mappingFunction:sourceProperty}"</i>
+        </p>
+
+        <p>
+            "mappingFunction" is an optional script function that can be used to transform a bound
+            source value before it is applied to the target property. If omitted, the source value
+            is simply applied to the target as-is.
+        </p>
+
+        <p>
+            The BXML source for the example is shown below:
         </p>
 
         <source type="xml" location="org/apache/pivot/tutorials/databinding/property_binding.bxml">
@@ -99,7 +117,16 @@ limitations under the License.
         </source>
 
         <p>
-            The Java source is as follows:
+            Note the use of mapping functions to transform the "textInput.text" property to
+            all caps before applying it to the bound label. Similarly, a mapping function is used
+            to transform the "selectedColor" property of the ColorChooserButton to a hex string
+            so it can be used as the value for the "color" style of the selected color label.
+        </p>
+
+        <p>
+            Bindings are not limited to BXML - they can also be defined programmatically. For
+            example, the "manual binding" shown in the demo is constructed in Java code as shown
+            in the <tt>initialize()</tt> method below:
         </p>
 
         <source type="java" location="org/apache/pivot/tutorials/databinding/PropertyBinding.java">
@@ -142,5 +169,11 @@ limitations under the License.
             }
             ]]>
         </source>
+
+        <p>
+            The primary advantage to creating a binding relationship in code is that it can be
+            "unbound" when it is no longer needed; once established, bindings defined in BXML cannot
+            be removed.
+        </p>
     </body>
 </document>

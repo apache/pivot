@@ -22,10 +22,22 @@ limitations under the License.
     </properties>
 
     <body>
-        <p>The following example...</p>
+        <p>
+            The following example demonstrates Pivot's support for "repeatable" list buttons.
+            A repeatable list button allows a user to easily repeat the action associated with
+            the currently selected item. They are often used to define "rubber stamp" behaviors
+            that are applied to one or more selected items.
+        </p>
+
+        <p>
+            For example, the list button in the example allows the user to change the text color
+            of the selected checkboxes. Clicking the drop-down arrow presents a list of color
+            options, and clicking the currently selected color re-applies the color selection
+            to the currently selected checkboxes:
+        </p>
 
         <application class="org.apache.pivot.wtk.ScriptApplication"
-            width="300" height="200">
+            width="320" height="220">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>
@@ -38,7 +50,7 @@ limitations under the License.
         </application>
 
         <p>
-            The BXML source for the example is...
+            The BXML source for the example is as follows:
         </p>
 
         <source type="xml" location="org/apache/pivot/tutorials/lists/repeatable_list_buttons.bxml">
@@ -101,7 +113,10 @@ limitations under the License.
         </source>
 
         <p>
-            The Java source for the example is below:
+            The Java source for the example is shown below. The logic for applying the color
+            selection is encapsulated in the anonymous "applyColor" action defined by the
+            <tt>applyColorAction</tt> member. The rest of the code simply manages the selection
+            state of the checkboxes:
         </p>
 
         <source type="java" location="org/apache/pivot/tutorials/lists/RepeatableListButtons.java">

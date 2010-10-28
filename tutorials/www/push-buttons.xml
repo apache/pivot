@@ -61,11 +61,16 @@ limitations under the License.
         </source>
 
         <p>
-            TBD Mention use of custom namespace
+            Note the use of the custom "buttons" namespace. This namespace is associated with the
+            <tt>org.apache.pivot.tutorials.buttons</tt> package. The root element,
+            <tt>&lt;buttons:PushButtons&gt;</tt> represents an instance of
+            <tt>org.apache.pivot.tutorials.buttons.PushButtons</tt> - a custom,
+            application-specific subclass of the <tt>org.apache.pivot.wtk.Window</tt> class.
+            When the BXML file is loaded, an instance of this class will be returned.
+        </p>
 
-            The following is the Java source for the example. The application simply registers the
-            event listener that is called when the button is pressed, as an anonymous inner class
-            that implements <tt>ButtonPressListener</tt>:
+        <p>
+            The source code for the <tt>PushButtons</tt> class is shown below:
         </p>
 
         <source type="java" location="org/apache/pivot/tutorials/buttons/PushButtons.java">
@@ -103,8 +108,17 @@ limitations under the License.
         </source>
 
         <p>
-            When called, the event handler method, <tt>buttonPressed()</tt>, uses a static method
-            of the <tt>Alert</tt> class to display the message to the user.
+            Note that the <tt>PushButtons</tt> class implements the <tt>org.apache.pivot.beans.Bindable</tt>
+            interface. This interface defines a single method, <tt>initialize()</tt>, that is called
+            when the root element of a BXML file has been completely loaded. This allows the bound
+            class to perform additional initialization tasks such as event registration.
+        </p>
+
+        <p>
+            In the <tt>initialize()</tt> method, the application registers an event listener that
+            is called when the button is pressed. When this listener is invoked, the <tt>buttonPressed()</tt>
+            event handler method calls a static method of the <tt>Alert</tt> class to display a simple
+            message to the user.
         </p>
     </body>
 </document>

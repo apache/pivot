@@ -64,13 +64,5 @@ limitations under the License.
             horizontally. The <tt>BoxPane</tt> container is discussed in more detail in the
             <a href="layout-containers.html">Layout Containers</a> section.
         </p>
-
-        <p>
-            Finally, note that, while the graphic used in this example is a static bitmap
-            (represented by the <tt>org.apache.pivot.wtk.media.Picture</tt> class),
-            <tt>ImageView</tt> is also capable of presenting vector graphic images, represented by
-            the <tt>org.apache.pivot.wtk.media.Drawing</tt> class. Drawings are discussed in more
-            detail in the <a href="drawing.html">Drawing</a> section.
-        </p>
     </body>
 </document>
