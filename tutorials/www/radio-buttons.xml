@@ -27,7 +27,7 @@ limitations under the License.
             Pivot application:
         </p>
 
-        <application class="org.apache.pivot.tutorials.buttons.RadioButtons"
+        <application class="org.apache.pivot.wtk.ScriptApplication"
             width="480" height="360">
             <libraries>
                 <library>core</library>
@@ -35,29 +35,33 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
+            <startup-properties>
+                <src>org/apache/pivot/tutorials/buttons/radio_buttons.bxml</src>
+            </startup-properties>
         </application>
 
         <p>
-            The WTKX source for the example is below:
+            The BXML source for the example is below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/buttons/push_buttons.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/buttons/radio_buttons.bxml">
             <![CDATA[
-            <Window title="Radio Buttons" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+            <buttons:RadioButtons title="Radio Buttons" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns:buttons="org.apache.pivot.tutorials.buttons"
                 xmlns="org.apache.pivot.wtk">
-                <content>
+                <Border>
                     <BoxPane orientation="vertical" styles="{padding:4}">
-                        <wtkx:define>
-                            <ButtonGroup wtkx:id="numbers"/>
-                        </wtkx:define>
-                        <RadioButton wtkx:id="oneButton" buttonData="One" buttonGroup="$numbers" selected="true"/>
-                        <RadioButton wtkx:id="twoButton" buttonData="Two" buttonGroup="$numbers"/>
-                        <RadioButton wtkx:id="threeButton" buttonData="Three" buttonGroup="$numbers"/>
-                        <PushButton wtkx:id="selectButton" buttonData="Select"/>
+                        <bxml:define>
+                            <ButtonGroup bxml:id="numbers"/>
+                        </bxml:define>
+                        <RadioButton bxml:id="oneButton" buttonData="One" buttonGroup="$numbers" selected="true"/>
+                        <RadioButton bxml:id="twoButton" buttonData="Two" buttonGroup="$numbers"/>
+                        <RadioButton bxml:id="threeButton" buttonData="Three" buttonGroup="$numbers"/>
+                        <PushButton bxml:id="selectButton" buttonData="Select"/>
                     </BoxPane>
-                </content>
-            </Window>
+                </Border>
+            </buttons:RadioButtons>
             ]]>
         </source>
 
@@ -75,32 +79,28 @@ limitations under the License.
             <![CDATA[
             package org.apache.pivot.tutorials.buttons;
 
+            import java.net.URL;
+
+            import org.apache.pivot.beans.Bindable;
             import org.apache.pivot.collections.Map;
+            import org.apache.pivot.util.Resources;
             import org.apache.pivot.wtk.Alert;
-            import org.apache.pivot.wtk.Application;
             import org.apache.pivot.wtk.Button;
             import org.apache.pivot.wtk.ButtonGroup;
             import org.apache.pivot.wtk.ButtonPressListener;
-            import org.apache.pivot.wtk.DesktopApplicationContext;
-            import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.MessageType;
             import org.apache.pivot.wtk.PushButton;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
-            public class RadioButtons implements Application {
-                private Window window = null;
+            public class RadioButtons extends Window implements Bindable {
                 private PushButton selectButton = null;
 
                 @Override
-                public void startup(Display display, Map<String, String> properties)
-                    throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    window = (Window)wtkxSerializer.readObject(this, "radio_buttons.wtkx");
-                    selectButton = (PushButton)wtkxSerializer.get("selectButton");
+                public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+                    selectButton = (PushButton)namespace.get("selectButton");
 
                     // Get a reference to the button group
-                    final ButtonGroup numbersGroup = (ButtonGroup)wtkxSerializer.get("numbers");
+                    final ButtonGroup numbersGroup = (ButtonGroup)namespace.get("numbers");
 
                     // Add a button press listener
                     selectButton.getButtonPressListeners().add(new ButtonPressListener() {
@@ -109,32 +109,9 @@ limitations under the License.
                             String message = "You selected \""
                                 + numbersGroup.getSelection().getButtonData()
                                 + "\".";
-                            Alert.alert(MessageType.INFO, message, window);
+                            Alert.alert(MessageType.INFO, message, RadioButtons.this);
                         }
                     });
-
-                    window.open(display);
-                }
-
-                @Override
-                public boolean shutdown(boolean optional) {
-                    if (window != null) {
-                        window.close();
-                    }
-
-                    return false;
-                }
-
-                @Override
-                public void suspend() {
-                }
-
-                @Override
-                public void resume() {
-                }
-
-                public static void main(String[] args) {
-                    DesktopApplicationContext.main(RadioButtons.class, args);
                 }
             }
             ]]>

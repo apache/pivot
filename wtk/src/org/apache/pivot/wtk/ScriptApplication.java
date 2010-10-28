@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk;
 
 import java.net.URL;
-import java.io.File;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
@@ -34,8 +33,7 @@ public class ScriptApplication implements Application {
     public static final String STYLESHEET_KEY = "stylesheet";
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         // Get the location of the source file
         String src = properties.get(SRC_KEY);
         if (src == null) {
@@ -44,14 +42,6 @@ public class ScriptApplication implements Application {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL location = classLoader.getResource(src.substring(1));
-
-        if (location == null) {
-            File file = new File(src);
-
-            if (file.exists()) {
-               location = file.toURI().toURL();
-            }
-        }
 
         if (location == null) {
             throw new IllegalArgumentException("Cannot find source file \"" + src + "\".");

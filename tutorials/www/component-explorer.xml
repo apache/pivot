@@ -31,7 +31,6 @@ limitations under the License.
                 <library>core</library>
                 <library>wtk</library>
                 <library>wtk-terra</library>
-                <library>tools</library>
                 <library>tutorials</library>
             </libraries>
         </application>

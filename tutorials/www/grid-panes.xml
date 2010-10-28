@@ -50,7 +50,7 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/layout/grid_panes.wtkx</src>
+                <src>/org/apache/pivot/tutorials/layout/grid_panes.wtkx</src>
             </startup-properties>
         </application>
 
@@ -61,74 +61,72 @@ limitations under the License.
         <source type="xml" location="org/apache/pivot/tutorials/layout/grid_panes.wtkx">
             <![CDATA[
             <Window title="Grid Panes" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <Border>
-                        <content>
-                            <GridPane columnCount="5" styles="{horizontalSpacing:1, verticalSpacing:1,
-                                showHorizontalGridLines:true, showVerticalGridLines:true}">
-                                <rows>
-                                    <GridPane.Row>
-                                        <Label text="0, 0" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="0, 1" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="0, 2" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="0, 3" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <GridPane.Filler/>
-                                    </GridPane.Row>
-                                    <GridPane.Row>
-                                        <Label text="1, 0" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="1, 1" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="1, 2" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <GridPane.Filler/>
-                                        <Label text="1, 4" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                    </GridPane.Row>
-                                    <GridPane.Row>
-                                        <Label text="2, 0" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="2, 1" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <GridPane.Filler/>
-                                        <Label text="2, 3" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="2, 4" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                    </GridPane.Row>
-                                    <GridPane.Row>
-                                        <Label text="3, 0" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <GridPane.Filler/>
-                                        <Label text="3, 2" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="3, 3" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="3, 4" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                    </GridPane.Row>
-                                    <GridPane.Row>
-                                        <GridPane.Filler/>
-                                        <Label text="4, 1" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="4, 2" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="4, 3" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                        <Label text="4, 4" styles="{horizontalAlignment:'center',
-                                            verticalAlignment:'center'}"/>
-                                    </GridPane.Row>
-                                </rows>
-                            </GridPane>
-                        </content>
-                    </Border>
-                </content>
+                <Border>
+                    <GridPane columnCount="5" styles="{horizontalSpacing:1, verticalSpacing:1,
+                        showHorizontalGridLines:true, showVerticalGridLines:true}">
+                        <GridPane.Row>
+                            <Label text="0, 0" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="0, 1" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="0, 2" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="0, 3" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <GridPane.Filler/>
+                        </GridPane.Row>
+
+                        <GridPane.Row>
+                            <Label text="1, 0" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="1, 1" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="1, 2" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <GridPane.Filler/>
+                            <Label text="1, 4" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                        </GridPane.Row>
+
+                        <GridPane.Row>
+                            <Label text="2, 0" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="2, 1" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <GridPane.Filler/>
+                            <Label text="2, 3" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="2, 4" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                        </GridPane.Row>
+
+                        <GridPane.Row>
+                            <Label text="3, 0" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <GridPane.Filler/>
+                            <Label text="3, 2" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="3, 3" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="3, 4" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                        </GridPane.Row>
+
+                        <GridPane.Row>
+                            <GridPane.Filler/>
+                            <Label text="4, 1" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="4, 2" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="4, 3" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                            <Label text="4, 4" styles="{horizontalAlignment:'center',
+                                verticalAlignment:'center'}"/>
+                        </GridPane.Row>
+                    </GridPane>
+                </Border>
             </Window>
             ]]>
         </source>

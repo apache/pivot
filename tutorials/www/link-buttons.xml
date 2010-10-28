@@ -33,35 +33,31 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/buttons/link_buttons.wtkx</src>
+                <src>/org/apache/pivot/tutorials/buttons/link_buttons.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The WTKX source for the example is below:
+            The BXML source for the example is below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/buttons/link_buttons.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/buttons/link_buttons.bxml">
             <![CDATA[
             <Window title="Link Buttons" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns:content="org.apache.pivot.wtk.content"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <CardPane wtkx:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontal_slide'}">
+                <Border>
+                    <CardPane bxml:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontal_slide'}">
                         <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                             <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
                             <LinkButton>
-                                <buttonData>
-                                    <content:ButtonData text="Next" icon="@resultset_next.png"/>
-                                </buttonData>
+                                <content:ButtonData text="Next" icon="@resultset_next.png"/>
 
                                 <buttonPressListeners>
-                                    <wtkx:script>
                                     function buttonPressed(button) {
                                         cardPane.setSelectedIndex(1);
                                     }
-                                    </wtkx:script>
                                 </buttonPressListeners>
                             </LinkButton>
                         </BoxPane>
@@ -69,21 +65,17 @@ limitations under the License.
                         <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                             <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
                             <LinkButton>
-                                <buttonData>
-                                    <content:ButtonData text="Previous" icon="@resultset_previous.png"/>
-                                </buttonData>
+                                <content:ButtonData text="Previous" icon="@resultset_previous.png"/>
 
                                 <buttonPressListeners>
-                                    <wtkx:script>
                                     function buttonPressed(button) {
                                         cardPane.setSelectedIndex(0);
                                     }
-                                    </wtkx:script>
                                 </buttonPressListeners>
                             </LinkButton>
                         </BoxPane>
                     </CardPane>
-                </content>
+                </Border>
             </Window>
             ]]>
         </source>
@@ -96,7 +88,7 @@ limitations under the License.
         </p>
 
         <p>
-            This example demonstrates another means of defining event handlers in WTKX: within an
+            This example demonstrates another means of defining event handlers in BXML: within an
             element that refers to a listener list property of its parent element. The
             <tt>&lt;buttonPressListeners&gt;</tt> element of each <tt>LinkButton</tt> contains
             script code that will be executed in response to a button press. In this case, the

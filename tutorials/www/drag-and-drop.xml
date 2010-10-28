@@ -54,7 +54,7 @@ limitations under the License.
                             <library>tutorials</library>
                         </libraries>
                         <startup-properties>
-                            <src>org/apache/pivot/tutorials/dragdrop/drag_drop.wtkx</src>
+                            <src>/org/apache/pivot/tutorials/dragdrop/drag_drop.bxml</src>
                         </startup-properties>
                     </application>
                 </td>
@@ -70,26 +70,22 @@ limitations under the License.
         </table>
 
         <p>
-            The WTKX source for this example is as follows. It creates an <tt>ImageView</tt> and
+            The BXML source for this example is as follows. It creates an <tt>ImageView</tt> and
             attaches a drag source and drop target to it via the <tt>dragSource</tt> and
             <tt>dropTarget</tt> attributes, respectively. The code for these handlers is defined
             in "dragdrop.js", discussed next:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/dragdrop/drag_drop.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/dragdrop/drag_drop.bxml">
             <![CDATA[
             <Window title="Drag and Drop" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <wtkx:script src="dragdrop.js"/>
-                <content>
-                    <Border styles="{padding:2}">
-                        <content>
-                            <ImageView wtkx:id="imageView" image="org/apache/pivot/tutorials/IMG_0767_2.jpg"
-                                dragSource="$dragSoure" dropTarget="$dropTarget"/>
-                        </content>
-                    </Border>
-                </content>
+                <bxml:script src="dragdrop.js"/>
+                <Border styles="{padding:2}">
+                    <ImageView bxml:id="imageView" image="org/apache/pivot/tutorials/IMG_0767_2.jpg"
+                        dragSource="$dragSoure" dropTarget="$dropTarget"/>
+                </Border>
             </Window>
             ]]>
         </source>

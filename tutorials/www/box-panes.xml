@@ -60,7 +60,7 @@ limitations under the License.
             the box pane's components:
         </p>
 
-        <application class="org.apache.pivot.tutorials.layout.BoxPanes"
+        <application class="org.apache.pivot.wtk.ScriptApplication"
             width="460" height="310">
             <libraries>
                 <library>core</library>
@@ -68,65 +68,64 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/tutorials/layout/box_panes.bxml</src>
+            </startup-properties>
         </application>
 
         <p>
-            The WTKX source for the application is shown below:
+            The BXML source for the application is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/layout/box_panes.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/layout/box_panes.bxml">
             <![CDATA[
-            <Window title="Box Panes" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+            <layout:BoxPanes title="Box Panes" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns:layout="org.apache.pivot.tutorials.layout"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <TablePane>
-                        <columns>
-                            <TablePane.Column width="300"/>
-                            <TablePane.Column width="-1"/>
-                        </columns>
+                <TablePane>
+                    <columns>
+                        <TablePane.Column width="300"/>
+                        <TablePane.Column width="-1"/>
+                    </columns>
 
-                        <rows>
-                            <TablePane.Row height="-1">
-                                <Border styles="{padding:6, color:'#999999'}">
-                                    <content>
-                                        <BoxPane wtkx:id="boxPane">
-                                            <PushButton buttonData="One"/>
-                                            <PushButton buttonData="Two"/>
-                                            <PushButton buttonData="Three"/>
-                                        </BoxPane>
-                                    </content>
-                                </Border>
-                                <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
-                                    <wtkx:define>
-                                        <ButtonGroup wtkx:id="orientation"/>
-                                        <ButtonGroup wtkx:id="horizontalAlignment"/>
-                                        <ButtonGroup wtkx:id="verticalAlignment"/>
-                                    </wtkx:define>
+                    <TablePane.Row height="-1">
+                        <Border styles="{padding:6, color:'#999999'}">
+                            <BoxPane bxml:id="boxPane">
+                                <PushButton buttonData="One"/>
+                                <PushButton buttonData="Two"/>
+                                <PushButton buttonData="Three"/>
+                            </BoxPane>
+                        </Border>
 
-                                    <Label text="Orientation" styles="{font:{bold:true}}"/>
-                                    <RadioButton wtkx:id="horizontalOrientationButton" buttonData="Horizontal" buttonGroup="$orientation" selected="true"/>
-                                    <RadioButton wtkx:id="verticalOrientationButton" buttonData="Vertical" buttonGroup="$orientation"/>
+                        <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
+                            <bxml:define>
+                                <ButtonGroup bxml:id="orientation"/>
+                                <ButtonGroup bxml:id="horizontalAlignment"/>
+                                <ButtonGroup bxml:id="verticalAlignment"/>
+                            </bxml:define>
 
-                                    <Label text="Horizontal Alignment" styles="{font:{bold:true}}"/>
-                                    <RadioButton wtkx:id="horizontalAlignmentLeftButton" buttonData="Left" buttonGroup="$horizontalAlignment" selected="true"/>
-                                    <RadioButton wtkx:id="horizontalAlignmentRightButton" buttonData="Right" buttonGroup="$horizontalAlignment"/>
-                                    <RadioButton wtkx:id="horizontalAlignmentCenterButton" buttonData="Center" buttonGroup="$horizontalAlignment"/>
+                            <Label text="Orientation" styles="{font:{bold:true}}"/>
+                            <RadioButton bxml:id="horizontalOrientationButton" buttonData="Horizontal" buttonGroup="$orientation" selected="true"/>
+                            <RadioButton bxml:id="verticalOrientationButton" buttonData="Vertical" buttonGroup="$orientation"/>
 
-                                    <Label text="Vertical Alignment" styles="{font:{bold:true}}"/>
-                                    <RadioButton wtkx:id="verticalAlignmentTopButton" buttonData="Top" buttonGroup="$verticalAlignment" selected="true"/>
-                                    <RadioButton wtkx:id="verticalAlignmentBottomButton" buttonData="Bottom" buttonGroup="$verticalAlignment"/>
-                                    <RadioButton wtkx:id="verticalAlignmentCenterButton" buttonData="Center" buttonGroup="$verticalAlignment"/>
+                            <Label text="Horizontal Alignment" styles="{font:{bold:true}}"/>
+                            <RadioButton bxml:id="horizontalAlignmentLeftButton" buttonData="Left" buttonGroup="$horizontalAlignment" selected="true"/>
+                            <RadioButton bxml:id="horizontalAlignmentRightButton" buttonData="Right" buttonGroup="$horizontalAlignment"/>
+                            <RadioButton bxml:id="horizontalAlignmentCenterButton" buttonData="Center" buttonGroup="$horizontalAlignment"/>
 
-                                    <BoxPane styles="{padding:{top:8}}">
-                                        <Checkbox wtkx:id="fillCheckbox" buttonData="Fill"/>
-                                    </BoxPane>
-                                </BoxPane>
-                            </TablePane.Row>
-                        </rows>
-                    </TablePane>
-                </content>
-            </Window>
+                            <Label text="Vertical Alignment" styles="{font:{bold:true}}"/>
+                            <RadioButton bxml:id="verticalAlignmentTopButton" buttonData="Top" buttonGroup="$verticalAlignment" selected="true"/>
+                            <RadioButton bxml:id="verticalAlignmentBottomButton" buttonData="Bottom" buttonGroup="$verticalAlignment"/>
+                            <RadioButton bxml:id="verticalAlignmentCenterButton" buttonData="Center" buttonGroup="$verticalAlignment"/>
+
+                            <BoxPane styles="{padding:{top:8}}">
+                                <Checkbox bxml:id="fillCheckbox" buttonData="Fill"/>
+                            </BoxPane>
+                        </BoxPane>
+                    </TablePane.Row>
+                </TablePane>
+            </layout:BoxPanes>
             ]]>
         </source>
 
@@ -139,23 +138,22 @@ limitations under the License.
             <![CDATA[
             package org.apache.pivot.tutorials.layout;
 
+            import java.net.URL;
+
+            import org.apache.pivot.beans.Bindable;
             import org.apache.pivot.collections.Map;
-            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.util.Resources;
             import org.apache.pivot.wtk.Button;
             import org.apache.pivot.wtk.ButtonStateListener;
             import org.apache.pivot.wtk.Checkbox;
-            import org.apache.pivot.wtk.DesktopApplicationContext;
-            import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.BoxPane;
             import org.apache.pivot.wtk.HorizontalAlignment;
             import org.apache.pivot.wtk.Orientation;
             import org.apache.pivot.wtk.RadioButton;
             import org.apache.pivot.wtk.VerticalAlignment;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
-            public class BoxPanes implements Application {
-                private Window window = null;
+            public class BoxPanes extends Window implements Bindable {
                 private BoxPane boxPane = null;
                 private RadioButton horizontalOrientationButton = null;
                 private RadioButton verticalOrientationButton = null;
@@ -168,19 +166,17 @@ limitations under the License.
                 private Checkbox fillCheckbox = null;
 
                 @Override
-                public void startup(Display display, Map<String, String> properties) throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    window = (Window)wtkxSerializer.readObject(this, "box_panes.wtkx");
-                    boxPane = (BoxPane)wtkxSerializer.get("boxPane");
-                    horizontalOrientationButton = (RadioButton)wtkxSerializer.get("horizontalOrientationButton");
-                    verticalOrientationButton = (RadioButton)wtkxSerializer.get("verticalOrientationButton");
-                    horizontalAlignmentRightButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentRightButton");
-                    horizontalAlignmentLeftButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentLeftButton");
-                    horizontalAlignmentCenterButton = (RadioButton)wtkxSerializer.get("horizontalAlignmentCenterButton");
-                    verticalAlignmentTopButton = (RadioButton)wtkxSerializer.get("verticalAlignmentTopButton");
-                    verticalAlignmentBottomButton = (RadioButton)wtkxSerializer.get("verticalAlignmentBottomButton");
-                    verticalAlignmentCenterButton = (RadioButton)wtkxSerializer.get("verticalAlignmentCenterButton");
-                    fillCheckbox = (Checkbox)wtkxSerializer.get("fillCheckbox");
+                public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+                    boxPane = (BoxPane)namespace.get("boxPane");
+                    horizontalOrientationButton = (RadioButton)namespace.get("horizontalOrientationButton");
+                    verticalOrientationButton = (RadioButton)namespace.get("verticalOrientationButton");
+                    horizontalAlignmentRightButton = (RadioButton)namespace.get("horizontalAlignmentRightButton");
+                    horizontalAlignmentLeftButton = (RadioButton)namespace.get("horizontalAlignmentLeftButton");
+                    horizontalAlignmentCenterButton = (RadioButton)namespace.get("horizontalAlignmentCenterButton");
+                    verticalAlignmentTopButton = (RadioButton)namespace.get("verticalAlignmentTopButton");
+                    verticalAlignmentBottomButton = (RadioButton)namespace.get("verticalAlignmentBottomButton");
+                    verticalAlignmentCenterButton = (RadioButton)namespace.get("verticalAlignmentCenterButton");
+                    fillCheckbox = (Checkbox)namespace.get("fillCheckbox");
 
                     ButtonStateListener buttonStateListener = new ButtonStateListener() {
                         @Override
@@ -200,25 +196,6 @@ limitations under the License.
                     fillCheckbox.getButtonStateListeners().add(buttonStateListener);
 
                     updateBoxPaneState();
-
-                    window.open(display);
-                }
-
-                @Override
-                public boolean shutdown(boolean optional) {
-                    if (window != null) {
-                        window.close();
-                    }
-
-                    return false;
-                }
-
-                @Override
-                public void suspend() {
-                }
-
-                @Override
-                public void resume() {
                 }
 
                 private void updateBoxPaneState() {
@@ -260,10 +237,6 @@ limitations under the License.
                     }
 
                     boxPane.getStyles().put("fill", fillCheckbox.isSelected());
-                }
-
-                public static void main(String[] args) {
-                    DesktopApplicationContext.main(BoxPanes.class, args);
                 }
             }
             ]]>

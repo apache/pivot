@@ -42,67 +42,53 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/colorchoosers/color_choosers.wtkx</src>
+                <src>/org/apache/pivot/tutorials/colorchoosers/color_choosers.bxml</src>
             </startup-properties>
         </application>
 
-        <p>The WTKX for this example is shown below:</p>
+        <p>The BXML for this example is shown below:</p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/colorchoosers/color_choosers.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/colorchoosers/color_choosers.bxml">
             <![CDATA[
             <Window title="Color Choosers" maximized="true"
                 WindowStateListener.windowOpened="init()"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <wtkx:script src="color_choosers.js"/>
+                <bxml:script src="color_choosers.js"/>
 
-                <content>
-                    <Border>
-                        <content>
-                            <BoxPane styles="{padding:4, spacing:12}">
-                                <Border styles="{color:10}">
-                                    <content>
-                                        <ColorChooser wtkx:id="colorChooser"
-                                            ColorChooserSelectionListener.selectedColorChanged="onColorChange()">
-                                        </ColorChooser>
-                                    </content>
+                <Border>
+                    <BoxPane styles="{padding:4, spacing:12}">
+                        <Border styles="{color:10}">
+                            <ColorChooser bxml:id="colorChooser"
+                                ColorChooserSelectionListener.selectedColorChanged="onColorChange()"/>
+                        </Border>
+                        <Form>
+                            <Form.Section>
+                                <Border Form.label="Selected Color" styles="{padding:1}">
+                                    <Border bxml:id="sampleBorder" preferredWidth="100"
+                                        preferredHeight="14" styles="{thickness:0}">
+                                        <Label/>
+                                    </Border>
                                 </Border>
-                                <Form>
-                                    <sections>
-                                        <Form.Section>
-                                            <Border Form.label="Selected Color" styles="{padding:1}">
-                                                <content>
-                                                    <Border wtkx:id="sampleBorder" preferredWidth="100"
-                                                        preferredHeight="14" styles="{thickness:0}">
-                                                        <content>
-                                                            <Label/>
-                                                        </content>
-                                                    </Border>
-                                                </content>
-                                            </Border>
-                                            <TextInput wtkx:id="hexInput" Form.label="HTML Notation"
-                                                ComponentStateListener.focusedChanged="onInputFocusChange()">
-                                                <componentKeyListeners>
-                                                    <wtkx:script>
-                                                        importClass(org.apache.pivot.wtk.Component);
-                                                        importClass(org.apache.pivot.wtk.Keyboard);
 
-                                                        function keyPressed(component, keyCode, keyLocation) {
-                                                            if (keyCode == Keyboard.KeyCode.TAB ||
-                                                                keyCode == Keyboard.KeyCode.ENTER) {
-                                                                Component.clearFocus();
-                                                            }
-                                                        }
-                                                    </wtkx:script>
-                                                </componentKeyListeners>
-                                            </TextInput>
-                                        </Form.Section>
-                                    </sections>
-                                </Form>
-                            </BoxPane>
-                        </content>
-                    </Border>
-                </content>
+                                <TextInput bxml:id="hexInput" Form.label="HTML Notation" textSize="6"
+                                    ComponentStateListener.focusedChanged="onInputFocusChange()">
+                                    <componentKeyListeners>
+                                        importClass(org.apache.pivot.wtk.Component);
+                                        importClass(org.apache.pivot.wtk.Keyboard);
+
+                                        function keyPressed(component, keyCode, keyLocation) {
+                                            if (keyCode == Keyboard.KeyCode.TAB ||
+                                                keyCode == Keyboard.KeyCode.ENTER) {
+                                                Component.clearFocus();
+                                            }
+                                        }
+                                    </componentKeyListeners>
+                                </TextInput>
+                            </Form.Section>
+                        </Form>
+                    </BoxPane>
+                </Border>
             </Window>
             ]]>
         </source>
@@ -176,7 +162,7 @@ limitations under the License.
         </source>
 
         <p>
-            Since this example is written entirely in WTKX and script, there is no associated Java
+            Since this example is written entirely in BXML and script, there is no associated Java
             source.
         </p>
     </body>

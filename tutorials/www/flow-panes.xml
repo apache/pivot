@@ -37,7 +37,7 @@ limitations under the License.
             have a baseline, it draws a blue line across the component's vertical midpoint:
         </p>
 
-        <application class="org.apache.pivot.tutorials.layout.FlowPanes"
+        <application class="org.apache.pivot.wtk.ScriptApplication"
             width="512" height="240">
             <libraries>
                 <library>core</library>
@@ -45,65 +45,64 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/tutorials/layout/flow_panes.bxml</src>
+            </startup-properties>
         </application>
 
         <p>
-            The WTKX source for this example is shown below:
+            The BXML source for this example is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/layout/flow_panes.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/layout/flow_panes.bxml">
             <![CDATA[
-            <Window title="Flow Panes" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+            <layout:FlowPanes title="Flow Panes" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns:effects="org.apache.pivot.wtk.effects"
+                xmlns:layout="org.apache.pivot.tutorials.layout"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <SplitPane splitRatio="0.75">
-                        <left>
-                            <Border styles="{padding:4}">
-                                <content>
-                                    <BoxPane orientation="vertical" styles="{fill:true}">
-                                        <FlowPane wtkx:id="flowPane" styles="{padding:2}">
-                                            <decorators>
-                                                <effects:BaselineDecorator/>
-                                            </decorators>
+                <SplitPane splitRatio="0.75">
+                    <left>
+                        <Border styles="{padding:4}">
+                            <BoxPane orientation="vertical" styles="{fill:true}">
+                                <FlowPane bxml:id="flowPane" styles="{padding:2}">
+                                    <decorators>
+                                        <effects:BaselineDecorator/>
+                                    </decorators>
 
-                                            <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
-                                            <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
-                                            <PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/>
-                                            <PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/>
-                                            <PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/>
-                                            <PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/>
-                                            <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
-                                            <PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/>
-                                        </FlowPane>
-                                    </BoxPane>
-                                </content>
-                            </Border>
-                        </left>
-                        <right>
-                            <Border styles="{padding:{top:2, left:6}}">
-                                <content>
-                                    <BoxPane orientation="vertical">
-                                        <Label text="Alignment" styles="{font:{bold:true}}"/>
+                                    <PushButton buttonData="0" styles="{minimumAspectRatio:1.5}"/>
+                                    <PushButton buttonData="1" styles="{minimumAspectRatio:1.5}"/>
+                                    <PushButton buttonData="2" styles="{minimumAspectRatio:1.5}"/>
+                                    <PushButton buttonData="3" preferredWidth="20" preferredHeight="20"/>
+                                    <PushButton buttonData="4" preferredWidth="30" preferredHeight="30"/>
+                                    <PushButton buttonData="5" preferredWidth="40" preferredHeight="40"/>
+                                    <PushButton buttonData="6" styles="{minimumAspectRatio:1.5}"/>
+                                    <PushButton buttonData="7" styles="{minimumAspectRatio:1.5}"/>
+                                </FlowPane>
+                            </BoxPane>
+                        </Border>
+                    </left>
 
-                                        <wtkx:define>
-                                            <ButtonGroup wtkx:id="alignment"/>
-                                        </wtkx:define>
-                                        <RadioButton wtkx:id="leftRadioButton" buttonData="Left" buttonGroup="$alignment" selected="true"/>
-                                        <RadioButton wtkx:id="rightRadioButton" buttonData="Right" buttonGroup="$alignment"/>
-                                        <RadioButton wtkx:id="centerRadioButton" buttonData="Center" buttonGroup="$alignment"/>
+                    <right>
+                        <Border styles="{padding:{top:2, left:6}}">
+                            <BoxPane orientation="vertical">
+                                <Label text="Alignment" styles="{font:{bold:true}}"/>
 
-                                        <BoxPane styles="{padding:{top:6}}">
-                                            <Checkbox wtkx:id="alignToBaselineCheckbox" buttonData="Align to baseline"/>
-                                        </BoxPane>
-                                    </BoxPane>
-                                </content>
-                            </Border>
-                        </right>
-                    </SplitPane>
-                </content>
-            </Window>
+                                <bxml:define>
+                                    <ButtonGroup bxml:id="alignment"/>
+                                </bxml:define>
+                                <RadioButton bxml:id="leftRadioButton" buttonData="Left" buttonGroup="$alignment" selected="true"/>
+                                <RadioButton bxml:id="rightRadioButton" buttonData="Right" buttonGroup="$alignment"/>
+                                <RadioButton bxml:id="centerRadioButton" buttonData="Center" buttonGroup="$alignment"/>
+
+                                <BoxPane styles="{padding:{top:6}}">
+                                    <Checkbox bxml:id="alignToBaselineCheckbox" buttonData="Align to baseline"/>
+                                </BoxPane>
+                            </BoxPane>
+                    </Border>
+                    </right>
+                </SplitPane>
+            </layout:FlowPanes>
             ]]>
         </source>
 
@@ -116,21 +115,20 @@ limitations under the License.
             <![CDATA[
             package org.apache.pivot.tutorials.layout;
 
+            import java.net.URL;
+
+            import org.apache.pivot.beans.Bindable;
             import org.apache.pivot.collections.Map;
-            import org.apache.pivot.wtk.Application;
+            import org.apache.pivot.util.Resources;
             import org.apache.pivot.wtk.Button;
             import org.apache.pivot.wtk.ButtonStateListener;
             import org.apache.pivot.wtk.Checkbox;
-            import org.apache.pivot.wtk.DesktopApplicationContext;
-            import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.FlowPane;
             import org.apache.pivot.wtk.HorizontalAlignment;
             import org.apache.pivot.wtk.RadioButton;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
-            public class FlowPanes implements Application {
-                private Window window = null;
+            public class FlowPanes extends Window implements Bindable {
                 private FlowPane flowPane = null;
                 private RadioButton leftRadioButton = null;
                 private RadioButton rightRadioButton = null;
@@ -138,14 +136,12 @@ limitations under the License.
                 private Checkbox alignToBaselineCheckbox = null;
 
                 @Override
-                public void startup(Display display, Map<String, String> properties) throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    window = (Window)wtkxSerializer.readObject(this, "flow_panes.wtkx");
-                    flowPane = (FlowPane)wtkxSerializer.get("flowPane");
-                    leftRadioButton = (RadioButton)wtkxSerializer.get("leftRadioButton");
-                    rightRadioButton = (RadioButton)wtkxSerializer.get("rightRadioButton");
-                    centerRadioButton = (RadioButton)wtkxSerializer.get("centerRadioButton");
-                    alignToBaselineCheckbox = (Checkbox)wtkxSerializer.get("alignToBaselineCheckbox");
+                public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+                    flowPane = (FlowPane)namespace.get("flowPane");
+                    leftRadioButton = (RadioButton)namespace.get("leftRadioButton");
+                    rightRadioButton = (RadioButton)namespace.get("rightRadioButton");
+                    centerRadioButton = (RadioButton)namespace.get("centerRadioButton");
+                    alignToBaselineCheckbox = (Checkbox)namespace.get("alignToBaselineCheckbox");
 
                     ButtonStateListener buttonStateListener = new ButtonStateListener() {
                         @Override
@@ -160,25 +156,6 @@ limitations under the License.
                     alignToBaselineCheckbox.getButtonStateListeners().add(buttonStateListener);
 
                     updateFlowPaneState();
-
-                    window.open(display);
-                }
-
-                @Override
-                public boolean shutdown(boolean optional) {
-                    if (window != null) {
-                        window.close();
-                    }
-
-                    return false;
-                }
-
-                @Override
-                public void suspend() {
-                }
-
-                @Override
-                public void resume() {
                 }
 
                 private void updateFlowPaneState() {
@@ -197,10 +174,6 @@ limitations under the License.
                     }
 
                     flowPane.getStyles().put("alignToBaseline", alignToBaselineCheckbox.isSelected());
-                }
-
-                public static void main(String[] args) {
-                    DesktopApplicationContext.main(FlowPanes.class, args);
                 }
             }
             ]]>

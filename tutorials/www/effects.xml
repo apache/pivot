@@ -50,104 +50,115 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/effects/decorators.wtkx</src>
+                <src>/org/apache/pivot/tutorials/effects/decorators.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The WTKX source for the example is shown below (there is no associated Java source):
+            The BXML source for the example is shown below (there is no associated Java source):
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/effects/decorators.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/effects/decorators.bxml">
             <![CDATA[
             <Window title="Decorators" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns:effects="org.apache.pivot.wtk.effects"
                 xmlns="org.apache.pivot.wtk">
-                <wtkx:define>
-                    <effects:BlurDecorator wtkx:id="blurDecorator"/>
-                    <effects:FadeDecorator wtkx:id="fadeDecorator" opacity="0.33"/>
-                    <effects:GrayscaleDecorator wtkx:id="grayscaleDecorator"/>
-                    <effects:ReflectionDecorator wtkx:id="reflectionDecorator"/>
-                    <effects:SaturationDecorator wtkx:id="saturationDecorator" multiplier="2.5"/>
-                    <effects:ShadeDecorator wtkx:id="shadeDecorator" color="#ff0000" opacity="0.33"/>
-                    <effects:WatermarkDecorator wtkx:id="watermarkDecorator" text="Watermark"
-                        font="Arial BOLD 24" opacity="0.33"/>
-                </wtkx:define>
+                <TablePane>
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                        <TablePane.Column width="-1"/>
+                    </columns>
 
-                <content>
-                    <TablePane>
-                        <columns>
-                            <TablePane.Column width="1*"/>
-                            <TablePane.Column width="-1"/>
-                        </columns>
-                        <rows>
-                            <TablePane.Row>
-                                <Border styles="{padding:2}">
-                                    <content>
-                                        <BoxPane preferredWidth="480" preferredHeight="480"
-                                            styles="{horizontalAlignment:'center', verticalAlignment:'top', padding:6}">
-                                            <ImageView wtkx:id="imageView" image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
-                                        </BoxPane>
-                                    </content>
-                                </Border>
+                    <TablePane.Row>
+                        <Border styles="{padding:2}">
+                            <BoxPane preferredWidth="480" preferredHeight="480"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'top', padding:6}">
+                                <ImageView bxml:id="imageView" image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                            </BoxPane>
+                        </Border>
 
-                                <BoxPane orientation="vertical" styles="{padding:6, spacing:6}">
-                                    <wtkx:define>
-                                        <ButtonGroup wtkx:id="decoratorButtonGroup">
-                                            <buttonGroupListeners>
-                                            <wtkx:script>
-                                            function selectionChanged(buttonGroup) {
-                                                var selection = buttonGroup.getSelection();
+                        <BoxPane orientation="vertical" styles="{padding:6, spacing:6}">
+                            <bxml:define>
+                                <ButtonGroup bxml:id="decoratorButtonGroup">
+                                    <buttonGroupListeners>
+                                        function selectionChanged(buttonGroup) {
+                                            var selection = buttonGroup.getSelection();
 
-                                                if (selection != null) {
-                                                    var decorator = selection.getUserData().get("decorator");
-                                                    imageView.getDecorators().removeAll();
+                                            if (selection != null) {
+                                                var decorator = selection.getUserData().get("decorator");
+                                                imageView.getDecorators().removeAll();
 
-                                                    if (decorator != null) {
-                                                        imageView.getDecorators().add(decorator);
-                                                    }
+                                                if (decorator != null) {
+                                                    imageView.getDecorators().add(decorator);
                                                 }
                                             }
-                                            </wtkx:script>
-                                            </buttonGroupListeners>
-                                        </ButtonGroup>
-                                    </wtkx:define>
+                                        }
+                                    </buttonGroupListeners>
+                                </ButtonGroup>
+                            </bxml:define>
 
-                                    <RadioButton buttonData="None" buttonGroup="$decoratorButtonGroup" selected="true"/>
+                            <RadioButton buttonData="None" buttonGroup="$decoratorButtonGroup" selected="true"/>
 
-                                    <RadioButton buttonData="Blur" buttonGroup="$decoratorButtonGroup">
-                                        <userData decorator="$blurDecorator"/>
-                                    </RadioButton>
+                            <RadioButton buttonData="Blur" buttonGroup="$decoratorButtonGroup">
+                                <userData>
+                                    <decorator>
+                                        <effects:BlurDecorator/>
+                                    </decorator>
+                                </userData>
+                            </RadioButton>
 
-                                    <RadioButton buttonData="Fade" buttonGroup="$decoratorButtonGroup">
-                                        <userData decorator="$fadeDecorator"/>
-                                    </RadioButton>
+                            <RadioButton buttonData="Fade" buttonGroup="$decoratorButtonGroup">
+                                <userData>
+                                    <decorator>
+                                        <effects:FadeDecorator opacity="0.33"/>
+                                    </decorator>
+                                </userData>
+                            </RadioButton>
 
-                                    <RadioButton buttonData="Grayscale" buttonGroup="$decoratorButtonGroup">
-                                        <userData decorator="$grayscaleDecorator"/>
-                                    </RadioButton>
+                            <RadioButton buttonData="Grayscale" buttonGroup="$decoratorButtonGroup">
+                                <userData>
+                                    <decorator>
+                                        <effects:GrayscaleDecorator/>
+                                    </decorator>
+                                </userData>
+                            </RadioButton>
 
-                                    <RadioButton buttonData="Reflection" buttonGroup="$decoratorButtonGroup">
-                                        <userData decorator="$reflectionDecorator"/>
-                                    </RadioButton>
+                            <RadioButton buttonData="Reflection" buttonGroup="$decoratorButtonGroup">
+                                <userData>
+                                    <decorator>
+                                        <effects:ReflectionDecorator/>
+                                    </decorator>
+                                </userData>
+                            </RadioButton>
 
-                                    <RadioButton buttonData="Saturation" buttonGroup="$decoratorButtonGroup">
-                                        <userData decorator="$saturationDecorator"/>
-                                    </RadioButton>
+                            <RadioButton buttonData="Saturation" buttonGroup="$decoratorButtonGroup">
+                                <userData>
+                                    <decorator>
+                                        <effects:SaturationDecorator multiplier="2.5"/>
+                                    </decorator>
+                                </userData>
+                            </RadioButton>
 
-                                    <RadioButton buttonData="Shade" buttonGroup="$decoratorButtonGroup">
-                                        <userData decorator="$shadeDecorator"/>
-                                    </RadioButton>
+                            <RadioButton buttonData="Shade" buttonGroup="$decoratorButtonGroup">
+                                <userData>
+                                    <decorator>
+                                        <effects:ShadeDecorator color="#ff0000" opacity="0.33"/>
+                                    </decorator>
+                                </userData>
+                            </RadioButton>
 
-                                    <RadioButton buttonData="Watermark" buttonGroup="$decoratorButtonGroup">
-                                        <userData decorator="$watermarkDecorator"/>
-                                    </RadioButton>
-                                </BoxPane>
-                            </TablePane.Row>
-                        </rows>
-                    </TablePane>
-                </content>
+                            <RadioButton buttonData="Watermark" buttonGroup="$decoratorButtonGroup">
+                                <userData>
+                                    <decorator>
+                                        <effects:WatermarkDecorator text="Watermark" font="Arial BOLD 24"
+                                            opacity="0.33"/>
+                                    </decorator>
+                                </userData>
+                            </RadioButton>
+                        </BoxPane>
+                    </TablePane.Row>
+                </TablePane>
             </Window>
             ]]>
         </source>

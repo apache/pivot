@@ -46,7 +46,7 @@ limitations under the License.
             menu that describes what the user clicked on:
         </p>
 
-        <application class="org.apache.pivot.tutorials.menus.ContextMenus"
+        <application class="org.apache.pivot.wtk.ScriptApplication"
             width="420" height="240">
             <libraries>
                 <library>core</library>
@@ -54,52 +54,52 @@ limitations under the License.
                 <library>wtk-terra</library>
                 <library>tutorials</library>
             </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/tutorials/menus/context_menus.bxml</src>
+            </startup-properties>
         </application>
 
         <p>
-            The WTKX source for the example is shown below. It simply instantiates four image
+            The BXML source for the example is shown below. It simply instantiates four image
             view components and places a description of the image shown in each in the component's
             user data:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/menus/context_menus.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/menus/context_menus.bxml">
             <![CDATA[
-            <Window title="Context Menus" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+            <menus:ContextMenus title="Context Menus" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns:menus="org.apache.pivot.tutorials.menus"
                 xmlns="org.apache.pivot.wtk">
-                <content>
-                    <Border styles="{color:10}">
-                        <content>
-                            <TablePane styles="{horizontalSpacing:1, verticalSpacing:1,
-                                showHorizontalGridLines:true, showVerticalGridLines:true,
-                                horizontalGridColor:10, verticalGridColor:10}">
-                                <columns>
-                                    <TablePane.Column width="1*"/>
-                                    <TablePane.Column width="1*"/>
-                                </columns>
-                                <rows>
-                                    <TablePane.Row height="1*">
-                                        <ImageView image="@battery.png">
-                                            <userData description="battery"/>
-                                        </ImageView>
-                                        <ImageView image="@emblem-favorite.png">
-                                            <userData description="heart"/>
-                                        </ImageView>
-                                    </TablePane.Row>
-                                    <TablePane.Row height="1*">
-                                        <ImageView image="@edit-paste.png">
-                                            <userData description="clipboard"/>
-                                        </ImageView>
-                                        <ImageView image="@face-smile.png">
-                                            <userData description="smiley face"/>
-                                        </ImageView>
-                                    </TablePane.Row>
-                                </rows>
-                            </TablePane>
-                        </content>
-                    </Border>
-                </content>
-            </Window>
+                <Border styles="{color:10}">
+                    <TablePane styles="{horizontalSpacing:1, verticalSpacing:1,
+                        showHorizontalGridLines:true, showVerticalGridLines:true,
+                        horizontalGridColor:10, verticalGridColor:10}">
+                        <columns>
+                            <TablePane.Column width="1*"/>
+                            <TablePane.Column width="1*"/>
+                        </columns>
+
+                        <TablePane.Row height="1*">
+                            <ImageView image="@battery.png">
+                                <userData description="battery"/>
+                            </ImageView>
+                            <ImageView image="@emblem-favorite.png">
+                                <userData description="heart"/>
+                            </ImageView>
+                        </TablePane.Row>
+
+                        <TablePane.Row height="1*">
+                            <ImageView image="@edit-paste.png">
+                                <userData description="clipboard"/>
+                            </ImageView>
+                            <ImageView image="@face-smile.png">
+                                <userData description="smiley face"/>
+                            </ImageView>
+                        </TablePane.Row>
+                    </TablePane>
+                </Border>
+            </menus:ContextMenus>
             ]]>
         </source>
 
@@ -126,24 +126,23 @@ limitations under the License.
             <![CDATA[
             package org.apache.pivot.tutorials.menus;
 
+            import java.net.URL;
+
+            import org.apache.pivot.beans.Bindable;
             import org.apache.pivot.collections.Map;
+            import org.apache.pivot.util.Resources;
             import org.apache.pivot.wtk.Action;
-            import org.apache.pivot.wtk.Application;
             import org.apache.pivot.wtk.Component;
-            import org.apache.pivot.wtk.DesktopApplicationContext;
-            import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.Menu;
             import org.apache.pivot.wtk.MenuHandler;
             import org.apache.pivot.wtk.Prompt;
             import org.apache.pivot.wtk.Window;
-            import org.apache.pivot.wtkx.WTKXSerializer;
 
-            public class ContextMenus implements Application {
-                private Window window = null;
+            public class ContextMenus extends Window implements Bindable {
                 private MenuHandler menuHandler = new MenuHandler.Adapter() {
                     @Override
                     public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
-                        final Component descendant = window.getDescendantAt(x, y);
+                        final Component descendant = getDescendantAt(x, y);
 
                         Menu.Section menuSection = new Menu.Section();
                         menu.getSections().add(menuSection);
@@ -151,11 +150,11 @@ limitations under the License.
                         Menu.Item whatIsThisMenuItem = new Menu.Item("What is this?");
                         whatIsThisMenuItem.setAction(new Action() {
                             @Override
-                            public void perform() {
+                            public void perform(Component source) {
                                 String description = (String)descendant.getUserData().get("description");
                                 String message = "This is a " + description + ".";
 
-                                Prompt.prompt(message, window);
+                                Prompt.prompt(message, ContextMenus.this);
                             }
                         });
 
@@ -166,33 +165,8 @@ limitations under the License.
                 };
 
                 @Override
-                public void startup(Display display, Map<String, String> properties) throws Exception {
-                    WTKXSerializer wtkxSerializer = new WTKXSerializer();
-                    window = (Window)wtkxSerializer.readObject(this, "context_menus.wtkx");
-                    window.setMenuHandler(menuHandler);
-
-                    window.open(display);
-                }
-
-                @Override
-                public boolean shutdown(boolean optional) {
-                    if (window != null) {
-                        window.close();
-                    }
-
-                    return false;
-                }
-
-                @Override
-                public void suspend() {
-                }
-
-                @Override
-                public void resume() {
-                }
-
-                public static void main(String[] args) {
-                    DesktopApplicationContext.main(ContextMenus.class, args);
+                public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+                    setMenuHandler(menuHandler);
                 }
             }
             ]]>

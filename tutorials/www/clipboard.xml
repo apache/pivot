@@ -43,106 +43,95 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/clipboard/clipboard.wtkx</src>
+                <src>/org/apache/pivot/tutorials/clipboard/clipboard.bxml</src>
             </startup-properties>
         </application>
 
         <p>
-            The application source code consists of two files: a main WTKX file that declares the
+            The application source code consists of two files: a main BXML file that declares the
             structure of the user interface along with some simple event handlers, and a JavaScript
             file that defines two functions: <tt>copy()</tt> and <tt>paste()</tt>. These functions
             are invoked by the button press listeners attached to the UI elements declared in the
-            WTKX file. The WTKX source code for the example is shown below:
+            BXML file. The BXML source code for the example is shown below:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/layout/box_panes.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/clipboard/clipboard.bxml">
             <![CDATA[
             <Window title="Clipboard" maximized="true"
-                xmlns:wtkx="http://pivot.apache.org/wtkx"
+                xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
-                <wtkx:script src="clipboard.js"/>
+                <bxml:script src="clipboard.js"/>
 
                 <windowStateListeners>
-                    <wtkx:script>
                     function windowOpened(window) {
                         sourceImageButtonGroup.setSelection(sourceImageButton1);
                         sourceImageButton1.requestFocus();
                     }
-                    </wtkx:script>
                 </windowStateListeners>
 
-                <content>
-                    <TablePane styles="{horizontalSpacing:4, verticalSpacing:4}">
-                        <columns>
-                            <TablePane.Column width="1*"/>
-                            <TablePane.Column width="1*"/>
-                        </columns>
-                        <rows>
-                            <TablePane.Row height="1*">
-                                <Border styles="{padding:2}">
-                                    <content>
-                                        <CardPane wtkx:id="sourceImageCardPane" styles="{padding:4}">
-                                            <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
-                                            <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
-                                            <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
-                                        </CardPane>
-                                    </content>
-                                </Border>
-                                <Border styles="{padding:2}">
-                                    <content>
-                                        <CardPane selectedIndex="0" styles="{padding:4}">
-                                            <ImageView wtkx:id="destinationImageView"/>
-                                        </CardPane>
-                                    </content>
-                                </Border>
-                            </TablePane.Row>
+                <TablePane styles="{horizontalSpacing:4, verticalSpacing:4}">
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                        <TablePane.Column width="1*"/>
+                    </columns>
 
-                            <TablePane.Row height="-1">
-                                <BoxPane orientation="vertical" styles="{fill:true}">
-                                    <BoxPane wtkx:id="sourceImageButtonBoxPane"
-                                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                        <wtkx:define>
-                                            <ButtonGroup wtkx:id="sourceImageButtonGroup">
-                                                <buttonGroupListeners>
-                                                    <wtkx:script>
-                                                    function selectionChanged(buttonGroup, previousSelection) {
-                                                        var selection = buttonGroup.getSelection();
+                    <TablePane.Row height="1*">
+                        <Border styles="{padding:2}">
+                            <CardPane bxml:id="sourceImageCardPane" styles="{padding:4}">
+                                <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                                <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                                <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                            </CardPane>
+                        </Border>
+                        <Border styles="{padding:2}">
+                            <CardPane selectedIndex="0" styles="{padding:4}">
+                                <ImageView bxml:id="destinationImageView"/>
+                            </CardPane>
+                        </Border>
+                    </TablePane.Row>
 
-                                                        if (selection != null) {
-                                                            var index = sourceImageButtonBoxPane.indexOf(selection);
-                                                            sourceImageCardPane.setSelectedIndex(index);
-                                                        }
-                                                    }
-                                                    </wtkx:script>
-                                                </buttonGroupListeners>
-                                            </ButtonGroup>
-                                        </wtkx:define>
+                    <TablePane.Row height="-1">
+                        <BoxPane orientation="vertical" styles="{fill:true}">
+                            <BoxPane bxml:id="sourceImageButtonBoxPane"
+                                styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                                <bxml:define>
+                                    <ButtonGroup bxml:id="sourceImageButtonGroup">
+                                        <buttonGroupListeners>
+                                            function selectionChanged(buttonGroup, previousSelection) {
+                                                var selection = buttonGroup.getSelection();
 
-                                        <PushButton wtkx:id="sourceImageButton1"
-                                            buttonData="IMG_0725_2.jpg" toggleButton="true"
-                                            buttonGroup="$sourceImageButtonGroup"/>
-                                        <PushButton wtkx:id="sourceImageButton2"
-                                            buttonData="IMG_0735_2.jpg" toggleButton="true"
-                                            buttonGroup="$sourceImageButtonGroup"/>
-                                        <PushButton wtkx:id="sourceImageButton3"
-                                            buttonData="IMG_0767_2.jpg" toggleButton="true"
-                                            buttonGroup="$sourceImageButtonGroup"/>
-                                    </BoxPane>
+                                                if (selection != null) {
+                                                    var index = sourceImageButtonBoxPane.indexOf(selection);
+                                                    sourceImageCardPane.setSelectedIndex(index);
+                                                }
+                                            }
+                                        </buttonGroupListeners>
+                                    </ButtonGroup>
+                                </bxml:define>
 
-                                    <BoxPane styles="{horizontalAlignment:'center'}">
-                                        <PushButton wtkx:id="copyButton" buttonData="Copy"
-                                            ButtonPressListener.buttonPressed="copy()"/>
-                                    </BoxPane>
-                                </BoxPane>
+                                <PushButton bxml:id="sourceImageButton1"
+                                    buttonData="IMG_0725_2.jpg" toggleButton="true"
+                                    buttonGroup="$sourceImageButtonGroup"/>
+                                <PushButton bxml:id="sourceImageButton2"
+                                    buttonData="IMG_0735_2.jpg" toggleButton="true"
+                                    buttonGroup="$sourceImageButtonGroup"/>
+                                <PushButton bxml:id="sourceImageButton3"
+                                    buttonData="IMG_0767_2.jpg" toggleButton="true"
+                                    buttonGroup="$sourceImageButtonGroup"/>
+                            </BoxPane>
 
-                                <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                                    <PushButton wtkx:id="pasteButton" buttonData="Paste"
-                                        ButtonPressListener.buttonPressed="paste()"/>
-                                </BoxPane>
-                            </TablePane.Row>
-                        </rows>
-                    </TablePane>
-                </content>
+                            <BoxPane styles="{horizontalAlignment:'center'}">
+                                <PushButton bxml:id="copyButton" buttonData="Copy"
+                                    ButtonPressListener.buttonPressed="copy()"/>
+                            </BoxPane>
+                        </BoxPane>
+
+                        <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <PushButton bxml:id="pasteButton" buttonData="Paste"
+                                ButtonPressListener.buttonPressed="paste()"/>
+                        </BoxPane>
+                    </TablePane.Row>
+                </TablePane>
             </Window>
             ]]>
         </source>
@@ -165,12 +154,10 @@ limitations under the License.
                 <source type="xml">
                     <![CDATA[
                     <windowStateListeners>
-                        <wtkx:script>
                         function windowOpened(window) {
                             sourceImageButtonGroup.setSelection(sourceImageButton1);
                             sourceImageButton1.requestFocus();
                         }
-                        </wtkx:script>
                     </windowStateListeners>
                     ]]>
                 </source>
@@ -180,7 +167,6 @@ limitations under the License.
                 <source type="xml">
                     <![CDATA[
                     <buttonGroupListeners>
-                        <wtkx:script>
                         function selectionChanged(buttonGroup, previousSelection) {
                             var selection = buttonGroup.getSelection();
 
@@ -189,7 +175,6 @@ limitations under the License.
                                 sourceImageCardPane.setSelectedIndex(index);
                             }
                         }
-                        </wtkx:script>
                     </buttonGroupListeners>
                     ]]>
                 </source>
@@ -198,7 +183,7 @@ limitations under the License.
                 <p>A button press listener that calls the <tt>copy()</tt> function when the "Copy" button is pressed:</p>
                 <source type="xml">
                     <![CDATA[
-                    <PushButton wtkx:id="copyButton" buttonData="Copy"
+                    <PushButton bxml:id="copyButton" buttonData="Copy"
                         ButtonPressListener.buttonPressed="copy()"/>
                     ]]>
                 </source>
@@ -207,7 +192,7 @@ limitations under the License.
                 <p>A button press listener that calls the <tt>paste()</tt> function when the "Paste" button is pressed:</p>
                 <source type="xml">
                     <![CDATA[
-                    <PushButton wtkx:id="pasteButton" buttonData="Paste"
+                    <PushButton bxml:id="pasteButton" buttonData="Paste"
                         ButtonPressListener.buttonPressed="paste()"/>
                     ]]>
                 </source>
@@ -246,7 +231,6 @@ limitations under the License.
                         destinationImageView.setImage(image);
                     }
                 }
-            }
             ]]>
         </source>
 

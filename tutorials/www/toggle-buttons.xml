@@ -37,39 +37,31 @@ limitations under the License.
                 <library>tutorials</library>
             </libraries>
             <startup-properties>
-                <src>org/apache/pivot/tutorials/buttons/toggle_buttons.wtkx</src>
+                <src>/org/apache/pivot/tutorials/buttons/toggle_buttons.bxml</src>
             </startup-properties>
         </application>
 
-        <p>The WTKX source for the example is below:</p>
+        <p>The BXML source for the example is below:</p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/buttons/toggle_buttons.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/buttons/toggle_buttons.bxml">
             <![CDATA[
-        <Window title="Toggle Buttons" maximized="true"
-            xmlns:wtkx="http://pivot.apache.org/wtkx"
-            xmlns:content="org.apache.pivot.wtk.content"
-            xmlns="org.apache.pivot.wtk">
-            <content>
+            <Window title="Toggle Buttons" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns:content="org.apache.pivot.wtk.content"
+                xmlns="org.apache.pivot.wtk">
                 <BoxPane styles="{padding:4, horizontalAlignment:'center',
                     verticalAlignment:'center'}">
                     <PushButton toggleButton="true">
-                        <buttonData>
-                            <content:ButtonData text="Anchor" icon="org/apache/pivot/tutorials/anchor.png"/>
-                        </buttonData>
+                        <content:ButtonData text="Anchor" icon="org/apache/pivot/tutorials/anchor.png"/>
                     </PushButton>
                     <PushButton toggleButton="true">
-                        <buttonData>
-                            <content:ButtonData text="Cup" icon="org/apache/pivot/tutorials/cup.png"/>
-                        </buttonData>
+                        <content:ButtonData text="Cup" icon="org/apache/pivot/tutorials/cup.png"/>
                     </PushButton>
                     <PushButton toggleButton="true">
-                        <buttonData>
-                            <content:ButtonData text="Star" icon="org/apache/pivot/tutorials/star.png"/>
-                        </buttonData>
+                        <content:ButtonData text="Star" icon="org/apache/pivot/tutorials/star.png"/>
                     </PushButton>
                 </BoxPane>
-            </content>
-        </Window>
+            </Window>
         ]]>
         </source>
 
@@ -83,8 +75,8 @@ limitations under the License.
 
         <p>
             Note also that the values of the "icon" attributes do not begin with an '@' symbol. In
-            WTKX, image URLs are commonly specified with this prefix, to indicate that an image's
-            location is relative to the WTKX source file currently being loaded. An image path
+            BXML, image URLs are commonly specified with this prefix, to indicate that an image's
+            location is relative to the BXML source file currently being loaded. An image path
             without an '@' prefix, such as those in this example, is generally treated as an
             absolute location relative to the application's classpath.
         </p>
