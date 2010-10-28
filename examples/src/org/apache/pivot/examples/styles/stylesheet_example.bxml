@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Stylesheet Demo" maximized="true"
+<Window title="Stylesheet Example" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <Border styles="{padding:8}">
