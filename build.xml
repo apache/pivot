@@ -576,7 +576,20 @@ limitations under the License.
 
         <!-- Copy static demo files to deploy folder -->
         <copy todir="demos/${folder.deploy}">
-            <fileset dir="demos/www" excludes="**/*.xml"/>
+            <fileset dir="demos/www">
+                <exclude name="**/*.xml"/>
+                <exclude name="**/*.template.html"/>
+            </fileset>
+        </copy>
+
+        <copy todir="demos/${folder.deploy}">
+            <fileset dir="demos/www">
+                <include name="*.template.html"/>
+            </fileset>
+            <filterset>
+                <filter token="VERSION" value="${version}"/>
+            </filterset>
+            <globmapper from="*.template.html" to="*.html"/>
         </copy>
 
         <!-- Generate demos WAR -->
@@ -626,7 +639,20 @@ limitations under the License.
 
         <!-- Copy static tutorial files to deploy folder -->
         <copy todir="tutorials/${folder.deploy}">
-            <fileset dir="tutorials/www" excludes="**/*.xml"/>
+            <fileset dir="tutorials/www">
+                <exclude name="**/*.xml"/>
+                <exclude name="**/*.template.html"/>
+            </fileset>
+        </copy>
+
+        <copy todir="tutorials/${folder.deploy}">
+            <fileset dir="tutorials/www">
+                <include name="*.template.html"/>
+            </fileset>
+            <filterset>
+                <filter token="VERSION" value="${version}"/>
+            </filterset>
+            <globmapper from="*.template.html" to="*.html"/>
         </copy>
 
         <!-- Generate tutorials WAR -->
