@@ -32,7 +32,7 @@ limitations under the License.
                 <Checkbox buttonData="Bell"
                     ButtonPressListener.buttonPressed="bellImageView.setVisible(!bellImageView.isVisible());"/>
             </BoxPane>
-            <ImageView bxml:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" visible="false"/>
+            <ImageView bxml:id="bellImageView" image="/org/apache/pivot/tutorials/bell.png" visible="false"/>
         </TablePane.Row>
 
         <TablePane.Row height="24">
@@ -40,7 +40,7 @@ limitations under the License.
                 <Checkbox buttonData="Clock"
                     ButtonPressListener.buttonPressed="clockImageView.setVisible(!clockImageView.isVisible());"/>
             </BoxPane>
-            <ImageView bxml:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" visible="false"/>
+            <ImageView bxml:id="clockImageView" image="/org/apache/pivot/tutorials/clock.png" visible="false"/>
         </TablePane.Row>
 
         <TablePane.Row height="24">
@@ -48,7 +48,7 @@ limitations under the License.
                 <Checkbox buttonData="House"
                     ButtonPressListener.buttonPressed="houseImageView.setVisible(!houseImageView.isVisible());"/>
             </BoxPane>
-            <ImageView bxml:id="houseImageView" image="org/apache/pivot/tutorials/house.png" visible="false"/>
+            <ImageView bxml:id="houseImageView" image="/org/apache/pivot/tutorials/house.png" visible="false"/>
         </TablePane.Row>
     </TablePane>
 </Window>

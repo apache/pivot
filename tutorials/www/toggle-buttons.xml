@@ -52,13 +52,13 @@ limitations under the License.
                 <BoxPane styles="{padding:4, horizontalAlignment:'center',
                     verticalAlignment:'center'}">
                     <PushButton toggleButton="true">
-                        <content:ButtonData text="Anchor" icon="org/apache/pivot/tutorials/anchor.png"/>
+                        <content:ButtonData text="Anchor" icon="/org/apache/pivot/tutorials/anchor.png"/>
                     </PushButton>
                     <PushButton toggleButton="true">
-                        <content:ButtonData text="Cup" icon="org/apache/pivot/tutorials/cup.png"/>
+                        <content:ButtonData text="Cup" icon="/org/apache/pivot/tutorials/cup.png"/>
                     </PushButton>
                     <PushButton toggleButton="true">
-                        <content:ButtonData text="Star" icon="org/apache/pivot/tutorials/star.png"/>
+                        <content:ButtonData text="Star" icon="/org/apache/pivot/tutorials/star.png"/>
                     </PushButton>
                 </BoxPane>
             </Window>
@@ -74,11 +74,10 @@ limitations under the License.
         </p>
 
         <p>
-            Note also that the values of the "icon" attributes do not begin with an '@' symbol. In
-            BXML, image URLs are commonly specified with this prefix, to indicate that an image's
-            location is relative to the BXML source file currently being loaded. An image path
-            without an '@' prefix, such as those in this example, is generally treated as an
-            absolute location relative to the application's classpath.
+            Also note that the values of the "icon" attributes begin with a slash. This represents
+            a location relative to the application's classpath. If the file name began with an
+            '@' symbol instead, the value would represent a location relative to the BXML file
+            currently being loaded.
         </p>
 
         <p>

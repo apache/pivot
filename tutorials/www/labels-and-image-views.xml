@@ -52,7 +52,7 @@ limitations under the License.
                 xmlns:bxml="http://pivot.apache.org/bxml"
                 xmlns="org.apache.pivot.wtk">
                 <BoxPane styles="{padding:4, verticalAlignment:'center'}">
-                    <ImageView image="org/apache/pivot/tutorials/clock.png"/>
+                    <ImageView image="/org/apache/pivot/tutorials/clock.png"/>
                     <Label text="What time is it?"/>
                 </BoxPane>
             </Window>

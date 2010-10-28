@@ -38,7 +38,7 @@ limitations under the License.
             </li>
             <li>
                 <b>WTK</b> - Classes for user interface development, including windows, dialogs,
-                buttons, lists, text input, layout, drag and drop, XML markup, etc.
+                buttons, lists, text input, layout, drag and drop, etc.
             </li>
             <li>
                 <b>Web</b> - Classes to facilitate implementation of and communication with remote

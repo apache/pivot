@@ -18,7 +18,7 @@ limitations under the License.
 
 <CardPane xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
-    <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
-    <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+    <ImageView image="/org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+    <ImageView image="/org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+    <ImageView image="/org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
 </CardPane>

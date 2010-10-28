@@ -27,26 +27,26 @@ limitations under the License.
             advantage of the JVM scripting support provided by the <tt>javax.script</tt> package
             included with JDK versions 1.6 and later. While these APIs can be used on their own to
             script Pivot applications, Pivot includes platform support for easily embedding script
-            code in WTKX files.
+            code in BXML files.
         </p>
 
         <p>
-            Script blocks can be defined in WTKX files in three different ways:
+            Script blocks can be defined in BXML files in three different ways:
         </p>
 
         <ul>
             <li>
-                Inline in a <tt>&lt;wtkx:script&gt;</tt> tag
+                Inline in a <tt>&lt;bxml:script&gt;</tt> tag
             </li>
             <li>
-                As an external file included by a <tt>&lt;wtkx:script&gt;</tt> with a <tt>src</tt>
+                As an external file included by a <tt>&lt;bxml:script&gt;</tt> with a <tt>src</tt>
                 attribute
             </li>
             <li>
                 In an event listener attribute
             </li>
             <li>
-                In a <tt>&lt;wtkx:script&gt;</tt> tag defined in an event listener element
+                In a <tt>&lt;bxml:script&gt;</tt> tag defined in an event listener element
             </li>
         </ul>
 
@@ -71,7 +71,7 @@ limitations under the License.
 
         <p>
             This application is completely contrived - it doesn't present any practical example,
-            but instead serves only to demonstrate the various means of using scripting in a WTKX
+            but instead serves only to demonstrate the various means of using scripting in a BXML
             file. The Java source code for the application is shown below:
         </p>
 
@@ -144,16 +144,16 @@ limitations under the License.
 
         <p>
             Notice how the <tt>startup()</tt> method calls <tt>put()</tt> on the
-            <tt>WTKXSerializer</tt> instance. <tt>WTKXSerializer</tt>'s dictionary methods allow a
-            caller to manipulate the script namespace before the WTKX is loaded and retrieve values
+            <tt>BXMLSerializer</tt> instance. <tt>BXMLSerializer</tt>'s dictionary methods allow a
+            caller to manipulate the script namespace before the BXML is loaded and retrieve values
             from it afterwards. In this example, the "bar" variable is pre-populated with the value
-            "12345", which is later written to the console by script defined in "scripting.wtkx".
+            "12345", which is later written to the console by script defined in "scripting.bxml".
             Similarly, the values of "foo" and "listData" are obtained from the serializer and
-            written to the console after the WTKX file has been read.
+            written to the console after the BXML file has been read.
         </p>
 
         <p>
-            The WTKX source is shown below:
+            The BXML source is shown below:
         </p>
 
         <source type="xml" location="org/apache/pivot/tutorials/scripting/Scripting.java">
@@ -203,15 +203,15 @@ limitations under the License.
         </source>
 
         <p>
-            This code demonstrates the various means by which script code can be used in WTKX:
+            This code demonstrates the various means by which script code can be used in BXML:
         </p>
 
         <ul>
             <li>
                 <p>
-                    <i>Inline in a <tt>&lt;wtkx:script&gt;</tt> tag.</i> The first
-                    <tt>&lt;wtkx:script&gt;</tt> tag defines its content inline. This code is
-                    executed as it is processed by the WTKX serializer. This example first outputs
+                    <i>Inline in a <tt>&lt;bxml:script&gt;</tt> tag.</i> The first
+                    <tt>&lt;bxml:script&gt;</tt> tag defines its content inline. This code is
+                    executed as it is processed by the BXML serializer. This example first outputs
                     the "bar" value set by the application, then declares two variables
                     (<tt>x</tt> and <tt>y</tt>) and a function (<tt>buttonClicked()</tt>. These
                     values are visible to all other script code declared within the page.
@@ -219,8 +219,8 @@ limitations under the License.
             </li>
             <li>
                 <p>
-                    <i>As an external file included by a <tt>&lt;wtkx:script&gt;</tt> with a
-                    <tt>src</tt> attribute.</i> The second <tt>&lt;wtkx:script&gt;</tt> tag
+                    <i>As an external file included by a <tt>&lt;bxml:script&gt;</tt> with a
+                    <tt>src</tt> attribute.</i> The second <tt>&lt;bxml:script&gt;</tt> tag
                     includes an externally defined script into the page. The contents of the script
                     are defined in "example.js", which is shown below. Any previously defined
                     values will be visible to the script, and any variables declared by the script
@@ -233,7 +233,7 @@ limitations under the License.
                     attributes, using a syntax similar to that used for static property setters.
                     The attribute name for an event listener consists of the name of the interface
                     that defines the event plus the name of the event, separated by a period. The
-                    WTKX source contains several examples of attribute-based listeners:
+                    BXML source contains several examples of attribute-based listeners:
                 </p>
                 <ul>
                     <li>
@@ -249,7 +249,7 @@ limitations under the License.
             </li>
             <li>
                 <p>
-                    <i>In a <tt>&lt;wtkx:script&gt;</tt> tag defined in an event listener
+                    <i>In a <tt>&lt;bxml:script&gt;</tt> tag defined in an event listener
                     element.</i> Attribute-based event handlers are convenient for simple one-line
                     listeners, but are not particuarly well suited to anything much more complex.
                     Pivot also provides the ability to define event listeners within a listener
@@ -303,7 +303,7 @@ limitations under the License.
         <p>
             This script declares the "foo" value that is later output by the Java application code,
             and also defines the list data that is used by the example <tt>ListView</tt> defined by
-            the WTKX file.
+            the BXML file.
         </p>
     </body>
 </document>

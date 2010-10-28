@@ -239,7 +239,7 @@ public class WatermarkDecorator implements Decorator {
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setImage(classLoader.getResource(imageName));
+        setImage(classLoader.getResource(imageName.substring(1)));
     }
 
     /**

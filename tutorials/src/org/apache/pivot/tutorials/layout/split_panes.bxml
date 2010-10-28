@@ -31,7 +31,7 @@ limitations under the License.
     <SplitPane bxml:id="splitPane" orientation="horizontal" splitRatio="0.6">
         <left>
             <Border styles="{padding:6}">
-                <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"
+                <ImageView image="/org/apache/pivot/tutorials/IMG_0725_2.jpg"
                     styles="{fill:true}"/>
             </Border>
         </left>
@@ -42,12 +42,14 @@ limitations under the License.
                         <ButtonGroup bxml:id="orientation">
                             <buttonGroupListeners>
                                 <![CDATA[
+                                importClass(org.apache.pivot.wtk.Orientation);
+
                                 function selectionChanged(buttonGroup, previousSelection) {
                                     var selection = buttonGroup.getSelection();
                                     if (selection == horizontalOrientationButton) {
-                                        splitPane.setOrientation("horizontal");
+                                        splitPane.setOrientation(Orientation.HORIZONTAL);
                                     } else {
-                                        splitPane.setOrientation("vertical");
+                                        splitPane.setOrientation(Orientation.VERTICAL);
                                     }
                                 }
                                 ]]>

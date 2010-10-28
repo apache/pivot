@@ -141,10 +141,9 @@ limitations under the License.
 
         <p>
             The Java source for the example is shown below. In the constructor, the application's
-            actions are created and added to the global action dictionary. Then, in
-            <tt>startup()</tt>, the application's user interface is loaded and the main window
-            opened. Note that, since the BXML file refers to the actions by ID, it is essential
-            that the actions be available before the BXML is read.
+            actions are created and added to the global action dictionary. Note that, since the
+            BXML file refers to the actions by ID, it is essential that the actions be available
+            before the BXML is read.
         </p>
 
         <source type="java" location="org/apache/pivot/tutorials/menus/MenuBars.java">

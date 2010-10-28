@@ -118,7 +118,7 @@ public class ImageNode extends Node {
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setImage(classLoader.getResource(imageName));
+        setImage(classLoader.getResource(imageName.substring(1)));
     }
 
     @Override

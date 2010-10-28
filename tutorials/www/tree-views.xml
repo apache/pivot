@@ -77,47 +77,47 @@ limitations under the License.
         <source type="xml" location="org/apache/pivot/tutorials/treeviews/tree_data.bxml">
             <![CDATA[
             <TreeBranch xmlns="org.apache.pivot.wtk.content">
-                <TreeBranch text="Activity" icon="org/apache/pivot/tutorials/folder.png">
-                    <TreeBranch text="Games" icon="org/apache/pivot/tutorials/folder.png">
-                        <TreeNode text="Foosball" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Ping Pong" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Air Hockey" icon="org/apache/pivot/tutorials/page_white.png"/>
+                <TreeBranch text="Activity" icon="/org/apache/pivot/tutorials/folder.png">
+                    <TreeBranch text="Games" icon="/org/apache/pivot/tutorials/folder.png">
+                        <TreeNode text="Foosball" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Ping Pong" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Air Hockey" icon="/org/apache/pivot/tutorials/page_white.png"/>
                     </TreeBranch>
-                    <TreeBranch text="Sports" icon="org/apache/pivot/tutorials/folder.png">
-                        <TreeNode text="Baseball" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Basketball" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Football" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Ice Hockey" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Soccer" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Softball" icon="org/apache/pivot/tutorials/page_white.png"/>
+                    <TreeBranch text="Sports" icon="/org/apache/pivot/tutorials/folder.png">
+                        <TreeNode text="Baseball" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Basketball" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Football" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Ice Hockey" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Soccer" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Softball" icon="/org/apache/pivot/tutorials/page_white.png"/>
                     </TreeBranch>
-                    <TreeNode text="Camping" icon="org/apache/pivot/tutorials/page_white.png"/>
-                    <TreeNode text="Skiing" icon="org/apache/pivot/tutorials/page_white.png"/>
+                    <TreeNode text="Camping" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                    <TreeNode text="Skiing" icon="/org/apache/pivot/tutorials/page_white.png"/>
                 </TreeBranch>
-                <TreeBranch text="Occasion" icon="org/apache/pivot/tutorials/folder.png">
-                    <TreeBranch text="Holidays" icon="org/apache/pivot/tutorials/folder.png">
-                        <TreeNode text="Christmas" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Independence Day" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Labor Day" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="New Year's Day" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="President's Day" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Thanksgiving" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Valentine's Day" icon="org/apache/pivot/tutorials/page_white.png"/>
-                        <TreeNode text="Veteran's Day" icon="org/apache/pivot/tutorials/page_white.png"/>
+                <TreeBranch text="Occasion" icon="/org/apache/pivot/tutorials/folder.png">
+                    <TreeBranch text="Holidays" icon="/org/apache/pivot/tutorials/folder.png">
+                        <TreeNode text="Christmas" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Independence Day" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Labor Day" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="New Year's Day" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="President's Day" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Thanksgiving" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Valentine's Day" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                        <TreeNode text="Veteran's Day" icon="/org/apache/pivot/tutorials/page_white.png"/>
                     </TreeBranch>
-                    <TreeNode text="Anniversary" icon="org/apache/pivot/tutorials/page_white.png"/>
-                    <TreeNode text="Birthday" icon="org/apache/pivot/tutorials/page_white.png"/>
-                    <TreeNode text="Wedding" icon="org/apache/pivot/tutorials/page_white.png"/>
+                    <TreeNode text="Anniversary" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                    <TreeNode text="Birthday" icon="/org/apache/pivot/tutorials/page_white.png"/>
+                    <TreeNode text="Wedding" icon="/org/apache/pivot/tutorials/page_white.png"/>
                 </TreeBranch>
-                <TreeBranch text="Location" icon="org/apache/pivot/tutorials/folder.png">
-                    <TreeNode text="Africa" icon="org/apache/pivot/tutorials/folder.png"/>
-                    <TreeNode text="Antarctica" icon="org/apache/pivot/tutorials/folder.png"/>
-                    <TreeNode text="Asia" icon="org/apache/pivot/tutorials/folder.png"/>
-                    <TreeNode text="Australia" icon="org/apache/pivot/tutorials/folder.png"/>
-                    <TreeNode text="Europe" icon="org/apache/pivot/tutorials/folder.png"/>
-                    <TreeNode text="North America" icon="org/apache/pivot/tutorials/folder.png"/>
-                    <TreeBranch text="South America" icon="org/apache/pivot/tutorials/folder.png">
-                        <TreeNode text="Peru" icon="org/apache/pivot/tutorials/page_white.png"/>
+                <TreeBranch text="Location" icon="/org/apache/pivot/tutorials/folder.png">
+                    <TreeNode text="Africa" icon="/org/apache/pivot/tutorials/folder.png"/>
+                    <TreeNode text="Antarctica" icon="/org/apache/pivot/tutorials/folder.png"/>
+                    <TreeNode text="Asia" icon="/org/apache/pivot/tutorials/folder.png"/>
+                    <TreeNode text="Australia" icon="/org/apache/pivot/tutorials/folder.png"/>
+                    <TreeNode text="Europe" icon="/org/apache/pivot/tutorials/folder.png"/>
+                    <TreeNode text="North America" icon="/org/apache/pivot/tutorials/folder.png"/>
+                    <TreeBranch text="South America" icon="/org/apache/pivot/tutorials/folder.png">
+                        <TreeNode text="Peru" icon="/org/apache/pivot/tutorials/page_white.png"/>
                     </TreeBranch>
                 </TreeBranch>
             </TreeBranch>

@@ -110,9 +110,9 @@ limitations under the License.
                                         backgroundColor:'#cccccc'}">
                                         <Border styles="{padding:6}">
                                             <CardPane bxml:id="cardPane">
-                                                <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
-                                                <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
-                                                <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                                                <ImageView image="/org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                                                <ImageView image="/org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                                                <ImageView image="/org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
                                             </CardPane>
                                         </Border>
                                     </BoxPane>

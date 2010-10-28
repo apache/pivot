@@ -282,7 +282,7 @@ limitations under the License.
         </p>
 
         <p>
-            Style values can be set in WTKX using the "styles" attribute. The value of this
+            Style values can be set in BXML using the "styles" attribute. The value of this
             attribute is a JSON-formatted string representing the style values to be applied to
             the component after it is constructed. For example, the following attribute applied to
             the Label element would produce a bold, 24-point Arial label with red text:
@@ -293,13 +293,50 @@ limitations under the License.
         </p>
 
         <p>
-            Styles can also be set via a URL reference to a JSON file, allowing common style
-            settings to be shared across multiple components, similar to CSS classes:
+            Styles can also be set using a <tt>&lt;styles&gt;</tt> sub-element:
         </p>
 
         <p>
-            <tt>styles="@my_styles.json"</tt><br/>
+            <tt>&lt;styles font="Arial bold 24" color="#ff0000"&gt;</tt><br/>
         </p>
+
+        <p>
+            Finally, styles can be applied via CSS-like stylesheets. Both typed and untyped
+            selectors are supported. For example:
+        </p>
+
+        <pre>
+        {  Button: {
+                color: "#aa0000"
+            },
+
+            RadioButton: {
+                color: "#00aa00"
+            },
+
+            "org.apache.pivot.wtk.PushButton": {
+                color: "#0000aa"
+            },
+
+            heading: {
+                font: {
+                    size: "120%",
+                    bold: true
+                },
+
+                color: "#000000"
+            },
+
+            subHeading: {
+                font: {
+                    size: "110%",
+                    italic: true
+                },
+
+                color: "#666666"
+            }
+        }
+        </pre>
 
         <h2>Attributes</h2>
 
@@ -316,7 +353,7 @@ limitations under the License.
         <p>
             Callers can set attribute values programmatically using a static setter method of
             the <tt>Container</tt> subclass (e.g. <tt>TabPane#setLabel(Component, String)</tt>).
-            Alternatively, attributes can be specified in WTKX. For example, the sub-elements of
+            Alternatively, attributes can be specified in BXML. For example, the sub-elements of
             a <tt>TabPane</tt> can provide a "TabPane.label" attribute to specify the value that
             should be used as the name for that component.
          </p>

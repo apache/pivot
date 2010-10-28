@@ -791,7 +791,7 @@ public class Window extends Container {
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setIcon(classLoader.getResource(iconName));
+        setIcon(classLoader.getResource(iconName.substring(1)));
     }
 
     public Component getContent() {

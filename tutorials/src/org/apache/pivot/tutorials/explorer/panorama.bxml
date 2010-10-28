@@ -18,6 +18,6 @@ limitations under the License.
 
 <Panorama xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
+    <ImageView image="/org/apache/pivot/tutorials/IMG_1147.jpg"
         tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
 </Panorama>

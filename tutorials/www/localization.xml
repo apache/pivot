@@ -79,13 +79,13 @@ limitations under the License.
         </source>
 
         <p>
-            The WTKX source for the application is as follows. Note the use of the "%" prefix in
+            The BXML source for the application is as follows. Note the use of the "%" prefix in
             the form label attributes. This prefix is known as the "resource resolution operator"
-            in WTKX. As the WTKX is read, attribute values that begin with the "%" character are
+            in BXML. As the BXML is read, attribute values that begin with the "%" character are
             replaced by the corresponding values defined in the resource bundle:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/localization/localization.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/localization/localization.bxml">
             <![CDATA[
             <Window title="Localization" maximized="true"
                 xmlns:bxml="http://pivot.apache.org/bxml"

@@ -39,9 +39,9 @@ limitations under the License.
         <TablePane.Row height="1*">
             <Border styles="{padding:2}">
                 <CardPane bxml:id="sourceImageCardPane" styles="{padding:4}">
-                    <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
-                    <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
-                    <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                    <ImageView image="/org/apache/pivot/tutorials/IMG_0725_2.jpg"/>
+                    <ImageView image="/org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                    <ImageView image="/org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
                 </CardPane>
             </Border>
             <Border styles="{padding:2}">

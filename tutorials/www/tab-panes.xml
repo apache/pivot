@@ -93,7 +93,7 @@ limitations under the License.
 
                                     <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                         <TabPane.tabData>
-                                            <content:ButtonData icon="org/apache/pivot/tutorials/bell.png"
+                                            <content:ButtonData icon="/org/apache/pivot/tutorials/bell.png"
                                                 text="Bell"/>
                                         </TabPane.tabData>
                                         <Border styles="{padding:2}">
@@ -104,7 +104,7 @@ limitations under the License.
 
                                     <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                         <TabPane.tabData>
-                                            <content:ButtonData icon="org/apache/pivot/tutorials/clock.png"
+                                            <content:ButtonData icon="/org/apache/pivot/tutorials/clock.png"
                                                 text="Clock"/>
                                         </TabPane.tabData>
                                         <Border styles="{padding:2}">
@@ -115,7 +115,7 @@ limitations under the License.
 
                                     <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
                                         <TabPane.tabData>
-                                            <content:ButtonData icon="org/apache/pivot/tutorials/house.png"
+                                            <content:ButtonData icon="/org/apache/pivot/tutorials/house.png"
                                                 text="House"/>
                                         </TabPane.tabData>
                                         <Border styles="{padding:2}">
@@ -126,7 +126,7 @@ limitations under the License.
 
                                     <BoxPane enabled="false">
                                         <TabPane.tabData>
-                                            <content:ButtonData icon="org/apache/pivot/tutorials/star.png"
+                                            <content:ButtonData icon="/org/apache/pivot/tutorials/star.png"
                                                 text="Star"/>
                                         </TabPane.tabData>
 

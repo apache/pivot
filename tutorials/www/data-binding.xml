@@ -63,10 +63,10 @@ limitations under the License.
         </application>
 
         <p>
-            The WTKX simply sets up the form structure and the bind keys:
+            The BXML simply sets up the form structure and the bind keys:
         </p>
 
-        <source type="xml" location="org/apache/pivot/tutorials/databinding/data_binding.wtkx">
+        <source type="xml" location="org/apache/pivot/tutorials/databinding/data_binding.bxml">
             <![CDATA[
             <databinding:DataBinding title="Data Binding" maximized="true"
                 xmlns:bxml="http://pivot.apache.org/bxml"
@@ -115,7 +115,7 @@ limitations under the License.
         </source>
 
         <p>
-            The application's <tt>startup()</tt> method defines the button press listeners that
+            The windows's <tt>initialize()</tt> method defines the button press listeners that
             load or clear the form:
         </p>
 

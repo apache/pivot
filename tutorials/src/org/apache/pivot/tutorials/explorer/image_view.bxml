@@ -16,6 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"
+<ImageView image="/org/apache/pivot/tutorials/IMG_0725_2.jpg"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk"/>

@@ -95,19 +95,19 @@ public final class Keyboard {
         public String toString() {
             int awtModifiers = 0x00;
 
-            if (isPressed(Modifier.META)) {
+            if (((modifiers & Modifier.META.getMask()) > 0)) {
                 awtModifiers |= KeyEvent.META_DOWN_MASK;
             }
 
-            if (isPressed(Modifier.CTRL)) {
+            if (((modifiers & Modifier.CTRL.getMask()) > 0)) {
                 awtModifiers |= KeyEvent.CTRL_DOWN_MASK;
             }
 
-            if (isPressed(Modifier.ALT)) {
+            if (((modifiers & Modifier.ALT.getMask()) > 0)) {
                 awtModifiers |= KeyEvent.ALT_DOWN_MASK;
             }
 
-            if (isPressed(Modifier.SHIFT)) {
+            if (((modifiers & Modifier.SHIFT.getMask()) > 0)) {
                 awtModifiers |= KeyEvent.SHIFT_DOWN_MASK;
             }
 

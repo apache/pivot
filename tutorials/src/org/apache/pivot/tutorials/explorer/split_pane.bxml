@@ -22,12 +22,12 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <left>
         <ImageView asynchronous="true"
-            image="org/apache/pivot/tutorials/IMG_0735_2.jpg"
+            image="/org/apache/pivot/tutorials/IMG_0735_2.jpg"
             styles="{backgroundColor:'#404040'}"/>
     </left>
     <right>
         <ImageView asynchronous="true"
-            image="org/apache/pivot/tutorials/IMG_0767_2.jpg"
+            image="/org/apache/pivot/tutorials/IMG_0767_2.jpg"
             styles="{backgroundColor:'#404040'}"/>
     </right>
 </SplitPane>

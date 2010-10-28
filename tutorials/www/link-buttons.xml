@@ -50,7 +50,7 @@ limitations under the License.
                 <Border>
                     <CardPane bxml:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontal_slide'}">
                         <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                            <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                            <ImageView image="/org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
                             <LinkButton>
                                 <content:ButtonData text="Next" icon="@resultset_next.png"/>
 
@@ -63,7 +63,7 @@ limitations under the License.
                         </BoxPane>
 
                         <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                            <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                            <ImageView image="/org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
                             <LinkButton>
                                 <content:ButtonData text="Previous" icon="@resultset_previous.png"/>
 
@@ -100,16 +100,16 @@ limitations under the License.
         </p>
 
         <p>
-            Though it is not obvious from this example, other listener methods can also be defined
-            within the same script block (if, for example, the <tt>ButtonPressListener</tt>
+            Though it may not be not obvious from this example, other listener methods can also be
+            defined within the same script block (if, for example, the <tt>ButtonPressListener</tt>
             interface declared additional methods). However, in such cases, callers are not
             required to provide implementations for all listener methods, only the ones they are
             interested in (similar to using an <tt>Adapter</tt> class in Java code).
         </p>
 
         <p>
-            Since all of the logic for this application is implemented in script, there is no Java
-            source associated with this example.
+            As in the previous example, all of the logic for this application is implemented in
+            script, so there is no associated Java source code for this example.
         </p>
     </body>
 </document>

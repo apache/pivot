@@ -19,10 +19,9 @@ limitations under the License.
 <Window title="Rollups" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <Border styles="{padding:6}">
+    <Border>
         <ScrollPane horizontalScrollBarPolicy="fill">
-            <BoxPane orientation="vertical" styles="{fill:true,
-                padding:{left:2, right:2}}">
+            <BoxPane orientation="vertical" styles="{fill:true, padding:6}">
                 <Rollup expanded="true">
                     <heading>
                         <Label text="Stocks" styles="{font:{bold:true}, color:13}"/>

@@ -100,7 +100,7 @@ public class ListItem {
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setIcon(classLoader.getResource(iconName));
+        setIcon(classLoader.getResource(iconName.substring(1)));
     }
 
     public String getText() {

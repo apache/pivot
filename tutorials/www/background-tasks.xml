@@ -64,7 +64,7 @@ limitations under the License.
         </p>
 
         <p>
-            The following application demonstrates the behavior of an application when a task is
+            The following example demonstrates the behavior of an application when a task is
             executed synchronously vs. asynchronously. It uses a simple "sleep task" to simulate an
             operation that runs for five seconds:
         </p>

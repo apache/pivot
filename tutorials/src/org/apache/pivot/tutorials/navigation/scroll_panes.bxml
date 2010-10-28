@@ -22,7 +22,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <Border styles="{color:10}">
         <ScrollPane>
-            <ImageView image="org/apache/pivot/tutorials/IMG_1147.jpg"
+            <ImageView image="/org/apache/pivot/tutorials/IMG_1147.jpg"
                 tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
 
             <columnHeader>

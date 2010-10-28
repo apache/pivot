@@ -77,7 +77,7 @@ limitations under the License.
         </source>
 
         <p>
-            The Java source is as follows. The main application class defines an inner class that
+            The Java source is as follows. The main window class defines an inner class that
             extends the <tt>org.apache.pivot.util.concurrent.Task</tt> class to simulate a background
             operation. This task simply sleeps for 100ms at a time and updates the meter when it
             wakes up to reflect the current count. Since all UI updates must be performed on the

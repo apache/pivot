@@ -23,13 +23,13 @@ limitations under the License.
     <BoxPane styles="{padding:4, horizontalAlignment:'center',
         verticalAlignment:'center'}">
         <PushButton toggleButton="true">
-            <content:ButtonData text="Anchor" icon="org/apache/pivot/tutorials/anchor.png"/>
+            <content:ButtonData text="Anchor" icon="/org/apache/pivot/tutorials/anchor.png"/>
         </PushButton>
         <PushButton toggleButton="true">
-            <content:ButtonData text="Cup" icon="org/apache/pivot/tutorials/cup.png"/>
+            <content:ButtonData text="Cup" icon="/org/apache/pivot/tutorials/cup.png"/>
         </PushButton>
         <PushButton toggleButton="true">
-            <content:ButtonData text="Star" icon="org/apache/pivot/tutorials/star.png"/>
+            <content:ButtonData text="Star" icon="/org/apache/pivot/tutorials/star.png"/>
         </PushButton>
     </BoxPane>
 </Window>

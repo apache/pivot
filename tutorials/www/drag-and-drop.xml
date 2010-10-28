@@ -83,7 +83,7 @@ limitations under the License.
                 xmlns="org.apache.pivot.wtk">
                 <bxml:script src="dragdrop.js"/>
                 <Border styles="{padding:2}">
-                    <ImageView bxml:id="imageView" image="org/apache/pivot/tutorials/IMG_0767_2.jpg"
+                    <ImageView bxml:id="imageView" image="/org/apache/pivot/tutorials/IMG_0767_2.jpg"
                         dragSource="$dragSoure" dropTarget="$dropTarget"/>
                 </Border>
             </Window>

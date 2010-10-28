@@ -23,7 +23,7 @@ limitations under the License.
     <Border>
         <CardPane bxml:id="cardPane" selectedIndex="0" styles="{selectionChangeEffect:'horizontal_slide'}">
             <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                <ImageView image="org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
+                <ImageView image="/org/apache/pivot/tutorials/IMG_0735_2.jpg"/>
                 <LinkButton>
                     <content:ButtonData text="Next" icon="@resultset_next.png"/>
 
@@ -38,7 +38,7 @@ limitations under the License.
             </BoxPane>
 
             <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
-                <ImageView image="org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
+                <ImageView image="/org/apache/pivot/tutorials/IMG_0767_2.jpg"/>
                 <LinkButton>
                     <content:ButtonData text="Previous" icon="@resultset_previous.png"/>
 

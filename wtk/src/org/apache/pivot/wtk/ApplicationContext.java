@@ -1522,7 +1522,7 @@ public abstract class ApplicationContext {
     public static void applyStylesheet(String resourceName) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-        URL stylesheetLocation = classLoader.getResource(resourceName);
+        URL stylesheetLocation = classLoader.getResource(resourceName.substring(1));
         if (stylesheetLocation == null) {
             throw new RuntimeException("Unable to locate style sheet resource \"" + resourceName + "\".");
         }

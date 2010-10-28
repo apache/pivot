@@ -51,13 +51,13 @@ limitations under the License.
         </TablePane.Row>
 
         <TablePane.Row height="24">
-            <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
-            <ImageView image="org/apache/pivot/tutorials/weather-few-clouds.png"/>
-            <ImageView image="org/apache/pivot/tutorials/weather-showers-scattered.png"/>
-            <ImageView image="org/apache/pivot/tutorials/weather-showers-scattered.png"/>
-            <ImageView image="org/apache/pivot/tutorials/weather-few-clouds.png"/>
-            <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
-            <ImageView image="org/apache/pivot/tutorials/weather-clear.png"/>
+            <ImageView image="/org/apache/pivot/tutorials/weather-clear.png"/>
+            <ImageView image="/org/apache/pivot/tutorials/weather-few-clouds.png"/>
+            <ImageView image="/org/apache/pivot/tutorials/weather-showers-scattered.png"/>
+            <ImageView image="/org/apache/pivot/tutorials/weather-showers-scattered.png"/>
+            <ImageView image="/org/apache/pivot/tutorials/weather-few-clouds.png"/>
+            <ImageView image="/org/apache/pivot/tutorials/weather-clear.png"/>
+            <ImageView image="/org/apache/pivot/tutorials/weather-clear.png"/>
         </TablePane.Row>
     </TablePane>
 </BoxPane>

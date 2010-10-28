@@ -93,7 +93,7 @@ limitations under the License.
                 <SplitPane bxml:id="splitPane" orientation="horizontal" splitRatio="0.6">
                     <left>
                         <Border styles="{padding:6}">
-                            <ImageView image="org/apache/pivot/tutorials/IMG_0725_2.jpg"
+                            <ImageView image="/org/apache/pivot/tutorials/IMG_0725_2.jpg"
                                 styles="{fill:true}"/>
                         </Border>
                     </left>
@@ -103,12 +103,14 @@ limitations under the License.
                                 <bxml:define>
                                     <ButtonGroup bxml:id="orientation">
                                         <buttonGroupListeners>
+                                            importClass(org.apache.pivot.wtk.Orientation);
+
                                             function selectionChanged(buttonGroup, previousSelection) {
                                                 var selection = buttonGroup.getSelection();
                                                 if (selection == horizontalOrientationButton) {
-                                                    splitPane.setOrientation("horizontal");
+                                                    splitPane.setOrientation(Orientation.HORIZONTAL);
                                                 } else {
-                                                    splitPane.setOrientation("vertical");
+                                                    splitPane.setOrientation(Orientation.VERTICAL);
                                                 }
                                             }
                                         </buttonGroupListeners>
@@ -125,9 +127,11 @@ limitations under the License.
 
                                 <Checkbox buttonData="Use Shadow">
                                     <buttonStateListeners>
+                                        <![CDATA[
                                         function stateChanged(button, previousState) {
                                             splitPane.getStyles().put("useShadow", button.isSelected());
                                         }
+                                        ]]>
                                     </buttonStateListeners>
                                 </Checkbox>
                             </BoxPane>

@@ -72,7 +72,7 @@ limitations under the License.
             The BXML source for this example is quite short, consisting of only a <tt>BoxPane</tt>,
             <tt>Label</tt>, and <tt>TextInput</tt>. Most of the demo's functionality is defined in
             the Java source, shown below. The application's constructor first establishes a sorted
-            list of state names. In <tt>startup()</tt>, the application attaches a
+            list of state names. In <tt>initialize()</tt>, the application attaches a
             <tt>TextInputCharacterListener</tt> to the text input. In the listener's
             <tt>charactersInserted()</tt> method, the handler attempts to identify the state whose
             name matches the entered text. If found, it is set as the text property of the text

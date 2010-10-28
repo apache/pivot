@@ -62,7 +62,7 @@ limitations under the License.
                             <Checkbox buttonData="Bell"
                                 ButtonPressListener.buttonPressed="bellImageView.setVisible(!bellImageView.isVisible());"/>
                         </BoxPane>
-                        <ImageView bxml:id="bellImageView" image="org/apache/pivot/tutorials/bell.png" visible="false"/>
+                        <ImageView bxml:id="bellImageView" image="/org/apache/pivot/tutorials/bell.png" visible="false"/>
                     </TablePane.Row>
 
                     <TablePane.Row height="24">
@@ -70,7 +70,7 @@ limitations under the License.
                             <Checkbox buttonData="Clock"
                                 ButtonPressListener.buttonPressed="clockImageView.setVisible(!clockImageView.isVisible());"/>
                         </BoxPane>
-                        <ImageView bxml:id="clockImageView" image="org/apache/pivot/tutorials/clock.png" visible="false"/>
+                        <ImageView bxml:id="clockImageView" image="/org/apache/pivot/tutorials/clock.png" visible="false"/>
                     </TablePane.Row>
 
                     <TablePane.Row height="24">
@@ -78,7 +78,7 @@ limitations under the License.
                             <Checkbox buttonData="House"
                                 ButtonPressListener.buttonPressed="houseImageView.setVisible(!houseImageView.isVisible());"/>
                         </BoxPane>
-                        <ImageView bxml:id="houseImageView" image="org/apache/pivot/tutorials/house.png" visible="false"/>
+                        <ImageView bxml:id="houseImageView" image="/org/apache/pivot/tutorials/house.png" visible="false"/>
                     </TablePane.Row>
                 </TablePane>
             </Window>
@@ -93,19 +93,17 @@ limitations under the License.
         </p>
 
         <p>
-            Note also that this example defines some button handler logic directly within the BXML
-            file. The <tt>ButtonPressListener.buttonPressed</tt> attribute of each <tt>PushButton</tt>
-            contains JavaScript code that toggles the visibility of the corresponding image view
-            when the handler is invoked, causing the image to appear and disappear based on the
-            checkbox's selection state. It is common in Pivot development to implement simple event
-            handlers in script code this way, since it can often be much less verbose than
-            performing the same logic in Java.
+            Also note the use of script code to respond to button press events fired by the
+            checkboxes. The <tt>ButtonPressListener.buttonPressed</tt> attribute of each component
+            contains JavaScript code that toggles the visibility of the corresponding image view,
+            causing the image to appear and disappear based on the checkbox's selection state.
+            It is common in Pivot development to implement simple event handlers in script code
+            this way, since it can often be much less verbose than performing the same logic in Java.
         </p>
 
         <p>
-            In fact, this application does not implement any logic in Java at all and is launched
-            using <tt>ScriptApplication</tt>, a class provided by the Pivot platform to handle this
-            fairly common use case.
+            In fact, since all of the logic for this application is implemented in script, there
+            is no Java source associated with this example.
         </p>
     </body>
 </document>

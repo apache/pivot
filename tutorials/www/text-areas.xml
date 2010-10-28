@@ -29,7 +29,7 @@ limitations under the License.
             The following application demonstrates the use of <tt>TextArea</tt>:
         </p>
 
-        <application class="org.apache.pivot.wtk.ScriptApplication" width="420" height="420">
+        <application class="org.apache.pivot.wtk.ScriptApplication" width="400" height="400">
             <libraries>
                 <library>core</library>
                 <library>wtk</library>

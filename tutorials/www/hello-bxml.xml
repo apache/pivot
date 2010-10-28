@@ -135,7 +135,7 @@ limitations under the License.
         </source>
 
         <p>
-            The actual output is shown below:
+            The output of this version is shown below:
         </p>
 
         <application class="org.apache.pivot.wtk.ScriptApplication"
@@ -156,7 +156,7 @@ limitations under the License.
             interface. Rather, it is launched using the <tt>org.apache.pivot.wtk.ScriptApplication</tt> class.
             This class, which is included with the Pivot platform, implements the
             <tt>Application</tt> interface and takes the name of a BXML file to launch as a startup
-            property. The BXML file is expected to contain a root element representing a
+            property named <tt>src</tt>. The BXML file is expected to contain a root element representing a
             <tt>Window</tt> subclass.
         </p>
 
