@@ -114,6 +114,16 @@ limitations under the License.
                 <xsl:text><![CDATA[");
                 ]]></xsl:text>
             </xsl:for-each>
+
+            <xsl:choose>
+                <xsl:when test='$signed'>
+                    libraries.push("lib/svgSalamander-tiny.signed.jar");
+                </xsl:when>
+                <xsl:otherwise>
+                    libraries.push("lib/svgSalamander-tiny.jar");
+                </xsl:otherwise>
+            </xsl:choose>
+      
             attributes.archive = libraries.join(",");
 
             <!-- Base parameters -->

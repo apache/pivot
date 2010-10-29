@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<document id="svg-images">
+    <properties>
+        <title>SVG Images</title>
+    </properties>
+
+    <body>
+        <p>
+            In addition to common bitmapped image formats such as PNG and JPEG, Pivot also supports
+            Scalable Vector Graphic (SVG) images. For example, the following application displays
+            an SVG image containing the Pivot logo, alongside a PNG equivalent:
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="640" height="480">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/tutorials/labels/svg.bxml</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The primary advantage of using SVG images rather than bitmapped images in an application
+            is scalability (i.e. resolution independence). When a bitmapped image is scaled, it
+            becomes pixelated and grainy, whereas a vector image does not.
+        </p>
+
+        <p>
+            To see an example, try scaling the Pivot display by clicking on the application and
+            using the mouse wheel or pressing the +/- keys while holding down Control-Shift. The
+            SVG image and text scale smoothly, while the PNG image quickly becomes unreadable.
+        </p>
+
+        <p>
+            Below is the BXML source for the application:
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/labels/svg.bxml">
+            <![CDATA[
+            <Window title="SVG Images" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns="org.apache.pivot.wtk">
+                <Border>
+                    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" verticalScrollBarPolicy="fill_to_capacity">
+                        <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                            <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', spacing:10}">
+                                <ImageView image="@logo.svg" preferredWidth="64" preferredHeight="64" styles="{fill:true}"/>
+                                <Label text="SVG"/>
+                            </BoxPane>
+
+                            <BoxPane orientation="vertical" styles="{horizontalAlignment:'center', spacing:10}">
+                                <ImageView image="@logo-64x64.png"/>
+                                <Label text="PNG"/>
+                            </BoxPane>
+                        </BoxPane>
+                    </ScrollPane>
+                </Border>
+            </Window>
+            ]]>
+        </source>
+    </body>
+</document>

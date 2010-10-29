@@ -110,6 +110,15 @@ limitations under the License.
                     </xsl:if>
                 </xsl:element>
             </xsl:for-each>
+
+            <xsl:choose>
+                <xsl:when test='$signed'>
+                    libraries.push("lib/svgSalamander-tiny.signed.jar");
+                </xsl:when>
+                <xsl:otherwise>
+                    libraries.push("lib/svgSalamander-tiny.jar");
+                </xsl:otherwise>
+            </xsl:choose>
         </resources>
 
         <application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext">

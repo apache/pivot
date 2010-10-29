@@ -54,7 +54,9 @@ limitations under the License.
         </item-group>
 
         <item-group name="Pivot Components">
-            <document-item id="labels-and-image-views"/>
+            <document-item id="labels-and-image-views">
+                <document-item id="svg-images"/>
+            </document-item>
             <document-item id="buttons">
                 <document-item id="push-buttons"/>
                 <document-item id="toggle-buttons"/>

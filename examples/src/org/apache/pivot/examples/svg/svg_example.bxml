@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="SVGImage Demo" maximized="true"
+<Window title="SVG Example" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:svg="biz.ixnay.demos.svg"
