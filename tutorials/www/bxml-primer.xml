@@ -31,8 +31,7 @@ limitations under the License.
 
         <p>
         This document introduces the BXML language and explains how it can be used to create and
-        configure a collection of Java objects. It also explains how to create BXML-compatible
-        classes for use in your own applications.
+        configure a collection of Java objects.
         </p>
 
         <h2>BXMLSerializer</h2>
@@ -57,12 +56,6 @@ limitations under the License.
         </source>
 
         <p>
-        <tt>BXMLSerializer</tt> does not implement <tt>writeObject()</tt>, but does provide some
-        additional conveniece methods for reading BXML as well as for localizing the deserialized
-        structure using resource bundles.
-        </p>
-
-        <p>
         For example, the following code snippet loads a Window object declared in a file named
         "my_window.bxml":
         </p>
@@ -74,15 +67,21 @@ limitations under the License.
         ]]>
         </source>
 
+        <p>
+        <tt>BXMLSerializer</tt> does not implement <tt>writeObject()</tt>, but does provide some
+        additional conveniece methods for reading BXML as well as for localizing the deserialized
+        structure using resource bundles.
+        </p>
+
         <h2>Namespaces</h2>
 
         <p>
         In BXML, an XML namespace represents a Java package. Declaring a namespace associates the
-        namespace prefix with a Java package, similar to how the import keyword is used in Java.
+        namespace prefix with the package, similar to how the import keyword is used in Java.
         </p>
 
         <p>
-        For example, the following simple BXML associates the "com.foo" package with the "foo"
+        For example, the following simple BXML associates the package "com.foo" with the "foo"
         namespace prefix:
         </p>
 
@@ -113,18 +112,32 @@ limitations under the License.
         <h3>The "bxml" Namespace</h3>
 
         <p>
-        The reserved "bxml" namespace defines the following elements and attributes, which are
-        used for internal processing:
+        The "bxml" namespace prefix is reserved and defines a number of elements and attributes
+        that are used for internal processing. It is generally declared on the root element of a
+        BXML document:
+        </p>
+
+        <source type="xml">
+        <![CDATA[
+        <Bar xmlns:bxml="http://pivot.apache.org/bxml"
+            xmlns="com.foo">
+            ...
+        </Bar>
+        ]]>
+        </source>
+
+        <p>
+        The "bxml" namespace includes the following:
         </p>
 
         <ul>
         <li>
         <p>
-        The <tt>bxml:id</tt> attribute is used to assign a variable name to an element declared in
-        a BXML file. For example, the following markup would associate an instance of the
+        The <tt>bxml:id</tt> attribute, which is used to assign a variable name to an element
+        declared in a BXML file. For example, the following markup would associate an instance of the
         <tt>Foo</tt> class with the ID "myFoo". This variable is added to the document's variable
         namespace (which is different from the XML namespace used to import Java packages), and
-        can then be referenced elsewhere in the file (or by the code that deserializes the file,
+        can then be referenced elsewhere in the file (or by code that deserializes the file,
         via the <tt>BXMLSerializer#getNamespace()</tt> method):
         </p>
 
@@ -137,7 +150,7 @@ limitations under the License.
 
         <li>
         <p>
-        The <tt>&lt;bxml:include&gt;</tt> element is used to include external resources, including
+        The <tt>&lt;bxml:include&gt;</tt> tag, used to include external resources, including
         nested BXML documents. For example, the following markup would embed the contents of the
         "my_include.bxml" file in the current document:</p>
 
@@ -148,8 +161,8 @@ limitations under the License.
         </source>
 
         <p>
-        Includes are often used for partitioning content into manageable pieces (for example, when
-        working on large applications or with multiple developers, or when defining reusable
+        BXML includes are often used for partitioning content into manageable pieces (for example,
+        when working on large applications or with multiple developers, or when defining reusable
         content templates). Each include is assigned its own variable namespace to avoid naming
         collisions with ancestor documents.
         </p>
@@ -157,7 +170,7 @@ limitations under the License.
 
         <li>
         <p>
-        The <tt>&lt;bxml:script&gt;</tt> element is used to define a block of script code within
+        The <tt>&lt;bxml:script&gt;</tt> tag, which defines a block of script code within
         a BXML file. For example, the following script block defines a function named
         <tt>foo()</tt>:
         </p>
@@ -186,14 +199,14 @@ limitations under the License.
         </source>
 
         <p>
-        Script blocks can also be defined in event handler attributes and elements, which are
-        discussed in more detail below.
+        Script blocks can also be defined in event handler attributes and elements. Scripting and
+        event handling are discussed in more detail below.
         </p>
         </li>
 
         <li>
         <p>
-        The <tt>&lt;bxml:define&gt;</tt> element is used to declare objects that will exist
+        The <tt>&lt;bxml:define&gt;</tt> tag, which is used to declare objects that will exist
         outside of the hierarchy but may be referred to elsewhere.
         </p>
 
@@ -215,7 +228,7 @@ limitations under the License.
 
         <li>
         <p>
-        The <tt>&lt;bxml:reference&gt;</tt> element is used to dereference a page variable. For
+        The <tt>&lt;bxml:reference&gt;</tt> tag, used to dereference a page variable. For
         example, the <tt>Foo</tt> instance in the previous example could be dereferenced as
         follows elsewhere in the document:
         </p>
@@ -227,30 +240,16 @@ limitations under the License.
         </source>
 
         <p>
-        Wherever this tag appears, it will effectively be replaced by the <tt>Foo</tt> instance
-        declared in the define block.
+        Wherever this tag appears, it will effectively be replaced by the value of the "myFoo"
+        variable.
         </p>
 
         <p>
-        The "$" variable deference operator can be used to dereference page variables in an
-        attribute. This operator is discussed in more detail below.
+        The variable deference operator ("$") can also be used to dereference page variables. This
+        is discussed in more detail below.
         </p>
         </li>
         </ul>
-
-        <p>
-        The "bxml" namespace is generally declared on the root element of a BXML document as
-        follows:
-        </p>
-
-        <source type="xml">
-        <![CDATA[
-        <Bar xmlns:bxml="http://pivot.apache.org/bxml"
-            xmlns="com.foo">
-            ...
-        </Bar>
-        ]]>
-        </source>
 
         <h2>Elements</h2>
         <p>
@@ -270,7 +269,7 @@ limitations under the License.
         <p>
         If an element's tag name begins with an uppercase letter (and it is not a "static"
         property setter; see below), it is considered a class instance. When
-        <tt>BXMLSerializer</tt> encounters such an element, creates an instance of that class. As
+        <tt>BXMLSerializer</tt> encounters such an element, it creates an instance of that class. As
         discussed above, the XML namespace prefix is used to determine the Java package to which
         the class belongs.
         </p>
@@ -288,7 +287,7 @@ limitations under the License.
 
         <p>
         Class instance elements in a BXML file will often represent instances of Java bean types.
-        Internally, the BXML serializer uses an instance of
+        Internally, <tt>BXMLSerializer</tt> uses an instance of
         <tt>org.apache.pivot.beans.BeanAdapter</tt> to wrap the instantiated class and invoke its
         setter methods. This class implements the <tt>org.apache.pivot.collections.Dictionary</tt>
         interface and allows a caller to get and set bean property values as key/value pairs.
@@ -308,6 +307,10 @@ limitations under the License.
         ]]>
         </source>
 
+        <p>
+        How the "foo" and "bar" attributes are handled is discussed in more detail below.
+        </p>
+
         <h3>Instance Properties</h3>
         <p>
         Elements whose tag names begin with a lowercase letter represent instance properties. An
@@ -321,15 +324,10 @@ limitations under the License.
         <li><p>An event listener list</p></li>
         </ul>
 
-        <p>
-        <tt>BXMLSerializer</tt> uses a bean adapter to obtain information about the type of the
-        property so that it can process the element's contents correctly.
-        </p>
-
         <h4>Property Setters</h4>
         <p>
-        If the element represents a Java bean property setter, the contents of the element (which
-        must be either a text node or a class instance element) are passed as the value to the
+        If the element represents a property setter, the contents of the element (which must be
+        either a text node or a nested class instance element) are passed as the value to the
         setter for the property. For example, the following BXML creates an instance of the
         <tt>Label</tt> class and sets the value of the label's "text" property to "Hello, World!":
         </p>
@@ -343,7 +341,7 @@ limitations under the License.
         </source>
 
         <p>
-        It produces the same result as the earlier example which used an attribute to set the
+        This produces the same result as the earlier example which used an attribute to set the
         "text" property:
         </p>
 
@@ -354,11 +352,10 @@ limitations under the License.
         </source>
 
         <p>
-        This example creates an instance of <tt>ListView</tt> and sets the value of its
+        The following example creates an instance of <tt>ListView</tt> and sets the value of its
         "listData" property to an instance of <tt>org.apache.pivot.collections.ArrayList</tt>
         that has been populated with several instances of
-        <tt>org.apache.pivot.wtk.content.ListItem</tt> (a data class recognized by the default
-        list item renderer):
+        <tt>org.apache.pivot.wtk.content.ListItem</tt>:
         </p>
 
         <source type="xml">
@@ -433,7 +430,7 @@ limitations under the License.
         defined in the <tt>org.apache.pivot.beans</tt> package. If present, the sub-element
         representing the default property can be omitted from the markup. For example, the
         <tt>TabPane</tt> component discussed above defines the "tabs" property as the default, so
-        the &lt;tabs&gt;sub-element is not required:
+        the &lt;tabs&gt;sub-element is not actually required:
         </p>
 
         <source type="xml">
@@ -453,13 +450,14 @@ limitations under the License.
         <h3>Static Properties</h3>
 
         <p>
-        Finally, an element may represent a "static" property setter (sometimes called an
+        An element may also represent a "static" property setter (sometimes called an
         "attached property"). Static properties are properties that only make sense in a
         particular context. They are not intrinsic to the class to which they are applied, but
         are defined by another class (generally the parent container of a component).
         </p>
 
         <p>
+        Static properties are prefixed with the name of class that defines them.
         For example, The following BXML invokes the static setter for the TabPane class's
         "tabData" property:
         </p>
@@ -500,7 +498,7 @@ limitations under the License.
         The call to <tt>TabPane.setTabData()</tt> attaches the "tabData" property to the
         <tt>Label</tt> instance. The tab pane then uses the value of this property as the button
         data for the label's tab in the tab pane's button bar. Other containers, including
-        <tt>Accordion</tt> and <tt>TablePane</tt>, define similar setters (as well as getters).
+        <tt>Accordion</tt> and <tt>TablePane</tt>, define similar properties.
         </p>
 
         <h2>Attributes</h2>
@@ -513,9 +511,6 @@ limitations under the License.
         <li><p>A "static" property</p></li>
         <li><p>An event listener</p></li>
         </ul>
-
-        <p>As with elements, <tt>BXMLSerializer</tt> uses an instance of <tt>BeanAdapter</tt> to
-        determine what type of property an attribute represents.</p>
 
         <h4>Instance Properties</h4>
 
@@ -553,9 +548,9 @@ limitations under the License.
 
         <p>
         Note that, if the parent element represents an untyped class (a class that implements
-        the <tt>Dictionary</tt> interface rather than a Java bean, such as <tt>HashMap</tt>), the
-        type of the attribute cannot be determined, and no conversion takes place - the values are
-        simply passed as strings.
+        the <tt>Dictionary</tt> interface directly, such as
+        <tt>org.apache.pivot.collections.HashMap</tt>), the type of the attribute cannot be
+        determined, and no conversion takes place - the values are simply passed as strings.
         </p>
 
         <h4>Static Properties</h4>
@@ -590,22 +585,17 @@ limitations under the License.
         ]]>
         </source>
 
-        <p>
-        As explained in the element example, the tab pane uses the value of the "tabData"
-        property as the button data for the tab component's tab button.
-        </p>
-
         <h4>Event Listeners</h4>
         <p>
-        Finally, an attribute may represent an event listener. The attribute value contains
-        script code that is executed in response to the event. This is discussed in more detail
-        in the <a href="#scripting">Scripting</a> section.
+        Finally, an attribute may represent an event listener. Event listener attribute values
+        contain script code that is executed in response to the event. This is discussed in more
+        detail in the <a href="#scripting">Scripting</a> section.
         </p>
 
         <h3>Resolution Operators</h3>
         <p>
-        Setter attributes (either bean or static) in BXML support several resolution operators
-        that extend their type handling capabilities:
+        Property setter attributes (either bean or static) in BXML support several resolution
+        operators that extend their capabilities:
         </p>
 
         <ul>
@@ -617,14 +607,14 @@ limitations under the License.
         <h4>Object Dereference</h4>
 
         <p>
-        The object deference operator ("$") allows a caller to replace an attribute value with
+        The object deference operator allows a caller to replace an attribute value with
         an instance of a named object before the corresponding setter method is invoked. Any
         attribute whose value begins with the "$" is considered an object reference.
         </p>
 
         <p>
-        For example, a table view header must be associated with an instance of TableView; in
-        Java, this is done via the <tt>setTableView()</tt> method. In BXML, the object
+        For example, a table view header must be associated with an instance of <tt>TableView</tt>;
+        in Java, this is done via the <tt>setTableView()</tt> method. In BXML, the object
         dereference operator is used. The following BXML defines an instance of
         <tt>ScrollPane</tt>, setting a <tt>TableView</tt> as its view component and a
         <tt>TableViewHeader</tt> as the column header. The table view is associated with the
@@ -745,8 +735,8 @@ limitations under the License.
 
         <h3>Listener List Elements</h3>
         <p>
-        Script code can also be used to define event handlers in BXML. Events can often be
-        handled more succinctly in script than in Java. For example, given the following BXML:
+        Script code can also be used to define event handlers in BXML. Event handlers can often be
+        defined more succinctly in script than in Java. For example, given the following BXML:
         </p>
 
         <source type="xml">
@@ -776,8 +766,8 @@ limitations under the License.
 
         <p>
         While this is simple enough, it can become cumbersome in any non-trivial application
-        where many such event handlers are defined. A similar event handler might be defined
-        in JavaScript as follows:
+        where many such event are defined. A similar event handler might be defined in JavaScript
+        as follows:
         </p>
 
         <source type="xml">
@@ -803,7 +793,9 @@ limitations under the License.
         When script is declared within a listener list element, <tt>BXMLSerializer</tt> creates a
         special scope that is local to the handler. As a result, any variables or functions
         defined within the script block do not pollute the page's global namespace and are only
-        visible within the block.
+        visible within the block. However, the script code can still see and access global variables
+        declared elsewhere in the page. This is somewhat analogous to defining an anonymous inner
+        class as a listener in Java.
         </p>
 
         <p>
@@ -846,7 +838,8 @@ limitations under the License.
         <p>
         Attribute-based event handlers are well suited to short handler code that, ideally, fits
         on a single line. Longer event handler code may be better suited to an element-based
-        listener list, or, depending on the level of complexity, a Java-based event handler.
+        listener list, or, depending on the level of complexity, implementation in a Java or
+        other compiled language.
         </p>
 
         <h3>Accessing Named Objects</h3>
@@ -884,13 +877,13 @@ limitations under the License.
         <h3>The Bindable Interface</h3>
 
         <p>
-        The <tt>org.apache.pivot.beans.Bindable</tt> interface can be used to simplify the process
-        of mapping named objects into a Java application. This interface defines a single method,
-        <tt>initialize()</tt>, that is called when the root element of a BXML file has been fully
-        loaded. This allows the implementing class to get access to the document's namespace
-        (i.e. page variables), the resources that were used to load it, and the location it was
-        loaded from, to perform any necessary post-processing (for example, registering event
-        listeners).
+        The <tt>org.apache.pivot.beans.Bindable</tt> interface can be used to simplify integration
+        between BXML markup and compiled code. <tt>Bindable</tt> defines a single method,
+        <tt>initialize()</tt>, that is called on the root element of a BXML document once the
+        document has been completely loaded. It allows the implementing class to get access to the
+        document's namespace (i.e. page variables), the resources that were used to load it, and the
+        location it was loaded from, to perform any necessary post-processing (for example,
+        registering event listeners).
         </p>
 
         <p>
@@ -935,7 +928,7 @@ limitations under the License.
         working with loaded BXML data in Java code. However, it is important to note that, because
         BXML binding relies on reflection to set the member variables, it can only be used with
         trusted code or to set the values of public fields. For untrusted code, the namespace
-        value passed to the <tt>initialize()</tt> method can be used to obtain named objects
+        value passed to the <tt>initialize()</tt> method can be used to access named objects
         defined in a BXML file.
         </p>
 
