@@ -137,8 +137,8 @@ limitations under the License.
         declared in a BXML file. For example, the following markup would associate an instance of the
         <tt>Foo</tt> class with the ID "myFoo". This variable is added to the document's variable
         namespace (which is different from the XML namespace used to import Java packages), and
-        can then be referenced elsewhere in the file (or by code that deserializes the file,
-        via the <tt>BXMLSerializer#getNamespace()</tt> method):
+        can then be referenced elsewhere in the file or by code that deserializes the file,
+        via the <tt>BXMLSerializer#getNamespace()</tt> method:
         </p>
 
         <source type="xml">
@@ -150,7 +150,7 @@ limitations under the License.
 
         <li>
         <p>
-        The <tt>&lt;bxml:include&gt;</tt> tag, used to include external resources, including
+        The <tt>&lt;bxml:include&gt;</tt> tag, which is used to include external resources, including
         nested BXML documents. For example, the following markup would embed the contents of the
         "my_include.bxml" file in the current document:</p>
 
@@ -172,7 +172,7 @@ limitations under the License.
         <p>
         The <tt>&lt;bxml:script&gt;</tt> tag, which defines a block of script code within
         a BXML file. For example, the following script block defines a function named
-        <tt>foo()</tt>:
+        <tt>foo()</tt>, which can then be called from other script blocks in the document:
         </p>
 
         <source type="xml">
@@ -186,10 +186,9 @@ limitations under the License.
         </source>
 
         <p>
-        By default, JavaScript is used as the scripting language in a BXML document, but any
-        JVM-compatible scripting language can be used. The <tt>language</tt> processing
-        instruction can be used to specify a different language; for example, the Groovy
-        scripting language:
+        The default scripting language is JavaScript, but any JVM-compatible scripting language can
+        be used. The <tt>language</tt> processing instruction is used to specify a different
+        language; for example, Groovy:
         </p>
 
         <source type="xml">
