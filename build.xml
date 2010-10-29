@@ -511,6 +511,13 @@ limitations under the License.
 
     <!-- Generate deployment files -->
     <target name="deploy" depends="package">
+        <!-- Copy library depenencies lib directory -->
+        <copy todir="${folder.lib}">
+            <fileset dir="wtk/lib">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+
         <!-- Sign JARS -->
         <mkdir dir="${folder.lib}/signed"/>
         <copy todir="${folder.lib}/signed">
