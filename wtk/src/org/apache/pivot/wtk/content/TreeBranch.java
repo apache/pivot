@@ -114,7 +114,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setExpandedIcon(classLoader.getResource(expandedIconName));
+        setExpandedIcon(classLoader.getResource(expandedIconName.substring(1)));
     }
 
     @Override
