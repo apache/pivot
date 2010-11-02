@@ -1138,7 +1138,8 @@ public class TableView extends Component {
             if (updated > 0) {
                 tableViewSelectionListeners.selectedRangesChanged(TableView.this, getSelectedRanges());
 
-                if (selectMode == SelectMode.SINGLE) {
+                if (selectMode == SelectMode.SINGLE
+                    && getSelectedIndex() != previousSelectedIndex) {
                     tableViewSelectionListeners.selectedRowChanged(TableView.this,
                         items.get(previousSelectedIndex - index));
                 }

@@ -511,7 +511,8 @@ public class ListView extends Component {
             if (updated > 0) {
                 listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
 
-                if (selectMode == SelectMode.SINGLE) {
+                if (selectMode == SelectMode.SINGLE
+                    && getSelectedIndex() != previousSelectedIndex) {
                     listViewSelectionListeners.selectedItemChanged(ListView.this,
                         items.get(previousSelectedIndex - index));
                 }
