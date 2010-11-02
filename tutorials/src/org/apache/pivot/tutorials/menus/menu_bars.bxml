@@ -27,9 +27,8 @@ limitations under the License.
     </bxml:define>
 
     <actionMappings>
-        <Window.ActionMapping action="cut" keyStroke="CTRL-X"/>
-        <Window.ActionMapping action="copy" keyStroke="CTRL-C"/>
-        <Window.ActionMapping action="paste" keyStroke="CTRL-V"/>
+        <Window.ActionMapping action="fileNew" keyStroke="CMD-N"/>
+        <Window.ActionMapping action="fileOpen" keyStroke="CMD-O"/>
     </actionMappings>
 
     <menuBar>
@@ -37,8 +36,17 @@ limitations under the License.
             <MenuBar.Item buttonData="File">
                 <Menu>
                     <Menu.Section>
-                        <Menu.Item buttonData="New" action="fileNew"/>
-                        <Menu.Item buttonData="Open" action="fileOpen"/>
+                        <Menu.Item action="fileNew">
+                            <buttonData>
+                                <content:MenuItemData text="New" keyboardShortcut="CMD-N"/>
+                            </buttonData>
+                        </Menu.Item>
+
+                        <Menu.Item action="fileOpen">
+                            <buttonData>
+                                <content:MenuItemData text="Open" keyboardShortcut="CMD-O"/>
+                            </buttonData>
+                        </Menu.Item>
                     </Menu.Section>
                 </Menu>
             </MenuBar.Item>
@@ -48,17 +56,17 @@ limitations under the License.
                     <Menu.Section>
                         <Menu.Item action="cut">
                             <buttonData>
-                                <content:MenuItemData text="Cut" keyboardShortcut="CTRL-X"/>
+                                <content:MenuItemData text="Cut" keyboardShortcut="CMD-X"/>
                             </buttonData>
                         </Menu.Item>
                         <Menu.Item action="copy">
                             <buttonData>
-                                <content:MenuItemData text="Copy" keyboardShortcut="CTRL-C"/>
+                                <content:MenuItemData text="Copy" keyboardShortcut="CMD-C"/>
                             </buttonData>
                         </Menu.Item>
                         <Menu.Item action="paste">
                             <buttonData>
-                                <content:MenuItemData text="Paste" keyboardShortcut="CTRL-V"/>
+                                <content:MenuItemData text="Paste" keyboardShortcut="CMD-V"/>
                             </buttonData>
                         </Menu.Item>
                     </Menu.Section>

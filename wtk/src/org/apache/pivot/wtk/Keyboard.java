@@ -55,6 +55,8 @@ public final class Keyboard {
         private int keyCode = KeyCode.UNDEFINED;
         private int modifiers = 0x00;
 
+        public static final String COMMAND_ABBREVIATION = "CMD";
+
         public KeyStroke(int keyCode, int modifiers) {
             this.keyCode = keyCode;
             this.modifiers = modifiers;
@@ -127,7 +129,15 @@ public final class Keyboard {
             for (int i = 0, n = keys.length; i < n; i++) {
                 if (i < n - 1) {
                     // Modifier
-                    Modifier modifier = Modifier.valueOf(keys[i].toUpperCase(Locale.ENGLISH));
+                    String modifierAbbreviation = keys[i].toUpperCase(Locale.ENGLISH);
+
+                    Modifier modifier;
+                    if (modifierAbbreviation.equals(COMMAND_ABBREVIATION)) {
+                        modifier = Platform.getCommandModifier();
+                    } else {
+                        modifier = Modifier.valueOf(modifierAbbreviation);
+                    }
+
                     modifiers |= modifier.getMask();
                 } else {
                     // Keycode
