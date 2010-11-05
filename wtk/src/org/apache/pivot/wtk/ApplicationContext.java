@@ -837,7 +837,7 @@ public abstract class ApplicationContext {
                         case MouseEvent.MOUSE_PRESSED: {
                             requestFocusInWindow();
 
-                            mouseOwner.mouseDown(button, x, y);
+                            boolean consumed = mouseOwner.mouseDown(button, x, y);
 
                             if (button == Mouse.Button.LEFT) {
                                 dragLocation = new Point(x, y);
@@ -903,12 +903,20 @@ public abstract class ApplicationContext {
                                 }
                             }
 
+                            if (consumed) {
+                                event.consume();
+                            }
+
                             break;
                         }
 
                         case MouseEvent.MOUSE_RELEASED: {
                             if (dragDescendant == null) {
-                                mouseOwner.mouseUp(button, x, y);
+                                boolean consumed = mouseOwner.mouseUp(button, x, y);
+
+                                if (consumed) {
+                                    event.consume();
+                                }
                             } else {
                                 DragSource dragSource = dragDescendant.getDragSource();
 
@@ -1038,7 +1046,11 @@ public abstract class ApplicationContext {
                                 } else {
                                     // Delegate the event to the capturer
                                     Point location = mouseCapturer.mapPointFromAncestor(display, x, y);
-                                    mouseCapturer.mouseMove(location.x, location.y);
+                                    boolean consumed = mouseCapturer.mouseMove(location.x, location.y);
+
+                                    if (consumed) {
+                                        event.consume();
+                                    }
                                 }
                             } else {
                                 if (dragLocation != null) {
@@ -1141,8 +1153,12 @@ public abstract class ApplicationContext {
                             }
 
                             // Delegate the event to the owner
-                            mouseOwner.mouseWheel(scrollType, event.getScrollAmount(),
+                            boolean consumed = mouseOwner.mouseWheel(scrollType, event.getScrollAmount(),
                                 event.getWheelRotation(), x, y);
+
+                            if (consumed) {
+                                event.consume();
+                            }
                         }
                         break;
                     }
