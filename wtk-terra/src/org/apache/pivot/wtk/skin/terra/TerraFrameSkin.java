@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.Mouse;
@@ -795,6 +796,30 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             dragOffset = null;
             resizeOffset = null;
             Mouse.release();
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
+
+        Frame frame = (Frame)component;
+        MenuBar menuBar = frame.getMenuBar();
+
+        if (menuBar != null
+            && keyCode == Keyboard.KeyCode.SPACE
+            && Keyboard.isPressed(Keyboard.Modifier.ALT)) {
+            MenuBar.Item activeItem = menuBar.getActiveItem();
+            MenuBar.ItemSequence items = menuBar.getItems();
+
+            if (activeItem == null
+                && items.getLength() > 0) {
+                items.get(0).setActive(true);
+
+                consumed = true;
+            }
         }
 
         return consumed;
