@@ -478,7 +478,7 @@ public class JSONSerializer implements Serializer<Object> {
         }
 
         while (c != -1 && (Character.isDigit(c) || c == '.'
-            || c == 'e' || c == 'E')) {
+            || c == 'e' || c == 'E' || c == '-')) {
             stringBuilder.append((char)c);
             integer &= !(c == '.');
             c = reader.read();
