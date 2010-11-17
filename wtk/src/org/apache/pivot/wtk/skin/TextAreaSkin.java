@@ -130,6 +130,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     private Color inactiveSelectionBackgroundColor;
     private Insets margin;
     private boolean wrapText;
+    private int tabWidth;
 
     private ArrayList<TextAreaSkinParagraphView> paragraphViews = new ArrayList<TextAreaSkinParagraphView>();
 
@@ -147,6 +148,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         inactiveSelectionBackgroundColor = Color.BLACK;
         margin = new Insets(4);
         wrapText = true;
+        tabWidth = 4;
     }
 
     @Override
@@ -678,6 +680,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         invalidateComponent();
     }
 
+    public int getTabWidth() {
+        return tabWidth;
+    }
+
+    public void setTabWidth(int tabWidth) {
+        if (tabWidth < 0) {
+            throw new IllegalArgumentException("tabWidth is negative.");
+        }
+
+        this.tabWidth = tabWidth;
+    }
+
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -805,8 +819,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     && !Keyboard.isPressed(Keyboard.Modifier.META)) {
                     int selectionLength = textArea.getSelectionLength();
 
-                    if (selectionLength == 0
-                        && textArea.getCharacterCount() == textArea.getMaximumLength()) {
+                    if (textArea.getCharacterCount() - selectionLength + 1 > textArea.getMaximumLength()) {
                         Toolkit.getDefaultToolkit().beep();
                     } else {
                         int selectionStart = textArea.getSelectionStart();
@@ -859,6 +872,24 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     textArea.removeText(index, count);
                     consumed = true;
                 }
+            } else if (keyCode == Keyboard.KeyCode.TAB
+                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                int selectionLength = textArea.getSelectionLength();
+
+                StringBuilder tabBuilder = new StringBuilder();
+                for (int i = 0; i < tabWidth; i++) {
+                    tabBuilder.append(" ");
+                }
+
+                if (textArea.getCharacterCount() - selectionLength + tabWidth > textArea.getMaximumLength()) {
+                    Toolkit.getDefaultToolkit().beep();
+                } else {
+                    int selectionStart = textArea.getSelectionStart();
+                    textArea.removeText(selectionStart, selectionLength);
+                    textArea.insertText(tabBuilder, selectionStart);
+                }
+
+                showCaret(true);
             } else if (keyCode == Keyboard.KeyCode.HOME
                 || (keyCode == Keyboard.KeyCode.LEFT
                     && Keyboard.isPressed(Keyboard.Modifier.META))) {

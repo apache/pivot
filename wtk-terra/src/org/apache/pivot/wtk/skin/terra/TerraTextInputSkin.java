@@ -1045,11 +1045,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             TextInput textInput = (TextInput)getComponent();
             int selectionLength = textInput.getSelectionLength();
 
-            if (selectionLength == 0
-                && textInput.getCharacterCount() == textInput.getMaximumLength()) {
+            if (textInput.getCharacterCount() - selectionLength + 1 > textInput.getMaximumLength()) {
                 Toolkit.getDefaultToolkit().beep();
             } else {
-                // NOTE We call getSelectionStart() explicitly here in case the remove
+                // NOTE We explicitly call getSelectionStart() twice here in case the remove
                 // event is vetoed
                 textInput.removeText(textInput.getSelectionStart(), selectionLength);
                 textInput.insertText(Character.toString(character), textInput.getSelectionStart());
