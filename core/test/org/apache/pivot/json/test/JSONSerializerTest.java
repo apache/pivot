@@ -52,6 +52,12 @@ public class JSONSerializerTest {
     }
 
     @Test
+    public void testE() throws SerializationException {
+        assertEquals(5000000, JSONSerializer.parseDouble("5.0E6"), 0);
+        assertEquals(0.000005, JSONSerializer.parseDouble("5.0E-6"), 0);
+    }
+
+    @Test
     public void testEquals() throws IOException, SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
         Object o1 = jsonSerializer.readObject(getClass().getResourceAsStream("sample.json"));
