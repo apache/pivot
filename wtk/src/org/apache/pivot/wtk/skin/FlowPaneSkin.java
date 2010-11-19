@@ -23,7 +23,6 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FlowPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
-import org.apache.pivot.wtk.Orientation;
 
 /**
  * Flow pane skin.
@@ -232,11 +231,6 @@ public class FlowPaneSkin extends ContainerSkin {
         }
 
         return baseline;
-    }
-
-    @Override
-    public Orientation getDisposition() {
-        return Orientation.HORIZONTAL;
     }
 
     @Override

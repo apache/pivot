@@ -64,16 +64,6 @@ public interface Skin extends ConstrainedVisual {
     public Component getComponent();
 
     /**
-     * Returns the skin's layout disposition. The layout disposition defines the
-     * direction in which the skin lays out content before wrapping.
-     *
-     * @return
-     * The skin's layout disposition, or <tt>null</tt> if the skin does not
-     * have a layout disposition.
-     */
-    public Orientation getDisposition();
-
-    /**
      * If the component on which the skin is installed is a container, lays
      * out the container's children.
      */

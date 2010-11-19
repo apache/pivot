@@ -34,7 +34,6 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
-import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.TextPaneListener;
@@ -246,11 +245,6 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
         return margin.top + Math.round(ascent);
-    }
-
-    @Override
-    public Orientation getDisposition() {
-        return Orientation.HORIZONTAL;
     }
 
     @Override

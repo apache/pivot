@@ -1099,25 +1099,12 @@ public abstract class Component implements ConstrainedVisual {
             int preferredWidth = widthLimits.constrain(preferredSize.width);
             int preferredHeight = heightLimits.constrain(preferredSize.height);
 
-            Orientation layoutDisposition = getDisposition();
-            if (layoutDisposition != null) {
-                switch (layoutDisposition) {
-                    case HORIZONTAL: {
-                        if (preferredSize.width > preferredWidth) {
-                            preferredHeight = heightLimits.constrain(skin.getPreferredHeight(preferredWidth));
-                        }
+            if (preferredSize.width > preferredWidth) {
+                preferredHeight = heightLimits.constrain(skin.getPreferredHeight(preferredWidth));
+            }
 
-                        break;
-                    }
-
-                    case VERTICAL: {
-                        if (preferredSize.height > preferredHeight) {
-                            preferredWidth = widthLimits.constrain(skin.getPreferredWidth(preferredHeight));
-                        }
-
-                        break;
-                    }
-                }
+            if (preferredSize.height > preferredHeight) {
+                preferredWidth = widthLimits.constrain(skin.getPreferredWidth(preferredHeight));
             }
 
             this.preferredSize = new Dimensions(preferredWidth, preferredHeight);
@@ -1955,17 +1942,6 @@ public abstract class Component implements ConstrainedVisual {
             layout();
             valid = true;
         }
-    }
-
-    /**
-     * Returns the component's layout disposition.
-     *
-     * @return
-     * The component's layout disposition, as determined by
-     * {@link Skin#getDisposition()}.
-     */
-    public Orientation getDisposition() {
-        return skin.getDisposition();
     }
 
     /**
