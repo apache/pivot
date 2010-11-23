@@ -80,7 +80,8 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
 
                 Object cellData = rowData.get(columnName);
 
-                if (cellData instanceof Image) {
+                if (cellData == null
+                    || cellData instanceof Image) {
                     image = (Image)cellData;
                 } else {
                     System.err.println("Data for \"" + columnName + "\" is not an instance of "
