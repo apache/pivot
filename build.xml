@@ -71,6 +71,17 @@ limitations under the License.
     <property name="jar.wtk.sources" value="${ant.project.name}-wtk-${version}-sources.jar" />
     <property name="jar.wtk-terra.sources" value="${ant.project.name}-wtk-terra-${version}-sources.jar" />
 
+    <!-- Maven Javadoc Jar file names -->
+    <property name="jar.charts.javadoc" value="${ant.project.name}-charts-${version}-javadoc.jar" />
+    <property name="jar.core.javadoc" value="${ant.project.name}-core-${version}-javadoc.jar" />
+    <property name="jar.web.javadoc" value="${ant.project.name}-web-${version}-javadoc.jar" />
+    <property name="jar.web-server.javadoc" value="${ant.project.name}-web-server-${version}-javadoc.jar" />
+    <property name="jar.wtk.javadoc" value="${ant.project.name}-wtk-${version}-javadoc.jar" />
+    <property name="jar.wtk-terra.javadoc" value="${ant.project.name}-wtk-terra-${version}-javadoc.jar" />
+
+    <!-- Base package, required by Maven Javadoc -->
+    <property name="src.package.base" value="org.apache.pivot" />
+
     <!-- Ant version check -->
     <fail>
         <condition>
@@ -214,11 +225,12 @@ limitations under the License.
         </sequential>
     </macrodef>
 
-    <!-- Package-sources macro -->
-    <macrodef name="package-sources">
+    <!-- Package-maven-source-or-javadoc-jar macro -->
+    <macrodef name="package-maven-source-or-javadoc-jar">
         <attribute name="project"/>
         <attribute name="jarFile"/>
         <attribute name="title"/>
+        <attribute name="jarFileset"/>
 
         <sequential>
             <mkdir dir="${folder.lib}"/>
@@ -235,7 +247,7 @@ limitations under the License.
                     <attribute name="Implementation-Title" value="Apache Pivot @{title}"/>
                     <attribute name="Implementation-Version" value="${version}"/>
                 </manifest>
-                <fileset dir="@{project}/src">
+                <fileset dir="@{jarFileset}">
                     <include name="LICENSE"/>
                     <include name="NOTICE"/>
                     <include name="README"/>
@@ -248,9 +260,75 @@ limitations under the License.
                     <include name="**/*.xml"/>
                     <include name="**/*.bxml"/>
                     <include name="**/*.json"/>
+                    <include name="**/*.jpg"/>
+                    <include name="**/*.png"/>
+                    <include name="**/*.svg"/>
                     <exclude name="**/*.class"/>
                 </fileset>
             </jar>
+        </sequential>
+    </macrodef>
+
+    <!-- Package-sources macro -->
+    <macrodef name="package-sources">
+        <attribute name="project"/>
+        <attribute name="jarFile"/>
+        <attribute name="title"/>
+
+        <sequential>
+            <mkdir dir="${folder.lib}"/>
+            <package-maven-source-or-javadoc-jar
+                project="@{project}"
+                jarFile="@{jarFile}"
+                title="@{title}"
+                jarFileset="@{project}/src"
+            />
+        </sequential>
+    </macrodef>
+
+    <!-- Package-javadoc macro -->
+    <macrodef name="package-javadoc">
+        <attribute name="project"/>
+        <attribute name="jarFile"/>
+        <attribute name="title"/>
+        <attribute name="package"/>
+
+        <sequential>
+            <mkdir dir="${folder.lib}"/>
+            <delete file="${folder.lib}/@{jarFile}" failonerror="false"/>
+            <delete dir="${folder.doc}/@{jarFile}" failonerror="false"/>
+
+            <javadoc packagenames="@{package}"
+                destdir="${folder.doc}/@{jarFile}"
+                author="true" version="true" use="true"
+                classpath="${java.class.path}">
+                <classpath>
+                    <path refid="classpath.javalib"/>
+                    <fileset dir="web-server/lib" includes="**/*.jar"/>
+                    <fileset dir="wtk/lib" includes="**/*.jar"/>
+
+                    <dirset dir="@{project}/../">
+                      <include name="charts/${folder.bin}"/>
+                      <include name="core/${folder.bin}"/>
+                      <include name="web/${folder.bin}"/>
+                      <include name="web-server/${folder.bin}"/>
+                      <include name="wtk/${folder.bin}"/>
+                      <include name="wtk-terra/${folder.bin}"/>
+                    </dirset>
+                </classpath>
+
+                <packageset dir="@{project}/src" includes="**/*"/>
+
+                <link href="http://download.oracle.com/javase/6/docs/api"/>
+                <link href="http://download.oracle.com/javaee/1.4/api/"/>
+            </javadoc>
+
+            <package-maven-source-or-javadoc-jar
+                project="@{project}"
+                jarFile="@{jarFile}"
+                title="@{title}"
+                jarFileset="${folder.doc}/@{jarFile}"
+            />
         </sequential>
     </macrodef>
 
@@ -290,13 +368,25 @@ limitations under the License.
     </target>
 
     <!-- Package Maven Sources JAR files -->
-    <target name="package-sources" description="Packages all projects into JAR files" depends="trim-whitespace">
+    <target name="package-sources" description="Packages any project sources into a JAR file" depends="trim-whitespace, package">
         <package-sources project="charts" jarFile="${jar.charts.sources}" title="Charts"/>
         <package-sources project="core" jarFile="${jar.core.sources}" title="Core"/>
         <package-sources project="web" jarFile="${jar.web.sources}" title="Web"/>
         <package-sources project="web-server" jarFile="${jar.web-server.sources}" title="Web Server"/>
         <package-sources project="wtk" jarFile="${jar.wtk.sources}" title="WTK"/>
         <package-sources project="wtk-terra" jarFile="${jar.wtk-terra.sources}" title="WTK Terra Theme Provider"/>
+    </target>
+
+    <!-- Package Maven Javadoc JAR files -->
+    <target name="package-javadoc" description="Packages any project Javadoc into a JAR file" depends="package-sources">
+        <delete dir="${folder.doc}"/>
+        <package-javadoc project="charts" jarFile="${jar.charts.javadoc}" title="Charts" package="${src.package.base}.charts.*"/>
+        <package-javadoc project="core" jarFile="${jar.core.javadoc}" title="Core" package="${src.package.base}.*"/>
+        <package-javadoc project="web" jarFile="${jar.web.javadoc}" title="Web" package="${src.package.base}.web.*"/>
+        <package-javadoc project="web-server" jarFile="${jar.web-server.javadoc}" title="Web Server" package="${src.package.base}.web.server.*"/>
+        <package-javadoc project="wtk" jarFile="${jar.wtk.javadoc}" title="WTK" package="${src.package.base}.wtk.*"/>
+        <package-javadoc project="wtk-terra" jarFile="${jar.wtk-terra.javadoc}" title="WTK Terra Theme Provider" package="${src.package.base}.wtk.skin.terra.*"/>
+        <delete dir="${folder.doc}"/>
     </target>
 
     <!-- Run unit tests -->
@@ -330,8 +420,9 @@ limitations under the License.
             author="true" version="true" use="true"
             classpath="${java.class.path}">
             <classpath>
-                <fileset dir="web-server/lib" includes="**/*.jar"/>
                 <path refid="classpath.javalib"/>
+                <fileset dir="web-server/lib" includes="**/*.jar"/>
+                <fileset dir="wtk/lib" includes="**/*.jar"/>
             </classpath>
 
             <packageset dir="charts/src" includes="**/*"/>
@@ -341,8 +432,8 @@ limitations under the License.
             <packageset dir="wtk/src" includes="**/*"/>
             <packageset dir="wtk-terra/src" includes="**/*"/>
 
-            <link href="http://java.sun.com/javase/6/docs/api"/>
-            <link href="http://java.sun.com/j2ee/1.4/docs/api"/>
+            <link href="http://download.oracle.com/javase/6/docs/api"/>
+            <link href="http://download.oracle.com/javaee/1.4/api/"/>
         </javadoc>
     </target>
 
@@ -680,7 +771,7 @@ limitations under the License.
     </target>
 
     <!-- Installs JARs to local Maven repository -->
-    <target name="maven-install" depends="clean, package, package-sources">
+    <target name="maven-install" depends="clean, package, package-sources, package-javadoc">
         <mkdir dir="maven-install"/>
 
         <copy todir="maven-install">
@@ -698,26 +789,32 @@ limitations under the License.
         <artifact:install file="lib/${jar.core}">
             <artifact:pom file="maven-install/core/pom.xml"/>
             <attach file="lib/${jar.core.sources}" classifier="sources" />
+            <attach file="lib/${jar.core.javadoc}" classifier="javadoc" />
         </artifact:install>
         <artifact:install file="lib/${jar.web}">
             <artifact:pom file="maven-install/web/pom.xml"/>
             <attach file="lib/${jar.web.sources}" classifier="sources" />
+            <attach file="lib/${jar.web.javadoc}" classifier="javadoc" />
         </artifact:install>
         <artifact:install file="lib/${jar.web-server}">
             <artifact:pom file="maven-install/web-server/pom.xml"/>
             <attach file="lib/${jar.web-server.sources}" classifier="sources" />
+            <attach file="lib/${jar.web-server.javadoc}" classifier="javadoc" />
         </artifact:install>
         <artifact:install file="lib/${jar.wtk}">
             <artifact:pom file="maven-install/wtk/pom.xml"/>
             <attach file="lib/${jar.wtk.sources}" classifier="sources" />
+            <attach file="lib/${jar.wtk.javadoc}" classifier="javadoc" />
         </artifact:install>
         <artifact:install file="lib/${jar.wtk-terra}">
             <artifact:pom file="maven-install/wtk-terra/pom.xml"/>
             <attach file="lib/${jar.wtk-terra.sources}" classifier="sources" />
+            <attach file="lib/${jar.wtk-terra.javadoc}" classifier="javadoc" />
         </artifact:install>
         <artifact:install file="lib/${jar.charts}">
             <artifact:pom file="maven-install/charts/pom.xml"/>
             <attach file="lib/${jar.charts.sources}" classifier="sources" />
+            <attach file="lib/${jar.charts.javadoc}" classifier="javadoc" />
         </artifact:install>
 
         <delete dir="maven-install"/>
