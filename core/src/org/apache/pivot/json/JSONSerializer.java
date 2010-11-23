@@ -737,8 +737,21 @@ public class JSONSerializer implements Serializer<Object> {
 
             // Move to the first character after ':'
             c = reader.read();
-            dictionary.put(key, readValue(reader, (valueType == null) ?
-                ((BeanAdapter)dictionary).getGenericType(key) : valueType));
+
+            if (valueType == null) {
+                // The map is a bean instance; get the generic type of the property
+                Type genericValueType = ((BeanAdapter)dictionary).getGenericType(key);
+
+                if (genericValueType != null) {
+                    // Set the value in the bean
+                    dictionary.put(key, readValue(reader, genericValueType));
+                } else {
+                    // The property does not exist; ignore this value
+                    readValue(reader, Object.class);
+                }
+            } else {
+                dictionary.put(key, readValue(reader, valueType));
+            }
 
             skipWhitespaceAndComments(reader);
 
