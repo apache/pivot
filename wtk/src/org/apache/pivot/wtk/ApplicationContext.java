@@ -843,8 +843,7 @@ public abstract class ApplicationContext {
                                 dragLocation = new Point(x, y);
                             } else if (menuPopup == null
                                 && button == Mouse.Button.RIGHT
-                                && mouseOwner.isShowing()
-                                && !mouseOwner.isBlocked()) {
+                                && !consumed) {
                                 // Instantiate a context menu
                                 Menu menu = new Menu();
 
