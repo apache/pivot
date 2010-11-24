@@ -270,7 +270,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
         // Ignore BOM (if present)
         if (c == 0xFEFF) {
-            c = reader.read();
+            c = lineNumberReader.read();
         }
 
         try {

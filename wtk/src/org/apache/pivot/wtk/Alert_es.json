@@ -14,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   saveAs: "Save as:",
-    ok: "OK",
-    cancel: "Cancel"
+{   defaultOption: "Aceptar",
+    defaultTitle: "Alerta",
+    defaultErrorTitle: "Error",
+    defaultWarningTitle: "Advertencia",
+    defaultQuestionTitle: "Pregunta",
+    defaultInfoTitle: "Información"
 }
-

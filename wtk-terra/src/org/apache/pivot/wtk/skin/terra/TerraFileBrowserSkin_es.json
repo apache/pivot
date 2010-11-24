@@ -14,8 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   saveAs: "Save as:",
-    ok: "OK",
-    cancel: "Cancel"
+{   selectDrive: "Selecionar unidad",
+    goTo: "Ir a la carpeta",
+    goUp: "Subir una carpeta",
+    newFolder: "Crear nueva carpeta",
+    goHome: "Ir a la carpeta personal",
+    search: "Buscar",
+    searchFor: "Buscar archivos",
+    fileName: "Archivo",
+    size: "Tamaño",
+    lastModified: "Última modificación"
 }
-

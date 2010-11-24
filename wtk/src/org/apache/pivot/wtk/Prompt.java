@@ -197,8 +197,6 @@ public class Prompt extends Sheet {
         setOptions((options == null) ? new ArrayList<Object>(resources.get("defaultOption")) : options);
         setBody(body);
 
-        setTitle((String)resources.get("defaultTitle"));
-
         installSkin(Prompt.class);
     }
 

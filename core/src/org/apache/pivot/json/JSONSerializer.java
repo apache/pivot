@@ -263,7 +263,7 @@ public class JSONSerializer implements Serializer<Object> {
 
         // Ignore BOM (if present)
         if (c == 0xFEFF) {
-            c = reader.read();
+            c = lineNumberReader.read();
         }
 
         // Read the root value

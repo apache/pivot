@@ -14,8 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   saveAs: "Save as:",
-    ok: "OK",
-    cancel: "Cancel"
+{   selectDrive: "Sélectionner lecteur",
+    goTo: "Aller au dossier",
+    goUp: "Remonter un dossier",
+    newFolder: "Créer nouveau dossier",
+    goHome: "Dossier d'accueil",
+    search: "Rechercher",
+    searchFor: "Rechercher des fichiers",
+    fileName: "Fichier",
+    size: "Taille",
+    lastModified: "Modifié le"
 }
-
