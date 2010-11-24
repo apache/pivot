@@ -14,11 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   a: 100,
-    b: "Hello",
-    c: false,
-    d: ["1", "2", "3"],
-    e: {f: 4, g: 5, h: 6},
-    "i": { a: 200, b: "Goodbye", c: true},
-    j: 200
-}
+[   {a:1, b:2, c:3},
+    {a:10, b:20, c:30},
+    {a:100, b:200, c:300}
+]

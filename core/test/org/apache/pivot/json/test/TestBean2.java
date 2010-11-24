@@ -16,16 +16,10 @@
  */
 package org.apache.pivot.json.test;
 
-import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.HashMap;
-
-public class SampleBean {
+public class TestBean2 {
     private int a = 0;
-    private String b = null;
-    private boolean c = false;
-    private ArrayList<String> d = null;
-    private HashMap<String, Integer> e = null;
-    private SampleBean i = null;
+    private int b = 0;
+    private int c = 0;
 
     public int getA() {
         return a;
@@ -35,43 +29,19 @@ public class SampleBean {
         this.a = a;
     }
 
-    public String getB() {
+    public int getB() {
         return b;
     }
 
-    public void setB(String b) {
+    public void setB(int b) {
         this.b = b;
     }
 
-    public boolean getC() {
+    public int getC() {
         return c;
     }
 
-    public void setC(boolean c) {
+    public void setC(int c) {
         this.c = c;
-    }
-
-    public ArrayList<String> getD() {
-        return d;
-    }
-
-    public void setD(ArrayList<String> d) {
-        this.d = d;
-    }
-
-    public HashMap<String, Integer> getE() {
-        return e;
-    }
-
-    public void setE(HashMap<String, Integer> e) {
-        this.e = e;
-    }
-
-    public SampleBean getI() {
-        return i;
-    }
-
-    public void setI(SampleBean i) {
-        this.i = i;
     }
 }
