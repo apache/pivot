@@ -19,7 +19,7 @@
     goUp: "Remonter un dossier",
     newFolder: "Créer nouveau dossier",
     goHome: "Dossier d'accueil",
-    search: "Rechercher",
+    search: "rechercher",
     searchFor: "Rechercher des fichiers",
     fileName: "Fichier",
     size: "Taille",

@@ -14,14 +14,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   selectDrive: "Laufwerk auswählen",
-    goTo: "Ordner auswählen",
-    goUp: "Eine Ebene nach oben",
-    newFolder: "Neuen Ordner erstellen",
-    goHome: "Eigene Dateien anzeigen",
-    search: "suchen",
-    searchFor: "Suche nach Dateien",
-    fileName: "Datei",
-    size: "Größe",
-    lastModified: "Geändert am"
+{   defaultOption: "OK"
 }

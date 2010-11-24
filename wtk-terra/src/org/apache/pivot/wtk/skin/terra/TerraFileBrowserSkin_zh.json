@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   selectDrive: "Selecionar unidad",
-    goTo: "Ir a la carpeta",
-    goUp: "Subir una carpeta",
-    newFolder: "Crear nueva carpeta",
-    goHome: "Ir a la carpeta personal",
-    search: "buscar",
-    searchFor: "Buscar archivos",
-    fileName: "Archivo",
-    size: "Tamaño",
-    lastModified: "Última modificación"
+{   selectDrive: "选择驱动器",
+    goTo: "去到一个文件夹",
+    goUp: "去上一个文件夹",
+    newFolder: "创建新的文件夹",
+    goHome: "到主文件夹",
+    search: "搜索",
+    searchFor: "搜索文件",
+    fileName: "文件",
+    size: "大小",
+    lastModified: "改动的"
 }

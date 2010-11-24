@@ -14,14 +14,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   selectDrive: "Selecionar unidad",
-    goTo: "Ir a la carpeta",
-    goUp: "Subir una carpeta",
-    newFolder: "Crear nueva carpeta",
-    goHome: "Ir a la carpeta personal",
-    search: "buscar",
-    searchFor: "Buscar archivos",
-    fileName: "Archivo",
-    size: "Tamaño",
-    lastModified: "Última modificación"
+{   defaultOption: "确定"
 }

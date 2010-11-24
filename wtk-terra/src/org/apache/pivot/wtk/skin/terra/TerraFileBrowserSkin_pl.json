@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   selectDrive: "Laufwerk auswählen",
-    goTo: "Ordner auswählen",
-    goUp: "Eine Ebene nach oben",
-    newFolder: "Neuen Ordner erstellen",
-    goHome: "Eigene Dateien anzeigen",
-    search: "suchen",
-    searchFor: "Suche nach Dateien",
-    fileName: "Datei",
-    size: "Größe",
-    lastModified: "Geändert am"
+{   selectDrive: "Wybierz dysk",
+    goTo: "Idz do folderu",
+    goUp: "Idz poziom wyøej",
+    newFolder: "StwÛrz nowy folder",
+    goHome: "Idz do folderu domowego",
+    search: "szukaj",
+    searchFor: "Szukaj plikÛw",
+    fileName: "Plik",
+    size: "WielkoúÊ",
+    lastModified: "Zmodyfikowano"
 }
