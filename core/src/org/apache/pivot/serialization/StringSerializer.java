@@ -55,7 +55,7 @@ public class StringSerializer implements Serializer<String> {
     }
 
 
-    
+
     /**
      * Reads data from a stream.
      *
