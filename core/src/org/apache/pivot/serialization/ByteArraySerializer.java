@@ -32,7 +32,7 @@ import java.io.OutputStream;
 public class ByteArraySerializer implements Serializer<byte[]> {
     public static final String MIME_TYPE = "application/octet-stream";
 
-    public static final int BUFFER_SIZE = 4096;
+    public static final int BUFFER_SIZE = 2048;
 
     /**
      * Reads a byte array from an input stream.
