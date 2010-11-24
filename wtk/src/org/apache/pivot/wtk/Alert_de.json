@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 {   defaultOption: "OK",
-    defaultTitle: "Alert",
-    defaultErrorTitle: "Error",
-    defaultWarningTitle: "Warning",
-    defaultQuestionTitle: "Question",
-    defaultInfoTitle: "Information"
+    defaultTitle: "Meldung",
+    defaultErrorTitle: "Fehler",
+    defaultWarningTitle: "Warnung",
+    defaultQuestionTitle: "Frage",
+    defaultInfoTitle: "Hinweis"
 }

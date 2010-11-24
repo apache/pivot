@@ -207,7 +207,27 @@ public class Alert extends Dialog {
         setOptions((options == null) ? new ArrayList<Object>(resources.get("defaultOption")) : options);
         setBody(body);
 
-        setTitle((String)resources.get("defaultTitle"));
+        if (messageType == null) {
+            setTitle((String)resources.get("defaultTitle"));
+        } else {
+            switch (messageType) {
+                case ERROR:
+                    setTitle((String)resources.get("defaultErrorTitle"));
+                    break;
+                case WARNING:
+                    setTitle((String)resources.get("defaultWarningTitle"));
+                    break;
+                case QUESTION:
+                    setTitle((String)resources.get("defaultQuestionTitle"));
+                    break;
+                case INFO:
+                    setTitle((String)resources.get("defaultInfoTitle"));
+                    break;
+                default:
+                    setTitle((String)resources.get("defaultTitle"));
+                    break;
+            }
+        }
 
         installSkin(Alert.class);
     }
@@ -307,25 +327,34 @@ public class Alert extends Dialog {
     }
 
     public static void alert(String message, Window owner) {
-        alert(MessageType.INFO, message, null, owner, null);
+        alert(MessageType.INFO, message, null, null, owner, null);
     }
 
     public static void alert(MessageType messageType, String message, Window owner) {
-        alert(messageType, message, null, owner, null);
+        alert(messageType, message, null, null, owner, null);
     }
 
     public static void alert(MessageType messageType, String message, Window owner,
         DialogCloseListener dialogCloseListener) {
-        alert(messageType, message, null, owner, dialogCloseListener);
+        alert(messageType, message, null, null, owner, dialogCloseListener);
     }
 
     public static void alert(MessageType messageType, String message, Component body, Window owner) {
-        alert(messageType, message, body, owner, null);
+        alert(messageType, message, null, body, owner, null);
     }
 
     public static void alert(MessageType messageType, String message, Component body, Window owner,
         DialogCloseListener dialogCloseListener) {
+        alert(messageType, message, null, body, owner, dialogCloseListener);
+    }
+
+    public static void alert(MessageType messageType, String message, String title, Component body,
+        Window owner, DialogCloseListener dialogCloseListener) {
         Alert alert = new Alert(messageType, message, null, body);
+        if (title != null) {
+            alert.setTitle(title);
+        }
+
         alert.open(owner.getDisplay(), owner, dialogCloseListener);
     }
 }
