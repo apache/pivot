@@ -136,6 +136,11 @@ limitations under the License.
         <p>
             Because <tt>StockTrackerWindow</tt> implements <tt>Bindable</tt>, these member variables
             are automatically populated with the corresponding values declared in the BXML file.
+            For example, the object with ID "stocksTableView" in the BXML file will be assigned to
+            the <tt>stocksTableView</tt> member variable, and so on.
+        </p>
+
+        <p>
             <tt>Bindable</tt> defines a single method, <tt>initialize()</tt>, that is called when
             the root element has been fully loaded and the bound values have been processed. This
             allows the bound class to perform any required initialization (generally event
@@ -167,10 +172,10 @@ limitations under the License.
             The dollar sign is a "variable dereference" operator. Though it isn't shown in this
             example, it is possible to embed script code in a BXML file using the
             <tt>&lt;bxml:script&gt;</tt> tag. Any JVM-capable scripting language is supported,
-            including JavaScript, Groovy, adnd Clojure, among others. Any attribute value preceded by
+            including JavaScript, Groovy, and Clojure, among others. Any attribute value preceded by
             a dollar sign is resolved to an instance of a script variable declared within the page.
             This allows developers to define variables in script and then easily use them as
-            initialization paramters for class instances declared as elements. Script code can
+            initialization parameters for class instances declared as elements. Script code can
             also refer to any page elements identified via a <tt>bxml:id</tt> attribute as globally
             scoped page level variables.
         </p>

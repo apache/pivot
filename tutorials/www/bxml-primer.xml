@@ -163,8 +163,10 @@ limitations under the License.
         <p>
         BXML includes are often used for partitioning content into manageable pieces (for example,
         when working on large applications or with multiple developers, or when defining reusable
-        content templates). Each include is assigned its own variable namespace to avoid naming
-        collisions with ancestor documents.
+        content templates). By default, each include is assigned its own variable namespace to
+        avoid naming collisions with ancestor documents; however, this behavior can be overridden
+        by adding an "inline" attribute with a value of "true" to the <tt>&lt;bxml:include&gt;</tt>
+        tag.
         </p>
         </li>
 

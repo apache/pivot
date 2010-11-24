@@ -174,11 +174,7 @@ limitations under the License.
 
         <p>
             The application class name is specified as the first argument to the
-            <tt>DesktopApplicationContext</tt> loader application. The sample <tt>HelloJava</tt>
-            application also defines a convenience <tt>main()</tt> method that delegates to
-            <tt>DesktopApplicationContext.main()</tt>, allowing it to be bundled in an executable
-            JARs and more easily launched from within an IDE. Defining such a convenience method
-            is common practice in Pivot development.
+            <tt>DesktopApplicationContext</tt> loader application.
         </p>
 
         <h3>The Window Class</h3>
