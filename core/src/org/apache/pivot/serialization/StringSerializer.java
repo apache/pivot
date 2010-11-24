@@ -24,11 +24,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-
 /**
  * Implementation of the {@link Serializer} interface that reads data from
  * and writes data to Java Strings.
- *
  */
 public class StringSerializer implements Serializer<String> {
     private final Charset charset;
@@ -54,16 +52,14 @@ public class StringSerializer implements Serializer<String> {
         return charset;
     }
 
-
-
     /**
-     * Reads data from a stream.
+     * Reads plain text data from an input stream.
      *
      * @param inputStream
      * The input stream from which data will be read.
      *
      * @return
-     * An instance of {@link String} containing the data read from the input stream.
+     * An instance of {@link String} containing the text read from the input stream.
      */
     @Override
     public String readObject(InputStream inputStream) throws IOException, SerializationException {
@@ -86,7 +82,6 @@ public class StringSerializer implements Serializer<String> {
             byteOutputStream.flush();
 
             result = new String(byteOutputStream.toByteArray(), charset);
-
         } catch (IOException exception) {
             throw new SerializationException(exception);
         }
@@ -95,19 +90,19 @@ public class StringSerializer implements Serializer<String> {
     }
 
     /**
-     * Writes the string to an output stream.
+     * Writes plain text data to an output stream.
      *
-     * @param string
-     * An instance of {@link String} containing the data to be written to the
-     * output stream.
+     * @param text
+     * The text to be written to the output stream.
      *
      * @param outputStream
      * The output stream to which data will be written.
      */
     @Override
-    public void writeObject(String string, OutputStream outputStream) throws IOException, SerializationException {
-        if (string == null) {
-            throw new IllegalArgumentException("string is null.");
+    public void writeObject(String text, OutputStream outputStream)
+        throws IOException, SerializationException {
+        if (text == null) {
+            throw new IllegalArgumentException("text is null.");
         }
 
         if (outputStream == null) {
@@ -116,17 +111,15 @@ public class StringSerializer implements Serializer<String> {
 
         try {
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-            bufferedOutputStream.write(string.getBytes());
+            bufferedOutputStream.write(text.getBytes());
             bufferedOutputStream.flush();
         } catch (IOException exception) {
             throw new SerializationException(exception);
         }
-
     }
 
     @Override
     public String getMIMEType(String object) {
         return MIME_TYPE;
     }
-
 }
