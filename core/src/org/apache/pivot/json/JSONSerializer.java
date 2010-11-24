@@ -385,10 +385,6 @@ public class JSONSerializer implements Serializer<Object> {
 
     private String readString(Reader reader)
         throws IOException, SerializationException {
-        if (!(type instanceof Class<?>)) {
-            throw new SerializationException("Cannot convert string to " + type + ".");
-        }
-
         StringBuilder stringBuilder = new StringBuilder();
 
         // Use the same delimiter to close the string
@@ -450,6 +446,10 @@ public class JSONSerializer implements Serializer<Object> {
 
     private Object readStringValue(Reader reader, Type type)
         throws IOException, SerializationException {
+        if (!(type instanceof Class<?>)) {
+            throw new SerializationException("Cannot convert string to " + type + ".");
+        }
+
         String string = readString(reader);
 
         // Notify the listeners

@@ -19,7 +19,7 @@ package org.apache.pivot.json.test;
 public class TestBean2 {
     private int a = 0;
     private int b = 0;
-    private int c = 0;
+    private String c = null;
 
     public int getA() {
         return a;
@@ -37,11 +37,11 @@ public class TestBean2 {
         this.b = b;
     }
 
-    public int getC() {
+    public String getC() {
         return c;
     }
 
-    public void setC(int c) {
+    public void setC(String c) {
         this.c = c;
     }
 }
