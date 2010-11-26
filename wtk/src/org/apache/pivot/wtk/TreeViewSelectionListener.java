@@ -38,6 +38,10 @@ public interface TreeViewSelectionListener {
         @Override
         public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
         }
+
+        @Override
+        public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
+        }
     }
 
     /**
@@ -63,4 +67,12 @@ public interface TreeViewSelectionListener {
      * @param previousSelectedPaths
      */
     public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths);
+
+    /**
+     * Called when a tree view's selected node has changed.
+     *
+     * @param treeView
+     * @param previousSelectedItem
+     */
+    public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode);
 }

@@ -238,8 +238,7 @@ public class ListButton extends Button {
                 listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
 
                 if (selectedIndex == -1) {
-                    listButtonSelectionListeners.selectedItemChanged(ListButton.this,
-                        items.get(previousSelectedIndex - index));
+                    listButtonSelectionListeners.selectedItemChanged(ListButton.this, null);
                 }
             }
         }
@@ -394,7 +393,7 @@ public class ListButton extends Button {
 
             if (selectedIndex != previousSelectedIndex) {
                 listButtonSelectionListeners.selectedIndexChanged(this, selectedIndex);
-                listButtonSelectionListeners.selectedItemChanged(this, getSelectedItem());
+                listButtonSelectionListeners.selectedItemChanged(this, null);
             }
         }
     }

@@ -386,6 +386,13 @@ public class TreeView extends Component {
                 listener.selectedPathsChanged(treeView, previousSelectedPaths);
             }
         }
+
+        @Override
+        public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
+            for (TreeViewSelectionListener listener : this) {
+                listener.selectedNodeChanged(treeView, previousSelectedNode);
+            }
+        }
     }
 
     /**
@@ -517,6 +524,14 @@ public class TreeView extends Component {
         public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
             Path path = getPath();
 
+            Path previousSelectedPath;
+            if (selectMode == SelectMode.SINGLE
+                && selectedPaths.getLength() > 0) {
+                previousSelectedPath = selectedPaths.get(0);
+            } else {
+                previousSelectedPath = null;
+            }
+
             // Remove child handlers
             int count = items.getLength();
             Sequence<BranchHandler> removed = remove(index, count);
@@ -540,6 +555,11 @@ public class TreeView extends Component {
 
             if (updated > 0) {
                 treeViewSelectionListeners.selectedPathsChanged(TreeView.this, getSelectedPaths());
+
+                if (selectMode == SelectMode.SINGLE
+                    && !getSelectedPath().equals(previousSelectedPath)) {
+                    treeViewSelectionListeners.selectedNodeChanged(TreeView.this, null);
+                }
             }
         }
 
@@ -591,6 +611,10 @@ public class TreeView extends Component {
 
             if (cleared > 0) {
                 treeViewSelectionListeners.selectedPathsChanged(TreeView.this, getSelectedPaths());
+
+                if (selectMode == SelectMode.SINGLE) {
+                    treeViewSelectionListeners.selectedNodeChanged(TreeView.this, null);
+                }
             }
         }
 
@@ -623,6 +647,10 @@ public class TreeView extends Component {
 
                 if (cleared > 0) {
                     treeViewSelectionListeners.selectedPathsChanged(TreeView.this, getSelectedPaths());
+
+                    if (selectMode == SelectMode.SINGLE) {
+                        treeViewSelectionListeners.selectedNodeChanged(TreeView.this, null);
+                    }
                 }
             }
         }
@@ -962,6 +990,10 @@ public class TreeView extends Component {
 
             if (cleared > 0) {
                 treeViewSelectionListeners.selectedPathsChanged(TreeView.this, getSelectedPaths());
+
+                if (selectMode == SelectMode.SINGLE) {
+                    treeViewSelectionListeners.selectedNodeChanged(TreeView.this, null);
+                }
             }
         }
     }
@@ -1104,6 +1136,7 @@ public class TreeView extends Component {
         }
 
         Sequence<Path> previousSelectedPaths = this.selectedPaths;
+        Object previousSelectedNode = (selectMode == SelectMode.SINGLE) ? getSelectedNode() : null;
 
         // TODO Only add and monitor non-duplicates
 
@@ -1122,6 +1155,10 @@ public class TreeView extends Component {
 
             // Notify listeners
             treeViewSelectionListeners.selectedPathsChanged(this, previousSelectedPaths);
+
+            if (selectMode == SelectMode.SINGLE) {
+                treeViewSelectionListeners.selectedNodeChanged(TreeView.this, previousSelectedNode);
+            }
         }
 
         return getSelectedPaths();

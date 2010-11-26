@@ -1140,8 +1140,7 @@ public class TableView extends Component {
 
                 if (selectMode == SelectMode.SINGLE
                     && getSelectedIndex() != previousSelectedIndex) {
-                    tableViewSelectionListeners.selectedRowChanged(TableView.this,
-                        items.get(previousSelectedIndex - index));
+                    tableViewSelectionListeners.selectedRowChanged(TableView.this, null);
                 }
             }
         }
@@ -1284,7 +1283,7 @@ public class TableView extends Component {
                 tableViewSelectionListeners.selectedRangesChanged(this, getSelectedRanges());
 
                 if (selectMode == SelectMode.SINGLE) {
-                    tableViewSelectionListeners.selectedRowChanged(this, getSelectedRow());
+                    tableViewSelectionListeners.selectedRowChanged(this, null);
                 }
             }
         }
@@ -1444,29 +1443,9 @@ public class TableView extends Component {
             throw new IllegalArgumentException("Selection is not enabled.");
         }
 
-        Object previousSelectedRow;
-        if (selectMode == SelectMode.SINGLE) {
-            int n = selectedRanges.getLength();
-
-            if (n > 1) {
-                throw new IllegalArgumentException("Selection length is greater than 1.");
-            }
-
-            if (n > 0) {
-                Span selectedRange = selectedRanges.get(0);
-
-                if (selectedRange.getLength() > 1) {
-                    throw new IllegalArgumentException("Selected range length is greater than 1.");
-                }
-            }
-
-            previousSelectedRow = getSelectedRow();
-        } else {
-            previousSelectedRow = null;
-        }
-
         // Update the selection
         Sequence<Span> previousSelectedRanges = this.rangeSelection.getSelectedRanges();
+        Object previousSelectedRow = (selectMode == SelectMode.SINGLE) ? getSelectedRow() : null;
 
         RangeSelection listSelection = new RangeSelection();
         for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {

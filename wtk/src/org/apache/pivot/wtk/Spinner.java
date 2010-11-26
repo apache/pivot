@@ -305,8 +305,7 @@ public class Spinner extends Container {
                 spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
 
                 if (selectedIndex == -1) {
-                    spinnerSelectionListeners.selectedItemChanged(Spinner.this,
-                        items.get(previousSelectedIndex - index));
+                    spinnerSelectionListeners.selectedItemChanged(Spinner.this, null);
                 }
             }
         }
@@ -412,7 +411,7 @@ public class Spinner extends Container {
 
             if (selectedIndex != previousSelectedIndex) {
                 spinnerSelectionListeners.selectedIndexChanged(Spinner.this, selectedIndex);
-                spinnerSelectionListeners.selectedItemChanged(this, getSelectedItem());
+                spinnerSelectionListeners.selectedItemChanged(this, null);
             }
         }
     }

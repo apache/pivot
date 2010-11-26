@@ -2330,4 +2330,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             }
         }
     }
+
+    @Override
+    public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
+        // No-op
+    }
 }

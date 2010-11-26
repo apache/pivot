@@ -188,8 +188,7 @@ public class SuggestionPopup extends Window {
                 suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
 
                 if (selectedIndex == -1) {
-                    suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this,
-                        items.get(previousSelectedIndex - index));
+                    suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this, null);
                 }
             }
         }
@@ -291,7 +290,7 @@ public class SuggestionPopup extends Window {
 
             if (selectedIndex != previousSelectedIndex) {
                 suggestionPopupSelectionListeners.selectedIndexChanged(this, selectedIndex);
-                suggestionPopupSelectionListeners.selectedSuggestionChanged(this, getSelectedSuggestion());
+                suggestionPopupSelectionListeners.selectedSuggestionChanged(this, null);
             }
         }
     }
