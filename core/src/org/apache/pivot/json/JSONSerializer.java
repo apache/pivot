@@ -560,10 +560,9 @@ public class JSONSerializer implements Serializer<Object> {
 
                     if (Sequence.class.isAssignableFrom(rawType)) {
                         itemType = parameterizedType.getActualTypeArguments()[0];
-                        break;
                     }
 
-                    parentType = rawType.getGenericSuperclass();
+                    break;
                 } else {
                     Class<?> classType = (Class<?>)parentType;
                     Type[] genericInterfaces = classType.getGenericInterfaces();
@@ -673,10 +672,9 @@ public class JSONSerializer implements Serializer<Object> {
 
                     if (Dictionary.class.isAssignableFrom(rawType)) {
                         valueType = parameterizedType.getActualTypeArguments()[1];
-                        break;
                     }
 
-                    parentType = rawType.getGenericSuperclass();
+                    break;
                 } else {
                     Class<?> classType = (Class<?>)parentType;
                     Type[] genericInterfaces = classType.getGenericInterfaces();
