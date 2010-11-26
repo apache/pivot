@@ -81,7 +81,7 @@ public class BindTest {
         List<Object> list =
             (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
-        JSONSerializer typedListSerializer = new JSONSerializer(TestBean2List.class);
+        JSONSerializer typedListSerializer = new JSONSerializer(TestBean2ListSubclass.class);
         TestBean2List typedList =
             (TestBean2List)typedListSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
@@ -103,7 +103,7 @@ public class BindTest {
         List<Object> list =
             (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
-        JSONSerializer sequenceSerializer = new JSONSerializer(TestBean2Sequence.class);
+        JSONSerializer sequenceSerializer = new JSONSerializer(TestBean2SequenceSubclass.class);
         TestBean2Sequence sequence =
             (TestBean2Sequence)sequenceSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
@@ -153,7 +153,7 @@ public class BindTest {
      */
     @Test
     public void testMapSubclass() throws IOException, SerializationException {
-        JSONSerializer typedMapSerializer = new JSONSerializer(TestBean2Map.class);
+        JSONSerializer typedMapSerializer = new JSONSerializer(TestBean2MapSubclass.class);
 
         TestBean2Map map =
             (TestBean2Map)typedMapSerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
@@ -170,7 +170,7 @@ public class BindTest {
      */
     @Test
     public void testDictionary() throws IOException, SerializationException {
-        JSONSerializer dictionarySerializer = new JSONSerializer(TestBean2Dictionary.class);
+        JSONSerializer dictionarySerializer = new JSONSerializer(TestBean2DictionarySubclass.class);
 
         TestBean2Dictionary dictionary =
             (TestBean2Dictionary)dictionarySerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
