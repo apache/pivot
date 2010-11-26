@@ -502,11 +502,15 @@ public class TreeView extends Component {
 
             // Update our data structures
             incrementPaths(expandedPaths, path, index);
-            incrementPaths(selectedPaths, path, index);
+            int updated = incrementPaths(selectedPaths, path, index);
             incrementPaths(checkedPaths, path, index);
 
             // Notify listeners
             treeViewNodeListeners.nodeInserted(TreeView.this, path, index);
+
+            if (updated > 0) {
+                treeViewSelectionListeners.selectedPathsChanged(TreeView.this, getSelectedPaths());
+            }
         }
 
         @Override
@@ -528,11 +532,15 @@ public class TreeView extends Component {
 
             // Update our data structures
             clearAndDecrementPaths(expandedPaths, path, index, count);
-            clearAndDecrementPaths(selectedPaths, path, index, count);
+            int updated = clearAndDecrementPaths(selectedPaths, path, index, count);
             clearAndDecrementPaths(checkedPaths, path, index, count);
 
             // Notify listeners
             treeViewNodeListeners.nodesRemoved(TreeView.this, path, index, count);
+
+            if (updated > 0) {
+                treeViewSelectionListeners.selectedPathsChanged(TreeView.this, getSelectedPaths());
+            }
         }
 
         @Override
@@ -575,11 +583,15 @@ public class TreeView extends Component {
 
             // Update our data structures
             clearPaths(expandedPaths, path);
-            clearPaths(selectedPaths, path);
+            int cleared = clearPaths(selectedPaths, path);
             clearPaths(checkedPaths, path);
 
             // Notify listeners
             treeViewNodeListeners.nodesCleared(TreeView.this, path);
+
+            if (cleared > 0) {
+                treeViewSelectionListeners.selectedPathsChanged(TreeView.this, getSelectedPaths());
+            }
         }
 
         @Override
@@ -603,11 +615,15 @@ public class TreeView extends Component {
 
                 // Update our data structures
                 clearPaths(expandedPaths, path);
-                clearPaths(selectedPaths, path);
+                int cleared = clearPaths(selectedPaths, path);
                 clearPaths(checkedPaths, path);
 
                 // Notify listeners
                 treeViewNodeListeners.nodesSorted(TreeView.this, path);
+
+                if (cleared > 0) {
+                    treeViewSelectionListeners.selectedPathsChanged(TreeView.this, getSelectedPaths());
+                }
             }
         }
 
@@ -627,7 +643,7 @@ public class TreeView extends Component {
          * @param index
          * The index of the inserted item within its parent.
          */
-        private void incrementPaths(ArrayList<Path> paths, Path basePath, int index) {
+        private int incrementPaths(ArrayList<Path> paths, Path basePath, int index) {
             // Calculate the child's path
             Path childPath = new Path(basePath);
             childPath.add(index);
@@ -640,9 +656,11 @@ public class TreeView extends Component {
 
             // Temporarily clear the comparator while we update the list
             paths.setComparator(null);
+
+            int n = paths.getLength();
             try {
                 // Update all affected paths by incrementing the appropriate path element
-                for (int depth = basePath.getLength(), n = paths.getLength(); i < n; i++) {
+                for (int depth = basePath.getLength(); i < n; i++) {
                     Path affectedPath = paths.get(i);
 
                     if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
@@ -658,6 +676,8 @@ public class TreeView extends Component {
                 // Restore the comparator
                 paths.setComparator(PATH_COMPARATOR);
             }
+
+            return (n - i);
         }
 
         /**
@@ -680,7 +700,7 @@ public class TreeView extends Component {
          * @param count
          * The number of items removed.
          */
-        private void clearAndDecrementPaths(ArrayList<Path> paths, Path basePath, int index,
+        private int clearAndDecrementPaths(ArrayList<Path> paths, Path basePath, int index,
             int count) {
             int depth = basePath.getLength();
 
@@ -707,7 +727,8 @@ public class TreeView extends Component {
             }
 
             // Decrement paths as necessary
-            for (int i = start, n = paths.getLength(); i < n; i++) {
+            int n = paths.getLength();
+            for (int i = start; i < n; i++) {
                 Path affectedPath = paths.get(i);
 
                 if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
@@ -719,6 +740,8 @@ public class TreeView extends Component {
                 elements[depth] -= count;
                 paths.update(i, new ImmutablePath(elements));
             }
+
+            return (n - start);
         }
 
         /**
@@ -774,13 +797,14 @@ public class TreeView extends Component {
          * @param basePath
          * The path whose children were sorted.
          */
-        private void clearPaths(ArrayList<Path> paths, Path basePath) {
+        private int clearPaths(ArrayList<Path> paths, Path basePath) {
             // Find first descendant in paths list, if it exists
             int index = ArrayList.binarySearch(paths, basePath, PATH_COMPARATOR);
             index = (index < 0 ? -(index + 1) : index + 1);
 
             // Remove all descendants from the paths list
-            for (int i = index, n = paths.getLength(); i < n; i++) {
+            int n = paths.getLength();
+            for (int i = index; i < n; i++) {
                 Path affectedPath = paths.get(index);
 
                 if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
@@ -789,6 +813,8 @@ public class TreeView extends Component {
 
                 paths.remove(index, 1);
             }
+
+            return (n - index);
         }
     }
 
@@ -911,14 +937,18 @@ public class TreeView extends Component {
         List<?> previousTreeData = this.treeData;
 
         if (previousTreeData != treeData) {
+            int cleared;
             if (previousTreeData != null) {
                 // Reset our data models
                 expandedPaths.clear();
+                cleared = selectedPaths.getLength();
                 selectedPaths.clear();
                 checkedPaths.clear();
 
                 // Release our existing branch handlers
                 rootBranchHandler.release();
+            } else {
+                cleared = 0;
             }
 
             // Update our root branch handler
@@ -929,6 +959,10 @@ public class TreeView extends Component {
 
             // Notify listeners
             treeViewListeners.treeDataChanged(this, previousTreeData);
+
+            if (cleared > 0) {
+                treeViewSelectionListeners.selectedPathsChanged(TreeView.this, getSelectedPaths());
+            }
         }
     }
 
@@ -1202,6 +1236,7 @@ public class TreeView extends Component {
 
             // Notify listeners
             treeViewSelectionListeners.selectedPathAdded(this, path);
+            treeViewSelectionListeners.selectedPathsChanged(this, null);
         }
 
         return (index < 0);
@@ -1239,6 +1274,7 @@ public class TreeView extends Component {
 
             // Notify listeners
             treeViewSelectionListeners.selectedPathRemoved(this, path);
+            treeViewSelectionListeners.selectedPathsChanged(this, null);
         }
 
         return (index >= 0);
