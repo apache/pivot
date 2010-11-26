@@ -421,7 +421,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     private List<NodeInfo> visibleNodes = new ArrayList<NodeInfo>();
 
     private NodeInfo highlightedNode = null;
-    private NodeInfo editNode = null;
+    private Path selectPath = null;
 
     // Styles
     private Font font;
@@ -1579,7 +1579,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         super.mouseOut(component);
 
         clearHighlightedNode();
-        editNode = null;
+        selectPath = null;
     }
 
     @Override
@@ -1637,33 +1637,30 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                             }
                         } else {
                             Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-                            if (selectMode == TreeView.SelectMode.SINGLE) {
-                                if (Keyboard.isPressed(commandModifier)) {
-                                    if (nodeInfo.isSelected()) {
-                                        treeView.clearSelection();
-                                    } else {
-                                        treeView.setSelectedPath(path);
-                                    }
+
+                            if (Keyboard.isPressed(commandModifier)
+                                && selectMode == TreeView.SelectMode.MULTI) {
+                                // Toggle the item's selection state
+                                if (nodeInfo.isSelected()) {
+                                    treeView.removeSelectedPath(path);
                                 } else {
-                                    if (nodeInfo.isSelected()
-                                        && treeView.isFocused()) {
-                                        // Edit the node
-                                        editNode = nodeInfo;
-                                    } else {
-                                        // Select the node
-                                        treeView.setSelectedPath(path);
-                                    }
+                                    treeView.addSelectedPath(path);
                                 }
-                            } else if (selectMode == TreeView.SelectMode.MULTI) {
-                                if (Keyboard.isPressed(commandModifier)) {
-                                    if (nodeInfo.isSelected()) {
-                                        treeView.removeSelectedPath(path);
-                                    } else {
-                                        treeView.addSelectedPath(path);
-                                    }
+                            } else if (Keyboard.isPressed(commandModifier)
+                                && selectMode == TreeView.SelectMode.SINGLE) {
+                                // Toggle the item's selection state
+                                if (nodeInfo.isSelected()) {
+                                    treeView.clearSelection();
                                 } else {
-                                    // Replace the selection
                                     treeView.setSelectedPath(path);
+                                }
+                            } else {
+                                if (selectMode != TreeView.SelectMode.NONE) {
+                                    if (nodeInfo.isSelected()) {
+                                        selectPath = path;
+                                    } else {
+                                        treeView.setSelectedPath(path);
+                                    }
                                 }
                             }
                         }
@@ -1672,6 +1669,20 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             }
 
             treeView.requestFocus();
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        boolean consumed = super.mouseUp(component, button, x, y);
+
+        TreeView treeView = (TreeView)getComponent();
+        if (selectPath != null
+            && !treeView.getFirstSelectedPath().equals(treeView.getLastSelectedPath())) {
+            treeView.setSelectedPath(selectPath);
+            selectPath = null;
         }
 
         return consumed;
@@ -1709,16 +1720,16 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     Path path = nodeInfo.getPath();
                     treeView.setNodeChecked(path, !nodeInfo.isChecked());
                 } else {
-                    if (editNode != null
+                    if (selectPath != null
                         && count == 1) {
                         TreeView.NodeEditor nodeEditor = treeView.getNodeEditor();
 
                         if (nodeEditor != null) {
-                            nodeEditor.edit(treeView, nodeInfo.getPath());
+                            nodeEditor.edit(treeView, selectPath);
                         }
                     }
 
-                    editNode = null;
+                    selectPath = null;
                 }
             }
         }
