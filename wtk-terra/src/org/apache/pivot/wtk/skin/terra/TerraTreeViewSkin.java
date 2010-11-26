@@ -2302,29 +2302,32 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
-        // Ensure that the selection is visible
-        if (treeView.isValid()) {
-            scrollSelectionToVisible();
-        } else {
-            validateSelection = true;
-        }
+        if (previousSelectedPaths != null
+            && previousSelectedPaths != treeView.getSelectedPaths()) {
+            // Ensure that the selection is visible
+            if (treeView.isValid()) {
+                scrollSelectionToVisible();
+            } else {
+                validateSelection = true;
+            }
 
-        // Un-select the previous selected paths
-        for (int i = 0, n = previousSelectedPaths.getLength(); i < n; i++) {
-            NodeInfo previousSelectedNode = getNodeInfoAt(previousSelectedPaths.get(i));
+            // Un-select the previous selected paths
+            for (int i = 0, n = previousSelectedPaths.getLength(); i < n; i++) {
+                NodeInfo previousSelectedNode = getNodeInfoAt(previousSelectedPaths.get(i));
 
-            previousSelectedNode.setSelected(false);
-            repaintNode(previousSelectedNode);
-        }
+                previousSelectedNode.setSelected(false);
+                repaintNode(previousSelectedNode);
+            }
 
-        Sequence<Path> selectedPaths = treeView.getSelectedPaths();
+            Sequence<Path> selectedPaths = treeView.getSelectedPaths();
 
-        // Select the current selected paths
-        for (int i = 0, n = selectedPaths.getLength(); i < n; i++) {
-            NodeInfo selectedNode = getNodeInfoAt(selectedPaths.get(i));
+            // Select the current selected paths
+            for (int i = 0, n = selectedPaths.getLength(); i < n; i++) {
+                NodeInfo selectedNode = getNodeInfoAt(selectedPaths.get(i));
 
-            selectedNode.setSelected(true);
-            repaintNode(selectedNode);
+                selectedNode.setSelected(true);
+                repaintNode(selectedNode);
+            }
         }
     }
 }
