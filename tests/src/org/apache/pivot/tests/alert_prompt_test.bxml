@@ -18,14 +18,17 @@ limitations under the License.
 
 <Window bxml:id="window" title="Alert/Prompt Test" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
     <bxml:define>
         <Alert bxml:id="alert" title="My Alert" message="Hello World!">
             <options>
-                <content:ButtonData icon="@bell.png" text="Bell"/>
-                <content:ButtonData icon="@clock.png" text="Clock"/>
-                <content:ButtonData icon="@cup.png" text="Cup"/>
+                <collections:ArrayList>
+                    <content:ButtonData icon="@bell.png" text="Bell"/>
+                    <content:ButtonData icon="@clock.png" text="Clock"/>
+                    <content:ButtonData icon="@cup.png" text="Cup"/>
+                </collections:ArrayList>
             </options>
 
             <TextArea text="This is a text area." editable="false"/>

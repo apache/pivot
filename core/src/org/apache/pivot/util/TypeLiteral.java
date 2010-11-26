@@ -34,7 +34,7 @@ import java.lang.reflect.Type;
  * {@code TypeLiteral} class, written by Bob Lee and Jesse Wilson.
  */
 public class TypeLiteral<T> {
-    final Type type;
+    private final Type type;
 
     /**
      * Constructs a new type literal. Derives represented class from type
@@ -45,12 +45,12 @@ public class TypeLiteral<T> {
      * at runtime despite erasure.
      */
     protected TypeLiteral() {
-        Type superclass = getClass().getGenericSuperclass();
-        if (superclass instanceof Class<?>) {
+        Type genericSuperclass = getClass().getGenericSuperclass();
+        if (!(genericSuperclass instanceof ParameterizedType)) {
             throw new RuntimeException("Missing type parameter.");
         }
 
-        ParameterizedType parameterizedType = (ParameterizedType)superclass;
+        ParameterizedType parameterizedType = (ParameterizedType)genericSuperclass;
         this.type = parameterizedType.getActualTypeArguments()[0];
     }
 

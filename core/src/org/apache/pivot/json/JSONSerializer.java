@@ -30,6 +30,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.nio.charset.Charset;
 
 import org.apache.pivot.beans.BeanAdapter;
@@ -485,8 +486,6 @@ public class JSONSerializer implements Serializer<Object> {
         }
 
         if (integer) {
-            // TODO 5/28/2008 Remove 32-bit optimization when 64-bit processors
-            // are more prevalent
             long value = Long.parseLong(stringBuilder.toString()) * (negative ? -1 : 1);
 
             if (value > Integer.MAX_VALUE
@@ -544,46 +543,77 @@ public class JSONSerializer implements Serializer<Object> {
     @SuppressWarnings("unchecked")
     private Object readListValue(Reader reader, Type type)
         throws IOException, SerializationException {
-        Sequence<Object> sequence;
-        Type itemType;
+        Sequence<Object> sequence = null;
+        Type itemType = null;
 
-        if (type instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType)type;
-            Class<?> rawType = (Class<?>)parameterizedType.getRawType();
-            if (!Sequence.class.isAssignableFrom(rawType)) {
-                throw new IllegalArgumentException("Cannot convert array to "
-                    + rawType.getName() + ".");
+        if (type == Object.class) {
+            // Return the default sequence and item types
+            sequence = new ArrayList<Object>();
+            itemType = Object.class;
+        } else {
+            // Determine the item type from generic parameters
+            Type parentType = type;
+            while (parentType != null) {
+                if (parentType instanceof ParameterizedType) {
+                    ParameterizedType parameterizedType = (ParameterizedType)parentType;
+                    Class<?> rawType = (Class<?>)parameterizedType.getRawType();
+
+                    if (Sequence.class.isAssignableFrom(rawType)) {
+                        itemType = parameterizedType.getActualTypeArguments()[0];
+                        break;
+                    }
+
+                    parentType = rawType.getGenericSuperclass();
+                } else {
+                    Class<?> classType = (Class<?>)parentType;
+                    Type[] genericInterfaces = classType.getGenericInterfaces();
+
+                    for (int i = 0; i < genericInterfaces.length; i++) {
+                        Type genericInterface = genericInterfaces[i];
+
+                        if (genericInterface instanceof ParameterizedType) {
+                            ParameterizedType parameterizedType = (ParameterizedType)genericInterface;
+                            Class<?> interfaceType = (Class<?>)parameterizedType.getRawType();
+
+                            if (Sequence.class.isAssignableFrom(interfaceType)) {
+                                itemType = parameterizedType.getActualTypeArguments()[0];
+
+                                if (itemType instanceof TypeVariable<?>) {
+                                    itemType = Object.class;
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+
+                    if (itemType != null) {
+                        break;
+                    }
+
+                    parentType = classType.getGenericSuperclass();
+                }
+            }
+
+            if (itemType == null) {
+                throw new SerializationException("Could not determine sequence item type.");
+            }
+
+            // Instantiate the sequence type
+            Class<?> sequenceType;
+            if (type instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType)type;
+                sequenceType = (Class<?>)parameterizedType.getRawType();
+            } else {
+                sequenceType = (Class<?>)type;
             }
 
             try {
-                sequence = (Sequence<Object>)rawType.newInstance();
+                sequence = (Sequence<Object>)sequenceType.newInstance();
             } catch (InstantiationException exception) {
                 throw new RuntimeException(exception);
             } catch (IllegalAccessException exception) {
                 throw new RuntimeException(exception);
-            }
-
-            // Get the target item type
-            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-            itemType = actualTypeArguments[0];
-        } else {
-            Class<?> classType = (Class<?>)type;
-
-            if (Sequence.class.isAssignableFrom(classType)) {
-                try {
-                    sequence = (Sequence<Object>)classType.newInstance();
-                } catch (InstantiationException exception) {
-                    throw new IllegalArgumentException(exception);
-                } catch (IllegalAccessException exception) {
-                    throw new IllegalArgumentException(exception);
-                }
-
-                itemType = Object.class;
-            } else if (type == Object.class) {
-                sequence = new ArrayList<Object>();
-                itemType = Object.class;
-            } else {
-                throw new IllegalArgumentException("Cannot convert array to " + type + ".");
             }
         }
 
@@ -626,46 +656,62 @@ public class JSONSerializer implements Serializer<Object> {
     @SuppressWarnings("unchecked")
     private Object readMapValue(Reader reader, Type type)
         throws IOException, SerializationException {
-        Dictionary<String, Object> dictionary;
-        Type valueType;
+        Dictionary<String, Object> dictionary = null;
+        Type valueType = null;
 
-        if (type instanceof ParameterizedType) {
-            // Instantiate the target dictionary
-            ParameterizedType parameterizedType = (ParameterizedType)type;
-            Class<?> rawType = (Class<?>)parameterizedType.getRawType();
-            if (!Dictionary.class.isAssignableFrom(rawType)) {
-                throw new IllegalArgumentException("Cannot convert object to "
-                    + rawType.getName() + ".");
-            }
-
-            try {
-                dictionary = (Dictionary<String, Object>)rawType.newInstance();
-            } catch (InstantiationException exception) {
-                throw new RuntimeException(exception);
-            } catch (IllegalAccessException exception) {
-                throw new RuntimeException(exception);
-            }
-
-            // Get the target value type
-            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-            valueType = actualTypeArguments[1];
+        if (type == Object.class) {
+            // Return the default dictionary and value types
+            dictionary = new HashMap<String, Object>();
+            valueType = Object.class;
         } else {
-            Class<?> classType = (Class<?>)type;
-            if (Dictionary.class.isAssignableFrom(classType)) {
-                try {
-                    dictionary = (Dictionary<String, Object>)classType.newInstance();
-                } catch (InstantiationException exception) {
-                    throw new IllegalArgumentException(exception);
-                } catch (IllegalAccessException exception) {
-                    throw new IllegalArgumentException(exception);
-                }
+            // Determine the value type from generic parameters
+            Type parentType = type;
+            while (parentType != null) {
+                if (parentType instanceof ParameterizedType) {
+                    ParameterizedType parameterizedType = (ParameterizedType)parentType;
+                    Class<?> rawType = (Class<?>)parameterizedType.getRawType();
 
-                valueType = Object.class;
-            } else if (type == Object.class){
-                dictionary = new HashMap<String, Object>();
-                valueType = Object.class;
-            } else {
+                    if (Dictionary.class.isAssignableFrom(rawType)) {
+                        valueType = parameterizedType.getActualTypeArguments()[1];
+                        break;
+                    }
+
+                    parentType = rawType.getGenericSuperclass();
+                } else {
+                    Class<?> classType = (Class<?>)parentType;
+                    Type[] genericInterfaces = classType.getGenericInterfaces();
+
+                    for (int i = 0; i < genericInterfaces.length; i++) {
+                        Type genericInterface = genericInterfaces[i];
+
+                        if (genericInterface instanceof ParameterizedType) {
+                            ParameterizedType parameterizedType = (ParameterizedType)genericInterface;
+                            Class<?> interfaceType = (Class<?>)parameterizedType.getRawType();
+
+                            if (Dictionary.class.isAssignableFrom(interfaceType)) {
+                                valueType = parameterizedType.getActualTypeArguments()[1];
+
+                                if (valueType instanceof TypeVariable<?>) {
+                                    valueType = Object.class;
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+
+                    if (valueType != null) {
+                        break;
+                    }
+
+                    parentType = classType.getGenericSuperclass();
+                }
+            }
+
+            // Instantiate the dictionary or bean type
+            if (valueType == null) {
                 Class<?> beanType = (Class<?>)type;
+
                 try {
                     dictionary = new BeanAdapter(beanType.newInstance());
                 } catch (InstantiationException exception) {
@@ -673,8 +719,22 @@ public class JSONSerializer implements Serializer<Object> {
                 } catch (IllegalAccessException exception) {
                     throw new RuntimeException(exception);
                 }
+            } else {
+                Class<?> dictionaryType;
+                if (type instanceof ParameterizedType) {
+                    ParameterizedType parameterizedType = (ParameterizedType)type;
+                    dictionaryType = (Class<?>)parameterizedType.getRawType();
+                } else {
+                    dictionaryType = (Class<?>)type;
+                }
 
-                valueType = null;
+                try {
+                    dictionary = (Dictionary<String, Object>)dictionaryType.newInstance();
+                } catch (InstantiationException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IllegalAccessException exception) {
+                    throw new RuntimeException(exception);
+                }
             }
         }
 
