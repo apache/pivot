@@ -72,7 +72,7 @@ public interface TreeViewSelectionListener {
      * Called when a tree view's selected node has changed.
      *
      * @param treeView
-     * @param previousSelectedItem
+     * @param previousSelectedNode
      */
     public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode);
 }
