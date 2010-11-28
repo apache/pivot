@@ -35,6 +35,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.FormAttributeListener;
 import org.apache.pivot.wtk.FormListener;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
@@ -237,6 +238,8 @@ public class TerraFormSkin extends ContainerSkin
     private Color infoMessageColor = null;
     private Color infoMessageBackgroundColor = null;
     private Color infoHighlightColor = null;
+    private Color separatorColor = null;
+    private Color separatorHeadingColor = null;
 
     private int maximumFlagImageWidth = 0;
 
@@ -352,6 +355,9 @@ public class TerraFormSkin extends ContainerSkin
         infoMessageColor = theme.getColor(1);
         infoMessageBackgroundColor = theme.getColor(10);
         infoHighlightColor = theme.getColor(9);
+
+        separatorColor = theme.getColor(7);
+        separatorHeadingColor = theme.getColor(12);
 
         // Determine maximum icon size
         maximumFlagImageWidth = Math.max(maximumFlagImageWidth, errorIcon.getWidth());
@@ -1077,6 +1083,46 @@ public class TerraFormSkin extends ContainerSkin
         invalidateComponent();
     }
 
+    public Color getSeparatorColor() {
+        return separatorColor;
+    }
+
+    public void setSeparatorColor(Color separatorColor) {
+        this.separatorColor = separatorColor;
+
+        for (Separator separator : separators) {
+            separator.getStyles().put("color", separatorColor);
+        }
+    }
+
+    public final void setSeparatorColor(String separatorColor) {
+        if (separatorColor == null) {
+            throw new IllegalArgumentException("separatorColor is null.");
+        }
+
+        setSeparatorColor(GraphicsUtilities.decodeColor(separatorColor));
+    }
+
+    public Color getSeparatorHeadingColor() {
+        return separatorHeadingColor;
+    }
+
+    public void setSeparatorHeadingColor(Color separatorHeadingColor) {
+        this.separatorHeadingColor = separatorHeadingColor;
+
+        for (Separator separator : separators) {
+            separator.getStyles().put("headingColor", separatorHeadingColor);
+        }
+    }
+
+    public final void setSeparatorHeadingColor(String separatorHeadingColor) {
+        if (separatorHeadingColor == null) {
+            throw new IllegalArgumentException("separatorHeadingColor is null.");
+        }
+
+        setSeparatorHeadingColor(GraphicsUtilities.decodeColor(separatorHeadingColor));
+    }
+
     // Form events
     @Override
     public void sectionInserted(Form form, int index) {
@@ -1130,6 +1176,9 @@ public class TerraFormSkin extends ContainerSkin
 
         // Insert separator
         Separator separator = new Separator(section.getHeading());
+        separator.getStyles().put("color", separatorColor);
+        separator.getStyles().put("headingColor", separatorHeadingColor);
+
         separators.insert(separator, index);
         form.add(separator);
 
