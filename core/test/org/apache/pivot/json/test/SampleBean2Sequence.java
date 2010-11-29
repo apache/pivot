@@ -19,41 +19,41 @@ package org.apache.pivot.json.test;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 
-public class TestBean2Sequence implements Sequence<TestBean2> {
-    private ArrayList<TestBean2> items = new ArrayList<TestBean2>();
+public class SampleBean2Sequence implements Sequence<SampleBean2> {
+    private ArrayList<SampleBean2> items = new ArrayList<SampleBean2>();
 
     @Override
-    public int add(TestBean2 item) {
+    public int add(SampleBean2 item) {
         return items.add(item);
     }
 
     @Override
-    public void insert(TestBean2 item, int index) {
+    public void insert(SampleBean2 item, int index) {
         items.insert(item, index);
     }
 
     @Override
-    public TestBean2 update(int index, TestBean2 item) {
+    public SampleBean2 update(int index, SampleBean2 item) {
         return items.update(index, item);
     }
 
     @Override
-    public int remove(TestBean2 item) {
+    public int remove(SampleBean2 item) {
         return items.remove(item);
     }
 
     @Override
-    public Sequence<TestBean2> remove(int index, int count) {
+    public Sequence<SampleBean2> remove(int index, int count) {
         return items.remove(index, count);
     }
 
     @Override
-    public TestBean2 get(int index) {
+    public SampleBean2 get(int index) {
         return items.get(index);
     }
 
     @Override
-    public int indexOf(TestBean2 item) {
+    public int indexOf(SampleBean2 item) {
         return items.indexOf(item);
     }
 

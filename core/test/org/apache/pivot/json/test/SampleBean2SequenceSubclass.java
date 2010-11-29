@@ -16,29 +16,6 @@
  */
 package org.apache.pivot.json.test;
 
-import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.collections.HashMap;
-
-public class TestBean2Dictionary implements Dictionary<String, TestBean2> {
-    private HashMap<String, TestBean2> values = new HashMap<String, TestBean2>();
-
-    @Override
-    public TestBean2 get(String key) {
-        return values.get(key);
-    }
-
-    @Override
-    public TestBean2 put(String key, TestBean2 value) {
-        return values.put(key, value);
-    }
-
-    @Override
-    public TestBean2 remove(String key) {
-        return values.remove(key);
-    }
-
-    @Override
-    public boolean containsKey(String key) {
-        return values.containsKey(key);
-    }
+public class SampleBean2SequenceSubclass extends SampleBean2Sequence {
+    private static final long serialVersionUID = 0;
 }

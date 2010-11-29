@@ -16,6 +16,32 @@
  */
 package org.apache.pivot.json.test;
 
-public class TestBean2ListSubclass extends TestBean2List {
-    private static final long serialVersionUID = 0;
+public class SampleBean2 {
+    private int a = 0;
+    private int b = 0;
+    private String c = null;
+
+    public int getA() {
+        return a;
+    }
+
+    public void setA(int a) {
+        this.a = a;
+    }
+
+    public int getB() {
+        return b;
+    }
+
+    public void setB(int b) {
+        this.b = b;
+    }
+
+    public String getC() {
+        return c;
+    }
+
+    public void setC(String c) {
+        this.c = c;
+    }
 }

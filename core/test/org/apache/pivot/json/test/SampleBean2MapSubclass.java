@@ -16,6 +16,6 @@
  */
 package org.apache.pivot.json.test;
 
-public class TestBean2MapSubclass extends TestBean2Map {
+public class SampleBean2MapSubclass extends SampleBean2Map {
     private static final long serialVersionUID = 0;
 }

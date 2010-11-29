@@ -19,14 +19,14 @@ package org.apache.pivot.json.test;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 
-public class TestBean1 {
+public class SampleBean1 {
     private int a = 0;
     private String b = null;
     private boolean c = false;
     private ArrayList<String> d = null;
     private HashMap<String, Integer> e = null;
-    private TestBean1 i = null;
-    private ArrayList<TestBean2> k = null;
+    private SampleBean1 i = null;
+    private ArrayList<SampleBean2> k = null;
 
     public int getA() {
         return a;
@@ -68,19 +68,19 @@ public class TestBean1 {
         this.e = e;
     }
 
-    public TestBean1 getI() {
+    public SampleBean1 getI() {
         return i;
     }
 
-    public void setI(TestBean1 i) {
+    public void setI(SampleBean1 i) {
         this.i = i;
     }
 
-    public ArrayList<TestBean2> getK() {
+    public ArrayList<SampleBean2> getK() {
         return k;
     }
 
-    public void setK(ArrayList<TestBean2> k) {
+    public void setK(ArrayList<SampleBean2> k) {
         this.k = k;
     }
 }

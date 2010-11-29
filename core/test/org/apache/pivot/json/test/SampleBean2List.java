@@ -18,6 +18,6 @@ package org.apache.pivot.json.test;
 
 import org.apache.pivot.collections.ArrayList;
 
-public class TestBean2List extends ArrayList<TestBean2> {
+public class SampleBean2List extends ArrayList<SampleBean2> {
     private static final long serialVersionUID = 0;
 }

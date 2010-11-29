@@ -18,6 +18,6 @@ package org.apache.pivot.json.test;
 
 import org.apache.pivot.collections.HashMap;
 
-public class TestBean2Map extends HashMap<String, TestBean2> {
+public class SampleBean2Map extends HashMap<String, SampleBean2> {
     private static final long serialVersionUID = 0;
 }

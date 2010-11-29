@@ -59,12 +59,12 @@ public class BindTest {
             (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
         JSONSerializer typedListSerializer =
-            new JSONSerializer((new TypeLiteral<ArrayList<TestBean2>>() {}).getType());
-        ArrayList<TestBean2> typedList =
-            (ArrayList<TestBean2>)typedListSerializer.readObject(getClass().getResourceAsStream("list.json"));
+            new JSONSerializer((new TypeLiteral<ArrayList<SampleBean2>>() {}).getType());
+        ArrayList<SampleBean2> typedList =
+            (ArrayList<SampleBean2>)typedListSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
         Object item0 = typedList.get(0);
-        assertTrue(item0 instanceof TestBean2);
+        assertTrue(item0 instanceof SampleBean2);
         assertEquals(typedList.get(0).getA(), JSON.get(list, "[0].a"));
     }
 
@@ -81,12 +81,12 @@ public class BindTest {
         List<Object> list =
             (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
-        JSONSerializer typedListSerializer = new JSONSerializer(TestBean2ListSubclass.class);
-        TestBean2List typedList =
-            (TestBean2List)typedListSerializer.readObject(getClass().getResourceAsStream("list.json"));
+        JSONSerializer typedListSerializer = new JSONSerializer(SampleBean2ListSubclass.class);
+        SampleBean2List typedList =
+            (SampleBean2List)typedListSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
         Object item0 = typedList.get(0);
-        assertTrue(item0 instanceof TestBean2);
+        assertTrue(item0 instanceof SampleBean2);
         assertEquals(typedList.get(0).getA(), JSON.get(list, "[0].a"));
     }
 
@@ -103,12 +103,12 @@ public class BindTest {
         List<Object> list =
             (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
-        JSONSerializer sequenceSerializer = new JSONSerializer(TestBean2SequenceSubclass.class);
-        TestBean2Sequence sequence =
-            (TestBean2Sequence)sequenceSerializer.readObject(getClass().getResourceAsStream("list.json"));
+        JSONSerializer sequenceSerializer = new JSONSerializer(SampleBean2SequenceSubclass.class);
+        SampleBean2Sequence sequence =
+            (SampleBean2Sequence)sequenceSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
         Object item0 = sequence.get(0);
-        assertTrue(item0 instanceof TestBean2);
+        assertTrue(item0 instanceof SampleBean2);
         assertEquals(sequence.get(0).getA(), JSON.get(list, "[0].a"));
     }
 
@@ -136,12 +136,12 @@ public class BindTest {
     @SuppressWarnings("unchecked")
     public void testTypedMap() throws IOException, SerializationException {
         JSONSerializer typedMapSerializer =
-            new JSONSerializer((new TypeLiteral<HashMap<String, TestBean2>>() {}).getType());
+            new JSONSerializer((new TypeLiteral<HashMap<String, SampleBean2>>() {}).getType());
 
-        HashMap<String, TestBean2> map =
-            (HashMap<String, TestBean2>)typedMapSerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
+        HashMap<String, SampleBean2> map =
+            (HashMap<String, SampleBean2>)typedMapSerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
 
-        assertTrue(JSON.get(map, "foo") instanceof TestBean2);
+        assertTrue(JSON.get(map, "foo") instanceof SampleBean2);
         assertEquals(JSON.get(map, "foo.c"), "3");
     }
 
@@ -153,12 +153,12 @@ public class BindTest {
      */
     @Test
     public void testMapSubclass() throws IOException, SerializationException {
-        JSONSerializer typedMapSerializer = new JSONSerializer(TestBean2MapSubclass.class);
+        JSONSerializer typedMapSerializer = new JSONSerializer(SampleBean2MapSubclass.class);
 
-        TestBean2Map map =
-            (TestBean2Map)typedMapSerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
+        SampleBean2Map map =
+            (SampleBean2Map)typedMapSerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
 
-        assertTrue(JSON.get(map, "foo") instanceof TestBean2);
+        assertTrue(JSON.get(map, "foo") instanceof SampleBean2);
         assertEquals(JSON.get(map, "foo.c"), "3");
     }
 
@@ -170,12 +170,12 @@ public class BindTest {
      */
     @Test
     public void testDictionary() throws IOException, SerializationException {
-        JSONSerializer dictionarySerializer = new JSONSerializer(TestBean2DictionarySubclass.class);
+        JSONSerializer dictionarySerializer = new JSONSerializer(SampleBean2DictionarySubclass.class);
 
-        TestBean2Dictionary dictionary =
-            (TestBean2Dictionary)dictionarySerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
+        SampleBean2Dictionary dictionary =
+            (SampleBean2Dictionary)dictionarySerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
 
-        assertTrue(JSON.get(dictionary, "foo") instanceof TestBean2);
+        assertTrue(JSON.get(dictionary, "foo") instanceof SampleBean2);
         assertEquals(JSON.get(dictionary, "foo.c"), "3");
     }
 
@@ -192,9 +192,9 @@ public class BindTest {
         Map<String, Object> map =
             (Map<String, Object>)mapSerializer.readObject(getClass().getResourceAsStream("map.json"));
 
-        JSONSerializer beanSerializer = new JSONSerializer(TestBean1.class);
-        TestBean1 typedMap =
-            (TestBean1)beanSerializer.readObject(getClass().getResourceAsStream("map.json"));
+        JSONSerializer beanSerializer = new JSONSerializer(SampleBean1.class);
+        SampleBean1 typedMap =
+            (SampleBean1)beanSerializer.readObject(getClass().getResourceAsStream("map.json"));
 
         assertEquals(typedMap.getA(), JSON.get(map, "a"));
         assertEquals(typedMap.getB(), JSON.get(map, "b"));
@@ -204,7 +204,7 @@ public class BindTest {
         assertEquals(typedMap.getI().getA(), JSON.get(map, "i.a"));
 
         Object k0 = typedMap.getK().get(0);
-        assertTrue(k0 instanceof TestBean2);
+        assertTrue(k0 instanceof SampleBean2);
         assertEquals(typedMap.getK().get(0).getA(), JSON.get(map, "k[0].a"));
     }
 }
