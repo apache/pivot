@@ -28,7 +28,7 @@ limitations under the License.
         <p>
             Allows users to create and preview custom color schemes for Pivot applications.
         </p>
-        <application class="org.apache.pivot.demos.styles.ColorSchemeBuilder" width="640" height="480">
+        <application class="org.apache.pivot.demos.styles.ColorSchemeBuilder" width="680" height="480">
             <libraries signed="true">
                 <library>core</library>
                 <library>wtk</library>
