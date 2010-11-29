@@ -58,6 +58,9 @@ public abstract class MenuButtonSkin extends ButtonSkin
                 && !componentWindow.isClosing()) {
                 componentWindow.moveToFront();
             }
+
+            pressed = false;
+            repaintComponent();
         }
     };
 
@@ -125,23 +128,6 @@ public abstract class MenuButtonSkin extends ButtonSkin
         repaintComponent();
 
         menuPopup.close();
-    }
-
-    @Override
-    public void focusedChanged(Component component, Component obverseComponent) {
-        super.focusedChanged(component, obverseComponent);
-
-        repaintComponent();
-
-        // Close the popup if focus was transferred to a component whose
-        // window is not the popup
-        if (!component.isFocused()) {
-            pressed = false;
-
-            if (!menuPopup.containsFocus()) {
-                menuPopup.close();
-            }
-        }
     }
 
     // Component mouse events
