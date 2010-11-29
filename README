@@ -39,17 +39,17 @@ Distribution JARs
 To begin developing with Pivot, simply include the necessary libraries on your
 project classpath.
 
-NOTE Pivot uses the StAX API to load and process WTKX source files. Like many
-APIs in the JDK, StAX uses a service discovery mechanism to locate and
-instantiate an appropriate parser. When deploying Pivot applications in a web
-browser, this may incur unnecessary requests to the web server. The service
-resolution process looks on the classpath for an appropriate service descriptor
-file; since an applet's classpath also contains its codebase, the JRE will look
-for this file on the web server if it is not found in an archive JAR. Such
-requests can have a noticeable impact on runtime performance, especially for
-slow or unresponsive web servers. As a result, it is recommended that all Pivot
-applications deployed via the web set the codebase_lookup applet parameter to
-false.
+NOTE Pivot uses the streaming API for XML (StAX) to load and process WTKX
+source files. Like many APIs in the JDK, StAX uses a service discovery
+mechanism to locate and instantiate an appropriate parser. When deploying Pivot
+applications in a web browser, this may incur unnecessary requests to the web
+server. The service resolution process looks on the classpath for an appropriate
+service descriptor file; since an applet's classpath also contains its codebase,
+the JRE will look for this file on the web server if it is not found in an
+archive JAR. Such requests can have a noticeable impact on runtime performance,
+especially for slow or unresponsive web servers. As a result, it is recommended
+that all Pivot applications deployed via the web set the codebase_lookup applet
+parameter to false.
 
 
 Distribution WARs
