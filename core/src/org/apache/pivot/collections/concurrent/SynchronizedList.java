@@ -105,11 +105,9 @@ public class SynchronizedList<T> implements List<T> {
     @Override
     public synchronized int remove (T item) {
         int index = indexOf(item);
-        if (index == -1) {
-            throw new IllegalArgumentException("item not in list");
+        if (index != -1) {
+            remove(index, 1);
         }
-
-        remove(index, 1);
 
         return index;
     }

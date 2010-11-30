@@ -159,11 +159,9 @@ public class ListAdapter<T> implements List<T>, Serializable {
     @Override
     public int remove(T item) {
         int index = indexOf(item);
-        if (index == -1) {
-            throw new IllegalArgumentException();
+        if (index != -1) {
+            remove(index, 1);
         }
-
-        remove(index, 1);
 
         return index;
     }
