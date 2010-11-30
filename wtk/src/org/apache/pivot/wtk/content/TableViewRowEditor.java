@@ -171,7 +171,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     }
 
     @Override
-    public void edit(TableView tableView, int rowIndex, int columnIndex) {
+    public void beginEdit(TableView tableView, int rowIndex, int columnIndex) {
         this.tableView = tableView;
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
@@ -180,6 +180,16 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane)tableViewParent : null;
 
         open(tableView.getWindow());
+    }
+
+    @Override
+    public void endEdit(boolean result) {
+        close(result);
+    }
+
+    @Override
+    public boolean isEditing() {
+        return isOpen();
     }
 
     /**

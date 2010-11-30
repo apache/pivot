@@ -152,7 +152,19 @@ public class TreeView extends Component {
          * @param treeView
          * @param path
          */
-        public void edit(TreeView treeView, Path path);
+        public void beginEdit(TreeView treeView, Path path);
+
+        /**
+         * Called to terminate an edit operation.
+         *
+         * @param result
+         */
+        public void endEdit(boolean result);
+
+        /**
+         * Tests the current edit state.
+         */
+        public boolean isEditing();
     }
 
     /**
