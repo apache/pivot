@@ -85,7 +85,7 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
     public void edit(TreeView treeView, Path path) {
         if (this.treeView != null
             && this.treeView != treeView) {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
 
         this.treeView = treeView;
@@ -138,8 +138,8 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
 
     @Override
     public void open(Display display, Window owner) {
-        if (owner == null) {
-            throw new IllegalArgumentException();
+        if (treeView == null) {
+            throw new IllegalStateException();
         }
 
         super.open(display, owner);

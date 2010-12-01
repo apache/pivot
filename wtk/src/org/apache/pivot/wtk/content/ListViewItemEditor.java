@@ -83,7 +83,7 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
     public void edit(ListView listView, int itemIndex) {
         if (this.listView != null
             && this.listView != listView) {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
 
         this.listView = listView;
@@ -135,8 +135,8 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
 
     @Override
     public void open(Display display, Window owner) {
-        if (owner == null) {
-            throw new IllegalArgumentException();
+        if (listView == null) {
+            throw new IllegalStateException();
         }
 
         super.open(display, owner);

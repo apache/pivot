@@ -174,7 +174,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     public void edit(TableView tableView, int rowIndex, int columnIndex) {
         if (this.tableView != null
             && this.tableView != tableView) {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
 
         if (this.tableView == null) {
@@ -317,8 +317,8 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     @Override
     public void open(Display display, Window owner) {
-        if (owner == null) {
-            throw new IllegalArgumentException();
+        if (tableView == null) {
+            throw new IllegalStateException();
         }
 
         super.open(display, owner);
