@@ -1269,11 +1269,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             TableView.RowEditor rowEditor = tableView.getRowEditor();
 
             if (rowEditor != null) {
-                if (rowEditor.isEditing()) {
-                    rowEditor.endEdit(true);
-                }
-
-                rowEditor.beginEdit(tableView, selectIndex, getColumnAt(x));
+                rowEditor.edit(tableView, selectIndex, getColumnAt(x));
             }
         }
 

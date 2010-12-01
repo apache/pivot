@@ -80,21 +80,11 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
     }
 
     @Override
-    public void beginEdit(ListView listView, int itemIndex) {
+    public void edit(ListView listView, int itemIndex) {
         this.listView = listView;
         this.itemIndex = itemIndex;
 
         open(listView.getWindow());
-    }
-
-    @Override
-    public void endEdit(boolean result) {
-        close(result);
-    }
-
-    @Override
-    public boolean isEditing() {
-        return isOpen();
     }
 
     @Override

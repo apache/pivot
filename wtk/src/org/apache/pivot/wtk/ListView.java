@@ -119,19 +119,7 @@ public class ListView extends Component {
          * @param listView
          * @param itemIndex
          */
-        public void beginEdit(ListView listView, int itemIndex);
-
-        /**
-         * Called to terminate an edit operation.
-         *
-         * @param result
-         */
-        public void endEdit(boolean result);
-
-        /**
-         * Tests the current edit state.
-         */
-        public boolean isEditing();
+        public void edit(ListView listView, int itemIndex);
     }
 
     /**

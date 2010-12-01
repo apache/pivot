@@ -82,21 +82,11 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
     }
 
     @Override
-    public void beginEdit(TreeView treeView, Path path) {
+    public void edit(TreeView treeView, Path path) {
         this.treeView = treeView;
         this.path = path;
 
         open(treeView.getWindow());
-    }
-
-    @Override
-    public void endEdit(boolean result) {
-        close(result);
-    }
-
-    @Override
-    public boolean isEditing() {
-        return isOpen();
     }
 
     @Override

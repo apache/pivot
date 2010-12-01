@@ -594,19 +594,7 @@ public class TableView extends Component {
          * @param rowIndex
          * @param columnIndex
          */
-        public void beginEdit(TableView tableView, int rowIndex, int columnIndex);
-
-        /**
-         * Called to terminate an edit operation.
-         *
-         * @param result
-         */
-        public void endEdit(boolean result);
-
-        /**
-         * Tests the current edit state.
-         */
-        public boolean isEditing();
+        public void edit(TableView tableView, int rowIndex, int columnIndex);
     }
 
     /**
