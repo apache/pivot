@@ -81,20 +81,13 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
 
     @Override
     public void edit(ListView listView, int itemIndex) {
-        this.listView = listView;
-        this.itemIndex = itemIndex;
-
-        open(listView.getWindow());
-    }
-
-    @Override
-    public void open(Display display, Window owner) {
-        if (owner == null) {
+        if (this.listView != null
+            && this.listView != listView) {
             throw new IllegalArgumentException();
         }
 
-        super.open(display, owner);
-        display.getContainerMouseListeners().add(displayMouseHandler);
+        this.listView = listView;
+        this.itemIndex = itemIndex;
 
         // Get the data being edited
         List<?> listData = listView.getListData();
@@ -102,7 +95,6 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
 
         textInput.setText(listItem.getText());
         textInput.selectAll();
-        textInput.requestFocus();
 
         // Get the item bounds
         Bounds itemBounds = listView.getItemBounds(itemIndex);
@@ -134,6 +126,23 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
 
         textInput.setPreferredWidth(editBounds.width);
         setLocation(location.x, location.y + (editBounds.height - getPreferredHeight(-1)) / 2);
+
+        // Open the editor
+        if (!isOpen()) {
+            open(listView.getWindow());
+        }
+    }
+
+    @Override
+    public void open(Display display, Window owner) {
+        if (owner == null) {
+            throw new IllegalArgumentException();
+        }
+
+        super.open(display, owner);
+        display.getContainerMouseListeners().add(displayMouseHandler);
+
+        requestFocus();
     }
 
     @Override

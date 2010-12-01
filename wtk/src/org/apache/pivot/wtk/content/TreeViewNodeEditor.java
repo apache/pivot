@@ -83,20 +83,13 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
 
     @Override
     public void edit(TreeView treeView, Path path) {
-        this.treeView = treeView;
-        this.path = path;
-
-        open(treeView.getWindow());
-    }
-
-    @Override
-    public void open(Display display, Window owner) {
-        if (owner == null) {
+        if (this.treeView != null
+            && this.treeView != treeView) {
             throw new IllegalArgumentException();
         }
 
-        super.open(display, owner);
-        display.getContainerMouseListeners().add(displayMouseHandler);
+        this.treeView = treeView;
+        this.path = path;
 
         // Get the data being edited
         List<?> treeData = treeView.getTreeData();
@@ -104,7 +97,6 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
 
         textInput.setText(treeNode.getText());
         textInput.selectAll();
-        textInput.requestFocus();
 
         // Get the node bounds
         Bounds nodeBounds = treeView.getNodeBounds(path);
@@ -137,6 +129,23 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
 
         textInput.setPreferredWidth(editBounds.width);
         setLocation(location.x, location.y + (editBounds.height - getPreferredHeight(-1)) / 2);
+
+        // Open the editor
+        if (!isOpen()) {
+            open(treeView.getWindow());
+        }
+    }
+
+    @Override
+    public void open(Display display, Window owner) {
+        if (owner == null) {
+            throw new IllegalArgumentException();
+        }
+
+        super.open(display, owner);
+        display.getContainerMouseListeners().add(displayMouseHandler);
+
+        requestFocus();
     }
 
     @Override

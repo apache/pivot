@@ -172,14 +172,81 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     @Override
     public void edit(TableView tableView, int rowIndex, int columnIndex) {
-        this.tableView = tableView;
+        if (this.tableView != null
+            && this.tableView != tableView) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.tableView == null) {
+            this.tableView = tableView;
+
+            Container tableViewParent = tableView.getParent();
+            tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane)tableViewParent : null;
+
+            // Create the editor components
+            TableView.ColumnSequence tableViewColumns = tableView.getColumns();
+            TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
+
+            for (int i = 0, n = tableViewColumns.getLength(); i < n; i++) {
+                // Add a new column to the table pane to match the table view column
+                TablePane.Column tablePaneColumn = new TablePane.Column();
+                tablePaneColumn.setWidth(tableView.getColumnBounds(i).width);
+                tablePaneColumns.add(tablePaneColumn);
+
+                // Determine which component to use as the editor for this column
+                String columnName = tableViewColumns.get(i).getName();
+                Component editorComponent = null;
+                if (columnName != null) {
+                    editorComponent = cellEditors.get(columnName);
+                }
+
+                // Default to a read-only text input editor
+                if (editorComponent == null) {
+                    TextInput editorTextInput = new TextInput();
+                    editorTextInput.setTextKey(columnName);
+                    editorTextInput.setEnabled(false);
+                    editorTextInput.setTextBindType(BindType.LOAD);
+                    editorComponent = editorTextInput;
+                }
+
+                // Add the editor component to the table pane
+                editorRow.add(editorComponent);
+            }
+        }
+
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
 
-        Container tableViewParent = tableView.getParent();
-        tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane)tableViewParent : null;
+        // Get the data being edited
+        List<?> tableData = tableView.getTableData();
+        Object tableRow = tableData.get(rowIndex);
 
-        open(tableView.getWindow());
+        // Load the row data into the editor components
+        tablePane.load(tableRow);
+
+        // Get the row bounds
+        Bounds rowBounds = tableView.getRowBounds(rowIndex);
+        rowImage.bounds = rowBounds;
+
+        // Scroll to make the row as visible as possible
+        tableView.scrollAreaToVisible(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
+
+        // Constrain the bounds by what is visible through viewport ancestors
+        rowBounds = tableView.getVisibleArea(rowBounds);
+        Point location = tableView.mapPointToAncestor(tableView.getDisplay(), rowBounds.x, rowBounds.y);
+
+        // Set size and location and match scroll left
+        setPreferredWidth(rowBounds.width);
+        setLocation(location.x, location.y + (rowBounds.height - getPreferredHeight(-1)) / 2);
+
+        if (tableViewScrollPane != null) {
+            scrollPane.setScrollLeft(tableViewScrollPane.getScrollLeft());
+        }
+
+        // Open the editor
+        if (!isOpen()) {
+            open(tableView.getWindow());
+        }
     }
 
     /**
@@ -256,62 +323,6 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
         super.open(display, owner);
         display.getContainerMouseListeners().add(displayMouseHandler);
-
-        // Get the data being edited
-        List<?> tableData = tableView.getTableData();
-        Object tableRow = tableData.get(rowIndex);
-
-        // Create the editor components
-        TableView.ColumnSequence tableViewColumns = tableView.getColumns();
-        TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
-
-        for (int i = 0, n = tableViewColumns.getLength(); i < n; i++) {
-            // Add a new column to the table pane to match the table view column
-            TablePane.Column tablePaneColumn = new TablePane.Column();
-            tablePaneColumn.setWidth(tableView.getColumnBounds(i).width);
-            tablePaneColumns.add(tablePaneColumn);
-
-            // Determine which component to use as the editor for this column
-            String columnName = tableViewColumns.get(i).getName();
-            Component editorComponent = null;
-            if (columnName != null) {
-                editorComponent = cellEditors.get(columnName);
-            }
-
-            // Default to a read-only text input editor
-            if (editorComponent == null) {
-                TextInput editorTextInput = new TextInput();
-                editorTextInput.setTextKey(columnName);
-                editorTextInput.setEnabled(false);
-                editorTextInput.setTextBindType(BindType.LOAD);
-                editorComponent = editorTextInput;
-            }
-
-            // Add the editor component to the table pane
-            editorRow.add(editorComponent);
-        }
-
-        // Load the row data into the editor components
-        tablePane.load(tableRow);
-
-        // Get the row bounds
-        Bounds rowBounds = tableView.getRowBounds(rowIndex);
-        rowImage.bounds = rowBounds;
-
-        // Scroll to make the row as visible as possible
-        tableView.scrollAreaToVisible(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
-
-        // Constrain the bounds by what is visible through viewport ancestors
-        rowBounds = tableView.getVisibleArea(rowBounds);
-        Point location = tableView.mapPointToAncestor(tableView.getDisplay(), rowBounds.x, rowBounds.y);
-
-        // Set size and location and match scroll left
-        setPreferredWidth(rowBounds.width);
-        setLocation(location.x, location.y + (rowBounds.height - getPreferredHeight(-1)) / 2);
-
-        if (tableViewScrollPane != null) {
-            scrollPane.setScrollLeft(tableViewScrollPane.getScrollLeft());
-        }
 
         // Start the transition
         cardPane.setSelectedIndex(EDITOR_CARD_INDEX);
