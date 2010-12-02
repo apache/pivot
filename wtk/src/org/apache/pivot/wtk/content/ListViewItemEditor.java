@@ -45,7 +45,7 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
             Window window = (Window)display.getComponentAt(x, y);
 
             if (window != ListViewItemEditor.this) {
-                close(true);
+                endEdit(true);
             }
 
             return false;
@@ -79,11 +79,6 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
 
     @Override
     public void beginEdit(ListView listView, int itemIndex) {
-        if (this.listView != null
-            && this.listView != listView) {
-            throw new IllegalStateException();
-        }
-
         this.listView = listView;
         this.itemIndex = itemIndex;
 
@@ -126,41 +121,12 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
         setLocation(location.x, location.y + (editBounds.height - getPreferredHeight(-1)) / 2);
 
         // Open the editor
-        if (!isOpen()) {
-            open(listView.getWindow());
-        }
+        open(listView.getWindow());
     }
 
     @Override
-    public void endEdit(boolean result) {
-        // TODO
-    }
-
-    @Override
-    public boolean isEditing() {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public void open(Display display, Window owner) {
-        if (listView == null) {
-            throw new IllegalStateException();
-        }
-
-        super.open(display, owner);
-        display.getContainerMouseListeners().add(displayMouseHandler);
-
-        requestFocus();
-    }
-
-    @Override
-    public final void close() {
-        close(false);
-    }
-
     @SuppressWarnings("unchecked")
-    public void close(boolean result) {
+    public void endEdit(boolean result) {
         if (result) {
             // Update the item data
             String text = textInput.getText();
@@ -186,25 +152,49 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
         getOwner().moveToFront();
         listView.requestFocus();
 
+        listView = null;
+        itemIndex = -1;
+
+        close();
+    }
+
+    @Override
+    public boolean isEditing() {
+        return (listView != null);
+    }
+
+    @Override
+    public void open(Display display, Window owner) {
+        if (listView == null) {
+            throw new IllegalStateException();
+        }
+
+        super.open(display, owner);
+        display.getContainerMouseListeners().add(displayMouseHandler);
+
+        requestFocus();
+    }
+
+    @Override
+    public void close() {
         Display display = getDisplay();
         display.getContainerMouseListeners().remove(displayMouseHandler);
 
         super.close();
-
-        listView = null;
-        itemIndex = -1;
     }
 
     @Override
     public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
+        boolean consumed;
 
         if (keyCode == Keyboard.KeyCode.ENTER) {
-            close(true);
+            endEdit(true);
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-            close(false);
+            endEdit(false);
             consumed = true;
+        } else {
+            consumed = false;
         }
 
         return consumed;

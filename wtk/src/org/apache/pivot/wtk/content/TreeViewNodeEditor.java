@@ -47,7 +47,7 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
             Window window = (Window)display.getComponentAt(x, y);
 
             if (window != TreeViewNodeEditor.this) {
-                close(true);
+                endEdit(true);
             }
 
             return false;
@@ -81,11 +81,6 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
 
     @Override
     public void beginEdit(TreeView treeView, Path path) {
-        if (this.treeView != null
-            && this.treeView != treeView) {
-            throw new IllegalStateException();
-        }
-
         this.treeView = treeView;
         this.path = path;
 
@@ -129,41 +124,12 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
         setLocation(location.x, location.y + (editBounds.height - getPreferredHeight(-1)) / 2);
 
         // Open the editor
-        if (!isOpen()) {
-            open(treeView.getWindow());
-        }
+        open(treeView.getWindow());
     }
 
     @Override
-    public void endEdit(boolean result) {
-        // TODO
-    }
-
-    @Override
-    public boolean isEditing() {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public void open(Display display, Window owner) {
-        if (treeView == null) {
-            throw new IllegalStateException();
-        }
-
-        super.open(display, owner);
-        display.getContainerMouseListeners().add(displayMouseHandler);
-
-        requestFocus();
-    }
-
-    @Override
-    public final void close() {
-        close(false);
-    }
-
     @SuppressWarnings("unchecked")
-    public void close(boolean result) {
+    public void endEdit(boolean result) {
         if (result) {
             // Update the node data
             String text = textInput.getText();
@@ -200,25 +166,49 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
         getOwner().moveToFront();
         treeView.requestFocus();
 
+        treeView = null;
+        path = null;
+
+        close();
+    }
+
+    @Override
+    public boolean isEditing() {
+        return (treeView != null);
+    }
+
+    @Override
+    public void open(Display display, Window owner) {
+        if (treeView == null) {
+            throw new IllegalStateException();
+        }
+
+        super.open(display, owner);
+        display.getContainerMouseListeners().add(displayMouseHandler);
+
+        requestFocus();
+    }
+
+    @Override
+    public void close() {
         Display display = getDisplay();
         display.getContainerMouseListeners().remove(displayMouseHandler);
 
         super.close();
-
-        treeView = null;
-        path = null;
     }
 
     @Override
     public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
+        boolean consumed;
 
         if (keyCode == Keyboard.KeyCode.ENTER) {
-            close(true);
+            endEdit(true);
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-            close(false);
+            endEdit(false);
             consumed = true;
+        } else {
+            consumed = false;
         }
 
         return consumed;

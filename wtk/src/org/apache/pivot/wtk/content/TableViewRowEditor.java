@@ -92,7 +92,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
             if (window != TableViewRowEditor.this
                 && (window == null || !isOwner(window))) {
-                close(true);
+                endEdit(true);
             }
 
             return false;
@@ -131,7 +131,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
                 if (previousSelectedIndex == IMAGE_CARD_INDEX) {
                     editorRow.get(columnIndex).requestFocus();
                 } else {
-                    close();
+                    endEdit(false);
                 }
             }
         });
@@ -170,50 +170,42 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     @Override
     public void beginEdit(TableView tableView, int rowIndex, int columnIndex) {
-        if (this.tableView != null
-            && this.tableView != tableView) {
-            throw new IllegalStateException();
-        }
-
-        if (this.tableView == null) {
-            this.tableView = tableView;
-
-            Container tableViewParent = tableView.getParent();
-            tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane)tableViewParent : null;
-
-            // Create the editor components
-            TableView.ColumnSequence tableViewColumns = tableView.getColumns();
-            TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
-
-            for (int i = 0, n = tableViewColumns.getLength(); i < n; i++) {
-                // Add a new column to the table pane to match the table view column
-                TablePane.Column tablePaneColumn = new TablePane.Column();
-                tablePaneColumn.setWidth(tableView.getColumnBounds(i).width);
-                tablePaneColumns.add(tablePaneColumn);
-
-                // Determine which component to use as the editor for this column
-                String columnName = tableViewColumns.get(i).getName();
-                Component editorComponent = null;
-                if (columnName != null) {
-                    editorComponent = cellEditors.get(columnName);
-                }
-
-                // Default to a read-only text input editor
-                if (editorComponent == null) {
-                    TextInput editorTextInput = new TextInput();
-                    editorTextInput.setTextKey(columnName);
-                    editorTextInput.setEnabled(false);
-                    editorTextInput.setTextBindType(BindType.LOAD);
-                    editorComponent = editorTextInput;
-                }
-
-                // Add the editor component to the table pane
-                editorRow.add(editorComponent);
-            }
-        }
-
+        this.tableView = tableView;
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
+
+        Container tableViewParent = tableView.getParent();
+        tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane)tableViewParent : null;
+
+        // Create the editor components
+        TableView.ColumnSequence tableViewColumns = tableView.getColumns();
+        TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
+
+        for (int i = 0, n = tableViewColumns.getLength(); i < n; i++) {
+            // Add a new column to the table pane to match the table view column
+            TablePane.Column tablePaneColumn = new TablePane.Column();
+            tablePaneColumn.setWidth(tableView.getColumnBounds(i).width);
+            tablePaneColumns.add(tablePaneColumn);
+
+            // Determine which component to use as the editor for this column
+            String columnName = tableViewColumns.get(i).getName();
+            Component editorComponent = null;
+            if (columnName != null) {
+                editorComponent = cellEditors.get(columnName);
+            }
+
+            // Default to a read-only text input editor
+            if (editorComponent == null) {
+                TextInput editorTextInput = new TextInput();
+                editorTextInput.setTextKey(columnName);
+                editorTextInput.setEnabled(false);
+                editorTextInput.setTextBindType(BindType.LOAD);
+                editorComponent = editorTextInput;
+            }
+
+            // Add the editor component to the table pane
+            editorRow.add(editorComponent);
+        }
 
         // Get the data being edited
         List<?> tableData = tableView.getTableData();
@@ -242,20 +234,58 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         }
 
         // Open the editor
-        if (!isOpen()) {
-            open(tableView.getWindow());
+        open(tableView.getWindow());
+
+        // Start the transition
+        cardPane.setSelectedIndex(EDITOR_CARD_INDEX);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void endEdit(boolean result) {
+        if (result) {
+            // Update the row data
+            List<Object> tableData = (List<Object>)tableView.getTableData();
+            Object tableRow = tableData.get(rowIndex);
+            tablePane.store(tableRow);
+
+            if (tableData.getComparator() == null) {
+                tableData.update(rowIndex, tableRow);
+            } else {
+                tableData.remove(rowIndex, 1);
+                tableData.add(tableRow);
+
+                // Re-select the item, and make sure it's visible
+                rowIndex = tableData.indexOf(tableRow);
+                tableView.setSelectedIndex(rowIndex);
+                tableView.scrollAreaToVisible(tableView.getRowBounds(rowIndex));
+            }
+        }
+
+        if (cardPane.getSelectedIndex() == EDITOR_CARD_INDEX) {
+            cardPane.setSelectedIndex(IMAGE_CARD_INDEX);
+        } else {
+            // Clear the editor components
+            TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
+            tablePaneColumns.remove(0, tablePaneColumns.getLength());
+            editorRow.remove(0, editorRow.getLength());
+
+            getOwner().moveToFront();
+            tableView.requestFocus();
+
+            tableView = null;
+            rowIndex = -1;
+            columnIndex = -1;
+
+            tableViewScrollPane = null;
+
+            close();
         }
     }
 
     @Override
-    public void endEdit(boolean result) {
-        // TODO
-    }
-
-    @Override
     public boolean isEditing() {
-        // TODO
-        return false;
+        return (tableView != null);
     }
 
     /**
@@ -332,71 +362,28 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
         super.open(display, owner);
         display.getContainerMouseListeners().add(displayMouseHandler);
-
-        // Start the transition
-        cardPane.setSelectedIndex(EDITOR_CARD_INDEX);
     }
 
     @Override
-    public final void close() {
-        close(false);
-    }
+    public void close() {
+        Display display = getDisplay();
+        display.getContainerMouseListeners().remove(displayMouseHandler);
 
-    @SuppressWarnings("unchecked")
-    public void close(boolean result) {
-        if (result) {
-            // Update the row data
-            List<Object> tableData = (List<Object>)tableView.getTableData();
-            Object tableRow = tableData.get(rowIndex);
-            tablePane.store(tableRow);
-
-            if (tableData.getComparator() == null) {
-                tableData.update(rowIndex, tableRow);
-            } else {
-                tableData.remove(rowIndex, 1);
-                tableData.add(tableRow);
-
-                // Re-select the item, and make sure it's visible
-                rowIndex = tableData.indexOf(tableRow);
-                tableView.setSelectedIndex(rowIndex);
-                tableView.scrollAreaToVisible(tableView.getRowBounds(rowIndex));
-            }
-        }
-
-        if (cardPane.getSelectedIndex() == EDITOR_CARD_INDEX) {
-            cardPane.setSelectedIndex(IMAGE_CARD_INDEX);
-        } else {
-            getOwner().moveToFront();
-            tableView.requestFocus();
-
-            Display display = getDisplay();
-            display.getContainerMouseListeners().remove(displayMouseHandler);
-
-            super.close();
-
-            // Clear the editor components
-            TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
-            tablePaneColumns.remove(0, tablePaneColumns.getLength());
-            editorRow.remove(0, editorRow.getLength());
-
-            tableView = null;
-            rowIndex = -1;
-            columnIndex = -1;
-
-            tableViewScrollPane = null;
-        }
+        super.close();
     }
 
     @Override
     public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = false;
+        boolean consumed;
 
         if (keyCode == Keyboard.KeyCode.ENTER) {
-            close(true);
+            endEdit(true);
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
-            close(false);
+            endEdit(false);
             consumed = true;
+        } else {
+            consumed = false;
         }
 
         return consumed;
