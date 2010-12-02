@@ -198,10 +198,12 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         Border border = new Border();
         border.getStyles().put("backgroundColor", index);
 
+        TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
+
         Label label = new Label();
         label.setText(Integer.toString(index));
         label.getStyles().put("font", "{size:'80%'}");
-        label.getStyles().put("backgroundColor", Color.WHITE);
+        label.getStyles().put("backgroundColor", terraTheme.getColor(4));
         label.getStyles().put("padding", 1);
 
         BoxPane boxPane = new BoxPane();
