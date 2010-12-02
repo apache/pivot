@@ -95,7 +95,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
                 endEdit(true);
             }
 
-            return false;
+            return (getEditEffect() != null);
         }
 
         @Override
@@ -177,7 +177,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         Container tableViewParent = tableView.getParent();
         tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane)tableViewParent : null;
 
-        // Create the editor components
+        // Add/create the editor components
         TableView.ColumnSequence tableViewColumns = tableView.getColumns();
         TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
 
@@ -265,7 +265,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         if (cardPane.getSelectedIndex() == EDITOR_CARD_INDEX) {
             cardPane.setSelectedIndex(IMAGE_CARD_INDEX);
         } else {
-            // Clear the editor components
+            // Remove the editor components
             TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
             tablePaneColumns.remove(0, tablePaneColumns.getLength());
             editorRow.remove(0, editorRow.getLength());
@@ -289,19 +289,17 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     }
 
     /**
-     * Gets the effect that this editor uses when changing from a read-only
-     * row to an editable row. By default, this editor uses no effect.
+     * Returns the effect that is applied when the editor opens or closes.
      *
      * @return
-     * The edit effect, or <tt>null</tt> if no effect is being used.
+     * The edit effect, or <tt>null</tt> for no effect.
      */
     public CardPaneSkin.SelectionChangeEffect getEditEffect() {
         return (CardPaneSkin.SelectionChangeEffect)cardPane.getStyles().get("selectionChangeEffect");
     }
 
     /**
-     * Sets the effect that this editor uses when changing from a read-only
-     * row to an editable row.
+     * Sets the effect that is applied when the editor opens or closes.
      *
      * @param editEffect
      * The edit effect, or <tt>null</tt> for no effect.
@@ -311,8 +309,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     }
 
     /**
-     * Gets the effect duration that this editor uses when changing from a
-     * read-only row to an editable row.
+     * Returns the edit effect duration.
      *
      * @return
      * The effect duration in milliseconds.
@@ -322,8 +319,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     }
 
     /**
-     * Sets the effect duration that this editor uses when changing from a
-     * read-only row to an editable row.
+     * Sets the edit effect duration.
      *
      * @param effectDuration
      * The effect duration in milliseconds.
@@ -333,8 +329,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     }
 
     /**
-     * Gets the effect rate that this editor uses when changing from a
-     * read-only row to an editable row.
+     * Returns the edit effect rate.
      *
      * @return
      * The effect rate.
@@ -344,8 +339,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     }
 
     /**
-     * Sets the effect duration that this editor uses when changing from a
-     * read-only row to an editable row.
+     * Sets the edit effect rate.
      *
      * @param effectRate
      * The effect rate.
