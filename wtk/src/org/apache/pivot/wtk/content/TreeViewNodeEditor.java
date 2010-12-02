@@ -46,13 +46,11 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
-            boolean consumed = false;
             if (window != TreeViewNodeEditor.this) {
                 close(true);
-                consumed = true;
             }
 
-            return consumed;
+            return false;
         }
 
         @Override
@@ -82,7 +80,7 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
     }
 
     @Override
-    public void edit(TreeView treeView, Path path) {
+    public void beginEdit(TreeView treeView, Path path) {
         if (this.treeView != null
             && this.treeView != treeView) {
             throw new IllegalStateException();
@@ -134,6 +132,17 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
         if (!isOpen()) {
             open(treeView.getWindow());
         }
+    }
+
+    @Override
+    public void endEdit(boolean result) {
+        // TODO
+    }
+
+    @Override
+    public boolean isEditing() {
+        // TODO
+        return false;
     }
 
     @Override

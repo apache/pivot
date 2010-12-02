@@ -90,14 +90,12 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
-            boolean consumed = false;
             if (window != TableViewRowEditor.this
                 && (window == null || !isOwner(window))) {
                 close(true);
-                consumed = true;
             }
 
-            return consumed;
+            return false;
         }
 
         @Override
@@ -171,7 +169,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     }
 
     @Override
-    public void edit(TableView tableView, int rowIndex, int columnIndex) {
+    public void beginEdit(TableView tableView, int rowIndex, int columnIndex) {
         if (this.tableView != null
             && this.tableView != tableView) {
             throw new IllegalStateException();
@@ -247,6 +245,17 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         if (!isOpen()) {
             open(tableView.getWindow());
         }
+    }
+
+    @Override
+    public void endEdit(boolean result) {
+        // TODO
+    }
+
+    @Override
+    public boolean isEditing() {
+        // TODO
+        return false;
     }
 
     /**

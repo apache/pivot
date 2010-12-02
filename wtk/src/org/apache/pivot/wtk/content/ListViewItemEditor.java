@@ -44,13 +44,11 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
-            boolean consumed = false;
             if (window != ListViewItemEditor.this) {
                 close(true);
-                consumed = true;
             }
 
-            return consumed;
+            return false;
         }
 
         @Override
@@ -80,7 +78,7 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
     }
 
     @Override
-    public void edit(ListView listView, int itemIndex) {
+    public void beginEdit(ListView listView, int itemIndex) {
         if (this.listView != null
             && this.listView != listView) {
             throw new IllegalStateException();
@@ -131,6 +129,17 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
         if (!isOpen()) {
             open(listView.getWindow());
         }
+    }
+
+    @Override
+    public void endEdit(boolean result) {
+        // TODO
+    }
+
+    @Override
+    public boolean isEditing() {
+        // TODO
+        return false;
     }
 
     @Override
