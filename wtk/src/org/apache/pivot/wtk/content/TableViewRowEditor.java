@@ -90,12 +90,16 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
             Display display = (Display)container;
             Window window = (Window)display.getComponentAt(x, y);
 
+            boolean consumed;
             if (window != TableViewRowEditor.this
                 && (window == null || !isOwner(window))) {
                 endEdit(true);
+                consumed = (getEditEffect() != null);
+            } else {
+                consumed = false;
             }
 
-            return (getEditEffect() != null);
+            return consumed;
         }
 
         @Override
