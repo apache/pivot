@@ -845,13 +845,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
             Keyboard.Modifier wordNavigationModifier = Platform.getWordNavigationModifier();
 
             if (keyCode == Keyboard.KeyCode.ENTER
-                && textArea.isEditable()) {
+                && textArea.isEditable()
+                && Keyboard.getModifiers() == 0) {
                 int index = textArea.getSelectionStart();
                 textArea.removeText(index, textArea.getSelectionLength());
                 textArea.insertText("\n", index);
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.DELETE) {
+            } else if (keyCode == Keyboard.KeyCode.DELETE
+                && textArea.isEditable()) {
                 int index = textArea.getSelectionStart();
 
                 if (index < textArea.getCharacterCount()) {
@@ -860,7 +862,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
                     consumed = true;
                 }
-            } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
+            } else if (keyCode == Keyboard.KeyCode.BACKSPACE
+                && textArea.isEditable()) {
                 int index = textArea.getSelectionStart();
                 int count = textArea.getSelectionLength();
 
@@ -873,7 +876,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     consumed = true;
                 }
             } else if (keyCode == Keyboard.KeyCode.TAB
-                && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                && Keyboard.isPressed(Keyboard.Modifier.CTRL)
+                && textArea.isEditable()) {
                 int selectionLength = textArea.getSelectionLength();
 
                 StringBuilder tabBuilder = new StringBuilder();
@@ -890,6 +894,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 }
 
                 showCaret(true);
+
+                consumed = true;
             } else if (keyCode == Keyboard.KeyCode.HOME
                 || (keyCode == Keyboard.KeyCode.LEFT
                     && Keyboard.isPressed(Keyboard.Modifier.META))) {
