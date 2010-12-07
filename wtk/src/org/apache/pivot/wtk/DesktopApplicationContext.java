@@ -757,10 +757,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
     public static Display createDisplay(int width, int height, int x, int y, boolean modal,
         boolean resizable, boolean undecorated, java.awt.Window owner,
         DisplayListener displayCloseListener) {
-        if (owner == null) {
-            throw new IllegalArgumentException();
-        }
-
         if (isFullScreen()) {
             throw new IllegalStateException();
         }
