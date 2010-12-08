@@ -291,15 +291,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             graphics.fillRect(0, 0, width, height);
         }
 
-        if (glyphVectors == null) {
-          // NOTE(tvolkert): I'm seeing this condition crop up in a Pivot app
-          // of mine very sporadically - adding this to see which class
-          // (probably a renderer) is the culprit
-          Label label = (Label)getComponent();
-          System.err.println("glyphVectors was nyll for class: " + label.getClass());
-          layout();
-        }
-
         // Draw the text
         if (glyphVectors.getLength() > 0) {
             graphics.setFont(font);
