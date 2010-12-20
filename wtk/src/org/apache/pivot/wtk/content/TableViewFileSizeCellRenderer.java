@@ -16,8 +16,7 @@
  */
 package org.apache.pivot.wtk.content;
 
-import org.apache.pivot.beans.BeanAdapter;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.text.FileSizeFormat;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
@@ -36,16 +35,8 @@ public class TableViewFileSizeCellRenderer extends TableViewCellRenderer {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public String toString(Object row, String columnName) {
-        Dictionary<String, Object> dictionary;
-        if (row instanceof Dictionary<?, ?>) {
-            dictionary = (Dictionary<String, Object>)row;
-        } else {
-            dictionary = new BeanAdapter(row);
-        }
-
-        Object cellData = dictionary.get(columnName);
+        Object cellData = JSON.get(row, columnName);
 
         String string;
         if (cellData instanceof Number) {

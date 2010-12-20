@@ -18,11 +18,11 @@ package org.apache.pivot.wtk.content;
 
 import java.awt.Graphics2D;
 
-import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
@@ -310,7 +310,6 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
         boolean selected, boolean highlighted, boolean disabled) {
@@ -321,14 +320,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                     selected, highlighted, disabled);
             }
         } else {
-            Dictionary<String, Object> dictionary;
-            if (row instanceof Dictionary<?, ?>) {
-                dictionary = (Dictionary<String, Object>)row;
-            } else {
-                dictionary = new BeanAdapter(row);
-            }
-
-            Object cellData = dictionary.get(columnName);
+            Object cellData = JSON.get(row, columnName);
 
             TableView.CellRenderer cellRenderer = null;
             Class<?> valueClass = (cellData == null ? null : cellData.getClass());
@@ -356,16 +348,8 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public String toString(Object row, String columnName) {
-        Dictionary<String, Object> dictionary;
-        if (row instanceof Dictionary<?, ?>) {
-            dictionary = (Dictionary<String, Object>)row;
-        } else {
-            dictionary = new BeanAdapter(row);
-        }
-
-        Object cellData = dictionary.get(columnName);
+        Object cellData = JSON.get(row, columnName);
 
         TableView.CellRenderer cellRenderer = null;
         Class<?> valueClass = (cellData == null ? null : cellData.getClass());
