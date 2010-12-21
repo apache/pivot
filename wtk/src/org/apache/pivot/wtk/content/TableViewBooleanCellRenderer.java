@@ -16,8 +16,7 @@
  */
 package org.apache.pivot.wtk.content;
 
-import org.apache.pivot.beans.BeanAdapter;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
@@ -50,7 +49,6 @@ public class TableViewBooleanCellRenderer extends BoxPane
         validate();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
@@ -60,14 +58,7 @@ public class TableViewBooleanCellRenderer extends BoxPane
 
             // Get the row and cell data
             if (columnName != null) {
-                Dictionary<String, Object> rowData;
-                if (row instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)row;
-                } else {
-                    rowData = new BeanAdapter(row);
-                }
-
-                Object cellData = rowData.get(columnName);
+                Object cellData = JSON.get(row, columnName);
 
                 if (cellData instanceof String) {
                     cellData = Boolean.parseBoolean((String)cellData);
