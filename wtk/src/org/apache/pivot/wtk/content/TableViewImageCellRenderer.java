@@ -16,13 +16,11 @@
  */
 package org.apache.pivot.wtk.content;
 
-import org.apache.pivot.beans.BeanAdapter;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableView.CellRenderer;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Default renderer for table view cells that contain image data.
@@ -61,7 +59,6 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
         super.setPreferredSize(preferredWidth, preferredHeight);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
@@ -71,14 +68,7 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
 
             // Get the row and cell data
             if (columnName != null) {
-                Dictionary<String, Object> rowData;
-                if (row instanceof Dictionary<?, ?>) {
-                    rowData = (Dictionary<String, Object>)row;
-                } else {
-                    rowData = new BeanAdapter(row);
-                }
-
-                Object cellData = rowData.get(columnName);
+                Object cellData = JSON.get(row, columnName);
 
                 if (cellData == null
                     || cellData instanceof Image) {

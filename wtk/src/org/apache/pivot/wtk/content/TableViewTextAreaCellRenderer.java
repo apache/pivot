@@ -19,8 +19,7 @@ package org.apache.pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Font;
 
-import org.apache.pivot.beans.BeanAdapter;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.TableView;
@@ -85,16 +84,8 @@ public class TableViewTextAreaCellRenderer extends TextArea implements TableView
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public String toString(Object row, String columnName) {
-        Dictionary<String, Object> dictionary;
-        if (row instanceof Dictionary<?, ?>) {
-            dictionary = (Dictionary<String, Object>)row;
-        } else {
-            dictionary = new BeanAdapter(row);
-        }
-
-        Object cellData = dictionary.get(columnName);
+        Object cellData = JSON.get(row, columnName);
         return (cellData == null) ? null : cellData.toString();
     }
 }

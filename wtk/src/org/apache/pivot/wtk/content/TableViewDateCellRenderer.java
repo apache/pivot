@@ -21,8 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.pivot.beans.BeanAdapter;
-import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.CalendarDate;
 
 /**
@@ -51,16 +50,8 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public String toString(Object row, String columnName) {
-        Dictionary<String, Object> dictionary;
-        if (row instanceof Dictionary<?, ?>) {
-            dictionary = (Dictionary<String, Object>)row;
-        } else {
-            dictionary = new BeanAdapter(row);
-        }
-
-        Object cellData = dictionary.get(columnName);
+        Object cellData = JSON.get(row, columnName);
 
         String string;
         if (cellData instanceof Date) {

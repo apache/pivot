@@ -934,7 +934,8 @@ public class TerraAccordionSkin extends ContainerSkin
     public Vote previewSelectedIndexChange(final Accordion accordion, final int selectedIndex) {
         Vote vote = Vote.APPROVE;
 
-        if (accordion.isShowing()) {
+        if (accordion.isShowing()
+            && accordion.isValid()) {
             if (selectionChangeTransition == null) {
                 int previousSelectedIndex = accordion.getSelectedIndex();
 
