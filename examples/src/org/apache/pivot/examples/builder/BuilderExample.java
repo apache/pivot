@@ -16,10 +16,7 @@
  */
 package org.apache.pivot.examples.builder;
 
-import java.io.IOException;
-
 import org.apache.pivot.collections.Map;
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
@@ -53,8 +50,7 @@ public class BuilderExample implements Application {
     public void resume() {
     }
 
-    private Window buildWindow()
-        throws SerializationException, IOException {
+    private Window buildWindow() {
         return new Window() {
             {   setContent(new TabPane() {
                     {   getTabs().add(new Label() {
