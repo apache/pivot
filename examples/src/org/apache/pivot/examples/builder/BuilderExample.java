@@ -16,27 +16,27 @@
  */
 package org.apache.pivot.examples.builder;
 
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TabPane;
-import org.apache.pivot.wtk.Window;
 
 public class BuilderExample implements Application {
-    private Window window = null;
+    private MyWindow myWindow = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
-        window = buildWindow();
-        window.open(display);
+        myWindow = buildWindow();
+        myWindow.open(display);
     }
 
     @Override
     public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
+        if (myWindow != null) {
+            myWindow.close();
         }
 
         return false;
@@ -50,10 +50,14 @@ public class BuilderExample implements Application {
     public void resume() {
     }
 
-    private Window buildWindow() {
-        return new Window() {
+    private MyWindow buildWindow() {
+        final HashMap<String, Object> namespace = new HashMap<String, Object>();
+
+        return new MyWindow() {
             {   setContent(new TabPane() {
-                    {   getTabs().add(new Label() {
+                    {   namespace.put("tabPane", this);
+
+                        getTabs().add(new Label() {
                             {   setText("Label 1");
                                 TabPane.setTabData(this, "Label 1");
                             }
@@ -77,6 +81,8 @@ public class BuilderExample implements Application {
 
                 setTitle("Builder Example");
                 setMaximized(true);
+
+                initialize(namespace, null, null);
             }
         };
     }

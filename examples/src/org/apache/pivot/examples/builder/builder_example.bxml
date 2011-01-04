@@ -16,13 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Builder Example" maximized="true"
+<builder:MyWindow title="Builder Example" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:builder="org.apache.pivot.examples.builder"
     xmlns="org.apache.pivot.wtk">
-    <TabPane selectedIndex="2">
+    <TabPane bxml:id="tabPane" selectedIndex="2">
         <Label text="Label 1" TabPane.tabData="Label 1"/>
         <Label text="Label 2" TabPane.tabData="Label 2"/>
         <Label text="Label 3" TabPane.tabData="Label 3"/>
     </TabPane>
-</Window>
+</builder:MyWindow>
 
