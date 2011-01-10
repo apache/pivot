@@ -17,7 +17,7 @@
 package org.apache.pivot.ui;
 
 public interface TextAreaContentListener {
-    public void textInserted(TextArea textArea, int index, int length);
-    public void textRemoved(TextArea textArea, int index, int length);
+    public void textInserted(TextArea textArea, int index, CharSequence text);
+    public void textRemoved(TextArea textArea, int start, int length);
     public void textChanged(TextArea textArea);
 }

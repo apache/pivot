@@ -16,8 +16,10 @@
  */
 package org.apache.pivot.ui;
 
+import java.util.List;
+
 public interface TextAreaParagraphListener {
-    public void paragraphsInserted(TextArea textArea, int index, int count);
+    public void paragraphsInserted(TextArea textArea, int index, List<CharSequence> paragraphText);
     public void paragraphsRemoved(TextArea textArea, int index, int count);
-    public void paragraphUpdated(TextArea textArea, int index);
+    public void paragraphUpdated(TextArea textArea, int index, CharSequence paragraphText);
 }
