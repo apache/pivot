@@ -594,7 +594,7 @@ public class BXMLSerializer implements Serializer<Object> {
         // If the element has an ID, add the value to the namespace
         if (element.id != null) {
             namespace.put(element.id, element.value);
-        
+
             // If the type has an ID property, use it
             Class<?> type = element.value.getClass();
             IDProperty idProperty = type.getAnnotation(IDProperty.class);
