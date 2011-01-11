@@ -20,14 +20,17 @@ package org.apache.pivot.scene.animation;
  * Quadratic easing operation.
  */
 public class QuadraticEasing implements Easing {
+    @Override
     public float easeIn(float time, float begin, float change, float duration) {
         return change * (time /= duration) * time + begin;
     }
 
+    @Override
     public float easeOut(float time, float begin, float change, float duration) {
         return -change * (time /= duration) * (time - 2) + begin;
     }
 
+    @Override
     public float easeInOut(float time, float begin, float change, float duration) {
         if ((time /= duration / 2) < 1) {
             return change / 2 * time * time + begin;

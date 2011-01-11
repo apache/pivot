@@ -85,6 +85,7 @@ public final class QueryProperties extends AbstractMap<String, String> {
                 return new PropertyEntry(key);
             }
 
+            @Override
             public void remove() {
                 if (key == null) {
                     throw new IllegalStateException();

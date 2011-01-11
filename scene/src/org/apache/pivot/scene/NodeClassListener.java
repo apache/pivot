@@ -24,6 +24,7 @@ public interface NodeClassListener {
      * Node class listener adapter.
      */
     public static class Adapter implements NodeClassListener {
+        @Override
         public void focusedNodeChanged(Node previousFocusedNode) {
         }
     }

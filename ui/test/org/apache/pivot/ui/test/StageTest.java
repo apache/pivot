@@ -25,14 +25,17 @@ import org.apache.pivot.scene.shape.Rectangle;
 import org.apache.pivot.ui.Application;
 
 public class StageTest implements Application {
+    @Override
     public String getTitle() {
         return null;
     }
 
+    @Override
     public List<Image> getIcons() {
         return null;
     }
 
+    @Override
     public void startup(Stage stage, Map<String, String> properties) throws Exception {
         // TODO Rectangles don't have a preferred size; add a group to the stage and
         // put the rectangles in it
@@ -41,13 +44,16 @@ public class StageTest implements Application {
         stage.getNodes().add(new Rectangle(30, 30, 320, 240));
     }
 
+    @Override
     public boolean shutdown(boolean optional) {
         return false;
     }
 
+    @Override
     public void suspend() {
     }
 
+    @Override
     public void resume() {
     }
 }

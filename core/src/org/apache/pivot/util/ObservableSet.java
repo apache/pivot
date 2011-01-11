@@ -28,12 +28,14 @@ public interface ObservableSet<E> extends Set<E> {
     public static class ObservableSetListenerList<E>
         extends ListenerList<ObservableSetListener<E>>
         implements ObservableSetListener<E> {
+        @Override
         public void elementAdded(ObservableSet<E> set, E element) {
             for (ObservableSetListener<E> listener : listeners()) {
                 listener.elementAdded(set, element);
             }
         }
 
+        @Override
         public void elementRemoved(ObservableSet<E> set, Object element) {
             for (ObservableSetListener<E> listener : listeners()) {
                 listener.elementRemoved(set, element);
