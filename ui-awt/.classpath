@@ -5,6 +5,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/scene"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ui"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/scene-awt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/scene-platform-awt"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

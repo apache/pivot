@@ -5,7 +5,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/scene"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ui"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/scene-swt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/scene-platform-swt"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SWT"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
