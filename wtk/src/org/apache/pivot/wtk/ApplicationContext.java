@@ -90,7 +90,7 @@ public abstract class ApplicationContext {
         private double scale = 1;
 
         private boolean paintPending = false;
-        private boolean disableVolatileBuffer = true;
+        private boolean disableVolatileBuffer = false;
         private boolean debugPaint = false;
 
         private Random random = null;

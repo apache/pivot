@@ -389,7 +389,7 @@ public class TextInput extends Component {
                 textValid = (validator == null) ? true : validator.isValid(getText());
 
                 // Fire change events
-                textInputContentListeners.textInserted(this, previousSelectionStart, text.length());
+                textInputContentListeners.textInserted(this, index, text.length());
                 textInputContentListeners.textChanged(this);
 
                 if (textValid != previousTextValid) {
@@ -434,7 +434,7 @@ public class TextInput extends Component {
                 textValid = (validator == null) ? true : validator.isValid(getText());
 
                 // Fire change events
-                textInputContentListeners.textRemoved(this, selectionStart, count);
+                textInputContentListeners.textRemoved(this, index, count);
                 textInputContentListeners.textChanged(this);
 
                 if (textValid != previousTextValid) {
