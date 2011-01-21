@@ -21,6 +21,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 import org.apache.pivot.beans.DefaultProperty;
+import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.media.Image;
@@ -106,6 +107,42 @@ public class TextPane extends Container {
         public Bounds getCharacterBounds(int offset);
     }
 
+    private interface Edit {
+        public void undo();
+    }
+
+    private class RangeRemovedEdit implements Edit {
+        private final Node node;
+        private final int offset;
+        private final Node range;
+
+        public RangeRemovedEdit(Node node, int offset, int characterCount) {
+            this.node = node;
+            this.offset = offset;
+            this.range = node.getRange(offset, characterCount);
+        }
+
+        public void undo() {
+            node.insertRange(range, offset);
+        }
+    }
+
+    private class RangeInsertedEdit implements Edit {
+        private final Node node;
+        private final int offset;
+        private final int characterCount;
+
+        public RangeInsertedEdit(Node node, int offset, int characterCount) {
+            this.node = node;
+            this.offset = offset;
+            this.characterCount = characterCount;
+        }
+
+        public void undo() {
+            node.removeRange(offset, characterCount);
+        }
+    }
+
     private static class TextPaneListenerList extends ListenerList<TextPaneListener>
         implements TextPaneListener {
         @Override
@@ -157,6 +194,7 @@ public class TextPane extends Container {
     private int selectionLength = 0;
 
     private boolean editable = true;
+    private boolean undoingHistory = false;
 
     private ComponentNodeListener componentNodeListener = new ComponentNodeListener() {
         @Override
@@ -167,15 +205,7 @@ public class TextPane extends Container {
         }
     };
 
-    private NodeListener documentListener = new NodeListener() {
-        @Override
-        public void parentChanged(Node node, Element previousParent) {
-        }
-
-        @Override
-        public void offsetChanged(Node node, int previousOffset) {
-        }
-
+    private NodeListener documentListener = new NodeListener.Adapter() {
         @Override
         public void rangeInserted(Node node, int offset, int characterCount) {
             if (selectionStart + selectionLength > offset) {
@@ -186,10 +216,16 @@ public class TextPane extends Container {
                 }
             }
 
+            if (!undoingHistory) {
+                addHistoryItem(new RangeInsertedEdit(node, offset, characterCount));
+            }
+
             textPaneCharacterListeners.charactersInserted(TextPane.this, offset, characterCount);
         }
 
+        @Override
         public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
+
             for (int i = 0; i < removed.getLength(); i++) {
                 Node descendant = removed.get(i);
                 if (descendant instanceof ComponentNode) {
@@ -228,13 +264,21 @@ public class TextPane extends Container {
                 }
             }
 
+            if (!undoingHistory) {
+                addHistoryItem(new RangeRemovedEdit(node, offset, characterCount));
+            }
+
             textPaneCharacterListeners.charactersRemoved(TextPane.this, offset, characterCount);
         }
     };
 
+    private LinkedList<Edit> editHistory = new LinkedList<Edit>();
+
     private TextPaneListenerList textPaneListeners = new TextPaneListenerList();
     private TextPaneCharacterListenerList textPaneCharacterListeners = new TextPaneCharacterListenerList();
     private TextPaneSelectionListenerList textPaneSelectionListeners = new TextPaneSelectionListenerList();
+
+    private static final int MAXIMUM_EDIT_HISTORY_LENGTH = 30;
 
     public TextPane() {
         installSkin(TextPane.class);
@@ -277,6 +321,9 @@ public class TextPane extends Container {
                 document.getNodeListeners().add(documentListener);
                 addComponentNodes(document);
             }
+
+            // Clear the edit history
+            editHistory.clear();
 
             this.document = document;
 
@@ -578,12 +625,27 @@ public class TextPane extends Container {
     }
 
     public void undo() {
-        // TODO
+        int n = editHistory.getLength();
+        if (n > 0) {
+            undoingHistory = true;
+            Edit edit = editHistory.remove(n - 1, 1).get(0);
+            edit.undo();
+            undoingHistory = false;
+        }
+    }
+
+    private void addHistoryItem(Edit edit) {
+        editHistory.add(edit);
+
+        if (editHistory.getLength() > MAXIMUM_EDIT_HISTORY_LENGTH) {
+            editHistory.remove(0, 1);
+        }
     }
 
     public void redo() {
         // TODO
     }
+
 
     /**
      * Returns the starting index of the selection.

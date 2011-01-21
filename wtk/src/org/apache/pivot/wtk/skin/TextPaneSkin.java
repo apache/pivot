@@ -950,9 +950,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 } else if (keyCode == Keyboard.KeyCode.Z
                     && textPane.isEditable()) {
                     if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        textPane.undo();
-                    } else {
                         textPane.redo();
+                    } else {
+                        textPane.undo();
                     }
 
                     consumed = true;
