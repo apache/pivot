@@ -29,6 +29,10 @@ public class Span extends Element {
         super(span, recursive);
     }
 
+    public int add(String text) {
+        return add(new TextNode(text));
+    }
+
     @Override
     public void insert(Node node, int index) {
         if (node instanceof Block) {
