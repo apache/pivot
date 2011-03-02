@@ -716,8 +716,8 @@ public class TerraCalendarSkin extends CalendarSkin {
     private static int getCellIndex(int year, int month, int day, Locale locale) {
         GregorianCalendar gregorianCalendar = new GregorianCalendar(locale);
         gregorianCalendar.set(year, month, 1);
-        int firstDay = gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK)
-            - gregorianCalendar.getFirstDayOfWeek();
+        int firstDay = ((gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK)
+            - gregorianCalendar.getFirstDayOfWeek()) + 7) % 7;
         int cellIndex = firstDay + day;
 
         return cellIndex;
