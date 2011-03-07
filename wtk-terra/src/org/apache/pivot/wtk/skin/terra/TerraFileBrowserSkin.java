@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Comparator;
 import java.util.Date;
@@ -277,10 +278,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 } else if (columnName.equals(LAST_MODIFIED_KEY)) {
                     long lastModified = file.lastModified();
                     Date lastModifiedDate = new Date(lastModified);
-
-                    DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-                        DateFormat.SHORT);
-                    text = dateFormat.format(lastModifiedDate);
+                    text = DATE_FORMAT.format(lastModifiedDate);
                     getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
                 } else {
                     System.err.println("Unexpected column name in " + getClass().getName()
@@ -324,9 +322,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             } else if (columnName.equals(LAST_MODIFIED_KEY)) {
                 long lastModified = file.lastModified();
                 Date lastModifiedDate = new Date(lastModified);
-                DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-                    DateFormat.SHORT);
-                string = dateFormat.format(lastModifiedDate);
+                string = DATE_FORMAT.format(lastModifiedDate);
             } else {
                 System.err.println("Unexpected column name in " + getClass().getName()
                     + ": " + columnName);
@@ -460,7 +456,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * File comparator.
      */
-    public static class FileComparator implements Comparator<File> {
+    public static class FileComparator implements Comparator<File>, Serializable {
+        private static final long serialVersionUID = 1L;
+        
         private String columnName = null;
         private SortDirection sortDirection = null;
 
@@ -621,6 +619,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     };
 
+    private static final DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(
+        DateFormat.SHORT, DateFormat.SHORT);
+
+    
     @Override
     public void install(Component component) {
         super.install(component);
