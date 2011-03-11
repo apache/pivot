@@ -458,7 +458,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
      */
     public static class FileComparator implements Comparator<File>, Serializable {
         private static final long serialVersionUID = 1L;
-        
+
         private String columnName = null;
         private SortDirection sortDirection = null;
 
@@ -622,7 +622,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     private static final DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(
         DateFormat.SHORT, DateFormat.SHORT);
 
-    
+
     @Override
     public void install(Component component) {
         super.install(component);
