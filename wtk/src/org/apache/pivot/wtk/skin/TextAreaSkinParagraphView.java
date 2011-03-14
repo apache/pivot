@@ -285,7 +285,9 @@ class TextAreaSkinParagraphView implements Visual, TextArea.ParagraphListener {
 
         int i = (int)Math.floor(y / rowHeight);
 
-        return getRowInsertionPoint(i, x);
+        int n = rows.getLength();
+        return (i < 0
+            || i >= n) ? -1 : getRowInsertionPoint(i, x);
     }
 
     public int getNextInsertionPoint(int x, int from, TextArea.ScrollDirection direction) {
