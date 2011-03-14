@@ -111,6 +111,12 @@ limitations under the License.
                                                 src="@text_area.bxml"
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill_to_capacity"/>
+                                            <explorer:ComponentNode
+                                                text="TextPane"
+                                                icon="@../page_white.png"
+                                                src="@text_pane.bxml"
+                                                horizontalScrollBarPolicy="fill"
+                                                verticalScrollBarPolicy="fill_to_capacity"/>
                                         </content:TreeBranch>
                                         <content:TreeBranch
                                             text="%explorerPane.branches.separators"
