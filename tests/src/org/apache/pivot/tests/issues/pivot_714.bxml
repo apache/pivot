@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Dialog xmlns:bxml="http://pivot.apache.org/bxml" xmlns="org.apache.pivot.wtk">
+    <content>
+        <Border styles="{padding:{top:10, right:10, bottom:10}}">
+            <content>
+                <TablePane>
+                    <columns>
+                        <TablePane.Column width="-1"/>
+                    </columns>
+                    <rows>
+                        <TablePane.Row height="-1">
+                            <Form>
+                                <sections>
+                                    <Form.Section>
+                                        <BoxPane Form.Label="Motif" styles="{verticalAlignment:'center', horizontalAlignment:'left'}">
+                                            <ListButton bxml:id="motif"/>
+                                        </BoxPane>
+                                        <BoxPane Form.label="Date">
+                                            <CalendarButton bxml:id="date"/>
+                                        </BoxPane>
+                                    </Form.Section>
+                                </sections>
+                            </Form>
+                        </TablePane.Row>
+                    </rows>
+                </TablePane>
+            </content>
+        </Border>
+    </content>
+</Dialog>
