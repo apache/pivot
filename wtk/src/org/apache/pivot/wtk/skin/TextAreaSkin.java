@@ -932,7 +932,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     selectionLength += (rowOffset + rowLength) - index;
                 } else {
                     selectionStart = rowOffset + rowLength;
-                    if (textArea.getCharacterAt(selectionStart) != '\n') {
+                    if (selectionStart < textArea.getCharacterCount()
+                            && textArea.getCharacterAt(selectionStart) != '\n') {
                         selectionStart--;
                     }
 
