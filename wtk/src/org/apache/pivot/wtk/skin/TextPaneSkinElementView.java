@@ -147,7 +147,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
                 Color styledBackgroundColor = getStyledBackgroundColor();
                 if (styledBackgroundColor != null) {
                     nodeViewGraphics.setColor(styledBackgroundColor);
-                    nodeViewGraphics.fillRect(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height);
+                    nodeViewGraphics.fillRect(0, 0, nodeViewBounds.width, nodeViewBounds.height);
                 }
 
                 // NOTE We don't clip here because views should generally
