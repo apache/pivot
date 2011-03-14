@@ -39,8 +39,8 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.TextArea;
-import org.apache.pivot.wtk.TextAreaListener;
 import org.apache.pivot.wtk.TextAreaContentListener;
+import org.apache.pivot.wtk.TextAreaListener;
 import org.apache.pivot.wtk.TextAreaSelectionListener;
 import org.apache.pivot.wtk.Theme;
 
@@ -302,13 +302,14 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         int index = -1;
 
         if (paragraphViews.getLength() > 0) {
-            if (y > getHeight() - margin.bottom) {
-                // Select the character at x in the first row
+            TextAreaSkinParagraphView lastParagraphView = paragraphViews.get(paragraphViews.getLength() - 1);
+            if (y > lastParagraphView.getY() + lastParagraphView.getHeight()) {
+                // Select the character at x in the last row
                 TextAreaSkinParagraphView paragraphView = paragraphViews.get(paragraphViews.getLength() - 1);
                 index = paragraphView.getNextInsertionPoint(x, -1, TextArea.ScrollDirection.UP)
                     + paragraphView.getParagraph().getOffset();
             } else if (y < margin.top) {
-                // Select the character at x in the last row
+                // Select the character at x in the first row
                 TextAreaSkinParagraphView paragraphView = paragraphViews.get(0);
                 index = paragraphView.getNextInsertionPoint(x, -1, TextArea.ScrollDirection.DOWN);
             } else {
