@@ -574,21 +574,21 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     private static void verifyIndexBounds(int index, int start, int end) {
         if (index < start || index > end) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds.");
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + "," + end + "].");
         }
     }
 
     private static void verifyIndexBounds(int index, int count, int start, int end) {
         if (count < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("count < 0, " + count);
         }
 
         if (index < start) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds.");
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + "," + end + "].");
         }
 
         if (index + count > end) {
-            throw new IndexOutOfBoundsException("index + count " + index + "," + count + " out of range.");
+            throw new IndexOutOfBoundsException("index + count " + index + "," + count + " out of bounds [" + start + "," + end + "].");
         }
     }
 }
