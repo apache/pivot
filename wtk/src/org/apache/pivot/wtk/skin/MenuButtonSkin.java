@@ -55,6 +55,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
 
             Window componentWindow = getComponent().getWindow();
             if (componentWindow != null
+                && componentWindow.isOpen()
                 && !componentWindow.isClosing()) {
                 componentWindow.moveToFront();
             }

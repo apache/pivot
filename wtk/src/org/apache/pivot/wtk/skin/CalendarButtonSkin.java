@@ -134,6 +134,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
             Window componentWindow = getComponent().getWindow();
             if (componentWindow != null
+                && componentWindow.isOpen()
                 && !componentWindow.isClosing()) {
                 componentWindow.moveToFront();
             }
