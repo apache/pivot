@@ -242,6 +242,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private String language = null;
     private int nextID = 0;
 
+    private ClassLoader classLoader = null;
+
     private LinkedList<Attribute> namespaceBindingAttributes = new LinkedList<Attribute>();
 
     private static HashMap<String, String> fileExtensions = new HashMap<String, String>();
@@ -388,6 +390,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 return values;
             }
         });
+    }
+
+    public BXMLSerializer(final ClassLoader classLoader) {
+        this();
+        this.classLoader = classLoader;
     }
 
     /**
@@ -734,7 +741,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                     String propertyClassName = namespaceURI + "." + localName.substring(0, i);
                     try {
-                        propertyClass = Class.forName(propertyClassName);
+                        if (classLoader == null) {
+                            propertyClass = Class.forName(propertyClassName);
+                        } else {
+                            propertyClass = Class.forName(propertyClassName, true, classLoader);
+                        }
                     } catch (ClassNotFoundException exception) {
                         throw new SerializationException(exception);
                     }
@@ -751,7 +762,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     String className = namespaceURI + "." + localName.replace('.', '$');
 
                     try {
-                        Class<?> type = Class.forName(className);
+                        Class<?> type;
+                        if (classLoader == null) {
+                            type = Class.forName(className);
+                        } else {
+                            type = Class.forName(className, true, classLoader);
+                        }
+
                         value = newTypedObject(type);
                     } catch (ClassNotFoundException exception) {
                         throw new SerializationException(exception);
@@ -978,13 +995,17 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         name = localName.substring(j + 1);
 
                         String namespaceURI = xmlStreamReader.getAttributeNamespace(i);
-                        if (namespaceURI == null) {
+                        if (namespaceURI == null || namespaceURI.isEmpty()) {
                             namespaceURI = xmlStreamReader.getNamespaceURI("");
                         }
 
                         String propertyClassName = namespaceURI + "." + localName.substring(0, j);
                         try {
-                            propertyClass = Class.forName(propertyClassName);
+                            if (classLoader == null) {
+                                propertyClass = Class.forName(propertyClassName);
+                            } else {
+                                propertyClass = Class.forName(propertyClassName, true, classLoader);
+                            }
                         } catch (ClassNotFoundException exception) {
                             throw new SerializationException(exception);
                         }
