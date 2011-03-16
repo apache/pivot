@@ -496,7 +496,7 @@ public abstract class Element extends Node
     public int getNodeAt(int offset) {
         if (offset < 0
             || offset >= characterCount) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("offset " + offset + " out of range [0," + characterCount + "]");
         }
 
         int i = nodes.getLength() - 1;

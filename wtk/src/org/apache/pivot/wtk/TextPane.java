@@ -114,16 +114,20 @@ public class TextPane extends Container {
     private class RangeRemovedEdit implements Edit {
         private final Node node;
         private final int offset;
-        private final Node range;
+        private final Sequence<Node> removed;
 
-        public RangeRemovedEdit(Node node, int offset, int characterCount) {
+        public RangeRemovedEdit(Node node, Sequence<Node> removed, int offset) {
             this.node = node;
             this.offset = offset;
-            this.range = node.getRange(offset, characterCount);
+            this.removed = removed;
         }
 
         public void undo() {
-            node.insertRange(range, offset);
+            Document tmp = new Document();
+            for (int i=0; i<removed.getLength(); i++) {
+                tmp.add(removed.get(i));
+            }
+            node.insertRange(tmp, offset);
         }
     }
 
@@ -234,6 +238,10 @@ public class TextPane extends Container {
                     TextPane.super.remove(componentNode.getComponent());
                 }
             }
+
+            if (!undoingHistory) {
+                addHistoryItem(new RangeRemovedEdit(node, removed, offset));
+            }
         }
 
         @Override
@@ -262,10 +270,6 @@ public class TextPane extends Container {
                         selectionLength = 0;
                     }
                 }
-            }
-
-            if (!undoingHistory) {
-                addHistoryItem(new RangeRemovedEdit(node, offset, characterCount));
             }
 
             textPaneCharacterListeners.charactersRemoved(TextPane.this, offset, characterCount);
@@ -367,8 +371,7 @@ public class TextPane extends Container {
             throw new IllegalArgumentException("text is null.");
         }
 
-        if (document == null
-            || document.getCharacterCount() == 0) {
+        if (document == null) {
             throw new IllegalStateException();
         }
 
@@ -376,38 +379,45 @@ public class TextPane extends Container {
             delete(false);
         }
 
-        Node descendant = document.getDescendantAt(selectionStart);
-        int offset = selectionStart - descendant.getDocumentOffset();
+        if (document.getCharacterCount() == 0) {
+            // the document is currently empty
+            Paragraph paragraph = new Paragraph();
+            paragraph.add(text);
+            document.insert(paragraph, 0);
+        } else {
+            Node descendant = document.getDescendantAt(selectionStart);
+            int offset = selectionStart - descendant.getDocumentOffset();
 
-        if (descendant instanceof TextNode) {
-            // The caret is positioned within an existing text node
-            TextNode textNode = (TextNode)descendant;
-            textNode.insertText(text, offset);
-        } else if (descendant instanceof Paragraph) {
-            // The caret is positioned on the paragraph terminator
-            Paragraph paragraph = (Paragraph)descendant;
+            if (descendant instanceof TextNode) {
+                // The caret is positioned within an existing text node
+                TextNode textNode = (TextNode)descendant;
+                textNode.insertText(text, offset);
+            } else if (descendant instanceof Paragraph) {
+                // The caret is positioned on the paragraph terminator
+                Paragraph paragraph = (Paragraph)descendant;
 
-            int n = paragraph.getLength();
-            if (n > 0) {
-                Node node = paragraph.get(n - 1);
-                if (node instanceof TextNode) {
-                    // Insert the text into the existing node
-                    TextNode textNode = (TextNode)node;
-                    textNode.insertText(text, offset - textNode.getOffset());
+                int n = paragraph.getLength();
+                if (n > 0) {
+                    Node node = paragraph.get(n - 1);
+                    if (node instanceof TextNode) {
+                        // Insert the text into the existing node
+                        TextNode textNode = (TextNode)node;
+                        textNode.insertText(text, offset - textNode.getOffset());
+                    } else {
+                        // Append a new text node
+                        paragraph.add(new TextNode(text));
+                    }
                 } else {
-                    // Append a new text node
+                    // The paragraph is currently empty
                     paragraph.add(new TextNode(text));
                 }
             } else {
-                // The paragraph is currently empty
-                paragraph.add(new TextNode(text));
+                // The caret is positioned on a non-text character node; insert
+                // the text into the descendant's parent
+                Element parent = descendant.getParent();
+                int index = parent.indexOf(descendant);
+                parent.insert(new TextNode(text), index);
             }
-        } else {
-            // The caret is positioned on a non-text character node; insert
-            // the text into the descendant's parent
-            Element parent = descendant.getParent();
-            int index = parent.indexOf(descendant);
-            parent.insert(new TextNode(text), index);
         }
 
         // Set the selection start to the character following the insertion

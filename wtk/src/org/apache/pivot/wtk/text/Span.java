@@ -37,7 +37,7 @@ public class Span extends Element {
     public void insert(Node node, int index) {
         if (node instanceof Block) {
             throw new IllegalArgumentException("Child node must not be an instance of "
-                + Block.class.getName());
+                + Block.class.getName() + ", " + node.getClass());
         }
 
         super.insert(node, index);
