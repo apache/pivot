@@ -51,10 +51,10 @@ import org.apache.pivot.wtk.text.NumberedList;
 
 /**
  * Simple bean for testing String to enum coercion.
- * {@link BeanAdapter#coerceEnum(Object, Class)}.
+ * {@link BeanAdapter#coerce(Object, Class)}.
  * <p>
  * All accessors were created using Eclipse's 'Generate Getters & Setters"
- * source generation.  No addtional code has been added to them, so they
+ * source generation.  No additional code has been added to them, so they
  * can safely be deleted and regenerated if required.
  */
 public class EnumBean {

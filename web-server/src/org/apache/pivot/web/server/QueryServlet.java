@@ -331,7 +331,7 @@ public abstract class QueryServlet extends HttpServlet {
      * @param method
      * @param path
      *
-     * @throws ServletException
+     * @throws QueryException
      */
     protected abstract Serializer<?> createSerializer(Query.Method method, Path path)
         throws QueryException;
