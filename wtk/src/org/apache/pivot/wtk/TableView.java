@@ -49,7 +49,7 @@ public class TableView extends Component {
     /**
      * Contains information about a table column.
      */
-    public static final class Column {
+    public static class Column {
         private TableView tableView = null;
 
         private String name = null;

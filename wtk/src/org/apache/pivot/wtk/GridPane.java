@@ -32,7 +32,7 @@ public class GridPane extends Container {
     /**
      * Represents a grid pane row.
      */
-    public static final class Row implements Sequence<Component>, Iterable<Component> {
+    public static class Row implements Sequence<Component>, Iterable<Component> {
         private ArrayList<Component> cells = new ArrayList<Component>();
 
         private GridPane gridPane = null;
@@ -257,7 +257,7 @@ public class GridPane extends Container {
     /**
      * Component that can be used as filler for empty cells.
      */
-    public static class Filler extends Component {
+    public static final class Filler extends Component {
         public Filler() {
             installSkin(Filler.class);
         }
