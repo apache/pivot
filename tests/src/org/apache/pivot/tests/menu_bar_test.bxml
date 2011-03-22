@@ -136,6 +136,14 @@ limitations under the License.
                         <Menu.Item buttonData="Medium" toggleButton="true" buttonGroup="$view"/>
                         <Menu.Item buttonData="Small" toggleButton="true" buttonGroup="$view"/>
                     </Menu.Section>
+                    <Menu.Section>
+                        <Menu.Item>
+                            <buttonData>
+                                <content:MenuItemData text="Refresh"
+                                    keyboardShortcut="F5"/>
+                            </buttonData>
+                        </Menu.Item>
+                    </Menu.Section>
                 </Menu>
             </MenuBar.Item>
 
@@ -162,4 +170,3 @@ limitations under the License.
         </Form>
     </Border>
 </Frame>
-
