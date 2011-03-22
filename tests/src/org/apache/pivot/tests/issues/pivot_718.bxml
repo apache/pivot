@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Tree Views" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:app="org.apache.pivot.tests.issues"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk"
+>
+    <Border>
+
+      <BoxPane orientation="horizontal">
+        <BoxPane orientation="vertical">
+          <PushButton bxml:id="treeDelButton" buttonData="delete"/>
+          <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+              <TreeView bxml:id="tree" >
+                  <treeData>
+                      <content:TreeBranch >
+                          <content:TreeBranch text="Activity">
+                              <content:TreeNode text="Camping" />
+                              <content:TreeNode text="Skiing" />
+                          </content:TreeBranch>
+                          <content:TreeBranch text="Occasion">
+                              <content:TreeBranch text="Holidays">
+                                  <content:TreeNode text="Christmas" />
+                                  <content:TreeNode text="Independence Day" />
+                                  <content:TreeNode text="Labor Day" />
+                                  <content:TreeNode text="New Year's Day" />
+                                  <content:TreeNode text="President's Day" />
+                                  <content:TreeNode text="Thanksgiving" />
+                                  <content:TreeNode text="Valentine's Day" />
+                                  <content:TreeNode text="Veteran's Day" />
+                              </content:TreeBranch>
+                              <content:TreeNode text="Anniversary" />
+                              <content:TreeNode text="Birthday" />
+                              <content:TreeNode text="Wedding" />
+                          </content:TreeBranch>
+                          <content:TreeBranch text="Sports" >
+                              <content:TreeNode text="Baseball" />
+                              <content:TreeNode text="Basketball" />
+                              <content:TreeNode text="Football" />
+                              <content:TreeNode text="Ice Hockey" />
+                              <content:TreeNode text="Soccer" />
+                              <content:TreeNode text="Softball" />
+                          </content:TreeBranch>
+                          <content:TreeBranch text="Games">
+                              <content:TreeNode text="Foosball" />
+                              <content:TreeNode text="Ping Pong" />
+                              <content:TreeNode text="Air Hockey" />
+                          </content:TreeBranch>
+                    </content:TreeBranch>
+                  </treeData>
+
+              </TreeView>
+          </ScrollPane>
+        </BoxPane>
+      </BoxPane>
+
+      <BoxPane orientation="vertical">
+        <PushButton bxml:id="listDelButton" buttonData="delete"/>
+        <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+            <ListView bxml:id="list" listData="['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']"/>
+        </ScrollPane>
+      </BoxPane>
+
+    </Border>
+
+</Window>
