@@ -31,7 +31,7 @@ public class Pivot686 implements Application {
     private Window window = null;
     private TextInput textInput = null;
     private PushButton pushButton = null;
-    
+
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
@@ -44,7 +44,7 @@ public class Pivot686 implements Application {
 
         textInput.requestFocus();  // force focus on TextInput, Ok when run as a Java Application
         System.out.println("textInput has focus: " + textInput.isFocused());
-        
+
         System.out.println("startup: end");
     }
 
@@ -79,12 +79,12 @@ public class Pivot686 implements Application {
                 String msg = "You clicked me!";
                 System.out.println(msg);
                 // Alert.alert(MessageType.INFO, msg, window);
-                
+
                 textInput.setText("");
                 textInput.requestFocus();
             }
         });
-        
+
         System.out.println("initializeFields: end");
     }
 

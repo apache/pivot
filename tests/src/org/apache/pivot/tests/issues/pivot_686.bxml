@@ -21,10 +21,10 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk"
 >
 
-	<BoxPane styles="{padding:4, verticalAlignment:'center'}">
+    <BoxPane styles="{padding:4, verticalAlignment:'center'}">
         <Label text="Input:"/>
         <TextInput bxml:id="textInput"/>
         <PushButton bxml:id="pushButton" buttonData="Click to Clear Text"/>
     </BoxPane>
-    
+
 </Window>
