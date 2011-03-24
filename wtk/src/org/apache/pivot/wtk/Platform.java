@@ -45,6 +45,10 @@ public class Platform {
             COMMAND_MODIFIER = Modifier.META;
             WORD_NAVIGATION_MODIFIER = Modifier.ALT;
             KEYSTROKE_MODIFIER_SEPARATOR = "";
+        } else if (osName.startsWith("windows")) {
+            COMMAND_MODIFIER = Modifier.CTRL;
+            WORD_NAVIGATION_MODIFIER = Modifier.CTRL;
+            KEYSTROKE_MODIFIER_SEPARATOR = "+";
         } else {
             COMMAND_MODIFIER = Modifier.CTRL;
             WORD_NAVIGATION_MODIFIER = Modifier.CTRL;

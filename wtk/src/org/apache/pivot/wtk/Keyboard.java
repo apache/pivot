@@ -113,8 +113,13 @@ public final class Keyboard {
                 awtModifiers |= KeyEvent.SHIFT_DOWN_MASK;
             }
 
-            return KeyEvent.getModifiersExText(awtModifiers) + Platform.getKeyStrokeModifierSeparator()
-                + KeyEvent.getKeyText(keyCode);
+            if (awtModifiers != 0x00) {
+                return KeyEvent.getModifiersExText(awtModifiers) + Platform.getKeyStrokeModifierSeparator()
+                    + KeyEvent.getKeyText(keyCode);
+            }
+            else {
+                return KeyEvent.getKeyText(keyCode);
+            }
         }
 
         public static KeyStroke decode(String value) {
@@ -306,4 +311,3 @@ public final class Keyboard {
         return dropAction;
     }
 }
-
