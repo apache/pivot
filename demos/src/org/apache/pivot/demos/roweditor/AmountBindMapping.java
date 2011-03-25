@@ -17,11 +17,12 @@
 package org.apache.pivot.demos.roweditor;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 
 import org.apache.pivot.wtk.TextInput;
 
 public class AmountBindMapping implements TextInput.TextBindMapping {
-    public static final DecimalFormat FORMAT = new DecimalFormat("0.00");
+    protected static final DecimalFormat FORMAT = new DecimalFormat("0.00");
 
     @Override
     public String toString(Object value) {
@@ -30,6 +31,14 @@ public class AmountBindMapping implements TextInput.TextBindMapping {
 
     @Override
     public Object valueOf(String text) {
-        return Float.valueOf(text);
+        // in case of an empty string to validate, return a default value, to avoid an NPE
+        if (text.length() < 1)
+            return new String("");
+        
+        try {
+            return FORMAT.parse(text);
+        } catch (ParseException ex) {
+            throw new NumberFormatException(ex.getMessage());
+        }
     }
 }

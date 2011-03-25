@@ -24,6 +24,6 @@
     },
 
     formats: {
-        currency: "$#,##0.00"
+        currency: "\u00A4#,##0.00"
     }
 }
