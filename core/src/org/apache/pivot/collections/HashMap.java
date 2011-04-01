@@ -358,7 +358,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
         if (previousBuckets != null) {
             count = 0;
-            
+
             if (keys != null) {
                 keys.clear();
             }
