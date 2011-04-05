@@ -104,6 +104,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     private int count = 0;
     private ArrayList<K> keys = null;
 
+    private boolean rehash = false;
+
     private transient MapListenerList<K, V> mapListeners = null;
 
     public static final int DEFAULT_CAPACITY = 16;
@@ -203,7 +205,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 previousValue = entry.value;
                 iterator.update(new Pair<K, V>(key, value));
 
-                if (mapListeners != null) {
+                if (mapListeners != null
+                    && !rehash) {
                     mapListeners.valueUpdated(this, key, previousValue);
                 }
 
@@ -229,7 +232,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 rehash(capacity * 2);
             }
 
-            if (mapListeners != null) {
+            if (mapListeners != null
+                && !rehash) {
                 mapListeners.valueAdded(this, key);
             }
         }
@@ -363,6 +367,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 keys.clear();
             }
 
+            rehash = true;
+
             for (LinkedList<Pair<K, V>> bucket : previousBuckets) {
                 if (bucket != null) {
                     for (Pair<K, V> entry : bucket) {
@@ -370,6 +376,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                     }
                 }
             }
+
+            rehash = false;
         }
     }
 
