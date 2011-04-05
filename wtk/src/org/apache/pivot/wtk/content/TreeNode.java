@@ -129,4 +129,18 @@ public class TreeNode {
     public void setUserData(Object userData) {
         this.userData = userData;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getClass().getName());
+        sb.append(" [");
+        sb.append(text);
+        sb.append(", ");
+        sb.append(userData);
+        sb.append("]");
+
+        return sb.toString();
+    }
 }

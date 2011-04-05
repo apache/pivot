@@ -284,4 +284,25 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
         return listListeners;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getClass().getName());
+        sb.append(" [");
+
+        int i = 0;
+        for (TreeNode item : treeNodes) {
+            if (i > 0) {
+                sb.append(", ");
+            }
+
+            sb.append(item);
+            i++;
+        }
+
+        sb.append("]");
+
+        return sb.toString();
+    }
 }
