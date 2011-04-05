@@ -212,7 +212,30 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     @Override
     public int indexOf(TreeNode treeNode) {
-        return treeNodes.indexOf(treeNode);
+        // We can't use the ArrayList indexOf method, because if we have a comparator, it
+        // might return the wrong answer.
+        int index = 0;
+        int length = treeNodes.getLength();
+        while (index < length) {
+            TreeNode node = treeNodes.get(index);
+            if (treeNode == null) {
+                if (node == null) {
+                    break;
+                }
+            } else {
+                if (treeNode.equals(node)) {
+                    break;
+                }
+            }
+
+            index++;
+        }
+
+        if (index == length) {
+            index = -1;
+        }
+
+        return index;
     }
 
     @Override
@@ -260,4 +283,5 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     public ListenerList<ListListener<TreeNode>> getListListeners() {
         return listListeners;
     }
+
 }
