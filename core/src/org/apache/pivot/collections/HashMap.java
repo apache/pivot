@@ -104,8 +104,6 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     private int count = 0;
     private ArrayList<K> keys = null;
 
-    private boolean rehash = false;
-
     private transient MapListenerList<K, V> mapListeners = null;
 
     public static final int DEFAULT_CAPACITY = 16;
@@ -186,6 +184,10 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
      */
     @Override
     public V put(K key, V value) {
+        return put(key, value, true);
+    }
+
+    private V put(K key, V value, boolean fireMapListeners) {
         if (key == null) {
             throw new IllegalArgumentException("key cannot be null.");
         }
@@ -206,7 +208,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 iterator.update(new Pair<K, V>(key, value));
 
                 if (mapListeners != null
-                    && !rehash) {
+                    && fireMapListeners) {
                     mapListeners.valueUpdated(this, key, previousValue);
                 }
 
@@ -233,7 +235,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             }
 
             if (mapListeners != null
-                && !rehash) {
+                && fireMapListeners) {
                 mapListeners.valueAdded(this, key);
             }
         }
@@ -367,17 +369,13 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 keys.clear();
             }
 
-            rehash = true;
-
             for (LinkedList<Pair<K, V>> bucket : previousBuckets) {
                 if (bucket != null) {
                     for (Pair<K, V> entry : bucket) {
-                        put(entry.key, entry.value);
+                        put(entry.key, entry.value, false);
                     }
                 }
             }
-
-            rehash = false;
         }
     }
 
