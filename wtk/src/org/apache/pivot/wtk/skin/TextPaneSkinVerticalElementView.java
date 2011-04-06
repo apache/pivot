@@ -26,11 +26,9 @@ import org.apache.pivot.wtk.text.Node;
  * Some of the classes in the text hierarchy are very similar in layout ie. they lay their children out vertically. This class groups that functionality.
  */
 abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
-    protected final TextPaneSkin textPaneSkin;
 
     public TextPaneSkinVerticalElementView(TextPaneSkin textPaneSkin, Element element) {
-        super(element);
-        this.textPaneSkin = textPaneSkin;
+        super(textPaneSkin, element);
     }
 
     @Override
@@ -77,6 +75,7 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
 
     @Override
     protected void setSkinLocation(int skinX, int skinY) {
+        super.setSkinLocation(skinX, skinY);
         for (TextPaneSkinNodeView nodeView : this) {
             nodeView.setSkinLocation(skinX, skinY + nodeView.getY());
         }

@@ -31,8 +31,6 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
     private static final int PARAGRAPH_TERMINATOR_WIDTH = 4;
 
-    private final TextPaneSkin textPaneSkin;
-
     private static class Row {
         public int x = 0;
         public int y = 0;
@@ -45,8 +43,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     private Bounds terminatorBounds = new Bounds(0, 0, 0, 0);
 
     public TextPaneSkinParagraphView(TextPaneSkin textPaneSkin, Paragraph paragraph) {
-        super(paragraph);
-        this.textPaneSkin = textPaneSkin;
+        super(textPaneSkin, paragraph);
     }
 
     @Override
@@ -179,6 +176,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
     @Override
     protected void setSkinLocation(int skinX, int skinY) {
+        super.setSkinLocation(skinX, skinY);
         for (int i = 0, n = rows.getLength(); i < n; i++) {
             Row row = rows.get(i);
             for (TextPaneSkinNodeView nodeView : row.nodeViews) {

@@ -27,11 +27,8 @@ import org.apache.pivot.wtk.text.TextNode;
  */
 class TextPaneSkinSpanView extends TextPaneSkinElementView {
 
-    private final TextPaneSkin textPaneSkin;
-
     public TextPaneSkinSpanView(TextPaneSkin textPaneSkin, org.apache.pivot.wtk.text.Span span) {
-        super(span);
-        this.textPaneSkin = textPaneSkin;
+        super(textPaneSkin, span);
     }
 
     @Override
@@ -129,6 +126,7 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
 
     @Override
     protected void setSkinLocation(int skinX, int skinY) {
+        super.setSkinLocation(skinX, skinY);
         for (TextPaneSkinNodeView nodeView : this) {
             nodeView.setSkinLocation(skinX, skinY + nodeView.getY());
         }

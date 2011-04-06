@@ -1166,4 +1166,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             scheduledBlinkCaretCallback = null;
         }
     }
+
+    Area getSelection() {
+        return selection;
+    }
 }

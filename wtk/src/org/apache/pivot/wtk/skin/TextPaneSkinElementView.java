@@ -20,6 +20,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
@@ -36,9 +38,13 @@ import org.apache.pivot.wtk.text.Node;
 abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
     implements Sequence<TextPaneSkinNodeView>, Iterable<TextPaneSkinNodeView>, ElementListener {
     private ArrayList<TextPaneSkinNodeView> nodeViews = new ArrayList<TextPaneSkinNodeView>();
+    protected final TextPaneSkin textPaneSkin;
+    private int skinX = 0;
+    private int skinY = 0;
 
-    public TextPaneSkinElementView(Element element) {
+    public TextPaneSkinElementView(TextPaneSkin textPaneSkin, Element element) {
         super(element);
+        this.textPaneSkin = textPaneSkin;
     }
 
     @Override
@@ -126,6 +132,12 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
     }
 
     @Override
+    protected void setSkinLocation(int skinX, int skinY) {
+        this.skinX = skinX;
+        this.skinY = skinY;
+    }
+
+    @Override
     public void paint(Graphics2D graphics) {
         // Determine the paint bounds
         Bounds paintBounds = new Bounds(0, 0, getWidth(), getHeight());
@@ -142,13 +154,23 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
                 // Create a copy of the current graphics context and
                 // translate to the node view's coordinate system
                 Graphics2D nodeViewGraphics = (Graphics2D)graphics.create();
-                nodeViewGraphics.translate(nodeViewBounds.x, nodeViewBounds.y);
 
                 Color styledBackgroundColor = getStyledBackgroundColor();
                 if (styledBackgroundColor != null) {
-                    nodeViewGraphics.setColor(styledBackgroundColor);
-                    nodeViewGraphics.fillRect(0, 0, nodeViewBounds.width, nodeViewBounds.height);
+                    // don't paint over the selection background
+                    Area selection = textPaneSkin.getSelection();
+                    if (selection != null) {
+                        Area fillArea = new Area(new Rectangle(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height));
+                        selection = selection.createTransformedArea(AffineTransform.getTranslateInstance(-skinX, -skinY));
+                        fillArea.subtract(selection);
+                        nodeViewGraphics.setColor(styledBackgroundColor);
+                        nodeViewGraphics.fill(fillArea);
+                    } else {
+                        nodeViewGraphics.setColor(styledBackgroundColor);
+                        nodeViewGraphics.fillRect(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height);
+                    }
                 }
+                nodeViewGraphics.translate(nodeViewBounds.x, nodeViewBounds.y);
 
                 // NOTE We don't clip here because views should generally
                 // not overlap and clipping would impose an unnecessary

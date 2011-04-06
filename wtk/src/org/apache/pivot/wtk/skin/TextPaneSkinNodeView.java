@@ -16,12 +16,13 @@
  */
 package org.apache.pivot.wtk.skin;
 
+import java.awt.Graphics2D;
+
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.TextPane;
-import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.NodeListener;
@@ -29,7 +30,7 @@ import org.apache.pivot.wtk.text.NodeListener;
 /**
  * Abstract base class for node views.
  */
-abstract class TextPaneSkinNodeView implements Visual, NodeListener {
+abstract class TextPaneSkinNodeView implements NodeListener {
     private Node node = null;
     private TextPaneSkinElementView parent = null;
 
@@ -66,20 +67,15 @@ abstract class TextPaneSkinNodeView implements Visual, NodeListener {
         node.getNodeListeners().remove(this);
     }
 
-    @Override
     public int getWidth() {
         return width;
     }
 
-    @Override
     public int getHeight() {
         return height;
     }
 
-    @Override
-    public int getBaseline() {
-        return -1;
-    }
+    public abstract void paint(Graphics2D g);
 
     public Dimensions getSize() {
         return new Dimensions(width, height);
@@ -123,6 +119,7 @@ abstract class TextPaneSkinNodeView implements Visual, NodeListener {
     }
 
     /**
+     * Set location of the NodeView relative to the skin component.
      * This is needed by the ComponentViewNode to correctly position child Component's.
      *
      * @param skinX the X coordinate in the skin's frame of reference
