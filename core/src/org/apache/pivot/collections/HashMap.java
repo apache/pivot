@@ -187,7 +187,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         return put(key, value, true);
     }
 
-    private V put(K key, V value, boolean fireMapListeners) {
+    private V put(K key, V value, boolean notifyListeners) {
         if (key == null) {
             throw new IllegalArgumentException("key cannot be null.");
         }
@@ -208,7 +208,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 iterator.update(new Pair<K, V>(key, value));
 
                 if (mapListeners != null
-                    && fireMapListeners) {
+                    && notifyListeners) {
                     mapListeners.valueUpdated(this, key, previousValue);
                 }
 
@@ -235,7 +235,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             }
 
             if (mapListeners != null
-                && fireMapListeners) {
+                && notifyListeners) {
                 mapListeners.valueAdded(this, key);
             }
         }
