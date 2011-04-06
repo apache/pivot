@@ -131,7 +131,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
         Bounds paintBounds = new Bounds(0, 0, getWidth(), getHeight());
         Rectangle clipBounds = graphics.getClipBounds();
         if (clipBounds != null) {
-            paintBounds = paintBounds.intersect(new Bounds(clipBounds));
+            paintBounds = paintBounds.intersect(clipBounds);
         }
 
         for (TextPaneSkinNodeView nodeView : nodeViews) {

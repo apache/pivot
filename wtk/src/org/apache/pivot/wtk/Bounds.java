@@ -147,6 +147,10 @@ public final class Bounds implements Serializable {
         return intersect(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
+    public Bounds intersect(java.awt.Rectangle rect) {
+        return intersect(rect.x, rect.y, rect.width, rect.height);
+    }
+
     public Bounds translate(int dx, int dy) {
         return new Bounds(x + dx, y + dy, width, height);
     }
