@@ -115,10 +115,10 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             // Add the row views to this view, lay out, and calculate height
             int x = 0;
             int width = 0;
-            int height = 0;
+            int rowY = 0;
             for (int i = 0, n = rows.getLength(); i < n; i++) {
                 row = rows.get(i);
-                row.y = height;
+                row.y = rowY;
 
                 width = Math.max(width, row.width);
 
@@ -135,17 +135,28 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                     // right alignment
                     x = width - row.width;
                 }
+                int rowBaseline = -1;
                 for (TextPaneSkinNodeView nodeView : row.nodeViews) {
-                    // TODO Align to baseline
-                    int y = row.height - nodeView.getHeight();
+                    rowBaseline = Math.max(rowBaseline, nodeView.getBaseline());
+                }
+                for (TextPaneSkinNodeView nodeView : row.nodeViews) {
+                    int nodeViewBaseline = nodeView.getBaseline();
+                    int y;
+                    if (rowBaseline == -1 || nodeViewBaseline == -1) {
+                        // Align to bottom
+                        y = row.height - nodeView.getHeight();
+                    } else {
+                        // Align to baseline
+                        y = rowBaseline - nodeViewBaseline;
+                    }
 
-                    nodeView.setLocation(x, y + height);
+                    nodeView.setLocation(x, y + rowY);
                     x += nodeView.getWidth();
 
                     add(nodeView);
                 }
 
-                height += row.height;
+                rowY += row.height;
             }
 
             // Recalculate terminator bounds
@@ -158,7 +169,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                 // The terminator is the only character in this paragraph
                 terminatorY = 0;
             } else {
-                terminatorY = height - terminatorHeight;
+                terminatorY = rowY - terminatorHeight;
             }
 
             terminatorBounds = new Bounds(x, terminatorY,
@@ -166,7 +177,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
             // Ensure that the paragraph is visible even when empty
             width += terminatorBounds.width;
-            height = Math.max(height, terminatorBounds.height);
+            int height = Math.max(rowY, terminatorBounds.height);
 
             setSize(width, height);
         }

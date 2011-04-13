@@ -132,6 +132,16 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
     }
 
     @Override
+    public int getBaseline() {
+        int baseline = -1;
+        for (TextPaneSkinNodeView nodeView : nodeViews) {
+            baseline = Math.max(baseline, nodeView.getBaseline());
+
+        }
+        return baseline;
+    }
+
+    @Override
     protected void setSkinLocation(int skinX, int skinY) {
         this.skinX = skinX;
         this.skinY = skinY;

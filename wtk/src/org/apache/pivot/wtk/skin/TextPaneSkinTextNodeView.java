@@ -151,6 +151,14 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
+    public int getBaseline() {
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        LineMetrics lm = getEffectiveFont().getLineMetrics("", fontRenderContext);
+        float ascent = lm.getAscent();
+        return (int) ascent;
+    }
+
+    @Override
     protected void setSkinLocation(int skinX, int skinY) {
     }
 

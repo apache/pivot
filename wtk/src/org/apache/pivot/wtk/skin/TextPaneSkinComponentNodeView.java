@@ -78,6 +78,18 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
     }
 
     @Override
+    public int getBaseline() {
+        ComponentNode componentNode = (ComponentNode) getNode();
+        Component component = componentNode.getComponent();
+
+        int baseline = -1;
+        if (component != null) {
+            baseline = component.getBaseline();
+        }
+        return baseline;
+    }
+
+    @Override
     protected void setSkinLocation(int skinX, int skinY) {
         ComponentNode componentNode = (ComponentNode) getNode();
         Component component = componentNode.getComponent();

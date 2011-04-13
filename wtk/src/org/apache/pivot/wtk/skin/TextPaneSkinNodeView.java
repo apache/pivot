@@ -75,6 +75,8 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         return height;
     }
 
+    public abstract int getBaseline();
+
     public abstract void paint(Graphics2D g);
 
     public Dimensions getSize() {

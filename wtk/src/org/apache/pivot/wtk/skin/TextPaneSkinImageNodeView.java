@@ -72,6 +72,20 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
     }
 
     @Override
+    public int getBaseline() {
+        ImageNode imageNode = (ImageNode)getNode();
+        Image image = imageNode.getImage();
+
+        int baseline = -1;
+
+        if (image != null) {
+            baseline = image.getBaseline();
+        }
+
+        return baseline;
+    }
+
+    @Override
     public void paint(Graphics2D graphics) {
         ImageNode imageNode = (ImageNode)getNode();
         Image image = imageNode.getImage();
