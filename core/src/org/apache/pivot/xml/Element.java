@@ -958,40 +958,6 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
     }
 
     @Override
-    public boolean equals(Object o) {
-        boolean equals = false;
-
-        if (this == o) {
-            equals = true;
-        } else if (o instanceof Element) {
-            Element element = (Element)o;
-            if (namespacePrefix == null) {
-                equals = (element.namespacePrefix == null);
-            } else {
-                equals = (namespacePrefix.equals(element.namespacePrefix));
-            }
-
-            equals &= (attributes.equals(element.attributes)
-                && nodes.equals(element.nodes));
-        }
-
-        return equals;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        if (namespacePrefix != null) {
-            result = 31 * result + namespacePrefix.hashCode();
-        }
-        result = prime * result + localName.hashCode();
-        result = prime * result + attributes.hashCode();
-        result = prime * result + nodes.hashCode();
-        return result;
-    }
-
-    @Override
     public String toString() {
         String string = "<";
         if (namespacePrefix != null) {
