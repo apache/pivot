@@ -150,7 +150,9 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
             }
 
             if (parentData.getComparator() == null) {
-                parentData.update(path.get(n - 1), treeNode);
+                int index = path.get(n - 1);
+                parentData.remove(index, 1);
+                parentData.insert(treeNode, index);
             } else {
                 parentData.remove(path.get(n - 1), 1);
                 parentData.add(treeNode);
