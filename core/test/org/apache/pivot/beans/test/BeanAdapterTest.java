@@ -56,7 +56,7 @@ public class BeanAdapterTest {
     }
 
     @Test
-    public void testSerializeBigDecimal() 
+    public void testSerializeBigDecimal()
     {
         double random_double = rnd.nextDouble();
         System.out.println("random_double = " + random_double);
@@ -65,11 +65,11 @@ public class BeanAdapterTest {
         src_test.setBd1(new BigDecimal(random_double, new MathContext(4)));
 
         Object object = src_test;
-        JSONSerializer serializer1 = new JSONSerializer(BeanAdapterTestObject.class);
+        JSONSerializer jsonSerializer = new JSONSerializer(BeanAdapterTestObject.class);
         StringWriter writer = new StringWriter();
 
         try {
-            serializer1.writeObject(object, writer);
+            jsonSerializer.writeObject(object, writer);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -83,7 +83,7 @@ public class BeanAdapterTest {
         BeanAdapterTestObject target_test;
 
         try {
-            target_test = (BeanAdapterTestObject) serializer1.readObject(reader);
+            target_test = (BeanAdapterTestObject) jsonSerializer.readObject(reader);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
