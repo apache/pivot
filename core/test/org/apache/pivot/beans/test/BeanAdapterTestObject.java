@@ -17,17 +17,36 @@
 package org.apache.pivot.beans.test;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class BeanAdapterTestObject {
 
-    private BigDecimal bd1;
+    private BigDecimal bd;
+    private BigInteger bi;
+    private String string;
 
-    public BigDecimal getBd1() {
-        return bd1;
+    public BigDecimal getBd() {
+        return bd;
     }
 
-    public void setBd1(BigDecimal bd1) {
-        this.bd1 = bd1;
+    protected BigInteger getBi() {
+        return bi;
+    }
+
+    protected void setBi(BigInteger bi) {
+        this.bi = bi;
+    }
+
+    protected void setBd(BigDecimal bd) {
+        this.bd = bd;
+    }
+
+    protected String getString() {
+        return string;
+    }
+
+    protected void setString(String string) {
+        this.string = string;
     }
 
 }
