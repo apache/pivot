@@ -19,8 +19,8 @@ package org.apache.pivot.wtk.skin;
 import java.util.Locale;
 
 import org.apache.pivot.wtk.text.NumberedList;
-import org.apache.pivot.wtk.text.NumberedListListener;
 import org.apache.pivot.wtk.text.NumberedList.Style;
+import org.apache.pivot.wtk.text.NumberedListListener;
 
 class TextPaneSkinNumberedListView extends TextPaneSkinListView implements NumberedListListener {
 
@@ -89,7 +89,7 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
     }
 
     @Override
-    public void validate() {
+    public void validate(int breakWidth) {
         if (!isValid()) {
 
             NumberedList numberedList = (NumberedList)getNode();
@@ -126,7 +126,7 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
                     listItemView.getIndexTextWidth());
             }
 
-            super.validate();
+            super.validate(breakWidth);
         }
     }
 

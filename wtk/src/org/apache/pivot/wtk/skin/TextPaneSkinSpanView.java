@@ -32,7 +32,7 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     }
 
     @Override
-    public void validate() {
+    public void validate(int breakWidth) {
 
         if (!isValid()) {
             // I have to re-create my children here instead of in attach(),
@@ -57,17 +57,14 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
                 // create and attach child node views
                 add(new TextPaneSkinTextNodeView(textPaneSkin, (TextNode)span.get(0), 0));
 
-                int breakWidth = getBreakWidth();
-
                 TextPaneSkinNodeView nodeView = get(0);
-                nodeView.setBreakWidth(breakWidth);
-                nodeView.validate();
+                nodeView.validate(breakWidth);
 
                 setSize(nodeView.getWidth(), nodeView.getHeight());
             }
         }
 
-        super.validate();
+        super.validateComplete();
     }
 
     @Override

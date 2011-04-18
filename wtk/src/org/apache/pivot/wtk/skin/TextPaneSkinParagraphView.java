@@ -53,13 +53,12 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     }
 
     @Override
-    public void validate() {
+    public void validate(int breakWidth) {
         if (!isValid()) {
             // Remove and re-create the child views, because of line-breaking, a single TextNode
             // may be added as many TextPaneSkinTextNodeView's.
 
             // Break the views into multiple rows
-            int breakWidth = getBreakWidth();
 
             Paragraph paragraph = (Paragraph)getNode();
             rows = new ArrayList<Row>();
@@ -68,9 +67,8 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             for (Node node : paragraph) {
                 TextPaneSkinNodeView nodeView = textPaneSkin.createNodeView(node);
 
-                nodeView.setBreakWidth(Math.max(breakWidth - (row.width
-                    + PARAGRAPH_TERMINATOR_WIDTH), 0));
-                nodeView.validate();
+                nodeView.validate(Math.max(breakWidth - (row.width
+                        + PARAGRAPH_TERMINATOR_WIDTH), 0));
 
                 int nodeViewWidth = nodeView.getWidth();
 
@@ -94,8 +92,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                     rows.add(row);
                     row = new Row();
 
-                    nodeView.setBreakWidth(breakWidth);
-                    nodeView.validate();
+                    nodeView.validate(breakWidth);
 
                     row.nodeViews.add(nodeView);
                     row.width = nodeView.getWidth();
@@ -182,7 +179,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             setSize(width, height);
         }
 
-        super.validate();
+        super.validateComplete();
     }
 
     @Override

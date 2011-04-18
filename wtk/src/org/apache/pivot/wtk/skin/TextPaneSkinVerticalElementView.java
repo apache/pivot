@@ -42,7 +42,7 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
         }
     }
 
-    protected void verticalValidate() {
+    protected void verticalValidate(int breakWidth) {
         // TODO At some point, we may want to optimize this method by deferring layout of
         // non-visible views. If so, we should not recycle views but rather recreate them
         // (as is done in ParagraphView). This way, we avoid thread contention over the
@@ -55,14 +55,11 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
         // they are added to the document view, we need to make sure they are disposed (i.e.
         // detached).
 
-        int breakWidth = getBreakWidth();
-
         int width = 0;
         int height = 0;
 
         for (TextPaneSkinNodeView nodeView : this) {
-            nodeView.setBreakWidth(breakWidth);
-            nodeView.validate();
+            nodeView.validate(breakWidth);
 
             nodeView.setLocation(0, height);
 

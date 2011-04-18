@@ -187,8 +187,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         if (documentView == null) {
            preferredWidth = 0;
         } else {
-            documentView.setBreakWidth(Integer.MAX_VALUE);
-            documentView.validate();
+            documentView.validate(Integer.MAX_VALUE);
 
             preferredWidth = documentView.getWidth() + margin.left + margin.right;
         }
@@ -211,8 +210,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 breakWidth = Integer.MAX_VALUE;
             }
 
-            documentView.setBreakWidth(breakWidth);
-            documentView.validate();
+            documentView.validate(breakWidth);
 
             preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
         }
@@ -229,8 +227,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
            preferredWidth = 0;
            preferredHeight = 0;
         } else {
-            documentView.setBreakWidth(Integer.MAX_VALUE);
-            documentView.validate();
+            documentView.validate(Integer.MAX_VALUE);
 
             preferredWidth = documentView.getWidth() + margin.left + margin.right;
             preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
@@ -259,8 +256,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             } else {
                 breakWidth = Integer.MAX_VALUE;
             }
-            documentView.setBreakWidth(breakWidth);
-            documentView.validate();
+            documentView.validate(breakWidth);
             documentView.setSkinLocation(margin.left, margin.top);
 
             updateSelection();
