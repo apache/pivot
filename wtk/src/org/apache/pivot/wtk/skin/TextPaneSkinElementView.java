@@ -54,9 +54,10 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
         Element element = (Element)getNode();
         element.getElementListeners().add(this);
 
-        // NOTE We don't attach child views here because this may not
-        // be efficient for all subclasses (e.g. paragraph views need to
-        // recreate child views when breaking across multiple lines)
+        // Attach child node views
+        for (Node node : element) {
+            add(textPaneSkin.createNodeView(node));
+        }
     }
 
     @Override
@@ -157,41 +158,45 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
         }
 
         for (TextPaneSkinNodeView nodeView : nodeViews) {
-            Bounds nodeViewBounds = nodeView.getBounds();
+            paintChild(graphics, paintBounds, nodeView);
+        }
+    }
 
-            // Only paint node views that intersect the current clip rectangle
-            if (nodeViewBounds.intersects(paintBounds)) {
-                // Create a copy of the current graphics context and
-                // translate to the node view's coordinate system
-                Graphics2D nodeViewGraphics = (Graphics2D)graphics.create();
+    protected final void paintChild(Graphics2D graphics, Bounds paintBounds, TextPaneSkinNodeView nodeView) {
+        Bounds nodeViewBounds = nodeView.getBounds();
 
-                Color styledBackgroundColor = getStyledBackgroundColor();
-                if (styledBackgroundColor != null) {
-                    // don't paint over the selection background
-                    Area selection = textPaneSkin.getSelection();
-                    if (selection != null) {
-                        Area fillArea = new Area(new Rectangle(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height));
-                        selection = selection.createTransformedArea(AffineTransform.getTranslateInstance(-skinX, -skinY));
-                        fillArea.subtract(selection);
-                        nodeViewGraphics.setColor(styledBackgroundColor);
-                        nodeViewGraphics.fill(fillArea);
-                    } else {
-                        nodeViewGraphics.setColor(styledBackgroundColor);
-                        nodeViewGraphics.fillRect(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height);
-                    }
+        // Only paint node views that intersect the current clip rectangle
+        if (nodeViewBounds.intersects(paintBounds)) {
+            // Create a copy of the current graphics context and
+            // translate to the node view's coordinate system
+            Graphics2D nodeViewGraphics = (Graphics2D)graphics.create();
+
+            Color styledBackgroundColor = getStyledBackgroundColor();
+            if (styledBackgroundColor != null) {
+                // don't paint over the selection background
+                Area selection = textPaneSkin.getSelection();
+                if (selection != null) {
+                    Area fillArea = new Area(new Rectangle(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height));
+                    selection = selection.createTransformedArea(AffineTransform.getTranslateInstance(-skinX, -skinY));
+                    fillArea.subtract(selection);
+                    nodeViewGraphics.setColor(styledBackgroundColor);
+                    nodeViewGraphics.fill(fillArea);
+                } else {
+                    nodeViewGraphics.setColor(styledBackgroundColor);
+                    nodeViewGraphics.fillRect(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height);
                 }
-                nodeViewGraphics.translate(nodeViewBounds.x, nodeViewBounds.y);
-
-                // NOTE We don't clip here because views should generally
-                // not overlap and clipping would impose an unnecessary
-                // performance penalty
-
-                // Paint the node view
-                nodeView.paint(nodeViewGraphics);
-
-                // Dispose of the node views's graphics
-                nodeViewGraphics.dispose();
             }
+            nodeViewGraphics.translate(nodeViewBounds.x, nodeViewBounds.y);
+
+            // NOTE We don't clip here because views should generally
+            // not overlap and clipping would impose an unnecessary
+            // performance penalty
+
+            // Paint the node view
+            nodeView.paint(nodeViewGraphics);
+
+            // Dispose of the node views's graphics
+            nodeViewGraphics.dispose();
         }
     }
 

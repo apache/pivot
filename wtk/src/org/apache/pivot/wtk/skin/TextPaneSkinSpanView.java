@@ -20,7 +20,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
-import org.apache.pivot.wtk.text.TextNode;
 
 /**
  * Span node view.
@@ -32,31 +31,26 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     }
 
     @Override
+    protected void attach() {
+        super.attach();
+
+        org.apache.pivot.wtk.text.Span span = (org.apache.pivot.wtk.text.Span)getNode();
+
+        // for now, assume that span contains at most one child, and
+        // that child is a TextNode
+        if (span.getLength() > 1) {
+            throw new IllegalStateException();
+        }
+    }
+
+    @Override
     public void validate(int breakWidth) {
 
         if (!isValid()) {
-            // I have to re-create my children here instead of in attach(),
-            // because that is how ParagraphView works,
-            // and ParagraphView is always my parent node.
 
-            // Clear all existing views
-            remove(0, getLength());
-
-            org.apache.pivot.wtk.text.Span span = (org.apache.pivot.wtk.text.Span)getNode();
-
-            // for now, assume that span contains at most one child, and
-            // that child is a TextNode
-            if (span.getLength() > 1) {
-                throw new IllegalStateException();
-            }
-
-            if (span.getLength() == 0) {
+            if (getLength() == 0) {
                 setSize(0, 0);
             } else {
-
-                // create and attach child node views
-                add(new TextPaneSkinTextNodeView(textPaneSkin, (TextNode)span.get(0), 0));
-
                 TextPaneSkinNodeView nodeView = get(0);
                 nodeView.validate(breakWidth);
 

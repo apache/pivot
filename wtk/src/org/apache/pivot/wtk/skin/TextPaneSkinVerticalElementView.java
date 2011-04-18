@@ -34,12 +34,6 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
     @Override
     protected void attach() {
         super.attach();
-
-        // Attach child node views
-        Element element = (Element)getNode();
-        for (Node node : element) {
-            add(textPaneSkin.createNodeView(node));
-        }
     }
 
     protected void verticalValidate(int breakWidth) {
