@@ -137,6 +137,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             if (end < ci.getEndIndex()) {
                 length = end - start;
                 next = new TextPaneSkinTextNodeView(textPaneSkin, textNode, end);
+                next.setParent(getParent());
             } else {
                 length = ci.getEndIndex() - start;
             }
