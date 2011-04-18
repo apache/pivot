@@ -123,8 +123,6 @@ limitations under the License.
 
         <application-desc main-class="org.apache.pivot.wtk.DesktopApplicationContext">
             <argument><xsl:value-of select="@class"/></argument>
-            <argument>--width=<xsl:value-of select="@width"/></argument>
-            <argument>--height=<xsl:value-of select="@height"/></argument>
             <argument>--center=true</argument>
             <xsl:for-each select="startup-properties/*">
             <argument>--<xsl:value-of select="name(.)"/>=<xsl:apply-templates/></argument>
