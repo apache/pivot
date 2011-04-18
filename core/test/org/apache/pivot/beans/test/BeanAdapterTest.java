@@ -101,7 +101,7 @@ public class BeanAdapterTest {
         }
 
         System.out.println("target_test.getBd() = " + target_test.getBd());
-        assertEquals(src_test.getBd(), target_test.getBd());
+        assertEquals(src_test.getBd().doubleValue(), target_test.getBd().doubleValue(), 0.0001);
     }
 
     @Test
@@ -170,7 +170,7 @@ public class BeanAdapterTest {
             return;
         }
 
-        System.out.println("target_test.getString() = " + target_test.getString());
+        System.out.println("target_test.getString() = \"" + target_test.getString() + "\"");
         assertEquals(src_test.getString(), target_test.getString());
     }
 

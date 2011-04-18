@@ -29,23 +29,23 @@ public class BeanAdapterTestObject {
         return bd;
     }
 
-    protected BigInteger getBi() {
+    public BigInteger getBi() {
         return bi;
     }
 
-    protected void setBi(BigInteger bi) {
+    public void setBi(BigInteger bi) {
         this.bi = bi;
     }
 
-    protected void setBd(BigDecimal bd) {
+    public void setBd(BigDecimal bd) {
         this.bd = bd;
     }
 
-    protected String getString() {
+    public String getString() {
         return string;
     }
 
-    protected void setString(String string) {
+    public void setString(String string) {
         this.string = string;
     }
 
