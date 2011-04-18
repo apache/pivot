@@ -113,10 +113,10 @@ limitations under the License.
 
             <xsl:choose>
                 <xsl:when test='$signed'>
-                    libraries.push("lib/svgSalamander-tiny.signed.jar");
+					<jar href="lib/svgSalamander-tiny.signed.jar"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    libraries.push("lib/svgSalamander-tiny.jar");
+					<jar href="lib/svgSalamander-tiny.jar"/>
                 </xsl:otherwise>
             </xsl:choose>
         </resources>
