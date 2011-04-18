@@ -21,6 +21,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -862,7 +864,9 @@ public class BeanAdapter implements Map<String, Object> {
                 }
             } else {
                 // Coerce the value to the requested type
-                if (type == Boolean.class
+                if (type == String.class) {
+                    coercedValue = value.toString();
+                } else if (type == Boolean.class
                     || type == Boolean.TYPE) {
                     coercedValue = Boolean.parseBoolean(value.toString());
                 } else if (type == Character.class
@@ -910,8 +914,18 @@ public class BeanAdapter implements Map<String, Object> {
                     } else {
                         coercedValue = Double.parseDouble(value.toString());
                     }
-                } else if (type == String.class) {
-                    coercedValue = value.toString();
+                } else if (type == BigInteger.class) {
+                    if (value instanceof Number) {
+                        coercedValue = new BigInteger(((Number)value).toString());
+                    } else {
+                        coercedValue = new BigInteger(value.toString());
+                    }
+                } else if (type == BigDecimal.class) {
+                    if (value instanceof Number) {
+                        coercedValue = new BigDecimal(((Number)value).toString());
+                    } else {
+                        coercedValue = new BigDecimal(value.toString());
+                    }
                 } else {
                     throw new IllegalArgumentException("Unable to coerce " + value.getClass().getName()
                         + " to " + type + ".");

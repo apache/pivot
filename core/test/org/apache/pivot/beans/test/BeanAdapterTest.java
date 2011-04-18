@@ -24,6 +24,7 @@ import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.util.Date;
 import java.util.Random;
 
 import org.apache.pivot.json.JSONSerializer;
@@ -45,12 +46,14 @@ public class BeanAdapterTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        System.out.println(BeanAdapterTest.class.getName() + ": Starting tests at " + new Date());
         rnd = new Random();
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
         rnd = null;
+        System.out.println(BeanAdapterTest.class.getName() + ": Ending tests at   " + new Date());
     }
 
     @Before
@@ -75,7 +78,7 @@ public class BeanAdapterTest {
         System.out.println("testSerializeBigDecimal");
 
         double random_double = rnd.nextDouble();
-        System.out.println("random_double = " + random_double);
+        System.out.println("random_double = " + random_double + " (value will be truncated to 4 digits in this test)");
 
         src_test.setBd(new BigDecimal(random_double, new MathContext(4)));
 
@@ -88,7 +91,7 @@ public class BeanAdapterTest {
         }
 
         System.out.println("json string from src_test = " + writer.toString());
-        System.out.println("src_test.getBd() = " + src_test.getBd());
+        System.out.println("src_test.getBd()    = " + src_test.getBd());
 
         reader = new StringReader(writer.toString());
 
@@ -123,7 +126,7 @@ public class BeanAdapterTest {
         }
 
         System.out.println("json string from src_test = " + writer.toString());
-        System.out.println("src_test.getBi() = " + src_test.getBi());
+        System.out.println("src_test.getBi()    = " + src_test.getBi());
 
         reader = new StringReader(writer.toString());
 
@@ -145,7 +148,7 @@ public class BeanAdapterTest {
         System.out.println("testSerializeString");
 
         String value = "A test String";
-        System.out.println("value = \"" + value + "\"");
+        System.out.println("String value = \"" + value + "\"");
 
         src_test.setString(value);
 
@@ -158,7 +161,7 @@ public class BeanAdapterTest {
         }
 
         System.out.println("json string from src_test = " + writer.toString());
-        System.out.println("src_test.getString() = \"" + src_test.getString() + "\"");
+        System.out.println("src_test.getString()    = \"" + src_test.getString() + "\"");
 
         reader = new StringReader(writer.toString());
 
