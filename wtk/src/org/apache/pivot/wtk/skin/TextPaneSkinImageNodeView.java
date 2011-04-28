@@ -52,7 +52,7 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
     }
 
     @Override
-    public void validate(int breakWidth) {
+    public void validate() {
         if (!isValid()) {
             ImageNode imageNode = (ImageNode)getNode();
             Image image = imageNode.getImage();

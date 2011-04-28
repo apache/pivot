@@ -43,15 +43,18 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
 
     public void setIndexText(String indexText) {
         indexTextNode.setText(indexText);
-        indexTextNodeView.validate(Integer.MAX_VALUE);
+        indexTextNodeView.setBreakWidth(Integer.MAX_VALUE);
+        indexTextNodeView.validate();
         indexTextNodeView.setLocation(0, 0);
     }
 
     @Override
-    public void validate(int breakWidth) {
+    public void validate() {
         if (!isValid()) {
+            int breakWidth = getBreakWidth();
 
-            indexTextNodeView.validate(breakWidth);
+            indexTextNodeView.setBreakWidth(breakWidth);
+            indexTextNodeView.validate();
             indexTextNodeView.setLocation(0, 0);
 
             breakWidth -= indexTextNodeView.getWidth();
@@ -64,7 +67,8 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
 
             for ( ; iterator.hasNext(); ) {
                 TextPaneSkinNodeView nodeView = iterator.next();
-                nodeView.validate(breakWidth);
+                nodeView.setBreakWidth(breakWidth);
+                nodeView.validate();
 
                 nodeView.setLocation(indexTextNodeView.getWidth(), itemsY);
 

@@ -187,7 +187,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         if (documentView == null) {
            preferredWidth = 0;
         } else {
-            documentView.validate(Integer.MAX_VALUE);
+            documentView.setBreakWidth(Integer.MAX_VALUE);
+            documentView.validate();
 
             preferredWidth = documentView.getWidth() + margin.left + margin.right;
         }
@@ -210,7 +211,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 breakWidth = Integer.MAX_VALUE;
             }
 
-            documentView.validate(breakWidth);
+            documentView.setBreakWidth(breakWidth);
+            documentView.validate();
 
             preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
         }
@@ -227,7 +229,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
            preferredWidth = 0;
            preferredHeight = 0;
         } else {
-            documentView.validate(Integer.MAX_VALUE);
+            documentView.setBreakWidth(Integer.MAX_VALUE);
+            documentView.validate();
 
             preferredWidth = documentView.getWidth() + margin.left + margin.right;
             preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
@@ -256,7 +259,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             } else {
                 breakWidth = Integer.MAX_VALUE;
             }
-            documentView.validate(breakWidth);
+            documentView.setBreakWidth(breakWidth);
+            documentView.validate();
             documentView.setSkinLocation(margin.left, margin.top);
 
             updateSelection();
@@ -285,6 +289,16 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     selectionBackgroundColor : inactiveSelectionBackgroundColor);
                 graphics.fill(selection);
             }
+
+            int width = getWidth();
+            int breakWidth;
+            if (wrapText) {
+                breakWidth = Math.max(width - (margin.left + margin.right), 0);
+            } else {
+                breakWidth = Integer.MAX_VALUE;
+            }
+            documentView.setBreakWidth(breakWidth);
+            documentView.validate();
 
             // Draw the document content
             graphics.translate(margin.left, margin.top);

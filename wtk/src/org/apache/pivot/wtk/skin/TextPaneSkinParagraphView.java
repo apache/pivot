@@ -63,18 +63,20 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     }
 
     @Override
-    public void validate(int breakWidth) {
+    public void validate() {
         if (!isValid()) {
             // Break the views into multiple rows
 
             Paragraph paragraph = (Paragraph)getNode();
             rows = new ArrayList<Row>();
             int offset = 0;
+            int breakWidth = getBreakWidth();
 
             Row row = new Row();
             for (TextPaneSkinNodeView nodeView : this) {
-                nodeView.validate(Math.max(breakWidth - (row.width
+                nodeView.setBreakWidth(Math.max(breakWidth - (row.width
                         + PARAGRAPH_TERMINATOR_WIDTH), 0));
+                nodeView.validate();
 
                 int nodeViewWidth = nodeView.getWidth();
 
@@ -99,7 +101,8 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                     rows.add(row);
                     row = new Row();
 
-                    nodeView.validate(breakWidth);
+                    nodeView.setBreakWidth(breakWidth);
+                    nodeView.validate();
 
                     row.rowSegments.add(new RowSegment(nodeView, offset));
                     offset += nodeView.getCharacterCount();

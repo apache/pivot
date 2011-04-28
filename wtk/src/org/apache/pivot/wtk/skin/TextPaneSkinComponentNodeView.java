@@ -60,7 +60,7 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
     }
 
     @Override
-    public void validate(int breakWidth) {
+    public void validate() {
         if (!isValid()) {
             ComponentNode componentNode = (ComponentNode) getNode();
             Component component = componentNode.getComponent();

@@ -39,6 +39,8 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     private int x = 0;
     private int y = 0;
 
+    private int breakWidth = -1;
+
     private boolean valid = false;
 
     public TextPaneSkinNodeView(Node node) {
@@ -160,7 +162,25 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         valid = true;
     }
 
-    public abstract void validate(int breakWidth);
+    public abstract void validate();
+
+    public int getBreakWidth() {
+        return breakWidth;
+    }
+
+    public void setBreakWidth(int breakWidth) {
+        int previousBreakWidth = this.breakWidth;
+
+        if (previousBreakWidth != breakWidth) {
+            this.breakWidth = breakWidth;
+
+            // NOTE We can't call invalidate() here because it would ultimately
+            // trigger a call to invalidateComponent(), which we don't want; this method
+            // is called during preferred size calculations as well as layout, neither
+            // of which should ever trigger an invalidate.
+            valid = false;
+        }
+    }
 
     public int getOffset() {
         return node.getOffset();

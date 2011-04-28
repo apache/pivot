@@ -84,10 +84,11 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public void validate(int breakWidth) {
+    public void validate() {
         if (!isValid()) {
             TextNode textNode = (TextNode)getNode();
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            int breakWidth = getBreakWidth();
 
             CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(textNode.getCharacters(), start);
 

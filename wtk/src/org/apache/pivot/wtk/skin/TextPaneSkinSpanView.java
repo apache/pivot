@@ -44,7 +44,7 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     }
 
     @Override
-    public void validate(int breakWidth) {
+    public void validate() {
 
         if (!isValid()) {
 
@@ -52,7 +52,8 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
                 setSize(0, 0);
             } else {
                 TextPaneSkinNodeView nodeView = get(0);
-                nodeView.validate(breakWidth);
+                nodeView.setBreakWidth(getBreakWidth());
+                nodeView.validate();
 
                 setSize(nodeView.getWidth(), nodeView.getHeight());
             }

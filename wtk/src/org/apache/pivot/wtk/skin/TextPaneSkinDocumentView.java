@@ -41,9 +41,9 @@ class TextPaneSkinDocumentView extends TextPaneSkinVerticalElementView {
     }
 
     @Override
-    public void validate(int breakWidth) {
+    public void validate() {
         if (!isValid()) {
-            verticalValidate(breakWidth);
+            verticalValidate();
             super.validateComplete();
         }
     }

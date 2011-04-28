@@ -89,7 +89,7 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
     }
 
     @Override
-    public void validate(int breakWidth) {
+    public void validate() {
         if (!isValid()) {
 
             NumberedList numberedList = (NumberedList)getNode();
@@ -126,7 +126,7 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
                     listItemView.getIndexTextWidth());
             }
 
-            super.validate(breakWidth);
+            super.validate();
         }
     }
 
