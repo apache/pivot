@@ -22,6 +22,7 @@ import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuPopup;
@@ -29,7 +30,6 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Abstract base class for menu bar item skins.
@@ -41,7 +41,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     private ComponentKeyListener menuPopupComponentKeyListener = new ComponentKeyListener.Adapter() {
         /**
          * {@link KeyCode#LEFT LEFT} or {@link KeyCode#TAB TAB} +
-         * {@link Modifier#SHIFT SHIFT} Activate the menu to the left of the
+         * {@link Keyboard.Modifier#SHIFT SHIFT} Activate the menu to the left of the
          * current menu.<br>
          * {@link KeyCode#RIGHT RIGHT} or {@link KeyCode#TAB TAB} Activate
          * the menu to the right of the current menu.<br>
