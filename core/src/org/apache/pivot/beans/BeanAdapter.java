@@ -298,9 +298,11 @@ public class BeanAdapter implements Map<String, Object> {
             }
 
             Class<?> fieldType = field.getType();
-            Class<?> valueType = value.getClass();
-            if (!fieldType.isAssignableFrom(valueType)) {
-                value = coerce(value, fieldType);
+            if (value != null) {
+                Class<?> valueType = value.getClass();
+                if (!fieldType.isAssignableFrom(valueType)) {
+                    value = coerce(value, fieldType);
+                }
             }
 
             try {
