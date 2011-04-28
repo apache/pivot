@@ -32,20 +32,20 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.TableView.SelectMode;
 import org.apache.pivot.wtk.TableViewColumnListener;
 import org.apache.pivot.wtk.TableViewListener;
 import org.apache.pivot.wtk.TableViewRowListener;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Keyboard.Modifier;
-import org.apache.pivot.wtk.TableView.SelectMode;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -1570,8 +1570,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             && previousSelectedRanges != tableView.getSelectedRanges()) {
             if (tableView.isValid()) {
                 // Repaint the area occupied by the previous selection
-                if (previousSelectedRanges != null
-                    && previousSelectedRanges.getLength() > 0) {
+                if (previousSelectedRanges.getLength() > 0) {
                     int rangeStart = previousSelectedRanges.get(0).start;
                     int rangeEnd = previousSelectedRanges.get(previousSelectedRanges.getLength() - 1).end;
 
