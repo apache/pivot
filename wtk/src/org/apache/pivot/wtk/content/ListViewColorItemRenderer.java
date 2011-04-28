@@ -80,9 +80,7 @@ public class ListViewColorItemRenderer extends ListViewItemRenderer {
         boolean checked, boolean highlighted, boolean disabled) {
         if (item != null) {
             ColorItem colorItem;
-            if (item == null) {
-                colorItem = new ColorItem(Color.WHITE);
-            } else if (item instanceof ColorItem) {
+            if (item instanceof ColorItem) {
                 colorItem = (ColorItem)item;
             } else if (item instanceof Color) {
                 colorItem = new ColorItem((Color)item);
