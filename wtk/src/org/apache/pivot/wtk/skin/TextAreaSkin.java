@@ -279,8 +279,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         graphics.setFont(font);
         graphics.translate(0, margin.top);
 
+        int breakWidth = (wrapText) ? Math.max(width - (margin.left + margin.right), 0)
+            : Integer.MAX_VALUE;
+
         for (int i = 0, n = paragraphViews.getLength(); i < n; i++) {
             TextAreaSkinParagraphView paragraphView = paragraphViews.get(i);
+            paragraphView.setBreakWidth(breakWidth);
+            paragraphView.validate();
 
             int x = paragraphView.getX();
             graphics.translate(x, 0);

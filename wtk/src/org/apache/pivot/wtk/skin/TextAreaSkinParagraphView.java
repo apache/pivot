@@ -33,9 +33,8 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextArea;
-import org.apache.pivot.wtk.Visual;
 
-class TextAreaSkinParagraphView implements Visual, TextArea.ParagraphListener {
+class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
     private static class Row {
         public final GlyphVector glyphVector;
         public final int offset;
@@ -96,13 +95,11 @@ class TextAreaSkinParagraphView implements Visual, TextArea.ParagraphListener {
         this.rowOffset = rowOffset;
     }
 
-    @Override
     public int getWidth() {
         validate();
         return (int)Math.ceil(width);
     }
 
-    @Override
     public int getHeight() {
         validate();
         return (int)Math.ceil(height);
@@ -120,12 +117,6 @@ class TextAreaSkinParagraphView implements Visual, TextArea.ParagraphListener {
         }
     }
 
-    @Override
-    public int getBaseline() {
-        return -1;
-    }
-
-    @Override
     public void paint(Graphics2D graphics) {
         TextArea textArea = (TextArea)textAreaSkin.getComponent();
 
