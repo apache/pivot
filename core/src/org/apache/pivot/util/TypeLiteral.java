@@ -27,7 +27,7 @@ import java.lang.reflect.Type;
  * For example, to get a reference to a generic type {@code List<String>}, you
  * create an empty anonymous inner class, like so:
  * <p>
- * {@code Type genericType = (new TypeLiteral<List<String>>() {}).getType();}
+ * {@code Type genericType = (new TypeLiteral<List<String>>() &#123;&#125;).getType();}
  * <p>
  * This class is a drastically reduced derivation from
  * <a href="http://code.google.com/p/google-guice/">Google Guice</a>'s
