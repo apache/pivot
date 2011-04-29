@@ -103,7 +103,7 @@ public class HashMapTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void constructorTests() throws Exception {
+    public void constructorTests() {
         // TODO Verify that this does not generate a warning under JDK 7
         HashMap<String, Integer> map = new HashMap<String, Integer>(new Map.Pair<String, Integer>(
             "a", 1), new Map.Pair<String, Integer>("b", 2));

@@ -45,13 +45,13 @@ public class BeanAdapterTest {
     BeanAdapterTestObject target_test;
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public static void setUpClass() {
         System.out.println(BeanAdapterTest.class.getName() + ": Starting tests at " + new Date());
         rnd = new Random();
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public static void tearDownClass() {
         rnd = null;
         System.out.println(BeanAdapterTest.class.getName() + ": Ending tests at   " + new Date());
     }

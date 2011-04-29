@@ -44,21 +44,21 @@ public class ParentResourcesTest {
     }
 
     @Test
-    public void testString() throws Exception {
+    public void testString() {
         assertNotNull("In main only", main.get("mainKeyString"));
         assertEquals("In parent", "From Parent", main.getParent().get("someMagicString"));
         assertEquals("In both", "From Main", main.get("someMagicString"));
     }
 
     @Test
-    public void testNumber() throws Exception {
+    public void testNumber() {
         assertNotNull("In main only", main.get("mainKeyNumber"));
         assertEquals("In parent", Integer.valueOf(100), main.getParent().get("someMagicNumber"));
         assertEquals("In both", Integer.valueOf(200), main.get("someMagicNumber"));
     }
 
     @Test
-    public void testBoolean() throws Exception {
+    public void testBoolean() {
         assertNotNull("In main only", main.get("mainKeyBoolean"));
         assertEquals("In parent", false, main.getParent().get("someMagicBoolean"));
         assertEquals("In both", true, main.get("someMagicBoolean"));
