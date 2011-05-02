@@ -936,7 +936,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 listView.setItemChecked(itemIndex, !listView.isItemChecked(itemIndex));
             } else {
                 if (selectIndex != -1
-                    && count == 1) {
+                    && count == 1
+                    && button == Mouse.Button.LEFT) {
                     ListView.ItemEditor itemEditor = listView.getItemEditor();
 
                     if (itemEditor != null) {

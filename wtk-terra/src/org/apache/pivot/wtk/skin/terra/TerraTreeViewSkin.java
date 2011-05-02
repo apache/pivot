@@ -1721,7 +1721,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     treeView.setNodeChecked(path, !nodeInfo.isChecked());
                 } else {
                     if (selectPath != null
-                        && count == 1) {
+                        && count == 1
+                        && button == Mouse.Button.LEFT) {
                         TreeView.NodeEditor nodeEditor = treeView.getNodeEditor();
 
                         if (nodeEditor != null) {
