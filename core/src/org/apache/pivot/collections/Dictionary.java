@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.collections;
 
+import java.io.Serializable;
+
 /**
  * Interface representing a set of key/value pairs.
  */
@@ -23,7 +25,9 @@ public interface Dictionary<K, V> {
     /**
      * Class representing a key/value pair.
      */
-    public static final class Pair<K, V> {
+    public static final class Pair<K, V> implements Serializable {
+        private static final long serialVersionUID = 5010958035775950649L;
+
         public final K key;
         public final V value;
 
