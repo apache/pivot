@@ -37,6 +37,11 @@ public class ContextMenus extends Window implements Bindable {
             Menu.Section menuSection = new Menu.Section();
             menu.getSections().add(menuSection);
 
+            menuSection.add(new Menu.Item("Do Nothing"));
+            Menu.Item doNothingMenuItem = new Menu.Item("Do Nothing and disabled");
+            doNothingMenuItem.setEnabled(false);
+            menuSection.add(doNothingMenuItem);
+
             Menu.Item whatIsThisMenuItem = new Menu.Item("What is this?");
             whatIsThisMenuItem.setAction(new Action() {
                 @Override
@@ -47,8 +52,11 @@ public class ContextMenus extends Window implements Bindable {
                     Prompt.prompt(message, ContextMenus.this);
                 }
             });
-
             menuSection.add(whatIsThisMenuItem);
+
+            Menu.Item nullActionMenuItem = new Menu.Item("Item with null action assigned");
+            nullActionMenuItem.setAction((Action) null);
+            menuSection.add(nullActionMenuItem);
 
             return false;
         }
