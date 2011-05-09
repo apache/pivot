@@ -30,13 +30,21 @@ import org.apache.pivot.wtk.skin.CardPaneSkin;
 public class TableViewTest2 implements Application {
     private Window window = null;
     private TableView tableView = null;
+    private Window menu = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
+
+        System.out.println("Double Click on Table elements to open the Row Editor");
+        
         window = (Window)bxmlSerializer.readObject(TableViewTest2.class, "table_view_test2.bxml");
         tableView = (TableView)bxmlSerializer.getNamespace().get("tableView");
+        menu = (Window)bxmlSerializer.readObject(TableViewTest2.class, "context_menus.bxml");
+
+        tableView.setMenuHandler(new ContextMenusSampleMenuHandlerAdapter());
+        System.out.println("Right  Click on Table elements to display Contextual Menu: " + menu);
 
         TableViewRowEditor tableViewRowEditor = new TableViewRowEditor();
         tableViewRowEditor.setEditEffect(CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);

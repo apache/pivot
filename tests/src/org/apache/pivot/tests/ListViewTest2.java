@@ -26,12 +26,20 @@ import org.apache.pivot.wtk.Window;
 
 public class ListViewTest2 implements Application {
     private Window window = null;
+    private Window menu = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties)
         throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
+
+        System.out.println("Left   Click on List elements to Select a Row");
+
         window = new Window((Component)bxmlSerializer.readObject(getClass().getResource("listview_test2.bxml")));
+        menu = (Window)bxmlSerializer.readObject(TableViewTest2.class, "context_menus.bxml");
+
+        window.setMenuHandler(new ContextMenusSampleMenuHandlerAdapter());
+        System.out.println("Right  Click on Window (and List elements) to display Contextual Menu: " + menu);
 
         window.setTitle("ListView Test2");
         window.setMaximized(true);
