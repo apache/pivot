@@ -32,7 +32,7 @@ public class ContextMenusSampleMenuHandlerAdapter extends MenuHandler.Adapter {
     protected void setDescendant(Component descendant) {
         this.descendant = descendant;
     }
-    
+
     @Override
     public void configureMenuBar(Component component, MenuBar menuBar) {
         System.out.println("Configure menu bar: " + component);

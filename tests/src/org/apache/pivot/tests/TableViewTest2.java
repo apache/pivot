@@ -38,7 +38,7 @@ public class TableViewTest2 implements Application {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
         System.out.println("Double Click on Table elements to open the Row Editor");
-        
+
         window = (Window)bxmlSerializer.readObject(TableViewTest2.class, "table_view_test2.bxml");
         tableView = (TableView)bxmlSerializer.getNamespace().get("tableView");
         menu = (Window)bxmlSerializer.readObject(TableViewTest2.class, "context_menus.bxml");
