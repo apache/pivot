@@ -40,7 +40,7 @@ public class TableViewHeader extends Component {
         public Bounds getHeaderBounds(int index);
     }
 
-    private static class TableViewHeaderListenerList extends ListenerList<TableViewHeaderListener>
+    private static class TableViewHeaderListenerList extends WTKListenerList<TableViewHeaderListener>
         implements TableViewHeaderListener {
         @Override
         public void tableViewChanged(TableViewHeader tableViewHeader,
@@ -58,7 +58,7 @@ public class TableViewHeader extends Component {
         }
     }
 
-    private static class TableViewHeaderPressListenerList extends ListenerList<TableViewHeaderPressListener>
+    private static class TableViewHeaderPressListenerList extends WTKListenerList<TableViewHeaderPressListener>
         implements TableViewHeaderPressListener {
         @Override
         public void headerPressed(TableViewHeader tableViewHeader, int index) {

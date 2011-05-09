@@ -102,7 +102,7 @@ public class TextInput extends Component {
         }
     }
 
-    private static class TextInputListenerList extends ListenerList<TextInputListener>
+    private static class TextInputListenerList extends WTKListenerList<TextInputListener>
         implements TextInputListener {
         @Override
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
@@ -154,7 +154,7 @@ public class TextInput extends Component {
         }
     }
 
-    private static class TextInputContentListenerList extends ListenerList<TextInputContentListener>
+    private static class TextInputContentListenerList extends WTKListenerList<TextInputContentListener>
         implements TextInputContentListener {
         @Override
         public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
@@ -214,7 +214,7 @@ public class TextInput extends Component {
         }
     }
 
-    private static class TextInputSelectionListenerList extends ListenerList<TextInputSelectionListener>
+    private static class TextInputSelectionListenerList extends WTKListenerList<TextInputSelectionListener>
         implements TextInputSelectionListener {
         @Override
         public void selectionChanged(TextInput textInput, int previousSelectionStart,
@@ -226,7 +226,7 @@ public class TextInput extends Component {
         }
     }
 
-    private static class TextInputBindingListenerList extends ListenerList<TextInputBindingListener>
+    private static class TextInputBindingListenerList extends WTKListenerList<TextInputBindingListener>
         implements TextInputBindingListener {
         @Override
         public void textKeyChanged(TextInput textInput, String previousTextKey) {

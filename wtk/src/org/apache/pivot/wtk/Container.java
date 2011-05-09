@@ -31,7 +31,7 @@ import org.apache.pivot.wtk.effects.Decorator;
  */
 public abstract class Container extends Component
     implements Sequence<Component>, Iterable<Component> {
-    private static class ContainerListenerList extends ListenerList<ContainerListener>
+    private static class ContainerListenerList extends WTKListenerList<ContainerListener>
         implements ContainerListener {
         @Override
         public void componentInserted(Container container, int index) {
@@ -63,7 +63,7 @@ public abstract class Container extends Component
         }
     }
 
-    private static class ContainerMouseListenerList extends ListenerList<ContainerMouseListener>
+    private static class ContainerMouseListenerList extends WTKListenerList<ContainerMouseListener>
         implements ContainerMouseListener {
         @Override
         public boolean mouseMove(Container container, int x, int y) {
@@ -135,6 +135,7 @@ public abstract class Container extends Component
 
     @Override
     public void insert(Component component, int index) {
+        assertEventDispatchThread();
         if (component == null) {
             throw new IllegalArgumentException("component is null.");
         }
@@ -176,6 +177,7 @@ public abstract class Container extends Component
 
     @Override
     public Sequence<Component> remove(int index, int count) {
+        assertEventDispatchThread();
         Sequence<Component> removed = components.remove(index, count);
 
         // Set the removed components' parent to null and repaint the area
@@ -215,6 +217,7 @@ public abstract class Container extends Component
      * @param to
      */
     public void move(int from, int to) {
+        assertEventDispatchThread();
         if (from != to) {
             int n = components.getLength();
 
@@ -239,21 +242,25 @@ public abstract class Container extends Component
 
     @Override
     public Component get(int index) {
+        assertEventDispatchThread();
         return components.get(index);
     }
 
     @Override
     public int indexOf(Component component) {
+        assertEventDispatchThread();
         return components.indexOf(component);
     }
 
     @Override
     public int getLength() {
+        assertEventDispatchThread();
         return components.getLength();
     }
 
     @Override
     public Iterator<Component> iterator() {
+        assertEventDispatchThread();
         return new ImmutableIterator<Component>(components.iterator());
     }
 
@@ -270,6 +277,7 @@ public abstract class Container extends Component
     }
 
     public Component getComponentAt(int x, int y) {
+        assertEventDispatchThread();
         Component component = null;
 
         int i = components.getLength() - 1;
@@ -834,5 +842,15 @@ public abstract class Container extends Component
 
     public ListenerList<ContainerMouseListener> getContainerMouseListeners() {
         return containerMouseListeners;
+    }
+
+    public static final void assertEventDispatchThread() {
+        /* Currently, application startup happens on the main thread, so we need to allow
+         * that thread to modify WTK state.
+         */
+        if (!java.awt.EventQueue.isDispatchThread()
+             && !Thread.currentThread().getName().equals("main")) {
+            throw new IllegalStateException("this method can only be called from the AWT event dispatch thread");
+        }
     }
 }

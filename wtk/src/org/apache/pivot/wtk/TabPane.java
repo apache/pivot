@@ -155,7 +155,7 @@ public class TabPane extends Container {
         TOOLTIP_TEXT;
     }
 
-    private static class TabPaneListenerList extends ListenerList<TabPaneListener>
+    private static class TabPaneListenerList extends WTKListenerList<TabPaneListener>
         implements TabPaneListener {
         @Override
         public void tabInserted(TabPane tabPane, int index) {
@@ -218,7 +218,7 @@ public class TabPane extends Container {
         }
     }
 
-    private static class TabPaneSelectionListenerList extends ListenerList<TabPaneSelectionListener>
+    private static class TabPaneSelectionListenerList extends WTKListenerList<TabPaneSelectionListener>
         implements TabPaneSelectionListener {
         @Override
         public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
@@ -246,7 +246,7 @@ public class TabPane extends Container {
         }
     }
 
-    private static class TabPaneAttributeListenerList extends ListenerList<TabPaneAttributeListener>
+    private static class TabPaneAttributeListenerList extends WTKListenerList<TabPaneAttributeListener>
         implements TabPaneAttributeListener {
         @Override
         public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {

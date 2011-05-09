@@ -25,7 +25,7 @@ import org.apache.pivot.util.ListenerList;
  */
 @DefaultProperty("content")
 public class Border extends Container {
-    private static class BorderListenerList extends ListenerList<BorderListener>
+    private static class BorderListenerList extends WTKListenerList<BorderListener>
         implements BorderListener {
         @Override
         public void titleChanged(Border border, String previousTitle) {

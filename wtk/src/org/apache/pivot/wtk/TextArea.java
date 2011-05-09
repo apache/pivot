@@ -479,7 +479,7 @@ public class TextArea extends Component {
         }
     }
 
-    private static class TextAreaListenerList extends ListenerList<TextAreaListener>
+    private static class TextAreaListenerList extends WTKListenerList<TextAreaListener>
         implements TextAreaListener {
         @Override
         public void maximumLengthChanged(TextArea textArea, int previousMaximumLength) {
@@ -496,7 +496,7 @@ public class TextArea extends Component {
         }
     }
 
-    private static class TextAreaContentListenerList extends ListenerList<TextAreaContentListener>
+    private static class TextAreaContentListenerList extends WTKListenerList<TextAreaContentListener>
         implements TextAreaContentListener {
         @Override
         public void paragraphInserted(TextArea textArea, int index) {
@@ -520,7 +520,7 @@ public class TextArea extends Component {
         }
     }
 
-    private static class TextAreaSelectionListenerList extends ListenerList<TextAreaSelectionListener>
+    private static class TextAreaSelectionListenerList extends WTKListenerList<TextAreaSelectionListener>
         implements TextAreaSelectionListener {
         @Override
         public void selectionChanged(TextArea textArea, int previousSelectionStart,
@@ -532,7 +532,7 @@ public class TextArea extends Component {
         }
     }
 
-    private static class TextAreaBindingListenerList extends ListenerList<TextAreaBindingListener>
+    private static class TextAreaBindingListenerList extends WTKListenerList<TextAreaBindingListener>
         implements TextAreaBindingListener {
         @Override
         public void textKeyChanged(TextArea textArea, String previousTextKey) {

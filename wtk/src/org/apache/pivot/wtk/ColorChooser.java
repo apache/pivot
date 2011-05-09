@@ -48,7 +48,7 @@ public class ColorChooser extends Container {
      * Color chooser selection listener list.
      */
     private static class ColorChooserSelectionListenerList
-        extends ListenerList<ColorChooserSelectionListener>
+        extends WTKListenerList<ColorChooserSelectionListener>
         implements ColorChooserSelectionListener {
 
         @Override
@@ -64,7 +64,7 @@ public class ColorChooser extends Container {
      * Color chooser binding listener list.
      */
     private static class ColorChooserBindingListenerList
-        extends ListenerList<ColorChooserBindingListener>
+        extends WTKListenerList<ColorChooserBindingListener>
         implements ColorChooserBindingListener {
         @Override
         public void selectedColorKeyChanged(ColorChooser colorChooser,

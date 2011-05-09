@@ -289,7 +289,7 @@ public class Window extends Container {
         }
     }
 
-    private static class WindowListenerList extends ListenerList<WindowListener>
+    private static class WindowListenerList extends WTKListenerList<WindowListener>
         implements WindowListener {
         @Override
         public void titleChanged(Window window, String previousTitle) {
@@ -341,7 +341,7 @@ public class Window extends Container {
         }
     }
 
-    private static class WindowStateListenerList extends ListenerList<WindowStateListener>
+    private static class WindowStateListenerList extends WTKListenerList<WindowStateListener>
         implements WindowStateListener {
         @Override
         public void windowOpened(Window window) {
@@ -376,7 +376,7 @@ public class Window extends Container {
         }
     }
 
-    private static class WindowActionMappingListenerList extends ListenerList<WindowActionMappingListener>
+    private static class WindowActionMappingListenerList extends WTKListenerList<WindowActionMappingListener>
         implements WindowActionMappingListener {
         @Override
         public void actionMappingAdded(Window window) {
@@ -408,7 +408,7 @@ public class Window extends Container {
     }
 
     private static class WindowClassListenerList
-        extends ListenerList<WindowClassListener>
+        extends WTKListenerList<WindowClassListener>
         implements WindowClassListener {
         @Override
         public void activeWindowChanged(Window previousActiveWindow) {

@@ -358,7 +358,7 @@ public class Form extends Container {
         FLAG;
     }
 
-    private static class FormListenerList extends ListenerList<FormListener>
+    private static class FormListenerList extends WTKListenerList<FormListener>
         implements FormListener {
         @Override
         public void sectionInserted(Form form, int index) {
@@ -396,7 +396,7 @@ public class Form extends Container {
         }
     }
 
-    private static class FormAttributeListenerList extends ListenerList<FormAttributeListener>
+    private static class FormAttributeListenerList extends WTKListenerList<FormAttributeListener>
         implements FormAttributeListener {
         @Override
         public void labelChanged(Form form, Component component, String previousLabel) {

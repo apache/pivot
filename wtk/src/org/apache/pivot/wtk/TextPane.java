@@ -147,7 +147,7 @@ public class TextPane extends Container {
         }
     }
 
-    private static class TextPaneListenerList extends ListenerList<TextPaneListener>
+    private static class TextPaneListenerList extends WTKListenerList<TextPaneListener>
         implements TextPaneListener {
         @Override
         public void documentChanged(TextPane textPane, Document previousText) {
@@ -164,7 +164,7 @@ public class TextPane extends Container {
         }
     }
 
-    private static class TextPaneCharacterListenerList extends ListenerList<TextPaneCharacterListener>
+    private static class TextPaneCharacterListenerList extends WTKListenerList<TextPaneCharacterListener>
         implements TextPaneCharacterListener {
         @Override
         public void charactersInserted(TextPane textPane, int index, int count) {
@@ -181,7 +181,7 @@ public class TextPane extends Container {
         }
     }
 
-    private static class TextPaneSelectionListenerList extends ListenerList<TextPaneSelectionListener>
+    private static class TextPaneSelectionListenerList extends WTKListenerList<TextPaneSelectionListener>
         implements TextPaneSelectionListener {
         @Override
         public void selectionChanged(TextPane textPane,

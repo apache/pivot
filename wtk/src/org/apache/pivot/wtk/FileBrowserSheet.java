@@ -40,7 +40,7 @@ public class FileBrowserSheet extends Sheet {
     }
 
     private static class FileBrowserSheetListenerList
-        extends ListenerList<FileBrowserSheetListener>
+        extends WTKListenerList<FileBrowserSheetListener>
         implements FileBrowserSheetListener {
         @Override
         public void modeChanged(FileBrowserSheet fileBrowserSheet,

@@ -22,7 +22,7 @@ import org.apache.pivot.util.ListenerList;
  * Component representing a horizontal divider.
  */
 public class Separator extends Component {
-    private static class SeparatorListenerList extends ListenerList<SeparatorListener>
+    private static class SeparatorListenerList extends WTKListenerList<SeparatorListener>
         implements SeparatorListener {
         @Override
         public void headingChanged(Separator separator, String previousHeading) {

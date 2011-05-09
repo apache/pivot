@@ -49,7 +49,7 @@ public class Calendar extends Container {
         public Object valueOf(CalendarDate calendarDate);
     }
 
-    private static class CalendarListenerList extends ListenerList<CalendarListener>
+    private static class CalendarListenerList extends WTKListenerList<CalendarListener>
         implements CalendarListener {
         @Override
         public void yearChanged(Calendar calendar, int previousYear) {
@@ -80,7 +80,7 @@ public class Calendar extends Container {
         }
     }
 
-    private static class CalendarSelectionListenerList extends ListenerList<CalendarSelectionListener>
+    private static class CalendarSelectionListenerList extends WTKListenerList<CalendarSelectionListener>
         implements CalendarSelectionListener {
 
         @Override
@@ -92,7 +92,7 @@ public class Calendar extends Container {
         }
     }
 
-    private static class CalendarBindingListenerList extends ListenerList<CalendarBindingListener>
+    private static class CalendarBindingListenerList extends WTKListenerList<CalendarBindingListener>
         implements CalendarBindingListener {
         @Override
         public void selectedDateKeyChanged(Calendar calendar,

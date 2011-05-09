@@ -35,7 +35,7 @@ public class Menu extends Container {
      */
     @DefaultProperty("menu")
     public static class Item extends Button {
-        private static class ItemListenerList extends ListenerList<ItemListener>
+        private static class ItemListenerList extends WTKListenerList<ItemListener>
             implements ItemListener {
             @Override
             public void menuChanged(Item item, Menu previousMenu) {
@@ -225,7 +225,7 @@ public class Menu extends Container {
      * items within a menu.
      */
     public static class Section implements Sequence<Item>, Iterable<Item> {
-        private static class SectionListenerList extends ListenerList<SectionListener>
+        private static class SectionListenerList extends WTKListenerList<SectionListener>
             implements SectionListener {
             @Override
             public void itemInserted(Menu.Section section, int index) {
@@ -474,7 +474,7 @@ public class Menu extends Container {
         }
     }
 
-    private static class MenuListenerList extends ListenerList<MenuListener>
+    private static class MenuListenerList extends WTKListenerList<MenuListener>
         implements MenuListener {
         @Override
         public void sectionInserted(Menu menu, int index) {
@@ -498,7 +498,7 @@ public class Menu extends Container {
         }
     }
 
-    private static class MenuItemSelectionListenerList extends ListenerList<MenuItemSelectionListener>
+    private static class MenuItemSelectionListenerList extends WTKListenerList<MenuItemSelectionListener>
         implements MenuItemSelectionListener {
         @Override
         public void itemSelected(Menu.Item menuItem) {

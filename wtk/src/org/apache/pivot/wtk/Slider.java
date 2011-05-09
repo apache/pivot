@@ -23,7 +23,7 @@ import org.apache.pivot.util.ListenerList;
  * Allows a user to select one of a range of values.
  */
 public class Slider extends Container {
-    private static class SliderListenerList extends ListenerList<SliderListener>
+    private static class SliderListenerList extends WTKListenerList<SliderListener>
         implements SliderListener {
         @Override
         public void orientationChanged(Slider slider) {
@@ -40,7 +40,7 @@ public class Slider extends Container {
         }
     }
 
-    private static class SliderValueListenerList extends ListenerList<SliderValueListener>
+    private static class SliderValueListenerList extends WTKListenerList<SliderValueListener>
         implements SliderValueListener {
         @Override
         public void valueChanged(Slider slider, int previousValue) {

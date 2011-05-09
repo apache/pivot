@@ -231,7 +231,7 @@ public class TreeView extends Component {
     /**
      * Tree view listener list.
      */
-    private static class TreeViewListenerList extends ListenerList<TreeViewListener>
+    private static class TreeViewListenerList extends WTKListenerList<TreeViewListener>
         implements TreeViewListener {
 
         @Override
@@ -298,7 +298,7 @@ public class TreeView extends Component {
     /**
      * Tree view branch listener list.
      */
-    private static class TreeViewBranchListenerList extends ListenerList<TreeViewBranchListener>
+    private static class TreeViewBranchListenerList extends WTKListenerList<TreeViewBranchListener>
         implements TreeViewBranchListener {
         @Override
         public void branchExpanded(TreeView treeView, Path path) {
@@ -318,7 +318,7 @@ public class TreeView extends Component {
     /**
      * Tree view node listener list.
      */
-    private static class TreeViewNodeListenerList extends ListenerList<TreeViewNodeListener>
+    private static class TreeViewNodeListenerList extends WTKListenerList<TreeViewNodeListener>
         implements TreeViewNodeListener {
         @Override
         public void nodeInserted(TreeView treeView, Path path, int index) {
@@ -361,7 +361,7 @@ public class TreeView extends Component {
      * Tree view node state listener list.
      */
     private static class TreeViewNodeStateListenerList
-        extends ListenerList<TreeViewNodeStateListener>
+        extends WTKListenerList<TreeViewNodeStateListener>
         implements TreeViewNodeStateListener {
         @Override
         public void nodeCheckStateChanged(TreeView treeView, Path path,
@@ -376,7 +376,7 @@ public class TreeView extends Component {
      * Tree view selection listener list.
      */
     private static class TreeViewSelectionListenerList
-        extends ListenerList<TreeViewSelectionListener>
+        extends WTKListenerList<TreeViewSelectionListener>
         implements TreeViewSelectionListener {
         @Override
         public void selectedPathAdded(TreeView treeView, Path path) {

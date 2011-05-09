@@ -131,7 +131,7 @@ public abstract class Button extends Component {
         public Object valueOf(Object buttonData);
     }
 
-    private static class ButtonListenerList extends ListenerList<ButtonListener>
+    private static class ButtonListenerList extends WTKListenerList<ButtonListener>
         implements ButtonListener {
         @Override
         public void buttonDataChanged(Button button, Object previousButtonData) {
@@ -176,7 +176,7 @@ public abstract class Button extends Component {
         }
     }
 
-    private static class ButtonStateListenerList extends ListenerList<ButtonStateListener>
+    private static class ButtonStateListenerList extends WTKListenerList<ButtonStateListener>
         implements ButtonStateListener {
         @Override
         public void stateChanged(Button button, Button.State previousState) {
@@ -186,7 +186,7 @@ public abstract class Button extends Component {
         }
     }
 
-    private static class ButtonPressListenerList extends ListenerList<ButtonPressListener>
+    private static class ButtonPressListenerList extends WTKListenerList<ButtonPressListener>
         implements ButtonPressListener {
         @Override
         public void buttonPressed(Button button) {
@@ -196,7 +196,7 @@ public abstract class Button extends Component {
         }
     }
 
-    private static class ButtonBindingListenerList extends ListenerList<ButtonBindingListener>
+    private static class ButtonBindingListenerList extends WTKListenerList<ButtonBindingListener>
         implements ButtonBindingListener {
         @Override
         public void buttonDataKeyChanged(Button button, String previousButtonDataKey) {

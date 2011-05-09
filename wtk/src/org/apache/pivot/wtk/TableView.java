@@ -814,7 +814,7 @@ public class TableView extends Component {
         }
     }
 
-    private static class TableViewListenerList extends ListenerList<TableViewListener>
+    private static class TableViewListenerList extends WTKListenerList<TableViewListener>
         implements TableViewListener {
         @Override
         public void tableDataChanged(TableView tableView, List<?> previousTableData) {
@@ -853,7 +853,7 @@ public class TableView extends Component {
         }
     }
 
-    private static class TableViewColumnListenerList extends ListenerList<TableViewColumnListener>
+    private static class TableViewColumnListenerList extends WTKListenerList<TableViewColumnListener>
         implements TableViewColumnListener {
         @Override
         public void columnInserted(TableView tableView, int index) {
@@ -920,7 +920,7 @@ public class TableView extends Component {
         }
     }
 
-    private static class TableViewRowListenerList extends ListenerList<TableViewRowListener>
+    private static class TableViewRowListenerList extends WTKListenerList<TableViewRowListener>
         implements TableViewRowListener {
         @Override
         public void rowInserted(TableView tableView, int index) {
@@ -958,7 +958,7 @@ public class TableView extends Component {
         }
     }
 
-    private static class TableViewSelectionListenerList extends ListenerList<TableViewSelectionListener>
+    private static class TableViewSelectionListenerList extends WTKListenerList<TableViewSelectionListener>
         implements TableViewSelectionListener {
         @Override
         public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
@@ -989,7 +989,7 @@ public class TableView extends Component {
         }
     }
 
-    private static class TableViewSortListenerList extends ListenerList<TableViewSortListener>
+    private static class TableViewSortListenerList extends WTKListenerList<TableViewSortListener>
         implements TableViewSortListener {
         public void sortAdded(TableView tableView, String columnName) {
             for (TableViewSortListener listener : this) {
@@ -1018,7 +1018,7 @@ public class TableView extends Component {
         }
     }
 
-    private static class TableViewBindingListenerList extends ListenerList<TableViewBindingListener>
+    private static class TableViewBindingListenerList extends WTKListenerList<TableViewBindingListener>
         implements TableViewBindingListener {
         @Override
         public void tableDataKeyChanged(TableView tableView, String previousTableDataKey) {

@@ -263,7 +263,7 @@ public class GridPane extends Container {
         }
     }
 
-    private static class GridPaneListenerList extends ListenerList<GridPaneListener>
+    private static class GridPaneListenerList extends WTKListenerList<GridPaneListener>
         implements GridPaneListener {
         @Override
         public void columnCountChanged(GridPane gridPane, int previousColumnCount) {

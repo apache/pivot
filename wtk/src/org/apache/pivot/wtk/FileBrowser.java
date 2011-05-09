@@ -36,7 +36,7 @@ public class FileBrowser extends Container {
         public File getFileAt(int x, int y);
     }
 
-    private static class FileBrowserListenerList extends ListenerList<FileBrowserListener>
+    private static class FileBrowserListenerList extends WTKListenerList<FileBrowserListener>
         implements FileBrowserListener {
         @Override
         public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {

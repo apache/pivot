@@ -264,7 +264,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentListenerList extends ListenerList<ComponentListener>
+    private static class ComponentListenerList extends WTKListenerList<ComponentListener>
         implements ComponentListener {
         @Override
         public void parentChanged(Component component, Container previousParent) {
@@ -372,7 +372,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     private static class ComponentStateListenerList extends
-        ListenerList<ComponentStateListener> implements ComponentStateListener {
+        WTKListenerList<ComponentStateListener> implements ComponentStateListener {
         @Override
         public void enabledChanged(Component component) {
             for (ComponentStateListener listener : this) {
@@ -389,7 +389,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     private static class ComponentDecoratorListenerList extends
-        ListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
+        WTKListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
         @Override
         public void decoratorInserted(Component component, int index) {
             for (ComponentDecoratorListener listener : this) {
@@ -414,7 +414,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     private static class ComponentStyleListenerList
-        extends ListenerList<ComponentStyleListener> implements ComponentStyleListener {
+        extends WTKListenerList<ComponentStyleListener> implements ComponentStyleListener {
         @Override
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
             for (ComponentStyleListener listener : this) {
@@ -423,7 +423,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentMouseListenerList extends ListenerList<ComponentMouseListener>
+    private static class ComponentMouseListenerList extends WTKListenerList<ComponentMouseListener>
         implements ComponentMouseListener {
         @Override
         public boolean mouseMove(Component component, int x, int y) {
@@ -451,7 +451,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentMouseButtonListenerList extends ListenerList<ComponentMouseButtonListener>
+    private static class ComponentMouseButtonListenerList extends WTKListenerList<ComponentMouseButtonListener>
         implements ComponentMouseButtonListener {
         @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
@@ -487,7 +487,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentMouseWheelListenerList extends ListenerList<ComponentMouseWheelListener>
+    private static class ComponentMouseWheelListenerList extends WTKListenerList<ComponentMouseWheelListener>
         implements ComponentMouseWheelListener {
         @Override
         public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
@@ -503,7 +503,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentKeyListenerList extends ListenerList<ComponentKeyListener>
+    private static class ComponentKeyListenerList extends WTKListenerList<ComponentKeyListener>
         implements ComponentKeyListener {
         @Override
         public boolean keyTyped(Component component, char character) {
@@ -539,7 +539,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentTooltipListenerList extends ListenerList<ComponentTooltipListener>
+    private static class ComponentTooltipListenerList extends WTKListenerList<ComponentTooltipListener>
         implements ComponentTooltipListener {
         @Override
         public void tooltipTriggered(Component component, int x, int y) {
@@ -549,7 +549,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentDataListenerList extends ListenerList<ComponentDataListener>
+    private static class ComponentDataListenerList extends WTKListenerList<ComponentDataListener>
         implements ComponentDataListener {
         @Override
         public void valueAdded(Component component, String key) {
@@ -573,7 +573,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentClassListenerList extends ListenerList<ComponentClassListener>
+    private static class ComponentClassListenerList extends WTKListenerList<ComponentClassListener>
         implements ComponentClassListener {
         @Override
         public void focusedComponentChanged(Component previousFocusedComponent) {
@@ -1922,6 +1922,7 @@ public abstract class Component implements ConstrainedVisual {
      * preferred size.
      */
     public void invalidate() {
+        Container.assertEventDispatchThread();
         valid = false;
 
         // Clear the preferred size and baseline
@@ -2013,6 +2014,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param immediate
      */
     public void repaint(int x, int y, int width, int height, boolean immediate) {
+        Container.assertEventDispatchThread();
         if (parent != null) {
             // Constrain the repaint area to this component's bounds
             int top = y;

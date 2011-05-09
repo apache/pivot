@@ -30,7 +30,7 @@ import org.apache.pivot.wtk.content.ListViewItemRenderer;
  * Popup that presents a list of text suggestions to the user.
  */
 public class SuggestionPopup extends Window {
-    private static class SuggestionPopupListenerList extends ListenerList<SuggestionPopupListener>
+    private static class SuggestionPopupListenerList extends WTKListenerList<SuggestionPopupListener>
         implements SuggestionPopupListener {
         @Override
         public void suggestionDataChanged(SuggestionPopup suggestionPopup,
@@ -56,7 +56,7 @@ public class SuggestionPopup extends Window {
         }
     }
 
-    private static class SuggestionPopupItemListenerList extends ListenerList<SuggestionPopupItemListener>
+    private static class SuggestionPopupItemListenerList extends WTKListenerList<SuggestionPopupItemListener>
         implements SuggestionPopupItemListener {
         @Override
         public void itemInserted(SuggestionPopup suggestionPopup, int index) {
@@ -94,7 +94,7 @@ public class SuggestionPopup extends Window {
         }
     }
 
-    private static class SuggestionPopupSelectionListenerList extends ListenerList<SuggestionPopupSelectionListener>
+    private static class SuggestionPopupSelectionListenerList extends WTKListenerList<SuggestionPopupSelectionListener>
         implements SuggestionPopupSelectionListener {
         @Override
         public void selectedIndexChanged(SuggestionPopup suggestionPopup,
@@ -112,7 +112,7 @@ public class SuggestionPopup extends Window {
         }
     }
 
-    private static class SuggestionPopupStateListenerList extends ListenerList<SuggestionPopupStateListener>
+    private static class SuggestionPopupStateListenerList extends WTKListenerList<SuggestionPopupStateListener>
         implements SuggestionPopupStateListener {
         @Override
         public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result) {

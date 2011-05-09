@@ -630,7 +630,7 @@ public class TablePane extends Container {
         COLUMN_SPAN;
     }
 
-    private static class TablePaneListenerList extends ListenerList<TablePaneListener>
+    private static class TablePaneListenerList extends WTKListenerList<TablePaneListener>
         implements TablePaneListener {
         @Override
         public void rowInserted(TablePane tablePane, int index) {
@@ -716,7 +716,7 @@ public class TablePane extends Container {
         }
     }
 
-    private static class TablePaneAttributeListenerList extends ListenerList<TablePaneAttributeListener>
+    private static class TablePaneAttributeListenerList extends WTKListenerList<TablePaneAttributeListener>
         implements TablePaneAttributeListener {
         @Override
         public void rowSpanChanged(TablePane tablePane, Component component,

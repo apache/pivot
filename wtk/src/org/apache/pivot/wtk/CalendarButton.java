@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.content.CalendarButtonDataRenderer;
  * is hidden until the user pushes the button.
  */
 public class CalendarButton extends Button {
-    private static class CalendarButtonListenerList extends ListenerList<CalendarButtonListener>
+    private static class CalendarButtonListenerList extends WTKListenerList<CalendarButtonListener>
         implements CalendarButtonListener {
         @Override
         public void yearChanged(CalendarButton calendarButton, int previousYear) {
@@ -65,7 +65,7 @@ public class CalendarButton extends Button {
     }
 
     private static class CalendarButtonSelectionListenerList
-        extends ListenerList<CalendarButtonSelectionListener>
+        extends WTKListenerList<CalendarButtonSelectionListener>
         implements CalendarButtonSelectionListener {
 
         @Override
@@ -77,7 +77,7 @@ public class CalendarButton extends Button {
         }
     }
 
-    private static class CalendarButtonBindingListenerList extends ListenerList<CalendarButtonBindingListener>
+    private static class CalendarButtonBindingListenerList extends WTKListenerList<CalendarButtonBindingListener>
         implements CalendarButtonBindingListener {
         @Override
         public void selectedDateKeyChanged(CalendarButton calendarButton,

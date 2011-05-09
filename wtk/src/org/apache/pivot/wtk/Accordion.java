@@ -147,7 +147,7 @@ public class Accordion extends Container {
         TOOLTIP_TEXT;
     }
 
-    private static class AccordionListenerList extends ListenerList<AccordionListener>
+    private static class AccordionListenerList extends WTKListenerList<AccordionListener>
         implements AccordionListener {
         @Override
         public void panelInserted(Accordion accordion, int index) {
@@ -171,7 +171,7 @@ public class Accordion extends Container {
         }
     }
 
-    private static class AccordionSelectionListenerList extends ListenerList<AccordionSelectionListener>
+    private static class AccordionSelectionListenerList extends WTKListenerList<AccordionSelectionListener>
         implements AccordionSelectionListener {
         @Override
         public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
@@ -199,7 +199,7 @@ public class Accordion extends Container {
         }
     }
 
-    private static class AccordionAttributeListenerList extends ListenerList<AccordionAttributeListener>
+    private static class AccordionAttributeListenerList extends WTKListenerList<AccordionAttributeListener>
         implements AccordionAttributeListener {
         @Override
         public void headerDataChanged(Accordion accordion, Component component, Object previousHeaderData) {

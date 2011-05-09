@@ -35,7 +35,7 @@ public class ScrollPane extends Viewport {
         FILL_TO_CAPACITY
     }
 
-    private static class ScrollPaneListenerList extends ListenerList<ScrollPaneListener>
+    private static class ScrollPaneListenerList extends WTKListenerList<ScrollPaneListener>
         implements ScrollPaneListener {
 
         @Override

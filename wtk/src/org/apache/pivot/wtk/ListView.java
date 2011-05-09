@@ -199,7 +199,7 @@ public class ListView extends Component {
         public Object get(List<?> listData, int index);
     }
 
-    private static class ListViewListenerList extends ListenerList<ListViewListener>
+    private static class ListViewListenerList extends WTKListenerList<ListViewListener>
         implements ListViewListener {
         @Override
         public void listDataChanged(ListView listView, List<?> previousListData) {
@@ -256,7 +256,7 @@ public class ListView extends Component {
         }
     }
 
-    private static class ListViewItemListenerList extends ListenerList<ListViewItemListener>
+    private static class ListViewItemListenerList extends WTKListenerList<ListViewItemListener>
         implements ListViewItemListener {
         @Override
         public void itemInserted(ListView listView, int index) {
@@ -294,7 +294,7 @@ public class ListView extends Component {
         }
     }
 
-    private static class ListViewItemStateListenerList extends ListenerList<ListViewItemStateListener>
+    private static class ListViewItemStateListenerList extends WTKListenerList<ListViewItemStateListener>
         implements ListViewItemStateListener {
         @Override
         public void itemCheckedChanged(ListView listView, int index) {
@@ -304,7 +304,7 @@ public class ListView extends Component {
         }
     }
 
-    private static class ListViewSelectionListenerList extends ListenerList<ListViewSelectionListener>
+    private static class ListViewSelectionListenerList extends WTKListenerList<ListViewSelectionListener>
         implements ListViewSelectionListener {
         @Override
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
@@ -335,7 +335,7 @@ public class ListView extends Component {
         }
     }
 
-    private static class ListViewBindingListenerList extends ListenerList<ListViewBindingListener>
+    private static class ListViewBindingListenerList extends WTKListenerList<ListViewBindingListener>
         implements ListViewBindingListener {
         @Override
         public void listDataKeyChanged(ListView listView, String previousListDataKey) {

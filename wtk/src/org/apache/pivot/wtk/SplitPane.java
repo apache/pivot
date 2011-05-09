@@ -57,7 +57,7 @@ public class SplitPane extends Container {
         PRIMARY_REGION
     }
 
-    private static class SplitPaneListenerList extends ListenerList<SplitPaneListener>
+    private static class SplitPaneListenerList extends WTKListenerList<SplitPaneListener>
         implements SplitPaneListener {
         @Override
         public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {

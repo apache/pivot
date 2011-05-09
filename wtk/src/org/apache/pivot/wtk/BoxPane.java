@@ -23,7 +23,7 @@ import org.apache.pivot.util.ListenerList;
  * horizontally.
  */
 public class BoxPane extends Container {
-    private static class BoxPaneListenerList extends ListenerList<BoxPaneListener>
+    private static class BoxPaneListenerList extends WTKListenerList<BoxPaneListener>
         implements BoxPaneListener {
         @Override
         public void orientationChanged(BoxPane boxPane) {

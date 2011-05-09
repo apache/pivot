@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.media.Movie;
  */
 @DefaultProperty("movie")
 public class MovieView extends Component {
-    private static class MovieViewListenerList extends ListenerList<MovieViewListener>
+    private static class MovieViewListenerList extends WTKListenerList<MovieViewListener>
         implements MovieViewListener {
         @Override
         public void movieChanged(MovieView movieView, Movie previousMovie) {
