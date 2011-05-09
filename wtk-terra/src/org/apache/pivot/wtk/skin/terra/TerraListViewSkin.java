@@ -849,12 +849,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 || !getCheckboxBounds(itemIndex).contains(x, y)) {
                 ListView.SelectMode selectMode = listView.getSelectMode();
 
-                if (button == Mouse.Button.RIGHT) {
+                if (button == Mouse.Button.LEFT) {
                     if (selectMode != ListView.SelectMode.NONE
                         && !listView.isItemSelected(itemIndex)) {
                         listView.setSelectedIndex(itemIndex);
                     }
-                } else {
+
                     Keyboard.Modifier commandModifier = Platform.getCommandModifier();
 
                     if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
