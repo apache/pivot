@@ -26,7 +26,10 @@ limitations under the License.
 
       <BoxPane orientation="horizontal">
         <BoxPane orientation="vertical">
-          <PushButton bxml:id="treeAddButton" buttonData="add"/>
+	      <BoxPane orientation="horizontal">
+    	      <PushButton bxml:id="treeButtonAdd"    buttonData="add"/>
+        	  <PushButton bxml:id="treeButtonRemove" buttonData="remove"/>
+		  </BoxPane>
           <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
               <!--
               <TreeView bxml:id="tree" styles="{}">

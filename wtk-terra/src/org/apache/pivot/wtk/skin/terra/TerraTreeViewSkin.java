@@ -390,7 +390,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
          */
         @SuppressWarnings("unchecked")
         public void loadChildren() {
-            if (children == null) {
+            if (children == null || children.isEmpty()) {
                 List<Object> data = (List<Object>)this.data;
                 int count = data.getLength();
 

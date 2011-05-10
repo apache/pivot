@@ -35,7 +35,8 @@ public class Pivot734 implements Application {
 
     private Window window = null;
     private TreeView tree;
-    private PushButton treeAddButton;
+    private PushButton treeButtonAdd;
+    private PushButton treeButtonRemove;
 
     public Pivot734() {
 
@@ -50,10 +51,13 @@ public class Pivot734 implements Application {
     }
 
     private void controlTree(BXMLSerializer bxmlSerializer) {
-        treeAddButton = (PushButton) bxmlSerializer.getNamespace().get("treeAddButton");
+        treeButtonAdd = (PushButton) bxmlSerializer.getNamespace().get("treeButtonAdd");
+        treeButtonRemove = (PushButton) bxmlSerializer.getNamespace().get("treeButtonRemove");
         tree = (TreeView) bxmlSerializer.getNamespace().get("tree");
-        tree.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
+        String treeStyleForShowEmptyBranchControls = ((Boolean) tree.getStyles().get("showEmptyBranchControls")).toString();
+        System.out.println("tree style for showEmptyBranchControls is " + treeStyleForShowEmptyBranchControls);
 
+        tree.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
             public void selectedPathAdded(TreeView treeView, Path path) {
                 System.out.println("selectedPathAdded");
             }
@@ -70,11 +74,11 @@ public class Pivot734 implements Application {
                 System.out.println("selectedNodeChanged");
             }
         });
-        treeAddButton.getButtonPressListeners().add(new ButtonPressListener() {
 
+        treeButtonAdd.getButtonPressListeners().add(new ButtonPressListener() {
             public void buttonPressed(Button button) {
                 Object x = tree.getSelectedNode();
-                System.out.println("add a new element to :: " + x);
+                System.out.println("add a 'new branch' element to the selected element :: " + x);
 
                 if (x != null && x instanceof TreeBranch)
                 {
@@ -84,6 +88,21 @@ public class Pivot734 implements Application {
 
             }
         });
+
+        treeButtonRemove.getButtonPressListeners().add(new ButtonPressListener() {
+            public void buttonPressed(Button button) {
+                Object x = tree.getSelectedNode();
+                System.out.println("remove a 'new branch' element under the selected element :: " + x);
+
+                if (x != null && x instanceof TreeBranch)
+                {
+                    TreeBranch treeBranch = new TreeBranch("new branch");
+                    ((TreeBranch)x).remove(treeBranch);
+                }
+
+            }
+        });
+
     }
 
     @Override
