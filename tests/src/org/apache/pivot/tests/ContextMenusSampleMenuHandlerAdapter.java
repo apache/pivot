@@ -65,9 +65,19 @@ public class ContextMenusSampleMenuHandlerAdapter extends MenuHandler.Adapter {
         });
         menuSection.add(whatIsThisMenuItem);
 
-        Menu.Item nullActionMenuItem = new Menu.Item("Item with null action assigned");
+        Menu.Item nullActionMenuItem = new Menu.Item("Item with null action");
         nullActionMenuItem.setAction((Action) null);
         menuSection.add(nullActionMenuItem);
+
+        Menu.Item disabledActionMenuItem = new Menu.Item("Item with disabled action");
+        disabledActionMenuItem.setAction(new Action() {
+            @Override
+            public void perform(Component source) {
+                System.out.println("in perform");
+            }
+        });
+        disabledActionMenuItem.getAction().setEnabled(false);
+        menuSection.add(disabledActionMenuItem);
 
         return false;
     }
