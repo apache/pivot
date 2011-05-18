@@ -769,7 +769,7 @@ public abstract class Button extends Component {
                 // Bind using state key
                 if (stateKey != null
                     && stateBindType != BindType.LOAD) {
-                    JSON.put(context, selectedKey, (stateBindMapping == null) ?
+                    JSON.put(context, stateKey, (stateBindMapping == null) ?
                         state : stateBindMapping.valueOf(state));
                 }
             } else {
