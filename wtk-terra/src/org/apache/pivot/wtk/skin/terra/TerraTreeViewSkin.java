@@ -390,7 +390,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
          */
         @SuppressWarnings("unchecked")
         public void loadChildren() {
-            if (children == null || children.isEmpty()) {
+            if (children == null) {
                 List<Object> data = (List<Object>)this.data;
                 int count = data.getLength();
 
@@ -1630,12 +1630,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     if (!consumed) {
                         TreeView.SelectMode selectMode = treeView.getSelectMode();
 
-                        if (button == Mouse.Button.RIGHT) {
-                            if (!treeView.isNodeSelected(path)
-                                && selectMode != TreeView.SelectMode.NONE) {
-                                treeView.setSelectedPath(path);
-                            }
-                        } else {
+                        if (button == Mouse.Button.LEFT) {
                             Keyboard.Modifier commandModifier = Platform.getCommandModifier();
 
                             if (Keyboard.isPressed(commandModifier)

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Multiple Selection on Lists" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk">
+    <windowStateListeners>
+    function windowOpened(window) {
+        dataListView.requestFocus();
+    }
+    </windowStateListeners>
+
+    <TablePane styles="{horizontalSpacing:8}">
+        <columns>
+            <TablePane.Column width="1*"/>
+            <TablePane.Column width="1*"/>
+        </columns>
+
+        <TablePane.Row height="1*">
+            <Border styles="{color:10}">
+                <ScrollPane horizontalScrollBarPolicy="fill">
+                    <ListView bxml:id="dataListView" selectMode="multi">
+                        <listData>
+                            <content:NumericSpinnerData lowerBound="0" upperBound="30" increment="1"/>
+                        </listData>
+
+                        <listViewSelectionListeners>
+                        importPackage(org.apache.pivot.collections);
+                        function selectedRangesChanged(viewComponent, previousSelectedElements) {
+                            selectionListView.listData = new ArrayList(viewComponent.selectedRanges);
+                        }
+                        </listViewSelectionListeners>
+                    </ListView>
+                </ScrollPane>
+            </Border>
+            <Border styles="{color:10}">
+                <ScrollPane horizontalScrollBarPolicy="fill">
+                    <ListView bxml:id="selectionListView" selectMode="none"/>
+                </ScrollPane>
+            </Border>
+        </TablePane.Row>
+    </TablePane>
+</Window>
