@@ -28,7 +28,7 @@ public class ArrayAdapter<T> implements Sequence<T>, Serializable {
 
     private T[] array;
 
-    public ArrayAdapter(T[] array) {
+    public ArrayAdapter(T... array) {
         if (array == null) {
             throw new IllegalArgumentException();
         }
