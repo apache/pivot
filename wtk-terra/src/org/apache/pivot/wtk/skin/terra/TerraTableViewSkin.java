@@ -1188,12 +1188,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             && !tableView.isRowDisabled(rowIndex)) {
             TableView.SelectMode selectMode = tableView.getSelectMode();
 
-            if (button == Mouse.Button.LEFT) {
+            if (button == Mouse.Button.RIGHT) {
                 if (selectMode != TableView.SelectMode.NONE
                     && !tableView.isRowSelected(rowIndex)) {
                     tableView.setSelectedIndex(rowIndex);
                 }
-
+            } else {
                 Keyboard.Modifier commandModifier = Platform.getCommandModifier();
 
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)

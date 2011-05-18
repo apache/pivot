@@ -1630,12 +1630,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     if (!consumed) {
                         TreeView.SelectMode selectMode = treeView.getSelectMode();
 
-                        if (button == Mouse.Button.LEFT) {
+                        if (button == Mouse.Button.RIGHT) {
                             if (!treeView.isNodeSelected(path)
                                 && selectMode != TreeView.SelectMode.NONE) {
                                 treeView.setSelectedPath(path);
                             }
-
+                        } else {
                             Keyboard.Modifier commandModifier = Platform.getCommandModifier();
 
                             if (Keyboard.isPressed(commandModifier)
