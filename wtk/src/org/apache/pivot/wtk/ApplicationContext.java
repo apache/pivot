@@ -49,6 +49,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -1508,9 +1509,18 @@ public abstract class ApplicationContext {
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
     private static Version jvmVersion = null;
+    private static Version pivotVersion = null;
 
     static {
         jvmVersion = Version.decode(System.getProperty("java.vm.version"));
+        try {
+            Properties buildProperties = new Properties();
+            buildProperties.load(ApplicationContext.class.getClassLoader().getResourceAsStream("build.properties"));
+            pivotVersion = Version.decode(buildProperties.getProperty("version"));
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
     }
 
     /**
@@ -1595,6 +1605,17 @@ public abstract class ApplicationContext {
      */
     public static Version getJVMVersion() {
         return jvmVersion;
+    }
+
+    /**
+     * Returns the current Pivot version.
+     *
+     * @return
+     * The current Pivot version (determined at build time), or <tt>null</tt>
+     * if the version can't be determined.
+     */
+    public static Version getPivotVersion() {
+        return pivotVersion;
     }
 
     /**

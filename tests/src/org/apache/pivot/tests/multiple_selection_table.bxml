@@ -37,41 +37,41 @@ limitations under the License.
         <TablePane.Row height="1*">
             <Border styles="{color:10}">
                 <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-					<TableView bxml:id="dataTableView" selectMode="multi">
-					    <columns>
-					        <TableView.Column name="i" width="75"/>
-					        <TableView.Column name="a" width="75"/>
-					        <TableView.Column name="b" width="75"/>
-					        <TableView.Column name="c" width="75"/>
-					        <TableView.Column name="d" width="1*"/>
-					    </columns>
-					    <componentListeners>
-					        <![CDATA[
-					        importClass(org.apache.pivot.collections.ArrayList);
-					        importClass(org.apache.pivot.collections.HashMap);
-					
-					        function parentChanged(component, previousParent) {
-					            if (component.getParent() != null) {
-					                var tableData = new ArrayList();
-					
-					                for (var i = 0; i < 20; i++) {
-					                    var row = new HashMap();
-					                    row.put("i", new String(i));
-					                    row.put("a", new String(Math.floor(Math.random() * 100)));
-					                    row.put("b", new String(Math.floor(Math.random() * 1000)));
-					                    row.put("c", new String(Math.floor(Math.random() * 10000)));
-					                    tableData.add(row);
-					                }
-					
-					                component.setTableData(tableData);
-					            }
-					        }
+                    <TableView bxml:id="dataTableView" selectMode="multi">
+                        <columns>
+                            <TableView.Column name="i" width="75"/>
+                            <TableView.Column name="a" width="75"/>
+                            <TableView.Column name="b" width="75"/>
+                            <TableView.Column name="c" width="75"/>
+                            <TableView.Column name="d" width="1*"/>
+                        </columns>
+                        <componentListeners>
+                            <![CDATA[
+                            importClass(org.apache.pivot.collections.ArrayList);
+                            importClass(org.apache.pivot.collections.HashMap);
 
-	                        function selectedRangesChanged(viewComponent, previousSelectedElements) {
-	                            selectionListView.listData = new ArrayList(viewComponent.selectedRanges);
-	                        }
-					        ]]>
-					    </componentListeners>
+                            function parentChanged(component, previousParent) {
+                                if (component.getParent() != null) {
+                                    var tableData = new ArrayList();
+
+                                    for (var i = 0; i < 20; i++) {
+                                        var row = new HashMap();
+                                        row.put("i", new String(i));
+                                        row.put("a", new String(Math.floor(Math.random() * 100)));
+                                        row.put("b", new String(Math.floor(Math.random() * 1000)));
+                                        row.put("c", new String(Math.floor(Math.random() * 10000)));
+                                        tableData.add(row);
+                                    }
+
+                                    component.setTableData(tableData);
+                                }
+                            }
+
+                            function selectedRangesChanged(viewComponent, previousSelectedElements) {
+                                selectionListView.listData = new ArrayList(viewComponent.selectedRanges);
+                            }
+                            ]]>
+                        </componentListeners>
 
                         <tableViewSelectionListeners>
                         importPackage(org.apache.pivot.collections);
@@ -79,7 +79,7 @@ limitations under the License.
                             selectionListView.listData = new ArrayList(viewComponent.selectedRanges);
                         }
                         </tableViewSelectionListeners>
-					</TableView>
+                    </TableView>
                 </ScrollPane>
             </Border>
             <Border styles="{color:10}">
