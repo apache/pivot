@@ -1004,6 +1004,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             case Keyboard.KeyCode.UP: {
                 if (selectMode != ListView.SelectMode.NONE) {
                     int index = listView.getFirstSelectedIndex();
+                    int count = listView.getListData().getLength();
 
                     do {
                         index--;
@@ -1017,6 +1018,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         } else {
                             listView.setSelectedIndex(index);
                         }
+                    } else if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT) && listView.getSelectMode() == ListView.SelectMode.MULTI && count == listView.getSelectedItems().getLength()) {
+                        index = listView.getLastSelectedIndex();
+                        do {
+                            index--;
+                        } while (index >= 0 &&
+                                listView.isItemDisabled(index));
+
+                        listView.setSelectedIndex(Math.max(0, index));
                     }
 
                     consumed = true;
@@ -1042,6 +1051,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         } else {
                             listView.setSelectedIndex(index);
                         }
+                    } else if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT) && listView.getSelectMode() == ListView.SelectMode.MULTI && count == listView.getSelectedItems().getLength()) {
+                        index = 0;
+                        do {
+                            index++;
+                        } while (index < count &&
+                                listView.isItemDisabled(index));
+
+                        listView.setSelectedIndex(Math.min(count - 1, index));
                     }
 
                     consumed = true;
