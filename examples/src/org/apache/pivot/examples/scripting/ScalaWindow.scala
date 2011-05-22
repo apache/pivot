@@ -30,24 +30,24 @@ import org.apache.pivot.wtk.Window;
 
 class ScalaWindow extends Window with Bindable {
     private var sayHelloButton:PushButton = null;
-    
-    override def initialize(namespace: Map[String, Object], location:URL, 
+
+    override def initialize(namespace: Map[String, Object], location:URL,
         resources:Resources) {
         sayHelloButton = namespace.get("sayHelloButton").asInstanceOf[PushButton];
-        
+
         sayHelloButton.getButtonPressListeners().add(new ButtonPressListener {
             override def buttonPressed(button:Button) {
                 sayHello();
             }
         });
     }
-    
+
     override def open(display:Display, owner:Window) {
         super.open(display, owner);
 
         sayHelloButton.requestFocus();
     }
-    
+
     private def sayHello() {
         Prompt.prompt("Hello from Scala!", this);
     }
