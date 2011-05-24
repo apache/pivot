@@ -1512,14 +1512,22 @@ public abstract class ApplicationContext {
     private static Version pivotVersion = null;
 
     static {
+        // Get the JVM version
         jvmVersion = Version.decode(System.getProperty("java.vm.version"));
-        try {
-            Properties buildProperties = new Properties();
-            buildProperties.load(ApplicationContext.class.getClassLoader().getResourceAsStream("build.properties"));
-            pivotVersion = Version.decode(buildProperties.getProperty("version"));
-        }
-        catch (IOException ioe) {
-            throw new RuntimeException(ioe);
+
+        // Get the Pivot version
+        InputStream buildPropertiesInputStream = ApplicationContext.class.getClassLoader().getResourceAsStream("build.properties");
+
+        if (buildPropertiesInputStream == null) {
+            pivotVersion = new Version(0, 0, 0, 0);
+        } else {
+            try {
+                Properties buildProperties = new Properties();
+                buildProperties.load(buildPropertiesInputStream);
+                pivotVersion = Version.decode(buildProperties.getProperty("version"));
+            } catch (IOException exception) {
+                throw new RuntimeException(exception);
+            }
         }
     }
 

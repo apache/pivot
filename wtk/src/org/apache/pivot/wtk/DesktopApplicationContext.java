@@ -373,13 +373,25 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Terminates the application context.
+     * this call is the same as exit(true)
      */
-    public static boolean exit() {
+    public static void exit() {
+        exit(true);
+    }
+
+    /**
+     * Terminates the application context.
+     *
+     * @param optional
+     * If <tt>true</tt>, shutdown is optional and may be cancelled. If
+     * <tt>false</tt>, shutdown cannot be cancelled.
+     */
+    public static boolean exit(boolean optional) {
         boolean cancelShutdown = false;
 
         if (application != null) {
             try {
-                cancelShutdown = application.shutdown(true);
+                cancelShutdown = application.shutdown(optional);
             } catch(Exception exception) {
                 displayException(exception);
             }
@@ -632,7 +644,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             Application.AboutHandler aboutHandler = (Application.AboutHandler)application;
                             aboutHandler.aboutRequested();
                         } else if (methodName.equals("handleQuit")) {
-                            handled = !exit();
+                            handled = !exit(true);
                         }
 
                         // Invoke setHandled()
