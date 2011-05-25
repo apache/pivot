@@ -1,0 +1,17 @@
+
+Welcome to Apache Pivot Quickstart Archetype
+============================================
+
+This is a Maven Archetype for generating Java Projects based on Apache Pivot.
+
+
+Dependencies
+============
+
+* Apache Pivot jars
+
+
+Documentation
+=============
+
+Pivot home page: http://pivot.apache.org/
