@@ -221,9 +221,6 @@ limitations under the License.
                     <exclude name="**/*.java"/>
                     <exclude name="**/package.html"/>
                 </fileset>
-                <fileset dir=".">
-                    <include name="build.properties"/>
-                </fileset>
             </jar>
         </sequential>
     </macrodef>

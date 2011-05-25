@@ -49,7 +49,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -1516,18 +1515,11 @@ public abstract class ApplicationContext {
         jvmVersion = Version.decode(System.getProperty("java.vm.version"));
 
         // Get the Pivot version
-        InputStream buildPropertiesInputStream = ApplicationContext.class.getClassLoader().getResourceAsStream("build.properties");
-
-        if (buildPropertiesInputStream == null) {
+        String version = ApplicationContext.class.getPackage().getImplementationVersion();
+        if (version == null) {
             pivotVersion = new Version(0, 0, 0, 0);
         } else {
-            try {
-                Properties buildProperties = new Properties();
-                buildProperties.load(buildPropertiesInputStream);
-                pivotVersion = Version.decode(buildProperties.getProperty("version"));
-            } catch (IOException exception) {
-                throw new RuntimeException(exception);
-            }
+            pivotVersion = Version.decode(version);
         }
     }
 
