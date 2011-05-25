@@ -83,11 +83,6 @@ public class Pivot734 implements Application {
                 if (x != null && x instanceof TreeBranch)
                 {
                     TreeBranch treeBranch = new TreeBranch("new branch");
-
-                    // workaround for PIVOT-734
-                    Path path = tree.getSelectedPath();
-                    tree.setBranchExpanded(path, true);
-
                     ((TreeBranch)x).add(treeBranch);
                 }
 
