@@ -16,68 +16,81 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Tree Views" maximized="true"
+<Window title="Tree Views [PIVOT-718]" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:app="org.apache.pivot.tests.issues"
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk"
 >
+
+  <BoxPane orientation="vertical">
+
     <Border>
 
-      <BoxPane orientation="horizontal">
+      <BoxPane orientation="horizontal" styles="{spacing:40}">
         <BoxPane orientation="vertical">
-          <PushButton bxml:id="treeDelButton" buttonData="delete"/>
+          <PushButton bxml:id="treeDelButton" buttonData="delete" />
           <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-              <TreeView bxml:id="tree" >
-                  <treeData>
-                      <content:TreeBranch >
-                          <content:TreeBranch text="Activity">
-                              <content:TreeNode text="Camping" />
-                              <content:TreeNode text="Skiing" />
-                          </content:TreeBranch>
-                          <content:TreeBranch text="Occasion">
-                              <content:TreeBranch text="Holidays">
-                                  <content:TreeNode text="Christmas" />
-                                  <content:TreeNode text="Independence Day" />
-                                  <content:TreeNode text="Labor Day" />
-                                  <content:TreeNode text="New Year's Day" />
-                                  <content:TreeNode text="President's Day" />
-                                  <content:TreeNode text="Thanksgiving" />
-                                  <content:TreeNode text="Valentine's Day" />
-                                  <content:TreeNode text="Veteran's Day" />
-                              </content:TreeBranch>
-                              <content:TreeNode text="Anniversary" />
-                              <content:TreeNode text="Birthday" />
-                              <content:TreeNode text="Wedding" />
-                          </content:TreeBranch>
-                          <content:TreeBranch text="Sports" >
-                              <content:TreeNode text="Baseball" />
-                              <content:TreeNode text="Basketball" />
-                              <content:TreeNode text="Football" />
-                              <content:TreeNode text="Ice Hockey" />
-                              <content:TreeNode text="Soccer" />
-                              <content:TreeNode text="Softball" />
-                          </content:TreeBranch>
-                          <content:TreeBranch text="Games">
-                              <content:TreeNode text="Foosball" />
-                              <content:TreeNode text="Ping Pong" />
-                              <content:TreeNode text="Air Hockey" />
-                          </content:TreeBranch>
+            <TreeView bxml:id="tree">
+              <treeData>
+                <content:TreeBranch>
+                  <content:TreeBranch text="Activity">
+                    <content:TreeNode text="Camping" />
+                    <content:TreeNode text="Skiing" />
+                  </content:TreeBranch>
+                  <content:TreeBranch text="Occasion">
+                    <content:TreeBranch text="Holidays">
+                      <content:TreeNode text="Christmas" />
+                      <content:TreeNode text="Independence Day" />
+                      <content:TreeNode text="Labor Day" />
+                      <content:TreeNode text="New Year's Day" />
+                      <content:TreeNode text="President's Day" />
+                      <content:TreeNode text="Thanksgiving" />
+                      <content:TreeNode text="Valentine's Day" />
+                      <content:TreeNode text="Veteran's Day" />
                     </content:TreeBranch>
-                  </treeData>
+                    <content:TreeNode text="Anniversary" />
+                    <content:TreeNode text="Birthday" />
+                    <content:TreeNode text="Wedding" />
+                  </content:TreeBranch>
+                  <content:TreeBranch text="Sports">
+                    <content:TreeNode text="Baseball" />
+                    <content:TreeNode text="Basketball" />
+                    <content:TreeNode text="Football" />
+                    <content:TreeNode text="Ice Hockey" />
+                    <content:TreeNode text="Soccer" />
+                    <content:TreeNode text="Softball" />
+                  </content:TreeBranch>
+                  <content:TreeBranch text="Games">
+                    <content:TreeNode text="Foosball" />
+                    <content:TreeNode text="Ping Pong" />
+                    <content:TreeNode text="Air Hockey" />
+                  </content:TreeBranch>
+                </content:TreeBranch>
+              </treeData>
 
-              </TreeView>
+            </TreeView>
           </ScrollPane>
         </BoxPane>
       </BoxPane>
 
       <BoxPane orientation="vertical">
-        <PushButton bxml:id="listDelButton" buttonData="delete"/>
+        <PushButton bxml:id="listDelButton" buttonData="delete" />
         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-            <ListView bxml:id="list" listData="['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']"/>
+          <ListView bxml:id="list" listData="['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']" />
         </ScrollPane>
       </BoxPane>
 
     </Border>
+
+
+    <BoxPane orientation="vertical" styles="{fill:true, spacing:10, padding:{top:20}}" preferredWidth="400">
+      <Label text="Select an item in the TreeView or ListView and then click the relevant button to remove the item." styles="{wrapText:true}" />
+      <Label text="Debug information is written to the console." styles="{wrapText:true}" />
+      <Label text="TreeViewSelectionListener#selectedNodeChanged() event does not appear to fired when deselecting a TreeView node." styles="{wrapText:true, color:23}" />
+      <Label text="TreeViewSelectionListener#selectedNodeChanged() and TreeViewSelectionListener#selectedPathsChanged events do not appear to fired when deleting TreeView node." styles="{wrapText:true, color:23}" />
+    </BoxPane>
+
+  </BoxPane>
 
 </Window>

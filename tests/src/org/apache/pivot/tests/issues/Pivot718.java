@@ -33,6 +33,8 @@ import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.content.TreeBranch;
+import org.apache.pivot.wtk.content.TreeNode;
 
 public class Pivot718 implements Application {
 
@@ -114,12 +116,15 @@ public class Pivot718 implements Application {
         });
         treeDelButton.getButtonPressListeners().add(new ButtonPressListener() {
 
-            @SuppressWarnings("unchecked")
             public void buttonPressed(Button button) {
-                Object x = tree.getSelectedNode();
-                System.out.println("delete :: " + x);
-                List data = tree.getTreeData();
-                data.remove(x);
+                TreeNode selectedNode = (TreeNode) tree.getSelectedNode();
+                System.out.println("delete :: " + selectedNode);
+                if (selectedNode != null) {
+                    TreeBranch parent = selectedNode.getParent();
+                    if (parent != null) {
+                        parent.remove(selectedNode);
+                    }
+                }
             }
         });
     }
