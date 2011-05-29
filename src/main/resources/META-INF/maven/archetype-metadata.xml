@@ -15,9 +15,11 @@
       <includes>
           <include>**/*</include>
       </includes>
+      <!-- 
 	  <excludes>
         <exclude>**/*.java</exclude>
       </excludes>
+      //-->
     </fileSet>
 
     <fileSet filtered="true" packaged="true" encoding="UTF-8">
@@ -31,9 +33,11 @@
       <includes>
           <include>**/*</include>
       </includes>
+      <!-- 
 	  <excludes>
         <exclude>**/*.java</exclude>
       </excludes>
+      //-->
     </fileSet>
   </fileSets>
 

@@ -5,6 +5,7 @@ System Requirements
 * Ant 1.7 or greater (http://ant.apache.org/)
 * JUnit 4.3 or greater (http://www.junit.org/)
 * Maven Ant Tasks 2.0.10 or greater (http://maven.apache.org/) (optional)
+* Maven 2.2.1 or greater (http://maven.apache.org/), recommended the latest 3.0.x
 
 Project Set-Up
 ==============
@@ -20,9 +21,10 @@ Building Apache Pivot Quickstart Archetype
   $ mvn -U install
   $ cd ..
 
-* To Test is, generating a Pivot Project (called "myapp") with it 
+* To Test, generate a Pivot Project (called "myapp") with it 
   (and give to it the desired package name when requested, like "com.mycompany.myapp", 
   note that usually the ".myapp" part in the package is written only if overridden here):
   $ mvn archetype:generate -U -DarchetypeGroupId=org.apache.pivot -DarchetypeArtifactId=pivot-archetype-quickstart -DarchetypeVersion=1.0 -DgroupId=com.mycompany -DartifactId=myapp -Dversion=1.0 
   then, compile the project and run it.
 
+* Note that all maven -U flags shown here are optional, but useful to ensure that latest versions will be used.
