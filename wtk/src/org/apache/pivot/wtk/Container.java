@@ -845,11 +845,21 @@ public abstract class Container extends Component
     }
 
     public static final void assertEventDispatchThread() {
+        String threadName = Thread.currentThread().getName();
         /* Currently, application startup happens on the main thread, so we need to allow
          * that thread to modify WTK state.
          */
-        if (!java.awt.EventQueue.isDispatchThread()
-             && !Thread.currentThread().getName().equals("main")) {
+        if (threadName.equals("main")) {
+            return;
+        }
+        /*
+         * See Sun/Oracle bug 6424157. There is a race condition where we can be running on the event thread
+         * but isDispatchThread() will return false.
+         */
+        if (threadName.startsWith("AWT-EventQueue-")) {
+            return;
+        }
+        if (!java.awt.EventQueue.isDispatchThread()) {
             throw new IllegalStateException("this method can only be called from the AWT event dispatch thread");
         }
     }
