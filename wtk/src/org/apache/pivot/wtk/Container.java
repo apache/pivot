@@ -844,23 +844,35 @@ public abstract class Container extends Component
         return containerMouseListeners;
     }
 
+    private static Runnable EDT_CHECKER = new Runnable() {
+        public void run() {
+            String threadName = Thread.currentThread().getName();
+            /* Currently, application startup happens on the main thread, so we need to allow
+             * that thread to modify WTK state.
+             */
+            if (threadName.equals("main") || threadName.equals("javawsApplicationMain")) {
+                return;
+            }
+            /*
+             * See Sun/Oracle bug 6424157. There is a race condition where we can be running on the event thread
+             * but isDispatchThread() will return false.
+             */
+            if (threadName.startsWith("AWT-EventQueue-")) {
+                return;
+            }
+            if (!java.awt.EventQueue.isDispatchThread()) {
+                throw new IllegalStateException("this method can only be called from the AWT event dispatch thread");
+            }
+        }
+    };
+
     public static final void assertEventDispatchThread() {
-        String threadName = Thread.currentThread().getName();
-        /* Currently, application startup happens on the main thread, so we need to allow
-         * that thread to modify WTK state.
-         */
-        if (threadName.equals("main")) {
-            return;
+        if (EDT_CHECKER != null) {
+            EDT_CHECKER.run();
         }
-        /*
-         * See Sun/Oracle bug 6424157. There is a race condition where we can be running on the event thread
-         * but isDispatchThread() will return false.
-         */
-        if (threadName.startsWith("AWT-EventQueue-")) {
-            return;
-        }
-        if (!java.awt.EventQueue.isDispatchThread()) {
-            throw new IllegalStateException("this method can only be called from the AWT event dispatch thread");
-        }
+    }
+
+    public static final void setEventDispatchThreadChecker(Runnable runnable) {
+        EDT_CHECKER = runnable;
     }
 }
