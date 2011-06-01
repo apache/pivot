@@ -374,21 +374,23 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         if (offset == getCharacterCount() - 1) {
             characterBounds = terminatorBounds;
         } else {
-            for (int i = 0, n = rows.getLength(); i < n; i++) {
-                Row row = rows.get(i);
-                for (RowSegment segment : row.rowSegments) {
-                    int nodeViewOffset = segment.offset;
-                    int characterCount = segment.nodeView.getCharacterCount();
+            if (rows != null) {
+                for (int i = 0, n = rows.getLength(); i < n; i++) {
+                    Row row = rows.get(i);
+                    for (RowSegment segment : row.rowSegments) {
+                        int nodeViewOffset = segment.offset;
+                        int characterCount = segment.nodeView.getCharacterCount();
 
-                    if (offset >= nodeViewOffset
-                        && offset < nodeViewOffset + characterCount) {
-                        characterBounds = segment.nodeView.getCharacterBounds(offset - nodeViewOffset);
+                        if (offset >= nodeViewOffset
+                            && offset < nodeViewOffset + characterCount) {
+                            characterBounds = segment.nodeView.getCharacterBounds(offset - nodeViewOffset);
 
-                        if (characterBounds != null) {
-                            characterBounds = characterBounds.translate(segment.nodeView.getX(), segment.nodeView.getY());
+                            if (characterBounds != null) {
+                                characterBounds = characterBounds.translate(segment.nodeView.getX(), segment.nodeView.getY());
+                            }
+
+                            break;
                         }
-
-                        break;
                     }
                 }
             }
