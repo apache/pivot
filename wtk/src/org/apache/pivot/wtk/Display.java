@@ -70,6 +70,11 @@ public final class Display extends Container {
     }
 
     @Override
+    public void setTooltipText(String tooltipText) {
+        throw new UnsupportedOperationException("Can't set a tooltip on the display.");
+    }
+
+    @Override
     public void repaint(int x, int y, int width, int height, boolean immediate) {
         if (immediate) {
             Graphics2D graphics = (Graphics2D)displayHost.getGraphics();
