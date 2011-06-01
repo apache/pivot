@@ -152,6 +152,13 @@ public class TextInput extends Component {
                 listener.textValidChanged(textInput);
             }
         }
+
+        @Override
+        public void editableChanged(TextInput textInput) {
+            for (TextInputListener listener : this) {
+                listener.editableChanged(textInput);
+            }
+        }
     }
 
     private static class TextInputContentListenerList extends WTKListenerList<TextInputContentListener>
@@ -259,6 +266,7 @@ public class TextInput extends Component {
     private int maximumLength = Integer.MAX_VALUE;
     private boolean password = false;
     private String prompt = null;
+    private boolean editable = true;
 
     private String textKey = null;
     private BindType textBindType = BindType.BOTH;
@@ -924,6 +932,32 @@ public class TextInput extends Component {
      */
     public boolean isTextValid() {
         return textValid;
+    }
+
+    /**
+     * Returns the text area's editable flag.
+     */
+    public boolean isEditable() {
+        return editable;
+    }
+
+    /**
+     * Sets the text area's editable flag.
+     *
+     * @param editable
+     */
+    public void setEditable(boolean editable) {
+        if (this.editable != editable) {
+            if (!editable) {
+                if (isFocused()) {
+                    clearFocus();
+                }
+            }
+
+            this.editable = editable;
+
+            textInputListeners.editableChanged(this);
+        }
     }
 
     /**

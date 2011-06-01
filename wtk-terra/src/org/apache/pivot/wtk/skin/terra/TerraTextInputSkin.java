@@ -42,6 +42,8 @@ import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
@@ -51,8 +53,6 @@ import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.TextInputSelectionListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.validation.Validator;
 
@@ -369,7 +369,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     Color selectionColor;
                     Color selectionBackgroundColor;
 
-                    if (textInput.isFocused()) {
+                    if (textInput.isFocused() && textInput.isEditable()) {
                         selectionColor = this.selectionColor;
                         selectionBackgroundColor = this.selectionBackgroundColor;
                     } else {
@@ -1036,22 +1036,24 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     @Override
     public boolean keyTyped(Component component, char character) {
         boolean consumed = super.keyTyped(component, character);
+        TextInput textInput = (TextInput)getComponent();
 
-        // Ignore characters in the control range and the ASCII delete
-        // character as well as meta key presses
-        if (character > 0x1F
-            && character != 0x7F
-            && !Keyboard.isPressed(Keyboard.Modifier.META)) {
-            TextInput textInput = (TextInput)getComponent();
-            int selectionLength = textInput.getSelectionLength();
+        if (textInput.isEditable()) {
+            // Ignore characters in the control range and the ASCII delete
+            // character as well as meta key presses
+            if (character > 0x1F
+                && character != 0x7F
+                && !Keyboard.isPressed(Keyboard.Modifier.META)) {
+                int selectionLength = textInput.getSelectionLength();
 
-            if (textInput.getCharacterCount() - selectionLength + 1 > textInput.getMaximumLength()) {
-                Toolkit.getDefaultToolkit().beep();
-            } else {
-                // NOTE We explicitly call getSelectionStart() twice here in case the remove
-                // event is vetoed
-                textInput.removeText(textInput.getSelectionStart(), selectionLength);
-                textInput.insertText(Character.toString(character), textInput.getSelectionStart());
+                if (textInput.getCharacterCount() - selectionLength + 1 > textInput.getMaximumLength()) {
+                    Toolkit.getDefaultToolkit().beep();
+                } else {
+                    // NOTE We explicitly call getSelectionStart() twice here in case the remove
+                    // event is vetoed
+                    textInput.removeText(textInput.getSelectionStart(), selectionLength);
+                    textInput.insertText(Character.toString(character), textInput.getSelectionStart());
+                }
             }
         }
 
@@ -1116,7 +1118,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
         Keyboard.Modifier wordNavigationModifier = Platform.getWordNavigationModifier();
 
-        if (keyCode == Keyboard.KeyCode.DELETE) {
+        if (keyCode == Keyboard.KeyCode.DELETE && textInput.isEditable()) {
             int index = textInput.getSelectionStart();
 
             if (index < textInput.getCharacterCount()) {
@@ -1125,7 +1127,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.BACKSPACE) {
+        } else if (keyCode == Keyboard.KeyCode.BACKSPACE && textInput.isEditable()) {
             int index = textInput.getSelectionStart();
             int count = textInput.getSelectionLength();
 
@@ -1270,7 +1272,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             if (keyCode == Keyboard.KeyCode.A) {
                 textInput.setSelection(0, textInput.getCharacterCount());
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.X) {
+            } else if (keyCode == Keyboard.KeyCode.X && textInput.isEditable()) {
                 if (textInput.isPassword()) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
@@ -1286,10 +1288,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 }
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.V) {
+            } else if (keyCode == Keyboard.KeyCode.V && textInput.isEditable()) {
                 textInput.paste();
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.Z) {
+            } else if (keyCode == Keyboard.KeyCode.Z && textInput.isEditable()) {
                 if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                     textInput.undo();
                 }
@@ -1456,6 +1458,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     @Override
     public void textChanged(TextInput textInput) {
         layout();
+        repaintComponent();
+    }
+
+    @Override
+    public void editableChanged(TextInput textInput) {
         repaintComponent();
     }
 

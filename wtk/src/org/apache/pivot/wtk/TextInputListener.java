@@ -53,6 +53,10 @@ public interface TextInputListener {
         @Override
         public void textValidChanged(TextInput textInput) {
         }
+
+        @Override
+        public void editableChanged(TextInput textInput) {
+        }
     }
 
     /**
@@ -107,4 +111,12 @@ public interface TextInputListener {
      * @param textInput
      */
     public void textValidChanged(TextInput textInput);
+
+    /**
+     * Called when the editable state has changed.
+     *
+     * @param textInput
+     */
+    public void editableChanged(TextInput textInput);
+
 }
