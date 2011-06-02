@@ -640,10 +640,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                 openTransition.start(transitionListener);
             } else {
                 // Reverse the open transition
-                if (!openTransition.isReversed()
-                    && openTransition.isRunning()) {
-                    openTransition.reverse(transitionListener);
-                }
+                openTransition.reverse();
             }
 
             vote = (openTransition != null

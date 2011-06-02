@@ -329,37 +329,6 @@ public abstract class Transition {
     }
 
     /**
-     * Reverses the transition with no listener.
-     *
-     * @see #reverse(TransitionListener)
-     */
-    public void reverse() {
-        reverse(null);
-    }
-
-    /**
-     * Reverses the transition. Updates the start time so the reverse duration
-     * is the same as the current elapsed time.
-     *
-     * @param transitionListener
-     * The listener to get notified when the transition completes, or
-     * <tt>null</tt> if no notification is necessary
-     */
-    public void reverse(TransitionListener transitionListener) {
-        if (this.transitionCallback == null) {
-            throw new IllegalStateException("Transition is not currently running.");
-        }
-
-        this.transitionListener = transitionListener;
-
-        long repeatDuration = currentTime - startTime;
-        long endTime = currentTime + repeatDuration;
-        startTime = endTime - duration;
-
-        reversed = !reversed;
-    }
-
-    /**
      * Tests whether the transition is reversed.
      *
      * @return
@@ -367,5 +336,28 @@ public abstract class Transition {
      */
     public boolean isReversed() {
         return reversed;
+    }
+
+    /**
+     * Sets the transition's reversed flag.
+     *
+     * @param reversed
+     */
+    public void setReversed(boolean reversed) {
+        this.reversed = reversed;
+    }
+
+    /**
+     * Reverses the transition. If the transition is running, updates the start
+     * time so the reverse duration is the same as the current elapsed time.
+     */
+    public void reverse() {
+        if (isRunning()) {
+            long repeatDuration = currentTime - startTime;
+            long endTime = currentTime + repeatDuration;
+            startTime = endTime - duration;
+        }
+
+        setReversed(!isReversed());
     }
 }
