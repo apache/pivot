@@ -41,6 +41,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Panorama;
@@ -52,7 +53,6 @@ import org.apache.pivot.wtk.TabPaneListener;
 import org.apache.pivot.wtk.TabPaneSelectionListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.effects.ClipDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -759,6 +759,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                     buttonAreaPreferredWidth += corner.getPreferredWidth(-1);
                     preferredHeight += Math.max(corner.getPreferredHeight(-1),
                         Math.max(tabButtonPanorama.getPreferredHeight(-1) - 1, 0));
+                    buttonAreaPreferredWidth += 2; // space between corner and panorama
                 } else {
                     preferredHeight += Math.max(tabButtonPanorama.getPreferredHeight(-1) - 1, 0);
                 }
@@ -789,9 +790,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                 int buttonAreaPreferredHeight = tabButtonPanorama.getPreferredHeight(-1);
                 if (corner != null) {
+                    buttonAreaPreferredHeight += corner.getPreferredHeight(-1);
                     preferredWidth += Math.max(corner.getPreferredWidth(-1),
                         Math.max(tabButtonPanorama.getPreferredWidth(-1) - 1, 0));
-                    buttonAreaPreferredHeight += corner.getPreferredHeight(-1);
+                    buttonAreaPreferredHeight += 2; // space between corner and panorama
                 } else {
                     preferredWidth += Math.max(tabButtonPanorama.getPreferredWidth(-1) - 1, 0);
                 }
@@ -884,9 +886,15 @@ public class TerraTabPaneSkin extends ContainerSkin
                 int buttonPanoramaY = 0;
 
                 if (corner != null) {
-                    int cornerWidth = width - buttonPanoramaWidth;
+                    int cornerWidth = corner.getPreferredWidth();
+                    if (cornerWidth > width - 2) {
+                        cornerWidth = Math.max(width - 2, 0);
+                    }
+                    if (buttonPanoramaWidth + 2 + cornerWidth> width) {
+                        buttonPanoramaWidth = Math.max(width - 2 - cornerWidth, 0);
+                    }
                     int cornerHeight = Math.max(corner.getPreferredHeight(-1), buttonPanoramaSize.height - 1);
-                    int cornerX = buttonPanoramaWidth;
+                    int cornerX = width - cornerWidth;
                     int cornerY = Math.max(buttonPanoramaHeight - cornerHeight - 1, 0);
 
                     buttonPanoramaY = Math.max(cornerHeight - buttonPanoramaHeight + 1, 0);
@@ -915,10 +923,16 @@ public class TerraTabPaneSkin extends ContainerSkin
                 int buttonPanoramaX = 0;
 
                 if (corner != null) {
-                    int cornerWidth = corner.getPreferredWidth(-1);
-                    int cornerHeight = height - buttonPanoramaHeight;
+                    int cornerHeight = corner.getPreferredHeight();
+                    if (cornerHeight > height - 2) {
+                        cornerHeight = Math.max(height - 2, 0);
+                    }
+                    if (buttonPanoramaHeight + 2 + cornerHeight > height) {
+                        buttonPanoramaHeight = Math.max(height - 2 - cornerHeight, 0);
+                    }
+                    int cornerWidth = Math.max(corner.getPreferredWidth(-1), buttonPanoramaSize.width - 1);
                     int cornerX = Math.max(buttonPanoramaWidth - cornerWidth - 1, 0);
-                    int cornerY = buttonPanoramaHeight;
+                    int cornerY = height - cornerHeight;
 
                     buttonPanoramaX = Math.max(cornerWidth - buttonPanoramaWidth + 1, 0);
 
