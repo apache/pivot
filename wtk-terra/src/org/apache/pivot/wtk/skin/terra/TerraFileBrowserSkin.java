@@ -38,7 +38,6 @@ import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -540,56 +539,14 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
-    private class RefreshFileListTask extends Task<Void> {
+    private class RefreshFileListTask extends Task<File[]> {
         @Override
-        public Void execute() {
+        public File[] execute() {
             FileBrowser fileBrowser = (FileBrowser)getComponent();
             File rootDirectory = fileBrowser.getRootDirectory();
             File[] files = rootDirectory.listFiles(HIDDEN_FILE_FILTER);
 
-            String text = searchTextInput.getText().trim();
-            IncludeFileFilter includeFileFilter = new IncludeFileFilter(text.length() == 0 ? null : text,
-                hideDisabledFiles ? fileBrowser.getDisabledFileFilter() : null);
-
-            TableView.SortDictionary sort = fileTableView.getSort();
-
-            final FileComparator fileComparator;
-            if (sort.isEmpty()) {
-                fileComparator = null;
-            } else {
-                Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
-                fileComparator = new FileComparator(pair.key, pair.value);
-            }
-
-            for (int i = 0; i < files.length && !abort; i++) {
-                final File file = files[i];
-
-                if (includeFileFilter.include(file)) {
-                    ApplicationContext.queueCallback(new Runnable() {
-                        @Override
-                        @SuppressWarnings("unchecked")
-                        public void run() {
-                            if (!abort) {
-                                ArrayList<File> fileTableData = (ArrayList<File>)fileTableView.getTableData();
-
-                                int index;
-                                if (fileComparator == null) {
-                                    index = fileTableData.getLength();
-                                } else {
-                                    index = ArrayList.binarySearch(fileTableData, file, fileComparator);
-                                    if (index < 0) {
-                                        index = -(index + 1);
-                                    }
-                                }
-
-                                fileTableData.insert(file, index);
-                            }
-                        }
-                    });
-                }
-            }
-
-            return null;
+            return files;
         }
     }
 
@@ -1070,16 +1027,53 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         fileTableView.setTableData(new ArrayList<File>());
 
         refreshFileListTask = new RefreshFileListTask();
-        refreshFileListTask.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+        refreshFileListTask.execute(new TaskAdapter<File[]>(new TaskListener<File[]>() {
+            @SuppressWarnings("unchecked")
             @Override
-            public void taskExecuted(Task<Void> task) {
+            public void taskExecuted(Task<File[]> task) {
                 if (task == refreshFileListTask) {
+                    File files[] = task.getResult();
+
+                    String text = searchTextInput.getText().trim();
+                    IncludeFileFilter includeFileFilter = new IncludeFileFilter(text.length() == 0 ? null : text,
+                        hideDisabledFiles ? ((FileBrowser) getComponent()).getDisabledFileFilter() : null);
+
+                    TableView.SortDictionary sort = fileTableView.getSort();
+
+                    final FileComparator fileComparator;
+                    if (sort.isEmpty()) {
+                        fileComparator = null;
+                    } else {
+                        Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
+                        fileComparator = new FileComparator(pair.key, pair.value);
+                    }
+
+                    for (int i = 0; i < files.length; i++) {
+                        final File file = files[i];
+
+                        if (includeFileFilter.include(file)) {
+                            ArrayList<File> fileTableData = (ArrayList<File>)fileTableView.getTableData();
+
+                            int index;
+                            if (fileComparator == null) {
+                                index = fileTableData.getLength();
+                            } else {
+                                index = ArrayList.binarySearch(fileTableData, file, fileComparator);
+                                if (index < 0) {
+                                    index = -(index + 1);
+                                }
+                            }
+
+                            fileTableData.insert(file, index);
+                        }
+                    }
+
                     refreshFileListTask = null;
                 }
             }
 
             @Override
-            public void executeFailed(Task<Void> task) {
+            public void executeFailed(Task<File[]> task) {
                 if (task == refreshFileListTask) {
                     refreshFileListTask = null;
                 }
