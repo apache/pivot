@@ -72,7 +72,8 @@ public class MenuBar extends Container {
 
         @Override
         protected void setParent(Container parent) {
-            if (!(parent instanceof MenuBar)) {
+            if (parent != null
+                && !(parent instanceof MenuBar)) {
                 throw new IllegalArgumentException("Parent must be an instance of "
                     + MenuBar.class.getName());
             }
@@ -308,6 +309,20 @@ public class MenuBar extends Container {
             this.activeItem = activeItem;
             menuBarListeners.activeItemChanged(this, previousActiveItem);
         }
+    }
+
+    @Override
+    public Sequence<Component> remove(int index, int count) {
+        for (int i = index, n = index + count; i < n; i++) {
+            Component component = get(i);
+
+            if (items.indexOf((Item)component) >= 0) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        // Call the base method to remove the components
+        return super.remove(index, count);
     }
 
     public void activateNextItem() {
