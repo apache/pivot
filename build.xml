@@ -836,6 +836,8 @@ limitations under the License.
             <include name="**/*.xml"/>
             <include name="**/*.bxml"/>
             <include name="**/*.json"/>
+            <include name="**/*.groovy"/>
+            <include name="**/*.scala"/>
         </fileset>
         <replaceregexp match="[\t]" replace="    " flags="gm" byline="true">
             <fileset refid="trimfiles"/>
