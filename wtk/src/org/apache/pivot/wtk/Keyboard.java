@@ -207,6 +207,7 @@ public final class Keyboard {
         public static final int ESCAPE = KeyEvent.VK_ESCAPE;
         public static final int BACKSPACE = KeyEvent.VK_BACK_SPACE;
         public static final int DELETE = KeyEvent.VK_DELETE;
+        public static final int INSERT = KeyEvent.VK_INSERT;
 
         public static final int UP = KeyEvent.VK_UP;
         public static final int DOWN = KeyEvent.VK_DOWN;
