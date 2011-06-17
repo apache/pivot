@@ -242,8 +242,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private String language = null;
     private int nextID = 0;
 
-    private ClassLoader classLoader = null;
-
     private LinkedList<Attribute> namespaceBindingAttributes = new LinkedList<Attribute>();
 
     private static HashMap<String, String> fileExtensions = new HashMap<String, String>();
@@ -392,9 +390,10 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         });
     }
 
+    /** DO NOT USE. see https://issues.apache.org/jira/browse/PIVOT-742 */
+    @Deprecated
     public BXMLSerializer(final ClassLoader classLoader) {
-        this();
-        this.classLoader = classLoader;
+        throw new UnsupportedOperationException("https://issues.apache.org/jira/browse/PIVOT-742");
     }
 
     /**
@@ -685,6 +684,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     private void processStartElement() throws IOException, SerializationException {
+
+        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
         // Initialize the page language
         if (language == null) {
             language = DEFAULT_LANGUAGE;
@@ -732,7 +734,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         } else {
             if (Character.isUpperCase(localName.charAt(0))) {
                 int i = localName.indexOf('.');
-
                 if (i != -1
                     && Character.isLowerCase(localName.charAt(i + 1))) {
                     // The element represents an attached property
@@ -741,12 +742,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                     String propertyClassName = namespaceURI + "." + localName.substring(0, i);
                     try {
-                        if (classLoader == null) {
-                            propertyClass = Class.forName(propertyClassName);
-                        } else {
-                            propertyClass = Class.forName(propertyClassName, true, classLoader);
-                        }
-                    } catch (ClassNotFoundException exception) {
+                        propertyClass = Class.forName(propertyClassName, true, classLoader);
+                    } catch (Throwable exception) {
                         throw new SerializationException(exception);
                     }
                 } else {
@@ -762,19 +759,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     String className = namespaceURI + "." + localName.replace('.', '$');
 
                     try {
-                        Class<?> type;
-                        if (classLoader == null) {
-                            type = Class.forName(className);
-                        } else {
-                            type = Class.forName(className, true, classLoader);
-                        }
-
+                        Class<?> type = Class.forName(className, true, classLoader);
                         value = newTypedObject(type);
-                    } catch (ClassNotFoundException exception) {
-                        throw new SerializationException(exception);
-                    } catch (InstantiationException exception) {
-                        throw new SerializationException(exception);
-                    } catch (IllegalAccessException exception) {
+                    } catch (Throwable exception) {
                         throw new SerializationException(exception);
                     }
                 }
@@ -877,7 +864,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             // Determine location from src attribute
             URL location;
             if (src.charAt(0) == '/') {
-                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
                 location = classLoader.getResource(src.substring(1));
             } else {
                 location = new URL(this.location, src);
@@ -933,6 +919,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     private void processAttributes() throws SerializationException {
+
+        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
         for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
             String prefix = xmlStreamReader.getAttributePrefix(i);
             String localName = xmlStreamReader.getAttributeLocalName(i);
@@ -1001,12 +990,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                         String propertyClassName = namespaceURI + "." + localName.substring(0, j);
                         try {
-                            if (classLoader == null) {
-                                propertyClass = Class.forName(propertyClassName);
-                            } else {
-                                propertyClass = Class.forName(propertyClassName, true, classLoader);
-                            }
-                        } catch (ClassNotFoundException exception) {
+                            propertyClass = Class.forName(propertyClassName, true, classLoader);
+                        } catch (Throwable exception) {
                             throw new SerializationException(exception);
                         }
                     } else {
@@ -1097,6 +1082,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     @SuppressWarnings("unchecked")
     private void processEndElement() throws SerializationException {
+
+        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
         switch (element.type) {
             case INSTANCE:
             case INCLUDE:
@@ -1145,7 +1133,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                 new AttributeInvocationHandler(scriptEngine, attribute.name,
                                     (String)attribute.value);
 
-                            Object listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                            Object listener = Proxy.newProxyInstance(classLoader,
                                 new Class<?>[]{attribute.propertyClass}, handler);
 
                             // Add the listener
@@ -1291,7 +1279,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     throw new RuntimeException(exception);
                 }
 
-                Object listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                Object listener = Proxy.newProxyInstance(classLoader,
                     new Class<?>[]{listenerClass}, handler);
 
                 try {
@@ -1331,7 +1319,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     try {
                         URL scriptLocation;
                         if (src.charAt(0) == '/') {
-                            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
                             scriptLocation = classLoader.getResource(src.substring(1));
                         } else {
                             scriptLocation = new URL(location, src);
