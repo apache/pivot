@@ -26,20 +26,20 @@ import org.apache.pivot.wtk.Display;
  * or by starting org.apache.pivot.wtk.DesktopApplicationContext with
  * ${package}.PivotApplication as the first argument.
  * For simplicity, a main method is included in this class as well.
- * 
+ *
  * Remember to run mvn compile before running mvn exec:java
  */
 public class PivotApplication implements Application {
 
-	PivotApplicationWindow window = null;
+    PivotApplicationWindow window = null;
 
 
-	/**
-	 * Command-line Entry point, as Application.
-	 */
-	public static void main(String[] args) {
-		DesktopApplicationContext.main(new String[] { "${package}.PivotApplication" });
-	}
+    /**
+     * Command-line Entry point, as Application.
+     */
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(new String[] { "${package}.PivotApplication" });
+    }
 
     /**
      * Called when the application is starting up.

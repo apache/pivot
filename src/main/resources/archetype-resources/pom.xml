@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 >
     <modelVersion>4.0.0</modelVersion>
     <groupId>${groupId}</groupId>
@@ -7,49 +7,49 @@
     <version>${version}</version>
 
     <properties>
-	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	  	<pivot.version>2.0</pivot.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+          <pivot.version>2.0</pivot.version>
     </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
-			<scope>test</scope>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.pivot</groupId>
-			<artifactId>pivot-core</artifactId>
-			<version>${pivot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.pivot</groupId>
-			<artifactId>pivot-wtk</artifactId>
-			<version>${pivot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.pivot</groupId>
-			<artifactId>pivot-web</artifactId>
-			<version>${pivot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.pivot</groupId>
-			<artifactId>pivot-wtk-terra</artifactId>
-			<version>${pivot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.pivot</groupId>
-			<artifactId>pivot-charts</artifactId>
-			<version>${pivot.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.pivot</groupId>
+            <artifactId>pivot-core</artifactId>
+            <version>${pivot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pivot</groupId>
+            <artifactId>pivot-wtk</artifactId>
+            <version>${pivot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pivot</groupId>
+            <artifactId>pivot-web</artifactId>
+            <version>${pivot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pivot</groupId>
+            <artifactId>pivot-wtk-terra</artifactId>
+            <version>${pivot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pivot</groupId>
+            <artifactId>pivot-charts</artifactId>
+            <version>${pivot.version}</version>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
     <build>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
 
         <plugins>
             <plugin>
