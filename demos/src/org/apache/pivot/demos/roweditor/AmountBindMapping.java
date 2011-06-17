@@ -33,7 +33,7 @@ public class AmountBindMapping implements TextInput.TextBindMapping {
     public Object valueOf(String text) {
         // in case of an empty string to validate, return a default value, to avoid an NPE
         if (text.length() < 1)
-            return new String("");
+            return "";
 
         try {
             return FORMAT.parse(text);

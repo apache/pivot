@@ -51,7 +51,7 @@ public class StringSerializerTest {
         assertEquals(result, testString);
 
         // dump content, but useful only for text resources ...
-        String dump = new String(result);
+        String dump = result;
         int dumpLength = dump.getBytes().length;
         log("Result: " + dumpLength + " bytes \n" + dump);
 
@@ -75,7 +75,7 @@ public class StringSerializerTest {
         assertEquals(result, testString);
 
         // dump content, but useful only for text resources ...
-        String dump = new String(result);
+        String dump = result;
         int dumpLength = dump.getBytes().length;
         log("Result: " + dumpLength + " bytes \n" + dump);
 
