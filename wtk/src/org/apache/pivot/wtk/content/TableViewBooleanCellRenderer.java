@@ -16,76 +16,13 @@
  */
 package org.apache.pivot.wtk.content;
 
-import org.apache.pivot.json.JSON;
-import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.BoxPane;
-import org.apache.pivot.wtk.HorizontalAlignment;
-import org.apache.pivot.wtk.TableView;
-import org.apache.pivot.wtk.VerticalAlignment;
-
 /**
  * Default renderer for table view cells that contain boolean data. Renders
  * cell contents as a checkbox.
  */
-public class TableViewBooleanCellRenderer extends BoxPane
-    implements TableView.CellRenderer {
-    private Checkbox checkbox = new Checkbox();
-    private boolean checkboxDisabled = false;
-
+public class TableViewBooleanCellRenderer extends TableViewCheckboxCellRenderer
+{
     public TableViewBooleanCellRenderer() {
-        add(checkbox);
-
-        getStyles().put("padding", 3);
-        getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-    }
-
-    @Override
-    public void setSize(int width, int height) {
-        super.setSize(width, height);
-
-        // Since this component doesn't have a parent, it won't be validated
-        // via layout; ensure that it is valid here
-        validate();
-    }
-
-    @Override
-    public void render(Object row, int rowIndex, int columnIndex,
-        TableView tableView, String columnName,
-        boolean selected, boolean highlighted, boolean disabled) {
-        if (row != null) {
-            boolean checkboxSelected = false;
-
-            // Get the row and cell data
-            if (columnName != null) {
-                Object cellData = JSON.get(row, columnName);
-
-                if (cellData instanceof String) {
-                    cellData = Boolean.parseBoolean((String)cellData);
-                }
-
-                if (cellData instanceof Boolean) {
-                    checkboxSelected = (Boolean)cellData;
-                } else {
-                    System.err.println("Data for \"" + columnName + "\" is not an instance of "
-                        + Boolean.class.getName());
-                }
-            }
-
-            checkbox.setSelected(checkboxSelected);
-            checkbox.setEnabled(!checkboxDisabled && tableView.isEnabled() && !disabled);
-        }
-    }
-
-    public String toString(Object row, String columnName) {
-        return null;
-    }
-
-    public boolean isCheckboxDisabled() {
-        return checkboxDisabled;
-    }
-
-    public void setCheckboxDisabled(boolean checkboxDisabled) {
-        this.checkboxDisabled = checkboxDisabled;
+        super();
     }
 }
