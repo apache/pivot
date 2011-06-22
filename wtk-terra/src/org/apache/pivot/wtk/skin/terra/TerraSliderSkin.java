@@ -360,7 +360,7 @@ public class TerraSliderSkin extends SliderSkin {
             RenderingHints.VALUE_ANTIALIAS_ON);
         if (slider.getOrientation() == Orientation.HORIZONTAL) {
             graphics.fillRect(0, (height - trackWidth) / 2, width, trackWidth);
-            if (tickSpacing != -1) {
+            if (tickSpacing > 0) {
                 int start = slider.getStart();
                 int end = slider.getEnd();
                 int value = start;
@@ -373,7 +373,7 @@ public class TerraSliderSkin extends SliderSkin {
             }
         } else {
             graphics.fillRect((width - trackWidth) / 2, 0, trackWidth, height);
-            if (tickSpacing != -1) {
+            if (tickSpacing > 0) {
                 int start = slider.getStart();
                 int end = slider.getEnd();
                 int value = start;
