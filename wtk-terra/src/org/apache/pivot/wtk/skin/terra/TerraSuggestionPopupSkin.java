@@ -63,6 +63,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
     private DropShadowDecorator dropShadowDecorator = null;
     private Transition closeTransition = null;
+    private boolean returnFocusToTextInput = true;
 
     private int closeTransitionDuration = DEFAULT_CLOSE_TRANSITION_DURATION;
     private int closeTransitionRate = DEFAULT_CLOSE_TRANSITION_RATE;
@@ -78,6 +79,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
             if (!suggestionPopup.isAncestor(descendant)
                 && descendant != textInput) {
+                returnFocusToTextInput = false;
                 suggestionPopup.close(false);
             }
 
@@ -98,6 +100,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
             if (!component.isFocused()
                 && !suggestionPopup.containsFocus()) {
+                returnFocusToTextInput = false;
                 suggestionPopup.close();
             }
         }
@@ -144,12 +147,43 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         }
     };
 
+    private ComponentKeyListener listViewKeyListener = new ComponentKeyListener.Adapter() {
+        /**
+         * {@link KeyCode#TAB TAB} Close the suggestion popup with a 'result' of
+         * true, and transfer focus forwards from the TextInput.<br>
+         * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Close the
+         * suggestion popup with a 'result' of true, and transfer focus backwards
+         * from the TextInput.<br>
+         */
+        @Override
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+            TextInput textInput = suggestionPopup.getTextInput();
+
+            switch (keyCode) {
+                case Keyboard.KeyCode.TAB: {
+                    returnFocusToTextInput = false;
+                    suggestionPopup.close(true);
+
+                    FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
+                        FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
+                    textInput.transferFocus(direction);
+
+                    break;
+                }
+            }
+
+            return false;
+        }
+    };
+
     private static final int DEFAULT_CLOSE_TRANSITION_DURATION = 150;
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraSuggestionPopupSkin () {
         listView.getStyles().put("variableItemHeight", true);
         listView.getListViewSelectionListeners().add(listViewSelectionListener);
+        listView.getComponentKeyListeners().add(listViewKeyListener);
 
         listViewPanorama = new Panorama(listView);
         listViewPanorama.getStyles().put("buttonBackgroundColor",
@@ -261,11 +295,6 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     /**
      * {@link KeyCode#ENTER ENTER} Close the suggestion popup with a 'result' of
      * true.<br>
-     * {@link KeyCode#TAB TAB} Close the suggestion popup with a 'result' of
-     * true, and transfer focus forwards from the TextInput.<br>
-     * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Close the
-     * suggestion popup with a 'result' of true, and transfer focus backwards
-     * from the TextInput.<br>
      * {@link KeyCode#ESCAPE ESCAPE} Close the suggestion popup with a 'result'
      * of false.
      */
@@ -277,16 +306,6 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         switch (keyCode) {
             case Keyboard.KeyCode.ENTER: {
                 suggestionPopup.close(true);
-                break;
-            }
-
-            case Keyboard.KeyCode.TAB: {
-                suggestionPopup.close(true);
-
-                FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                    FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
-                textInput.transferFocus(direction);
-
                 break;
             }
 
@@ -326,6 +345,8 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         display.getContainerMouseListeners().add(displayMouseListener);
 
         dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
+
+        returnFocusToTextInput = true;
 
         TextInput textInput = suggestionPopup.getTextInput();
         textInput.getComponentStateListeners().add(textInputStateListener);
@@ -428,7 +449,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         textInput.getComponentStateListeners().remove(textInputStateListener);
         textInput.getComponentKeyListeners().remove(textInputKeyListener);
 
-        textInput.requestFocus();
+        if (returnFocusToTextInput) {
+            textInput.requestFocus();
+        }
 
         listViewBorder.setEnabled(true);
         closeTransition = null;
