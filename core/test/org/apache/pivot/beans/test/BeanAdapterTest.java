@@ -38,11 +38,11 @@ public class BeanAdapterTest {
 
     private static Random rnd;
 
-    BeanAdapterTestObject src_test;
+    BeanAdapterSampleObject src_test;
     JSONSerializer jsonSerializer;
     StringWriter writer;
     StringReader reader;
-    BeanAdapterTestObject target_test;
+    BeanAdapterSampleObject target_test;
 
     @BeforeClass
     public static void setUpClass() {
@@ -58,8 +58,8 @@ public class BeanAdapterTest {
 
     @Before
     public void setUp() {
-        src_test = new BeanAdapterTestObject();
-        jsonSerializer = new JSONSerializer(BeanAdapterTestObject.class);
+        src_test = new BeanAdapterSampleObject();
+        jsonSerializer = new JSONSerializer(BeanAdapterSampleObject.class);
         writer = new StringWriter();
     }
 
@@ -96,7 +96,7 @@ public class BeanAdapterTest {
         reader = new StringReader(writer.toString());
 
         try {
-            target_test = (BeanAdapterTestObject) jsonSerializer.readObject(reader);
+            target_test = (BeanAdapterSampleObject) jsonSerializer.readObject(reader);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -131,7 +131,7 @@ public class BeanAdapterTest {
         reader = new StringReader(writer.toString());
 
         try {
-            target_test = (BeanAdapterTestObject) jsonSerializer.readObject(reader);
+            target_test = (BeanAdapterSampleObject) jsonSerializer.readObject(reader);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -166,7 +166,7 @@ public class BeanAdapterTest {
         reader = new StringReader(writer.toString());
 
         try {
-            target_test = (BeanAdapterTestObject) jsonSerializer.readObject(reader);
+            target_test = (BeanAdapterSampleObject) jsonSerializer.readObject(reader);
         } catch (Exception e) {
             e.printStackTrace();
             fail();

@@ -19,7 +19,7 @@ package org.apache.pivot.beans.test;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class BeanAdapterTestObject {
+public class BeanAdapterSampleObject {
 
     private BigDecimal bd;
     private BigInteger bi;
