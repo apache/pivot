@@ -187,7 +187,7 @@ limitations under the License.
                 <formatter type="brief" usefile="false" if="test.formatter"/>
 
                 <batchtest>
-                    <fileset dir="@{project}/test" includes="**/*Test*.java"/>
+                    <fileset dir="@{project}/test" includes="**/*Test.java"/>
                 </batchtest>
             </junit>
         </sequential>
@@ -391,8 +391,17 @@ limitations under the License.
 
     <!-- Run unit tests -->
     <target name="test" description="Executes unit tests" depends="compile">
+        <test project="charts"/>
         <test project="core"/>
+        <test project="demos"/>
+        <test project="demos-server"/>
+        <test project="tests"/>
+        <test project="tutorials"/>
+        <test project="tutorials-server"/>
         <test project="web"/>
+        <test project="web-server"/>
+	    <test project="wtk"/>
+    	<test project="wtk-terra"/>
     </target>
 
     <!-- Clean -->
