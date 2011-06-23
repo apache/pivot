@@ -21,8 +21,9 @@ limitations under the License.
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <BoxPane orientation="vertical">
-        <TextInput bxml:id="textInput"/>
-        <TextInput/>
+        <TextInput prompt="Regular TextInput" />
+        <TextInput bxml:id="textInput" prompt="TextInput &amp; SuggestionPopup" />
+        <TextInput prompt="Regular TextInput" />
         <Label bxml:id="selectedIndexLabel"/>
     </BoxPane>
 </Window>
