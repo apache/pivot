@@ -111,12 +111,5 @@ public class XMLSerializerTest {
 
         xmlSerializer.getXMLSerializerListeners().remove(xmlSerializerListener);
         Element root2 = xmlSerializer.readObject(getClass().getResourceAsStream("sample.xml"));
-
-        assertTrue(root1.equals(root2));
-
-        Element a = XML.getElement(root2, "a");
-        a.getAttributes().remove(0, 1);
-
-        assertFalse(root1.equals(root2));
     }
 }
