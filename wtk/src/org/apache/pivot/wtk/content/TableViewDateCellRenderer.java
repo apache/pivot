@@ -29,12 +29,10 @@ import org.apache.pivot.util.CalendarDate;
  * cell contents as a formatted date.
  */
 public class TableViewDateCellRenderer extends TableViewCellRenderer {
-    private DateFormat dateFormat = DEFAULT_DATE_FORMAT;
-
-    protected static final DateFormat DEFAULT_DATE_FORMAT = DateFormat.getDateInstance();
+    private DateFormat dateFormat = DateFormat.getDateInstance();
 
     public DateFormat getDateFormat() {
-        return (DateFormat) dateFormat.clone();
+        return dateFormat;
     }
 
     public void setDateFormat(DateFormat dateFormat) {
