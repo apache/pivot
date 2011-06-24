@@ -108,7 +108,8 @@ public class BindTest {
             (SampleBean2Sequence)sequenceSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
         Object item0 = sequence.get(0);
-        assertTrue(item0 instanceof SampleBean2);
+        assertNotNull(item0);
+        // assertTrue(item0 instanceof SampleBean2);  // true but superflous
         assertEquals(sequence.get(0).getA(), JSON.get(list, "[0].a"));
     }
 

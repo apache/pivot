@@ -16,6 +16,10 @@
  */
 package org.apache.pivot.xml.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.io.IOException;
 
 import org.apache.pivot.collections.List;
@@ -26,11 +30,6 @@ import org.apache.pivot.xml.XML;
 import org.apache.pivot.xml.XMLSerializer;
 import org.apache.pivot.xml.XMLSerializerListener;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class XMLSerializerTest {
     @Test
@@ -108,8 +107,10 @@ public class XMLSerializerTest {
 
         xmlSerializer.getXMLSerializerListeners().add(xmlSerializerListener);
         Element root1 = xmlSerializer.readObject(getClass().getResourceAsStream("sample.xml"));
+        assertNotNull(root1);
 
         xmlSerializer.getXMLSerializerListeners().remove(xmlSerializerListener);
         Element root2 = xmlSerializer.readObject(getClass().getResourceAsStream("sample.xml"));
+        assertNotNull(root2);
     }
 }

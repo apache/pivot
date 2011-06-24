@@ -21,7 +21,7 @@ import java.text.CharacterIterator;
 /**
  * Character iterator that is backed by a {@link java.lang.CharSequence}.
  */
-public class CharSequenceCharacterIterator implements CharacterIterator {
+public final class CharSequenceCharacterIterator implements CharacterIterator {
     private CharSequence charSequence;
     private int beginIndex;
     private int endIndex;
