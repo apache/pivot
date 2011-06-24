@@ -34,7 +34,7 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
     protected static final DateFormat DEFAULT_DATE_FORMAT = DateFormat.getDateInstance();
 
     public DateFormat getDateFormat() {
-        return dateFormat;
+        return (DateFormat) dateFormat.clone();
     }
 
     public void setDateFormat(DateFormat dateFormat) {
