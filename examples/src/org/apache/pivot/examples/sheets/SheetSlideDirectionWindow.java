@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.pivot.tutorials.sheets;
+package org.apache.pivot.examples.sheets;
 
 import java.net.URL;
 import java.util.Iterator;
@@ -40,7 +40,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.skin.terra.TerraSheetSkin.SheetPlacement;
 
-public class Sheets extends Window implements Bindable {
+public class SheetSlideDirectionWindow extends Window implements Bindable {
 
     @BXML private Sheet sheet;
     @BXML private TablePane tablePane;

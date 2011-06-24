@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<sheets:Sheets
+<sheets:SheetSlideDirectionWindow
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk"
-    xmlns:sheets="org.apache.pivot.tutorials.sheets"
+    xmlns:sheets="org.apache.pivot.examples.sheets"
     xmlns:content="org.apache.pivot.wtk.content"
-    title="Sheets" maximized="true"
+    title="Sheet Slide Direction Example" maximized="true"
     width="600" height="600">
 
     <bxml:define>
@@ -118,4 +118,4 @@ limitations under the License.
 
     </Border>
 
-</sheets:Sheets>
+</sheets:SheetSlideDirectionWindow>
