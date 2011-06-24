@@ -55,7 +55,13 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  * Sheet skin class.
  */
 public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
+
+    public enum SheetPlacement {
+        NORTH, EAST, SOUTH, WEST
+    }
+
     public class OpenTransition extends Transition {
+        private int dx = 0;
         private int dy = 0;
 
         public OpenTransition(boolean reversed) {
@@ -67,6 +73,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             Sheet sheet = (Sheet)getComponent();
             sheet.getDecorators().add(translationDecorator);
 
+            dx = 0;
             dy = 0;
 
             super.start(transitionListener);
@@ -95,14 +102,32 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             if (display != null) {
                 Bounds decoratedBounds = sheet.getDecoratedBounds();
                 display.repaint(decoratedBounds.x, decoratedBounds.y,
-                    decoratedBounds.width, decoratedBounds.height + dy);
+                    decoratedBounds.width + dx, decoratedBounds.height + dy);
 
                 Dimensions size = sheet.getPreferredSize();
-                dy = -(int)(size.height * scale);
+                switch (slideSource) {
+                    case NORTH:
+                        dy = -(int)(size.height * scale);
+                        break;
+                    case EAST:
+                        dx = (int)(size.width * scale);
+                        break;
+                    case SOUTH:
+                        dy = (int)(size.height * scale);
+                        break;
+                    case WEST:
+                        dx = -(int)(size.width * scale);
+                        break;
+                    default:
+                        throw new IllegalStateException(
+                            "slideSource is null or an unexpected value");
+                }
+
+                translationDecorator.setX(dx);
                 translationDecorator.setY(dy);
 
                 display.repaint(decoratedBounds.x, decoratedBounds.y,
-                    decoratedBounds.width, decoratedBounds.height + dy);
+                    decoratedBounds.width + dx, decoratedBounds.height + dy);
             }
         }
     }
@@ -145,6 +170,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private Color borderColor;
     private Insets padding;
     private boolean resizable;
+    private SheetPlacement slideSource = SheetPlacement.NORTH;
 
     private int stateTransitionDuration = DEFAULT_STATE_TRANSITION_DURATION;
     private int stateTransitionRate = DEFAULT_STATE_TRANSITION_RATE;
@@ -562,6 +588,17 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         invalidateComponent();
     }
 
+    public SheetPlacement getSlideSource() {
+        return slideSource;
+    }
+
+    public void setSlideSource(SheetPlacement slideSource) {
+        if (slideSource == null) {
+            throw new IllegalArgumentException("slideSource is null.");
+        }
+        this.slideSource = slideSource;
+    }
+
     public int getStateTransitionDuration() {
         return stateTransitionDuration;
     }
@@ -668,9 +705,36 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         Sheet sheet = (Sheet)getComponent();
 
         Window owner = sheet.getOwner();
-        Bounds clientArea = owner.getClientArea();
+        if (owner != null) {
+            Bounds clientArea = owner.getClientArea();
 
-        Point location = owner.mapPointToAncestor(owner.getDisplay(), clientArea.x, clientArea.y);
-        sheet.setLocation(location.x + (clientArea.width - getWidth()) / 2, location.y);
+            Point location = owner.mapPointToAncestor(owner.getDisplay(), clientArea.x,
+                clientArea.y);
+            int x = location.x;
+            int y = location.y;
+
+            switch (slideSource) {
+                case NORTH:
+                    x = location.x + (clientArea.width - getWidth()) / 2;
+                    y = location.y;
+                    break;
+                case SOUTH:
+                    x = location.x + (clientArea.width - getWidth()) / 2;
+                    y = location.y + (clientArea.height - getHeight());
+                    break;
+                case WEST:
+                    x = location.x;
+                    y = location.y + (clientArea.height - getHeight()) / 2;
+                    break;
+                case EAST:
+                    x = location.x + (clientArea.width - getWidth());
+                    y = location.y + (clientArea.height - getHeight()) / 2;
+                    break;
+                default:
+                    throw new IllegalStateException("slideSource is null or an unexpected value");
+            }
+
+            sheet.setLocation(x, y);
+        }
     }
 }

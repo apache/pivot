@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<sheets:Sheets
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk"
+    xmlns:sheets="org.apache.pivot.tutorials.sheets"
+    xmlns:content="org.apache.pivot.wtk.content"
+    title="Sheets" maximized="true"
+    width="600" height="600">
+
+    <bxml:define>
+        <!-- Sheet that will be displayed when any of the 'open' buttons are pressed -->
+        <Sheet bxml:id="sheet" preferredWidth="300" preferredHeight="300"
+            styles="{padding:8, slideSource:'north', stateTransitionRate:30, stateTransitionDuration:300}">
+            <Border title="Sheet Styles">
+                <BoxPane orientation="vertical"
+                    styles="{fill:true, horizontalAlignment:'center', verticalAlignment:'center'}" >
+                    <Form styles="{leftAlignLabels:false}">
+                        <Form.Section>
+                            <Label Form.label="slideSource"
+                                textKey="slideSource" styles="{font:{bold:true}}" />
+                            <Label Form.label="stateTransitionDuration"
+                                textKey="stateTransitionDuration" styles="{font:{bold:true}}" />
+                            <Label Form.label="stateTransitionRate"
+                                textKey="stateTransitionRate" styles="{font:{bold:true}}" />
+                            <Label Form.label="resizable"
+                                textKey="resizable" styles="{font:{bold:true}}" />
+                        </Form.Section>
+                    </Form>
+                </BoxPane>
+            </Border>
+        </Sheet>
+    </bxml:define>
+
+
+    <Border>
+
+        <TablePane bxml:id="tablePane"
+            styles="{padding:10, horizontalSpacing:20, verticalSpacing:20}" >
+
+            <columns>
+                <TablePane.Column width="1*" />
+                <TablePane.Column width="1*" />
+                <TablePane.Column width="1*" />
+            </columns>
+
+            <TablePane.Row height="1*">
+                <TablePane.Filler />
+                <PushButton buttonData="NORTH" buttonDataKey="slideSource" />
+                <TablePane.Filler />
+            </TablePane.Row>
+
+            <TablePane.Row height="1*">
+                <PushButton buttonData="WEST" buttonDataKey="slideSource" />
+
+                <Border>
+                    <BoxPane orientation="vertical"
+                        styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                        <!-- Central Form -->
+                        <Form bxml:id="form" >
+                            <Form.Section heading="Sheet Styles" >
+                                <ListButton Form.label="Slide Source" selectedItemKey="slideSource" bxml:id="listButton"
+                                    styles="{closeTransitionDuration:200, closeTransitionRate:30}" />
+                                <Spinner Form.label="Transition Duration" selectedItemKey="stateTransitionDuration"
+                                    selectedIndex="2" preferredWidth="50">
+                                    <spinnerData>
+                                        <content:NumericSpinnerData lowerBound="100" upperBound="2000" increment="100"/>
+                                    </spinnerData>
+                                </Spinner>
+                                <Spinner Form.label="Transition Rate" selectedItemKey="stateTransitionRate"
+                                    selectedIndex="2" preferredWidth="50">
+                                    <spinnerData>
+                                        <content:NumericSpinnerData lowerBound="10" upperBound="100" increment="10"/>
+                                    </spinnerData>
+                                </Spinner>
+                                <Checkbox Form.label="Resizable" selectedKey="resizable" selected="true" />
+                            </Form.Section>
+                        </Form>
+                        <PushButton buttonData="Open Sheet">
+                            <buttonPressListeners>
+                                function buttonPressed(button) {
+                                    var sheetStyles = sheet.getStyles();
+                                    form.store(sheetStyles);
+                                    sheet.load(sheetStyles);
+                                    sheet.open(button.getWindow());
+                                }
+                            </buttonPressListeners>
+                        </PushButton>
+                    </BoxPane>
+                </Border>
+
+                <PushButton buttonData="EAST" buttonDataKey="slideSource" />
+            </TablePane.Row>
+
+            <TablePane.Row height="1*">
+                <TablePane.Filler />
+                <PushButton buttonData="SOUTH" buttonDataKey="slideSource" />
+                <TablePane.Filler />
+            </TablePane.Row>
+
+        </TablePane>
+
+    </Border>
+
+</sheets:Sheets>
