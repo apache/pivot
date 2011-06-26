@@ -301,7 +301,6 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
-        TextInput textInput = suggestionPopup.getTextInput();
 
         switch (keyCode) {
             case Keyboard.KeyCode.ENTER: {
