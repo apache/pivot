@@ -19,7 +19,9 @@ package org.apache.pivot.json;
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.adapter.MapAdapter;
 
 /**
  * Contains utility methods for working with JSON or JSON-like data structures.
@@ -71,9 +73,9 @@ public class JSON {
 
             String key = keys.get(i);
 
-            BeanAdapter beanAdapter = new BeanAdapter(value);
-            if (beanAdapter.containsKey(key)) {
-                value = beanAdapter.get(key);
+            Map adapter = value instanceof java.util.Map ? new MapAdapter((java.util.Map) value) : new BeanAdapter(value);
+            if (adapter.containsKey(key)) {
+                value = adapter.get(key);
             } else if (value instanceof Sequence<?>) {
                 Sequence<Object> sequence = (Sequence<Object>)value;
                 value = sequence.get(Integer.parseInt(key));
@@ -145,11 +147,11 @@ public class JSON {
             throw new IllegalArgumentException("Invalid path.");
         }
 
-        BeanAdapter beanAdapter = new BeanAdapter(parent);
+        Map adapter = parent instanceof java.util.Map ? new MapAdapter((java.util.Map) parent) : new BeanAdapter(parent);
 
         Object previousValue;
-        if (beanAdapter.containsKey(key)) {
-            previousValue = beanAdapter.put(key, value);
+        if (adapter.containsKey(key)) {
+            previousValue = adapter.put(key, value);
         } else if (parent instanceof Sequence<?>) {
             Sequence<Object> sequence = (Sequence<Object>)parent;
             previousValue = sequence.update(Integer.parseInt(key), value);
@@ -230,8 +232,8 @@ public class JSON {
         if (parent == null) {
             containsKey = false;
         } else {
-            BeanAdapter beanAdapter = new BeanAdapter(parent);
-            containsKey = beanAdapter.containsKey(key);
+            Map adapter = parent instanceof java.util.Map ? new MapAdapter((java.util.Map) parent) : new BeanAdapter(parent);
+            containsKey = adapter.containsKey(key);
 
             if (!containsKey) {
                 if (parent instanceof Sequence<?>) {

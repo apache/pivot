@@ -144,4 +144,21 @@ public class JSONSerializerTest {
 
         assertFalse(o1.equals(o2));
     }
+    
+    @Test
+    public void testJavaMap() 
+    {
+        System.out.println("Test interaction with Standard java.util.Map"); 
+
+        java.util.HashMap<String, java.util.Map<String, String>> root  = new java.util.HashMap<String, java.util.Map<String, String>>();
+        java.util.HashMap<String, String> child = new java.util.HashMap<String, String>();
+        
+        child.put("name", "John Doe");
+        root.put("child", child);
+
+        String childName = JSON.get(root, "child.name");
+        System.out.println("JSON child.name = \"" + childName + "\""); 
+        assertEquals(childName, "John Doe");
+    }
+    
 }
