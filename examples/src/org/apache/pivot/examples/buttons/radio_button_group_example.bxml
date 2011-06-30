@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window maximized="true" title="RadioButtonGroup Example"
+    xmlns="org.apache.pivot.wtk"
+    xmlns:bxml="http://pivot.apache.org/bxml">
+
+  <bxml:script>
+    function isChecked(state) {
+      return state == "SELECTED";
+    }
+  </bxml:script>
+
+  <bxml:define>
+    <RadioButtonGroup bxml:id="groupA"
+      circular="${isChecked:circularCheckbox.state}"
+      intraGroupFocusTransferEnabled="${isChecked:focusCheckbox.state}" />
+
+    <RadioButtonGroup bxml:id="groupB"
+      circular="${isChecked:circularCheckbox.state}"
+      intraGroupFocusTransferEnabled="${isChecked:focusCheckbox.state}" />
+
+    <RadioButtonGroup bxml:id="groupC"
+      circular="${isChecked:circularCheckbox.state}"
+      intraGroupFocusTransferEnabled="${isChecked:focusCheckbox.state}" />
+
+    <RadioButtonGroup bxml:id="groupD"
+      circular="${isChecked:circularCheckbox.state}"
+      intraGroupFocusTransferEnabled="${isChecked:focusCheckbox.state}" />
+
+    <RadioButtonGroup bxml:id="groupE"
+      circular="${isChecked:circularCheckbox.state}"
+      intraGroupFocusTransferEnabled="${isChecked:focusCheckbox.state}" />
+
+    <RadioButtonGroup bxml:id="groupF"
+      circular="${isChecked:circularCheckbox.state}"
+      intraGroupFocusTransferEnabled="${isChecked:focusCheckbox.state}" />
+
+    <RadioButtonGroup bxml:id="multiContainerGroup"
+      circular="${isChecked:circularCheckbox.state}"
+      intraGroupFocusTransferEnabled="${isChecked:focusCheckbox.state}" />
+
+    <RadioButtonGroup bxml:id="pushButtonGroup"
+      circular="${isChecked:circularCheckbox.state}"
+      intraGroupFocusTransferEnabled="${isChecked:focusCheckbox.state}" />
+
+  </bxml:define>
+
+
+  <TablePane styles="{horizontalSpacing:8, verticalSpacing:20, padding:8}">
+
+    <columns>
+      <TablePane.Column width="-1" />
+      <TablePane.Column width="-1" />
+      <TablePane.Column width="-1" />
+      <TablePane.Column width="-1" />
+      <TablePane.Column width="-1" />
+      <TablePane.Column width="-1" />
+    </columns>
+
+    <rows>
+
+      <TablePane.Row height="-1">
+        <Border title="RadioButtonGroup Properties" styles="{padding:8}"
+                TablePane.columnSpan="2">
+          <BoxPane orientation="vertical" styles="{horizontalAlignment:'left'}">
+            <Form styles="{showFlagIcons:false, leftAlignLabels:true}">
+              <Form.Section>
+                <Checkbox bxml:id="circularCheckbox"
+                    selected="{$groupA.circular}"
+                    Form.label="Circular" />
+                <Checkbox bxml:id="focusCheckbox"
+                    selected="{$groupA.intraGroupFocusTransferEnabled}"
+                    Form.label="Intra-group focus transfer" />
+              </Form.Section>
+            </Form>
+          </BoxPane>
+        </Border>
+
+        <!--
+            Workaround to push the 2nd Border across to the right hand side.
+            If visisble the TablePane.Filler ends up overlayed on top of the
+            checkboxes from the 1st Border, and prevents mouse clicks from
+            reaching them.
+         -->
+        <TablePane.Filler visible="false" />
+        <TablePane.Filler visible="false" />
+        <TablePane.Filler visible="false" />
+
+        <Border title="Custom Keyboard Handling Of" styles="{padding:8}"
+                TablePane.columnSpan="2">
+          <GridPane columnCount="2" styles="{verticalSpacing:8, padding:8}">
+            <GridPane.Row>
+              <Label text="UP / DOWN" tooltipDelay="200"
+                tooltipText="Select previous / next" />
+              <Label text="LEFT / RIGHT" tooltipDelay="200"
+                tooltipText="Select previous / next" />
+            </GridPane.Row>
+            <GridPane.Row>
+              <Label text="HOME / END" tooltipDelay="200"
+                tooltipText="Select first / last" />
+              <Label text="TAB / SHIFT+TAB" tooltipDelay="200"
+                tooltipText="Transfer focus forwards / backwards" />
+            </GridPane.Row>
+          </GridPane>
+        </Border>
+
+      </TablePane.Row>
+
+      <TablePane.Row height="-1">
+        <Border styles="{padding:8}" title="All enabled">
+          <BoxPane orientation="vertical" styles="{spacing:8}">
+            <RadioButton buttonGroup="$groupA" buttonData="Red" selected="true" />
+            <RadioButton buttonGroup="$groupA" buttonData="Yellow" />
+            <RadioButton buttonGroup="$groupA" buttonData="Orange" />
+            <RadioButton buttonGroup="$groupA" buttonData="Green" />
+            <RadioButton buttonGroup="$groupA" buttonData="Blue" />
+            <RadioButton buttonGroup="$groupA" buttonData="Indigo" />
+            <RadioButton buttonGroup="$groupA" buttonData="Violet" />
+          </BoxPane>
+        </Border>
+        <Border styles="{padding:8}" title="All disabled">
+          <BoxPane orientation="vertical" styles="{spacing:8}">
+            <RadioButton buttonGroup="$groupB" buttonData="Red" enabled="false" />
+            <RadioButton buttonGroup="$groupB" buttonData="Yellow" enabled="false" />
+            <RadioButton buttonGroup="$groupB" buttonData="Orange" enabled="false" />
+            <RadioButton buttonGroup="$groupB" buttonData="Green" enabled="false" />
+            <RadioButton buttonGroup="$groupB" buttonData="Blue" enabled="false" />
+            <RadioButton buttonGroup="$groupB" buttonData="Indigo" enabled="false" />
+            <RadioButton buttonGroup="$groupB" buttonData="Violet" enabled="false" />
+          </BoxPane>
+        </Border>
+        <Border styles="{padding:8}" title="Some disabled">
+          <BoxPane orientation="vertical" styles="{spacing:8}">
+            <RadioButton buttonGroup="$groupC" buttonData="Red" enabled="false" />
+            <RadioButton buttonGroup="$groupC" buttonData="Yellow" selected="true" />
+            <RadioButton buttonGroup="$groupC" buttonData="Orange" />
+            <RadioButton buttonGroup="$groupC" buttonData="Green" enabled="false" />
+            <RadioButton buttonGroup="$groupC" buttonData="Blue" enabled="false" />
+            <RadioButton buttonGroup="$groupC" buttonData="Indigo" />
+            <RadioButton buttonGroup="$groupC" buttonData="Violet" enabled="false" />
+          </BoxPane>
+        </Border>
+        <Border styles="{padding:8}" title="Some disabled &amp; hidden">
+          <BoxPane orientation="vertical" styles="{spacing:8}">
+            <RadioButton buttonGroup="$groupD" buttonData="Red" selected="true" />
+            <RadioButton buttonGroup="$groupD" buttonData="Yellow" />
+            <RadioButton buttonGroup="$groupD" buttonData="Orange" enabled="false" />
+            <RadioButton buttonGroup="$groupD" buttonData="Green" visible="false" />
+            <RadioButton buttonGroup="$groupD" buttonData="Blue" visible="false" />
+            <RadioButton buttonGroup="$groupD" buttonData="Indigo" />
+            <RadioButton buttonGroup="$groupD" buttonData="Violet" enabled="false" />
+          </BoxPane>
+        </Border>
+        <Border styles="{padding:8}" title="No selection">
+          <BoxPane orientation="vertical" styles="{spacing:8}">
+            <RadioButton buttonGroup="$groupE" buttonData="Red"/>
+            <RadioButton buttonGroup="$groupE" buttonData="Yellow" />
+            <RadioButton buttonGroup="$groupE" buttonData="Orange" />
+            <RadioButton buttonGroup="$groupE" buttonData="Green" />
+            <RadioButton buttonGroup="$groupE" buttonData="Blue" />
+            <RadioButton buttonGroup="$groupE" buttonData="Indigo" />
+            <RadioButton buttonGroup="$groupE" buttonData="Violet" />
+            <PushButton buttonData="Clear selection" >
+              <buttonPressListeners>
+                function buttonPressed(button) {
+                  var selection = groupE.getSelection();
+                  if (selection != null) {
+                    try {
+                      selection.setSelected(false);
+                    } catch (e) {
+                      // Exception expected from
+                      // org.apache.pivot.wtk.ButtonGroup.setSelection(Button)
+                      // as it doesn't support clearing the selection
+                    }
+                  }
+                }
+              </buttonPressListeners>
+            </PushButton>
+          </BoxPane>
+        </Border>
+        <Border styles="{padding:8}" title="Jump to character">
+          <BoxPane orientation="vertical" styles="{spacing:8}">
+            <RadioButton buttonGroup="$groupF" buttonData="Aaron" selected="true" />
+            <RadioButton buttonGroup="$groupF" buttonData="Andrew" />
+            <RadioButton buttonGroup="$groupF" buttonData="Anthony" />
+            <RadioButton buttonGroup="$groupF" buttonData="Bill" />
+            <RadioButton buttonGroup="$groupF" buttonData="Bob" />
+            <RadioButton buttonGroup="$groupF" buttonData="Brian" />
+            <RadioButton buttonGroup="$groupF" buttonData="Charles" />
+            <RadioButton buttonGroup="$groupF" buttonData="Chris" />
+            <RadioButton buttonGroup="$groupF" buttonData="Cliff" />
+          </BoxPane>
+        </Border>
+      </TablePane.Row>
+
+      <TablePane.Row height="-1">
+        <Border styles="{padding:8}" title="Container 1">
+          <RadioButton buttonGroup="$multiContainerGroup" buttonData="Grapefruit" selected="true" />
+        </Border>
+        <Border styles="{padding:8}" title="Container 2">
+          <RadioButton buttonGroup="$multiContainerGroup" buttonData="Lemon" />
+        </Border>
+        <Border styles="{padding:8}" title="Container 3">
+          <RadioButton buttonGroup="$multiContainerGroup" buttonData="Lime" />
+        </Border>
+        <Border styles="{padding:8}" title="Container 4">
+          <RadioButton buttonGroup="$multiContainerGroup" buttonData="Orange" />
+        </Border>
+        <Border styles="{padding:8}" title="Container 5">
+          <RadioButton buttonGroup="$multiContainerGroup" buttonData="Rangpur" />
+        </Border>
+        <Border styles="{padding:8}" title="Container 6">
+          <RadioButton buttonGroup="$multiContainerGroup" buttonData="Tangerine" />
+        </Border>
+      </TablePane.Row>
+
+      <TablePane.Row height="-1">
+        <Border styles="{padding:8}" title="PushButtons" TablePane.columnSpan="6">
+          <BoxPane styles="{spacing:8}">
+            <PushButton toggleButton="true" buttonGroup="$pushButtonGroup" buttonData="A [PushButton]" />
+            <PushButton toggleButton="true" buttonGroup="$pushButtonGroup" buttonData="B [PushButton]" />
+            <PushButton toggleButton="true" buttonGroup="$pushButtonGroup" buttonData="C [PushButton]" />
+            <PushButton toggleButton="true" buttonGroup="$pushButtonGroup" buttonData="AA [PushButton]" />
+            <PushButton toggleButton="true" buttonGroup="$pushButtonGroup" buttonData="BB [PushButton]" />
+            <PushButton toggleButton="true" buttonGroup="$pushButtonGroup" buttonData="CC [PushButton]" />
+          </BoxPane>
+        </Border>
+      </TablePane.Row>
+    </rows>
+  </TablePane>
+
+</Window>
