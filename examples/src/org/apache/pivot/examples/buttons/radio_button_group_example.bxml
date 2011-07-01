@@ -176,22 +176,8 @@ limitations under the License.
             <RadioButton buttonGroup="$groupE" buttonData="Blue" />
             <RadioButton buttonGroup="$groupE" buttonData="Indigo" />
             <RadioButton buttonGroup="$groupE" buttonData="Violet" />
-            <PushButton buttonData="Clear selection" >
-              <buttonPressListeners>
-                function buttonPressed(button) {
-                  var selection = groupE.getSelection();
-                  if (selection != null) {
-                    try {
-                      selection.setSelected(false);
-                    } catch (e) {
-                      // Exception expected from
-                      // org.apache.pivot.wtk.ButtonGroup.setSelection(Button)
-                      // as it doesn't support clearing the selection
-                    }
-                  }
-                }
-              </buttonPressListeners>
-            </PushButton>
+            <PushButton buttonData="Clear selection"
+              ButtonPressListener.buttonPressed="groupE.setSelection(null);" />
           </BoxPane>
         </Border>
         <Border styles="{padding:8}" title="Jump to character">

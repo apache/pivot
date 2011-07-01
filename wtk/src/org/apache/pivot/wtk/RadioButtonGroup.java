@@ -304,6 +304,9 @@ public class RadioButtonGroup extends ButtonGroup {
      */
     @Override
     public boolean add(Button button) {
+        if (button == null) {
+            throw new IllegalArgumentException("Button cannot be null");
+        }
         boolean result = super.add(button);
         if (result) {
             buttonOrder.add(button);
@@ -347,6 +350,9 @@ public class RadioButtonGroup extends ButtonGroup {
      * @see Sequence#insert(Object, int)
      */
     public void insert(Button button, int index) {
+        if (button == null) {
+            throw new IllegalArgumentException("Button cannot be null");
+        }
         boolean result = super.add(button);
         if (result) {
             buttonOrder.insert(button, index);
@@ -361,9 +367,12 @@ public class RadioButtonGroup extends ButtonGroup {
      */
     @Override
     public boolean remove(Button button) {
-        boolean result = super.remove(button);
-        if (result) {
-            buttonOrder.remove(button);
+        boolean result = false;
+        if (button != null) {
+            result = super.remove(button);
+            if (result) {
+                buttonOrder.remove(button);
+            }
         }
         return result;
     }
@@ -403,7 +412,9 @@ public class RadioButtonGroup extends ButtonGroup {
     @Override
     public void setSelection(Button button) {
         super.setSelection(button);
-        button.requestFocus();
+        if (button != null) {
+            button.requestFocus();
+        }
     }
 
     /**
