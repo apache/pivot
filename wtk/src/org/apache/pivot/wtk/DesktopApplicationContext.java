@@ -48,6 +48,19 @@ public final class DesktopApplicationContext extends ApplicationContext {
      */
     public interface DisplayListener {
         /**
+         * DisplayListener adapter.
+         */
+        public static class Adapter implements DisplayListener {
+            @Override
+            public void hostWindowOpened(Display display) {
+            }
+
+            @Override
+            public void hostWindowClosed(Display display) {
+            }
+        }
+
+        /**
          * Called when the host window for secondary display has been opened.
          *
          * @param display

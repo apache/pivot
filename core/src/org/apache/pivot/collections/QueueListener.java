@@ -23,6 +23,27 @@ import java.util.Comparator;
  */
 public interface QueueListener<T> {
     /**
+     * QueueListener adapter.
+     */
+    public static class Adapter<T> implements QueueListener<T> {
+        @Override
+        public void itemEnqueued(Queue<T> queue, T item) {
+        }
+
+        @Override
+        public void itemDequeued(Queue<T> queue, T item) {
+        }
+
+        @Override
+        public void queueCleared(Queue<T> queue) {
+        }
+
+        @Override
+        public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator) {
+        }
+    }
+
+    /**
      * Called when an item has been inserted into the tail of a queue.
      *
      * @param queue

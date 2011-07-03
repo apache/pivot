@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 
 /**
  * Represents the entry point into a WTK application.
@@ -25,6 +26,28 @@ import org.apache.pivot.collections.Map;
  * not be invoked directly by the application.
  */
 public interface Application {
+    /**
+     * Application adapter.
+     */
+    public static class Adapter implements Application {
+        @Override
+        public void startup(Display display, Map<String, String> properties) throws Exception {
+        }
+
+        @Override
+        public boolean shutdown(boolean optional) throws Exception {
+            return false;
+        }
+
+        @Override
+        public void suspend() throws Exception {
+        }
+
+        @Override
+        public void resume() throws Exception {
+        }
+    }
+
     /**
      * Optional interface that allows an application to present information
      * about itself.
@@ -43,6 +66,23 @@ public interface Application {
      * input focus).
      */
     public interface UnprocessedKeyHandler {
+        /**
+         * UnprocessedKeyHandler adapter.
+         */
+        public static class Adapter implements UnprocessedKeyHandler {
+            @Override
+            public void keyTyped(char character) {
+            }
+
+            @Override
+            public void keyPressed(int keyCode, KeyLocation keyLocation) {
+            }
+
+            @Override
+            public void keyReleased(int keyCode, KeyLocation keyLocation) {
+            }
+        }
+
         public void keyTyped(char character);
         public void keyPressed(int keyCode, Keyboard.KeyLocation keyLocation);
         public void keyReleased(int keyCode, Keyboard.KeyLocation keyLocation);

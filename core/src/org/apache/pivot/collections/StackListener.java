@@ -23,6 +23,27 @@ import java.util.Comparator;
  */
 public interface StackListener<T> {
     /**
+     * StackListener adapter.
+     */
+    public static class Adapter<T> implements StackListener<T> {
+        @Override
+        public void itemPushed(Stack<T> stack, T item) {
+        }
+
+        @Override
+        public void itemPopped(Stack<T> stack, T item) {
+        }
+
+        @Override
+        public void stackCleared(Stack<T> stack) {
+        }
+
+        @Override
+        public void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator) {
+        }
+    }
+
+    /**
      * Called when an item has been pushed onto a stack.
      *
      * @param stack
