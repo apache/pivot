@@ -23,27 +23,27 @@ limitations under the License.
 >
 
 <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
- 
+
     <BoxPane styles="{padding:4, verticalAlignment:'center'}">
-		<Label text="Select one element:"/>
-		<ListButton bxml:id="listButton1" buttonData="Color">
-			<content:ListItem text="Red"/>
-			<content:ListItem text="Orange"/>
-			<content:ListItem text="Yellow"/>
-			<content:ListItem text="Green"/>
-			<content:ListItem text="Blue"/>
-			<content:ListItem text="Purple"/>
-		</ListButton>
+        <Label text="Select one element:"/>
+        <ListButton bxml:id="listButton1" buttonData="Color">
+            <content:ListItem text="Red"/>
+            <content:ListItem text="Orange"/>
+            <content:ListItem text="Yellow"/>
+            <content:ListItem text="Green"/>
+            <content:ListItem text="Blue"/>
+            <content:ListItem text="Purple"/>
+        </ListButton>
         <PushButton bxml:id="pushButton1" buttonData="Click to Clear Selection"/>
     </BoxPane>
 
-	<Separator/>
+    <Separator/>
 
     <BoxPane styles="{padding:4, verticalAlignment:'center'}">
-		<Label text="Select one element:"/>
-		<ListButton bxml:id="listButton2" buttonData="Number"
-			listData="['One', 'Two', 'Three']"
-		/>
+        <Label text="Select one element:"/>
+        <ListButton bxml:id="listButton2" buttonData="Number"
+            listData="['One', 'Two', 'Three']"
+        />
         <PushButton bxml:id="pushButton2" buttonData="Click to Clear Selection"/>
     </BoxPane>
 
