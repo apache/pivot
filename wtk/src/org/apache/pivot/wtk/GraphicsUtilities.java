@@ -176,7 +176,7 @@ public final class GraphicsUtilities {
 
     public static Color decodeColor(String value) throws NumberFormatException {
         if (value == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Cannot decode a null String.");
         }
 
         value = value.toLowerCase(Locale.ENGLISH);
@@ -185,7 +185,8 @@ public final class GraphicsUtilities {
         if (value.startsWith("0x")) {
             value = value.substring(2);
             if (value.length() != 8) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(
+                    "Incorrect Color format.  Expecting exactly 8 digits after the '0x' prefix.");
             }
 
             int rgb = Integer.parseInt(value.substring(0, 6), 16);
@@ -195,7 +196,8 @@ public final class GraphicsUtilities {
         } else if (value.startsWith("#")) {
             value = value.substring(1);
             if (value.length() != 6) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(
+                    "Incorrect Color format.  Expecting exactly 6 digits after the '#' prefix.");
             }
 
             int rgb = Integer.parseInt(value, 16);
@@ -223,7 +225,7 @@ public final class GraphicsUtilities {
 
     public static Paint decodePaint(String value) {
         if (value == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Cannot decode a null String.");
         }
 
         Paint paint;
