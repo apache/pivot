@@ -1168,8 +1168,9 @@ public class TerraScrollBarSkin extends ContainerSkin
                 scrollDownButton.getHeight() + 2;
             numLegalPixelValues = availableHeight - handle.getHeight() + 1;
         }
-
-        valueScale = (float)numLegalPixelValues / (float)numLegalRealValues;
+        
+        // the number of segments is one less than the number of values
+        valueScale = numLegalPixelValues / ((float)numLegalRealValues - 1);
 
         return valueScale;
     }
