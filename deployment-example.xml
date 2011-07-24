@@ -161,7 +161,7 @@ JarBundler requires Mac OS X. See the project home page for installation instruc
                 <classPath mainClass="org.apache.pivot.wtk.DesktopApplicationContext"
                     cp="${folder.lib}/pivot-core-${version}.jar;${folder.lib}/pivot-wtk-${version}.jar;${folder.lib}/pivot-wtk-terra-${version}.jar"/>
                 <jre minVersion="1.6.0">
-                    <opt>-Dorg.apache.pivot.wtk.skin.terra.location=TerraTheme_winxp.json</opt>
+                    <opt>-Dorg.apache.pivot.wtk.skin.terra.location=TerraTheme_winxp1.json</opt>
                 </jre>
             </config>
         </launch4j>
