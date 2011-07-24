@@ -36,13 +36,13 @@ public abstract class Task<V> {
         @Override
         public void run() {
             V result = null;
-            Exception fault = null;
+            Throwable fault = null;
 
             try {
                 result = execute();
             }
-            catch(Exception exception) {
-                fault = exception;
+            catch(Throwable throwable) {
+                fault = throwable;
             }
 
             TaskListener<V> taskListener;
@@ -104,7 +104,7 @@ public abstract class Task<V> {
     private ExecutorService executorService;
 
     private V result = null;
-    private Exception fault = null;
+    private Throwable fault = null;
     private TaskListener<V> taskListener = null;
 
     protected volatile long timeout = Long.MAX_VALUE;
@@ -194,7 +194,7 @@ public abstract class Task<V> {
      * has succeeded. Callers should call {@link #isPending()} to distinguish
      * between these cases.
      */
-    public synchronized Exception getFault() {
+    public synchronized Throwable getFault() {
         return fault;
     }
 
