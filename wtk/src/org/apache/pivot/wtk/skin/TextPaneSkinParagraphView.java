@@ -369,8 +369,6 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
     @Override
     public Bounds getCharacterBounds(int offset) {
-        // need to validate in case we get called from user-code after a modification
-        validate();
         Bounds characterBounds = null;
 
         if (offset == getCharacterCount() - 1) {

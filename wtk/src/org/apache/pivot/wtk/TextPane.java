@@ -842,6 +842,9 @@ public class TextPane extends Container {
     }
 
     public Bounds getCharacterBounds(int offset) {
+        // We need to validate in case we get called from user-code after
+        // a user-code initiated modification, but before another layout has run.
+        validate();
         TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
         return textPaneSkin.getCharacterBounds(offset);
     }
