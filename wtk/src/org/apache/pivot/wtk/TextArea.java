@@ -1239,6 +1239,9 @@ public class TextArea extends Component {
     }
 
     public Bounds getCharacterBounds(int index) {
+        // We need to validate in case we get called from user-code after
+        // a user-code initiated modification, but before another layout has run.
+        validate();
         TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
         return textAreaSkin.getCharacterBounds(index);
     }

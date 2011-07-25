@@ -371,8 +371,6 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
     }
 
     public Bounds getCharacterBounds(int index) {
-        // need to validate in case we get called from user-code after a modification
-        validate();
         Bounds characterBounds = null;
 
         CharSequence characters = paragraph.getCharacters();
