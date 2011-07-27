@@ -25,7 +25,7 @@ import org.apache.pivot.util.ImmutableIterator;
 
 
 /**
- * Class that runs a sequence of tasks in series and notifies listeners
+ * {@link Task} that runs a sequence of tasks in series and notifies listeners
  * when all tasks are complete.
  */
 public class TaskSequence extends Task<Void>
