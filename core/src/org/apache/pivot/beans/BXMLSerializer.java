@@ -571,8 +571,12 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             throw new IllegalArgumentException("resourceName is null.");
         }
 
-        return readObject(baseType.getResource(resourceName),
-            localize ? new Resources(baseType.getName()) : null);
+        // throw a nice error so the user knows which resource did not load
+        URL location = baseType.getResource(resourceName);
+        if (location == null) {
+            throw new IllegalArgumentException("could not find resource " + resourceName);
+        }
+        return readObject(location, localize ? new Resources(baseType.getName()) : null);
     }
 
     /**
