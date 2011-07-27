@@ -1824,7 +1824,13 @@ public abstract class Component implements ConstrainedVisual {
      * @param height
      */
     public void scrollAreaToVisible(int x, int y, int width, int height) {
-        Component component = this;
+        // The calculations need all the component sizes to be up to date, which means the
+        // entire hierarchy has to be layed out.
+        Display display = getDisplay();
+        if (display != null) {
+            display.validate();
+        }
+        Component component = getParent();
 
         while (component != null) {
             if (component instanceof Viewport) {
