@@ -31,6 +31,9 @@ public abstract class Viewport extends Container {
      * Viewport skin interface. Viewport skins must implement this.
      */
     public interface Skin {
+        /**
+         * The bounds of the Viewport within the container, for example, in ScrollPaneSkin, this excludes the scrollbars.
+         */
         public Bounds getViewportBounds();
     }
 
@@ -157,6 +160,9 @@ public abstract class Viewport extends Container {
         this.consumeRepaint = consumeRepaint;
     }
 
+    /**
+     * The bounds of the Viewport within the container, for example, in ScrollPaneSkin, this excludes the scrollbars.
+     */
     public Bounds getViewportBounds() {
         Viewport.Skin viewportSkin = (Viewport.Skin)getSkin();
         return viewportSkin.getViewportBounds();
