@@ -74,6 +74,14 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
     }
 
     @Override
+    public void invalidateTree() {
+        super.invalidateTree();
+        for (TextPaneSkinNodeView child : this) {
+            child.invalidateTree();
+        }
+    }
+
+    @Override
     public int add(TextPaneSkinNodeView nodeView) {
         int index = getLength();
         insert(nodeView, index);
@@ -256,7 +264,8 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
 
     @Override
     public void fontChanged(Element element, Font previousFont) {
-        invalidate();
+        // because children may depend on parents for their style information, we need to invalidate the whole tree
+        textPaneSkin.invalidateNodeViewTree();
     }
 
     @Override
@@ -266,17 +275,20 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
 
     @Override
     public void foregroundColorChanged(Element element, Color previousForegroundColor) {
-        repaint();
+        // because children may depend on parents for their style information, we need to invalidate the whole tree
+        textPaneSkin.invalidateNodeViewTree();
     }
 
     @Override
     public void underlineChanged(Element element) {
-        repaint();
+        // because children may depend on parents for their style information, we need to invalidate the whole tree
+        textPaneSkin.invalidateNodeViewTree();
     }
 
     @Override
     public void strikethroughChanged(Element element) {
-        repaint();
+        // because children may depend on parents for their style information, we need to invalidate the whole tree
+        textPaneSkin.invalidateNodeViewTree();
     }
 
     @Override

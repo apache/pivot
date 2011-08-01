@@ -1180,4 +1180,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     Area getSelection() {
         return selection;
     }
+
+    void invalidateNodeViewTree() {
+        this.documentView.invalidateTree();
+        invalidateComponent();
+    }
 }
