@@ -141,6 +141,8 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                 next.setParent(getParent());
             } else {
                 length = ci.getEndIndex() - start;
+                // set to null in case this node used to be broken across multiple, but is no longer
+                next = null;
             }
 
             Rectangle2D textBounds = glyphVector.getLogicalBounds();
