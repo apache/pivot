@@ -23,8 +23,10 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -131,6 +133,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     private Insets margin;
     private boolean wrapText;
     private int tabWidth;
+    private int lineWidth;
+
+    private Dimensions averageCharacterSize;
 
     private ArrayList<TextAreaSkinParagraphView> paragraphViews = new ArrayList<TextAreaSkinParagraphView>();
 
@@ -165,9 +170,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        for (TextAreaSkinParagraphView paragraphView : paragraphViews) {
-            paragraphView.setBreakWidth(Integer.MAX_VALUE);
-            preferredWidth = Math.max(preferredWidth, paragraphView.getWidth());
+        if (lineWidth <= 0) {
+            for (TextAreaSkinParagraphView paragraphView : paragraphViews) {
+                paragraphView.setBreakWidth(Integer.MAX_VALUE);
+                preferredWidth = Math.max(preferredWidth, paragraphView.getWidth());
+            }
+        } else {
+            preferredWidth = averageCharacterSize.width * lineWidth;
         }
 
         preferredWidth += margin.left + margin.right;
@@ -219,17 +228,24 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
             : Integer.MAX_VALUE;
 
         int y = margin.top;
+        int lastY = 0;
+        int lastHeight = 0;
 
         int rowOffset = 0;
+        int index = 0;
         for (TextAreaSkinParagraphView paragraphView : paragraphViews) {
             paragraphView.setBreakWidth(breakWidth);
             paragraphView.setX(margin.left);
             paragraphView.setY(y);
+            lastY = y;
             y += paragraphView.getHeight();
+            lastHeight = paragraphView.getHeight();
 
             paragraphView.setRowOffset(rowOffset);
             rowOffset += paragraphView.getRowCount();
+            index++;
         }
+        System.out.println("layout lastY=" + lastY + " lastHeight=" + lastHeight + " paragraphLastIndex=" + (index - 1));
 
         updateSelection();
         caretX = caret.x;
@@ -435,18 +451,22 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
     public Bounds getCharacterBounds(int index) {
         Bounds characterBounds = null;
+        new Throwable("getCharacterBounds index=" + index).printStackTrace(System.out);
 
         if (paragraphViews.getLength() > 0) {
             TextArea textArea = (TextArea)getComponent();
             TextAreaSkinParagraphView paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
             characterBounds = paragraphView.getCharacterBounds(index
                 - paragraphView.getParagraph().getOffset());
+            System.out.println("getCharacterBounds paraIndex=" + paragraphViews.indexOf(paragraphView));
+            System.out.println("getCharacterBounds paraY=" + paragraphView.getY());
 
             characterBounds = new Bounds(characterBounds.x + paragraphView.getX(),
                 characterBounds.y + paragraphView.getY(),
                 characterBounds.width, characterBounds.height);
         }
 
+        System.out.println("getCharacterBounds result=" + characterBounds);
         return characterBounds;
     }
 
@@ -474,6 +494,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         }
 
         this.font = font;
+
+        int missingGlyphCode = font.getMissingGlyphCode();
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
+        GlyphVector missingGlyphVector = font.createGlyphVector(fontRenderContext,
+            new int[] {missingGlyphCode});
+        Rectangle2D textBounds = missingGlyphVector.getLogicalBounds();
+
+        Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
+        averageCharacterSize = new Dimensions((int)Math.ceil(textBounds.getWidth()),
+            (int)Math.ceil(maxCharBounds.getHeight()));
+
         invalidateComponent();
     }
 
@@ -696,6 +728,29 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         }
 
         this.tabWidth = tabWidth;
+    }
+
+    public int getLineWidth() {
+        return lineWidth;
+    }
+
+    public void setLineWidth(int lineWidth) {
+        if (this.lineWidth != lineWidth) {
+            this.lineWidth = lineWidth;
+
+            int missingGlyphCode = font.getMissingGlyphCode();
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
+            GlyphVector missingGlyphVector = font.createGlyphVector(fontRenderContext,
+                new int[] {missingGlyphCode});
+            Rectangle2D textBounds = missingGlyphVector.getLogicalBounds();
+
+            Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
+            averageCharacterSize = new Dimensions((int)Math.ceil(textBounds.getWidth()),
+                (int)Math.ceil(maxCharBounds.getHeight()));
+
+            invalidateComponent();
+        }
     }
 
     @Override
@@ -1096,23 +1151,30 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     } else {
                         // Get next insertion point from right edge of trailing selection
                         // character
-                        from = selectionStart + selectionLength - 1;
+                        from = selectionStart + selectionLength;
 
                         Bounds trailingSelectionBounds = getCharacterBounds(from);
                         x = trailingSelectionBounds.x + trailingSelectionBounds.width;
                     }
+                    System.out.println("from=" + from);
 
                     int index = getNextInsertionPoint(x, from, TextArea.ScrollDirection.DOWN);
 
                     if (index != -1) {
+                        System.out.println("nextInsertionPoint=" + index);
+                        System.out.println("charAt(" + index + ") is eol=" + (textArea.getCharacterAt(index) == '\n'));
+                        System.out.println("charAt(" + index + ")=" + (int) textArea.getCharacterAt(index) + " " + textArea.getCharacterAt(index));
                         // If the next character is a paragraph terminator and is
                         // not the final terminator character, increment the selection
-                        if (index < textArea.getCharacterCount() - 1
-                            && textArea.getCharacterAt(index) == '\n') {
-                            index++;
-                        }
+//                        if (index < textArea.getCharacterCount() - 1
+//                            && textArea.getCharacterAt(index) == '\n') {
+//                            index++;
+//                        }
+//                        System.out.println("nextInsertionPoint=" + index);
 
+                        System.out.println("setSelection start=" + selectionStart + " len=" + (index - selectionStart));
                         textArea.setSelection(selectionStart, index - selectionStart);
+                        System.out.println("selection=" + textArea.getSelection());
                         scrollCharacterToVisible(index);
                     }
                 } else {
