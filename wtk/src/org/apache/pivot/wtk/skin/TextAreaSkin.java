@@ -134,6 +134,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     private boolean wrapText;
     private int tabWidth;
     private int lineWidth;
+    private boolean acceptsEnter = true;
 
     private Dimensions averageCharacterSize;
 
@@ -718,6 +719,14 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         invalidateComponent();
     }
 
+    public boolean getAcceptsEnter() {
+        return acceptsEnter;
+    }
+
+    public void setAcceptsEnter(boolean acceptsEnter) {
+        this.acceptsEnter = acceptsEnter;
+    }
+
     public int getTabWidth() {
         return tabWidth;
     }
@@ -906,6 +915,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
             Keyboard.Modifier wordNavigationModifier = Platform.getWordNavigationModifier();
 
             if (keyCode == Keyboard.KeyCode.ENTER
+                && acceptsEnter
                 && textArea.isEditable()
                 && Keyboard.getModifiers() == 0) {
                 int index = textArea.getSelectionStart();
