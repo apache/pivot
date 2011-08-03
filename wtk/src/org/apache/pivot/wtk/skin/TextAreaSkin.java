@@ -773,6 +773,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
             visibleArea = new Bounds(visibleArea.x, visibleArea.y, visibleArea.width,
                 visibleArea.height);
 
+            // if it's inside the visible area, stop the scroll timer
             if (y >= visibleArea.y
                 && y < visibleArea.y + visibleArea.height) {
                 // Stop the scroll selection timer
@@ -782,17 +783,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 }
 
                 scrollDirection = null;
-                int index = getInsertionPoint(x, y);
-
-                if (index != -1) {
-                    // Select the range
-                    if (index > anchor) {
-                        textArea.setSelection(anchor, index - anchor);
-                    } else {
-                        textArea.setSelection(index, anchor - index);
-                    }
-                }
             } else {
+                // if it's outside the visible area, start the scroll timer
                 if (scheduledScrollSelectionCallback == null) {
                     scrollDirection = (y < visibleArea.y) ? TextArea.ScrollDirection.UP
                         : TextArea.ScrollDirection.DOWN;
@@ -802,6 +794,17 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
                     // Run the callback once now to scroll the selection immediately
                     scrollSelectionCallback.run();
+                }
+            }
+
+            int index = getInsertionPoint(x, y);
+
+            if (index != -1) {
+                // Select the range
+                if (index > anchor) {
+                    textArea.setSelection(anchor, index - anchor);
+                } else {
+                    textArea.setSelection(index, anchor - index);
                 }
             }
 
