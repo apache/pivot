@@ -942,6 +942,14 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 }
 
                 consumed = true;
+            } else if (Keyboard.isPressed(commandModifier)
+                    && keyCode == Keyboard.KeyCode.TAB
+                    && textPane.isEditable()) {
+                    // FIXME instead of converting to spaces, implement proper tab stops
+                    textPane.insert("    ");
+                    showCaret(true);
+
+                    consumed = true;
             } else if (Keyboard.isPressed(commandModifier)) {
                 if (keyCode == Keyboard.KeyCode.A) {
                     textPane.setSelection(0, document.getCharacterCount());
