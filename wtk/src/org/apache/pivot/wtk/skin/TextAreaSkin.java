@@ -246,7 +246,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
             rowOffset += paragraphView.getRowCount();
             index++;
         }
-        System.out.println("layout lastY=" + lastY + " lastHeight=" + lastHeight + " paragraphLastIndex=" + (index - 1));
 
         updateSelection();
         caretX = caret.x;
@@ -452,22 +451,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
     public Bounds getCharacterBounds(int index) {
         Bounds characterBounds = null;
-        new Throwable("getCharacterBounds index=" + index).printStackTrace(System.out);
 
         if (paragraphViews.getLength() > 0) {
             TextArea textArea = (TextArea)getComponent();
             TextAreaSkinParagraphView paragraphView = paragraphViews.get(textArea.getParagraphAt(index));
             characterBounds = paragraphView.getCharacterBounds(index
                 - paragraphView.getParagraph().getOffset());
-            System.out.println("getCharacterBounds paraIndex=" + paragraphViews.indexOf(paragraphView));
-            System.out.println("getCharacterBounds paraY=" + paragraphView.getY());
 
             characterBounds = new Bounds(characterBounds.x + paragraphView.getX(),
                 characterBounds.y + paragraphView.getY(),
                 characterBounds.width, characterBounds.height);
         }
 
-        System.out.println("getCharacterBounds result=" + characterBounds);
         return characterBounds;
     }
 
@@ -954,7 +949,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 && textArea.isEditable()) {
                 int selectionLength = textArea.getSelectionLength();
 
-                StringBuilder tabBuilder = new StringBuilder();
+                StringBuilder tabBuilder = new StringBuilder(tabWidth);
                 for (int i = 0; i < tabWidth; i++) {
                     tabBuilder.append(" ");
                 }
@@ -1169,25 +1164,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                         Bounds trailingSelectionBounds = getCharacterBounds(from);
                         x = trailingSelectionBounds.x + trailingSelectionBounds.width;
                     }
-                    System.out.println("from=" + from);
 
                     int index = getNextInsertionPoint(x, from, TextArea.ScrollDirection.DOWN);
 
                     if (index != -1) {
-                        System.out.println("nextInsertionPoint=" + index);
-                        System.out.println("charAt(" + index + ") is eol=" + (textArea.getCharacterAt(index) == '\n'));
-                        System.out.println("charAt(" + index + ")=" + (int) textArea.getCharacterAt(index) + " " + textArea.getCharacterAt(index));
                         // If the next character is a paragraph terminator and is
                         // not the final terminator character, increment the selection
-//                        if (index < textArea.getCharacterCount() - 1
-//                            && textArea.getCharacterAt(index) == '\n') {
-//                            index++;
-//                        }
-//                        System.out.println("nextInsertionPoint=" + index);
+                        if (index < textArea.getCharacterCount() - 1
+                            && textArea.getCharacterAt(index) == '\n') {
+                            index++;
+                        }
 
-                        System.out.println("setSelection start=" + selectionStart + " len=" + (index - selectionStart));
                         textArea.setSelection(selectionStart, index - selectionStart);
-                        System.out.println("selection=" + textArea.getSelection());
                         scrollCharacterToVisible(index);
                     }
                 } else {
