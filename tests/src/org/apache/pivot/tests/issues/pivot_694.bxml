@@ -21,8 +21,10 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns:collections="org.apache.pivot.collections"
     xmlns="org.apache.pivot.wtk"
+    preferredWidth="800" preferredHeight="600"
 >
 
+<ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
 <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
 
     <BoxPane styles="{padding:4, verticalAlignment:'top'}">
@@ -92,8 +94,10 @@ limitations under the License.
 
     <BoxPane styles="{padding:4, verticalAlignment:'top'}">
         <FlowPane>
-            <Label text="Select one element:"/>
-            <ListButton bxml:id="listButton1" buttonData="Color">
+            <Label text="Select one element (listDataKey set):"/>
+            <ListButton bxml:id="listButton1" buttonData="Color"
+                listDataKey="colorKey"
+            >
                 <content:ListItem text="Red"/>
                 <content:ListItem text="Orange"/>
                 <content:ListItem text="Yellow"/>
@@ -104,7 +108,7 @@ limitations under the License.
         </FlowPane>
         <Separator/>
         <FlowPane>
-            <Label text="Select one element:"/>
+            <Label text="Select one element (listDataKey not set):"/>
             <ListButton bxml:id="listButton2" buttonData="Number"
                 listData="['One', 'Two', 'Three']"
             />
@@ -114,56 +118,143 @@ limitations under the License.
 
     <BoxPane styles="{padding:4, verticalAlignment:'top'}">
         <FlowPane>
-            <Label text="Select a date:"/>
-            <CalendarButton bxml:id="calendarButton"/>
+            <Label text="Select a date (buttonDataKey set):"/>
+            <CalendarButton bxml:id="calendarButton1" buttonDataKey = "buttonDataKey" />
         </FlowPane>
         <Separator/>
         <FlowPane>
-            <Label text="Select a value:"/>
-            <Spinner bxml:id="spinner" preferredWidth="60"
-                spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
-                circular="true"
-                selectedIndex="0"
-            />
+            <Label text="Select a date (buttonDataKey not set):"/>
+            <CalendarButton bxml:id="calendarButton2" />
         </FlowPane>
     </BoxPane>
     <Separator/>
 
-    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-        <TableView bxml:id="tableView" styles="{variableRowHeight:true, backgroundColor:'#ffeeee'}" selectMode="multi">
-            <columns>
-                <TableView.Column name="value" width="1*"/>
-                <TableView.Column width="1*"/>
-            </columns>
-
-            <collections:HashMap value="Single Line"/>
-            <collections:HashMap value="Double&#xA;Line Line Line Line!"/>
-            <collections:HashMap value="Single Line"/>
-            <collections:HashMap value="Double&#xA;Line"/>
-        </TableView>
-    </ScrollPane>
+    <BoxPane styles="{padding:4, verticalAlignment:'top'}">
+        <Label text="Select a value (spinnerDataKey set):"/>
+        <Spinner bxml:id="spinner1" preferredWidth="60"
+            spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
+            circular="true"
+            selectedIndex="0"
+            spinnerDataKey="spinnerDataKey"
+        />
+        <Separator/>
+        <Label text="Select a value (spinnerDataKey not set):"/>
+        <Spinner bxml:id="spinner2" preferredWidth="60"
+            spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
+            circular="true"
+            selectedIndex="0"
+        />
+    </BoxPane>
     <Separator/>
 
-    <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-        <TreeView bxml:id="treeView" selectMode="multi">
-            <nodeRenderer>
-                <content:TreeViewNodeRenderer showIcon="true"/>
-            </nodeRenderer>
-            <treeData>
-                <content:TreeBranch>
-                    <content:TreeBranch text="Activity">
-                        <content:TreeBranch text="Games">
-                            <content:TreeNode text="Foosball"/>
-                            <content:TreeNode text="A very long game name that just serves to show how a wide tree node behaves"/>
-                            <content:TreeNode text="Ping Pong"/>
-                            <content:TreeNode text="Air Hockey"/>
+    <BoxPane styles="{padding:4, verticalAlignment:'top'}">
+        <FlowPane>
+            <Label text="ListView (listDataKey set):"/>
+               <ListView bxml:id="listView1" selectMode="multi" listDataKey= "listDataKey">
+                   <listData>
+                       <content:NumericSpinnerData lowerBound="0" upperBound="3" increment="1"/>
+                </listData>
+            </ListView>
+        </FlowPane>
+        <Separator/>
+        <FlowPane>
+            <Label text="ListView (listDataKey not set):"/>
+               <ListView bxml:id="listView2" selectMode="multi">
+                   <listData>
+                       <content:NumericSpinnerData lowerBound="0" upperBound="3" increment="1"/>
+                </listData>
+            </ListView>
+        </FlowPane>
+    </BoxPane>
+    <Separator/>
+
+    <!--
+    <SplitPane orientation="horizontal" splitRatio="0.5" resizeMode="primary_region"
+        preferredWidth="700" preferredHeight="100"
+    >
+        <top>
+    -->
+    <BoxPane orientation="vertical" styles="{fill:true}">
+           <Label text="TableView (tableDataKey set):"/>
+            <TableView bxml:id="tableView1" styles="{variableRowHeight:true, backgroundColor:'#ffeeee'}" selectMode="multi" tableDataKey="tableDataKey">
+                <columns>
+                    <TableView.Column name="value" width="1*"/>
+                    <TableView.Column width="1*"/>
+                </columns>
+                <collections:HashMap value="Single Line"/>
+                <collections:HashMap value="Double&#xA;Line Line Line Line!"/>
+                <collections:HashMap value="Single Line"/>
+                <collections:HashMap value="Double&#xA;Line"/>
+            </TableView>
+    <!--
+        </top>
+        <bottom>
+    -->
+           <Label text="TableView (tableDataKey not set):"/>
+            <TableView bxml:id="tableView2" styles="{variableRowHeight:true, backgroundColor:'#ffeeee'}" selectMode="multi">
+                <columns>
+                    <TableView.Column name="value" width="1*"/>
+                    <TableView.Column width="1*"/>
+                </columns>
+                <collections:HashMap value="Single Line"/>
+                <collections:HashMap value="Double&#xA;Line Line Line Line!"/>
+                <collections:HashMap value="Single Line"/>
+                <collections:HashMap value="Double&#xA;Line"/>
+            </TableView>
+    <!--
+        </bottom>
+    </SplitPane>
+    -->
+    </BoxPane>
+    <Separator/>
+
+    <BoxPane styles="{padding:4, verticalAlignment:'top'}">
+        <FlowPane>
+            <Label text="TreeView (treeDataKey set): - future"/>
+            <TreeView bxml:id="treeView1" selectMode="multi"
+                ComponentListener.parentChanged="treeView1.expandAll();"
+            >
+                <nodeRenderer>
+                    <content:TreeViewNodeRenderer showIcon="true"/>
+                </nodeRenderer>
+                <treeData>
+                    <content:TreeBranch>
+                        <content:TreeBranch text="Activity">
+                            <content:TreeBranch text="Games">
+                                <content:TreeNode text="Foosball"/>
+                                <content:TreeNode text="Ping Pong"/>
+                                <content:TreeNode text="Air Hockey"/>
+                            </content:TreeBranch>
                         </content:TreeBranch>
                     </content:TreeBranch>
-                </content:TreeBranch>
-            </treeData>
-        </TreeView>
-    </ScrollPane>
+                </treeData>
+            </TreeView>
+        </FlowPane>
+        <Separator/>
+        <FlowPane>
+            <Label text="TreeView (treeDataKey not set):"/>
+            <TreeView bxml:id="treeView2" selectMode="multi"
+                ComponentListener.parentChanged="treeView2.expandAll();"
+            >
+                <nodeRenderer>
+                    <content:TreeViewNodeRenderer showIcon="true"/>
+                </nodeRenderer>
+                <treeData>
+                    <content:TreeBranch>
+                        <content:TreeBranch text="Activity">
+                            <content:TreeBranch text="Games">
+                                <content:TreeNode text="Foosball"/>
+                                <content:TreeNode text="Ping Pong"/>
+                                <content:TreeNode text="Air Hockey"/>
+                            </content:TreeBranch>
+                        </content:TreeBranch>
+                    </content:TreeBranch>
+                </treeData>
+            </TreeView>
+        </FlowPane>
+    </BoxPane>
     <Separator/>
+
 
     <BoxPane styles="{padding:4, verticalAlignment:'top', horizontalAlignment:'center'}">
         <PushButton bxml:id="clearSelectionButton" buttonData="Click to Clear Selection in supported Components" enabled="true"/>
@@ -171,5 +262,6 @@ limitations under the License.
     </BoxPane>
 
 </BoxPane>
+</ScrollPane>
 
 </Window>
