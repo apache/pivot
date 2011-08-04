@@ -144,7 +144,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         }
     }
 
-    public boolean isValid() {
+    public final boolean isValid() {
         return valid;
     }
 
@@ -160,11 +160,14 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         valid = false;
     }
 
-    protected final void layoutComplete() {
-        valid = true;
+    public final void layout(int breakWidth) {
+        if (!valid) {
+            childLayout(breakWidth);
+            valid = true;
+        }
     }
 
-    public abstract void layout(int breakWidth);
+    protected abstract void childLayout(int breakWidth);
 
     public int getOffset() {
         return node.getOffset();

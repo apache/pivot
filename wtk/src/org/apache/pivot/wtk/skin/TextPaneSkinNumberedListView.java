@@ -89,45 +89,42 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
     }
 
     @Override
-    public void layout(int breakWidth) {
-        if (!isValid()) {
+    protected void childLayout(int breakWidth) {
+        NumberedList numberedList = (NumberedList)getNode();
 
-            NumberedList numberedList = (NumberedList)getNode();
+        int index = 1;
+        for (TextPaneSkinNodeView nodeView : this) {
+            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
 
-            int index = 1;
-            for (TextPaneSkinNodeView nodeView : this) {
-                TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
-
-                switch (numberedList.getStyle()) {
-                    case DECIMAL:
-                        listItemView.setIndexText(index + ". ");
-                        break;
-                    case LOWER_ALPHA:
-                        listItemView.setIndexText(int2alpha(index).toLowerCase(Locale.ENGLISH) + ". ");
-                        break;
-                    case UPPER_ALPHA:
-                        listItemView.setIndexText(int2alpha(index) + ". ");
-                        break;
-                    case LOWER_ROMAN:
-                        listItemView.setIndexText(int2roman(index).toLowerCase(Locale.ENGLISH) + ". ");
-                        break;
-                    case UPPER_ROMAN:
-                        listItemView.setIndexText(int2roman(index) + ". ");
-                        break;
-                }
-
-                index++;
+            switch (numberedList.getStyle()) {
+                case DECIMAL:
+                    listItemView.setIndexText(index + ". ");
+                    break;
+                case LOWER_ALPHA:
+                    listItemView.setIndexText(int2alpha(index).toLowerCase(Locale.ENGLISH) + ". ");
+                    break;
+                case UPPER_ALPHA:
+                    listItemView.setIndexText(int2alpha(index) + ". ");
+                    break;
+                case LOWER_ROMAN:
+                    listItemView.setIndexText(int2roman(index).toLowerCase(Locale.ENGLISH) + ". ");
+                    break;
+                case UPPER_ROMAN:
+                    listItemView.setIndexText(int2roman(index) + ". ");
+                    break;
             }
 
-            this.maxIndexTextWidth = 0;
-            for (TextPaneSkinNodeView nodeView : this) {
-                TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
-                this.maxIndexTextWidth = Math.max(this.maxIndexTextWidth,
-                    listItemView.getIndexTextWidth());
-            }
-
-            super.layout(breakWidth);
+            index++;
         }
+
+        this.maxIndexTextWidth = 0;
+        for (TextPaneSkinNodeView nodeView : this) {
+            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
+            this.maxIndexTextWidth = Math.max(this.maxIndexTextWidth,
+                listItemView.getIndexTextWidth());
+        }
+
+        super.childLayout(breakWidth);
     }
 
     @Override

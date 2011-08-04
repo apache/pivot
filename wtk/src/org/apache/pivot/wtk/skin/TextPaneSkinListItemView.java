@@ -48,36 +48,32 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
     }
 
     @Override
-    public void layout(int breakWidth) {
-        if (!isValid()) {
-            indexTextNodeView.layout(breakWidth);
-            indexTextNodeView.setLocation(0, 0);
+    protected void childLayout(int breakWidth) {
+        indexTextNodeView.childLayout(breakWidth);
+        indexTextNodeView.setLocation(0, 0);
 
-            breakWidth -= indexTextNodeView.getWidth();
-            int itemsWidth = 0;
-            int itemsY = 0;
+        breakWidth -= indexTextNodeView.getWidth();
+        int itemsWidth = 0;
+        int itemsY = 0;
 
-            // skip the first item, it's the indexText nodeView
-            Iterator<TextPaneSkinNodeView> iterator = this.iterator();
-            iterator.next();
+        // skip the first item, it's the indexText nodeView
+        Iterator<TextPaneSkinNodeView> iterator = this.iterator();
+        iterator.next();
 
-            for ( ; iterator.hasNext(); ) {
-                TextPaneSkinNodeView nodeView = iterator.next();
-                nodeView.layout(breakWidth);
+        for ( ; iterator.hasNext(); ) {
+            TextPaneSkinNodeView nodeView = iterator.next();
+            nodeView.childLayout(breakWidth);
 
-                nodeView.setLocation(indexTextNodeView.getWidth(), itemsY);
+            nodeView.setLocation(indexTextNodeView.getWidth(), itemsY);
 
-                itemsWidth = Math.max(itemsWidth, nodeView.getWidth());
-                itemsY += nodeView.getHeight();
-            }
-
-            int width = itemsWidth + indexTextNodeView.getWidth();
-            int height = Math.max(itemsY, indexTextNodeView.getHeight());
-
-            setSize(width, height);
-
-            super.layoutComplete();
+            itemsWidth = Math.max(itemsWidth, nodeView.getWidth());
+            itemsY += nodeView.getHeight();
         }
+
+        int width = itemsWidth + indexTextNodeView.getWidth();
+        int height = Math.max(itemsY, indexTextNodeView.getHeight());
+
+        setSize(width, height);
     }
 
     public int getIndexTextWidth() {

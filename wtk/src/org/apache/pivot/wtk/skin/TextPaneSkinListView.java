@@ -30,11 +30,4 @@ class TextPaneSkinListView extends TextPaneSkinVerticalElementView {
         return maxIndexTextWidth;
     }
 
-    @Override
-    public void layout(int breakWidth) {
-        if (!isValid()) {
-            verticalLayout(breakWidth);
-            super.layoutComplete();
-        }
-    }
 }

@@ -44,21 +44,15 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     }
 
     @Override
-    public void layout(int breakWidth) {
+    protected void childLayout(int breakWidth) {
+        if (getLength() == 0) {
+            setSize(0, 0);
+        } else {
+            TextPaneSkinNodeView nodeView = get(0);
+            nodeView.childLayout(breakWidth);
 
-        if (!isValid()) {
-
-            if (getLength() == 0) {
-                setSize(0, 0);
-            } else {
-                TextPaneSkinNodeView nodeView = get(0);
-                nodeView.layout(breakWidth);
-
-                setSize(nodeView.getWidth(), nodeView.getHeight());
-            }
+            setSize(nodeView.getWidth(), nodeView.getHeight());
         }
-
-        super.layoutComplete();
     }
 
     @Override

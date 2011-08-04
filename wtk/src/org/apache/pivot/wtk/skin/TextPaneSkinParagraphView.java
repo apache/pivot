@@ -63,126 +63,122 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     }
 
     @Override
-    public void layout(int breakWidth) {
-        if (!isValid()) {
-            // Break the views into multiple rows
+    protected void childLayout(int breakWidth) {
+        // Break the views into multiple rows
 
-            Paragraph paragraph = (Paragraph)getNode();
-            rows = new ArrayList<Row>();
-            int offset = 0;
+        Paragraph paragraph = (Paragraph)getNode();
+        rows = new ArrayList<Row>();
+        int offset = 0;
 
-            Row row = new Row();
-            for (TextPaneSkinNodeView nodeView : this) {
-                nodeView.layout(Math.max(breakWidth - (row.width
-                        + PARAGRAPH_TERMINATOR_WIDTH), 0));
+        Row row = new Row();
+        for (TextPaneSkinNodeView nodeView : this) {
+            nodeView.childLayout(Math.max(breakWidth - (row.width
+                    + PARAGRAPH_TERMINATOR_WIDTH), 0));
 
-                int nodeViewWidth = nodeView.getWidth();
+            int nodeViewWidth = nodeView.getWidth();
 
-                if (row.width + nodeViewWidth > breakWidth
-                    && row.width > 0) {
-                    // The view is too big to fit in the remaining space,
-                    // and it is not the only view in this row
-                    rows.add(row);
-                    row = new Row();
-                    row.width = 0;
-                }
+            if (row.width + nodeViewWidth > breakWidth
+                && row.width > 0) {
+                // The view is too big to fit in the remaining space,
+                // and it is not the only view in this row
+                rows.add(row);
+                row = new Row();
+                row.width = 0;
+            }
 
-                // Add the view to the row
+            // Add the view to the row
+            row.rowSegments.add(new RowSegment(nodeView, offset));
+            offset += nodeView.getCharacterCount();
+            row.width += nodeViewWidth;
+
+            // If the view was split into multiple views, add them to
+            // their own rows
+            nodeView = nodeView.getNext();
+            while (nodeView != null) {
+                rows.add(row);
+                row = new Row();
+
+                nodeView.childLayout(breakWidth);
+
                 row.rowSegments.add(new RowSegment(nodeView, offset));
                 offset += nodeView.getCharacterCount();
-                row.width += nodeViewWidth;
+                row.width = nodeView.getWidth();
 
-                // If the view was split into multiple views, add them to
-                // their own rows
                 nodeView = nodeView.getNext();
-                while (nodeView != null) {
-                    rows.add(row);
-                    row = new Row();
-
-                    nodeView.layout(breakWidth);
-
-                    row.rowSegments.add(new RowSegment(nodeView, offset));
-                    offset += nodeView.getCharacterCount();
-                    row.width = nodeView.getWidth();
-
-                    nodeView = nodeView.getNext();
-                }
             }
-
-            // Add the last row
-            if (row.rowSegments.getLength() > 0) {
-                rows.add(row);
-            }
-
-            // Add the row views to this view, lay out, and calculate height
-            int x = 0;
-            int width = 0;
-            int rowY = 0;
-            for (int i = 0, n = rows.getLength(); i < n; i++) {
-                row = rows.get(i);
-                row.y = rowY;
-
-                width = Math.max(width, row.width);
-
-                // Determine the row height
-                for (RowSegment segment : row.rowSegments) {
-                    row.height = Math.max(row.height, segment.nodeView.getHeight());
-                }
-
-                if (paragraph.getHorizontalAlignment() == HorizontalAlignment.LEFT) {
-                    x = 0;
-                } else if (paragraph.getHorizontalAlignment() == HorizontalAlignment.CENTER) {
-                    x = (width - row.width) / 2;
-                } else {
-                    // right alignment
-                    x = width - row.width;
-                }
-                int rowBaseline = -1;
-                for (RowSegment segment : row.rowSegments) {
-                    rowBaseline = Math.max(rowBaseline, segment.nodeView.getBaseline());
-                }
-                for (RowSegment segment : row.rowSegments) {
-                    int nodeViewBaseline = segment.nodeView.getBaseline();
-                    int y;
-                    if (rowBaseline == -1 || nodeViewBaseline == -1) {
-                        // Align to bottom
-                        y = row.height - segment.nodeView.getHeight();
-                    } else {
-                        // Align to baseline
-                        y = rowBaseline - nodeViewBaseline;
-                    }
-
-                    segment.nodeView.setLocation(x, y + rowY);
-                    x += segment.nodeView.getWidth();
-                }
-
-                rowY += row.height;
-            }
-
-            // Recalculate terminator bounds
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = textPaneSkin.getFont().getLineMetrics("", 0, 0, fontRenderContext);
-            int terminatorHeight = (int)Math.ceil(lm.getHeight());
-
-            int terminatorY;
-            if (getCharacterCount() == 1) {
-                // The terminator is the only character in this paragraph
-                terminatorY = 0;
-            } else {
-                terminatorY = rowY - terminatorHeight;
-            }
-
-            terminatorBounds = new Bounds(x, terminatorY,
-                PARAGRAPH_TERMINATOR_WIDTH, terminatorHeight);
-
-            // Ensure that the paragraph is visible even when empty
-            width += terminatorBounds.width;
-            int height = Math.max(rowY, terminatorBounds.height);
-
-            setSize(width, height);
         }
 
-        super.layoutComplete();
+        // Add the last row
+        if (row.rowSegments.getLength() > 0) {
+            rows.add(row);
+        }
+
+        // Add the row views to this view, lay out, and calculate height
+        int x = 0;
+        int width = 0;
+        int rowY = 0;
+        for (int i = 0, n = rows.getLength(); i < n; i++) {
+            row = rows.get(i);
+            row.y = rowY;
+
+            width = Math.max(width, row.width);
+
+            // Determine the row height
+            for (RowSegment segment : row.rowSegments) {
+                row.height = Math.max(row.height, segment.nodeView.getHeight());
+            }
+
+            if (paragraph.getHorizontalAlignment() == HorizontalAlignment.LEFT) {
+                x = 0;
+            } else if (paragraph.getHorizontalAlignment() == HorizontalAlignment.CENTER) {
+                x = (width - row.width) / 2;
+            } else {
+                // right alignment
+                x = width - row.width;
+            }
+            int rowBaseline = -1;
+            for (RowSegment segment : row.rowSegments) {
+                rowBaseline = Math.max(rowBaseline, segment.nodeView.getBaseline());
+            }
+            for (RowSegment segment : row.rowSegments) {
+                int nodeViewBaseline = segment.nodeView.getBaseline();
+                int y;
+                if (rowBaseline == -1 || nodeViewBaseline == -1) {
+                    // Align to bottom
+                    y = row.height - segment.nodeView.getHeight();
+                } else {
+                    // Align to baseline
+                    y = rowBaseline - nodeViewBaseline;
+                }
+
+                segment.nodeView.setLocation(x, y + rowY);
+                x += segment.nodeView.getWidth();
+            }
+
+            rowY += row.height;
+        }
+
+        // Recalculate terminator bounds
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        LineMetrics lm = textPaneSkin.getFont().getLineMetrics("", 0, 0, fontRenderContext);
+        int terminatorHeight = (int)Math.ceil(lm.getHeight());
+
+        int terminatorY;
+        if (getCharacterCount() == 1) {
+            // The terminator is the only character in this paragraph
+            terminatorY = 0;
+        } else {
+            terminatorY = rowY - terminatorHeight;
+        }
+
+        terminatorBounds = new Bounds(x, terminatorY,
+            PARAGRAPH_TERMINATOR_WIDTH, terminatorHeight);
+
+        // Ensure that the paragraph is visible even when empty
+        width += terminatorBounds.width;
+        int height = Math.max(rowY, terminatorBounds.height);
+
+        setSize(width, height);
     }
 
     @Override

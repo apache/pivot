@@ -60,20 +60,16 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
     }
 
     @Override
-    public void layout(int breakWidth) {
-        if (!isValid()) {
-            ComponentNode componentNode = (ComponentNode) getNode();
-            Component component = componentNode.getComponent();
+    protected void childLayout(int breakWidth) {
+        ComponentNode componentNode = (ComponentNode) getNode();
+        Component component = componentNode.getComponent();
 
-            if (component == null) {
-                setSize(0, 0);
-            } else {
-                component.validate();
-                component.setSize(component.getPreferredWidth(), component.getPreferredHeight());
-                setSize(component.getWidth(), component.getHeight());
-            }
-
-            super.layoutComplete();
+        if (component == null) {
+            setSize(0, 0);
+        } else {
+            component.validate();
+            component.setSize(component.getPreferredWidth(), component.getPreferredHeight());
+            setSize(component.getWidth(), component.getHeight());
         }
     }
 

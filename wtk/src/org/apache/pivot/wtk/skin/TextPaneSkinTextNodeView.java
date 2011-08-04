@@ -84,72 +84,68 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public void layout(int breakWidth) {
-        if (!isValid()) {
-            TextNode textNode = (TextNode)getNode();
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+    protected void childLayout(int breakWidth) {
+        TextNode textNode = (TextNode)getNode();
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
-            CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(textNode.getCharacters(), start);
+        CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(textNode.getCharacters(), start);
 
-            float lineWidth = 0;
-            int lastWhitespaceIndex = -1;
+        float lineWidth = 0;
+        int lastWhitespaceIndex = -1;
 
-            Font effectiveFont = getEffectiveFont();
-            char c = ci.first();
-            while (c != CharacterIterator.DONE
-                && lineWidth < breakWidth) {
-                if (Character.isWhitespace(c)) {
-                    lastWhitespaceIndex = ci.getIndex();
-                }
-
-                int i = ci.getIndex();
-                Rectangle2D characterBounds = effectiveFont.getStringBounds(ci, i, i + 1, fontRenderContext);
-                lineWidth += characterBounds.getWidth();
-
-                c = ci.current();
+        Font effectiveFont = getEffectiveFont();
+        char c = ci.first();
+        while (c != CharacterIterator.DONE
+            && lineWidth < breakWidth) {
+            if (Character.isWhitespace(c)) {
+                lastWhitespaceIndex = ci.getIndex();
             }
 
-            int end;
-            if (textPaneSkin.getWrapText()) {
-                if (textNode.getCharacterCount() == 0) {
-                    end = start;
-                } else {
-                    if (lineWidth < breakWidth) {
-                        end = ci.getEndIndex();
-                    } else {
-                        if (lastWhitespaceIndex == -1) {
-                            end = ci.getIndex() - 1;
-                            if (end <= start) {
-                                end = start + 1;
-                            }
-                        } else {
-                            end = lastWhitespaceIndex + 1;
-                        }
-                    }
-                }
-            } else {
-                end = ci.getEndIndex();
-            }
+            int i = ci.getIndex();
+            Rectangle2D characterBounds = effectiveFont.getStringBounds(ci, i, i + 1, fontRenderContext);
+            lineWidth += characterBounds.getWidth();
 
-            glyphVector = getEffectiveFont().createGlyphVector(fontRenderContext,
-                new CharSequenceCharacterIterator(textNode.getCharacters(), start, end));
-
-            if (end < ci.getEndIndex()) {
-                length = end - start;
-                next = new TextPaneSkinTextNodeView(textPaneSkin, textNode, end);
-                next.setParent(getParent());
-            } else {
-                length = ci.getEndIndex() - start;
-                // set to null in case this node used to be broken across multiple, but is no longer
-                next = null;
-            }
-
-            Rectangle2D textBounds = glyphVector.getLogicalBounds();
-            setSize((int)Math.ceil(textBounds.getWidth()),
-                (int)Math.ceil(textBounds.getHeight()));
+            c = ci.current();
         }
 
-        super.layoutComplete();
+        int end;
+        if (textPaneSkin.getWrapText()) {
+            if (textNode.getCharacterCount() == 0) {
+                end = start;
+            } else {
+                if (lineWidth < breakWidth) {
+                    end = ci.getEndIndex();
+                } else {
+                    if (lastWhitespaceIndex == -1) {
+                        end = ci.getIndex() - 1;
+                        if (end <= start) {
+                            end = start + 1;
+                        }
+                    } else {
+                        end = lastWhitespaceIndex + 1;
+                    }
+                }
+            }
+        } else {
+            end = ci.getEndIndex();
+        }
+
+        glyphVector = getEffectiveFont().createGlyphVector(fontRenderContext,
+            new CharSequenceCharacterIterator(textNode.getCharacters(), start, end));
+
+        if (end < ci.getEndIndex()) {
+            length = end - start;
+            next = new TextPaneSkinTextNodeView(textPaneSkin, textNode, end);
+            next.setParent(getParent());
+        } else {
+            length = ci.getEndIndex() - start;
+            // set to null in case this node used to be broken across multiple, but is no longer
+            next = null;
+        }
+
+        Rectangle2D textBounds = glyphVector.getLogicalBounds();
+        setSize((int)Math.ceil(textBounds.getWidth()),
+            (int)Math.ceil(textBounds.getHeight()));
     }
 
     @Override

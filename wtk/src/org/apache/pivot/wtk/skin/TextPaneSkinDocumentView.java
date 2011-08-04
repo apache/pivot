@@ -40,12 +40,4 @@ class TextPaneSkinDocumentView extends TextPaneSkinVerticalElementView {
         textPaneSkin.invalidateComponent();
     }
 
-    @Override
-    public void layout(int breakWidth) {
-        if (!isValid()) {
-            verticalLayout(breakWidth);
-            super.layoutComplete();
-        }
-    }
-
 }

@@ -52,18 +52,14 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
     }
 
     @Override
-    public void layout(int breakWidth) {
-        if (!isValid()) {
-            ImageNode imageNode = (ImageNode)getNode();
-            Image image = imageNode.getImage();
+    protected void childLayout(int breakWidth) {
+        ImageNode imageNode = (ImageNode)getNode();
+        Image image = imageNode.getImage();
 
-            if (image == null) {
-                setSize(0, 0);
-            } else {
-                setSize(image.getWidth(), image.getHeight());
-            }
-
-            super.layoutComplete();
+        if (image == null) {
+            setSize(0, 0);
+        } else {
+            setSize(image.getWidth(), image.getHeight());
         }
     }
 

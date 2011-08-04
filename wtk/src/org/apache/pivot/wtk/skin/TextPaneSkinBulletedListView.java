@@ -42,33 +42,30 @@ class TextPaneSkinBulletedListView extends TextPaneSkinListView implements Bulle
     }
 
     @Override
-    public void layout(int breakWidth) {
-        if (!isValid()) {
+    protected void childLayout(int breakWidth) {
+        BulletedList bulletedList = (BulletedList)getNode();
 
-            BulletedList bulletedList = (BulletedList)getNode();
+        for (TextPaneSkinNodeView nodeView : this) {
+            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
 
-            for (TextPaneSkinNodeView nodeView : this) {
-                TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
-
-                switch (bulletedList.getStyle()) {
-                    case CIRCLE:
-                        listItemView.setIndexText("\u2022 ");
-                        break;
-                    case CIRCLE_OUTLINE:
-                        listItemView.setIndexText("\u25e6 ");
-                        break;
-                }
+            switch (bulletedList.getStyle()) {
+                case CIRCLE:
+                    listItemView.setIndexText("\u2022 ");
+                    break;
+                case CIRCLE_OUTLINE:
+                    listItemView.setIndexText("\u25e6 ");
+                    break;
             }
-
-            this.maxIndexTextWidth = 0;
-            for (TextPaneSkinNodeView nodeView : this) {
-                TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
-                this.maxIndexTextWidth = Math.max(this.maxIndexTextWidth,
-                    listItemView.getIndexTextWidth());
-            }
-
-            super.layout(breakWidth);
         }
+
+        this.maxIndexTextWidth = 0;
+        for (TextPaneSkinNodeView nodeView : this) {
+            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
+            this.maxIndexTextWidth = Math.max(this.maxIndexTextWidth,
+                listItemView.getIndexTextWidth());
+        }
+
+        super.childLayout(breakWidth);
     }
 
     @Override
