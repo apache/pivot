@@ -72,7 +72,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
         Row row = new Row();
         for (TextPaneSkinNodeView nodeView : this) {
-            nodeView.childLayout(Math.max(breakWidth - (row.width
+            nodeView.layout(Math.max(breakWidth - (row.width
                     + PARAGRAPH_TERMINATOR_WIDTH), 0));
 
             int nodeViewWidth = nodeView.getWidth();
@@ -98,7 +98,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                 rows.add(row);
                 row = new Row();
 
-                nodeView.childLayout(breakWidth);
+                nodeView.layout(breakWidth);
 
                 row.rowSegments.add(new RowSegment(nodeView, offset));
                 offset += nodeView.getCharacterCount();

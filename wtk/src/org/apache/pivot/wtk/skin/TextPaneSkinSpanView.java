@@ -49,7 +49,7 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
             setSize(0, 0);
         } else {
             TextPaneSkinNodeView nodeView = get(0);
-            nodeView.childLayout(breakWidth);
+            nodeView.layout(breakWidth);
 
             setSize(nodeView.getWidth(), nodeView.getHeight());
         }

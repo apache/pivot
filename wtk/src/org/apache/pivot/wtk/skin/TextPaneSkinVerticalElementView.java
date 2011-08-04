@@ -54,7 +54,7 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
         int height = 0;
 
         for (TextPaneSkinNodeView nodeView : this) {
-            nodeView.childLayout(breakWidth);
+            nodeView.layout(breakWidth);
 
             nodeView.setLocation(0, height);
 

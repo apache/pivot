@@ -38,6 +38,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     private int height = 0;
     private int x = 0;
     private int y = 0;
+    private int previousBreakWidth = -1;
 
     private boolean valid = false;
 
@@ -161,9 +162,11 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     }
 
     public final void layout(int breakWidth) {
-        if (!valid) {
+        // reduce the number of layout calculations we need to do by only redoing them if necessary
+        if (!valid || previousBreakWidth != breakWidth) {
             childLayout(breakWidth);
             valid = true;
+            previousBreakWidth = breakWidth;
         }
     }
 
