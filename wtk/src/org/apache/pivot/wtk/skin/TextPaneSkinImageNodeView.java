@@ -52,7 +52,7 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
     }
 
     @Override
-    public void validate() {
+    public void layout(int breakWidth) {
         if (!isValid()) {
             ImageNode imageNode = (ImageNode)getNode();
             Image image = imageNode.getImage();
@@ -63,7 +63,7 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
                 setSize(image.getWidth(), image.getHeight());
             }
 
-            super.validateComplete();
+            super.layoutComplete();
         }
     }
 

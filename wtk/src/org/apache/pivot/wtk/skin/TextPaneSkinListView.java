@@ -31,10 +31,10 @@ class TextPaneSkinListView extends TextPaneSkinVerticalElementView {
     }
 
     @Override
-    public void validate() {
+    public void layout(int breakWidth) {
         if (!isValid()) {
-            verticalValidate();
-            super.validateComplete();
+            verticalLayout(breakWidth);
+            super.layoutComplete();
         }
     }
 }

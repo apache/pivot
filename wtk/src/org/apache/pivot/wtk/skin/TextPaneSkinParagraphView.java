@@ -63,20 +63,18 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     }
 
     @Override
-    public void validate() {
+    public void layout(int breakWidth) {
         if (!isValid()) {
             // Break the views into multiple rows
 
             Paragraph paragraph = (Paragraph)getNode();
             rows = new ArrayList<Row>();
             int offset = 0;
-            int breakWidth = getBreakWidth();
 
             Row row = new Row();
             for (TextPaneSkinNodeView nodeView : this) {
-                nodeView.setBreakWidth(Math.max(breakWidth - (row.width
+                nodeView.layout(Math.max(breakWidth - (row.width
                         + PARAGRAPH_TERMINATOR_WIDTH), 0));
-                nodeView.validate();
 
                 int nodeViewWidth = nodeView.getWidth();
 
@@ -101,8 +99,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                     rows.add(row);
                     row = new Row();
 
-                    nodeView.setBreakWidth(breakWidth);
-                    nodeView.validate();
+                    nodeView.layout(breakWidth);
 
                     row.rowSegments.add(new RowSegment(nodeView, offset));
                     offset += nodeView.getCharacterCount();
@@ -185,7 +182,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             setSize(width, height);
         }
 
-        super.validateComplete();
+        super.layoutComplete();
     }
 
     @Override

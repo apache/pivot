@@ -42,7 +42,7 @@ class TextPaneSkinBulletedListView extends TextPaneSkinListView implements Bulle
     }
 
     @Override
-    public void validate() {
+    public void layout(int breakWidth) {
         if (!isValid()) {
 
             BulletedList bulletedList = (BulletedList)getNode();
@@ -67,7 +67,7 @@ class TextPaneSkinBulletedListView extends TextPaneSkinListView implements Bulle
                     listItemView.getIndexTextWidth());
             }
 
-            super.validate();
+            super.layout(breakWidth);
         }
     }
 

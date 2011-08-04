@@ -84,11 +84,10 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public void validate() {
+    public void layout(int breakWidth) {
         if (!isValid()) {
             TextNode textNode = (TextNode)getNode();
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            int breakWidth = getBreakWidth();
 
             CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(textNode.getCharacters(), start);
 
@@ -150,7 +149,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                 (int)Math.ceil(textBounds.getHeight()));
         }
 
-        super.validateComplete();
+        super.layoutComplete();
     }
 
     @Override
