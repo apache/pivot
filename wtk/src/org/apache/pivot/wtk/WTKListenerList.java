@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-import java.util.Iterator;
-
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -25,58 +23,4 @@ import org.apache.pivot.util.ListenerList;
  * for the WTK components.
  */
 public class WTKListenerList<T> extends ListenerList<T> {
-
-    /**
-     * Adds a listener to the list, if it has not previously been added.
-     *
-     * @param listener
-     */
-    @Override
-    public void add(T listener) {
-        Container.assertEventDispatchThread();
-        super.add(listener);
-    }
-
-    /**
-     * Removes a listener from the list, if it has previously been added.
-     *
-     * @param listener
-     */
-    @Override
-    public void remove(T listener) {
-        Container.assertEventDispatchThread();
-        super.remove(listener);
-    }
-
-    /**
-     * Tests the existence of a listener in the list.
-     *
-     * @param listener
-     *
-     * @return <tt>true</tt> if the listener exists in the list; <tt>false</tt>,
-     *         otherwise.
-     */
-    @Override
-    public boolean contains(T listener) {
-        Container.assertEventDispatchThread();
-        return super.contains(listener);
-    }
-
-    /**
-     * Tests the emptiness of the list.
-     *
-     * @return <tt>true</tt> if the list contains no listeners; <tt>false</tt>,
-     *         otherwise.
-     */
-    @Override
-    public boolean isEmpty() {
-        Container.assertEventDispatchThread();
-        return super.isEmpty();
-    }
-
-    @Override
-    public Iterator<T> iterator() {
-        Container.assertEventDispatchThread();
-        return super.iterator();
-    }
 }

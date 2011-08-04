@@ -844,13 +844,25 @@ public abstract class Container extends Component
         return containerMouseListeners;
     }
 
-    private static Runnable EDT_CHECKER = new Runnable() {
-        public void run() {
+    public interface EDT_Checker {
+        public void check(Component component);
+    }
+
+    protected final void assertEventDispatchThread() {
+        assertEventDispatchThread(this);
+    }
+
+    private static EDT_Checker EDT_CHECKER = new EDT_Checker() {
+        public void check(Component component) {
             String threadName = Thread.currentThread().getName();
             /* Currently, application startup happens on the main thread, so we need to allow
              * that thread to modify WTK state.
              */
             if (threadName.equals("main") || threadName.equals("javawsApplicationMain")) {
+                return;
+            }
+            // Allow components to be constructed from outside the event thread
+            if (component.getDisplay() == null) {
                 return;
             }
             /*
@@ -866,13 +878,13 @@ public abstract class Container extends Component
         }
     };
 
-    public static final void assertEventDispatchThread() {
+    public static final void assertEventDispatchThread(Component component) {
         if (EDT_CHECKER != null) {
-            EDT_CHECKER.run();
+            EDT_CHECKER.check(component);
         }
     }
 
-    public static final void setEventDispatchThreadChecker(Runnable runnable) {
+    public static final void setEventDispatchThreadChecker(EDT_Checker runnable) {
         EDT_CHECKER = runnable;
     }
 }

@@ -1922,7 +1922,7 @@ public abstract class Component implements ConstrainedVisual {
      * preferred size.
      */
     public void invalidate() {
-        Container.assertEventDispatchThread();
+        Container.assertEventDispatchThread(this);
         valid = false;
 
         // Clear the preferred size and baseline
@@ -2014,7 +2014,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param immediate
      */
     public void repaint(int x, int y, int width, int height, boolean immediate) {
-        Container.assertEventDispatchThread();
+        Container.assertEventDispatchThread(this);
         if (parent != null) {
             // Constrain the repaint area to this component's bounds
             int top = y;
