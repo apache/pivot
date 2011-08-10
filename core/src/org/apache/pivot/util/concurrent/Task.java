@@ -147,8 +147,26 @@ public abstract class Task<V> {
      * The listener to be notified when the task completes.
      */
     public synchronized void execute(TaskListener<V> taskListener) {
+        execute(taskListener, executorService);
+    }
+
+    /**
+     * Asynchronously executes the task. The caller is notified of the task's
+     * completion via the listener argument. Note that the listener will be
+     * notified on the task's worker thread, not on the thread that executed
+     * the task.
+     *
+     * @param taskListener The listener to be notified when the task completes.
+     * @param executorService The service to submit the task to, overriding the
+     * Task's own ExecutorService.
+     */
+    public synchronized void execute(TaskListener<V> taskListener, ExecutorService executorService) {
         if (taskListener == null) {
             throw new IllegalArgumentException("taskListener is null.");
+        }
+
+        if (executorService == null) {
+            throw new IllegalThreadStateException("executorService is null.");
         }
 
         if (this.taskListener != null) {
