@@ -38,19 +38,18 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
 
         // add an extra TextNodeView to render the index text
         indexTextNodeView = new TextPaneSkinTextNodeView(textPaneSkin, indexTextNode);
+        indexTextNodeView.setLocation(0, 0);
         insert(indexTextNodeView, 0);
     }
 
     public void setIndexText(String indexText) {
         indexTextNode.setText(indexText);
-        indexTextNodeView.layout(Integer.MAX_VALUE);
-        indexTextNodeView.setLocation(0, 0);
+        indexTextNodeView.invalidate();
     }
 
     @Override
     protected void childLayout(int breakWidth) {
         indexTextNodeView.layout(breakWidth);
-        indexTextNodeView.setLocation(0, 0);
 
         breakWidth -= indexTextNodeView.getWidth();
         int itemsWidth = 0;

@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
@@ -63,6 +64,21 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
         }
 
         setSize(width, height);
+    }
+
+    @Override
+    public Dimensions getPreferredSize(int breakWidth) {
+        int width = 0;
+        int height = 0;
+
+        for (TextPaneSkinNodeView nodeView : this) {
+            Dimensions childDimensions = nodeView.getPreferredSize(breakWidth);
+
+            width = Math.max(width, childDimensions.width);
+            height += childDimensions.height;
+        }
+
+        return new Dimensions(width, height);
     }
 
     @Override

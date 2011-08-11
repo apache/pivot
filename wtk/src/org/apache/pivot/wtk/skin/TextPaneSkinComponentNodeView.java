@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentListener;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.ComponentNode;
 import org.apache.pivot.wtk.text.ComponentNodeListener;
@@ -70,6 +71,18 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
             component.validate();
             component.setSize(component.getPreferredWidth(), component.getPreferredHeight());
             setSize(component.getWidth(), component.getHeight());
+        }
+    }
+
+    @Override
+    public Dimensions getPreferredSize(int breakWidth) {
+        ComponentNode componentNode = (ComponentNode) getNode();
+        Component component = componentNode.getComponent();
+
+        if (component == null) {
+            return new Dimensions(0, 0);
+        } else {
+            return new Dimensions(component.getPreferredWidth(), component.getPreferredHeight());
         }
     }
 

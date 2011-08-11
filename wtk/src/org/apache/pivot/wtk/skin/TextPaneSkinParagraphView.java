@@ -23,6 +23,7 @@ import java.awt.font.LineMetrics;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.TextPane;
@@ -70,6 +71,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         rows = new ArrayList<Row>();
         int offset = 0;
 
+        ParagraphChildLayouter layouter = new ParagraphChildLayouter();
         Row row = new Row();
         for (TextPaneSkinNodeView nodeView : this) {
             nodeView.layout(Math.max(breakWidth - (row.width
@@ -82,12 +84,15 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                 // The view is too big to fit in the remaining space,
                 // and it is not the only view in this row
                 rows.add(row);
+                layouter.endRow(row);
                 row = new Row();
                 row.width = 0;
             }
 
             // Add the view to the row
-            row.rowSegments.add(new RowSegment(nodeView, offset));
+            RowSegment segment = new RowSegment(nodeView, offset);
+            row.rowSegments.add(segment);
+            layouter.startSegment(segment);
             offset += nodeView.getCharacterCount();
             row.width += nodeViewWidth;
 
@@ -96,11 +101,14 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             nodeView = nodeView.getNext();
             while (nodeView != null) {
                 rows.add(row);
+                layouter.endRow(row);
                 row = new Row();
 
                 nodeView.layout(breakWidth);
 
-                row.rowSegments.add(new RowSegment(nodeView, offset));
+                segment = new RowSegment(nodeView, offset);
+                row.rowSegments.add(segment);
+                layouter.startSegment(segment);
                 offset += nodeView.getCharacterCount();
                 row.width = nodeView.getWidth();
 
@@ -111,31 +119,145 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         // Add the last row
         if (row.rowSegments.getLength() > 0) {
             rows.add(row);
+            layouter.endRow(row);
         }
 
-        // Add the row views to this view, lay out, and calculate height
-        int x = 0;
-        int width = 0;
-        int rowY = 0;
-        for (int i = 0, n = rows.getLength(); i < n; i++) {
-            row = rows.get(i);
-            row.y = rowY;
+        // calculate paragraph width and adjust for alignment
+        layouter.end(paragraph, rows);
 
-            width = Math.max(width, row.width);
+        // Recalculate terminator bounds
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        LineMetrics lm = textPaneSkin.getFont().getLineMetrics("", 0, 0, fontRenderContext);
+        int terminatorHeight = (int)Math.ceil(lm.getHeight());
+
+        int terminatorY;
+        if (getCharacterCount() == 1) {
+            // The terminator is the only character in this paragraph
+            terminatorY = 0;
+        } else {
+            terminatorY = layouter.rowY - terminatorHeight;
+        }
+
+        terminatorBounds = new Bounds(layouter.x, terminatorY,
+            PARAGRAPH_TERMINATOR_WIDTH, terminatorHeight);
+
+        // Ensure that the paragraph is visible even when empty
+        layouter.paragraphWidth += terminatorBounds.width;
+        int height = Math.max(layouter.rowY, terminatorBounds.height);
+
+        setSize(layouter.paragraphWidth, height);
+    }
+
+    @Override
+    public Dimensions getPreferredSize(int breakWidth) {
+        // Break the views into multiple rows
+
+        Paragraph paragraph = (Paragraph)getNode();
+        ArrayList<Row> rows = new ArrayList<Row>();
+        int offset = 0;
+
+        ParagraphChildLayouter layouter = new ParagraphChildLayouter();
+        Row row = new Row();
+        for (TextPaneSkinNodeView nodeView : this) {
+            nodeView.layout(Math.max(breakWidth - (row.width
+                    + PARAGRAPH_TERMINATOR_WIDTH), 0));
+
+            int nodeViewWidth = nodeView.getWidth();
+
+            if (row.width + nodeViewWidth > breakWidth
+                && row.width > 0) {
+                // The view is too big to fit in the remaining space,
+                // and it is not the only view in this row
+                rows.add(row);
+                layouter.endRow(row);
+                row = new Row();
+                row.width = 0;
+            }
+
+            // Add the view to the row
+            RowSegment segment = new RowSegment(nodeView, offset);
+            row.rowSegments.add(segment);
+            layouter.startSegment(segment);
+            offset += nodeView.getCharacterCount();
+            row.width += nodeViewWidth;
+
+            // If the view was split into multiple views, add them to
+            // their own rows
+            nodeView = nodeView.getNext();
+            while (nodeView != null) {
+                rows.add(row);
+                layouter.endRow(row);
+                row = new Row();
+
+                nodeView.layout(breakWidth);
+
+                segment = new RowSegment(nodeView, offset);
+                row.rowSegments.add(segment);
+                layouter.startSegment(segment);
+                offset += nodeView.getCharacterCount();
+                row.width = nodeView.getWidth();
+
+                nodeView = nodeView.getNext();
+            }
+        }
+
+        // Add the last row
+        if (row.rowSegments.getLength() > 0) {
+            rows.add(row);
+            layouter.endRow(row);
+        }
+
+        // calculate paragraph width and adjust for alignment
+        layouter.end(paragraph, rows);
+
+        // Recalculate terminator bounds
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        LineMetrics lm = textPaneSkin.getFont().getLineMetrics("", 0, 0, fontRenderContext);
+        int terminatorHeight = (int)Math.ceil(lm.getHeight());
+
+        int terminatorY;
+        if (getCharacterCount() == 1) {
+            // The terminator is the only character in this paragraph
+            terminatorY = 0;
+        } else {
+            terminatorY = layouter.rowY - terminatorHeight;
+        }
+
+        Bounds terminatorBounds = new Bounds(layouter.x, terminatorY,
+            PARAGRAPH_TERMINATOR_WIDTH, terminatorHeight);
+
+        // Ensure that the paragraph is visible even when empty
+        layouter.paragraphWidth += terminatorBounds.width;
+        int height = Math.max(layouter.rowY, terminatorBounds.height);
+
+        return new Dimensions(layouter.paragraphWidth, height);
+    }
+
+    /**
+     * The layout process and the line breaking process are interleaved,
+     * because tab stops mean that we need to calculate X and width for each
+     * segment before moving on to the next segment.
+     */
+    private static class ParagraphChildLayouter {
+        // Add the row views to this view, lay out, and calculate height
+        public int x = 0;
+        public int paragraphWidth = 0;
+        public int rowY = 0;
+
+        public void startSegment(RowSegment segment) {
+            segment.nodeView.setLocation(x, segment.nodeView.getY());
+            x += segment.nodeView.getWidth();
+        }
+
+        public void endRow(Row row) {
+            row.y = rowY;
 
             // Determine the row height
             for (RowSegment segment : row.rowSegments) {
                 row.height = Math.max(row.height, segment.nodeView.getHeight());
             }
 
-            if (paragraph.getHorizontalAlignment() == HorizontalAlignment.LEFT) {
-                x = 0;
-            } else if (paragraph.getHorizontalAlignment() == HorizontalAlignment.CENTER) {
-                x = (width - row.width) / 2;
-            } else {
-                // right alignment
-                x = width - row.width;
-            }
+            // Determine row-segment Y values
             int rowBaseline = -1;
             for (RowSegment segment : row.rowSegments) {
                 rowBaseline = Math.max(rowBaseline, segment.nodeView.getBaseline());
@@ -150,35 +272,36 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                     // Align to baseline
                     y = rowBaseline - nodeViewBaseline;
                 }
-
-                segment.nodeView.setLocation(x, y + rowY);
-                x += segment.nodeView.getWidth();
+                segment.nodeView.setLocation(segment.nodeView.getX(), y + rowY);
             }
 
             rowY += row.height;
         }
 
-        // Recalculate terminator bounds
-        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-        LineMetrics lm = textPaneSkin.getFont().getLineMetrics("", 0, 0, fontRenderContext);
-        int terminatorHeight = (int)Math.ceil(lm.getHeight());
+         public void end(Paragraph paragraph, ArrayList<Row> rows) {
+            // calculate paragraph width
+            for (Row row : rows) {
+                paragraphWidth = Math.max(paragraphWidth, row.width);
+            }
 
-        int terminatorY;
-        if (getCharacterCount() == 1) {
-            // The terminator is the only character in this paragraph
-            terminatorY = 0;
-        } else {
-            terminatorY = rowY - terminatorHeight;
+            // adjust for horizontal alignment
+            for (Row row : rows) {
+                if (paragraph.getHorizontalAlignment() == HorizontalAlignment.LEFT) {
+                    x = 0;
+                } else if (paragraph.getHorizontalAlignment() == HorizontalAlignment.CENTER) {
+                    x = (paragraphWidth - row.width) / 2;
+                } else if (paragraph.getHorizontalAlignment() == HorizontalAlignment.RIGHT) {
+                    // right alignment
+                    x = paragraphWidth - row.width;
+                } else {
+                    throw new IllegalStateException();
+                }
+                for (RowSegment segment : row.rowSegments) {
+                    segment.nodeView.setLocation(x, segment.nodeView.getY());
+                    x += segment.nodeView.getWidth();
+                }
+            }
         }
-
-        terminatorBounds = new Bounds(x, terminatorY,
-            PARAGRAPH_TERMINATOR_WIDTH, terminatorHeight);
-
-        // Ensure that the paragraph is visible even when empty
-        width += terminatorBounds.width;
-        int height = Math.max(rowY, terminatorBounds.height);
-
-        setSize(width, height);
     }
 
     @Override

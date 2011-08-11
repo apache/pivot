@@ -187,9 +187,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         if (documentView == null) {
            preferredWidth = 0;
         } else {
-            documentView.layout(Integer.MAX_VALUE);
+            Dimensions documentDimensions = documentView.getPreferredSize(Integer.MAX_VALUE);
 
-            preferredWidth = documentView.getWidth() + margin.left + margin.right;
+            preferredWidth = documentDimensions.width + margin.left + margin.right;
         }
 
         return preferredWidth;
@@ -210,9 +210,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 breakWidth = Integer.MAX_VALUE;
             }
 
-            documentView.layout(breakWidth);
+            Dimensions documentDimensions = documentView.getPreferredSize(breakWidth);
 
-            preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
+            preferredHeight = documentDimensions.height + margin.top + margin.bottom;
         }
 
         return preferredHeight;
@@ -227,10 +227,10 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
            preferredWidth = 0;
            preferredHeight = 0;
         } else {
-            documentView.layout(Integer.MAX_VALUE);
+            Dimensions documentDimensions = documentView.getPreferredSize(Integer.MAX_VALUE);
 
-            preferredWidth = documentView.getWidth() + margin.left + margin.right;
-            preferredHeight = documentView.getHeight() + margin.top + margin.bottom;
+            preferredWidth = documentDimensions.width + margin.left + margin.right;
+            preferredHeight = documentDimensions.height + margin.top + margin.bottom;
         }
 
         return new Dimensions(preferredWidth, preferredHeight);
@@ -940,8 +940,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             } else if (Keyboard.isPressed(commandModifier)
                     && keyCode == Keyboard.KeyCode.TAB
                     && textPane.isEditable()) {
-                    // FIXME instead of converting to spaces, implement proper tab stops
-                    textPane.insert("    ");
+                    textPane.insert("\t");
                     showCaret(true);
 
                     consumed = true;

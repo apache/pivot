@@ -30,6 +30,7 @@ import java.text.CharacterIterator;
 
 import org.apache.pivot.text.CharSequenceCharacterIterator;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextPane;
@@ -145,6 +146,61 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
         Rectangle2D textBounds = glyphVector.getLogicalBounds();
         setSize((int)Math.ceil(textBounds.getWidth()),
+            (int)Math.ceil(textBounds.getHeight()));
+    }
+
+    @Override
+    public Dimensions getPreferredSize(int breakWidth) {
+        TextNode textNode = (TextNode)getNode();
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
+        CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(textNode.getCharacters(), start);
+
+        float lineWidth = 0;
+        int lastWhitespaceIndex = -1;
+
+        Font effectiveFont = getEffectiveFont();
+        char c = ci.first();
+        while (c != CharacterIterator.DONE
+            && lineWidth < breakWidth) {
+            if (Character.isWhitespace(c)) {
+                lastWhitespaceIndex = ci.getIndex();
+            }
+
+            int i = ci.getIndex();
+            Rectangle2D characterBounds = effectiveFont.getStringBounds(ci, i, i + 1, fontRenderContext);
+            lineWidth += characterBounds.getWidth();
+
+            c = ci.current();
+        }
+
+        int end;
+        if (textPaneSkin.getWrapText()) {
+            if (textNode.getCharacterCount() == 0) {
+                end = start;
+            } else {
+                if (lineWidth < breakWidth) {
+                    end = ci.getEndIndex();
+                } else {
+                    if (lastWhitespaceIndex == -1) {
+                        end = ci.getIndex() - 1;
+                        if (end <= start) {
+                            end = start + 1;
+                        }
+                    } else {
+                        end = lastWhitespaceIndex + 1;
+                    }
+                }
+            }
+        } else {
+            end = ci.getEndIndex();
+        }
+
+        GlyphVector glyphVector = getEffectiveFont().createGlyphVector(fontRenderContext,
+            new CharSequenceCharacterIterator(textNode.getCharacters(), start, end));
+
+        Rectangle2D textBounds = glyphVector.getLogicalBounds();
+        return new Dimensions((int)Math.ceil(textBounds.getWidth()),
             (int)Math.ceil(textBounds.getHeight()));
     }
 

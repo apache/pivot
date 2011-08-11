@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.skin;
 import java.awt.Graphics2D;
 
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.ImageListener;
@@ -60,6 +61,18 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
             setSize(0, 0);
         } else {
             setSize(image.getWidth(), image.getHeight());
+        }
+    }
+
+    @Override
+    public Dimensions getPreferredSize(int breakWidth) {
+        ImageNode imageNode = (ImageNode)getNode();
+        Image image = imageNode.getImage();
+
+        if (image == null) {
+            return new Dimensions(0, 0);
+        } else {
+            return new Dimensions(image.getWidth(), image.getHeight());
         }
     }
 

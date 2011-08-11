@@ -170,6 +170,8 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         }
     }
 
+    public abstract Dimensions getPreferredSize(int breakWidth);
+
     protected abstract void childLayout(int breakWidth);
 
     public int getOffset() {
