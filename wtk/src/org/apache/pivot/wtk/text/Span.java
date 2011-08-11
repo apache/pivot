@@ -19,28 +19,16 @@ package org.apache.pivot.wtk.text;
 
 /**
  * Element representing an inline range of styled characters.
+ * @deprecated class has been renamed to TextSpan
  */
-public class Span extends Element {
+@Deprecated
+public class Span extends TextSpan {
     public Span() {
         super();
     }
 
     public Span(Span span, boolean recursive) {
         super(span, recursive);
-    }
-
-    public int add(String text) {
-        return add(new TextNode(text));
-    }
-
-    @Override
-    public void insert(Node node, int index) {
-        if (node instanceof Block) {
-            throw new IllegalArgumentException("Child node must not be an instance of "
-                + Block.class.getName() + ", " + node.getClass());
-        }
-
-        super.insert(node, index);
     }
 
     @Override

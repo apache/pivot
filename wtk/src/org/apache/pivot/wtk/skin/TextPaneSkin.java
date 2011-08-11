@@ -48,6 +48,7 @@ import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.NumberedList;
 import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.TextNode;
+import org.apache.pivot.wtk.text.TextSpan;
 
 /**
  * Text pane skin.
@@ -1089,8 +1090,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             nodeView = new TextPaneSkinImageNodeView((ImageNode)node);
         } else if (node instanceof ComponentNode) {
             nodeView = new TextPaneSkinComponentNodeView((ComponentNode)node);
-        } else if (node instanceof org.apache.pivot.wtk.text.Span) {
-            nodeView = new TextPaneSkinSpanView(this, (org.apache.pivot.wtk.text.Span)node);
+        } else if (node instanceof TextSpan) {
+            nodeView = new TextPaneSkinSpanView(this, (TextSpan)node);
         } else if (node instanceof NumberedList) {
             nodeView = new TextPaneSkinNumberedListView(this, (NumberedList)node);
         } else if (node instanceof BulletedList) {

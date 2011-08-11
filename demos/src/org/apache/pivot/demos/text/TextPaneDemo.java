@@ -59,6 +59,7 @@ import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtk.text.TextNode;
+import org.apache.pivot.wtk.text.TextSpan;
 
 /**
  * Demonstrates the use of the rich-text functionality in TextPane.
@@ -211,7 +212,7 @@ public class TextPaneDemo implements Application {
             public void buttonPressed(Button button) {
                 applyStyleToSelection(new StyleApplicator() {
                     @Override
-                    public void apply(org.apache.pivot.wtk.text.Span span) {
+                    public void apply(TextSpan span) {
                         if (span.getFont() != null) {
                             Font font = span.getFont();
                             if (font.getStyle() == Font.PLAIN) {
@@ -236,7 +237,7 @@ public class TextPaneDemo implements Application {
             public void buttonPressed(Button button) {
                 applyStyleToSelection(new StyleApplicator() {
                     @Override
-                    public void apply(org.apache.pivot.wtk.text.Span span) {
+                    public void apply(TextSpan span) {
                         if (span.getFont() != null) {
                             Font font = span.getFont();
                             if (font.getStyle() == Font.PLAIN) {
@@ -261,7 +262,7 @@ public class TextPaneDemo implements Application {
             public void buttonPressed(Button button) {
                 applyStyleToSelection(new StyleApplicator() {
                     @Override
-                    public void apply(org.apache.pivot.wtk.text.Span span) {
+                    public void apply(TextSpan span) {
                         span.setUnderline(!span.isUnderline());
                     }
                 });
@@ -273,7 +274,7 @@ public class TextPaneDemo implements Application {
             public void buttonPressed(Button button) {
                 applyStyleToSelection(new StyleApplicator() {
                     @Override
-                    public void apply(org.apache.pivot.wtk.text.Span span) {
+                    public void apply(TextSpan span) {
                         span.setStrikethrough(!span.isStrikethrough());
                     }
                 });
@@ -287,7 +288,7 @@ public class TextPaneDemo implements Application {
                     Color previousSelectedColor) {
                     applyStyleToSelection(new StyleApplicator() {
                         @Override
-                        public void apply(org.apache.pivot.wtk.text.Span span) {
+                        public void apply(TextSpan span) {
                             span.setForegroundColor(foregroundColorChooserButton.getSelectedColor());
                         }
                     });
@@ -301,7 +302,7 @@ public class TextPaneDemo implements Application {
                     Color previousSelectedColor) {
                     applyStyleToSelection(new StyleApplicator() {
                         @Override
-                        public void apply(org.apache.pivot.wtk.text.Span span) {
+                        public void apply(TextSpan span) {
                             span.setBackgroundColor(backgroundColorChooserButton.getSelectedColor());
                         }
                     });
@@ -317,7 +318,7 @@ public class TextPaneDemo implements Application {
 
                 applyStyleToSelection(new StyleApplicator() {
                     @Override
-                    public void apply(org.apache.pivot.wtk.text.Span span) {
+                    public void apply(TextSpan span) {
                         span.setFont(derivedFont);
                     }
                 });
@@ -359,7 +360,7 @@ public class TextPaneDemo implements Application {
     }
 
     private interface StyleApplicator {
-        void apply(org.apache.pivot.wtk.text.Span span);
+        void apply(TextSpan span);
     }
 
     private void applyAlignmentStyle(HorizontalAlignment horizontalAlignment) {
@@ -431,8 +432,8 @@ public class TextPaneDemo implements Application {
         final int selectionLength = textPane.getSelectionLength();
 
         for (Node node : nodeList) {
-            if (node instanceof org.apache.pivot.wtk.text.Span) {
-                org.apache.pivot.wtk.text.Span span = (org.apache.pivot.wtk.text.Span)node;
+            if (node instanceof TextSpan) {
+                TextSpan span = (TextSpan)node;
                 int documentOffset = node.getDocumentOffset();
                 int characterCount = node.getCharacterCount();
                 org.apache.pivot.wtk.Span textSpan = new org.apache.pivot.wtk.Span(documentOffset,
@@ -466,7 +467,7 @@ public class TextPaneDemo implements Application {
             // if the text-node is contained wholly inside the selection, remove
             // the text-node, replace it with a Span, and apply the style
             Element parent = textNode.getParent();
-            org.apache.pivot.wtk.text.Span newSpanNode = new org.apache.pivot.wtk.text.Span();
+            TextSpan newSpanNode = new TextSpan();
             newSpanNode.add(new TextNode(textNode.getText()));
             styleApplicator.apply(newSpanNode);
             int index = parent.remove(textNode);
@@ -478,7 +479,7 @@ public class TextPaneDemo implements Application {
             String part1 = textNode.getSubstring(0, intersectionLength);
             String part2 = textNode.getSubstring(intersectionLength, characterCount);
 
-            org.apache.pivot.wtk.text.Span newSpanNode = new org.apache.pivot.wtk.text.Span();
+            TextSpan newSpanNode = new TextSpan();
             newSpanNode.add(new TextNode(part1));
             styleApplicator.apply(newSpanNode);
 
@@ -494,7 +495,7 @@ public class TextPaneDemo implements Application {
             String part1 = textNode.getSubstring(0, intersectionStart);
             String part2 = textNode.getSubstring(intersectionStart, characterCount);
 
-            org.apache.pivot.wtk.text.Span newSpanNode = new org.apache.pivot.wtk.text.Span();
+            TextSpan newSpanNode = new TextSpan();
             newSpanNode.add(new TextNode(part2));
             styleApplicator.apply(newSpanNode);
 
@@ -512,7 +513,7 @@ public class TextPaneDemo implements Application {
             String part2 = textNode.getSubstring(part2Start, part2End);
             String part3 = textNode.getSubstring(part2End, characterCount);
 
-            org.apache.pivot.wtk.text.Span newSpanNode = new org.apache.pivot.wtk.text.Span();
+            TextSpan newSpanNode = new TextSpan();
             newSpanNode.add(new TextNode(part2));
             styleApplicator.apply(newSpanNode);
 
@@ -525,7 +526,7 @@ public class TextPaneDemo implements Application {
     }
 
     private void applyStyleToSpanNode(org.apache.pivot.wtk.Span selectionSpan,
-        StyleApplicator styleApplicator, org.apache.pivot.wtk.text.Span spanNode,
+        StyleApplicator styleApplicator, TextSpan spanNode,
         int characterCount, org.apache.pivot.wtk.Span textSpan) {
         if (selectionSpan.contains(textSpan)) {
             // if the span-node is contained wholly inside the
@@ -535,7 +536,7 @@ public class TextPaneDemo implements Application {
             // if the selection covers the first part of the span-node, split
             // off the first part of the span-node, and apply the style to it
             int intersectionLength = selectionSpan.end - textSpan.start;
-            org.apache.pivot.wtk.text.Span node1 = spanNode.getRange(0, intersectionLength);
+            TextSpan node1 = spanNode.getRange(0, intersectionLength);
             styleApplicator.apply(node1);
             Node node2 = spanNode.getRange(intersectionLength, characterCount - intersectionLength);
             Element parent = spanNode.getParent();
@@ -546,8 +547,8 @@ public class TextPaneDemo implements Application {
             // if the selection covers the last part of the span-node, split off
             // the last part of the span-node, and apply the style to it
             int intersectionStart = selectionSpan.start - textSpan.start;
-            org.apache.pivot.wtk.text.Span part1 = spanNode.getRange(0, intersectionStart);
-            org.apache.pivot.wtk.text.Span part2 = spanNode.getRange(intersectionStart,
+            TextSpan part1 = spanNode.getRange(0, intersectionStart);
+            TextSpan part2 = spanNode.getRange(intersectionStart,
                 characterCount - intersectionStart);
 
             styleApplicator.apply(part2);
@@ -562,10 +563,10 @@ public class TextPaneDemo implements Application {
             // span-node into 3 parts, and apply the style to the second part
             int part2Start = selectionSpan.start - textSpan.start;
             int part2End = selectionSpan.end - textSpan.start;
-            org.apache.pivot.wtk.text.Span part1 = spanNode.getRange(0, part2Start);
-            org.apache.pivot.wtk.text.Span part2 = spanNode.getRange(part2Start, part2End
+            TextSpan part1 = spanNode.getRange(0, part2Start);
+            TextSpan part2 = spanNode.getRange(part2Start, part2End
                 - part2Start);
-            org.apache.pivot.wtk.text.Span part3 = spanNode.getRange(part2End, characterCount
+            TextSpan part3 = spanNode.getRange(part2End, characterCount
                 - part2End);
 
             styleApplicator.apply(part2);
@@ -580,7 +581,7 @@ public class TextPaneDemo implements Application {
 
     private void collectNodes(org.apache.pivot.wtk.text.Node node, List<Node> nodeList) {
         // don't worry about the text-nodes that are children of Span nodes.
-        if (node instanceof org.apache.pivot.wtk.text.Span) {
+        if (node instanceof TextSpan) {
             return;
         }
         if (node instanceof org.apache.pivot.wtk.text.Element) {

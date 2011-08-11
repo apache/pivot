@@ -21,13 +21,14 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Node;
+import org.apache.pivot.wtk.text.TextSpan;
 
 /**
  * Span node view.
  */
 class TextPaneSkinSpanView extends TextPaneSkinElementView {
 
-    public TextPaneSkinSpanView(TextPaneSkin textPaneSkin, org.apache.pivot.wtk.text.Span span) {
+    public TextPaneSkinSpanView(TextPaneSkin textPaneSkin, TextSpan span) {
         super(textPaneSkin, span);
     }
 
@@ -35,7 +36,7 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     protected void attach() {
         super.attach();
 
-        org.apache.pivot.wtk.text.Span span = (org.apache.pivot.wtk.text.Span)getNode();
+        TextSpan span = (TextSpan)getNode();
 
         // for now, assume that span contains at most one child, and
         // that child is a TextNode
@@ -134,7 +135,7 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     public void nodeInserted(Element element, int index) {
         super.nodeInserted(element, index);
 
-        org.apache.pivot.wtk.text.Span span = (org.apache.pivot.wtk.text.Span)getNode();
+        TextSpan span = (TextSpan)getNode();
         insert(textPaneSkin.createNodeView(span.get(index)), index);
     }
 
