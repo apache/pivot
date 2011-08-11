@@ -144,6 +144,15 @@ public class TextPane extends Container {
 
         public void undo() {
             node.removeRange(offset, characterCount);
+            int newSelectionStart = selectionStart;
+            int newSelectionLength = selectionLength;
+            if (newSelectionStart >= document.getCharacterCount()) {
+                newSelectionStart = document.getCharacterCount() - 1;
+            }
+            if (newSelectionStart + newSelectionLength > document.getCharacterCount()) {
+                newSelectionLength = document.getCharacterCount() - newSelectionStart;
+            }
+            setSelection(newSelectionStart, newSelectionLength);
         }
     }
 
