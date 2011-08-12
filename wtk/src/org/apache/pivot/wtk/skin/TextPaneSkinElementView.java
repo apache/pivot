@@ -38,13 +38,11 @@ import org.apache.pivot.wtk.text.Node;
 abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
     implements Sequence<TextPaneSkinNodeView>, Iterable<TextPaneSkinNodeView>, ElementListener {
     private ArrayList<TextPaneSkinNodeView> nodeViews = new ArrayList<TextPaneSkinNodeView>();
-    protected final TextPaneSkin textPaneSkin;
     private int skinX = 0;
     private int skinY = 0;
 
-    public TextPaneSkinElementView(TextPaneSkin textPaneSkin, Element element) {
+    public TextPaneSkinElementView(Element element) {
         super(element);
-        this.textPaneSkin = textPaneSkin;
     }
 
     @Override
@@ -56,7 +54,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
 
         // Attach child node views
         for (Node node : element) {
-            add(textPaneSkin.createNodeView(node));
+            add(getTextPaneSkin().createNodeView(node));
         }
     }
 
@@ -182,7 +180,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
             Color styledBackgroundColor = getStyledBackgroundColor();
             if (styledBackgroundColor != null) {
                 // don't paint over the selection background
-                Area selection = textPaneSkin.getSelection();
+                Area selection = getTextPaneSkin().getSelection();
                 if (selection != null) {
                     Area fillArea = new Area(new Rectangle(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height));
                     selection = selection.createTransformedArea(AffineTransform.getTranslateInstance(-skinX, -skinY));
@@ -265,7 +263,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
     @Override
     public void fontChanged(Element element, Font previousFont) {
         // because children may depend on parents for their style information, we need to invalidate the whole tree
-        textPaneSkin.invalidateNodeViewTree();
+        getTextPaneSkin().invalidateNodeViewTree();
     }
 
     @Override
@@ -276,19 +274,19 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
     @Override
     public void foregroundColorChanged(Element element, Color previousForegroundColor) {
         // because children may depend on parents for their style information, we need to invalidate the whole tree
-        textPaneSkin.invalidateNodeViewTree();
+        getTextPaneSkin().invalidateNodeViewTree();
     }
 
     @Override
     public void underlineChanged(Element element) {
         // because children may depend on parents for their style information, we need to invalidate the whole tree
-        textPaneSkin.invalidateNodeViewTree();
+        getTextPaneSkin().invalidateNodeViewTree();
     }
 
     @Override
     public void strikethroughChanged(Element element) {
         // because children may depend on parents for their style information, we need to invalidate the whole tree
-        textPaneSkin.invalidateNodeViewTree();
+        getTextPaneSkin().invalidateNodeViewTree();
     }
 
     @Override

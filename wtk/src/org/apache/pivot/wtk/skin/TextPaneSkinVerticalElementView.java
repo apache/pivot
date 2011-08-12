@@ -28,8 +28,8 @@ import org.apache.pivot.wtk.text.Node;
  */
 abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
 
-    public TextPaneSkinVerticalElementView(TextPaneSkin textPaneSkin, Element element) {
-        super(textPaneSkin, element);
+    public TextPaneSkinVerticalElementView(Element element) {
+        super(element);
     }
 
     @Override
@@ -207,7 +207,7 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
     public void nodeInserted(Element element, int index) {
         super.nodeInserted(element, index);
 
-        insert(textPaneSkin.createNodeView(element.get(index)), index);
+        insert(getTextPaneSkin().createNodeView(element.get(index)), index);
     }
 
     @Override

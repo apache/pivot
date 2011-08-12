@@ -58,6 +58,10 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         this.parent = parent;
     }
 
+    protected TextPaneSkin getTextPaneSkin() {
+        return getParent().getTextPaneSkin();
+    }
+
     protected void attach() {
         node.getNodeListeners().add(this);
     }

@@ -53,8 +53,8 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     private ArrayList<Row> rows = null;
     private Bounds terminatorBounds = new Bounds(0, 0, 0, 0);
 
-    public TextPaneSkinParagraphView(TextPaneSkin textPaneSkin, Paragraph paragraph) {
-        super(textPaneSkin, paragraph);
+    public TextPaneSkinParagraphView(Paragraph paragraph) {
+        super(paragraph);
     }
 
     @Override
@@ -127,7 +127,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
         // Recalculate terminator bounds
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-        LineMetrics lm = textPaneSkin.getFont().getLineMetrics("", 0, 0, fontRenderContext);
+        LineMetrics lm = getTextPaneSkin().getFont().getLineMetrics("", 0, 0, fontRenderContext);
         int terminatorHeight = (int)Math.ceil(lm.getHeight());
 
         int terminatorY;
@@ -212,7 +212,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
         // Recalculate terminator bounds
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-        LineMetrics lm = textPaneSkin.getFont().getLineMetrics("", 0, 0, fontRenderContext);
+        LineMetrics lm = getTextPaneSkin().getFont().getLineMetrics("", 0, 0, fontRenderContext);
         int terminatorHeight = (int)Math.ceil(lm.getHeight());
 
         int terminatorY;

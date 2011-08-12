@@ -22,8 +22,8 @@ class TextPaneSkinListView extends TextPaneSkinVerticalElementView {
 
     protected int maxIndexTextWidth;
 
-    public TextPaneSkinListView(TextPaneSkin textPaneSkin, List list) {
-        super(textPaneSkin, list);
+    public TextPaneSkinListView(List list) {
+        super(list);
     }
 
     public int getMaxIndexTextWidth() {

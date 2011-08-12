@@ -42,20 +42,17 @@ import org.apache.pivot.wtk.text.TextNodeListener;
  * Text node view.
  */
 class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeListener {
-    private final TextPaneSkin textPaneSkin;
-
     private int start;
     private int length = 0;
     private GlyphVector glyphVector = null;
     private TextPaneSkinTextNodeView next = null;
 
-    public TextPaneSkinTextNodeView(TextPaneSkin textPaneSkin, TextNode textNode) {
-        this(textPaneSkin, textNode, 0);
+    public TextPaneSkinTextNodeView(TextNode textNode) {
+        this(textNode, 0);
     }
 
-    public TextPaneSkinTextNodeView(TextPaneSkin textPaneSkin, TextNode textNode, int start) {
+    public TextPaneSkinTextNodeView(TextNode textNode, int start) {
         super(textNode);
-        this.textPaneSkin = textPaneSkin;
         this.start = start;
     }
 
@@ -110,7 +107,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         }
 
         int end;
-        if (textPaneSkin.getWrapText()) {
+        if (getTextPaneSkin().getWrapText()) {
             if (textNode.getCharacterCount() == 0) {
                 end = start;
             } else {
@@ -136,7 +133,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
         if (end < ci.getEndIndex()) {
             length = end - start;
-            next = new TextPaneSkinTextNodeView(textPaneSkin, textNode, end);
+            next = new TextPaneSkinTextNodeView(textNode, end);
             next.setParent(getParent());
         } else {
             length = ci.getEndIndex() - start;
@@ -175,7 +172,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         }
 
         int end;
-        if (textPaneSkin.getWrapText()) {
+        if (getTextPaneSkin().getWrapText()) {
             if (textNode.getCharacterCount() == 0) {
                 end = start;
             } else {
@@ -219,7 +216,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     @Override
     public void paint(Graphics2D graphics) {
         if (glyphVector != null) {
-            TextPane textPane = (TextPane)textPaneSkin.getComponent();
+            TextPane textPane = (TextPane)getTextPaneSkin().getComponent();
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = getEffectiveFont().getLineMetrics("", fontRenderContext);
@@ -282,14 +279,14 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                 // Paint the selection
                 Color selectionColor;
                 if (textPane.isFocused()) {
-                    selectionColor = textPaneSkin.getSelectionColor();
+                    selectionColor = getTextPaneSkin().getSelectionColor();
                 } else {
-                    selectionColor = textPaneSkin.getInactiveSelectionColor();
+                    selectionColor = getTextPaneSkin().getInactiveSelectionColor();
                 }
 
                 Graphics2D selectedTextGraphics = (Graphics2D)graphics.create();
                 selectedTextGraphics.setColor(textPane.isFocused() &&
-                    textPane.isEditable() ? selectionColor : textPaneSkin.getInactiveSelectionColor());
+                    textPane.isEditable() ? selectionColor : getTextPaneSkin().getInactiveSelectionColor());
                 selectedTextGraphics.clip(selection.getBounds());
                 selectedTextGraphics.drawGlyphVector(glyphVector, 0, ascent);
                 if (underline) {
@@ -373,7 +370,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         }
         // if we find nothing, use the default font
         if (element == null) {
-            font = textPaneSkin.getFont();
+            font = getTextPaneSkin().getFont();
         }
         return font;
     }
@@ -392,7 +389,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         }
         // if we find nothing, use the default color
         if (element == null) {
-            foregroundColor = textPaneSkin.getColor();
+            foregroundColor = getTextPaneSkin().getColor();
         }
         return foregroundColor;
     }

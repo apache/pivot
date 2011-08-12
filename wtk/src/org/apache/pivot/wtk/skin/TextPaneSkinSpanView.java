@@ -28,8 +28,8 @@ import org.apache.pivot.wtk.text.TextSpan;
  */
 class TextPaneSkinSpanView extends TextPaneSkinElementView {
 
-    public TextPaneSkinSpanView(TextPaneSkin textPaneSkin, TextSpan span) {
-        super(textPaneSkin, span);
+    public TextPaneSkinSpanView(TextSpan span) {
+        super(span);
     }
 
     @Override
@@ -136,7 +136,7 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
         super.nodeInserted(element, index);
 
         TextSpan span = (TextSpan)getNode();
-        insert(textPaneSkin.createNodeView(span.get(index)), index);
+        insert(getTextPaneSkin().createNodeView(span.get(index)), index);
     }
 
     @Override

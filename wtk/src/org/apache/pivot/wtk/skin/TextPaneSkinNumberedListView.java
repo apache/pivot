@@ -68,8 +68,8 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
         return (char)('A' + n - 1) + "";
     }
 
-    public TextPaneSkinNumberedListView(TextPaneSkin textPaneSkin, NumberedList numberedList) {
-        super(textPaneSkin, numberedList);
+    public TextPaneSkinNumberedListView(NumberedList numberedList) {
+        super(numberedList);
     }
 
     @Override

@@ -1083,21 +1083,21 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         if (node instanceof Document) {
             nodeView = new TextPaneSkinDocumentView(this, (Document)node);
         } else if (node instanceof Paragraph) {
-            nodeView = new TextPaneSkinParagraphView(this, (Paragraph)node);
+            nodeView = new TextPaneSkinParagraphView((Paragraph)node);
         } else if (node instanceof TextNode) {
-            nodeView = new TextPaneSkinTextNodeView(this, (TextNode)node);
+            nodeView = new TextPaneSkinTextNodeView((TextNode)node);
         } else if (node instanceof ImageNode) {
             nodeView = new TextPaneSkinImageNodeView((ImageNode)node);
         } else if (node instanceof ComponentNode) {
             nodeView = new TextPaneSkinComponentNodeView((ComponentNode)node);
         } else if (node instanceof TextSpan) {
-            nodeView = new TextPaneSkinSpanView(this, (TextSpan)node);
+            nodeView = new TextPaneSkinSpanView((TextSpan)node);
         } else if (node instanceof NumberedList) {
-            nodeView = new TextPaneSkinNumberedListView(this, (NumberedList)node);
+            nodeView = new TextPaneSkinNumberedListView((NumberedList)node);
         } else if (node instanceof BulletedList) {
-            nodeView = new TextPaneSkinBulletedListView(this, (BulletedList)node);
+            nodeView = new TextPaneSkinBulletedListView((BulletedList)node);
         } else if (node instanceof List.Item) {
-            nodeView = new TextPaneSkinListItemView(this, (List.Item)node);
+            nodeView = new TextPaneSkinListItemView((List.Item)node);
         } else {
             throw new IllegalArgumentException("Unsupported node type: "
                 + node.getClass().getName());
