@@ -58,6 +58,26 @@ public abstract class Component implements ConstrainedVisual {
             return styles.get(key);
         }
 
+        /**
+         * Stores the supplied value for the specified style.</br></br>
+         *
+         * <strong>NOTE</strong> The current implementation always returns
+         * <code>null</code> due to the use of BeanAdapter to set the the new
+         * value. (BeanAdapter does not look up the previous value for
+         * performance reasons)</br></br>
+         *
+         * This also means that the logic determining whether to fire the the
+         * event differs from other Pivot event firing code.  The event will be
+         * fired each time this method is executed, regardless of whether the
+         * new value differs from the old value or not.</br></br>
+         *
+         * This behaviour may change in the future so should not be relied upon.
+         *
+         * @param key Style whose value will be overwritten
+         * @param value Value to be stored
+         * @return The previous value of the specified style (See note above)
+         * @see BeanAdapter#put(String, Object)
+         */
         @Override
         public Object put(String key, Object value) {
             Object previousValue = null;

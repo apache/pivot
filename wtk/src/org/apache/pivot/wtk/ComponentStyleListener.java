@@ -23,9 +23,11 @@ public interface ComponentStyleListener {
     /**
      * Called when a component style has been updated.
      *
-     * @param component
-     * @param styleKey
-     * @param previousValue
+     * @param component Component the style belongs to
+     * @param styleKey The name of the style
+     * @param previousValue The previous value for this style
+     *
+     * @see org.apache.pivot.wtk.Component.StyleDictionary#put(String, Object)
      */
     public void styleUpdated(Component component, String styleKey, Object previousValue);
 }
