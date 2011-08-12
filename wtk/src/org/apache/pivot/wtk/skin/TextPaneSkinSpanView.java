@@ -78,12 +78,14 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
         }
     }
 
-    @Override
-    public TextPaneSkinNodeView getNext() {
+    /**
+     * Used by TextPaneSkinParagraphView when it breaks child nodes into multiple views.
+     */
+    public TextPaneSkinTextNodeView getNext() {
         if (getLength() == 0) {
             return null;
         } else {
-            return get(0).getNext();
+            return (TextPaneSkinTextNodeView) ((TextPaneSkinTextNodeView) get(0)).getNext();
         }
     }
 

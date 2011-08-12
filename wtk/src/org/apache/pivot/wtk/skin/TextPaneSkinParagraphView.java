@@ -98,7 +98,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
             // If the view was split into multiple views, add them to
             // their own rows
-            nodeView = nodeView.getNext();
+            nodeView = getNext(nodeView);
             while (nodeView != null) {
                 rows.add(row);
                 layouter.endRow(row);
@@ -112,7 +112,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                 offset += nodeView.getCharacterCount();
                 row.width = nodeView.getWidth();
 
-                nodeView = nodeView.getNext();
+                nodeView = getNext(nodeView);
             }
         }
 
@@ -183,7 +183,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
             // If the view was split into multiple views, add them to
             // their own rows
-            nodeView = nodeView.getNext();
+            nodeView = getNext(nodeView);
             while (nodeView != null) {
                 rows.add(row);
                 layouter.endRow(row);
@@ -197,7 +197,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                 offset += nodeView.getCharacterCount();
                 row.width = nodeView.getWidth();
 
-                nodeView = nodeView.getNext();
+                nodeView = getNext(nodeView);
             }
         }
 
@@ -231,6 +231,18 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         int height = Math.max(layouter.rowY, terminatorBounds.height);
 
         return new Dimensions(layouter.paragraphWidth, height);
+    }
+
+    private TextPaneSkinNodeView getNext(TextPaneSkinNodeView child) {
+        // Using instanceof checks because there is no nice place in the hierarchy
+        // to put an abstract method
+        if (child instanceof TextPaneSkinSpanView) {
+            return ((TextPaneSkinSpanView) child).getNext();
+        } else if (child instanceof TextPaneSkinTextNodeView) {
+            return ((TextPaneSkinTextNodeView) child).getNext();
+        } else {
+            throw new IllegalStateException();
+        }
     }
 
     /**
@@ -333,11 +345,6 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                 paintChild(graphics, paintBounds, segment.nodeView);
             }
         }
-    }
-
-    @Override
-    public TextPaneSkinNodeView getNext() {
-        return null;
     }
 
     @Override

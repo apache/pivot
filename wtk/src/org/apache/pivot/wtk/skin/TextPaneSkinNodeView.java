@@ -190,11 +190,6 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         return node.getCharacterCount();
     }
 
-    /**
-     * Used by TextPaneSkinParagraphView when it breaks child nodes into multiple views.
-     */
-    public abstract TextPaneSkinNodeView getNext();
-
     public abstract int getInsertionPoint(int x, int y);
     public abstract int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction);
     public abstract int getRowAt(int offset);

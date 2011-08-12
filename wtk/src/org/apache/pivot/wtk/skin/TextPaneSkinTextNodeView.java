@@ -320,7 +320,9 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         return length;
     }
 
-    @Override
+    /**
+     * Used by TextPaneSkinParagraphView when it breaks child nodes into multiple views.
+     */
     public TextPaneSkinNodeView getNext() {
         return next;
     }

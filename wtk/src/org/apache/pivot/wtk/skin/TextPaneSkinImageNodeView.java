@@ -105,11 +105,6 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
     }
 
     @Override
-    public TextPaneSkinNodeView getNext() {
-        return null;
-    }
-
-    @Override
     public int getInsertionPoint(int x, int y) {
         return 0;
     }

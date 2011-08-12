@@ -90,11 +90,6 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
     }
 
     @Override
-    public TextPaneSkinNodeView getNext() {
-        return null;
-    }
-
-    @Override
     public int getInsertionPoint(int x, int y) {
         int offset = -1;
 

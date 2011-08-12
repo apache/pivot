@@ -117,11 +117,6 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
     }
 
     @Override
-    public TextPaneSkinNodeView getNext() {
-        return null;
-    }
-
-    @Override
     public int getInsertionPoint(int x, int y) {
         return 0;
     }
