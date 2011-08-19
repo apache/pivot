@@ -300,7 +300,31 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
             int tooltipX = location.x + 16;
             int tooltipY = location.y;
 
+            int tooltipWidth = tooltip.getPreferredWidth();
             int tooltipHeight = tooltip.getPreferredHeight();
+            if (tooltipX + tooltipWidth > display.getWidth()) {
+                // Try to just fit it inside the display if
+                // there would be room to shift it above the
+                // cursor, otherwise move it to the left of
+                // the cursor
+                if (tooltipY > tooltipHeight) {
+                    tooltipX = display.getWidth() - tooltipWidth;
+                } else {
+                    tooltipX = location.x - tooltipWidth - 16;
+                }
+                if (tooltipX < 0) {
+                    tooltipX = 0;
+                }
+                // Adjust the y location if the tip ends up
+                // being behind the mouse cursor because of
+                // these x adjustments
+                if (tooltipX < location.x && tooltipX + tooltipWidth > location.x) {
+                    tooltipY -= tooltipHeight;
+                    if (tooltipY < 0) {
+                        tooltipY = 0;
+                    }
+                }
+            }
             if (tooltipY + tooltipHeight > display.getHeight()) {
                 tooltipY -= tooltipHeight;
             }
