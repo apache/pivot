@@ -4,6 +4,7 @@
 >
 
   <fileSets>
+
     <fileSet filtered="true" packaged="true" encoding="UTF-8">
       <directory>src/main/java</directory>
       <includes>
@@ -39,6 +40,19 @@
       </excludes>
       //-->
     </fileSet>
+
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
+      <directory></directory>
+      <includes>
+          <include>*/*.txt</include>
+          <include>BUILD</include>
+          <include>LICENSE</include>
+          <include>NOTICE</include>
+          <include>README</include>
+          <include>RELEASE-NOTES</include>
+      </includes>
+    </fileSet>
+
   </fileSets>
 
 </archetype-descriptor>
