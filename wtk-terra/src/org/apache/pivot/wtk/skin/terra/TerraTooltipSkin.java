@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Tooltip;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
@@ -100,7 +101,10 @@ public class TerraTooltipSkin extends WindowSkin {
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraTooltipSkin() {
-        setBackgroundColor(new Color(0xff, 0xff, 0xe0, 0xf0));
+        // Get theme icons/colors
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+
+        setBackgroundColor(theme.getColor(19));
 
         borderColor = Color.BLACK;
         padding = new Insets(2);
