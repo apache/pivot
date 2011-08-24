@@ -101,6 +101,9 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     private Color horizontalGridColor = Color.BLACK;
     private Color verticalGridColor = Color.BLACK;
 
+    /**
+     * These are cached computed values, for performance.
+     */
     private int cellWidth = 0;
     private int cellHeight = 0;
 
