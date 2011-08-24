@@ -1,0 +1,8 @@
+
+
+This folder contains files required for Continuous Integration Build with Apache Jenkins.
+
+
+Under the lib folder you can find all libraries needed to do the build in automated way and related licenses.
+Other libraries are already inside Pivot projects.
+
