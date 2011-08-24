@@ -42,6 +42,13 @@ limitations under the License.
             </li>
             <li>
                 <p>
+                    <a href="fill-panes.html"><b>FillPane</b></a> - Arranges components in a line,
+                    either vertically or horizontally and fills up the available space in both
+                    directions.
+                </p>
+            </li>
+            <li>
+                <p>
                     <a href="grid-panes.html"><b>GridPane</b></a> - Arranges components in a
                     two-dimensional grid where each cell is given the same size, based on the
                     available width and height.

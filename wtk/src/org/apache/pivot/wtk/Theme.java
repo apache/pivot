@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.skin.BorderSkin;
 import org.apache.pivot.wtk.skin.BoxPaneSkin;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 import org.apache.pivot.wtk.skin.ColorChooserButtonSkin;
+import org.apache.pivot.wtk.skin.FillPaneSkin;
 import org.apache.pivot.wtk.skin.FlowPaneSkin;
 import org.apache.pivot.wtk.skin.GridPaneFillerSkin;
 import org.apache.pivot.wtk.skin.GridPaneSkin;
@@ -83,6 +84,7 @@ public abstract class Theme {
         componentSkinMap.put(CardPane.class, CardPaneSkin.class);
         componentSkinMap.put(ColorChooserButtonSkin.ColorChooserPopup.class,
             ColorChooserButtonSkin.ColorChooserPopupSkin.class);
+        componentSkinMap.put(FillPane.class, FillPaneSkin.class);
         componentSkinMap.put(FlowPane.class, FlowPaneSkin.class);
         componentSkinMap.put(GridPane.class, GridPaneSkin.class);
         componentSkinMap.put(GridPane.Filler.class, GridPaneFillerSkin.class);

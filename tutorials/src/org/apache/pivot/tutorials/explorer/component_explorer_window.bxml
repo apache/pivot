@@ -144,6 +144,12 @@ limitations under the License.
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
+                                                text="FillPane"
+                                                icon="@../page_white.png"
+                                                src="@fill_pane.bxml"
+                                                horizontalScrollBarPolicy="fill"
+                                                verticalScrollBarPolicy="fill"/>
+                                            <explorer:ComponentNode
                                                 text="TablePane"
                                                 icon="@../page_white.png"
                                                 src="@table_pane.bxml"
