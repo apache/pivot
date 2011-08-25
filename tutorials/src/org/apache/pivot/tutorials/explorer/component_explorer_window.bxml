@@ -389,7 +389,7 @@ limitations under the License.
                                     <corner>
                                         <BoxPane styles="{padding:{right:6},
                                             horizontalAlignment:'right', fill:true}">
-                                            <MenuButton styles="{toolbar:true,
+                                            <MenuButton tooltipText="%contentPane.scrollBarPolicy.tooltip" styles="{toolbar:true,
                                                 padding:{top:1, left:2, bottom:1, right:2}}">
                                                 <bxml:define>
                                                     <ButtonGroup bxml:id="horizontalScrollBarPolicyGroup"/>
@@ -489,7 +489,7 @@ limitations under the License.
                             <corner>
                                 <BoxPane styles="{padding:{right:6},
                                     horizontalAlignment:'right', fill:true}">
-                                    <MenuButton styles="{toolbar:true,
+                                    <MenuButton tooltipText="%eventLoggerPane.tooltip" styles="{toolbar:true,
                                         padding:{top:1, left:2, bottom:1, right:2}}">
                                         <buttonData>
                                             <content:ButtonData icon="@preferences-system.png"/>
