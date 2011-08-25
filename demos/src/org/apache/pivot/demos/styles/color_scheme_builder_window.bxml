@@ -52,14 +52,14 @@ limitations under the License.
 
                     <TablePane.Row height="1*">
                         <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
-                            <PushButton bxml:id="copyToClipboardButton" buttonData="Copy" 
-                            	tooltipText="Click to copy color data in Clipboard"/>
+                            <PushButton bxml:id="copyToClipboardButton" buttonData="Copy"
+                                tooltipText="Click to copy color data in Clipboard"/>
                         </BoxPane>
                     </TablePane.Row>
                     <TablePane.Row height="1*">
                         <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
-                            <PushButton bxml:id="resetPaletteButton" buttonData="Reset" 
-                            	tooltipText="Click to reset color data to theme default"/>
+                            <PushButton bxml:id="resetPaletteButton" buttonData="Reset"
+                                tooltipText="Click to reset color data to theme default"/>
                         </BoxPane>
                     </TablePane.Row>
                 </TablePane>
