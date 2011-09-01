@@ -220,6 +220,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void layout() {
         TextArea textArea = (TextArea)getComponent();

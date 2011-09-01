@@ -17,14 +17,12 @@
 package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.wtk.FillPane;
-import org.apache.pivot.wtk.FillPaneListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
-import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.FillPane;
+import org.apache.pivot.wtk.FillPaneListener;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Orientation;
-import org.apache.pivot.wtk.VerticalAlignment;
 
 /**
  * Fill pane skin.
