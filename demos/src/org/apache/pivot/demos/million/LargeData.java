@@ -160,7 +160,9 @@ public class LargeData implements Application {
         cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                loadDataTask.abort();
+                if (loadDataTask != null) {
+                    loadDataTask.abort();
+                }
 
                 loadDataButton.setEnabled(true);
                 cancelButton.setEnabled(false);
@@ -240,7 +242,9 @@ public class LargeData implements Application {
 
                 @Override
                 public void executeFailed(Task<Void> task) {
-                    statusLabel.setText(task.getFault().toString());
+                    String taskFault = task.getFault().toString();
+                    System.err.println(taskFault);
+                    statusLabel.setText(taskFault);
                     loadDataButton.setEnabled(true);
                     cancelButton.setEnabled(false);
 
