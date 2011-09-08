@@ -73,7 +73,7 @@ public class JSON {
 
             String key = keys.get(i);
 
-            Map adapter = value instanceof java.util.Map ? new MapAdapter((java.util.Map) value) : new BeanAdapter(value);
+            Map<String, T> adapter = (Map<String, T>) (value instanceof java.util.Map ? new MapAdapter<String, T>((java.util.Map<String, T>) value) : new BeanAdapter(value));
             if (adapter.containsKey(key)) {
                 value = adapter.get(key);
             } else if (value instanceof Sequence<?>) {
@@ -147,7 +147,7 @@ public class JSON {
             throw new IllegalArgumentException("Invalid path.");
         }
 
-        Map adapter = parent instanceof java.util.Map ? new MapAdapter((java.util.Map) parent) : new BeanAdapter(parent);
+        Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<String, T>((java.util.Map<String, T>) parent) : new BeanAdapter(parent));
 
         Object previousValue;
         if (adapter.containsKey(key)) {
@@ -215,7 +215,7 @@ public class JSON {
      * <tt>true</tt> if the path exists; <tt>false</tt>, otherwise.
      */
     @SuppressWarnings("unchecked")
-    public static boolean containsKey(Object root, String path) {
+    public static <T> boolean containsKey(Object root, String path) {
         if (root == null) {
             throw new IllegalArgumentException("root is null.");
         }
@@ -232,7 +232,7 @@ public class JSON {
         if (parent == null) {
             containsKey = false;
         } else {
-            Map adapter = parent instanceof java.util.Map ? new MapAdapter((java.util.Map) parent) : new BeanAdapter(parent);
+            Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<String, T>((java.util.Map<String, T>) parent) : new BeanAdapter(parent));
             containsKey = adapter.containsKey(key);
 
             if (!containsKey) {
