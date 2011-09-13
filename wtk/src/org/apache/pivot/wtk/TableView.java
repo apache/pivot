@@ -49,6 +49,7 @@ public class TableView extends Component {
     /**
      * Contains information about a table column.
      */
+    @DefaultProperty("cellRenderer")
     public static class Column {
         private TableView tableView = null;
 
