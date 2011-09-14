@@ -128,7 +128,9 @@ limitations under the License.
             <fail>
                 <condition>
                     <not>
-                        <available classname="org.junit.Test"/>
+						<available classname="org.junit.Test">
+							<classpath refid="classpath.javalib" />
+						</available>
                     </not>
                 </condition>
                 <![CDATA[
