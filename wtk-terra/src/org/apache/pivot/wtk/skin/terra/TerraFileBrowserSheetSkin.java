@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.FileBrowserSheetListener;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
+import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.Window;
@@ -62,6 +63,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         }
     }
 
+    @BXML private TablePane tablePane = null;
     @BXML private BoxPane saveAsBoxPane = null;
     @BXML private TextInput saveAsTextInput = null;
     @BXML private FileBrowser fileBrowser = null;
@@ -404,5 +406,11 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 break;
             }
         }
+    }
+
+    public void addComponent(Component component) {
+        TablePane.Row row = new TablePane.Row(-1);
+        row.add(component);
+        tablePane.getRows().add(row);
     }
 }
