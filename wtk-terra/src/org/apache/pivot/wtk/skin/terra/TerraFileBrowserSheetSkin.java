@@ -411,6 +411,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     public void addComponent(Component component) {
         TablePane.Row row = new TablePane.Row(-1);
         row.add(component);
-        tablePane.getRows().add(row);
+        Sequence<TablePane.Row> rows = tablePane.getRows();
+        rows.insert(row, rows.getLength() - 1);
     }
 }
