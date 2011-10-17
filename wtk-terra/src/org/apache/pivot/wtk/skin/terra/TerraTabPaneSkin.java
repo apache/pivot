@@ -260,7 +260,7 @@ public class TerraTabPaneSkin extends ContainerSkin
             }
 
             // Draw the border
-            graphics.setPaint(borderColor);
+            graphics.setPaint((tabButton.isSelected() || active) ? borderColor : inactiveBorderColor);
             graphics.setStroke(new BasicStroke(1));
 
             switch(tabOrientation) {
@@ -279,6 +279,7 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             if (!(tabButton.isSelected()
                 || active)) {
+                graphics.setPaint(borderColor);
                 // Draw divider
                 switch(tabOrientation) {
                     case HORIZONTAL: {
@@ -507,6 +508,7 @@ public class TerraTabPaneSkin extends ContainerSkin
     private Color activeTabColor;
     private Color inactiveTabColor;
     private Color borderColor;
+    private Color inactiveBorderColor;
     private Insets padding;
     private Font buttonFont;
     private Color buttonColor;
@@ -546,6 +548,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         activeTabColor = theme.getColor(11);
         inactiveTabColor = theme.getColor(9);
         borderColor = theme.getColor(7);
+        inactiveBorderColor = theme.getColor(7);
         padding = new Insets(6);
         buttonFont = theme.getFont();
         buttonColor = theme.getColor(1);
@@ -1149,6 +1152,32 @@ public class TerraTabPaneSkin extends ContainerSkin
     public final void setBorderColor(int borderColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBorderColor(theme.getColor(borderColor));
+    }
+
+    public Color getInactiveBorderColor() {
+        return inactiveBorderColor;
+    }
+
+    public void setInactiveBorderColor(Color inactiveBorderColor) {
+        if (inactiveBorderColor == null) {
+            throw new IllegalArgumentException("inactiveBorderColor is null.");
+        }
+
+        this.inactiveBorderColor = inactiveBorderColor;
+        repaintComponent();
+    }
+
+    public final void setInactiveBorderColor(String inactiveBorderColor) {
+        if (inactiveBorderColor == null) {
+            throw new IllegalArgumentException("inactiveBorderColor is null.");
+        }
+
+        setInactiveBorderColor(GraphicsUtilities.decodeColor(inactiveBorderColor));
+    }
+
+    public final void setInactiveBorderColor(int inactiveBorderColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInactiveBorderColor(theme.getColor(inactiveBorderColor));
     }
 
     public Insets getPadding() {
