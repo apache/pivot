@@ -92,6 +92,7 @@ public abstract class ApplicationContext {
         private boolean paintPending = false;
         private boolean disableVolatileBuffer = false;
         private boolean debugPaint = false;
+        private java.awt.image.VolatileImage volatileImage = null;
 
         private Random random = null;
 
@@ -511,9 +512,10 @@ public abstract class ApplicationContext {
             // Paint the display into a volatile offscreen buffer
             GraphicsConfiguration gc = graphics.getDeviceConfiguration();
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
-            java.awt.image.VolatileImage volatileImage =
-                gc.createCompatibleVolatileImage(clipBounds.width, clipBounds.height,
+            if (volatileImage == null) {
+                volatileImage = gc.createCompatibleVolatileImage(clipBounds.width, clipBounds.height,
                     Transparency.OPAQUE);
+            }
 
             // If we have a valid volatile image, attempt to paint the
             // display to it
@@ -534,6 +536,9 @@ public abstract class ApplicationContext {
                     }
 
                     painted = !volatileImage.contentsLost();
+                } else {
+                    volatileImage.flush();
+                    volatileImage = null;
                 }
             }
 
