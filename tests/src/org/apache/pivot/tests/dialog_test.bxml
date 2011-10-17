@@ -24,7 +24,7 @@ limitations under the License.
             <Label text="Modeless dialog"/>
         </Dialog>
     </bxml:define>
-    
+
     <BoxPane orientation="vertical">
         <Checkbox bxml:id="modalCheckbox" buttonData="Modal"/>
         <PushButton buttonData="Open Dialog">

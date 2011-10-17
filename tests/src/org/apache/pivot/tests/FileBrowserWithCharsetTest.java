@@ -44,38 +44,38 @@ import org.apache.pivot.wtk.skin.terra.TerraFileBrowserSheetSkin;
 
 public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Application
 {
-	private ArrayList<String> choices = new ArrayList<String>();
-	private ListButton lb = new ListButton();
+    private ArrayList<String> choices = new ArrayList<String>();
+    private ListButton lb = new ListButton();
 
-	public FileBrowserWithCharsetTest() {
-	    this(Mode.OPEN);
-	}
+    public FileBrowserWithCharsetTest() {
+        this(Mode.OPEN);
+    }
 
-	public FileBrowserWithCharsetTest(Mode mode) {
-	    super(mode);
-	    TerraFileBrowserSheetSkin skin = (TerraFileBrowserSheetSkin)getSkin();
-	    BoxPane box = new BoxPane();
-	    box.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-	    box.add(new Label("Character set:"));
-	    Charset defaultCS = Charset.defaultCharset();
-	    choices.add("US-ASCII");
-	    choices.add(defaultCS.name());
-	    choices.add("ISO-8859-1");
-	    if (!"UTF-8".equals(defaultCS.name()))
-	        choices.add("UTF-8");
+    public FileBrowserWithCharsetTest(Mode mode) {
+        super(mode);
+        TerraFileBrowserSheetSkin skin = (TerraFileBrowserSheetSkin)getSkin();
+        BoxPane box = new BoxPane();
+        box.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        box.add(new Label("Character set:"));
+        Charset defaultCS = Charset.defaultCharset();
+        choices.add("US-ASCII");
+        choices.add(defaultCS.name());
+        choices.add("ISO-8859-1");
+        if (!"UTF-8".equals(defaultCS.name()))
+            choices.add("UTF-8");
 
-	    lb.setListData(choices);
-	    lb.setSelectedIndex(1);
-	    box.add(lb);
-	    skin.addComponent(box);
-	}
+        lb.setListData(choices);
+        lb.setSelectedIndex(1);
+        box.add(lb);
+        skin.addComponent(box);
+    }
 
-	public String getCharsetName() {
-	    return (String)lb.getSelectedItem();
-	}
+    public String getCharsetName() {
+        return (String)lb.getSelectedItem();
+    }
 
 
-	private Frame frame = null;
+    private Frame frame = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception

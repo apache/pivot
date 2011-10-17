@@ -79,8 +79,8 @@ public class TerraDialogSkin extends TerraFrameSkin
 
         private boolean isMouseOverOwner(Container display, int x, int y) {
             boolean mouseOverOwner = false;
-            
-            Dialog dialog = (Dialog)getComponent();            
+
+            Dialog dialog = (Dialog)getComponent();
             if (dialog.isModal()) {
                 Component descendant = display.getDescendantAt(x, y);
 

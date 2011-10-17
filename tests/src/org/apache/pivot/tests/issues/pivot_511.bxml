@@ -19,11 +19,11 @@ limitations under the License.
 <Window title="PIVOT-652" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <BoxPane 
-      orientation="vertical" 
+    <BoxPane
+      orientation="vertical"
       styles="{padding:10, horizontalAlignment:'center', verticalAlignment:'center'}"
     >
-		<Label text="Test Label" styles="{font:'Arial bold 24', color:'#ff0000'}" />
-		<Label text="Print from the Browser and seen what is printed" />
+        <Label text="Test Label" styles="{font:'Arial bold 24', color:'#ff0000'}" />
+        <Label text="Print from the Browser and seen what is printed" />
     </BoxPane>
 </Window>
