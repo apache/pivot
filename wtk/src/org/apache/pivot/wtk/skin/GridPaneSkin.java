@@ -477,6 +477,18 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * Sets the padding that will be reserved around the grid pane during
      * layout.
      */
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
+    }
+
+    /**
+     * Sets the padding that will be reserved around the grid pane during
+     * layout.
+     */
     public final void setPadding(String padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");

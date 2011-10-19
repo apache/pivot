@@ -1292,8 +1292,32 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
     }
 
+    public final void setButtonPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(new Insets(padding));
+    }
+
     public final void setButtonPadding(int buttonPadding) {
         setButtonPadding(new Insets(buttonPadding));
+    }
+
+    public final void setButtonPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(padding.intValue());
+    }
+
+    public final void setButtonPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(Insets.decode(padding));
     }
 
     public int getButtonSpacing() {

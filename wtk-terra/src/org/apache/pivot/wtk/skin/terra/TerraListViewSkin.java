@@ -33,7 +33,10 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.ListView;
+import org.apache.pivot.wtk.ListView.SelectMode;
 import org.apache.pivot.wtk.ListViewItemListener;
 import org.apache.pivot.wtk.ListViewItemStateListener;
 import org.apache.pivot.wtk.ListViewListener;
@@ -42,9 +45,6 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Keyboard.Modifier;
-import org.apache.pivot.wtk.ListView.SelectMode;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -775,6 +775,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     public final void setCheckboxPadding(int checkboxPadding) {
         setCheckboxPadding(new Insets(checkboxPadding));
+    }
+
+    public final void setCheckboxPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("checkboxPadding is null.");
+        }
+
+        setCheckboxPadding(padding.intValue());
     }
 
     public final void setCheckboxPadding(String checkboxPadding) {

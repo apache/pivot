@@ -38,11 +38,11 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.effects.ClipDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -730,8 +730,32 @@ public class TerraAccordionSkin extends ContainerSkin
         invalidateComponent();
     }
 
+    public final void setButtonPadding(Dictionary<String, ?> buttonPadding) {
+        if (buttonPadding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(new Insets(buttonPadding));
+    }
+
     public final void setButtonPadding(int buttonPadding) {
         setButtonPadding(new Insets(buttonPadding));
+    }
+
+    public final void setButtonPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(padding.intValue());
+    }
+
+    public final void setButtonPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(Insets.decode(padding));
     }
 
     public int getSelectionChangeDuration() {
