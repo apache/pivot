@@ -16,7 +16,7 @@ public class Pivot765 implements Application {
     public static void main(String[] args) {
         DesktopApplicationContext.main( new String[] { Pivot765.class.getName() });
     }
-    
+
     public void startup(final Display display, Map<String, String> properties) throws Exception {
         final MenuButton button = new MenuButton();
         button.setButtonData("Populate menu and open!");
