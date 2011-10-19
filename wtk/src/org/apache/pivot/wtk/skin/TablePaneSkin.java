@@ -1423,7 +1423,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     int rowSpan = TablePane.getRowSpan(component);
 
                     if (rowSpan > 1) {
-                        // We might need to adjust row heights to accomodate
+                        // We might need to adjust row heights to accommodate
                         // this spanning cell. First, we find out if any of the
                         // spanned cells are default height and how much space
                         // we've allocated thus far for those cells
@@ -1490,7 +1490,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         // Finally, we allocate the heights of the relative rows by divvying
         // up the remaining height
 
-        int remainingHeight = Math.max(height - reservedHeight, 0);
+        int remainingHeight = height - reservedHeight;
         if (totalRelativeWeight > 0
             && remainingHeight > 0) {
             for (int i = 0; i < rowCount; i++) {
@@ -1506,6 +1506,23 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     // calculation
                     remainingHeight -= rowHeight;
                     totalRelativeWeight -= relativeWeight;
+                }
+            }
+        }
+
+        // If we have don't actually have enough height available
+
+        while (remainingHeight < 0) {
+            for (int i = 0; i < rowCount; i++) {
+                if (isRowVisible(i)) {
+                    TablePane.Row row = rows.get(i);
+                    if (!row.isRelative()) {
+                        if (rowHeights[i] > 0) {
+                            rowHeights[i]--;
+                            remainingHeight++;
+                            if (remainingHeight >= 0) break;
+                        }
+                    }
                 }
             }
         }
