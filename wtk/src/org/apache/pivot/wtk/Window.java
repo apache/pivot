@@ -369,6 +369,25 @@ public class Window extends Container {
         }
 
         @Override
+        public Vote previewWindowOpen(Window window) {
+            Vote vote = Vote.APPROVE;
+
+            for (WindowStateListener listener : this) {
+                vote = vote.tally(listener.previewWindowOpen(window));
+            }
+
+            return vote;
+        }
+
+
+        @Override
+        public void windowOpenVetoed(Window window, Vote reason) {
+            for (WindowStateListener listener : this) {
+                listener.windowOpenVetoed(window, reason);
+            }
+        }
+
+        @Override
         public void windowClosed(Window window, Display display, Window owner) {
             for (WindowStateListener listener : this) {
                 listener.windowClosed(window, display, owner);
@@ -432,6 +451,7 @@ public class Window extends Container {
     private Component content = null;
     private Component focusDescendant = null;
 
+    private boolean opening = false;
     private boolean closing = false;
 
     private Point restoreLocation = null;
@@ -563,6 +583,16 @@ public class Window extends Container {
     }
 
     /**
+     * Returns this window's opening state.
+     *
+     * @return
+     * <tt>true</tt> if the window is opening; <tt>false</tt>, otherwise.
+     */
+    public boolean isOpening() {
+        return opening;
+    }
+
+    /**
      * Opens the window.
      *
      * @param display
@@ -620,20 +650,33 @@ public class Window extends Container {
         }
 
         if (!isOpen()) {
-            // Set the owner and add to the owner's owned window list
-            this.owner = owner;
+            opening = true;
+            Vote vote = windowStateListeners.previewWindowOpen(this);
 
-            if (owner != null) {
-                owner.ownedWindows.add(this);
+            if (vote == Vote.APPROVE) {
+                // Set the owner and add to the owner's owned window list
+                this.owner = owner;
+
+                if (owner != null) {
+                    owner.ownedWindows.add(this);
+                }
+
+                // Add the window to the display
+                display.add(this);
+
+                // Notify listeners
+                opening = false;
+                windowStateListeners.windowOpened(this);
+
+                moveToFront();
+            } else {
+                if (vote == Vote.DENY) {
+                    opening = false;
+                }
+
+                windowStateListeners.windowOpenVetoed(this, vote);
             }
 
-            // Add the window to the display
-            display.add(this);
-
-            // Notify listeners
-            windowStateListeners.windowOpened(this);
-
-            moveToFront();
         }
     }
 
