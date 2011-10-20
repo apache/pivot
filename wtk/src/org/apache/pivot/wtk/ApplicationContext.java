@@ -93,6 +93,7 @@ public abstract class ApplicationContext {
         private boolean disableVolatileBuffer = false;
         private boolean debugPaint = false;
         private java.awt.image.VolatileImage volatileImage = null;
+        private java.awt.image.VolatileImage volatileImageClipBounds = null;
 
         private Random random = null;
 
@@ -511,9 +512,9 @@ public abstract class ApplicationContext {
 
             // Paint the display into a volatile offscreen buffer
             GraphicsConfiguration gc = graphics.getDeviceConfiguration();
-            java.awt.Rectangle clipBounds = graphics.getClipBounds();
+            java.awt.Rectangle gcBounds = gc.getBounds();
             if (volatileImage == null) {
-                volatileImage = gc.createCompatibleVolatileImage(clipBounds.width, clipBounds.height,
+                volatileImage = gc.createCompatibleVolatileImage(gcBounds.width, gcBounds.height,
                     Transparency.OPAQUE);
             }
 
@@ -524,13 +525,16 @@ public abstract class ApplicationContext {
 
                 if (valid == java.awt.image.VolatileImage.IMAGE_OK
                     || valid == java.awt.image.VolatileImage.IMAGE_RESTORED) {
+                    java.awt.Rectangle clipBounds = graphics.getClipBounds();
                     Graphics2D volatileImageGraphics = volatileImage.createGraphics();
-                    volatileImageGraphics.setClip(0, 0, clipBounds.width, clipBounds.height);
-                    volatileImageGraphics.translate(-clipBounds.x, -clipBounds.y);
+                    volatileImageGraphics.setClip(clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height);
 
                     try {
                         paintDisplay(volatileImageGraphics);
-                        graphics.drawImage(volatileImage, clipBounds.x, clipBounds.y, this);
+                        graphics.drawImage(volatileImage,
+                            clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height,
+                            clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height,
+                            this);
                     } finally {
                         volatileImageGraphics.dispose();
                     }
