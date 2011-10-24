@@ -1512,7 +1512,9 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
         // If we have don't actually have enough height available
 
-        while (remainingHeight < 0) {
+        int progress = 1; // prevent infinite loop
+        while (remainingHeight < 0 && progress > 0) {
+            progress = 0;
             for (int i = 0; i < rowCount; i++) {
                 if (isRowVisible(i)) {
                     TablePane.Row row = rows.get(i);
@@ -1520,6 +1522,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                         if (rowHeights[i] > 0) {
                             rowHeights[i]--;
                             remainingHeight++;
+                            progress++;
                             if (remainingHeight >= 0) break;
                         }
                     }
