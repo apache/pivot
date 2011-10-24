@@ -80,10 +80,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static class DesktopDisplayHost extends DisplayHost {
         private static final long serialVersionUID = 0;
 
-        private Window rootOwner = null;
-        private Runnable updateHostWindowTitleBarCallback = null;
+        private transient Window rootOwner = null;
+        private transient Runnable updateHostWindowTitleBarCallback = null;
 
-        private WindowListener rootOwnerListener = new WindowListener.Adapter() {
+        private transient WindowListener rootOwnerListener = new WindowListener.Adapter() {
             @Override
             public void titleChanged(Window window, String previousTitle) {
                 updateFrameTitleBar();

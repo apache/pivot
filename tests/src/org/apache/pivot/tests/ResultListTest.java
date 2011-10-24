@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.tests;
 
+import static java.lang.System.out;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -26,20 +28,19 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.sql.ResultList;
 
-import static java.lang.System.out;
-
 public class ResultListTest {
     public static void main(String[] args) throws Exception {
         // e.g. jdbc:mysql://localhost/test
         String connectionURL = args[0];
 
         Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        ResultList resultList = null;
 
         try {
             connection = DriverManager.getConnection(connectionURL);
-            Statement statement = connection.createStatement();
-            ResultSet resultSet;
-            ResultList resultList;
+            statement = connection.createStatement();
 
             resultSet = statement.executeQuery("SELECT * FROM result_list_test");
             resultList = new ResultList(resultSet);
@@ -78,6 +79,14 @@ public class ResultListTest {
                 out.println(JSONSerializer.toString(iterator.next()));
             }
         } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            
+            if (statement != null) {
+                statement.close();
+            }
+            
             if (connection != null) {
                 connection.close();
             }

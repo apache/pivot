@@ -111,7 +111,7 @@ public class TextPane extends Container {
         public void undo();
     }
 
-    private class RangeRemovedEdit implements Edit {
+    private static class RangeRemovedEdit implements Edit {
         private final Node node;
         private final int offset;
         private final Sequence<Node> removed;

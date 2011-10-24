@@ -39,10 +39,9 @@ public class Expenses implements Application {
     public static final String PORT_KEY = "port";
     public static final String SECURE_KEY = "secure";
 
-    private static Expenses instance = null;
+    private static Expenses instance = new Expenses();
 
     public Expenses() {
-        instance = this;
     }
 
     @Override

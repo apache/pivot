@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import org.apache.pivot.beans.DefaultProperty;
@@ -412,7 +413,9 @@ public class TreeView extends Component {
      * A comparator that sorts paths by the order in which they would visually
      * appear in a fully expanded tree, otherwise known as their "row order".
      */
-    public static final class PathComparator implements Comparator<Path> {
+    public static final class PathComparator implements Comparator<Path>, Serializable {
+        private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(Path path1, Path path2) {
             int path1Length = path1.getLength();

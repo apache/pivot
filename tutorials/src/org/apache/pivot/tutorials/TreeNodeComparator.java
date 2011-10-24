@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import org.apache.pivot.wtk.content.TreeNode;
@@ -23,7 +24,9 @@ import org.apache.pivot.wtk.content.TreeNode;
 /**
  * Orders TreeNode instances by their name using string comparison.
  */
-public class TreeNodeComparator implements Comparator<TreeNode> {
+public class TreeNodeComparator implements Comparator<TreeNode>, Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Override
     public int compare(TreeNode treeNode1, TreeNode treeNode2) {
         String text1 = treeNode1.getText();

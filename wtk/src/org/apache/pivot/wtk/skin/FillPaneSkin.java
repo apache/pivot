@@ -233,8 +233,6 @@ public class FillPaneSkin extends ContainerSkin
                     }
                 }
 
-                contentHeight -= spacing;
-
                 break;
             }
         }

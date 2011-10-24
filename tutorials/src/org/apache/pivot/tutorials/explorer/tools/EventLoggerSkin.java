@@ -16,8 +16,9 @@
  */
 package org.apache.pivot.tutorials.explorer.tools;
 
-import java.lang.reflect.Method;
 import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -40,7 +41,9 @@ import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
 class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLoggerListener {
-    private static class TreeNodeComparator implements Comparator<TreeNode> {
+    private static class TreeNodeComparator implements Comparator<TreeNode>, Serializable {
+        private static final long serialVersionUID = 1L;
+
         public int compare(TreeNode treeNode1, TreeNode treeNode2) {
             return treeNode1.getText().compareTo(treeNode2.getText());
         }
