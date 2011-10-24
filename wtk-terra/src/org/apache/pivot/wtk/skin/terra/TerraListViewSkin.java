@@ -1156,7 +1156,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             for (int i = 0, n = listData.getLength(); i < n; i++) {
                 if (!listView.isItemDisabled(i)) {
                     String string = itemRenderer.toString(listData.get(i));
-                    
+
                     if (string != null
                             && string.length() > 0) {
                         char first = Character.toUpperCase(string.charAt(0));
