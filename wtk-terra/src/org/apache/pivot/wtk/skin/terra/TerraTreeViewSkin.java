@@ -1897,7 +1897,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             break;
         }
 
-        clearHighlightedNode();
+        if (consumed == true) {
+            clearHighlightedNode();
+        }
 
         return consumed;
     }

@@ -1370,7 +1370,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         // Clear the highlight
         if (highlightIndex != -1
             && tableView.getSelectMode() != TableView.SelectMode.NONE
-            && showHighlight) {
+            && showHighlight
+            && consumed == true) {
             repaintComponent(getRowBounds(highlightIndex));
         }
 

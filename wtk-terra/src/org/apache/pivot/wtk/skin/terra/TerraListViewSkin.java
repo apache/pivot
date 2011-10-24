@@ -1079,7 +1079,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         // Clear the highlight
         if (highlightIndex != -1
             && listView.getSelectMode() != ListView.SelectMode.NONE
-            && showHighlight) {
+            && showHighlight
+            && consumed == true) {
             repaintComponent(getItemBounds(highlightIndex));
         }
 
@@ -1144,6 +1145,27 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         listView.setSelectedIndex(i);
                         consumed = true;
                         break;
+                    }
+                }
+            }
+        }
+
+// TODO: add a style "wrapSelectNext" or similar to disable this behavior (now enabled by default) ...
+        if (true && consumed == false)
+        {
+            for (int i = 0, n = listData.getLength(); i < n; i++) {
+                if (!listView.isItemDisabled(i)) {
+                    String string = itemRenderer.toString(listData.get(i));
+                    
+                    if (string != null
+                            && string.length() > 0) {
+                        char first = Character.toUpperCase(string.charAt(0));
+
+                        if (first == character) {
+                            listView.setSelectedIndex(i);
+                            consumed = true;
+                            break;
+                        }
                     }
                 }
             }
