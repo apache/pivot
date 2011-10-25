@@ -231,6 +231,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     private Color contentBorderColor;
     private Insets padding;
     private boolean resizable;
+    private boolean showContentBevel;
 
     // Derived colors
     private Color titleBarBevelColor;
@@ -252,6 +253,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         contentBorderColor = theme.getColor(7);
         padding = new Insets(8);
         resizable = true;
+        showContentBevel = true;
 
         // Set the derived colors
         titleBarBevelColor = TerraTheme.brighten(titleBarBackgroundColor);
@@ -372,7 +374,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             if (height != -1) {
                 // Subtract padding, top/bottom content borders, and content bevel
                 // from height constraint
-                height -= (padding.top + padding.bottom) + 3;
+                height -= (padding.top + padding.bottom) + (showContentBevel ? 1 : 0) + 2;
 
                 height = Math.max(height, 0);
             }
@@ -414,7 +416,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         }
 
         // Add padding, top/bottom content borders, and content bevel
-        preferredHeight += (padding.top + padding.bottom) + 3;
+        preferredHeight += (padding.top + padding.bottom) + (showContentBevel ? 1 : 0) + 2;
 
         return preferredHeight;
     }
@@ -452,7 +454,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         // Add padding, borders, and content bevel
         preferredWidth += (padding.left + padding.right) + 2;
-        preferredHeight += (padding.top + padding.bottom) + 3;
+        preferredHeight += (padding.top + padding.bottom) + (showContentBevel ? 1 : 0) + 2;
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -479,7 +481,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             titleBarTablePane.setVisible(true);
 
             // Add bottom title bar border, top content border, and content bevel
-            clientY += titleBarTablePane.getHeight() + 3;
+            clientY += titleBarTablePane.getHeight() + (showContentBevel ? 1 : 0) + 2;
 
             // Size/position resize handle
             resizeHandle.setSize(resizeHandle.getPreferredSize());
@@ -506,7 +508,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
                 int contentX = clientX + padding.left;
                 int contentY = clientY + padding.top;
                 int contentWidth = Math.max(clientWidth - (padding.left + padding.right), 0);
-                int contentHeight = Math.max(clientHeight - (clientY + padding.top + padding.bottom) + 1, 0);
+                int contentHeight = Math.max(clientHeight - (clientY + padding.top + padding.bottom) + (showContentBevel ? 1 : 0), 0);
 
                 content.setLocation(contentX, contentY);
                 content.setSize(contentWidth, contentHeight);
@@ -574,9 +576,11 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
                 contentAreaRectangle.width, contentAreaRectangle.height);
 
-            graphics.setPaint(contentBevelColor);
-            GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
-                contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);
+            if (showContentBevel) {
+                graphics.setPaint(contentBevelColor);
+                GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
+                    contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);
+            }
         }
     }
 
@@ -697,6 +701,15 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         invalidateComponent();
     }
 
+    public boolean getShowContentBevel() {
+        return showContentBevel;
+    }
+
+    public void setShowContentBevel(boolean showContentBevel) {
+        this.showContentBevel = showContentBevel;
+        invalidateComponent();
+    }
+
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -729,7 +742,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
                     if (frame.isPreferredHeightSet()) {
                         preferredHeight = Math.max(location.y - frame.getY() + resizeOffset.y,
-                            titleBarTablePane.getHeight() + resizeHandle.getHeight() + 7);
+                            titleBarTablePane.getHeight() + resizeHandle.getHeight() + (showContentBevel ? 1 : 0) + 6);
                         preferredHeight = Math.min(preferredHeight, frame.getMaximumHeight());
                         preferredHeight = Math.max(preferredHeight, frame.getMinimumHeight());
                     }
