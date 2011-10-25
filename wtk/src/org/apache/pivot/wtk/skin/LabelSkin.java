@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.skin;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.PrintGraphics;
 import java.awt.Transparency;
@@ -345,15 +344,16 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     }
                 }
 
-                if (!((Graphics) graphics instanceof PrintGraphics)) {
-                    graphics.drawGlyphVector(glyphVector, x, y + ascent);
+                if (graphics instanceof PrintGraphics) {
+                    /* Work-around for printing problem in applets */
+                    Label label = (Label)getComponent();
+                    String text = label.getText();
+                    if (text != null && text.length() > 0) {
+                        graphics.drawString(text, x, y + ascent);
+                    }
                 }
                 else {
-                  Label label = (Label)getComponent();
-                  String text = label.getText();
-                  if (text != null && text.length() > 0) {
-                      graphics.drawString(text, x, y + ascent);
-                  }
+                    graphics.drawGlyphVector(glyphVector, x, y + ascent);
                 }
 
                 // Draw the text decoration

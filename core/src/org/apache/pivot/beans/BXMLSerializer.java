@@ -226,7 +226,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             return value;
         }
-    };
+    }
 
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;

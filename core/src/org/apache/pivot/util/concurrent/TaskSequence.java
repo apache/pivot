@@ -31,7 +31,6 @@ import org.apache.pivot.util.ImmutableIterator;
 public class TaskSequence extends Task<Void>
     implements Sequence<Task<?>>, Iterable<Task<?>> {
     private ArrayList<Task<?>> tasks = new ArrayList<Task<?>>();
-    private int complete = 0;
 
     public TaskSequence() {
         this(DEFAULT_EXECUTOR_SERVICE);
@@ -48,7 +47,6 @@ public class TaskSequence extends Task<Void>
             @Override
             public void taskExecuted(Task<Object> task) {
                 synchronized (TaskSequence.this) {
-                    complete++;
                     TaskSequence.this.notify();
                 }
             }
@@ -56,13 +54,11 @@ public class TaskSequence extends Task<Void>
             @Override
             public void executeFailed(Task<Object> task) {
                 synchronized (TaskSequence.this) {
-                    complete++;
                     TaskSequence.this.notify();
                 }
             }
         };
 
-        complete = 0;
         for (Task<?> task : tasks) {
             if (abort) {
                 throw new AbortException();
