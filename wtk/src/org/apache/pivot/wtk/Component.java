@@ -1649,6 +1649,16 @@ public abstract class Component implements ConstrainedVisual {
         return coordinates;
     }
 
+    /**
+     * Maps a point in this component's coordinate system to the specified
+     * ancestor's coordinate space.
+     *
+     * @param location The coordinates in this component's coordinate space
+     *
+     * @return
+     * A point containing the translated coordinates, or <tt>null</tt> if the
+     * component is not a descendant of the specified ancestor.
+     */
     public Point mapPointToAncestor(Container ancestor, Point location) {
         if (location == null) {
             throw new IllegalArgumentException();
