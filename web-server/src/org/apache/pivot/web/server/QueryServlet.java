@@ -110,11 +110,9 @@ public abstract class QueryServlet extends HttpServlet {
         public String toString() {
             StringBuilder sb = new StringBuilder();
 
-            int i = 0;
             for (String element : elements) {
                 sb.append("/");
                 sb.append(element);
-                i++;
             }
 
             return sb.toString();
