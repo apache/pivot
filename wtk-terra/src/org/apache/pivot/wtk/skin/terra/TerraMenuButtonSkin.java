@@ -79,6 +79,9 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             int width = getWidth();
             window.setMinimumWidth(width - TRIGGER_WIDTH - 1);
 
+            // If the popup extends over the right edge of the display,
+            // move it so that the right edge of the popup lines up with the
+            // right edge of the button
             int popupWidth = window.getPreferredWidth();
             if (buttonLocation.x + popupWidth > displaySize.width) {
                 window.setX(buttonLocation.x + width - popupWidth);
