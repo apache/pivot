@@ -245,16 +245,16 @@ public class TerraTabPaneSkin extends ContainerSkin
                 case HORIZONTAL: {
                     graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor,
                         width / 2f, height / 2f, backgroundColor));
-                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1 + CORNER_RADIUS,
-                        CORNER_RADIUS, CORNER_RADIUS));
+                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1 + buttonCornerRadius,
+                        buttonCornerRadius, buttonCornerRadius));
                     break;
                 }
 
                 case VERTICAL: {
                     graphics.setPaint(new GradientPaint(0, height / 2f, buttonBevelColor,
                         width / 2f, height / 2f, backgroundColor));
-                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1 + CORNER_RADIUS, height - 1,
-                        CORNER_RADIUS, CORNER_RADIUS));
+                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1 + buttonCornerRadius, height - 1,
+                        buttonCornerRadius, buttonCornerRadius));
                     break;
                 }
             }
@@ -265,14 +265,14 @@ public class TerraTabPaneSkin extends ContainerSkin
 
             switch(tabOrientation) {
                 case HORIZONTAL: {
-                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height + CORNER_RADIUS - 1,
-                        CORNER_RADIUS, CORNER_RADIUS));
+                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height + buttonCornerRadius - 1,
+                        buttonCornerRadius, buttonCornerRadius));
                     break;
                 }
 
                 case VERTICAL: {
-                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width + CORNER_RADIUS - 1, height - 1,
-                        CORNER_RADIUS, CORNER_RADIUS));
+                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width + buttonCornerRadius - 1, height - 1,
+                        buttonCornerRadius, buttonCornerRadius));
                     break;
                 }
             }
@@ -515,6 +515,7 @@ public class TerraTabPaneSkin extends ContainerSkin
     private Color disabledButtonColor;
     private Insets buttonPadding;
     private int buttonSpacing;
+    private int buttonCornerRadius;
 
     private Color activeButtonBevelColor;
     private Color inactiveButtonBevelColor;
@@ -537,7 +538,6 @@ public class TerraTabPaneSkin extends ContainerSkin
     };
 
 
-    public static final int CORNER_RADIUS = 4;
     public static final int GRADIENT_BEVEL_THICKNESS = 8;
     private static final int CLOSE_TRIGGER_SIZE = 6;
     private static final int DEFAULT_SELECTION_CHANGE_DURATION = 250;
@@ -555,6 +555,7 @@ public class TerraTabPaneSkin extends ContainerSkin
         disabledButtonColor = theme.getColor(7);
         buttonPadding = new Insets(3, 4, 3, 4);
         buttonSpacing = 6;
+        buttonCornerRadius = 4;
 
         activeButtonBevelColor = TerraTheme.brighten(activeTabColor);
         inactiveButtonBevelColor = TerraTheme.brighten(inactiveTabColor);
@@ -1326,6 +1327,26 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     public void setButtonSpacing(int buttonSpacing) {
         tabButtonBoxPane.getStyles().put("spacing", buttonSpacing);
+    }
+
+    public final void setButtonCornerRadius(int buttonCornerRadius) {
+        this.buttonCornerRadius = buttonCornerRadius;
+    }
+
+    public final void setButtonCornerRadius(Number radius) {
+        if (radius == null) {
+            throw new IllegalArgumentException("buttonCornerRadius is null.");
+        }
+
+        setButtonCornerRadius(radius.intValue());
+    }
+
+    public final void setButtonCornerRadius(String radius) {
+        if (radius == null) {
+            throw new IllegalArgumentException("buttonCornerRadius is null.");
+        }
+
+        setButtonCornerRadius(Integer.valueOf(radius));
     }
 
     public Orientation getTabOrientation() {
