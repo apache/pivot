@@ -626,6 +626,9 @@ public class TextArea extends Component {
         }
 
         int count = endIndex - beginIndex;
+        if (count == 0) {
+            return "";
+        }
         StringBuilder textBuilder = new StringBuilder(count);
 
         // Get paragraph and character offset at beginIndex
