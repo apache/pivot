@@ -340,6 +340,19 @@ public class TabPane extends Container {
         return (selectedIndex == -1) ? null : tabs.get(selectedIndex);
     }
 
+    public void setSelectedTab(Component comp) {
+        if (comp == null) {
+            setSelectedIndex(-1);
+        } else {
+            int index = tabs.indexOf(comp);
+            if (index < 0) {
+                throw new IllegalArgumentException("component is not a child of the TabPane");
+            } else {
+                setSelectedIndex(index);
+            }
+        }
+    }
+
     public Button.DataRenderer getTabDataRenderer() {
         return tabDataRenderer;
     }
