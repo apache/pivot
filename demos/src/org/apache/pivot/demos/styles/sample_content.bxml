@@ -19,7 +19,7 @@ limitations under the License.
 <TabPane selectedIndex="0"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
-    <Border TabPane.tabData="Tab 1">
+    <Border TabPane.tabData="Tab 1" TabPane.tooltipText="Sample Content Tab">
         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" styles="{backgroundColor:null}">
             <TablePane styles="{padding:8, horizontalSpacing:12}">
                 <columns>
@@ -161,6 +161,6 @@ limitations under the License.
             </TablePane>
         </ScrollPane>
     </Border>
-    <Border TabPane.tabData="Tab 2" styles="{padding:8}"/>
-    <Border TabPane.tabData="Tab 3" styles="{padding:8}"/>
+    <Border TabPane.tabData="Tab 2" styles="{padding:8}" enabled="false" TabPane.tooltipText="Disabled Tab"/>
+    <Border TabPane.tabData="Tab 3" styles="{padding:8}" TabPane.tooltipText="Empty Tab"/>
 </TabPane>
