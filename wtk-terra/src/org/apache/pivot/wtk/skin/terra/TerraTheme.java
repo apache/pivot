@@ -78,8 +78,8 @@ import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.TextArea;
-import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Tooltip;
 import org.apache.pivot.wtk.TreeView;
@@ -359,7 +359,7 @@ public final class TerraTheme extends Theme {
      * Gets the number of Palette Colors
      * @return the number
      */
-    @Override
+    // @Override  // TODO: re-enable this override for PIVOT-689
     public int getNumberOfPaletteColors() {
         return numberOfPaletteColors;
     }
@@ -368,7 +368,7 @@ public final class TerraTheme extends Theme {
      * Gets the total number of Colors
      * @return the number
      */
-    @Override
+    // @Override  // TODO: re-enable this override for PIVOT-689
     public int getNumberOfColors() {
         return numberOfColors;
     }
