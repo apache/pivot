@@ -59,7 +59,6 @@ public class SwingDemo extends ApplicationContext {
         }
     }
 
-    @SuppressWarnings("unused")
     private static final long serialVersionUID = 0;
 
     private static JDesktopPane desktop = new JDesktopPane();
