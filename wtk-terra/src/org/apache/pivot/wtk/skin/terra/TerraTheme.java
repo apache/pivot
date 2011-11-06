@@ -91,6 +91,8 @@ import org.apache.pivot.wtk.media.Image;
 public final class TerraTheme extends Theme {
     private Font font = null;
     private ArrayList<Color> colors = null;
+    private int numberOfPaletteColors = 0;
+    private int numberOfColors = 0;
     private HashMap<MessageType, Image> messageIcons = null;
     private HashMap<MessageType, Image> smallMessageIcons = null;
 
@@ -236,7 +238,9 @@ public final class TerraTheme extends Theme {
                 font = Font.decode((String)properties.get("font"));
 
                 List<String> colorCodes = (List<String>)properties.get("colors");
-                colors = new ArrayList<Color>(colorCodes.getLength() * 3);
+                numberOfPaletteColors = colorCodes.getLength();
+                numberOfColors = numberOfPaletteColors * 3;
+                colors = new ArrayList<Color>(numberOfColors);
 
                 colorMultiplier = ((Double)properties.get("colorMultiplier")).floatValue();
 
@@ -352,6 +356,24 @@ public final class TerraTheme extends Theme {
     }
 
     /**
+     * Gets the number of Palette Colors
+     * @return the number
+     */
+    @Override
+    public int getNumberOfPaletteColors() {
+        return numberOfPaletteColors;
+    }
+
+    /**
+     * Gets the total number of Colors
+     * @return the number
+     */
+    @Override
+    public int getNumberOfColors() {
+        return numberOfColors;
+    }
+
+    /**
      * Gets the image that this theme uses to represent messages of the
      * specified type.
      *
@@ -445,4 +467,5 @@ public final class TerraTheme extends Theme {
         int rgb = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
         return new Color((color.getAlpha() << 24) | (rgb & 0xffffff), true);
     }
+
 }
