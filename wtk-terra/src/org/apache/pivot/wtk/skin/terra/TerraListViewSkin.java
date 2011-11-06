@@ -64,6 +64,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     private Color highlightBackgroundColor;
     private Color alternateItemBackgroundColor;
     private boolean showHighlight;
+    private boolean wrapSelectNext;
     private boolean variableItemHeight;
     private Insets checkboxPadding = new Insets(2, 2, 2, 0);
 
@@ -94,6 +95,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         highlightBackgroundColor = theme.getColor(10);
         alternateItemBackgroundColor = null;
         showHighlight = true;
+        wrapSelectNext = true;
     }
 
     @Override
@@ -752,6 +754,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         repaintComponent();
     }
 
+    public boolean getWrapSelectNext() {
+        return wrapSelectNext;
+    }
+
+    public void setWrapSelectNext(boolean wrapSelectNext) {
+        this.wrapSelectNext = wrapSelectNext;
+    }
+
     public Insets getCheckboxPadding() {
         return checkboxPadding;
     }
@@ -1150,9 +1160,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             }
         }
 
-// TODO: add a style "wrapSelectNext" or similar to disable this behaviour (now enabled by default) ...
-        if (!consumed)
-        {
+        if (!consumed
+            && wrapSelectNext) {
             for (int i = 0, n = listData.getLength(); i < n; i++) {
                 if (!listView.isItemDisabled(i)) {
                     String string = itemRenderer.toString(listData.get(i));
@@ -1320,7 +1329,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     Bounds visibleSelectionBounds = listView.getVisibleArea(selectionBounds);
                     if (visibleSelectionBounds != null
                         && visibleSelectionBounds.height < selectionBounds.height) {
-                        // TODO Repainting the entire component is a workaround for PIVOT-490
+                        // Repainting the entire component is a workaround for PIVOT-490
                         repaintComponent();
 
                         listView.scrollAreaToVisible(selectionBounds);
@@ -1336,4 +1345,5 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
         // No-op
     }
+
 }
