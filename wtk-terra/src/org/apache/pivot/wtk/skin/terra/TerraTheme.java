@@ -92,7 +92,6 @@ public final class TerraTheme extends Theme {
     private Font font = null;
     private ArrayList<Color> colors = null;
     private int numberOfPaletteColors = 0;
-    private int numberOfColors = 0;
     private HashMap<MessageType, Image> messageIcons = null;
     private HashMap<MessageType, Image> smallMessageIcons = null;
 
@@ -239,7 +238,7 @@ public final class TerraTheme extends Theme {
 
                 List<String> colorCodes = (List<String>)properties.get("colors");
                 numberOfPaletteColors = colorCodes.getLength();
-                numberOfColors = numberOfPaletteColors * 3;
+                int numberOfColors = numberOfPaletteColors * 3;
                 colors = new ArrayList<Color>(numberOfColors);
 
                 colorMultiplier = ((Double)properties.get("colorMultiplier")).floatValue();
@@ -370,7 +369,7 @@ public final class TerraTheme extends Theme {
      */
     // @Override  // TODO: re-enable this override for PIVOT-689
     public int getNumberOfColors() {
-        return numberOfColors;
+        return colors == null ? 0 : colors.getLength();
     }
 
     /**
