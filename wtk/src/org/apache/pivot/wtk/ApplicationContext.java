@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
+import java.awt.PrintGraphics;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.dnd.DnDConstants;
@@ -429,6 +430,11 @@ public abstract class ApplicationContext {
             // (for some reason, AWT does not do this automatically)
             graphics.clipRect(0, 0, getWidth(), getHeight());
 
+            if (graphics instanceof PrintGraphics) {
+            	print(graphics);
+            	return;
+            }
+            
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
             if (clipBounds != null
                 && !clipBounds.isEmpty()) {
@@ -457,6 +463,25 @@ public abstract class ApplicationContext {
         @Override
         public void update(Graphics graphics) {
             paint(graphics);
+        }
+        
+        @Override 
+        public void print(Graphics graphics) { 
+        	// Intersect the clip region with the bounds of this component
+        	// (for some reason, AWT does not do this automatically)
+        	graphics.clipRect(0, 0, getWidth(), getHeight());
+        
+        	java.awt.Rectangle clipBounds = graphics.getClipBounds();
+        	if (clipBounds != null
+        			&& !clipBounds.isEmpty()) {
+        		try {
+        			// When printing, there is no point in using offscreen buffers.
+        			paintDisplay((Graphics2D)graphics);
+        		} catch (RuntimeException exception) {
+        			System.err.println("Exception thrown during print(): " + exception);
+        			throw exception;
+        		}
+        	}
         }
 
         /**
