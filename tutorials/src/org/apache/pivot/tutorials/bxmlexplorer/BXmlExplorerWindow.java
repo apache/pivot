@@ -35,8 +35,10 @@ import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
+import org.apache.pivot.wtk.SplitPane;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
@@ -50,6 +52,12 @@ public class BXmlExplorerWindow extends Window implements Bindable {
     private TabPane tabPane = null;
     @BXML
     private PushButton closeButton = null;
+    @BXML
+    private ScrollPane paletteTreeViewScrollPane;
+    @BXML
+    private TabPane paletteTabPane;
+    @BXML
+    private SplitPane splitPane;
 
     private MenuHandler menuHandler = new MenuHandler.Adapter() {
         TextInputContentListener textInputTextListener = new TextInputContentListener.Adapter() {
@@ -205,6 +213,10 @@ public class BXmlExplorerWindow extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+        // hide until we support editing and saving BXML files
+        paletteTabPane.getTabs().remove(paletteTreeViewScrollPane);
+        splitPane.setSplitRatio(0);
+
         fileBrowserSheet.setDisabledFileFilter(new Filter<File>() {
             @Override
             public boolean include(File item) {

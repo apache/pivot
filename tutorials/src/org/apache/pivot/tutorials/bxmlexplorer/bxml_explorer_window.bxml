@@ -29,12 +29,13 @@
         <MenuBar.Item buttonData="File">
           <Menu>
             <Menu.Section>
+<!--  commented out until we support saving BXML files 
               <Menu.Item action="fileNew">
                 <buttonData>
                   <content:MenuItemData text="New" keyboardShortcut="CMD-N" />
                 </buttonData>
               </Menu.Item>
-
+-->
               <Menu.Item action="fileOpen">
                 <buttonData>
                   <content:MenuItemData text="Open" keyboardShortcut="CMD-O" />
@@ -72,9 +73,9 @@
       <Border styles="{backgroundColor:null, padding:2}">
         <SplitPane bxml:id="splitPane" orientation="horizontal" splitRatio="0.25">
           <left>
-            <TabPane>
-              <ScrollPane TabPane.tabData="Palette" horizontalScrollBarPolicy="fill_to_capacity">
-                <TreeView bxml:id="treeView">
+            <TabPane bxml:id="paletteTabPane">
+              <ScrollPane bxml:id="paletteTreeViewScrollPane" TabPane.tabData="Palette" horizontalScrollBarPolicy="fill_to_capacity">
+                <TreeView bxml:id="paletteTreeView">
                   <nodeRenderer>
                     <content:TreeViewNodeRenderer styles="{padding:1}" />
                   </nodeRenderer>
