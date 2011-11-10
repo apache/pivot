@@ -27,8 +27,8 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
-import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
@@ -239,7 +239,11 @@ public class WatermarkDecorator implements Decorator {
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setImage(classLoader.getResource(imageName.substring(1)));
+        URL url = classLoader.getResource(imageName.substring(1));
+        if (url == null) {
+            throw new IllegalArgumentException("cannot find image resource " + imageName);
+        }
+        setImage(url);
     }
 
     /**

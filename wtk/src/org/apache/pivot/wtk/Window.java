@@ -834,7 +834,11 @@ public class Window extends Container {
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setIcon(classLoader.getResource(iconName.substring(1)));
+        URL url = classLoader.getResource(iconName.substring(1));
+        if (url == null) {
+            throw new IllegalArgumentException("cannot find icon resource " + iconName);
+        }
+        setIcon(url);
     }
 
     public Component getContent() {
