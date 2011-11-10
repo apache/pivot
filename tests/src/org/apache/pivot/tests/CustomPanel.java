@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Window;
 
 /**
  * Test Component to ensure that BXMLSerializer will use public setter methods
- * instead of setting private fields directly (possible in trusted code 
+ * instead of setting private fields directly (possible in trusted code
  * when run in a sandboxed environment, like in not trusted applets).
  */
 public class CustomPanel extends Window implements Bindable {
@@ -54,11 +54,11 @@ public class CustomPanel extends Window implements Bindable {
     public TextInput getTextInput() {
         return textInput;
     }
-    
+
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         System.out.println("field = \"" + getField() + "\"");
         System.out.println("textInput.text = \"" + getTextInput().getText() + "\"");
     }
-    
+
 }

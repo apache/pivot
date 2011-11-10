@@ -20,7 +20,7 @@ limitations under the License.
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <Label text="Splash Screen Test"
-        styles="{font:'Arial bold 24', color:'#ff0000', 
+        styles="{font:'Arial bold 24', color:'#ff0000',
         horizontalAlignment:'center', verticalAlignment:'center'}"
     />
 </Window>

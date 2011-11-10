@@ -431,10 +431,10 @@ public abstract class ApplicationContext {
             graphics.clipRect(0, 0, getWidth(), getHeight());
 
             if (graphics instanceof PrintGraphics) {
-            	print(graphics);
-            	return;
+                print(graphics);
+                return;
             }
-            
+
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
             if (clipBounds != null
                 && !clipBounds.isEmpty()) {
@@ -464,24 +464,24 @@ public abstract class ApplicationContext {
         public void update(Graphics graphics) {
             paint(graphics);
         }
-        
-        @Override 
-        public void print(Graphics graphics) { 
-        	// Intersect the clip region with the bounds of this component
-        	// (for some reason, AWT does not do this automatically)
-        	graphics.clipRect(0, 0, getWidth(), getHeight());
-        
-        	java.awt.Rectangle clipBounds = graphics.getClipBounds();
-        	if (clipBounds != null
-        			&& !clipBounds.isEmpty()) {
-        		try {
-        			// When printing, there is no point in using offscreen buffers.
-        			paintDisplay((Graphics2D)graphics);
-        		} catch (RuntimeException exception) {
-        			System.err.println("Exception thrown during print(): " + exception);
-        			throw exception;
-        		}
-        	}
+
+        @Override
+        public void print(Graphics graphics) {
+            // Intersect the clip region with the bounds of this component
+            // (for some reason, AWT does not do this automatically)
+            graphics.clipRect(0, 0, getWidth(), getHeight());
+
+            java.awt.Rectangle clipBounds = graphics.getClipBounds();
+            if (clipBounds != null
+                    && !clipBounds.isEmpty()) {
+                try {
+                    // When printing, there is no point in using offscreen buffers.
+                    paintDisplay((Graphics2D)graphics);
+                } catch (RuntimeException exception) {
+                    System.err.println("Exception thrown during print(): " + exception);
+                    throw exception;
+                }
+            }
         }
 
         /**
