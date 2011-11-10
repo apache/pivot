@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file 
+  distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under 
+  the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may 
+  obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to 
+  in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
+  ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under 
+  the License. -->
+
+<explorer:BXmlExplorerDocument xmlns:bxml="http://pivot.apache.org/bxml" xmlns="org.apache.pivot.wtk"
+  xmlns:content="org.apache.pivot.wtk.content" xmlns:tools="org.apache.pivot.tutorials.bxmlexplorer.tools" xmlns:explorer="org.apache.pivot.tutorials.bxmlexplorer">
+  <SplitPane orientation="horizontal" splitRatio="0.25">
+    <left>
+      <TabPane>
+        <ScrollPane TabPane.tabData="Component Hierarchy" horizontalScrollBarPolicy="fill_to_capacity">
+          <TreeView bxml:id="treeView">
+            <nodeRenderer>
+              <content:TreeViewNodeRenderer styles="{padding:1}" />
+            </nodeRenderer>
+
+            <treeData>
+              <!-- FIXME -->
+              <content:TreeBranch>
+                <content:TreeBranch text="TreeBranch1" icon="@../folder.png">
+                  <content:TreeNode text="TreeNode1" />
+                  <content:TreeNode text="TreeNode1" />
+                </content:TreeBranch>
+              </content:TreeBranch>
+            </treeData>
+          </TreeView>
+        </ScrollPane>
+      </TabPane>
+    </left>
+    <right>
+      <SplitPane orientation="horizontal" splitRatio="0.6">
+        <left>
+          <TabPane>
+            <Border TabPane.tabData="Visualization">
+              <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                <CardPane bxml:id="playgroundCardPane" styles="{padding:10}">
+                </CardPane>
+              </ScrollPane>
+            </Border>
+            <Border TabPane.tabData="BXML Source">
+              <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                <TextArea bxml:id="bxmlSourceTextArea" editable="false">
+                </TextArea>
+              </ScrollPane>
+            </Border>
+            <corner>
+              <BoxPane styles="{padding:{right:6, bottom:2}, horizontalAlignment:'right', fill:true}">
+                <PushButton bxml:id="reloadButton" buttonData="Reload"/>
+              </BoxPane>
+            </corner>
+          </TabPane>
+        </left>
+        <right>
+          <TabPane>
+            <Border TabPane.tabData="Properties">
+              <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                <CardPane styles="{padding:10}">
+                  <tools:ComponentPropertyInspector bxml:id="componentPropertyInspector" />
+                </CardPane>
+              </ScrollPane>
+            </Border>
+            <Border TabPane.tabData="Styles">
+              <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+                <CardPane styles="{padding:10}">
+                  <tools:ComponentStyleInspector bxml:id="componentStyleInspector" />
+                </CardPane>
+              </ScrollPane>
+            </Border>
+          </TabPane>
+        </right>
+      </SplitPane>
+    </right>
+  </SplitPane>
+</explorer:BXmlExplorerDocument>
