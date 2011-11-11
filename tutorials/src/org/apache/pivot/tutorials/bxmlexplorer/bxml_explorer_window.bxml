@@ -9,7 +9,7 @@
 
 <explorer:BXmlExplorerWindow title="BXML Preview" maximized="true"
   xmlns:bxml="http://pivot.apache.org/bxml" xmlns:content="org.apache.pivot.wtk.content" xmlns:explorer="org.apache.pivot.tutorials.bxmlexplorer"
-  xmlns="org.apache.pivot.wtk" styles="{showWindowControls:false}">
+  xmlns="org.apache.pivot.wtk">
 
   <bxml:define>
     <FileBrowserSheet bxml:id="fileBrowserSheet" />
@@ -28,14 +28,12 @@
       <MenuBar>
         <MenuBar.Item buttonData="File">
           <Menu>
-            <Menu.Section>
-<!--  commented out until we support saving BXML files 
-              <Menu.Item action="fileNew">
+            <Menu.Section bxml:id="fileMenuSection">
+              <Menu.Item bxml:id="fileNewMenuItem" action="fileNew">
                 <buttonData>
                   <content:MenuItemData text="New" keyboardShortcut="CMD-N" />
                 </buttonData>
               </Menu.Item>
--->
               <Menu.Item action="fileOpen">
                 <buttonData>
                   <content:MenuItemData text="Open" keyboardShortcut="CMD-O" />

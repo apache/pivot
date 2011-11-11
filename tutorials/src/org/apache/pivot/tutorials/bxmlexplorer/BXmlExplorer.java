@@ -27,7 +27,14 @@ import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.Window;
 
 public class BXmlExplorer implements Application {
+
+    /**
+     * For the moment editing is experimental, so use a property to turn it on.
+     */
+    static final boolean ENABLE_EDITING = Boolean.getBoolean("edit");
+
     private BXmlExplorerWindow window = null;
+
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {

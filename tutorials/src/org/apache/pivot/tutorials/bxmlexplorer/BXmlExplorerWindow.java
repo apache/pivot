@@ -32,6 +32,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.FileBrowserSheet;
+import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.PushButton;
@@ -58,6 +59,10 @@ public class BXmlExplorerWindow extends Window implements Bindable {
     private TabPane paletteTabPane;
     @BXML
     private SplitPane splitPane;
+    @BXML
+    private Menu.Section fileMenuSection;
+    @BXML
+    private Menu.Item fileNewMenuItem;
 
     private MenuHandler menuHandler = new MenuHandler.Adapter() {
         TextInputContentListener textInputTextListener = new TextInputContentListener.Adapter() {
@@ -214,8 +219,11 @@ public class BXmlExplorerWindow extends Window implements Bindable {
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         // hide until we support editing and saving BXML files
-        paletteTabPane.getTabs().remove(paletteTreeViewScrollPane);
-        splitPane.setSplitRatio(0);
+        if (!BXmlExplorer.ENABLE_EDITING) {
+            paletteTabPane.getTabs().remove(paletteTreeViewScrollPane);
+            splitPane.setSplitRatio(0);
+            fileMenuSection.remove(fileNewMenuItem);
+        }
 
         fileBrowserSheet.setDisabledFileFilter(new Filter<File>() {
             @Override
