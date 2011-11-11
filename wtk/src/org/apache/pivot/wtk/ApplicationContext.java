@@ -42,6 +42,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.print.PrinterGraphics;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -430,7 +431,7 @@ public abstract class ApplicationContext {
             // (for some reason, AWT does not do this automatically)
             graphics.clipRect(0, 0, getWidth(), getHeight());
 
-            if (graphics instanceof PrintGraphics) {
+            if (graphics instanceof PrintGraphics || graphics instanceof PrinterGraphics) {
                 print(graphics);
                 return;
             }
@@ -467,6 +468,8 @@ public abstract class ApplicationContext {
 
         @Override
         public void print(Graphics graphics) {
+            // TODO: verify if/how we have to re-scale output in this case ...
+
             // Intersect the clip region with the bounds of this component
             // (for some reason, AWT does not do this automatically)
             graphics.clipRect(0, 0, getWidth(), getHeight());
