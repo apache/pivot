@@ -57,8 +57,15 @@ public class CustomPanel extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+        System.out.println("initialize - start");
+
+        System.out.println("Testing Java Security ...");
+        TestUtils.testJavaSecurity();
+
         System.out.println("field = \"" + getField() + "\"");
         System.out.println("textInput.text = \"" + getTextInput().getText() + "\"");
+
+        System.out.println("initialize - end");
     }
 
 }
