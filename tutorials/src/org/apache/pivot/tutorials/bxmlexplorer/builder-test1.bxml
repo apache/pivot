@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TablePane xmlns:bxml="http://pivot.apache.org/bxml" xmlns="org.apache.pivot.wtk" bxml:id="tablepane1"
+  styles="{verticalSpacing:1, showHorizontalGridLines:true, horizontalSpacing:1, showVerticalGridLines:true, horizontalGridColor:'#ff0000', verticalGridColor:'#ff0000', backgroundColor:'#ffffff'}">
+  <columns>
+    <TablePane.Column width="1*" />
+    <TablePane.Column width="1*" />
+  </columns>
+  <TablePane.Row height="60">
+    <TablePane bxml:id="tablepane2"
+      styles="{verticalSpacing:1, showHorizontalGridLines:true, horizontalSpacing:1, showVerticalGridLines:true, horizontalGridColor:'#00ff00', verticalGridColor:'#00ff00'}">
+      <columns>
+        <TablePane.Column width="60" />
+        <TablePane.Column width="1*" />
+      </columns>
+      <TablePane.Row>
+        <ImageView image="@test1.jpg" styles="{fill:true}" />
+      </TablePane.Row>
+    </TablePane>
+    <ImageView image="@test1.jpg" styles="{fill:true}" />
+  </TablePane.Row>
+  <TablePane.Row height="60">
+    <TablePane
+      styles="{verticalSpacing:1, showHorizontalGridLines:true, horizontalSpacing:1, showVerticalGridLines:true, horizontalGridColor:'#0000ff', verticalGridColor:'#0000ff'}">
+      <columns>
+        <TablePane.Column width="60" />
+        <TablePane.Column width="1*" />
+      </columns>
+      <TablePane.Row>
+        <ImageView image="@test2.jpg" styles="{fill:true}" />
+      </TablePane.Row>
+    </TablePane>
+    <ImageView image="@test2.jpg" styles="{fill:true}" />
+  </TablePane.Row>
+  <TablePane.Row>
+    <Label TablePane.columnSpan="2" text="The bottom" />
+  </TablePane.Row>
+</TablePane>

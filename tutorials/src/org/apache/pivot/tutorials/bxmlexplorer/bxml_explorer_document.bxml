@@ -43,8 +43,8 @@
             </Border>
             <Border TabPane.tabData="BXML Source">
               <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                <TextArea bxml:id="bxmlSourceTextArea" editable="false">
-                </TextArea>
+                <TextPane bxml:id="bxmlSourceTextPane" editable="false" styles="{wrapText:true}">
+                </TextPane>
               </ScrollPane>
             </Border>
             <corner>

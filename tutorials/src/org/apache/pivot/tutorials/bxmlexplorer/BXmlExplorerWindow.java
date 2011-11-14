@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.beans.Bindable;
@@ -45,6 +47,7 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.TextInputSelectionListener;
 import org.apache.pivot.wtk.Window;
+import org.xml.sax.SAXException;
 
 public class BXmlExplorerWindow extends Window implements Bindable {
     @BXML
@@ -175,6 +178,14 @@ public class BXmlExplorerWindow extends Window implements Bindable {
                             BXmlExplorer.displayLoadException(exception, BXmlExplorerWindow.this);
                             return;
                         } catch (SerializationException exception) {
+                            exception.printStackTrace();
+                            BXmlExplorer.displayLoadException(exception, BXmlExplorerWindow.this);
+                            return;
+                        } catch (ParserConfigurationException exception) {
+                            exception.printStackTrace();
+                            BXmlExplorer.displayLoadException(exception, BXmlExplorerWindow.this);
+                            return;
+                        } catch (SAXException exception) {
                             exception.printStackTrace();
                             BXmlExplorer.displayLoadException(exception, BXmlExplorerWindow.this);
                             return;

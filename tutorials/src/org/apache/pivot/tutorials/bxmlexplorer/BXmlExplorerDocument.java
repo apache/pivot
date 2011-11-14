@@ -19,10 +19,11 @@ package org.apache.pivot.tutorials.bxmlexplorer;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BXMLSerializer;
@@ -49,7 +50,7 @@ import org.apache.pivot.wtk.Mouse.Button;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.TablePane;
-import org.apache.pivot.wtk.TextArea;
+import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeView.SelectMode;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
@@ -59,6 +60,7 @@ import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
 import org.apache.pivot.wtk.effects.Decorator;
 import org.apache.pivot.wtk.effects.ShadeDecorator;
+import org.xml.sax.SAXException;
 
 public class BXmlExplorerDocument extends CardPane implements Bindable {
     @BXML
@@ -66,7 +68,7 @@ public class BXmlExplorerDocument extends CardPane implements Bindable {
     @BXML
     private CardPane playgroundCardPane;
     @BXML
-    private TextArea bxmlSourceTextArea;
+    private TextPane bxmlSourceTextPane;
     @BXML
     private ComponentPropertyInspector componentPropertyInspector;
     @BXML
@@ -168,6 +170,12 @@ public class BXmlExplorerDocument extends CardPane implements Bindable {
                 } catch (SerializationException exception) {
                     exception.printStackTrace();
                     BXmlExplorer.displayLoadException(exception, BXmlExplorerDocument.this.getWindow());
+                } catch (ParserConfigurationException exception) {
+                    exception.printStackTrace();
+                    BXmlExplorer.displayLoadException(exception, BXmlExplorerDocument.this.getWindow());
+                } catch (SAXException exception) {
+                    exception.printStackTrace();
+                    BXmlExplorer.displayLoadException(exception, BXmlExplorerDocument.this.getWindow());
                 }
             }
         });
@@ -190,7 +198,7 @@ public class BXmlExplorerDocument extends CardPane implements Bindable {
         return file;
     }
 
-    public void load(File f) throws IOException, SerializationException {
+    public void load(File f) throws IOException, SerializationException, ParserConfigurationException, SAXException {
         BXMLSerializer serializer = new BXMLSerializer();
         serializer.setLocation(f.toURI().toURL());
         final FileInputStream in = new FileInputStream(f);
@@ -222,9 +230,10 @@ public class BXmlExplorerDocument extends CardPane implements Bindable {
         } finally {
             in.close();
         }
-        final FileReader in2 = new FileReader(f);
+        final FileInputStream in2 = new FileInputStream(f);
         try {
-            bxmlSourceTextArea.setText(in2);
+            CreateHighlightedXml xml = new CreateHighlightedXml();
+            bxmlSourceTextPane.setDocument(xml.prettyPrint(in2));
         } finally {
             in2.close();
         }
