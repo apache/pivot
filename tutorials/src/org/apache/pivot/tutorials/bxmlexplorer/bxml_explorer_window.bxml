@@ -12,7 +12,7 @@
   xmlns="org.apache.pivot.wtk">
 
   <bxml:define>
-    <FileBrowserSheet bxml:id="fileBrowserSheet" />
+    <FileBrowserSheet bxml:id="fileBrowserSheet" styles="{hideDisabledFiles:true}"/>
   </bxml:define>
 
   <actionMappings>

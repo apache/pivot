@@ -133,7 +133,7 @@ public class BXmlExplorerWindow extends Window implements Bindable {
                 }
 
                 tabPane.getTabs().add(tab);
-                TabPane.setTabData(tab, "Document " + tabPane.getTabs().getLength());
+                TabPane.setTabData(tab, "New File " + tabPane.getTabs().getLength());
                 tabPane.setSelectedIndex(tabPane.getTabs().getLength() - 1);
                 closeButton.setEnabled(true);
             }
@@ -192,7 +192,7 @@ public class BXmlExplorerWindow extends Window implements Bindable {
                         }
 
                         tabPane.getTabs().add(tab);
-                        TabPane.setTabData(tab, "Document " + f.getName());
+                        TabPane.setTabData(tab, f.getName());
                         tabPane.setSelectedIndex(tabPane.getTabs().getLength() - 1);
                         closeButton.setEnabled(true);
                     }
