@@ -88,7 +88,7 @@ public class TreeView extends Component {
     }
 
     /**
-     * Tree view node renderer interface.
+     * {@link Renderer} interface to customize the appearance of items in a TreeView.
      */
     public interface NodeRenderer extends Renderer {
         /**

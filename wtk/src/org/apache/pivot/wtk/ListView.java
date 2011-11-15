@@ -61,7 +61,7 @@ public class ListView extends Component {
     }
 
     /**
-     * List item renderer interface.
+     * {@link Renderer} interface to customize the appearance of items in a ListView.
      */
     public interface ItemRenderer extends Renderer {
         /**

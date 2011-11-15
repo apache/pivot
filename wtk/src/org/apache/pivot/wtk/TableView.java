@@ -492,7 +492,7 @@ public class TableView extends Component {
     }
 
     /**
-     * Table cell renderer interface.
+     * {@link Renderer} interface to customize the appearance of a cell in a TableView.
      */
     public interface CellRenderer extends Renderer {
         /**
@@ -544,7 +544,7 @@ public class TableView extends Component {
     }
 
     /**
-     * Table view header data renderer interface.
+     * {@link Renderer} interface to customize the appearance of the header of a TableView
      */
     public interface HeaderDataRenderer extends Renderer {
         /**

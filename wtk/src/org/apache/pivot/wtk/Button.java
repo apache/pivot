@@ -35,7 +35,7 @@ public abstract class Button extends Component {
     }
 
     /**
-     * Button data renderer interface.
+     * {@link Renderer} interface to customize the appearance of data in a Button.
      */
     public interface DataRenderer extends Renderer {
         /**

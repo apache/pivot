@@ -35,7 +35,7 @@ import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 @DefaultProperty("spinnerData")
 public class Spinner extends Container {
     /**
-     * Spinner renderer interface.
+     * {@link Renderer} interface to customize the appearance of the data in a Spinner.
      */
     public interface ItemRenderer extends Renderer {
         /**
