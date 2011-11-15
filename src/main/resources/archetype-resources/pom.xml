@@ -24,17 +24,17 @@ limitations under the License.
     <artifactId>${artifactId}</artifactId>
     <version>${version}</version>
 
-	<licenses>
-		<license>
-			<name>Apache 2.0 License</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>Apache 2.0 License</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<pivot.version>2.0</pivot.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <pivot.version>2.0</pivot.version>
     </properties>
 
     <dependencies>
