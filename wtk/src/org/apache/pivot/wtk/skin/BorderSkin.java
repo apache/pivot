@@ -322,10 +322,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         }
     }
 
+    /**
+     * Returns the font used in rendering the title
+     */
     public Font getFont() {
         return font;
     }
 
+    /**
+     * Sets the font used in rendering the title
+     */
     public void setFont(Font font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -335,6 +341,10 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         invalidateComponent();
     }
 
+    /**
+     * Sets the font used in rendering the title
+     * @param font A {@link ComponentSkin#decodeFont(String) font specification}
+     */
     public final void setFont(String font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -343,6 +353,10 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         setFont(decodeFont(font));
     }
 
+    /**
+     * Sets the font used in rendering the title
+     * @param font A dictionary {@link Theme#deriveFont describing a font}
+     */
     public final void setFont(Dictionary<String, ?> font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -351,10 +365,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         setFont(Theme.deriveFont(font));
     }
 
+    /**
+     * Returns the color of the border
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Sets the color of the border
+     */
     public void setColor(Color color) {
         if (color == null) {
             throw new IllegalArgumentException("color is null.");
@@ -364,6 +384,10 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         repaintComponent();
     }
 
+    /**
+     * Sets the color of the border
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     */
     public final void setColor(String color) {
         if (color == null) {
             throw new IllegalArgumentException("color is null.");
@@ -393,10 +417,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         setTitleColor(GraphicsUtilities.decodeColor(titleColor));
     }
 
+    /**
+     * Returns the thickness of the border
+     */
     public int getThickness() {
         return thickness;
     }
 
+    /**
+     * Sets the thickness of the border
+     */
     public void setThickness(int thickness) {
         if (thickness < 0) {
             throw new IllegalArgumentException("thickness is negative.");
@@ -406,6 +436,9 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         invalidateComponent();
     }
 
+    /**
+     * Sets the thickness of the border
+     */
     public void setThickness(Number thickness) {
         if (thickness == null) {
             throw new IllegalArgumentException("thickness is null.");
@@ -414,10 +447,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         setThickness(thickness.intValue());
     }
 
+    /**
+     * Returns the amount of space between the edge of the Border and its content.
+     */
     public Insets getPadding() {
         return padding;
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Border and its content.
+     */
     public void setPadding(Insets padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -427,6 +466,11 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         invalidateComponent();
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Border and its content.
+     *
+     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -435,10 +479,18 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Border and its content,
+     * uniformly on all four edges.
+     */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Border and its content,
+     * uniformly on all four edges.
+     */
     public void setPadding(Number padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -447,6 +499,12 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         setPadding(padding.intValue());
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Border and its content.
+     *
+     * @param padding A string containing an integer or a JSON dictionary with keys
+     * left, top, bottom, and/or right.
+     */
     public final void setPadding(String padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -455,10 +513,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         setPadding(Insets.decode(padding));
     }
 
+    /**
+     * Returns a {@link CornerRadii}, describing the radius of each of the Border's corners.
+     */
     public CornerRadii getCornerRadii() {
         return cornerRadii;
     }
 
+    /**
+     * Sets the radii of the Border's corners
+     */
     public void setCornerRadii(CornerRadii cornerRadii) {
         if (cornerRadii == null) {
             throw new IllegalArgumentException("cornerRadii is null.");
@@ -468,6 +532,11 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         repaintComponent();
     }
 
+    /**
+     * Sets the radii of the Border's corners
+     * @param cornerRadii A Dictionary
+     * {@link CornerRadii#CornerRadii(Dictionary) specifying the four corners}
+     */
     public final void setCornerRadii(Dictionary<String, ?> cornerRadii) {
         if (cornerRadii == null) {
             throw new IllegalArgumentException("cornerRadii is null.");
@@ -476,10 +545,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         setCornerRadii(new CornerRadii(cornerRadii));
     }
 
+    /**
+     * Sets the radii of the Border's four corners to the same value
+     */
     public final void setCornerRadii(int cornerRadii) {
         setCornerRadii(new CornerRadii(cornerRadii));
     }
 
+    /**
+     * Sets the radii of the Border's four corners to the same value
+     */
     public final void setCornerRadii(Number cornerRadii) {
         if (cornerRadii == null) {
             throw new IllegalArgumentException("cornerRadii is null.");
@@ -488,6 +563,11 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         setCornerRadii(cornerRadii.intValue());
     }
 
+    /**
+     * Sets the radii of the Border's corners
+     * @param cornerRadii A single integer value, or a JSON dictionary
+     * {@link CornerRadii#CornerRadii(Dictionary) specifying the four corners}
+     */
     public final void setCornerRadii(String cornerRadii) {
         if (cornerRadii == null) {
             throw new IllegalArgumentException("cornerRadii is null.");

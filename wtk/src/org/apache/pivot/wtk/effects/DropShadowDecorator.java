@@ -76,7 +76,8 @@ public class DropShadowDecorator implements Decorator {
      * Sets the color used to draw the shadow.
      *
      * @param shadowColor
-     * The color used to draw the shadow.
+     * The color used to draw the shadow, which can be any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setShadowColor(String shadowColor) {
         if (shadowColor == null) {

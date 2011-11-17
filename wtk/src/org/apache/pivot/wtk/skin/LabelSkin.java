@@ -398,10 +398,16 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
+    /**
+     * Returns the font used in rendering the Label's text
+     */
     public Font getFont() {
         return font;
     }
 
+    /**
+     * Sets the font used in rendering the Label's text
+     */
     public void setFont(Font font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -411,6 +417,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         invalidateComponent();
     }
 
+    /**
+     * Sets the font used in rendering the Label's text
+     * @param font A {@link ComponentSkin#decodeFont(String) font specification}
+     */
     public final void setFont(String font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -419,6 +429,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         setFont(decodeFont(font));
     }
 
+    /**
+     * Sets the font used in rendering the Label's text
+     * @param font A dictionary {@link Theme#deriveFont describing a font}
+     */
     public final void setFont(Dictionary<String, ?> font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -427,10 +441,16 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         setFont(Theme.deriveFont(font));
     }
 
+    /**
+     * Returns the foreground color of the text of the label.
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Sets the foreground color of the text of the label.
+     */
     public void setColor(Color color) {
         if (color == null) {
             throw new IllegalArgumentException("color is null.");
@@ -440,6 +460,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         repaintComponent();
     }
 
+    /**
+     * Sets the foreground color of the text of the label.
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     */
     public final void setColor(String color) {
         if (color == null) {
             throw new IllegalArgumentException("color is null.");
@@ -448,15 +472,25 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
+    /**
+     * Returns the background color of the label.
+     */
     public Color getBackgroundColor() {
         return backgroundColor;
     }
 
+    /**
+     * Sets the background color of the label.
+     */
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
+    /**
+     * Sets the background color of the label.
+     * @param backgroundColor Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     */
     public final void setBackgroundColor(String backgroundColor) {
         if (backgroundColor == null) {
             throw new IllegalArgumentException("backgroundColor is null");
@@ -500,10 +534,16 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         repaintComponent();
     }
 
+    /**
+     * Returns the amount of space to leave between the edge of the Label and its text.
+     */
     public Insets getPadding() {
         return padding;
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Label and its text.
+     */
     public void setPadding(Insets padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -513,6 +553,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         invalidateComponent();
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Label and its text.
+     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -521,10 +565,18 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Label and its text,
+     * uniformly on all four edges.
+     */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Label and its text,
+     * uniformly on all four edges.
+     */
     public final void setPadding(Number padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -533,6 +585,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         setPadding(padding.intValue());
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Label and its text.
+     *
+     * @param padding A string containing an integer or a JSON dictionary with keys
+     * left, top, bottom, and/or right.
+     */
     public final void setPadding(String padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -541,10 +599,18 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         setPadding(Insets.decode(padding));
     }
 
+    /**
+     * Returns true if the text of the label will be wrapped to fit the Label's width.
+     */
     public boolean getWrapText() {
         return wrapText;
     }
 
+    /**
+     * Sets whether the text of the label will be wrapped to fit the Label's width.
+     * Note that for wrapping to occur, the Label must specify a preferred width or
+     * be placed in a container that constrains its width.
+     */
     public void setWrapText(boolean wrapText) {
         this.wrapText = wrapText;
         invalidateComponent();

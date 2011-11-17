@@ -171,15 +171,27 @@ public abstract class ContainerSkin extends ComponentSkin
             && backgroundPaint.getTransparency() == Transparency.OPAQUE);
     }
 
+    /**
+     * Returns the {@link Paint} object used to paint the background of the container
+     */
     public Paint getBackgroundPaint() {
         return backgroundPaint;
     }
 
+    /**
+     * Sets the object used to paint the background of the container.
+     * @param backgroundPaint The {@link Paint} object
+     */
     public void setBackgroundPaint(Paint backgroundPaint) {
         this.backgroundPaint = backgroundPaint;
         repaintComponent();
     }
 
+    /**
+     * Sets the object used to paint the background of the container.
+     * @param backgroundPaint A string recognized by Pivot as a
+     * {@linkplain GraphicsUtilities#decodePaint(String) Color or Paint value}.
+     */
     public final void setBackgroundPaint(String backgroundPaint) {
         if (backgroundPaint == null) {
             throw new IllegalArgumentException("backgroundPaint is null");
@@ -188,6 +200,11 @@ public abstract class ContainerSkin extends ComponentSkin
         setBackgroundPaint(GraphicsUtilities.decodePaint(backgroundPaint));
     }
 
+    /**
+     * Sets the object used to paint the background of the container.
+     * @param backgroundPaint A dictionary containing a
+     * {@linkplain GraphicsUtilities#decodePaint(Dictionary) Paint description}.
+     */
     public final void setBackgroundPaint(Dictionary<String, ?> backgroundPaint) {
         if (backgroundPaint == null) {
             throw new IllegalArgumentException("backgroundPaint is null");
@@ -196,14 +213,25 @@ public abstract class ContainerSkin extends ComponentSkin
         setBackgroundPaint(GraphicsUtilities.decodePaint(backgroundPaint));
     }
 
+    /**
+     * Returns the color of the container's background if a solid color has been
+     * set as the background; otherwise null.
+     */
     public Color getBackgroundColor() {
         return (backgroundPaint instanceof Color) ? (Color)backgroundPaint : null;
     }
 
+    /**
+     * Sets the background of the container to a solid color.
+     */
     public void setBackgroundColor(Color backgroundColor) {
         setBackgroundPaint(backgroundColor);
     }
 
+    /**
+     * Sets the background of the container to a solid color.
+     * @param backgroundColor Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     */
     public final void setBackgroundColor(String backgroundColor) {
         if (backgroundColor == null) {
             throw new IllegalArgumentException("backgroundColor is null");

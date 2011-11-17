@@ -25,13 +25,37 @@ import org.apache.pivot.util.ListenerList;
  */
 public class ScrollPane extends Viewport {
     /**
-     * Enumeration defining scroll pane scroll bar policies.
+     * Enumeration defining when to show a scroll bar, and if not showing,
+     * whether to constrain the pane's content to the size of the ScrollPane,
+     * or to let the content be shown at its unconstrained size.
      */
     public enum ScrollBarPolicy {
+        /**
+         * Show the scroll bar if the pane's content exceeds the size of the pane
+         * in the relevant dimension.
+         * Does not have any effect on the layout of the content.
+         * This is the default setting.
+         */
         AUTO,
+        /**
+         * Never show the scroll bar, and don't affect the layout of the pane's content.
+         */
         NEVER,
+        /**
+         * Always show the scroll bar, and don't affect the layout of the pane's content.
+         */
         ALWAYS,
+        /**
+         * Do not show the scroll bar, and cause the pane's content to be laid out
+         * to exactly fill the available space in the relevant dimension of the pane.
+         */
         FILL,
+        /**
+         * Show the scroll bar if the pane's content exceeds the size of the pane
+         * in the relevant dimension; if it does not, act like <code>FILL</code>,
+         * omitting the scroll bar and causing the pane's content to fill the
+         * available space in the relevant dimension of the pane.
+         */
         FILL_TO_CAPACITY
     }
 

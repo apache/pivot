@@ -597,6 +597,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
     /**
      * Sets the color used to paint the grid pane's horizontal grid lines.
+     * @param horizontalGridColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setHorizontalGridColor(String horizontalGridColor) {
         if (horizontalGridColor == null) {
@@ -630,6 +632,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
     /**
      * Sets the color used to paint the grid pane's vertical grid lines.
+     * @param verticalGridColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setVerticalGridColor(String verticalGridColor) {
         if (verticalGridColor == null) {

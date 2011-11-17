@@ -398,10 +398,16 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         }
     }
 
+    /**
+     * Returns the font of the text
+     */
     public Font getFont() {
         return font;
     }
 
+    /**
+     * Sets the font of the text
+     */
     public void setFont(Font font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -411,6 +417,10 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         invalidateComponent();
     }
 
+    /**
+     * Sets the font of the text
+     * @param font A {@link ComponentSkin#decodeFont(String) font specification}
+     */
     public final void setFont(String font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -419,6 +429,10 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         setFont(decodeFont(font));
     }
 
+    /**
+     * Sets the font of the text
+     * @param font A dictionary {@link Theme#deriveFont describing a font}
+     */
     public final void setFont(Dictionary<String, ?> font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -427,10 +441,16 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         setFont(Theme.deriveFont(font));
     }
 
+    /**
+     * Returns the foreground color of the text
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Sets the foreground color of the text
+     */
     public void setColor(Color color) {
         if (color == null) {
             throw new IllegalArgumentException("color is null.");
@@ -440,6 +460,10 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         repaintComponent();
     }
 
+    /**
+     * Sets the foreground color of the text
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     */
     public final void setColor(String color) {
         if (color == null) {
             throw new IllegalArgumentException("color is null.");
@@ -553,10 +577,16 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
 
+    /**
+     * Returns the amount of space between the edge of the TextPane and its Document
+     */
     public Insets getMargin() {
         return margin;
     }
 
+    /**
+     * Sets the amount of space between the edge of the TextPane and its Document
+     */
     public void setMargin(Insets margin) {
         if (margin == null) {
             throw new IllegalArgumentException("margin is null.");
@@ -566,6 +596,10 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         invalidateComponent();
     }
 
+    /**
+     * Sets the amount of space between the edge of the TextPane and its Document
+     * @param margin A dictionary with keys in the set {left, top, bottom, right}.
+     */
     public final void setMargin(Dictionary<String, ?> margin) {
         if (margin == null) {
             throw new IllegalArgumentException("margin is null.");
@@ -574,10 +608,16 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         setMargin(new Insets(margin));
     }
 
+    /**
+     * Sets the amount of space between the edge of the TextPane and its Document
+     */
     public final void setMargin(int margin) {
         setMargin(new Insets(margin));
     }
 
+    /**
+     * Sets the amount of space between the edge of the TextPane and its Document
+     */
     public final void setMargin(Number margin) {
         if (margin == null) {
             throw new IllegalArgumentException("margin is null.");
@@ -586,6 +626,11 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         setMargin(margin.intValue());
     }
 
+    /**
+     * Sets the amount of space between the edge of the TextPane and its Document
+     * @param margin A string containing an integer or a JSON dictionary with keys
+     * left, top, bottom, and/or right.
+     */
     public final void setMargin(String margin) {
         if (margin == null) {
             throw new IllegalArgumentException("margin is null.");

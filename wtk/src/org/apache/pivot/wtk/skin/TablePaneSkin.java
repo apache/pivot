@@ -758,16 +758,16 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Gets the padding that will be reserved around the table pane during
-     * layout.
+     * Returns the amount of space that will be reserved around the inside edges of the
+     * table pane.
      */
     public Insets getPadding() {
         return padding;
     }
 
     /**
-     * Sets the padding that will be reserved around the table pane during
-     * layout.
+     * Sets the amount of space that will be reserved around the inside edges of the
+     * table pane.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -779,16 +779,17 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Sets the padding that will be reserved around the table pane during
-     * layout.
+     * Sets the amount of space that will be reserved around the inside edges of the
+     * table pane.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
     /**
-     * Sets the padding that will be reserved around the table pane during
-     * layout.
+     * Sets the amount of space that will be reserved around the inside edges of the
+     * table pane.
+     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
@@ -799,8 +800,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Sets the padding that will be reserved around the table pane during
-     * layout.
+     * Sets the amount of space that will be reserved around the inside edges of the
+     * table pane.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {
@@ -811,8 +812,10 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Sets the padding that will be reserved around the table pane during
-     * layout.
+     * Sets the amount of space that will be reserved around the inside edges of the
+     * table pane.
+     * @param padding A string containing an integer or a JSON dictionary with keys
+     * left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
         if (padding == null) {
@@ -823,7 +826,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Gets the spacing that will be applied in between the table pane's
+     * Gets the spacing that will be applied between the table pane's
      * columns during layout.
      */
     public int getHorizontalSpacing() {
@@ -831,7 +834,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Sets the spacing that will be applied in between the table pane's
+     * Sets the spacing that will be applied between the table pane's
      * columns during layout.
      */
     public void setHorizontalSpacing(int horizontalSpacing) {
@@ -922,6 +925,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     /**
      * Sets the color used to paint the table pane's horizontal grid lines.
+     * @param horizontalGridColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setHorizontalGridColor(String horizontalGridColor) {
         if (horizontalGridColor == null) {
@@ -955,6 +960,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     /**
      * Sets the color used to paint the table pane's vertical grid lines.
+     * @param verticalGridColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setVerticalGridColor(String verticalGridColor) {
         if (verticalGridColor == null) {
@@ -985,6 +992,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     /**
      * Sets the background color used to paint the highlighted rows and columns.
+     * @param highlightBackgroundColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
         if (highlightBackgroundColor == null) {
