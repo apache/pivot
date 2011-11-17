@@ -489,18 +489,11 @@ limitations under the License.
                             <corner>
                                 <BoxPane styles="{padding:{right:6},
                                     horizontalAlignment:'right', fill:true}">
-                                    <MenuButton tooltipText="%eventLoggerPane.tooltip" styles="{toolbar:true,
-                                        padding:{top:1, left:2, bottom:1, right:2}}">
-                                        <buttonData>
-                                            <content:ButtonData icon="@preferences-system.png"/>
-                                        </buttonData>
-                                        <Menu>
-                                            <Menu.Section>
-                                                <Menu.Item buttonData="%eventLoggerPane.clear"
-                                                    ButtonPressListener.buttonPressed="eventLogger.clearLog();"/>
-                                            </Menu.Section>
-                                        </Menu>
-                                    </MenuButton>
+									<PushButton
+										buttonData="%eventLoggerPane.clear" 
+										tooltipText="%eventLoggerPane.clear"
+										ButtonPressListener.buttonPressed="eventLogger.clearLog();"
+									/>
                                 </BoxPane>
                             </corner>
                         </TabPane>
