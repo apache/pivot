@@ -485,13 +485,29 @@ limitations under the License.
                     <bottom>
                         <TabPane>
                             <tools:EventLogger bxml:id="eventLogger"
-                                TabPane.tabData="%eventLoggerPane.label"/>
+                                TabPane.tabData="%eventLoggerPane.label"
+                                TabPane.tooltipText="%eventLoggerPane.labelTooltip"
+                            />
                             <corner>
                                 <BoxPane styles="{padding:{right:6},
-                                    horizontalAlignment:'right', fill:true}">
+                                    horizontalAlignment:'right', fill:true}"
+                                >
+                                	<Label text="%eventLoggerPane.buttonsDescription" 
+                                		styles="{verticalAlignment:'center'}"
+                                	/>
+									<PushButton styles="{toolbar:'false'}"
+										buttonData="%eventLoggerPane.selectAll" 
+										tooltipText="%eventLoggerPane.selectAllEvents"
+										ButtonPressListener.buttonPressed="eventLogger.selectAllEvents(true);"
+									/>
+									<PushButton styles="{toolbar:'false'}"
+										buttonData="%eventLoggerPane.deselectAll" 
+										tooltipText="%eventLoggerPane.deselectAllEvents"
+										ButtonPressListener.buttonPressed="eventLogger.selectAllEvents(false);"
+									/>
 									<PushButton
 										buttonData="%eventLoggerPane.clear" 
-										tooltipText="%eventLoggerPane.clear"
+										tooltipText="%eventLoggerPane.clearTooltip"
 										ButtonPressListener.buttonPressed="eventLogger.clearLog();"
 									/>
                                 </BoxPane>

@@ -60,8 +60,14 @@
     },
 
     eventLoggerPane: {
-        tooltip: "Show/Clear Event Log Commands",
         label: "Event Log",
-        clear: "Clear Event Log"
+        labelTooltip: "Select/Deselect Events to Log",
+        buttonsDescription: "Events:",
+        selectAll: "All",
+        selectAllEvents: "Select All Events",
+        deselectAll: "None",
+        deselectAllEvents: "Deselect All Events",
+        clear: "Clear",
+        clearTooltip: "Clear Events Log"
     }
 }

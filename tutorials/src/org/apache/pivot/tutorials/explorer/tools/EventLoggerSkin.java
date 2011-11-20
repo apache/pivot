@@ -27,6 +27,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.Sequence.Tree.ItemIterator;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.ApplicationContext;
@@ -211,6 +212,18 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
     @Override
     public void clearLog() {
         firedEventsTableView.getTableData().clear();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void selectAllEvents(boolean select) {
+        List<TreeNode> treeData = (List<TreeNode>)declaredEventsTreeView.getTreeData();
+
+        ItemIterator<TreeNode> iter = Sequence.Tree.depthFirstIterator(treeData); 
+        while(iter.hasNext()) {
+        	iter.next();
+    		declaredEventsTreeView.setNodeChecked(iter.getPath(), select);
+		}
     }
 
     // EventLoggerListener methods
