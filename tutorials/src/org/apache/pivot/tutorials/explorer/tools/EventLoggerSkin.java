@@ -219,11 +219,11 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
     public void selectAllEvents(boolean select) {
         List<TreeNode> treeData = (List<TreeNode>)declaredEventsTreeView.getTreeData();
 
-        ItemIterator<TreeNode> iter = Sequence.Tree.depthFirstIterator(treeData); 
+        ItemIterator<TreeNode> iter = Sequence.Tree.depthFirstIterator(treeData);
         while(iter.hasNext()) {
-        	iter.next();
-    		declaredEventsTreeView.setNodeChecked(iter.getPath(), select);
-		}
+            iter.next();
+            declaredEventsTreeView.setNodeChecked(iter.getPath(), select);
+        }
     }
 
     // EventLoggerListener methods

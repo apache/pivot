@@ -49,8 +49,8 @@ public class EventLogger extends Container {
 
         /**
          * Select/Deselect all Events to log.
-         * @param select 
-         * if true, all events will be selected for the log, 
+         * @param select
+         * if true, all events will be selected for the log,
          * otherwise all events will be deselected
          */
         public void selectAllEvents(boolean select);
@@ -291,21 +291,21 @@ public class EventLogger extends Container {
 
     /**
      * Select/Deselect all Events to log.
-     * @param select 
-     * if true, all events will be selected for the log, 
+     * @param select
+     * if true, all events will be selected for the log,
      * otherwise all events will be deselected
      */
     public void selectAllEvents(boolean select) {
         // Include or exclude each possible method from the group of monitored events
-    	IncludeEventGroup includeEvents = getIncludeEvents();
+        IncludeEventGroup includeEvents = getIncludeEvents();
         for (Method event : declaredEvents) {
-        	if (select) {
-        		includeEvents.add(event);
-        	} else {
-        		includeEvents.remove(event);
-        	}
+            if (select) {
+                includeEvents.add(event);
+            } else {
+                includeEvents.remove(event);
+            }
         }
-        // Update the skin (Checkboxes) 
+        // Update the skin (Checkboxes)
         EventLogger.Skin eventLoggerSkin = (EventLogger.Skin)getSkin();
         eventLoggerSkin.selectAllEvents(select);
     }
