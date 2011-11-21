@@ -119,6 +119,7 @@ limitations under the License.
             import org.apache.pivot.wtk.ListViewSelectionListener;
             import org.apache.pivot.wtk.Span;
             import org.apache.pivot.wtk.Window;
+            import org.apache.pivot.wtk.content.ListItem;
 
             public class ListViews extends Window implements Bindable {
                 private Label selectionLabel = null;
@@ -167,7 +168,13 @@ limitations under the License.
                                         selectionText += ", ";
                                     }
 
-                                    String text = (String)listView.getListData().get(j);
+                                    Object item = listView.getListData().get(j);
+                                    String text;
+                                    if (item instanceof ListItem) {  // item is a listItem (for example because it has an image)
+                                        text = ((ListItem) item).getText();
+                                    } else {  // item is a standard item for listData
+                                        text = item.toString();
+                                    }
                                     selectionText += text;
                                 }
                             }
@@ -179,5 +186,81 @@ limitations under the License.
             }
             ]]>
         </source>
+
+<br/>
+<br/>
+
+        <p>
+            Sample <tt>ListView</tt> containing <tt>ListItem</tt>s, and a renderer to display images for any item.
+        </p>
+
+        <application class="org.apache.pivot.wtk.ScriptApplication"
+            width="216" height="122">
+            <libraries>
+                <library>core</library>
+                <library>wtk</library>
+                <library>wtk-terra</library>
+                <library>tutorials</library>
+            </libraries>
+            <startup-properties>
+                <src>/org/apache/pivot/tutorials/lists/list_views_with_images.bxml</src>
+            </startup-properties>
+        </application>
+
+        <p>
+            The BXML source for the example follows.
+        </p>
+
+        <p>
+            In this case list contents are set using the content namespace, 
+            they are ListItem instances (not only plain Strings as the previous sample),
+            and there is a ListViewItemRenderer set.
+            Note that references to images (icon) here are set in a relative path, 
+            to reuse images already existing just for convenience. 
+        </p>
+
+        <source type="xml" location="org/apache/pivot/tutorials/lists/list_views_with_images.bxml">
+            <![CDATA[
+            <lists:ListViews title="List Views with Images" maximized="true"
+                xmlns:bxml="http://pivot.apache.org/bxml"
+                xmlns:content="org.apache.pivot.wtk.content"
+                xmlns:lists="org.apache.pivot.tutorials.lists"
+                xmlns="org.apache.pivot.wtk">
+                <Border>
+                    <BoxPane styles="{padding:4, spacing:4}">
+                        <Border styles="{color:10}">
+                            <ScrollPane preferredWidth="80" preferredHeight="110"
+                                horizontalScrollBarPolicy="fill"
+                                verticalScrollBarPolicy="fill_to_capacity">
+                                <ListView bxml:id="listView" selectMode="multi"
+                                >
+                                    <itemRenderer>
+                                        <content:ListViewItemRenderer iconWidth="16" iconHeight="16"
+                                            showIcon="true"
+                                        />
+                                    </itemRenderer>
+
+                                    <content:ListItem icon="@../anchor.png" text="Anchor"/>
+                                    <content:ListItem icon="@../bell.png" text="Bell"/>
+                                    <content:ListItem icon="@../clock.png" text="Clock"/>
+                                    <content:ListItem icon="@../cup.png" text="Cup"/>
+                                    <content:ListItem icon="@../house.png" text="House"/>
+                                    <content:ListItem icon="@../star.png" text="Star"/>
+                                </ListView>
+                            </ScrollPane>
+                        </Border>
+                        <BoxPane orientation="vertical" preferredWidth="120" styles="{fill:true}">
+                            <Label text="You selected:"/>
+                            <Label bxml:id="selectionLabel" styles="{wrapText:true}"/>
+                        </BoxPane>
+                    </BoxPane>
+                </Border>
+            </lists:ListViews>
+            ]]>
+        </source>
+
+        <p>
+            The Java code for the example is the same seen in the previous sample.
+        </p>
     </body>
 </document>
