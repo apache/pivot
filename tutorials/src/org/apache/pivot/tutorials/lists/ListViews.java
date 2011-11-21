@@ -76,8 +76,6 @@ public class ListViews extends Window implements Bindable {
                             selectionText += ", ";
                         }
 
-                        // String text = (String)listView.getListData().get(j);  // original version
-                        // new version, to handle even ListItems
                         Object item = listView.getListData().get(j);
                         String text;
                         if (item instanceof ListItem) {  // item is a listItem (for example because it has an image)
