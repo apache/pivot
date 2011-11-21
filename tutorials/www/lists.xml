@@ -212,11 +212,11 @@ limitations under the License.
         </p>
 
         <p>
-            In this case list contents are set using the content namespace, 
+            In this case list contents are set using the content namespace,
             they are ListItem instances (not only plain Strings as the previous sample),
             and there is a ListViewItemRenderer set.
-            Note that references to images (icon) here are set in a relative path, 
-            to reuse images already existing just for convenience. 
+            Note that references to images (icon) here are set in a relative path,
+            to reuse images already existing just for convenience.
         </p>
 
         <source type="xml" location="org/apache/pivot/tutorials/lists/list_views_with_images.bxml">

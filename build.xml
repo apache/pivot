@@ -620,13 +620,13 @@ limitations under the License.
             </fileset>
         </copy>
 
-		<!-- Delete old signed jars and old already deployed jars -->
+        <!-- Delete old signed jars and old already deployed jars -->
         <delete>
             <fileset dir="${folder.lib}" includes="**/*.war"/>
             <fileset dir="${folder.lib}" includes="**/*.signed.jar"/>
         </delete>
 
-		<!-- Sign JARS -->
+        <!-- Sign JARS -->
         <mkdir dir="${folder.lib}/signed"/>
         <copy todir="${folder.lib}/signed">
             <fileset dir="${folder.lib}">
@@ -652,7 +652,7 @@ limitations under the License.
         <!-- Deploy demos -->
         <mkdir dir="demos/${folder.deploy}/lib"/>
         <delete>
-	        <fileset dir="demos/${folder.deploy}/lib" includes="**/*.jar"/>
+            <fileset dir="demos/${folder.deploy}/lib" includes="**/*.jar"/>
         </delete>
         <copy todir="demos/${folder.deploy}/lib">
             <fileset dir="${folder.lib}">
@@ -730,7 +730,7 @@ limitations under the License.
         <!-- Deploy tutorials -->
         <mkdir dir="tutorials/${folder.deploy}/lib"/>
         <delete>
-	        <fileset dir="tutorials/${folder.deploy}/lib" includes="**/*.jar"/>
+            <fileset dir="tutorials/${folder.deploy}/lib" includes="**/*.jar"/>
         </delete>
         <copy todir="tutorials/${folder.deploy}/lib">
             <fileset dir="${folder.lib}">
