@@ -191,7 +191,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     // The AWT Window class does not define a title property; this interface allows
-    // the HostFrame and HostDialog titles to be handled polymorphicaly
+    // the HostFrame and HostDialog titles to be handled polymorphically
     private interface TitledWindow {
         public String getTitle();
         public void setTitle(String title);
@@ -771,7 +771,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     /**
      * Gets the window hosting the specified Display and makes it visible.</br>
      * This will cause a visible {@link SplashScreen} to be closed.<br/> It is
-     * intended to be called one time when the Pivot application has initialised
+     * intended to be called one time when the Pivot application has initialized
      * its UI and the SplashScreen is ready to be dismissed, but can be safely
      * called regardless of whether there is now, or used to be, a visible
      * SplashScreen.
@@ -866,4 +866,5 @@ public final class DesktopApplicationContext extends ApplicationContext {
         args[0] = applicationClass.getName();
         main(args);
     }
+
 }
