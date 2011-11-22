@@ -448,7 +448,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     /**
-     * Primary aplication entry point.
+     * Primary application entry point.
      *
      * @param args
      */
