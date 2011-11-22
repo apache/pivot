@@ -1298,6 +1298,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                 consumed = true;
             }
+        } else if (keyCode == Keyboard.KeyCode.INSERT) {
+            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT) && textInput.isEditable()) {
+                textInput.paste();
+                consumed = true;
+            }
         } else {
             consumed = super.keyPressed(component, keyCode, keyLocation);
         }

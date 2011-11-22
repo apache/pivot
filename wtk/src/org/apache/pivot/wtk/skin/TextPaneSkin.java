@@ -1037,6 +1037,12 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 scrollCharacterToVisible(textPane.getCharacterCount() - 1);
 
                 consumed = true;
+            } else if (keyCode == Keyboard.KeyCode.INSERT) {
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                    && textPane.isEditable()) {
+                    textPane.paste();
+                    consumed = true;
+                }
             } else {
                 consumed = super.keyPressed(component, keyCode, keyLocation);
             }

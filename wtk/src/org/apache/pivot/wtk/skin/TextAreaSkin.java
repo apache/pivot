@@ -1266,6 +1266,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
                     consumed = true;
                 }
+            } else if (keyCode == Keyboard.KeyCode.INSERT) {
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                    && textArea.isEditable()) {
+                    textArea.paste();
+                    consumed = true;
+                }
             } else {
                 consumed = super.keyPressed(component, keyCode, keyLocation);
             }
