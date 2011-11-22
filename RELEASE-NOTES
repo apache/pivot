@@ -57,9 +57,11 @@ Release Notes for Pivot 2.0.1:
     * [PIVOT-813] - BXML annotation should work for JavaBean properties
     * [PIVOT-818] - Better document the Renderer interface
     * [PIVOT-819] - Improve the documentation for BoxPane and several other components
+    * [PIVOT-821] - Add support for Shift-Ins to do a Paste on Windows
 
 ** Bug
     * [PIVOT-247] - Mouse.capture() interferes with mouseClick event
+    * [PIVOT-406] - Ensure that java_arguments param is properly set for Large Data demo
     * [PIVOT-499] - Kitchen Sink demo launched via JNLP produces console error re: width and height args
     * [PIVOT-500] - JNLP demos that use signed JARs fail to launch
     * [PIVOT-506] - Menu item renderer not given enough space
