@@ -26,8 +26,6 @@ limitations under the License.
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
                 <title>
-                  <xsl:value-of select="properties/title"/>
-                  <xsl:text> | </xsl:text>
                   <xsl:value-of select="$project/title"/>
                 </title>
                 <link rel="stylesheet" href="tutorial.css" type="text/css"/>
@@ -52,6 +50,10 @@ limitations under the License.
         <ul style="padding-left: 0px;">
             <xsl:apply-templates/>
         </ul>
+
+        <xsl:if test="following::item-group">
+            <hr/>
+        </xsl:if>
     </xsl:template>
 
     <!-- <document-item> gets translated to a list item with a hyperlink -->

@@ -23,12 +23,17 @@ limitations under the License.
 
     <body>
         <p>
-            A collection of Pivot demos. All demos require
-            <a href="http://www.java.com/">Java 6</a> or greater.
+            A collection of Pivot demos. <br/>
+            All demos require <a href="http://www.java.com/">Java 6</a> or greater. <br/>
+            <br/>
+            Note that some demos uses signed jars.
         </p>
+        <br/>
+
         <document-item id="kitchen-sink"/>
         <document-item id="stock-tracker"/>
         <document-item id="component-explorer"/>
+        <document-item id="bxml-explorer"/>
         <document-item id="itunes-search"/>
         <document-item id="suggest"/>
         <document-item id="color-scheme-builder"/>
@@ -42,5 +47,8 @@ limitations under the License.
         <document-item id="dom-interaction"/>
         <document-item id="fixed-column-table"/>
         <document-item id="multiselect"/>
+
+        <br/>
+        <hr/>
     </body>
 </document>
