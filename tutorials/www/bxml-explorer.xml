@@ -20,8 +20,8 @@ limitations under the License.
     <properties>
         <title>BXML Explorer</title>
         <description>
-            Does a Graphical preview of bxml files, 
-            change (currently from outside) 
+            Does a Graphical preview of bxml files,
+            change (currently from outside)
             and reload, to see changes immediately.
         </description>
         <full-screen>false</full-screen>
