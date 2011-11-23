@@ -7,7 +7,7 @@
   ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under
   the License. -->
 
-<explorer:BXmlExplorerDocument xmlns:bxml="http://pivot.apache.org/bxml" xmlns="org.apache.pivot.wtk"
+<explorer:BXMLExplorerDocument xmlns:bxml="http://pivot.apache.org/bxml" xmlns="org.apache.pivot.wtk"
   xmlns:content="org.apache.pivot.wtk.content" xmlns:tools="org.apache.pivot.tutorials.bxmlexplorer.tools" xmlns:explorer="org.apache.pivot.tutorials.bxmlexplorer">
   <SplitPane orientation="horizontal" splitRatio="0.25">
     <left>
@@ -75,4 +75,4 @@
       </SplitPane>
     </right>
   </SplitPane>
-</explorer:BXmlExplorerDocument>
+</explorer:BXMLExplorerDocument>

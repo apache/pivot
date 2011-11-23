@@ -26,20 +26,20 @@ import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.Window;
 
-public class BXmlExplorer implements Application {
+public class BXMLExplorer implements Application {
 
     /**
      * For the moment editing is experimental, so use a property to turn it on.
      */
     static final boolean ENABLE_EDITING = Boolean.getBoolean("edit");
 
-    private BXmlExplorerWindow window = null;
+    private BXMLExplorerWindow window = null;
 
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (BXmlExplorerWindow)bxmlSerializer.readObject(BXmlExplorer.class,
+        window = (BXMLExplorerWindow)bxmlSerializer.readObject(BXMLExplorer.class,
             "bxml_explorer_window.bxml", true);
         window.open(display);
     }
@@ -77,7 +77,7 @@ public class BXmlExplorer implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(BXmlExplorer.class, args);
+        DesktopApplicationContext.main(BXMLExplorer.class, args);
     }
 }
 

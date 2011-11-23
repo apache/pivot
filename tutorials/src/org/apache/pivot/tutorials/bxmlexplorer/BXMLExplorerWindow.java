@@ -49,7 +49,7 @@ import org.apache.pivot.wtk.TextInputSelectionListener;
 import org.apache.pivot.wtk.Window;
 import org.xml.sax.SAXException;
 
-public class BXmlExplorerWindow extends Window implements Bindable {
+public class BXMLExplorerWindow extends Window implements Bindable {
     @BXML
     private FileBrowserSheet fileBrowserSheet;
     @BXML
@@ -115,7 +115,7 @@ public class BXmlExplorerWindow extends Window implements Bindable {
         }
     };
 
-    public BXmlExplorerWindow() {
+    public BXMLExplorerWindow() {
         Action.getNamedActions().put("fileNew", new Action() {
             @Override
             public void perform(Component source) {
@@ -124,8 +124,8 @@ public class BXmlExplorerWindow extends Window implements Bindable {
 
                 Component tab;
                 try {
-                    tab = (BXmlExplorerDocument) bxmlSerializer.readObject(
-                        BXmlExplorerWindow.class, "bxml_explorer_document.bxml");
+                    tab = (BXMLExplorerDocument) bxmlSerializer.readObject(
+                        BXMLExplorerWindow.class, "bxml_explorer_document.bxml");
                 } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 } catch (SerializationException exception) {
@@ -142,7 +142,7 @@ public class BXmlExplorerWindow extends Window implements Bindable {
         Action.getNamedActions().put("fileOpen", new Action() {
             @Override
             public void perform(Component source) {
-                fileBrowserSheet.open(BXmlExplorerWindow.this, new SheetCloseListener() {
+                fileBrowserSheet.open(BXMLExplorerWindow.this, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
                         if (!sheet.getResult()) {
@@ -153,7 +153,7 @@ public class BXmlExplorerWindow extends Window implements Bindable {
                         // if we have already loaded the file, select the appropriate tab and return
                         int idx = 0;
                         for (Component comp : tabPane.getTabs()) {
-                            if (f.equals(((BXmlExplorerDocument) comp).getLoadedFile())) {
+                            if (f.equals(((BXMLExplorerDocument) comp).getLoadedFile())) {
                                 tabPane.setSelectedIndex(idx);
                                 return;
                             }
@@ -165,29 +165,29 @@ public class BXmlExplorerWindow extends Window implements Bindable {
 
                         Component tab;
                         try {
-                            BXmlExplorerDocument explorerDoc = (BXmlExplorerDocument) bxmlSerializer.readObject(
-                                BXmlExplorerWindow.class, "bxml_explorer_document.bxml");
+                            BXMLExplorerDocument explorerDoc = (BXMLExplorerDocument) bxmlSerializer.readObject(
+                                BXMLExplorerWindow.class, "bxml_explorer_document.bxml");
                             explorerDoc.load(f);
                             tab = explorerDoc;
                         } catch (RuntimeException exception) {
                             exception.printStackTrace();
-                            BXmlExplorer.displayLoadException(exception, BXmlExplorerWindow.this);
+                            BXMLExplorer.displayLoadException(exception, BXMLExplorerWindow.this);
                             return;
                         } catch (IOException exception) {
                             exception.printStackTrace();
-                            BXmlExplorer.displayLoadException(exception, BXmlExplorerWindow.this);
+                            BXMLExplorer.displayLoadException(exception, BXMLExplorerWindow.this);
                             return;
                         } catch (SerializationException exception) {
                             exception.printStackTrace();
-                            BXmlExplorer.displayLoadException(exception, BXmlExplorerWindow.this);
+                            BXMLExplorer.displayLoadException(exception, BXMLExplorerWindow.this);
                             return;
                         } catch (ParserConfigurationException exception) {
                             exception.printStackTrace();
-                            BXmlExplorer.displayLoadException(exception, BXmlExplorerWindow.this);
+                            BXMLExplorer.displayLoadException(exception, BXMLExplorerWindow.this);
                             return;
                         } catch (SAXException exception) {
                             exception.printStackTrace();
-                            BXmlExplorer.displayLoadException(exception, BXmlExplorerWindow.this);
+                            BXMLExplorer.displayLoadException(exception, BXMLExplorerWindow.this);
                             return;
                         }
 
@@ -204,7 +204,7 @@ public class BXmlExplorerWindow extends Window implements Bindable {
         Action.getNamedActions().put("cut", new Action(false) {
             @Override
             public void perform(Component source) {
-                TextInput textInput = (TextInput) BXmlExplorerWindow.this.getFocusDescendant();
+                TextInput textInput = (TextInput) BXMLExplorerWindow.this.getFocusDescendant();
                 textInput.cut();
             }
         });
@@ -212,7 +212,7 @@ public class BXmlExplorerWindow extends Window implements Bindable {
         Action.getNamedActions().put("copy", new Action(false) {
             @Override
             public void perform(Component source) {
-                TextInput textInput = (TextInput) BXmlExplorerWindow.this.getFocusDescendant();
+                TextInput textInput = (TextInput) BXMLExplorerWindow.this.getFocusDescendant();
                 textInput.copy();
             }
         });
@@ -220,7 +220,7 @@ public class BXmlExplorerWindow extends Window implements Bindable {
         Action.getNamedActions().put("paste", new Action(false) {
             @Override
             public void perform(Component source) {
-                TextInput textInput = (TextInput) BXmlExplorerWindow.this.getFocusDescendant();
+                TextInput textInput = (TextInput) BXMLExplorerWindow.this.getFocusDescendant();
                 textInput.paste();
             }
         });
@@ -230,7 +230,7 @@ public class BXmlExplorerWindow extends Window implements Bindable {
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         // hide until we support editing and saving BXML files
-        if (!BXmlExplorer.ENABLE_EDITING) {
+        if (!BXMLExplorer.ENABLE_EDITING) {
             paletteTabPane.getTabs().remove(paletteTreeViewScrollPane);
             splitPane.setSplitRatio(0);
             fileMenuSection.remove(fileNewMenuItem);

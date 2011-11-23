@@ -62,7 +62,7 @@ import org.apache.pivot.wtk.effects.Decorator;
 import org.apache.pivot.wtk.effects.ShadeDecorator;
 import org.xml.sax.SAXException;
 
-public class BXmlExplorerDocument extends CardPane implements Bindable {
+public class BXMLExplorerDocument extends CardPane implements Bindable {
     @BXML
     private TreeView treeView;
     @BXML
@@ -84,7 +84,7 @@ public class BXmlExplorerDocument extends CardPane implements Bindable {
     private HashMap<Object, String> widgetToID = null;
     private HashMap<Object, TreeNode> componentToTreeNode = null;
 
-    public BXmlExplorerDocument() {
+    public BXMLExplorerDocument() {
     }
 
     @Override
@@ -144,8 +144,11 @@ public class BXmlExplorerDocument extends CardPane implements Bindable {
                         Component comp = playgroundCardPane.getDescendantAt(x, y);
                         if (comp != null) {
                             TreeNode treeNode = componentToTreeNode.get(comp);
-                            treeView.setSelectedPath(getPathForNode(treeView, treeNode));
-                            return true;
+                            Path path = getPathForNode(treeView, treeNode);
+                            if (path != null) {
+                                treeView.setSelectedPath(path);
+                                return true;
+                            }
                         }
                     }
                     return false;
@@ -163,19 +166,19 @@ public class BXmlExplorerDocument extends CardPane implements Bindable {
                     load(file);
                 } catch (RuntimeException exception) {
                     exception.printStackTrace();
-                    BXmlExplorer.displayLoadException(exception, BXmlExplorerDocument.this.getWindow());
+                    BXMLExplorer.displayLoadException(exception, BXMLExplorerDocument.this.getWindow());
                 } catch (IOException exception) {
                     exception.printStackTrace();
-                    BXmlExplorer.displayLoadException(exception, BXmlExplorerDocument.this.getWindow());
+                    BXMLExplorer.displayLoadException(exception, BXMLExplorerDocument.this.getWindow());
                 } catch (SerializationException exception) {
                     exception.printStackTrace();
-                    BXmlExplorer.displayLoadException(exception, BXmlExplorerDocument.this.getWindow());
+                    BXMLExplorer.displayLoadException(exception, BXMLExplorerDocument.this.getWindow());
                 } catch (ParserConfigurationException exception) {
                     exception.printStackTrace();
-                    BXmlExplorer.displayLoadException(exception, BXmlExplorerDocument.this.getWindow());
+                    BXMLExplorer.displayLoadException(exception, BXMLExplorerDocument.this.getWindow());
                 } catch (SAXException exception) {
                     exception.printStackTrace();
-                    BXmlExplorer.displayLoadException(exception, BXmlExplorerDocument.this.getWindow());
+                    BXMLExplorer.displayLoadException(exception, BXMLExplorerDocument.this.getWindow());
                 }
             }
         });
@@ -232,7 +235,7 @@ public class BXmlExplorerDocument extends CardPane implements Bindable {
         }
         final FileInputStream in2 = new FileInputStream(f);
         try {
-            CreateHighlightedXml xml = new CreateHighlightedXml();
+            CreateHighlightedXML xml = new CreateHighlightedXML();
             bxmlSourceTextPane.setDocument(xml.prettyPrint(in2));
         } finally {
             in2.close();
@@ -330,7 +333,7 @@ public class BXmlExplorerDocument extends CardPane implements Bindable {
             resource = "tablepane.png";
         }
         if (resource != null) {
-            URL url = BXmlExplorerDocument.class.getResource(resource);
+            URL url = BXMLExplorerDocument.class.getResource(resource);
             if (url == null) {
                 throw new IllegalStateException("could not load resource " + resource);
             }

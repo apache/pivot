@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 /**
  * Create a nicely syntax highlighted version of the BXML document.
  */
-public class CreateHighlightedXml {
+public class CreateHighlightedXML {
 
     private static final Color ELEMENT_COLOR = new Color(63, 127, 127);
     private static final Color ATTR_NAME_COLOR = new Color(127, 0, 127);
@@ -126,11 +126,11 @@ public class CreateHighlightedXml {
         @Override
         public void startup(Display display, Map<String, String> properties) throws Exception {
 
-            CreateHighlightedXml xml = new CreateHighlightedXml();
-            Document doc = xml.prettyPrint(CreateHighlightedXml.class.getResourceAsStream("builder-test1.bxml"));
+            CreateHighlightedXML xml = new CreateHighlightedXML();
+            Document doc = xml.prettyPrint(CreateHighlightedXML.class.getResourceAsStream("builder-test1.bxml"));
 
             BXMLSerializer bxmlSerializer = new BXMLSerializer();
-            window = (Window) bxmlSerializer.readObject(BXmlExplorer.class,
+            window = (Window) bxmlSerializer.readObject(BXMLExplorer.class,
                 "CreateHighlightedXml.bxml", true);
 
             TextPane textPane = (TextPane) bxmlSerializer.getNamespace().get("textPane");

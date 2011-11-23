@@ -7,7 +7,7 @@
   ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under
   the License. -->
 
-<explorer:BXmlExplorerWindow title="BXML Preview" maximized="true"
+<explorer:BXMLExplorerWindow title="BXML Preview" maximized="true"
   xmlns:bxml="http://pivot.apache.org/bxml" xmlns:content="org.apache.pivot.wtk.content" xmlns:explorer="org.apache.pivot.tutorials.bxmlexplorer"
   xmlns="org.apache.pivot.wtk">
 
@@ -204,4 +204,4 @@
       </Border>
     </TablePane.Row>
   </TablePane>
-</explorer:BXmlExplorerWindow>
+</explorer:BXMLExplorerWindow>
