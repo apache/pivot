@@ -18,6 +18,7 @@ limitations under the License.
 
 <project href="http://pivot.apache.org/">
     <vendor>Apache Pivot</vendor>
+    <title>Apache Pivot Demos</title>
 
     <demo-screenshots>
         <screenshot id="kitchen-sink" src="kitchen_sink.png"/>

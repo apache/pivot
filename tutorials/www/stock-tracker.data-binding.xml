@@ -64,7 +64,7 @@ limitations under the License.
             selection state of a <tt>ListView</tt> component.
         </p>
 
-        <h2>Data Binding in Stock Tracker</h2>
+        <h3>Data Binding in Stock Tracker</h3>
 
         <p>
             The Stock Tracker demo uses data binding to populate the fields in the quote detail
@@ -157,7 +157,7 @@ limitations under the License.
             ]]>
         </source>
 
-        <h2>Bind Mappings</h2>
+        <h3>Bind Mappings</h3>
 
         <p>
             Also note the use of the "textBindMapping" attributes. Bind mappings allow a caller

@@ -155,7 +155,7 @@ limitations under the License.
             arrangement of components within a section to be customized.
         </p>
 
-        <h2>Form Validation</h2>
+        <h3>Form Validation</h3>
         <p>
             Pressing the "Submit" button performs some simple validation on the name fields,
             ensuring that the user has provided some text in each field. If either field is empty,

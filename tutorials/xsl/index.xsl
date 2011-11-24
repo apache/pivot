@@ -39,6 +39,9 @@ limitations under the License.
             </head>
 
             <body>
+                <h2>
+                  <xsl:value-of select="$project/title"/>
+                </h2>
                 <xsl:apply-templates select="body"/>
             </body>
         </html>

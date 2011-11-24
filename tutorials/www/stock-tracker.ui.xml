@@ -42,7 +42,7 @@ limitations under the License.
             information used by the serializer.
         </p>
 
-        <h2>StockTrackerWindow</h2>
+        <h3>StockTrackerWindow</h3>
 
         <p>
             The following is a snippet of code taken from <tt>stock_tracker_window.bxml</tt>,

@@ -30,7 +30,9 @@ limitations under the License.
         <html xmlns="http://www.w3.org/1999/xhtml">
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-                <title><xsl:value-of select="$project/vendor"/> Demos</title>
+                <title>
+                  <xsl:value-of select="$project/title"/>
+                </title>
                 <link rel="stylesheet" href="demo.css" type="text/css"/>
                 <link rel="icon" href="favicon.png" type="image/png" />
                 <link rel="shortcut icon" href="favicon.png" type="image/png" />
@@ -38,6 +40,9 @@ limitations under the License.
             </head>
 
             <body>
+                <h2>
+                  <xsl:value-of select="$project/title"/>
+                </h2>
                 <xsl:apply-templates select="body"/>
             </body>
         </html>
@@ -54,6 +59,10 @@ limitations under the License.
 
         <h3><xsl:value-of select="normalize-space($document/properties/title)"/></h3>
         <p>
+            <xsl:value-of select="normalize-space($document/properties/description)"/>
+        </p>
+
+        <p>
             <a href="{$id}.html">Applet</a>
 
             <!-- JNLP translation must ignore the head, so if one exists, we skip JNLP link -->
@@ -61,9 +70,6 @@ limitations under the License.
                 <xsl:text> | </xsl:text>
                 <a href="{$id}.jnlp">Web Start</a>
             </xsl:if>
-        </p>
-        <p>
-            <xsl:value-of select="normalize-space($document/properties/description)"/>
         </p>
 
         <!-- Include a screenshot if one exists -->

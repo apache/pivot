@@ -23,10 +23,10 @@ limitations under the License.
 
     <body>
         <p>
-            A collection of Pivot demos. <br/>
+            A collection of Pivot demos.
             All demos require <a href="http://www.java.com/">Java 6</a> or greater. <br/>
             <br/>
-            Note that some demos uses signed jars.
+            Note that signed jars are used in some demo.
         </p>
         <br/>
 
