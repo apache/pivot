@@ -52,16 +52,12 @@ limitations under the License.
     <xsl:template match="document-item">
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="document" select="document(concat('../www/', $id, '.xml'))/document"/>
-
-        <xsl:if test="preceding::document-item">
-            <hr/>
-        </xsl:if>
-
+    <tr>
+        <td class="indexLeft">
         <h3><xsl:value-of select="normalize-space($document/properties/title)"/></h3>
         <p>
             <xsl:value-of select="normalize-space($document/properties/description)"/>
         </p>
-
         <p>
             <a href="{$id}.html">Applet</a>
 
@@ -71,11 +67,15 @@ limitations under the License.
                 <a href="{$id}.jnlp">Web Start</a>
             </xsl:if>
         </p>
-
+        </td>
+        <td class="indexRight">
         <!-- Include a screenshot if one exists -->
         <xsl:if test="$project/demo-screenshots/screenshot[@id=$id]">
             <xsl:variable name="src" select="$project/demo-screenshots/screenshot[@id=$id]/@src"/>
             <p><img src="{$src}"/></p>
         </xsl:if>
+        </td>
+    </tr>
     </xsl:template>
+
 </xsl:stylesheet>

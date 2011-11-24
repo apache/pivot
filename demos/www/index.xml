@@ -30,6 +30,7 @@ limitations under the License.
         </p>
         <br/>
 
+<table>
         <document-item id="kitchen-sink"/>
         <document-item id="stock-tracker"/>
         <document-item id="component-explorer"/>
@@ -47,6 +48,7 @@ limitations under the License.
         <document-item id="dom-interaction"/>
         <document-item id="fixed-column-table"/>
         <document-item id="multiselect"/>
+</table>
 
         <br/>
         <hr/>
