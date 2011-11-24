@@ -873,7 +873,8 @@ public abstract class Container extends Component
                 return;
             }
             if (!java.awt.EventQueue.isDispatchThread()) {
-                throw new IllegalStateException("this method can only be called from the AWT event dispatch thread");
+                throw new IllegalStateException("this method can only be called from the AWT event dispatch thread"
+                    + ", and not from \"" + threadName + "\"");
             }
         }
     };
