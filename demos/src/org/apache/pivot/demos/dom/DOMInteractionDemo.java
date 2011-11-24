@@ -18,18 +18,37 @@ package org.apache.pivot.demos.dom;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Border;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.BrowserApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
 public class DOMInteractionDemo implements Application {
+
+    private class CallFromBrowserCallback implements Runnable {
+        String text;
+
+        public CallFromBrowserCallback(String text) {
+            this.text = text;
+        }
+
+        @Override
+        public void run() {
+            if (window.isBlocked()) {
+                System.out.println("I'm already saying \"" + text + "\" !");
+            } else {
+                Prompt.prompt(text, window);
+            }
+        }
+    }
+
     private Window window = null;
     private PushButton helloButton = null;
 
@@ -75,10 +94,7 @@ public class DOMInteractionDemo implements Application {
     }
 
     public void sayHello(String helloText) {
-        if (window.isBlocked()) {
-            System.out.println("I'm already saying hello!");
-        } else {
-            Prompt.prompt(helloText, window);
-        }
+        ApplicationContext.queueCallback(new CallFromBrowserCallback(helloText));
     }
+
 }
