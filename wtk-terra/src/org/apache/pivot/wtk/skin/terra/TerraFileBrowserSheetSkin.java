@@ -285,7 +285,18 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
                 case SAVE_AS: {
                     String fileName = saveAsTextInput.getText();
-                    File selectedFile = new File(fileBrowser.getRootDirectory(), fileName);
+                    File selectedFile = new File(fileName);
+                    File parentFile = selectedFile.getParentFile();
+                    if (parentFile == null) {
+                        selectedFile = new File(fileBrowser.getRootDirectory(), fileName);
+                    } else {
+                        if (parentFile.isAbsolute() || parentFile.getPath().startsWith(File.separator)) {
+                            fileBrowserSheet.setRootDirectory(parentFile.getAbsoluteFile());
+                        } else {
+                            fileBrowserSheet.setRootDirectory(new File(fileBrowser.getRootDirectory(), parentFile.getName()));
+                            selectedFile = new File(selectedFile.getName());
+                        }
+                    }
                     fileBrowserSheet.setSelectedFiles(new ArrayList<File>(selectedFile));
                     break;
                 }
