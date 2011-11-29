@@ -106,6 +106,7 @@ Release Notes for Pivot 2.0.1:
     * [PIVOT-809] - Wrong position for nested menu
     * [PIVOT-814] - TextArea#getText throws IndexOutOfBoundsException when called from TextChanged method under setText
     * [PIVOT-815] - Printing crashes with Out Of Memory exception
+    * [PIVOT-825] - Specifying a full path in a Save As FileBrowserSheet gives IllegalArgumentException when you try to close
 
 ** Task
     * [PIVOT-637] - Ensure that keystrokes & associated functionality handled by ComponentKeyListener methods are documented in javadocs
