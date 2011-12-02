@@ -27,6 +27,7 @@ Release Notes for Pivot 2.0.1:
     * [PIVOT-790] - Add FillPane layout container that acts like a BoxPane with fill=true in both directions
 
 ** Improvement
+    * [PIVOT-656] - FileBrowserSheet seems frozen while browsing network folders
     * [PIVOT-677] - Add ability to navigate a ButtonGroup of RadioButtons using the keyboard
     * [PIVOT-682] - Enable slide-in direction specification in the case of Sheet component
     * [PIVOT-687] - BXMLSerializer, would like to be able to specify a classloader for loading custom components
