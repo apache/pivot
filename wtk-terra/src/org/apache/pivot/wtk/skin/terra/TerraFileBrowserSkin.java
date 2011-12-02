@@ -310,7 +310,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         @Override
-		public String toString(Object row, String columnName) {
+        public String toString(Object row, String columnName) {
             String string;
 
             File file = (File)row;
@@ -608,11 +608,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 if (previousSelectedItem != null) {
                     File drive = (File)listButton.getSelectedItem();
                     if(drive.canRead()) {
-						fileBrowser.setRootDirectory(drive);
-					} else {
-						refreshRoots = true;
-						listButton.setSelectedItem(previousSelectedItem);
-					}
+                        fileBrowser.setRootDirectory(drive);
+                    } else {
+                        refreshRoots = true;
+                        listButton.setSelectedItem(previousSelectedItem);
+                    }
                 }
             }
         });
@@ -929,18 +929,18 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         @SuppressWarnings("unchecked")
-		ArrayList<File> drives = (ArrayList<File>) driveListButton.getListData();
+        ArrayList<File> drives = (ArrayList<File>) driveListButton.getListData();
         if(refreshRoots) {
-	        File[] roots = File.listRoots();
-	        drives = new ArrayList<File>();
-	        for (int i = 0; i < roots.length; i++) {
-	            File root = roots[i];
-	            if (root.exists()) {
-	                drives.add(root);
-	            }
-	        }
-	        driveListButton.setListData(drives);
-	        refreshRoots = false;
+            File[] roots = File.listRoots();
+            drives = new ArrayList<File>();
+            for (int i = 0; i < roots.length; i++) {
+                File root = roots[i];
+                if (root.exists()) {
+                    drives.add(root);
+                }
+            }
+            driveListButton.setListData(drives);
+            refreshRoots = false;
         }
 
         driveListButton.setVisible(drives.getLength() > 1);
