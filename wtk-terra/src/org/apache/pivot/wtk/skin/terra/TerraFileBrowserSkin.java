@@ -52,6 +52,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
@@ -70,7 +71,6 @@ import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.VerticalAlignment;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
 
@@ -309,7 +309,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             label.getStyles().put("color", color);
         }
 
-        public String toString(Object row, String columnName) {
+        @Override
+		public String toString(Object row, String columnName) {
             String string;
 
             File file = (File)row;
@@ -544,7 +545,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         public File[] execute() {
             FileBrowser fileBrowser = (FileBrowser)getComponent();
             File rootDirectory = fileBrowser.getRootDirectory();
-            File[] files = rootDirectory.listFiles(HIDDEN_FILE_FILTER);
+            File[] files = rootDirectory.listFiles();
 
             return files;
         }
@@ -566,6 +567,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     private boolean hideDisabledFiles = false;
 
     private boolean updatingSelection = false;
+    private boolean refreshRoots = true;
 
     private RefreshFileListTask refreshFileListTask = null;
 
@@ -605,7 +607,12 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
                 if (previousSelectedItem != null) {
                     File drive = (File)listButton.getSelectedItem();
-                    fileBrowser.setRootDirectory(drive);
+                    if(drive.canRead()) {
+						fileBrowser.setRootDirectory(drive);
+					} else {
+						refreshRoots = true;
+						listButton.setSelectedItem(previousSelectedItem);
+					}
                 }
             }
         });
@@ -921,16 +928,21 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             ancestorDirectory = ancestorDirectory.getParentFile();
         }
 
-        File[] roots = File.listRoots();
-        ArrayList<File> drives = new ArrayList<File>();
-        for (int i = 0; i < roots.length; i++) {
-            File root = roots[i];
-            if (root.isDirectory()) {
-                drives.add(root);
-            }
+        @SuppressWarnings("unchecked")
+		ArrayList<File> drives = (ArrayList<File>) driveListButton.getListData();
+        if(refreshRoots) {
+	        File[] roots = File.listRoots();
+	        drives = new ArrayList<File>();
+	        for (int i = 0; i < roots.length; i++) {
+	            File root = roots[i];
+	            if (root.exists()) {
+	                drives.add(root);
+	            }
+	        }
+	        driveListButton.setListData(drives);
+	        refreshRoots = false;
         }
 
-        driveListButton.setListData(drives);
         driveListButton.setVisible(drives.getLength() > 1);
 
         File drive;
@@ -1051,7 +1063,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     for (int i = 0; i < files.length; i++) {
                         final File file = files[i];
 
-                        if (includeFileFilter.include(file)) {
+                        if (includeFileFilter.include(file) && HIDDEN_FILE_FILTER.accept(file)) {
                             ArrayList<File> fileTableData = (ArrayList<File>)fileTableView.getTableData();
 
                             int index;
