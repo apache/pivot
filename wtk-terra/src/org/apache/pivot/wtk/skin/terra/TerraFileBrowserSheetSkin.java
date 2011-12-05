@@ -265,44 +265,43 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             && !okButton.isEnabled()) {
             vote = Vote.DENY;
         } else {
-            vote = super.previewSheetClose(sheet, result);
-        }
+            if (result) {
+                updatingSelection = true;
 
-        if (vote == Vote.APPROVE
-            && result) {
-            updatingSelection = true;
+                FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)sheet;
+                FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 
-            FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)sheet;
-            FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
-
-            switch (mode) {
-                case OPEN:
-                case OPEN_MULTIPLE:
-                case SAVE_TO: {
-                    fileBrowserSheet.setSelectedFiles(fileBrowser.getSelectedFiles());
-                    break;
-                }
-
-                case SAVE_AS: {
-                    String fileName = saveAsTextInput.getText();
-                    File selectedFile = new File(fileName);
-                    File parentFile = selectedFile.getParentFile();
-                    if (parentFile == null) {
-                        selectedFile = new File(fileBrowser.getRootDirectory(), fileName);
-                    } else {
-                        if (parentFile.isAbsolute() || parentFile.getPath().startsWith(File.separator)) {
-                            fileBrowserSheet.setRootDirectory(parentFile.getAbsoluteFile());
-                        } else {
-                            fileBrowserSheet.setRootDirectory(new File(fileBrowser.getRootDirectory(), parentFile.getName()));
-                            selectedFile = new File(selectedFile.getName());
-                        }
+                switch (mode) {
+                    case OPEN:
+                    case OPEN_MULTIPLE:
+                    case SAVE_TO: {
+                        fileBrowserSheet.setSelectedFiles(fileBrowser.getSelectedFiles());
+                        break;
                     }
-                    fileBrowserSheet.setSelectedFiles(new ArrayList<File>(selectedFile));
-                    break;
+
+                    case SAVE_AS: {
+                        String fileName = saveAsTextInput.getText();
+                        File selectedFile = new File(fileName);
+                        File parentFile = selectedFile.getParentFile();
+                        if (parentFile == null) {
+                            selectedFile = new File(fileBrowser.getRootDirectory(), fileName);
+                        } else {
+                            if (parentFile.isAbsolute() || parentFile.getPath().startsWith(File.separator)) {
+                                fileBrowserSheet.setRootDirectory(parentFile.getAbsoluteFile());
+                            } else {
+                                fileBrowserSheet.setRootDirectory(new File(fileBrowser.getRootDirectory(), parentFile.getName()));
+                                selectedFile = new File(selectedFile.getName());
+                            }
+                        }
+                        fileBrowserSheet.setSelectedFiles(new ArrayList<File>(selectedFile));
+                        break;
+                    }
                 }
+
+                updatingSelection = false;
             }
 
-            updatingSelection = false;
+            vote = super.previewSheetClose(sheet, result);
         }
 
         return vote;
