@@ -791,7 +791,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             } else {
                 Bounds resizeHandleBounds = resizeHandle.getBounds();
 
-                if (resizeHandleBounds.contains(x, y)) {
+                if (resizable && resizeHandleBounds.contains(x, y)) {
                     resizeOffset = new Point(getWidth() - x, getHeight() - y);
                     Mouse.capture(component);
                 }
