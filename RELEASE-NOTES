@@ -109,6 +109,7 @@ Release Notes for Pivot 2.0.1:
     * [PIVOT-815] - Printing crashes with Out Of Memory exception
     * [PIVOT-825] - Specifying a full path in a Save As FileBrowserSheet gives IllegalArgumentException when you try to close
     * [PIVOT-826] - Setting a Frame's 'resizable' style to 'false' does not prevent the Frame from being resized
+    * [PIVOT-828] - New FillPane container ignores 'visible' attribute of children during layout
 
 ** Task
     * [PIVOT-637] - Ensure that keystrokes & associated functionality handled by ComponentKeyListener methods are documented in javadocs
