@@ -247,7 +247,16 @@ public class FillPaneSkin extends ContainerSkin
     @Override
     public void layout() {
         FillPane fillPane = (FillPane)getComponent();
-        int n = fillPane.getLength();
+        // n is the number of 'visible' components
+        // len is the total number of components
+        int n = 0;
+        int len = fillPane.getLength();
+        for (int i = 0; i < len; i++) {
+            Component component = fillPane.get(i);
+            if (component.isVisible()) {
+                n++;
+            }
+        }
 
         int width = getWidth();
         int height = getHeight();
@@ -266,12 +275,12 @@ public class FillPaneSkin extends ContainerSkin
             int leftoverWidth = totalWidth - (dividedWidth * n);
 
             // Lay out the components
-            for (int i = 0; i < n; i++) {
+            for (int i = 0, j = 0; i < len; i++) {
                 Component component = fillPane.get(i);
 
                 if (component.isVisible()) {
                     int componentWidth = dividedWidth;
-                    if (i == n - 1)
+                    if (j == n - 1)
                         componentWidth += leftoverWidth;
 
                     int componentHeight = Math.max(height - (padding.top
@@ -285,6 +294,7 @@ public class FillPaneSkin extends ContainerSkin
 
                     // Increment the x-coordinate
                     x += componentWidth + spacing;
+                    j++;
                 }
             }
         } else {
@@ -297,12 +307,12 @@ public class FillPaneSkin extends ContainerSkin
             int leftoverHeight = totalHeight - (dividedHeight * n);
 
             // Lay out the components
-            for (int i = 0; i < n; i++) {
+            for (int i = 0, j = 0; i < len; i++) {
                 Component component = fillPane.get(i);
 
                 if (component.isVisible()) {
                     int componentHeight = dividedHeight;
-                    if (i == n - 1)
+                    if (j == n - 1)
                         componentHeight += leftoverHeight;
 
                     int componentWidth = Math.max(width - (padding.left
@@ -316,6 +326,7 @@ public class FillPaneSkin extends ContainerSkin
 
                     // Increment the y-coordinate
                     y += componentHeight + spacing;
+                    j++;
                 }
             }
         }
