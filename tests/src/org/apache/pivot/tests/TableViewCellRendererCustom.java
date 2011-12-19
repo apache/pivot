@@ -20,11 +20,11 @@ import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
 
 /**
- * Minimal sample for a customized version of table cell renderer. 
+ * Minimal sample for a customized version of table cell renderer.
  * Renders cell contents as a string, but in this case, transformed.
  * <br/>
- * Note that here it's possible to extends Label implements TableView.CellRenderer, 
- * or even to extends directly TableViewCellRenderer 
+ * Note that here it's possible to extends Label implements TableView.CellRenderer,
+ * or even to extends directly TableViewCellRenderer
  * (because it extends Label and implements TableView.CellRenderer).
  */
 public class TableViewCellRendererCustom extends TableViewCellRenderer {
