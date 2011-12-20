@@ -60,6 +60,7 @@ Release Notes for Pivot 2.0.1:
     * [PIVOT-819] - Improve the documentation for BoxPane and several other components
     * [PIVOT-821] - Add support for Shift-Ins to do a Paste on Windows
     * [PIVOT-823] - Add BXML Explorer, to see a live graphical preview of BXML files
+    * [PIVOT-829] - Select file in FileBrowserSheet
 
 ** Bug
     * [PIVOT-247] - Mouse.capture() interferes with mouseClick event
