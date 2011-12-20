@@ -1199,13 +1199,19 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         // Select the range
                         int startIndex = tableView.getFirstSelectedIndex();
                         int endIndex = tableView.getLastSelectedIndex();
-                        Span selectedRange = (rowIndex > startIndex) ?
-                            new Span(startIndex, rowIndex) : new Span(rowIndex, endIndex);
+                        // if there is nothing currently selected, selected the indicated row
+                        if (startIndex == -1) {
+                            tableView.addSelectedIndex(rowIndex);
+                        } else {
+                            // otherwise select the range of rows
+                            Span selectedRange = (rowIndex > startIndex) ?
+                                new Span(startIndex, rowIndex) : new Span(rowIndex, endIndex);
 
-                        ArrayList<Span> selectedRanges = new ArrayList<Span>();
-                        selectedRanges.add(selectedRange);
+                            ArrayList<Span> selectedRanges = new ArrayList<Span>();
+                            selectedRanges.add(selectedRange);
 
-                        tableView.setSelectedRanges(selectedRanges);
+                            tableView.setSelectedRanges(selectedRanges);
+                        }
                     }
                 } else if (Keyboard.isPressed(commandModifier)
                     && selectMode == TableView.SelectMode.MULTI) {
