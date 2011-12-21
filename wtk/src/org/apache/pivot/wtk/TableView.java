@@ -1723,13 +1723,7 @@ public class TableView extends Component {
      * otherwise.
      */
     public boolean isRowSelected(int index) {
-        if (index < 0) {
-            throw new IndexOutOfBoundsException("index < 0, " + index);
-        }
-        if (index >= tableData.getLength()) {
-            throw new IndexOutOfBoundsException("index >= tableData.getLength(), "
-                  + index + " >= " + tableData.getLength());
-        }
+        indexBoundsCheck("index", index, 0, tableData.getLength() - 1);
 
         return rangeSelection.containsIndex(index);
     }

@@ -78,10 +78,7 @@ public class CardPane extends Container {
      * The selected card index, or <tt>-1</tt> for no selection.
      */
     public void setSelectedIndex(int selectedIndex) {
-        if (selectedIndex < -1
-            || selectedIndex > getLength() - 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("selectedIndex", selectedIndex, -1, getLength() -1);
 
         int previousSelectedIndex = this.selectedIndex;
 

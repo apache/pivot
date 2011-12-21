@@ -1083,9 +1083,7 @@ public class ListView extends Component {
      * otherwise.
      */
     public boolean isItemSelected(int index) {
-        if (index < 0 || index >= listData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("index", index, 0, listData.getLength() - 1);
 
         return (rangeSelection.containsIndex(index));
     }

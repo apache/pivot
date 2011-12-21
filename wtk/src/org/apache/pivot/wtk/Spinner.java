@@ -496,10 +496,7 @@ public class Spinner extends Container {
      * The index to select, or <tt>-1</tt> to clear the selection.
      */
     public void setSelectedIndex(int selectedIndex) {
-        if (selectedIndex < -1
-            || selectedIndex >= spinnerData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("selectedIndex", selectedIndex, -1, spinnerData.getLength() - 1);
 
         int previousSelectedIndex = this.selectedIndex;
 

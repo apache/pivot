@@ -504,10 +504,7 @@ public class ListButton extends Button {
      * selection.
      */
     public void setSelectedIndex(int selectedIndex) {
-        if (selectedIndex < -1
-            || selectedIndex >= listData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("selectedIndex", selectedIndex, -1, listData.getLength() - 1);
 
         int previousSelectedIndex = this.selectedIndex;
 

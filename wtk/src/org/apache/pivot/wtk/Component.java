@@ -2920,4 +2920,18 @@ public abstract class Component implements ConstrainedVisual {
     public static ListenerList<ComponentClassListener> getComponentClassListeners() {
         return componentClassListeners;
     }
+
+    /**
+     * Provide a nice exception message for out of range values.
+     *
+     * @throws IndexOutOfBoundsException if index is out of range.
+     */
+    protected static final void indexBoundsCheck(String indexName, int index, int min, int max) throws IndexOutOfBoundsException {
+        if (index < min) {
+            throw new IndexOutOfBoundsException(indexName + index + " < " + min);
+        }
+        if (index > max) {
+            throw new IndexOutOfBoundsException(indexName + index + " > " + max);
+        }
+    }
 }

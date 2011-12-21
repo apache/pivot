@@ -718,14 +718,7 @@ public class TextPane extends Container {
             throw new IllegalArgumentException("selectionLength is negative, selectionLength=" + selectionLength);
         }
 
-        if (selectionStart < 0) {
-            throw new IndexOutOfBoundsException("selectionStart < 0, selectionStart=" + selectionStart);
-        }
-
-        if (selectionStart >= document.getCharacterCount()) {
-            throw new IndexOutOfBoundsException("selectionStart=" + selectionStart
-                + ", document.characterCount=" + document.getCharacterCount());
-        }
+        indexBoundsCheck("selectionStart", selectionStart, 0, document.getCharacterCount() - 1);
 
         if (selectionStart + selectionLength > document.getCharacterCount()) {
             throw new IndexOutOfBoundsException("selectionStart=" + selectionStart + ", selectionLength=" + selectionLength

@@ -317,10 +317,7 @@ public class TabPane extends Container {
     }
 
     public void setSelectedIndex(int selectedIndex) {
-        if (selectedIndex < -1
-            || selectedIndex > tabs.getLength() - 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("selectedIndex", selectedIndex, -1, tabs.getLength() - 1);
 
         int previousSelectedIndex = this.selectedIndex;
 
