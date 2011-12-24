@@ -21,6 +21,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuPopup;
@@ -159,12 +160,24 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
 
         if (menu != null
             && !menuPopup.isOpen()) {
+            // Size and position the popup
             Display display = menuItem.getDisplay();
+            Dimensions displaySize = display.getSize();
+
             Point location = menuItem.mapPointToAncestor(display, getWidth(), 0);
-
-            // TODO Ensure that the popup remains within the bounds of the display
-
             menuPopup.setLocation(location.x, location.y);
+
+            int width = getWidth();
+
+            // If the popup extends over the right edge of the display,
+            // move it so that the right edge of the popup lines up with the
+            // left edge of the menu item
+            int popupWidth = menuPopup.getPreferredWidth();
+            if (location.x + popupWidth > displaySize.width) {
+                menuPopup.setX(location.x - width - popupWidth);
+            }
+
+
             menuPopup.open(menuItem.getWindow());
             menuPopup.requestFocus();
         }

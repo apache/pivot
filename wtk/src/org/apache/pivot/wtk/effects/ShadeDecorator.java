@@ -69,14 +69,25 @@ public class ShadeDecorator implements Decorator {
         this.color = color;
     }
 
+    /**
+     * Returns the opacity of the decorator, in [0,1].
+     */
     public float getOpacity() {
         return opacity;
     }
 
+    /**
+     * Sets the opacity of the decorator.
+     * @param opacity A number between 0 (transparent) and 1 (opaque)
+     */
     public void setOpacity(float opacity) {
         this.opacity = opacity;
     }
 
+    /**
+     * Sets the opacity of the decorator.
+     * @param opacity A number between 0 (transparent) and 1 (opaque)
+     */
     public void setOpacity(Number opacity) {
         if (opacity == null) {
             throw new IllegalArgumentException("opacity is null.");
@@ -85,10 +96,16 @@ public class ShadeDecorator implements Decorator {
         setOpacity(opacity.floatValue());
     }
 
+    /**
+     * Returns the color of the decorator
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Sets the color of the decorator
+     */
     public void setColor(Color color) {
         if (color == null) {
             throw new IllegalArgumentException("color is null.");
@@ -98,6 +115,8 @@ public class ShadeDecorator implements Decorator {
     }
 
     /**
+     * Sets the color of the decorator
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setColor(String color) {
         if (color == null) {

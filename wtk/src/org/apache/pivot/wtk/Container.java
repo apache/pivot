@@ -221,12 +221,8 @@ public abstract class Container extends Component
         if (from != to) {
             int n = components.getLength();
 
-            if (from < 0
-                || from >= n
-                || to < 0
-                || to >= n) {
-                throw new IndexOutOfBoundsException();
-            }
+            indexBoundsCheck("from", from, 0, n - 1);
+            indexBoundsCheck("to", to, 0, n - 1);
 
             Sequence<Component> removed = components.remove(from, 1);
             Component component = removed.get(0);
@@ -873,7 +869,8 @@ public abstract class Container extends Component
                 return;
             }
             if (!java.awt.EventQueue.isDispatchThread()) {
-                throw new IllegalStateException("this method can only be called from the AWT event dispatch thread");
+                throw new IllegalStateException("this method can only be called from the AWT event dispatch thread"
+                    + ", and not from \"" + threadName + "\"");
             }
         }
     };

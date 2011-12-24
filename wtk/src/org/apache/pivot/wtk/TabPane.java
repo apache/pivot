@@ -317,10 +317,7 @@ public class TabPane extends Container {
     }
 
     public void setSelectedIndex(int selectedIndex) {
-        if (selectedIndex < -1
-            || selectedIndex > tabs.getLength() - 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("selectedIndex", selectedIndex, -1, tabs.getLength() - 1);
 
         int previousSelectedIndex = this.selectedIndex;
 
@@ -338,6 +335,19 @@ public class TabPane extends Container {
 
     public Component getSelectedTab() {
         return (selectedIndex == -1) ? null : tabs.get(selectedIndex);
+    }
+
+    public void setSelectedTab(Component comp) {
+        if (comp == null) {
+            setSelectedIndex(-1);
+        } else {
+            int index = tabs.indexOf(comp);
+            if (index < 0) {
+                throw new IllegalArgumentException("component is not a child of the TabPane");
+            } else {
+                setSelectedIndex(index);
+            }
+        }
     }
 
     public Button.DataRenderer getTabDataRenderer() {

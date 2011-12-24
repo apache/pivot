@@ -49,6 +49,7 @@ public class TableView extends Component {
     /**
      * Contains information about a table column.
      */
+    @DefaultProperty("cellRenderer")
     public static class Column {
         private TableView tableView = null;
 
@@ -298,7 +299,7 @@ public class TableView extends Component {
          */
         public void setWidth(int width, boolean relative) {
             if (width < (relative ? 0 : -1)) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("illegal width " + width);
             }
 
             int previousWidth = this.width;
@@ -334,11 +335,12 @@ public class TableView extends Component {
          */
         public void setWidthLimits(int minimumWidth, int maximumWidth) {
             if (minimumWidth < 0) {
-                throw new IllegalArgumentException("Minimum width is negative.");
+                throw new IllegalArgumentException("Minimum width is negative, " + minimumWidth);
             }
 
             if (maximumWidth < minimumWidth) {
-                throw new IllegalArgumentException("Maximum width is smaller than minimum width.");
+                throw new IllegalArgumentException("Maximum width is smaller than minimum width, "
+                            + maximumWidth + "<" + minimumWidth);
             }
 
             int previousMinimumWidth = this.minimumWidth;
@@ -491,7 +493,7 @@ public class TableView extends Component {
     }
 
     /**
-     * Table cell renderer interface.
+     * {@link Renderer} interface to customize the appearance of a cell in a TableView.
      */
     public interface CellRenderer extends Renderer {
         /**
@@ -543,7 +545,7 @@ public class TableView extends Component {
     }
 
     /**
-     * Table view header data renderer interface.
+     * {@link Renderer} interface to customize the appearance of the header of a TableView
      */
     public interface HeaderDataRenderer extends Renderer {
         /**
@@ -1468,8 +1470,12 @@ public class TableView extends Component {
                 throw new IllegalArgumentException("range is null.");
             }
 
-            if (range.start < 0 || range.end >= tableData.getLength()) {
-                throw new IndexOutOfBoundsException();
+            if (range.start < 0) {
+                throw new IndexOutOfBoundsException("range.start < 0, " + range.start);
+            }
+            if (range.end >= tableData.getLength()) {
+                throw new IndexOutOfBoundsException("range.end >= tableData length, "
+                            + range.end + " >= " + tableData.getLength());
             }
 
             listSelection.addRange(range.start, range.end);
@@ -1579,8 +1585,12 @@ public class TableView extends Component {
             throw new IllegalStateException("Table view is not in multi-select mode.");
         }
 
-        if (start < 0 || end >= tableData.getLength()) {
-            throw new IndexOutOfBoundsException();
+        if (start < 0) {
+            throw new IndexOutOfBoundsException("start < 0, " + start);
+        }
+        if (end >= tableData.getLength()) {
+            throw new IndexOutOfBoundsException("end >= tableData.getLength(), "
+                  + end + " >= " + tableData.getLength());
         }
 
         Sequence<Span> addedRanges = rangeSelection.addRange(start, end);
@@ -1647,8 +1657,12 @@ public class TableView extends Component {
             throw new IllegalStateException("Table view is not in multi-select mode.");
         }
 
-        if (start < 0 || end >= tableData.getLength()) {
-            throw new IndexOutOfBoundsException();
+        if (start < 0) {
+            throw new IndexOutOfBoundsException("start < 0, " + start);
+        }
+        if (end >= tableData.getLength()) {
+            throw new IndexOutOfBoundsException("end >= tableData.getLength(), "
+                  + end + " >= " + tableData.getLength());
         }
 
         Sequence<Span> removedRanges = rangeSelection.removeRange(start, end);
@@ -1709,11 +1723,9 @@ public class TableView extends Component {
      * otherwise.
      */
     public boolean isRowSelected(int index) {
-        if (index < 0 || index >= tableData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("index", index, 0, tableData.getLength() - 1);
 
-        return (rangeSelection.containsIndex(index));
+        return rangeSelection.containsIndex(index);
     }
 
     public Object getSelectedRow() {
@@ -1750,7 +1762,7 @@ public class TableView extends Component {
     @SuppressWarnings("unchecked")
     public void setSelectedRows(Sequence<Object> rows) {
         if (rows == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("rows is null");
         }
 
         ArrayList<Span> selectedRanges = new ArrayList<Span>();
@@ -1836,7 +1848,7 @@ public class TableView extends Component {
      */
     public Dictionary<String, SortDirection> setSort(Sequence<Dictionary.Pair<String, SortDirection>> sort) {
         if (sort == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("sort is null");
         }
 
         sortMap.clear();
@@ -1866,7 +1878,7 @@ public class TableView extends Component {
      */
     public final Dictionary<String, SortDirection> setSort(String sort) {
         if (sort == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("sort is null");
         }
 
         try {
@@ -1975,7 +1987,7 @@ public class TableView extends Component {
 
     public void setTableDataBindType(BindType tableDataBindType) {
         if (tableDataBindType == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("tableDataBindType is null");
         }
 
         BindType previousTableDataBindType = this.tableDataBindType;
@@ -2018,7 +2030,7 @@ public class TableView extends Component {
 
     public void setSelectedRowBindType(BindType selectedRowBindType) {
         if (selectedRowBindType == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("selectedRowBindType is null");
         }
 
         BindType previousSelectedRowBindType = this.selectedRowBindType;
@@ -2060,7 +2072,7 @@ public class TableView extends Component {
 
     public void setSelectedRowsBindType(BindType selectedRowsBindType) {
         if (selectedRowsBindType == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("selectedRowsBindType is null");
         }
 
         BindType previousSelectedRowsBindType = this.selectedRowsBindType;

@@ -61,7 +61,7 @@ public class ListView extends Component {
     }
 
     /**
-     * List item renderer interface.
+     * {@link Renderer} interface to customize the appearance of items in a ListView.
      */
     public interface ItemRenderer extends Renderer {
         /**
@@ -1083,9 +1083,7 @@ public class ListView extends Component {
      * otherwise.
      */
     public boolean isItemSelected(int index) {
-        if (index < 0 || index >= listData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("index", index, 0, listData.getLength() - 1);
 
         return (rangeSelection.containsIndex(index));
     }

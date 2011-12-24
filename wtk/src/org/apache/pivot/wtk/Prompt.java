@@ -269,10 +269,7 @@ public class Prompt extends Sheet {
     }
 
     public void setSelectedOptionIndex(int selectedOption) {
-        if (selectedOption < -1
-            || selectedOption > options.getLength() - 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("selectedOption", selectedOption, -1, options.getLength() - 1);
 
         int previousSelectedOption = this.selectedOptionIndex;
 

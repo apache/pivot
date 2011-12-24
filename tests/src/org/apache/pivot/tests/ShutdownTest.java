@@ -52,8 +52,11 @@ public class ShutdownTest implements Application {
             alert.setModal(false);
             alert.open(display, new DialogCloseListener() {
                 public void dialogClosed(Dialog dialog, boolean modal) {
-                    Alert alert = (Alert)dialog;
+                    if (!(dialog instanceof Alert)) {
+                        return ;
+                    }
 
+                    Alert alert = (Alert)dialog;
                     if (alert.getResult()) {
                         if (alert.getSelectedOptionIndex() == 1) {
                             cancelShutdown = false;

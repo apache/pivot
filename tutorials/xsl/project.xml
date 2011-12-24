@@ -17,5 +17,6 @@ limitations under the License.
 -->
 
 <project href="http://pivot.apache.org/">
+    <vendor>Apache Pivot</vendor>
     <title>Apache Pivot Tutorials</title>
 </project>

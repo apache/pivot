@@ -33,7 +33,10 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.ListView;
+import org.apache.pivot.wtk.ListView.SelectMode;
 import org.apache.pivot.wtk.ListViewItemListener;
 import org.apache.pivot.wtk.ListViewItemStateListener;
 import org.apache.pivot.wtk.ListViewListener;
@@ -42,9 +45,6 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Keyboard.Modifier;
-import org.apache.pivot.wtk.ListView.SelectMode;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -64,6 +64,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     private Color highlightBackgroundColor;
     private Color alternateItemBackgroundColor;
     private boolean showHighlight;
+    private boolean wrapSelectNext;
     private boolean variableItemHeight;
     private Insets checkboxPadding = new Insets(2, 2, 2, 0);
 
@@ -94,6 +95,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         highlightBackgroundColor = theme.getColor(10);
         alternateItemBackgroundColor = null;
         showHighlight = true;
+        wrapSelectNext = true;
     }
 
     @Override
@@ -752,6 +754,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         repaintComponent();
     }
 
+    public boolean getWrapSelectNext() {
+        return wrapSelectNext;
+    }
+
+    public void setWrapSelectNext(boolean wrapSelectNext) {
+        this.wrapSelectNext = wrapSelectNext;
+    }
+
     public Insets getCheckboxPadding() {
         return checkboxPadding;
     }
@@ -775,6 +785,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     public final void setCheckboxPadding(int checkboxPadding) {
         setCheckboxPadding(new Insets(checkboxPadding));
+    }
+
+    public final void setCheckboxPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("checkboxPadding is null.");
+        }
+
+        setCheckboxPadding(padding.intValue());
     }
 
     public final void setCheckboxPadding(String checkboxPadding) {
@@ -1071,7 +1089,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         // Clear the highlight
         if (highlightIndex != -1
             && listView.getSelectMode() != ListView.SelectMode.NONE
-            && showHighlight) {
+            && showHighlight
+            && consumed) {
             repaintComponent(getItemBounds(highlightIndex));
         }
 
@@ -1136,6 +1155,26 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         listView.setSelectedIndex(i);
                         consumed = true;
                         break;
+                    }
+                }
+            }
+        }
+
+        if (!consumed
+            && wrapSelectNext) {
+            for (int i = 0, n = listData.getLength(); i < n; i++) {
+                if (!listView.isItemDisabled(i)) {
+                    String string = itemRenderer.toString(listData.get(i));
+
+                    if (string != null
+                            && string.length() > 0) {
+                        char first = Character.toUpperCase(string.charAt(0));
+
+                        if (first == character) {
+                            listView.setSelectedIndex(i);
+                            consumed = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1290,7 +1329,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     Bounds visibleSelectionBounds = listView.getVisibleArea(selectionBounds);
                     if (visibleSelectionBounds != null
                         && visibleSelectionBounds.height < selectionBounds.height) {
-                        // TODO Repainting the entire component is a workaround for PIVOT-490
+                        // Repainting the entire component is a workaround for PIVOT-490
                         repaintComponent();
 
                         listView.scrollAreaToVisible(selectionBounds);
@@ -1306,4 +1345,5 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
         // No-op
     }
+
 }

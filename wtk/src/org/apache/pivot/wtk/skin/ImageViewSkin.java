@@ -268,15 +268,26 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
+    /**
+     * Returns the color that is painted behind the image
+     */
     public Color getBackgroundColor() {
         return backgroundColor;
     }
 
+    /**
+     * Sets the color that is painted behind the image
+     */
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
+    /**
+     * Sets the color that is painted behind the image
+     * @param backgroundColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     */
     public final void setBackgroundColor(String backgroundColor) {
         if (backgroundColor == null) {
             throw new IllegalArgumentException("backgroundColor is null.");
@@ -285,10 +296,17 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
+    /**
+     * Returns the opacity of the image, in [0,1].
+     */
     public float getOpacity() {
         return opacity;
     }
 
+    /**
+     * Sets the opacity of the image.
+     * @param opacity A number between 0 (transparent) and 1 (opaque)
+     */
     public void setOpacity(float opacity) {
         if (opacity < 0 || opacity > 1) {
             throw new IllegalArgumentException("Opacity out of range [0,1].");
@@ -298,6 +316,10 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         repaintComponent();
     }
 
+    /**
+     * Sets the opacity of the image.
+     * @param opacity A number between 0 (transparent) and 1 (opaque)
+     */
     public final void setOpacity(Number opacity) {
         if (opacity == null) {
             throw new IllegalArgumentException("opacity is null.");
@@ -306,10 +328,17 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         setOpacity(opacity.floatValue());
     }
 
+    /**
+     * Returns the horizontal alignment of the image.
+     */
     public HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
     }
 
+    /**
+     * Sets the horizontal alignment of the image.
+     * Ignored if the <code>fill</code> style is true.
+     */
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
         if (horizontalAlignment == null) {
             throw new IllegalArgumentException("horizontalAlignment is null.");
@@ -320,10 +349,17 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         repaintComponent();
     }
 
+    /**
+     * Returns the vertical alignment of the image.
+     */
     public VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
     }
 
+    /**
+     * Sets the vertical alignment of the image.
+     * Ignored if the <code>fill</code> style is true.
+     */
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
         if (verticalAlignment == null) {
             throw new IllegalArgumentException("verticalAlignment is null.");
@@ -334,20 +370,39 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         repaintComponent();
     }
 
+    /**
+     * Returns a boolean indicating whether the image will be scaled to fit
+     * the space in which it is placed.
+     */
     public boolean getFill() {
         return fill;
     }
 
+    /**
+     * Sets a boolean indicating whether the image will be scaled to fit
+     * the space in which it is placed.  Note that for scaling to occur,
+     * the ImageView must specify a preferred size or be placed
+     * in a container that constrains its size.
+     */
     public void setFill(boolean fill) {
         this.fill = fill;
         layout();
         repaintComponent();
     }
 
+    /**
+     * Returns a boolean indicating whether, when the image is scaled,
+     * its aspect ratio is preserved.
+     */
     public boolean getPreserveAspectRatio() {
         return preserveAspectRatio;
     }
 
+    /**
+     * Sets a boolean indicating whether, when the image is scaled,
+     * its aspect ratio is preserved.
+     * Ignored if the <code>fill</code> style is false.
+     */
     public void setPreserveAspectRatio(boolean preserveAspectRatio) {
         this.preserveAspectRatio = preserveAspectRatio;
         layout();

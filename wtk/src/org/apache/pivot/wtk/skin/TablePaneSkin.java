@@ -758,16 +758,16 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Gets the padding that will be reserved around the table pane during
-     * layout.
+     * Returns the amount of space that will be reserved around the inside edges of the
+     * table pane.
      */
     public Insets getPadding() {
         return padding;
     }
 
     /**
-     * Sets the padding that will be reserved around the table pane during
-     * layout.
+     * Sets the amount of space that will be reserved around the inside edges of the
+     * table pane.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -779,16 +779,17 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Sets the padding that will be reserved around the table pane during
-     * layout.
+     * Sets the amount of space that will be reserved around the inside edges of the
+     * table pane.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
     /**
-     * Sets the padding that will be reserved around the table pane during
-     * layout.
+     * Sets the amount of space that will be reserved around the inside edges of the
+     * table pane.
+     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
@@ -799,8 +800,22 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Sets the padding that will be reserved around the table pane during
-     * layout.
+     * Sets the amount of space that will be reserved around the inside edges of the
+     * table pane.
+     */
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
+    }
+
+    /**
+     * Sets the amount of space that will be reserved around the inside edges of the
+     * table pane.
+     * @param padding A string containing an integer or a JSON dictionary with keys
+     * left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
         if (padding == null) {
@@ -811,7 +826,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Gets the spacing that will be applied in between the table pane's
+     * Gets the spacing that will be applied between the table pane's
      * columns during layout.
      */
     public int getHorizontalSpacing() {
@@ -819,7 +834,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
     }
 
     /**
-     * Sets the spacing that will be applied in between the table pane's
+     * Sets the spacing that will be applied between the table pane's
      * columns during layout.
      */
     public void setHorizontalSpacing(int horizontalSpacing) {
@@ -910,6 +925,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     /**
      * Sets the color used to paint the table pane's horizontal grid lines.
+     * @param horizontalGridColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setHorizontalGridColor(String horizontalGridColor) {
         if (horizontalGridColor == null) {
@@ -943,6 +960,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     /**
      * Sets the color used to paint the table pane's vertical grid lines.
+     * @param verticalGridColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setVerticalGridColor(String verticalGridColor) {
         if (verticalGridColor == null) {
@@ -973,6 +992,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
     /**
      * Sets the background color used to paint the highlighted rows and columns.
+     * @param highlightBackgroundColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
         if (highlightBackgroundColor == null) {
@@ -1411,7 +1432,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     int rowSpan = TablePane.getRowSpan(component);
 
                     if (rowSpan > 1) {
-                        // We might need to adjust row heights to accomodate
+                        // We might need to adjust row heights to accommodate
                         // this spanning cell. First, we find out if any of the
                         // spanned cells are default height and how much space
                         // we've allocated thus far for those cells
@@ -1478,7 +1499,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
         // Finally, we allocate the heights of the relative rows by divvying
         // up the remaining height
 
-        int remainingHeight = Math.max(height - reservedHeight, 0);
+        int remainingHeight = height - reservedHeight;
         if (totalRelativeWeight > 0
             && remainingHeight > 0) {
             for (int i = 0; i < rowCount; i++) {
@@ -1494,6 +1515,26 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                     // calculation
                     remainingHeight -= rowHeight;
                     totalRelativeWeight -= relativeWeight;
+                }
+            }
+        }
+
+        // If we have don't actually have enough height available
+
+        boolean progress = true; // prevent infinite loop
+        while (remainingHeight < 0 && progress) {
+            progress = false;
+            for (int i = 0; i < rowCount; i++) {
+                if (isRowVisible(i)) {
+                    TablePane.Row row = rows.get(i);
+                    if (!row.isRelative()) {
+                        if (rowHeights[i] > 0) {
+                            rowHeights[i]--;
+                            remainingHeight++;
+                            progress = true;
+                            if (remainingHeight >= 0) break;
+                        }
+                    }
                 }
             }
         }

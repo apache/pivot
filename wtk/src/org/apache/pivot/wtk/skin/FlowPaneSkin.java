@@ -342,10 +342,16 @@ public class FlowPaneSkin extends ContainerSkin {
         invalidateComponent();
     }
 
+    /**
+     * Returns the amount of space between the edge of the FlowPane and its components.
+     */
     public Insets getPadding() {
         return padding;
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the FlowPane and its components.
+     */
     public void setPadding(Insets padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -355,6 +361,11 @@ public class FlowPaneSkin extends ContainerSkin {
         invalidateComponent();
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the FlowPane and its components.
+     *
+     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -363,10 +374,18 @@ public class FlowPaneSkin extends ContainerSkin {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the FlowPane and its components,
+     * uniformly on all four edges.
+     */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the FlowPane and its components,
+     * uniformly on all four edges.
+     */
     public final void setPadding(Number padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -375,6 +394,12 @@ public class FlowPaneSkin extends ContainerSkin {
         setPadding(padding.intValue());
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the FlowPane and its components.
+     *
+     * @param padding A string containing an integer or a JSON dictionary with keys
+     * left, top, bottom, and/or right.
+     */
     public final void setPadding(String padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");

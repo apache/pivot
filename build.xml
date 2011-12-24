@@ -128,7 +128,9 @@ limitations under the License.
             <fail>
                 <condition>
                     <not>
-                        <available classname="org.junit.Test"/>
+                        <available classname="org.junit.Test">
+                            <classpath refid="classpath.javalib" />
+                        </available>
                     </not>
                 </condition>
                 <![CDATA[
@@ -618,11 +620,18 @@ limitations under the License.
             </fileset>
         </copy>
 
+        <!-- Delete old signed jars and old already deployed jars -->
+        <delete>
+            <fileset dir="${folder.lib}" includes="**/*.war"/>
+            <fileset dir="${folder.lib}" includes="**/*.signed.jar"/>
+        </delete>
+
         <!-- Sign JARS -->
         <mkdir dir="${folder.lib}/signed"/>
         <copy todir="${folder.lib}/signed">
             <fileset dir="${folder.lib}">
                 <include name="*.jar"/>
+                <exclude name="*.signed.jar"/>
             </fileset>
         </copy>
 
@@ -642,6 +651,9 @@ limitations under the License.
 
         <!-- Deploy demos -->
         <mkdir dir="demos/${folder.deploy}/lib"/>
+        <delete>
+            <fileset dir="demos/${folder.deploy}/lib" includes="**/*.jar"/>
+        </delete>
         <copy todir="demos/${folder.deploy}/lib">
             <fileset dir="${folder.lib}">
                 <include name="*.jar"/>
@@ -678,7 +690,7 @@ limitations under the License.
             includes="*.xml"
             excludes="index.xml">
             <param name="version" expression="${version}"/>
-            <param name="root" expression="${ant.project.name}-demos"/>
+            <param name="root" expression="${local.server}/${ant.project.name}-demos"/>
         </xslt>
 
         <!-- Copy static demo files to deploy folder -->
@@ -717,6 +729,9 @@ limitations under the License.
 
         <!-- Deploy tutorials -->
         <mkdir dir="tutorials/${folder.deploy}/lib"/>
+        <delete>
+            <fileset dir="tutorials/${folder.deploy}/lib" includes="**/*.jar"/>
+        </delete>
         <copy todir="tutorials/${folder.deploy}/lib">
             <fileset dir="${folder.lib}">
                 <include name="*.jar"/>

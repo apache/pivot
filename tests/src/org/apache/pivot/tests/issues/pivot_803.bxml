@@ -1,0 +1,38 @@
+<Window title="Images Example" maximized="true" xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk">
+    <TablePane
+        styles="{verticalSpacing:1, showHorizontalGridLines:true,
+    horizontalSpacing:1, showVerticalGridLines:true}">
+        <columns>
+            <TablePane.Column width="1*" />
+            <TablePane.Column width="1*" />
+        </columns>
+        <TablePane.Row height="60">
+            <TablePane>
+                <columns>
+                    <TablePane.Column width="60" />
+                    <TablePane.Column width="1*" />
+                </columns>
+                <TablePane.Row>
+                    <ImageView image="@test1.jpg" styles="{fill:true}" />
+                </TablePane.Row>
+            </TablePane>
+            <ImageView image="@test1.jpg" styles="{fill:true}" />
+        </TablePane.Row>
+        <TablePane.Row height="60">
+            <TablePane>
+                <columns>
+                    <TablePane.Column width="60" />
+                    <TablePane.Column width="1*" />
+                </columns>
+                <TablePane.Row>
+                    <ImageView image="@test2.jpg" styles="{fill:true}" />
+                </TablePane.Row>
+            </TablePane>
+            <ImageView image="@test2.jpg" styles="{fill:true}" />
+        </TablePane.Row>
+        <TablePane.Row>
+            <Label TablePane.columnSpan="2" text="The bottom" />
+        </TablePane.Row>
+    </TablePane>
+</Window>

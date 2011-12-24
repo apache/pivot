@@ -75,7 +75,7 @@ limitations under the License.
             more detail in the <a href="stock-tracker.data-binding.html">data binding</a> section.
         </p>
 
-        <h2>Constructing the Web Query</h2>
+        <h3>Constructing the Web Query</h3>
 
         <p>
             In order to display the stock quotes to the user, Stock Tracker must execute a web

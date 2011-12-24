@@ -94,7 +94,7 @@ public class RadioButtonGroup extends ButtonGroup {
             }
             return include;
         }
-    };
+    }
 
     /**
      * ComponentKeyListener to be applied to all buttons as they are added to

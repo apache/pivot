@@ -272,7 +272,11 @@ public class ImageView extends Component {
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        setImage(classLoader.getResource(imageName.substring(1)));
+        URL url = classLoader.getResource(imageName.substring(1));
+        if (url == null) {
+            throw new IllegalArgumentException("cannot find image resource " + imageName);
+        }
+        setImage(url);
     }
 
     /**

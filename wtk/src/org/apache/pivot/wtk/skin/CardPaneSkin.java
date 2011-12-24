@@ -493,10 +493,16 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         }
     }
 
+    /**
+     * Returns the amount of space between the edge of the CardPane and its content.
+     */
     public Insets getPadding() {
         return padding;
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the CardPane and its content.
+     */
     public void setPadding(Insets padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -506,6 +512,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         invalidateComponent();
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the CardPane and its content.
+     *
+     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -514,11 +525,19 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the CardPane and its content,
+     * uniformly on all four edges.
+     */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
-    public final void setPadding(Number padding) {
+    /**
+     * Sets the amount of space to leave between the edge of the CardPane and its content,
+     * uniformly on all four edges.
+     */
+    public void setPadding(Number padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
         }
@@ -526,6 +545,12 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         setPadding(padding.intValue());
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the CardPane and its content.
+     *
+     * @param padding A string containing an integer or a JSON dictionary with keys
+     * left, top, bottom, and/or right.
+     */
     public final void setPadding(String padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");

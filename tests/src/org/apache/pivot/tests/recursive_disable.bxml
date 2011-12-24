@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk"
+>
+    <BoxPane orientation="vertical" styles="{padding:6, spacing:8, fill:true}">
+        <Checkbox buttonData="Enable Magic">
+            <buttonStateListeners>
+                function stateChanged(button, previousState) {
+                    paneMagic.setEnabled(button.isSelected());
+                }
+            </buttonStateListeners>
+        </Checkbox>
+        <TablePane bxml:id="paneMagic" enabled="false"
+          styles="{verticalSpacing:4, horizontalSpacing:4, padding:{left:20}}">
+            <columns>
+            <TablePane.Column width="-1" />
+            <TablePane.Column width="1*" />
+            </columns>
+            <TablePane.Row>
+                <Label text="Preferred spell:"/>
+                <ListButton listData="['Accio', 'Expeliarmus', 'Riddikulus']" selectedIndex="0"/>
+            </TablePane.Row>
+            <TablePane.Row>
+                <Label text="Wand supplier:"/>
+                <TextInput bxml:id="textSupplier" />
+            </TablePane.Row>
+        </TablePane>
+        <Checkbox buttonData="Enable Kindness">
+            <buttonStateListeners>
+                function stateChanged(button, previousState) {
+                    listActs.setEnabled(button.isSelected());
+                }
+            </buttonStateListeners>
+        </Checkbox>
+        <BoxPane styles="{padding:{left:20}}">
+            <Label text="Acts:"/>
+            <ListButton bxml:id="listActs" enabled="false"
+                listData="['Wash dishes', 'Run errands', 'Carry groceries']" selectedIndex="0"/>
+        </BoxPane>
+    </BoxPane>
+</Window>

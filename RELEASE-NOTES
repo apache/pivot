@@ -15,137 +15,109 @@
   limitations under the License.
 ================================================================================
 
-Release Notes for Pivot 2.0:
+Release Notes for Pivot 2.0.1:
 
 ** New Feature
-    * [PIVOT-28] - Add tick marks to Slider component
-    * [PIVOT-74] - Add a "closeable" property to TabPane
-    * [PIVOT-239] - Create an Eclipse launcher for org.apache.pivot.wtk.Application and
-      ScriptApplication
-    * [PIVOT-368] - Provide a means for programmatically detecting current application context
-    * [PIVOT-372] - Support undo/redo in TextInput and TextArea
-    * [PIVOT-418] - Multiple host windows
-    * [PIVOT-458] - Add a "repeatable" property to ListButton
-    * [PIVOT-512] - Fire tooltipTriggered() event from Component
-    * [PIVOT-553] - Add support for named styles
-    * [PIVOT-555] - Re-implement TextArea
-    * [PIVOT-556] - Add a <bxml:reference> tag
-    * [PIVOT-557] - Pivot javadoc artifacts for Maven
-    * [PIVOT-562] - Allow <bxml:include> tag to include arbitrary content
-    * [PIVOT-568] - Add support for dynamic data binding
-    * [PIVOT-574] - Add support for CSS-like type selectors
-    * [PIVOT-579] - Provide additional Color schemes
-    * [PIVOT-595] - Add data binding support to Button
-    * [PIVOT-607] - Creation of an application wide 'focus decorator' which would be applied to
-      the focused Component
-    * [PIVOT-621] - BindMapping for ImageView
-    * [PIVOT-625] - Enable item deselection in list based controls (ListView, TableView, TreeView)
-    * [PIVOT-629] -  Set ApplicationContext origin property in desktop application
-    * [PIVOT-639] - Add navigation between words in TextInput
-    * [PIVOT-672] - Add a StringSerializer
+    * [PIVOT-378] - Add a "lineWidth" property to TextArea
+    * [PIVOT-700] - SplashScreen control
+    * [PIVOT-709] - Want a single-line text input component that wraps
+    * [PIVOT-736] - Visible Property for ComponentSkin
+    * [PIVOT-746] - Add API to return Version of Pivot retrieved from "build.properties"
+    * [PIVOT-765] - Reintroduce WindowStateListener#previewWindowOpen
+    * [PIVOT-790] - Add FillPane layout container that acts like a BoxPane with fill=true in both directions
 
 ** Improvement
-    * [PIVOT-31] - Add rich text support to TextPane (formerly TextArea)
-    * [PIVOT-245] - In Skin json file, add optional coefficients for darkening and brightening
-      base colors
-    * [PIVOT-287] - Inconsistency between TableView, ListView, and TreeView as to when to consume
-      arrow key events
-    * [PIVOT-369] - Unable to easily drag multiple selected items in ListView
-    * [PIVOT-468] - Update tutorials to use Bindable where applicable
-    * [PIVOT-470] - Rename org.apache.pivot.wtkx.WTKXSerializer to
-      org.apache.pivot.beans.BXMLSerializer
-    * [PIVOT-477] - Window and DesktopApplicationContext should support
-      java.awt.Window.setIconImages() to display multi-resolution icons
-    * [PIVOT-482] - Eliminate ThreadUtilities?
-    * [PIVOT-488] - Add resizing support to Alert etc
-    * [PIVOT-502] - Building with Ant 1.8 gives warnings on the javac tasks
-    * [PIVOT-514] - Create an annotation to specify the default "child" property of a component
-    * [PIVOT-519] - CSVSerializer does not trim values
-    * [PIVOT-520] - add a name property to Component
-    * [PIVOT-523] - Rename Alert/Prompt getSelectedOption() to getSelectedOptionIndex()
-    * [PIVOT-524] - Add default properties to components and other classes as appropriate
-    * [PIVOT-534] - Expose transtion durations & rates in Terra theme skins as styles to allow
-      them to be configured
-    * [PIVOT-537] - Move message processing functionality to pivot-core
-    * [PIVOT-541] - Remove "name" properties in Menu.Item and Menu.Section
-    * [PIVOT-543] - Rename Limits min and max fields to minimum and maximum, change limit() to
-      constrain()
-    * [PIVOT-544] - Add a command line argument, "--undecorated", to support removing native Frame
-      chrome on a non-fullscreen window
-    * [PIVOT-546] - Bindable improvements
-    * [PIVOT-548] - Fire selection change events when selection changes indirectly
-    * [PIVOT-550] - Optimize org.apache.pivot.wtk.text.TextNode
-    * [PIVOT-563] - Configurable Tooltip delay
-    * [PIVOT-565] - Use TextArea in default tooltip rather than Label
-    * [PIVOT-569] - Make ListView selectedItem, etc. notifying properties
-    * [PIVOT-570] - Make tab pane button and accordion header content and renderer configurable
-    * [PIVOT-583] - Add parent to TreeNode/TreeBranch
-    * [PIVOT-584] - Update BXMLSerializer extensibility
-    * [PIVOT-587] - Allow caller to specific table view header renderer on a per-column basis
-    * [PIVOT-590] - Make "collapsible" an intrinsic property of TabPane
-    * [PIVOT-593] - Rename SuggestionPopup "suggestions" property to "suggestionData"
-    * [PIVOT-596] - BXMLSerializer should call bind() on superclasses when appropriate
-    * [PIVOT-599] - Move SuggestionPopupListener#selectedIndexChanged() event to
-      SuggestionPopupSelectionListener interface
-    * [PIVOT-611] - add a method hasListener() in ListenerList object
-    * [PIVOT-614] - add a clearFlag() method in Form
-    * [PIVOT-615] - Add 'collapsible' utility methods and a closeTab method to TabPane
-    * [PIVOT-616] - TextInput API improvements
-    * [PIVOT-617] - Optimize performance of ResultList
-    * [PIVOT-618] - CSVSerializer API improvements
-    * [PIVOT-620] - Allow serializers to fire events as data is read
-    * [PIVOT-622] - Add setExpandedIcon() overloads to org.apache.pivot.wtk.content.TreeBranch
-    * [PIVOT-626] - Add "userData" member to TreeNode to facilitate right-click menu handling
-      (among other things)
-    * [PIVOT-627] - Painting RadioButton with null ButtonData
-    * [PIVOT-628] - Allow BXMLSerializer to assign null values to bean properties using attributes
-    * [PIVOT-632] - Add a source argument to Action#perform()
-    * [PIVOT-634] - Provide automated support for setting enum values
-    * [PIVOT-640] - Add a Query.Method argument to QueryServlet#createSerializer() and validate()
-    * [PIVOT-644] - Improve JSONSerializer and CSVSerializer to ignore a BOM at the beginning of
-      file
-    * [PIVOT-645] - Remove the keyboardFolderTraversalEnabled style from TerraFileBrowserSkin
-    * [PIVOT-650] - Add platform support for SVG images
-    * [PIVOT-653] - Eliminate use of field prefix in BeanAdapter
-    * [PIVOT-654] - Simplify editor APIs
-    * [PIVOT-661] - Standardize on use of leading slash character for resource paths
-    * [PIVOT-663] - Provide platform-independent keystroke mapping to "command" key
-    * [PIVOT-673] - Pimping Alerts
-    * [PIVOT-674] - Add Translations for existing Resources
+    * [PIVOT-656] - FileBrowserSheet seems frozen while browsing network folders
+    * [PIVOT-677] - Add ability to navigate a ButtonGroup of RadioButtons using the keyboard
+    * [PIVOT-682] - Enable slide-in direction specification in the case of Sheet component
+    * [PIVOT-687] - BXMLSerializer, would like to be able to specify a classloader for loading custom components
+    * [PIVOT-694] - Improvement in ListButton clear() method
+    * [PIVOT-695] - TextInput should support editable property
+    * [PIVOT-703] - Allow BXMLSerializer.bind() to access superclass fields
+    * [PIVOT-708] - DateFormat.getDateTimeInstance() is very expensive, we can cache it to improve performance
+    * [PIVOT-713] - Consider making some inner classes non-final
+    * [PIVOT-723] - Better GrayscaleDecorator
+    * [PIVOT-727] - Text of different sizes in a TextPane should have aligned baselines
+    * [PIVOT-729] - TabPane corner component is hidden by tabs
+    * [PIVOT-733] - Re-enabling JNLP links in Demos
+    * [PIVOT-740] - Add sanity checks to prevent updates to WTK state from happening except from the event dispatch thread
+    * [PIVOT-747] - pivot & blocking edt
+    * [PIVOT-763] - Add tri-state checkbox renderer for TableView row editors
+    * [PIVOT-764] - BeanAdapter should support Map objects
+    * [PIVOT-769] - A Task's TaskListener will not be called if a Throwable is thrown when the task is executed
+    * [PIVOT-778] - Optimise DisplayHost.paintBuffered and DisplayHost.paintVolatileBuffered
+    * [PIVOT-786] - Annotate Pivot annotations with the @Documented annotation
+    * [PIVOT-787] - Allow a Task to be executed using an ExecutorService supplied at execution time
+    * [PIVOT-795] - Add access in TerraFileBrowserSheetSkin to allow additional fields in the dialog
+    * [PIVOT-802] - Introduce "inactiveBorderColor" to TabPane to allow greater flexibility for look and feel
+    * [PIVOT-805] - Labels doesn't appear in Print from Java
+    * [PIVOT-806] - Preselection disappears when something is already selected
+    * [PIVOT-807] - Add new "showContentBevel" style to TerraFrameSkin to allow greater flexibility
+    * [PIVOT-812] - Add style to TabPane to specify the tab button corner radius
+    * [PIVOT-816] - Add "setSelectedTab(Component)" method to TabPane to facilitate selecting tabs programmatically
+    * [PIVOT-813] - BXML annotation should work for JavaBean properties
+    * [PIVOT-818] - Better document the Renderer interface
+    * [PIVOT-819] - Improve the documentation for BoxPane and several other components
+    * [PIVOT-821] - Add support for Shift-Ins to do a Paste on Windows
+    * [PIVOT-823] - Add BXML Explorer, to see a live graphical preview of BXML files
+    * [PIVOT-829] - Select file in FileBrowserSheet
 
 ** Bug
-    * [PIVOT-390] - issue for 'ColorChooser' Component
-    * [PIVOT-392] - Calendar issue?
-    * [PIVOT-399] - DesktopApplicationContext.setFullScreen(true) issue.
-    * [PIVOT-487] - Pivot doesn't start in turkish locale (and other locales)
+    * [PIVOT-247] - Mouse.capture() interferes with mouseClick event
+    * [PIVOT-406] - Ensure that java_arguments param is properly set for Large Data demo
+    * [PIVOT-499] - Kitchen Sink demo launched via JNLP produces console error re: width and height args
+    * [PIVOT-500] - JNLP demos that use signed JARs fail to launch
+    * [PIVOT-506] - Menu item renderer not given enough space
     * [PIVOT-511] - Labels doesn't appear in Print from Browser
-    * [PIVOT-545] - Preferred size limits don't take constraints into account
-    * [PIVOT-552] - ListButton does not update selected index in response to model changes
-    * [PIVOT-554] - org.apache.pivot.beans.BeanAdapter doesn't gracefully handle keys that are
-      nulls or empty Strings
-    * [PIVOT-561] - The Form.Section Heading is not displaying for the first Section of a Form.
-    * [PIVOT-577] - Time.decode() throws NPE when no milliseconds present in input string
-    * [PIVOT-586] - Alt+A in Polish locale incorrectly selects all text
-    * [PIVOT-597] - StackPane with padding style
-    * [PIVOT-598] - Not found url on BUILD file
-    * [PIVOT-601] - missing pivot-web-server artefact on local Maven repository
-    * [PIVOT-612] - TextInput validator problem when modifying selected text
-    * [PIVOT-613] - RadioButton, etc. does not correctly report opaqueness
-    * [PIVOT-619] - TableViewHeader does not repaint properly when used in a sheet or dialog
-    * [PIVOT-630] - NPE when using ReflectionDecorator on Dialog with TextInput inside
-    * [PIVOT-635] - Ficker effect on TextPaneDemo
-    * [PIVOT-646] - ListButton focus incorrectly transfers out of selected ListButton back to
-      previously selected ListButton
-    * [PIVOT-648] - useless ResultList constructors due to ignored argument
-    * [PIVOT-651] - unexpected layout in row editor
-    * [PIVOT-652] - Missing days in French localization of CalendarButton
-    * [PIVOT-657] - FileBrowserSheet not responding
-    * [PIVOT-662] - Ctrl-V pastes clipboard two times!
-    * [PIVOT-664] - Mouse wheel scrolls ScrollPane AND web page in which the applet is contained
+    * [PIVOT-647] - IllegalArgumentException when attempting to show a tooltip set against a Display
+    * [PIVOT-659] - Scrollbar - The scrollbar's handle can't reach the right end in some cases
+    * [PIVOT-668] - AWT : java.lang.IndexOutOfBoundsException
+    * [PIVOT-669] - tooltip being displayed outside of the window
+    * [PIVOT-675] - Dialog does not become the Active Window
+    * [PIVOT-681] - TableRowEditor demo: amount field doesn't validate in some countries
+    * [PIVOT-683] - TextAreaSkin throws IndexOutOfBoundsException when the END key is pressed on the final line of a TextArea
+    * [PIVOT-684] - Clicking on unused space following the last character in a TextArea should move the caret to after the last character
+    * [PIVOT-693] - Mouse drag in TextArea causes IndexOutOfBoundsException
+    * [PIVOT-701] - Fix demo.jnlp.xsl
+    * [PIVOT-702] - Calendar component error
+    * [PIVOT-704] - JSONSerializer can't deserialize to BigDecimal
+    * [PIVOT-714] - Error : java.lang.IllegalStateException: Window is not open. when a Dialog is closing
+    * [PIVOT-715] - Background color not painted properly in TextPane
+    * [PIVOT-716] - Clearing a Document by removing all elements crashes
+    * [PIVOT-717] - Issue within BXMLSerializer preventing compatibility with other StAX implementation, particularly woodstox
+    * [PIVOT-719] - Keyboard shortcut display is not correct on Windows XP platform
+    * [PIVOT-722] - Map (in Pivot Collections) with comparator issue
+    * [PIVOT-724] - Problem with TreeView and Comparator
+    * [PIVOT-725] - HashMap rehash fires events
+    * [PIVOT-726] - Selection in a Paragraph with non-null background color displays incorrectly
+    * [PIVOT-730] - NullPointerException when selecting across multiple text spans
+    * [PIVOT-735] - Strange problem with textarea
+    * [PIVOT-737] - TerraTableViewSkin opens a TableViewRowEditor listening to both mouse buttons
+    * [PIVOT-744] - ListView with SelectMode.Multi does not allow deselection when all elements are selected
+    * [PIVOT-745] - Illegal argument exception on tristate checkbox using stateKey binding
+    * [PIVOT-749] - Transitions bug
+    * [PIVOT-752] - Possible memory leak in Pivot Decorators, for example in ScaleDecorator
+    * [PIVOT-756] - FileBrowserSheet displays incorrect directory listing
+    * [PIVOT-762] - Incorrect handling of TAB key in SuggestionPopup
+    * [PIVOT-772] - Exceptions thrown when calling getCharacterBounds of TextArea when incomplete lines exist
+    * [PIVOT-774] - Selection bug in TextArea
+    * [PIVOT-779] - Resizing a TextPane wider leaves spurious lines of repeated text
+    * [PIVOT-780] - Can't use BXMLSerializer from non-AWT threads makes background resource loading impossible
+    * [PIVOT-803] - ImageView placement is incorrect when nested inside two TablePanes
+    * [PIVOT-804] - Why can't I set a TabPane's buttonPadding to a dictionary?
+    * [PIVOT-809] - Wrong position for nested menu
+    * [PIVOT-814] - TextArea#getText throws IndexOutOfBoundsException when called from TextChanged method under setText
+    * [PIVOT-815] - Printing crashes with Out Of Memory exception
+    * [PIVOT-825] - Specifying a full path in a Save As FileBrowserSheet gives IllegalArgumentException when you try to close
+    * [PIVOT-826] - Setting a Frame's 'resizable' style to 'false' does not prevent the Frame from being resized
+    * [PIVOT-828] - New FillPane container ignores 'visible' attribute of children during layout
 
 ** Task
-    * [PIVOT-643] - Create one or more upgrade guides to help users transition between Pivot
-      releases
+    * [PIVOT-637] - Ensure that keystrokes & associated functionality handled by ComponentKeyListener methods are documented in javadocs
+    * [PIVOT-760 / PIVOT-742] - unification of all class loading in pivot via TCCL
 
 ** Test
-    * [PIVOT-517] - Not clear that test suite executes all tests in the tests directory
+    * [PIVOT-205] - Pivot collections test suite
+
+** Wish
+    * [PIVOT-680] - Contribution to the Pivot codebase

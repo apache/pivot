@@ -87,7 +87,8 @@ public class Pivot718 implements Application {
             public void buttonPressed(Button button) {
                 Object x = list.getSelectedItem();
                 System.out.println("delete :: " + x);
-                List data = list.getListData();
+                // List data = list.getListData();
+                List<Object> data = (List<Object>) list.getListData();
                 data.remove(x);
             }
         });

@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.skin.BorderSkin;
 import org.apache.pivot.wtk.skin.BoxPaneSkin;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 import org.apache.pivot.wtk.skin.ColorChooserButtonSkin;
+import org.apache.pivot.wtk.skin.FillPaneSkin;
 import org.apache.pivot.wtk.skin.FlowPaneSkin;
 import org.apache.pivot.wtk.skin.GridPaneFillerSkin;
 import org.apache.pivot.wtk.skin.GridPaneSkin;
@@ -83,6 +84,7 @@ public abstract class Theme {
         componentSkinMap.put(CardPane.class, CardPaneSkin.class);
         componentSkinMap.put(ColorChooserButtonSkin.ColorChooserPopup.class,
             ColorChooserButtonSkin.ColorChooserPopupSkin.class);
+        componentSkinMap.put(FillPane.class, FillPaneSkin.class);
         componentSkinMap.put(FlowPane.class, FlowPaneSkin.class);
         componentSkinMap.put(GridPane.class, GridPaneSkin.class);
         componentSkinMap.put(GridPane.Filler.class, GridPaneFillerSkin.class);
@@ -163,6 +165,17 @@ public abstract class Theme {
         return theme;
     }
 
+    /**
+     * Produce a font by describing it relative to the current theme's font
+     * @param dictionary A dictionary with any of the following keys:
+     * <ul>
+     * <li>{@value #NAME_KEY} - the family name of the font</li>
+     * <li>{@value #SIZE_KEY} - the font size as an integer, or a string "x%" for a relative size</li>
+     * <li>{@value #BOLD_KEY} - true/false</li>
+     * <li>{@value #ITALIC_KEY} - true/false</li>
+     * </ul>
+     * Omitted values are taken from the theme's font.
+     */
     public static Font deriveFont(Dictionary<String, ?> dictionary) {
         Font font = theme.getFont();
 

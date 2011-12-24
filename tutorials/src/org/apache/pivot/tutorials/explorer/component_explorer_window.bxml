@@ -144,6 +144,12 @@ limitations under the License.
                                                 horizontalScrollBarPolicy="fill"
                                                 verticalScrollBarPolicy="fill"/>
                                             <explorer:ComponentNode
+                                                text="FillPane"
+                                                icon="@../page_white.png"
+                                                src="@fill_pane.bxml"
+                                                horizontalScrollBarPolicy="fill"
+                                                verticalScrollBarPolicy="fill"/>
+                                            <explorer:ComponentNode
                                                 text="TablePane"
                                                 icon="@../page_white.png"
                                                 src="@table_pane.bxml"
@@ -383,7 +389,7 @@ limitations under the License.
                                     <corner>
                                         <BoxPane styles="{padding:{right:6},
                                             horizontalAlignment:'right', fill:true}">
-                                            <MenuButton styles="{toolbar:true,
+                                            <MenuButton tooltipText="%contentPane.scrollBarPolicy.tooltip" styles="{toolbar:true,
                                                 padding:{top:1, left:2, bottom:1, right:2}}">
                                                 <bxml:define>
                                                     <ButtonGroup bxml:id="horizontalScrollBarPolicyGroup"/>
@@ -479,22 +485,31 @@ limitations under the License.
                     <bottom>
                         <TabPane>
                             <tools:EventLogger bxml:id="eventLogger"
-                                TabPane.tabData="%eventLoggerPane.label"/>
+                                TabPane.tabData="%eventLoggerPane.label"
+                                TabPane.tooltipText="%eventLoggerPane.labelTooltip"
+                            />
                             <corner>
                                 <BoxPane styles="{padding:{right:6},
-                                    horizontalAlignment:'right', fill:true}">
-                                    <MenuButton styles="{toolbar:true,
-                                        padding:{top:1, left:2, bottom:1, right:2}}">
-                                        <buttonData>
-                                            <content:ButtonData icon="@preferences-system.png"/>
-                                        </buttonData>
-                                        <Menu>
-                                            <Menu.Section>
-                                                <Menu.Item buttonData="%eventLoggerPane.clear"
-                                                    ButtonPressListener.buttonPressed="eventLogger.clearLog();"/>
-                                            </Menu.Section>
-                                        </Menu>
-                                    </MenuButton>
+                                    horizontalAlignment:'right', fill:true}"
+                                >
+                                    <Label text="%eventLoggerPane.buttonsDescription"
+                                        styles="{verticalAlignment:'center'}"
+                                    />
+                                    <PushButton styles="{toolbar:'false'}"
+                                        buttonData="%eventLoggerPane.selectAll"
+                                        tooltipText="%eventLoggerPane.selectAllEvents"
+                                        ButtonPressListener.buttonPressed="eventLogger.selectAllEvents(true);"
+                                    />
+                                    <PushButton styles="{toolbar:'false'}"
+                                        buttonData="%eventLoggerPane.deselectAll"
+                                        tooltipText="%eventLoggerPane.deselectAllEvents"
+                                        ButtonPressListener.buttonPressed="eventLogger.selectAllEvents(false);"
+                                    />
+                                    <PushButton
+                                        buttonData="%eventLoggerPane.clear"
+                                        tooltipText="%eventLoggerPane.clearTooltip"
+                                        ButtonPressListener.buttonPressed="eventLogger.clearLog();"
+                                    />
                                 </BoxPane>
                             </corner>
                         </TabPane>

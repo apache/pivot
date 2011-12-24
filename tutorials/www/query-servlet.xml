@@ -51,7 +51,7 @@ limitations under the License.
             </libraries>
         </application>
 
-        <h2>QueryServlet</h2>
+        <h3>QueryServlet</h3>
 
         <p>
             The <tt>QueryServlet</tt> class extends <tt>javax.servlet.http.HttpServlet</tt> and
@@ -129,7 +129,7 @@ limitations under the License.
             these collections via <tt>get()</tt>, <tt>put()</tt>, and <tt>remove()</tt> methods.
         </p>
 
-        <h2>ExpenseServlet</h2>
+        <h3>ExpenseServlet</h3>
 
         <p>
             The following listing contains the full source code for <tt>ExpenseServlet</tt>, which
@@ -632,7 +632,7 @@ limitations under the License.
             it is deleted. Otherwise, HTTP 404 is returned.
         </p>
 
-        <h2>The Expenses Application</h2>
+        <h3>The Expenses Application</h3>
 
         <p>
             The Expenses client application allows a user to interact with the web service. It is

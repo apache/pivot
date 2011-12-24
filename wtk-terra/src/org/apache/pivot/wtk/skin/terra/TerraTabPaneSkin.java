@@ -245,40 +245,41 @@ public class TerraTabPaneSkin extends ContainerSkin
                 case HORIZONTAL: {
                     graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor,
                         width / 2f, height / 2f, backgroundColor));
-                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1 + CORNER_RADIUS,
-                        CORNER_RADIUS, CORNER_RADIUS));
+                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1 + buttonCornerRadius,
+                        buttonCornerRadius, buttonCornerRadius));
                     break;
                 }
 
                 case VERTICAL: {
                     graphics.setPaint(new GradientPaint(0, height / 2f, buttonBevelColor,
                         width / 2f, height / 2f, backgroundColor));
-                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1 + CORNER_RADIUS, height - 1,
-                        CORNER_RADIUS, CORNER_RADIUS));
+                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1 + buttonCornerRadius, height - 1,
+                        buttonCornerRadius, buttonCornerRadius));
                     break;
                 }
             }
 
             // Draw the border
-            graphics.setPaint(borderColor);
+            graphics.setPaint((tabButton.isSelected() || active) ? borderColor : inactiveBorderColor);
             graphics.setStroke(new BasicStroke(1));
 
             switch(tabOrientation) {
                 case HORIZONTAL: {
-                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height + CORNER_RADIUS - 1,
-                        CORNER_RADIUS, CORNER_RADIUS));
+                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height + buttonCornerRadius - 1,
+                        buttonCornerRadius, buttonCornerRadius));
                     break;
                 }
 
                 case VERTICAL: {
-                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width + CORNER_RADIUS - 1, height - 1,
-                        CORNER_RADIUS, CORNER_RADIUS));
+                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width + buttonCornerRadius - 1, height - 1,
+                        buttonCornerRadius, buttonCornerRadius));
                     break;
                 }
             }
 
             if (!(tabButton.isSelected()
                 || active)) {
+                graphics.setPaint(borderColor);
                 // Draw divider
                 switch(tabOrientation) {
                     case HORIZONTAL: {
@@ -507,12 +508,14 @@ public class TerraTabPaneSkin extends ContainerSkin
     private Color activeTabColor;
     private Color inactiveTabColor;
     private Color borderColor;
+    private Color inactiveBorderColor;
     private Insets padding;
     private Font buttonFont;
     private Color buttonColor;
     private Color disabledButtonColor;
     private Insets buttonPadding;
     private int buttonSpacing;
+    private int buttonCornerRadius;
 
     private Color activeButtonBevelColor;
     private Color inactiveButtonBevelColor;
@@ -535,7 +538,6 @@ public class TerraTabPaneSkin extends ContainerSkin
     };
 
 
-    public static final int CORNER_RADIUS = 4;
     public static final int GRADIENT_BEVEL_THICKNESS = 8;
     private static final int CLOSE_TRIGGER_SIZE = 6;
     private static final int DEFAULT_SELECTION_CHANGE_DURATION = 250;
@@ -546,12 +548,14 @@ public class TerraTabPaneSkin extends ContainerSkin
         activeTabColor = theme.getColor(11);
         inactiveTabColor = theme.getColor(9);
         borderColor = theme.getColor(7);
+        inactiveBorderColor = theme.getColor(7);
         padding = new Insets(6);
         buttonFont = theme.getFont();
         buttonColor = theme.getColor(1);
         disabledButtonColor = theme.getColor(7);
         buttonPadding = new Insets(3, 4, 3, 4);
         buttonSpacing = 6;
+        buttonCornerRadius = 4;
 
         activeButtonBevelColor = TerraTheme.brighten(activeTabColor);
         inactiveButtonBevelColor = TerraTheme.brighten(inactiveTabColor);
@@ -1151,6 +1155,32 @@ public class TerraTabPaneSkin extends ContainerSkin
         setBorderColor(theme.getColor(borderColor));
     }
 
+    public Color getInactiveBorderColor() {
+        return inactiveBorderColor;
+    }
+
+    public void setInactiveBorderColor(Color inactiveBorderColor) {
+        if (inactiveBorderColor == null) {
+            throw new IllegalArgumentException("inactiveBorderColor is null.");
+        }
+
+        this.inactiveBorderColor = inactiveBorderColor;
+        repaintComponent();
+    }
+
+    public final void setInactiveBorderColor(String inactiveBorderColor) {
+        if (inactiveBorderColor == null) {
+            throw new IllegalArgumentException("inactiveBorderColor is null.");
+        }
+
+        setInactiveBorderColor(GraphicsUtilities.decodeColor(inactiveBorderColor));
+    }
+
+    public final void setInactiveBorderColor(int inactiveBorderColor) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setInactiveBorderColor(theme.getColor(inactiveBorderColor));
+    }
+
     public Insets getPadding() {
         return padding;
     }
@@ -1263,8 +1293,32 @@ public class TerraTabPaneSkin extends ContainerSkin
         }
     }
 
+    public final void setButtonPadding(Dictionary<String, ?> padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(new Insets(padding));
+    }
+
     public final void setButtonPadding(int buttonPadding) {
         setButtonPadding(new Insets(buttonPadding));
+    }
+
+    public final void setButtonPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(padding.intValue());
+    }
+
+    public final void setButtonPadding(String padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(Insets.decode(padding));
     }
 
     public int getButtonSpacing() {
@@ -1273,6 +1327,26 @@ public class TerraTabPaneSkin extends ContainerSkin
 
     public void setButtonSpacing(int buttonSpacing) {
         tabButtonBoxPane.getStyles().put("spacing", buttonSpacing);
+    }
+
+    public final void setButtonCornerRadius(int buttonCornerRadius) {
+        this.buttonCornerRadius = buttonCornerRadius;
+    }
+
+    public final void setButtonCornerRadius(Number radius) {
+        if (radius == null) {
+            throw new IllegalArgumentException("buttonCornerRadius is null.");
+        }
+
+        setButtonCornerRadius(radius.intValue());
+    }
+
+    public final void setButtonCornerRadius(String radius) {
+        if (radius == null) {
+            throw new IllegalArgumentException("buttonCornerRadius is null.");
+        }
+
+        setButtonCornerRadius(Integer.valueOf(radius));
     }
 
     public Orientation getTabOrientation() {

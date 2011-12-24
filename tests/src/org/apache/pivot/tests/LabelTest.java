@@ -18,9 +18,9 @@ package org.apache.pivot.tests;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
@@ -57,17 +57,23 @@ public class LabelTest implements Application {
         label1.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         boxPane.add(label1);
 
-        Label label2 = new Label(line2);
+        Label label2 = new Label(line2);  // strikethrough
         label2.getStyles().put("wrapText", true);
         label2.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         label2.getStyles().put("textDecoration", TextDecoration.STRIKETHROUGH);
         boxPane.add(label2);
 
+        Label label3 = new Label(line2);  // disabled
+        label3.getStyles().put("wrapText", true);
+        label3.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        label3.setEnabled(false);
+        boxPane.add(label3);
+
         boxPane.getStyles().put("fill", true);
         boxPane.getStyles().put("padding", new Insets(10));
 
         frame.setContent(boxPane);
-        frame.setPreferredSize(240, 320);
+        frame.setPreferredSize(340, 400);
 
         frame.open(display);
     }

@@ -32,20 +32,20 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TableView;
+import org.apache.pivot.wtk.TableView.SelectMode;
 import org.apache.pivot.wtk.TableViewColumnListener;
 import org.apache.pivot.wtk.TableViewListener;
 import org.apache.pivot.wtk.TableViewRowListener;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Keyboard.Modifier;
-import org.apache.pivot.wtk.TableView.SelectMode;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -1199,13 +1199,19 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         // Select the range
                         int startIndex = tableView.getFirstSelectedIndex();
                         int endIndex = tableView.getLastSelectedIndex();
-                        Span selectedRange = (rowIndex > startIndex) ?
-                            new Span(startIndex, rowIndex) : new Span(rowIndex, endIndex);
+                        // if there is nothing currently selected, selected the indicated row
+                        if (startIndex == -1) {
+                            tableView.addSelectedIndex(rowIndex);
+                        } else {
+                            // otherwise select the range of rows
+                            Span selectedRange = (rowIndex > startIndex) ?
+                                new Span(startIndex, rowIndex) : new Span(rowIndex, endIndex);
 
-                        ArrayList<Span> selectedRanges = new ArrayList<Span>();
-                        selectedRanges.add(selectedRange);
+                            ArrayList<Span> selectedRanges = new ArrayList<Span>();
+                            selectedRanges.add(selectedRange);
 
-                        tableView.setSelectedRanges(selectedRanges);
+                            tableView.setSelectedRanges(selectedRanges);
+                        }
                     }
                 } else if (Keyboard.isPressed(commandModifier)
                     && selectMode == TableView.SelectMode.MULTI) {
@@ -1370,7 +1376,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         // Clear the highlight
         if (highlightIndex != -1
             && tableView.getSelectMode() != TableView.SelectMode.NONE
-            && showHighlight) {
+            && showHighlight
+            && consumed) {
             repaintComponent(getRowBounds(highlightIndex));
         }
 

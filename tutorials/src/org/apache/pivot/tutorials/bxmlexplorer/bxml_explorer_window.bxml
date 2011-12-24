@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file
+  distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under
+  the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may
+  obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to
+  in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+  ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under
+  the License. -->
+
+<explorer:BXMLExplorerWindow title="BXML Preview" maximized="true"
+  xmlns:bxml="http://pivot.apache.org/bxml" xmlns:content="org.apache.pivot.wtk.content" xmlns:explorer="org.apache.pivot.tutorials.bxmlexplorer"
+  xmlns="org.apache.pivot.wtk">
+
+  <bxml:define>
+    <FileBrowserSheet bxml:id="fileBrowserSheet" styles="{hideDisabledFiles:true}"/>
+  </bxml:define>
+
+  <actionMappings>
+    <Window.ActionMapping action="fileNew" keyStroke="CMD-N" />
+    <Window.ActionMapping action="fileOpen" keyStroke="CMD-O" />
+  </actionMappings>
+
+  <TablePane>
+    <columns>
+      <TablePane.Column width="1*" />
+    </columns>
+    <TablePane.Row height="-1">
+      <MenuBar>
+        <MenuBar.Item buttonData="File">
+          <Menu>
+            <Menu.Section bxml:id="fileMenuSection">
+              <Menu.Item bxml:id="fileNewMenuItem" action="fileNew">
+                <buttonData>
+                  <content:MenuItemData text="New" keyboardShortcut="CMD-N" />
+                </buttonData>
+              </Menu.Item>
+              <Menu.Item action="fileOpen">
+                <buttonData>
+                  <content:MenuItemData text="Open" keyboardShortcut="CMD-O" />
+                </buttonData>
+              </Menu.Item>
+            </Menu.Section>
+          </Menu>
+        </MenuBar.Item>
+
+        <MenuBar.Item buttonData="Edit">
+          <Menu>
+            <Menu.Section>
+              <Menu.Item action="cut">
+                <buttonData>
+                  <content:MenuItemData text="Cut" keyboardShortcut="CMD-X" />
+                </buttonData>
+              </Menu.Item>
+              <Menu.Item action="copy">
+                <buttonData>
+                  <content:MenuItemData text="Copy" keyboardShortcut="CMD-C" />
+                </buttonData>
+              </Menu.Item>
+              <Menu.Item action="paste">
+                <buttonData>
+                  <content:MenuItemData text="Paste" keyboardShortcut="CMD-V" />
+                </buttonData>
+              </Menu.Item>
+            </Menu.Section>
+          </Menu>
+        </MenuBar.Item>
+      </MenuBar>
+    </TablePane.Row>
+    <TablePane.Row height="1*">
+
+      <Border styles="{backgroundColor:null, padding:2}">
+        <SplitPane bxml:id="splitPane" orientation="horizontal" splitRatio="0.25">
+          <left>
+            <TabPane bxml:id="paletteTabPane">
+              <ScrollPane bxml:id="paletteTreeViewScrollPane" TabPane.tabData="Palette" horizontalScrollBarPolicy="fill_to_capacity">
+                <TreeView bxml:id="paletteTreeView">
+                  <nodeRenderer>
+                    <content:TreeViewNodeRenderer styles="{padding:1}" />
+                  </nodeRenderer>
+
+                  <treeData>
+                    <content:TreeBranch>
+                      <content:TreeBranch text="Labels &amp; Image Views" icon="@../folder.png">
+                        <explorer:ComponentNode text="Label" src="@label.bxml" />
+                        <explorer:ComponentNode text="ImageView" src="@image_view.bxml" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Buttons" icon="@../folder.png">
+                        <explorer:ComponentNode text="PushButton" src="@push_button.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="RadioButton" src="@radio_button.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="Checkbox" src="@checkbox.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="LinkButton" src="@link_button.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Lists" icon="@../folder.png">
+                        <explorer:ComponentNode text="ListView" src="@list_view.bxml"
+                          horizontalScrollBarPolicy="fill_to_capacity" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="ListButton" src="@list_button.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Text" icon="@../folder.png">
+                        <explorer:ComponentNode text="TextInput" src="@text_input.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="TextArea" src="@text_area.bxml"
+                          horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity" />
+                        <explorer:ComponentNode text="TextPane" src="@text_pane.bxml"
+                          horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Separators" icon="@../folder.png">
+                        <explorer:ComponentNode text="Separator" src="@separator.bxml"
+                          horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Layout Containers" icon="@../folder.png">
+                        <explorer:ComponentNode text="FlowPane" src="@flow_pane.bxml" />
+                        <explorer:ComponentNode text="BoxPane" src="@box_pane.bxml" />
+                        <explorer:ComponentNode text="FillPane" src="@fill_pane.bxml" />
+                        <explorer:ComponentNode text="TablePane" src="@table_pane.bxml" />
+                        <explorer:ComponentNode text="GridPane" src="@grid_pane.bxml" />
+                        <explorer:ComponentNode text="Border" src="@border.bxml" />
+                        <explorer:ComponentNode text="StackPane" src="@stack_pane.bxml" />
+                        <explorer:ComponentNode text="SplitPane" src="@split_pane.bxml" />
+                        <explorer:ComponentNode text="Form" src="@form.bxml"
+                          horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="Panel" src="@panel.bxml" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Navigation Containers" icon="@../folder.png">
+                        <explorer:ComponentNode text="CardPane" src="@card_pane.bxml"
+                          horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill" />
+                        <explorer:ComponentNode text="TabPane" src="@tab_pane.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="Accordion" src="@accordion.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="Expander" src="@expander.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="Rollup" src="@rollup.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <content:TreeBranch text="Viewports" icon="@../folder.png">
+                          <explorer:ComponentNode text="ScrollPane" src="@scroll_pane.bxml" />
+                          <explorer:ComponentNode text="Panorama" src="@panorama.bxml" />
+                        </content:TreeBranch>
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Progress Indicators" icon="@../folder.png">
+                        <explorer:ComponentNode text="Meter" src="@meter.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="ActivityIndicator" icon="@../page_white.png"
+                          src="@activity_indicator.bxml" horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Bounded Range Components" icon="@../folder.png">
+                        <explorer:ComponentNode text="ScrollBar" src="@scroll_bar.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="Slider" src="@slider.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="Spinner" src="@spinner.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Calendars" icon="@../folder.png">
+                        <explorer:ComponentNode text="Calendar" src="@calendar.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="CalendarButton" src="@calendar_button.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Color Choosers" icon="@../folder.png">
+                        <explorer:ComponentNode text="ColorChooser" src="@color_chooser.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="ColorChooserButton" icon="@../page_white.png"
+                          src="@color_chooser_button.bxml" horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Menus" icon="@../folder.png">
+                        <explorer:ComponentNode text="MenuBar" src="@menu_bar.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                        <explorer:ComponentNode text="MenuButton" src="@menu_button.bxml"
+                          horizontalScrollBarPolicy="auto" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Tables" icon="@../folder.png">
+                        <explorer:ComponentNode text="TableView" src="@table_view.bxml"
+                          horizontalScrollBarPolicy="fill_to_capacity" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="Trees" icon="@../folder.png">
+                        <explorer:ComponentNode text="TreeView" src="@tree_view.bxml"
+                          horizontalScrollBarPolicy="fill_to_capacity" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                      <content:TreeBranch text="File Browsing" icon="@../folder.png">
+                        <explorer:ComponentNode text="FileBrowser" src="@file_browser.bxml"
+                          horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="auto" />
+                      </content:TreeBranch>
+                    </content:TreeBranch>
+                  </treeData>
+                </TreeView>
+              </ScrollPane>
+            </TabPane>
+          </left>
+          <right>
+            <TabPane bxml:id="tabPane" >
+              <corner>
+                <BoxPane styles="{padding:{right:6, bottom:2}, horizontalAlignment:'right', fill:true}">
+                  <PushButton bxml:id="closeButton" buttonData="Close Tab"/>
+                </BoxPane>
+            </corner>
+            </TabPane>
+          </right>
+        </SplitPane>
+      </Border>
+    </TablePane.Row>
+  </TablePane>
+</explorer:BXMLExplorerWindow>

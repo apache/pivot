@@ -177,4 +177,15 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
     public void windowClosed(Window window, Display display, Window owner) {
         // No-op
     }
+
+    @Override
+    public Vote previewWindowOpen(Window window) {
+        return Vote.APPROVE;
+    }
+
+    @Override
+    public void windowOpenVetoed(Window window, Vote reason) {
+        // No-op
+    }
+
 }

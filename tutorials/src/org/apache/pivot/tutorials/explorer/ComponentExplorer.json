@@ -43,6 +43,7 @@
         bxmlSourceLabel: "BXML Source",
 
         scrollBarPolicy: {
+            tooltip: "Show/Change Scroll Bar Policy",
             horizontal: "Horizontal Scroll Bar Policy",
             vertical: "Vertical Scroll Bar Policy",
             auto: "Auto",
@@ -60,6 +61,13 @@
 
     eventLoggerPane: {
         label: "Event Log",
-        clear: "Clear Event Log"
+        labelTooltip: "Select/Deselect Events to Log",
+        buttonsDescription: "Events:",
+        selectAll: "All",
+        selectAllEvents: "Select All Events",
+        deselectAll: "None",
+        deselectAllEvents: "Deselect All Events",
+        clear: "Clear",
+        clearTooltip: "Clear Events Log"
     }
 }

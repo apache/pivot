@@ -556,6 +556,14 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         invalidateComponent();
     }
 
+    public final void setButtonPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("buttonPadding is null.");
+        }
+
+        setButtonPadding(padding.intValue());
+    }
+
     public boolean getAlwaysShowScrollButtons() {
         return alwaysShowScrollButtons;
     }

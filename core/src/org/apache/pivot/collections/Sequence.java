@@ -166,11 +166,11 @@ public interface Sequence<T> {
         }
 
         /**
-         * Nested sequence item iterator iterface.
+         * Nested sequence item iterator interface.
          */
         public interface ItemIterator<T> extends Iterator<T> {
             /**
-             * Gets the path within the nested sequence to the item nost
+             * Gets the path within the nested sequence to the item most
              * recently returned by a call to <tt>next()</tt>.
              *
              * @return

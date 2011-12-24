@@ -16,9 +16,12 @@
  */
 package org.apache.pivot.tests.issues;
 
+import java.io.IOException;
+
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.CalendarButton;
@@ -43,30 +46,35 @@ public class Pivot714 implements Application {
     }
 
     public Window getWindow(final Window owner) {
+        this.owner = owner;
+        final BXMLSerializer bxmlSerializer = new BXMLSerializer();
         try {
-            this.owner = owner;
-            final BXMLSerializer bxmlSerializer = new BXMLSerializer();
             result = (Dialog)bxmlSerializer.readObject(Pivot714.class.getResource("pivot_714.bxml"));
-            final ListButton motif = (ListButton)bxmlSerializer.getNamespace().get("motif");
-            ArrayList<String> al = new ArrayList<String>();
-            al.add("One");
-            al.add("Two");
-            motif.setListData(al);
-            CalendarButton cbDate = (CalendarButton)bxmlSerializer.getNamespace().get("date");
-            dcl = (new DialogCloseListener() {
-                public void dialogClosed(Dialog dialog, boolean modal) {
-                }
-            });
-            cbDate.getCalendarButtonSelectionListeners().add(new CalendarButtonSelectionListener() {
-                @Override
-                public void selectedDateChanged(CalendarButton calendarButton, CalendarDate previousSelectedDate) {
-                }
-            });
-
-            return result;
-        } catch (Exception e) {
-            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SerializationException e) {
+            e.printStackTrace();
         }
+
+        final ListButton motif = (ListButton)bxmlSerializer.getNamespace().get("motif");
+
+        ArrayList<String> al = new ArrayList<String>();
+        al.add("One");
+        al.add("Two");
+        motif.setListData(al);
+
+        CalendarButton cbDate = (CalendarButton)bxmlSerializer.getNamespace().get("date");
+        dcl = (new DialogCloseListener() {
+            public void dialogClosed(Dialog dialog, boolean modal) {
+            }
+        });
+        cbDate.getCalendarButtonSelectionListeners().add(new CalendarButtonSelectionListener() {
+            @Override
+            public void selectedDateChanged(CalendarButton calendarButton, CalendarDate previousSelectedDate) {
+            }
+        });
+
+        return result;
     }
 
     @Override

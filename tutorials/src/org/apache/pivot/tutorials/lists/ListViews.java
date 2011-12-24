@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.content.ListItem;
 
 public class ListViews extends Window implements Bindable {
     private Label selectionLabel = null;
@@ -75,7 +76,13 @@ public class ListViews extends Window implements Bindable {
                             selectionText += ", ";
                         }
 
-                        String text = (String)listView.getListData().get(j);
+                        Object item = listView.getListData().get(j);
+                        String text;
+                        if (item instanceof ListItem) {  // item is a listItem (for example because it has an image)
+                            text = ((ListItem) item).getText();
+                        } else {  // item is a standard item for listData
+                            text = item.toString();
+                        }
                         selectionText += text;
                     }
                 }

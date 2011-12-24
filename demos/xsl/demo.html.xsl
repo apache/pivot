@@ -114,8 +114,18 @@ limitations under the License.
             };
 
             <!-- Java arguments -->
+	<xsl:choose>
+		<xsl:when test="/document/properties/java_memory_options_huge">
+            var javaArguments = ["-Dsun.awt.noerasebackground=true",
+                "-Dsun.awt.erasebackgroundonresize=true",
+                "-Xms256M -Xmx1024M"
+                ];
+		</xsl:when>
+		<xsl:otherwise>
             var javaArguments = ["-Dsun.awt.noerasebackground=true",
                 "-Dsun.awt.erasebackgroundonresize=true"];
+		</xsl:otherwise>
+	</xsl:choose>
 
             <xsl:if test="java-arguments">
                 <xsl:for-each select="java-arguments/*">

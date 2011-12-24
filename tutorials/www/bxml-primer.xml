@@ -34,7 +34,7 @@ limitations under the License.
         configure a collection of Java objects.
         </p>
 
-        <h2>BXMLSerializer</h2>
+        <h3>BXMLSerializer</h3>
 
         <p>
         The <tt>org.apache.pivot.beans.BXMLSerializer</tt> class is used to load a structure
@@ -73,7 +73,7 @@ limitations under the License.
         structure using resource bundles.
         </p>
 
-        <h2>Namespaces</h2>
+        <h3>Namespaces</h3>
 
         <p>
         In BXML, an XML namespace represents a Java package. Declaring a namespace associates the
@@ -252,7 +252,7 @@ limitations under the License.
         </li>
         </ul>
 
-        <h2>Elements</h2>
+        <h3>Elements</h3>
         <p>
         In BXML, an XML element that does not begin with the reserved "bxml" namespace prefix
         represents one of the following:
@@ -502,7 +502,7 @@ limitations under the License.
         <tt>Accordion</tt> and <tt>TablePane</tt>, define similar properties.
         </p>
 
-        <h2>Attributes</h2>
+        <h3>Attributes</h3>
         <p>
         An attribute in BXML may represent one of the following:
         </p>
@@ -688,7 +688,7 @@ limitations under the License.
         path to such a resource.
         </p>
 
-        <h2><a name="scripting">Scripting</a></h2>
+        <h3><a name="scripting">Scripting</a></h3>
         <p>
         The <tt>&lt;bxml:script&gt;</tt> tag allows a caller to import scripting code into or
         embed script within a BXML file. Any JVM scripting language can be used, including
@@ -933,7 +933,7 @@ limitations under the License.
         defined in a BXML file.
         </p>
 
-        <h2>Summary</h2>
+        <h3>Summary</h3>
         <p>
         BXML provides a number of features that help simplify the process of building a user
         interface. It can be used to instantiate objects and set member variables as well as

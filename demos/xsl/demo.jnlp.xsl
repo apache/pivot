@@ -90,7 +90,16 @@ limitations under the License.
                 <property name="sun.awt.erasebackgroundonresize=true" value="true"/>
             </xsl:if>
 
+	<xsl:choose>
+		<xsl:when test="/document/properties/java_memory_options_huge">
+            <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"
+				initial-heap-size="256M" max-heap-size="1024M"
+			/>
+		</xsl:when>
+		<xsl:otherwise>
             <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+		</xsl:otherwise>
+	</xsl:choose>
 
             <xsl:variable name="signed" select="libraries/@signed"/>
             <xsl:for-each select="libraries/library">

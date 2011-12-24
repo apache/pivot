@@ -36,7 +36,16 @@ public interface WindowStateListener {
         }
 
         @Override
+        public Vote previewWindowOpen(Window window) {
+            return Vote.APPROVE;
+        }
+
+        @Override
         public void windowCloseVetoed(Window window, Vote reason) {
+        }
+
+        @Override
+        public void windowOpenVetoed(Window window, Vote reason) {
         }
 
         @Override
@@ -59,12 +68,27 @@ public interface WindowStateListener {
     public Vote previewWindowClose(Window window);
 
     /**
+     * Called to preview a window open event.
+     *
+     * @param window
+     */
+    public Vote previewWindowOpen(Window window);
+
+    /**
      * Called when a window close event has been vetoed.
      *
      * @param window
      * @param reason
      */
     public void windowCloseVetoed(Window window, Vote reason);
+
+    /**
+     * Called when a window open event has been vetoed.
+     *
+     * @param window
+     * @param reason
+     */
+    public void windowOpenVetoed(Window window, Vote reason);
 
     /**
      * Called when a window has closed.

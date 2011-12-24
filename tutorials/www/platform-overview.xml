@@ -188,7 +188,7 @@ limitations under the License.
             Most of Pivot's classes live in the WTK libraries.
         </p>
 
-        <h2>Architecture</h2>
+        <h3>Architecture</h3>
 
         <p>
             The design of WTK is based on the
@@ -666,7 +666,7 @@ limitations under the License.
         <p><img src="platform_overview/buttons.png"/></p>
         <p class="caption">Some Pivot buttons.</p>
 
-        <h2>Internationalization/Localization</h2>
+        <h3>Internationalization/Localization</h3>
 
         <p>
             While Pivot applications can be localized using the standard Java localization APIs,
@@ -677,7 +677,7 @@ limitations under the License.
             that are not available in the ISO-8859 character set.
         </p>
 
-        <h2>XML Markup</h2>
+        <h3>XML Markup</h3>
 
         <p>
             Pivot applications can be constructed entirely in Java code, but it is often more
@@ -702,7 +702,7 @@ limitations under the License.
             <a href="bxml-primer.html">BXML primer</a> section.
         </p>
 
-        <h2>Effects</h2>
+        <h3>Effects</h3>
 
         <p>
             The <tt>org.apache.pivot.wtk.effects</tt> package provides support for adding visual
@@ -716,7 +716,7 @@ limitations under the License.
         <p><img src="platform_overview/decorator.png"/></p>
         <p class="caption">Decorator example.</p>
 
-        <h2>Web Queries</h2>
+        <h3>Web Queries</h3>
 
         <p>
             "Web queries" are Pivot's native means of communicating with remote data services.

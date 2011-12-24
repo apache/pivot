@@ -39,19 +39,19 @@ import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.TreeView;
+import org.apache.pivot.wtk.TreeView.SelectMode;
 import org.apache.pivot.wtk.TreeViewBranchListener;
 import org.apache.pivot.wtk.TreeViewListener;
 import org.apache.pivot.wtk.TreeViewNodeListener;
 import org.apache.pivot.wtk.TreeViewNodeStateListener;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Keyboard.Modifier;
-import org.apache.pivot.wtk.TreeView.SelectMode;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
@@ -1897,7 +1897,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             break;
         }
 
-        clearHighlightedNode();
+        if (consumed) {
+            clearHighlightedNode();
+        }
 
         return consumed;
     }

@@ -92,10 +92,7 @@ public class TextArea extends Component {
                 throw new IllegalArgumentException();
             }
 
-            if (index < 0
-                || index > characters.length()) {
-                throw new IndexOutOfBoundsException();
-            }
+            indexBoundsCheck("index", index, 0, characters.length());
 
             int count = text.length();
 
@@ -626,6 +623,9 @@ public class TextArea extends Component {
         }
 
         int count = endIndex - beginIndex;
+        if (count == 0) {
+            return "";
+        }
         StringBuilder textBuilder = new StringBuilder(count);
 
         // Get paragraph and character offset at beginIndex
@@ -735,10 +735,7 @@ public class TextArea extends Component {
             throw new IllegalArgumentException();
         }
 
-        if (index < 0
-            || index > characterCount) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("index", index, 0, characterCount);
 
         if (text.length() > 0) {
             // Insert the text
@@ -844,10 +841,7 @@ public class TextArea extends Component {
      * @param index
      */
     public int getParagraphAt(int index) {
-        if (index < 0
-            || index > characterCount) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("index", index, 0, characterCount);
 
         int paragraphIndex = paragraphs.getLength() - 1;
         Paragraph paragraph = paragraphs.get(paragraphIndex);
@@ -865,10 +859,7 @@ public class TextArea extends Component {
      * @param index
      */
     public char getCharacterAt(int index) {
-        if (index < 0
-            || index >= characterCount) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("index", index, 0, characterCount - 1);
 
         int paragraphIndex = getParagraphAt(index);
         Paragraph paragraph = paragraphs.get(paragraphIndex);

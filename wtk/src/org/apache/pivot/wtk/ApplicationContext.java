@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
+import java.awt.PrintGraphics;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.dnd.DnDConstants;
@@ -41,6 +42,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.print.PrinterGraphics;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -92,6 +94,8 @@ public abstract class ApplicationContext {
         private boolean paintPending = false;
         private boolean disableVolatileBuffer = false;
         private boolean debugPaint = false;
+        private java.awt.image.VolatileImage volatileImage = null;
+        private GraphicsConfiguration volatileImageGC = null;
 
         private Random random = null;
 
@@ -427,6 +431,11 @@ public abstract class ApplicationContext {
             // (for some reason, AWT does not do this automatically)
             graphics.clipRect(0, 0, getWidth(), getHeight());
 
+            if (graphics instanceof PrintGraphics || graphics instanceof PrinterGraphics) {
+                print(graphics);
+                return;
+            }
+
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
             if (clipBounds != null
                 && !clipBounds.isEmpty()) {
@@ -455,6 +464,27 @@ public abstract class ApplicationContext {
         @Override
         public void update(Graphics graphics) {
             paint(graphics);
+        }
+
+        @Override
+        public void print(Graphics graphics) {
+            // TODO: verify if/how we have to re-scale output in this case ...
+
+            // Intersect the clip region with the bounds of this component
+            // (for some reason, AWT does not do this automatically)
+            graphics.clipRect(0, 0, getWidth(), getHeight());
+
+            java.awt.Rectangle clipBounds = graphics.getClipBounds();
+            if (clipBounds != null
+                    && !clipBounds.isEmpty()) {
+                try {
+                    // When printing, there is no point in using offscreen buffers.
+                    paintDisplay((Graphics2D)graphics);
+                } catch (RuntimeException exception) {
+                    System.err.println("Exception thrown during print(): " + exception);
+                    throw exception;
+                }
+            }
         }
 
         /**
@@ -510,31 +540,44 @@ public abstract class ApplicationContext {
 
             // Paint the display into a volatile offscreen buffer
             GraphicsConfiguration gc = graphics.getDeviceConfiguration();
-            java.awt.Rectangle clipBounds = graphics.getClipBounds();
-            java.awt.image.VolatileImage volatileImage =
-                gc.createCompatibleVolatileImage(clipBounds.width, clipBounds.height,
+            java.awt.Rectangle gcBounds = gc.getBounds();
+            if (volatileImage == null || volatileImageGC != gc) {
+                if (volatileImage != null) {
+                    volatileImage.flush();
+                }
+                volatileImage = gc.createCompatibleVolatileImage(gcBounds.width, gcBounds.height,
                     Transparency.OPAQUE);
+                // we need to create a new volatile if the GC changes
+                volatileImageGC = gc;
+            }
 
             // If we have a valid volatile image, attempt to paint the
             // display to it
-            if (volatileImage != null) {
-                int valid = volatileImage.validate(gc);
+            int valid = volatileImage.validate(gc);
 
-                if (valid == java.awt.image.VolatileImage.IMAGE_OK
-                    || valid == java.awt.image.VolatileImage.IMAGE_RESTORED) {
-                    Graphics2D volatileImageGraphics = volatileImage.createGraphics();
-                    volatileImageGraphics.setClip(0, 0, clipBounds.width, clipBounds.height);
-                    volatileImageGraphics.translate(-clipBounds.x, -clipBounds.y);
+            if (valid == java.awt.image.VolatileImage.IMAGE_OK
+                || valid == java.awt.image.VolatileImage.IMAGE_RESTORED) {
+                java.awt.Rectangle clipBounds = graphics.getClipBounds();
+                Graphics2D volatileImageGraphics = volatileImage.createGraphics();
+                volatileImageGraphics.setClip(clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height);
 
-                    try {
-                        paintDisplay(volatileImageGraphics);
-                        graphics.drawImage(volatileImage, clipBounds.x, clipBounds.y, this);
-                    } finally {
-                        volatileImageGraphics.dispose();
-                    }
-
-                    painted = !volatileImage.contentsLost();
+                try {
+                    paintDisplay(volatileImageGraphics);
+                    // this drawImage method doesn't use width and height
+                    int x2 = clipBounds.x + clipBounds.width;
+                    int y2 = clipBounds.y + clipBounds.height;
+                    graphics.drawImage(volatileImage,
+                        clipBounds.x, clipBounds.y, x2, y2,
+                        clipBounds.x, clipBounds.y, x2, y2,
+                        this);
+                } finally {
+                    volatileImageGraphics.dispose();
                 }
+
+                painted = !volatileImage.contentsLost();
+            } else {
+                volatileImage.flush();
+                volatileImage = null;
             }
 
             return painted;

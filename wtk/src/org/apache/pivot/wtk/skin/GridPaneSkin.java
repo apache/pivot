@@ -101,6 +101,9 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     private Color horizontalGridColor = Color.BLACK;
     private Color verticalGridColor = Color.BLACK;
 
+    /**
+     * These are cached computed values, for performance.
+     */
     private int cellWidth = 0;
     private int cellHeight = 0;
 
@@ -474,6 +477,18 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * Sets the padding that will be reserved around the grid pane during
      * layout.
      */
+    public final void setPadding(Number padding) {
+        if (padding == null) {
+            throw new IllegalArgumentException("padding is null.");
+        }
+
+        setPadding(padding.intValue());
+    }
+
+    /**
+     * Sets the padding that will be reserved around the grid pane during
+     * layout.
+     */
     public final void setPadding(String padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -582,6 +597,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
     /**
      * Sets the color used to paint the grid pane's horizontal grid lines.
+     * @param horizontalGridColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setHorizontalGridColor(String horizontalGridColor) {
         if (horizontalGridColor == null) {
@@ -615,6 +632,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
     /**
      * Sets the color used to paint the grid pane's vertical grid lines.
+     * @param verticalGridColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
     public final void setVerticalGridColor(String verticalGridColor) {
         if (verticalGridColor == null) {

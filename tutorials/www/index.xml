@@ -76,6 +76,7 @@ limitations under the License.
             <document-item id="layout-containers">
                 <document-item id="flow-panes"/>
                 <document-item id="box-panes"/>
+                <document-item id="fill-panes"/>
                 <document-item id="grid-panes"/>
                 <document-item id="table-panes"/>
                 <document-item id="borders"/>
@@ -146,6 +147,9 @@ limitations under the License.
 
         <item-group name="Further Reading">
             <document-item id="bxml-primer"/>
+        </item-group>
+
+        <item-group name="">
         </item-group>
     </body>
 </document>

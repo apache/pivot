@@ -465,7 +465,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         if (this == o) {
             equals = true;
         } else if (o instanceof List) {
-            List<T> list = (List)o;
+            List<T> list = (List<T>)o;
 
             if (length == list.getLength()) {
                 Iterator<T> iterator = list.iterator();

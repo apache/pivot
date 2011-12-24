@@ -17,5 +17,6 @@
 package org.apache.pivot.json.test;
 
 public class SampleBean2SequenceSubclass extends SampleBean2Sequence {
+    @SuppressWarnings("unused")
     private static final long serialVersionUID = 0;
 }

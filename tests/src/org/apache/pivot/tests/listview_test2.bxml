@@ -22,7 +22,7 @@ limitations under the License.
     styles="{padding:{top:2, left:4, bottom:4, right:4}, spacing:12}">
     <Border styles="{color:10}">
         <ScrollPane preferredHeight="80">
-            <ListView bxml:id="iconListView2" selectMode="multi" selectedIndex="2" styles="{variableItemHeight:true}">
+            <ListView bxml:id="iconListView2" selectMode="multi" selectedIndex="2" styles="{variableItemHeight:true, wrapSelectNext:false}">
                 <itemRenderer>
                     <content:ListViewItemRenderer iconWidth="-1" iconHeight="-1"
                         showIcon="true"/>

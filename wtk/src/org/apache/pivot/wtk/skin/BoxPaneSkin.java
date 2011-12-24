@@ -449,10 +449,24 @@ public class BoxPaneSkin extends ContainerSkin
         }
     }
 
+    /**
+     * Returns the horizontal alignment of the BoxPane's components within the pane.
+     */
     public HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
     }
 
+    /**
+     * Sets the horizontal alignment of the BoxPane's components within the pane.
+     *
+     * <p>If the orientation of the pane is HORIZONTAL, this means the collective alignment
+     * all the components as group, which are still laid out close together according
+     * to the value of the <code>spacing</code> style.
+     *
+     * <p>If the orientation of the pane is VERTICAL, this means the alignment of each
+     * individual component within the pane.  It has no effect if the <code>fill</code>
+     * style is true.
+     */
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
         if (horizontalAlignment == null) {
             throw new IllegalArgumentException("horizontalAlignment is null.");
@@ -462,10 +476,24 @@ public class BoxPaneSkin extends ContainerSkin
         invalidateComponent();
     }
 
+    /**
+     * Returns the vertical alignment of the BoxPane's components within the pane.
+     */
     public VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
     }
 
+    /**
+     * Sets the vertical alignment of the BoxPane's components within the pane.
+     *
+     * <p>If the orientation of the pane is VERTICAL, this means the collective alignment
+     * all the components as group, which are still laid out close together according
+     * to the value of the <code>spacing</code> style.
+     *
+     * <p>If the orientation of the pane is HORIZONTAL, this means the alignment of each
+     * individual component within the pane.  It has no effect if the <code>fill</code>
+     * style is true.
+     */
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
         if (verticalAlignment == null) {
             throw new IllegalArgumentException("verticalAlignment is null.");
@@ -475,10 +503,16 @@ public class BoxPaneSkin extends ContainerSkin
         invalidateComponent();
     }
 
+    /**
+     * Returns the amount of space between the edge of the BoxPane and its components.
+     */
     public Insets getPadding() {
         return padding;
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the BoxPane and its components.
+     */
     public void setPadding(Insets padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -488,6 +522,11 @@ public class BoxPaneSkin extends ContainerSkin
         invalidateComponent();
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the BoxPane and its components.
+     *
+     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -496,10 +535,18 @@ public class BoxPaneSkin extends ContainerSkin
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the BoxPane and its components,
+     * uniformly on all four edges.
+     */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the BoxPane and its components,
+     * uniformly on all four edges.
+     */
     public final void setPadding(Number padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -508,6 +555,12 @@ public class BoxPaneSkin extends ContainerSkin
         setPadding(padding.intValue());
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the BoxPane and its components.
+     *
+     * @param padding A string containing an integer or a JSON dictionary with keys
+     * left, top, bottom, and/or right.
+     */
     public final void setPadding(String padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -516,10 +569,16 @@ public class BoxPaneSkin extends ContainerSkin
         setPadding(Insets.decode(padding));
     }
 
+    /**
+     * Returns the amount of space between the BoxPane's components.
+     */
     public int getSpacing() {
         return spacing;
     }
 
+    /**
+     * Sets the amount of space to leave between the BoxPane's components.
+     */
     public void setSpacing(int spacing) {
         if (spacing < 0) {
             throw new IllegalArgumentException("spacing is negative.");
@@ -528,6 +587,9 @@ public class BoxPaneSkin extends ContainerSkin
         invalidateComponent();
     }
 
+    /**
+     * Sets the amount of space to leave between the BoxPane's components.
+     */
     public final void setSpacing(Number spacing) {
         if (spacing == null) {
             throw new IllegalArgumentException("spacing is null.");
@@ -536,10 +598,27 @@ public class BoxPaneSkin extends ContainerSkin
         setSpacing(spacing.intValue());
     }
 
+    /**
+     * Returns a value indicating whether the BoxPane's components fill the
+     * available space in the pane in the dimension orthogonal to its orientation.
+     */
     public boolean getFill() {
         return fill;
     }
 
+    /**
+     * Sets whether the BoxPane's components fill to the edges of the pane.
+     *
+     * @param fill If <b>true</b>, the components are given all the available space
+     * in the dimension orthogonal to the pane's orientation (e.g., vertically
+     * in a BoxPane with orientation=horizontal).  It has no effect on the layout
+     * of components in the direction of the pane's orientation, which are always
+     * given exactly their preferred size.
+     * If <b>false</b>, the pane's components are laid out to their preferred size,
+     * regardless of the size of the BoxPane.  Their alignment along the axis orthogonal
+     * to the pane's orientation is controlled by the corresponding alignment style
+     * (e.g., verticalAlignment in a BoxPane with orientation=horizontal).
+     */
     public void setFill(boolean fill) {
         this.fill = fill;
         invalidateComponent();

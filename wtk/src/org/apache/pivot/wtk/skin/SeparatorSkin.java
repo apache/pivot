@@ -177,10 +177,16 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         return false;
     }
 
+    /**
+     * Returns the font used in rendering the Separator's heading
+     */
     public Font getFont() {
         return font;
     }
 
+    /**
+     * Sets the font used in rendering the Separator's heading
+     */
     public void setFont(Font font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -190,6 +196,10 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         invalidateComponent();
     }
 
+    /**
+     * Sets the font used in rendering the Separator's heading
+     * @param font A {@link ComponentSkin#decodeFont(String) font specification}
+     */
     public final void setFont(String font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -198,6 +208,10 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         setFont(decodeFont(font));
     }
 
+    /**
+     * Sets the font used in rendering the Separator's heading
+     * @param font A dictionary {@link Theme#deriveFont describing a font}
+     */
     public final void setFont(Dictionary<String, ?> font) {
         if (font == null) {
             throw new IllegalArgumentException("font is null.");
@@ -206,10 +220,16 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         setFont(Theme.deriveFont(font));
     }
 
+    /**
+     * Returns the color of the Separator's horizontal rule
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Sets the color of the Separator's horizontal rule
+     */
     public void setColor(Color color) {
         if (color == null) {
             throw new IllegalArgumentException("color is null.");
@@ -219,6 +239,10 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         repaintComponent();
     }
 
+    /**
+     * Sets the color of the Separator's horizontal rule
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     */
     public final void setColor(String color) {
         if (color == null) {
             throw new IllegalArgumentException("color is null.");
@@ -227,10 +251,16 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
+    /**
+     * Returns the color of the text in the heading
+     */
     public Color getHeadingColor() {
         return headingColor;
     }
 
+    /**
+     * Sets the color of the text in the heading
+     */
     public void setHeadingColor(Color headingColor) {
         if (headingColor == null) {
             throw new IllegalArgumentException("headingColor is null.");
@@ -240,6 +270,10 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         repaintComponent();
     }
 
+    /**
+     * Sets the color of the text in the heading
+     * @param headingColor Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     */
     public final void setHeadingColor(String headingColor) {
         if (headingColor == null) {
             throw new IllegalArgumentException("headingColor is null.");
@@ -248,10 +282,16 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         setHeadingColor(GraphicsUtilities.decodeColor(headingColor));
     }
 
+    /**
+     * Returns the thickness of the Separator's horizontal rule
+     */
     public int getThickness() {
         return thickness;
     }
 
+    /**
+     * Sets the thickness of the Separator's horizontal rule
+     */
     public void setThickness(int thickness) {
         if (thickness < 0) {
             throw new IllegalArgumentException("thickness is negative.");
@@ -260,6 +300,9 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         invalidateComponent();
     }
 
+    /**
+     * Sets the thickness of the Separator's horizontal rule
+     */
     public final void setThickness(Number thickness) {
         if (thickness == null) {
             throw new IllegalArgumentException("thickness is null.");
@@ -268,10 +311,18 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         setThickness(thickness.intValue());
     }
 
+    /**
+     * Returns the amount of space surrounding (left/right) the Separator's heading,
+     * and above and below the entire component.
+     */
     public Insets getPadding() {
         return padding;
     }
 
+    /**
+     * Sets the amount of space to leave around the Separator's heading,
+     * and above and below the entire component.
+     */
     public void setPadding(Insets padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -281,6 +332,11 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         invalidateComponent();
     }
 
+    /**
+     * Sets the amount of space to leave around the Separator's heading,
+     * and above and below the entire component.
+     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -289,10 +345,18 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave around the Separator's heading,
+     * and above and below the entire component.
+     */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave around the Separator's heading,
+     * and above and below the entire component.
+     */
     public final void setPadding(Number padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");
@@ -301,6 +365,12 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         setPadding(padding.intValue());
     }
 
+    /**
+     * Sets the amount of space to leave around the Separator's heading,
+     * and above and below the entire component.
+     * @param padding A string containing an integer or a JSON dictionary with keys
+     * left, top, bottom, and/or right.
+     */
     public final void setPadding(String padding) {
         if (padding == null) {
             throw new IllegalArgumentException("padding is null.");

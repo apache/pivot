@@ -17,7 +17,7 @@ limitations under the License.
 
 body {
     font-family:Verdana;
-    font-size:11px;
+    font-size:small;
 }
 
 p.caption {
@@ -46,9 +46,31 @@ tt {
 }
 
 table {
-    font-size:11px;
+}
+
+td {
+}
+
+td.indexLeft {
+    width:60%;
+    padding:20px;
+    vertical-align:text-top;
+}
+
+td.indexRight {
+    text-align:center;
 }
 
 img {
-    vertical-align: middle;
+    vertical-align:middle;
+}
+
+h2 {
+    font-size:200%;
+    font-weight:bold;
+    text-align:center;
+}
+
+hr {
+    width:80%;
 }

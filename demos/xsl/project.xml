@@ -18,10 +18,13 @@ limitations under the License.
 
 <project href="http://pivot.apache.org/">
     <vendor>Apache Pivot</vendor>
+    <title>Apache Pivot Demos</title>
 
     <demo-screenshots>
         <screenshot id="kitchen-sink" src="kitchen_sink.png"/>
         <screenshot id="stock-tracker" src="stock_tracker.png"/>
+        <screenshot id="component-explorer" src="component-explorer.png"/>
+        <screenshot id="bxml-explorer" src="bxml-explorer.png"/>
         <screenshot id="itunes-search" src="itunes_search.png"/>
         <screenshot id="json-viewer" src="json_viewer.png"/>
         <screenshot id="xml-viewer" src="xml_viewer.png"/>

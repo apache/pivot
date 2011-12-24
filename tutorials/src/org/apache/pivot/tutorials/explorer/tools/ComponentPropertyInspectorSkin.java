@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tutorials.explorer.tools;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 
@@ -29,14 +30,18 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Form;
 
 class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
-    private static class NameComparator implements Comparator<String> {
+    private static class NameComparator implements Comparator<String>, Serializable {
+        private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(String propertyName1, String propertyName2) {
             return propertyName1.compareTo(propertyName2);
         }
     }
 
-    private static class ClassComparator implements Comparator<Class<?>> {
+    private static class ClassComparator implements Comparator<Class<?>>, Serializable {
+        private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(Class<?> class1, Class<?> class2) {
             int result = 0;

@@ -29,7 +29,7 @@ limitations under the License.
             user will interact with it.
         </p>
 
-        <h2>Visual and ConstrainedVisual</h2>
+        <h3>Visual and ConstrainedVisual</h3>
 
         <p><img src="component_and_container/visuals.png"/></p>
 
@@ -101,7 +101,7 @@ limitations under the License.
             handled automatically in a Pivot application, and is discussed next.
         </p>
 
-        <h2>Layout</h2>
+        <h3>Layout</h3>
 
         <p>
             "Layout management" is the process of automatically determining how components should
@@ -185,7 +185,7 @@ limitations under the License.
             columns. However, most respect at least one, and many respect both.
         </p>
 
-        <h2>Disabled Components</h2>
+        <h3>Disabled Components</h3>
 
         <p>
             A component that is "enabled" is currently capable of receiving user input. A component
@@ -209,7 +209,7 @@ limitations under the License.
             ancestors is disabled, it is said to be "blocked".
         </p>
 
-        <h2>Focus Management</h2>
+        <h3>Focus Management</h3>
 
         <p>
             A component that is eligible to receive keyboard input is said to have the "input
@@ -239,7 +239,7 @@ limitations under the License.
             container.
         </p>
 
-        <h2>Cursors</h2>
+        <h3>Cursors</h3>
 
         <p>
             A component's skin will generally ensure that an appropriate cursor is displayed when
@@ -248,7 +248,7 @@ limitations under the License.
             defined by the <tt>Cursor</tt> enum.
         </p>
 
-        <h2>Styles</h2>
+        <h3>Styles</h3>
 
         <p>
             Styles are a means of customizing a component's appearance. They are implemented as
@@ -338,7 +338,7 @@ limitations under the License.
         }
         </source>
 
-        <h2>Attributes</h2>
+        <h3>Attributes</h3>
 
         <p>
             Attributes are a means of attaching container-specific properties to a component.
@@ -358,7 +358,7 @@ limitations under the License.
             that should be used as the text label for that component.
          </p>
 
-        <h2>Events</h2>
+        <h3>Events</h3>
 
         <p>
             In GUI programming, the term "event" generally refers to a notification sent by a

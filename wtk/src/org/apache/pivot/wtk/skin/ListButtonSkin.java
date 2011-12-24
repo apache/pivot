@@ -113,7 +113,7 @@ public abstract class ListButtonSkin extends ButtonSkin
         }
     };
 
-    private WindowStateListener listViewPopupWindowStateListener = new WindowStateListener() {
+    private WindowStateListener listViewPopupWindowStateListener = new WindowStateListener.Adapter() {
         @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();

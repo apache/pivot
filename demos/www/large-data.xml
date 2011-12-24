@@ -22,6 +22,7 @@ limitations under the License.
         <description>
             Demonstrates Pivot's ability to handle large data sets of up to 1,000,000 rows.
         </description>
+        <java_memory_options_huge>true</java_memory_options_huge>
     </properties>
 
     <body>

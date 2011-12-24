@@ -605,7 +605,7 @@ public class LinkedList<T> implements List<T>, Serializable {
         if (this == o) {
             equals = true;
         } else if (o instanceof List) {
-            List<T> otherList = (List) o;
+            List<T> otherList = (List<T>) o;
 
             if (length == otherList.getLength()) {
                 Iterator<T> iterator = otherList.iterator();

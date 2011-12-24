@@ -174,6 +174,21 @@ public final class GraphicsUtilities {
         }
     }
 
+    /**
+     * Interprets a string as a color value.
+     * @param value One of the following forms:
+     * <ul>
+     * <li>0xdddddddd - 8 hexadecimal digits, specifying 8 bits each of
+     * red, green, and blue, followed by 8 bits of alpha.</li>
+     * <li>#dddddd - 6 hexadecimal digits, specifying 8 bits each of
+     * red, green, and blue.
+     * <li>Any of the names of the static colors in the Java {@link Color} class.
+      * </ul>
+     * @return A {@link Color} on successful decoding
+     * @throws NumberFormatException if the value in the first two cases contains
+     * illegal hexadecimal digits.
+     * @throws IllegalArgumentException if the value is not in one of the formats listed above.
+     */
     public static Color decodeColor(String value) throws NumberFormatException {
         if (value == null) {
             throw new IllegalArgumentException("Cannot decode a null String.");
@@ -223,6 +238,12 @@ public final class GraphicsUtilities {
         return new Color(red, green, blue, alpha);
     }
 
+    /**
+     * Interpret a string as a {@link Paint} value
+     * @param value Either
+     * (a) One of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}
+     * or (b) A {@linkplain GraphicsUtilities#decodePaint(Dictionary) JSON dictionary describing a Paint value}.
+     */
     public static Paint decodePaint(String value) {
         if (value == null) {
             throw new IllegalArgumentException("Cannot decode a null String.");
@@ -244,6 +265,24 @@ public final class GraphicsUtilities {
         return paint;
     }
 
+    /**
+     * Interpret a dictionary as a {@link Paint} value
+     * @param dictionary A dictionary containing a key {@value #PAINT_TYPE_KEY} and further elements
+     * according to its value:
+     * <ul>
+     * <li><b>solid_color</b> - key {@value #COLOR_KEY} with value being any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}</li>
+     * <li><b>gradient</b> - keys {@value #START_X_KEY}, {@value #START_Y_KEY}, {@value #END_X_KEY},
+     * {@value #END_Y_KEY} (values are coordinates),
+     * {@value #START_COLOR_KEY}, {@value #END_COLOR_KEY} (values are {@linkplain GraphicsUtilities#decodeColor colors})</li>
+     * <li><b>linear_gradient</b> - keys {@value #START_X_KEY}, {@value #START_Y_KEY}, {@value #END_X_KEY},
+     * {@value #END_Y_KEY} (coordinates), {@value #STOPS_KEY} (a list of dictionaries
+     * with keys {@value #OFFSET_KEY} (a number in [0,1]) and {@value #COLOR_KEY})</li>
+     * <li><b>radial_gradient</b> - keys {@value #CENTER_X_KEY}, {@value #CENTER_Y_KEY} (coordinates),
+     * {@value #RADIUS_KEY} (a number), {@value #STOPS_KEY} (a list of dictionaries
+     * with keys {@value #OFFSET_KEY} and {@value #COLOR_KEY})</li>
+     * </ul>
+     */
     @SuppressWarnings("unchecked")
     public static Paint decodePaint(Dictionary<String, ?> dictionary) {
         String paintType = JSON.get(dictionary, PAINT_TYPE_KEY);

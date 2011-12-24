@@ -335,10 +335,7 @@ public class SuggestionPopup extends Window {
      * selection.
      */
     public void setSelectedIndex(int selectedIndex) {
-        if (selectedIndex < -1
-            || selectedIndex >= suggestionData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
+        indexBoundsCheck("selectedIndex", selectedIndex, -1, suggestionData.getLength() - 1);
 
         int previousSelectedIndex = this.selectedIndex;
 

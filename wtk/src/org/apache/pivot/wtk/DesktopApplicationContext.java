@@ -20,6 +20,7 @@ import java.awt.AWTEvent;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.SplashScreen;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
@@ -80,10 +81,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
     private static class DesktopDisplayHost extends DisplayHost {
         private static final long serialVersionUID = 0;
 
-        private Window rootOwner = null;
-        private Runnable updateHostWindowTitleBarCallback = null;
+        private transient Window rootOwner = null;
+        private transient Runnable updateHostWindowTitleBarCallback = null;
 
-        private WindowListener rootOwnerListener = new WindowListener.Adapter() {
+        private transient WindowListener rootOwnerListener = new WindowListener.Adapter() {
             @Override
             public void titleChanged(Window window, String previousTitle) {
                 updateFrameTitleBar();
@@ -190,7 +191,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     // The AWT Window class does not define a title property; this interface allows
-    // the HostFrame and HostDialog titles to be handled polymorphicaly
+    // the HostFrame and HostDialog titles to be handled polymorphically
     private interface TitledWindow {
         public String getTitle();
         public void setTitle(String title);
@@ -373,6 +374,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     public static final String MAXIMIZED_ARGUMENT = "maximized";
     public static final String UNDECORATED_ARGUMENT = "undecorated";
     public static final String FULL_SCREEN_ARGUMENT = "fullScreen";
+    public static final String PRESERVE_SPLASH_SCREEN_ARGUMENT = "preserveSplashScreen";
     public static final String ORIGIN_ARGUMENT = "origin";
 
     private static final String INVALID_PROPERTY_FORMAT_MESSAGE = "\"%s\" is not a valid startup "
@@ -446,7 +448,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     /**
-     * Primary aplication entry point.
+     * Primary application entry point.
      *
      * @param args
      */
@@ -471,6 +473,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         boolean maximized = false;
         boolean undecorated = false;
         boolean fullScreen = false;
+        boolean preserveSplashScreen = false;
 
         try {
             Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
@@ -527,6 +530,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             undecorated = Boolean.parseBoolean(value);
                         } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
                             fullScreen = Boolean.parseBoolean(value);
+                        } else if (key.equals(PRESERVE_SPLASH_SCREEN_ARGUMENT)) {
+                            preserveSplashScreen = Boolean.parseBoolean(value);
                         } else if (key.equals(ORIGIN_ARGUMENT)) {
                             origin = new URL(value);
                         } else {
@@ -607,8 +612,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
             // Initialize OS-specific extensions
             initializeOSExtensions();
 
-            // Show the appropriate host window
-            setFullScreen(fullScreen);
+            // Don't make the window visible if there is a SplashScreen that the
+            // application intends to use
+            boolean visible = (!preserveSplashScreen || SplashScreen.getSplashScreen() == null);
+            // Initial configuration of the windows
+            setFullScreen(fullScreen, visible);
 
             // Start the application in a callback to allow the host window to
             // open first
@@ -715,6 +723,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * @param fullScreen
      */
     public static void setFullScreen(boolean fullScreen) {
+        setFullScreen(fullScreen, true);
+    }
+
+    private static void setFullScreen(boolean fullScreen, boolean visible) {
         GraphicsDevice graphicsDevice = windowedHostFrame.getGraphicsConfiguration().getDevice();
 
         if (fullScreen) {
@@ -725,11 +737,19 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             windowedHostFrame.setVisible(false);
 
-            graphicsDevice.setFullScreenWindow(fullScreenHostFrame);
+            // Setting the full screen window now will cause a SplashScreen to
+            // be dismissed, so don't do so if the --preserveSplashScreen
+            // startup property was true, and a SplashScreen was supplied.
+            // When the SplashScreen needs to be dismissed, users can call
+            // replaceSplashScreen(Display) which will set the full screen
+            // window, if required.
+            if (visible) {
+                graphicsDevice.setFullScreenWindow(fullScreenHostFrame);
+            }
 
             fullScreenHostFrame.add(primaryDisplayHost);
             fullScreenHostFrame.setTitle(windowedHostFrame.getTitle());
-            fullScreenHostFrame.setVisible(true);
+            fullScreenHostFrame.setVisible(visible);
         } else {
             // Go to windowed mode
             if (fullScreenHostFrame.isVisible()) {
@@ -742,10 +762,30 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             windowedHostFrame.add(primaryDisplayHost);
             windowedHostFrame.setTitle(fullScreenHostFrame.getTitle());
-            windowedHostFrame.setVisible(true);
+            windowedHostFrame.setVisible(visible);
         }
 
         primaryDisplayHost.requestFocusInWindow();
+    }
+
+    /**
+     * Gets the window hosting the specified Display and makes it visible.</br>
+     * This will cause a visible {@link SplashScreen} to be closed.<br/> It is
+     * intended to be called one time when the Pivot application has initialized
+     * its UI and the SplashScreen is ready to be dismissed, but can be safely
+     * called regardless of whether there is now, or used to be, a visible
+     * SplashScreen.
+     *
+     * @param display Display to make visible
+     * @see java.awt.SplashScreen
+     */
+    public static void replaceSplashScreen(Display display) {
+        java.awt.Window hostWindow = display.getHostWindow();
+        GraphicsDevice device = windowedHostFrame.getGraphicsConfiguration().getDevice();
+        if ((hostWindow == fullScreenHostFrame) && (device.getFullScreenWindow() == null)) {
+            device.setFullScreenWindow(fullScreenHostFrame);
+        }
+        hostWindow.setVisible(true);
     }
 
     /**
@@ -826,4 +866,5 @@ public final class DesktopApplicationContext extends ApplicationContext {
         args[0] = applicationClass.getName();
         main(args);
     }
+
 }
