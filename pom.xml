@@ -22,7 +22,7 @@ limitations under the License.
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.pivot</groupId>
     <artifactId>pivot-archetype-quickstart</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <name>Apache Pivot Quickstart Archetype</name>
     <url>http://pivot.apache.org</url>
     <organization>
@@ -40,7 +40,7 @@ limitations under the License.
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <application.version>1.0</application.version>
+        <application.version>1.0.1</application.version>
     </properties>
 
     <build>

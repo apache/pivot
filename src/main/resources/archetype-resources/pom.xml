@@ -34,7 +34,7 @@ limitations under the License.
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <pivot.version>2.0</pivot.version>
+        <pivot.version>2.0.1</pivot.version>
     </properties>
 
     <dependencies>
