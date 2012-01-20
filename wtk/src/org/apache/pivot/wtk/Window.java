@@ -1168,8 +1168,12 @@ public class Window extends Container {
     }
 
     @Override
-    public boolean keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyReleased(keyCode, keyLocation);
+    public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+        /* Use keyPressed rather than keyReleased other this sequence:
+         * Press Ctrl, Press C, Release Ctrl, Release C
+         * will not trigger the Ctrl-C action.
+         */
+        boolean consumed = super.keyPressed(keyCode, keyLocation);
 
         // Perform any action defined for this keystroke
         // in the active window's action dictionary
