@@ -33,7 +33,10 @@ limitations under the License.
                   <xsl:text> | </xsl:text>
                   <xsl:value-of select="$project/title"/>
                 </title>
+
                 <link rel="stylesheet" href="tutorial.css" type="text/css"/>
+                <link rel="stylesheet" href="tutorial_print.css" type="text/css" media="print"/>
+
                 <script xmlns="" type="text/javascript" src="http://java.com/js/deployJava.js"/>
 
                 <xsl:comment>NOTE: Syntax highlighting script is LGPL</xsl:comment>

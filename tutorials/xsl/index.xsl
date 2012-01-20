@@ -29,6 +29,7 @@ limitations under the License.
                   <xsl:value-of select="$project/title"/>
                 </title>
                 <link rel="stylesheet" href="tutorial.css" type="text/css"/>
+                <link rel="stylesheet" href="tutorial_print.css" type="text/css" media="print"/>
                 <style>
                     ul {
                         list-style-type: none;
