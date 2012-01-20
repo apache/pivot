@@ -35,7 +35,10 @@ limitations under the License.
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
                 <title>Pivot <xsl:value-of select="properties/title"/> Demo</title>
+
                 <link rel="stylesheet" href="demo.css" type="text/css"/>
+                <link rel="stylesheet" href="demo_print.css" type="text/css" media="print"/>
+
                 <script xmlns="" type="text/javascript" src="http://java.com/js/deployJava.js"/>
                 <xsl:if test="boolean(properties/full-screen)">
                     <style type="text/css">

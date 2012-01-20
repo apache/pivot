@@ -33,9 +33,12 @@ limitations under the License.
                 <title>
                   <xsl:value-of select="$project/title"/>
                 </title>
+
                 <link rel="stylesheet" href="demo.css" type="text/css"/>
+                <link rel="stylesheet" href="demo_print.css" type="text/css" media="print"/>
                 <link rel="icon" href="favicon.png" type="image/png" />
                 <link rel="shortcut icon" href="favicon.png" type="image/png" />
+
                 <xsl:apply-templates select="head"/>
             </head>
 
