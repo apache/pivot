@@ -626,7 +626,7 @@ public abstract class Component implements ConstrainedVisual {
     // a parent
     private Container parent = null;
 
-    // The component's valid state
+    // The component's layout-valid state
     private boolean valid = false;
 
     // The component's location, relative to the parent's origin
