@@ -131,7 +131,7 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
 
     @Override
     public void imageChanged(ImageNode imageNode, Image previousImage) {
-        invalidate();
+        invalidateUpTree();
 
         Image image = imageNode.getImage();
         if (image != null) {
@@ -145,7 +145,7 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
 
     @Override
     public void sizeChanged(Image image, int previousWidth, int previousHeight) {
-        invalidate();
+        invalidateUpTree();
     }
 
     @Override

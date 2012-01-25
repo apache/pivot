@@ -72,10 +72,10 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
     }
 
     @Override
-    public void invalidateTree() {
-        super.invalidateTree();
+    public void invalidateDownTree() {
+        super.invalidateDownTree();
         for (TextPaneSkinNodeView child : this) {
-            child.invalidateTree();
+            child.invalidateDownTree();
         }
     }
 
@@ -252,17 +252,20 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
 
     @Override
     public void nodeInserted(Element element, int index) {
-        invalidate();
+        insert(getTextPaneSkin().createNodeView(element.get(index)), index);
+        invalidateUpTree();
     }
 
     @Override
     public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
-        invalidate();
+        remove(index, nodes.getLength());
+        invalidateUpTree();
     }
 
     @Override
     public void fontChanged(Element element, Font previousFont) {
         // because children may depend on parents for their style information, we need to invalidate the whole tree
+        // TODO, we don't need to invalidate the whole tree, just the sub-tree from here down
         getTextPaneSkin().invalidateNodeViewTree();
     }
 
@@ -273,19 +276,22 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
 
     @Override
     public void foregroundColorChanged(Element element, Color previousForegroundColor) {
-        // because children may depend on parents for their style information, we need to invalidate the whole tree
+        // Because children may depend on parents for their style information, we need to invalidate the whole tree.
+        // TODO we don't need to invalidate the whole tree, just the sub-tree from here down.
         getTextPaneSkin().invalidateNodeViewTree();
     }
 
     @Override
     public void underlineChanged(Element element) {
-        // because children may depend on parents for their style information, we need to invalidate the whole tree
+        // Because children may depend on parents for their style information, we need to invalidate the whole tree.
+        // TODO we don't need to invalidate the whole tree, just the sub-tree from here down.
         getTextPaneSkin().invalidateNodeViewTree();
     }
 
     @Override
     public void strikethroughChanged(Element element) {
-        // because children may depend on parents for their style information, we need to invalidate the whole tree
+        // Because children may depend on parents for their style information, we need to invalidate the whole tree.
+        // TODO we don't need to invalidate the whole tree, just the sub-tree from here down.
         getTextPaneSkin().invalidateNodeViewTree();
     }
 

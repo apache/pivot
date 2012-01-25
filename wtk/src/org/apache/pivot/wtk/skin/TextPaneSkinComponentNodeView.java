@@ -31,7 +31,7 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
     private final ComponentListener myComponentListener = new ComponentListener.Adapter() {
         @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            invalidate();
+            invalidateUpTree();
         }
     };
 
@@ -143,7 +143,7 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
 
     @Override
     public void componentChanged(ComponentNode componentNode, Component previousComponent) {
-        invalidate();
+        invalidateUpTree();
 
         Component component = componentNode.getComponent();
         if (component != null) {

@@ -70,6 +70,6 @@ class TextPaneSkinBulletedListView extends TextPaneSkinListView implements Bulle
 
     @Override
     public void styleChanged(BulletedList bulletedList, BulletedList.Style previousStyle) {
-        invalidate();
+        invalidateUpTree();
     }
 }

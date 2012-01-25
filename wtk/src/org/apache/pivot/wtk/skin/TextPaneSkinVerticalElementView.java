@@ -16,12 +16,10 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.Element;
-import org.apache.pivot.wtk.text.Node;
 
 /**
  * Some of the classes in the text hierarchy are very similar in layout ie. they lay their children out vertically. This class groups that functionality.
@@ -30,11 +28,6 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
 
     public TextPaneSkinVerticalElementView(Element element) {
         super(element);
-    }
-
-    @Override
-    protected void attach() {
-        super.attach();
     }
 
     @Override
@@ -196,19 +189,5 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
         }
 
         return rowCount;
-    }
-
-    @Override
-    public void nodeInserted(Element element, int index) {
-        super.nodeInserted(element, index);
-
-        insert(getTextPaneSkin().createNodeView(element.get(index)), index);
-    }
-
-    @Override
-    public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
-        remove(index, nodes.getLength());
-
-        super.nodesRemoved(element, index, nodes);
     }
 }

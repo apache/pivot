@@ -44,7 +44,7 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
 
     public void setIndexText(String indexText) {
         indexTextNode.setText(indexText);
-        indexTextNodeView.invalidate();
+        indexTextNodeView.invalidateUpTree();
     }
 
     @Override

@@ -648,7 +648,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             this.wrapText = wrapText;
 
             if (documentView != null) {
-                documentView.invalidate();
+                documentView.invalidateUpTree();
             }
         }
     }
@@ -1165,6 +1165,10 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             int selectionStart = textPane.getSelectionStart();
 
             Bounds leadingSelectionBounds = getCharacterBounds(selectionStart);
+            // sanity check - this is where a lot of bugs show up
+            if (leadingSelectionBounds == null) {
+                throw new IllegalStateException("no bounds for selection " + selectionStart);
+            }
             caret = leadingSelectionBounds.toRectangle();
             caret.width = 1;
 
@@ -1236,7 +1240,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     void invalidateNodeViewTree() {
-        this.documentView.invalidateTree();
+        this.documentView.invalidateDownTree();
         invalidateComponent();
     }
 }

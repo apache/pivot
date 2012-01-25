@@ -45,6 +45,6 @@ abstract class TextPaneSkinBlockView extends TextPaneSkinElementView implements
 
     @Override
     public void horizontalAlignmentChanged(Block block, HorizontalAlignment previousHorizontalAlignment) {
-        invalidate();
+        invalidateUpTree();
     }
 }

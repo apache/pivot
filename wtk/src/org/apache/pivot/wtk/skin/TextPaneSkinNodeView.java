@@ -153,15 +153,15 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         return valid;
     }
 
-    public void invalidate() {
+    public void invalidateUpTree() {
         valid = false;
 
         if (parent != null) {
-            parent.invalidate();
+            parent.invalidateUpTree();
         }
     }
 
-    public void invalidateTree() {
+    public void invalidateDownTree() {
         valid = false;
     }
 

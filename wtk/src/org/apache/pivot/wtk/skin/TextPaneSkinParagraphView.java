@@ -58,8 +58,8 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     }
 
     @Override
-    public void invalidate() {
-        super.invalidate();
+    public void invalidateUpTree() {
+        super.invalidateUpTree();
         terminatorBounds = null;
     }
 
@@ -233,7 +233,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         return new Dimensions(layouter.paragraphWidth, height);
     }
 
-    private TextPaneSkinNodeView getNext(TextPaneSkinNodeView child) {
+    private static TextPaneSkinNodeView getNext(TextPaneSkinNodeView child) {
         // Using instanceof checks because there is no nice place in the hierarchy
         // to put an abstract method
         if (child instanceof TextPaneSkinSpanView) {

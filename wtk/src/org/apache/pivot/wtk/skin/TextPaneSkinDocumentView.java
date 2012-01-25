@@ -38,8 +38,8 @@ class TextPaneSkinDocumentView extends TextPaneSkinVerticalElementView {
     }
 
     @Override
-    public void invalidate() {
-        super.invalidate();
+    public void invalidateUpTree() {
+        super.invalidateUpTree();
         textPaneSkin.invalidateComponent();
     }
 

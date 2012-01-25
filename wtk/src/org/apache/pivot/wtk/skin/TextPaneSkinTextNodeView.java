@@ -73,12 +73,12 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public void invalidate() {
+    public void invalidateUpTree() {
         length = 0;
         next = null;
         glyphVector = null;
 
-        super.invalidate();
+        super.invalidateUpTree();
     }
 
     @Override
@@ -477,12 +477,12 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
     @Override
     public void charactersInserted(TextNode textNode, int index, int count) {
-        invalidate();
+        invalidateUpTree();
     }
 
     @Override
     public void charactersRemoved(TextNode textNode, int index, int count) {
-        invalidate();
+        invalidateUpTree();
     }
 
     @Override

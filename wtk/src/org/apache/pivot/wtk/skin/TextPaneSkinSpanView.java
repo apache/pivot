@@ -16,11 +16,8 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.TextPane;
-import org.apache.pivot.wtk.text.Element;
-import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.TextSpan;
 
 /**
@@ -133,18 +130,4 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
         }
     }
 
-    @Override
-    public void nodeInserted(Element element, int index) {
-        super.nodeInserted(element, index);
-
-        TextSpan span = (TextSpan)getNode();
-        insert(getTextPaneSkin().createNodeView(span.get(index)), index);
-    }
-
-    @Override
-    public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
-        remove(index, nodes.getLength());
-
-        super.nodesRemoved(element, index, nodes);
-    }
 }

@@ -129,6 +129,6 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
 
     @Override
     public void styleChanged(NumberedList numberedList, Style previousStyle) {
-        invalidate();
+        invalidateUpTree();
     }
 }
