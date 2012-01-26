@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Pivot-832" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk"
+>
+    <Border styles="{padding:6}">
+        <TablePane>
+            <columns>
+                <TablePane.Column width="1*"/>
+            </columns>
+            <TablePane.Row height="-1">
+                <FlowPane styles="{padding:2, alignToBaseline:true}">
+                    <Label text="1 - "/>
+                    <Label text="Select a folder:"/>
+                    <Label text="  "/>
+                    <PushButton bxml:id="selectFolderButton" buttonData="Open Folder"/>
+                    <Label text="  "/>
+                    <TextArea editable="false" preferredWidth="400" styles="{}"
+                        text="Note: for this test you have to select a folder, and in a different disk than C: (in a Windows environment)"
+                    />
+                </FlowPane>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <Label text="  "/> <!-- spacer -->
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <FlowPane styles="{padding:2, alignToBaseline:true}">
+                    <Label text="2 - "/>
+                    <Label text="Open the File Browser:"/>
+                    <Label text="  "/>
+                    <PushButton bxml:id="openFileButton" buttonData="Open File" enabled="false"/>
+                    <Label text="  "/>
+                    <TextArea editable="false" preferredWidth="400" styles="{}"
+                        text="Note: this File Browser has as root folder the previous selected folder"
+                    />
+                </FlowPane>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <Label text="  "/> <!-- spacer -->
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <FlowPane styles="{padding:2, alignToBaseline:true}">
+                    <Label text="3 - "/>
+                    <TextArea editable="false" preferredWidth="500" styles="{}"
+                        text="For this Test to be successful, the File Browser (in row 2) should start from the selected folder (in point 1)"
+                    />
+                </FlowPane>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <Label text="  "/> <!-- spacer -->
+            </TablePane.Row>
+        </TablePane>
+    </Border>
+</Window>
