@@ -27,13 +27,13 @@ import java.awt.geom.Line2D;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.FrameListener;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -789,9 +789,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
                 dragOffset = new Point(x, y);
                 Mouse.capture(component);
             } else {
-                Bounds resizeHandleBounds = resizeHandle.getBounds();
-
-                if (resizable && resizeHandleBounds.contains(x, y)) {
+                if (resizable && x > resizeHandle.getX() && y > resizeHandle.getY()) {
                     resizeOffset = new Point(getWidth() - x, getHeight() - y);
                     Mouse.capture(component);
                 }
