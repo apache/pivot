@@ -16,8 +16,7 @@
  */
 package org.apache.pivot.wtk.effects;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
@@ -178,16 +177,19 @@ public class DropShadowDecorator implements Decorator {
                 || shadowImage.getWidth() != width + 2 * blurRadius
                 || shadowImage.getHeight() != height + 2 * blurRadius) {
                 // Recreate the shadow
-                BufferedImage rectangleImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                BufferedImage rectangleImage =
+                    graphics.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.OPAQUE);
                 Graphics2D rectangleImageGraphics = rectangleImage.createGraphics();
                 rectangleImageGraphics.setColor(Color.BLACK);
                 rectangleImageGraphics.fillRect(0, 0, width, height);
                 rectangleImageGraphics.dispose();
-
                 shadowImage = createShadow(rectangleImage);
             }
 
-            graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
+            // Avoid drawing shadow if it will be covered by the component itself:
+            Bounds paintBounds = new Bounds(0, 0, width, height);
+            if (!component.isOpaque() || !paintBounds.contains(new Bounds(graphics.getClipBounds())))
+                graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
         } else {
             shadowImage = null;
         }
@@ -247,9 +249,11 @@ public class DropShadowDecorator implements Decorator {
 
         int aSum;
 
-        BufferedImage dst = new BufferedImage(dstWidth, dstHeight,
-            BufferedImage.TYPE_INT_ARGB);
-
+        Graphics2D srcGraphics = src.createGraphics();
+        BufferedImage dst = srcGraphics.getDeviceConfiguration()
+                .createCompatibleImage(dstWidth, dstHeight, Transparency.TRANSLUCENT);
+        srcGraphics.dispose();
+                
         int[] dstBuffer = new int[dstWidth * dstHeight];
         int[] srcBuffer = new int[srcWidth * srcHeight];
 
