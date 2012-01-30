@@ -17,7 +17,9 @@
 package org.apache.pivot.wtk;
 
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.Rectangle;
+import java.awt.Transparency;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
@@ -121,6 +123,11 @@ public abstract class Container extends Component
     private long mouseDownTime = 0;
     private int mouseClickCount = 0;
     private boolean mouseClickConsumed = false;
+
+    // The component's double-buffering buffer and flags
+    private boolean doubleBuffering = false;
+    private java.awt.image.BufferedImage doubleBufferImage = null;
+    private boolean doubleBufferedRepaintRequired = false;
 
     private ContainerListenerList containerListeners = new ContainerListenerList();
     private ContainerMouseListenerList containerMouseListeners = new ContainerMouseListenerList();
@@ -351,6 +358,31 @@ public abstract class Container extends Component
 
     @Override
     public void paint(Graphics2D graphics) {
+        if (!doubleBuffering) {
+            paint0(graphics);
+        } else {
+            if (doubleBufferImage == null) {
+                GraphicsConfiguration gc = graphics.getDeviceConfiguration();
+                doubleBufferImage = gc.createCompatibleImage(getWidth(), getHeight(),
+                        Transparency.OPAQUE);
+                doubleBufferedRepaintRequired = true;
+            }
+            // TODO use clipbounds
+            Graphics2D bufferedImageGraphics = (Graphics2D)doubleBufferImage.getGraphics();
+            try {
+                if (doubleBufferedRepaintRequired) {
+                    paint0(bufferedImageGraphics);
+                    doubleBufferedRepaintRequired = false;
+                }
+                graphics.drawImage(doubleBufferImage, 0, 0, null);
+            } finally {
+                bufferedImageGraphics.dispose();
+            }
+
+        }
+    }
+
+    private void paint0(Graphics2D graphics) {
         int count = getLength();
 
         // Determine the paint bounds
@@ -830,6 +862,45 @@ public abstract class Container extends Component
         }
 
         return consumed;
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+
+        if (doubleBuffering) {
+            doubleBufferImage = null;
+        }
+    }
+
+    @Override
+    public void repaint(int x, int y, int width, int height, boolean immediate) {
+        super.repaint(x, y, width, height, immediate);
+
+        if (doubleBuffering) {
+            doubleBufferedRepaintRequired = true;
+        }
+    }
+
+    @Override
+    public Graphics2D getGraphics() {
+        Graphics2D g = super.getGraphics();
+        doubleBufferedRepaintRequired = true;
+        return g;
+    }
+
+    public boolean isDoubleBuffered() {
+        return doubleBuffering;
+    }
+
+    public void setDoubleBuffered(boolean b) {
+       doubleBuffering = b;
+       if (b) {
+           invalidate();
+       } else {
+           doubleBufferImage = null;
+           doubleBufferedRepaintRequired = false;
+       }
     }
 
     public ListenerList<ContainerListener> getContainerListeners() {
