@@ -878,6 +878,7 @@ public abstract class ApplicationContext {
                 try {
                     switch (eventID) {
                         case MouseEvent.MOUSE_PRESSED: {
+                            requestFocus();
                             requestFocusInWindow();
 
                             boolean consumed = mouseOwner.mouseDown(button, x, y);
