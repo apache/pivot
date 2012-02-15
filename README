@@ -68,7 +68,7 @@ Dependencies
 * Pivot's charting components require a compatible chart provider. No such
   provider is included in this release, but one is available here:
 
-  http://code.google.com/p/pivot-jfree/
+  http://code.google.com/a/apache-extras.org/p/pivot-jfree/
 
   Version 2.0 of this provider is compatible with Pivot 2.0.x. Please note that
   this provider has a dependency on JFreeChart, which is licensed under LGPL.
@@ -76,7 +76,7 @@ Dependencies
 * SVG support requires SVG Salamander, which is licensed under a dual LGPL/BSD
   license and is available here:
 
-  https://svgsalamander.dev.java.net/
+  http://java.net/projects/svgsalamander/
 
 * Scripting support requires a compatible script engine. See
   http://jcp.org/en/jsr/detail?id=223 or
