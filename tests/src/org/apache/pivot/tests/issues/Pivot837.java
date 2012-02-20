@@ -23,27 +23,27 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot837 implements Application 
+public class Pivot837 implements Application
 {
 
     public void startup(Display display, Map<String, String> properties) throws Exception {
-		BXMLSerializer bxmlSerializer = new BXMLSerializer();
-		Window window = (Window) bxmlSerializer.readObject(getClass().getResource("pivot_837.bxml"));
-		window.open(display);
-	}
+        BXMLSerializer bxmlSerializer = new BXMLSerializer();
+        Window window = (Window) bxmlSerializer.readObject(getClass().getResource("pivot_837.bxml"));
+        window.open(display);
+    }
 
-	public boolean shutdown(boolean optional) throws Exception {
-		return false;
-	}
+    public boolean shutdown(boolean optional) throws Exception {
+        return false;
+    }
 
-	public void suspend() throws Exception {
-	}
+    public void suspend() throws Exception {
+    }
 
-	public void resume() throws Exception {
-	}
+    public void resume() throws Exception {
+    }
 
-	public static void main(String[] args) {
-		DesktopApplicationContext.main(Pivot837.class, args);
-	}
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(Pivot837.class, args);
+    }
 
 }

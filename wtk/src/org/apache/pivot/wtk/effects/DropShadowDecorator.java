@@ -253,7 +253,7 @@ public class DropShadowDecorator implements Decorator {
         BufferedImage dst = srcGraphics.getDeviceConfiguration()
                 .createCompatibleImage(dstWidth, dstHeight, Transparency.TRANSLUCENT);
         srcGraphics.dispose();
-                
+
         int[] dstBuffer = new int[dstWidth * dstHeight];
         int[] srcBuffer = new int[srcWidth * srcHeight];
 

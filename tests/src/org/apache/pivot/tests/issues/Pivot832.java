@@ -63,7 +63,7 @@ public class Pivot832 implements Application
                             File loadedFile = fileBrowserSheet.getSelectedFile();
                             try {
                                 selectedFolder = loadedFile.getCanonicalPath();
-                                
+
                                 openFileButton.setEnabled(true);
                             } catch (IOException e) {
                                 e.printStackTrace();
