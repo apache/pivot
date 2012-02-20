@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-Licensed to the Apache Software Foundation (ASF) under one or more
-contributor license agreements.  See the NOTICE file distributed with
-this work for additional information regarding copyright ownership.
-The ASF licenses this file to you under the Apache License,
-Version 2.0 (the "License"); you may not use this file except in
-compliance with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <!-- Generator: Adobe Illustrator 13.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -35,12 +19,14 @@ limitations under the License.
    enable-background="new 0 0 205.244 223.248"
    xml:space="preserve"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
+   inkscape:version="0.48.2 r9819"
    sodipodi:docname="Pivot Logo (Full Color).svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape"><metadata
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"><title
+   id="title3153">Apache Pivot</title><metadata
    id="metadata341"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>Apache Pivot</dc:title><cc:license
+         rdf:resource="http://www.apache.org/licenses/LICENSE-2.0" /><dc:source>http://pivot.apache.org/</dc:source><dc:subject><rdf:Bag><rdf:li>Apache Pivot TM Logo</rdf:li></rdf:Bag></dc:subject><dc:description>Apache Pivot TM Logo</dc:description></cc:Work></rdf:RDF></metadata><defs
    id="defs339" /><sodipodi:namedview
    inkscape:window-height="866"
    inkscape:window-width="1328"
@@ -59,7 +45,16 @@ limitations under the License.
    inkscape:cy="111.624"
    inkscape:window-x="188"
    inkscape:window-y="38"
-   inkscape:current-layer="Layer_1" />
+   inkscape:current-layer="Layer_1"
+   inkscape:window-maximized="0"
+   showguides="true"
+   inkscape:guide-bbox="true"><sodipodi:guide
+     orientation="1,0"
+     position="196.67086,71.033456"
+     id="guide3159" /><sodipodi:guide
+     orientation="0,1"
+     position="34.791897,45.422754"
+     id="guide3161" /></sodipodi:namedview>
 <pattern
    x="-196.176"
    y="508.5"
@@ -775,4 +770,15 @@ limitations under the License.
      d="M115.191,5.72c-11.477-6.627-26.156-2.695-32.783,8.785L68.639,38.353  c21.765-23.506,37.332-22.759,55.522-23.523C122.122,11.157,119.093,7.973,115.191,5.72z"
      fill="#FFFFFF"
      opacity="0.3" /></g>
+<text
+   xml:space="preserve"
+   style="font-size:16px;font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:'Arial Black, Heavy'"
+   x="157.53"
+   y="166.77827"
+   id="textTM"
+   sodipodi:linespacing="125%"><tspan
+     sodipodi:role="line"
+     id="tspan3157"
+     x="157.53"
+     y="166.77827">TM</tspan></text>
 </svg>
