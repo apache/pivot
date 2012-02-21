@@ -20,10 +20,6 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.TextArea;
-import org.apache.pivot.wtk.TextArea.Paragraph;
-import org.apache.pivot.wtk.TextArea.ParagraphListener;
-import org.apache.pivot.wtk.TextAreaContentListener;
 import org.apache.pivot.wtk.Window;
 
 public class Pivot838 extends Application.Adapter
@@ -32,34 +28,9 @@ public class Pivot838 extends Application.Adapter
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception
     {
-        TextArea textArea = new TextArea();
-        textArea.setText("abcxyz");
+        // TODO: empty currently ...
 
-        final ParagraphListener paragraphListener = new ParagraphListener.Adapter() {
-            @Override
-            public void textInserted(Paragraph paragraph, int index, int count) {
-                System.out.println("Text inserted\n\tparagraph content: '" + paragraph.getCharacters() + "" + "'\n\tindex: " + index + "\n\tcount: " + count);
-            }
-
-            @Override
-            public void textRemoved(Paragraph paragraph, int index, int count) {
-                System.out.println("Text removed\n\tparagraph content: '" + paragraph.getCharacters() + "'\n\tindex: " + index + "\n\tcount: " + count);
-            }
-        };
-
-        textArea.getParagraphs().get(0).getParagraphListeners().add(paragraphListener);
-        textArea.getTextAreaContentListeners().add(new TextAreaContentListener.Adapter() {
-            @Override
-            public void paragraphInserted(TextArea textArea, int index) 
-            {
-                Paragraph paragraph = textArea.getParagraphs().get(index);
-                System.out.println("Paragraph inserted\n\tparagraph content: '" + paragraph.getCharacters() + "'\n\tindex: " + index);
-
-                paragraph.getParagraphListeners().add(paragraphListener);
-            }
-        });
-
-        Window window = new Window(textArea);
+    	Window window = new Window();
         window.open(display);
       }
 
