@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.TextArea.ParagraphListener;
 import org.apache.pivot.wtk.TextAreaContentListener;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot838ParagraphListener extends Application.Adapter
+public class Pivot841 extends Application.Adapter
 {
 
     @Override
@@ -64,7 +64,7 @@ public class Pivot838ParagraphListener extends Application.Adapter
       }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(Pivot838ParagraphListener.class, args);
+        DesktopApplicationContext.main(Pivot841.class, args);
     }
 
 }
