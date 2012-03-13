@@ -51,14 +51,14 @@ public class WatermarkDecorator implements Decorator {
     private Graphics2D graphics = null;
 
     /**
-     * Cretes a new <tt>WatermarkDecorator</tt> with no text or image.
+     * Creates a new <tt>WatermarkDecorator</tt> with no text or image.
      */
     public WatermarkDecorator() {
         this(null, null);
     }
 
     /**
-     * Cretes a new <tt>WatermarkDecorator</tt> with the specified string as
+     * Creates a new <tt>WatermarkDecorator</tt> with the specified string as
      * its text and no image.
      *
      * @param text
@@ -69,7 +69,7 @@ public class WatermarkDecorator implements Decorator {
     }
 
     /**
-     * Cretes a new <tt>WatermarkDecorator</tt> with no text and the specified
+     * Creates a new <tt>WatermarkDecorator</tt> with no text and the specified
      * image.
      *
      * @param image
@@ -80,7 +80,7 @@ public class WatermarkDecorator implements Decorator {
     }
 
     /**
-     * Cretes a new <tt>WatermarkDecorator</tt> with the specified text and
+     * Creates a new <tt>WatermarkDecorator</tt> with the specified text and
      * image.
      *
      * @param text
