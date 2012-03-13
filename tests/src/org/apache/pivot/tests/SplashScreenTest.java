@@ -28,6 +28,7 @@ import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -131,7 +132,7 @@ public class SplashScreenTest implements Application {
     public void startup(final Display display, Map<String, String> properties) throws Exception {
 
         System.out.println("Startup the application at " + new Date());
-        System.out.println("To show the Splash Screen, remember to run with the arguments: "
+        System.out.println("To show the Splash Screen, remember to run as a Standard Java Application, and with the arguments: "
             + "-splash:/org/apache/pivot/tests/splash.png "
             + "--preserveSplashScreen=true "
             + ", or no splash screen will be shown"
@@ -166,10 +167,22 @@ public class SplashScreenTest implements Application {
             // Load the Pivot UI
             private void loadBXML(final Display display, final double weight) {
                 try {
-                    Window window = (Window) new BXMLSerializer().readObject(this.getClass().getResource(
-                        "splash.bxml"));
-                    window.open(display);
-                    progressOverlay.increment(weight);
+                    ApplicationContext.queueCallback(new Runnable() {
+                        @Override
+                        public void run() {
+                        	Window window = null;
+							try {
+								window = (Window) new BXMLSerializer().readObject(
+										this.getClass().getResource("splash.bxml"));
+			                } catch (Exception e) {
+			                    throw new RuntimeException(e);
+							}
+                            if (window != null) {
+                            	window.open(display);
+                            	progressOverlay.increment(weight);
+                            }
+                        }
+                    });
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
