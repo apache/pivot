@@ -177,8 +177,7 @@ public class DropShadowDecorator implements Decorator {
                 || shadowImage.getWidth() != width + 2 * blurRadius
                 || shadowImage.getHeight() != height + 2 * blurRadius) {
                 // Recreate the shadow
-                BufferedImage rectangleImage =
-                    graphics.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.OPAQUE);
+                BufferedImage rectangleImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D rectangleImageGraphics = rectangleImage.createGraphics();
                 rectangleImageGraphics.setColor(Color.BLACK);
                 rectangleImageGraphics.fillRect(0, 0, width, height);
