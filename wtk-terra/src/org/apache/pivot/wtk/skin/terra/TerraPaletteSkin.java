@@ -511,9 +511,7 @@ public class TerraPaletteSkin extends WindowSkin {
                 dragOffset = new Point(x, y);
                 Mouse.capture(component);
             } else {
-                Bounds resizeHandleBounds = resizeHandle.getBounds();
-
-                if (resizeHandleBounds.contains(x, y)) {
+                if (resizeHandle.isVisible() && x > resizeHandle.getX() && y > resizeHandle.getY()) {
                     resizeOffset = new Point(getWidth() - x, getHeight() - y);
                     Mouse.capture(component);
                 }
