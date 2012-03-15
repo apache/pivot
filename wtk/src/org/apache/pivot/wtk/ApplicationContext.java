@@ -42,6 +42,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 import java.awt.print.PrinterGraphics;
 import java.io.IOException;
 import java.io.InputStream;
@@ -92,9 +94,14 @@ public abstract class ApplicationContext {
         private double scale = 1;
 
         private boolean paintPending = false;
-        private boolean disableVolatileBuffer = false;
         private boolean debugPaint = false;
-        private java.awt.image.VolatileImage volatileImage = null;
+
+        private boolean bufferedImagePaintEnabled = true;
+        private BufferedImage bufferedImage = null;
+        private GraphicsConfiguration bufferedImageGC = null;
+
+        private boolean volatileImagePaintEnabled = true;
+        private VolatileImage volatileImage = null;
         private GraphicsConfiguration volatileImageGC = null;
 
         private Random random = null;
@@ -289,13 +296,15 @@ public abstract class ApplicationContext {
             }
 
             try {
-                disableVolatileBuffer = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.disablevolatilebuffer"));
+                if (Boolean.getBoolean("org.apache.pivot.wtk.disablevolatilebuffer")) {
+                    volatileImagePaintEnabled = false;
+                }
             } catch (SecurityException ex) {
                 // No-op
             }
 
             try {
-                debugPaint = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugpaint"));
+                debugPaint = Boolean.getBoolean("org.apache.pivot.wtk.debugpaint");
                 if (debugPaint == true) {
                     random = new Random();
                 }
@@ -304,7 +313,7 @@ public abstract class ApplicationContext {
             }
 
             try {
-                boolean debugFocus = Boolean.parseBoolean(System.getProperty("org.apache.pivot.wtk.debugfocus"));
+                boolean debugFocus = Boolean.getBoolean("org.apache.pivot.wtk.debugfocus");
 
                 if (debugFocus) {
                     final Decorator focusDecorator = new ShadeDecorator(0.2f, Color.RED);
@@ -396,6 +405,31 @@ public abstract class ApplicationContext {
             setScale(newScale);
         }
 
+        /**
+         * Under some conditions, e.g. running under Linux in an applet, volatile buffering
+         * can reduce performance.
+         */
+        public void setVolatileImagePaint(boolean enabled) {
+            volatileImagePaintEnabled = enabled;
+            if (enabled) {
+                bufferedImage = null;
+                bufferedImageGC = null;
+            }
+            else {
+                volatileImage = null;
+                volatileImageGC = null;
+            }
+        }
+
+        public void setBufferedImagePaintEnabled(boolean enabled) {
+            bufferedImagePaintEnabled = enabled;
+            if (!enabled) {
+                bufferedImage = null;
+                bufferedImageGC = null;
+            }
+        }
+
+
         @Override
         public void repaint(int x, int y, int width, int height) {
             // Ensure that the repaint call is properly bounded (some
@@ -440,11 +474,15 @@ public abstract class ApplicationContext {
             if (clipBounds != null
                 && !clipBounds.isEmpty()) {
                 try {
-                    if (disableVolatileBuffer
-                        || !paintVolatileBuffered((Graphics2D)graphics)) {
-                        if (!paintBuffered((Graphics2D)graphics)) {
-                            paintDisplay((Graphics2D)graphics);
-                        }
+                    boolean bPaintSuccess = false;
+                    if (volatileImagePaintEnabled) {
+                        bPaintSuccess = paintVolatileBuffered((Graphics2D)graphics);
+                    }
+                    if (!bPaintSuccess && bufferedImagePaintEnabled) {
+                        bPaintSuccess = paintBuffered((Graphics2D)graphics);
+                    }
+                    if (!bPaintSuccess) {
+                        paintDisplay((Graphics2D)graphics);
                     }
 
                     if (debugPaint) {
@@ -503,9 +541,16 @@ public abstract class ApplicationContext {
             // Paint the display into an offscreen buffer
             GraphicsConfiguration gc = graphics.getDeviceConfiguration();
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
-            java.awt.image.BufferedImage bufferedImage =
-                gc.createCompatibleImage(clipBounds.width, clipBounds.height,
-                    Transparency.OPAQUE);
+
+            if (bufferedImage == null
+                || bufferedImageGC != gc
+                || bufferedImage.getWidth() < clipBounds.width
+                || bufferedImage.getHeight() < clipBounds.height) {
+
+                bufferedImage = gc.createCompatibleImage(clipBounds.width,
+                    clipBounds.height, Transparency.OPAQUE);
+                bufferedImageGC = gc;
+            }
 
             if (bufferedImage != null) {
                 Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.getGraphics();
