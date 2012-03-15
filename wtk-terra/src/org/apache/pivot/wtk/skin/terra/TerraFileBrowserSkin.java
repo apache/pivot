@@ -686,35 +686,39 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             @Override
             @SuppressWarnings("unchecked")
             public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
-                updatingSelection = true;
+                if (!updatingSelection) {
+                    updatingSelection = true;
 
-                for (int i = rangeStart; i <= rangeEnd; i++) {
-                    List<File> files = (List<File>)fileTableView.getTableData();
-                    File file = files.get(i);
-                    fileBrowser.addSelectedFile(file);
+                    for (int i = rangeStart; i <= rangeEnd; i++) {
+                        List<File> files = (List<File>)fileTableView.getTableData();
+                        File file = files.get(i);
+                        fileBrowser.addSelectedFile(file);
+                    }
+
+                    updatingSelection = false;
                 }
-
-                updatingSelection = false;
             }
 
             @Override
             @SuppressWarnings("unchecked")
             public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
-                updatingSelection = true;
+                if (!updatingSelection) {
+                    updatingSelection = true;
 
-                for (int i = rangeStart; i <= rangeEnd; i++) {
-                    List<File> files = (List<File>)fileTableView.getTableData();
-                    File file = files.get(i);
-                    fileBrowser.removeSelectedFile(file);
+                    for (int i = rangeStart; i <= rangeEnd; i++) {
+                        List<File> files = (List<File>)fileTableView.getTableData();
+                        File file = files.get(i);
+                        fileBrowser.removeSelectedFile(file);
+                    }
+
+                    updatingSelection = false;
                 }
-
-                updatingSelection = false;
             }
 
             @Override
             @SuppressWarnings("unchecked")
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-                if (previousSelectedRanges != null) {
+                if (!updatingSelection && previousSelectedRanges != null) {
                     updatingSelection = true;
 
                     Sequence<File> files = (Sequence<File>)tableView.getSelectedRows();
@@ -980,7 +984,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             List<File> files = (List<File>)fileTableView.getTableData();
             int index = files.indexOf(file);
             if (index != -1) {
+                updatingSelection = true;
                 fileTableView.addSelectedIndex(index);
+                updatingSelection = false;
             }
         }
     }
@@ -992,14 +998,20 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             List<File> files = (List<File>)fileTableView.getTableData();
             int index = files.indexOf(file);
             if (index != -1) {
+                updatingSelection = true;
                 fileTableView.removeSelectedIndex(index);
+                updatingSelection = false;
             }
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
+        updateSelectedFiles(fileBrowser);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void updateSelectedFiles(FileBrowser fileBrowser) {
         if (!updatingSelection) {
             Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
 
@@ -1014,7 +1026,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 }
             }
 
+            updatingSelection = true;
             fileTableView.setSelectedRanges(selectedRanges);
+            updatingSelection = false;
         }
     }
 
@@ -1079,6 +1093,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                             fileTableData.insert(file, index);
                         }
                     }
+
+                    updateSelectedFiles((FileBrowser) getComponent());
 
                     refreshFileListTask = null;
                 }
