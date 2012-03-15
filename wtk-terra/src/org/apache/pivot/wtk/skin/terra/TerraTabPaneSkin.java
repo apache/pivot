@@ -898,7 +898,7 @@ public class TerraTabPaneSkin extends ContainerSkin
                         buttonPanoramaWidth = Math.max(width - 2 - cornerWidth, 0);
                     }
                     int cornerHeight = Math.max(corner.getPreferredHeight(-1), buttonPanoramaSize.height - 1);
-					int cornerX = width - cornerWidth;
+                    int cornerX = width - cornerWidth;
                     int cornerY = Math.max(buttonPanoramaHeight - cornerHeight - 1, 0);
 
                     buttonPanoramaY = Math.max(cornerHeight - buttonPanoramaHeight + 1, 0);

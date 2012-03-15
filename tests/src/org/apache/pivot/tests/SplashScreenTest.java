@@ -170,16 +170,16 @@ public class SplashScreenTest implements Application {
                     ApplicationContext.queueCallback(new Runnable() {
                         @Override
                         public void run() {
-                        	Window window = null;
-							try {
-								window = (Window) new BXMLSerializer().readObject(
-										this.getClass().getResource("splash.bxml"));
-			                } catch (Exception e) {
-			                    throw new RuntimeException(e);
-							}
+                            Window window = null;
+                            try {
+                                window = (Window) new BXMLSerializer().readObject(
+                                        this.getClass().getResource("splash.bxml"));
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                             if (window != null) {
-                            	window.open(display);
-                            	progressOverlay.increment(weight);
+                                window.open(display);
+                                progressOverlay.increment(weight);
                             }
                         }
                     });

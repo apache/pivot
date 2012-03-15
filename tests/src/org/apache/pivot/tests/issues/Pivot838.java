@@ -30,7 +30,7 @@ public class Pivot838 extends Application.Adapter
     {
         // TODO: empty currently ...
 
-    	Window window = new Window();
+        Window window = new Window();
         window.open(display);
       }
 
