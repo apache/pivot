@@ -16,7 +16,9 @@
  */
 package org.apache.pivot.wtk.effects;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
@@ -294,7 +296,7 @@ public class DropShadowDecorator implements Decorator {
                 // in the next pass
                 dstBuffer[dstOffset++] = a << 24;
 
-                // Substract the oldest pixel from the sum
+                // Subtract the oldest pixel from the sum
                 aSum -= aHistory[historyIdx];
 
                 // Extract the new pixel and store its value into history...
@@ -314,7 +316,7 @@ public class DropShadowDecorator implements Decorator {
                 int a = hSumLookup[aSum];
                 dstBuffer[dstOffset++] = a << 24;
 
-                // Substract the oldest pixel from the sum...and nothing new
+                // Subtract the oldest pixel from the sum...and nothing new
                 // to add!
                 aSum -= aHistory[historyIdx];
 
@@ -346,13 +348,13 @@ public class DropShadowDecorator implements Decorator {
             bufferOffset = x;
             historyIdx = 0;
 
-            // Compute the blur avera`ge with pixels from the previous pass
+            // Compute the blur average with pixels from the previous pass
             for (int y = 0; y < yStop; y++, bufferOffset += dstWidth) {
                 // Store alpha value + shadow color
                 int a = vSumLookup[aSum];
                 dstBuffer[bufferOffset] = a << 24 | shadowRgb;
 
-                // Substract the oldest pixel from the sum
+                // Subtract the oldest pixel from the sum
                 aSum -= aHistory[historyIdx];
 
                 // Extract the new pixel and store its value into history...
@@ -372,7 +374,7 @@ public class DropShadowDecorator implements Decorator {
                 int a = vSumLookup[aSum];
                 dstBuffer[bufferOffset] = a << 24 | shadowRgb;
 
-                // Substract the oldest pixel from the sum
+                // Subtract the oldest pixel from the sum
                 aSum -= aHistory[historyIdx];
 
                 if (++historyIdx >= shadowSize) {
