@@ -408,7 +408,7 @@ public abstract class ApplicationContext {
          * Under some conditions, e.g. running under Linux in an applet, volatile buffering
          * can reduce performance.
          */
-        public void setVolatileImagePaint(boolean enabled) {
+        public void setVolatileImagePaintEnabled(boolean enabled) {
             volatileImagePaintEnabled = enabled;
             if (enabled) {
                 bufferedImage = null;
