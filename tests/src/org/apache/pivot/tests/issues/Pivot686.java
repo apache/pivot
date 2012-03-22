@@ -32,17 +32,25 @@ public class Pivot686 implements Application {
     private TextInput textInput = null;
     private PushButton pushButton = null;
 
+    public static final String FORCE_FOCUS_KEY = "forceFocus";
+
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         System.out.println("startup: start");
+
+        String forceFocusParameter = properties.get(FORCE_FOCUS_KEY);
+        boolean forceFocus = false;
+        forceFocus = Boolean.parseBoolean(forceFocusParameter);
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window)bxmlSerializer.readObject(this.getClass(), "pivot_686.bxml");
         initializeFields(bxmlSerializer);
         window.open(display);
 
-        textInput.requestFocus();  // force focus on TextInput, Ok when run as a Java Application
+        if (forceFocus == true) {
+            System.out.println("force focus on textInput now");
+            textInput.requestFocus();  // force focus on TextInput, Ok when run as a Java Application, and even as Applet
+        }
         System.out.println("textInput has focus: " + textInput.isFocused());
 
         System.out.println("startup: end");
