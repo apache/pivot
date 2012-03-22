@@ -62,6 +62,7 @@ limitations under the License.
     <property name="jar.web-server" value="${ant.project.name}-web-server-${version}.jar" />
     <property name="jar.wtk" value="${ant.project.name}-wtk-${version}.jar" />
     <property name="jar.wtk-terra" value="${ant.project.name}-wtk-terra-${version}.jar" />
+    <property name="jar.tests" value="${ant.project.name}-tests-${version}.jar" />
 
     <!-- Maven Sources Jar file names -->
     <property name="jar.charts.sources" value="${ant.project.name}-charts-${version}-sources.jar" />
@@ -367,6 +368,11 @@ limitations under the License.
         <package project="web-server" jarFile="${jar.web-server}" title="Web Server"/>
         <package project="wtk" jarFile="${jar.wtk}" title="WTK"/>
         <package project="wtk-terra" jarFile="${jar.wtk-terra}" title="WTK Terra Theme Provider"/>
+    </target>
+
+    <!-- Package JAR file for tests, note that this could be needed only for interactive GUI Tests -->
+    <target name="package-tests" description="Packages only tests project into JAR files" depends="compile">
+        <package project="tests" jarFile="${jar.tests}" title="Tests"/>
     </target>
 
     <!-- Package Maven Sources JAR files -->
