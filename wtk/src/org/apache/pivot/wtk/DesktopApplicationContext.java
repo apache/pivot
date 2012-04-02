@@ -834,7 +834,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Open the window in a callback; otherwise, if it is modal, it will block the
         // calling thread
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        ApplicationContext.queueCallback(new Runnable() {
             @Override
             public void run() {
                 hostDialog.setVisible(true);
