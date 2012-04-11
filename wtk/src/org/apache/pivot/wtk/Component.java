@@ -2927,11 +2927,17 @@ public abstract class Component implements ConstrainedVisual {
      * @throws IndexOutOfBoundsException if index is out of range.
      */
     protected static final void indexBoundsCheck(String indexName, int index, int min, int max) throws IndexOutOfBoundsException {
+        if (max < min) {
+            throw new IllegalArgumentException("max (" + max + ") < " + "min (" + min + ")");
+        }
+        if (min < 0) {
+            throw new IllegalArgumentException("min (" + min + ") < 0");
+        }
         if (index < min) {
-            throw new IndexOutOfBoundsException(indexName + index + " < " + min);
+            throw new IndexOutOfBoundsException(indexName + ": index (" + index + ") < min (" + min + ")");
         }
         if (index > max) {
-            throw new IndexOutOfBoundsException(indexName + index + " > " + max);
+            throw new IndexOutOfBoundsException(indexName + ": index (" + index + ") > max (" + max + ")");
         }
     }
 }
