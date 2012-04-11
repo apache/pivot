@@ -2930,9 +2930,6 @@ public abstract class Component implements ConstrainedVisual {
         if (max < min) {
             throw new IllegalArgumentException("max (" + max + ") < " + "min (" + min + ")");
         }
-        if (min < 0) {
-            throw new IllegalArgumentException("min (" + min + ") < 0");
-        }
         if (index < min) {
             throw new IndexOutOfBoundsException(indexName + ": index (" + index + ") < min (" + min + ")");
         }
