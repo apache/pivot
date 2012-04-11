@@ -617,6 +617,8 @@ public class Window extends Container {
 
     /**
      * Opens the window.
+     * <p>
+     * Note that this method is not a synchronous call, it schedules an event to open the window.
      *
      * @param display
      * The display on which the window will be opened.
