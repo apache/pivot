@@ -573,16 +573,21 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     private static void verifyIndexBounds(int index, int start, int end) {
+        if (end < start) {
+            throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
+        }
         if (index < start || index > end) {
             throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + "," + end + "].");
         }
     }
 
     private static void verifyIndexBounds(int index, int count, int start, int end) {
-        if (count < 0) {
-            throw new IllegalArgumentException("count < 0, " + count);
+        if (end < start) {
+            throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
         }
-
+        if (count < 0 || start < 0) {
+            throw new IllegalArgumentException("count (" + count + ") < 0 or start (" + start + ") < 0");
+        }
         if (index < start) {
             throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + "," + end + "].");
         }
