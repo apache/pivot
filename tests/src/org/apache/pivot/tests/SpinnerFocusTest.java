@@ -29,10 +29,10 @@ import org.apache.pivot.wtk.Spinner;
 
 public class SpinnerFocusTest implements Application {
     private Frame frame = null;
+    private Spinner spinner = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         Action action = new Action() {
             @Override
             public String getDescription() {
@@ -41,7 +41,11 @@ public class SpinnerFocusTest implements Application {
 
             @Override
             public void perform(Component source) {
-                Alert.alert("Foo", frame);
+                String msg = "Selected: " + spinner.getSelectedItem().toString();
+            	Alert.alert(msg, frame);
+
+                spinner.requestFocus();
+                System.out.println("Focus transferred to spinner");
             }
         };
 
@@ -52,10 +56,10 @@ public class SpinnerFocusTest implements Application {
         frame.setTitle("Spinner Focus Test");
         frame.open(display);
 
-        Spinner spinner = (Spinner)bxmlSerializer.getNamespace().get("spinner");
+        spinner = (Spinner)bxmlSerializer.getNamespace().get("spinner");
         spinner.requestFocus();
 
-        action.setEnabled(false);
+        // action.setEnabled(false);
     }
 
     @Override
