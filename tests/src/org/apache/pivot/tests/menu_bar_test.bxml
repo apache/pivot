@@ -157,6 +157,19 @@ limitations under the License.
             </MenuBar.Item>
 
             <MenuBar.Item buttonData="Empty"/>
+
+            <MenuBar.Item buttonData="Help">
+                <Menu>
+                    <Menu.Section>
+                        <Menu.Item>
+                            <buttonData>
+                                <content:MenuItemData text="About" keyboardShortcut="F1"/>
+                            </buttonData>
+                        </Menu.Item>
+                    </Menu.Section>
+                </Menu>
+            </MenuBar.Item>
+
         </MenuBar>
     </menuBar>
 
