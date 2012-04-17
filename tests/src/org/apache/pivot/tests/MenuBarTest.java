@@ -19,7 +19,10 @@ package org.apache.pivot.tests;
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Action;
+import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -30,7 +33,7 @@ import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextInput;
 
-public class MenuBarTest implements Application {
+public class MenuBarTest extends Application.Adapter {
     private Frame frame1 = null;
     private Frame frame2 = null;
 
@@ -47,21 +50,37 @@ public class MenuBarTest implements Application {
         frame1 = new Frame(boxPane);
         frame1.setLocation(50, 50);
         frame1.setPreferredSize(320, 240);
-        frame1.open(display);
+        frame1.setTitle("Frame 1");
+
+        // put this before loading the related bxml, or an IllegalArgumentException will be thrown
+        Action.getNamedActions().put("about", new Action() {
+            @Override
+            public void perform(Component source) {
+                String msg = "Hello from Pivot-"
+                    + ApplicationContext.getPivotVersion().toString()
+                    + ", running from Java "
+                    // + ApplicationContext.getJVMVersion().toString()
+                    + System.getProperty("java.version")
+                ;
+                Alert.alert(msg, frame2.getRootOwner());  // frame2);
+                System.out.println("Help triggered");
+            }
+        });
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         frame2 = (Frame)bxmlSerializer.readObject(MenuBarTest.class, "menu_bar_test.bxml");
+        frame2.setTitle("Frame 2, from bxml");
         bxmlSerializer.bind(this, MenuBarTest.class);
 
         MenuHandler menuHandler = new MenuHandler.Adapter() {
             @Override
             public void configureMenuBar(Component component, MenuBar menuBar) {
-                System.out.println("Configure menu bar: " + component);
+                System.out.println("Configure menu bar: got focus on " + component.getName());
             }
 
             @Override
             public void cleanupMenuBar(Component component, MenuBar menuBar) {
-                System.out.println("Clean up menu bar: " + component);
+                System.out.println("Clean up menu bar: lost focus on " + component.getName());
             }
         };
 
@@ -69,6 +88,7 @@ public class MenuBarTest implements Application {
         textInput2.setMenuHandler(menuHandler);
         textInput3.setMenuHandler(menuHandler);
 
+        frame1.open(display);
         frame2.open(display);
     }
 
@@ -78,15 +98,11 @@ public class MenuBarTest implements Application {
             frame2.close();
         }
 
+        if (frame1 != null) {
+            frame1.close();
+        }
+
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

@@ -42,7 +42,7 @@ public class SpinnerFocusTest implements Application {
             @Override
             public void perform(Component source) {
                 String msg = "Selected: " + spinner.getSelectedItem().toString();
-            	Alert.alert(msg, frame);
+                Alert.alert(msg, frame);
 
                 spinner.requestFocus();
                 System.out.println("Focus transferred to spinner");

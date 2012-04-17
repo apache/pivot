@@ -161,7 +161,7 @@ limitations under the License.
             <MenuBar.Item buttonData="Help">
                 <Menu>
                     <Menu.Section>
-                        <Menu.Item>
+                        <Menu.Item action="about">
                             <buttonData>
                                 <content:MenuItemData text="About" keyboardShortcut="F1"/>
                             </buttonData>
