@@ -17,6 +17,7 @@ limitations under the License.
 -->
 
 <Window title="Clipboard" maximized="true"
+    bxml:id="window"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <bxml:script src="clipboard.js"/>
