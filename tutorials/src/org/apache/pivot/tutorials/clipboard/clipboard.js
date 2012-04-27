@@ -26,10 +26,16 @@ function copy() {
     content.putImage(sourceImage);
 
     Clipboard.setContent(content);
+
+    // Diagnostic info
+	// Alert("Copy Image").open(window);
 }
 
 function paste() {
-    // Paste any available image from the clipboard
+    // Diagnostic info
+	// Prompt("Paste Image").open(window);
+
+	// Paste any available image from the clipboard
     var content = Clipboard.getContent();
 
     if (content != null) {
