@@ -187,6 +187,10 @@ public class Prompt extends Sheet {
         this(null, null, null);
     }
 
+    public Prompt(String message) {
+        this(null, message, null, null);
+    }
+
     public Prompt(MessageType messageType, String message, Sequence<?> options) {
         this(messageType, message, options, null);
     }

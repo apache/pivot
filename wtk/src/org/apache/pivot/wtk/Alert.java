@@ -187,6 +187,10 @@ public class Alert extends Dialog {
         this(null, null, null);
     }
 
+    public Alert(String message) {
+        this(null, message, null, true);
+    }
+
     public Alert(MessageType messageType, String message, Sequence<?> options) {
         this(messageType, message, options, true);
     }
