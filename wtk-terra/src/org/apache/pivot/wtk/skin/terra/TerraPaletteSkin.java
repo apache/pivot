@@ -26,6 +26,7 @@ import java.awt.geom.Line2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
@@ -33,7 +34,6 @@ import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
@@ -132,6 +132,8 @@ public class TerraPaletteSkin extends WindowSkin {
     private Point dragOffset = null;
     private Point resizeOffset = null;
 
+    private float titleFontScale = 0.8f;
+
     private Insets padding = new Insets(1);
 
     private WindowClassListener windowClassListener = new WindowClassListener() {
@@ -144,6 +146,7 @@ public class TerraPaletteSkin extends WindowSkin {
             palette.setVisible(activeWindow != null
                 && (owner == activeWindow
                     || owner.isOwner(activeWindow)));
+            invalidateComponent();
         }
     };
 
@@ -151,9 +154,11 @@ public class TerraPaletteSkin extends WindowSkin {
     private Color titleBarBackgroundColor;
     private Color titleBarBorderColor;
     private Color contentBorderColor;
+    // private Color inactiveTitleBarColor;
+    private Color inactiveTitleBarBackgroundColor;
+    private Color inactiveTitleBarBorderColor;
 
     // Derived colors
-    private Color titleBarBevelColor;
     private Color contentBevelColor;
 
     public TerraPaletteSkin() {
@@ -166,7 +171,9 @@ public class TerraPaletteSkin extends WindowSkin {
         contentBorderColor = theme.getColor(7);
 
         // Set the derived colors
-        titleBarBevelColor = TerraTheme.brighten(titleBarBackgroundColor);
+        // inactiveTitleBarColor = theme.getColor(7);
+        inactiveTitleBarBackgroundColor = theme.getColor(9);
+        inactiveTitleBarBorderColor = theme.getColor(7);
 
         // The title bar table pane contains two nested box panes: one for
         // the title contents and the other for the buttons
@@ -187,7 +194,7 @@ public class TerraPaletteSkin extends WindowSkin {
         titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 3));
 
         Font titleFont = theme.getFont();
-        titleFont = titleFont.deriveFont(Font.BOLD, Math.round(titleFont.getSize2D() * 0.8f));
+        titleFont = titleFont.deriveFont(Font.BOLD, Math.round(titleFont.getSize2D() * titleFontScale));
         titleLabel.getStyles().put("font", titleFont);
         titleLabel.getStyles().put("color", titleBarColor);
 
@@ -356,13 +363,19 @@ public class TerraPaletteSkin extends WindowSkin {
 
         graphics.setStroke(new BasicStroke());
 
+        Palette palette = (Palette)getComponent();
+        boolean active = palette.getOwner().isActive();
+        Color currentTitleBarBackgroundColor = active ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
+        Color currentTitleBarBorderColor = active ? titleBarBorderColor : inactiveTitleBarBorderColor;
+        Color titleBarBevelColor = TerraTheme.brighten(currentTitleBarBackgroundColor);
+
         // Draw the title area
         graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColor,
-            width / 2f, titleBarHeight + 1, titleBarBackgroundColor));
+            width / 2f, titleBarHeight + 1, currentTitleBarBackgroundColor));
         graphics.fillRect(0, 0, width, titleBarHeight + 1);
 
         // Draw the border
-        graphics.setPaint(titleBarBorderColor);
+        graphics.setPaint(currentTitleBarBorderColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 1);
         // Draw the content area
         Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2,
@@ -431,6 +444,44 @@ public class TerraPaletteSkin extends WindowSkin {
 
         setPadding(Insets.decode(padding));
     }
+
+    /**
+     * Sets the font used in rendering the titlebar text
+     * @param font A {@link org.apache.pivot.wtk.skin.ComponentSkin#decodeFont(String) font specification}
+     */
+    public final void setTitleFont(String font) {
+    	if (font == null) {
+    		throw new IllegalArgumentException("font is null.");
+    	}
+
+    	titleLabel.getStyles().put("font", decodeFont(font));
+    }
+
+    /**
+     * Sets the font used in rendering the titlebar text
+     * @param font A dictionary {@link Theme#deriveFont describing a font}
+     */
+    public final void setTitleFont(Dictionary<String, ?> font) {
+    	if (font == null) {
+    		throw new IllegalArgumentException("font is null.");
+    	}
+
+    	titleLabel.getStyles().put("font", Theme.deriveFont(font));
+	}
+
+    public final float getTitleFontScale() {
+    	return titleFontScale;
+    }
+
+    public final void setTitleFontScale(float scale) {
+    	this.titleFontScale = scale;
+
+    	TerraTheme theme = (TerraTheme)Theme.getTheme();
+    	Font titleFont = theme.getFont();
+    	titleFont = titleFont.deriveFont(Font.BOLD, Math.round(titleFont.getSize2D() * scale));
+    	titleLabel.getStyles().put("font", titleFont);
+		invalidateComponent();
+	}
 
     @Override
     public boolean mouseMove(Component component, int x, int y) {
