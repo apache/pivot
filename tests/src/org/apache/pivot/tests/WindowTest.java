@@ -105,8 +105,10 @@ public class WindowTest implements Application {
 
         Frame window1bi = new Frame();
         window1bi.setTitle("Window 1 B I");
-        window1bi.setPreferredSize(160, 60);
+        window1bi.setPreferredSize(180, 60);
         window1bi.setLocation(270, 160);
+        window1bi.setContent(new Label("This window is not enabled"));
+        window1bi.setEnabled(false);  // to test even a not enabled window ...
         window1bi.open(window1b);
 
         Frame window1bii = new Frame();
@@ -118,13 +120,15 @@ public class WindowTest implements Application {
         Palette palette1 = new Palette();
         palette1.setTitle("Palette 1bii 1");
         palette1.setPreferredSize(160, 60);
-        palette1.setLocation(300, 200);
+        palette1.setLocation(290, 210);
         palette1.open(window1bii);
 
         Palette palette2 = new Palette();
         palette2.setTitle("Palette 1bii 2");
         palette2.setPreferredSize(160, 60);
-        palette2.setLocation(550, 200);
+        palette2.setLocation(600, 200);
+        palette2.setContent(new Label("This palette is not enabled"));
+        palette2.setEnabled(false);  // to test even a not enabled palette ...
         palette2.open(window1bii);
 
         dialogOwner.setTitle("Dialog Owner");

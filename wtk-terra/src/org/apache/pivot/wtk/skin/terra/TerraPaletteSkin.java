@@ -154,7 +154,6 @@ public class TerraPaletteSkin extends WindowSkin {
     private Color titleBarBackgroundColor;
     private Color titleBarBorderColor;
     private Color contentBorderColor;
-    // private Color inactiveTitleBarColor;
     private Color inactiveTitleBarBackgroundColor;
     private Color inactiveTitleBarBorderColor;
 
@@ -171,7 +170,6 @@ public class TerraPaletteSkin extends WindowSkin {
         contentBorderColor = theme.getColor(7);
 
         // Set the derived colors
-        // inactiveTitleBarColor = theme.getColor(7);
         inactiveTitleBarBackgroundColor = theme.getColor(9);
         inactiveTitleBarBorderColor = theme.getColor(7);
 
@@ -365,8 +363,10 @@ public class TerraPaletteSkin extends WindowSkin {
 
         Palette palette = (Palette)getComponent();
         boolean active = palette.getOwner().isActive();
-        Color currentTitleBarBackgroundColor = active ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
-        Color currentTitleBarBorderColor = active ? titleBarBorderColor : inactiveTitleBarBorderColor;
+        boolean enabled = palette.isEnabled();
+
+		Color currentTitleBarBackgroundColor = (active && enabled) ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
+        Color currentTitleBarBorderColor = (active && enabled) ? titleBarBorderColor : inactiveTitleBarBorderColor;
         Color titleBarBevelColor = TerraTheme.brighten(currentTitleBarBackgroundColor);
 
         // Draw the title area
