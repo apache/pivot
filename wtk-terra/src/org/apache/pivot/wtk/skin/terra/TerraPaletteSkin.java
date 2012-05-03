@@ -365,7 +365,7 @@ public class TerraPaletteSkin extends WindowSkin {
         boolean active = palette.getOwner().isActive();
         boolean enabled = palette.isEnabled();
 
-		Color currentTitleBarBackgroundColor = (active && enabled) ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
+        Color currentTitleBarBackgroundColor = (active && enabled) ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
         Color currentTitleBarBorderColor = (active && enabled) ? titleBarBorderColor : inactiveTitleBarBorderColor;
         Color titleBarBevelColor = TerraTheme.brighten(currentTitleBarBackgroundColor);
 
@@ -450,11 +450,11 @@ public class TerraPaletteSkin extends WindowSkin {
      * @param font A {@link org.apache.pivot.wtk.skin.ComponentSkin#decodeFont(String) font specification}
      */
     public final void setTitleFont(String font) {
-    	if (font == null) {
-    		throw new IllegalArgumentException("font is null.");
-    	}
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
 
-    	titleLabel.getStyles().put("font", decodeFont(font));
+        titleLabel.getStyles().put("font", decodeFont(font));
     }
 
     /**
@@ -462,26 +462,26 @@ public class TerraPaletteSkin extends WindowSkin {
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setTitleFont(Dictionary<String, ?> font) {
-    	if (font == null) {
-    		throw new IllegalArgumentException("font is null.");
-    	}
+        if (font == null) {
+            throw new IllegalArgumentException("font is null.");
+        }
 
-    	titleLabel.getStyles().put("font", Theme.deriveFont(font));
-	}
+        titleLabel.getStyles().put("font", Theme.deriveFont(font));
+    }
 
     public final float getTitleFontScale() {
-    	return titleFontScale;
+        return titleFontScale;
     }
 
     public final void setTitleFontScale(float scale) {
-    	this.titleFontScale = scale;
+        this.titleFontScale = scale;
 
-    	TerraTheme theme = (TerraTheme)Theme.getTheme();
-    	Font titleFont = theme.getFont();
-    	titleFont = titleFont.deriveFont(Font.BOLD, Math.round(titleFont.getSize2D() * scale));
-    	titleLabel.getStyles().put("font", titleFont);
-		invalidateComponent();
-	}
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        Font titleFont = theme.getFont();
+        titleFont = titleFont.deriveFont(Font.BOLD, Math.round(titleFont.getSize2D() * scale));
+        titleLabel.getStyles().put("font", titleFont);
+        invalidateComponent();
+    }
 
     @Override
     public boolean mouseMove(Component component, int x, int y) {

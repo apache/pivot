@@ -41,7 +41,7 @@ limitations under the License.
         </p>
 
         <p>
-            Note that for a keystroke to be processed (for example assigned to a Menu Item), 
+            Note that for a keystroke to be processed (for example assigned to a Menu Item),
             a component must have the focus to receive the key event and propagate it up the component hierarchy.
             So, make sure that the window's content contains a focusable component, like a TextInput or PushButton.
         </p>

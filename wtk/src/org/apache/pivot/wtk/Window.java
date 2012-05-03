@@ -958,7 +958,7 @@ public class Window extends Container {
      */
     public static void clearActive() {
         if (activeWindow != null)
-        	setActiveWindow(activeWindow.owner);
+            setActiveWindow(activeWindow.owner);
     }
 
     /**

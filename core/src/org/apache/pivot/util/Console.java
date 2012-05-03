@@ -25,25 +25,25 @@ public class Console  {
     }
 
     public static final void log(String message) {
-    	logOutput(message);
+        logOutput(message);
     }
 
     public static final void log(Throwable t) {
-    	if (t != null) {
-    	    t.printStackTrace();
+        if (t != null) {
+            t.printStackTrace();
         }
     }
 
     public static final void logExceptionMessage(Throwable t) {
-    	logOutput(t.getMessage());
+        logOutput(t.getMessage());
     }
 
     public static final void logOutput(String message) {
-    	System.out.println(message != null ? message : "");
+        System.out.println(message != null ? message : "");
     }
 
     public static final void logError(String message) {
-    	System.err.println(message != null ? message : "");
+        System.err.println(message != null ? message : "");
     }
 
 }
