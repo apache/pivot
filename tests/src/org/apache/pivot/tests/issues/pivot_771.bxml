@@ -31,10 +31,14 @@ limitations under the License.
 
     function readSelectedElementsOnListView_js() {
         System.out.println("readSelectedElementsOnListView_js");
+        var firstSelectedIndex = listView.getSelectedIndex();
+        System.out.println("firstSelectedIndex is " + firstSelectedIndex);
     }
 
     function readSelectedElementsOnTableView_js() {
         System.out.println("readSelectedElementsOnTableView_js");
+        var firstSelectedIndex = tableView.getSelectedIndex();
+        System.out.println("firstSelectedIndex is " + firstSelectedIndex);
     }
 
     function readSelectedElementsOnTreeView_js() {
