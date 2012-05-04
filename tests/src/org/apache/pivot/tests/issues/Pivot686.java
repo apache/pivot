@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot686 implements Application {
+public class Pivot686 extends Application.Adapter {
     private Window window = null;
     private TextInput textInput = null;
     private PushButton pushButton = null;
@@ -63,14 +63,6 @@ public class Pivot686 implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void initializeFields(BXMLSerializer serializer) {
