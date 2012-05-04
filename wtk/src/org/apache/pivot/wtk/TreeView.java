@@ -1204,20 +1204,13 @@ public class TreeView extends Component {
     }
 
     /**
-     *
+     * Returns the currently selected index, even when in multi-select mode.
      *
      * @return
      * The selected path, or <tt>null</tt> if nothing is selected.
-     *
-     * @throws IllegalStateException
-     * If the tree view is not in single-select mode.
      */
     public Path getSelectedPath() {
-        if (selectMode != SelectMode.SINGLE) {
-            throw new IllegalStateException("Tree view is not in single-select mode.");
-        }
-
-        return (selectedPaths.getLength() > 0 ? selectedPaths.get(0) : null);
+    	return getFirstSelectedPath();
     }
 
     /**

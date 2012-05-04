@@ -1385,17 +1385,13 @@ public class TableView extends Component {
     }
 
     /**
-     * When in single-select mode, returns the currently selected index.
+     * Returns the currently selected index, even when in multi-select mode.
      *
      * @return
      * The currently selected index.
      */
     public int getSelectedIndex() {
-        if (selectMode != SelectMode.SINGLE) {
-            throw new IllegalStateException("Table view is not in single-select mode.");
-        }
-
-        return (rangeSelection.getLength() == 0) ? -1 : rangeSelection.get(0).start;
+    	return getFirstSelectedIndex();
     }
 
     /**

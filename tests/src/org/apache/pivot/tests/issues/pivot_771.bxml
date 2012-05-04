@@ -43,6 +43,8 @@ limitations under the License.
 
     function readSelectedElementsOnTreeView_js() {
         System.out.println("readSelectedElementsOnTreeView_js");
+        var firstSelectedIndex = treeView.getSelectedPath();
+        System.out.println("firstSelectedIndex is " + firstSelectedIndex);
     }
 
     System.out.println("BXML Scripts successfully initialized");
