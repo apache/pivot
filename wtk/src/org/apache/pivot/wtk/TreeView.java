@@ -1210,7 +1210,7 @@ public class TreeView extends Component {
      * The selected path, or <tt>null</tt> if nothing is selected.
      */
     public Path getSelectedPath() {
-    	return getFirstSelectedPath();
+        return getFirstSelectedPath();
     }
 
     /**

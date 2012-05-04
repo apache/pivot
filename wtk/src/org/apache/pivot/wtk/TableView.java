@@ -1391,7 +1391,7 @@ public class TableView extends Component {
      * The currently selected index.
      */
     public int getSelectedIndex() {
-    	return getFirstSelectedIndex();
+        return getFirstSelectedIndex();
     }
 
     /**
