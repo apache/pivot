@@ -842,18 +842,19 @@ public class TerraFormSkin extends ContainerSkin
                                     flagIcon = errorIcon;
                                     break;
                                 }
-
                                 case WARNING: {
                                     flagIcon = warningIcon;
                                     break;
                                 }
-
                                 case QUESTION: {
                                     flagIcon = questionIcon;
                                     break;
                                 }
-
                                 case INFO: {
+                                    flagIcon = infoIcon;
+                                    break;
+                                }
+                                default: {
                                     flagIcon = infoIcon;
                                     break;
                                 }

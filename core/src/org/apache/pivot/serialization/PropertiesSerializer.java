@@ -86,11 +86,9 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
 
         for (Object key : map) {
             Object value = map.get(key);
-            if (value != null) {
-                value = value.toString();
+            if (key != null && value != null) {
+                properties.put(key, value.toString());
             }
-
-            properties.put(key, value);
         }
 
         properties.store(outputStream, null);
