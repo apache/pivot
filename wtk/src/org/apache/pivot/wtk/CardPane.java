@@ -111,7 +111,7 @@ public class CardPane extends Container {
         super.insert(component, index);
 
         // Fire selection change event, if necessary
-        if (selectedIndex != previousSelectedIndex) {
+        if (selectedIndex != previousSelectedIndex && previousSelectedIndex > -1) {
             cardPaneListeners.selectedIndexChanged(this, selectedIndex);
         }
     }
@@ -133,7 +133,7 @@ public class CardPane extends Container {
         Sequence<Component> removed = super.remove(index, count);
 
         // Fire selection change event, if necessary
-        if (selectedIndex != previousSelectedIndex) {
+        if (selectedIndex != previousSelectedIndex && previousSelectedIndex > -1) {
             cardPaneListeners.selectedIndexChanged(this, selectedIndex);
         }
 

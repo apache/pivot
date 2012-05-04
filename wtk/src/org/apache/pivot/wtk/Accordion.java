@@ -68,7 +68,7 @@ public class Accordion extends Container {
             accordionListeners.panelInserted(Accordion.this, index);
 
             // Fire selection change event, if necessary
-            if (selectedIndex != previousSelectedIndex) {
+            if (selectedIndex != previousSelectedIndex && previousSelectedIndex > -1) {
                 accordionSelectionListeners.selectedIndexChanged(Accordion.this, selectedIndex);
             }
         }
@@ -114,7 +114,7 @@ public class Accordion extends Container {
             }
 
             // Fire selection change event, if necessary
-            if (selectedIndex != previousSelectedIndex) {
+            if (selectedIndex != previousSelectedIndex && previousSelectedIndex > -1) {
                 accordionSelectionListeners.selectedIndexChanged(Accordion.this, selectedIndex);
             }
 
