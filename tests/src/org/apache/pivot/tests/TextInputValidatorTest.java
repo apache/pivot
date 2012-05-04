@@ -25,29 +25,33 @@ import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.validation.FloatRangeValidator;
 import org.apache.pivot.wtk.validation.IntRangeValidator;
+import org.apache.pivot.wtk.validation.NotEmptyTextValidator;
 import org.apache.pivot.wtk.validation.RegexTextValidator;
 import org.apache.pivot.wtk.validation.Validator;
 
 /**
  * Text input validator test.
  */
-public class TextInputValidatorTest implements Application {
+public class TextInputValidatorTest  extends Application.Adapter {
     private Window window = null;
     private TextInput textinputFloatRange = null;
     private Label invalidLabel = null;
     private TextInput textinputIntRange = null;
     private TextInput textinputDateRegex = null;
     private TextInput textinputCustomBoolean = null;
+    private TextInput textinputNotEmptyText = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = new Window((Component)bxmlSerializer.readObject(
             getClass().getResource("text_input_validator_test.bxml")));
+
         textinputFloatRange = (TextInput)bxmlSerializer.getNamespace().get("textinputFloatRange");
         textinputIntRange = (TextInput)bxmlSerializer.getNamespace().get("textinputIntRange");
         textinputDateRegex = (TextInput)bxmlSerializer.getNamespace().get("textinputDateRegex");
         textinputCustomBoolean = (TextInput)bxmlSerializer.getNamespace().get("textinputCustomBoolean");
+        textinputNotEmptyText = (TextInput)bxmlSerializer.getNamespace().get("textinputNotEmptyText");
 
         // standard float range model
         textinputFloatRange.setText("0.5");
@@ -81,6 +85,11 @@ public class TextInputValidatorTest implements Application {
             }
         });
 
+        // validate any not-empty text
+        textinputNotEmptyText.setText("  Not Empty, and with spaces  ");
+        textinputNotEmptyText.setValidator(new NotEmptyTextValidator());
+
+
         window.setTitle("Text Input Validator Test");
         window.setMaximized(true);
         window.open(display);
@@ -95,15 +104,8 @@ public class TextInputValidatorTest implements Application {
         return false;
     }
 
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void suspend() {
-    }
-
     public static void main(String[] args) throws Exception {
         DesktopApplicationContext.main(new String[] { TextInputValidatorTest.class.getName() });
     }
+
 }
