@@ -509,7 +509,7 @@ public class JSONSerializer implements Serializer<Object> {
     private Object readBooleanValue(Reader reader, Type type)
         throws IOException, SerializationException {
         if (!(type instanceof Class<?>)) {
-            throw new SerializationException("Cannot convert number to " + type + ".");
+            throw new SerializationException("Cannot convert boolean to " + type + ".");
         }
 
         String text = (c == 't') ? "true" : "false";
