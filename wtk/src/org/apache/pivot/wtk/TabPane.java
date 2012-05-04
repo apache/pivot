@@ -68,7 +68,7 @@ public class TabPane extends Container {
             tabPaneListeners.tabInserted(TabPane.this, index);
 
             // Fire selection change event, if necessary
-            if (selectedIndex != previousSelectedIndex) {
+            if (selectedIndex != previousSelectedIndex && previousSelectedIndex > -1) {
                 tabPaneSelectionListeners.selectedIndexChanged(TabPane.this, selectedIndex);
             }
         }
@@ -118,7 +118,7 @@ public class TabPane extends Container {
                 }
 
                 // Fire selection change event, if necessary
-                if (selectedIndex != previousSelectedIndex) {
+                if (selectedIndex != previousSelectedIndex && previousSelectedIndex > -1) {
                     tabPaneSelectionListeners.selectedIndexChanged(TabPane.this, selectedIndex);
                 }
             } else {

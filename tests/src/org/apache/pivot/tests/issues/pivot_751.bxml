@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Pivot-837" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk"
+>
+
+    <bxml:script>
+    <![CDATA[
+    importPackage(java.lang);  // required to use System.out and System.err
+    importPackage(org.apache.pivot.util);  // required to use Pivot Utility class Console
+    importPackage(org.apache.pivot.wtk);   // required to use Pivot WTK classes
+
+    function removeTab_js() {
+        System.out.println("removeTab_js");
+        var numTabs = tabPane.getTabs().getLength()
+        System.out.println("there was " + numTabs + " tabs before the remove");
+        var selectedTab = tabPane.getSelectedIndex();
+        System.out.println("selected index was " + selectedTab);
+
+        // remove the selected tab (if any)
+        if (selectedTab > -1)
+            tabPane.getTabs().remove(selectedTab, 1);
+
+        var numTabs = tabPane.getTabs().getLength()
+        System.out.println("now there are " + numTabs + " tabs");
+    }
+
+    function addTab_js() {
+        System.out.println("addTab_js");
+        var numTabs = tabPane.getTabs().getLength()
+        System.out.println("there was " + numTabs + " tabs before the add");
+        var selectedTab = tabPane.getSelectedIndex();
+        System.out.println("selected index was " + selectedTab);
+
+        // add a tab at the end of the sequence
+        // var insertIndex = 0  // at the beginning
+        // var insertIndex = selectedTab + 1  // after the selected
+        var insertIndex = numTabs  // at the end
+           tabPane.getTabs().insert(new Label("Tab current index is " + insertIndex), insertIndex);
+
+           // var insertedTab = tabPane.getTabs().get(insertIndex);
+           // insertedTab.setName("tab " + numTabs);
+
+        var numTabs = tabPane.getTabs().getLength()
+        System.out.println("now there are " + numTabs + " tabs");
+    }
+
+    System.out.println("BXML Scripts successfully initialized");
+    ]]>
+    </bxml:script>
+
+
+    <TabPane bxml:id="tabPane" styles="{tabOrientation:'vertical'}">
+        <corner>
+            <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'top'}">
+                <PushButton buttonData="-"
+                    ButtonPressListener.buttonPressed="removeTab_js()"
+                />
+                <PushButton buttonData="+"
+                    ButtonPressListener.buttonPressed="addTab_js()"
+                />
+            </BoxPane>
+        </corner>
+
+        <BoxPane>
+            <TabPane.tabData>
+                <content:ButtonData text="Tab 1"/>
+            </TabPane.tabData>
+        </BoxPane>
+        <BoxPane>
+            <TabPane.tabData>
+                <content:ButtonData text="Tab 2"/>
+            </TabPane.tabData>
+        </BoxPane>
+    </TabPane>
+
+</Window>
