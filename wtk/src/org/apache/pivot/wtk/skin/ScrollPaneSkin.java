@@ -366,7 +366,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
         if (view != null) {
             // The scroll orientation is tied to whether the shift key was
-            // presssed while the mouse wheel was scrolled
+            // pressed while the mouse wheel was scrolled
             if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Treat the mouse wheel as a horizontal scroll event
                 int previousScrollLeft = scrollPane.getScrollLeft();
@@ -901,6 +901,7 @@ public class ScrollPaneSkin extends ContainerSkin
             ScrollPane scrollPane = (ScrollPane)getComponent();
             ApplicationContext.DisplayHost displayHost = scrollPane.getDisplay().getDisplayHost();
 
+            // TODO: verify if use non deprecated methods ...
             optimizeScrolling = (displayHost.getScale() == 1
                 && (DesktopApplicationContext.isActive()
                 || (displayHost.getPeer().canDetermineObscurity()
