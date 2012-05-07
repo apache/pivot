@@ -19,37 +19,86 @@ limitations under the License.
 <Form styles="{fill:true}"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:content="org.apache.pivot.wtk.content"
-    xmlns="org.apache.pivot.wtk">
+    xmlns:effects="org.apache.pivot.wtk.effects"
+    xmlns="org.apache.pivot.wtk"
+>
     <Form.Section heading="Test Section">
         <Label Form.label="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
-            styles="{wrapText:true}"/>
+            styles="{wrapText:true}">
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
+        </Label>
     </Form.Section>
     <Form.Section heading="Test Section">
         <Label Form.label="ABCD" text="Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS..."
-            styles="{wrapText:true}"/>
+            styles="{wrapText:true}">
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
+        </Label>
     </Form.Section>
     <Form.Section heading="Test Section">
         <TextInput Form.label="Text Input Field"
             Form.Flag="{messageType:'error', message:'Error message'}"
-            text="Some sample text"/>
-        <Checkbox Form.label="Checkbox" buttonData="Bell"/>
-        <LinkButton Form.label="LinkButton" buttonData="Previous"/>
-        <RadioButton Form.label="RadioButton" buttonData="Crossfade" selected="true"/>
-        <ListButton Form.label="ListButton" listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0"/>
-        <PushButton Form.label="PushButton" buttonData="Copy"/>
+            text="Some sample text">
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
+        </TextInput>
+        <Checkbox Form.label="Checkbox" buttonData="Bell">
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
+        </Checkbox>
+        <LinkButton Form.label="LinkButton" buttonData="Previous">
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
+        </LinkButton>
+        <RadioButton Form.label="RadioButton" buttonData="Crossfade" selected="true">
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
+        </RadioButton>
+        <ListButton Form.label="ListButton" listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0">
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
+        </ListButton>
+        <PushButton Form.label="PushButton" buttonData="Copy">
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
+        </PushButton>
         <Spinner Form.label="Spinner" selectedIndex="0">
             <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
         </Spinner>
         <Border Form.label="ListView"
             Form.Flag="{messageType:'error', message:'Error message'}">
             <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
-                <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']"/>
+                <ListView listData="['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']">
+                    <decorators>
+                        <effects:BaselineDecorator/>
+                    </decorators>
+                </ListView>
             </ScrollPane>
         </Border>
         <FlowPane Form.label="FlowPane"
             styles="{horizontalSpacing:4, alignToBaseline:true}">
-            <TextInput text=""/>
-            <Label text="(optional)"/>
+            <TextInput text="">
+                <decorators>
+                    <effects:BaselineDecorator/>
+                </decorators>
+            </TextInput>
+            <Label text="(optional)">
+                <decorators>
+                    <effects:BaselineDecorator/>
+                </decorators>
+            </Label>
         </FlowPane>
         <TablePane Form.label="TablePane"
             styles="{padding:{top:8}, horizontalSpacing:12, verticalSpacing:6}">
@@ -57,6 +106,9 @@ limitations under the License.
                 <TablePane.Column/>
                 <TablePane.Column width="1*"/>
             </columns>
+            <decorators>
+                <effects:BaselineDecorator/>
+            </decorators>
 
             <TablePane.Row>
                 <Label text="Left 1"/>

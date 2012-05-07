@@ -54,9 +54,6 @@ public class BaselineTest implements Application {
     }
 
     public static void main(String[] args) {
-        // turn on the drawing of red lines to debug any problems
-        System.setProperty("pivot.wtk.debugBaseline", "true");
-
         DesktopApplicationContext.main(BaselineTest.class, args);
     }
 }
