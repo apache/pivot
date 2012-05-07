@@ -21,9 +21,9 @@ limitations under the License.
     xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk"
     minimumHeight="200"
-    minimumWidth="600"
-    maximumHeight="200"
-    maximumWidth="600"
+    minimumWidth="300"
+    maximumHeight="250"
+    maximumWidth="400"
 >
 
     <bxml:script>
