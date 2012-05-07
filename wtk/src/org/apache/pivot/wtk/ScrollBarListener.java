@@ -70,7 +70,7 @@ public interface ScrollBarListener {
     public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement);
 
     /**
-     * Called when a scroll bar's block increment ahs changed.
+     * Called when a scroll bar's block increment has changed.
      *
      * @param scrollBar
      * @param previousBlockIncrement
