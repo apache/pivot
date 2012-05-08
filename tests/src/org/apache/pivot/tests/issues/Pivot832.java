@@ -63,6 +63,15 @@ public class Pivot832 implements Application
                             File loadedFile = fileBrowserSheet.getSelectedFile();
                             try {
                                 selectedFolder = loadedFile.getCanonicalPath();
+                                System.out.println("Selected folder '" + selectedFolder + "'");
+
+                                // multiple tests ...
+                                System.out.println("Verify: Root folder (display from getName) was set to '"
+                                    + fileBrowserSheet.getRootDirectory().getName() + "'");
+                                System.out.println("Verify: Root folder (display from getCanonicalPath) was set to '"
+                                    + fileBrowserSheet.getRootDirectory().getCanonicalPath() + "'");
+                                System.out.println("Verify: Root folder (display from getCanonicalFile) was set to '"
+                                    + fileBrowserSheet.getRootDirectory().getCanonicalFile() + "'");
 
                                 openFileButton.setEnabled(true);
                             } catch (IOException e) {
@@ -79,16 +88,22 @@ public class Pivot832 implements Application
         openFileButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                final FileBrowserSheet fileBrowserSheet = new FileBrowserSheet();
+                System.out.println("Now opening a BrowserSheet starting from the previous selected folder: \""
+                    + selectedFolder + "\"");
+                final FileBrowserSheet fileBrowserSheet = new FileBrowserSheet(FileBrowserSheet.Mode.OPEN, selectedFolder);
 
                 try {
-                    fileBrowserSheet.setRootDirectory(new File(selectedFolder));
-                    System.out.println("Root folder set to '" + fileBrowserSheet.getRootDirectory().getCanonicalPath() + "'");
+                    // multiple tests ...
+                    System.out.println("Verify: Root folder (display from getName) was set to '"
+                        + fileBrowserSheet.getRootDirectory().getName() + "'");
+                    System.out.println("Verify: Root folder (display from getCanonicalPath) was set to '"
+                        + fileBrowserSheet.getRootDirectory().getCanonicalPath() + "'");
+                    System.out.println("Verify: Root folder (display from getCanonicalFile) was set to '"
+                        + fileBrowserSheet.getRootDirectory().getCanonicalFile() + "'");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                fileBrowserSheet.setMode(FileBrowserSheet.Mode.OPEN);  // open it, so I can verify that it starts from the right folder ...
                 fileBrowserSheet.open(window, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
