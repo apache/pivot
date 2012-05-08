@@ -36,6 +36,8 @@ public class FileBrowser extends Container {
         public File getFileAt(int x, int y);
     }
 
+    private static final String USER_HOME = System.getProperty("user.home");
+
     private static class FileBrowserListenerList extends WTKListenerList<FileBrowserListener>
         implements FileBrowserListener {
         @Override
@@ -91,8 +93,18 @@ public class FileBrowser extends Container {
     private FileBrowserListenerList fileBrowserListeners = new FileBrowserListenerList();
 
     public FileBrowser() {
-        String userHome = System.getProperty("user.home");
-        rootDirectory = new File(userHome);
+        this(USER_HOME);
+    }
+
+    public FileBrowser(String rootFolder) {
+        if (rootFolder == null) {
+            throw new IllegalArgumentException();
+        }
+
+        rootDirectory = new File(rootFolder);
+        if (!rootDirectory.isDirectory()) {
+            throw new IllegalArgumentException();
+        }
 
         installSkin(FileBrowser.class);
     }
@@ -121,7 +133,7 @@ public class FileBrowser extends Container {
         if (rootDirectory.exists()) {
             File previousRootDirectory = this.rootDirectory;
 
-            if (previousRootDirectory != rootDirectory) {
+            if (!rootDirectory.equals(previousRootDirectory)) {
                 this.rootDirectory = rootDirectory;
                 selectedFiles.clear();
                 fileBrowserListeners.rootDirectoryChanged(this, previousRootDirectory);

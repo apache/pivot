@@ -39,6 +39,8 @@ public class FileBrowserSheet extends Sheet {
         SAVE_TO
     }
 
+    private static final String USER_HOME = System.getProperty("user.home");
+
     private static class FileBrowserSheetListenerList
         extends WTKListenerList<FileBrowserSheetListener>
         implements FileBrowserSheetListener {
@@ -88,10 +90,24 @@ public class FileBrowserSheet extends Sheet {
     }
 
     public FileBrowserSheet(Mode mode) {
+        this(Mode.OPEN, USER_HOME);
+    }
+
+    public FileBrowserSheet(Mode mode, String rootFolder) {
+        if (mode == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (rootFolder == null) {
+            throw new IllegalArgumentException();
+        }
+
         this.mode = mode;
 
-        String userHome = System.getProperty("user.home");
-        rootDirectory = new File(userHome);
+        rootDirectory = new File(rootFolder);
+        if (!rootDirectory.isDirectory()) {
+            throw new IllegalArgumentException();
+        }
 
         installSkin(FileBrowserSheet.class);
     }
@@ -126,7 +142,7 @@ public class FileBrowserSheet extends Sheet {
         if (rootDirectory.exists()) {
             File previousRootDirectory = this.rootDirectory;
 
-            if (previousRootDirectory != rootDirectory) {
+            if (!rootDirectory.equals(previousRootDirectory)) {
                 this.rootDirectory = rootDirectory;
                 selectedFiles.clear();
                 fileBrowserSheetListeners.rootDirectoryChanged(this, previousRootDirectory);
