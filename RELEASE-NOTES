@@ -20,8 +20,26 @@ Release Notes for Pivot 2.0.2:
 ** New Feature
 
 ** Improvement
+    * [PIVOT-508] - TextArea displays blinking cursor even when it's in read-only mode.
+    * [PIVOT-771] - getSelectedIndex()/getSelectedPath() in TreeView, ListView and TableView should not throw Exception when in SelectMode.MULTI
+    * [PIVOT-836] - Improve Performance of Graphics
+    * [PIVOT-839] - Czech localization
+    * [PIVOT-842] - Disable volatile buffer even in unsigned Applets, using the existing flag
+    * [PIVOT-845] - Russian localization
+    * [PIVOT-847] - Update SVGSalamander jars to the latest stable version
+    * [PIVOT-852] - add methods for show/log info, callable even from dynamic languages include files
+    * [PIVOT-854] - Improvements of Palette
 
 ** Bug
+    * [PIVOT-707] - TextArea cant be edited when pivot applet loses focus
+    * [PIVOT-738] - artefact problem with 2 scrollPane and TableView
+    * [PIVOT-751] - TabPaneSelectionListener#selectedIndexChanged called twice when first tab is inserted
+    * [PIVOT-782] - java7 / applets : input fields not working
+    * [PIVOT-800] - FileBrowserSheet#setSelectedFile() does not take effect
+    * [PIVOT-811] - ScrollPane painting lag / ListView focus issues
+    * [PIVOT-832] - FileBrowserSheet.setRootDirectory(...) fails the first time on drives other than system volume
+    * [PIVOT-835] - TextPane is unusable in 2.0.1 release
+    * [PIVOT-837] - TabPane with vertical tabOrientation and corner's content with top verticalAlignment
 
 ** Task
 
