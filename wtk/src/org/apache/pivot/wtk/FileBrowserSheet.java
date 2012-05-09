@@ -160,7 +160,7 @@ public class FileBrowserSheet extends Sheet {
      */
     public File getSelectedFile() {
         if (mode == Mode.OPEN_MULTIPLE) {
-            throw new IllegalStateException("File browser is not in single-select mode.");
+            throw new IllegalStateException("File browser sheet is not in single-select mode.");
         }
 
         return (selectedFiles.getLength() == 0) ? null : selectedFiles.get(0);

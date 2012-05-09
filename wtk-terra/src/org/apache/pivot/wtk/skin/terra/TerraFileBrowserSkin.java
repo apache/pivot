@@ -78,6 +78,9 @@ import org.apache.pivot.wtk.skin.FileBrowserSkin;
  * Terra file browser skin.
  */
 public class TerraFileBrowserSkin extends FileBrowserSkin {
+
+    public static final File HOME_DIRECTORY = new File(System.getProperty("user.home"));
+
     /**
      * Abstract renderer for displaying file system contents.
      */
@@ -92,15 +95,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         public static final Image HOME_FOLDER_IMAGE;
         public static final Image FILE_IMAGE;
 
-        public static final File HOME_DIRECTORY;
-
         static {
             try {
                 FOLDER_IMAGE = Image.load(FileRenderer.class.getResource("folder.png"));
                 HOME_FOLDER_IMAGE = Image.load(FileRenderer.class.getResource("folder_home.png"));
                 FILE_IMAGE = Image.load(FileRenderer.class.getResource("page_white.png"));
-
-                HOME_DIRECTORY = new File(System.getProperty("user.home"));
             } catch (TaskExecutionException exception) {
                 throw new RuntimeException(exception);
             }
@@ -647,7 +646,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         goHomeButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                fileBrowser.setRootDirectory(new File(System.getProperty("user.home")));
+                fileBrowser.setRootDirectory(HOME_DIRECTORY);
             }
         });
 
@@ -964,8 +963,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         goUpButton.setEnabled(pathListButton.isEnabled());
 
-        File homeDirectory = new File(System.getProperty("user.home"));
-        goHomeButton.setEnabled(!rootDirectory.equals(homeDirectory));
+        goHomeButton.setEnabled(!rootDirectory.equals(HOME_DIRECTORY));
 
         searchTextInput.setText("");
 
