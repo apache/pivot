@@ -60,7 +60,7 @@ public class Pivot811 extends Application.Adapter {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(ScrollBarPolicy.FILL);
         scrollPane.setVerticalScrollBarPolicy(ScrollBarPolicy.FILL_TO_CAPACITY);
-        // scrollPane.setRepaintAllViewport(true);  // workaround for pivot-738, needed only in in some cases
+        scrollPane.setRepaintAllViewport(true);  // workaround for pivot-738, needed only in in some cases
         boxPane.add(scrollPane);
 
         final ListView listView = new ListView();
