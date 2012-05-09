@@ -361,16 +361,21 @@ public abstract class Container extends Component
         if (!doubleBuffering) {
             paint0(graphics);
         } else {
+            boolean freshImage = false;
             if (doubleBufferImage == null) {
                 GraphicsConfiguration gc = graphics.getDeviceConfiguration();
                 doubleBufferImage = gc.createCompatibleImage(getWidth(), getHeight(),
                         Transparency.OPAQUE);
                 doubleBufferedRepaintRequired = true;
+                freshImage = true;
             }
-            // TODO use clipbounds
+
             Graphics2D bufferedImageGraphics = (Graphics2D)doubleBufferImage.getGraphics();
             try {
                 if (doubleBufferedRepaintRequired) {
+                    if (!freshImage) {
+                        bufferedImageGraphics.setClip(graphics.getClip());
+                    }
                     paint0(bufferedImageGraphics);
                     doubleBufferedRepaintRequired = false;
                 }
