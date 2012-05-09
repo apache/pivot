@@ -48,6 +48,9 @@ import org.apache.pivot.wtk.Window;
  * Terra file browser sheet skin.
  */
 public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBrowserSheetListener {
+
+    public static final File HOME_DIRECTORY = new File(System.getProperty("user.home"));
+
     private static class SaveToFileFilter implements Filter<File> {
         public final Filter<File> sourceFilter;
 
@@ -101,6 +104,10 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         fileBrowserSheet.setContent(content);
 
         bxmlSerializer.bind(this, TerraFileBrowserSheetSkin.class);
+
+        if (!HOME_DIRECTORY.equals(fileBrowserSheet.getRootDirectory())){
+            fileBrowser.setRootDirectory(fileBrowserSheet.getRootDirectory());
+        }
 
         saveAsTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
