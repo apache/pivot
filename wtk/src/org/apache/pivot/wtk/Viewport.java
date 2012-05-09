@@ -67,6 +67,7 @@ public abstract class Viewport extends Container {
     private Component view;
 
     private boolean consumeRepaint = false;
+    private boolean repaintAllViewport = false;
 
     private ViewportListenerList viewportListeners = new ViewportListenerList();
 
@@ -191,4 +192,24 @@ public abstract class Viewport extends Container {
     public ListenerList<ViewportListener> getViewportListeners() {
         return viewportListeners;
     }
+
+    /**
+     * Tell if the viewport mode is optimized (repaint only needed area, default), or repaint all
+     *
+     * @return true if optimized, otherwise false
+     */
+    public boolean isRepaintAllViewport() {
+        return repaintAllViewport;
+    }
+
+    /**
+     * Set the viewport mode
+     *
+     * @param repaintAllViewport
+     * true means optimized (repaint only needed area, default), while false means repaint all
+     */
+    public void setRepaintAllViewport(boolean repaintAllViewport) {
+        this.repaintAllViewport = repaintAllViewport;
+    }
+
 }

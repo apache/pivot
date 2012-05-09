@@ -36,7 +36,7 @@ limitations under the License.
 
     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" verticalScrollBarPolicy="fill_to_capacity">
         <Border preferredHeight="220">
-            <ScrollPane verticalScrollBarPolicy="always">
+            <ScrollPane verticalScrollBarPolicy="always" repaintAllViewport="true">
                 <TableView bxml:id="listTable">
                     <columns>
                         <TableView.Column name="i" width="80"/>

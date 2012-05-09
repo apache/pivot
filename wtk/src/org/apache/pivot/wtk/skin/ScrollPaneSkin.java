@@ -27,17 +27,17 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.ScrollBar;
 import org.apache.pivot.wtk.ScrollBarValueListener;
 import org.apache.pivot.wtk.ScrollPane;
+import org.apache.pivot.wtk.ScrollPane.Corner;
+import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 import org.apache.pivot.wtk.ScrollPaneListener;
 import org.apache.pivot.wtk.Viewport;
 import org.apache.pivot.wtk.ViewportListener;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.ScrollPane.Corner;
-import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 
 /**
  * Scroll pane skin.
@@ -901,7 +901,6 @@ public class ScrollPaneSkin extends ContainerSkin
             ScrollPane scrollPane = (ScrollPane)getComponent();
             ApplicationContext.DisplayHost displayHost = scrollPane.getDisplay().getDisplayHost();
 
-            // TODO: verify if use non deprecated methods ...
             optimizeScrolling = (displayHost.getScale() == 1
                 && (DesktopApplicationContext.isActive()
                 || (displayHost.getPeer().canDetermineObscurity()
@@ -1023,6 +1022,7 @@ public class ScrollPaneSkin extends ContainerSkin
             graphics.copyArea(blitX, blitY, blitWidth, blitHeight, 0, -deltaScrollTop);
 
             scrollPane.setConsumeRepaint(true);
+
             try {
                 view.setLocation(view.getX(), columnHeaderHeight - scrollTop);
 
@@ -1033,8 +1033,16 @@ public class ScrollPaneSkin extends ContainerSkin
                 scrollPane.setConsumeRepaint(false);
             }
 
-            scrollPane.repaint(blitX, columnHeaderHeight + (deltaScrollTop > 0 ? blitHeight : 0),
-                blitWidth, Math.abs(deltaScrollTop), true);
+            boolean repaintAllViewport = scrollPane.isRepaintAllViewport();
+            if (!repaintAllViewport) {
+                scrollPane.repaint(blitX, (columnHeaderHeight + (deltaScrollTop > 0 ? blitHeight : 0)),
+                    blitWidth, Math.abs(deltaScrollTop), true);
+            } else {
+                Bounds viewportBounds = getViewportBounds();
+                scrollPane.repaint(viewportBounds.x, viewportBounds.y, 
+                    viewportBounds.width, viewportBounds.height, true);
+            }
+
         } else {
             if (view != null) {
                 view.setLocation(view.getX(), columnHeaderHeight - scrollTop);
