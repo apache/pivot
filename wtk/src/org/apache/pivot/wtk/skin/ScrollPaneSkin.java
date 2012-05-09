@@ -886,7 +886,6 @@ public class ScrollPaneSkin extends ContainerSkin
         this.verticalReveal = verticalReveal;
     }
 
-    @SuppressWarnings("deprecation")
     private boolean isOptimizeScrolling() {
         boolean optimizeScrolling = this.optimizeScrolling;
 
@@ -903,8 +902,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
             optimizeScrolling = (displayHost.getScale() == 1
                 && (DesktopApplicationContext.isActive()
-                || (displayHost.getPeer().canDetermineObscurity()
-                && !displayHost.getPeer().isObscured())));
+                && displayHost.isDisplayable()));
         }
 
         return optimizeScrolling;
@@ -1039,7 +1037,7 @@ public class ScrollPaneSkin extends ContainerSkin
                     blitWidth, Math.abs(deltaScrollTop), true);
             } else {
                 Bounds viewportBounds = getViewportBounds();
-                scrollPane.repaint(viewportBounds.x, viewportBounds.y, 
+                scrollPane.repaint(viewportBounds.x, viewportBounds.y,
                     viewportBounds.width, viewportBounds.height, true);
             }
 
