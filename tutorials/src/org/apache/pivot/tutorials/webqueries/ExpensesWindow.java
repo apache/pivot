@@ -52,6 +52,7 @@ import org.apache.pivot.wtk.Window;
  * Main expense management window.
  */
 public class ExpensesWindow extends Window implements Bindable {
+
     private class RefreshExpenseListAction extends Action {
         @Override
         public void perform(Component source) {
@@ -87,6 +88,9 @@ public class ExpensesWindow extends Window implements Bindable {
             deleteSelectedExpense();
         }
     }
+
+
+    private Expenses expensesApplication = null;
 
     private RefreshExpenseListAction refreshExpenseListAction = new RefreshExpenseListAction();
     private AddExpenseAction addExpenseAction = new AddExpenseAction();
@@ -131,7 +135,7 @@ public class ExpensesWindow extends Window implements Bindable {
         }
 
         // Create the delete confirmation prompt
-        ArrayList<String> options = new ArrayList<String>((String) resources.get("cancel"), (String) resources.get("ok"));
+        ArrayList<String> options = new ArrayList<String>((String) resources.get("ok"), (String) resources.get("cancel"));
         deleteConfirmationPrompt = new Prompt(MessageType.QUESTION, (String)resources.get("confirmDelete"),
             options);
 
@@ -146,6 +150,16 @@ public class ExpensesWindow extends Window implements Bindable {
         });
     }
 
+
+    public Expenses getExpensesApplication() {
+        return expensesApplication;
+    }
+
+    public void setExpensesApplication(Expenses expensesApplication) {
+        this.expensesApplication = expensesApplication;
+    }
+
+
     @Override
     public void open(Display display, Window owner) {
         super.open(display, owner);
@@ -155,10 +169,11 @@ public class ExpensesWindow extends Window implements Bindable {
     }
 
     private void refreshExpenseList() {
-        Expenses expensesApplication = Expenses.getInstance();
+        Expenses expensesApplication = getExpensesApplication();
         GetQuery expenseListQuery = new GetQuery(expensesApplication.getHostname(),
             expensesApplication.getPort(), "/pivot-tutorials/expenses",
-            expensesApplication.isSecure());
+            expensesApplication.isSecure()
+        );
 
         activityIndicatorBoxPane.setVisible(true);
         activityIndicator.setActive(true);
@@ -195,10 +210,11 @@ public class ExpensesWindow extends Window implements Bindable {
                     expenseSheet.store(expense);
 
                     // POST expense to server and then add to table
-                    Expenses expensesApplication = Expenses.getInstance();
+                    Expenses expensesApplication = getExpensesApplication();
                     PostQuery addExpenseQuery = new PostQuery(expensesApplication.getHostname(),
                         expensesApplication.getPort(), "/pivot-tutorials/expenses",
-                        expensesApplication.isSecure());
+                        expensesApplication.isSecure()
+                    );
                     addExpenseQuery.setValue(expense);
 
                     activityIndicatorBoxPane.setVisible(true);
@@ -247,10 +263,11 @@ public class ExpensesWindow extends Window implements Bindable {
                     expenseSheet.store(expense);
 
                     // PUT expense to server and then update table
-                    Expenses expensesApplication = Expenses.getInstance();
+                    Expenses expensesApplication = getExpensesApplication();
                     PutQuery updateExpenseQuery = new PutQuery(expensesApplication.getHostname(),
                         expensesApplication.getPort(), "/pivot-tutorials/expenses/" + JSON.get(expense, "id"),
-                        expensesApplication.isSecure());
+                        expensesApplication.isSecure()
+                    );
                     updateExpenseQuery.setValue(expense);
 
                     activityIndicatorBoxPane.setVisible(true);
@@ -296,10 +313,11 @@ public class ExpensesWindow extends Window implements Bindable {
                 if (sheet.getResult()
                     && ((Prompt)sheet).getSelectedOptionIndex() == 1) {
                     // DELETE expense from server and then remove from table
-                    Expenses expensesApplication = Expenses.getInstance();
+                    Expenses expensesApplication = getExpensesApplication();
                     DeleteQuery deleteExpenseQuery = new DeleteQuery(expensesApplication.getHostname(),
                         expensesApplication.getPort(), "/pivot-tutorials/expenses/" + id,
-                        expensesApplication.isSecure());
+                        expensesApplication.isSecure()
+                    );
 
                     activityIndicatorBoxPane.setVisible(true);
                     activityIndicator.setActive(true);
@@ -332,4 +350,5 @@ public class ExpensesWindow extends Window implements Bindable {
             }
         });
     }
+
 }

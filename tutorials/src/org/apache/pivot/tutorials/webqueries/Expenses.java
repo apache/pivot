@@ -39,16 +39,24 @@ public class Expenses implements Application {
     public static final String PORT_KEY = "port";
     public static final String SECURE_KEY = "secure";
 
-    private static Expenses instance = null;
-
     public Expenses() {
-        instance = this;
     }
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         // Get startup properties
         URL origin = ApplicationContext.getOrigin();
+        if (origin == null) {
+            System.out.println("Warning: Origin null, so for this application to run you have to set the following properties: \n"
+                + SECURE_KEY + ", " + HOSTNAME_KEY + ", " + PORT_KEY + "\n"
+            );
+        }
+
+        if (properties.containsKey(SECURE_KEY)) {
+            secure = Boolean.parseBoolean(properties.get(SECURE_KEY));
+        } else {
+            secure = origin.getProtocol().equals("HTTPS");
+        }
 
         if (properties.containsKey(HOSTNAME_KEY)) {
             hostname = properties.get(HOSTNAME_KEY);
@@ -62,15 +70,10 @@ public class Expenses implements Application {
             port = origin.getPort();
         }
 
-        if (properties.containsKey(SECURE_KEY)) {
-            secure = Boolean.parseBoolean(properties.get(SECURE_KEY));
-        } else {
-            secure = origin.getProtocol().equals("HTTPS");
-        }
-
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         expensesWindow = (ExpensesWindow)bxmlSerializer.readObject(ExpensesWindow.class,
             "expenses_window.bxml", true);
+        expensesWindow.setExpensesApplication(this);
         expensesWindow.open(display);
     }
 
@@ -101,10 +104,6 @@ public class Expenses implements Application {
 
     public boolean isSecure() {
         return secure;
-    }
-
-    public static Expenses getInstance() {
-        return instance;
     }
 
     public static void main(String[] args) {
