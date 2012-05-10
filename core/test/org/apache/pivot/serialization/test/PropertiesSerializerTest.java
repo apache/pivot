@@ -33,7 +33,6 @@ import org.junit.Test;
 public class PropertiesSerializerTest
 {
     public static Map<String, Object> testMap = null;
-    public static byte[] testBytes = null;
 
     static {
         testMap = new HashMap<String, Object>();
@@ -48,26 +47,39 @@ public class PropertiesSerializerTest
         System.out.println(msg);
     }
 
-    @Test
-    // run writeValues before readValues, important
-    public void writeValues() throws IOException, SerializationException {
-        log("writeValues()");
-
+    // utility method to transform the given Map to Properties,
+    // and then to byte array
+    protected byte[] mapToPropertiesToBytes(Map<String, Object> testMap2)
+            throws IOException, SerializationException {
         Serializer<Map<?, ?>> serializer = new PropertiesSerializer();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        serializer.writeObject(testMap, outputStream);
+        serializer.writeObject(testMap2, outputStream);
         outputStream.flush();
         outputStream.close();
 
         String result = outputStream.toString();
-        assertNotNull(result);
+
+        return result.getBytes();
+    }
+
+    @Test
+    public void writeValues() throws IOException, SerializationException {
+        log("writeValues()");
+
+        assertNotNull(testMap);
+
+        Serializer<Map<?, ?>> serializer = new PropertiesSerializer();
+        log("serializer instance created: " + serializer);
+
+        byte[] testBytes = mapToPropertiesToBytes(testMap);
+        assertNotNull(testBytes);
 
         // dump content, but useful only for text resources ...
-        String dump = result;
-        testBytes = dump.getBytes();
         int dumpLength = testBytes.length;
-        log("Result: " + dumpLength + " bytes \n" + dump);
+        log("Result: " + dumpLength + " bytes"
+            + ", dump written content now (could have different ordering of rows, and without comment lines):\n"
+            + new String(testBytes));
 
         assertTrue(dumpLength > 0);
     }
@@ -77,7 +89,15 @@ public class PropertiesSerializerTest
     public void readValues() throws IOException, SerializationException {
         log("readValues()");
 
+        assertNotNull(testMap);
+
+        // prepare test data, but without using a static variable
+        byte[] testBytes = mapToPropertiesToBytes(testMap);
+        assertNotNull(testBytes);
+
+
         Serializer<Map<?, ?>> serializer = new PropertiesSerializer();
+        log("serializer instance created: " + serializer);
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(testBytes);
         @SuppressWarnings("unchecked")
