@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.skin.LabelSkin;
 public class TerraLabelSkin extends LabelSkin {
     public TerraLabelSkin() {
         setColor(1);
+        setDisabledColor(7);
     }
 
     public final void setColor(int color) {
@@ -32,8 +33,14 @@ public class TerraLabelSkin extends LabelSkin {
         setColor(theme.getColor(color));
     }
 
+    public final void setDisabledColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledColor(theme.getColor(color));
+    }
+
     public final void setBackgroundColor(int backgroundColor) {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
+
 }

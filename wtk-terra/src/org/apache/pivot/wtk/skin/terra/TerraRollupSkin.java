@@ -127,7 +127,11 @@ public class TerraRollupSkin extends RollupSkin {
             Rollup rollup = (Rollup)TerraRollupSkin.this.getComponent();
 
             graphics.setStroke(new BasicStroke(0));
-            graphics.setPaint(buttonColor);
+            if (rollup.isEnabled()) {
+                graphics.setPaint(buttonColor);
+            } else {
+                graphics.setPaint(disabledButtonColor);
+            }
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -165,6 +169,7 @@ public class TerraRollupSkin extends RollupSkin {
 
     // Styles
     private Color buttonColor;
+    private Color disabledButtonColor;
     private int spacing;
     private int buffer;
     private boolean fill;
@@ -198,6 +203,7 @@ public class TerraRollupSkin extends RollupSkin {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
 
         buttonColor = theme.getColor(1);
+        disabledButtonColor = theme.getColor(7);
         spacing = 4;
         buffer = 4;
         fill = false;
@@ -389,6 +395,32 @@ public class TerraRollupSkin extends RollupSkin {
         }
 
         setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
+    }
+
+    public Color getDisabledButtonColor() {
+        return disabledButtonColor;
+    }
+
+    public final void setDisabledButtonColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setDisabledButtonColor(theme.getColor(color));
+    }
+
+    public void setDisabledButtonColor(Color buttonColor) {
+        if (buttonColor == null) {
+            throw new IllegalArgumentException("buttonColor is null.");
+        }
+
+        this.disabledButtonColor = buttonColor;
+        rollupButton.repaint();
+    }
+
+    public final void setDisabledButtonColor(String buttonColor) {
+        if (buttonColor == null) {
+            throw new IllegalArgumentException("buttonColor is null.");
+        }
+
+        setDisabledButtonColor(GraphicsUtilities.decodeColor(buttonColor));
     }
 
     public int getSpacing() {

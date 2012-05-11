@@ -45,12 +45,11 @@ import org.apache.pivot.wtk.VerticalAlignment;
 
 /**
  * Label skin.
- * <p>
- * TODO Add a showEllipsis style.
  */
 public class LabelSkin extends ComponentSkin implements LabelListener {
     private Font font;
     private Color color;
+    private Color disabledColor;
     private Color backgroundColor;
     private TextDecoration textDecoration;
     private HorizontalAlignment horizontalAlignment;
@@ -65,6 +64,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         Theme theme = Theme.getTheme();
         font = theme.getFont();
         color = Color.BLACK;
+        disabledColor = Color.GRAY;
         backgroundColor = null;
         textDecoration = null;
         horizontalAlignment = HorizontalAlignment.LEFT;
@@ -283,6 +283,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     @Override
     public void paint(Graphics2D graphics) {
+        Label label = (Label)this.getComponent();
+
         int width = getWidth();
         int height = getHeight();
 
@@ -295,7 +297,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         // Draw the text
         if (glyphVectors != null && glyphVectors.getLength() > 0) {
             graphics.setFont(font);
-            graphics.setPaint(color);
+
+            if (label.isEnabled()) {
+                graphics.setPaint(color);
+            } else {
+                graphics.setPaint(disabledColor);
+            }
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
@@ -345,8 +352,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                 }
 
                 if (graphics instanceof PrintGraphics) {
-                    /* Work-around for printing problem in applets */
-                    Label label = (Label)getComponent();
+                    // Work-around for printing problem in applets
                     String text = label.getText();
                     if (text != null && text.length() > 0) {
                         graphics.drawString(text, x, y + ascent);
@@ -470,6 +476,37 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         }
 
         setColor(GraphicsUtilities.decodeColor(color));
+    }
+
+    /**
+     * Returns the foreground color of the text of the label when disabled.
+     */
+    public Color getDisabledColor() {
+        return disabledColor;
+    }
+
+    /**
+     * Sets the foreground color of the text of the label when disabled.
+     */
+    public void setDisabledColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        this.disabledColor = color;
+        repaintComponent();
+    }
+
+    /**
+     * Sets the foreground color of the text of the label when disabled.
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     */
+    public final void setDisabledColor(String color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color is null.");
+        }
+
+        setDisabledColor(GraphicsUtilities.decodeColor(color));
     }
 
     /**
