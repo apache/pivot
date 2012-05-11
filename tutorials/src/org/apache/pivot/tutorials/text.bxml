@@ -18,7 +18,8 @@ limitations under the License.
 
 <BoxPane xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:validation="org.apache.pivot.wtk.validation"
-    xmlns="org.apache.pivot.wtk">
+    xmlns="org.apache.pivot.wtk"
+>
     <Border styles="{padding:2}">
         <BoxPane orientation="vertical" styles="{fill:true,
             padding:{top:2, left:4, bottom:12, right:4}}">
@@ -40,6 +41,8 @@ limitations under the License.
                     </TextInput>
                 </Form.Section>
             </Form>
+            <Label text=""/> <!-- Spacer -->
+            <Label text="Disabled label with custom colors" styles="{color:13, disabledColor:18}" enabled="false"/>
         </BoxPane>
     </Border>
 
