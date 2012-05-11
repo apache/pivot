@@ -197,7 +197,7 @@ public class TerraRollupSkin extends RollupSkin {
     public TerraRollupSkin() {
         TerraTheme theme = (TerraTheme)Theme.getTheme();
 
-        buttonColor = theme.getColor(9);
+        buttonColor = theme.getColor(1);
         spacing = 4;
         buffer = 4;
         fill = false;
@@ -369,6 +369,11 @@ public class TerraRollupSkin extends RollupSkin {
         return buttonColor;
     }
 
+    public final void setButtonColor(int color) {
+        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        setButtonColor(theme.getColor(color));
+    }
+
     public void setButtonColor(Color buttonColor) {
         if (buttonColor == null) {
             throw new IllegalArgumentException("buttonColor is null.");
@@ -523,4 +528,5 @@ public class TerraRollupSkin extends RollupSkin {
 
         invalidateComponent();
     }
+
 }
