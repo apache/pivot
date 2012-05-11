@@ -40,6 +40,7 @@ Release Notes for Pivot 2.0.2:
     * [PIVOT-832] - FileBrowserSheet.setRootDirectory(...) fails the first time on drives other than system volume
     * [PIVOT-835] - TextPane is unusable in 2.0.1 release
     * [PIVOT-837] - TabPane with vertical tabOrientation and corner's content with top verticalAlignment
+	* [PIVOT-855] - Compilation errors with Java 7 (JDK 1.7)
 
 ** Task
 
