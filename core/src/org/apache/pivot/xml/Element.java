@@ -31,7 +31,7 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Node class representing an XML element.
  */
-public class Element extends Node implements List<Node>, Dictionary<String, String> {
+public class Element extends Node implements List<Node> {
     /**
      * Class representing an XML attribute.
      */
@@ -453,12 +453,108 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
         }
     }
 
+    /**
+
+     * Dictionary representing the attributes declared by this element.
+     */
+    public class ElementDictionary implements Dictionary<String, String> {
+        private ElementDictionary() {
+        }
+
+        /**
+         * Returns an attribute value.
+         *
+         * @param attributeName
+         *
+         * @return
+         * The value associated with the given attribute, or <tt>null</tt>
+         */
+        @Override
+        public String get(String attributeName) {
+            Attribute attribute = attributeMap.get(attributeName);
+            return (attribute == null) ? null : attribute.getValue();
+        }
+
+        /**
+         * Sets an attribute value.
+         *
+         * @param attributeName
+         * @param value
+         *
+         * @return
+         * The value previously associated with the given attribute, or <tt>null</tt>
+         * if the attribute did not previously exist.
+         */
+        @Override
+        public String put(String attributeName, String value) {
+            String previousValue;
+
+            Attribute attribute = attributeMap.get(attributeName);
+            if (attribute == null) {
+                previousValue = null;
+
+                String namespacePrefix;
+                String localName;
+                int i = attributeName.indexOf(':');
+                if (i == -1) {
+                    namespacePrefix = null;
+                    localName = attributeName;
+                } else {
+                    namespacePrefix = attributeName.substring(0, i);
+                    localName = attributeName.substring(i + 1);
+                }
+
+                attributeSequence.add(new Attribute(namespacePrefix, localName, value));
+            } else {
+                previousValue = attribute.getValue();
+                attribute.setValue(value);
+            }
+
+            return previousValue;
+        }
+
+        /**
+         * Removes an attribute.
+         *
+         * @param attributeName
+         *
+         * @return
+         * The value previously associated with the given attribute.
+         */
+        @Override
+        public String remove(String attributeName) {
+            Attribute attribute = attributeMap.get(attributeName);
+            if (attribute != null) {
+                attributeSequence.remove(attribute);
+            }
+
+            return (attribute == null) ? null : attribute.getValue();
+        }
+
+        /**
+         * Tests for the existence of an attribute.
+         *
+         * @param attributeName
+         *
+         * @return
+         * <tt>true</tt> if this element defines the given attribute; <tt>false<tt>,
+         * otherwise.
+         */
+        @Override
+        public boolean containsKey(String attributeName) {
+            return attributeMap.containsKey(attributeName);
+        }
+
+    }
+
+
     private String namespacePrefix;
     private String localName;
 
     private String defaultNamespaceURI = null;
     private HashMap<String, String> namespaces = new HashMap<String, String>();
     private NamespaceDictionary namespaceDictionary = new NamespaceDictionary();
+    private ElementDictionary elementDictionary = new ElementDictionary();
 
     private ArrayList<Attribute> attributes = new ArrayList<Attribute>();
     private AttributeSequence attributeSequence = new AttributeSequence();
@@ -577,6 +673,13 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
         }
 
         return namespaceURI;
+    }
+
+    /**
+     * Returns the element's element dictionary.
+     */
+    public ElementDictionary getElementDictionary() {
+        return elementDictionary;
     }
 
     /**
@@ -741,85 +844,6 @@ public class Element extends Node implements List<Node>, Dictionary<String, Stri
     @Override
     public Iterator<Node> iterator() {
         return new ImmutableIterator<Node>(nodes.iterator());
-    }
-
-    /**
-     * Returns an attribute value.
-     */
-    @Override
-    public String get(String attributeName) {
-        Attribute attribute = attributeMap.get(attributeName);
-        return (attribute == null) ? null : attribute.getValue();
-    }
-
-    /**
-     * Sets an attribute value.
-     *
-     * @param attributeName
-     * @param value
-     *
-     * @return
-     * The value previously associated with the given attribute, or <tt>null</tt>
-     * if the attribute did not previously exist.
-     */
-    @Override
-    public String put(String attributeName, String value) {
-        String previousValue;
-
-        Attribute attribute = attributeMap.get(attributeName);
-        if (attribute == null) {
-            previousValue = null;
-
-            String namespacePrefix;
-            String localName;
-            int i = attributeName.indexOf(':');
-            if (i == -1) {
-                namespacePrefix = null;
-                localName = attributeName;
-            } else {
-                namespacePrefix = attributeName.substring(0, i);
-                localName = attributeName.substring(i + 1);
-            }
-
-            attributeSequence.add(new Attribute(namespacePrefix, localName, value));
-        } else {
-            previousValue = attribute.getValue();
-            attribute.setValue(value);
-        }
-
-        return previousValue;
-    }
-
-    /**
-     * Removes an attribute.
-     *
-     * @param attributeName
-     *
-     * @return
-     * The value previously associated with the given attribute.
-     */
-    @Override
-    public String remove(String attributeName) {
-        Attribute attribute = attributeMap.get(attributeName);
-        if (attribute != null) {
-            attributeSequence.remove(attribute);
-        }
-
-        return (attribute == null) ? null : attribute.getValue();
-    }
-
-    /**
-     * Tests for the existence of an attribute.
-     *
-     * @param attributeName
-     *
-     * @return
-     * <tt>true</tt> if this element defines the given attribute; <tt>false<tt>,
-     * otherwise.
-     */
-    @Override
-    public boolean containsKey(String attributeName) {
-        return attributeMap.containsKey(attributeName);
     }
 
     /**

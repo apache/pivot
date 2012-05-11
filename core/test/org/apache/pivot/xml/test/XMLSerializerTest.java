@@ -42,15 +42,15 @@ public class XMLSerializerTest {
 
         Element a = XML.getElement(root, "a");
         assertEquals(a.getName(), "a");
-        assertEquals(a.get("id"), "x");
+        assertEquals(a.getElementDictionary().get("id"), "x");
 
         Element b = XML.getElement(root, "a/b");
         assertEquals(b.getName(), "b");
-        assertEquals(b.get("id"), "y");
+        assertEquals(b.getElementDictionary().get("id"), "y");
 
         b = XML.getElement(a, "b");
         assertEquals(b.getName(), "b");
-        assertEquals(b.get("id"), "y");
+        assertEquals(b.getElementDictionary().get("id"), "y");
 
         List<Element> cs = XML.getElements(root, "a/b", "c");
         assertEquals(cs.getLength(), 1);

@@ -170,7 +170,9 @@ public class XMLViewer implements Application {
     public void updateProperties() {
         Node node = (Node)treeView.getSelectedNode();
 
-        if (node instanceof TextNode) {
+        if (node == null) {
+            // no selection, but it's ok
+        } else if (node instanceof TextNode) {
             TextNode textNode = (TextNode)node;
             textArea.setText(textNode.getText());
             propertiesCardPane.setSelectedIndex(1);
@@ -208,7 +210,7 @@ public class XMLViewer implements Application {
 
                 String attributeName = attribute.getName();
                 row.put("name", attributeName);
-                row.put("value", element.get(attributeName));
+                row.put("value", element.getElementDictionary().get(attributeName));
                 attributesTableData.add(row);
             }
 
