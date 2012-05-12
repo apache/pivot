@@ -310,7 +310,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
      * Calculates the table row height, which is determined as the maximum
      * preferred height of all cell renderers.
      */
-    private int calculateFixedRowHeight(TableView tableView) {
+    private static int calculateFixedRowHeight(TableView tableView) {
         int fixedRowHeight = 0;
         TableView.ColumnSequence columns = tableView.getColumns();
 

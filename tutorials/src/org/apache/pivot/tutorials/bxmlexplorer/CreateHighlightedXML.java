@@ -132,7 +132,7 @@ public class CreateHighlightedXML {
         return buf.toString();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         DesktopApplicationContext.main(TestApplication.class, args);
     }
 

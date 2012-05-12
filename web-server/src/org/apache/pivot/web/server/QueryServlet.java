@@ -584,7 +584,7 @@ public abstract class QueryServlet extends HttpServlet {
         response.flushBuffer();
     }
 
-    private Path getPath(HttpServletRequest request) {
+    private static Path getPath(HttpServletRequest request) {
         String pathInfo = request.getPathInfo();
         Path path;
         if (pathInfo == null

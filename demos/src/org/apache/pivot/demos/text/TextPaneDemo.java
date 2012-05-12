@@ -460,7 +460,7 @@ public class TextPaneDemo implements Application {
         textPane.setSelection(selectionStart, selectionLength);
     }
 
-    private void applyStyleToTextNode(org.apache.pivot.wtk.Span selectionSpan,
+    private static void applyStyleToTextNode(org.apache.pivot.wtk.Span selectionSpan,
         StyleApplicator styleApplicator, org.apache.pivot.wtk.text.TextNode textNode,
         int characterCount, org.apache.pivot.wtk.Span textSpan) {
         if (selectionSpan.contains(textSpan)) {
@@ -525,7 +525,7 @@ public class TextPaneDemo implements Application {
         }
     }
 
-    private void applyStyleToSpanNode(org.apache.pivot.wtk.Span selectionSpan,
+    private static void applyStyleToSpanNode(org.apache.pivot.wtk.Span selectionSpan,
         StyleApplicator styleApplicator, TextSpan spanNode,
         int characterCount, org.apache.pivot.wtk.Span textSpan) {
         if (selectionSpan.contains(textSpan)) {

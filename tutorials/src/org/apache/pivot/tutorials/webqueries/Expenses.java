@@ -50,6 +50,8 @@ public class Expenses implements Application {
             System.out.println("Warning: Origin null, so for this application to run you have to set the following properties: \n"
                 + SECURE_KEY + ", " + HOSTNAME_KEY + ", " + PORT_KEY + "\n"
             );
+            System.exit(1);
+            return; // make Eclipse's null checker happy
         }
 
         if (properties.containsKey(SECURE_KEY)) {

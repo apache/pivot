@@ -258,7 +258,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addIntControl(final Dictionary<String, Object> dictionary,
+    private static Component addIntControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         int value = (Integer)dictionary.get(key);
 
@@ -299,7 +299,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addFloatControl(final Dictionary<String, Object> dictionary,
+    private static Component addFloatControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         float value = (Float)dictionary.get(key);
 
@@ -339,7 +339,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addDoubleControl(final Dictionary<String, Object> dictionary,
+    private static Component addDoubleControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         double value = (Double)dictionary.get(key);
 
@@ -379,7 +379,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addStringControl(final Dictionary<String, Object> dictionary,
+    private static Component addStringControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         String value = (String)dictionary.get(key);
 
@@ -466,7 +466,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addPointControl(final Dictionary<String, Object> dictionary,
+    private static Component addPointControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         Point point = (Point)dictionary.get(key);
 
@@ -559,7 +559,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addDimensionsControl(final Dictionary<String, Object> dictionary,
+    private static Component addDimensionsControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         Dimensions dimensions = (Dimensions)dictionary.get(key);
 
@@ -652,7 +652,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addLimitsControl(final Dictionary<String, Object> dictionary,
+    private static Component addLimitsControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         Limits limits = (Limits)dictionary.get(key);
 
@@ -745,7 +745,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addInsetsControl(final Dictionary<String, Object> dictionary,
+    private static Component addInsetsControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         Insets insets = (Insets)dictionary.get(key);
 
@@ -896,7 +896,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         return boxPane;
     }
 
-    private Component addSpanControl(final Dictionary<String, Object> dictionary,
+    private static Component addSpanControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         Span span = (Span)dictionary.get(key);
 
@@ -989,7 +989,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addCornerRadiiControl(final Dictionary<String, Object> dictionary,
+    private static Component addCornerRadiiControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         CornerRadii cornerRadii = (CornerRadii)dictionary.get(key);
 
@@ -1140,7 +1140,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         return boxPane;
     }
 
-    private Component addScopeControl(final Dictionary<String, Object> dictionary,
+    private static Component addScopeControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         Scope scope = (Scope)dictionary.get(key);
 
@@ -1272,7 +1272,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addColorControl(final Dictionary<String, Object> dictionary,
+    private static Component addColorControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         Color color = (Color)dictionary.get(key);
 
@@ -1307,7 +1307,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private Component addCalendarDateControl(final Dictionary<String, Object> dictionary,
+    private static Component addCalendarDateControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
         CalendarDate calendarDate = (CalendarDate)dictionary.get(key);
 
@@ -1343,7 +1343,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         }
     }
 
-    private void displayErrorMessage(Exception exception, Window window) {
+    private static void displayErrorMessage(Exception exception, Window window) {
         String message = exception.getLocalizedMessage();
 
         if (message == null) {

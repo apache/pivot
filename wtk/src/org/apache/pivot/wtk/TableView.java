@@ -1515,7 +1515,7 @@ public class TableView extends Component {
     }
 
     @SuppressWarnings("unchecked")
-    private Sequence<Span> parseSelectedRanges(String json)
+    private static Sequence<Span> parseSelectedRanges(String json)
         throws SerializationException {
         ArrayList<Span> selectedRanges = new ArrayList<Span>();
 
@@ -1887,7 +1887,7 @@ public class TableView extends Component {
     }
 
     @SuppressWarnings("unchecked")
-    private Sequence<Dictionary.Pair<String, SortDirection>> parseSort(String json)
+    private static Sequence<Dictionary.Pair<String, SortDirection>> parseSort(String json)
         throws SerializationException {
         ArrayList<Dictionary.Pair<String, SortDirection>> sort =
             new ArrayList<Dictionary.Pair<String, SortDirection>>();

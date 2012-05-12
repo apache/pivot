@@ -50,7 +50,7 @@ public class BuilderExample implements Application {
     public void resume() {
     }
 
-    private MyWindow buildWindow() {
+    private static MyWindow buildWindow() {
         final HashMap<String, Object> namespace = new HashMap<String, Object>();
 
         return new MyWindow() {

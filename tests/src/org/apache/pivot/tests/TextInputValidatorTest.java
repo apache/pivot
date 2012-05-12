@@ -104,7 +104,7 @@ public class TextInputValidatorTest  extends Application.Adapter {
         return false;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         DesktopApplicationContext.main(new String[] { TextInputValidatorTest.class.getName() });
     }
 

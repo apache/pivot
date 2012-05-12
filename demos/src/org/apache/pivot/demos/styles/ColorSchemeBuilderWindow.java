@@ -194,7 +194,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         colorPaletteTablePane.getStyles().put("verticalSpacing", 4);
     }
 
-    private Component createColorPaletteCell(int index) {
+    private static Component createColorPaletteCell(int index) {
         Border border = new Border();
         border.getStyles().put("backgroundColor", index);
 

@@ -316,7 +316,7 @@ public class XMLSerializer implements Serializer<Element> {
         }
     }
 
-    private void writeTextNode(TextNode textNode, XMLStreamWriter xmlStreamWriter)
+    private static void writeTextNode(TextNode textNode, XMLStreamWriter xmlStreamWriter)
         throws XMLStreamException {
         xmlStreamWriter.writeCharacters(textNode.getText());
     }

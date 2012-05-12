@@ -82,7 +82,7 @@ public class ColorPaletteTest implements Application {
     public void resume() {
     }
 
-    private Component createCell(int index) {
+    private static Component createCell(int index) {
         StackPane stackPane = new StackPane();
 
         Border border = new Border();

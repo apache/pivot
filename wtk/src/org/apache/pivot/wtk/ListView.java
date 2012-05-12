@@ -883,7 +883,7 @@ public class ListView extends Component {
     }
 
     @SuppressWarnings("unchecked")
-    private Sequence<Span> parseSelectedRanges(String json)
+    private static Sequence<Span> parseSelectedRanges(String json)
         throws SerializationException {
         ArrayList<Span> selectedRanges = new ArrayList<Span>();
 
