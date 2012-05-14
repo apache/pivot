@@ -74,12 +74,12 @@ limitations under the License.
                             <TableView.Column name="c" width="1*" headerData="Name" minimumWidth="50"/>
                         </columns>
 
-                        <tutorials:CustomTableRow a="true" b="@anchor.png" c="Anchor"/>
-                        <tutorials:CustomTableRow a="false" b="@bell.png" c="Bell"/>
-                        <tutorials:CustomTableRow a="false" b="@clock.png" c="Clock"/>
-                        <tutorials:CustomTableRow a="true" b="@cup.png" c="Cup"/>
-                        <tutorials:CustomTableRow a="false" b="@house.png" c="House"/>
-                        <tutorials:CustomTableRow a="true" b="@star.png" c="Star"/>
+                        <tutorials:KitchenSink.CustomTableRow a="true" b="@anchor.png" c="Anchor"/>
+                        <tutorials:KitchenSink.CustomTableRow a="false" b="@bell.png" c="Bell"/>
+                        <tutorials:KitchenSink.CustomTableRow a="false" b="@clock.png" c="Clock"/>
+                        <tutorials:KitchenSink.CustomTableRow a="true" b="@cup.png" c="Cup"/>
+                        <tutorials:KitchenSink.CustomTableRow a="false" b="@house.png" c="House"/>
+                        <tutorials:KitchenSink.CustomTableRow a="true" b="@star.png" c="Star"/>
                     </TableView>
 
                     <columnHeader>
