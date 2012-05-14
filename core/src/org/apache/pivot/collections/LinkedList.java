@@ -370,9 +370,9 @@ public class LinkedList<T> implements List<T>, Serializable {
             // Ensure that the new item is greater or equal to its
             // predecessor and less than or equal to its successor
             if ((previous != null
-                && comparator.compare(item, previous.item) == -1)
+                && comparator.compare(item, previous.item) < 0)
                 || (next != null
-                && comparator.compare(item, next.item) == 1)) {
+                && comparator.compare(item, next.item) > 0)) {
                 throw new IllegalArgumentException("Illegal item modification.");
             }
         }

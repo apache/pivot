@@ -269,9 +269,9 @@ public class ArrayList<T> implements List<T>, Serializable {
                 T successorItem = (index < length - 1 ? (T)items[index + 1] : null);
 
                 if ((predecessorItem != null
-                    && comparator.compare(item, predecessorItem) == -1)
+                    && comparator.compare(item, predecessorItem) < 0)
                     || (successorItem != null
-                    && comparator.compare(item, successorItem) == 1)) {
+                    && comparator.compare(item, successorItem) > 0)) {
                     throw new IllegalArgumentException("Illegal item modification.");
                 }
             }

@@ -121,9 +121,9 @@ public class ListAdapter<T> implements List<T>, Serializable {
             }
 
             if ((predecessor != null
-                    && comparator.compare(item, predecessor) == -1)
+                    && comparator.compare(item, predecessor) < 0)
                 || (successor != null
-                        && comparator.compare(item, successor) == 1)) {
+                        && comparator.compare(item, successor) > 0)) {
                 throw new IllegalArgumentException("Illegal item modification.");
             }
         }
