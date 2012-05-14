@@ -1193,7 +1193,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         // empty block
     }
 
-    // needed to run this as a Java Application
+    // useful to run this as a Java Application in a simpler way (directly)
     public static void main(String[] args) {
         DesktopApplicationContext.main(KitchenSink.class, args);
     }
