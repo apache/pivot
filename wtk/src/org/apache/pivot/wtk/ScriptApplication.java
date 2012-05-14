@@ -67,14 +67,14 @@ public class ScriptApplication implements Application {
 
         // Load the file and open the window
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(location, resources);
-        window.open(display);
+        this.window = (Window)bxmlSerializer.readObject(location, resources);
+        this.window.open(display);
     }
 
     @Override
     public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
+        if (this.window != null) {
+            this.window.close();
         }
 
         return false;
@@ -82,13 +82,16 @@ public class ScriptApplication implements Application {
 
     @Override
     public void resume() {
+        // empty block
     }
 
     @Override
     public void suspend() {
+        // empty block
     }
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(ScriptApplication.class, args);
     }
+
 }

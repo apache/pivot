@@ -25,11 +25,11 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Locale;
 
+import netscape.javascript.JSObject;
+
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.immutable.ImmutableMap;
-
-import netscape.javascript.JSObject;
 
 /**
  * Application context used to execute applications in a web browser.
@@ -51,6 +51,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
         private static final long serialVersionUID = -7710026348576806673L;
 
         private class InitCallback implements Runnable {
+            public InitCallback() {
+            }
+
             @Override
             public void run() {
                 // Set the origin
@@ -120,7 +123,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 }
 
                 // Load properties specified in the startup properties parameter
-                startupProperties = new HashMap<String, String>();
+                HostApplet.this.startupProperties = new HashMap<String, String>();
 
                 String startupPropertiesParameter = getParameter(STARTUP_PROPERTIES_PARAMETER);
                 if (startupPropertiesParameter != null) {
@@ -138,7 +141,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                             } catch (UnsupportedEncodingException exception) {
                                 throw new RuntimeException(exception);
                             }
-                            startupProperties.put(key, value);
+                            HostApplet.this.startupProperties.put(key, value);
                         } else {
                             System.err.println(argument + " is not a valid startup property.");
                         }
@@ -146,12 +149,12 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 }
 
                 // Create the display host
-                displayHost = new DisplayHost();
+                HostApplet.this.displayHost = new DisplayHost();
                 setLayout(new java.awt.BorderLayout());
-                add(displayHost);
+                add(HostApplet.this.displayHost);
 
                 // Add the display to the display list
-                displays.add(displayHost.getDisplay());
+                displays.add(HostApplet.this.displayHost.getDisplay());
 
                 // Disable focus traversal keys
                 setFocusTraversalKeysEnabled(false);
@@ -173,7 +176,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 } else {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
-                        application = (Application)applicationClass.newInstance();
+                        HostApplet.this.application = (Application)applicationClass.newInstance();
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
                     }
@@ -182,45 +185,54 @@ public final class BrowserApplicationContext extends ApplicationContext {
         }
 
         private class StartCallback implements Runnable {
+            public StartCallback() {
+            }
+
             @Override
             public void run() {
                 // Start the application
-                if (application != null) {
+                if (HostApplet.this.application != null) {
                     try {
-                        application.startup(displayHost.getDisplay(),
-                            new ImmutableMap<String, String>(startupProperties));
+                        HostApplet.this.application.startup(HostApplet.this.displayHost.getDisplay(),
+                            new ImmutableMap<String, String>(HostApplet.this.startupProperties));
                     } catch (Exception exception) {
                         displayException(exception);
                     }
 
                     // Add the application to the application list
-                    applications.add(application);
+                    applications.add(HostApplet.this.application);
                 }
             }
         }
 
         private class StopCallback implements Runnable {
+            public StopCallback() {
+            }
+
             @Override
             public void run() {
-                if (application != null) {
+                if (HostApplet.this.application != null) {
                     try {
-                        application.shutdown(false);
+                        HostApplet.this.application.shutdown(false);
                     } catch (Exception exception) {
                         displayException(exception);
                     }
 
                     // Remove the application from the application list
-                    applications.remove(application);
-                    application = null;
+                    applications.remove(HostApplet.this.application);
+                    HostApplet.this.application = null;
                 }
             }
         }
 
         private class DestroyCallback implements Runnable {
+            public DestroyCallback() {
+            }
+
             @Override
             public void run() {
                 // Remove the display from the display list
-                displays.remove(displayHost.getDisplay());
+                displays.remove(HostApplet.this.displayHost.getDisplay());
 
                 // Remove this applet from the host applets list and stop the timer
                 hostApplets.remove(HostApplet.this);
@@ -240,7 +252,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
         public static final String SYSTEM_PROPERTIES_PARAMETER = "system_properties";
 
         public Application getApplication() {
-            return application;
+            return this.application;
         }
 
         @Override
@@ -307,7 +319,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
             }
 
             Alert alert = new Alert(MessageType.ERROR, message, null, body, false);
-            alert.open(displayHost.getDisplay());
+            alert.open(this.displayHost.getDisplay());
         }
     }
 
@@ -369,4 +381,5 @@ public final class BrowserApplicationContext extends ApplicationContext {
             throw new UnsupportedOperationException(throwable);
         }
     }
+
 }

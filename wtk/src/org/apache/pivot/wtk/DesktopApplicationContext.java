@@ -21,6 +21,7 @@ import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.SplashScreen;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
@@ -54,10 +55,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
         public static class Adapter implements DisplayListener {
             @Override
             public void hostWindowOpened(Display display) {
+                // empty block
             }
 
             @Override
             public void hostWindowClosed(Display display) {
+                // empty block
             }
         }
 
@@ -134,29 +137,29 @@ public final class DesktopApplicationContext extends ApplicationContext {
             Display display = getDisplay();
             int n = display.getLength();
 
-            Window rootOwner;
+            Window rootOwnerLocal;
             if (n == 0) {
-                rootOwner = null;
+                rootOwnerLocal = null;
             } else {
                 Window topWindow = (Window)display.get(display.getLength() - 1);
-                rootOwner = topWindow.getRootOwner();
+                rootOwnerLocal = topWindow.getRootOwner();
             }
 
             Window previousRootOwner = this.rootOwner;
-            if (rootOwner != previousRootOwner) {
+            if (rootOwnerLocal != previousRootOwner) {
                 if (previousRootOwner != null) {
-                    previousRootOwner.getWindowListeners().remove(rootOwnerListener);
+                    previousRootOwner.getWindowListeners().remove(this.rootOwnerListener);
                 }
 
-                if (rootOwner != null) {
-                    rootOwner.getWindowListeners().add(rootOwnerListener);
+                if (rootOwnerLocal != null) {
+                    rootOwnerLocal.getWindowListeners().add(this.rootOwnerListener);
                 }
 
-                this.rootOwner = rootOwner;
+                this.rootOwner = rootOwnerLocal;
             }
 
-            if (updateHostWindowTitleBarCallback == null) {
-                updateHostWindowTitleBarCallback = new Runnable() {
+            if (this.updateHostWindowTitleBarCallback == null) {
+                this.updateHostWindowTitleBarCallback = new Runnable() {
                     @Override
                     public void run() {
                         java.awt.Window hostWindow = getDisplay().getHostWindow();
@@ -181,11 +184,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             }
                         }
 
-                        updateHostWindowTitleBarCallback = null;
+                        DesktopDisplayHost.this.updateHostWindowTitleBarCallback = null;
                     }
                 };
 
-                queueCallback(updateHostWindowTitleBarCallback);
+                queueCallback(this.updateHostWindowTitleBarCallback);
             }
         }
     }
@@ -295,7 +298,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             setBackground(null);
 
             // Add the display host
-            add(displayHost);
+            add(this.displayHost);
         }
 
         @Override
@@ -304,7 +307,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         public Display getDisplay() {
-            return displayHost.getDisplay();
+            return this.displayHost.getDisplay();
         }
 
         @Override
@@ -323,14 +326,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
             switch(event.getID()) {
                 case WindowEvent.WINDOW_OPENED: {
-                    Display display = displayHost.getDisplay();
+                    Display display = this.displayHost.getDisplay();
                     displays.add(display);
 
-                    if (displayCloseListener != null) {
-                        displayCloseListener.hostWindowOpened(display);
+                    if (this.displayCloseListener != null) {
+                        this.displayCloseListener.hostWindowOpened(display);
                     }
 
-                    displayHost.requestFocus();
+                    this.displayHost.requestFocus();
 
                     break;
                 }
@@ -341,11 +344,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 }
 
                 case WindowEvent.WINDOW_CLOSED: {
-                    Display display = displayHost.getDisplay();
+                    Display display = this.displayHost.getDisplay();
                     displays.remove(display);
 
-                    if (displayCloseListener != null) {
-                        displayCloseListener.hostWindowClosed(display);
+                    if (this.displayCloseListener != null) {
+                        this.displayCloseListener.hostWindowClosed(display);
                     }
 
                     break;
@@ -586,8 +589,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_F
-                    && (keyEvent.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) > 0
-                    && (keyEvent.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) > 0) {
+                    && (keyEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) > 0
+                    && (keyEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) > 0) {
                     setFullScreen(!isFullScreen());
                 }
             }
