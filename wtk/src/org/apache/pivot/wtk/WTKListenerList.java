@@ -19,7 +19,7 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * This is a customised subclass of ListenerList that adds thread-safety checks
+ * This is a customized subclass of ListenerList that adds thread-safety checks
  * for the WTK components.
  */
 public class WTKListenerList<T> extends ListenerList<T> {
