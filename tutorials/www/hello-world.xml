@@ -177,6 +177,20 @@ limitations under the License.
             <tt>DesktopApplicationContext</tt> loader application.
         </p>
 
+        <p>
+            Note that you can even add the main() method to be able to run the class as 
+            Standard Java Application in the usual way.
+        </p>
+        <source type="java" location="org/apache/pivot/tutorials/HelloJava.java">
+            <![CDATA[
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(HelloJava.class, args);
+                }
+            ]]>
+        </source>
+
+
+        <br/>
         <h3>The Window Class</h3>
         <p>
             A window is the top-level entry point into an application's user interface. Almost all
@@ -199,6 +213,7 @@ limitations under the License.
             detail in the <a href="windows.html">Windows</a> section.
         </p>
 
+        <br/>
         <h3>Styles</h3>
         <p>
             Styles are a means of customizing a component's appearance. Style properties are

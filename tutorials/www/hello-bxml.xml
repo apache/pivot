@@ -167,5 +167,19 @@ limitations under the License.
             of the examples in the following sections are executed using this class.
             Scripting is discussed in more detail in the <a href="scripting.html">Scripting</a> section.
         </p>
+
+        <p>
+            Note that you can even add the main() method to be able to run the class as 
+            Standard Java Application in the usual way.
+        </p>
+        <source type="java" location="org/apache/pivot/tutorials/HelloBXML.java">
+            <![CDATA[
+                public static void main(String[] args) {
+                    DesktopApplicationContext.main(HelloBXML.class, args);
+                }
+            ]]>
+        </source>
+
+
     </body>
 </document>
