@@ -118,55 +118,55 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         this.charset = charset;
 
         String resourceName = baseName.replace('.', '/');
-        resourceMap = readJSONResource(resourceName + "." + JSONSerializer.JSON_EXTENSION);
+        this.resourceMap = readJSONResource(resourceName + "." + JSONSerializer.JSON_EXTENSION);
 
         // Try to find resource for the language (e.g. resourceName_en)
         Map<String, Object> overrideMap = readJSONResource(resourceName + "_"
             + locale.getLanguage() + "." + JSONSerializer.JSON_EXTENSION);
         if (overrideMap != null) {
-            if (resourceMap == null) {
-                resourceMap = overrideMap;
+            if (this.resourceMap == null) {
+                this.resourceMap = overrideMap;
             } else {
-                applyOverrides(resourceMap, overrideMap);
+                applyOverrides(this.resourceMap, overrideMap);
             }
         }
 
         // Try to find resource for the entire locale (e.g. resourceName_en_GB)
         overrideMap = readJSONResource(resourceName + "_" + locale.toString() + "." + JSONSerializer.JSON_EXTENSION);
         if (overrideMap != null) {
-            if (resourceMap == null) {
-                resourceMap = overrideMap;
+            if (this.resourceMap == null) {
+                this.resourceMap = overrideMap;
             } else {
-                applyOverrides(resourceMap, overrideMap);
+                applyOverrides(this.resourceMap, overrideMap);
             }
         }
 
-        if (resourceMap == null) {
+        if (this.resourceMap == null) {
             throw new MissingResourceException("Can't find resource for base name "
                 + baseName + ", locale " + locale, baseName, "");
         }
     }
 
     public Resources getParent() {
-        return parent;
+        return this.parent;
     }
 
     public String getBaseName() {
-        return baseName;
+        return this.baseName;
     }
 
     public Locale getLocale() {
-        return locale;
+        return this.locale;
     }
 
     public Charset getCharset() {
-        return charset;
+        return this.charset;
     }
 
     @Override
     public Object get(String key) {
-        return (resourceMap.containsKey(key)) ?
-            resourceMap.get(key) : (parent == null) ? null : parent.get(key);
+        return (this.resourceMap.containsKey(key)) ?
+            this.resourceMap.get(key) : (this.parent == null) ? null : this.parent.get(key);
     }
 
     @Override
@@ -181,14 +181,14 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     @Override
     public boolean containsKey(String key) {
-        return resourceMap.containsKey(key)
-            || (parent != null
-                && parent.containsKey(key));
+        return this.resourceMap.containsKey(key)
+            || (this.parent != null
+                && this.parent.containsKey(key));
     }
 
     @Override
     public Iterator<String> iterator() {
-        return new ImmutableIterator<String>(resourceMap.iterator());
+        return new ImmutableIterator<String>(this.resourceMap.iterator());
     }
 
     @SuppressWarnings("unchecked")
@@ -211,21 +211,21 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     @SuppressWarnings("unchecked")
     private Map<String, Object> readJSONResource(String name)
         throws IOException, SerializationException {
-        Map<String, Object> resourceMap = null;
+        Map<String, Object> resourceMapFromResource = null;
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(name);
 
         if (inputStream != null) {
-            JSONSerializer serializer = new JSONSerializer(charset);
+            JSONSerializer serializer = new JSONSerializer(this.charset);
 
             try {
-                resourceMap = (Map<String, Object>)serializer.readObject(inputStream);
+                resourceMapFromResource = (Map<String, Object>)serializer.readObject(inputStream);
             } finally {
                 inputStream.close();
             }
         }
 
-        return resourceMap;
+        return resourceMapFromResource;
     }
 }

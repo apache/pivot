@@ -62,8 +62,8 @@ public final class Time implements Comparable<Time>, Serializable {
                 throw new IllegalArgumentException("range is null.");
             }
 
-            start = range.start;
-            end = range.end;
+            this.start = range.start;
+            this.end = range.end;
         }
 
         public Range(Dictionary<String, ?> range) {
@@ -71,32 +71,32 @@ public final class Time implements Comparable<Time>, Serializable {
                 throw new IllegalArgumentException("range is null.");
             }
 
-            Object start = range.get(START_KEY);
-            Object end = range.get(END_KEY);
+            Object startRange = range.get(START_KEY);
+            Object endRange = range.get(END_KEY);
 
-            if (start == null) {
+            if (startRange == null) {
                 throw new IllegalArgumentException(START_KEY + " is required.");
             }
 
-            if (end == null) {
+            if (endRange == null) {
                 throw new IllegalArgumentException(END_KEY + " is required.");
             }
 
-            if (start instanceof String) {
-                this.start = Time.decode((String)start);
+            if (startRange instanceof String) {
+                this.start = Time.decode((String)startRange);
             } else {
-                this.start = (Time)start;
+                this.start = (Time)startRange;
             }
 
-            if (end instanceof String) {
-                this.end = Time.decode((String)end);
+            if (endRange instanceof String) {
+                this.end = Time.decode((String)endRange);
             } else {
-                this.end = (Time)end;
+                this.end = (Time)endRange;
             }
         }
 
         public int getLength() {
-            return Math.abs(start.subtract(end)) + 1;
+            return Math.abs(this.start.subtract(this.end)) + 1;
         }
 
         public boolean contains(Range range) {
@@ -107,12 +107,12 @@ public final class Time implements Comparable<Time>, Serializable {
             Range normalizedRange = range.normalize();
 
             boolean contains;
-            if (start.compareTo(end) < 0) {
-                contains = (start.compareTo(normalizedRange.start) <= 0
-                    && end.compareTo(normalizedRange.end) >= 0);
+            if (this.start.compareTo(this.end) < 0) {
+                contains = (this.start.compareTo(normalizedRange.start) <= 0
+                    && this.end.compareTo(normalizedRange.end) >= 0);
             } else {
-                contains = (end.compareTo(normalizedRange.start) <= 0
-                    && start.compareTo(normalizedRange.end) >= 0);
+                contains = (this.end.compareTo(normalizedRange.start) <= 0
+                    && this.start.compareTo(normalizedRange.end) >= 0);
             }
 
             return contains;
@@ -124,12 +124,12 @@ public final class Time implements Comparable<Time>, Serializable {
             }
 
             boolean contains;
-            if (start.compareTo(end) < 0) {
-                contains = (start.compareTo(time) <= 0
-                    && end.compareTo(time) >= 0);
+            if (this.start.compareTo(this.end) < 0) {
+                contains = (this.start.compareTo(time) <= 0
+                    && this.end.compareTo(time) >= 0);
             } else {
-                contains = (end.compareTo(time) <= 0
-                    && start.compareTo(time) >= 0);
+                contains = (this.end.compareTo(time) <= 0
+                    && this.start.compareTo(time) >= 0);
             }
 
             return contains;
@@ -143,20 +143,20 @@ public final class Time implements Comparable<Time>, Serializable {
             Range normalizedRange = range.normalize();
 
             boolean intersects;
-            if (start.compareTo(end) < 0) {
-                intersects = (start.compareTo(normalizedRange.end) <= 0
-                    && end.compareTo(normalizedRange.start) >= 0);
+            if (this.start.compareTo(this.end) < 0) {
+                intersects = (this.start.compareTo(normalizedRange.end) <= 0
+                    && this.end.compareTo(normalizedRange.start) >= 0);
             } else {
-                intersects = (end.compareTo(normalizedRange.end) <= 0
-                    && start.compareTo(normalizedRange.start) >= 0);
+                intersects = (this.end.compareTo(normalizedRange.end) <= 0
+                    && this.start.compareTo(normalizedRange.start) >= 0);
             }
 
             return intersects;
         }
 
         public Range normalize() {
-            Time earlier = (start.compareTo(end) < 0 ? start : end);
-            Time later = (earlier == start ? end : start);
+            Time earlier = (this.start.compareTo(this.end) < 0 ? this.start : this.end);
+            Time later = (earlier == this.start ? this.end : this.start);
             return new Range(earlier, later);
         }
 
@@ -250,19 +250,21 @@ public final class Time implements Comparable<Time>, Serializable {
     }
 
     public Time(int milliseconds) {
-        milliseconds %= MILLISECONDS_PER_DAY;
-        milliseconds = (milliseconds + MILLISECONDS_PER_DAY) % MILLISECONDS_PER_DAY;
+        int msec = milliseconds;
 
-        hour = milliseconds / MILLISECONDS_PER_HOUR;
-        milliseconds %= MILLISECONDS_PER_HOUR;
+        msec %= MILLISECONDS_PER_DAY;
+        msec = (msec + MILLISECONDS_PER_DAY) % MILLISECONDS_PER_DAY;
 
-        minute = milliseconds / MILLISECONDS_PER_MINUTE;
-        milliseconds %= MILLISECONDS_PER_MINUTE;
+        this.hour = msec / MILLISECONDS_PER_HOUR;
+        msec %= MILLISECONDS_PER_HOUR;
 
-        second = milliseconds / MILLISECONDS_PER_SECOND;
-        milliseconds %= MILLISECONDS_PER_SECOND;
+        this.minute = msec / MILLISECONDS_PER_MINUTE;
+        msec %= MILLISECONDS_PER_MINUTE;
 
-        millisecond = milliseconds;
+        this.second = msec / MILLISECONDS_PER_SECOND;
+        msec %= MILLISECONDS_PER_SECOND;
+
+        this.millisecond = msec;
     }
 
     /**
@@ -309,24 +311,24 @@ public final class Time implements Comparable<Time>, Serializable {
      * The number of milliseconds since midnight represented by this time.
      */
     public int toMilliseconds() {
-        return hour * MILLISECONDS_PER_HOUR
-            + minute * MILLISECONDS_PER_MINUTE
-            + second * MILLISECONDS_PER_SECOND
-            + millisecond;
+        return this.hour * MILLISECONDS_PER_HOUR
+            + this.minute * MILLISECONDS_PER_MINUTE
+            + this.second * MILLISECONDS_PER_SECOND
+            + this.millisecond;
     }
 
     @Override
     public int compareTo(Time time) {
-        int result = hour - time.hour;
+        int result = this.hour - time.hour;
 
         if (result == 0) {
-            result = minute - time.minute;
+            result = this.minute - time.minute;
 
             if (result == 0) {
-                result = second - time.second;
+                result = this.second - time.second;
 
                 if (result == 0) {
-                    result = millisecond - time.millisecond;
+                    result = this.millisecond - time.millisecond;
                 }
             }
         }
@@ -337,20 +339,20 @@ public final class Time implements Comparable<Time>, Serializable {
     @Override
     public boolean equals(Object o) {
         return (o instanceof Time
-            && ((Time)o).hour == hour
-            && ((Time)o).minute == minute
-            && ((Time)o).second == second
-            && ((Time)o).millisecond == millisecond);
+            && ((Time)o).hour == this.hour
+            && ((Time)o).minute == this.minute
+            && ((Time)o).second == this.second
+            && ((Time)o).millisecond == this.millisecond);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + hour;
-        result = prime * result + minute;
-        result = prime * result + second;
-        result = prime * result + millisecond;
+        result = prime * result + this.hour;
+        result = prime * result + this.minute;
+        result = prime * result + this.second;
+        result = prime * result + this.millisecond;
         return result;
     }
 
@@ -362,17 +364,17 @@ public final class Time implements Comparable<Time>, Serializable {
         format.setGroupingUsed(false);
         format.setMinimumIntegerDigits(2);
 
-        buf.append(format.format(hour));
+        buf.append(format.format(this.hour));
         buf.append(":");
-        buf.append(format.format(minute));
+        buf.append(format.format(this.minute));
         buf.append(":");
-        buf.append(format.format(second));
+        buf.append(format.format(this.second));
 
-        if (millisecond > 0) {
+        if (this.millisecond > 0) {
             buf.append(".");
 
             format.setMinimumIntegerDigits(3);
-            buf.append(format.format(millisecond));
+            buf.append(format.format(this.millisecond));
         }
 
         return buf.toString();

@@ -34,12 +34,12 @@ public class ImmutableIterator<T> implements Iterator<T> {
 
     @Override
     public boolean hasNext() {
-        return iterator.hasNext();
+        return this.iterator.hasNext();
     }
 
     @Override
     public T next() {
-        return iterator.next();
+        return this.iterator.next();
     }
 
     @Override

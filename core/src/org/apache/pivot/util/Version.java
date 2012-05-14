@@ -69,26 +69,26 @@ public class Version implements Comparable<Version>, Serializable {
     }
 
     public byte getMajorRevision() {
-        return majorRevision;
+        return this.majorRevision;
     }
 
     public byte getMinorRevision() {
-        return minorRevision;
+        return this.minorRevision;
     }
 
     public byte getMaintenanceRevision() {
-        return maintenanceRevision;
+        return this.maintenanceRevision;
     }
 
     public byte getUpdateRevision() {
-        return updateRevision;
+        return this.updateRevision;
     }
 
     public int getNumber() {
-        int number = ((majorRevision) & 0xff) << (8 * 3)
-            | ((minorRevision) & 0xff) << (8 * 2)
-            | ((maintenanceRevision) & 0xff) << (8 * 1)
-            | ((updateRevision) & 0xff) << (8 * 0);
+        int number = ((this.majorRevision) & 0xff) << (8 * 3)
+            | ((this.minorRevision) & 0xff) << (8 * 2)
+            | ((this.maintenanceRevision) & 0xff) << (8 * 1)
+            | ((this.updateRevision) & 0xff) << (8 * 0);
 
         return number;
     }
@@ -111,13 +111,13 @@ public class Version implements Comparable<Version>, Serializable {
 
     @Override
     public String toString() {
-        String string = majorRevision
-            + "." + minorRevision
-            + "." + maintenanceRevision
-            + "_" + String.format("%02d", updateRevision);
+        String string = this.majorRevision
+            + "." + this.minorRevision
+            + "." + this.maintenanceRevision
+            + "_" + String.format("%02d", this.updateRevision);
 
-        if (build != null) {
-            string += "-" + build;
+        if (this.build != null) {
+            string += "-" + this.build;
         }
 
         return string;

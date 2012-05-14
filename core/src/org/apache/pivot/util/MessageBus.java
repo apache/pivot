@@ -35,7 +35,9 @@ public class MessageBus {
         ListenerList<MessageBusListener<?>> topicListeners = messageTopics.get(topic);
 
         if (topicListeners == null) {
-            topicListeners = new ListenerList<MessageBusListener<?>>() {};
+            topicListeners = new ListenerList<MessageBusListener<?>>() {
+                // empty block
+            };
             messageTopics.put(topic, topicListeners);
         }
 
@@ -43,7 +45,7 @@ public class MessageBus {
     }
 
     /**
-     * Unsubscribes a listener from a message topic.
+     * Unsubscribe a listener from a message topic.
      *
      * @param topic
      * @param messageListener

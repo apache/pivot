@@ -58,6 +58,6 @@ public class TypeLiteral<T> {
      * Gets underlying {@code Type} instance.
      */
     public final Type getType() {
-        return type;
+        return this.type;
     }
 }

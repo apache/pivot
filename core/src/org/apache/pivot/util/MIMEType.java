@@ -22,7 +22,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 
 /**
- * Utility class for introspecting a MIME type string.
+ * Utility class for introspection a MIME type string.
  */
 public class MIMEType implements Dictionary<String, String>, Iterable<String> {
     private String baseType;
@@ -37,42 +37,42 @@ public class MIMEType implements Dictionary<String, String>, Iterable<String> {
      * parameter values).
      */
     public String getBaseType() {
-        return baseType;
+        return this.baseType;
     }
 
     @Override
     public String get(String key) {
-        return parameters.get(key);
+        return this.parameters.get(key);
     }
 
     @Override
     public String put(String key, String value) {
-        return parameters.put(key, value);
+        return this.parameters.put(key, value);
     }
 
     @Override
     public String remove(String key) {
-        return parameters.remove(key);
+        return this.parameters.remove(key);
     }
 
     @Override
     public boolean containsKey(String key) {
-        return parameters.containsKey(key);
+        return this.parameters.containsKey(key);
     }
 
     @Override
     public Iterator<String> iterator() {
-        return new ImmutableIterator<String>(parameters.iterator());
+        return new ImmutableIterator<String>(this.parameters.iterator());
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append(baseType);
-        if (!parameters.isEmpty()) {
-            for (String parameter : parameters) {
-                stringBuilder.append("; " + parameter + "=" + parameters.get(parameter));
+        stringBuilder.append(this.baseType);
+        if (!this.parameters.isEmpty()) {
+            for (String parameter : this.parameters) {
+                stringBuilder.append("; " + parameter + "=" + this.parameters.get(parameter));
             }
         }
 
