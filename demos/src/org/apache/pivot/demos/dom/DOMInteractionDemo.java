@@ -30,7 +30,7 @@ import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class DOMInteractionDemo implements Application {
+public class DOMInteractionDemo extends Application.Adapter {
 
     private class CallFromBrowserCallback implements Runnable {
         String text;
@@ -83,14 +83,6 @@ public class DOMInteractionDemo implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public void sayHello(String helloText) {

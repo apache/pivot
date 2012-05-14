@@ -24,10 +24,10 @@ import org.junit.Test;
 
 public class TaskTest {
     public static class SleepTask extends Task<Void> {
-        private long timeout = 0;
+        private long timeoutSleepTask = 0;
 
         public SleepTask(long timeout) {
-            this.timeout = timeout;
+            this.timeoutSleepTask = timeout;
         }
 
         @Override
@@ -35,7 +35,7 @@ public class TaskTest {
             System.out.println("Starting task " + this + "...");
 
             try {
-                Thread.sleep(timeout);
+                Thread.sleep(timeoutSleepTask);
             } catch (InterruptedException exception) {
                 System.out.println(exception);
             }
@@ -47,7 +47,7 @@ public class TaskTest {
 
         @Override
         public String toString() {
-            return Long.toString(timeout);
+            return Long.toString(timeoutSleepTask);
         }
     }
 
@@ -84,6 +84,7 @@ public class TaskTest {
             try {
                 taskListener.wait();
             } catch (InterruptedException exception) {
+                // empty block
             }
         }
     }
@@ -121,6 +122,7 @@ public class TaskTest {
             try {
                 taskListener.wait();
             } catch (InterruptedException exception) {
+                // empty block
             }
         }
     }

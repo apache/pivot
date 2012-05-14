@@ -105,6 +105,7 @@ public class ProxyServlet extends HttpServlet {
 
     @Override
     public void destroy() {
+        // empty block
     }
 
     @Override
@@ -112,21 +113,21 @@ public class ProxyServlet extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         // Construct the URL
-        String path = this.path;
+        String pathLocal = this.path;
 
         String pathInfo = request.getPathInfo();
         if (pathInfo != null) {
-            path += "/" + pathInfo;
+            pathLocal += "/" + pathInfo;
         }
 
         String queryString = request.getQueryString();
         if (queryString != null) {
-            path += "?" + queryString;
+            pathLocal += "?" + queryString;
         }
 
         URL url = null;
         try {
-            url = new URL(request.getScheme(), hostname, port, path);
+            url = new URL(request.getScheme(), hostname, port, pathLocal);
         } catch(MalformedURLException exception) {
             throw new ServletException("Unable to construct URL.", exception);
         }

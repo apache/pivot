@@ -28,22 +28,27 @@ public interface ListListener<T> {
     public static class Adapter<T> implements ListListener<T> {
         @Override
         public void itemInserted(List<T> list, int index) {
+            // empty block
         }
 
         @Override
         public void itemsRemoved(List<T> list, int index, Sequence<T> items) {
+            // empty block
         }
 
         @Override
         public void itemUpdated(List<T> list, int index, T previousItem) {
+            // empty block
         }
 
         @Override
         public void listCleared(List<T> list) {
+            // empty block
         }
 
         @Override
         public void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
+            // empty block
         }
     }
 

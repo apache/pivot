@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.demos.million;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -26,16 +27,17 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.io.IOTask;
-import org.apache.pivot.serialization.CSVSerializerListener;
 import org.apache.pivot.serialization.CSVSerializer;
+import org.apache.pivot.serialization.CSVSerializerListener;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.concurrent.Task;
-import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
+import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListButton;
@@ -46,7 +48,11 @@ import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowComparator;
 
-public class LargeData implements Application {
+public class LargeData extends Application.Adapter {
+    private static final String USER_HOME = System.getProperty("user.home");
+
+    URL origin = null;
+
     private class LoadDataTask extends IOTask<Void> {
         private URL fileURL;
 
@@ -68,14 +74,14 @@ public class LargeData implements Application {
                         private ArrayList<Object> page = new ArrayList<Object>(pageSize);
 
                         @Override
-                        public void endList(CSVSerializer csvSerializer) {
+                        public void endList(CSVSerializer csvSerializerArgument) {
                             if (page.getLength() > 0) {
                                 ApplicationContext.queueCallback(new AddRowsCallback(page));
                             }
                         }
 
                         @Override
-                        public void readItem(CSVSerializer csvSerializer, Object item) {
+                        public void readItem(CSVSerializer csvSerializerArgument, Object item) {
                             page.add(item);
 
                             if (page.getLength() == pageSize) {
@@ -139,6 +145,12 @@ public class LargeData implements Application {
             throw new IllegalArgumentException(BASE_PATH_KEY + " is required.");
         }
 
+        origin = ApplicationContext.getOrigin();
+        if (origin == null) {
+            System.out.println("Running as a Standalone Java Application, so set as origin the user home: \"" + USER_HOME + "\"");
+            origin = (new File(USER_HOME).toURI()).toURL();
+        }
+        
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window)bxmlSerializer.readObject(LargeData.class, "large_data.bxml");
         fileListButton = (ListButton)bxmlSerializer.getNamespace().get("fileListButton");
@@ -172,11 +184,11 @@ public class LargeData implements Application {
         tableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
             @SuppressWarnings("unchecked")
-            public void sortChanged(TableView tableView) {
-                List<Object> tableData = (List<Object>)tableView.getTableData();
+            public void sortChanged(TableView tableViewArgument) {
+                List<Object> tableData = (List<Object>)tableViewArgument.getTableData();
 
                 long startTime = System.currentTimeMillis();
-                tableData.setComparator(new TableViewRowComparator(tableView));
+                tableData.setComparator(new TableViewRowComparator(tableViewArgument));
                 long endTime = System.currentTimeMillis();
 
                 statusLabel.setText("Data sorted in " + (endTime - startTime) + " ms.");
@@ -195,14 +207,6 @@ public class LargeData implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     private void loadData() {
         int index = fileListButton.getSelectedIndex();
         int capacity = (int)Math.pow(10, index + 1);
@@ -211,8 +215,6 @@ public class LargeData implements Application {
         pageSize = Math.max(capacity / 1000, 100);
 
         String fileName = (String)fileListButton.getSelectedItem();
-
-        URL origin = ApplicationContext.getOrigin();
 
         URL fileURL = null;
         try {
@@ -225,15 +227,18 @@ public class LargeData implements Application {
             statusLabel.setText("Loading " + fileURL);
 
             final long t0 = System.currentTimeMillis();
+            System.out.println("Loading \"" + fileURL + "\" ...");
 
             loadDataTask = new LoadDataTask(fileURL);
             loadDataTask.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
                 @Override
                 public void taskExecuted(Task<Void> task) {
                     long t1 = System.currentTimeMillis();
+                    String msg = "Read " + tableView.getTableData().getLength() + " rows in "
+                        + (t1 - t0) + "ms";
+                    System.out.println(msg);
 
-                    statusLabel.setText("Read " + tableView.getTableData().getLength() + " rows in "
-                        + (t1 - t0) + "ms");
+                    statusLabel.setText(msg);
                     loadDataButton.setEnabled(true);
                     cancelButton.setEnabled(false);
 
@@ -253,4 +258,9 @@ public class LargeData implements Application {
             }));
         }
     }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(LargeData.class, args);
+    }
+
 }

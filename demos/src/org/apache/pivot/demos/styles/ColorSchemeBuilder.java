@@ -21,7 +21,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
 
-public class ColorSchemeBuilder implements Application {
+public class ColorSchemeBuilder extends Application.Adapter {
     private ColorSchemeBuilderWindow window = null;
 
     @Override
@@ -41,11 +41,4 @@ public class ColorSchemeBuilder implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
 }

@@ -26,18 +26,22 @@ public interface QueryListener<V> {
     public static class Adapter<V> implements QueryListener<V> {
         @Override
         public void connected(Query<V> query) {
+            // empty block
         }
 
         @Override
         public void requestSent(Query<V> query) {
+            // empty block
         }
 
         @Override
         public void responseReceived(Query<V> query) {
+            // empty block
         }
 
         @Override
         public void failed(Query<V> query) {
+            // empty block
         }
     }
 

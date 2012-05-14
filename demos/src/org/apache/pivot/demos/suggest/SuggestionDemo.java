@@ -55,12 +55,12 @@ public class SuggestionDemo extends Window implements Bindable {
 
         textInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
-            public void textInserted(TextInput textInput, int index, int count) {
+            public void textInserted(TextInput textInputArgument, int index, int count) {
                 getSuggestions();
             }
 
             @Override
-            public void textRemoved(TextInput textInput, int index, int count) {
+            public void textRemoved(TextInput textInputArgument, int index, int count) {
                 if (suggestionQuery != null) {
                     suggestionQuery.abort();
                 }
@@ -114,16 +114,16 @@ public class SuggestionDemo extends Window implements Bindable {
                         suggestionPopup.setSuggestionData(suggestions);
                         suggestionPopup.open(textInput, new SuggestionPopupCloseListener() {
                             @Override
-                            public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
-                                if (suggestionPopup.getResult()) {
-                                    String text;
+                            public void suggestionPopupClosed(SuggestionPopup suggestionPopupArgument) {
+                                if (suggestionPopupArgument.getResult()) {
+                                    String textLocal;
                                     try {
-                                        text = URLEncoder.encode(textInput.getText(), "UTF-8");
+                                        textLocal = URLEncoder.encode(textInput.getText(), "UTF-8");
                                     } catch (UnsupportedEncodingException exception) {
                                         throw new RuntimeException(exception);
                                     }
 
-                                    String location = "http://search.yahoo.com/search?p=" + text;
+                                    String location = "http://search.yahoo.com/search?p=" + textLocal;
 
                                     try {
                                         Desktop.getDesktop().browse(new URI(location));

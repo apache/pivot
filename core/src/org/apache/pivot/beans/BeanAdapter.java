@@ -74,10 +74,10 @@ public class BeanAdapter implements Map<String, Object> {
                 throw new NoSuchElementException();
             }
 
-            String nextProperty = this.nextProperty;
+            String nextPropertyLocal = this.nextProperty;
             nextProperty();
 
-            return nextProperty;
+            return nextPropertyLocal;
         }
 
         private void nextProperty() {
@@ -138,6 +138,7 @@ public class BeanAdapter implements Map<String, Object> {
             }
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }

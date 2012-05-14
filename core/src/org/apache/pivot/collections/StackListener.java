@@ -28,18 +28,22 @@ public interface StackListener<T> {
     public static class Adapter<T> implements StackListener<T> {
         @Override
         public void itemPushed(Stack<T> stack, T item) {
+            // empty block
         }
 
         @Override
         public void itemPopped(Stack<T> stack, T item) {
+            // empty block
         }
 
         @Override
         public void stackCleared(Stack<T> stack) {
+            // empty block
         }
 
         @Override
         public void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator) {
+            // empty block
         }
     }
 

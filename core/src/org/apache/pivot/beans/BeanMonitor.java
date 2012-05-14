@@ -78,9 +78,10 @@ public class BeanMonitor {
             }
         }
 
-        public void propertyChanged(Object bean, String propertyName) {
+        @Override
+        public void propertyChanged(Object beanArgument, String propertyName) {
             for (PropertyChangeListener listener : this) {
-                listener.propertyChanged(bean, propertyName);
+                listener.propertyChanged(beanArgument, propertyName);
             }
         }
     }

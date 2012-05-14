@@ -90,17 +90,17 @@ public class XMLSerializerTest {
         XMLSerializer xmlSerializer = new XMLSerializer();
         XMLSerializerListener xmlSerializerListener = new XMLSerializerListener() {
             @Override
-            public void beginElement(XMLSerializer xmlSerializer, Element element) {
+            public void beginElement(XMLSerializer xmlSerializerArgument, Element element) {
                 System.out.println("Begin element: " + element);
             }
 
             @Override
-            public void endElement(XMLSerializer xmlSerializer) {
+            public void endElement(XMLSerializer xmlSerializerArgument) {
                 System.out.println("End element");
             }
 
             @Override
-            public void readTextNode(XMLSerializer xmlSerializer, TextNode textNode) {
+            public void readTextNode(XMLSerializer xmlSerializerArgument, TextNode textNode) {
                 System.out.println("Read text node: " + textNode);
             }
         };

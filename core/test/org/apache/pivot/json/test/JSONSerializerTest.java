@@ -85,47 +85,47 @@ public class JSONSerializerTest {
         JSONSerializer jsonSerializer = new JSONSerializer();
         JSONSerializerListener jsonSerializerListener = new JSONSerializerListener() {
             @Override
-            public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value) {
+            public void beginDictionary(JSONSerializer jsonSerializerArgument, Dictionary<String, ?> value) {
                 System.out.println("Begin dictionary: " + value);
             }
 
             @Override
-            public void endDictionary(JSONSerializer jsonSerializer) {
+            public void endDictionary(JSONSerializer jsonSerializerArgument) {
                 System.out.println("End dictionary");
             }
 
             @Override
-            public void readKey(JSONSerializer jsonSerializer, String key) {
+            public void readKey(JSONSerializer jsonSerializerArgument, String key) {
                 System.out.println("Read key: " + key);
             }
 
             @Override
-            public void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value) {
+            public void beginSequence(JSONSerializer jsonSerializerArgument, Sequence<?> value) {
                 System.out.println("Begin sequence: " + value);
             }
 
             @Override
-            public void endSequence(JSONSerializer jsonSerializer) {
+            public void endSequence(JSONSerializer jsonSerializerArgument) {
                 System.out.println("End sequence");
             }
 
             @Override
-            public void readString(JSONSerializer jsonSerializer, String value) {
+            public void readString(JSONSerializer jsonSerializerArgument, String value) {
                 System.out.println("Read string: " + value);
             }
 
             @Override
-            public void readNumber(JSONSerializer jsonSerializer, Number value) {
+            public void readNumber(JSONSerializer jsonSerializerArgument, Number value) {
                 System.out.println("Read number: " + value);
             }
 
             @Override
-            public void readBoolean(JSONSerializer jsonSerializer, Boolean value) {
+            public void readBoolean(JSONSerializer jsonSerializerArgument, Boolean value) {
                 System.out.println("Read boolean: " + value);
             }
 
             @Override
-            public void readNull(JSONSerializer jsonSerializer) {
+            public void readNull(JSONSerializer jsonSerializerArgument) {
                 System.out.println("Read null");
             }
         };

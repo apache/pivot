@@ -26,14 +26,17 @@ public interface XMLSerializerListener {
     public static class Adapter implements XMLSerializerListener {
         @Override
         public void beginElement(XMLSerializer xmlSerializer, Element element) {
+            // empty block
         }
 
         @Override
         public void endElement(XMLSerializer xmlSerializer) {
+            // empty block
         }
 
         @Override
         public void readTextNode(XMLSerializer xmlSerializer, TextNode textNode) {
+            // empty block
         }
     }
 

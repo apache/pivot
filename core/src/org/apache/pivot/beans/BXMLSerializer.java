@@ -203,6 +203,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             this.functionName = functionName;
         }
 
+        @Override
         public Object evaluate(Object value) {
             Bindings bindings = scriptEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
             if (bindings.containsKey(functionName)) {
@@ -391,6 +392,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     /** DO NOT USE. see https://issues.apache.org/jira/browse/PIVOT-742 */
+    @SuppressWarnings("unused")
     @Deprecated
     public BXMLSerializer(final ClassLoader classLoader) {
         throw new UnsupportedOperationException("https://issues.apache.org/jira/browse/PIVOT-742");
@@ -466,7 +468,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         // Apply the namespace bindings
         for (Attribute attribute : namespaceBindingAttributes) {
-            Element element = attribute.element;
+            Element elementLocal = attribute.element;
             String sourcePath = (String)attribute.value;
 
             NamespaceBinding.BindMapping bindMapping;
@@ -479,16 +481,16 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 bindMapping = new ScriptBindMapping(scriptEngineManager.getEngineByName(language), bindFunction);
             }
 
-            switch (element.type) {
+            switch (elementLocal.type) {
                 case INSTANCE:
                 case INCLUDE: {
                     // Bind to <element ID>.<attribute name>
-                    if (element.id == null) {
-                        element.id = INTERNAL_ID_PREFIX + Integer.toString(nextID++);
-                        namespace.put(element.id, element.value);
+                    if (elementLocal.id == null) {
+                        elementLocal.id = INTERNAL_ID_PREFIX + Integer.toString(nextID++);
+                        namespace.put(elementLocal.id, elementLocal.value);
                     }
 
-                    String targetPath = element.id + "." + attribute.name;
+                    String targetPath = elementLocal.id + "." + attribute.name;
                     NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath,
                         bindMapping);
                     namespaceBinding.bind();
@@ -498,16 +500,20 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                 case READ_ONLY_PROPERTY: {
                     // Bind to <parent element ID>.<element name>.<attribute name>
-                    if (element.parent.id == null) {
-                        element.parent.id = INTERNAL_ID_PREFIX + Integer.toString(nextID++);
-                        namespace.put(element.parent.id, element.parent.value);
+                    if (elementLocal.parent.id == null) {
+                        elementLocal.parent.id = INTERNAL_ID_PREFIX + Integer.toString(nextID++);
+                        namespace.put(elementLocal.parent.id, elementLocal.parent.value);
                     }
 
-                    String targetPath = element.parent.id + "." + element.name + "." + attribute.name;
+                    String targetPath = elementLocal.parent.id + "." + elementLocal.name + "." + attribute.name;
                     NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath,
                         bindMapping);
                     namespaceBinding.bind();
 
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }
@@ -572,11 +578,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
 
         // throw a nice error so the user knows which resource did not load
-        URL location = baseType.getResource(resourceName);
-        if (location == null) {
+        URL locationLocal = baseType.getResource(resourceName);
+        if (locationLocal == null) {
             throw new IllegalArgumentException("could not find resource " + resourceName);
         }
-        return readObject(location, localize ? new Resources(baseType.getName()) : null);
+        return readObject(locationLocal, localize ? new Resources(baseType.getName()) : null);
     }
 
     /**
@@ -587,37 +593,37 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * resolution must manually set this property via a call to
      * {@link #setResources(Resources)} before calling this method.
      *
-     * @param location
+     * @param locationArgument
      * The location of the BXML resource.
      *
      * @see #readObject(URL, Resources)
      */
-    public final Object readObject(URL location)
+    public final Object readObject(URL locationArgument)
         throws IOException, SerializationException {
-        return readObject(location, null);
+        return readObject(locationArgument, null);
     }
 
     /**
      * Deserializes an object hierarchy from a BXML resource.
      *
-     * @param location
+     * @param locationArgument
      * The location of the BXML resource.
      *
-     * @param resources
+     * @param resourcesArgument
      * The resources that will be used to localize the deserialized resource.
      *
      * #see readObject(InputStream)
      */
-    public final Object readObject(URL location, Resources resources)
+    public final Object readObject(URL locationArgument, Resources resourcesArgument)
         throws IOException, SerializationException {
-        if (location == null) {
+        if (locationArgument == null) {
             throw new IllegalArgumentException("location is null.");
         }
 
-        this.location = location;
-        this.resources = resources;
+        this.location = locationArgument;
+        this.resources = resourcesArgument;
 
-        InputStream inputStream = new BufferedInputStream(location.openStream());
+        InputStream inputStream = new BufferedInputStream(locationArgument.openStream());
 
         Object object;
         try {
@@ -818,9 +824,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             String src = element.properties.get(INCLUDE_SRC_ATTRIBUTE);
 
-            Resources resources = this.resources;
+            Resources resourcesLocal = this.resources;
             if (element.properties.containsKey(INCLUDE_RESOURCES_ATTRIBUTE)) {
-                resources = new Resources(resources,
+                resourcesLocal = new Resources(resourcesLocal,
                     element.properties.get(INCLUDE_RESOURCES_ATTRIBUTE));
             }
 
@@ -866,11 +872,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             }
 
             // Determine location from src attribute
-            URL location;
+            URL locationLocal;
             if (src.charAt(0) == '/') {
-                location = classLoader.getResource(src.substring(1));
+                locationLocal = classLoader.getResource(src.substring(1));
             } else {
-                location = new URL(this.location, src);
+                locationLocal = new URL(this.location, src);
             }
 
             // Set optional resolution properties
@@ -880,12 +886,12 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     resolvable.setNamespace(namespace);
                 }
 
-                resolvable.setLocation(location);
-                resolvable.setResources(resources);
+                resolvable.setLocation(locationLocal);
+                resolvable.setResources(resourcesLocal);
             }
 
             // Read the object
-            InputStream inputStream = new BufferedInputStream(location.openStream());
+            InputStream inputStream = new BufferedInputStream(locationLocal.openStream());
             try {
                 element.value = serializer.readObject(inputStream);
             } finally {
@@ -973,6 +979,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                     case REFERENCE: {
                         property = (localName.equals(REFERENCE_ID_ATTRIBUTE));
+                        break;
+                    }
+
+                    default: {
+                        break;
                     }
                 }
 

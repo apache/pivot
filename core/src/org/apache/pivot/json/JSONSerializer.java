@@ -281,7 +281,7 @@ public class JSONSerializer implements Serializer<Object> {
         return object;
     }
 
-    private Object readValue(Reader reader, Type type)
+    private Object readValue(Reader reader, Type typeArgument)
         throws IOException, SerializationException {
         Object object = null;
 
@@ -294,15 +294,15 @@ public class JSONSerializer implements Serializer<Object> {
         if (c == 'n') {
             object = readNullValue(reader);
         } else if (c == '"' || c == '\'') {
-            object = readStringValue(reader, type);
+            object = readStringValue(reader, typeArgument);
         } else if (c == '+' || c == '-' || Character.isDigit(c)) {
-            object = readNumberValue(reader, type);
+            object = readNumberValue(reader, typeArgument);
         } else if (c == 't' || c == 'f') {
-            object = readBooleanValue(reader, type);
+            object = readBooleanValue(reader, typeArgument);
         } else if (c == '[') {
-            object = readListValue(reader, type);
+            object = readListValue(reader, typeArgument);
         } else if (c == '{') {
-            object = readMapValue(reader, type);
+            object = readMapValue(reader, typeArgument);
         } else {
             throw new SerializationException("Unexpected character in input stream.");
         }
@@ -445,10 +445,10 @@ public class JSONSerializer implements Serializer<Object> {
         return stringBuilder.toString();
     }
 
-    private Object readStringValue(Reader reader, Type type)
+    private Object readStringValue(Reader reader, Type typeArgument)
         throws IOException, SerializationException {
-        if (!(type instanceof Class<?>)) {
-            throw new SerializationException("Cannot convert string to " + type + ".");
+        if (!(typeArgument instanceof Class<?>)) {
+            throw new SerializationException("Cannot convert string to " + typeArgument + ".");
         }
 
         String string = readString(reader);
@@ -458,13 +458,13 @@ public class JSONSerializer implements Serializer<Object> {
             jsonSerializerListeners.readString(this, string);
         }
 
-        return BeanAdapter.coerce(string, (Class<?>)type);
+        return BeanAdapter.coerce(string, (Class<?>)typeArgument);
     }
 
-    private Object readNumberValue(Reader reader, Type type)
+    private Object readNumberValue(Reader reader, Type typeArgument)
         throws IOException, SerializationException {
-        if (!(type instanceof Class<?>)) {
-            throw new SerializationException("Cannot convert number to " + type + ".");
+        if (!(typeArgument instanceof Class<?>)) {
+            throw new SerializationException("Cannot convert number to " + typeArgument + ".");
         }
 
         Number number = null;
@@ -503,13 +503,13 @@ public class JSONSerializer implements Serializer<Object> {
             jsonSerializerListeners.readNumber(this, number);
         }
 
-        return BeanAdapter.coerce(number, (Class<?>)type);
+        return BeanAdapter.coerce(number, (Class<?>)typeArgument);
     }
 
-    private Object readBooleanValue(Reader reader, Type type)
+    private Object readBooleanValue(Reader reader, Type typeArgument)
         throws IOException, SerializationException {
-        if (!(type instanceof Class<?>)) {
-            throw new SerializationException("Cannot convert boolean to " + type + ".");
+        if (!(typeArgument instanceof Class<?>)) {
+            throw new SerializationException("Cannot convert boolean to " + typeArgument + ".");
         }
 
         String text = (c == 't') ? "true" : "false";
@@ -537,22 +537,22 @@ public class JSONSerializer implements Serializer<Object> {
             jsonSerializerListeners.readBoolean(this, value);
         }
 
-        return BeanAdapter.coerce(value, (Class<?>)type);
+        return BeanAdapter.coerce(value, (Class<?>)typeArgument);
     }
 
     @SuppressWarnings("unchecked")
-    private Object readListValue(Reader reader, Type type)
+    private Object readListValue(Reader reader, Type typeArgument)
         throws IOException, SerializationException {
         Sequence<Object> sequence = null;
         Type itemType = null;
 
-        if (type == Object.class) {
+        if (typeArgument == Object.class) {
             // Return the default sequence and item types
             sequence = new ArrayList<Object>();
             itemType = Object.class;
         } else {
             // Determine the item type from generic parameters
-            Type parentType = type;
+            Type parentType = typeArgument;
             while (parentType != null) {
                 if (parentType instanceof ParameterizedType) {
                     ParameterizedType parameterizedType = (ParameterizedType)parentType;
@@ -600,11 +600,11 @@ public class JSONSerializer implements Serializer<Object> {
 
             // Instantiate the sequence type
             Class<?> sequenceType;
-            if (type instanceof ParameterizedType) {
-                ParameterizedType parameterizedType = (ParameterizedType)type;
+            if (typeArgument instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType)typeArgument;
                 sequenceType = (Class<?>)parameterizedType.getRawType();
             } else {
-                sequenceType = (Class<?>)type;
+                sequenceType = (Class<?>)typeArgument;
             }
 
             try {
@@ -653,18 +653,18 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     @SuppressWarnings("unchecked")
-    private Object readMapValue(Reader reader, Type type)
+    private Object readMapValue(Reader reader, Type typeArgument)
         throws IOException, SerializationException {
         Dictionary<String, Object> dictionary = null;
         Type valueType = null;
 
-        if (type == Object.class) {
+        if (typeArgument == Object.class) {
             // Return the default dictionary and value types
             dictionary = new HashMap<String, Object>();
             valueType = Object.class;
         } else {
             // Determine the value type from generic parameters
-            Type parentType = type;
+            Type parentType = typeArgument;
             while (parentType != null) {
                 if (parentType instanceof ParameterizedType) {
                     ParameterizedType parameterizedType = (ParameterizedType)parentType;
@@ -708,7 +708,7 @@ public class JSONSerializer implements Serializer<Object> {
 
             // Instantiate the dictionary or bean type
             if (valueType == null) {
-                Class<?> beanType = (Class<?>)type;
+                Class<?> beanType = (Class<?>)typeArgument;
 
                 try {
                     dictionary = new BeanAdapter(beanType.newInstance());
@@ -719,11 +719,11 @@ public class JSONSerializer implements Serializer<Object> {
                 }
             } else {
                 Class<?> dictionaryType;
-                if (type instanceof ParameterizedType) {
-                    ParameterizedType parameterizedType = (ParameterizedType)type;
+                if (typeArgument instanceof ParameterizedType) {
+                    ParameterizedType parameterizedType = (ParameterizedType)typeArgument;
                     dictionaryType = (Class<?>)parameterizedType.getRawType();
                 } else {
-                    dictionaryType = (Class<?>)type;
+                    dictionaryType = (Class<?>)typeArgument;
                 }
 
                 try {
@@ -893,9 +893,9 @@ public class JSONSerializer implements Serializer<Object> {
             StringBuilder stringBuilder = new StringBuilder();
 
             for (int i = 0, n = string.length(); i < n; i++) {
-                char c = string.charAt(i);
+                char ci = string.charAt(i);
 
-                switch(c) {
+                switch(ci) {
                     case '\t': {
                         stringBuilder.append("\\t");
                         break;
@@ -909,17 +909,17 @@ public class JSONSerializer implements Serializer<Object> {
                     case '\\':
                     case '\"':
                     case '\'': {
-                        stringBuilder.append("\\" + c);
+                        stringBuilder.append("\\" + ci);
                         break;
                     }
 
                     default: {
                         if (charset.name().startsWith("UTF")
-                            || c <= 0xFF) {
-                            stringBuilder.append(c);
+                            || ci <= 0xFF) {
+                            stringBuilder.append(ci);
                         } else {
                             stringBuilder.append("\\u");
-                            stringBuilder.append(String.format("%04x", (short)c));
+                            stringBuilder.append(String.format("%04x", (short)ci));
                         }
                     }
                 }
@@ -980,14 +980,14 @@ public class JSONSerializer implements Serializer<Object> {
                 StringBuilder keyStringBuilder = new StringBuilder();
 
                 for (int j = 0, n = key.length(); j < n; j++) {
-                    char c = key.charAt(j);
-                    identifier &= Character.isJavaIdentifierPart(c);
+                    char cj = key.charAt(j);
+                    identifier &= Character.isJavaIdentifierPart(cj);
 
-                    if (c == '"') {
+                    if (cj == '"') {
                         keyStringBuilder.append('\\');
                     }
 
-                    keyStringBuilder.append(c);
+                    keyStringBuilder.append(cj);
                 }
 
                 key = keyStringBuilder.toString();

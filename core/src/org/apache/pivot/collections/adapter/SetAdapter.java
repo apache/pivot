@@ -119,9 +119,9 @@ public class SetAdapter<E> implements Set<E>, Serializable {
             try {
                 Constructor<?> constructor = this.set.getClass().getConstructor(Comparator.class);
                 if (constructor != null) {
-                    java.util.SortedSet<E> set = (java.util.SortedSet<E>)constructor.newInstance(comparator);
-                    set.addAll(this.set);
-                    this.set = set;
+                    java.util.SortedSet<E> setLocal = (java.util.SortedSet<E>)constructor.newInstance(comparator);
+                    setLocal.addAll(this.set);
+                    this.set = setLocal;
                 }
             } catch (SecurityException exception) {
                 throw new RuntimeException(exception);

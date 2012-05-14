@@ -36,7 +36,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     private class KeyIterator implements Iterator<K> {
         private int bucketIndex;
         private Iterator<Pair<K, V>> entryIterator;
-        private int count;
+        private int countLocal;
 
         private Pair<K, V> entry = null;
 
@@ -44,12 +44,12 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             bucketIndex = 0;
             entryIterator = getBucketIterator(bucketIndex);
 
-            count = HashMap.this.count;
+            countLocal = HashMap.this.count;
         }
 
         @Override
         public boolean hasNext() {
-            if (count != HashMap.this.count) {
+            if (countLocal != HashMap.this.count) {
                 throw new ConcurrentModificationException();
             }
 
@@ -81,7 +81,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             }
 
             entryIterator.remove();
-            count--;
+            countLocal--;
             HashMap.this.count--;
 
             if (mapListeners != null) {
@@ -91,8 +91,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             entry = null;
         }
 
-        private Iterator<Pair<K, V>> getBucketIterator(int bucketIndex) {
-            LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
+        private Iterator<Pair<K, V>> getBucketIterator(int bucketIndexArgument) {
+            LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndexArgument);
 
             return (bucket == null) ? new EmptyIterator<Pair<K,V>>() : bucket.iterator();
         }
@@ -406,12 +406,12 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         } else {
             if (keys == null) {
                 // Populate key list
-                ArrayList<K> keys = new ArrayList<K>((int)(getCapacity() * loadFactor));
+                ArrayList<K> keysLocal = new ArrayList<K>((int)(getCapacity() * loadFactor));
                 for (K key : this) {
-                    keys.add(key);
+                    keysLocal.add(key);
                 }
 
-                this.keys = keys;
+                this.keys = keysLocal;
             }
 
             keys.setComparator(comparator);

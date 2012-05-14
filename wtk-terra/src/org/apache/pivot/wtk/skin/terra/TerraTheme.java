@@ -270,7 +270,7 @@ public final class TerraTheme extends Theme {
     }
 
     private void loadMessageIcons(Map<String, String> messageIconNames,
-        HashMap<MessageType, Image> messageIcons) {
+        HashMap<MessageType, Image> messageIconsLocal) {
         for (String messageIconType : messageIconNames) {
             String messageIconName = messageIconNames.get(messageIconType);
 
@@ -281,7 +281,7 @@ public final class TerraTheme extends Theme {
                 throw new RuntimeException(exception);
             }
 
-            messageIcons.put(MessageType.valueOf(messageIconType.toUpperCase(Locale.ENGLISH)), messageIcon);
+            messageIconsLocal.put(MessageType.valueOf(messageIconType.toUpperCase(Locale.ENGLISH)), messageIcon);
         }
     }
 

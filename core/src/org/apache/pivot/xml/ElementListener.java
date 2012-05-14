@@ -28,30 +28,37 @@ public interface ElementListener {
     public static class Adapter implements ElementListener {
         @Override
         public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
+            // empty block
         }
 
         @Override
         public void namespaceAdded(Element element, String prefix) {
+            // empty block
         }
 
         @Override
         public void namespaceUpdated(Element element, String prefix, String previousURI) {
+            // empty block
         }
 
         @Override
         public void namespaceRemoved(Element element, String prefix, String uri) {
+            // empty block
         }
 
         @Override
         public void attributeInserted(Element element, int index) {
+            // empty block
         }
 
         @Override
         public void attributesRemoved(Element element, int index, Sequence<Element.Attribute> attributes) {
+            // empty block
         }
 
         @Override
         public void attributeValueChanged(Element.Attribute attribute, String previousValue) {
+            // empty block
         }
     }
 

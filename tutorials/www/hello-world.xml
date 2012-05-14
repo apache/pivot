@@ -178,7 +178,7 @@ limitations under the License.
         </p>
 
         <p>
-            Note that you can even add the main() method to be able to run the class as 
+            Note that you can even add the main() method to be able to run the class as
             Standard Java Application in the usual way.
         </p>
         <source type="java" location="org/apache/pivot/tutorials/HelloJava.java">

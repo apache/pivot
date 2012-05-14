@@ -352,12 +352,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             fields &= ~CHECK_STATE_MASK;
 
             switch (checkState) {
-            case CHECKED:
-                fields |= CHECK_STATE_CHECKED_MASK;
-                break;
-            case MIXED:
-                fields |= CHECK_STATE_MIXED_MASK;
-                break;
+                case CHECKED:
+                    fields |= CHECK_STATE_CHECKED_MASK;
+                    break;
+                case MIXED:
+                    fields |= CHECK_STATE_MIXED_MASK;
+                    break;
+                case UNCHECKED:
+                    break;
             }
         }
 
@@ -391,13 +393,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         @SuppressWarnings("unchecked")
         public void loadChildren() {
             if (children == null) {
-                List<Object> data = (List<Object>)this.data;
-                int count = data.getLength();
+                List<Object> dataLocal = (List<Object>)this.data;
+                int count = dataLocal.getLength();
 
                 children = new ArrayList<NodeInfo>(count);
 
                 for (int i = 0; i < count; i++) {
-                    Object nodeData = data.get(i);
+                    Object nodeData = dataLocal.get(i);
                     NodeInfo childNodeInfo = NodeInfo.newInstance(treeView, this, nodeData);
                     children.add(childNodeInfo);
                 }
@@ -640,9 +642,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             if (treeView.isEnabled()) {
                 if (selected) {
                     // Paint the selection state
-                    Color selectionBackgroundColor = treeView.isFocused() ?
+                    Color selectionBackgroundColorLocal = treeView.isFocused() ?
                         this.selectionBackgroundColor : inactiveSelectionBackgroundColor;
-                    graphics.setPaint(selectionBackgroundColor);
+                    graphics.setPaint(selectionBackgroundColorLocal);
                     graphics.fillRect(0, nodeY, width, nodeHeight);
                 } else if (highlighted && !disabled) {
                     // Paint the highlight state
@@ -665,16 +667,16 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     if (showBranchControl) {
                         expanded = branchInfo.isExpanded();
 
-                        Color branchControlColor;
+                        Color branchControlColorLocal;
 
                         if (selected) {
                             if (treeView.isFocused()) {
-                                branchControlColor = branchControlSelectionColor;
+                                branchControlColorLocal = branchControlSelectionColor;
                             } else {
-                                branchControlColor = branchControlInactiveSelectionColor;
+                                branchControlColorLocal = branchControlInactiveSelectionColor;
                             }
                         } else {
-                            branchControlColor = this.branchControlColor;
+                            branchControlColorLocal = this.branchControlColor;
                         }
 
                         GeneralPath shape = new GeneralPath();
@@ -702,7 +704,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                             branchControlGraphics.setComposite
                                 (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
                         }
-                        branchControlGraphics.setPaint(branchControlColor);
+                        branchControlGraphics.setPaint(branchControlColorLocal);
                         branchControlGraphics.fill(shape);
                         branchControlGraphics.dispose();
                     }
@@ -1419,6 +1421,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 for (int n = visibleNodes.getLength(), nodeDepth = youngerSibling.depth;
                     insertIndex < n && visibleNodes.get(insertIndex).depth > nodeDepth;
                     insertIndex++) {
+                    // empty block
                 }
             }
 
@@ -1471,6 +1474,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 for (int n = visibleNodes.getLength(), nodeDepth = last.depth;
                     rangeEnd < n && visibleNodes.get(rangeEnd).depth > nodeDepth;
                     rangeEnd++) {
+                    // empty block
                 }
 
                 visibleNodes.remove(rangeStart, rangeEnd - rangeStart);

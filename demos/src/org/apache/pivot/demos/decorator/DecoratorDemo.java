@@ -75,13 +75,16 @@ public class DecoratorDemo implements Application {
 
     @Override
     public void suspend() {
+        // empty block
     }
 
     @Override
     public void resume() {
+        // empty block
     }
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(DecoratorDemo.class, args);
     }
+
 }

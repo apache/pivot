@@ -110,22 +110,22 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             ColorChooserButtonSelectionListener colorChooserButtonSelectionListener =
                 new ColorChooserButtonSelectionListener() {
                 @Override
-                public void selectedColorChanged(ColorChooserButton colorChooserButton,
+                public void selectedColorChanged(ColorChooserButton colorChooserButtonArgument,
                     Color previousSelectedColor) {
-                    Color selectedColor = colorChooserButton.getSelectedColor();
+                    Color selectedColor = colorChooserButtonArgument.getSelectedColor();
                     redSpinner.setSelectedItem(selectedColor.getRed());
                     greenSpinner.setSelectedItem(selectedColor.getGreen());
                     blueSpinner.setSelectedItem(selectedColor.getBlue());
 
                     // Update the theme
                     TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
-                    int i = colorChooserButtons.indexOf(colorChooserButton);
-                    terraTheme.setBaseColor(i, colorChooserButtons.get(i).getSelectedColor());
+                    int iLocal = colorChooserButtons.indexOf(colorChooserButtonArgument);
+                    terraTheme.setBaseColor(iLocal, colorChooserButtons.get(iLocal).getSelectedColor());
 
                     // Update the palette
-                    int offset = i * 3;
+                    int offset = iLocal * 3;
                     for (int j = 0; j < 3; j++) {
-                        Component colorPaletteCell = colorPaletteTablePane.getRows().get(i).get(j);
+                        Component colorPaletteCell = colorPaletteTablePane.getRows().get(iLocal).get(j);
                         colorPaletteCell.getStyles().put("backgroundColor", offset + j);
                     }
 

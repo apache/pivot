@@ -277,34 +277,34 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int width = getWidth();
         int height = getHeight();
 
-        Color backgroundColor;
-        Color borderColor;
-        Color bevelColor;
+        Color backgroundColorLocal;
+        Color borderColorLocal;
+        Color bevelColorLocal;
 
         if (textInput.isEnabled()) {
             if (textInput.isTextValid()) {
-                backgroundColor = this.backgroundColor;
-                bevelColor = this.bevelColor;
+                backgroundColorLocal = this.backgroundColor;
+                bevelColorLocal = this.bevelColor;
             } else {
-                backgroundColor = invalidBackgroundColor;
-                bevelColor = invalidBevelColor;
+                backgroundColorLocal = invalidBackgroundColor;
+                bevelColorLocal = invalidBevelColor;
             }
 
-            borderColor = this.borderColor;
+            borderColorLocal = this.borderColor;
         } else {
-            backgroundColor = disabledBackgroundColor;
-            borderColor = disabledBorderColor;
-            bevelColor = disabledBevelColor;
+            backgroundColorLocal = disabledBackgroundColor;
+            borderColorLocal = disabledBorderColor;
+            bevelColorLocal = disabledBevelColor;
         }
 
         graphics.setStroke(new BasicStroke());
 
         // Paint the background
-        graphics.setColor(backgroundColor);
+        graphics.setColor(backgroundColorLocal);
         graphics.fillRect(0, 0, width, height);
 
         // Paint the bevel
-        graphics.setColor(bevelColor);
+        graphics.setColor(bevelColorLocal);
         GraphicsUtilities.drawLine(graphics, 0, 0, width, Orientation.HORIZONTAL);
 
         // Paint the content
@@ -331,25 +331,25 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         } else {
             boolean textValid = textInput.isTextValid();
 
-            Color color;
+            Color colorLocal;
             if (textInput.isEnabled()) {
                 if (!textValid) {
-                    color = invalidColor;
+                    colorLocal = invalidColor;
                 } else {
-                    color = this.color;
+                    colorLocal = this.color;
                 }
             } else {
-               color = disabledColor;
+               colorLocal = disabledColor;
             }
 
-            caretColor = color;
+            caretColor = colorLocal;
 
             if (glyphVector != null) {
                 graphics.setFont(font);
 
                 if (selection == null) {
                     // Paint the text
-                    graphics.setColor(color);
+                    graphics.setColor(colorLocal);
                     graphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1,
                         (height - textHeight) / 2 + ascent);
                 } else {
@@ -359,29 +359,29 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     unselectedArea.subtract(new Area(selection));
 
                     Graphics2D textGraphics = (Graphics2D)graphics.create();
-                    textGraphics.setColor(color);
+                    textGraphics.setColor(colorLocal);
                     textGraphics.clip(unselectedArea);
                     textGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1,
                         (height - textHeight) / 2 + ascent);
                     textGraphics.dispose();
 
                     // Paint the selection
-                    Color selectionColor;
-                    Color selectionBackgroundColor;
+                    Color selectionColorLocal;
+                    Color selectionBackgroundColorLocal;
 
                     if (textInput.isFocused() && textInput.isEditable()) {
-                        selectionColor = this.selectionColor;
-                        selectionBackgroundColor = this.selectionBackgroundColor;
+                        selectionColorLocal = this.selectionColor;
+                        selectionBackgroundColorLocal = this.selectionBackgroundColor;
                     } else {
-                        selectionColor = inactiveSelectionColor;
-                        selectionBackgroundColor = inactiveSelectionBackgroundColor;
+                        selectionColorLocal = inactiveSelectionColor;
+                        selectionBackgroundColorLocal = inactiveSelectionBackgroundColor;
                     }
 
-                    graphics.setColor(selectionBackgroundColor);
+                    graphics.setColor(selectionBackgroundColorLocal);
                     graphics.fill(selection);
 
                     Graphics2D selectedTextGraphics = (Graphics2D)graphics.create();
-                    selectedTextGraphics.setColor(selectionColor);
+                    selectedTextGraphics.setColor(selectionColorLocal);
                     selectedTextGraphics.clip(selection.getBounds());
                     selectedTextGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1,
                         (height - textHeight) / 2 + ascent);
@@ -399,10 +399,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
 
         // Paint the border
-        graphics.setColor(borderColor);
+        graphics.setColor(borderColorLocal);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
     }
 
+    @Override
     public int getInsertionPoint(int x) {
         int offset = -1;
 
@@ -448,6 +449,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return offset;
     }
 
+    @Override
     public Bounds getCharacterBounds(int index) {
         Bounds characterBounds = null;
 

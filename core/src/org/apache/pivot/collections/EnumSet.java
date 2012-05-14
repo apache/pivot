@@ -59,11 +59,11 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
                 throw new NoSuchElementException();
             }
 
-            E next = this.next;
+            E nextLocal = this.next;
             this.next = null;
             i++;
 
-            return next;
+            return nextLocal;
         }
 
         @Override

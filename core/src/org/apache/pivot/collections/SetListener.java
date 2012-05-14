@@ -28,18 +28,22 @@ public interface SetListener<E> {
     public static class Adapter<E> implements SetListener<E> {
         @Override
         public void elementAdded(Set<E> set, E element) {
+            // empty block
         }
 
         @Override
         public void elementRemoved(Set<E> set, E element) {
+            // empty block
         }
 
         @Override
         public void setCleared(Set<E> set) {
+            // empty block
         }
 
         @Override
         public void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
+            // empty block
         }
     }
 

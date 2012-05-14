@@ -45,8 +45,8 @@ public class EditGreetingSheet extends Sheet implements Bindable {
     private Resources resources = null;
 
     @Override
-    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        this.resources = resources;
+    public void initialize(Map<String, Object> namespace, URL location, Resources resourcesArgument) {
+        this.resources = resourcesArgument;
 
         cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -85,4 +85,5 @@ public class EditGreetingSheet extends Sheet implements Bindable {
             super.close(result);
         }
     }
+
 }

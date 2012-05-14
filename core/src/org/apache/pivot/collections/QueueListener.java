@@ -28,18 +28,22 @@ public interface QueueListener<T> {
     public static class Adapter<T> implements QueueListener<T> {
         @Override
         public void itemEnqueued(Queue<T> queue, T item) {
+            // empty block
         }
 
         @Override
         public void itemDequeued(Queue<T> queue, T item) {
+            // empty block
         }
 
         @Override
         public void queueCleared(Queue<T> queue) {
+            // empty block
         }
 
         @Override
         public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator) {
+            // empty block
         }
     }
 

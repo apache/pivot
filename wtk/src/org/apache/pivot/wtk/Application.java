@@ -32,6 +32,7 @@ public interface Application {
     public static class Adapter implements Application {
         @Override
         public void startup(Display display, Map<String, String> properties) throws Exception {
+            // empty block
         }
 
         @Override
@@ -41,10 +42,12 @@ public interface Application {
 
         @Override
         public void suspend() throws Exception {
+            // empty block
         }
 
         @Override
         public void resume() throws Exception {
+            // empty block
         }
     }
 
@@ -72,14 +75,17 @@ public interface Application {
         public static class Adapter implements UnprocessedKeyHandler {
             @Override
             public void keyTyped(char character) {
+                // empty block
             }
 
             @Override
             public void keyPressed(int keyCode, KeyLocation keyLocation) {
+                // empty block
             }
 
             @Override
             public void keyReleased(int keyCode, KeyLocation keyLocation) {
+                // empty block
             }
         }
 

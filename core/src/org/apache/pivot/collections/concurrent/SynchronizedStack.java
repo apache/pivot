@@ -82,6 +82,7 @@ public class SynchronizedStack<T> implements Stack<T> {
             stackListeners.itemPopped(this, item);
         }
         catch(InterruptedException exception) {
+            // empty block
         }
 
         return item;

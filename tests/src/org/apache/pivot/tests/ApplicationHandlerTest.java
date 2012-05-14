@@ -24,8 +24,8 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Window;
 
-public class ApplicationHandlerTest implements Application,
-    Application.UnprocessedKeyHandler, Application.UncaughtExceptionHandler {
+public class ApplicationHandlerTest extends Application.Adapter
+    implements Application.UnprocessedKeyHandler, Application.UncaughtExceptionHandler {
     private Window window = null;
 
     @Override
@@ -43,14 +43,6 @@ public class ApplicationHandlerTest implements Application,
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     @Override

@@ -493,18 +493,18 @@ public class Element extends Node implements List<Node> {
             if (attribute == null) {
                 previousValue = null;
 
-                String namespacePrefix;
-                String localName;
+                String namespacePrefixElementDictionary;
+                String localNameElementDictionary;
                 int i = attributeName.indexOf(':');
                 if (i == -1) {
-                    namespacePrefix = null;
-                    localName = attributeName;
+                    namespacePrefixElementDictionary = null;
+                    localNameElementDictionary = attributeName;
                 } else {
-                    namespacePrefix = attributeName.substring(0, i);
-                    localName = attributeName.substring(i + 1);
+                    namespacePrefixElementDictionary = attributeName.substring(0, i);
+                    localNameElementDictionary = attributeName.substring(i + 1);
                 }
 
-                attributeSequence.add(new Attribute(namespacePrefix, localName, value));
+                attributeSequence.add(new Attribute(namespacePrefixElementDictionary, localNameElementDictionary, value));
             } else {
                 previousValue = attribute.getValue();
                 attribute.setValue(value);

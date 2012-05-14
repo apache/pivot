@@ -106,6 +106,7 @@ public class FileDropTargetDemo extends Window implements Bindable {
 
             @Override
             public void dragExit(Component component) {
+                // empty block
             }
 
             @Override
@@ -128,8 +129,8 @@ public class FileDropTargetDemo extends Window implements Bindable {
                 if (dragContent.containsFileList()) {
                     try {
                         FileList tableData = (FileList)fileTableView.getTableData();
-                        FileList fileList = dragContent.getFileList();
-                        for (File file : fileList) {
+                        FileList fileListLocal = dragContent.getFileList();
+                        for (File file : fileListLocal) {
                             if (file.isDirectory()) {
                                 // TODO Expand recursively
                             }

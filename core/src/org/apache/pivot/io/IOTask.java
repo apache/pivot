@@ -112,7 +112,7 @@ public abstract class IOTask<V> extends Task<V> {
         }
 
         @Override
-        public void mark(int readLimit) {
+        public synchronized void mark(int readLimit) {
             if (abort) {
                 throw new AbortException();
             }
@@ -122,7 +122,7 @@ public abstract class IOTask<V> extends Task<V> {
         }
 
         @Override
-        public void reset() throws IOException {
+        public synchronized void reset() throws IOException {
             if (abort) {
                 throw new AbortException();
             }

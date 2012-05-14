@@ -81,6 +81,7 @@ public class SynchronizedQueue<T> implements Queue<T> {
             item = queue.dequeue();
             queueListeners.itemDequeued(this, item);
         } catch(InterruptedException exception) {
+            // empty block
         }
 
         return item;

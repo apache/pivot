@@ -26,14 +26,17 @@ public interface ComponentDataListener {
     public static class Adapter implements ComponentDataListener {
         @Override
         public void valueAdded(Component component, String key) {
+            // empty block
         }
 
         @Override
         public void valueUpdated(Component component, String key, Object previousValue) {
+            // empty block
         }
 
         @Override
         public void valueRemoved(Component component, String key, Object value) {
+            // empty block
         }
     }
 

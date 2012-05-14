@@ -37,16 +37,16 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     private class ArrayListItemIterator implements ItemIterator<T> {
         private int index = 0;
-        private int modificationCount;
+        private int modificationCountLocal;
         private boolean forward = true;
 
         public ArrayListItemIterator() {
-            modificationCount = ArrayList.this.modificationCount;
+            modificationCountLocal = ArrayList.this.modificationCount;
         }
 
         @Override
         public boolean hasNext() {
-            if (modificationCount != ArrayList.this.modificationCount) {
+            if (modificationCountLocal != ArrayList.this.modificationCount) {
                 throw new ConcurrentModificationException();
             }
 
@@ -65,7 +65,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
         @Override
         public boolean hasPrevious() {
-            if (modificationCount != ArrayList.this.modificationCount) {
+            if (modificationCountLocal != ArrayList.this.modificationCount) {
                 throw new ConcurrentModificationException();
             }
 
@@ -97,7 +97,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             indexBoundsCheck();
 
             ArrayList.this.insert(item, index);
-            modificationCount++;
+            modificationCountLocal++;
         }
 
         @Override
@@ -105,7 +105,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             indexBoundsCheck();
 
             ArrayList.this.update(forward ? index - 1 : index, item);
-            modificationCount++;
+            modificationCountLocal++;
         }
 
         @Override
@@ -117,7 +117,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             }
 
             ArrayList.this.remove(index, 1);
-            modificationCount++;
+            modificationCountLocal++;
         }
 
         private void indexBoundsCheck() {
@@ -394,20 +394,20 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     public void trimToSize() {
-        Object[] items = new Object[length];
-        System.arraycopy(this.items, 0, items, 0, length);
+        Object[] itemsLocal = new Object[length];
+        System.arraycopy(this.items, 0, itemsLocal, 0, length);
 
-        this.items = items;
-        length = items.length;
+        this.items = itemsLocal;
+        length = itemsLocal.length;
     }
 
     public void ensureCapacity(int capacity) {
         if (capacity > items.length) {
             capacity = Math.max(this.items.length * 3 / 2, capacity);
-            Object[] items = new Object[capacity];
-            System.arraycopy(this.items, 0, items, 0, length);
+            Object[] itemsLocal = new Object[capacity];
+            System.arraycopy(this.items, 0, itemsLocal, 0, length);
 
-            this.items = items;
+            this.items = itemsLocal;
         }
     }
 

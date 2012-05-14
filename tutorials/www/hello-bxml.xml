@@ -103,12 +103,12 @@ limitations under the License.
         </source>
 
         <p>
-		    You can run this example as a Standard Java Application executing ScriptApplication in the following way:<br/>
-			org.apache.pivot.wtk.ScriptApplication --src=/org/apache/pivot/tutorials/hello.bxml
+            You can run this example as a Standard Java Application executing ScriptApplication in the following way:<br/>
+            org.apache.pivot.wtk.ScriptApplication --src=/org/apache/pivot/tutorials/hello.bxml
         </p>
 
         <p>
-            Note that you can even add the main() method to be able to run the class as 
+            Note that you can even add the main() method to be able to run the class as
             Standard Java Application in the usual way.
         </p>
         <source type="java" location="org/apache/pivot/tutorials/HelloBXML.java">
@@ -179,8 +179,8 @@ limitations under the License.
         </p>
 
         <p>
-		    You can run this example as a Standard Java Application executing ScriptApplication in the following way:<br/>
-			org.apache.pivot.wtk.ScriptApplication --src=/org/apache/pivot/tutorials/hello_javascript.bxml
+            You can run this example as a Standard Java Application executing ScriptApplication in the following way:<br/>
+            org.apache.pivot.wtk.ScriptApplication --src=/org/apache/pivot/tutorials/hello_javascript.bxml
         </p>
 
         <p>
@@ -192,11 +192,11 @@ limitations under the License.
         </p>
 
         <p>
-		    Accessing BXML resources is the same as accessing any other kind of resources from within a Java application,
-			following the same rules of standard ClassLoader resource retrieval methods.
-			<br/>
-			Note that it's not mandatory to use BXML files within Pivot (all could be done in Java or any JVM compatible language),
-			but BXML is a much more convenient method for specifying the UI layout.
+            Accessing BXML resources is the same as accessing any other kind of resources from within a Java application,
+            following the same rules of standard ClassLoader resource retrieval methods.
+            <br/>
+            Note that it's not mandatory to use BXML files within Pivot (all could be done in Java or any JVM compatible language),
+            but BXML is a much more convenient method for specifying the UI layout.
         </p>
 
         <br/>

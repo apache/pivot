@@ -86,6 +86,7 @@ public class NodeRenderer extends Label implements TreeView.NodeRenderer {
         }
     }
 
+    @Override
     public String toString(Object node) {
         String string;
         if (node instanceof Element) {

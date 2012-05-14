@@ -375,7 +375,7 @@ public abstract class Query<V> extends IOTask<V> {
         URL location = getLocation();
         HttpURLConnection connection = null;
 
-        Serializer<Object> serializer = (Serializer<Object>)this.serializer;
+        Serializer<Object> serializerLocal = (Serializer<Object>)this.serializer;
 
         bytesSent = 0;
         bytesReceived = 0;
@@ -408,7 +408,7 @@ public abstract class Query<V> extends IOTask<V> {
 
             // Set the request headers
             if (value != null) {
-                connection.setRequestProperty("Content-Type", serializer.getMIMEType(value));
+                connection.setRequestProperty("Content-Type", serializerLocal.getMIMEType(value));
             }
 
             for (String key : requestHeaders) {
@@ -434,7 +434,7 @@ public abstract class Query<V> extends IOTask<V> {
                 OutputStream outputStream = null;
                 try {
                     outputStream = connection.getOutputStream();
-                    serializer.writeObject(value, new MonitoredOutputStream(outputStream));
+                    serializerLocal.writeObject(value, new MonitoredOutputStream(outputStream));
                 } finally {
                     if (outputStream != null) {
                         outputStream.close();
@@ -471,7 +471,7 @@ public abstract class Query<V> extends IOTask<V> {
                 InputStream inputStream = null;
                 try {
                     inputStream = connection.getInputStream();
-                    value = serializer.readObject(new MonitoredInputStream(inputStream));
+                    value = serializerLocal.readObject(new MonitoredInputStream(inputStream));
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();

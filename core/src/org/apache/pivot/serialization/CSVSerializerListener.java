@@ -28,14 +28,17 @@ public interface CSVSerializerListener {
     public static class Adapter implements CSVSerializerListener {
         @Override
         public void beginList(CSVSerializer csvSerializer, List<?> list) {
+            // empty block
         }
 
         @Override
         public void endList(CSVSerializer csvSerializer) {
+            // empty block
         }
 
         @Override
         public void readItem(CSVSerializer csvSerializer, Object item) {
+            // empty block
         }
     }
 

@@ -117,6 +117,7 @@ public class DragAndDropDemo extends Window implements Bindable {
 
             @Override
             public void dragExit(Component component) {
+                // empty block
             }
 
             @Override
@@ -240,6 +241,7 @@ public class DragAndDropDemo extends Window implements Bindable {
 
             @Override
             public void dragExit(Component component) {
+                // empty block
             }
 
             @Override
@@ -310,8 +312,8 @@ public class DragAndDropDemo extends Window implements Bindable {
 
             @Override
             public boolean beginDrag(Component component, int x, int y) {
-                ListView listView = (ListView)component;
-                FileList fileList = (FileList)listView.getListData();
+                ListView listViewLocal = (ListView)component;
+                FileList fileList = (FileList)listViewLocal.getListData();
 
                 if (fileList.getLength() > 0) {
                     content = new LocalManifest();
@@ -368,6 +370,7 @@ public class DragAndDropDemo extends Window implements Bindable {
 
             @Override
             public void dragExit(Component component) {
+                // empty block
             }
 
             @Override

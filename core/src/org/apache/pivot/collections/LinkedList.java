@@ -54,15 +54,15 @@ public class LinkedList<T> implements List<T>, Serializable {
         private Node<T> current = null;
         private boolean forward = false;
 
-        private int modificationCount;
+        private int modificationCountLocal;
 
         public LinkedListItemIterator() {
-            modificationCount = LinkedList.this.modificationCount;
+            modificationCountLocal = LinkedList.this.modificationCount;
         }
 
         @Override
         public boolean hasNext() {
-            if (modificationCount != LinkedList.this.modificationCount) {
+            if (modificationCountLocal != LinkedList.this.modificationCount) {
                 throw new ConcurrentModificationException();
             }
 
@@ -91,7 +91,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
         @Override
         public boolean hasPrevious() {
-            if (modificationCount != LinkedList.this.modificationCount) {
+            if (modificationCountLocal != LinkedList.this.modificationCount) {
                 throw new ConcurrentModificationException();
             }
 
@@ -164,7 +164,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             LinkedList.this.insert(item, previous, next);
 
             length++;
-            modificationCount++;
+            modificationCountLocal++;
             LinkedList.this.modificationCount++;
 
             if (listListeners != null) {
@@ -184,7 +184,7 @@ public class LinkedList<T> implements List<T>, Serializable {
                 verifyLocation(item, current.previous, current.next);
 
                 current.item = item;
-                modificationCount++;
+                modificationCountLocal++;
                 LinkedList.this.modificationCount++;
 
                 if (listListeners != null) {
@@ -221,7 +221,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
 
             length--;
-            modificationCount++;
+            modificationCountLocal++;
             LinkedList.this.modificationCount++;
 
             if (listListeners != null) {

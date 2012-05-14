@@ -23,7 +23,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TabPane;
 
-public class BuilderExample implements Application {
+public class BuilderExample extends Application.Adapter {
     private MyWindow myWindow = null;
 
     @Override
@@ -40,14 +40,6 @@ public class BuilderExample implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private static MyWindow buildWindow() {

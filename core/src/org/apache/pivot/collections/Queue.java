@@ -92,6 +92,7 @@ public interface Queue<T> extends Collection<T> {
      * <tt>true</tt> if the queue contains no items; <tt>false</tt>,
      * otherwise.
      */
+    @Override
     public boolean isEmpty();
 
     /**

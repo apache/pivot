@@ -92,6 +92,7 @@ public interface Stack<T> extends Collection<T> {
      * <tt>true</tt> if the stack contains no items; <tt>false</tt>,
      * otherwise.
      */
+    @Override
     public boolean isEmpty();
 
     /**

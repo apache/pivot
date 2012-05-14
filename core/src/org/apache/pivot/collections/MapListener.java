@@ -28,22 +28,27 @@ public interface MapListener<K, V> {
     public static class Adapter<K, V> implements MapListener<K, V> {
         @Override
         public void valueAdded(Map<K, V> map, K key) {
+            // empty block
         }
 
         @Override
         public void valueUpdated(Map<K, V> map, K key, V previousValue) {
+            // empty block
         }
 
         @Override
         public void valueRemoved(Map<K, V> map, K key, V value) {
+            // empty block
         }
 
         @Override
         public void mapCleared(Map<K, V> map) {
+            // empty block
         }
 
         @Override
         public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
+            // empty block
         }
     }
 

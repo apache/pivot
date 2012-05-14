@@ -249,11 +249,11 @@ public class CSVSerializer implements Serializer<List<?>> {
                 throw new SerializationException("Could not read keys from input.");
             }
 
-            String[] keys = line.split(",");
-            this.keys = new ArrayList<String>(keys.length);
+            String[] keysLocal = line.split(",");
+            this.keys = new ArrayList<String>(keysLocal.length);
 
-            for (int i = 0; i < keys.length; i++) {
-                String key = keys[i];
+            for (int i = 0; i < keysLocal.length; i++) {
+                String key = keysLocal[i];
                 this.keys.add(key.trim());
             }
         }

@@ -123,9 +123,9 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
             try {
                 Constructor<?> constructor = this.map.getClass().getConstructor(Comparator.class);
                 if (constructor != null) {
-                    java.util.Map<K, V> map = (java.util.Map<K, V>)constructor.newInstance(comparator);
-                    map.putAll(this.map);
-                    this.map = map;
+                    java.util.Map<K, V> mapLocal = (java.util.Map<K, V>)constructor.newInstance(comparator);
+                    mapLocal.putAll(this.map);
+                    this.map = mapLocal;
                 }
             } catch (SecurityException exception) {
                 throw new RuntimeException(exception);

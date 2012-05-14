@@ -59,16 +59,16 @@ public class ColorPaletteTest implements Application {
         Border border = new Border(tablePane);
         border.getStyles().put("padding", 6);
 
-        window = new Window(border);
-        window.setTitle("Color Palette");
-        window.setMaximized(true);
-        window.open(display);
+        this.window = new Window(border);
+        this.window.setTitle("Color Palette");
+        this.window.setMaximized(true);
+        this.window.open(display);
     }
 
     @Override
     public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
+        if (this.window != null) {
+            this.window.close();
         }
 
         return false;
@@ -76,10 +76,12 @@ public class ColorPaletteTest implements Application {
 
     @Override
     public void suspend() {
+        // empty block
     }
 
     @Override
     public void resume() {
+        // empty block
     }
 
     private static Component createCell(int index) {

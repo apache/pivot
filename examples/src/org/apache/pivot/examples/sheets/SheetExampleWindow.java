@@ -50,13 +50,14 @@ public class SheetExampleWindow extends Window implements Bindable {
                     @Override
                     public void sheetClosed(Sheet sheet) {
                         if (sheet.getResult()) {
-                            HashMap<String, Object> context = new HashMap<String, Object>();
-                            editGreetingSheet.store(context);
-                            load(context);
+                            HashMap<String, Object> contextLocal = new HashMap<String, Object>();
+                            editGreetingSheet.store(contextLocal);
+                            load(contextLocal);
                         }
                     }
                 });
             }
         });
     }
+
 }

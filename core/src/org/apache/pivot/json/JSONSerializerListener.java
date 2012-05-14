@@ -29,38 +29,47 @@ public interface JSONSerializerListener {
     public static class Adapter implements JSONSerializerListener {
         @Override
         public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value) {
+            // empty block
         }
 
         @Override
         public void endDictionary(JSONSerializer jsonSerializer) {
+            // empty block
         }
 
         @Override
         public void readKey(JSONSerializer jsonSerializer, String key) {
+            // empty block
         }
 
         @Override
         public void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value) {
+            // empty block
         }
 
         @Override
         public void endSequence(JSONSerializer jsonSerializer) {
+            // empty block
         }
 
         @Override
         public void readString(JSONSerializer jsonSerializer, String value) {
+            // empty block
         }
 
         @Override
         public void readNumber(JSONSerializer jsonSerializer, Number value) {
+            // empty block
         }
 
         @Override
         public void readBoolean(JSONSerializer jsonSerializer, Boolean value) {
+            // empty block
         }
 
         @Override
         public void readNull(JSONSerializer jsonSerializer) {
+            // empty block
         }
     }
 

@@ -59,7 +59,9 @@ public class BindTest {
             (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
         JSONSerializer typedListSerializer =
-            new JSONSerializer((new TypeLiteral<ArrayList<SampleBean2>>() {}).getType());
+            new JSONSerializer((new TypeLiteral<ArrayList<SampleBean2>>() {
+                // empty block
+            }).getType());
         ArrayList<SampleBean2> typedList =
             (ArrayList<SampleBean2>)typedListSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
@@ -109,7 +111,7 @@ public class BindTest {
 
         Object item0 = sequence.get(0);
         assertNotNull(item0);
-        // assertTrue(item0 instanceof SampleBean2);  // true but superflous
+        // assertTrue(item0 instanceof SampleBean2);  // true but superfluous
         assertEquals(sequence.get(0).getA(), JSON.get(list, "[0].a"));
     }
 
@@ -137,7 +139,9 @@ public class BindTest {
     @SuppressWarnings("unchecked")
     public void testTypedMap() throws IOException, SerializationException {
         JSONSerializer typedMapSerializer =
-            new JSONSerializer((new TypeLiteral<HashMap<String, SampleBean2>>() {}).getType());
+            new JSONSerializer((new TypeLiteral<HashMap<String, SampleBean2>>() {
+                // empty block
+            }).getType());
 
         HashMap<String, SampleBean2> map =
             (HashMap<String, SampleBean2>)typedMapSerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));

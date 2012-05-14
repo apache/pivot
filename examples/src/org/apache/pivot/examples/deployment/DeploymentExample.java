@@ -43,9 +43,12 @@ public class DeploymentExample implements Application {
 
     @Override
     public void suspend() {
+        // empty block
     }
 
     @Override
     public void resume() {
+        // empty block
     }
+
 }

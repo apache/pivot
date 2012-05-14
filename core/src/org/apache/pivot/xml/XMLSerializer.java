@@ -135,7 +135,9 @@ public class XMLSerializer implements Serializer<Element> {
                                 xmlSerializerListeners.readTextNode(this, textNode);
                             }
 
-                            current.add(textNode);
+                            if (current != null) {
+                                current.add(textNode);
+                            }
                         }
 
                         break;
@@ -203,7 +205,9 @@ public class XMLSerializer implements Serializer<Element> {
                         }
 
                         // Move up the stack
-                        current = current.getParent();
+                        if (current != null) {
+                            current = current.getParent();
+                        }
 
                         break;
                     }

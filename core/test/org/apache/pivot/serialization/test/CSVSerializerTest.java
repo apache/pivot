@@ -48,14 +48,17 @@ public class CSVSerializerTest {
         CSVSerializer serializer = new CSVSerializer();
         serializer.setKeys("A", "B", "C");
         serializer.getCSVSerializerListeners().add(new CSVSerializerListener() {
+            @Override
             public void beginList(CSVSerializer csvSerializer, List<?> list) {
                 System.out.println("Begin list: " + list);
             }
 
+            @Override
             public void endList(CSVSerializer csvSerializer) {
                 System.out.println("End list");
             }
 
+            @Override
             public void readItem(CSVSerializer csvSerializer, Object item) {
                 System.out.println("Read item: " + item);
             }

@@ -35,32 +35,32 @@ public abstract class Task<V> {
     private class ExecuteCallback implements Runnable {
         @Override
         public void run() {
-            V result = null;
-            Throwable fault = null;
+            V resultLocal = null;
+            Throwable faultLocal = null;
 
             try {
-                result = execute();
+                resultLocal = execute();
             }
             catch(Throwable throwable) {
-                fault = throwable;
+                faultLocal = throwable;
             }
 
-            TaskListener<V> taskListener;
+            TaskListener<V> taskListenerLocal;
             synchronized (Task.this) {
-                Task.this.result = result;
-                Task.this.fault = fault;
+                Task.this.result = resultLocal;
+                Task.this.fault = faultLocal;
 
                 abort = false;
 
-                taskListener = Task.this.taskListener;
+                taskListenerLocal = Task.this.taskListener;
                 Task.this.taskListener = null;
             }
 
-            if (fault == null) {
-                taskListener.taskExecuted(Task.this);
+            if (faultLocal == null) {
+                taskListenerLocal.taskExecuted(Task.this);
             }
             else {
-                taskListener.executeFailed(Task.this);
+                taskListenerLocal.executeFailed(Task.this);
             }
         }
     }
@@ -143,11 +143,11 @@ public abstract class Task<V> {
      * notified on the task's worker thread, not on the thread that executed
      * the task.
      *
-     * @param taskListener
+     * @param taskListenerArgument
      * The listener to be notified when the task completes.
      */
-    public synchronized void execute(TaskListener<V> taskListener) {
-        execute(taskListener, executorService);
+    public synchronized void execute(TaskListener<V> taskListenerArgument) {
+        execute(taskListenerArgument, executorService);
     }
 
     /**
@@ -156,16 +156,16 @@ public abstract class Task<V> {
      * notified on the task's worker thread, not on the thread that executed
      * the task.
      *
-     * @param taskListener The listener to be notified when the task completes.
-     * @param executorService The service to submit the task to, overriding the
+     * @param taskListenerArgument The listener to be notified when the task completes.
+     * @param executorServiceArgument The service to submit the task to, overriding the
      * Task's own ExecutorService.
      */
-    public synchronized void execute(TaskListener<V> taskListener, ExecutorService executorService) {
-        if (taskListener == null) {
+    public synchronized void execute(TaskListener<V> taskListenerArgument, ExecutorService executorServiceArgument) {
+        if (taskListenerArgument == null) {
             throw new IllegalArgumentException("taskListener is null.");
         }
 
-        if (executorService == null) {
+        if (executorServiceArgument == null) {
             throw new IllegalThreadStateException("executorService is null.");
         }
 
@@ -173,7 +173,7 @@ public abstract class Task<V> {
             throw new IllegalThreadStateException("Task is already pending.");
         }
 
-        this.taskListener = taskListener;
+        this.taskListener = taskListenerArgument;
 
         result = null;
         fault = null;
@@ -181,7 +181,7 @@ public abstract class Task<V> {
 
         // Create a new execute callback and post it to the executor service
         ExecuteCallback executeCallback = new ExecuteCallback();
-        executorService.submit(executeCallback);
+        executorServiceArgument.submit(executeCallback);
     }
 
     /**

@@ -232,6 +232,7 @@ public class SearchDemo implements Application {
             try {
                 artworkURL = new URL((String)result.get("artworkUrl100"));
             } catch (MalformedURLException exception) {
+                // ignore exception
             }
         }
 

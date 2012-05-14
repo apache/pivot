@@ -1591,19 +1591,19 @@ public class TerraTabPaneSkin extends ContainerSkin
                     selectionChangeTransition.start(new TransitionListener() {
                         @Override
                         public void transitionCompleted(Transition transition) {
-                            TabPane tabPane = (TabPane)getComponent();
+                            TabPane tabPaneLocal = (TabPane)getComponent();
 
-                            SelectionChangeTransition selectionChangeTransition =
+                            SelectionChangeTransition selectionChangeTransitionLocal =
                                 (SelectionChangeTransition)transition;
 
-                            int selectedIndex;
-                            if (selectionChangeTransition.expand) {
-                                selectedIndex = selectionChangeTransition.index;
+                            int selectedIndexLocal;
+                            if (selectionChangeTransitionLocal.expand) {
+                                selectedIndexLocal = selectionChangeTransitionLocal.index;
                             } else {
-                                selectedIndex = -1;
+                                selectedIndexLocal = -1;
                             }
 
-                            tabPane.setSelectedIndex(selectedIndex);
+                            tabPaneLocal.setSelectedIndex(selectedIndexLocal);
 
                             TerraTabPaneSkin.this.selectionChangeTransition = null;
                         }
@@ -1687,4 +1687,5 @@ public class TerraTabPaneSkin extends ContainerSkin
     public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
         // No-op
     }
+
 }

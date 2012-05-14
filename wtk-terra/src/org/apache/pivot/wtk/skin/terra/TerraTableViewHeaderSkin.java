@@ -216,7 +216,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            ArrayList<Integer> headerWidths = TerraTableViewSkin.getColumnWidths(tableView, width);
+            ArrayList<Integer> headerWidthsLocal = TerraTableViewSkin.getColumnWidths(tableView, width);
             int rowHeight = getPreferredHeight(width) - 1;
 
             TableView.ColumnSequence columns = tableView.getColumns();
@@ -225,7 +225,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 TableView.Column column = columns.get(i);
                 TableView.HeaderDataRenderer headerDataRenderer = column.getHeaderDataRenderer();
                 headerDataRenderer.render(column.getHeaderData(), i, tableViewHeader, column.getName(), false);
-                baseline = Math.max(baseline, headerDataRenderer.getBaseline(headerWidths.get(i), rowHeight));
+                baseline = Math.max(baseline, headerDataRenderer.getBaseline(headerWidthsLocal.get(i), rowHeight));
             }
         }
 
@@ -251,27 +251,27 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
         TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
 
-        Color backgroundColor = null;
-        Color bevelColor = null;
-        Color borderColor = null;
+        Color backgroundColorLocal = null;
+        Color bevelColorLocal = null;
+        Color borderColorLocal = null;
 
         if (tableViewHeader.isEnabled()) {
-            backgroundColor = this.backgroundColor;
-            bevelColor = this.bevelColor;
-            borderColor = this.borderColor;
+            backgroundColorLocal = this.backgroundColor;
+            bevelColorLocal = this.bevelColor;
+            borderColorLocal = this.borderColor;
         } else {
-            backgroundColor = disabledBackgroundColor;
-            bevelColor = disabledBevelColor;
-            borderColor = disabledBorderColor;
+            backgroundColorLocal = disabledBackgroundColor;
+            bevelColorLocal = disabledBevelColor;
+            borderColorLocal = disabledBorderColor;
         }
 
         // Paint the background
-        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
-            width / 2f, height, backgroundColor));
+        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal,
+            width / 2f, height, backgroundColorLocal));
         graphics.fillRect(0, 0, width, height);
 
         // Paint the border
-        graphics.setPaint(borderColor);
+        graphics.setPaint(borderColorLocal);
         graphics.setStroke(new BasicStroke(1));
         graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5, height - 0.5));
 
@@ -290,7 +290,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 // Paint the pressed bevel
                 if (columnIndex == pressedHeaderIndex) {
                     graphics.setPaint(new GradientPaint(width / 2f, 0, pressedBevelColor,
-                        width / 2f, height, backgroundColor));
+                        width / 2f, height, backgroundColorLocal));
                     graphics.fillRect(headerX, 0, headerWidth, height - 1);
                 }
 
@@ -341,7 +341,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                 if (columnIndex < columnCount - 1
                     || includeTrailingVerticalGridLine) {
-                    graphics.setPaint(borderColor);
+                    graphics.setPaint(borderColorLocal);
                     graphics.draw(new Line2D.Double(headerX + 0.5, 0.5, headerX + 0.5, height - 0.5));
                 }
 
@@ -872,21 +872,26 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     // Table view sort events
+    @Override
     public void sortAdded(TableView tableView, String columnName) {
         repaintComponent();
     }
 
+    @Override
     public void sortUpdated(TableView tableView, String columnName,
         SortDirection previousSortDirection) {
         repaintComponent();
     }
 
+    @Override
     public void sortRemoved(TableView tableView, String columnName,
         SortDirection sortDirection) {
         repaintComponent();
     }
 
+    @Override
     public void sortChanged(TableView tableView) {
         repaintComponent();
     }
+
 }

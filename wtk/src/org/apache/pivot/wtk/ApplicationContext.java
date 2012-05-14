@@ -325,15 +325,14 @@ public abstract class ApplicationContext {
                                 previousFocusedComponent.getDecorators().remove(focusDecorator);
                             }
 
-                            Component focusedComponent = Component.getFocusedComponent();
-
-                            if (focusedComponent != null
-                                && focusedComponent.getDecorators().indexOf(focusDecorator) == -1) {
-                                focusedComponent.getDecorators().add(focusDecorator);
+                            Component focusedComponentLocal = Component.getFocusedComponent();
+                            if (focusedComponentLocal != null
+                                && focusedComponentLocal.getDecorators().indexOf(focusDecorator) == -1) {
+                                focusedComponentLocal.getDecorators().add(focusDecorator);
                             }
 
                             System.out.println("focusedComponentChanged():\n  from = " + previousFocusedComponent
-                                + "\n  to = " + focusedComponent);
+                                + "\n  to = " + focusedComponentLocal);
                         }
                     };
 
@@ -344,7 +343,8 @@ public abstract class ApplicationContext {
             }
 
             // Add native drop support
-            new java.awt.dnd.DropTarget(this, dropTargetListener);
+            @SuppressWarnings("unused")
+            java.awt.dnd.DropTarget dropTarget = new java.awt.dnd.DropTarget(this, dropTargetListener);
 
             setFocusTraversalKeysEnabled(false);
         }
@@ -680,22 +680,22 @@ public abstract class ApplicationContext {
         }
 
         private Component getDropDescendant(int x, int y) {
-            Component dropDescendant = display.getDescendantAt(x, y);
+            Component dropDescendantLocal = display.getDescendantAt(x, y);
 
-            while (dropDescendant != null
-                && dropDescendant.getDropTarget() == null) {
-                dropDescendant = dropDescendant.getParent();
+            while (dropDescendantLocal != null
+                && dropDescendantLocal.getDropTarget() == null) {
+                dropDescendantLocal = dropDescendantLocal.getParent();
             }
 
-            if (dropDescendant != null
-                && dropDescendant.isBlocked()) {
-                dropDescendant = null;
+            if (dropDescendantLocal != null
+                && dropDescendantLocal.isBlocked()) {
+                dropDescendantLocal = null;
             }
 
-            return dropDescendant;
+            return dropDescendantLocal;
         }
 
-        private void startNativeDrag(final DragSource dragSource, final Component dragDescendant,
+        private void startNativeDrag(final DragSource dragSource, final Component dragDescendantArgument,
             final MouseEvent mouseEvent) {
             java.awt.dnd.DragSource awtDragSource = java.awt.dnd.DragSource.getDefaultDragSource();
 
@@ -780,7 +780,7 @@ public abstract class ApplicationContext {
                 public void dragDropEnd(DragSourceDropEvent event) {
                     DragSourceContext context = event.getDragSourceContext();
                     context.setCursor(java.awt.Cursor.getDefaultCursor());
-                    dragSource.endDrag(dragDescendant, getDropAction(event.getDropAction()));
+                    dragSource.endDrag(dragDescendantArgument, getDropAction(event.getDropAction()));
                 }
             });
         }
@@ -966,7 +966,7 @@ public abstract class ApplicationContext {
 
                                     menuPopup.getWindowStateListeners().add(new WindowStateListener.Adapter() {
                                         @Override
-                                        public void windowClosed(Window window, Display display, Window owner) {
+                                        public void windowClosed(Window window, Display displayArgument, Window owner) {
                                             menuPopup.getMenu().getSections().clear();
                                             menuPopup = null;
                                             window.getWindowStateListeners().remove(this);
@@ -980,8 +980,8 @@ public abstract class ApplicationContext {
                                         window = mouseOwner.getWindow();
                                     }
 
-                                    Display display = window.getDisplay();
-                                    Point location = mouseOwner.mapPointToAncestor(display, x, y);
+                                    Display displayLocal = window.getDisplay();
+                                    Point location = mouseOwner.mapPointToAncestor(displayLocal, x, y);
                                     menuPopup.open(window, location);
                                 }
                             }
@@ -1305,7 +1305,7 @@ public abstract class ApplicationContext {
 
             if (dragDescendant == null) {
                 // Process the event
-                Component focusedComponent = Component.getFocusedComponent();
+                Component focusedComponentLocal = Component.getFocusedComponent();
 
                 switch (event.getID()) {
                     case KeyEvent.KEY_PRESSED: {
@@ -1326,7 +1326,7 @@ public abstract class ApplicationContext {
                         }
 
                         try {
-                            if (focusedComponent == null) {
+                            if (focusedComponentLocal == null) {
                                 for (Application application : applications) {
                                     if (application instanceof Application.UnprocessedKeyHandler) {
                                         Application.UnprocessedKeyHandler unprocessedKeyHandler =
@@ -1335,8 +1335,8 @@ public abstract class ApplicationContext {
                                     }
                                 }
                             } else {
-                                if (!focusedComponent.isBlocked()) {
-                                    consumed = focusedComponent.keyPressed(keyCode, keyLocation);
+                                if (!focusedComponentLocal.isBlocked()) {
+                                    consumed = focusedComponentLocal.keyPressed(keyCode, keyLocation);
                                 }
                             }
                         } catch (Exception exception) {
@@ -1356,7 +1356,7 @@ public abstract class ApplicationContext {
                         int keyCode = event.getKeyCode();
 
                         try {
-                            if (focusedComponent == null) {
+                            if (focusedComponentLocal == null) {
                                 for (Application application : applications) {
                                     if (application instanceof Application.UnprocessedKeyHandler) {
                                         Application.UnprocessedKeyHandler unprocessedKeyHandler =
@@ -1365,8 +1365,8 @@ public abstract class ApplicationContext {
                                     }
                                 }
                             } else {
-                                if (!focusedComponent.isBlocked()) {
-                                    consumed = focusedComponent.keyReleased(keyCode, keyLocation);
+                                if (!focusedComponentLocal.isBlocked()) {
+                                    consumed = focusedComponentLocal.keyReleased(keyCode, keyLocation);
                                 }
                             }
                         } catch (Exception exception) {
@@ -1386,7 +1386,7 @@ public abstract class ApplicationContext {
                         char keyChar = event.getKeyChar();
 
                         try {
-                            if (focusedComponent == null) {
+                            if (focusedComponentLocal == null) {
                                 for (Application application : applications) {
                                     if (application instanceof Application.UnprocessedKeyHandler) {
                                         Application.UnprocessedKeyHandler unprocessedKeyHandler =
@@ -1395,8 +1395,8 @@ public abstract class ApplicationContext {
                                     }
                                 }
                             } else {
-                                if (!focusedComponent.isBlocked()) {
-                                    consumed = focusedComponent.keyTyped(keyChar);
+                                if (!focusedComponentLocal.isBlocked()) {
+                                    consumed = focusedComponentLocal.keyTyped(keyChar);
                                 }
                             }
                         } catch (Exception exception) {
@@ -1446,7 +1446,7 @@ public abstract class ApplicationContext {
         }
 
         @Override
-        public Object get(URL key) {
+        public synchronized Object get(URL key) {
             try {
                 return resourceCache.get(key.toURI());
             } catch (URISyntaxException exception) {
@@ -1455,7 +1455,7 @@ public abstract class ApplicationContext {
         }
 
         @Override
-        public Object put(URL key, Object value) {
+        public synchronized Object put(URL key, Object value) {
             try {
                 return resourceCache.put(key.toURI(), value);
             } catch (URISyntaxException exception) {
@@ -1464,7 +1464,7 @@ public abstract class ApplicationContext {
         }
 
         @Override
-        public Object remove(URL key) {
+        public synchronized Object remove(URL key) {
             try {
                 return resourceCache.remove(key.toURI());
             } catch (URISyntaxException exception) {
@@ -1473,7 +1473,7 @@ public abstract class ApplicationContext {
         }
 
         @Override
-        public boolean containsKey(URL key) {
+        public synchronized boolean containsKey(URL key) {
             try {
                 return resourceCache.containsKey(key.toURI());
             } catch (URISyntaxException exception) {
@@ -1550,6 +1550,7 @@ public abstract class ApplicationContext {
             this.callback = callback;
         }
 
+        @Override
         public void run() {
             if (!cancelled) {
                 try {
@@ -1960,4 +1961,5 @@ public abstract class ApplicationContext {
             exception.printStackTrace();
         }
     }
+
 }
