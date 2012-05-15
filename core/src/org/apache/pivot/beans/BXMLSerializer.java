@@ -580,7 +580,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         // throw a nice error so the user knows which resource did not load
         URL locationLocal = baseType.getResource(resourceName);
         if (locationLocal == null) {
-            throw new IllegalArgumentException("could not find resource " + resourceName);
+            throw new IllegalArgumentException("could not find resource \"" + resourceName + "\".");
         }
         return readObject(locationLocal, localize ? new Resources(baseType.getName()) : null);
     }
@@ -644,7 +644,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         if (piTarget.equals(LANGUAGE_PROCESSING_INSTRUCTION)) {
             if (language != null) {
-                throw new SerializationException("Language already set.");
+                throw new SerializationException("language already set.");
             }
 
             language = piData;
@@ -667,7 +667,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             addMethod.invoke(sequence, text);
                         } catch (NoSuchMethodException exception) {
                             throw new SerializationException("Text content cannot be added to "
-                                + sequence.getClass().getName() + ".", exception);
+                                + sequence.getClass().getName() + ": \"" + text + "\"", exception);
                         } catch (InvocationTargetException exception) {
                             throw new SerializationException(exception);
                         } catch (IllegalAccessException exception) {

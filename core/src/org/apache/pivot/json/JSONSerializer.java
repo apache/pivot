@@ -563,35 +563,35 @@ public class JSONSerializer implements Serializer<Object> {
                     }
 
                     break;
-                } else {
-                    Class<?> classType = (Class<?>)parentType;
-                    Type[] genericInterfaces = classType.getGenericInterfaces();
+                }
 
-                    for (int i = 0; i < genericInterfaces.length; i++) {
-                        Type genericInterface = genericInterfaces[i];
+                Class<?> classType = (Class<?>)parentType;
+                Type[] genericInterfaces = classType.getGenericInterfaces();
 
-                        if (genericInterface instanceof ParameterizedType) {
-                            ParameterizedType parameterizedType = (ParameterizedType)genericInterface;
-                            Class<?> interfaceType = (Class<?>)parameterizedType.getRawType();
+                for (int i = 0; i < genericInterfaces.length; i++) {
+                    Type genericInterface = genericInterfaces[i];
 
-                            if (Sequence.class.isAssignableFrom(interfaceType)) {
-                                itemType = parameterizedType.getActualTypeArguments()[0];
+                    if (genericInterface instanceof ParameterizedType) {
+                        ParameterizedType parameterizedType = (ParameterizedType)genericInterface;
+                        Class<?> interfaceType = (Class<?>)parameterizedType.getRawType();
 
-                                if (itemType instanceof TypeVariable<?>) {
-                                    itemType = Object.class;
-                                }
+                        if (Sequence.class.isAssignableFrom(interfaceType)) {
+                            itemType = parameterizedType.getActualTypeArguments()[0];
 
-                                break;
+                            if (itemType instanceof TypeVariable<?>) {
+                                itemType = Object.class;
                             }
+
+                            break;
                         }
                     }
-
-                    if (itemType != null) {
-                        break;
-                    }
-
-                    parentType = classType.getGenericSuperclass();
                 }
+
+                if (itemType != null) {
+                    break;
+                }
+
+                parentType = classType.getGenericSuperclass();
             }
 
             if (itemType == null) {
@@ -675,35 +675,35 @@ public class JSONSerializer implements Serializer<Object> {
                     }
 
                     break;
-                } else {
-                    Class<?> classType = (Class<?>)parentType;
-                    Type[] genericInterfaces = classType.getGenericInterfaces();
+                }
 
-                    for (int i = 0; i < genericInterfaces.length; i++) {
-                        Type genericInterface = genericInterfaces[i];
+                Class<?> classType = (Class<?>)parentType;
+                Type[] genericInterfaces = classType.getGenericInterfaces();
 
-                        if (genericInterface instanceof ParameterizedType) {
-                            ParameterizedType parameterizedType = (ParameterizedType)genericInterface;
-                            Class<?> interfaceType = (Class<?>)parameterizedType.getRawType();
+                for (int i = 0; i < genericInterfaces.length; i++) {
+                    Type genericInterface = genericInterfaces[i];
 
-                            if (Dictionary.class.isAssignableFrom(interfaceType)) {
-                                valueType = parameterizedType.getActualTypeArguments()[1];
+                    if (genericInterface instanceof ParameterizedType) {
+                        ParameterizedType parameterizedType = (ParameterizedType)genericInterface;
+                        Class<?> interfaceType = (Class<?>)parameterizedType.getRawType();
 
-                                if (valueType instanceof TypeVariable<?>) {
-                                    valueType = Object.class;
-                                }
+                        if (Dictionary.class.isAssignableFrom(interfaceType)) {
+                            valueType = parameterizedType.getActualTypeArguments()[1];
 
-                                break;
+                            if (valueType instanceof TypeVariable<?>) {
+                                valueType = Object.class;
                             }
+
+                            break;
                         }
                     }
-
-                    if (valueType != null) {
-                        break;
-                    }
-
-                    parentType = classType.getGenericSuperclass();
                 }
+
+                if (valueType != null) {
+                    break;
+                }
+
+                parentType = classType.getGenericSuperclass();
             }
 
             // Instantiate the dictionary or bean type
