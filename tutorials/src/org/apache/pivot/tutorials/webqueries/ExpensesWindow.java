@@ -169,10 +169,10 @@ public class ExpensesWindow extends Window implements Bindable {
     }
 
     private void refreshExpenseList() {
-        Expenses expensesApplication = getExpensesApplication();
-        GetQuery expenseListQuery = new GetQuery(expensesApplication.getHostname(),
-            expensesApplication.getPort(), "/pivot-tutorials/expenses",
-            expensesApplication.isSecure()
+        Expenses expensesApplicationLocal = getExpensesApplication();
+        GetQuery expenseListQuery = new GetQuery(expensesApplicationLocal.getHostname(),
+            expensesApplicationLocal.getPort(), "/pivot-tutorials/expenses",
+            expensesApplicationLocal.isSecure()
         );
 
         activityIndicatorBoxPane.setVisible(true);
@@ -210,10 +210,10 @@ public class ExpensesWindow extends Window implements Bindable {
                     expenseSheet.store(expense);
 
                     // POST expense to server and then add to table
-                    Expenses expensesApplication = getExpensesApplication();
-                    PostQuery addExpenseQuery = new PostQuery(expensesApplication.getHostname(),
-                        expensesApplication.getPort(), "/pivot-tutorials/expenses",
-                        expensesApplication.isSecure()
+                    Expenses expensesApplicationLocal = getExpensesApplication();
+                    PostQuery addExpenseQuery = new PostQuery(expensesApplicationLocal.getHostname(),
+                        expensesApplicationLocal.getPort(), "/pivot-tutorials/expenses",
+                        expensesApplicationLocal.isSecure()
                     );
                     addExpenseQuery.setValue(expense);
 
@@ -259,16 +259,16 @@ public class ExpensesWindow extends Window implements Bindable {
             public void sheetClosed(Sheet sheet) {
                 if (sheet.getResult()) {
                     // Get the expense data from the sheet
-                    final HashMap<String, Object> expense = new HashMap<String, Object>();
-                    expenseSheet.store(expense);
+                    final HashMap<String, Object> expenseLocal = new HashMap<String, Object>();
+                    expenseSheet.store(expenseLocal);
 
                     // PUT expense to server and then update table
-                    Expenses expensesApplication = getExpensesApplication();
-                    PutQuery updateExpenseQuery = new PutQuery(expensesApplication.getHostname(),
-                        expensesApplication.getPort(), "/pivot-tutorials/expenses/" + JSON.get(expense, "id"),
-                        expensesApplication.isSecure()
+                    Expenses expensesApplicationLocal = getExpensesApplication();
+                    PutQuery updateExpenseQuery = new PutQuery(expensesApplicationLocal.getHostname(),
+                        expensesApplicationLocal.getPort(), "/pivot-tutorials/expenses/" + JSON.get(expenseLocal, "id"),
+                        expensesApplicationLocal.isSecure()
                     );
-                    updateExpenseQuery.setValue(expense);
+                    updateExpenseQuery.setValue(expenseLocal);
 
                     activityIndicatorBoxPane.setVisible(true);
                     activityIndicator.setActive(true);
@@ -283,7 +283,7 @@ public class ExpensesWindow extends Window implements Bindable {
                             List<Object> expenses = (List<Object>)expenseTableView.getTableData();
                             for (int i = 0, n = expenses.getLength(); i < n; i++) {
                                 if (JSON.get(expenses.get(i), "id").equals(id)) {
-                                    expenses.update(i, expense);
+                                    expenses.update(i, expenseLocal);
                                     break;
                                 }
                             }
@@ -313,10 +313,10 @@ public class ExpensesWindow extends Window implements Bindable {
                 if (sheet.getResult()
                     && ((Prompt)sheet).getSelectedOptionIndex() == 1) {
                     // DELETE expense from server and then remove from table
-                    Expenses expensesApplication = getExpensesApplication();
-                    DeleteQuery deleteExpenseQuery = new DeleteQuery(expensesApplication.getHostname(),
-                        expensesApplication.getPort(), "/pivot-tutorials/expenses/" + id,
-                        expensesApplication.isSecure()
+                    Expenses expensesApplicationLocal = getExpensesApplication();
+                    DeleteQuery deleteExpenseQuery = new DeleteQuery(expensesApplicationLocal.getHostname(),
+                        expensesApplicationLocal.getPort(), "/pivot-tutorials/expenses/" + id,
+                        expensesApplicationLocal.isSecure()
                     );
 
                     activityIndicatorBoxPane.setVisible(true);

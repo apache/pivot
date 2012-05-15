@@ -385,16 +385,16 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
         int titleBarHeight = titleBarTablePane.getHeight();
 
         // Draw the title area
-        Color titleBarBackgroundColor = this.titleBarBackgroundColor;
-        Color titleBarBorderColor = this.titleBarBorderColor;
-        Color titleBarBevelColor = this.titleBarBevelColor;
+        Color titleBarBackgroundColorLocal = this.titleBarBackgroundColor;
+        Color titleBarBorderColorLocal = this.titleBarBorderColor;
+        Color titleBarBevelColorLocal = this.titleBarBevelColor;
 
-        graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColor, width / 2f,
-            titleBarHeight + 1, titleBarBackgroundColor));
+        graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColorLocal, width / 2f,
+            titleBarHeight + 1, titleBarBackgroundColorLocal));
         graphics.fillRect(0, 0, width, titleBarHeight + 1);
 
         // Draw the border
-        graphics.setPaint(titleBarBorderColor);
+        graphics.setPaint(titleBarBorderColorLocal);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 2);
 
         // Draw the content area

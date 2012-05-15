@@ -96,8 +96,8 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
             private Component previousSelectedComponent = null;
 
             @Override
-            public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
-                TreeNode node = (TreeNode) treeView.getSelectedNode();
+            public void selectedNodeChanged(TreeView treeViewArgument, Object previousSelectedNode) {
+                TreeNode node = (TreeNode) treeViewArgument.getSelectedNode();
                 if (previousSelectedComponent != null
                     && previousSelectedComponent.getDecorators().indexOf(focusDecorator) > -1) {
                     previousSelectedComponent.getDecorators().remove(focusDecorator);
@@ -125,9 +125,9 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
             }
 
             @Override
-            public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
+            public void selectedPathsChanged(TreeView treeViewArgument, Sequence<Path> previousSelectedPaths) {
                 // if the selection becomes empty, remove the decorator
-                if (treeView.getSelectedNode() == null && previousSelectedComponent != null
+                if (treeViewArgument.getSelectedNode() == null && previousSelectedComponent != null
                     && previousSelectedComponent.getDecorators().indexOf(focusDecorator) > -1) {
                     previousSelectedComponent.getDecorators().remove(focusDecorator);
                 }
@@ -281,10 +281,9 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
                 TreeNode node = new TreeNode(branch.getText());
                 setComponentIconOnTreeNode(container, node);
                 return node;
-            } else {
-                setComponentIconOnTreeNode(container, branch);
-                return branch;
             }
+            setComponentIconOnTreeNode(container, branch);
+            return branch;
         }
 
         if (container instanceof Sequence<?>) {
@@ -348,9 +347,8 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
         String bxmlID = widgetToID.get(obj);
         if (bxmlID == null) {
             return obj.getClass().getSimpleName();
-        } else {
-            return obj.getClass().getSimpleName() + " " + bxmlID;
         }
+        return obj.getClass().getSimpleName() + " " + bxmlID;
     }
 
     private static class MyTreeViewNodeRenderer extends TreeViewNodeRenderer {

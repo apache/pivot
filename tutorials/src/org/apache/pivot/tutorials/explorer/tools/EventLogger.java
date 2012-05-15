@@ -297,12 +297,12 @@ public class EventLogger extends Container {
      */
     public void selectAllEvents(boolean select) {
         // Include or exclude each possible method from the group of monitored events
-        IncludeEventGroup includeEvents = getIncludeEvents();
+        IncludeEventGroup includeEventsLocal = getIncludeEvents();
         for (Method event : declaredEvents) {
             if (select) {
-                includeEvents.add(event);
+                includeEventsLocal.add(event);
             } else {
-                includeEvents.remove(event);
+                includeEventsLocal.remove(event);
             }
         }
         // Update the skin (Checkboxes)

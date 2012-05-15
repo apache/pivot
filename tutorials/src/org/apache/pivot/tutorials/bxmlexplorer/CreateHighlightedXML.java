@@ -132,11 +132,8 @@ public class CreateHighlightedXML {
         return buf.toString();
     }
 
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(TestApplication.class, args);
-    }
 
-    public static final class TestApplication implements Application {
+    public static final class TestApplication extends Application.Adapter {
         private Window window = null;
 
         @Override
@@ -164,13 +161,10 @@ public class CreateHighlightedXML {
             return false;
         }
 
-        @Override
-        public void resume() throws Exception {
-        }
+    }
 
-        @Override
-        public void suspend() throws Exception {
-        }
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(TestApplication.class, args);
     }
 
 }

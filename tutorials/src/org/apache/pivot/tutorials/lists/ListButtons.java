@@ -40,8 +40,8 @@ public class ListButtons extends Window implements Bindable {
 
         listButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener.Adapter() {
             @Override
-            public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
-                Object selectedItem = listButton.getSelectedItem();
+            public void selectedItemChanged(ListButton listButtonArgument, Object previousSelectedItem) {
+                Object selectedItem = listButtonArgument.getSelectedItem();
 
                 if (selectedItem != null) {
                     // Get the image URL for the selected item

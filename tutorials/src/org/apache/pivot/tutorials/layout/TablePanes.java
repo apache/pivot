@@ -44,15 +44,15 @@ public class TablePanes extends Window implements Bindable {
         private int y = -1;
 
         @Override
-        public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
-            this.x = x;
-            this.y = y;
+        public boolean configureContextMenu(Component component, Menu menu, int xArgument, int yArgument) {
+            this.x = xArgument;
+            this.y = yArgument;
 
             // Set the enabled state of actions based on where the user clicked
             Action.NamedActionDictionary namedActions = Action.getNamedActions();
 
-            int rowIndex = tablePane.getRowAt(y);
-            int columnIndex = tablePane.getColumnAt(x);
+            int rowIndex = tablePane.getRowAt(yArgument);
+            int columnIndex = tablePane.getColumnAt(xArgument);
 
             namedActions.get("configureCell").setEnabled(rowIndex > 0 && columnIndex > 0);
             namedActions.get("configureRow").setEnabled(rowIndex > 0);

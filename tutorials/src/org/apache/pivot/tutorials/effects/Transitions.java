@@ -56,10 +56,10 @@ public class Transitions extends Window implements Bindable {
                     TransitionListener transitionListener = new TransitionListener() {
                         @Override
                         public void transitionCompleted(Transition transition) {
-                            CollapseTransition collapseTransition = (CollapseTransition)transition;
+                            CollapseTransition collapseTransitionLocal = (CollapseTransition)transition;
 
                             if (!transition.isReversed()) {
-                                Component component = collapseTransition.getComponent();
+                                Component component = collapseTransitionLocal.getComponent();
                                 component.getParent().remove(component);
                             }
 

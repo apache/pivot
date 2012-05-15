@@ -40,32 +40,32 @@ public class ListViews extends Window implements Bindable {
 
         listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
             @Override
-            public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
-                updateSelection(listView);
+            public void selectedRangeAdded(ListView listViewArgument, int rangeStart, int rangeEnd) {
+                updateSelection(listViewArgument);
             }
 
             @Override
-            public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
-                updateSelection(listView);
+            public void selectedRangeRemoved(ListView listViewArgument, int rangeStart, int rangeEnd) {
+                updateSelection(listViewArgument);
             }
 
             @Override
-            public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+            public void selectedRangesChanged(ListView listViewArgument, Sequence<Span> previousSelectedRanges) {
                 if (previousSelectedRanges != null
-                    && previousSelectedRanges != listView.getSelectedRanges()) {
-                    updateSelection(listView);
+                    && previousSelectedRanges != listViewArgument.getSelectedRanges()) {
+                    updateSelection(listViewArgument);
                 }
             }
 
             @Override
-            public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
+            public void selectedItemChanged(ListView listViewArgument, Object previousSelectedItem) {
                 // No-op
             }
 
-            private void updateSelection(ListView listView) {
+            private void updateSelection(ListView listViewArgument) {
                 String selectionText = "";
 
-                Sequence<Span> selectedRanges = listView.getSelectedRanges();
+                Sequence<Span> selectedRanges = listViewArgument.getSelectedRanges();
                 for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
                     Span selectedRange = selectedRanges.get(i);
 
@@ -76,7 +76,7 @@ public class ListViews extends Window implements Bindable {
                             selectionText += ", ";
                         }
 
-                        Object item = listView.getListData().get(j);
+                        Object item = listViewArgument.getListData().get(j);
                         String text;
                         if (item instanceof ListItem) {  // item is a listItem (for example because it has an image)
                             text = ((ListItem) item).getText();

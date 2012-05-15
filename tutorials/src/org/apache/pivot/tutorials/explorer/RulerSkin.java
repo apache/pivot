@@ -98,7 +98,9 @@ class RulerSkin extends ComponentSkin implements RulerListener {
         }
     }
 
+    @Override
     public void orientationChanged(Ruler ruler) {
         invalidateComponent();
     }
+
 }

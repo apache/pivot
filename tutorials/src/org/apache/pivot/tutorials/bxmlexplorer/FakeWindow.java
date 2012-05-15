@@ -82,45 +82,47 @@ public class FakeWindow extends Container {
     public final Window window;
 
     public FakeWindow(Window _window) {
-        Component content = _window.getContent();
+        Component contentLocal = _window.getContent();
         _window.setContent(null);
         this.window = _window;
         window.getWindowListeners().add(new WindowListener() {
 
             @Override
-            public void titleChanged(Window window, String previousTitle) {
+            public void titleChanged(Window windowArgument, String previousTitle) {
                 windowListeners.titleChanged(FakeWindow.this, previousTitle);
             }
 
             @Override
-            public void iconAdded(Window window, Image addedIcon) {
+            public void iconAdded(Window windowArgument, Image addedIcon) {
                 windowListeners.iconAdded(FakeWindow.this, addedIcon);
             }
 
             @Override
-            public void iconInserted(Window window, Image addedIcon, int index) {
+            public void iconInserted(Window windowArgument, Image addedIcon, int index) {
                 windowListeners.iconInserted(FakeWindow.this, addedIcon, index);
             }
 
             @Override
-            public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
+            public void iconsRemoved(Window windowArgument, int index, Sequence<Image> removed) {
                 windowListeners.iconsRemoved(FakeWindow.this, index, removed);
             }
 
             @Override
-            public void contentChanged(Window window, Component previousContent) {
+            public void contentChanged(Window windowArgument, Component previousContent) {
                 windowListeners.contentChanged(FakeWindow.this, previousContent);
             }
 
             @Override
-            public void activeChanged(Window window, Window obverseWindow) {
+            public void activeChanged(Window windowArgument, Window obverseWindow) {
+                // empty block
             }
 
             @Override
-            public void maximizedChanged(Window window) {
+            public void maximizedChanged(Window windowArgument) {
+                // empty block
             }
         });
-        setContent(content);
+        setContent(contentLocal);
         setSkin(new FakeWindowSkin());
     }
 

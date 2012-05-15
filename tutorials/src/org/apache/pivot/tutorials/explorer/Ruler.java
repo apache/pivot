@@ -21,8 +21,10 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Orientation;
 
 public class Ruler extends Component {
+
     private static class RulerListenerList extends ListenerList<RulerListener>
         implements RulerListener {
+        @Override
         public void orientationChanged(Ruler ruler) {
             for (RulerListener listener : this) {
                 listener.orientationChanged(ruler);

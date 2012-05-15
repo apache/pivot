@@ -145,5 +145,6 @@ public class MenuBars extends Frame implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+        // empty block
     }
 }

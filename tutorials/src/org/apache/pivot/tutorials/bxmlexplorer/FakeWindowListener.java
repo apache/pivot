@@ -27,22 +27,27 @@ public interface FakeWindowListener {
     public static class Adapter implements FakeWindowListener {
         @Override
         public void titleChanged(FakeWindow window, String previousTitle) {
+            // empty block
         }
 
         @Override
         public void iconAdded(FakeWindow window, Image addedIcon) {
+            // empty block
         }
 
         @Override
         public void iconInserted(FakeWindow window, Image addedIcon, int index) {
+            // empty block
         }
 
         @Override
         public void iconsRemoved(FakeWindow window, int index, Sequence<Image> removed) {
+            // empty block
         }
 
         @Override
         public void contentChanged(FakeWindow window, Component previousContent) {
+            // empty block
         }
 
     }

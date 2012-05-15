@@ -37,7 +37,7 @@ public class Sliders extends Window implements Bindable {
 
         slider.getSliderValueListeners().add(new SliderValueListener() {
             @Override
-            public void valueChanged(Slider slider, int previousValue) {
+            public void valueChanged(Slider sliderArgument, int previousValue) {
                 updateLabel();
             }
         });

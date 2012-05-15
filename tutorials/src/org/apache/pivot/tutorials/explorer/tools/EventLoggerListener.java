@@ -30,18 +30,22 @@ public interface EventLoggerListener {
     public static class Adapter implements EventLoggerListener {
         @Override
         public void sourceChanged(EventLogger eventLogger, Component previousSource) {
+            // empty block
         }
 
         @Override
         public void eventIncluded(EventLogger eventLogger, Method method) {
+            // empty block
         }
 
         @Override
         public void eventExcluded(EventLogger eventLogger, Method method) {
+            // empty block
         }
 
         @Override
         public void eventFired(EventLogger eventLogger, Method event, Object[] arguments) {
+            // empty block
         }
     }
 

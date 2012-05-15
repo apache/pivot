@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class Scripting implements Application {
+public class Scripting extends Application.Adapter {
     public static class MyButtonPressListener implements ButtonPressListener {
         @Override
         public void buttonPressed(Button button) {
@@ -64,15 +64,8 @@ public class Scripting implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(Scripting.class, args);
     }
+
 }

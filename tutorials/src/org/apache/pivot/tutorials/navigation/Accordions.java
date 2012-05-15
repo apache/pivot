@@ -38,17 +38,17 @@ public class Accordions extends Window implements Bindable {
             private int selectedIndex = -1;
 
             @Override
-            public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
-                this.selectedIndex = selectedIndex;
+            public Vote previewSelectedIndexChange(Accordion accordionArgument, int selectedIndexArgument) {
+                this.selectedIndex = selectedIndexArgument;
 
                 // Enable the next panel or disable the previous panel so the
                 // transition looks smoother
-                if (selectedIndex != -1) {
-                    int previousSelectedIndex = accordion.getSelectedIndex();
-                    if (selectedIndex > previousSelectedIndex) {
-                        accordion.getPanels().get(selectedIndex).setEnabled(true);
+                if (selectedIndexArgument != -1) {
+                    int previousSelectedIndex = accordionArgument.getSelectedIndex();
+                    if (selectedIndexArgument > previousSelectedIndex) {
+                        accordionArgument.getPanels().get(selectedIndexArgument).setEnabled(true);
                     } else {
-                        accordion.getPanels().get(previousSelectedIndex).setEnabled(false);
+                        accordionArgument.getPanels().get(previousSelectedIndex).setEnabled(false);
                     }
 
                 }
@@ -57,16 +57,16 @@ public class Accordions extends Window implements Bindable {
             }
 
             @Override
-            public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
+            public void selectedIndexChangeVetoed(Accordion accordionArgument, Vote reason) {
                 if (reason == Vote.DENY
                     && selectedIndex != -1) {
-                    Component panel = accordion.getPanels().get(selectedIndex);
+                    Component panel = accordionArgument.getPanels().get(selectedIndex);
                     panel.setEnabled(!panel.isEnabled());
                 }
             }
 
             @Override
-            public void selectedIndexChanged(Accordion accordion, int previousSelection) {
+            public void selectedIndexChanged(Accordion accordionArgument, int previousSelection) {
                 updateAccordion();
             }
         });

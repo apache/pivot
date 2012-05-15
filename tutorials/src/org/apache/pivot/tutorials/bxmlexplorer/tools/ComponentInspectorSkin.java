@@ -274,14 +274,14 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
+                    TextInput textInputLocal = (TextInput)component;
 
                     try {
-                        dictionary.put(key, Integer.parseInt(textInput.getText()));
+                        dictionary.put(key, Integer.parseInt(textInputLocal.getText()));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        int value = (Integer)dictionary.get(key);
-                        textInput.setText(String.valueOf(value));
+                        int valueLocal = (Integer)dictionary.get(key);
+                        textInputLocal.setText(String.valueOf(valueLocal));
                     }
                 }
             }
@@ -314,14 +314,14 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
+                    TextInput textInputLocal = (TextInput)component;
 
                     try {
-                        dictionary.put(key, Float.parseFloat(textInput.getText()));
+                        dictionary.put(key, Float.parseFloat(textInputLocal.getText()));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        float value = (Float)dictionary.get(key);
-                        textInput.setText(String.valueOf(value));
+                        float valueLocal = (Float)dictionary.get(key);
+                        textInputLocal.setText(String.valueOf(valueLocal));
                     }
                 }
             }
@@ -354,14 +354,14 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
+                    TextInput textInputLocal = (TextInput)component;
 
                     try {
-                        dictionary.put(key, Double.parseDouble(textInput.getText()));
+                        dictionary.put(key, Double.parseDouble(textInputLocal.getText()));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        double value = (Double)dictionary.get(key);
-                        textInput.setText(String.valueOf(value));
+                        double valueLocal = (Double)dictionary.get(key);
+                        textInputLocal.setText(String.valueOf(valueLocal));
                     }
                 }
             }
@@ -392,14 +392,14 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
+                    TextInput textInputLocal = (TextInput)component;
 
                     try {
-                        dictionary.put(key, textInput.getText());
+                        dictionary.put(key, textInputLocal.getText());
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        String value = (String)dictionary.get(key);
-                        textInput.setText(value == null ? "" : value);
+                        String valueLocal = (String)dictionary.get(key);
+                        textInputLocal.setText(valueLocal == null ? "" : valueLocal);
                     }
                 }
             }
@@ -439,14 +439,14 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             private boolean updating = false;
 
             @Override
-            public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+            public void selectedIndexChanged(ListButton listButtonArgument, int previousSelectedIndex) {
                 if (!updating) {
                     updating = true;
                     try {
-                        dictionary.put(key, listButton.getSelectedItem());
+                        dictionary.put(key, listButtonArgument.getSelectedItem());
                     } catch (Exception exception) {
-                        displayErrorMessage(exception, listButton.getWindow());
-                        listButton.setSelectedIndex(previousSelectedIndex);
+                        displayErrorMessage(exception, listButtonArgument.getWindow());
+                        listButtonArgument.setSelectedIndex(previousSelectedIndex);
                     } finally {
                         updating = false;
                     }
@@ -490,15 +490,15 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Point point = (Point)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Point pointLocal = (Point)dictionary.get(key);
 
                     try {
-                        int x = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Point(x, point.y));
+                        int x = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Point(x, pointLocal.y));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(point.x));
+                        textInputLocal.setText(String.valueOf(pointLocal.x));
                     }
                 }
             }
@@ -524,15 +524,15 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Point point = (Point)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Point pointLocal = (Point)dictionary.get(key);
 
                     try {
-                        int y = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Point(point.x, y));
+                        int y = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Point(pointLocal.x, y));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(point.y));
+                        textInputLocal.setText(String.valueOf(pointLocal.y));
                     }
                 }
             }
@@ -583,15 +583,15 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Dimensions dimensions = (Dimensions)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Dimensions dimensionsLocal = (Dimensions)dictionary.get(key);
 
                     try {
-                        int width = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Dimensions(width, dimensions.height));
+                        int width = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Dimensions(width, dimensionsLocal.height));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(dimensions.width));
+                        textInputLocal.setText(String.valueOf(dimensionsLocal.width));
                     }
                 }
             }
@@ -617,15 +617,15 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Dimensions dimensions = (Dimensions)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Dimensions dimensionsLocal = (Dimensions)dictionary.get(key);
 
                     try {
-                        int height = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Dimensions(dimensions.width, height));
+                        int height = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Dimensions(dimensionsLocal.width, height));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(dimensions.height));
+                        textInputLocal.setText(String.valueOf(dimensionsLocal.height));
                     }
                 }
             }
@@ -676,15 +676,15 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Limits limits = (Limits)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Limits limitsLocal = (Limits)dictionary.get(key);
 
                     try {
-                        int min = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Limits(min, limits.maximum));
+                        int min = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Limits(min, limitsLocal.maximum));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(limits.minimum));
+                        textInputLocal.setText(String.valueOf(limitsLocal.minimum));
                     }
                 }
             }
@@ -710,15 +710,15 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Limits limits = (Limits)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Limits limitsLocal = (Limits)dictionary.get(key);
 
                     try {
-                        int max = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Limits(limits.minimum, max));
+                        int max = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Limits(limitsLocal.minimum, max));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(limits.maximum));
+                        textInputLocal.setText(String.valueOf(limitsLocal.maximum));
                     }
                 }
             }
@@ -769,16 +769,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Insets insets = (Insets)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Insets insetsLocal = (Insets)dictionary.get(key);
 
                     try {
-                        int top = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Insets(top, insets.left, insets.bottom,
-                            insets.right));
+                        int top = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Insets(top, insetsLocal.left, insetsLocal.bottom,
+                            insetsLocal.right));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(insets.top));
+                        textInputLocal.setText(String.valueOf(insetsLocal.top));
                     }
                 }
             }
@@ -804,16 +804,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Insets insets = (Insets)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Insets insetsLocal = (Insets)dictionary.get(key);
 
                     try {
-                        int left = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Insets(insets.top, left, insets.bottom,
-                            insets.right));
+                        int left = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Insets(insetsLocal.top, left, insetsLocal.bottom,
+                            insetsLocal.right));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(insets.left));
+                        textInputLocal.setText(String.valueOf(insetsLocal.left));
                     }
                 }
             }
@@ -839,16 +839,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Insets insets = (Insets)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Insets insetsLocal = (Insets)dictionary.get(key);
 
                     try {
-                        int bottom = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Insets(insets.top, insets.left, bottom,
-                            insets.right));
+                        int bottom = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Insets(insetsLocal.top, insetsLocal.left, bottom,
+                            insetsLocal.right));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(insets.bottom));
+                        textInputLocal.setText(String.valueOf(insetsLocal.bottom));
                     }
                 }
             }
@@ -874,16 +874,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Insets insets = (Insets)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Insets insetsLocal = (Insets)dictionary.get(key);
 
                     try {
-                        int right = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Insets(insets.top, insets.left, insets.bottom,
+                        int right = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Insets(insetsLocal.top, insetsLocal.left, insetsLocal.bottom,
                             right));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(insets.right));
+                        textInputLocal.setText(String.valueOf(insetsLocal.right));
                     }
                 }
             }
@@ -920,15 +920,15 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Span span = (Span)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Span spanLocal = (Span)dictionary.get(key);
 
                     try {
-                        int start = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Span(start, span == null ? start : span.end));
+                        int start = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Span(start, spanLocal == null ? start : spanLocal.end));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(span == null ? "" : String.valueOf(span.start));
+                        textInputLocal.setText(spanLocal == null ? "" : String.valueOf(spanLocal.start));
                     }
                 }
             }
@@ -954,15 +954,15 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Span span = (Span)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Span spanLocal = (Span)dictionary.get(key);
 
                     try {
-                        int end = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Span(span == null ? end : span.start, end));
+                        int end = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Span(spanLocal == null ? end : spanLocal.start, end));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(span == null ? "" : String.valueOf(span.end));
+                        textInputLocal.setText(spanLocal == null ? "" : String.valueOf(spanLocal.end));
                     }
                 }
             }
@@ -1013,16 +1013,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    CornerRadii cornerRadii = (CornerRadii)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    CornerRadii cornerRadiiLocal = (CornerRadii)dictionary.get(key);
 
                     try {
-                        int topLeft = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new CornerRadii(topLeft, cornerRadii.topRight,
-                            cornerRadii.bottomLeft, cornerRadii.bottomRight));
+                        int topLeft = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new CornerRadii(topLeft, cornerRadiiLocal.topRight,
+                            cornerRadiiLocal.bottomLeft, cornerRadiiLocal.bottomRight));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(cornerRadii.topLeft));
+                        textInputLocal.setText(String.valueOf(cornerRadiiLocal.topLeft));
                     }
                 }
             }
@@ -1048,16 +1048,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    CornerRadii cornerRadii = (CornerRadii)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    CornerRadii cornerRadiiLocal = (CornerRadii)dictionary.get(key);
 
                     try {
-                        int topRight = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new CornerRadii(cornerRadii.topLeft, topRight,
-                            cornerRadii.bottomLeft, cornerRadii.bottomRight));
+                        int topRight = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new CornerRadii(cornerRadiiLocal.topLeft, topRight,
+                            cornerRadiiLocal.bottomLeft, cornerRadiiLocal.bottomRight));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(cornerRadii.topRight));
+                        textInputLocal.setText(String.valueOf(cornerRadiiLocal.topRight));
                     }
                 }
             }
@@ -1083,16 +1083,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    CornerRadii cornerRadii = (CornerRadii)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    CornerRadii cornerRadiiLocal = (CornerRadii)dictionary.get(key);
 
                     try {
-                        int bottomLeft = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new CornerRadii(cornerRadii.topLeft,
-                            cornerRadii.topRight, bottomLeft, cornerRadii.bottomRight));
+                        int bottomLeft = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new CornerRadii(cornerRadiiLocal.topLeft,
+                            cornerRadiiLocal.topRight, bottomLeft, cornerRadiiLocal.bottomRight));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(cornerRadii.bottomLeft));
+                        textInputLocal.setText(String.valueOf(cornerRadiiLocal.bottomLeft));
                     }
                 }
             }
@@ -1118,16 +1118,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    CornerRadii cornerRadii = (CornerRadii)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    CornerRadii cornerRadiiLocal = (CornerRadii)dictionary.get(key);
 
                     try {
-                        int bottomRight = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new CornerRadii(cornerRadii.topLeft,
-                            cornerRadii.topRight, cornerRadii.bottomLeft, bottomRight));
+                        int bottomRight = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new CornerRadii(cornerRadiiLocal.topLeft,
+                            cornerRadiiLocal.topRight, cornerRadiiLocal.bottomLeft, bottomRight));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(String.valueOf(cornerRadii.bottomRight));
+                        textInputLocal.setText(String.valueOf(cornerRadiiLocal.bottomRight));
                     }
                 }
             }
@@ -1164,16 +1164,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Scope scope = (Scope)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Scope scopeLocal = (Scope)dictionary.get(key);
 
                     try {
-                        int start = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Scope(start, scope == null ? start : scope.end,
-                            scope == null ? start : scope.extent));
+                        int start = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Scope(start, scopeLocal == null ? start : scopeLocal.end,
+                            scopeLocal == null ? start : scopeLocal.extent));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(scope == null ? "" : String.valueOf(scope.start));
+                        textInputLocal.setText(scopeLocal == null ? "" : String.valueOf(scopeLocal.start));
                     }
                 }
             }
@@ -1199,16 +1199,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Scope scope = (Scope)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Scope scopeLocal = (Scope)dictionary.get(key);
 
                     try {
-                        int end = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Scope(scope == null ? end : scope.start, end,
-                            scope == null ? end : scope.extent));
+                        int end = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Scope(scopeLocal == null ? end : scopeLocal.start, end,
+                            scopeLocal == null ? end : scopeLocal.extent));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(scope == null ? "" : String.valueOf(scope.end));
+                        textInputLocal.setText(scopeLocal == null ? "" : String.valueOf(scopeLocal.end));
                     }
                 }
             }
@@ -1234,16 +1234,16 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInput = (TextInput)component;
-                    Scope scope = (Scope)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput)component;
+                    Scope scopeLocal = (Scope)dictionary.get(key);
 
                     try {
-                        int extent = Integer.parseInt(textInput.getText());
-                        dictionary.put(key, new Scope(scope == null ? extent : scope.start,
-                            scope == null ? extent : scope.end, extent));
+                        int extent = Integer.parseInt(textInputLocal.getText());
+                        dictionary.put(key, new Scope(scopeLocal == null ? extent : scopeLocal.start,
+                            scopeLocal == null ? extent : scopeLocal.end, extent));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInput.setText(scope == null ? "" : String.valueOf(scope.extent));
+                        textInputLocal.setText(scopeLocal == null ? "" : String.valueOf(scopeLocal.extent));
                     }
                 }
             }
@@ -1284,12 +1284,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         colorChooserButton.getColorChooserButtonSelectionListeners().add
             (new ColorChooserButtonSelectionListener() {
             @Override
-            public void selectedColorChanged(ColorChooserButton colorChooserButton,
+            public void selectedColorChanged(ColorChooserButton colorChooserButtonArgument,
                 Color previousSelectedColor) {
                 try {
-                    dictionary.put(key, colorChooserButton.getSelectedColor());
+                    dictionary.put(key, colorChooserButtonArgument.getSelectedColor());
                 } catch (Exception exception) {
-                    displayErrorMessage(exception, colorChooserButton.getWindow());
+                    displayErrorMessage(exception, colorChooserButtonArgument.getWindow());
                     dictionary.put(key, previousSelectedColor);
                 }
             }
@@ -1320,12 +1320,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         calendarButton.getCalendarButtonSelectionListeners().add
             (new CalendarButtonSelectionListener() {
             @Override
-            public void selectedDateChanged(CalendarButton calendarButton,
+            public void selectedDateChanged(CalendarButton calendarButtonArgument,
                 CalendarDate previousSelectedDate) {
                 try {
-                    dictionary.put(key, calendarButton.getSelectedDate());
+                    dictionary.put(key, calendarButtonArgument.getSelectedDate());
                 } catch (Exception exception) {
-                    displayErrorMessage(exception, calendarButton.getWindow());
+                    displayErrorMessage(exception, calendarButtonArgument.getWindow());
                     dictionary.put(key, previousSelectedDate);
                 }
             }

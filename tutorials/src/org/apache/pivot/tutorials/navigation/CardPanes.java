@@ -62,7 +62,7 @@ public class CardPanes extends Window implements Bindable {
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
             @Override
-            public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+            public void selectedIndexChanged(CardPane cardPaneArgument, int previousSelectedIndex) {
                 updateLinkButtonState();
             }
         });

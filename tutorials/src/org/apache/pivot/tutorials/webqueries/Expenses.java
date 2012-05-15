@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.Display;
 /**
  * Query servlet tutorial client application.
  */
-public class Expenses implements Application {
+public class Expenses extends Application.Adapter {
     private String hostname = null;
     private int port = 0;
     private boolean secure = false;
@@ -88,14 +88,6 @@ public class Expenses implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public String getHostname() {
         return hostname;
     }
@@ -111,4 +103,5 @@ public class Expenses implements Application {
     public static void main(String[] args) {
         DesktopApplicationContext.main(Expenses.class, args);
     }
+
 }

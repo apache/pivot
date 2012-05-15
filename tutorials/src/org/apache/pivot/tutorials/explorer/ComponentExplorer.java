@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 
-public class ComponentExplorer implements Application {
+public class ComponentExplorer extends Application.Adapter {
     private ComponentExplorerWindow window = null;
 
     public static final String CLASS_PROPERTY = "class";
@@ -45,16 +45,9 @@ public class ComponentExplorer implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(ComponentExplorer.class, args);
     }
+
 }
 

@@ -42,9 +42,11 @@ import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
 class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLoggerListener {
+
     private static class TreeNodeComparator implements Comparator<TreeNode>, Serializable {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public int compare(TreeNode treeNode1, TreeNode treeNode2) {
             return treeNode1.getText().compareTo(treeNode2.getText());
         }
@@ -112,7 +114,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
                         }
                     });
 
-                    EventLogger eventLogger = (EventLogger)getComponent();
+                    EventLogger eventLoggerLocal = (EventLogger)getComponent();
 
                     boolean checked = (checkState == TreeView.NodeCheckState.CHECKED);
 
@@ -137,9 +139,9 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
                                 Method event = eventNode.getEvent();
 
                                 if (checked) {
-                                    eventLogger.getIncludeEvents().add(event);
+                                    eventLoggerLocal.getIncludeEvents().add(event);
                                 } else {
-                                    eventLogger.getIncludeEvents().remove(event);
+                                    eventLoggerLocal.getIncludeEvents().remove(event);
                                 }
                             }
                         }
@@ -171,12 +173,12 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
                                 treeView.setNodeChecked(parentPath, checked);
                             }
 
-                            eventLogger.getIncludeEvents().add(event);
+                            eventLoggerLocal.getIncludeEvents().add(event);
                         } else {
                             // Propagate upward
                             treeView.setNodeChecked(parentPath, checked);
 
-                            eventLogger.getIncludeEvents().remove(event);
+                            eventLoggerLocal.getIncludeEvents().remove(event);
                         }
                     }
                 }

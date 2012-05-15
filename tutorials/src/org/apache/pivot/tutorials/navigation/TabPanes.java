@@ -58,7 +58,7 @@ public class TabPanes extends Window implements Bindable {
 
         tabPane.getTabPaneListeners().add(new TabPaneListener.Adapter() {
             @Override
-            public Vote previewRemoveTabs(final TabPane tabPane, final int index, final int count) {
+            public Vote previewRemoveTabs(final TabPane tabPaneArgument, final int index, final int count) {
                 Vote vote;
                 if (confirmCloseTab) {
                     confirmCloseTabPrompt.open(TabPanes.this, new SheetCloseListener() {
@@ -68,14 +68,14 @@ public class TabPanes extends Window implements Bindable {
                                 && confirmCloseTabPrompt.getSelectedOptionIndex() == 1) {
                                 confirmCloseTab = false;
 
-                                int n = tabPane.getTabs().getLength();
+                                int n = tabPaneArgument.getTabs().getLength();
                                 if (index < n - 1) {
-                                    tabPane.setSelectedIndex(index + 1);
+                                    tabPaneArgument.setSelectedIndex(index + 1);
                                 } else {
-                                    tabPane.setSelectedIndex(index - 1);
+                                    tabPaneArgument.setSelectedIndex(index - 1);
                                 }
 
-                                tabPane.getTabs().remove(index, count);
+                                tabPaneArgument.getTabs().remove(index, count);
 
                                 confirmCloseTab = true;
                             }

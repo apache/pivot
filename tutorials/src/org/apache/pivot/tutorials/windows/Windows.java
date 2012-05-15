@@ -27,12 +27,12 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Window;
 
-public class Windows implements Application {
+public class Windows extends Application.Adapter {
     private Display display = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        this.display = display;
+    public void startup(Display displayArgument, Map<String, String> properties) throws Exception {
+        this.display = displayArgument;
 
         int x = 0;
         int y = 0;
@@ -55,7 +55,7 @@ public class Windows implements Application {
             x += 20;
             y += 20;
 
-            frame.open(display);
+            frame.open(displayArgument);
         }
     }
 
@@ -69,14 +69,6 @@ public class Windows implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public Window load(String fileName)
         throws SerializationException, IOException {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
@@ -86,4 +78,5 @@ public class Windows implements Application {
     public static void main(String[] args) {
         DesktopApplicationContext.main(Windows.class, args);
     }
+
 }

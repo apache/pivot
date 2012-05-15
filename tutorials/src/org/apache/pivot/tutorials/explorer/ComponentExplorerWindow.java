@@ -100,11 +100,11 @@ public class ComponentExplorerWindow extends Window implements Bindable {
 
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener.Adapter() {
             @Override
-            public void selectedPathsChanged(TreeView treeView,
+            public void selectedPathsChanged(TreeView treeViewArgument,
                 Sequence<Path> previousSelectedPaths) {
                 Component component = null;
 
-                Object node = treeView.getSelectedNode();
+                Object node = treeViewArgument.getSelectedNode();
                 if (node instanceof ComponentNode) {
                     ComponentNode componentNode = (ComponentNode)node;
                     URL url = componentNode.getSrc();
