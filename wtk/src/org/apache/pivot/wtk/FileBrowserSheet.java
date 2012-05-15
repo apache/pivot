@@ -90,7 +90,7 @@ public class FileBrowserSheet extends Sheet {
     }
 
     public FileBrowserSheet(Mode mode) {
-        this(Mode.OPEN, USER_HOME);
+        this(mode, USER_HOME);
     }
 
     public FileBrowserSheet(Mode mode, String rootFolder) {
