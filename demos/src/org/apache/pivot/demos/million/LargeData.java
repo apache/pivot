@@ -41,6 +41,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListButton;
+import org.apache.pivot.wtk.ListButtonSelectionListener;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSortListener;
@@ -158,6 +159,17 @@ public class LargeData extends Application.Adapter {
         cancelButton = (PushButton)bxmlSerializer.getNamespace().get("cancelButton");
         statusLabel = (Label)bxmlSerializer.getNamespace().get("statusLabel");
         tableView = (TableView)bxmlSerializer.getNamespace().get("tableView");
+
+        fileListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener.Adapter() {
+            @Override
+            public void selectedItemChanged(ListButton listButtonArgument, Object previousSelectedItem) {
+                Object selectedItem = listButtonArgument.getSelectedItem();
+
+                System.out.println("Selected: " + selectedItem.toString()
+                    + ", now clear table data ...");
+                tableView.getTableData().clear();  // empty the table
+            }
+        });
 
         loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
