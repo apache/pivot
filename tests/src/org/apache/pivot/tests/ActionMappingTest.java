@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Window;
 
-public class ActionMappingTest implements Application {
+public class ActionMappingTest extends Application.Adapter {
     private Window window = null;
 
     @Override
@@ -65,15 +65,8 @@ public class ActionMappingTest implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(ActionMappingTest.class, args);
     }
+
 }

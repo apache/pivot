@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.effects.TagDecorator;
 import org.apache.pivot.wtk.media.Image;
 
-public class TagDecoratorTest implements Application {
+public class TagDecoratorTest extends Application.Adapter {
     private Frame frame = null;
 
     @Override
@@ -52,14 +52,6 @@ public class TagDecoratorTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

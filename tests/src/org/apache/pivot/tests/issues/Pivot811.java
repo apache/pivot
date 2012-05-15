@@ -40,8 +40,9 @@ import org.apache.pivot.wtk.Window;
 public class Pivot811 extends Application.Adapter {
     private Display display = null;
 
-    public void startup(final Display display, Map<String, String> properties) throws Exception {
-        this.display = display;
+    @Override
+    public void startup(final Display displayArgument, Map<String, String> properties) throws Exception {
+        this.display = displayArgument;
 
         Frame listFrame = new Frame();
         listFrame.setTitle("List Frame");
@@ -73,8 +74,8 @@ public class Pivot811 extends Application.Adapter {
 
         listView.getListViewSelectionListeners().add(new ListViewSelectionListener.Adapter() {
             @Override
-            public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
-                System.out.println("selectedItemChanged : " + listView.getSelectedItem());
+            public void selectedItemChanged(ListView listViewArgument, Object previousSelectedItem) {
+                System.out.println("selectedItemChanged : " + listViewArgument.getSelectedItem());
             }
         });
 
@@ -93,22 +94,22 @@ public class Pivot811 extends Application.Adapter {
                     detailFrame.setLocation(80 + (selectedIndex * 10), 80 + (selectedIndex * 10));
                     detailFrame.getStyles().put("padding", new Insets(0, 0, 0, 0));
 
-                    BoxPane boxPane = new BoxPane();
-                    boxPane.getStyles().put("fill", true);
-                    boxPane.setOrientation(Orientation.VERTICAL);
-                    detailFrame.setContent(boxPane);
+                    BoxPane boxPaneLocal = new BoxPane();
+                    boxPaneLocal.getStyles().put("fill", true);
+                    boxPaneLocal.setOrientation(Orientation.VERTICAL);
+                    detailFrame.setContent(boxPaneLocal);
 
                     String selectedItem = listView.getSelectedItem().toString();
                     Label label = new Label("Selected Item is \"" + selectedItem + "\"");
-                    boxPane.add(label);
-                    boxPane.add(new Label(""));  // spacer
+                    boxPaneLocal.add(label);
+                    boxPaneLocal.add(new Label(""));  // spacer
 
-                    boxPane.add(new Label("Click inside the text input to focus it"));
+                    boxPaneLocal.add(new Label("Click inside the text input to focus it"));
                     TextInput textInput = new TextInput();
                     textInput.setText("Focusable component");
-                    boxPane.add(textInput);  // workaround for pivot-811: add a focusable element inside the frame
+                    boxPaneLocal.add(textInput);  // workaround for pivot-811: add a focusable element inside the frame
 
-                    detailFrame.open(display);
+                    detailFrame.open(displayArgument);
 
                     // workaround for pivot-811: force the focus on the first focusable element inside the frame
                     detailFrame.requestFocus();
@@ -119,7 +120,7 @@ public class Pivot811 extends Application.Adapter {
             }
         });
 
-        listFrame.open(display);
+        listFrame.open(displayArgument);
 
         listView.setSelectedIndex(0);
         listView.requestFocus();

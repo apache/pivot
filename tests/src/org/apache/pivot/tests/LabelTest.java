@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextDecoration;
 
-public class LabelTest implements Application {
+public class LabelTest extends Application.Adapter {
     private Frame frame = null;
 
     @Override
@@ -85,14 +85,6 @@ public class LabelTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

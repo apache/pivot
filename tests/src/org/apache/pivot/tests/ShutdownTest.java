@@ -26,14 +26,14 @@ import org.apache.pivot.wtk.DialogCloseListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MessageType;
 
-public class ShutdownTest implements Application {
+public class ShutdownTest extends Application.Adapter {
     private Display display = null;
     private Alert alert = null;
     private boolean cancelShutdown = true;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) {
-        this.display = display;
+    public void startup(Display displayArgument, Map<String, String> properties) {
+        this.display = displayArgument;
         cancelShutdown = true;
 
         System.out.println("startup()");
@@ -51,14 +51,15 @@ public class ShutdownTest implements Application {
             alert = new Alert(MessageType.QUESTION, "Cancel shutdown?", options);
             alert.setModal(false);
             alert.open(display, new DialogCloseListener() {
+                @Override
                 public void dialogClosed(Dialog dialog, boolean modal) {
                     if (!(dialog instanceof Alert)) {
                         return ;
                     }
 
-                    Alert alert = (Alert)dialog;
-                    if (alert.getResult()) {
-                        if (alert.getSelectedOptionIndex() == 1) {
+                    Alert alertLocal = (Alert)dialog;
+                    if (alertLocal.getResult()) {
+                        if (alertLocal.getSelectedOptionIndex() == 1) {
                             cancelShutdown = false;
                             DesktopApplicationContext.exit();
                         }
@@ -72,15 +73,8 @@ public class ShutdownTest implements Application {
         return cancelShutdown;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(ShutdownTest.class, args);
     }
+
 }

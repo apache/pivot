@@ -35,7 +35,7 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot694 implements Application {
+public class Pivot694 extends Application.Adapter {
     private Window window = null;
 
 // TODO: for release 2.1 ... maybe generalizing some test here
@@ -93,14 +93,6 @@ public class Pivot694 implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     private void initializeFields(BXMLSerializer serializer) {

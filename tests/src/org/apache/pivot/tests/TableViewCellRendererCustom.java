@@ -36,10 +36,9 @@ public class TableViewCellRendererCustom extends TableViewCellRenderer {
         if (text == null) {
             return text;
         }
-        else {
-            // return new StringBuffer(text).reverse().toString();  // reverse text
-            return text.toUpperCase();  // to upper text
-        }
+
+        // return new StringBuffer(text).reverse().toString();  // reverse text
+        return text.toUpperCase();  // to upper text
     }
 
 }

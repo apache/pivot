@@ -28,15 +28,16 @@ public class MessageBusTest {
     public static void main(String[] args) {
         MessageBusListener<TestMessage> testMessageListener =
             new MessageBusListener<TestMessage>() {
+                @Override
                 public void messageSent(TestMessage message) {
                     System.out.println(message);
                 }
             };
 
-        MessageBus.subscribe(TestMessage.class, testMessageListener);
-        MessageBus.sendMessage(TestMessage.HELLO);
+        MessageBus.subscribe(TestMessage.class, testMessageListener);  // subscribe
+        MessageBus.sendMessage(TestMessage.HELLO);  // a message will be printed
 
-        MessageBus.unsubscribe(TestMessage.class, testMessageListener);
-        MessageBus.sendMessage(TestMessage.GOODBYE);
+        MessageBus.unsubscribe(TestMessage.class, testMessageListener);  // unsubscribe
+        MessageBus.sendMessage(TestMessage.GOODBYE);  // the message will not be printed
     }
 }

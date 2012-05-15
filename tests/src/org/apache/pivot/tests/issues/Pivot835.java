@@ -23,22 +23,18 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot835 implements Application
+public class Pivot835 extends Application.Adapter
 {
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         Window window = (Window) bxmlSerializer.readObject(getClass().getResource("pivot_835.bxml"));
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean b) throws Exception {
         return false;
-    }
-
-    public void suspend() throws Exception {
-    }
-
-    public void resume() throws Exception {
     }
 
     public static void main(String[] args) {

@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.content.ListButtonDataRenderer;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 
-public class DataBindingTest implements Application {
+public class DataBindingTest extends Application.Adapter {
     public static class TestListButtonDataRenderer extends ListButtonDataRenderer {
         @Override
         public void render(Object data, Button button, boolean highlighted) {
@@ -84,6 +84,7 @@ public class DataBindingTest implements Application {
     }
 
     public static class TestBindMapping implements ListView.ItemBindMapping, Spinner.ItemBindMapping {
+        @Override
         @SuppressWarnings("unchecked")
         public int indexOf(List<?> list, Object value) {
             int i = 0;
@@ -104,6 +105,7 @@ public class DataBindingTest implements Application {
             return i;
         }
 
+        @Override
         @SuppressWarnings("unchecked")
         public Object get(List<?> list, int index) {
             Map<String, ?> map = (Map<String, ?>)list.get(index);
@@ -139,14 +141,6 @@ public class DataBindingTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

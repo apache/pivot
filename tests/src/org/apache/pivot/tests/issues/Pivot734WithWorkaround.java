@@ -31,7 +31,7 @@ import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TreeBranch;
 
-public class Pivot734WithWorkaround implements Application {
+public class Pivot734WithWorkaround extends Application.Adapter {
 
     private Window window = null;
     private TreeView tree;
@@ -58,24 +58,29 @@ public class Pivot734WithWorkaround implements Application {
         System.out.println("tree style for showEmptyBranchControls is " + treeStyleForShowEmptyBranchControls);
 
         tree.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
+            @Override
             public void selectedPathAdded(TreeView treeView, Path path) {
                 System.out.println("selectedPathAdded");
             }
 
+            @Override
             public void selectedPathRemoved(TreeView treeView, Path path) {
                 System.out.println("selectedPathRemoved");
             }
 
+            @Override
             public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
                 System.out.println("selectedPathsChanged");
             }
 
+            @Override
             public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
                 System.out.println("selectedNodeChanged");
             }
         });
 
         treeButtonAdd.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 Object x = tree.getSelectedNode();
                 System.out.println("add a 'new branch' element to the selected element :: " + x);
@@ -95,6 +100,7 @@ public class Pivot734WithWorkaround implements Application {
         });
 
         treeButtonRemove.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 Object x = tree.getSelectedNode();
                 System.out.println("remove a 'new branch' element under the selected element :: " + x);
@@ -117,14 +123,6 @@ public class Pivot734WithWorkaround implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

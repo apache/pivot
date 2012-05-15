@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.SliderValueListener;
 import org.apache.pivot.wtk.Window;
 
-public class SliderTest implements Application {
+public class SliderTest extends Application.Adapter {
     private Window window = null;
     private Slider slider1 = null;
     private Slider slider2 = null;
@@ -69,15 +69,6 @@ public class SliderTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void resume() {
-    }
-
-
-    @Override
-    public void suspend() {
     }
 
     public static void main(String[] args) {

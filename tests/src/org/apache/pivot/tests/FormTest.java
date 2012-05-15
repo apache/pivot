@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 
-public class FormTest implements Application {
+public class FormTest extends Application.Adapter {
     private Frame frame = null;
 
     @Override
@@ -44,15 +44,6 @@ public class FormTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void resume() {
-    }
-
-
-    @Override
-    public void suspend() {
     }
 
     public static void main(String[] args) {

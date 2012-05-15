@@ -35,7 +35,7 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Visual;
 import org.apache.pivot.wtk.media.Image;
 
-public class DragDropTest implements Application {
+public class DragDropTest extends Application.Adapter {
     private Frame frame1 = new Frame();
     private Frame frame2 = new Frame();
 
@@ -196,14 +196,6 @@ public class DragDropTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

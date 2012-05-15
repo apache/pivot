@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Span;
 
-public class ListViewSelectionTest implements Application {
+public class ListViewSelectionTest extends Application.Adapter {
     private ListView listView = new ListView();
 
     @SuppressWarnings("unchecked")
@@ -119,7 +119,7 @@ public class ListViewSelectionTest implements Application {
 
         listView.getListViewSelectionListeners().add(new ListViewSelectionListener.Adapter() {
             @Override
-            public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+            public void selectedRangesChanged(ListView listViewArgument, Sequence<Span> previousSelectedRanges) {
                 System.out.println("Selection changed");
             }
         });
@@ -131,14 +131,6 @@ public class ListViewSelectionTest implements Application {
     @Override
     public boolean shutdown(boolean optional) {
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     protected void dumpSelection() {
@@ -155,4 +147,5 @@ public class ListViewSelectionTest implements Application {
         // on the screen, but only some messages will be displayed to the text console
         DesktopApplicationContext.main(ListViewSelectionTest.class, args);
     }
+
 }

@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.WindowStateListener;
 public class Pivot800 extends Application.Adapter {
     private FileBrowserSheet sheet;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         Window window = new Window();
         window.setMaximized(true);
@@ -52,6 +53,7 @@ public class Pivot800 extends Application.Adapter {
     }
 
     private class FolderFilter implements FileFilter {
+        @Override
         public boolean accept(File pathname) {
             return pathname.isDirectory();
         }

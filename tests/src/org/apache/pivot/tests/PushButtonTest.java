@@ -18,14 +18,14 @@ package org.apache.pivot.tests;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class PushButtonTest implements Application {
+public class PushButtonTest extends Application.Adapter {
     private Window window = null;
 
     @Override
@@ -54,15 +54,8 @@ public class PushButtonTest implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(PushButtonTest.class, args);
     }
+
 }

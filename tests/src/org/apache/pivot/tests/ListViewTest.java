@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Window;
 
-public class ListViewTest implements Application {
+public class ListViewTest extends Application.Adapter {
     private Window window = null;
 
     @Override
@@ -53,6 +53,7 @@ public class ListViewTest implements Application {
 
         listView.setListData(listData);
         listView.setDisabledItemFilter(new Filter<String>() {
+            @Override
             public boolean include(String item) {
                 return !Character.isDigit(item.charAt(0));
             }
@@ -78,14 +79,6 @@ public class ListViewTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

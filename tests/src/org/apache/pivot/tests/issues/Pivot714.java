@@ -34,7 +34,7 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot714 implements Application {
+public class Pivot714 extends Application.Adapter {
 
     private Frame frame;
     private Dialog result;
@@ -45,8 +45,8 @@ public class Pivot714 implements Application {
 
     }
 
-    public Window getWindow(final Window owner) {
-        this.owner = owner;
+    public Window getWindow(final Window ownerArgument) {
+        this.owner = ownerArgument;
         final BXMLSerializer bxmlSerializer = new BXMLSerializer();
         try {
             result = (Dialog)bxmlSerializer.readObject(Pivot714.class.getResource("pivot_714.bxml"));
@@ -65,12 +65,15 @@ public class Pivot714 implements Application {
 
         CalendarButton cbDate = (CalendarButton)bxmlSerializer.getNamespace().get("date");
         dcl = (new DialogCloseListener() {
+            @Override
             public void dialogClosed(Dialog dialog, boolean modal) {
+                // empty block
             }
         });
         cbDate.getCalendarButtonSelectionListeners().add(new CalendarButtonSelectionListener() {
             @Override
             public void selectedDateChanged(CalendarButton calendarButton, CalendarDate previousSelectedDate) {
+                // empty block
             }
         });
 
@@ -101,14 +104,6 @@ public class Pivot714 implements Application {
        }
 
        return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

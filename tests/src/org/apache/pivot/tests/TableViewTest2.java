@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowEditor;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 
-public class TableViewTest2 implements Application {
+public class TableViewTest2 extends Application.Adapter {
     private Window window = null;
     private TableView tableView = null;
     private Window menu = null;
@@ -64,14 +64,6 @@ public class TableViewTest2 implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.Window;
 public class Pivot738 extends Application.Adapter {
     private Window window = null;
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window) bxmlSerializer.readObject(Pivot734.class, "pivot_738.bxml");

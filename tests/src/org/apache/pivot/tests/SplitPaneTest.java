@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class SplitPaneTest implements Application {
+public class SplitPaneTest extends Application.Adapter {
     private Window window = null;
 
     @Override
@@ -44,14 +44,6 @@ public class SplitPaneTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

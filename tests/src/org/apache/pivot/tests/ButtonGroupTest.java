@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class ButtonGroupTest implements Application {
+public class ButtonGroupTest extends Application.Adapter {
     private Window window = null;
 
     @Override
@@ -36,18 +36,18 @@ public class ButtonGroupTest implements Application {
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
             @Override
-            public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
+            public void selectionChanged(ButtonGroup buttonGroupArgument, Button previousSelection) {
                 System.out.println("selectionChanged(): previousSelection = " + previousSelection
-                    + ", selection = " + buttonGroup.getSelection());
+                    + ", selection = " + buttonGroupArgument.getSelection());
             }
 
             @Override
-            public void buttonAdded(ButtonGroup buttonGroup, Button button) {
+            public void buttonAdded(ButtonGroup buttonGroupArgument, Button button) {
                 System.out.println("buttonAdded(): " + button);
             }
 
             @Override
-            public void buttonRemoved(ButtonGroup buttonGroup, Button button) {
+            public void buttonRemoved(ButtonGroup buttonGroupArgument, Button button) {
                 System.out.println("buttonRemoved(): " + button);
             }
         });
@@ -90,14 +90,6 @@ public class ButtonGroupTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

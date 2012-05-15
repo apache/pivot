@@ -31,7 +31,7 @@ import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Window;
 
 
-public class CheckedListViewTest implements Application {
+public class CheckedListViewTest extends Application.Adapter {
     private Window window = null;
 
     @Override
@@ -74,14 +74,6 @@ public class CheckedListViewTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void suspend() {
     }
 
     public static void main(String[] args) {

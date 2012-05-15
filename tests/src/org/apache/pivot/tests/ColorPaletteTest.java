@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 
-public class ColorPaletteTest implements Application {
+public class ColorPaletteTest extends Application.Adapter {
     private Window window = null;
 
     @Override
@@ -74,16 +74,6 @@ public class ColorPaletteTest implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-        // empty block
-    }
-
-    @Override
-    public void resume() {
-        // empty block
-    }
-
     private static Component createCell(int index) {
         StackPane stackPane = new StackPane();
 
@@ -110,4 +100,5 @@ public class ColorPaletteTest implements Application {
     public static void main(String[] args) {
         DesktopApplicationContext.main(ColorPaletteTest.class, args);
     }
+
 }

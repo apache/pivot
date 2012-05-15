@@ -28,11 +28,11 @@ public class Pivot751WithoutGUI extends Application.Adapter {
 
         tabPane.getTabPaneSelectionListeners().add(new TabPaneSelectionListener.Adapter() {
             @Override
-            public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
+            public void selectedIndexChanged(TabPane tabPaneArgument, int previousSelectedIndex) {
                 System.out.println(String.format("tabs     : %-16d actual selectedIndex    : %d",
-                        tabPane.getTabs().getLength(), tabPane.getSelectedIndex()));
+                        tabPaneArgument.getTabs().getLength(), tabPaneArgument.getSelectedIndex()));
                 System.out.println(String.format("indirect : %-16s 'previousSelectedIndex' : %d",
-                        (previousSelectedIndex == tabPane.getSelectedIndex()), previousSelectedIndex));
+                        (previousSelectedIndex == tabPaneArgument.getSelectedIndex()), previousSelectedIndex));
             }
         });
 

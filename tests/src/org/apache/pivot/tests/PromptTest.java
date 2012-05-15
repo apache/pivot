@@ -30,7 +30,7 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 
-public class PromptTest implements Application {
+public class PromptTest extends Application.Adapter {
     private Window window = null;
     private PushButton helloButton = null;
 
@@ -70,14 +70,6 @@ public class PromptTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

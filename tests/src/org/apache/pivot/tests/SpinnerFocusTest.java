@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Spinner;
 
-public class SpinnerFocusTest implements Application {
+public class SpinnerFocusTest extends Application.Adapter {
     private Frame frame = null;
     private Spinner spinner = null;
 
@@ -69,14 +69,6 @@ public class SpinnerFocusTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

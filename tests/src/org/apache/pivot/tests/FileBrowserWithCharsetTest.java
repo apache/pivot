@@ -84,7 +84,7 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
         PushButton button = new PushButton("Open Sheet");
         button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
-            public void buttonPressed(Button button) {
+            public void buttonPressed(Button buttonArgument) {
                 final Window window = FileBrowserWithCharsetTest.getActiveWindow();
                 final FileBrowserSheet fileBrowserSheet = new FileBrowserWithCharsetTest(FileBrowserSheet.Mode.OPEN);
 
@@ -127,11 +127,13 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
 
     @Override
     public void resume() {
+        // empty block
     }
 
 
     @Override
     public void suspend() {
+        // empty block
     }
 
     public static void main(String[] args) {

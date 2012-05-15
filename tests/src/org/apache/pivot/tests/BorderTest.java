@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 
 
-public class BorderTest implements Application {
+public class BorderTest extends Application.Adapter {
     private Frame frame = null;
 
     @Override
@@ -47,15 +47,8 @@ public class BorderTest implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(BorderTest.class, args);
     }
+
 }

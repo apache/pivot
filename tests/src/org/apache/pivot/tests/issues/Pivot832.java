@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot832 implements Application
+public class Pivot832 extends Application.Adapter
 {
     private Window window = null;
     private String selectedFolder = null;
@@ -45,6 +45,7 @@ public class Pivot832 implements Application
     private PushButton openFileButton = null;
 
 
+    @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window) bxmlSerializer.readObject(getClass().getResource("pivot_832.bxml"));
@@ -107,6 +108,7 @@ public class Pivot832 implements Application
                 fileBrowserSheet.open(window, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
+                        // empty block
                     }
                 });
             }
@@ -115,14 +117,9 @@ public class Pivot832 implements Application
         window.open(display);
     }
 
+    @Override
     public boolean shutdown(boolean b) throws Exception {
         return false;
-    }
-
-    public void suspend() throws Exception {
-    }
-
-    public void resume() throws Exception {
     }
 
     public static void main(String[] args) {

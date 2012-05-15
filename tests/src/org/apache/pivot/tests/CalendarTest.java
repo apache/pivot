@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 
-public class CalendarTest implements Application {
+public class CalendarTest extends Application.Adapter {
     private Window window = null;
 
     @BXML private Calendar calendar = null;
@@ -57,12 +57,12 @@ public class CalendarTest implements Application {
 
         calendarButton.getCalendarButtonListeners().add(new CalendarButtonListener.Adapter() {
             @Override
-            public void yearChanged(CalendarButton calendarButton, int previousYear) {
+            public void yearChanged(CalendarButton calendarButtonArgument, int previousYear) {
                 disable();
             }
 
             @Override
-            public void monthChanged(CalendarButton calendarButton, int previousMonth) {
+            public void monthChanged(CalendarButton calendarButtonArgument, int previousMonth) {
                 disable();
             }
 
@@ -80,6 +80,7 @@ public class CalendarTest implements Application {
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException exception) {
+                            // ignore exception
                         }
 
                         return null;
@@ -90,13 +91,13 @@ public class CalendarTest implements Application {
 
                 task.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
                     @Override
-                    public void taskExecuted(Task<Void> task) {
+                    public void taskExecuted(Task<Void> taskArgument) {
                         System.out.println("EXECUTED");
                         calendarButton.setDisabledDateFilter(null);
                     }
 
                     @Override
-                    public void executeFailed(Task<Void> task) {
+                    public void executeFailed(Task<Void> taskArgument) {
                         System.out.println("FAILED");
                         calendarButton.setDisabledDateFilter(null);
                     }
@@ -116,15 +117,8 @@ public class CalendarTest implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(CalendarTest.class, args);
     }
+
 }

@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class ListViewTest2 implements Application {
+public class ListViewTest2 extends Application.Adapter {
     private Window window = null;
     private Window menu = null;
 
@@ -53,14 +53,6 @@ public class ListViewTest2 implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

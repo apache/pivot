@@ -72,7 +72,7 @@ import org.apache.pivot.wtk.Window;
  * @see DesktopApplicationContext#replaceSplashScreen(Display)
  * @see DesktopApplicationContext#PRESERVE_SPLASH_SCREEN_ARGUMENT
  */
-public class SplashScreenTest implements Application {
+public class SplashScreenTest extends Application.Adapter {
 
     private static class SplashScreenProgressOverlay {
         private final SplashScreen splashScreen;
@@ -165,7 +165,7 @@ public class SplashScreenTest implements Application {
             }
 
             // Load the Pivot UI
-            private void loadBXML(final Display display, final double weight) {
+            private void loadBXML(final Display displayArgument, final double weight) {
                 try {
                     ApplicationContext.queueCallback(new Runnable() {
                         @Override
@@ -178,7 +178,7 @@ public class SplashScreenTest implements Application {
                                 throw new RuntimeException(e);
                             }
                             if (window != null) {
-                                window.open(display);
+                                window.open(displayArgument);
                                 progressOverlay.increment(weight);
                             }
                         }
@@ -214,6 +214,12 @@ public class SplashScreenTest implements Application {
     }
 
 
+    @Override
+    public boolean shutdown(boolean optional) throws Exception {
+        System.out.println("Shutdown the application at " + new Date());
+        return false;
+    }
+
     public static void main(String[] args) {
         // Allow the BXML to be loaded on a background thread
         Container.setEventDispatchThreadChecker(null);
@@ -222,18 +228,4 @@ public class SplashScreenTest implements Application {
         DesktopApplicationContext.main(SplashScreenTest.class, args);
     }
 
-
-    @Override
-    public boolean shutdown(boolean optional) throws Exception {
-        System.out.println("Shutdown the application at " + new Date());
-        return false;
-    }
-
-    @Override
-    public void suspend() throws Exception {
-    }
-
-    @Override
-    public void resume() throws Exception {
-    }
 }

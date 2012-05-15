@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
 
-public class ExpanderTest implements Application {
+public class ExpanderTest extends Application.Adapter {
     private Window window = null;
 
     @Override
@@ -42,14 +42,6 @@ public class ExpanderTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

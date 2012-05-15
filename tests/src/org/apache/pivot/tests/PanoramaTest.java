@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Panorama;
 
-public class PanoramaTest implements Application {
+public class PanoramaTest extends Application.Adapter {
     private Frame frame1 = null;
     private Frame frame2 = null;
 
@@ -63,14 +63,6 @@ public class PanoramaTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

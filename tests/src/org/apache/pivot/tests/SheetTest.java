@@ -20,13 +20,13 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
@@ -41,7 +41,7 @@ import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
 
-public class SheetTest implements Application {
+public class SheetTest extends Application.Adapter {
     private Frame frame = null;
     private Sheet sheet = null;
 
@@ -113,24 +113,24 @@ public class SheetTest implements Application {
 
         closeButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
-            public void buttonPressed(Button button) {
-                button.getWindow().close();
+            public void buttonPressed(Button buttonArgument) {
+                buttonArgument.getWindow().close();
             }
         });
 
         button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
-            public void buttonPressed(Button button) {
+            public void buttonPressed(Button buttonArgument) {
                 prompt.open(frame);
 
-                Display display = DesktopApplicationContext.createDisplay(640, 480, 100, 100, true,
-                    true, false, button.getDisplay().getHostWindow(), null);
+                Display displayLocal = DesktopApplicationContext.createDisplay(640, 480, 100, 100, true,
+                    true, false, buttonArgument.getDisplay().getHostWindow(), null);
 
                 Window window = new Window();
                 window.setTitle("New Secondary Window");
                 window.setMaximized(true);
                 window.setContent(new Label("I am a secondary window!"));
-                window.open(display);
+                window.open(displayLocal);
             }
         });
 
@@ -151,14 +151,6 @@ public class SheetTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

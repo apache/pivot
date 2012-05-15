@@ -30,7 +30,7 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.Window;
 
-public class SuggestionPopupTest implements Application {
+public class SuggestionPopupTest extends Application.Adapter {
     private Window window = null;
 
     @BXML private TextInput textInput = null;
@@ -47,15 +47,15 @@ public class SuggestionPopupTest implements Application {
 
         textInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
-            public void textInserted(TextInput textInput, int index, int count) {
+            public void textInserted(TextInput textInputArgument, int index, int count) {
                 ArrayList<String> suggestions = new ArrayList<String>("One", "Two", "Three", "Four", "Five");
                 suggestionPopup.setSuggestionData(suggestions);
-                suggestionPopup.open(textInput, new SuggestionPopupCloseListener() {
+                suggestionPopup.open(textInputArgument, new SuggestionPopupCloseListener() {
                     @Override
-                    public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
-                        if (suggestionPopup.getResult()) {
+                    public void suggestionPopupClosed(SuggestionPopup suggestionPopupArgument) {
+                        if (suggestionPopupArgument.getResult()) {
                             selectedIndexLabel.setText("You selected suggestion number "
-                                + suggestionPopup.getSelectedIndex() + ".");
+                                + suggestionPopupArgument.getSelectedIndex() + ".");
                         } else {
                             selectedIndexLabel.setText("You didn't select anything.");
                         }
@@ -64,7 +64,7 @@ public class SuggestionPopupTest implements Application {
             }
 
             @Override
-            public void textRemoved(TextInput textInput, int index, int count) {
+            public void textRemoved(TextInput textInputArgument, int index, int count) {
                 suggestionPopup.close();
             }
         });
@@ -79,14 +79,6 @@ public class SuggestionPopupTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

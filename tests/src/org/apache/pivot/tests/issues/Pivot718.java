@@ -36,7 +36,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
 
-public class Pivot718 implements Application {
+public class Pivot718 extends Application.Adapter {
 
     private Window window = null;
     private TreeView tree;
@@ -64,25 +64,30 @@ public class Pivot718 implements Application {
         list = (ListView) bxmlSerializer.getNamespace().get("list");
         list.getListViewSelectionListeners().add(new ListViewSelectionListener() {
 
+            @Override
             public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
                 System.out.println("selectedRangeAdded");
             }
 
+            @Override
             public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
                 System.out.println("selectedRangeRemoved");
             }
 
+            @Override
             public void selectedRangesChanged(ListView listView,
                 Sequence<Span> previousSelectedRanges) {
                 System.out.println("selectedRangesChanged");
             }
 
+            @Override
             public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
                 System.out.println("selectedItemChanged :::" + listView.getSelectedItem());
             }
         });
         listDelButton.getButtonPressListeners().add(new ButtonPressListener() {
 
+            @Override
             @SuppressWarnings("unchecked")
             public void buttonPressed(Button button) {
                 Object x = list.getSelectedItem();
@@ -99,24 +104,29 @@ public class Pivot718 implements Application {
         tree = (TreeView) bxmlSerializer.getNamespace().get("tree");
         tree.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
 
+            @Override
             public void selectedPathAdded(TreeView treeView, Path path) {
                 System.out.println("selectedPathAdded");
             }
 
+            @Override
             public void selectedPathRemoved(TreeView treeView, Path path) {
                 System.out.println("selectedPathRemoved");
             }
 
+            @Override
             public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
                 System.out.println("selectedPathsChanged");
             }
 
+            @Override
             public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
                 System.out.println("selectedNodeChanged");
             }
         });
         treeDelButton.getButtonPressListeners().add(new ButtonPressListener() {
 
+            @Override
             public void buttonPressed(Button button) {
                 TreeNode selectedNode = (TreeNode) tree.getSelectedNode();
                 System.out.println("delete :: " + selectedNode);
@@ -137,14 +147,6 @@ public class Pivot718 implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

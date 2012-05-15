@@ -21,6 +21,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonGroupListener;
@@ -28,11 +29,10 @@ import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.CardPaneListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Sheet;
 
-public class CardPaneTest implements Application {
+public class CardPaneTest extends Application.Adapter {
     private Frame frame = null;
     private Sheet sheet = null;
 
@@ -61,7 +61,7 @@ public class CardPaneTest implements Application {
 
                 cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
                     @Override
-                    public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
+                    public Vote previewSelectedIndexChange(CardPane cardPaneArgument, int selectedIndexArgument) {
                         if (selection != null) {
                             selection.getParent().setEnabled(false);
                         }
@@ -70,7 +70,7 @@ public class CardPaneTest implements Application {
                     }
 
                     @Override
-                    public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+                    public void selectedIndexChangeVetoed(CardPane cardPaneArgument, Vote reason) {
                         if (selection != null
                             && reason == Vote.DENY) {
                             selection.getParent().setEnabled(true);
@@ -78,7 +78,7 @@ public class CardPaneTest implements Application {
                     }
 
                     @Override
-                    public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+                    public void selectedIndexChanged(CardPane cardPaneArgument, int previousSelectedIndex) {
                         if (selection != null) {
                             selection.getParent().setEnabled(true);
                         }
@@ -106,14 +106,6 @@ public class CardPaneTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void suspend() {
     }
 
     public static void main(String[] args) {

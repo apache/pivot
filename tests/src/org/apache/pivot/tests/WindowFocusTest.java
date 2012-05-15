@@ -18,14 +18,14 @@ package org.apache.pivot.tests;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextInput;
 
-public class WindowFocusTest implements Application {
+public class WindowFocusTest extends Application.Adapter {
     private Frame frame1;
     private Frame frame2;
 
@@ -67,15 +67,8 @@ public class WindowFocusTest implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(WindowFocusTest.class, args);
     }
+
 }

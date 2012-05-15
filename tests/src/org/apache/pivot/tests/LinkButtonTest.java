@@ -18,18 +18,18 @@ package org.apache.pivot.tests;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ButtonData;
 import org.apache.pivot.wtk.media.Image;
 
-public class LinkButtonTest implements Application {
+public class LinkButtonTest extends Application.Adapter {
     private Window window = new Window();
 
     @Override
@@ -46,10 +46,12 @@ public class LinkButtonTest implements Application {
 
             @Override
             public void mouseOver(Component component) {
+                // empty block
             }
 
             @Override
             public void mouseOut(Component component) {
+                // empty block
             }
         });
 
@@ -67,10 +69,12 @@ public class LinkButtonTest implements Application {
 
             @Override
             public void mouseOver(Component component) {
+                // empty block
             }
 
             @Override
             public void mouseOut(Component component) {
+                // empty block
             }
         });
 
@@ -93,15 +97,8 @@ public class LinkButtonTest implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(LinkButtonTest.class, args);
     }
+
 }

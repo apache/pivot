@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 
-public class ColorListButtonTest implements Application {
+public class ColorListButtonTest extends Application.Adapter {
     private Frame frame = null;
     private ListButton listButton = null;
 
@@ -53,15 +53,6 @@ public class ColorListButtonTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void resume() {
-    }
-
-
-    @Override
-    public void suspend() {
     }
 
     public static void main(String[] args) {

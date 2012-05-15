@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class NamespaceTest implements Application {
+public class NamespaceTest extends Application.Adapter {
     private Window window = null;
 
     @Override
@@ -44,15 +44,6 @@ public class NamespaceTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void resume() {
-    }
-
-
-    @Override
-    public void suspend() {
     }
 
     public static void main(String[] args) {

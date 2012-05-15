@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Window;
 
-public class ContextMenuTest implements Application {
+public class ContextMenuTest extends Application.Adapter {
     private Window window = null;
 
     @BXML private Menu.Section globalSection;
@@ -61,14 +61,6 @@ public class ContextMenuTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {

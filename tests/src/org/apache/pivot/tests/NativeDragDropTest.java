@@ -36,13 +36,13 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Visual;
 
-public class NativeDragDropTest implements Application {
+public class NativeDragDropTest extends Application.Adapter {
     private Frame frame = null;
 
     @Override
     public void startup(final Display display, Map<String, String> properties)
         throws Exception {
-        final Label label = new Label("http://www.apple.com");
+        final Label label = new Label("http://pivot.apache.org/");
         label.getStyles().put("font", new Font("Arial", Font.PLAIN, 24));
         label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
@@ -125,9 +125,9 @@ public class NativeDragDropTest implements Application {
                 DropAction dropAction = null;
 
                 if (dragContent.containsText()) {
-                    Label label = (Label)component;
+                    Label labelLocal = (Label)component;
                     try {
-                        label.setText(dragContent.getText());
+                        labelLocal.setText(dragContent.getText());
                     } catch(IOException exception) {
                         System.err.println(exception);
                     }
@@ -150,14 +150,6 @@ public class NativeDragDropTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     public static void main(String[] args) {
