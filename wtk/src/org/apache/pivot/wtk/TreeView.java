@@ -1640,7 +1640,7 @@ public class TreeView extends Component {
                 Path ancestorPath = new Path(path, path.getLength() - 1);
 
                 for (int i = ancestorPath.getLength() - 1; i >= 0; i--) {
-                    NodeCheckState ancestorPreviousCheckState = ancestorCheckStates.get(i);
+                    NodeCheckState ancestorPreviousCheckState = (ancestorCheckStates != null) ? ancestorCheckStates.get(i) : null;
                     NodeCheckState ancestorCheckState = getNodeCheckState(ancestorPath);
 
                     if (ancestorCheckState != ancestorPreviousCheckState) {

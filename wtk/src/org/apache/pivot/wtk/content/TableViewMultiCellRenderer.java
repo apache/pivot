@@ -275,20 +275,20 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     }
 
     @Override
-    public int getPreferredWidth(int height) {
-        return currentRenderer.getPreferredWidth(height);
+    public int getPreferredWidth(int heightArgument) {
+        return currentRenderer.getPreferredWidth(heightArgument);
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(int widthArgument) {
         // Our preferred height is the maximum of all our possible renderers'
         // preferred height
-        int preferredHeight = defaultRenderer.getPreferredHeight(width);
+        int preferredHeight = defaultRenderer.getPreferredHeight(widthArgument);
 
         for (Class<?> key : cellRenderers) {
             TableView.CellRenderer renderer = cellRenderers.get(key);
             preferredHeight = Math.max(preferredHeight,
-                renderer.getPreferredHeight(width));
+                renderer.getPreferredHeight(widthArgument));
         }
 
         return preferredHeight;
@@ -300,7 +300,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(int widthArgument, int heightArgument) {
         return -1;
     }
 
@@ -329,7 +329,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                 cellRenderer = cellRenderers.get(valueClass);
 
                 if (cellRenderer == null) {
-                    valueClass = valueClass.getSuperclass();
+                    valueClass = (valueClass != null) ? valueClass.getSuperclass() : null;
                 }
             }
 
@@ -358,7 +358,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             cellRenderer = cellRenderers.get(valueClass);
 
             if (cellRenderer == null) {
-                valueClass = valueClass.getSuperclass();
+                valueClass = (valueClass != null) ? valueClass.getSuperclass() : null;
             }
         }
 
