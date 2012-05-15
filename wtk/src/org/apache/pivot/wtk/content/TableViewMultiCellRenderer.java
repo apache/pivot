@@ -25,7 +25,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.TableView;
-import org.apache.pivot.wtk.content.TableViewCellRenderer;
 
 /**
  * Table cell renderer that supports dynamic rendering based on the type of
@@ -309,6 +308,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         return STYLES;
     }
 
+    @SuppressWarnings("null")  // false warning from eclipse
     @Override
     public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
@@ -329,7 +329,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                 cellRenderer = cellRenderers.get(valueClass);
 
                 if (cellRenderer == null) {
-                    valueClass = (valueClass != null) ? valueClass.getSuperclass() : null;
+                    valueClass = valueClass.getSuperclass();
                 }
             }
 
@@ -347,6 +347,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         }
     }
 
+    @SuppressWarnings("null")  // false warning from eclipse
     @Override
     public String toString(Object row, String columnName) {
         Object cellData = JSON.get(row, columnName);
@@ -358,7 +359,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             cellRenderer = cellRenderers.get(valueClass);
 
             if (cellRenderer == null) {
-                valueClass = (valueClass != null) ? valueClass.getSuperclass() : null;
+                valueClass = valueClass.getSuperclass();
             }
         }
 
