@@ -314,22 +314,22 @@ public class TerraListButtonSkin extends ListButtonSkin {
         int width = getWidth();
         int height = getHeight();
 
-        Color color = null;
-        Color backgroundColor = null;
-        Color bevelColor = null;
-        Color borderColor = null;
+        Color colorLocal = null;
+        Color backgroundColorLocal = null;
+        Color bevelColorLocal = null;
+        Color borderColorLocal = null;
 
         if (listButton.isEnabled()) {
-            color = this.color;
-            backgroundColor = this.backgroundColor;
-            bevelColor = (pressed || (listViewPopup.isOpen() && !listViewPopup.isClosing())) ?
+            colorLocal = this.color;
+            backgroundColorLocal = this.backgroundColor;
+            bevelColorLocal = (pressed || (listViewPopup.isOpen() && !listViewPopup.isClosing())) ?
                 pressedBevelColor : this.bevelColor;
-            borderColor = this.borderColor;
+            borderColorLocal = this.borderColor;
         } else {
-            color = disabledColor;
-            backgroundColor = disabledBackgroundColor;
-            bevelColor = disabledBevelColor;
-            borderColor = disabledBorderColor;
+            colorLocal = disabledColor;
+            backgroundColorLocal = disabledBackgroundColor;
+            bevelColorLocal = disabledBevelColor;
+            borderColorLocal = disabledBorderColor;
         }
 
         graphics.setStroke(new BasicStroke());
@@ -338,8 +338,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColor,
-            width / 2f, height / 2f, backgroundColor));
+        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal,
+            width / 2f, height / 2f, backgroundColorLocal));
         graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
             CORNER_RADIUS, CORNER_RADIUS));
 
@@ -364,7 +364,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Paint the border
-        graphics.setPaint(borderColor);
+        graphics.setPaint(borderColorLocal);
         graphics.setStroke(new BasicStroke(1));
         graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
             CORNER_RADIUS, CORNER_RADIUS));
@@ -377,7 +377,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
             graphics.setStroke(dashStroke);
-            graphics.setColor(borderColor);
+            graphics.setColor(borderColorLocal);
 
             graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(contentBounds.width - 4, 0),
                 Math.max(contentBounds.height - 4, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
@@ -395,7 +395,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         Graphics2D triggerGraphics = (Graphics2D)graphics.create();
         triggerGraphics.setStroke(new BasicStroke(0));
-        triggerGraphics.setPaint(color);
+        triggerGraphics.setPaint(colorLocal);
 
         Bounds triggerBounds = getTriggerBounds();
         int tx = triggerBounds.x + Math.round((triggerBounds.width

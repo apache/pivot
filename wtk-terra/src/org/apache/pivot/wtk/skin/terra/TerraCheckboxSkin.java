@@ -199,18 +199,18 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
     private void paintButton(Graphics2D graphics, boolean enabled, Button.State state) {
         Paint buttonPaint;
-        Color buttonBorderColor;
-        Color buttonSelectionColor;
+        Color buttonBorderColorLocal;
+        Color buttonSelectionColorLocal;
 
         if (enabled) {
             buttonPaint = new GradientPaint(CHECKBOX_SIZE / 2, 0, TerraTheme.darken(buttonColor),
                 CHECKBOX_SIZE / 2, CHECKBOX_SIZE, buttonColor);
-            buttonBorderColor = this.buttonBorderColor;
-            buttonSelectionColor = this.buttonSelectionColor;
+            buttonBorderColorLocal = this.buttonBorderColor;
+            buttonSelectionColorLocal = this.buttonSelectionColor;
         } else {
             buttonPaint = disabledButtonColor;
-            buttonBorderColor = disabledButtonBorderColor;
-            buttonSelectionColor = disabledButtonSelectionColor;
+            buttonBorderColorLocal = disabledButtonBorderColor;
+            buttonSelectionColorLocal = disabledButtonSelectionColor;
         }
 
         // Paint the background
@@ -218,7 +218,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         graphics.fillRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
 
         // Paint the border
-        graphics.setPaint(buttonBorderColor);
+        graphics.setPaint(buttonBorderColorLocal);
         GraphicsUtilities.drawRect(graphics, 0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
 
         // Paint the checkmark
@@ -226,7 +226,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
             RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (state == Button.State.SELECTED) {
-            graphics.setColor(buttonSelectionColor);
+            graphics.setColor(buttonSelectionColorLocal);
             graphics.setStroke(new BasicStroke(2.5f));
 
             // Draw a checkmark
@@ -241,7 +241,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
                 (m + n) + offsetX, offsetY);
         } else {
             if (state == Button.State.MIXED) {
-                graphics.setColor(buttonSelectionColor);
+                graphics.setColor(buttonSelectionColorLocal);
                 GraphicsUtilities.drawLine(graphics, 4, (CHECKBOX_SIZE - 3) / 2 + 1, CHECKBOX_SIZE - 8,
                     Orientation.HORIZONTAL, 2);
             }

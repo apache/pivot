@@ -115,11 +115,11 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         fileBrowser.getFileBrowserListeners().add(new FileBrowserListener.Adapter() {
             @Override
-            public void rootDirectoryChanged(FileBrowser fileBrowser,
+            public void rootDirectoryChanged(FileBrowser fileBrowserArgument,
                 File previousRootDirectory) {
                 updatingSelection = true;
 
-                fileBrowserSheet.setRootDirectory(fileBrowser.getRootDirectory());
+                fileBrowserSheet.setRootDirectory(fileBrowserArgument.getRootDirectory());
 
                 updatingSelection = false;
 
@@ -128,7 +128,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
 
             @Override
-            public void selectedFileAdded(FileBrowser fileBrowser, File file) {
+            public void selectedFileAdded(FileBrowser fileBrowserArgument, File file) {
                 if (file.isDirectory()) {
                     selectedDirectoryCount++;
                 }
@@ -137,7 +137,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
 
             @Override
-            public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
+            public void selectedFileRemoved(FileBrowser fileBrowserArgument, File file) {
                 if (file.isDirectory()) {
                     selectedDirectoryCount--;
                 }
@@ -146,11 +146,11 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
 
             @Override
-            public void selectedFilesChanged(FileBrowser fileBrowser,
+            public void selectedFilesChanged(FileBrowser fileBrowserArgument,
                 Sequence<File> previousSelectedFiles) {
                 selectedDirectoryCount = 0;
 
-                Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
+                Sequence<File> selectedFiles = fileBrowserArgument.getSelectedFiles();
                 for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
                     File selectedFile = selectedFiles.get(i);
 
@@ -159,8 +159,8 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                     }
                 }
 
-                if (!fileBrowser.isMultiSelect()) {
-                    File selectedFile = fileBrowser.getSelectedFile();
+                if (!fileBrowserArgument.isMultiSelect()) {
+                    File selectedFile = fileBrowserArgument.getSelectedFile();
 
                     if (selectedFile != null
                         && !selectedFile.isDirectory()) {
@@ -176,23 +176,23 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             private File file = null;
 
             @Override
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-                boolean consumed = super.mouseClick(component, button, x, y, count);
+            public boolean mouseClick(Component componentArgument, Mouse.Button button, int x, int y, int count) {
+                boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
 
                 FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 
                 if (count == 1) {
                     file = fileBrowser.getFileAt(x, y);
                 } else if (count == 2) {
-                    File file = fileBrowser.getFileAt(x, y);
+                    File fileLocal = fileBrowser.getFileAt(x, y);
 
-                    if (file != null
+                    if (fileLocal != null
                         && this.file != null
-                        && file.equals(this.file)
-                        && fileBrowser.isFileSelected(file)) {
+                        && fileLocal.equals(this.file)
+                        && fileBrowser.isFileSelected(fileLocal)) {
                         if (mode == FileBrowserSheet.Mode.OPEN
                             || mode == FileBrowserSheet.Mode.OPEN_MULTIPLE) {
-                            if (!file.isDirectory()) {
+                            if (!fileLocal.isDirectory()) {
                                 fileBrowserSheet.close(true);
                                 consumed = true;
                             }
@@ -311,6 +311,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         return vote;
     }
 
+    @Override
     public void modeChanged(FileBrowserSheet fileBrowserSheet,
         FileBrowserSheet.Mode previousMode) {
         FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();

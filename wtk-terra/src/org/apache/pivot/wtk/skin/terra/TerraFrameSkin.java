@@ -314,15 +314,15 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         ButtonPressListener buttonPressListener = new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                Frame frame = (Frame)getComponent();
+                Frame frameLocal = (Frame)getComponent();
 
                 if (button == minimizeButton) {
-                    frame.setVisible(false);
+                    frameLocal.setVisible(false);
                 } else if (button == maximizeButton) {
-                    frame.moveToFront();
-                    frame.setMaximized(!frame.isMaximized());
+                    frameLocal.moveToFront();
+                    frameLocal.setMaximized(!frameLocal.isMaximized());
                 } else if (button == closeButton) {
-                    frame.close();
+                    frameLocal.close();
                 }
             }
         };
@@ -554,19 +554,19 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             int titleBarHeight = titleBarTablePane.getHeight();
 
             // Draw the title area
-            Color titleBarBackgroundColor = frame.isActive() ?
+            Color titleBarBackgroundColorLocal = frame.isActive() ?
                 this.titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
-            Color titleBarBorderColor = frame.isActive() ?
+            Color titleBarBorderColorLocal = frame.isActive() ?
                 this.titleBarBorderColor : inactiveTitleBarBorderColor;
-            Color titleBarBevelColor = frame.isActive() ?
+            Color titleBarBevelColorLocal = frame.isActive() ?
                 this.titleBarBevelColor : inactiveTitleBarBevelColor;
 
-            graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColor,
-                width / 2f, titleBarHeight + 1, titleBarBackgroundColor));
+            graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColorLocal,
+                width / 2f, titleBarHeight + 1, titleBarBackgroundColorLocal));
             graphics.fillRect(0, 0, width, titleBarHeight + 1);
 
             // Draw the border
-            graphics.setPaint(titleBarBorderColor);
+            graphics.setPaint(titleBarBorderColorLocal);
             GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 2);
 
             // Draw the content area

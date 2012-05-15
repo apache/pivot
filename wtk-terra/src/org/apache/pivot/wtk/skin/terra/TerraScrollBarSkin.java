@@ -60,15 +60,15 @@ public class TerraScrollBarSkin extends ContainerSkin
          * Starts scrolling this skin's scroll bar, stopping the scroll when
          * the specified value has been reached.
          *
-         * @param direction
+         * @param directionArgument
          * <tt>1</tt> to adjust the scroll bar's value larger; <tt>-1</tt> to
          * adjust it smaller
          *
-         * @param incrementType
+         * @param incrementTypeArgument
          * Determines whether we'll use the scroll bar's unit increment or the
          * block increment when scrolling
          *
-         * @param stopValue
+         * @param stopValueArgument
          * The value which, once reached, will stop the automatic scrolling.
          * Use <tt>-1</tt> to specify no stop value
          *
@@ -76,14 +76,14 @@ public class TerraScrollBarSkin extends ContainerSkin
          * If automatic scrolling of any scroll bar is already in progress.
          * Only one scroll bar may be automatically scrolled at one time
          */
-        public void start(int direction, Mouse.ScrollType incrementType, int stopValue) {
+        public void start(int directionArgument, Mouse.ScrollType incrementTypeArgument, int stopValueArgument) {
             if (scheduledScrollCallback != null) {
                 throw new IllegalStateException("Already running");
             }
 
-            this.direction = direction;
-            this.incrementType = incrementType;
-            this.stopValue = stopValue;
+            this.direction = directionArgument;
+            this.incrementType = incrementTypeArgument;
+            this.stopValue = stopValueArgument;
 
             // Wait a timeout period, then begin rapidly scrolling
             scheduledScrollCallback = ApplicationContext.scheduleRecurringCallback(new Runnable() {

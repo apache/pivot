@@ -657,8 +657,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
          */
         searchTextInput.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
-            public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-                boolean consumed = super.keyPressed(component, keyCode, keyLocation);
+            public boolean keyPressed(Component componentArgument, int keyCode, Keyboard.KeyLocation keyLocation) {
+                boolean consumed = super.keyPressed(componentArgument, keyCode, keyLocation);
 
                 if (keyCode == Keyboard.KeyCode.ESCAPE) {
                     searchTextInput.setText("");
@@ -756,17 +756,17 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             private int index = -1;
 
             @Override
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-                boolean consumed = super.mouseClick(component, button, x, y, count);
+            public boolean mouseClick(Component componentArgument, Mouse.Button button, int x, int y, int count) {
+                boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
 
                 if (count == 1) {
                     index = fileTableView.getRowAt(y);
                 } else if (count == 2) {
-                    int index = fileTableView.getRowAt(y);
-                    if (index != -1
-                        && index == this.index
-                        && fileTableView.isRowSelected(index)) {
-                        File file = (File)fileTableView.getTableData().get(index);
+                    int indexLocal = fileTableView.getRowAt(y);
+                    if (indexLocal != -1
+                        && indexLocal == this.index
+                        && fileTableView.isRowSelected(indexLocal)) {
+                        File file = (File)fileTableView.getTableData().get(indexLocal);
 
                         if (file.isDirectory()) {
                             fileBrowser.setRootDirectory(file);
@@ -781,13 +781,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         fileBrowser.setFocusTraversalPolicy(new IndexFocusTraversalPolicy() {
             @Override
-            public Component getNextComponent(Container container, Component component,
+            public Component getNextComponent(Container container, Component componentArgument,
                 FocusTraversalDirection direction) {
                 Component nextComponent;
-                if (component == null) {
+                if (componentArgument == null) {
                     nextComponent = fileTableView;
                 } else {
-                    nextComponent = super.getNextComponent(container, component, direction);
+                    nextComponent = super.getNextComponent(container, componentArgument, direction);
                 }
 
                 return nextComponent;

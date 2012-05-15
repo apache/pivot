@@ -60,10 +60,10 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         /**
          * Starts spinning the specified spinner.
          *
-         * @param spinner
+         * @param spinnerArgument
          * The spinner to spin
          *
-         * @param direction
+         * @param directionArgument
          * <tt>1</tt> to adjust the spinner's selected index larger;
          * <tt>-1</tt> to adjust it smaller
          *
@@ -71,15 +71,15 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
          * If automatic spinner of any spinner is already in progress.
          * Only one spinner may be automatically spun at one time
          */
-        public void start(Spinner spinner, int direction) {
-            assert(direction != 0) : "Direction must be positive or negative";
+        public void start(Spinner spinnerArgument, int directionArgument) {
+            assert(directionArgument != 0) : "Direction must be positive or negative";
 
             if (scheduledSpinnerCallback != null) {
                 throw new IllegalStateException("Already running");
             }
 
-            this.spinner = spinner;
-            this.direction = direction;
+            this.spinner = spinnerArgument;
+            this.direction = directionArgument;
 
             // Wait a timeout period, then begin rapidly spinning
             scheduledSpinnerCallback = ApplicationContext.scheduleRecurringCallback(new Runnable() {
@@ -213,7 +213,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
         @Override
         public void paint(Graphics2D graphics) {
-            SpinnerContent spinnerContent = (SpinnerContent)getComponent();
+            SpinnerContent spinnerContentLocal = (SpinnerContent)getComponent();
             Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
 
             int width = getWidth();
@@ -229,7 +229,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             contentGraphics.dispose();
 
             // Paint the focus state
-            if (spinnerContent.isFocused()) {
+            if (spinnerContentLocal.isFocused()) {
                 BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
                     BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 

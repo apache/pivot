@@ -61,9 +61,9 @@ public class TerraFormSkin extends ContainerSkin
         private Graphics2D graphics = null;
 
         @Override
-        public Graphics2D prepare(Component component, Graphics2D graphics) {
-            this.graphics = graphics;
-            return graphics;
+        public Graphics2D prepare(Component component, Graphics2D graphicsArgument) {
+            this.graphics = graphicsArgument;
+            return graphicsArgument;
         }
 
         @Override
@@ -102,9 +102,9 @@ public class TerraFormSkin extends ContainerSkin
         private Graphics2D graphics = null;
 
         @Override
-        public Graphics2D prepare(Component component, Graphics2D graphics) {
-            this.graphics = graphics;
-            return graphics;
+        public Graphics2D prepare(Component component, Graphics2D graphicsArgument) {
+            this.graphics = graphicsArgument;
+            return graphicsArgument;
         }
 
         @Override
@@ -378,6 +378,7 @@ public class TerraFormSkin extends ContainerSkin
             public void windowOpened(Window window) {
                 // Set a timer to hide the message
                 Runnable hideFlagMessageCallback = new Runnable() {
+                    @Override
                     public void run() {
                         flagMessageWindow.close();
                     }

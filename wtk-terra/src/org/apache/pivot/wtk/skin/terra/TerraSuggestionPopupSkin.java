@@ -139,8 +139,8 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
     private ListViewSelectionListener listViewSelectionListener = new ListViewSelectionListener.Adapter() {
         @Override
-        public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
-            int index = listView.getSelectedIndex();
+        public void selectedItemChanged(ListView listViewArgument, Object previousSelectedItem) {
+            int index = listViewArgument.getSelectedIndex();
 
             SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
             suggestionPopup.setSelectedIndex(index);

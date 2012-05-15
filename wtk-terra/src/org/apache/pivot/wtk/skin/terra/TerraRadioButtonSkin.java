@@ -198,8 +198,8 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
     private void paintButton(Graphics2D graphics, boolean enabled, boolean selected) {
         Paint buttonPaint;
-        Color buttonBorderColor = null;
-        Color buttonSelectionColor = null;
+        Color buttonBorderColorLocal = null;
+        Color buttonSelectionColorLocal = null;
 
         Ellipse2D buttonBackgroundCircle = new Ellipse2D.Double(1, 1,
             BUTTON_DIAMETER - 3, BUTTON_DIAMETER - 3);
@@ -210,20 +210,20 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
                 (float)buttonBackgroundCircle.getWidth() * 2 / 3,
                 new float[] {0f, 1f}, new Color[] {TerraTheme.darken(buttonColor), buttonColor});
 
-            buttonBorderColor = this.buttonBorderColor;
-            buttonSelectionColor = this.buttonSelectionColor;
+            buttonBorderColorLocal = this.buttonBorderColor;
+            buttonSelectionColorLocal = this.buttonSelectionColor;
         }
         else {
             buttonPaint = disabledButtonColor;
-            buttonBorderColor = disabledButtonBorderColor;
-            buttonSelectionColor = disabledButtonSelectionColor;
+            buttonBorderColorLocal = disabledButtonBorderColor;
+            buttonSelectionColorLocal = disabledButtonSelectionColor;
         }
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Paint the border
-        graphics.setColor(buttonBorderColor);
+        graphics.setColor(buttonBorderColorLocal);
         graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
 
         // Paint the background
@@ -236,7 +236,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
                 - (BUTTON_SELECTION_DIAMETER - 1)) / 2,
                 (BUTTON_DIAMETER - (BUTTON_SELECTION_DIAMETER - 1)) / 2,
                 BUTTON_SELECTION_DIAMETER - 1, BUTTON_SELECTION_DIAMETER - 1);
-            graphics.setColor(buttonSelectionColor);
+            graphics.setColor(buttonSelectionColorLocal);
             graphics.fill(buttonSelectionCircle);
         }
 

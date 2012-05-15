@@ -114,7 +114,7 @@ public class TerraSliderSkin extends SliderSkin {
                 Slider slider = (Slider)TerraSliderSkin.this.getComponent();
                 if (slider.getOrientation() == Orientation.HORIZONTAL) {
                     int sliderWidth = slider.getWidth();
-                    int thumbWidth = thumb.getWidth();
+                    int thumbWidthLocal = thumb.getWidth();
 
                     Point sliderLocation = thumb.mapPointToAncestor(slider, x, y);
                     int sliderX = sliderLocation.x;
@@ -124,12 +124,12 @@ public class TerraSliderSkin extends SliderSkin {
                         sliderX = minX;
                     }
 
-                    int maxX = (sliderWidth - thumbWidth) + dragOffset.x;
+                    int maxX = (sliderWidth - thumbWidthLocal) + dragOffset.x;
                     if (sliderX > maxX) {
                         sliderX = maxX;
                     }
 
-                    float ratio = (float)(sliderX - dragOffset.x) / (sliderWidth - thumbWidth);
+                    float ratio = (float)(sliderX - dragOffset.x) / (sliderWidth - thumbWidthLocal);
 
                     int start = slider.getStart();
                     int end = slider.getEnd();
@@ -138,7 +138,7 @@ public class TerraSliderSkin extends SliderSkin {
                     slider.setValue(value);
                 } else {
                     int sliderHeight = slider.getHeight();
-                    int thumbHeight = thumb.getHeight();
+                    int thumbHeightLocal = thumb.getHeight();
 
                     Point sliderLocation = thumb.mapPointToAncestor(slider, x, y);
                     int sliderY = sliderLocation.y;
@@ -148,12 +148,12 @@ public class TerraSliderSkin extends SliderSkin {
                         sliderY = minY;
                     }
 
-                    int maxY = (sliderHeight - thumbHeight) + dragOffset.y;
+                    int maxY = (sliderHeight - thumbHeightLocal) + dragOffset.y;
                     if (sliderY > maxY) {
                         sliderY = maxY;
                     }
 
-                    float ratio = (float)(sliderY - dragOffset.y) / (sliderHeight - thumbHeight);
+                    float ratio = (float)(sliderY - dragOffset.y) / (sliderHeight - thumbHeightLocal);
 
                     int start = slider.getStart();
                     int end = slider.getEnd();
