@@ -26,14 +26,17 @@ public interface TextInputBindingListener {
     public static class Adapter implements TextInputBindingListener {
         @Override
         public void textKeyChanged(TextInput textInput, String previousTextKey) {
+            // empty block
         }
 
         @Override
         public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
+            // empty block
         }
 
         @Override
         public void textBindMappingChanged(TextInput textInput, TextInput.TextBindMapping previousTextBindMapping) {
+            // empty block
         }
     }
 

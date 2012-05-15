@@ -33,10 +33,12 @@ public interface TextInputContentListener {
 
         @Override
         public void insertTextVetoed(TextInput textInput, Vote reason) {
+            // empty block
         }
 
         @Override
         public void textInserted(TextInput textInput, int index, int count) {
+            // empty block
         }
 
         @Override
@@ -46,14 +48,17 @@ public interface TextInputContentListener {
 
         @Override
         public void removeTextVetoed(TextInput textInput, Vote reason) {
+            // empty block
         }
 
         @Override
         public void textRemoved(TextInput textInput, int index, int count) {
+            // empty block
         }
 
         @Override
         public void textChanged(TextInput textInput) {
+            // empty block
         }
     }
 

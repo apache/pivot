@@ -268,20 +268,20 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
         height += textBounds.getHeight();
     }
 
-    public int getInsertionPoint(int x, int y) {
+    public int getInsertionPoint(int xArgument, int yArgument) {
         Font font = textAreaSkin.getFont();
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float rowHeight = lm.getAscent() + lm.getDescent();
 
-        int i = (int)Math.floor(y / rowHeight);
+        int i = (int)Math.floor(yArgument / rowHeight);
 
         int n = rows.getLength();
         return (i < 0
-            || i >= n) ? -1 : getRowInsertionPoint(i, x);
+            || i >= n) ? -1 : getRowInsertionPoint(i, xArgument);
     }
 
-    public int getNextInsertionPoint(int x, int from, TextArea.ScrollDirection direction) {
+    public int getNextInsertionPoint(int xArgument, int from, TextArea.ScrollDirection direction) {
         // Identify the row that contains the from index
         int n = rows.getLength();
         int i;
@@ -299,19 +299,19 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
         }
 
         return (i < 0
-            || i >= n) ? -1 : getRowInsertionPoint(i, x);
+            || i >= n) ? -1 : getRowInsertionPoint(i, xArgument);
     }
 
-    private int getRowInsertionPoint(int rowIndex, float x) {
+    private int getRowInsertionPoint(int rowIndex, float xArgument) {
         Row row = rows.get(rowIndex);
 
         Rectangle2D glyphVectorBounds = row.glyphVector.getLogicalBounds();
         float rowWidth = (float)glyphVectorBounds.getWidth();
 
         int index;
-        if (x < 0) {
+        if (xArgument < 0) {
             index = 0;
-        } else if (x > rowWidth) {
+        } else if (xArgument > rowWidth) {
             index = row.glyphVector.getNumGlyphs();
 
             // If this is not the last row, decrement the index so the insertion
@@ -327,10 +327,10 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
                 Shape glyphBounds = row.glyphVector.getGlyphLogicalBounds(index);
                 Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-                if (glyphBounds2D.contains(x, glyphBounds2D.getY())) {
+                if (glyphBounds2D.contains(xArgument, glyphBounds2D.getY())) {
                     // Determine the bias; if the user clicks on the right half of the
                     // character; select the next character
-                    if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2
+                    if (xArgument - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2
                         && index < n - 1) {
                         index++;
                     }
@@ -376,15 +376,15 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
         CharSequence characters = paragraph.getCharacters();
         int characterCount = characters.length();
 
-        int rowIndex, x, width;
+        int rowIndex, xLocal, widthLocal;
         if (index == characterCount) {
             // This is the terminator character
             rowIndex = rows.getLength() - 1;
             Row row = rows.get(rowIndex);
 
             Rectangle2D glyphVectorBounds = row.glyphVector.getLogicalBounds();
-            x = (int)Math.floor(glyphVectorBounds.getWidth());
-            width = PARAGRAPH_TERMINATOR_WIDTH;
+            xLocal = (int)Math.floor(glyphVectorBounds.getWidth());
+            widthLocal = PARAGRAPH_TERMINATOR_WIDTH;
         } else {
             // This is a visible character
             rowIndex = getRowAt(index);
@@ -392,8 +392,8 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
 
             Shape glyphBounds = row.glyphVector.getGlyphLogicalBounds(index - row.offset);
             Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
-            x = (int)Math.floor(glyphBounds2D.getX());
-            width = (int)Math.ceil(glyphBounds2D.getWidth());
+            xLocal = (int)Math.floor(glyphBounds2D.getX());
+            widthLocal = (int)Math.ceil(glyphBounds2D.getWidth());
         }
 
         Font font = textAreaSkin.getFont();
@@ -401,21 +401,22 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float rowHeight = lm.getAscent() + lm.getDescent();
 
-        characterBounds = new Bounds(x, (int)Math.floor(rowIndex * rowHeight), width,
+        characterBounds = new Bounds(xLocal, (int)Math.floor(rowIndex * rowHeight), widthLocal,
             (int)Math.ceil(rowHeight));
 
         return characterBounds;
     }
 
     @Override
-    public void textInserted(TextArea.Paragraph paragraph, int index, int count) {
+    public void textInserted(TextArea.Paragraph paragraphArgument, int index, int count) {
         invalidate();
         textAreaSkin.invalidateComponent();
     }
 
     @Override
-    public void textRemoved(TextArea.Paragraph paragraph, int index, int count) {
+    public void textRemoved(TextArea.Paragraph paragraphArgument, int index, int count) {
         invalidate();
         textAreaSkin.invalidateComponent();
     }
+
 }

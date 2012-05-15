@@ -27,6 +27,7 @@ public interface BlockListener {
         @Override
         public void horizontalAlignmentChanged(Block block,
             HorizontalAlignment previousHorizontalAlignment) {
+            // empty block
         }
     }
 

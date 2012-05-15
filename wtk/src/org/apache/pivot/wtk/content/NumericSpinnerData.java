@@ -37,33 +37,34 @@ import org.apache.pivot.util.ListenerList;
  * iteration, a <tt>ConcurrentModificationException</tt> will be thrown.
  */
 public class NumericSpinnerData implements List<Integer> {
+
     private class DataIterator implements Iterator<Integer> {
         // Parity members to support ConcurrentModificationException check
-        private int lowerBound = NumericSpinnerData.this.lowerBound;
-        private int upperBound = NumericSpinnerData.this.upperBound;
-        private int increment = NumericSpinnerData.this.increment;
+        private int lowerBoundLocal = NumericSpinnerData.this.lowerBound;
+        private int upperBoundLocal = NumericSpinnerData.this.upperBound;
+        private int incrementLocal = NumericSpinnerData.this.increment;
 
-        private int value = lowerBound;
+        private int value = lowerBoundLocal;
 
         @Override
         public boolean hasNext() {
-            return (value <= upperBound);
+            return (value <= upperBoundLocal);
         }
 
         @Override
         public Integer next() {
-            if (lowerBound != NumericSpinnerData.this.lowerBound
-                || upperBound != NumericSpinnerData.this.upperBound
-                || increment != NumericSpinnerData.this.increment) {
+            if (lowerBoundLocal != NumericSpinnerData.this.lowerBound
+                || upperBoundLocal != NumericSpinnerData.this.upperBound
+                || incrementLocal != NumericSpinnerData.this.increment) {
                 throw new ConcurrentModificationException();
             }
 
-            if (value > upperBound) {
+            if (value > upperBoundLocal) {
                 throw new NoSuchElementException();
             }
 
             int next = value;
-            value += increment;
+            value += incrementLocal;
             return next;
         }
 
@@ -224,4 +225,5 @@ public class NumericSpinnerData implements List<Integer> {
     public ListenerList<ListListener<Integer>> getListListeners() {
         return listListeners;
     }
+
 }

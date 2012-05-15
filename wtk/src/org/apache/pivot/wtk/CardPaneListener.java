@@ -33,10 +33,12 @@ public interface CardPaneListener {
 
         @Override
         public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+            // empty block
         }
 
         @Override
         public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+            // empty block
         }
     }
 

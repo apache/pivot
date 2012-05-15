@@ -28,10 +28,12 @@ public interface TreeViewBranchListener {
     public static class Adapter implements TreeViewBranchListener {
         @Override
         public void branchExpanded(TreeView treeView, Path path) {
+            // empty block
         }
 
         @Override
         public void branchCollapsed(TreeView treeView, Path path) {
+            // empty block
         }
     }
 

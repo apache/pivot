@@ -26,10 +26,12 @@ public interface TextAreaListener {
     public static class Adapter implements TextAreaListener {
         @Override
         public void maximumLengthChanged(TextArea textArea, int previousMaximumLength) {
+            // empty block
         }
 
         @Override
         public void editableChanged(TextArea textArea) {
+            // empty block
         }
     }
 

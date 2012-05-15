@@ -28,10 +28,12 @@ public interface TableViewHeaderListener {
     public static class Adapter implements TableViewHeaderListener {
         @Override
         public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
+            // empty block
         }
 
         @Override
         public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
+            // empty block
         }
     }
 

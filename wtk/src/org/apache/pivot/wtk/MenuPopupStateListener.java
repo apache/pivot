@@ -33,10 +33,12 @@ public interface MenuPopupStateListener {
 
         @Override
         public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
+            // empty block
         }
 
         @Override
         public void menuPopupClosed(MenuPopup menuPopup) {
+            // empty block
         }
     }
 

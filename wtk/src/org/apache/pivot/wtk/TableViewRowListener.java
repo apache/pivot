@@ -26,22 +26,27 @@ public interface TableViewRowListener {
     public static class Adapter implements TableViewRowListener {
         @Override
         public void rowInserted(TableView tableView, int index) {
+            // empty block
         }
 
         @Override
         public void rowsRemoved(TableView tableView, int index, int count) {
+            // empty block
         }
 
         @Override
         public void rowUpdated(TableView tableView, int index) {
+            // empty block
         }
 
         @Override
         public void rowsCleared(TableView tableView) {
+            // empty block
         }
 
         @Override
         public void rowsSorted(TableView tableView) {
+            // empty block
         }
     }
 

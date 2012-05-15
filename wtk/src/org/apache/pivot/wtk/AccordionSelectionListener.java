@@ -33,10 +33,12 @@ public interface AccordionSelectionListener {
 
         @Override
         public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
+            // empty block
         }
 
         @Override
         public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
+            // empty block
         }
     }
 

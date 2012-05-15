@@ -26,19 +26,23 @@ public interface ScrollBarListener {
     public static class Adapter implements ScrollBarListener {
         @Override
         public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
+            // empty block
         }
 
         @Override
         public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
             int previousExtent) {
+            // empty block
         }
 
         @Override
         public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement) {
+            // empty block
         }
 
         @Override
         public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement) {
+            // empty block
         }
     }
 

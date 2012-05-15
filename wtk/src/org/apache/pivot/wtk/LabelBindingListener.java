@@ -26,14 +26,17 @@ public interface LabelBindingListener {
     public static class Adapter implements LabelBindingListener {
         @Override
         public void textKeyChanged(Label label, String previousTextKey) {
+            // empty block
         }
 
         @Override
         public void textBindTypeChanged(Label label, BindType previousTextBindType) {
+            // empty block
         }
 
         @Override
         public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
+            // empty block
         }
     }
 

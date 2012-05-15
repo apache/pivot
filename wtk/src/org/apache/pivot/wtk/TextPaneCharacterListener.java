@@ -26,10 +26,12 @@ public interface TextPaneCharacterListener {
     public static class Adapter implements TextPaneCharacterListener {
         @Override
         public void charactersInserted(TextPane textPane, int index, int count) {
+            // empty block
         }
 
         @Override
         public void charactersRemoved(TextPane textPane, int index, int count) {
+            // empty block
         }
     }
 

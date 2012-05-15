@@ -27,24 +27,29 @@ public interface ScrollPaneListener {
         @Override
         public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
             ScrollPane.ScrollBarPolicy previousPolicy) {
+            // empty block
         }
 
         @Override
         public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
             ScrollPane.ScrollBarPolicy previousPolicy) {
+            // empty block
         }
 
         @Override
         public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader) {
+            // empty block
         }
 
         @Override
         public void columnHeaderChanged(ScrollPane scrollPane,
             Component previousColumnHeader) {
+            // empty block
         }
 
         @Override
         public void cornerChanged(ScrollPane scrollPane, Component previousCorner) {
+            // empty block
         }
     }
 

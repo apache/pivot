@@ -81,9 +81,8 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
 
         if (component == null) {
             return new Dimensions(0, 0);
-        } else {
-            return new Dimensions(component.getPreferredWidth(), component.getPreferredHeight());
         }
+        return new Dimensions(component.getPreferredWidth(), component.getPreferredHeight());
     }
 
     @Override

@@ -268,8 +268,8 @@ public abstract class Button extends Component {
     private Action action = null;
     private ActionListener actionListener = new ActionListener() {
         @Override
-        public void enabledChanged(Action action) {
-            setEnabled(action.isEnabled());
+        public void enabledChanged(Action actionArgument) {
+            setEnabled(actionArgument.isEnabled());
         }
     };
 
@@ -385,13 +385,13 @@ public abstract class Button extends Component {
             throw new IllegalArgumentException("actionID is null");
         }
 
-        Action action = Action.getNamedActions().get(actionID);
-        if (action == null) {
+        Action actionLocal = Action.getNamedActions().get(actionID);
+        if (actionLocal == null) {
             throw new IllegalArgumentException("An action with ID "
                 + actionID + " does not exist.");
         }
 
-        setAction(action);
+        setAction(actionLocal);
     }
 
     @Override
@@ -717,18 +717,18 @@ public abstract class Button extends Component {
                     && JSON.containsKey(context, stateKey)) {
                     Object value = JSON.get(context, stateKey);
 
-                    State state = State.UNSELECTED;
+                    State stateLocal = State.UNSELECTED;
                     if (value instanceof State) {
-                        state = (State)value;
+                        stateLocal = (State)value;
                     } else if (stateBindMapping == null) {
                         if (value != null) {
-                            state = State.valueOf(value.toString().toUpperCase(Locale.ENGLISH));
+                            stateLocal = State.valueOf(value.toString().toUpperCase(Locale.ENGLISH));
                         }
                     } else {
-                        state = stateBindMapping.toState(value);
+                        stateLocal = stateBindMapping.toState(value);
                     }
 
-                    setState(state);
+                    setState(stateLocal);
                 }
             } else {
                 // Bind using selected key

@@ -81,16 +81,16 @@ public final class Mouse {
      * "Captures" the mouse, causing all mouse input to be delegated to the
      * given component rather than propagating down the component hierarchy.
      *
-     * @param capturer
+     * @param capturerArgument
      * The component that wants to capture the mouse. The mouse pointer must
      * currently be over the component.
      */
-    public static void capture(Component capturer) {
-        if (capturer == null) {
+    public static void capture(Component capturerArgument) {
+        if (capturerArgument == null) {
             throw new IllegalArgumentException("capturer is null.");
         }
 
-        if (!capturer.isMouseOver()) {
+        if (!capturerArgument.isMouseOver()) {
             throw new IllegalArgumentException("Mouse pointer is not currently over capturer.");
         }
 
@@ -98,7 +98,7 @@ public final class Mouse {
             throw new IllegalStateException("Mouse is already captured.");
         }
 
-        Mouse.capturer = capturer;
+        Mouse.capturer = capturerArgument;
     }
 
     /**

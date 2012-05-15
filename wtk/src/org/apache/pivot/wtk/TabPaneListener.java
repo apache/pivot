@@ -29,6 +29,7 @@ public interface TabPaneListener {
     public static class Adapter implements TabPaneListener {
         @Override
         public void tabInserted(TabPane tabPane, int index) {
+            // empty block
         }
 
         @Override
@@ -38,26 +39,32 @@ public interface TabPaneListener {
 
         @Override
         public void removeTabsVetoed(TabPane tabPane, Vote vote) {
+            // empty block
         }
 
         @Override
         public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
+            // empty block
         }
 
         @Override
         public void cornerChanged(TabPane tabPane, Component previousCorner) {
+            // empty block
         }
 
         @Override
         public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer) {
+            // empty block
         }
 
         @Override
         public void closeableChanged(TabPane tabPane) {
+            // empty block
         }
 
         @Override
         public void collapsibleChanged(TabPane tabPane) {
+            // empty block
         }
     }
 

@@ -140,14 +140,14 @@ public class Menu extends Container {
                 this.active = active;
 
                 // Update the active item
-                Menu menu = (Menu)getParent();
-                Item activeItem = menu.getActiveItem();
+                Menu menuLocal = (Menu)getParent();
+                Item activeItem = menuLocal.getActiveItem();
 
                 if (active) {
                     // Set this as the new active item (do this before
                     // de-selecting any currently active item so the
                     // menu bar's change event isn't fired twice)
-                    menu.setActiveItem(this);
+                    menuLocal.setActiveItem(this);
 
                     // Deactivate any previously active item
                     if (activeItem != null) {
@@ -158,7 +158,7 @@ public class Menu extends Container {
                     // If this item is currently active, clear the
                     // selection
                     if (activeItem == this) {
-                        menu.setActiveItem(null);
+                        menuLocal.setActiveItem(null);
                     }
                 }
 
@@ -183,13 +183,13 @@ public class Menu extends Container {
                 Item item = this;
 
                 while (item != null) {
-                    Menu menu = (Menu)item.getParent();
+                    Menu menuLocal = (Menu)item.getParent();
 
-                    if (menu == null) {
+                    if (menuLocal == null) {
                         item = null;
                     } else {
-                        menu.menuItemSelectionListeners.itemSelected(this);
-                        item = menu.item;
+                        menuLocal.menuItemSelectionListeners.itemSelected(this);
+                        item = menuLocal.item;
                     }
                 }
             }
@@ -439,8 +439,8 @@ public class Menu extends Container {
                 Section section = removed.get(i);
                 section.menu = null;
 
-                for (Item item : section) {
-                    Menu.this.remove(item);
+                for (Item itemLocal : section) {
+                    Menu.this.remove(itemLocal);
                 }
             }
 
@@ -459,8 +459,8 @@ public class Menu extends Container {
         }
 
         @Override
-        public int indexOf(Section item) {
-            return sections.indexOf(item);
+        public int indexOf(Section itemArgument) {
+            return sections.indexOf(itemArgument);
         }
 
         @Override

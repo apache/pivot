@@ -27,16 +27,19 @@ public interface CalendarButtonBindingListener {
         @Override
         public void selectedDateKeyChanged(CalendarButton calendarButton,
             String previousSelectedDateKey) {
+            // empty block
         }
 
         @Override
         public void selectedDateBindTypeChanged(CalendarButton calendarButton,
             BindType previousSelectedDateBindType) {
+            // empty block
         }
 
         @Override
         public void selectedDateBindMappingChanged(CalendarButton calendarButton,
             Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
+            // empty block
         }
     }
 

@@ -28,26 +28,32 @@ public interface PromptListener {
     public static class Adapter implements PromptListener {
         @Override
         public void messageTypeChanged(Prompt prompt, MessageType previousMessageType) {
+            // empty block
         }
 
         @Override
         public void messageChanged(Prompt prompt, String previousMessage) {
+            // empty block
         }
 
         @Override
         public void bodyChanged(Prompt prompt, Component previousBody) {
+            // empty block
         }
 
         @Override
         public void optionInserted(Prompt prompt, int index) {
+            // empty block
         }
 
         @Override
         public void optionsRemoved(Prompt prompt, int index, Sequence<?> removed) {
+            // empty block
         }
 
         @Override
         public void selectedOptionChanged(Prompt prompt, int previousSelectedOption) {
+            // empty block
         }
     }
 

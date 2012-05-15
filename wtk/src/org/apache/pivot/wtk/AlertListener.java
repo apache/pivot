@@ -28,26 +28,32 @@ public interface AlertListener {
     public static class Adapter implements AlertListener {
         @Override
         public void messageTypeChanged(Alert alert, MessageType previousMessageType) {
+            // empty block
         }
 
         @Override
         public void messageChanged(Alert alert, String previousMessage) {
+            // empty block
         }
 
         @Override
         public void bodyChanged(Alert alert, Component previousBody) {
+            // empty block
         }
 
         @Override
         public void optionInserted(Alert alert, int index) {
+            // empty block
         }
 
         @Override
         public void optionsRemoved(Alert alert, int index, Sequence<?> removed) {
+            // empty block
         }
 
         @Override
         public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
+            // empty block
         }
     }
 

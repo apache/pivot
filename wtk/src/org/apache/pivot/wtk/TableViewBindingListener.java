@@ -26,41 +26,50 @@ public interface TableViewBindingListener {
     public static class Adapter implements TableViewBindingListener {
         @Override
         public void tableDataKeyChanged(TableView tableView, String previousTableDataKey) {
+            // empty block
         }
 
         @Override
         public void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType) {
+            // empty block
         }
 
         @Override
         public void tableDataBindMappingChanged(TableView tableView,
             TableView.TableDataBindMapping previousTableDataBindMapping) {
+            // empty block
         }
 
         @Override
         public void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey) {
+            // empty block
         }
 
         @Override
         public void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType) {
+            // empty block
         }
 
         @Override
         public void selectedRowBindMappingChanged(TableView tableView,
             TableView.SelectedRowBindMapping previousSelectedRowBindMapping) {
+            // empty block
         }
 
         @Override
         public void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey) {
+            // empty block
         }
 
         @Override
         public void selectedRowsBindTypeChanged(TableView tableView, BindType previousSelectedRowsBindType) {
+            // empty block
         }
 
         @Override
         public void selectedRowsBindMappingChanged(TableView tableView,
             TableView.SelectedRowBindMapping previousSelectedRowsBindMapping) {
+            // empty block
         }
     }
 

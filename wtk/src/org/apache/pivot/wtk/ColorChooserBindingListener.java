@@ -27,16 +27,19 @@ public interface ColorChooserBindingListener {
         @Override
         public void selectedColorKeyChanged(ColorChooser colorChooser,
             String previousSelectedColorKey) {
+            // empty block
         }
 
         @Override
         public void selectedColorBindTypeChanged(ColorChooser colorChooser,
             BindType previousSelectedColorBindType) {
+            // empty block
         }
 
         @Override
         public void selectedColorBindMappingChanged(ColorChooser colorChooser,
             ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping) {
+            // empty block
         }
     }
 

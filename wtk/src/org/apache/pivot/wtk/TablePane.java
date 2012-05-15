@@ -118,14 +118,14 @@ public class TablePane extends Container {
          * considered an absolute value.
          */
         public void setHeight(String height) {
-            boolean relative = false;
+            boolean relativeLocal = false;
 
             if (height.endsWith(RELATIVE_SIZE_INDICATOR)) {
-                relative = true;
+                relativeLocal = true;
                 height = height.substring(0, height.length() - 1);
             }
 
-            setHeight(Integer.parseInt(height), relative);
+            setHeight(Integer.parseInt(height), relativeLocal);
         }
 
         /**
@@ -358,14 +358,14 @@ public class TablePane extends Container {
          * considered an absolute value.
          */
         public void setWidth(String width) {
-            boolean relative = false;
+            boolean relativeLocal = false;
 
             if (width.endsWith(RELATIVE_SIZE_INDICATOR)) {
-                relative = true;
+                relativeLocal = true;
                 width = width.substring(0, width.length() - 1);
             }
 
-            setWidth(Integer.parseInt(width), relative);
+            setWidth(Integer.parseInt(width), relativeLocal);
         }
 
         /**

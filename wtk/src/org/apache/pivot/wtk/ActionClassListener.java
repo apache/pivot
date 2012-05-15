@@ -26,14 +26,17 @@ public interface ActionClassListener {
     public class Adapter implements ActionClassListener {
         @Override
         public void actionAdded(String id) {
+            // empty block
         }
 
         @Override
         public void actionUpdated(String id, Action previousAction) {
+            // empty block
         }
 
         @Override
         public void actionRemoved(String id, Action action) {
+            // empty block
         }
     }
 

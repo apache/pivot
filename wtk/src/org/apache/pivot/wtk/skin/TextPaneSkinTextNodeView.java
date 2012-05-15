@@ -193,10 +193,10 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             end = ci.getEndIndex();
         }
 
-        GlyphVector glyphVector = getEffectiveFont().createGlyphVector(fontRenderContext,
+        GlyphVector glyphVectorLocal = getEffectiveFont().createGlyphVector(fontRenderContext,
             new CharSequenceCharacterIterator(textNode.getCharacters(), start, end));
 
-        Rectangle2D textBounds = glyphVector.getLogicalBounds();
+        Rectangle2D textBounds = glyphVectorLocal.getLogicalBounds();
         return new Dimensions((int)Math.ceil(textBounds.getWidth()),
             (int)Math.ceil(textBounds.getHeight()));
     }
@@ -211,6 +211,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
     @Override
     protected void setSkinLocation(int skinX, int skinY) {
+        // empty block
     }
 
     @Override

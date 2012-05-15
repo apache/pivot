@@ -26,10 +26,12 @@ public interface TabPaneAttributeListener {
     public static class Adapter implements TabPaneAttributeListener {
         @Override
         public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
+            // empty block
         }
 
         @Override
         public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
+            // empty block
         }
     }
 

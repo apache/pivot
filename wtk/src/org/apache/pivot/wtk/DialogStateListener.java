@@ -33,10 +33,12 @@ public interface DialogStateListener extends DialogCloseListener {
 
         @Override
         public void dialogCloseVetoed(Dialog dialog, Vote reason) {
+            // empty block
         }
 
         @Override
         public void dialogClosed(Dialog dialog, boolean modal) {
+            // empty block
         }
     }
 

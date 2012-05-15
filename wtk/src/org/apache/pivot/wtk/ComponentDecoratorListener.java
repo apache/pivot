@@ -29,15 +29,18 @@ public interface ComponentDecoratorListener {
     public static class Adapter implements ComponentDecoratorListener {
         @Override
         public void decoratorInserted(Component component, int index) {
+            // empty block
         }
 
         @Override
         public void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
+            // empty block
         }
 
         @Override
         public void decoratorsRemoved(Component component, int index,
             Sequence<Decorator> decorators) {
+            // empty block
         }
     }
 

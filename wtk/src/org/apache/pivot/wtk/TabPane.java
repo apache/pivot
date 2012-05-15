@@ -344,9 +344,8 @@ public class TabPane extends Container {
             int index = tabs.indexOf(comp);
             if (index < 0) {
                 throw new IllegalArgumentException("component is not a child of the TabPane");
-            } else {
-                setSelectedIndex(index);
             }
+            setSelectedIndex(index);
         }
     }
 

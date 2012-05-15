@@ -28,19 +28,23 @@ public interface ContainerListener  {
     public static class Adapter implements ContainerListener {
         @Override
         public void componentInserted(Container container, int index) {
+            // empty block
         }
 
         @Override
         public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+            // empty block
         }
 
         @Override
         public void componentMoved(Container container, int from, int to) {
+            // empty block
         }
 
         @Override
         public void focusTraversalPolicyChanged(Container container,
             FocusTraversalPolicy previousFocusTraversalPolicy) {
+            // empty block
         }
     }
 

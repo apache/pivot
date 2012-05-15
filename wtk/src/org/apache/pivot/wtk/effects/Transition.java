@@ -273,16 +273,16 @@ public abstract class Transition {
      * <tt>TransitionListener</tt> will be notified when the transition
      * completes.
      *
-     * @param transitionListener
+     * @param transitionListenerArgument
      * The listener to get notified when the transition completes, or
      * <tt>null</tt> if no notification is necessary
      */
-    public void start(TransitionListener transitionListener) {
+    public void start(TransitionListener transitionListenerArgument) {
         if (transitionCallback != null) {
             throw new IllegalStateException("Transition is currently running.");
         }
 
-        this.transitionListener = transitionListener;
+        this.transitionListener = transitionListenerArgument;
 
         startTime = System.currentTimeMillis();
         currentTime = startTime;

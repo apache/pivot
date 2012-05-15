@@ -32,10 +32,12 @@ public interface ComponentMouseListener {
 
         @Override
         public void mouseOver(Component component) {
+            // empty block
         }
 
         @Override
         public void mouseOut(Component component) {
+            // empty block
         }
     }
 

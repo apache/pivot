@@ -26,30 +26,37 @@ public interface MovieListener {
     public static class Adapter implements MovieListener {
         @Override
         public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
+            // empty block
         }
 
         @Override
         public void baselineChanged(Movie movie, int previousBaseline) {
+            // empty block
         }
 
         @Override
         public void currentFrameChanged(Movie movie, int previousFrame) {
+            // empty block
         }
 
         @Override
         public void loopingChanged(Movie movie) {
+            // empty block
         }
 
         @Override
         public void movieStarted(Movie movie) {
+            // empty block
         }
 
         @Override
         public void movieStopped(Movie movie) {
+            // empty block
         }
 
         @Override
         public void regionUpdated(Movie movie, int x, int y, int width, int height) {
+            // empty block
         }
     }
 

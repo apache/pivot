@@ -88,19 +88,19 @@ public class ImageNode extends Node {
             throw new IllegalArgumentException("imageURL is null.");
         }
 
-        Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+        Image imageLocal = (Image)ApplicationContext.getResourceCache().get(imageURL);
 
-        if (image == null) {
+        if (imageLocal == null) {
             try {
-                image = Image.load(imageURL);
+                imageLocal = Image.load(imageURL);
             } catch (TaskExecutionException exception) {
                 throw new IllegalArgumentException(exception);
             }
 
-            ApplicationContext.getResourceCache().put(imageURL, image);
+            ApplicationContext.getResourceCache().put(imageURL, imageLocal);
         }
 
-        setImage(image);
+        setImage(imageLocal);
     }
 
     /**

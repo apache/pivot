@@ -28,18 +28,22 @@ public interface TableViewSelectionListener {
     public static class Adapter implements TableViewSelectionListener {
         @Override
         public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
+            // empty block
         }
 
         @Override
         public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
+            // empty block
         }
 
         @Override
         public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+            // empty block
         }
 
         @Override
         public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+            // empty block
         }
     }
 

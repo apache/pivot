@@ -23,4 +23,5 @@ import org.apache.pivot.util.ListenerList;
  * for the WTK components.
  */
 public class WTKListenerList<T> extends ListenerList<T> {
+    // empty block
 }

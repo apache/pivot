@@ -124,26 +124,26 @@ public abstract class Node {
      * rather than the range itself, is added to the node.
      *
      * @param range
-     * @param offset
+     * @param offsetArgument
      */
-    public abstract void insertRange(Node range, int offset);
+    public abstract void insertRange(Node range, int offsetArgument);
 
     /**
      * Removes a range from the node.
      *
-     * @param offset
+     * @param offsetArgument
      * @param characterCount
      *
      * @return
      * The removed range. This will be a copy of the node structure relative
      * to this node.
      */
-    public abstract Node removeRange(int offset, int characterCount);
+    public abstract Node removeRange(int offsetArgument, int characterCount);
 
     /**
      * Replaces an existing range with a new range.
      *
-     * @param offset
+     * @param offsetArgument
      * @param characterCount
      * @param range
      *
@@ -151,9 +151,9 @@ public abstract class Node {
      * The removed range. This will be a copy of the node structure relative
      * to this node.
      */
-    public Node replaceRange(int offset, int characterCount, Node range) {
-        Node removed = removeRange(offset, characterCount);
-        insertRange(range, offset);
+    public Node replaceRange(int offsetArgument, int characterCount, Node range) {
+        Node removed = removeRange(offsetArgument, characterCount);
+        insertRange(range, offsetArgument);
 
         return removed;
     }
@@ -161,21 +161,21 @@ public abstract class Node {
     /**
      * Returns a range from the node.
      *
-     * @param offset
+     * @param offsetArgument
      * @param characterCount
      *
      * @return
      * A node containing a copy of the node structure spanning the given range,
      * relative to this node.
      */
-    public abstract Node getRange(int offset, int characterCount);
+    public abstract Node getRange(int offsetArgument, int characterCount);
 
     /**
      * Returns the character at the given offset.
      *
-     * @param offset
+     * @param offsetArgument
      */
-    public abstract char getCharacterAt(int offset);
+    public abstract char getCharacterAt(int offsetArgument);
 
     /**
      * Returns the number of characters in this node.
@@ -192,56 +192,56 @@ public abstract class Node {
     /**
      * Called to notify a node that a range has been inserted.
      *
-     * @param offset
+     * @param offsetArgument
      * @param characterCount
      */
-    protected void rangeInserted(int offset, int characterCount) {
+    protected void rangeInserted(int offsetArgument, int characterCount) {
         if (parent != null) {
-            parent.rangeInserted(offset + this.offset, characterCount);
+            parent.rangeInserted(offsetArgument + this.offset, characterCount);
         }
 
-        nodeListeners.rangeInserted(this, offset, characterCount);
+        nodeListeners.rangeInserted(this, offsetArgument, characterCount);
     }
 
     /**
      * Called to notify a node that a range has been removed.
      *
-     * @param offset
+     * @param offsetArgument
      * @param characterCount
      */
-    protected void rangeRemoved(int offset, int characterCount) {
+    protected void rangeRemoved(int offsetArgument, int characterCount) {
         if (parent != null) {
-            parent.rangeRemoved(offset + this.offset, characterCount);
+            parent.rangeRemoved(offsetArgument + this.offset, characterCount);
         }
 
-        nodeListeners.rangeRemoved(this, offset, characterCount);
+        nodeListeners.rangeRemoved(this, offsetArgument, characterCount);
     }
 
     /**
      * Called to notify a node that some child nodes has been removed.
      *
      * @param removed
-     * @param offset
+     * @param offsetArgument
      */
-    protected void nodesRemoved(Sequence<Node> removed, int offset) {
+    protected void nodesRemoved(Sequence<Node> removed, int offsetArgument) {
         if (parent != null) {
-            parent.nodesRemoved(removed, offset + this.offset);
+            parent.nodesRemoved(removed, offsetArgument + this.offset);
         }
 
-        nodeListeners.nodesRemoved(this, removed, offset);
+        nodeListeners.nodesRemoved(this, removed, offsetArgument);
     }
 
     /**
      * Called to notify a node that a child node has been inserted.
      *
-     * @param offset
+     * @param offsetArgument
      */
-    protected void nodeInserted(int offset) {
+    protected void nodeInserted(int offsetArgument) {
         if (parent != null) {
-            parent.nodeInserted(offset + this.offset);
+            parent.nodeInserted(offsetArgument + this.offset);
         }
 
-        nodeListeners.nodeInserted(this, offset);
+        nodeListeners.nodeInserted(this, offsetArgument);
     }
 
     /**

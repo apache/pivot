@@ -26,10 +26,12 @@ public interface ListButtonSelectionListener {
     public static class Adapter implements ListButtonSelectionListener {
         @Override
         public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+            // empty block
         }
 
         @Override
         public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+            // empty block
         }
     }
 

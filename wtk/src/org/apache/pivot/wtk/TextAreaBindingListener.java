@@ -26,14 +26,17 @@ public interface TextAreaBindingListener {
     public static class Adapter implements TextAreaBindingListener {
         @Override
         public void textKeyChanged(TextArea textArea, String previousTextKey) {
+            // empty block
         }
 
         @Override
         public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
+            // empty block
         }
 
         @Override
         public void textBindMappingChanged(TextArea textArea, TextArea.TextBindMapping previousTextBindMapping) {
+            // empty block
         }
     }
 

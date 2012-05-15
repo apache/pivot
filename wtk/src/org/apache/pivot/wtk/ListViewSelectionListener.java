@@ -28,18 +28,22 @@ public interface ListViewSelectionListener {
     public static class Adapter implements ListViewSelectionListener {
         @Override
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+            // empty block
         }
 
         @Override
         public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+            // empty block
         }
 
         @Override
         public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+            // empty block
         }
 
         @Override
         public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
+            // empty block
         }
     }
 

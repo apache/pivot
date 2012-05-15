@@ -31,18 +31,22 @@ public interface CalendarListener {
     public static class Adapter implements CalendarListener {
         @Override
         public void yearChanged(Calendar calendar, int previousYear) {
+            // empty block
         }
 
         @Override
         public void monthChanged(Calendar calendar, int previousMonth) {
+            // empty block
         }
 
         @Override
         public void localeChanged(Calendar calendar, Locale previousLocale) {
+            // empty block
         }
 
         @Override
         public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter) {
+            // empty block
         }
     }
 

@@ -27,10 +27,12 @@ public interface SuggestionPopupSelectionListener {
         @Override
         public void selectedIndexChanged(SuggestionPopup suggestionPopup,
             int previousSelectedIndex) {
+            // empty block
         }
 
         @Override
         public void selectedSuggestionChanged(SuggestionPopup suggestionPopup, Object previousSelectedSuggestion) {
+            // empty block
         }
     }
 

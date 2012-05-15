@@ -28,14 +28,17 @@ public interface RollupListener {
     public static class Adapter implements RollupListener {
         @Override
         public void headingChanged(Rollup rollup, Component previousHeading) {
+            // empty block
         }
 
         @Override
         public void contentChanged(Rollup rollup, Component previousContent) {
+            // empty block
         }
 
         @Override
         public void collapsibleChanged(Rollup rollup) {
+            // empty block
         }
     }
 

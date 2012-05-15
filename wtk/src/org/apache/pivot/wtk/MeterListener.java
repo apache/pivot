@@ -26,12 +26,17 @@ public interface MeterListener {
     public static class Adapter implements MeterListener {
         @Override
         public void percentageChanged(Meter meter, double previousPercentage) {
+            // empty block
         }
+
         @Override
         public void textChanged(Meter meter, String previousText) {
+            // empty block
         }
+
         @Override
         public void orientationChanged(Meter meter) {
+            // empty block
         }
     }
 

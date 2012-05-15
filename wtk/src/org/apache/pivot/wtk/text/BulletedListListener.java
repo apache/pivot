@@ -25,6 +25,7 @@ public interface BulletedListListener {
     public class Adapter implements BulletedListListener {
         @Override
         public void styleChanged(BulletedList bulletedList, BulletedList.Style previousStyle) {
+            // empty block
         }
     }
 

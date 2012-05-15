@@ -28,22 +28,27 @@ public interface TreeViewNodeListener {
     public static class Adapter implements TreeViewNodeListener {
         @Override
         public void nodeInserted(TreeView treeView, Path path, int index) {
+            // empty block
         }
 
         @Override
         public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
+            // empty block
         }
 
         @Override
         public void nodeUpdated(TreeView treeView, Path path, int index) {
+            // empty block
         }
 
         @Override
         public void nodesCleared(TreeView treeView, Path path) {
+            // empty block
         }
 
         @Override
         public void nodesSorted(TreeView treeView, Path path) {
+            // empty block
         }
     }
 

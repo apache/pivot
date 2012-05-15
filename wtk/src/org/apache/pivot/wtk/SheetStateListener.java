@@ -33,10 +33,12 @@ public interface SheetStateListener extends SheetCloseListener {
 
         @Override
         public void sheetCloseVetoed(Sheet sheet, Vote reason) {
+            // empty block
         }
 
         @Override
         public void sheetClosed(Sheet sheet) {
+            // empty block
         }
     }
 

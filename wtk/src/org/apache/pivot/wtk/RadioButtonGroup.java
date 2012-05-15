@@ -537,12 +537,12 @@ public class RadioButtonGroup extends ButtonGroup {
      *
      * @param index Index to which the 'next' is relative
      * @param filter Alternative filter to use during the search.
-     * @param circular Loop when upper bound is reached
+     * @param circularArgument Loop when upper bound is reached
      * @return The first button found to satisfy the filter
      *
      * @see #setCircular(boolean)
      */
-    private int findNext(int index, Filter<Integer> filter, boolean circular) {
+    private int findNext(int index, Filter<Integer> filter, boolean circularArgument) {
         filter = (filter == null ? defaultFilter : filter);
         int result = NOT_FOUND_INDEX;
         int length = buttonOrder.getLength();
@@ -554,7 +554,7 @@ public class RadioButtonGroup extends ButtonGroup {
                     break;
                 }
             }
-            if (circular && result == NOT_FOUND_INDEX) {
+            if (circularArgument && result == NOT_FOUND_INDEX) {
                 // first index --> index
                 for (int i = 0; i <= index; i++) {
                     if (filter.include(i)) {
@@ -578,12 +578,12 @@ public class RadioButtonGroup extends ButtonGroup {
      *
      * @param index Index to which the 'previous' is relative
      * @param filter Alternative filter to use during the search.
-     * @param circular Loop when lower bound is reached
+     * @param circularArgument Loop when lower bound is reached
      * @return The first focusable button found
      *
      * @see #setCircular(boolean)
      */
-    private int findPrevious(int index, Filter<Integer> filter, boolean circular) {
+    private int findPrevious(int index, Filter<Integer> filter, boolean circularArgument) {
         filter = (filter == null ? defaultFilter : filter);
         int result = NOT_FOUND_INDEX;
         int length = buttonOrder.getLength();
@@ -595,7 +595,7 @@ public class RadioButtonGroup extends ButtonGroup {
                     break;
                 }
             }
-            if (circular && result == NOT_FOUND_INDEX) {
+            if (circularArgument && result == NOT_FOUND_INDEX) {
                 // last index --> index
                 for (int i = (length - 1); i >= index; i--) {
                     if (filter.include(i)) {

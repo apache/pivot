@@ -29,18 +29,22 @@ public interface TreeViewSelectionListener {
     public static class Adapter implements TreeViewSelectionListener {
         @Override
         public void selectedPathAdded(TreeView treeView, Path path) {
+            // empty block
         }
 
         @Override
         public void selectedPathRemoved(TreeView treeView, Path path) {
+            // empty block
         }
 
         @Override
         public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
+            // empty block
         }
 
         @Override
         public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
+            // empty block
         }
     }
 

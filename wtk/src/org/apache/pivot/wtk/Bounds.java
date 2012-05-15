@@ -120,11 +120,11 @@ public final class Bounds implements Serializable {
         return new Dimensions(width, height);
     }
 
-    public Bounds union(int x, int y, int width, int height) {
-        int x1 = Math.min(this.x, x);
-        int y1 = Math.min(this.y, y);
-        int x2 = Math.max(this.x + this.width, x + width);
-        int y2 = Math.max(this.y + this.height, y + height);
+    public Bounds union(int xArgument, int yArgument, int widthArgument, int heightArgument) {
+        int x1 = Math.min(this.x, xArgument);
+        int y1 = Math.min(this.y, yArgument);
+        int x2 = Math.max(this.x + this.width, xArgument + widthArgument);
+        int y2 = Math.max(this.y + this.height, yArgument + heightArgument);
 
         return new Bounds(x1, y1, x2 - x1, y2 - y1);
 
@@ -134,11 +134,11 @@ public final class Bounds implements Serializable {
         return union(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
-    public Bounds intersect(int x, int y, int width, int height) {
-        int x1 = Math.max(this.x, x);
-        int y1 = Math.max(this.y, y);
-        int x2 = Math.min(this.x + this.width, x + width);
-        int y2 = Math.min(this.y + this.height, y + height);
+    public Bounds intersect(int xArgument, int yArgument, int widthArgument, int heightArgument) {
+        int x1 = Math.max(this.x, xArgument);
+        int y1 = Math.max(this.y, yArgument);
+        int x2 = Math.min(this.x + this.width, xArgument + widthArgument);
+        int y2 = Math.min(this.y + this.height, yArgument + heightArgument);
 
         return new Bounds(x1, y1, x2 - x1, y2 - y1);
     }
@@ -167,11 +167,11 @@ public final class Bounds implements Serializable {
         return contains(point.x, point.y);
     }
 
-    public boolean contains(int x, int y) {
-        return (x >= this.x
-            && y >= this.y
-            && x < this.x + width
-            && y < this.y + height);
+    public boolean contains(int xArgument, int yArgument) {
+        return (xArgument >= this.x
+            && yArgument >= this.y
+            && xArgument < this.x + width
+            && yArgument < this.y + height);
     }
 
     public boolean contains(Bounds bounds) {
@@ -182,12 +182,12 @@ public final class Bounds implements Serializable {
         return contains(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
-    public boolean contains(int x, int y, int width, int height) {
+    public boolean contains(int xArgument, int yArgument, int widthArgument, int heightArgument) {
         return (!isEmpty()
-            && x >= this.x
-            && y >= this.y
-            && x + width <= this.x + this.width
-            && y + height <= this.y + this.height);
+            && xArgument >= this.x
+            && yArgument >= this.y
+            && xArgument + widthArgument <= this.x + this.width
+            && yArgument + heightArgument <= this.y + this.height);
     }
 
     public boolean intersects(Bounds bounds) {
@@ -198,12 +198,12 @@ public final class Bounds implements Serializable {
         return intersects(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
-    public boolean intersects(int x, int y, int width, int height) {
+    public boolean intersects(int xArgument, int yArgument, int widthArgument, int heightArgument) {
         return (!isEmpty()
-            && x + width > this.x
-            && y + height > this.y
-            && x < this.x + this.width
-            && y < this.y + this.height);
+            && xArgument + widthArgument > this.x
+            && yArgument + heightArgument > this.y
+            && xArgument < this.x + this.width
+            && yArgument < this.y + this.height);
     }
 
     public boolean isEmpty() {

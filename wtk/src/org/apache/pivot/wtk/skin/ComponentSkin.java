@@ -85,23 +85,23 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(int widthArgument, int heightArgument) {
         return -1;
     }
 
     @Override
-    public void install(Component component) {
+    public void install(Component componentArgument) {
         assert(this.component == null) : "Skin is already installed on a component.";
 
-        component.getComponentListeners().add(this);
-        component.getComponentStateListeners().add(this);
-        component.getComponentMouseListeners().add(this);
-        component.getComponentMouseButtonListeners().add(this);
-        component.getComponentMouseWheelListeners().add(this);
-        component.getComponentKeyListeners().add(this);
-        component.getComponentTooltipListeners().add(this);
+        componentArgument.getComponentListeners().add(this);
+        componentArgument.getComponentStateListeners().add(this);
+        componentArgument.getComponentMouseListeners().add(this);
+        componentArgument.getComponentMouseButtonListeners().add(this);
+        componentArgument.getComponentMouseWheelListeners().add(this);
+        componentArgument.getComponentKeyListeners().add(this);
+        componentArgument.getComponentTooltipListeners().add(this);
 
-        this.component = component;
+        this.component = componentArgument;
     }
 
     @Override
@@ -127,127 +127,131 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     // Component events
     @Override
-    public void parentChanged(Component component, Container previousParent) {
+    public void parentChanged(Component componentArgument, Container previousParent) {
         // No-op
     }
 
     @Override
-    public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+    public void sizeChanged(Component componentArgument, int previousWidth, int previousHeight) {
         // No-op
     }
 
     @Override
-    public void preferredSizeChanged(Component component,
+    public void preferredSizeChanged(Component componentArgument,
         int previousPreferredWidth, int previousPreferredHeight) {
         // No-op
     }
 
     @Override
-    public void widthLimitsChanged(Component component, int previousMinimumWidth,
+    public void widthLimitsChanged(Component componentArgument, int previousMinimumWidth,
         int previousMaximumWidth) {
         // No-op
     }
 
     @Override
-    public void heightLimitsChanged(Component component, int previousMinimumHeight,
+    public void heightLimitsChanged(Component componentArgument, int previousMinimumHeight,
         int previousMaximumHeight) {
         // No-op
     }
 
     @Override
-    public void locationChanged(Component component, int previousX, int previousY) {
+    public void locationChanged(Component componentArgument, int previousX, int previousY) {
         // No-op
     }
 
     @Override
-    public void visibleChanged(Component component) {
+    public void visibleChanged(Component componentArgument) {
         // No-op
     }
 
     @Override
-    public void cursorChanged(Component component, Cursor previousCursor) {
+    public void cursorChanged(Component componentArgument, Cursor previousCursor) {
         // No-op
     }
 
     @Override
-    public void tooltipTextChanged(Component component, String previousTooltipText) {
-    }
-
-    @Override
-    public void tooltipDelayChanged(Component component, int previousTooltipDelay) {
-    }
-
-    @Override
-    public void dragSourceChanged(Component component, DragSource previousDragSource) {
+    public void tooltipTextChanged(Component componentArgument, String previousTooltipText) {
         // No-op
     }
 
     @Override
-    public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
+    public void tooltipDelayChanged(Component componentArgument, int previousTooltipDelay) {
         // No-op
     }
 
     @Override
-    public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
+    public void dragSourceChanged(Component componentArgument, DragSource previousDragSource) {
         // No-op
     }
 
     @Override
-    public void nameChanged(Component component, String previousName) {
+    public void dropTargetChanged(Component componentArgument, DropTarget previousDropTarget) {
+        // No-op
+    }
+
+    @Override
+    public void menuHandlerChanged(Component componentArgument, MenuHandler previousMenuHandler) {
+        // No-op
+    }
+
+    @Override
+    public void nameChanged(Component componentArgument, String previousName) {
         // No-op
     }
 
     // Component state events
     @Override
-    public void enabledChanged(Component component) {
+    public void enabledChanged(Component componentArgument) {
         // No-op
     }
 
     @Override
-    public void focusedChanged(Component component, Component obverseComponent) {
+    public void focusedChanged(Component componentArgument, Component obverseComponent) {
         // No-op
     }
 
     // Component mouse events
     @Override
-    public boolean mouseMove(Component component, int x, int y) {
+    public boolean mouseMove(Component componentArgument, int x, int y) {
         return false;
     }
 
     @Override
-    public void mouseOver(Component component) {
+    public void mouseOver(Component componentArgument) {
+        // No-op
     }
 
     @Override
-    public void mouseOut(Component component) {
+    public void mouseOut(Component componentArgument) {
+        // No-op
     }
 
     // Component mouse button events
     @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseDown(Component componentArgument, Mouse.Button button, int x, int y) {
         return false;
     }
 
     @Override
-    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseUp(Component componentArgument, Mouse.Button button, int x, int y) {
         return false;
     }
 
     @Override
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component componentArgument, Mouse.Button button, int x, int y, int count) {
         return false;
     }
 
     // Component mouse wheel events
     @Override
-    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
+    public boolean mouseWheel(Component componentArgument, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         return false;
     }
 
     // Component key events
     @Override
-    public boolean keyTyped(Component component, char character) {
+    public boolean keyTyped(Component componentArgument, char character) {
         return false;
     }
 
@@ -257,7 +261,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
      * backwards
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component componentArgument, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         if (keyCode == Keyboard.KeyCode.TAB
@@ -282,12 +286,12 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component componentArgument, int keyCode, Keyboard.KeyLocation keyLocation) {
         return false;
     }
 
     @Override
-    public void tooltipTriggered(Component component, int x, int y) {
+    public void tooltipTriggered(Component componentArgument, int x, int y) {
         String tooltipText = component.getTooltipText();
 
         if (tooltipText != null) {
@@ -360,15 +364,15 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         }
     }
 
-    protected void repaintComponent(int x, int y, int width, int height) {
+    protected void repaintComponent(int x, int y, int widthArgument, int heightArgument) {
         if (component != null) {
-            component.repaint(x, y, width, height);
+            component.repaint(x, y, widthArgument, heightArgument);
         }
     }
 
-    protected void repaintComponent(int x, int y, int width, int height, boolean immediate) {
+    protected void repaintComponent(int x, int y, int widthArgument, int heightArgument, boolean immediate) {
         if (component != null) {
-            component.repaint(x, y, width, height, immediate);
+            component.repaint(x, y, widthArgument, heightArgument, immediate);
         }
     }
 

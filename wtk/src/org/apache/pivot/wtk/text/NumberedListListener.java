@@ -24,6 +24,7 @@ public interface NumberedListListener {
     public class Adapter implements NumberedListListener {
         @Override
         public void styleChanged(NumberedList numberedList, NumberedList.Style previousStyle) {
+            // empty block
         }
     }
 

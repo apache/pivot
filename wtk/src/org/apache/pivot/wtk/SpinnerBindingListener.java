@@ -26,27 +26,33 @@ public interface SpinnerBindingListener {
     public static class Adapter implements SpinnerBindingListener {
         @Override
         public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {
+            // empty block
         }
 
         @Override
         public void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType) {
+            // empty block
         }
 
         @Override
         public void spinnerDataBindMappingChanged(Spinner spinner,
             Spinner.SpinnerDataBindMapping previousSpinnerDataBindMapping) {
+            // empty block
         }
 
         @Override
         public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
+            // empty block
         }
 
         @Override
         public void selectedItemBindTypeChanged(Spinner spinner, BindType previousSelectedItemBindType) {
+            // empty block
         }
 
         @Override
         public void selectedItemBindMappingChanged(Spinner spinner, Spinner.ItemBindMapping previousSelectedItemBindMapping) {
+            // empty block
         }
     }
 

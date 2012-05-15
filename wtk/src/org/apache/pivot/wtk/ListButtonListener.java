@@ -29,22 +29,27 @@ public interface ListButtonListener {
     public static class Adapter implements ListButtonListener {
         @Override
         public void listDataChanged(ListButton listButton, List<?> previousListData) {
+            // empty block
         }
 
         @Override
         public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
+            // empty block
         }
 
         @Override
         public void repeatableChanged(ListButton listButton) {
+            // empty block
         }
 
         @Override
         public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
+            // empty block
         }
 
         @Override
         public void listSizeChanged(ListButton listButton, int previousListSize) {
+            // empty block
         }
     }
 

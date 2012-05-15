@@ -33,10 +33,12 @@ public interface TabPaneSelectionListener {
 
         @Override
         public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
+            // empty block
         }
 
         @Override
         public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
+            // empty block
         }
     }
 

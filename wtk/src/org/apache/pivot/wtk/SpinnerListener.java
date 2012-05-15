@@ -28,14 +28,17 @@ public interface SpinnerListener {
     public static class Adapter implements SpinnerListener {
         @Override
         public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
+            // empty block
         }
 
         @Override
         public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
+            // empty block
         }
 
         @Override
         public void circularChanged(Spinner spinner) {
+            // empty block
         }
     }
 

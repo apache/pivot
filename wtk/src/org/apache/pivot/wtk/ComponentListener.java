@@ -26,61 +26,75 @@ public interface ComponentListener {
     public static class Adapter implements ComponentListener {
         @Override
         public void parentChanged(Component component, Container previousParent) {
+            // empty block
         }
 
         @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+            // empty block
         }
 
         @Override
         public void preferredSizeChanged(Component component, int previousPreferredWidth,
             int previousPreferredHeight) {
+            // empty block
         }
 
         @Override
         public void widthLimitsChanged(Component component, int previousMinimumWidth,
             int previousMaximumWidth) {
+            // empty block
         }
 
         @Override
         public void heightLimitsChanged(Component component, int previousMinimumHeight,
             int previousMaximumHeight) {
+            // empty block
         }
 
         @Override
         public void locationChanged(Component component, int previousX, int previousY) {
+            // empty block
         }
 
         @Override
         public void visibleChanged(Component component) {
+            // empty block
         }
 
         @Override
         public void cursorChanged(Component component, Cursor previousCursor) {
+            // empty block
         }
 
         @Override
         public void tooltipTextChanged(Component component, String previousTooltipText) {
+            // empty block
         }
 
         @Override
         public void tooltipDelayChanged(Component component, int previousTooltipDelay) {
+            // empty block
         }
 
         @Override
         public void dragSourceChanged(Component component, DragSource previousDragSource) {
+            // empty block
         }
 
         @Override
         public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
+            // empty block
         }
 
         @Override
         public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
+            // empty block
         }
 
         @Override
         public void nameChanged(Component component, String previousName) {
+            // empty block
         }
     }
 

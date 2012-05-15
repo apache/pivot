@@ -35,10 +35,12 @@ public interface RollupStateListener {
 
         @Override
         public void expandedChangeVetoed(Rollup rollup, Vote reason) {
+            // empty block
         }
 
         @Override
         public void expandedChanged(Rollup rollup) {
+            // empty block
         }
     }
 

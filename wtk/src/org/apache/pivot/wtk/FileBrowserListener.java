@@ -31,28 +31,34 @@ public interface FileBrowserListener {
     public static class Adapter implements FileBrowserListener {
         @Override
         public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
+            // empty block
         }
 
         @Override
         public void selectedFileAdded(FileBrowser fileBrowser, File file) {
+            // empty block
         }
 
         @Override
         public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
+            // empty block
         }
 
         @Override
         public void selectedFilesChanged(FileBrowser fileBrowser,
             Sequence<File> previousSelectedFiles) {
+            // empty block
         }
 
         @Override
         public void multiSelectChanged(FileBrowser fileBrowser) {
+            // empty block
         }
 
         @Override
         public void disabledFileFilterChanged(FileBrowser fileBrowser,
             Filter<File> previousDisabledFileFilter) {
+            // empty block
         }
     }
 

@@ -26,14 +26,17 @@ public interface CalendarBindingListener {
     public static class Adapter implements CalendarBindingListener {
         @Override
         public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey) {
+            // empty block
         }
 
         @Override
         public void selectedDateBindTypeChanged(Calendar calendar, BindType previousSelectedDateBindType) {
+            // empty block
         }
 
         @Override
         public void selectedDateBindMappingChanged(Calendar calendar, Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
+            // empty block
         }
     }
 

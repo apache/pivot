@@ -100,8 +100,8 @@ public class Picture extends Image {
             float scaleX = ((float)width / (float)previousWidth);
             float scaleY = ((float)height / (float)previousHeight);
 
-            java.awt.image.BufferedImage bufferedImage = new BufferedImage(width, height, type);
-            Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.getGraphics();
+            java.awt.image.BufferedImage bufferedImageLocal = new BufferedImage(width, height, type);
+            Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImageLocal.getGraphics();
 
             // Clear the background
             if (this.bufferedImage.getTransparency() != Transparency.OPAQUE) {
@@ -139,7 +139,7 @@ public class Picture extends Image {
             bufferedImageGraphics.dispose();
 
             // Set the scaled image as the new instance
-            this.bufferedImage = bufferedImage;
+            this.bufferedImage = bufferedImageLocal;
 
             imageListeners.sizeChanged(this, previousWidth, previousHeight);
         }

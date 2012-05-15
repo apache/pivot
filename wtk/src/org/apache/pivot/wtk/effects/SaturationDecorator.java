@@ -65,13 +65,13 @@ public class SaturationDecorator implements Decorator {
     }
 
     @Override
-    public Graphics2D prepare(Component component, Graphics2D graphics) {
+    public Graphics2D prepare(Component component, Graphics2D graphicsArgument) {
         int x = 0;
         int y = 0;
         int width = component.getWidth();
         int height = component.getHeight();
 
-        java.awt.Rectangle clipBounds = graphics.getClipBounds();
+        java.awt.Rectangle clipBounds = graphicsArgument.getClipBounds();
         if (clipBounds != null) {
             x = clipBounds.x;
             y = clipBounds.y;
@@ -81,11 +81,11 @@ public class SaturationDecorator implements Decorator {
 
         componentImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-        this.graphics = graphics;
+        this.graphics = graphicsArgument;
 
         componentGraphics = componentImage.createGraphics();
         componentGraphics.translate(-x, -y);
-        componentGraphics.setClip(graphics.getClip());
+        componentGraphics.setClip(graphicsArgument.getClip());
 
         return componentGraphics;
     }

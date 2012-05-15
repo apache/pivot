@@ -40,12 +40,12 @@ public class ReflectionDecorator implements Decorator {
     private Graphics2D componentImageGraphics = null;
 
     @Override
-    public Graphics2D prepare(Component component, Graphics2D graphics) {
-        this.component = component;
-        this.graphics = graphics;
+    public Graphics2D prepare(Component componentArgument, Graphics2D graphicsArgument) {
+        this.component = componentArgument;
+        this.graphics = graphicsArgument;
 
-        int width = component.getWidth();
-        int height = component.getHeight();
+        int width = componentArgument.getWidth();
+        int height = componentArgument.getHeight();
 
         componentImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         componentImageGraphics = componentImage.createGraphics();
@@ -90,15 +90,16 @@ public class ReflectionDecorator implements Decorator {
     }
 
     @Override
-    public Bounds getBounds(Component component) {
-        return new Bounds(0, 0, component.getWidth(), component.getHeight() * 2);
+    public Bounds getBounds(Component componentArgument) {
+        return new Bounds(0, 0, componentArgument.getWidth(), componentArgument.getHeight() * 2);
     }
 
     @Override
-    public AffineTransform getTransform(Component component) {
+    public AffineTransform getTransform(Component componentArgument) {
         AffineTransform transform = AffineTransform.getScaleInstance(1.0, -1.0);
-        transform.translate(0, -(component.getHeight() * 2));
+        transform.translate(0, -(componentArgument.getHeight() * 2));
 
         return transform;
     }
+
 }

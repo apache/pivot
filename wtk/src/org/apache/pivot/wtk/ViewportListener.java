@@ -26,14 +26,17 @@ public interface ViewportListener {
     public static class Adapter implements ViewportListener {
         @Override
         public void scrollTopChanged(Viewport scrollPane, int previousScrollTop) {
+            // empty block
         }
 
         @Override
         public void scrollLeftChanged(Viewport scrollPane, int previousScrollLeft) {
+            // empty block
         }
 
         @Override
         public void viewChanged(Viewport scrollPane, Component previousView) {
+            // empty block
         }
     }
 

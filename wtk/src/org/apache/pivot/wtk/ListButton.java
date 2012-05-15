@@ -698,14 +698,14 @@ public class ListButton extends Button {
             && JSON.containsKey(context, listDataKey)) {
             Object value = JSON.get(context, listDataKey);
 
-            List<?> listData;
+            List<?> listDataLocal;
             if (listDataBindMapping == null) {
-                listData = (List<?>)value;
+                listDataLocal = (List<?>)value;
             } else {
-                listData = listDataBindMapping.toListData(value);
+                listDataLocal = listDataBindMapping.toListData(value);
             }
 
-            setListData(listData);
+            setListData(listDataLocal);
         }
 
         // Bind to selected item
@@ -745,14 +745,14 @@ public class ListButton extends Button {
             && selectedItemBindType != BindType.LOAD) {
             Object item;
 
-            int selectedIndex = getSelectedIndex();
-            if (selectedIndex == -1) {
+            int selectedIndexLocal = getSelectedIndex();
+            if (selectedIndexLocal == -1) {
                 item = null;
             } else {
                 if (selectedItemBindMapping == null) {
-                    item = listData.get(selectedIndex);
+                    item = listData.get(selectedIndexLocal);
                 } else {
-                    item = selectedItemBindMapping.get(listData, selectedIndex);
+                    item = selectedItemBindMapping.get(listData, selectedIndexLocal);
                 }
             }
 

@@ -187,11 +187,11 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
 
-        float textHeight;
+        float textHeightLocal;
         if (wrapText) {
-            textHeight = Math.max(getPreferredHeight(width) - (padding.top + padding.bottom), 0);
+            textHeightLocal = Math.max(getPreferredHeight(width) - (padding.top + padding.bottom), 0);
         } else {
-            textHeight = (int)Math.ceil(lm.getHeight());
+            textHeightLocal = (int)Math.ceil(lm.getHeight());
         }
 
         int baseline = -1;
@@ -202,12 +202,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             }
 
             case CENTER: {
-                baseline = Math.round((height - textHeight) / 2 + ascent);
+                baseline = Math.round((height - textHeightLocal) / 2 + ascent);
                 break;
             }
 
             case BOTTOM: {
-                baseline = Math.round(height - (textHeight + padding.bottom) + ascent);
+                baseline = Math.round(height - (textHeightLocal + padding.bottom) + ascent);
                 break;
             }
         }

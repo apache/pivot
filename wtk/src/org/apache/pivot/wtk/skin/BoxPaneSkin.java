@@ -240,6 +240,8 @@ public class BoxPaneSkin extends ContainerSkin
                                         componentBaseline += contentHeight - size.height;
                                         break;
                                     }
+                                    case TOP:
+                                        break;
                                 }
                             }
 
@@ -332,6 +334,8 @@ public class BoxPaneSkin extends ContainerSkin
                     x = width - preferredWidth;
                     break;
                 }
+                case LEFT:
+                    break;
             }
 
             x += padding.left;
@@ -397,6 +401,8 @@ public class BoxPaneSkin extends ContainerSkin
                     y = height - preferredHeight;
                     break;
                 }
+                case TOP:
+                    break;
             }
 
             y += padding.top;

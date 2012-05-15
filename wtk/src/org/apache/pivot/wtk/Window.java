@@ -134,13 +134,13 @@ public class Window extends Container {
                 throw new IllegalArgumentException("actionID is null");
             }
 
-            Action action = Action.getNamedActions().get(actionID);
-            if (action == null) {
+            Action actionLocal = Action.getNamedActions().get(actionID);
+            if (actionLocal == null) {
                 throw new IllegalArgumentException("An action with ID "
                     + actionID + " does not exist.");
             }
 
-            setAction(action);
+            setAction(actionLocal);
         }
     }
 
@@ -562,14 +562,14 @@ public class Window extends Container {
             throw new IllegalArgumentException("window is null.");
         }
 
-        Window owner = window.getOwner();
+        Window ownerLocal = window.getOwner();
 
-        while (owner != null
-            && owner != this) {
-            owner = owner.getOwner();
+        while (ownerLocal != null
+            && ownerLocal != this) {
+            ownerLocal = ownerLocal.getOwner();
         }
 
-        return (owner == this);
+        return (ownerLocal == this);
     }
 
     /**
@@ -604,15 +604,15 @@ public class Window extends Container {
     /**
      * Opens the window.
      *
-     * @param owner
+     * @param ownerArgument
      * The window's owner. The window is opened on the owner's display.
      */
-    public final void open(Window owner) {
-        if (owner == null) {
+    public final void open(Window ownerArgument) {
+        if (ownerArgument == null) {
             throw new IllegalArgumentException();
         }
 
-        open(owner.getDisplay(), owner);
+        open(ownerArgument.getDisplay(), ownerArgument);
     }
 
     /**
@@ -623,20 +623,20 @@ public class Window extends Container {
      * @param display
      * The display on which the window will be opened.
      *
-     * @param owner
+     * @param ownerArgument
      * The window's owner, or <tt>null<tt> if the window has no owner.
      */
-    public void open(Display display, Window owner) {
+    public void open(Display display, Window ownerArgument) {
         if (display == null) {
             throw new IllegalArgumentException("display is null.");
         }
 
-        if (owner != null) {
-            if (!owner.isOpen()) {
+        if (ownerArgument != null) {
+            if (!ownerArgument.isOpen()) {
                 throw new IllegalArgumentException("owner is not open.");
             }
 
-            if (isOwner(owner)) {
+            if (isOwner(ownerArgument)) {
                 throw new IllegalArgumentException("owner is an owned descendant of this window.");
             }
         }
@@ -646,7 +646,7 @@ public class Window extends Container {
                 throw new IllegalStateException("Window is already open on a different display.");
             }
 
-            if (this.owner != owner) {
+            if (this.owner != ownerArgument) {
                 throw new IllegalStateException("Window is already open with a different owner.");
             }
         }
@@ -657,10 +657,10 @@ public class Window extends Container {
 
             if (vote == Vote.APPROVE) {
                 // Set the owner and add to the owner's owned window list
-                this.owner = owner;
+                this.owner = ownerArgument;
 
-                if (owner != null) {
-                    owner.ownedWindows.add(this);
+                if (ownerArgument != null) {
+                    ownerArgument.ownedWindows.add(this);
                 }
 
                 // Add the window to the display
@@ -736,17 +736,17 @@ public class Window extends Container {
                     display.remove(this);
 
                     // Clear the owner and remove from the owner's owned window list
-                    Window owner = this.owner;
+                    Window ownerLocal = this.owner;
                     this.owner = null;
 
-                    if (owner != null) {
-                        owner.ownedWindows.remove(this);
+                    if (ownerLocal != null) {
+                        ownerLocal.ownedWindows.remove(this);
                     }
 
                     // Notify listeners
                     closing = false;
 
-                    windowStateListeners.windowClosed(this, display, owner);
+                    windowStateListeners.windowClosed(this, display, ownerLocal);
                 } else {
                     if (vote == Vote.DENY) {
                         closing = false;

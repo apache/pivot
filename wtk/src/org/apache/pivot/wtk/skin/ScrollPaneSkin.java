@@ -887,9 +887,9 @@ public class ScrollPaneSkin extends ContainerSkin
     }
 
     private boolean isOptimizeScrolling() {
-        boolean optimizeScrolling = this.optimizeScrolling;
+        boolean optimizeScrollingLocal = this.optimizeScrolling;
 
-        if (optimizeScrolling) {
+        if (optimizeScrollingLocal) {
             // Due to Sun bug #6293145, we cannot call copyArea if scaling is
             // applied to the graphics context.
 
@@ -900,12 +900,12 @@ public class ScrollPaneSkin extends ContainerSkin
             ScrollPane scrollPane = (ScrollPane)getComponent();
             ApplicationContext.DisplayHost displayHost = scrollPane.getDisplay().getDisplayHost();
 
-            optimizeScrolling = (displayHost.getScale() == 1
+            optimizeScrollingLocal = (displayHost.getScale() == 1
                 && (DesktopApplicationContext.isActive()
                 && displayHost.isDisplayable()));
         }
 
-        return optimizeScrolling;
+        return optimizeScrollingLocal;
     }
 
     // Viewport.Skin methods

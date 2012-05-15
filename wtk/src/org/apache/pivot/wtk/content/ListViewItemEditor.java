@@ -78,26 +78,26 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
     }
 
     @Override
-    public void beginEdit(ListView listView, int itemIndex) {
-        this.listView = listView;
-        this.itemIndex = itemIndex;
+    public void beginEdit(ListView listViewArgument, int itemIndexArgument) {
+        this.listView = listViewArgument;
+        this.itemIndex = itemIndexArgument;
 
         // Get the data being edited
-        List<?> listData = listView.getListData();
-        ListItem listItem = (ListItem)listData.get(itemIndex);
+        List<?> listData = listViewArgument.getListData();
+        ListItem listItem = (ListItem)listData.get(itemIndexArgument);
 
         textInput.setText(listItem.getText());
         textInput.selectAll();
 
         // Get the item bounds
-        Bounds itemBounds = listView.getItemBounds(itemIndex);
-        int itemIndent = listView.getItemIndent();
+        Bounds itemBounds = listViewArgument.getItemBounds(itemIndexArgument);
+        int itemIndent = listViewArgument.getItemIndent();
         itemBounds = new Bounds(itemBounds.x + itemIndent, itemBounds.y,
             itemBounds.width - itemIndent, itemBounds.height);
 
         // Render the item data
-        ListViewItemRenderer itemRenderer = (ListViewItemRenderer)listView.getItemRenderer();
-        itemRenderer.render(listItem, itemIndex, listView, false, false, false, false);
+        ListViewItemRenderer itemRenderer = (ListViewItemRenderer)listViewArgument.getItemRenderer();
+        itemRenderer.render(listItem, itemIndexArgument, listViewArgument, false, false, false, false);
         itemRenderer.setSize(itemBounds.width, itemBounds.height);
 
         // Calculate the text bounds
@@ -110,18 +110,18 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
             itemBounds.height);
 
         // Scroll to make the item as visible as possible
-        listView.scrollAreaToVisible(editBounds.x, editBounds.y,
+        listViewArgument.scrollAreaToVisible(editBounds.x, editBounds.y,
             textBounds.width + padding.left + 1, editBounds.height);
 
         // Constrain the bounds by what is visible through viewport ancestors
-        editBounds = listView.getVisibleArea(editBounds);
-        Point location = listView.mapPointToAncestor(listView.getDisplay(), editBounds.x, editBounds.y);
+        editBounds = listViewArgument.getVisibleArea(editBounds);
+        Point location = listViewArgument.mapPointToAncestor(listViewArgument.getDisplay(), editBounds.x, editBounds.y);
 
         textInput.setPreferredWidth(editBounds.width);
         setLocation(location.x, location.y + (editBounds.height - getPreferredHeight(-1)) / 2);
 
         // Open the editor
-        open(listView.getWindow());
+        open(listViewArgument.getWindow());
     }
 
     @Override

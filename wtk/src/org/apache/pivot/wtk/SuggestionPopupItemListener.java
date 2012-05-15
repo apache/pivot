@@ -26,22 +26,27 @@ public interface SuggestionPopupItemListener {
     public static class Adapter implements SuggestionPopupItemListener {
         @Override
         public void itemInserted(SuggestionPopup suggestionPopup, int index) {
+            // empty block
         }
 
         @Override
         public void itemsRemoved(SuggestionPopup suggestionPopup, int index, int count) {
+            // empty block
         }
 
         @Override
         public void itemUpdated(SuggestionPopup suggestionPopup, int index) {
+            // empty block
         }
 
         @Override
         public void itemsCleared(SuggestionPopup suggestionPopup) {
+            // empty block
         }
 
         @Override
         public void itemsSorted(SuggestionPopup suggestionPopup) {
+            // empty block
         }
     }
 

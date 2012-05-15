@@ -28,14 +28,17 @@ public interface MenuListener {
     public static class Adapter implements MenuListener {
         @Override
         public void sectionInserted(Menu menu, int index) {
+            // empty block
         }
 
         @Override
         public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed) {
+            // empty block
         }
 
         @Override
         public void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
+            // empty block
         }
     }
 

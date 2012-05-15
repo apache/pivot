@@ -29,24 +29,37 @@ public interface ElementListener {
     public class Adapter implements ElementListener {
         @Override
         public void nodeInserted(Element element, int index) {
+            // empty block
         }
+
         @Override
         public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
+            // empty block
         }
+
         @Override
         public void fontChanged(Element element, Font previousFont) {
+            // empty block
         }
+
         @Override
         public void backgroundColorChanged(Element element, Color previousBackgroundColor) {
+            // empty block
         }
+
         @Override
         public void foregroundColorChanged(Element element, Color previousForegroundColor) {
+            // empty block
         }
+
         @Override
         public void underlineChanged(Element element) {
+            // empty block
         }
+
         @Override
         public void strikethroughChanged(Element element) {
+            // empty block
         }
     }
 

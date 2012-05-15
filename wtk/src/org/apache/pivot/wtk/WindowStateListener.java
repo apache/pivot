@@ -28,6 +28,7 @@ public interface WindowStateListener {
     public static class Adapter implements WindowStateListener {
         @Override
         public void windowOpened(Window window) {
+            // empty block
         }
 
         @Override
@@ -42,14 +43,17 @@ public interface WindowStateListener {
 
         @Override
         public void windowCloseVetoed(Window window, Vote reason) {
+            // empty block
         }
 
         @Override
         public void windowOpenVetoed(Window window, Vote reason) {
+            // empty block
         }
 
         @Override
         public void windowClosed(Window window, Display display, Window owner) {
+            // empty block
         }
     }
 

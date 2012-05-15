@@ -53,13 +53,13 @@ public final class Keyboard {
      */
     public static final class KeyStroke {
         private int keyCode = KeyCode.UNDEFINED;
-        private int modifiers = 0x00;
+        private int modifiersLocal = 0x00;
 
         public static final String COMMAND_ABBREVIATION = "CMD";
 
         public KeyStroke(int keyCode, int modifiers) {
             this.keyCode = keyCode;
-            this.modifiers = modifiers;
+            this.modifiersLocal = modifiers;
         }
 
         public int getKeyCode() {
@@ -67,7 +67,7 @@ public final class Keyboard {
         }
 
         public int getModifiers() {
-            return modifiers;
+            return modifiersLocal;
         }
 
         @Override
@@ -77,7 +77,7 @@ public final class Keyboard {
             if (object instanceof KeyStroke) {
                 KeyStroke keyStroke = (KeyStroke)object;
                 equals = (this.keyCode == keyStroke.keyCode
-                    && this.modifiers == keyStroke.modifiers);
+                    && this.modifiersLocal == keyStroke.modifiersLocal);
             }
 
             return equals;
@@ -89,7 +89,7 @@ public final class Keyboard {
             // shifting by 4 bits to append the modifiers should be OK.
             // However, if Sun changes the key code values in the future,
             // this may no longer be safe.
-            int hashCode = keyCode << 4 | modifiers;
+            int hashCode = keyCode << 4 | modifiersLocal;
             return hashCode;
         }
 
@@ -97,19 +97,19 @@ public final class Keyboard {
         public String toString() {
             int awtModifiers = 0x00;
 
-            if (((modifiers & Modifier.META.getMask()) > 0)) {
+            if (((modifiersLocal & Modifier.META.getMask()) > 0)) {
                 awtModifiers |= KeyEvent.META_DOWN_MASK;
             }
 
-            if (((modifiers & Modifier.CTRL.getMask()) > 0)) {
+            if (((modifiersLocal & Modifier.CTRL.getMask()) > 0)) {
                 awtModifiers |= KeyEvent.CTRL_DOWN_MASK;
             }
 
-            if (((modifiers & Modifier.ALT.getMask()) > 0)) {
+            if (((modifiersLocal & Modifier.ALT.getMask()) > 0)) {
                 awtModifiers |= KeyEvent.ALT_DOWN_MASK;
             }
 
-            if (((modifiers & Modifier.SHIFT.getMask()) > 0)) {
+            if (((modifiersLocal & Modifier.SHIFT.getMask()) > 0)) {
                 awtModifiers |= KeyEvent.SHIFT_DOWN_MASK;
             }
 
@@ -117,9 +117,8 @@ public final class Keyboard {
                 return KeyEvent.getModifiersExText(awtModifiers) + Platform.getKeyStrokeModifierSeparator()
                     + KeyEvent.getKeyText(keyCode);
             }
-            else {
-                return KeyEvent.getKeyText(keyCode);
-            }
+
+            return KeyEvent.getKeyText(keyCode);
         }
 
         public static KeyStroke decode(String value) {
@@ -128,7 +127,7 @@ public final class Keyboard {
             }
 
             int keyCode = KeyCode.UNDEFINED;
-            int modifiers = 0x00;
+            int modifiersLocal = 0x00;
 
             String[] keys = value.split("-");
             for (int i = 0, n = keys.length; i < n; i++) {
@@ -143,7 +142,7 @@ public final class Keyboard {
                         modifier = Modifier.valueOf(modifierAbbreviation);
                     }
 
-                    modifiers |= modifier.getMask();
+                    modifiersLocal |= modifier.getMask();
                 } else {
                     // Keycode
                     try {
@@ -155,7 +154,7 @@ public final class Keyboard {
                 }
             }
 
-            return new KeyStroke(keyCode, modifiers);
+            return new KeyStroke(keyCode, modifiersLocal);
         }
     }
 

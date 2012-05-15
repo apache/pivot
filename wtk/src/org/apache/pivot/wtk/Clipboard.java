@@ -32,19 +32,19 @@ public final class Clipboard {
      * Retrieves the contents of the clipboard.
      */
     public static Manifest getContent() {
-        Manifest content = Clipboard.content;
+        Manifest contentLocal = Clipboard.content;
 
-        if (content == null) {
+        if (contentLocal == null) {
             try {
                 java.awt.datatransfer.Clipboard awtClipboard =
                     Toolkit.getDefaultToolkit().getSystemClipboard();
-                content = new RemoteManifest(awtClipboard.getContents(null));
+                contentLocal = new RemoteManifest(awtClipboard.getContents(null));
             } catch(SecurityException exception) {
                 // No-op
             }
         }
 
-        return content;
+        return contentLocal;
     }
 
     /**

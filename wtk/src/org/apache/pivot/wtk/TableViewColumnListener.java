@@ -28,43 +28,52 @@ public interface TableViewColumnListener {
     public static class Adapter implements TableViewColumnListener {
         @Override
         public void columnInserted(TableView tableView, int index) {
+            // empty block
         }
 
         @Override
         public void columnsRemoved(TableView tableView, int index,
             Sequence<TableView.Column> columns) {
+            // empty block
         }
 
         @Override
         public void columnNameChanged(TableView.Column column, String previousName) {
+            // empty block
         }
 
         @Override
         public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData) {
+            // empty block
         }
 
         @Override
         public void columnHeaderDataRendererChanged(TableView.Column column,
             TableView.HeaderDataRenderer previousColumnHeaderDataRenderer) {
+            // empty block
         }
 
         @Override
         public void columnWidthChanged(TableView.Column column, int previousWidth,
             boolean previousRelative) {
+            // empty block
         }
 
         @Override
         public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth,
             int previousMaximumWidth) {
+            // empty block
         }
 
         @Override
         public void columnFilterChanged(TableView.Column column, Object previousFilter) {
+            // empty block
         }
 
         @Override
         public void columnCellRendererChanged(TableView.Column column,
             TableView.CellRenderer previousCellRenderer) {
+            // empty block
         }
     }
 

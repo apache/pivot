@@ -374,19 +374,19 @@ public class Calendar extends Container {
             && selectedDateBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedDateKey);
 
-            CalendarDate selectedDate = null;
+            CalendarDate selectedDateLocal = null;
 
             if (value instanceof CalendarDate) {
-                selectedDate = (CalendarDate)value;
+                selectedDateLocal = (CalendarDate)value;
             } else if (selectedDateBindMapping == null) {
                 if (value != null) {
-                    selectedDate = CalendarDate.decode(value.toString());
+                    selectedDateLocal = CalendarDate.decode(value.toString());
                 }
             } else {
-                selectedDate = selectedDateBindMapping.toDate(value);
+                selectedDateLocal = selectedDateBindMapping.toDate(value);
             }
 
-            setSelectedDate(selectedDate);
+            setSelectedDate(selectedDateLocal);
         }
     }
 

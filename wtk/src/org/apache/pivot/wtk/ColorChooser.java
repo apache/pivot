@@ -208,19 +208,19 @@ public class ColorChooser extends Container {
             && selectedColorBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedColorKey);
 
-            Color selectedColor = null;
+            Color selectedColorLocal = null;
 
             if (value instanceof Color) {
-                selectedColor = (Color)value;
+                selectedColorLocal = (Color)value;
             } else if (selectedColorBindMapping == null) {
                 if (value != null) {
-                    selectedColor = Color.decode(value.toString());
+                    selectedColorLocal = Color.decode(value.toString());
                 }
             } else {
-                selectedColor = selectedColorBindMapping.toColor(value);
+                selectedColorLocal = selectedColorBindMapping.toColor(value);
             }
 
-            setSelectedColor(selectedColor);
+            setSelectedColor(selectedColorLocal);
         }
     }
 

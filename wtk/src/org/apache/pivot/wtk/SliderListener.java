@@ -26,10 +26,12 @@ public interface SliderListener {
     public static class Adapter implements SliderListener {
         @Override
         public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
+            // empty block
         }
 
         @Override
         public void orientationChanged(Slider slider) {
+            // empty block
         }
     }
 

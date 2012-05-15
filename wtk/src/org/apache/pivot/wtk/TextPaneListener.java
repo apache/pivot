@@ -28,10 +28,12 @@ public interface TextPaneListener {
     public static class Adapter implements TextPaneListener {
         @Override
         public void documentChanged(TextPane textPane, Document previousDocument) {
+            // empty block
         }
 
         @Override
         public void editableChanged(TextPane textPane) {
+            // empty block
         }
     }
 

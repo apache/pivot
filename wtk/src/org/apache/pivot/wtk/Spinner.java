@@ -617,14 +617,14 @@ public class Spinner extends Container {
             && JSON.containsKey(context, spinnerDataKey)) {
             Object value = JSON.get(context, spinnerDataKey);
 
-            List<?> spinnerData;
+            List<?> spinnerDataLocal;
             if (spinnerDataBindMapping == null) {
-                spinnerData = (List<?>)value;
+                spinnerDataLocal = (List<?>)value;
             } else {
-                spinnerData = spinnerDataBindMapping.toSpinnerData(value);
+                spinnerDataLocal = spinnerDataBindMapping.toSpinnerData(value);
             }
 
-            setSpinnerData(spinnerData);
+            setSpinnerData(spinnerDataLocal);
         }
 
         // Bind to selected item

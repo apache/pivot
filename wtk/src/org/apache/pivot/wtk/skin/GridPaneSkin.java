@@ -56,8 +56,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
             visibleRows = new boolean[rowCount];
             visibleColumns = new boolean[columnCount];
 
-            int visibleRowCount = 0;
-            int visibleColumnCount = 0;
+            int visibleRowCountLocal = 0;
+            int visibleColumnCountLocal = 0;
 
             for (int i = 0; i < rowCount; i++) {
                 GridPane.Row row = rows.get(i);
@@ -68,20 +68,20 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
                     if (component != null
                         && component.isVisible()) {
                         if (!visibleRows[i]) {
-                            visibleRowCount++;
+                            visibleRowCountLocal++;
                             visibleRows[i] = true;
                         }
 
                         if (!visibleColumns[j]) {
-                            visibleColumnCount++;
+                            visibleColumnCountLocal++;
                             visibleColumns[j] = true;
                         }
                     }
                 }
             }
 
-            this.visibleRowCount = visibleRowCount;
-            this.visibleColumnCount = visibleColumnCount;
+            this.visibleRowCount = visibleRowCountLocal;
+            this.visibleColumnCount = visibleColumnCountLocal;
         }
 
         public boolean isRowVisible(int rowIndex) {
@@ -126,7 +126,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
         Metadata metadata = new Metadata();
 
-        int cellHeight = getCellHeight(height, metadata);
+        int cellHeightLocal = getCellHeight(height, metadata);
 
         int preferredCellWidth = 0;
         for (int i = 0; i < rowCount; i++) {
@@ -138,7 +138,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
                 if (component != null
                     && component.isVisible()) {
                     preferredCellWidth = Math.max(preferredCellWidth,
-                        component.getPreferredWidth(cellHeight));
+                        component.getPreferredWidth(cellHeightLocal));
                 }
             }
         }
@@ -167,7 +167,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
         Metadata metadata = new Metadata();
 
-        int cellWidth = getCellWidth(width, metadata);
+        int cellWidthLocal = getCellWidth(width, metadata);
 
         int preferredCellHeight = 0;
         for (int i = 0; i < rowCount; i++) {
@@ -179,7 +179,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
                 if (component != null
                     && component.isVisible()) {
                     preferredCellHeight = Math.max(preferredCellHeight,
-                        component.getPreferredHeight(cellWidth));
+                        component.getPreferredHeight(cellWidthLocal));
                 }
             }
         }
@@ -260,8 +260,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
         Metadata metadata = new Metadata();
 
-        int cellWidth = getCellWidth(width, metadata);
-        int cellHeight = getCellHeight(height, metadata);
+        int cellWidthLocal = getCellWidth(width, metadata);
+        int cellHeightLocal = getCellHeight(height, metadata);
 
         // Return the first available baseline by traversing cells top left to bottom right
 
@@ -278,7 +278,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
                     if (component != null
                         && component.isVisible()) {
-                        baseline = component.getBaseline(cellWidth, cellHeight);
+                        baseline = component.getBaseline(cellWidthLocal, cellHeightLocal);
 
                         if (baseline != -1) {
                             baseline += rowY;
@@ -286,7 +286,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
                     }
                 }
 
-                rowY += (cellHeight + verticalSpacing);
+                rowY += (cellHeightLocal + verticalSpacing);
             }
         }
 
@@ -392,7 +392,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * Gets the cell width given the specified grid pane width and metadata.
      */
     private int getCellWidth(int width, Metadata metadata) {
-        int cellWidth = -1;
+        int cellWidthLocal = -1;
 
         if (width != -1) {
             int clientWidth = width - padding.left - padding.right;
@@ -403,18 +403,18 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
             clientWidth = Math.max(0, clientWidth);
 
-            cellWidth = (metadata.visibleColumnCount == 0) ? 0 :
+            cellWidthLocal = (metadata.visibleColumnCount == 0) ? 0 :
                 clientWidth / metadata.visibleColumnCount;
         }
 
-        return cellWidth;
+        return cellWidthLocal;
     }
 
     /**
      * Gets the cell height given the specified grid pane height and metadata.
      */
     private int getCellHeight(int height, Metadata metadata) {
-        int cellHeight = -1;
+        int cellHeightLocal = -1;
 
         if (height != -1) {
             int clientHeight = height - padding.top - padding.bottom;
@@ -425,11 +425,11 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
             clientHeight = Math.max(0, clientHeight);
 
-            cellHeight = (metadata.visibleRowCount == 0) ? 0 :
+            cellHeightLocal = (metadata.visibleRowCount == 0) ? 0 :
                 clientHeight / metadata.visibleRowCount;
         }
 
-        return cellHeight;
+        return cellHeightLocal;
     }
 
     /**

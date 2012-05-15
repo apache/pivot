@@ -201,9 +201,9 @@ public class ImageView extends Component {
             throw new IllegalArgumentException("imageURL is null.");
         }
 
-        Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+        Image imageLocal = (Image)ApplicationContext.getResourceCache().get(imageURL);
 
-        if (image == null) {
+        if (imageLocal == null) {
             // Convert to URI because using a URL as a key causes performance problems
             final java.net.URI imageURI;
             try {
@@ -221,18 +221,18 @@ public class ImageView extends Component {
                     Image.load(imageURL, new TaskAdapter<Image>(new TaskListener<Image>() {
                         @Override
                         public void taskExecuted(Task<Image> task) {
-                            Image image = task.getResult();
+                            Image imageLoadedLocal = task.getResult();
 
                             // Update the contents of all image views that requested this
                             // image
                             for (ImageView imageView : loadMap.get(imageURI)) {
-                                imageView.setImage(image);
+                                imageView.setImage(imageLoadedLocal);
                             }
 
                             loadMap.remove(imageURI);
 
                             // Add the image to the cache
-                            ApplicationContext.getResourceCache().put(imageURL, image);
+                            ApplicationContext.getResourceCache().put(imageURL, imageLoadedLocal);
                         }
 
                         @Override
@@ -245,16 +245,16 @@ public class ImageView extends Component {
                 }
             } else {
                 try {
-                    image = Image.load(imageURL);
+                    imageLocal = Image.load(imageURL);
                 } catch (TaskExecutionException exception) {
                     throw new IllegalArgumentException(exception);
                 }
 
-                ApplicationContext.getResourceCache().put(imageURL, image);
+                ApplicationContext.getResourceCache().put(imageURL, imageLocal);
             }
         }
 
-        setImage(image);
+        setImage(imageLocal);
     }
 
     /**

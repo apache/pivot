@@ -26,26 +26,32 @@ public interface ButtonListener {
     public static class Adapter implements ButtonListener {
         @Override
         public void buttonDataChanged(Button button, Object previousButtonData) {
+            // empty block
         }
 
         @Override
         public void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer) {
+            // empty block
         }
 
         @Override
         public void actionChanged(Button button, Action previousAction) {
+            // empty block
         }
 
         @Override
         public void toggleButtonChanged(Button button) {
+            // empty block
         }
 
         @Override
         public void triStateChanged(Button button) {
+            // empty block
         }
 
         @Override
         public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
+            // empty block
         }
     }
 

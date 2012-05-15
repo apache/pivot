@@ -31,19 +31,23 @@ public interface CalendarButtonListener {
     public static class Adapter implements CalendarButtonListener {
         @Override
         public void yearChanged(CalendarButton calendarButton, int previousYear) {
+            // empty block
         }
 
         @Override
         public void monthChanged(CalendarButton calendarButton, int previousMonth) {
+            // empty block
         }
 
         @Override
         public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
+            // empty block
         }
 
         @Override
         public void disabledDateFilterChanged(CalendarButton calendarButton,
             Filter<CalendarDate> previousDisabledDateFilter) {
+            // empty block
         }
     }
 

@@ -42,12 +42,12 @@ public class LocalManifest implements Manifest {
         return text;
     }
 
-    public void putText(String text) {
-        if (text == null) {
+    public void putText(String textArgument) {
+        if (textArgument == null) {
             throw new IllegalArgumentException("text is null.");
         }
 
-        this.text = text;
+        this.text = textArgument;
     }
 
     @Override
@@ -60,12 +60,12 @@ public class LocalManifest implements Manifest {
         return image;
     }
 
-    public void putImage(Image image) {
-        if (image == null) {
+    public void putImage(Image imageArgument) {
+        if (imageArgument == null) {
             throw new IllegalArgumentException("image is null.");
         }
 
-        this.image = image;
+        this.image = imageArgument;
     }
 
     @Override
@@ -78,12 +78,12 @@ public class LocalManifest implements Manifest {
         return fileList;
     }
 
-    public void putFileList(FileList fileList) {
-        if (fileList == null) {
+    public void putFileList(FileList fileListArgument) {
+        if (fileListArgument == null) {
             throw new IllegalArgumentException("fileList is null.");
         }
 
-        this.fileList = fileList;
+        this.fileList = fileListArgument;
     }
 
     @Override

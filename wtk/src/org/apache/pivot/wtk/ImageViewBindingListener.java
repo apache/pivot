@@ -26,17 +26,19 @@ public interface ImageViewBindingListener {
     public static class Adapter implements ImageViewBindingListener {
         @Override
         public void imageKeyChanged(ImageView imageView, String previousImageKey) {
+            // empty block
         }
 
         @Override
         public void imageBindTypeChanged(ImageView imageView,
             BindType previousImageBindType) {
+            // empty block
         }
 
         @Override
         public void imageBindMappingChanged(ImageView imageView,
             ImageView.ImageBindMapping previousImageBindMapping) {
-
+            // empty block
         }
     }
 

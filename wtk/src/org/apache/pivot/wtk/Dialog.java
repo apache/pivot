@@ -138,11 +138,11 @@ public class Dialog extends Frame {
      * @param display
      * The display on which the dialog will be opened.
      *
-     * @param dialogCloseListener
+     * @param dialogCloseListenerArgument
      * A listener that will be called when the dialog is closed.
      */
-    public final void open(Display display, DialogCloseListener dialogCloseListener) {
-        open(display, null, dialogCloseListener);
+    public final void open(Display display, DialogCloseListener dialogCloseListenerArgument) {
+        open(display, null, dialogCloseListenerArgument);
     }
 
     /**
@@ -151,15 +151,15 @@ public class Dialog extends Frame {
      * @param owner
      * The window's owner. The dialog will be modal over this window.
      *
-     * @param dialogCloseListener
+     * @param dialogCloseListenerArgument
      * A listener that will be called when the dialog is closed.
      */
-    public final void open(Window owner, DialogCloseListener dialogCloseListener) {
+    public final void open(Window owner, DialogCloseListener dialogCloseListenerArgument) {
         if (owner == null) {
             throw new IllegalArgumentException();
         }
 
-        open(owner.getDisplay(), owner, dialogCloseListener);
+        open(owner.getDisplay(), owner, dialogCloseListenerArgument);
     }
 
     /**
@@ -172,15 +172,15 @@ public class Dialog extends Frame {
      * The window's owner, or <tt>null</tt> if the window has no owner. Required if the dialog
      * is modal.
      *
-     * @param dialogCloseListener
+     * @param dialogCloseListenerArgument
      * A listener that will be called when the dialog is closed.
      */
-    public void open(Display display, Window owner, DialogCloseListener dialogCloseListener) {
+    public void open(Display display, Window owner, DialogCloseListener dialogCloseListenerArgument) {
         if (modal && owner == null) {
             throw new IllegalArgumentException("Modal dialogs must have an owner.");
         }
 
-        this.dialogCloseListener = dialogCloseListener;
+        this.dialogCloseListener = dialogCloseListenerArgument;
         result = false;
 
         super.open(display, owner);
@@ -196,11 +196,11 @@ public class Dialog extends Frame {
         close(false);
     }
 
-    public void close(boolean result) {
+    public void close(boolean resultArgument) {
         if (!isClosed()) {
             closing = true;
 
-            Vote vote = dialogStateListeners.previewDialogClose(this, result);
+            Vote vote = dialogStateListeners.previewDialogClose(this, resultArgument);
 
             if (vote == Vote.APPROVE) {
                 Window owner = getOwner();
@@ -210,7 +210,7 @@ public class Dialog extends Frame {
                 closing = super.isClosing();
 
                 if (isClosed()) {
-                    this.result = result;
+                    this.result = resultArgument;
 
                     // Move the owner to the front
                     if (owner != null

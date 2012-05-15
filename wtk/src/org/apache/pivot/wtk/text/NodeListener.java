@@ -25,23 +25,35 @@ public interface NodeListener {
     public class Adapter implements NodeListener {
         @Override
         public void offsetChanged(Node node, int previousOffset) {
+            // empty block
         }
+
         @Override
         public void parentChanged(Node node, Element previousParent) {
+            // empty block
         }
+
         @Override
         public void nodeInserted(Node node, int offset) {
+            // empty block
         }
+
         @Override
         public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
+            // empty block
         }
+
         @Override
         public void rangeInserted(Node node, int offset, int span) {
+            // empty block
         }
+
         @Override
         public void rangeRemoved(Node node, int offset, int characterCount) {
+            // empty block
         }
     }
+
     /**
      * Called when a node's parent has changed, either as a result of being
      * added to or removed from an element.

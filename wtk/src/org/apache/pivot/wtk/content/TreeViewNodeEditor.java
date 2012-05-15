@@ -80,26 +80,26 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
     }
 
     @Override
-    public void beginEdit(TreeView treeView, Path path) {
-        this.treeView = treeView;
-        this.path = path;
+    public void beginEdit(TreeView treeViewArgument, Path pathArgument) {
+        this.treeView = treeViewArgument;
+        this.path = pathArgument;
 
         // Get the data being edited
-        List<?> treeData = treeView.getTreeData();
-        TreeNode treeNode = (TreeNode)Sequence.Tree.get(treeData, path);
+        List<?> treeData = treeViewArgument.getTreeData();
+        TreeNode treeNode = (TreeNode)Sequence.Tree.get(treeData, pathArgument);
 
         textInput.setText(treeNode.getText());
         textInput.selectAll();
 
         // Get the node bounds
-        Bounds nodeBounds = treeView.getNodeBounds(path);
-        int nodeIndent = treeView.getNodeIndent(path.getLength());
+        Bounds nodeBounds = treeViewArgument.getNodeBounds(pathArgument);
+        int nodeIndent = treeViewArgument.getNodeIndent(pathArgument.getLength());
         nodeBounds = new Bounds(nodeBounds.x + nodeIndent, nodeBounds.y,
             nodeBounds.width - nodeIndent, nodeBounds.height);
 
         // Render the node data
-        TreeViewNodeRenderer nodeRenderer = (TreeViewNodeRenderer)treeView.getNodeRenderer();
-        nodeRenderer.render(treeNode, path, treeView.getRowIndex(path), treeView, false, false,
+        TreeViewNodeRenderer nodeRenderer = (TreeViewNodeRenderer)treeViewArgument.getNodeRenderer();
+        nodeRenderer.render(treeNode, pathArgument, treeViewArgument.getRowIndex(pathArgument), treeViewArgument, false, false,
             TreeView.NodeCheckState.UNCHECKED, false, false);
         nodeRenderer.setSize(nodeBounds.width, nodeBounds.height);
 
@@ -113,18 +113,18 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
             nodeBounds.height);
 
         // Scroll to make the node as visible as possible
-        treeView.scrollAreaToVisible(editBounds.x, editBounds.y,
+        treeViewArgument.scrollAreaToVisible(editBounds.x, editBounds.y,
             textBounds.width + padding.left + 1, editBounds.height);
 
         // Constrain the bounds by what is visible through viewport ancestors
-        editBounds = treeView.getVisibleArea(editBounds);
-        Point location = treeView.mapPointToAncestor(treeView.getDisplay(), editBounds.x, editBounds.y);
+        editBounds = treeViewArgument.getVisibleArea(editBounds);
+        Point location = treeViewArgument.mapPointToAncestor(treeViewArgument.getDisplay(), editBounds.x, editBounds.y);
 
         textInput.setPreferredWidth(editBounds.width);
         setLocation(location.x, location.y + (editBounds.height - getPreferredHeight(-1)) / 2);
 
         // Open the editor
-        open(treeView.getWindow());
+        open(treeViewArgument.getWindow());
     }
 
     @Override

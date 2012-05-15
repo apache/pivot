@@ -1244,10 +1244,10 @@ public class ListView extends Component {
      * Clears the checked state of all checked items.
      */
     public void clearCheckmarks() {
-        ArrayList<Integer> checkedIndexes = this.checkedIndexes;
+        ArrayList<Integer> checkedIndexesLocal = this.checkedIndexes;
         this.checkedIndexes = new ArrayList<Integer>();
 
-        for (Integer index : checkedIndexes) {
+        for (Integer index : checkedIndexesLocal) {
             listViewItemStateListeners.itemCheckedChanged(this, index);
         }
     }
@@ -1541,14 +1541,14 @@ public class ListView extends Component {
             && JSON.containsKey(context, listDataKey)) {
             Object value = JSON.get(context, listDataKey);
 
-            List<?> listData;
+            List<?> listDataLocal;
             if (listDataBindMapping == null) {
-                listData = (List<?>)value;
+                listDataLocal = (List<?>)value;
             } else {
-                listData = listDataBindMapping.toListData(value);
+                listDataLocal = listDataBindMapping.toListData(value);
             }
 
-            setListData(listData);
+            setListData(listDataLocal);
         }
 
         switch (selectMode) {
@@ -1599,6 +1599,9 @@ public class ListView extends Component {
 
                 break;
             }
+
+            case NONE:
+                break;
         }
 
         if (checkmarksEnabled) {
@@ -1693,6 +1696,9 @@ public class ListView extends Component {
 
                 break;
             }
+
+            case NONE:
+                break;
         }
 
         if (checkmarksEnabled) {

@@ -153,7 +153,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         // Break the views into multiple rows
 
         Paragraph paragraph = (Paragraph)getNode();
-        ArrayList<Row> rows = new ArrayList<Row>();
+        ArrayList<Row> rowsLocal = new ArrayList<Row>();
         int offset = 0;
 
         ParagraphChildLayouter layouter = new ParagraphChildLayouter();
@@ -168,7 +168,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                 && row.width > 0) {
                 // The view is too big to fit in the remaining space,
                 // and it is not the only view in this row
-                rows.add(row);
+                rowsLocal.add(row);
                 layouter.endRow(row);
                 row = new Row();
                 row.width = 0;
@@ -185,7 +185,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             // their own rows
             nodeView = getNext(nodeView);
             while (nodeView != null) {
-                rows.add(row);
+                rowsLocal.add(row);
                 layouter.endRow(row);
                 row = new Row();
 
@@ -203,12 +203,12 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
         // Add the last row
         if (row.rowSegments.getLength() > 0) {
-            rows.add(row);
+            rowsLocal.add(row);
             layouter.endRow(row);
         }
 
         // calculate paragraph width and adjust for alignment
-        layouter.end(paragraph, rows);
+        layouter.end(paragraph, rowsLocal);
 
         // Recalculate terminator bounds
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
@@ -223,12 +223,12 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             terminatorY = layouter.rowY - terminatorHeight;
         }
 
-        Bounds terminatorBounds = new Bounds(layouter.x, terminatorY,
+        Bounds terminatorBoundsLocal = new Bounds(layouter.x, terminatorY,
             PARAGRAPH_TERMINATOR_WIDTH, terminatorHeight);
 
         // Ensure that the paragraph is visible even when empty
-        layouter.paragraphWidth += terminatorBounds.width;
-        int height = Math.max(layouter.rowY, terminatorBounds.height);
+        layouter.paragraphWidth += terminatorBoundsLocal.width;
+        int height = Math.max(layouter.rowY, terminatorBoundsLocal.height);
 
         return new Dimensions(layouter.paragraphWidth, height);
     }

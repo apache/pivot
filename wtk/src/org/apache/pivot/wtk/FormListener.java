@@ -28,22 +28,27 @@ public interface FormListener {
     public static class Adapter implements FormListener {
         @Override
         public void sectionInserted(Form form, int index) {
+            // empty block
         }
 
         @Override
         public void sectionsRemoved(Form form, int index, Sequence<Form.Section> removed) {
+            // empty block
         }
 
         @Override
         public void sectionHeadingChanged(Form.Section section) {
+            // empty block
         }
 
         @Override
         public void fieldInserted(Form.Section section, int index) {
+            // empty block
         }
 
         @Override
         public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields) {
+            // empty block
         }
     }
 

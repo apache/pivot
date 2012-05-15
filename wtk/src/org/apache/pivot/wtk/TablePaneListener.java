@@ -28,52 +28,63 @@ public interface TablePaneListener {
     public static class Adapter implements TablePaneListener {
         @Override
         public void rowInserted(TablePane tablePane, int index) {
+            // empty block
         }
 
         @Override
         public void rowsRemoved(TablePane tablePane, int index,
             Sequence<TablePane.Row> rows) {
+            // empty block
         }
 
         @Override
         public void rowHeightChanged(TablePane.Row row, int previousHeight,
             boolean previousRelative) {
+            // empty block
         }
 
         @Override
         public void rowHighlightedChanged(TablePane.Row row) {
+            // empty block
         }
 
         @Override
         public void columnInserted(TablePane tablePane, int index) {
+            // empty block
         }
 
         @Override
         public void columnsRemoved(TablePane tablePane, int index,
             Sequence<TablePane.Column> columns) {
+            // empty block
         }
 
         @Override
         public void columnWidthChanged(TablePane.Column column, int previousWidth,
             boolean previousRelative) {
+            // empty block
         }
 
         @Override
         public void columnHighlightedChanged(TablePane.Column column) {
+            // empty block
         }
 
         @Override
         public void cellInserted(TablePane.Row row, int column) {
+            // empty block
         }
 
         @Override
         public void cellsRemoved(TablePane.Row row, int column,
             Sequence<Component> removed) {
+            // empty block
         }
 
         @Override
         public void cellUpdated(TablePane.Row row, int column,
             Component previousComponent) {
+            // empty block
         }
     }
 

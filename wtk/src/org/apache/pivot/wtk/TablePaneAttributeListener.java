@@ -27,11 +27,13 @@ public interface TablePaneAttributeListener {
         @Override
         public void rowSpanChanged(TablePane tablePane, Component component,
             int previousRowSpan) {
+            // empty block
         }
 
         @Override
         public void columnSpanChanged(TablePane tablePane, Component component,
             int previousColumnSpan) {
+            // empty block
         }
     }
     /**

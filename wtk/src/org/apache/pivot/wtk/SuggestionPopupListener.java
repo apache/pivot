@@ -29,15 +29,18 @@ public interface SuggestionPopupListener {
         @Override
         public void suggestionDataChanged(SuggestionPopup suggestionPopup,
             List<?> previousSuggestionData) {
+            // empty block
         }
 
         @Override
         public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
             ListView.ItemRenderer previousSuggestionRenderer) {
+            // empty block
         }
 
         @Override
         public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize) {
+            // empty block
         }
     }
 

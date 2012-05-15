@@ -28,10 +28,12 @@ public interface ImageViewListener {
     public static class Adapter implements ImageViewListener {
         @Override
         public void imageChanged(ImageView imageView, Image previousImage) {
+            // empty block
         }
 
         @Override
         public void asynchronousChanged(ImageView imageView) {
+            // empty block
         }
     }
 

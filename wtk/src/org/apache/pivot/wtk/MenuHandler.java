@@ -26,10 +26,12 @@ public interface MenuHandler {
     public static class Adapter implements MenuHandler {
         @Override
         public void configureMenuBar(Component component, MenuBar menuBar) {
+            // empty block
         }
 
         @Override
         public void cleanupMenuBar(Component component, MenuBar menuBar) {
+            // empty block
         }
 
         @Override

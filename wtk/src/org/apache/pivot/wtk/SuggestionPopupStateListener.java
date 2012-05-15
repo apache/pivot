@@ -33,10 +33,12 @@ public interface SuggestionPopupStateListener extends SuggestionPopupCloseListen
 
         @Override
         public void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason) {
+            // empty block
         }
 
         @Override
         public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
+            // empty block
         }
     }
 

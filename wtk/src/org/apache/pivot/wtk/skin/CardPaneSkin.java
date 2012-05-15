@@ -733,13 +733,13 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 selectionChangeTransition.start(new TransitionListener() {
                     @Override
                     public void transitionCompleted(Transition transition) {
-                        CardPane cardPane = (CardPane)getComponent();
+                        CardPane cardPaneLocal = (CardPane)getComponent();
 
-                        SelectionChangeTransition selectionChangeTransition =
+                        SelectionChangeTransition selectionChangeTransitionLocal =
                             (SelectionChangeTransition)transition;
 
-                        int selectedIndex = cardPane.indexOf(selectionChangeTransition.toCard);
-                        cardPane.setSelectedIndex(selectedIndex);
+                        int selectedIndexLocal = cardPaneLocal.indexOf(selectionChangeTransitionLocal.toCard);
+                        cardPaneLocal.setSelectedIndex(selectedIndexLocal);
                         CardPaneSkin.this.selectionChangeTransition = null;
                     }
                 });

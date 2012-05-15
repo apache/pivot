@@ -29,22 +29,27 @@ public interface TableViewListener {
     public static class Adapter implements TableViewListener {
         @Override
         public void tableDataChanged(TableView tableView, List<?> previousTableData) {
+            // empty block
         }
 
         @Override
         public void columnSourceChanged(TableView tableView, TableView previousColumnSource) {
+            // empty block
         }
 
         @Override
         public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
+            // empty block
         }
 
         @Override
         public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {
+            // empty block
         }
 
         @Override
         public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
+            // empty block
         }
     }
 

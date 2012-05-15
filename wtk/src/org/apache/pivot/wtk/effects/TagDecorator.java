@@ -114,13 +114,13 @@ public class TagDecorator implements Decorator {
     }
 
     @Override
-    public Graphics2D prepare(Component component, Graphics2D graphics) {
+    public Graphics2D prepare(Component component, Graphics2D graphicsArgument) {
         if (tag != null) {
             bounds = getBounds(component);
-            this.graphics = graphics;
+            this.graphics = graphicsArgument;
         }
 
-        return graphics;
+        return graphicsArgument;
     }
 
     @Override
@@ -135,10 +135,10 @@ public class TagDecorator implements Decorator {
 
     @Override
     public Bounds getBounds(Component component) {
-        Bounds bounds;
+        Bounds boundsLocal;
 
         if (tag == null) {
-            bounds = null;
+            boundsLocal = null;
         } else {
             int x, y;
 
@@ -184,10 +184,10 @@ public class TagDecorator implements Decorator {
                 }
             }
 
-            bounds = new Bounds(x, y, tag.getWidth(), tag.getHeight());
+            boundsLocal = new Bounds(x, y, tag.getWidth(), tag.getHeight());
         }
 
-        return bounds;
+        return boundsLocal;
     }
 
     @Override

@@ -47,13 +47,13 @@ public class OverlayDecorator implements Decorator {
     }
 
     @Override
-    public Graphics2D prepare(Component component, Graphics2D graphics) {
-        this.graphics = graphics;
+    public Graphics2D prepare(Component component, Graphics2D graphicsArgument) {
+        this.graphics = graphicsArgument;
 
         overlay.setSize(component.getSize());
         overlay.validate();
 
-        return graphics;
+        return graphicsArgument;
     }
 
     @Override

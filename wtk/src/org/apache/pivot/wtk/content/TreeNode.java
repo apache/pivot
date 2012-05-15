@@ -81,19 +81,19 @@ public class TreeNode {
             throw new IllegalArgumentException("iconURL is null.");
         }
 
-        Image icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
+        Image iconLocal = (Image)ApplicationContext.getResourceCache().get(iconURL);
 
-        if (icon == null) {
+        if (iconLocal == null) {
             try {
-                icon = Image.load(iconURL);
+                iconLocal = Image.load(iconURL);
             } catch (TaskExecutionException exception) {
                 throw new IllegalArgumentException(exception);
             }
 
-            ApplicationContext.getResourceCache().put(iconURL, icon);
+            ApplicationContext.getResourceCache().put(iconURL, iconLocal);
         }
 
-        setIcon(icon);
+        setIcon(iconLocal);
     }
 
     /**

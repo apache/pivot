@@ -26,22 +26,27 @@ public interface ListViewItemListener {
     public static class Adapter implements ListViewItemListener {
         @Override
         public void itemInserted(ListView listView, int index) {
+            // empty block
         }
 
         @Override
         public void itemsRemoved(ListView listView, int index, int count) {
+            // empty block
         }
 
         @Override
         public void itemUpdated(ListView listView, int index) {
+            // empty block
         }
 
         @Override
         public void itemsCleared(ListView listView) {
+            // empty block
         }
 
         @Override
         public void itemsSorted(ListView listView) {
+            // empty block
         }
     }
 

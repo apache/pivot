@@ -26,10 +26,12 @@ public interface AccordionAttributeListener {
     public static class Adapter implements AccordionAttributeListener {
         @Override
         public void headerDataChanged(Accordion accordion, Component component, Object previousHeaderData) {
+            // empty block
         }
 
         @Override
         public void tooltipTextChanged(Accordion accordion, Component component, String previousTooltipText) {
+            // empty block
         }
     }
 

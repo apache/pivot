@@ -28,14 +28,17 @@ public interface TextAreaContentListener {
     public static class Adapter implements TextAreaContentListener {
         @Override
         public void paragraphInserted(TextArea textArea, int index) {
+            // empty block
         }
 
         @Override
         public void paragraphsRemoved(TextArea textArea, int index, Sequence<TextArea.Paragraph> removed) {
+            // empty block
         }
 
         @Override
         public void textChanged(TextArea textArea) {
+            // empty block
         }
     }
 

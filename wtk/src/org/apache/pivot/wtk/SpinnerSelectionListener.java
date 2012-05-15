@@ -26,10 +26,12 @@ public interface SpinnerSelectionListener {
     public static class Adapter implements SpinnerSelectionListener {
         @Override
         public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
+            // empty block
         }
 
         @Override
         public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
+            // empty block
         }
     }
 

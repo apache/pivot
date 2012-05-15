@@ -58,21 +58,20 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     public Dimensions getPreferredSize(int breakWidth) {
         if (getLength() == 0) {
             return new Dimensions(0, 0);
-        } else {
-            TextPaneSkinNodeView nodeView = get(0);
-            Dimensions childDimensions = nodeView.getPreferredSize(breakWidth);
-
-            return childDimensions;
         }
+
+        TextPaneSkinNodeView nodeView = get(0);
+        Dimensions childDimensions = nodeView.getPreferredSize(breakWidth);
+
+        return childDimensions;
     }
 
     @Override
     public int getCharacterCount() {
         if (getLength() == 0) {
             return 0;
-        } else {
-            return get(0).getCharacterCount();
         }
+        return get(0).getCharacterCount();
     }
 
     /**
@@ -81,45 +80,40 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     public TextPaneSkinTextNodeView getNext() {
         if (getLength() == 0) {
             return null;
-        } else {
-            return (TextPaneSkinTextNodeView) ((TextPaneSkinTextNodeView) get(0)).getNext();
         }
+        return (TextPaneSkinTextNodeView) ((TextPaneSkinTextNodeView) get(0)).getNext();
     }
 
     @Override
     public int getInsertionPoint(int x, int y) {
         if (getLength() == 0) {
             return -1;
-        } else {
-            return get(0).getInsertionPoint(x, y);
         }
+        return get(0).getInsertionPoint(x, y);
     }
 
     @Override
     public int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction) {
         if (getLength() == 0) {
             return -1;
-        } else {
-            return get(0).getNextInsertionPoint(x, from, direction);
         }
+        return get(0).getNextInsertionPoint(x, from, direction);
     }
 
     @Override
     public int getRowCount() {
         if (getLength() == 0) {
             return 0;
-        } else {
-            return get(0).getRowCount();
         }
+        return get(0).getRowCount();
     }
 
     @Override
     public int getRowAt(int offset) {
         if (getLength() == 0) {
             return 0;
-        } else {
-            return get(0).getRowAt(offset);
         }
+        return get(0).getRowAt(offset);
     }
 
     @Override

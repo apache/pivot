@@ -28,14 +28,17 @@ public interface AccordionListener {
     public static class Adapter implements AccordionListener {
         @Override
         public void panelInserted(Accordion accordion, int index) {
+            // empty block
         }
 
         @Override
         public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed) {
+            // empty block
         }
 
         @Override
         public void headerDataRendererChanged(Accordion accordion, Button.DataRenderer previousHeaderDataRenderer) {
+            // empty block
         }
     }
 

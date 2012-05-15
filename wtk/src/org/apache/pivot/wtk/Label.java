@@ -185,9 +185,9 @@ public class Label extends Component {
     public void store(Object context) {
         if (textKey != null
             && textBindType != BindType.LOAD) {
-            String text = getText();
+            String textLocal = getText();
             JSON.put(context, textKey, (textBindMapping == null) ?
-                text : textBindMapping.valueOf(text));
+                textLocal : textBindMapping.valueOf(textLocal));
         }
     }
 

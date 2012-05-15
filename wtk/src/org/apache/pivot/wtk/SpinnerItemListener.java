@@ -26,22 +26,27 @@ public interface SpinnerItemListener {
     public static class Adapter implements SpinnerItemListener {
         @Override
         public void itemInserted(Spinner spinner, int index) {
+            // empty block
         }
 
         @Override
         public void itemsRemoved(Spinner spinner, int index, int count) {
+            // empty block
         }
 
         @Override
         public void itemUpdated(Spinner spinner, int index) {
+            // empty block
         }
 
         @Override
         public void itemsCleared(Spinner spinner) {
+            // empty block
         }
 
         @Override
         public void itemsSorted(Spinner spinner) {
+            // empty block
         }
     }
 

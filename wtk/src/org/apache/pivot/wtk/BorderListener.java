@@ -28,10 +28,12 @@ public interface BorderListener {
     public static class Adapter implements BorderListener {
         @Override
         public void titleChanged(Border border, String previousTitle) {
+            // empty block
         }
 
         @Override
         public void contentChanged(Border border, Component previousContent) {
+            // empty block
         }
     }
 

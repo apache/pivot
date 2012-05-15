@@ -26,10 +26,12 @@ public interface ComponentStateListener {
     public static class Adapter implements ComponentStateListener {
         @Override
         public void enabledChanged(Component component) {
+            // empty block
         }
 
         @Override
         public void focusedChanged(Component component, Component obverseComponent) {
+            // empty block
         }
     }
 

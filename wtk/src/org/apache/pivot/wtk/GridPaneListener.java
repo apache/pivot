@@ -28,26 +28,32 @@ public interface GridPaneListener {
     public static class Adapter implements GridPaneListener {
         @Override
         public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
+            // empty block
         }
 
         @Override
         public void rowInserted(GridPane gridPane, int index) {
+            // empty block
         }
 
         @Override
         public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
+            // empty block
         }
 
         @Override
         public void cellInserted(GridPane.Row row, int column) {
+            // empty block
         }
 
         @Override
         public void cellsRemoved(GridPane.Row row, int column, Sequence<Component> removed) {
+            // empty block
         }
 
         @Override
         public void cellUpdated(GridPane.Row row, int column, Component previousComponent) {
+            // empty block
         }
     }
 

@@ -131,7 +131,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         cardPane.add(tablePane);
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
             @Override
-            public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+            public void selectedIndexChanged(CardPane cardPaneArgument, int previousSelectedIndex) {
                 if (previousSelectedIndex == IMAGE_CARD_INDEX) {
                     editorRow.get(columnIndex).requestFocus();
                 } else {
@@ -173,22 +173,22 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     }
 
     @Override
-    public void beginEdit(TableView tableView, int rowIndex, int columnIndex) {
-        this.tableView = tableView;
-        this.rowIndex = rowIndex;
-        this.columnIndex = columnIndex;
+    public void beginEdit(TableView tableViewArgument, int rowIndexArgument, int columnIndexArgument) {
+        this.tableView = tableViewArgument;
+        this.rowIndex = rowIndexArgument;
+        this.columnIndex = columnIndexArgument;
 
-        Container tableViewParent = tableView.getParent();
+        Container tableViewParent = tableViewArgument.getParent();
         tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane)tableViewParent : null;
 
         // Add/create the editor components
-        TableView.ColumnSequence tableViewColumns = tableView.getColumns();
+        TableView.ColumnSequence tableViewColumns = tableViewArgument.getColumns();
         TablePane.ColumnSequence tablePaneColumns = tablePane.getColumns();
 
         for (int i = 0, n = tableViewColumns.getLength(); i < n; i++) {
             // Add a new column to the table pane to match the table view column
             TablePane.Column tablePaneColumn = new TablePane.Column();
-            tablePaneColumn.setWidth(tableView.getColumnBounds(i).width);
+            tablePaneColumn.setWidth(tableViewArgument.getColumnBounds(i).width);
             tablePaneColumns.add(tablePaneColumn);
 
             // Determine which component to use as the editor for this column
@@ -212,22 +212,22 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         }
 
         // Get the data being edited
-        List<?> tableData = tableView.getTableData();
-        Object tableRow = tableData.get(rowIndex);
+        List<?> tableData = tableViewArgument.getTableData();
+        Object tableRow = tableData.get(rowIndexArgument);
 
         // Load the row data into the editor components
         tablePane.load(tableRow);
 
         // Get the row bounds
-        Bounds rowBounds = tableView.getRowBounds(rowIndex);
+        Bounds rowBounds = tableViewArgument.getRowBounds(rowIndexArgument);
         rowImage.bounds = rowBounds;
 
         // Scroll to make the row as visible as possible
-        tableView.scrollAreaToVisible(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
+        tableViewArgument.scrollAreaToVisible(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
 
         // Constrain the bounds by what is visible through viewport ancestors
-        rowBounds = tableView.getVisibleArea(rowBounds);
-        Point location = tableView.mapPointToAncestor(tableView.getDisplay(), rowBounds.x, rowBounds.y);
+        rowBounds = tableViewArgument.getVisibleArea(rowBounds);
+        Point location = tableViewArgument.mapPointToAncestor(tableViewArgument.getDisplay(), rowBounds.x, rowBounds.y);
 
         // Set size and location and match scroll left
         setPreferredWidth(rowBounds.width);
@@ -238,7 +238,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         }
 
         // Open the editor
-        open(tableView.getWindow());
+        open(tableViewArgument.getWindow());
 
         // Start the transition
         cardPane.setSelectedIndex(EDITOR_CARD_INDEX);

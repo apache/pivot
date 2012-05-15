@@ -26,22 +26,27 @@ public interface ListButtonItemListener {
     public static class Adapter implements ListButtonItemListener {
         @Override
         public void itemInserted(ListButton listButton, int index) {
+            // empty block
         }
 
         @Override
         public void itemsRemoved(ListButton listButton, int index, int count) {
+            // empty block
         }
 
         @Override
         public void itemUpdated(ListButton listButton, int index) {
+            // empty block
         }
 
         @Override
         public void itemsCleared(ListButton listButton) {
+            // empty block
         }
 
         @Override
         public void itemsSorted(ListButton listButton) {
+            // empty block
         }
     }
 

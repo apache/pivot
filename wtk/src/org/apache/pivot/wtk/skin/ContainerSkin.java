@@ -243,14 +243,17 @@ public abstract class ContainerSkin extends ComponentSkin
     // Container events
     @Override
     public void componentInserted(Container container, int index) {
+        // No-op
     }
 
     @Override
     public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+        // No-op
     }
 
     @Override
     public void componentMoved(Container container, int from, int to) {
+        // No-op
     }
 
     @Override

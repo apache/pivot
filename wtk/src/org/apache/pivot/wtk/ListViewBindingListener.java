@@ -26,54 +26,66 @@ public interface ListViewBindingListener {
     public static class Adapter implements ListViewBindingListener {
         @Override
         public void listDataKeyChanged(ListView listView, String previousListDataKey) {
+            // empty block
         }
 
         @Override
         public void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType) {
+            // empty block
         }
 
         @Override
         public void listDataBindMappingChanged(ListView listView,
             ListView.ListDataBindMapping previousListDataBindMapping) {
+            // empty block
         }
 
         @Override
         public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
+            // empty block
         }
 
         @Override
         public void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType) {
+            // empty block
         }
 
         @Override
         public void selectedItemBindMappingChanged(ListView listView,
             ListView.ItemBindMapping previousSelectedItemBindMapping) {
+            // empty block
         }
 
         @Override
         public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
+            // empty block
         }
 
         @Override
         public void selectedItemsBindTypeChanged(ListView listView, BindType previousSelectedItemsBindType) {
+            // empty block
         }
 
         @Override
         public void selectedItemsBindMappingChanged(ListView listView,
             ListView.ItemBindMapping previousSelectedItemsBindMapping) {
+            // empty block
         }
 
         @Override
         public void checkedItemsKeyChanged(ListView listView, String previousCheckedItemsKey) {
+            // empty block
         }
 
         @Override
         public void checkedItemsBindTypeChanged(ListView listView, BindType previousCheckedItemsBindType) {
+            // empty block
         }
 
         @Override
         public void checkedItemsBindMappingChanged(ListView listView,
             ListView.ItemBindMapping previousCheckedItemsBindMapping) {
+            // empty block
         }
     }
 

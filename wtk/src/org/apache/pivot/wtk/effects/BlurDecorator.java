@@ -73,8 +73,8 @@ public class BlurDecorator implements Decorator {
     }
 
     @Override
-    public Graphics2D prepare(Component component, Graphics2D graphics) {
-        this.graphics = graphics;
+    public Graphics2D prepare(Component component, Graphics2D graphicsArgument) {
+        this.graphics = graphicsArgument;
 
         int width = component.getWidth();
         int height = component.getHeight();
@@ -86,7 +86,7 @@ public class BlurDecorator implements Decorator {
         }
 
         bufferedImageGraphics = bufferedImage.createGraphics();
-        bufferedImageGraphics.setClip(graphics.getClip());
+        bufferedImageGraphics.setClip(graphicsArgument.getClip());
 
         return bufferedImageGraphics;
     }

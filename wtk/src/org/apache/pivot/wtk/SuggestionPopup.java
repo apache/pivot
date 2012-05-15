@@ -402,33 +402,33 @@ public class SuggestionPopup extends Window {
     /**
      * Opens the suggestion popup window.
      *
-     * @param textInput
+     * @param textInputArgument
      * The text input for which suggestions will be provided.
      */
-    public final void open(TextInput textInput) {
-        open(textInput, null);
+    public final void open(TextInput textInputArgument) {
+        open(textInputArgument, null);
     }
 
     /**
      * Opens the suggestion popup window.
      *
-     * @param textInput
+     * @param textInputArgument
      * The text input for which suggestions will be provided.
      *
-     * @param suggestionPopupCloseListener
+     * @param suggestionPopupCloseListenerArgument
      * A listener that will be called when the suggestion popup has closed.
      */
-    public void open(TextInput textInput, SuggestionPopupCloseListener suggestionPopupCloseListener) {
-        if (textInput == null) {
+    public void open(TextInput textInputArgument, SuggestionPopupCloseListener suggestionPopupCloseListenerArgument) {
+        if (textInputArgument == null) {
             throw new IllegalArgumentException();
         }
 
-        this.textInput = textInput;
-        this.suggestionPopupCloseListener = suggestionPopupCloseListener;
+        this.textInput = textInputArgument;
+        this.suggestionPopupCloseListener = suggestionPopupCloseListenerArgument;
 
         result = false;
 
-        super.open(textInput.getWindow());
+        super.open(textInputArgument.getWindow());
     }
 
     @Override
@@ -441,11 +441,11 @@ public class SuggestionPopup extends Window {
         close(false);
     }
 
-    public void close(boolean result) {
+    public void close(boolean resultArgument) {
         if (!isClosed()) {
             closing = true;
 
-            Vote vote = suggestionPopupStateListeners.previewSuggestionPopupClose(this, result);
+            Vote vote = suggestionPopupStateListeners.previewSuggestionPopupClose(this, resultArgument);
 
             if (vote == Vote.APPROVE) {
                 super.close();
@@ -453,7 +453,7 @@ public class SuggestionPopup extends Window {
                 closing = super.isClosing();
 
                 if (isClosed()) {
-                    this.result = result;
+                    this.result = resultArgument;
 
                     suggestionPopupStateListeners.suggestionPopupClosed(this);
 

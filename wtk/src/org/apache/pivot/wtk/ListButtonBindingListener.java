@@ -26,28 +26,34 @@ public interface ListButtonBindingListener {
     public static class Adapter implements ListButtonBindingListener {
         @Override
         public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
+            // empty block
         }
 
         @Override
         public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType) {
+            // empty block
         }
 
         @Override
         public void listDataBindMappingChanged(ListButton listButton,
             ListView.ListDataBindMapping previousListDataBindMapping) {
+            // empty block
         }
 
         @Override
         public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
+            // empty block
         }
 
         @Override
         public void selectedItemBindTypeChanged(ListButton listButton, BindType previousSelectedItemBindType) {
+            // empty block
         }
 
         @Override
         public void selectedItemBindMappingChanged(ListButton listButton,
             ListView.ItemBindMapping previousSelectedItemBindMapping) {
+            // empty block
         }
     }
 

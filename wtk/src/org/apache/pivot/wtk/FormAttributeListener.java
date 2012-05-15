@@ -26,14 +26,17 @@ public interface FormAttributeListener {
     public class Adapter implements FormAttributeListener {
         @Override
         public void labelChanged(Form form, Component field, String previousLabel) {
+            // empty block
         }
 
         @Override
         public void requiredChanged(Form form, Component field) {
+            // empty block
         }
 
         @Override
         public void flagChanged(Form form, Component field, Form.Flag previousFlag) {
+            // empty block
         }
     }
 

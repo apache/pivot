@@ -29,32 +29,39 @@ public interface ListViewListener {
     public static class Adapter implements ListViewListener {
         @Override
         public void listDataChanged(ListView listView, List<?> previousListData) {
+            // empty block
         }
 
         @Override
         public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
+            // empty block
         }
 
         @Override
         public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
+            // empty block
         }
 
         @Override
         public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
+            // empty block
         }
 
         @Override
         public void checkmarksEnabledChanged(ListView listView) {
+            // empty block
         }
 
         @Override
         public void disabledItemFilterChanged(ListView listView,
             Filter<?> previousDisabledItemFilter) {
+            // empty block
         }
 
         @Override
         public void disabledCheckmarkFilterChanged(ListView listView,
             Filter<?> previousDisabledCheckmarkFilter) {
+            // empty block
         }
     }
 

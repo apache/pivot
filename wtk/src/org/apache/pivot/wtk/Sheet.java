@@ -78,12 +78,12 @@ public class Sheet extends Window {
         installSkin(Sheet.class);
     }
 
-    public final void open(Window owner, SheetCloseListener sheetCloseListener) {
+    public final void open(Window owner, SheetCloseListener sheetCloseListenerArgument) {
         if (owner == null) {
             throw new IllegalArgumentException("owner is null");
         }
 
-        open(owner.getDisplay(), owner, sheetCloseListener);
+        open(owner.getDisplay(), owner, sheetCloseListenerArgument);
     }
 
     @Override
@@ -91,12 +91,12 @@ public class Sheet extends Window {
         open(display, owner, null);
     }
 
-    public void open(Display display, Window owner, SheetCloseListener sheetCloseListener) {
+    public void open(Display display, Window owner, SheetCloseListener sheetCloseListenerArgument) {
         if (owner == null) {
             throw new IllegalArgumentException("Sheets must have an owner.");
         }
 
-        this.sheetCloseListener = sheetCloseListener;
+        this.sheetCloseListener = sheetCloseListenerArgument;
 
         super.open(display, owner);
     }
@@ -111,11 +111,11 @@ public class Sheet extends Window {
         close(false);
     }
 
-    public void close(boolean result) {
+    public void close(boolean resultArgument) {
         if (!isClosed()) {
             closing = true;
 
-            Vote vote = sheetStateListeners.previewSheetClose(this, result);
+            Vote vote = sheetStateListeners.previewSheetClose(this, resultArgument);
 
             if (vote == Vote.APPROVE) {
                 Window owner = getOwner();
@@ -125,7 +125,7 @@ public class Sheet extends Window {
                 closing = super.isClosing();
 
                 if (isClosed()) {
-                    this.result = result;
+                    this.result = resultArgument;
 
                     // Move the owner to the front
                     if (owner.isOpen()) {

@@ -29,30 +29,37 @@ public interface WindowListener {
     public static class Adapter implements WindowListener {
         @Override
         public void titleChanged(Window window, String previousTitle) {
+            // empty block
         }
 
         @Override
         public void iconAdded(Window window, Image addedIcon) {
+            // empty block
         }
 
         @Override
         public void iconInserted(Window window, Image addedIcon, int index) {
+            // empty block
         }
 
         @Override
         public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
+            // empty block
         }
 
         @Override
         public void contentChanged(Window window, Component previousContent) {
+            // empty block
         }
 
         @Override
         public void activeChanged(Window window, Window obverseWindow) {
+            // empty block
         }
 
         @Override
         public void maximizedChanged(Window window) {
+            // empty block
         }
     }
 

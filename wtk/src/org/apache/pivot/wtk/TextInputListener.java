@@ -28,34 +28,42 @@ public interface TextInputListener {
     public static class Adapter implements TextInputListener {
         @Override
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
+            // empty block
         }
 
         @Override
         public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
+            // empty block
         }
 
         @Override
         public void passwordChanged(TextInput textInput) {
+            // empty block
         }
 
         @Override
         public void promptChanged(TextInput textInput, String previousPrompt) {
+            // empty block
         }
 
         @Override
         public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
+            // empty block
         }
 
         @Override
         public void strictValidationChanged(TextInput textInput) {
+            // empty block
         }
 
         @Override
         public void textValidChanged(TextInput textInput) {
+            // empty block
         }
 
         @Override
         public void editableChanged(TextInput textInput) {
+            // empty block
         }
     }
 

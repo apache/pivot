@@ -28,10 +28,12 @@ public interface ExpanderListener {
     public static class Adapter implements ExpanderListener {
         @Override
         public void titleChanged(Expander expander, String previousTitle) {
+            // empty block
         }
 
         @Override
         public void collapsibleChanged(Expander expander) {
+            // empty block
         }
 
         @Override
@@ -41,14 +43,17 @@ public interface ExpanderListener {
 
         @Override
         public void expandedChangeVetoed(Expander expander, Vote reason) {
+            // empty block
         }
 
         @Override
         public void expandedChanged(Expander expander) {
+            // empty block
         }
 
         @Override
         public void contentChanged(Expander expander, Component previousContent) {
+            // empty block
         }
     }
 

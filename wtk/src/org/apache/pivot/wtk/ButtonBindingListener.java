@@ -26,38 +26,47 @@ public interface ButtonBindingListener {
     public static class Adapter implements ButtonBindingListener {
         @Override
         public void buttonDataKeyChanged(Button button, String previousButtonDataKey) {
+            // empty block
         }
 
         @Override
         public void buttonDataBindTypeChanged(Button button, BindType previousButtonDataBindType) {
+            // empty block
         }
 
         @Override
         public void buttonDataBindMappingChanged(Button button, Button.ButtonDataBindMapping previousButtonDataBindMapping) {
+            // empty block
         }
 
         @Override
         public void selectedKeyChanged(Button button, String previousSelectedKey) {
+            // empty block
         }
 
         @Override
         public void selectedBindTypeChanged(Button button, BindType previousSelectedBindType) {
+            // empty block
         }
 
         @Override
         public void selectedBindMappingChanged(Button button, Button.SelectedBindMapping previousSelectedBindMapping) {
+            // empty block
         }
 
         @Override
         public void stateKeyChanged(Button button, String previousStateKey) {
+            // empty block
         }
 
         @Override
         public void stateBindTypeChanged(Button button, BindType previousStateBindType) {
+            // empty block
         }
 
         @Override
         public void stateBindMappingChanged(Button button, Button.StateBindMapping previousStateBindMapping) {
+            // empty block
         }
     }
 

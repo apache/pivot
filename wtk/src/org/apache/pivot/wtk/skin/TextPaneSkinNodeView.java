@@ -140,12 +140,12 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         repaint(0, 0, width, height);
     }
 
-    public void repaint(int x, int y, int width, int height) {
-        assert(width >= 0);
-        assert(height >= 0);
+    public void repaint(int xArgument, int yArgument, int widthArgument, int heightArgument) {
+        assert(widthArgument >= 0);
+        assert(heightArgument >= 0);
 
         if (parent != null) {
-            parent.repaint(x + this.x, y + this.y, width, height);
+            parent.repaint(xArgument + this.x, yArgument + this.y, widthArgument, heightArgument);
         }
     }
 
@@ -190,39 +190,40 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         return node.getCharacterCount();
     }
 
-    public abstract int getInsertionPoint(int x, int y);
-    public abstract int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction);
+    public abstract int getInsertionPoint(int xArgument, int yArgument);
+    public abstract int getNextInsertionPoint(int xArgument, int from, TextPane.ScrollDirection direction);
     public abstract int getRowAt(int offset);
     public abstract int getRowCount();
     public abstract Bounds getCharacterBounds(int offset);
 
     @Override
-    public void parentChanged(Node node, Element previousParent) {
+    public void parentChanged(Node nodeArgument, Element previousParent) {
         // No-op
     }
 
     @Override
-    public void offsetChanged(Node node, int previousOffset) {
+    public void offsetChanged(Node nodeArgument, int previousOffset) {
         // No-op
     }
 
     @Override
-    public void rangeInserted(Node node, int offset, int span) {
+    public void rangeInserted(Node nodeArgument, int offset, int span) {
         // No-op
     }
 
     @Override
-    public void rangeRemoved(Node node, int offset, int characterCount) {
+    public void rangeRemoved(Node nodeArgument, int offset, int characterCount) {
         // No-op
     }
 
     @Override
-    public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
+    public void nodesRemoved(Node nodeArgument, Sequence<Node> removed, int offset) {
         // No-op
     }
 
     @Override
-    public void nodeInserted(Node node, int offset) {
+    public void nodeInserted(Node nodeArgument, int offset) {
         // No-op
     }
+
 }

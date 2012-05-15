@@ -49,5 +49,7 @@ public class TablePaneFillerSkin extends ComponentSkin {
 
     @Override
     public void paint(Graphics2D graphics) {
+        // empty block
     }
+
 }

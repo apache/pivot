@@ -26,14 +26,17 @@ public interface ButtonGroupListener {
     public class Adapter implements ButtonGroupListener {
         @Override
         public void buttonAdded(ButtonGroup buttonGroup, Button button) {
+            // empty block
         }
 
         @Override
         public void buttonRemoved(ButtonGroup buttonGroup, Button button) {
+            // empty block
         }
 
         @Override
         public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
+            // empty block
         }
     }
 
