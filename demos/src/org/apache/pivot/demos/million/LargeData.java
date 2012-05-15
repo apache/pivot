@@ -150,7 +150,7 @@ public class LargeData extends Application.Adapter {
             System.out.println("Running as a Standalone Java Application, so set as origin the user home: \"" + USER_HOME + "\"");
             origin = (new File(USER_HOME).toURI()).toURL();
         }
-        
+
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window)bxmlSerializer.readObject(LargeData.class, "large_data.bxml");
         fileListButton = (ListButton)bxmlSerializer.getNamespace().get("fileListButton");
