@@ -389,7 +389,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 }
 
                 if (index != -1) {
-                    index += paragraphView.getParagraph().getOffset();
+                    index += (paragraphView != null) ? paragraphView.getParagraph().getOffset() : 0;
                 }
             }
         }
@@ -412,6 +412,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         return rowIndex;
     }
 
+    @Override
     public int getRowOffset(int index) {
         int rowOffset = -1;
 
@@ -426,6 +427,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         return rowOffset;
     }
 
+    @Override
     public int getRowLength(int index) {
         int rowLength = -1;
 
@@ -450,6 +452,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         return rowCount;
     }
 
+    @Override
     public Bounds getCharacterBounds(int index) {
         Bounds characterBounds = null;
 

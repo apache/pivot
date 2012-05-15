@@ -83,6 +83,7 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
         }
     }
 
+    @Override
     public String toString(Object row, String columnName) {
         return null;
     }

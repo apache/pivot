@@ -277,14 +277,14 @@ public class TableView extends Component {
          * considered an absolute value.
          */
         public void setWidth(String width) {
-            boolean relative = false;
+            boolean relativeLocal = false;
 
             if (width.endsWith("*")) {
-                relative = true;
+                relativeLocal = true;
                 width = width.substring(0, width.length() - 1);
             }
 
-            setWidth(Integer.parseInt(width), relative);
+            setWidth(Integer.parseInt(width), relativeLocal);
         }
 
         /**
@@ -756,10 +756,12 @@ public class TableView extends Component {
      * Sort dictionary implementation.
      */
     public final class SortDictionary implements Dictionary<String, SortDirection>, Iterable<String> {
+        @Override
         public SortDirection get(String columnName) {
             return sortMap.get(columnName);
         }
 
+        @Override
         public SortDirection put(String columnName, SortDirection sortDirection) {
             SortDirection previousSortDirection;
 
@@ -780,6 +782,7 @@ public class TableView extends Component {
             return previousSortDirection;
         }
 
+        @Override
         public SortDirection remove(String columnName) {
             SortDirection sortDirection = null;
 
@@ -792,6 +795,7 @@ public class TableView extends Component {
             return sortDirection;
         }
 
+        @Override
         public boolean containsKey(String columnName) {
             return sortMap.containsKey(columnName);
         }
@@ -811,6 +815,7 @@ public class TableView extends Component {
             return sortList.getLength();
         }
 
+        @Override
         public Iterator<String> iterator() {
             return sortList.iterator();
         }
@@ -993,12 +998,14 @@ public class TableView extends Component {
 
     private static class TableViewSortListenerList extends WTKListenerList<TableViewSortListener>
         implements TableViewSortListener {
+        @Override
         public void sortAdded(TableView tableView, String columnName) {
             for (TableViewSortListener listener : this) {
                 listener.sortAdded(tableView, columnName);
             }
         }
 
+        @Override
         public void sortUpdated(TableView tableView, String columnName,
             SortDirection previousSortDirection) {
             for (TableViewSortListener listener : this) {
@@ -1006,6 +1013,7 @@ public class TableView extends Component {
             }
         }
 
+        @Override
         public void sortRemoved(TableView tableView, String columnName,
             SortDirection sortDirection) {
             for (TableViewSortListener listener : this) {
@@ -1013,6 +1021,7 @@ public class TableView extends Component {
             }
         }
 
+        @Override
         public void sortChanged(TableView tableView) {
             for (TableViewSortListener listener : this) {
                 listener.sortChanged(tableView);
@@ -1243,13 +1252,13 @@ public class TableView extends Component {
      * The table column sequence.
      */
     public ColumnSequence getColumns() {
-        ColumnSequence columnSequence = this.columnSequence;
+        ColumnSequence columnSequenceLocal = this.columnSequence;
 
         if (columnSource != null) {
-            columnSequence = columnSource.getColumns();
+            columnSequenceLocal = columnSource.getColumns();
         }
 
-        return columnSequence;
+        return columnSequenceLocal;
     }
 
     /**
@@ -2100,14 +2109,14 @@ public class TableView extends Component {
             && JSON.containsKey(context, tableDataKey)) {
             Object value = JSON.get(context, tableDataKey);
 
-            List<?> tableData;
+            List<?> tableDataLocal;
             if (tableDataBindMapping == null) {
-                tableData = (List<?>)value;
+                tableDataLocal = (List<?>)value;
             } else {
-                tableData = tableDataBindMapping.toTableData(value);
+                tableDataLocal = tableDataBindMapping.toTableData(value);
             }
 
-            setTableData(tableData);
+            setTableData(tableDataLocal);
         }
 
         switch (selectMode) {
@@ -2158,6 +2167,8 @@ public class TableView extends Component {
 
                 break;
             }
+            case NONE:
+                break;
         }
     }
 
@@ -2227,6 +2238,8 @@ public class TableView extends Component {
 
                 break;
             }
+            case NONE:
+                break;
         }
     }
 

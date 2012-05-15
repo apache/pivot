@@ -925,6 +925,7 @@ public abstract class Container extends Component
     }
 
     private static EDT_Checker EDT_CHECKER = new EDT_Checker() {
+        @Override
         public void check(Component component) {
             String threadName = Thread.currentThread().getName();
             /* Currently, application startup happens on the main thread, so we need to allow

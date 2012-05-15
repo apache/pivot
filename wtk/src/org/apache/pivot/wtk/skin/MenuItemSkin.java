@@ -100,6 +100,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
 
         if (menuItem.getMenu() != null) {
             buttonPressCallback = ApplicationContext.scheduleCallback(new Runnable() {
+                @Override
                 public void run() {
                     menuItem.press();
                 }

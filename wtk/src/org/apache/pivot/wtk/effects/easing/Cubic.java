@@ -20,14 +20,17 @@ package org.apache.pivot.wtk.effects.easing;
  * Cubic easing operation.
  */
 public class Cubic implements Easing {
+    @Override
     public float easeIn(float time, float begin, float change, float duration) {
         return change * (time /= duration) * time * time + begin;
     }
 
+    @Override
     public float easeOut(float time, float begin, float change, float duration) {
         return change * ((time = time / duration - 1f) * time * time + 1f) + begin;
     }
 
+    @Override
     public float easeInOut(float time, float begin, float change, float duration) {
         if ((time /= duration / 2f) < 1f) {
             return change / 2f * time * time * time + begin;

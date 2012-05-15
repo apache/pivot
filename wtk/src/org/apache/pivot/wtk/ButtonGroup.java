@@ -29,18 +29,21 @@ import org.apache.pivot.util.ListenerList;
 public class ButtonGroup implements Group<Button>, Iterable<Button> {
     private static class ButtonGroupListenerList extends WTKListenerList<ButtonGroupListener>
         implements ButtonGroupListener {
+        @Override
         public void buttonAdded(ButtonGroup buttonGroup, Button button) {
             for (ButtonGroupListener listener : this) {
                 listener.buttonAdded(buttonGroup, button);
             }
         }
 
+        @Override
         public void buttonRemoved(ButtonGroup buttonGroup, Button button) {
             for (ButtonGroupListener listener : this) {
                 listener.buttonRemoved(buttonGroup, button);
             }
         }
 
+        @Override
         public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
             for (ButtonGroupListener listener : this) {
                 listener.selectionChanged(buttonGroup, previousSelection);

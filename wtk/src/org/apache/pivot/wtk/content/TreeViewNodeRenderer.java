@@ -130,6 +130,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
         }
     }
 
+    @Override
     public String toString(Object node) {
         String string = null;
 

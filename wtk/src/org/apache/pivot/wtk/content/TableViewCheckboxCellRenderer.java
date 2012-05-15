@@ -69,6 +69,7 @@ public class TableViewCheckboxCellRenderer extends BoxPane
         }
     }
 
+    @Override
     public String toString(Object row, String columnName) {
         return null;
     }

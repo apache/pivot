@@ -24,18 +24,26 @@ public interface TableViewSortListener {
      * Table view sort listener adapter.
      */
     public static class Adapter implements TableViewSortListener {
+        @Override
         public void sortAdded(TableView tableView, String columnName) {
+            // empty block
         }
 
+        @Override
         public void sortUpdated(TableView tableView, String columnName,
             SortDirection previousSortDirection) {
+            // empty block
         }
 
+        @Override
         public void sortRemoved(TableView tableView, String columnName,
             SortDirection sortDirection) {
+            // empty block
         }
 
+        @Override
         public void sortChanged(TableView tableView) {
+            // empty block
         }
     }
 

@@ -180,10 +180,12 @@ public class TextArea extends Component {
         public static class Adapter implements ParagraphListener {
             @Override
             public void textInserted(Paragraph paragraph, int index, int count) {
+                // empty block
             }
 
             @Override
             public void textRemoved(Paragraph paragraph, int index, int count) {
+                // empty block
             }
         }
 
@@ -308,6 +310,7 @@ public class TextArea extends Component {
      * Text area paragraph sequence.
      */
     public final class ParagraphSequence implements Sequence<Paragraph>, Iterable<Paragraph> {
+        @Override
         public int add(Paragraph paragraph) {
             int index = getLength();
             insert(paragraph, index);
@@ -315,6 +318,7 @@ public class TextArea extends Component {
             return index;
         }
 
+        @Override
         public void insert(Paragraph paragraph, int index) {
             if (paragraph == null) {
                 throw new IllegalArgumentException("paragraph is null.");
@@ -325,13 +329,13 @@ public class TextArea extends Component {
             }
 
             // Determine insertion count, including terminator character
-            int characterCount = paragraph.characters.length();
+            int characterCountLocal = paragraph.characters.length();
 
             if (getLength() > 0) {
-                characterCount++;
+                characterCountLocal++;
             }
 
-            if (TextArea.this.characterCount + characterCount > maximumLength) {
+            if (TextArea.this.characterCount + characterCountLocal > maximumLength) {
                 throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
             }
 
@@ -352,8 +356,8 @@ public class TextArea extends Component {
             paragraph.textArea = TextArea.this;
 
             // Update offsets and character count
-            updateParagraphOffsets(index + 1, characterCount);
-            TextArea.this.characterCount += characterCount;
+            updateParagraphOffsets(index + 1, characterCountLocal);
+            TextArea.this.characterCount += characterCountLocal;
 
             // Update selection state
             int previousSelectionStart = selectionStart;
@@ -372,10 +376,12 @@ public class TextArea extends Component {
             }
         }
 
+        @Override
         public Paragraph update(int index, Paragraph paragraph) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int remove(Paragraph paragraph){
             int index = indexOf(paragraph);
             if (index != -1) {
@@ -385,26 +391,27 @@ public class TextArea extends Component {
             return index;
         }
 
+        @Override
         public Sequence<Paragraph> remove(int index, int count) {
             Sequence<Paragraph> removed = paragraphs.remove(index, count);
 
             if (count > 0) {
-                int characterCount = 0;
+                int characterCountLocal = 0;
                 for (int i = 0, n = removed.getLength(); i < n; i++) {
                     Paragraph paragraph = removed.get(i);
                     paragraph.textArea = null;
                     paragraph.offset = -1;
-                    characterCount += paragraph.characters.length() + 1;
+                    characterCountLocal += paragraph.characters.length() + 1;
                 }
 
                 // Don't include the implicit final terminator in the character count
                 if (getLength() == 0) {
-                    characterCount--;
+                    characterCountLocal--;
                 }
 
                 // Update offsets
-                updateParagraphOffsets(index, -characterCount);
-                TextArea.this.characterCount -= characterCount;
+                updateParagraphOffsets(index, -characterCountLocal);
+                TextArea.this.characterCount -= characterCountLocal;
 
                 // Update selection state
                 int previousSelectionStart = selectionStart;
@@ -427,18 +434,22 @@ public class TextArea extends Component {
             return removed;
         }
 
+        @Override
         public Paragraph get(int index) {
             return paragraphs.get(index);
         }
 
+        @Override
         public int indexOf(Paragraph paragraph) {
             return paragraphs.indexOf(paragraph);
         }
 
+        @Override
         public int getLength() {
             return paragraphs.getLength();
         }
 
+        @Override
         public Iterator<Paragraph> iterator() {
             return new ImmutableIterator<Paragraph>(paragraphs.iterator());
         }
@@ -457,6 +468,7 @@ public class TextArea extends Component {
             count = text.length();
         }
 
+        @Override
         public void undo() {
             removeText(index, count, false);
         }
@@ -471,6 +483,7 @@ public class TextArea extends Component {
             text = getText(index, index + count);
         }
 
+        @Override
         public void undo() {
             insertText(text, index, false);
         }
@@ -692,19 +705,19 @@ public class TextArea extends Component {
         }
 
         // Construct the paragraph list
-        ArrayList<Paragraph> paragraphs = new ArrayList<Paragraph>();
-        int characterCount = 0;
+        ArrayList<Paragraph> paragraphsLocal = new ArrayList<Paragraph>();
+        int characterCountLocal = 0;
 
         Paragraph paragraph = new Paragraph();
 
         int c = textReader.read();
         while (c != -1) {
-            if (++characterCount > maximumLength) {
+            if (++characterCountLocal > maximumLength) {
                 throw new IllegalArgumentException("Text length is greater than maximum length.");
             }
 
             if (c == '\n') {
-                paragraphs.add(paragraph);
+                paragraphsLocal.add(paragraph);
                 paragraph = new Paragraph();
             } else {
                 paragraph.append((char)c);
@@ -713,7 +726,7 @@ public class TextArea extends Component {
             c = textReader.read();
         }
 
-        paragraphs.add(paragraph);
+        paragraphsLocal.add(paragraph);
 
         // Clear the edit history
         editHistory.clear();
@@ -721,8 +734,8 @@ public class TextArea extends Component {
         // Update content
         paragraphSequence.remove(0, paragraphSequence.getLength());
 
-        for (int i = 0, n = paragraphs.getLength(); i < n; i++) {
-            paragraphSequence.add(paragraphs.get(i));
+        for (int i = 0, n = paragraphsLocal.getLength(); i < n; i++) {
+            paragraphSequence.add(paragraphsLocal.get(i));
         }
     }
 

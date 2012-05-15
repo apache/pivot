@@ -20,14 +20,17 @@ package org.apache.pivot.wtk.effects.easing;
  * Quintic easing operation.
  */
 public class Quintic implements Easing {
+    @Override
     public float easeIn(float time, float begin, float change, float duration) {
         return change * (time /= duration) * time * time * time * time + begin;
     }
 
+    @Override
     public float easeOut(float time, float begin, float change, float duration) {
         return change * ((time = time / duration - 1) * time * time * time * time + 1) + begin;
     }
 
+    @Override
     public float easeInOut(float time, float begin, float change, float duration) {
         if ((time /= duration / 2f) < 1) {
             return change / 2f * time * time * time * time * time + begin;

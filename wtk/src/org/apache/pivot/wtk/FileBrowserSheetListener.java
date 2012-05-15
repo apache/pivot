@@ -32,21 +32,25 @@ public interface FileBrowserSheetListener {
         @Override
         public void modeChanged(FileBrowserSheet fileBrowserSheet,
             FileBrowserSheet.Mode previousMode) {
+            // empty block
         }
 
         @Override
         public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
             File previousRootDirectory) {
+            // empty block
         }
 
         @Override
         public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
             Sequence<File> previousSelectedFiles) {
+            // empty block
         }
 
         @Override
         public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
             Filter<File> previousDisabledFileFilter) {
+            // empty block
         }
     }
 

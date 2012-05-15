@@ -67,8 +67,8 @@ public abstract class MenuButtonSkin extends ButtonSkin
 
     private MenuPopupStateListener menuPopupStateListener = new MenuPopupStateListener.Adapter() {
         @Override
-        public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
-            if (menuPopup.containsFocus()) {
+        public Vote previewMenuPopupClose(MenuPopup menuPopupArgument, boolean immediate) {
+            if (menuPopupArgument.containsFocus()) {
                 getComponent().requestFocus();
             }
 
@@ -76,9 +76,9 @@ public abstract class MenuButtonSkin extends ButtonSkin
         }
 
         @Override
-        public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
+        public void menuPopupCloseVetoed(MenuPopup menuPopupArgument, Vote reason) {
             if (reason == Vote.DENY) {
-                menuPopup.requestFocus();
+                menuPopupArgument.requestFocus();
             }
         }
     };
@@ -113,6 +113,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
 
     // MenuButton.Skin methods
 
+    @Override
     public Window getMenuPopup() {
         return menuPopup;
     }

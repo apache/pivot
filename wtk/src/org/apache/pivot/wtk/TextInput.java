@@ -83,6 +83,7 @@ public class TextInput extends Component {
             count = text.length();
         }
 
+        @Override
         public void undo() {
             removeText(index, count, false);
         }
@@ -97,6 +98,7 @@ public class TextInput extends Component {
             text = getText(index, index + count);
         }
 
+        @Override
         public void undo() {
             insertText(text, index, false);
         }

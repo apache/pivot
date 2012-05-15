@@ -20,16 +20,19 @@ package org.apache.pivot.wtk.effects.easing;
  * Exponential easing operation.
  */
 public class Exponential implements Easing {
+    @Override
     public float easeIn(float time, float begin, float change, float duration) {
         return (time == 0) ? begin
             : change * (float)Math.pow(2, 10 * (time / duration - 1f)) + begin;
     }
 
+    @Override
     public float easeOut(float time, float begin, float change, float duration) {
         return (time == duration) ? begin + change
             : change * ((float)-Math.pow(2, -10 * time / duration) + 1f) + begin;
     }
 
+    @Override
     public float easeInOut(float time, float begin, float change, float duration) {
         if (time == 0) {
             return begin;

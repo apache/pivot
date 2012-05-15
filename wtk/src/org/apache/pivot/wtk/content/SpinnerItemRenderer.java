@@ -65,6 +65,7 @@ public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
         getStyles().put("color", color);
     }
 
+    @Override
     public String toString(Object item) {
         return (item == null) ? null : item.toString();
     }

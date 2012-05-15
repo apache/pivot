@@ -113,6 +113,7 @@ public class TableViewHeaderDataRenderer extends BoxPane
         }
     }
 
+    @Override
     public String toString(Object data) {
         if (data == null) {
             throw new IllegalArgumentException();

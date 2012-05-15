@@ -625,6 +625,7 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     // Box pane events
+    @Override
     public void orientationChanged(BoxPane boxPane) {
         invalidateComponent();
     }

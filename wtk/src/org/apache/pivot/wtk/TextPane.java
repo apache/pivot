@@ -122,6 +122,7 @@ public class TextPane extends Container {
             this.removed = removed;
         }
 
+        @Override
         public void undo() {
             Document tmp = new Document();
             for (int i=0; i<removed.getLength(); i++) {
@@ -142,6 +143,7 @@ public class TextPane extends Container {
             this.characterCount = characterCount;
         }
 
+        @Override
         public void undo() {
             node.removeRange(offset, characterCount);
             int newSelectionStart = selectionStart;
@@ -625,15 +627,15 @@ public class TextPane extends Container {
                 }
 
                 // Insert the clipboard contents
-                Document document;
+                Document documentLocal;
                 int n;
                 try {
                     PlainTextSerializer serializer = new PlainTextSerializer();
                     StringReader reader = new StringReader(text);
-                    document = serializer.readObject(reader);
-                    n = document.getCharacterCount();
+                    documentLocal = serializer.readObject(reader);
+                    n = documentLocal.getCharacterCount();
 
-                    this.document.insertRange(document, selectionStart);
+                    this.document.insertRange(documentLocal, selectionStart);
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 }

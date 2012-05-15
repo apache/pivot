@@ -185,11 +185,13 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         menuPopup.close(true);
     }
 
+    @Override
     public void menuChanged(MenuBar.Item menuBarItem, Menu previousMenu) {
         menuPopup.setMenu(menuBarItem.getMenu());
         repaintComponent();
     }
 
+    @Override
     public void activeChanged(MenuBar.Item menuBarItem) {
         if (menuBarItem.isActive()) {
             Display display = menuBarItem.getDisplay();

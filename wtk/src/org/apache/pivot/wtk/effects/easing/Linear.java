@@ -20,14 +20,17 @@ package org.apache.pivot.wtk.effects.easing;
  * Linear easing operation.
  */
 public class Linear implements Easing {
+    @Override
     public float easeIn(float time, float begin, float change, float duration) {
         return change * time / duration + begin;
     }
 
+    @Override
     public float easeOut(float time, float begin, float change, float duration) {
         return change * time / duration + begin;
     }
 
+    @Override
     public float easeInOut(float time, float begin, float change, float duration) {
         return change * time / duration + begin;
     }

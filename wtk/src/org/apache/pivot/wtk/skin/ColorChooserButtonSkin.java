@@ -216,6 +216,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
 
     // ColorChooserButton.Skin methods
 
+    @Override
     public Window getColorChooserPopup() {
         return colorChooserPopup;
     }
