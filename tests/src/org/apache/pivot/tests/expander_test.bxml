@@ -27,10 +27,19 @@ limitations under the License.
         </columns>
 
         <TablePane.Row height="1*">
-            <Expander title="Left Expander">
+            <Expander title="Left Top Expander">
                 <Label text="Left" styles="{verticalAlignment:'center', horizontalAlignment:'center', wrapText:true}" />
             </Expander>
-            <Expander title="Right Expander" collapsible="false">
+            <Expander title="Right Top Expander" collapsible="false">
+                <Label text="Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the 'License'); you may not use this file except in compliance with the License." styles="{verticalAlignment:'center', horizontalAlignment:'center', wrapText:true}" />
+            </Expander>
+        </TablePane.Row>
+
+        <TablePane.Row height="1*">
+            <Expander title="Left Bottom Expander, disabled" enabled="false">
+                <Label text="Left" styles="{verticalAlignment:'center', horizontalAlignment:'center', wrapText:true}" />
+            </Expander>
+            <Expander title="Right Bottom Expander, disabled" collapsible="false" enabled="false">
                 <Label text="Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the 'License'); you may not use this file except in compliance with the License." styles="{verticalAlignment:'center', horizontalAlignment:'center', wrapText:true}" />
             </Expander>
         </TablePane.Row>

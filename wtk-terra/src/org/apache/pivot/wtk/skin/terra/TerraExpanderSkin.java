@@ -149,8 +149,14 @@ public class TerraExpanderSkin extends ExpanderSkin
     protected class CollapseImage extends ButtonImage {
         @Override
         public void paint(Graphics2D graphics) {
+            Expander expander = (Expander)TerraExpanderSkin.this.getComponent();
+
             graphics.setStroke(new BasicStroke(0));
-            graphics.setPaint(shadeButtonColor);
+            if (expander.isEnabled()) {
+                graphics.setPaint(shadeButtonColor);
+            } else {
+                graphics.setPaint(disabledShadeButtonColor);
+            }
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -164,8 +170,14 @@ public class TerraExpanderSkin extends ExpanderSkin
     protected class ExpandImage extends ButtonImage {
         @Override
         public void paint(Graphics2D graphics) {
+            Expander expander = (Expander)TerraExpanderSkin.this.getComponent();
+
             graphics.setStroke(new BasicStroke(0));
-            graphics.setPaint(shadeButtonColor);
+            if (expander.isEnabled()) {
+                graphics.setPaint(shadeButtonColor);
+            } else {
+                graphics.setPaint(disabledShadeButtonColor);
+            }
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -189,6 +201,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     private Color titleBarBackgroundColor;
     private Color titleBarBorderColor;
     private Color shadeButtonColor;
+    private Color disabledShadeButtonColor;
     private Color borderColor;
     private Insets padding;
 
@@ -227,7 +240,8 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         titleBarBackgroundColor = theme.getColor(10);
         titleBarBorderColor = theme.getColor(7);
-        shadeButtonColor = theme.getColor(7);
+        shadeButtonColor = theme.getColor(12);
+        disabledShadeButtonColor = theme.getColor(7);
         borderColor = theme.getColor(7);
         padding = new Insets(4);
 
@@ -255,7 +269,7 @@ public class TerraExpanderSkin extends ExpanderSkin
         titleRow.add(titleBoxPane);
         titleRow.add(buttonBoxPane);
 
-        titleLabel.getStyles().put("color", theme.getColor(12));
+        titleLabel.getStyles().put("color", shadeButtonColor);
 
         Font titleFont = theme.getFont().deriveFont(Font.BOLD);
         titleLabel.getStyles().put("font", titleFont);
@@ -453,6 +467,13 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         graphics.setPaint(borderColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+
+        Expander expander = (Expander)TerraExpanderSkin.this.getComponent();
+        if (expander.isEnabled()) {
+            setTitleBarColor(shadeButtonColor);
+        } else {
+            setTitleBarColor(disabledShadeButtonColor);
+        }
     }
 
     public Font getTitleBarFont() {
@@ -545,6 +566,10 @@ public class TerraExpanderSkin extends ExpanderSkin
         }
 
         setShadeButtonColor(GraphicsUtilities.decodeColor(shadeButtonColor));
+    }
+
+    public Color getDisabledShadeButtonColor() {
+        return disabledShadeButtonColor;
     }
 
     public Color getBorderColor() {

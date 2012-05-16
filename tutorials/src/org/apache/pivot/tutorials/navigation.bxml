@@ -156,8 +156,13 @@ limitations under the License.
                         styles="{horizontalAlignment:'center', verticalAlignment:'center', font:{italic:true}}"/>
                 </Expander>
 
-                <Expander title="Three">
+                <Expander title="Three" enabled="false">
                     <Label preferredWidth="100" preferredHeight="50" text="Trois"
+                        styles="{horizontalAlignment:'center', verticalAlignment:'bottom', font:{italic:true}}"/>
+                </Expander>
+
+                <Expander title="Four">
+                    <Label preferredWidth="100" preferredHeight="50" text="Quatre"
                         styles="{horizontalAlignment:'center', verticalAlignment:'bottom', font:{italic:true}}"/>
                 </Expander>
             </BoxPane>
@@ -172,7 +177,9 @@ limitations under the License.
                   styles="{horizontalAlignment:'center', verticalAlignment:'top', font:{italic:true}}"/>
                 <Label Accordion.headerData="Two" text="Deux"
                   styles="{horizontalAlignment:'center', verticalAlignment:'center', font:{italic:true}}"/>
-                <Label Accordion.headerData="Three" text="Trois"
+                <Label Accordion.headerData="Three" text="Trois" enabled="false"
+                  styles="{horizontalAlignment:'center', verticalAlignment:'bottom', font:{italic:true}}"/>
+                <Label Accordion.headerData="Four" text="Quatre"
                   styles="{horizontalAlignment:'center', verticalAlignment:'bottom', font:{italic:true}}"/>
             </Accordion>
         </BoxPane>
