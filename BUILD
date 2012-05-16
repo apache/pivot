@@ -41,7 +41,7 @@ Building Pivot
 
 * To compile all Pivot source files into binary class files:
 
-  $ ant
+  $ ant compile
 
 * To generate Javadoc
 
