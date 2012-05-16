@@ -344,7 +344,7 @@ limitations under the License.
         </sequential>
     </macrodef>
 
-    <!-- Compile all classes (tests included) -->
+    <!-- Return some environmental info -->
     <target name="environment-info" description="Gives some info on Environment and Compiler flags"
         depends=""
     >
