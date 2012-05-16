@@ -19,8 +19,15 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Container that fills it space and then arranges components
- * in a line, either vertically or horizontally.
+ * Container that fills the space it has been given inside its parent
+ * and then arranges its child components in a line, either vertically
+ * or horizontally.
+ * <p> This is useful, for instance, as a shortcut to making a one
+ * row and one column {@link TablePane} or {@link GridPane}.  Adding
+ * just one child, such as a {@link ScrollPane}, will allow that child
+ * to fill the containing area (as opposed to using a {@link BoxPane} which
+ * will only size itself to the size of its children, which doesn't work
+ * well with a <tt>ScrollPane</tt>).
  */
 public class FillPane extends Container {
     private static class FillPaneListenerList extends WTKListenerList<FillPaneListener>
