@@ -19,7 +19,15 @@ limitations under the License.
 <Window title="Expander Test" maximized="true"
     styles="{backgroundColor:'#c8c8bb'}"
     xmlns:bxml="http://pivot.apache.org/bxml"
-    xmlns="org.apache.pivot.wtk">
+    xmlns="org.apache.pivot.wtk"
+>
+    <bxml:script>
+    <![CDATA[
+    // define a variable here to reuse it inside the same bxml, as a sample
+    var msg = "Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the 'License'); you may not use this file except in compliance with the License.";
+    ]]>
+    </bxml:script>
+
     <TablePane styles="{padding:6, horizontalSpacing:6}">
         <columns>
             <TablePane.Column width="8*" />
@@ -31,7 +39,7 @@ limitations under the License.
                 <Label text="Left" styles="{verticalAlignment:'center', horizontalAlignment:'center', wrapText:true}" />
             </Expander>
             <Expander title="Right Top Expander" collapsible="false">
-                <Label text="Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the 'License'); you may not use this file except in compliance with the License." styles="{verticalAlignment:'center', horizontalAlignment:'center', wrapText:true}" />
+                <Label text="$msg" styles="{verticalAlignment:'center', horizontalAlignment:'center', wrapText:true}" />
             </Expander>
         </TablePane.Row>
 
@@ -40,7 +48,7 @@ limitations under the License.
                 <Label text="Left" styles="{verticalAlignment:'center', horizontalAlignment:'center', wrapText:true}" />
             </Expander>
             <Expander title="Right Bottom Expander, disabled" collapsible="false" enabled="false">
-                <Label text="Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the 'License'); you may not use this file except in compliance with the License." styles="{verticalAlignment:'center', horizontalAlignment:'center', wrapText:true}" />
+                <Label text="$msg" styles="{verticalAlignment:'center', horizontalAlignment:'center', wrapText:true}" />
             </Expander>
         </TablePane.Row>
     </TablePane>
