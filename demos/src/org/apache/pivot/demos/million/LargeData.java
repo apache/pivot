@@ -279,7 +279,7 @@ public class LargeData extends Application.Adapter {
             // moved here because in some cases (for example when running as unsigned code via Web Start) this would not be accessible
             USER_HOME = System.getProperty("user.home");
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();  // ignore the exception, and set a fallback
             USER_HOME = null;
         }
 
