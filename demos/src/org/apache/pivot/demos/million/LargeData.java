@@ -50,7 +50,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowComparator;
 
 public class LargeData extends Application.Adapter {
-    private static final String USER_HOME = System.getProperty("user.home");
+    private static String USER_HOME;  // useful for local tests as Java Application
 
     URL origin = null;
 
@@ -148,8 +148,11 @@ public class LargeData extends Application.Adapter {
 
         origin = ApplicationContext.getOrigin();
         if (origin == null) {
-            System.out.println("Running as a Standalone Java Application, so set as origin the user home: \"" + USER_HOME + "\"");
-            origin = (new File(USER_HOME).toURI()).toURL();
+            System.out.println("Running as a Standalone Java Application, with user home: \"" + USER_HOME + "\"");
+            if (USER_HOME != null) {
+                System.out.println("Set as origin the user home");
+                origin = (new File(USER_HOME).toURI()).toURL();
+            }
         }
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
@@ -272,6 +275,14 @@ public class LargeData extends Application.Adapter {
     }
 
     public static void main(String[] args) {
+        try {
+            // moved here because in some cases (for example when running as unsigned code via Web Start) this would not be accessible
+            USER_HOME = System.getProperty("user.home");
+        } catch (Exception e) {
+            e.printStackTrace();
+            USER_HOME = null;
+        }
+
         DesktopApplicationContext.main(LargeData.class, args);
     }
 
