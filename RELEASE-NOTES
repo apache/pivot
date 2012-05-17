@@ -24,7 +24,7 @@ Release Notes for Pivot 2.0.2:
     * [PIVOT-771] - getSelectedIndex()/getSelectedPath() in TreeView, ListView and TableView should not throw Exception when in SelectMode.MULTI
     * [PIVOT-836] - Improve Performance of Graphics
     * [PIVOT-839] - Czech localization
-	* [PIVOT-840] - Improve instructions on how to use BXML in an application
+    * [PIVOT-840] - Improve instructions on how to use BXML in an application
     * [PIVOT-842] - Disable volatile buffer even in unsigned Applets, using the existing flag
     * [PIVOT-845] - Russian localization
     * [PIVOT-847] - Update SVGSalamander jars to the latest stable version
