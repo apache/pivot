@@ -22,7 +22,7 @@ Building Apache Pivot Quickstart Archetype
 * To Test, generate a Pivot Project (called "myapp") with it 
   (and give to it the desired package name when requested, like "com.mycompany.myapp", 
   note that usually the ".myapp" part in the package is written only if overridden here):
-  $ mvn archetype:generate -U -DarchetypeGroupId=org.apache.pivot -DarchetypeArtifactId=pivot-archetype-quickstart -DarchetypeVersion=1.0.1 -DgroupId=com.mycompany -DartifactId=myapp -Dversion=1.0
+  $ mvn archetype:generate -U -DarchetypeGroupId=org.apache.pivot -DarchetypeArtifactId=pivot-archetype-quickstart -DarchetypeVersion=1.0.2 -DgroupId=com.mycompany -DartifactId=myapp -Dversion=1.0
   then, compile the project and run it.
 
 * Note that all maven -U flags shown here are optional, but useful to ensure that latest versions will be used.

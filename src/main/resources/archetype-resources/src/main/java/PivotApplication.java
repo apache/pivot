@@ -81,6 +81,7 @@ public class PivotApplication implements Application {
      */
     @Override
     public void suspend() throws Exception {
+        // empty method
     }
 
     /**
@@ -88,6 +89,7 @@ public class PivotApplication implements Application {
      */
     @Override
     public void resume() throws Exception {
+        // empty method
     }
 
 }
