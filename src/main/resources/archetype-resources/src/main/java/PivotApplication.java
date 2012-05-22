@@ -29,7 +29,7 @@ import org.apache.pivot.wtk.Display;
  *
  * Remember to run mvn compile before running mvn exec:java
  */
-public class PivotApplication implements Application {
+public class PivotApplication extends Application.Adapter {
 
     PivotApplicationWindow window = null;
 
@@ -74,22 +74,6 @@ public class PivotApplication implements Application {
         }
 
         return false;
-    }
-
-    /**
-     * Called to notify the application that it is being suspended.
-     */
-    @Override
-    public void suspend() throws Exception {
-        // empty method
-    }
-
-    /**
-     * Called when a suspended application has been resumed.
-     */
-    @Override
-    public void resume() throws Exception {
-        // empty method
     }
 
 }
