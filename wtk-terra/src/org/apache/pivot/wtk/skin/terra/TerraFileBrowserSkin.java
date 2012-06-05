@@ -23,6 +23,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -35,9 +36,11 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.text.FileSizeFormat;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.concurrent.AbortException;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
+import org.apache.pivot.wtk.ActivityIndicator;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -48,6 +51,7 @@ import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FocusTraversalDirection;
+import org.apache.pivot.wtk.GridPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
@@ -64,6 +68,7 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Span;
+import org.apache.pivot.wtk.StackPane;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TableViewSortListener;
@@ -500,25 +505,23 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
      */
     public static class IncludeFileFilter implements Filter<File> {
         private String match;
-        private Filter<File> excludeFileFilter;
 
         public IncludeFileFilter() {
-            this(null, null);
+            this(null);
         }
 
-        public IncludeFileFilter(String match, Filter<File> excludeFileFilter) {
+        public IncludeFileFilter(String match) {
             this.match = (match == null ? null : match.toLowerCase());
-            this.excludeFileFilter = excludeFileFilter;
         }
 
         @Override
         public boolean include(File file) {
-            String name = file.getName();
-            name = name.toLowerCase();
-
             boolean include = true;
 
             if (match != null) {
+                String name = file.getName();
+                name = name.toLowerCase();
+
                 if (match.startsWith("*")) {
                     if (match.length() == 1) {
                         include = true;
@@ -530,23 +533,63 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 }
             }
 
-            if (include
-                && excludeFileFilter != null) {
-                include = !excludeFileFilter.include(file);
-            }
-
             return include;
         }
     }
 
-    private class RefreshFileListTask extends Task<File[]> {
+    public static class FullFileFilter implements FileFilter {
+        private Filter<File> includeFileFilter;
+        private Filter<File> excludeFileFilter;
+
+        public FullFileFilter(Filter<File> includeFileFilter, Filter<File> excludeFileFilter) {
+            this.includeFileFilter = includeFileFilter;
+            this.excludeFileFilter = excludeFileFilter;
+        }
+
         @Override
-        public File[] execute() {
+        public boolean accept(File file) {
+            boolean include = HIDDEN_FILE_FILTER.accept(file);
+            if (include
+                && includeFileFilter != null) {
+                include = includeFileFilter.include(file);
+            }
+            if (include
+                && excludeFileFilter != null) {
+                include = !excludeFileFilter.include(file);
+            }
+            return include;
+        }
+    }
+
+    private class RefreshFileListTask extends Task<ArrayList<File>> {
+        private Filter<File> includeFileFilter;
+        private Filter<File> excludeFileFilter;
+        private FileComparator fileComparator;
+
+        public RefreshFileListTask(Filter<File> includeFileFilter,
+                Filter<File> excludeFileFilter,
+                FileComparator fileComparator) {
+            this.includeFileFilter = includeFileFilter;
+            this.excludeFileFilter = excludeFileFilter;
+            this.fileComparator = fileComparator;
+        }
+
+        @Override
+        public ArrayList<File> execute() {
             FileBrowser fileBrowser = (FileBrowser)getComponent();
             File rootDirectory = fileBrowser.getRootDirectory();
-            File[] files = rootDirectory.listFiles();
+            if (abort) {
+                throw new AbortException();
+            }
 
-            return files;
+            File[] files = rootDirectory.listFiles(new FullFileFilter(includeFileFilter, excludeFileFilter));
+            if (abort) {
+                throw new AbortException();
+            }
+
+            Arrays.sort(files, fileComparator);
+
+            return new ArrayList<File>(files, 0, files.length);
         }
     }
 
@@ -559,8 +602,12 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @BXML private PushButton goHomeButton = null;
     @BXML private TextInput searchTextInput = null;
 
+    @BXML private StackPane fileStackPane = null;
     @BXML private ScrollPane fileScrollPane = null;
     @BXML private TableView fileTableView = null;
+
+    private ActivityIndicator indicator = null;
+    private GridPane activityGrid = null;
 
     private boolean keyboardFolderTraversalEnabled = true;
     private boolean hideDisabledFiles = false;
@@ -965,12 +1012,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         goHomeButton.setEnabled(!rootDirectory.equals(HOME_DIRECTORY));
 
-        searchTextInput.setText("");
-
         fileScrollPane.setScrollTop(0);
         fileScrollPane.setScrollLeft(0);
 
-        refreshFileList();
+        searchTextInput.setText("");
 
         fileTableView.requestFocus();
     }
@@ -1046,51 +1091,61 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         // Cancel any outstanding task
         if (refreshFileListTask != null) {
             refreshFileListTask.abort();
+
+            if (indicator != null) {
+                indicator.setActive(false);
+                fileStackPane.remove(fileStackPane.getLength() - 1, 1);
+            }
         }
+
+        if (indicator == null) {
+            indicator = new ActivityIndicator();
+            activityGrid = new GridPane(5);
+            GridPane.Row row1 = new GridPane.Row();
+            GridPane.Row row2 = new GridPane.Row();
+            GridPane.Row row3 = new GridPane.Row();
+            for (int i = 0; i < 5; i++) {
+                row1.add(new GridPane.Filler());
+                if (i == 2)
+                    row2.add(indicator);
+                else
+                    row2.add(new GridPane.Filler());
+                row3.add(new GridPane.Filler());
+            }
+            activityGrid.getRows().add(row1);
+            activityGrid.getRows().add(row2);
+            activityGrid.getRows().add(row3);
+        }
+        fileStackPane.add(activityGrid);
+        indicator.setActive(true);
 
         fileTableView.setTableData(new ArrayList<File>());
 
-        refreshFileListTask = new RefreshFileListTask();
-        refreshFileListTask.execute(new TaskAdapter<File[]>(new TaskListener<File[]>() {
+        String text = searchTextInput.getText().trim();
+        Filter<File> disabledFileFilter = hideDisabledFiles ? ((FileBrowser) getComponent()).getDisabledFileFilter() : null;
+        Filter<File> includeFileFilter = text.length() != 0 ? new IncludeFileFilter(text) : null;
+
+        TableView.SortDictionary sort = fileTableView.getSort();
+
+        final FileComparator fileComparator;
+        if (sort.isEmpty()) {
+            fileComparator = null;
+        } else {
+            Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
+            fileComparator = new FileComparator(pair.key, pair.value);
+        }
+
+        refreshFileListTask = new RefreshFileListTask(includeFileFilter, disabledFileFilter, fileComparator);
+        refreshFileListTask.execute(new TaskAdapter<ArrayList<File>>(new TaskListener<ArrayList<File>>() {
             @SuppressWarnings("unchecked")
             @Override
-            public void taskExecuted(Task<File[]> task) {
+            public void taskExecuted(Task<ArrayList<File>> task) {
                 if (task == refreshFileListTask) {
-                    File files[] = task.getResult();
+                    indicator.setActive(false);
+                    fileStackPane.remove(fileStackPane.getLength() - 1, 1);
 
-                    String text = searchTextInput.getText().trim();
-                    IncludeFileFilter includeFileFilter = new IncludeFileFilter(text.length() == 0 ? null : text,
-                        hideDisabledFiles ? ((FileBrowser) getComponent()).getDisabledFileFilter() : null);
-
-                    TableView.SortDictionary sort = fileTableView.getSort();
-
-                    final FileComparator fileComparator;
-                    if (sort.isEmpty()) {
-                        fileComparator = null;
-                    } else {
-                        Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
-                        fileComparator = new FileComparator(pair.key, pair.value);
-                    }
-
-                    for (int i = 0; i < files.length; i++) {
-                        final File file = files[i];
-
-                        if (includeFileFilter.include(file) && HIDDEN_FILE_FILTER.accept(file)) {
-                            ArrayList<File> fileTableData = (ArrayList<File>)fileTableView.getTableData();
-
-                            int index;
-                            if (fileComparator == null) {
-                                index = fileTableData.getLength();
-                            } else {
-                                index = ArrayList.binarySearch(fileTableData, file, fileComparator);
-                                if (index < 0) {
-                                    index = -(index + 1);
-                                }
-                            }
-
-                            fileTableData.insert(file, index);
-                        }
-                    }
+                    ArrayList<File> fileList = task.getResult();
+                    fileTableView.setTableData(fileList);
 
                     updateSelectedFiles((FileBrowser) getComponent());
 
@@ -1099,8 +1154,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
 
             @Override
-            public void executeFailed(Task<File[]> task) {
+            public void executeFailed(Task<ArrayList<File>> task) {
                 if (task == refreshFileListTask) {
+                    indicator.setActive(false);
+                    fileStackPane.remove(fileStackPane.getLength() - 1, 1);
+
                     refreshFileListTask = null;
                 }
             }
