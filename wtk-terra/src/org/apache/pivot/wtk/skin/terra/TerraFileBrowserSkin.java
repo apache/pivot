@@ -457,46 +457,104 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
+    public static abstract class FileComparator implements Comparator<File>, Serializable {
+        @Override
+        public abstract int compare(File f1, File f2);
+    }
+
+    public static class FileNameAscendingComparator extends FileComparator {
+        private static final long serialVersionUID = 1L;
+        @Override
+        public int compare(File f1, File f2) {
+            boolean file1IsDirectory = f1.isDirectory();
+            boolean file2IsDirectory = f2.isDirectory();
+
+            int result;
+            if (file1IsDirectory && !file2IsDirectory) {
+                result = -1;
+            } else if (!file1IsDirectory && file2IsDirectory) {
+                result = 1;
+            } else {
+                // Do the compare according to the rules of the file system
+                result = f1.compareTo(f2);
+            }
+            return result;
+        }
+    }
+
+    public static class FileNameDescendingComparator extends FileComparator {
+        private static final long serialVersionUID = 1L;
+        @Override
+        public int compare(File f1, File f2) {
+            boolean file1IsDirectory = f1.isDirectory();
+            boolean file2IsDirectory = f2.isDirectory();
+
+            int result;
+            if (file1IsDirectory && !file2IsDirectory) {
+                result = -1;
+            } else if (!file1IsDirectory && file2IsDirectory) {
+                result = 1;
+            } else {
+                // Do the compare according to the rules of the file system
+                result = f2.compareTo(f1);
+            }
+            return result;
+        }
+    }
+
+    public static class FileSizeAscendingComparator extends FileComparator {
+        private static final long serialVersionUID = 1L;
+        @Override
+        public int compare(File f1, File f2) {
+            return Long.signum(f1.length() - f2.length());
+        }
+    }
+
+    public static class FileSizeDescendingComparator extends FileComparator {
+        private static final long serialVersionUID = 1L;
+        @Override
+        public int compare(File f1, File f2) {
+            return Long.signum(f2.length() - f1.length());
+        }
+    }
+
+    public static class FileDateAscendingComparator extends FileComparator {
+        private static final long serialVersionUID = 1L;
+        @Override
+        public int compare(File f1, File f2) {
+            return Long.signum(f1.lastModified() - f2.lastModified());
+        }
+    }
+
+    public static class FileDateDescendingComparator extends FileComparator {
+        private static final long serialVersionUID = 1L;
+        @Override
+        public int compare(File f1, File f2) {
+            return Long.signum(f2.lastModified() - f1.lastModified());
+        }
+    }
+
     /**
      * File comparator.
      */
-    public static class FileComparator implements Comparator<File>, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        private String columnName = null;
-        private SortDirection sortDirection = null;
-
-        public FileComparator(String columnName, SortDirection sortDirection) {
-            this.columnName = columnName;
-            this.sortDirection = sortDirection;
+    public static FileComparator getFileComparator(String columnName, SortDirection sortDirection) {
+        if (columnName.equals("name")) {
+            return sortDirection == SortDirection.ASCENDING ?
+                    new FileNameAscendingComparator() :
+                    new FileNameDescendingComparator();
         }
-
-        @Override
-        public int compare(File file1, File file2) {
-            int result;
-
-            if (columnName.equals("name")) {
-                boolean file1IsDirectory = file1.isDirectory();
-                boolean file2IsDirectory = file2.isDirectory();
-
-                if (file1IsDirectory && !file2IsDirectory) {
-                    result = -1;
-                } else if (!file1IsDirectory && file2IsDirectory) {
-                    result = 1;
-                } else {
-                    result = file1.getName().compareToIgnoreCase(file2.getName());
-                }
-            } else if (columnName.equals("size")) {
-                result = Long.signum(file1.length() - file2.length());
-            } else if (columnName.equals("lastModified")) {
-                result = Long.signum(file1.lastModified() - file2.lastModified());
-            } else {
-                throw new IllegalArgumentException();
-            }
-
-            result *= (sortDirection == SortDirection.ASCENDING) ? 1 : -1;
-
-            return result;
+        else if (columnName.equals("size")) {
+            return sortDirection == SortDirection.ASCENDING ?
+                    new FileSizeAscendingComparator() :
+                    new FileSizeDescendingComparator();
+        }
+        else if (columnName.equals("lastModified")) {
+            return sortDirection == SortDirection.ASCENDING ?
+                    new FileDateAscendingComparator() :
+                    new FileDateDescendingComparator();
+        }
+        else {
+            throw new IllegalArgumentException();
         }
     }
 
@@ -794,7 +852,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 if (!sort.isEmpty()) {
                     Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
                     List<File> files = (List<File>)fileTableView.getTableData();
-                    files.setComparator(new FileComparator(pair.key, pair.value));
+                    files.setComparator(getFileComparator(pair.key, pair.value));
                 }
             }
         });
@@ -1132,7 +1190,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             fileComparator = null;
         } else {
             Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
-            fileComparator = new FileComparator(pair.key, pair.value);
+            fileComparator = getFileComparator(pair.key, pair.value);
         }
 
         refreshFileListTask = new RefreshFileListTask(includeFileFilter, disabledFileFilter, fileComparator);
