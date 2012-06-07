@@ -20,7 +20,8 @@ limitations under the License.
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
-    xmlns="org.apache.pivot.wtk">
+    xmlns="org.apache.pivot.wtk"
+>
     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
         <TableView bxml:id="tableView" styles="{variableRowHeight:true, backgroundColor:'#ffeeee'}">
             <columns>

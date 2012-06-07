@@ -20,7 +20,8 @@ limitations under the License.
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns:collections="org.apache.pivot.collections"
     xmlns:content="org.apache.pivot.wtk.content"
-    xmlns="org.apache.pivot.wtk">
+    xmlns="org.apache.pivot.wtk"
+>
     <bxml:script>
     <![CDATA[
     importPackage(java.net);
@@ -32,7 +33,13 @@ limitations under the License.
     var b = true;
     var n = 100.25;
     var d = new CalendarDate();
+    var location = new java.io.File("bin/" // add this to run from inside eclipse ...
+        + "org/apache/pivot/tests" // current package, view as folders
+        // + "/go-home.png" // image name
+    ).toURI().toURL();
+    java.lang.System.out.println("location for the image to load = \"" + location + "\"");
     var i = Image.load(new URL(location, "go-home.png"));
+    java.lang.System.out.println("image = " + i);
     ]]>
     </bxml:script>
 
