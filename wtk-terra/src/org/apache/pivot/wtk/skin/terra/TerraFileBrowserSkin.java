@@ -458,6 +458,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     public static abstract class FileComparator implements Comparator<File>, Serializable {
+        private static final long serialVersionUID = 1L;
+
         @Override
         public abstract int compare(File f1, File f2);
     }
