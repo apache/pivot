@@ -42,7 +42,7 @@ limitations under the License.
                 <CardPane bxml:id="sourceImageCardPane" styles="{padding:4}">
                     <ImageView image="/org/apache/pivot/tests/IMG_0725_2.jpg"/>
                     <ImageView image="/org/apache/pivot/tests/palette.png"/>
-                    <ImageView image="/org/apache/pivot/tests/issues/pivot_843_test.jpg"/>
+                    <ImageView image="/org/apache/pivot/tests/issues/pivot_843_test.dib"/>
                 </CardPane>
             </Border>
             <Border styles="{padding:2}">
@@ -84,7 +84,7 @@ limitations under the License.
                         tooltipText="palette.png"
                     />
                     <PushButton bxml:id="sourceImageButton3"
-                        buttonData="pivot_843_test.jpg" toggleButton="true"
+                        buttonData="pivot_843_test.dib" toggleButton="true"
                         buttonGroup="$sourceImageButtonGroup"
                         tooltipText="Sample Image with problems after Paste"
                     />
