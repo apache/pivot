@@ -85,14 +85,40 @@ public class FileBrowserSheet extends Sheet {
 
     private FileBrowserSheetListenerList fileBrowserSheetListeners = new FileBrowserSheetListenerList();
 
+    /**
+     * Creates a new FileBrowserSheet
+     * <p>
+     * Note that this version set by default mode to open and user home as root folder.
+     */
     public FileBrowserSheet() {
         this(Mode.OPEN);
     }
 
+    /**
+     * Creates a new FileBrowserSheet
+     * <p>
+     * Note that this version set by default the user home as root folder.
+     *
+     * @param mode
+     * The mode for opening the sheet.
+     * @see Mode
+     */
     public FileBrowserSheet(Mode mode) {
         this(mode, USER_HOME);
     }
 
+    /**
+     * Creates a new FileBrowserSheet
+     * <p>
+     * Note that this version of the constructor must be used when a custom root folder has to be set.
+     *
+     * @param mode
+     * The mode for opening the sheet.
+     * @see Mode
+     *
+     * @param rootFolder
+     * The root folder full name.
+     */
     public FileBrowserSheet(Mode mode, String rootFolder) {
         if (mode == null) {
             throw new IllegalArgumentException();
@@ -104,10 +130,7 @@ public class FileBrowserSheet extends Sheet {
 
         this.mode = mode;
 
-        rootDirectory = new File(rootFolder);
-        if (!rootDirectory.isDirectory()) {
-            throw new IllegalArgumentException();
-        }
+        setRootFolder(rootFolder);
 
         installSkin(FileBrowserSheet.class);
     }
@@ -131,6 +154,19 @@ public class FileBrowserSheet extends Sheet {
 
     public File getRootDirectory() {
         return rootDirectory;
+    }
+
+    // set the root folder but without firing events
+    public void setRootFolder(String rootFolder) {
+        if (rootFolder == null) {
+            throw new IllegalArgumentException();
+        }
+
+        rootDirectory = new File(rootFolder);
+        if (!rootDirectory.isDirectory()) {
+            throw new IllegalArgumentException();
+        }
+
     }
 
     public void setRootDirectory(File rootDirectory) {
