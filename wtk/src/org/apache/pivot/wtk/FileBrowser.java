@@ -92,10 +92,23 @@ public class FileBrowser extends Container {
 
     private FileBrowserListenerList fileBrowserListeners = new FileBrowserListenerList();
 
+    /**
+     * Creates a new FileBrowser
+     * <p>
+     * Note that this version set by default mode to open.
+     */
     public FileBrowser() {
         this(USER_HOME);
     }
 
+    /**
+     * Creates a new FileBrowser
+     * <p>
+     * Note that this version of the constructor must be used when a custom root folder has to be set.
+     *
+     * @param rootFolder
+     * The root folder full name.
+     */
     public FileBrowser(String rootFolder) {
         if (rootFolder == null) {
             throw new IllegalArgumentException();

@@ -139,13 +139,16 @@ limitations under the License.
         </source>
 
         <p>
-            Note that this example makes use of the global resource cache to store the loaded
-            images. This cache can be used to store any kind of application-specific data that may
+            This example makes use of the global resource cache to store the loaded images.
+            This cache can be used to store any kind of application-specific data that may
             be expensive to load. Entries are keyed by the URL from which they were retrieved, and,
             once placed in the cache, are available to all code within the application. When the
             list button's selection changes, the application first looks for an image in the
-            resource cache; if it is not found, it is loaded and added to the cache. It is then set
-            as the "image" property of the image view and displayed.
+            resource cache; if it is not found, it is loaded and added to the cache.
+            It is then set as the "image" property of the image view and displayed.
+            Note that the global cache does not have a way to limiting the number of elements
+            to contain, so the cache continues to grow; to keep it small you have
+            to manually remove old elements from it when they are no more necessary.
         </p>
     </body>
 </document>

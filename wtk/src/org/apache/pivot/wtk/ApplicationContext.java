@@ -1439,6 +1439,10 @@ public abstract class ApplicationContext {
 
     /**
      * Resource cache dictionary implementation.
+     * <p>
+     * Note that this implementation does not have a way to limiting the number of elements
+     * to contain, so the cache continues to grow; to keep it small you have
+     * to manually remove old elements from it when they are no more necessary.
      */
     public static final class ResourceCacheDictionary
         implements Dictionary<URL, Object>, Iterable<URL> {

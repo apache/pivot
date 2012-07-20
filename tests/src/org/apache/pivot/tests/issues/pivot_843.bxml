@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Pivot-843 Test" maximized="true"
+    bxml:id="window"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk">
+    <bxml:script src="../clipboard.js"/>
+
+    <windowStateListeners>
+        <![CDATA[
+        function windowOpened(window) {
+            sourceImageButtonGroup.setSelection(sourceImageButton1);
+            sourceImageButton1.requestFocus();
+        }
+        ]]>
+    </windowStateListeners>
+
+    <TablePane styles="{horizontalSpacing:4, verticalSpacing:4}">
+        <columns>
+            <TablePane.Column width="1*"/>
+            <TablePane.Column width="1*"/>
+        </columns>
+
+        <TablePane.Row height="1*">
+            <Border styles="{padding:2}">
+                <CardPane bxml:id="sourceImageCardPane" styles="{padding:4}">
+                    <ImageView image="/org/apache/pivot/tests/IMG_0725_2.jpg"/>
+                    <ImageView image="/org/apache/pivot/tests/palette.png"/>
+                    <ImageView image="/org/apache/pivot/tests/issues/pivot_843_test.dib"/>
+                </CardPane>
+            </Border>
+            <Border styles="{padding:2}">
+                <CardPane selectedIndex="0" styles="{padding:4}">
+                    <ImageView bxml:id="destinationImageView"/>
+                </CardPane>
+            </Border>
+        </TablePane.Row>
+
+        <TablePane.Row height="-1">
+            <BoxPane orientation="vertical" styles="{fill:true}">
+                <BoxPane bxml:id="sourceImageButtonBoxPane"
+                    styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                    <bxml:define>
+                        <ButtonGroup bxml:id="sourceImageButtonGroup">
+                            <buttonGroupListeners>
+                                <![CDATA[
+                                function selectionChanged(buttonGroup, previousSelection) {
+                                    var selection = buttonGroup.getSelection();
+
+                                    if (selection != null) {
+                                        var index = sourceImageButtonBoxPane.indexOf(selection);
+                                        sourceImageCardPane.setSelectedIndex(index);
+                                    }
+                                }
+                                ]]>
+                            </buttonGroupListeners>
+                        </ButtonGroup>
+                    </bxml:define>
+
+                    <PushButton bxml:id="sourceImageButton1"
+                        buttonData="IMG_0725_2.jpg" toggleButton="true"
+                        buttonGroup="$sourceImageButtonGroup"
+                        tooltipText="Good Image"
+                    />
+                    <PushButton bxml:id="sourceImageButton2"
+                        buttonData="palette.png" toggleButton="true"
+                        buttonGroup="$sourceImageButtonGroup"
+                        tooltipText="palette.png"
+                    />
+                    <PushButton bxml:id="sourceImageButton3"
+                        buttonData="pivot_843_test.dib" toggleButton="true"
+                        buttonGroup="$sourceImageButtonGroup"
+                        tooltipText="Sample Image with problems after Paste"
+                    />
+                </BoxPane>
+
+                <BoxPane styles="{horizontalAlignment:'center'}">
+                    <PushButton bxml:id="copyButton" buttonData="Copy"
+                        ButtonPressListener.buttonPressed="copy()"
+                        tooltipText="Copy the selected image in memory"
+                    />
+                </BoxPane>
+            </BoxPane>
+
+            <BoxPane styles="{horizontalAlignment:'center', verticalAlignment:'center'}">
+                <PushButton bxml:id="pasteButton" buttonData="Paste"
+                    ButtonPressListener.buttonPressed="paste()"
+                    tooltipText="Paste an image from memory (could be from outside this application)"
+                />
+            </BoxPane>
+        </TablePane.Row>
+    </TablePane>
+</Window>
