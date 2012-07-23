@@ -1,0 +1,15 @@
+
+Jenkins
+
+This folder contains all the (additional) stuff required by Jenkins (CI Build Services at Apache) to build Pivot (from its maintenance branch).
+This folder must be added to Jenkins as Source checkout, like what is done for Pivot maintenance branch.
+
+To avoid multiple folder checkout from SVN, note that the jenkins folder will be checked out as root folder (.), 
+while the Pivot maintenance branch will be checked out in a (sub)folder called pivot_maintenance (its value will be assigned to the build variable pivot.trunk).
+
+In this way, the (main) build file will be that inside the Jenkins folder, and the (usual) Pivot build file will be included inside it,
+and redefined/extended.
+
+Note that during a Jenkins build, the environment variable jenkins.job is defined, 
+so for example inside the same build files it's possible to have a different flow between standard (manual) builds, 
+and automated builds by Jenkins.
