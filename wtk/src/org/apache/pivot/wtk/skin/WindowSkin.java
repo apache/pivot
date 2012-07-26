@@ -176,6 +176,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
     @Override
     public void windowClosed(Window window, Display display, Window owner) {
         window.getIcons().remove(0, window.getIcons().getLength());
+        // invalidateComponent();
     }
 
     @Override
