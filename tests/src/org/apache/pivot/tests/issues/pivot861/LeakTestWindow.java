@@ -63,11 +63,17 @@ public class LeakTestWindow extends Window implements Bindable {
 
         button.setAction(new Action() {
             @Override
-            public void perform(Component arg0) {
+            public void perform(Component component) {
                 TestDialog dialog = TestDialog.create();
+
+                System.out.println("Opening the dialog");
                 dialog.open(LeakTestWindow.this);
+
                 // Close the dialog straight away
+                System.out.println("Closing the dialog");
                 dialog.close();
+
+                System.out.println("End of perform()\n");
             }
         });
     }
