@@ -27,7 +27,7 @@ import java.awt.image.BufferedImage;
  */
 public class Picture extends Image {
     /**
-     * Enum defing the algorithms to apply when resizing a picture.
+     * Enum defining the algorithms to apply when resizing a picture.
      */
     public enum Interpolation {
         NEAREST_NEIGHBOR,
