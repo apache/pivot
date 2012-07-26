@@ -18,6 +18,7 @@ package org.apache.pivot.tests.issues.pivot861;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BXMLSerializer;
@@ -52,6 +53,8 @@ public class LeakTestWindow extends Window implements Bindable {
     @BXML
     PushButton button;
 
+    int dialogTest = 0;
+
     public static LeakTestWindow create() throws IOException, SerializationException {
         System.out.println("LeakTestWindow create()");
         return (LeakTestWindow) new BXMLSerializer().readObject(LeakTestWindow.class, MARKUP_FILE);
@@ -59,11 +62,13 @@ public class LeakTestWindow extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> arg0, URL arg1, Resources arg2) {
-        System.out.println("LeakTestWindow initialize(...)");
+        System.out.println("LeakTestWindow initialize(...)\n");
 
         button.setAction(new Action() {
             @Override
             public void perform(Component component) {
+                dialogTest++;
+                System.out.println("Dialog test number " + dialogTest + " at " + new Date());
                 TestDialog dialog = TestDialog.create();
 
                 System.out.println("Opening the dialog");
