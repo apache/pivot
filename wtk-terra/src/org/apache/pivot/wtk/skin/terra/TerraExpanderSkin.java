@@ -285,6 +285,8 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         Expander expander = (Expander)component;
         expander.add(titleBarTablePane);
+        expander.getComponentStateListeners().add(this);
+        enabledChanged(expander);
 
         Image buttonData = expander.isExpanded() ? collapseImage : expandImage;
         shadeButton = new ShadeButton(buttonData);
@@ -467,13 +469,6 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         graphics.setPaint(borderColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
-
-        Expander expander = (Expander)TerraExpanderSkin.this.getComponent();
-        if (expander.isEnabled()) {
-            setTitleBarColor(shadeButtonColor);
-        } else {
-            setTitleBarColor(disabledShadeButtonColor);
-        }
     }
 
     public Font getTitleBarFont() {
@@ -656,6 +651,20 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         if (expander.isCollapsible()) {
             expander.setExpanded(!expander.isExpanded());
+        }
+    }
+
+    // ComponentStateListener methods
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void enabledChanged(Component component) {
+        if (component.isEnabled()) {
+            setTitleBarColor(shadeButtonColor);
+        } else {
+            setTitleBarColor(disabledShadeButtonColor);
         }
     }
 
