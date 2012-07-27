@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FileBrowserListener;
 import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.FileBrowserSheetListener;
+import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
@@ -109,6 +110,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         saveAsTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textChanged(TextInput textInput) {
+                Form.clearFlag(saveAsBoxPane);
                 updateOKButtonState();
             }
         });
@@ -263,7 +265,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
     @Override
     public Vote previewSheetClose(final Sheet sheet, final boolean result) {
-        Vote vote;
+        Vote vote = null;
 
         if (result
             && !okButton.isEnabled()) {
@@ -285,27 +287,61 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
                     case SAVE_AS: {
                         String fileName = saveAsTextInput.getText();
+                        // Contents of the entry field could be:
+                        // 1. Just a new file name in the current root directory
+                        // 2. A relative or absolute path that is an existing directory
+                        //    to navigate to
+                        // 3. A relative or absolute path including the new file name
+                        //    in an existing directory
+                        // So, first make it an absolute path
                         File selectedFile = new File(fileName);
-                        File parentFile = selectedFile.getParentFile();
-                        if (parentFile == null) {
+                        if (!selectedFile.isAbsolute() && !fileName.startsWith(File.separator)) {
                             selectedFile = new File(fileBrowser.getRootDirectory(), fileName);
                         } else {
-                            if (parentFile.isAbsolute() || parentFile.getPath().startsWith(File.separator)) {
-                                fileBrowserSheet.setRootDirectory(parentFile.getAbsoluteFile());
+                            selectedFile = selectedFile.getAbsoluteFile();
+                        }
+                        if (selectedFile.exists() && selectedFile.isDirectory()) {
+                            try {
+                                File root = selectedFile.getCanonicalFile();
+                                fileBrowserSheet.setRootDirectory(root);
+                                fileBrowser.setRootDirectory(root);
+                                saveAsTextInput.setText("");
+                            } catch (IOException ioe) {
+                                Form.setFlag(saveAsBoxPane, new Form.Flag());
+                            }
+                            selectedFile = null;
+                            vote = Vote.DENY;
+                        } else {
+                            File root = selectedFile.getParentFile();
+                            if (root != null && root.exists() && root.isDirectory()) {
+                                try {
+                                    fileBrowserSheet.setRootDirectory(root.getCanonicalFile());
+                                    selectedFile = new File(selectedFile.getName());
+                                }
+                                catch (IOException ioe) {
+                                    Form.setFlag(saveAsBoxPane, new Form.Flag());
+                                    selectedFile = null;
+                                    vote = Vote.DENY;
+                                }
                             } else {
-                                fileBrowserSheet.setRootDirectory(new File(fileBrowser.getRootDirectory(), parentFile.getName()));
-                                selectedFile = new File(selectedFile.getName());
+                                // Could be an error message here ("Directory does not exist")
+                                Form.setFlag(saveAsBoxPane, new Form.Flag());
+                                selectedFile = null;
+                                vote = Vote.DENY;
                             }
                         }
-                        fileBrowserSheet.setSelectedFiles(new ArrayList<File>(selectedFile));
+                        if (selectedFile != null) {
+                            fileBrowserSheet.setSelectedFiles(new ArrayList<File>(selectedFile));
+                        }
                         break;
                     }
                 }
 
                 updatingSelection = false;
             }
-
-            vote = super.previewSheetClose(sheet, result);
+            if (vote == null) {
+                vote = super.previewSheetClose(sheet, result);
+            }
         }
 
         return vote;
