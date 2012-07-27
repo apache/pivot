@@ -31,6 +31,11 @@ import org.apache.pivot.wtk.VerticalAlignment;
 
 /**
  * Decorator that scales the painting of a component along the X and/or Y axes.
+ * <p> Generally speaking, decorators don't force a repaint of the component(s) they
+ * are attached to when their parameters are changed.  So, if this decorator is changed
+ * after being applied to a particular component (e.g., to do a dynamic resize) then
+ * either the component.repaint() method must be called or the decorator should be
+ * removed and added again to force a repaint with the new scale.
  */
 public class ScaleDecorator implements Decorator {
     private float scaleX;
