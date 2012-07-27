@@ -25,13 +25,17 @@ limitations under the License.
         </columns>
 
         <TablePane.Row height="-1">
-            <BoxPane bxml:id="saveAsBoxPane" orientation="vertical" styles="{fill:true}">
-                <BoxPane styles="{verticalAlignment:'center'}">
-                    <Label text="%saveAs"/>
-                    <TextInput bxml:id="saveAsTextInput" textSize="32"/>
-                </BoxPane>
-                <Separator styles="{padding:2}"/>
-            </BoxPane>
+            <Form>
+                <Form.Section>
+                    <BoxPane bxml:id="saveAsBoxPane" orientation="vertical" styles="{fill:true}">
+                        <BoxPane styles="{verticalAlignment:'center'}">
+                            <Label text="%saveAs"/>
+                            <TextInput bxml:id="saveAsTextInput" textSize="32"/>
+                        </BoxPane>
+                        <Separator styles="{padding:2}"/>
+                    </BoxPane>
+                </Form.Section>
+            </Form>
         </TablePane.Row>
 
         <TablePane.Row height="1*">
