@@ -285,8 +285,6 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         Expander expander = (Expander)component;
         expander.add(titleBarTablePane);
-        expander.getComponentStateListeners().add(this);
-        enabledChanged(expander);
 
         Image buttonData = expander.isExpanded() ? collapseImage : expandImage;
         shadeButton = new ShadeButton(buttonData);
@@ -296,6 +294,7 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         titleChanged(expander, null);
         collapsibleChanged(expander);
+        enabledChanged(expander);
     }
 
     @Override
