@@ -33,21 +33,16 @@ limitations under the License.
         <TablePane.Row height="-1">
             <Label styles="{horizontalAlignment:'right', verticalAlignment:'center'}" text="URL:"/>
             <TextInput bxml:id="textInput" text="http://pivot.apache.org/index.html" textSize="30"/>
-            <PushButton buttonData="Go">
-                <buttonPressListeners>
-                function buttonPressed(button) {
-                    var id = "";  
-                        // = org.apache.pivot.wtk.BrowserApplicationContext.eval("", Pivot859.this);  // test
-                    java.lang.System.out.println("Applet " + id + ", getting content from \"" + textInput.text + "\" ...");
-                    textArea.text = "";
-                }
-                </buttonPressListeners>
-            </PushButton>
+            <PushButton bxml:id="goButton" buttonData="Go"/>
         </TablePane.Row>
         <TablePane.Row height="-1">
             <Label styles="{horizontalAlignment:'right', verticalAlignment:'center'}" text="Content:"/>
             <Border>
-                <TextArea bxml:id="textArea" text="" preferredWidth="320" preferredHeight="200" styles="{wrapText:true}">
+                <TextArea bxml:id="textArea" preferredWidth="320" preferredHeight="200"
+                    styles="{wrapText:true}"
+                    editable="false"
+                    text=""
+                >
                    <textAreaContentListeners>
                     function textChanged(textArea) {
                         // java.lang.System.out.println("length = " + textArea.characterCount);
@@ -55,7 +50,7 @@ limitations under the License.
                     </textAreaContentListeners>
                 </TextArea>
             </Border>
-            <PushButton buttonData="Clear" preferredHeight="40" preferredWidth="50">
+            <PushButton  bxml:id="clearButton" buttonData="Clear" preferredHeight="40" preferredWidth="50">
                 <buttonPressListeners>
                 function buttonPressed(button) {
                     textArea.text = "";
