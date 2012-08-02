@@ -29,35 +29,37 @@ limitations under the License.
 </head>
 <body>
 
-<div class="content">
+    <script type="text/javascript" src="http://java.com/js/deployJava.js"></script>
+    <script type="text/javascript">
+        // global variables to edit
+        var local_path_to_lib_jars = // "../../../../../../../../lib/";  // sample relative path, good from this package
+            "./lib/";  // edit to put the relative path between the html page and Pivot jars
+        var pivot_version = "";  // edit to put Pivot version in the string value
+        var pivot_signed = ".signed";  // name suffix for use signed version of jars
 
-<div class="applet1">
-    <p>Test Applet, first instance</p>
-    <script type="text/javascript" src="http://java.com/js/deployJava.js"></script><script type="text/javascript">
+        // Applet definition sample
         var attributes = {
-            id:"applet1",
-            name:"applet, first instance",
+            // id:"",    // set later (if necessary)
+            // name:"",  // set later (if necessary)
             code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
             width:"640",
             height:"240"
         };
 
         var libraries = [];
-        var pivot_version = "2.0.3";
-        var local_path_to_lib_jars = "../../../../../../../../lib/";
-        libraries.push(local_path_to_lib_jars + "pivot-tests-" + pivot_version + ".jar");
-        libraries.push(local_path_to_lib_jars + "pivot-core-" + pivot_version + ".jar");
-        libraries.push(local_path_to_lib_jars + "pivot-wtk-" + pivot_version + ".jar");
-        libraries.push(local_path_to_lib_jars + "pivot-wtk-terra-" + pivot_version + ".jar");
-        libraries.push(local_path_to_lib_jars + "pivot-tutorials-" + pivot_version + ".jar");
+        libraries.push(local_path_to_lib_jars + "pivot-tests-"     + pivot_version + pivot_signed + ".jar");
+        libraries.push(local_path_to_lib_jars + "pivot-core-"      + pivot_version + pivot_signed + ".jar");
+        libraries.push(local_path_to_lib_jars + "pivot-wtk-"       + pivot_version + pivot_signed + ".jar");
+        libraries.push(local_path_to_lib_jars + "pivot-wtk-terra-" + pivot_version + pivot_signed + ".jar");
+        libraries.push(local_path_to_lib_jars + "pivot-tutorials-" + pivot_version + pivot_signed + ".jar");
 
-        libraries.push(local_path_to_lib_jars + "svgSalamander-tiny.jar");
+        libraries.push(local_path_to_lib_jars + "svgSalamander-tiny" + pivot_signed + ".jar");
 
         attributes.archive = libraries.join(",");
 
         var parameters = {
             codebase_lookup:false,
-            application_class_name:'org.apache.pivot.tests.issues.pivot859.Pivot859',
+            application_class_name:"org.apache.pivot.tests.issues.pivot859.Pivot859",
             separate_jvm:false
         };
 
@@ -65,7 +67,18 @@ limitations under the License.
             "-Dsun.awt.erasebackgroundonresize=true"];
 
         parameters.java_arguments = javaArguments.join(" ");
+    </script>
 
+<div class="content">
+
+<div class="applet">
+    <p>Test Applet, first instance</p>
+    <script type="text/javascript">
+        // set some values, before running the applet
+        attributes.id   = "applet1";
+        attributes.name = "applet, first instance";
+
+        // run the applet
         deployJava.runApplet(attributes, parameters, "1.6");
 
         // call Applet methods from JavaScript
@@ -73,47 +86,25 @@ limitations under the License.
         // alert("applet1 = " + applet1);
         var appletReference = applet1.getApplication();  // the reference to Pivot Applet instance
         appletReference.setAppletName(applet1.name);  // read the name from applet tag attribute in HTML page
-        alert("applet1 has name = \"" + appletReference.getAppletName() + "\"");
+        // put some debug info in page
+        // alert(
+        document.write(  // less intrusive
+            "<br/>" +
+            "applet has name = \"" + appletReference.getAppletName() + "\""
+        );
     </script>
     <br/>
 </div>
+<hr/>
 
-
-<div class="applet2">
+<div class="applet">
     <p>Test Applet, second instance</p>
-    <script type="text/javascript" src="http://java.com/js/deployJava.js"></script><script type="text/javascript">
-        var attributes = {
-            id:"applet2",
-            name:"applet, second instance",
-            code:"org.apache.pivot.wtk.BrowserApplicationContext$HostApplet",
-            width:"640",
-            height:"240"
-        };
+    <script type="text/javascript">
+        // set some values, before running the applet
+        attributes.id   = "applet2";
+        attributes.name = "applet, second instance";
 
-        var libraries = [];
-        var pivot_version = "2.0.3";
-        var local_path_to_lib_jars = "../../../../../../../../lib/";
-        libraries.push(local_path_to_lib_jars + "pivot-tests-" + pivot_version + ".jar");
-        libraries.push(local_path_to_lib_jars + "pivot-core-" + pivot_version + ".jar");
-        libraries.push(local_path_to_lib_jars + "pivot-wtk-" + pivot_version + ".jar");
-        libraries.push(local_path_to_lib_jars + "pivot-wtk-terra-" + pivot_version + ".jar");
-        libraries.push(local_path_to_lib_jars + "pivot-tutorials-" + pivot_version + ".jar");
-
-        libraries.push(local_path_to_lib_jars + "svgSalamander-tiny.jar");
-
-        attributes.archive = libraries.join(",");
-
-        var parameters = {
-            codebase_lookup:false,
-            application_class_name:'org.apache.pivot.tests.issues.pivot859.Pivot859',
-            separate_jvm:false
-        };
-
-        var javaArguments = ["-Dsun.awt.noerasebackground=true",
-            "-Dsun.awt.erasebackgroundonresize=true"];
-
-        parameters.java_arguments = javaArguments.join(" ");
-
+        // run the applet
         deployJava.runApplet(attributes, parameters, "1.6");
 
         // call Applet methods from JavaScript
@@ -121,10 +112,16 @@ limitations under the License.
         // alert("applet2 = " + applet2);
         var appletReference = applet2.getApplication();  // the reference to Pivot Applet instance
         appletReference.setAppletName(applet2.name);  // read the name from applet tag attribute in HTML page
-        alert("applet2 has name = \"" + appletReference.getAppletName() + "\"");
+        // put some debug info in page
+        // alert(
+        document.write(  // less intrusive
+            "<br/>" +
+            "applet has name = \"" + appletReference.getAppletName() + "\""
+        );
     </script>
     <br/>
 </div>
+<hr/>
 
 </div>
 

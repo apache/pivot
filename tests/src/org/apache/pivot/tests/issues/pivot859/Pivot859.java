@@ -16,11 +16,14 @@
  */
 package org.apache.pivot.tests.issues.pivot859;
 
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.serialization.StringSerializer;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -139,10 +142,19 @@ public class Pivot859 extends Application.Adapter {
         }
 
         try {
-            System.out.println(getAppletNameForLog() + "Retrieving Content from URL \"" + url + "\"");
-// TODO: retrieve content ...
+            System.out.println(getAppletNameForLog() + "Retrieving Content from URL \"" + url + "\" ...");
 
-            contentArea.setText("test");
+            long start = System.currentTimeMillis();
+            Serializer<String> serializer = new StringSerializer();
+            InputStream inputStream = url.openStream();
+            String result = serializer.readObject(inputStream);
+            if (result == null){
+                result = "";
+            }
+            long end = System.currentTimeMillis();
+
+            contentArea.setText(result);
+            System.out.println(getAppletNameForLog() + "retrieved " + result.length() + " chars in " + (end - start) + " msec.");
         } catch (Exception e) {
             e.printStackTrace();
         }

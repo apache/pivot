@@ -35,20 +35,24 @@ limitations under the License.
             <TextInput bxml:id="textInput" text="http://pivot.apache.org/index.html" textSize="30"/>
             <PushButton bxml:id="goButton" buttonData="Go"/>
         </TablePane.Row>
-        <TablePane.Row height="-1">
+        <TablePane.Row height="1*">
             <Label styles="{horizontalAlignment:'right', verticalAlignment:'center'}" text="Content:"/>
             <Border>
-                <TextArea bxml:id="textArea" preferredWidth="320" preferredHeight="200"
-                    styles="{wrapText:true}"
-                    editable="false"
-                    text=""
+                <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity"
+                    preferredHeight="200"
                 >
-                   <textAreaContentListeners>
-                    function textChanged(textArea) {
-                        // java.lang.System.out.println("length = " + textArea.characterCount);
-                    }
-                    </textAreaContentListeners>
-                </TextArea>
+                    <TextArea bxml:id="textArea"
+                        styles="{wrapText:true}"
+                        editable="false"
+                        text=""
+                    >
+                       <textAreaContentListeners>
+                        function textChanged(textArea) {
+                            // java.lang.System.out.println("length = " + textArea.characterCount);
+                        }
+                        </textAreaContentListeners>
+                    </TextArea>
+                </ScrollPane>
             </Border>
             <PushButton  bxml:id="clearButton" buttonData="Clear" preferredHeight="40" preferredWidth="50">
                 <buttonPressListeners>
