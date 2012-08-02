@@ -32,7 +32,7 @@ limitations under the License.
 
         <TablePane.Row height="-1">
             <Label styles="{horizontalAlignment:'right', verticalAlignment:'center'}" text="URL:"/>
-            <TextInput bxml:id="textInput" text="http://pivot.apache.org/index.html" textSize="30"/>
+            <TextInput bxml:id="textInput" text="http://pivot.apache.org" textSize="30"/>
             <PushButton bxml:id="goButton" buttonData="Go"/>
         </TablePane.Row>
         <TablePane.Row height="1*">
@@ -55,12 +55,18 @@ limitations under the License.
                 </ScrollPane>
             </Border>
             <PushButton  bxml:id="clearButton" buttonData="Clear" preferredHeight="40" preferredWidth="50">
+                <!--
                 <buttonPressListeners>
                 function buttonPressed(button) {
                     textArea.text = "";
                 }
                 </buttonPressListeners>
+                //-->
             </PushButton>
+        </TablePane.Row>
+        <TablePane.Row height="-1">
+            <Label styles="{horizontalAlignment:'right', verticalAlignment:'center'}" text="Status:"/>
+            <Label bxml:id="textStatus" styles="{horizontalAlignment:'left', verticalAlignment:'center'}" text=""/>
         </TablePane.Row>
     </TablePane>
 

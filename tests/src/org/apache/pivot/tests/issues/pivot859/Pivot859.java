@@ -29,6 +29,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TextInput;
@@ -43,13 +44,17 @@ public class Pivot859 extends Application.Adapter {
     private TextInput urlInput = null;
     private PushButton goButton = null;
     private TextArea contentArea = null;
-    @SuppressWarnings("unused") private PushButton clearButton = null;
+    private PushButton clearButton = null;
+    private Label statusLabel = null;
 
     private String appletName = null;
+    private String defaultURL = null;
 
 
-    public void startup(final Display display, Map<String, String> args) throws Exception {
+    public void startup(final Display display, Map<String, String> properties) throws Exception {
         System.out.println("startup(...)");
+
+        initializeProperties(properties);
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window) bxmlSerializer.readObject(Pivot859.class, "pivot_859.bxml");
@@ -88,10 +93,23 @@ public class Pivot859 extends Application.Adapter {
     }
 
 
+    private void initializeProperties(Map<String, String> properties) {
+        defaultURL = properties.get("default_url");
+        if (defaultURL == null){
+            defaultURL = "";
+        }
+        if (defaultURL.length() > 0){
+            System.out.println("got default URL from startup properties, to \"" + defaultURL + "\"");
+        }
+    }
+
     private void initializeFields(BXMLSerializer serializer) {
         System.out.println("initializeFields: start");
 
         urlInput = (TextInput)serializer.getNamespace().get("textInput");
+        if (defaultURL.length() > 0){
+            urlInput.setText(defaultURL);
+        }
 
         goButton = (PushButton)serializer.getNamespace().get("goButton");
         goButton.getButtonPressListeners().add(new ButtonPressListener() {
@@ -104,6 +122,14 @@ public class Pivot859 extends Application.Adapter {
 
         contentArea = (TextArea)serializer.getNamespace().get("textArea");
         clearButton = (PushButton)serializer.getNamespace().get("clearButton");
+        clearButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                clearContent();
+            }
+        });
+
+        statusLabel = (Label)serializer.getNamespace().get("textStatus");
 
         System.out.println("initializeFields: end");
     }
@@ -112,8 +138,13 @@ public class Pivot859 extends Application.Adapter {
         return ( (getAppletName() != null) ? getAppletName() + ": " : "" );
     }
 
+    private void updateStatus(String status) {
+        System.out.println(getAppletNameForLog() + status);
+        statusLabel.setText(status);
+    }
+
     private void clearContent() {
-        System.out.println(getAppletNameForLog() + "Clearing text area content ...");
+        updateStatus("Clearing text area content ...");
         // contentArea.clear();
         contentArea.setText("");
     }
@@ -137,12 +168,12 @@ public class Pivot859 extends Application.Adapter {
     private void retrieveURLContentSync() {
         URL url = buildURL();
         if (url == null) {
-            System.out.println(getAppletNameForLog() + "Unable to retrieve content from a bad URL");
+            updateStatus("Unable to retrieve content from a bad URL");
             return ;
         }
 
         try {
-            System.out.println(getAppletNameForLog() + "Retrieving Content from URL \"" + url + "\" ...");
+            updateStatus("Retrieving Content from URL \"" + url + "\" ...");
 
             long start = System.currentTimeMillis();
             Serializer<String> serializer = new StringSerializer();
@@ -154,7 +185,7 @@ public class Pivot859 extends Application.Adapter {
             long end = System.currentTimeMillis();
 
             contentArea.setText(result);
-            System.out.println(getAppletNameForLog() + "retrieved " + result.length() + " chars in " + (end - start) + " msec.");
+            updateStatus("retrieved " + result.length() + " chars in " + (end - start) + " msec.");
         } catch (Exception e) {
             e.printStackTrace();
         }

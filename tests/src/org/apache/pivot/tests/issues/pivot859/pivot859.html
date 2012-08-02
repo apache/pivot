@@ -52,7 +52,6 @@ limitations under the License.
         libraries.push(local_path_to_lib_jars + "pivot-wtk-"       + pivot_version + pivot_signed + ".jar");
         libraries.push(local_path_to_lib_jars + "pivot-wtk-terra-" + pivot_version + pivot_signed + ".jar");
         libraries.push(local_path_to_lib_jars + "pivot-tutorials-" + pivot_version + pivot_signed + ".jar");
-
         libraries.push(local_path_to_lib_jars + "svgSalamander-tiny" + pivot_signed + ".jar");
 
         attributes.archive = libraries.join(",");
@@ -65,8 +64,9 @@ limitations under the License.
 
         var javaArguments = ["-Dsun.awt.noerasebackground=true",
             "-Dsun.awt.erasebackgroundonresize=true"];
-
         parameters.java_arguments = javaArguments.join(" ");
+
+        var startupProperties = [];
     </script>
 
 <div class="content">
@@ -77,6 +77,8 @@ limitations under the License.
         // set some values, before running the applet
         attributes.id   = "applet1";
         attributes.name = "applet, first instance";
+        startupProperties.push("default_url=http://pivot.apache.org/");
+        parameters.startup_properties = startupProperties.join("&");
 
         // run the applet
         deployJava.runApplet(attributes, parameters, "1.6");
@@ -103,6 +105,8 @@ limitations under the License.
         // set some values, before running the applet
         attributes.id   = "applet2";
         attributes.name = "applet, second instance";
+        startupProperties.push("default_url=http://www.google.com/");
+        parameters.startup_properties = startupProperties.join("&");
 
         // run the applet
         deployJava.runApplet(attributes, parameters, "1.6");
