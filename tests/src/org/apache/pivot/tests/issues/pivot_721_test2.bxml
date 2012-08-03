@@ -53,8 +53,8 @@ limitations under the License.
             </BoxPane>
         </Border>
 
-        <Border title="height: 200">
-            <BoxPane styles="{fill:true, verticalAlignment:'center'}" preferredHeight="200">
+        <Border title="height: 300">
+            <BoxPane styles="{fill:true, verticalAlignment:'center'}" preferredHeight="300">
                 <Label text="16x16" />
                 <ImageView image="@../clock.png" styles="{fill:true}" tooltipText="clock.png, 16x16" />
                 <Label text=" , " />
