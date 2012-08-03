@@ -85,6 +85,12 @@ public class DOMInteractionDemo extends Application.Adapter {
         return false;
     }
 
+    /**
+     * Set text of the message, then display it in a Popup.
+     * <p>
+     * Called by JavaScript from the Browser.
+     * @param name the text of the message
+     */
     public void sayHello(String helloText) {
         ApplicationContext.queueCallback(new CallFromBrowserCallback(helloText));
     }
