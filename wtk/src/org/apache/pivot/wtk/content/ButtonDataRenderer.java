@@ -38,6 +38,7 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
     public ButtonDataRenderer() {
         getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        getStyles().put("fill", true);
 
         add(imageView);
         add(label);
