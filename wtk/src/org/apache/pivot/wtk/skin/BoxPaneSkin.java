@@ -624,6 +624,10 @@ public class BoxPaneSkin extends ContainerSkin
      * regardless of the size of the BoxPane.  Their alignment along the axis orthogonal
      * to the pane's orientation is controlled by the corresponding alignment style
      * (e.g., verticalAlignment in a BoxPane with orientation=horizontal).
+     * <p>
+     * Note that to Scale Up Images, other that fill=true it will be needed to set
+     * even the preferredWidth/preferredHeight as with container preferredHeight/preferredWidth
+     * just set, depending on the pane's orientation.
      */
     public void setFill(boolean fill) {
         this.fill = fill;
