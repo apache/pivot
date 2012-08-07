@@ -772,6 +772,13 @@ public class ListButton extends Button {
     }
 
     /**
+     * Clears the selection.
+     */
+    public void clearSelection() {
+        setSelectedItem(null);
+    }
+
+    /**
      * Returns the list button listener list.
      */
     public ListenerList<ListButtonListener> getListButtonListeners() {

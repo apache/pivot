@@ -679,9 +679,20 @@ public class Spinner extends Container {
 
     @Override
     public void clear() {
+        if (spinnerDataKey != null) {
+            setSpinnerData(new ArrayList<Object>());
+        }
+
         if (selectedItemKey != null) {
             setSelectedItem(null);
         }
+    }
+
+    /**
+     * Clears the selection.
+     */
+    public void clearSelection() {
+        setSelectedItem(null);
     }
 
     /**

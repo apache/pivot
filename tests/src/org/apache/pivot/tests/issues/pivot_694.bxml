@@ -118,12 +118,12 @@ limitations under the License.
 
     <BoxPane styles="{padding:4, verticalAlignment:'top'}">
         <FlowPane>
-            <Label text="Select a date (buttonDataKey set):"/>
-            <CalendarButton bxml:id="calendarButton1" buttonDataKey = "buttonDataKey" />
+            <Label text="Select a date (selectedDateKey set):"/>
+            <CalendarButton bxml:id="calendarButton1" selectedDateKey = "selectedDateKey" />
         </FlowPane>
         <Separator/>
         <FlowPane>
-            <Label text="Select a date (buttonDataKey not set):"/>
+            <Label text="Select a date (selectedDateKey not set):"/>
             <CalendarButton bxml:id="calendarButton2" />
         </FlowPane>
     </BoxPane>
@@ -210,9 +210,10 @@ limitations under the License.
 
     <BoxPane styles="{padding:4, verticalAlignment:'top'}">
         <FlowPane>
-            <Label text="TreeView (treeDataKey set): - future"/>
+            <Label text="TreeView (treeDataKey set):"/>
             <TreeView bxml:id="treeView1" selectMode="multi"
                 ComponentListener.parentChanged="treeView1.expandAll();"
+                 treeDataKey="treeDataKey"
             >
                 <nodeRenderer>
                     <content:TreeViewNodeRenderer showIcon="true"/>

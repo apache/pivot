@@ -897,6 +897,9 @@ public class TreeView extends Component {
     private TreeViewSelectionListenerList treeViewSelectionListeners =
         new TreeViewSelectionListenerList();
 
+    // other properties
+    private String treeDataKey = null;
+
     private static final NodeRenderer DEFAULT_NODE_RENDERER = new TreeViewNodeRenderer();
 
     private static final Comparator<Path> PATH_COMPARATOR = new PathComparator();
@@ -1326,7 +1329,30 @@ public class TreeView extends Component {
         return (index >= 0);
     }
 
+    public String getTreeDataKey() {
+        return treeDataKey;
+    }
+
+    public void setTreeDataKey(String treeDataKey) {
+        String previousTreeDataKey = this.treeDataKey;
+
+        if (previousTreeDataKey != treeDataKey) {
+            this.treeDataKey = treeDataKey;
+            // treeViewBindingListeners.treeDataKeyChanged(this, previousTreeDataKey);  // future use
+        }
+    }
+
+    @Override
+    public void clear() {
+        if (treeDataKey != null) {
+            setTreeData(new ArrayList<Object>());
+        }
+
+        clearSelection();
+    }
+
     /**
+     * Clears the selection.
      */
     public void clearSelection() {
         if (selectedPaths.getLength() > 0) {
