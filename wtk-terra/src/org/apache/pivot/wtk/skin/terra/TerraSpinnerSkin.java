@@ -32,13 +32,13 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.SpinnerListener;
 import org.apache.pivot.wtk.SpinnerSelectionListener;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.skin.ContainerSkin;
@@ -97,6 +97,11 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             boolean circular = spinner.isCircular();
             int selectedIndex = spinner.getSelectedIndex();
             int count = spinner.getSpinnerData().getLength();
+            if (count < 1) {
+                // empty spinner
+                stop();
+                return ;
+            }
 
             if (direction > 0) {
                 if (selectedIndex < count - 1) {

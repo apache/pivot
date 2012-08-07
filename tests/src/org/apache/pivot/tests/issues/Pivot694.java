@@ -132,12 +132,15 @@ public class Pivot694 extends Application.Adapter {
 //                radioButtons.clearSelection();
 //                checkButtons.clearSelection();
 //                checkTriButtons.clearSelection();
-//
-//                calendarButton.clearSelection();
-//                spinner.clearSelection();
-//
-//              listButton1.clearSelection();
-//              listButton2.clearSelection();
+
+                calendarButton1.clearSelection();
+                calendarButton2.clearSelection();
+
+                spinner1.clearSelection();
+                spinner2.clearSelection();
+
+                listButton1.clearSelection();
+                listButton2.clearSelection();
 
                 listView1.clearSelection();
                 listView2.clearSelection();
@@ -163,7 +166,7 @@ public class Pivot694 extends Application.Adapter {
 //                checkTriButtons.remove(button);
 
                 // force clear of elements data ...
-                clearComponent(calendarButton1);  // TODO: doesn't seem to work on this component ...
+                clearComponent(calendarButton1);
                 clearComponent(calendarButton2);
                 clearComponent(spinner1);
                 clearComponent(spinner2);
@@ -174,12 +177,12 @@ public class Pivot694 extends Application.Adapter {
                 clearComponent(listView2);
                 clearComponent(tableView1);
                 clearComponent(tableView2);
-                clearComponent(treeView1);  // TODO: doesn't seem to work on this component ...
+                clearComponent(treeView1);
                 clearComponent(treeView2);
 
 // TODO: put (in bxml) the two tableView in a SplitPane, and see some strange moving mouse over  ...
 
-// TODO: add clear even to some type of buttons (all types in the first row displayed) ...
+// TODO: add clear/clearSelection methods even to some type of buttons (all types in the first row displayed) ...
 
             }
         });

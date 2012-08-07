@@ -433,9 +433,19 @@ public class CalendarButton extends Button {
 
     @Override
     public void clear() {
+        super.clear();  // for better consistency with superclass
+
         if (selectedDateKey != null) {
             setSelectedDate((CalendarDate)null);
         }
+
+    }
+
+    /**
+     * Clears the selection.
+     */
+    public void clearSelection() {
+        setSelectedDate((CalendarDate)null);
     }
 
     /**
