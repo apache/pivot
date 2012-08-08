@@ -38,6 +38,14 @@ function clearStatus() {
 	updateStatus("");
 }
 
+function clearConsole() {
+	textArea.text = "";
+	// runButton.enabled = false;  // ok
+	runButton.setEnabled(false);   // explicit usage of the setter
+	log("Console cleared");
+	clearStatus();
+}
+
 
 function runConsole() {
 	var text = textArea.text;

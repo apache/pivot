@@ -23,11 +23,61 @@ limitations under the License.
 >
     <bxml:script src="javascript_console_test.js"/>
 
+    <bxml:script>
+    <![CDATA[
+    // note that this script could be moved in an external js file, like that already included in this file ...
+    log("inline script 1");
+
+    // JS variables for (remote) resources
+    // needed for test 2 and 4
+    var baseURL  = "http://pivot.apache.org/assets-for-tests";
+    var frameURL = baseURL + "/frame.bxml";
+    // note that bxml files must have the MIME Type "application/bxml" (as requested by BXMLSerializer),
+    // or (BXMLSerializer) will try to get it from its file extension ...
+    ]]>
+    </bxml:script>
+
     <bxml:define>
-        <!-- temp, then keep these definitions commented //-->
+        <!-- temp, then keep these definitions commented, do NOT removed them from here //-->
         <bxml:include bxml:id="testLocalFrame"  src="script_application_test.frame.bxml"/>
+
+        <!--
+        // test 1, ok
+        // load the bxml file from a fixed URL
+        // note that the bxml file will be loaded when this bxml file is loaded, so at application startup time, slowing it ...
         <bxml:include bxml:id="testRemoteFrame" src="http://pivot.apache.org/assets-for-tests/frame.bxml"/>
+
+        // test 2, ok
+        // load the bxml file from a URL set in a JS variable, feature just added
+        // note that the bxml file will be loaded when this bxml file is loaded, so at application startup time, slowing it ...
+        <bxml:include bxml:id="testRemoteFrame" src="$frameURL"/>
+
+        // test 3, no, it's not possible
+        // try to set src later in JS ...
+        // <bxml:include bxml:id="testRemoteFrame" src=""/>
+        // <bxml:include bxml:id="testRemoteFrame"/>
+        //-->
     </bxml:define>
+
+    <bxml:script>
+    <![CDATA[
+    // note that this script could be moved in an external js file, like that already included in this file ...
+    importPackage(java.net);
+    importPackage(org.apache.pivot.util);
+    importPackage(org.apache.pivot.wtk);
+    importPackage(org.apache.pivot.wtk.media);
+
+    log("inline script 2");
+
+// TODO ...
+    // test 4, TODO
+    // define the variable in JS, and load it by instancing Java classes from here
+    // log("frameURL is \"" + frameURL + "\"");  // show that the required value is already defined
+
+    // JS variables for (remote) resources
+    var testRemoteFrame = "";
+    ]]>
+    </bxml:script>
 
     <TablePane styles="{padding:6, horizontalSpacing:6, verticalSpacing:8}">
         <columns>
@@ -50,7 +100,7 @@ limitations under the License.
                     <listButtonSelectionListeners>
                         function selectedIndexChanged(listButton, previousSelectedIndex) {
                             var selectedIndex = listButton.selectedIndex;
-                            log("Previous Selection was " + previousSelectedIndex + ", now Selected " + selectedIndex);
+                            // log("Previous Selection was " + previousSelectedIndex + ", now Selected " + selectedIndex);
 
                             var templateText = "";
                             // simple logic to set template text, just for sample
@@ -64,11 +114,11 @@ limitations under the License.
                                 case 2:
 // TODO: put the right text to run in console ...
                                     templateText = "testRemoteFrame.open(window);";
-                                    // note that testRemoteFrame is loaded when this bxml is load, so at application startup time ...
+                                    // note that testRemoteFrame is already loaded, so here it's only to display it ...
                                     testRemoteFrame.open(window);  // temp, then keep this commented
                                     break;
                                 default:
-                                    templateText = "";
+                                    clearConsole();
                                     break;
                             }
                             textArea.text = templateText;
@@ -81,10 +131,7 @@ limitations under the License.
                 <PushButton bxml:id="clearButton" buttonData="Clear">
                     <buttonPressListeners>
                     function buttonPressed(button) {
-                        textArea.text = "";
-                        var msg = "Console cleared";
-                        log(msg);
-                        clearStatus();
+                        clearConsole();
                     }
                     </buttonPressListeners>
                 </PushButton>
@@ -103,7 +150,12 @@ limitations under the License.
                     >
                        <textAreaContentListeners>
                         function textChanged(textArea) {
-                            // log("length = " + textArea.characterCount);
+                            var numChars = textArea.characterCount;
+                            // log("numChars = " + numChars);
+                            if (numChars > 0) {
+                                // runButton.enabled = true;  // ok
+                                runButton.setEnabled(true);   // explicit usage of the setter
+                            }
                         }
                         </textAreaContentListeners>
                     </TextArea>
