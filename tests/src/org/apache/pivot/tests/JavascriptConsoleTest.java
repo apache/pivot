@@ -17,6 +17,8 @@
 package org.apache.pivot.tests;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
@@ -32,7 +34,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
 
     @Override
     public void startup(Display displayArgument, Map<String, String> properties) throws Exception {
-        System.out.println("startup: start");
+        logObject("startup: start");
 
         this.display = displayArgument;
 
@@ -40,13 +42,13 @@ public class JavascriptConsoleTest extends Application.Adapter {
 
         // add a reference to the application itself in bxml namespace, to be used by JS inside bxml files
         bxmlSerializer.getNamespace().put("application", this);
-        System.out.println("put a reference to application in serializer namespace");
+        logObject("put a reference to application in serializer namespace");
 
         window = loadWindow("javascript_console_test.bxml", bxmlSerializer);
         initializeFields(bxmlSerializer);
         window.open(display);
 
-        System.out.println("startup: end");
+        logObject("startup: end");
     }
 
     @Override
@@ -59,21 +61,87 @@ public class JavascriptConsoleTest extends Application.Adapter {
     }
 
     private void initializeFields(BXMLSerializer serializer) {
-        System.out.println("initializeFields: start");
+        logObject("initializeFields: start");
 
-        System.out.println("got BXMLSerializer instance = " + serializer);
+        logObject("got BXMLSerializer instance = " + serializer);
 
-        System.out.println("initializeFields: end");
+        logObject("initializeFields: end");
     }
 
-    protected Window loadWindow(String fileName, BXMLSerializer bxmlSerializer)
+    /**
+     * Load (and returns) a Window, given its file name and serializer to use
+     *
+     * @param fileName the file name for the bxml file to load
+     * @param bxmlSerializer the serializer to use, or if null a new one will be created
+     * @return the Window instance
+     * @throws SerializationException in case of error
+     * @throws IOException in case of error
+     */
+    private Window loadWindow(String fileName, BXMLSerializer bxmlSerializer)
         throws SerializationException, IOException {
+        logObject("loadWindow from \"" + fileName + "\", with the serializer " + bxmlSerializer);
+
         if (bxmlSerializer == null) {
             bxmlSerializer = new BXMLSerializer();
         }
+
         return (Window)bxmlSerializer.readObject(JavascriptConsoleTest.class, fileName);
     }
 
+    /**
+     * Load (and returns) a Window, given its URL and serializer to use
+     * <p>
+     * Note that if public this method could be called even from JS in a bxml file
+     * (but a reference to the current application has to be put in serializer namespace).
+     * <p>
+     * Note that all Exceptions are catched inside this method, to not expose them to JS code.
+     *
+     * @param url the URL of the bxml file to load
+     * @param bxmlSerializer the serializer to use, or if null a new one will be created
+     * @return the Window instance
+     */
+    public Window loadWindowFromURL(String url, BXMLSerializer bxmlSerializer) {
+        logObject("loadWindow from \"" + url + "\", with the serializer " + bxmlSerializer);
+
+        if (bxmlSerializer == null) {
+            bxmlSerializer = new BXMLSerializer();
+        }
+
+        Window loadedWindow = null;
+        try {
+            loadedWindow = (Window)bxmlSerializer.readObject(new URL(url));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SerializationException e) {
+            e.printStackTrace();
+        }
+
+        return loadedWindow;
+    }
+
+
+    /**
+     * Sample utility method to log a formatted dump of the given object to System.out .
+     * <p>
+     * Note that it has been set public, static, and accepting Object (and not String as usual),
+     * even to make some tests on it from JS code.
+     *
+     * @param msg the object (or message) to log
+     */
+    public static final void logObject(Object obj) {
+        if (obj != null) {
+            System.out.println(new java.util.Date() + ", log: { class: \"" + obj.getClass().getName() + "\", msg:\"" + obj + "\" }");
+        }
+    }
+
+
+    /**
+     * Application entry point, when run as a Standard (Desktop) Java Application.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         DesktopApplicationContext.main(JavascriptConsoleTest.class, args);
     }
