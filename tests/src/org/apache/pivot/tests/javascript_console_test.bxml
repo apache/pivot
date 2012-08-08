@@ -26,7 +26,7 @@ limitations under the License.
     <bxml:script>
     <![CDATA[
     // note that this script could be moved in an external js file, like that already included in this file ...
-    log("inline script 1");
+    log("inline script 1 - start");
 
     // JS variables for (remote) resources
     // needed for test 2 and 4
@@ -34,6 +34,8 @@ limitations under the License.
     var frameURL = baseURL + "/frame.bxml";
     // note that bxml files must have the MIME Type "application/bxml" (as requested by BXMLSerializer),
     // or (BXMLSerializer) will try to get it from its file extension ...
+
+    log("inline script 1 - end");
     ]]>
     </bxml:script>
 
@@ -62,20 +64,37 @@ limitations under the License.
     <bxml:script>
     <![CDATA[
     // note that this script could be moved in an external js file, like that already included in this file ...
-    importPackage(java.net);
+    importPackage(org.apache.pivot.beans);  // for BXMLSerializer
     importPackage(org.apache.pivot.util);
     importPackage(org.apache.pivot.wtk);
-    importPackage(org.apache.pivot.wtk.media);
 
-    log("inline script 2");
+    log("inline script 2 - start");
 
-// TODO ...
-    // test 4, TODO
+    // test 4, ok
     // define the variable in JS, and load it by instancing Java classes from here
     // log("frameURL is \"" + frameURL + "\"");  // show that the required value is already defined
+    log("application is " + application);  // reference to the application itself, set in main class, in Java Code
 
     // JS variables for (remote) resources
-    var testRemoteFrame = "";
+    var bxmlSerializer = new BXMLSerializer();  // trick, I hope a good one ...
+    log("bxmlSerializer is " + bxmlSerializer);
+    // load the window/frame, but using an utility method defined in the application ...
+    log("load the window/frame now, by JS code (calling Java code from the application) ...");
+    var loadedWindow = application.loadWindowFromURL(frameURL, bxmlSerializer);
+    log("loadedWindow is " + loadedWindow + ", and its JavaScript typeof here is " + typeof loadedWindow);  // note that typeof loadedWindow is object
+
+    var testRemoteFrame = loadedWindow;
+    // log formatted info but using a static method defined in the application, just for test ...
+    // note that this call is done in the usual (non-static) way, and works the same even from here
+    application.logObject(testRemoteFrame);
+
+
+    // test 5, TODO
+    // isolate a JS snippet (but self-contained) derive from test 4, and
+    // find a way to execute it as the text written in the textArea in a JS interpreter,
+    // then put it in a fixed template, and generalize it inside this test/sample application ...
+
+    log("inline script 2 - end");
     ]]>
     </bxml:script>
 
