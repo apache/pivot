@@ -823,6 +823,16 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             }
 
             String src = element.properties.get(INCLUDE_SRC_ATTRIBUTE);
+            if (src.charAt(0) == OBJECT_REFERENCE_PREFIX) {
+                src = src.substring(1);
+                if (src.length() > 0) {
+                    if (!JSON.containsKey(namespace, src)) {
+                        throw new SerializationException("Value \"" + src + "\" is not defined.");
+                    }
+                    String variableValue = JSON.get(namespace, src);
+                    src = variableValue;
+                }
+            }
 
             Resources resourcesLocal = this.resources;
             if (element.properties.containsKey(INCLUDE_RESOURCES_ATTRIBUTE)) {
