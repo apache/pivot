@@ -39,6 +39,7 @@ function clearStatus() {
 }
 
 function clearConsole() {
+	templateButton.selectedIndex = 0;
 	textArea.text = "";
 	// runButton.enabled = false;  // ok
 	runButton.setEnabled(false);   // explicit usage of the setter
