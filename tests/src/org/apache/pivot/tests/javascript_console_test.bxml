@@ -35,7 +35,10 @@ limitations under the License.
         // "file:///D:/work/pivot/site/trunk/deploy/assets-for-tests" + "/";  // local test
         // "http://pivot.apache.org/assets-for-tests" + "/";  // production url
         "http://pivot.apache.org/assets-for-tests" + "/";
-    var frameName = "frame.bxml";
+    var frameName = 
+        // "frame.bxml";    // the first level bxml
+        // "palette.bxml";  // the second level bxml (loaded usually be frame.bxml), just to test here directly
+        "frame.bxml";
     var frameURL  = resourcesBaseURL + frameName;
     // note that bxml files must have the MIME Type "application/bxml" (as requested by BXMLSerializer),
     // or (BXMLSerializer) will try to get it from its file extension ...
@@ -89,9 +92,11 @@ limitations under the License.
     log("put a reference to resourcesBaseURL in serializer namespace");
 
     // load the window/frame, but using an utility method defined in the application ...
+    // important: remember that to load a remote file it's necessary to use the (more generic) version that takes an URL (maybe even to load a local file),
+    // and not the version that takes the filename string ...
     log("load the window/frame now, by JS code (calling Java code from the application) ...");
     var loadedWindow = application.loadWindowFromURL(frameURL, bxmlSerializer);
-//    var loadedWindow = application.loadWindowFromBaseURLAndFilename(resourcesBaseURL, frameName, bxmlSerializer);
+    // var loadedWindow = application.loadWindowFromBaseURLAndFilename(resourcesBaseURL, frameName, bxmlSerializer);  // maybe add this method in future ...
     log("loadedWindow is " + loadedWindow + ", and its JavaScript typeof here is " + typeof loadedWindow);  // note that typeof loadedWindow is object
 
     var testRemoteFrame = loadedWindow;
