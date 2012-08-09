@@ -30,13 +30,13 @@ limitations under the License.
 
     // JS variables for (remote) resources
     // needed for test 2 and 4
-    var baseURL   =
+    var resourcesBaseURL   =
         // "";
         // "file:///D:/work/pivot/site/trunk/deploy/assets-for-tests" + "/";  // local test
         // "http://pivot.apache.org/assets-for-tests" + "/";  // production url
         "http://pivot.apache.org/assets-for-tests" + "/";
     var frameName = "frame.bxml";
-    var frameURL  = baseURL + frameName;
+    var frameURL  = resourcesBaseURL + frameName;
     // note that bxml files must have the MIME Type "application/bxml" (as requested by BXMLSerializer),
     // or (BXMLSerializer) will try to get it from its file extension ...
 
@@ -85,13 +85,13 @@ limitations under the License.
     log("bxmlSerializer is " + bxmlSerializer);
     bxmlSerializer.getNamespace().put("application", application);  // add a reference to application even in this instance of BXMLSerializer ...
     log("put a reference to application in serializer namespace");
-    bxmlSerializer.getNamespace().put("baseURL", baseURL);  // add a reference to baseURL, so included bxml files could use it ...
-    log("put a reference to baseURL in serializer namespace");
+    bxmlSerializer.getNamespace().put("resourcesBaseURL", resourcesBaseURL);  // add a reference to resourcesBaseURL, so included bxml files could use it ...
+    log("put a reference to resourcesBaseURL in serializer namespace");
 
     // load the window/frame, but using an utility method defined in the application ...
     log("load the window/frame now, by JS code (calling Java code from the application) ...");
     var loadedWindow = application.loadWindowFromURL(frameURL, bxmlSerializer);
-//    var loadedWindow = application.loadWindowFromBaseURLAndFilename(baseURL, frameName, bxmlSerializer);
+//    var loadedWindow = application.loadWindowFromBaseURLAndFilename(resourcesBaseURL, frameName, bxmlSerializer);
     log("loadedWindow is " + loadedWindow + ", and its JavaScript typeof here is " + typeof loadedWindow);  // note that typeof loadedWindow is object
 
     var testRemoteFrame = loadedWindow;
