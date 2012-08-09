@@ -69,6 +69,22 @@ public class JavascriptConsoleTest extends Application.Adapter {
     }
 
     /**
+     * Load (and returns) a Window, given its file name
+     * <p>
+     * Note that if public this method could be called even from JS in a bxml file
+     * (but a reference to the current application has to be put in serializer namespace).
+     *
+     * @param fileName the file name for the bxml file to load
+     * @return the Window instance
+     * @throws SerializationException in case of error
+     * @throws IOException in case of error
+     */
+    public Window load(String fileName) throws SerializationException, IOException {
+        logObject("load from \"" + fileName + "\"");
+        return loadWindow(fileName, null);
+    }
+
+    /**
      * Load (and returns) a Window, given its file name and serializer to use
      *
      * @param fileName the file name for the bxml file to load
