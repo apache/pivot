@@ -101,7 +101,9 @@ public class JavascriptConsoleTest extends Application.Adapter {
             bxmlSerializer = new BXMLSerializer();
         }
 
-        return (Window)bxmlSerializer.readObject(JavascriptConsoleTest.class, fileName);
+        // return (Window)bxmlSerializer.readObject(JavascriptConsoleTest.class, fileName); // ok
+        // better, to allow usage of resources (without having to call setLocation or setResources in the serializer) ...
+        return (Window)bxmlSerializer.readObject(JavascriptConsoleTest.class, fileName, true);
     }
 
     /**
@@ -112,12 +114,12 @@ public class JavascriptConsoleTest extends Application.Adapter {
      * <p>
      * Note that all Exceptions are catched inside this method, to not expose them to JS code.
      *
-     * @param url the URL of the bxml file to load
+     * @param urlString the URL of the bxml file to load, as a String
      * @param bxmlSerializer the serializer to use, or if null a new one will be created
      * @return the Window instance
      */
-    public Window loadWindowFromURL(String url, BXMLSerializer bxmlSerializer) {
-        logObject("loadWindow from \"" + url + "\", with the serializer " + bxmlSerializer);
+    public Window loadWindowFromURL(String urlString, BXMLSerializer bxmlSerializer) {
+        logObject("loadWindow from \"" + urlString + "\", with the serializer " + bxmlSerializer);
 
         if (bxmlSerializer == null) {
             bxmlSerializer = new BXMLSerializer();
@@ -125,7 +127,12 @@ public class JavascriptConsoleTest extends Application.Adapter {
 
         Window loadedWindow = null;
         try {
-            loadedWindow = (Window)bxmlSerializer.readObject(new URL(url));
+            URL url = new URL(urlString);
+
+            // force the location, so it will be possible to decode resources like labels ...
+            bxmlSerializer.setLocation(url);
+
+            loadedWindow = (Window)bxmlSerializer.readObject(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
