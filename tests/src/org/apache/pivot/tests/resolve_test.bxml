@@ -16,11 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Resolve Test" maximized="true"
+<Window title="%title" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <bxml:script>
-    var foo = "ABC";
+    var foo = "Label from the JS variable 'foo'";
+    var bar = "Label from the JS variable 'bar'";
     </bxml:script>
 
     <BoxPane orientation="vertical">
