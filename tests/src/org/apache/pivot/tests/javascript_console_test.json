@@ -16,7 +16,8 @@
  */
 {
     title: "JavaScript Console Test, from javascript_console_test.json",
-    labelText: "Hello, from JavascriptConsoleTest.json",
+    labelText: "Hello, from javascript_console_test.json",
     labelInfo: "JavaScript (interpreted by the JVM) Console:",
+
     last: ""
 }
