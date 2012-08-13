@@ -19,18 +19,26 @@ package org.apache.pivot.tests;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
 public class JavascriptConsoleTest extends Application.Adapter {
+    public static final String LANGUAGE_KEY = "language";
+    public static final String MAIN_CLASS_NAME = JavascriptConsoleTest.class.getName();
+
     private Display display = null;
     private Window window = null;
+
+    private Locale locale = null;
+    private Resources resources = null;
 
     @Override
     public void startup(Display displayArgument, Map<String, String> properties) throws Exception {
@@ -38,11 +46,18 @@ public class JavascriptConsoleTest extends Application.Adapter {
 
         this.display = displayArgument;
 
+        // get the locale from startup properties, or use the default
+        String language = properties.get(LANGUAGE_KEY);
+        locale = (language == null) ? Locale.getDefault() : new Locale(language);
+        logObject("running with the locale " + locale);
+
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
         // add a reference to the application itself in bxml namespace, to be used by JS inside bxml files
         bxmlSerializer.getNamespace().put("application", this);
         logObject("put a reference to application in serializer namespace");
+        bxmlSerializer.getNamespace().put("mainClassName", MAIN_CLASS_NAME);
+        logObject("put a reference to main class name in serializer namespace \"" + MAIN_CLASS_NAME + "\"");
 
         window = loadWindow("javascript_console_test.bxml", bxmlSerializer);
         initializeFields(bxmlSerializer);
@@ -62,11 +77,31 @@ public class JavascriptConsoleTest extends Application.Adapter {
 
     private void initializeFields(BXMLSerializer serializer) {
         logObject("initializeFields: start");
-
         logObject("got BXMLSerializer instance = " + serializer);
+
+        buildResources(MAIN_CLASS_NAME);
 
         logObject("initializeFields: end");
     }
+
+    private void buildResources(String className) {
+        if (className == null || className.length() < 1) {
+            className = MAIN_CLASS_NAME;  // set a useful default
+        }
+
+        try {
+            // load some resources here, just to show its usage from JS files,
+            // but only if not already loaded ...
+            if (resources == null) {
+                resources = new Resources(MAIN_CLASS_NAME, locale);
+                logObject("buildResources, load resources from \"" + className + "\", with locale " + locale);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     /**
      * Load (and returns) a Window, given its file name
@@ -142,6 +177,32 @@ public class JavascriptConsoleTest extends Application.Adapter {
         }
 
         return loadedWindow;
+    }
+
+
+    /**
+     * Return the value for the given label,
+     * from the resource file loaded at application startup.
+     *
+     * @param name the label name
+     * @return the value or the label, or empty string if not found
+     */
+    public String getLabel(String name) {
+        String label = "";
+        if (name == null || name.length() < 1) {
+            throw new IllegalArgumentException("name must be a valid string");
+        }
+
+        // note that if called from bxml files, resources could be not already loaded,
+        // so try to force its load with a default value ...
+        if (resources == null) {
+            buildResources(null);
+        }
+
+        label = (String) resources.get(name);
+        logObject("search label with name \"" + name + "\", find value \"" + label + "\"");
+
+        return ((label == null) ? "": label);
     }
 
 

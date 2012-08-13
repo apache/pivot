@@ -44,8 +44,8 @@ limitations under the License.
     // or (BXMLSerializer) will try to get it from its file extension ...
 
     // assign a label value to a JS variable
-    var valueFromLabel = "%labelText";  // note that this doesn't work as expected, must be handled from the bxmlSerializer ...
-    log("valueFromLabel (direct access) = \"" + valueFromLabel + "\"");
+    // var valueFromLabel = "%labelText";  // note that this doesn't work as expected, must be handled from the bxmlSerializer ...
+    // log("valueFromLabel (direct access) = \"" + valueFromLabel + "\"");
 
     log("inline script 1 - end");
     ]]>
@@ -108,9 +108,11 @@ limitations under the License.
     // note that this call is done in the usual (non-static) way, and works the same even from here
     application.logObject(testRemoteFrame);
 
-    // assign a label value to a JS variable
-    var valueFromLabel = bxmlSerializer.getNamespace().get("labelText");  // ok, getting the label value from the bxmlSerializer ...
-    log("valueFromLabel (access via bxmlSerializer) = \"" + valueFromLabel + "\"");
+    // decode and assign a label value to a JS variable (from the usual json resource file just used)
+    // var valueFromLabel = bxmlSerializer.getNamespace().get("labelText");  // get the label value from the bxmlSerializer, but doesn't work here (in an all-JS block)...
+    // working solution: get from resources, and to simplify things here use a Java helper method, but should be possible to do all from here ...
+    var valueFromLabel = application.getLabel("labelText");  // get the label value from resources
+    log("valueFromLabel (access via dedicated Java Helper) = \"" + valueFromLabel + "\"");
 
 
     // test 5, TODO
@@ -175,7 +177,7 @@ limitations under the License.
                 </ListButton>
                 <Label text=" " />
 
-                <PushButton bxml:id="runButton"   buttonData="%labelRun" ButtonPressListener.buttonPressed="runConsole()"/>
+                <PushButton bxml:id="runButton"   buttonData="%labelRun" ButtonPressListener.buttonPressed="runConsole()" enabled="false" />
                 <PushButton bxml:id="clearButton" buttonData="%labelClear">
                     <buttonPressListeners>
                     function buttonPressed(button) {
