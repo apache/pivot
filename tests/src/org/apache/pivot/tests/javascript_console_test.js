@@ -40,7 +40,8 @@ function clearStatus() {
 
 function clearConsole() {
 	templateButton.selectedIndex = 0;
-	textArea.text = "";
+	textJSSource.text = "";
+	textJSOutput.text = "";
 	// runButton.enabled = false;  // ok
 	runButton.setEnabled(false);   // explicit usage of the setter
 	log("Console cleared");
@@ -49,7 +50,7 @@ function clearConsole() {
 
 
 function runConsole() {
-	var text = textArea.text;
+	var text = textJSSource.text;
 	log("Console Text length = " + text.length());
 	if (text.length() < 1)
 		return ;
@@ -57,6 +58,7 @@ function runConsole() {
 	var msg = "Run JS Code in Console";
 	log(msg);
 	updateStatus(msg + " ...");
+	textJSOutput.text = "";
 
 // TODO: continue here ...
 	;

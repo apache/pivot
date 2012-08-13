@@ -17,7 +17,7 @@ limitations under the License.
 -->
 
 <Window bxml:id="window"
-    title="JavaScript Console Test" maximized="true"
+    title="%title" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk"
 >
@@ -35,13 +35,17 @@ limitations under the License.
         // "file:///D:/work/pivot/site/trunk/deploy/assets-for-tests" + "/";  // local test
         // "http://pivot.apache.org/assets-for-tests" + "/";  // production url
         "http://pivot.apache.org/assets-for-tests" + "/";
-    var frameName = 
+    var frameName =
         // "frame.bxml";    // the first level bxml
         // "palette.bxml";  // the second level bxml (loaded usually be frame.bxml), just to test here directly
         "frame.bxml";
     var frameURL  = resourcesBaseURL + frameName;
     // note that bxml files must have the MIME Type "application/bxml" (as requested by BXMLSerializer),
     // or (BXMLSerializer) will try to get it from its file extension ...
+
+    // assign a label value to a JS variable
+    // var valueFromLabel = "%labelText";  // note that this doesn't work as expected, must be handled from the bxmlSerializer ...
+    // log("valueFromLabel (direct access) = \"" + valueFromLabel + "\"");
 
     log("inline script 1 - end");
     ]]>
@@ -104,6 +108,12 @@ limitations under the License.
     // note that this call is done in the usual (non-static) way, and works the same even from here
     application.logObject(testRemoteFrame);
 
+    // decode and assign a label value to a JS variable (from the usual json resource file just used)
+    // var valueFromLabel = bxmlSerializer.getNamespace().get("labelText");  // get the label value from the bxmlSerializer, but doesn't work here (in an all-JS block)...
+    // working solution: get from resources, and to simplify things here use a Java helper method, but should be possible to do all from here ...
+    var valueFromLabel = application.getLabel("labelText");  // get the label value from resources
+    log("valueFromLabel (access via dedicated Java Helper) = \"" + valueFromLabel + "\"");
+
 
     // test 5, TODO
     // comment test 4, and copy its source inside the switch statements below (if possible), to make it really dynamic ...
@@ -127,11 +137,11 @@ limitations under the License.
 
         <TablePane.Row height="-1">
             <BoxPane orientation="horizontal" TablePane.columnSpan="3">
-                <Label styles="{horizontalAlignment:'center', verticalAlignment:'center'}" text="JavaScript (interpreted by the JVM) Console:"
+                <Label styles="{horizontalAlignment:'center', verticalAlignment:'center'}" text="%labelInfo"
                 />
                 <Label text=" " />
 
-                <Label text="Templates:"/>
+                <Label text="%labelTemplates"/>
                 <ListButton bxml:id="templateButton"
                     listData="[' - Choose a template - ', 'Open Frame Local', 'Open Frame Remote (from Pivot Web Site)']"
                     selectedIndex="-1"
@@ -161,14 +171,14 @@ limitations under the License.
                                     clearConsole();
                                     break;
                             }
-                            textArea.text = templateText;
+                            textJSSource.text = templateText;
                         }
                     </listButtonSelectionListeners>
                 </ListButton>
                 <Label text=" " />
 
-                <PushButton bxml:id="runButton"   buttonData="Run" ButtonPressListener.buttonPressed="runConsole()"/>
-                <PushButton bxml:id="clearButton" buttonData="Clear">
+                <PushButton bxml:id="runButton"   buttonData="%labelRun" ButtonPressListener.buttonPressed="runConsole()" enabled="false" />
+                <PushButton bxml:id="clearButton" buttonData="%labelClear">
                     <buttonPressListeners>
                     function buttonPressed(button) {
                         clearConsole();
@@ -178,12 +188,12 @@ limitations under the License.
             </BoxPane>
         </TablePane.Row>
         <TablePane.Row height="1*">
-            <Label styles="{horizontalAlignment:'right', verticalAlignment:'center'}" text="JS Source:"/>
+            <Label styles="{horizontalAlignment:'right', verticalAlignment:'center'}" text="%labelJSSource"/>
             <Border>
                 <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity"
                     preferredHeight="200"
                 >
-                    <TextArea bxml:id="textArea"
+                    <TextArea bxml:id="textJSSource"
                         styles="{wrapText:false}"
                         editable="true"
                         text=""
@@ -202,8 +212,23 @@ limitations under the License.
                 </ScrollPane>
             </Border>
         </TablePane.Row>
+        <TablePane.Row height="1*">
+            <Label styles="{horizontalAlignment:'right', verticalAlignment:'center'}" text="%labelJSOutput"/>
+            <Border>
+                <ScrollPane horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity"
+                    preferredHeight="100"
+                >
+                    <TextArea bxml:id="textJSOutput"
+                        styles="{wrapText:false}"
+                        editable="false"
+                        text=""
+                    >
+                    </TextArea>
+                </ScrollPane>
+            </Border>
+        </TablePane.Row>
         <TablePane.Row height="-1">
-            <Label styles="{horizontalAlignment:'right', verticalAlignment:'center'}" text="Status:"/>
+            <Label styles="{horizontalAlignment:'right', verticalAlignment:'center'}" text="%labelStatus"/>
             <Label bxml:id="textStatus" styles="{horizontalAlignment:'left', verticalAlignment:'center'}" text=""/>
         </TablePane.Row>
     </TablePane>
