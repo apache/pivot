@@ -19,13 +19,17 @@
     labelText: "Hello, from JavascriptConsoleTest.json",
     labelInfo: "JavaScript (interpreted by the JVM) Console:",
     labelTemplates: "Templates:",
+
     valuesTemplates_0: " - Choose a template - ",  // future use
     valuesTemplates_1: "Open Frame Local",  // future use
     valuesTemplates_2: "Open Frame Remote (from Pivot Web Site)",  // future use
+    valuesTemplates_all: "[' - Choose a template - ', 'Open Frame Local', 'Open Frame Remote (from Pivot Web Site)']",  // future use, as alternative for singles valuesTemplates_* values ...
+
     labelRun: "Run",
     labelClear: "Clear",
     labelJSSource: "JS Source:",
     labelJSOutput: "JS Output:",
     labelStatus: "Status:",
+
     last: ""
 }
