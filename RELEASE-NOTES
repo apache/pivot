@@ -15,12 +15,11 @@
   limitations under the License.
 ================================================================================
 
-Release Notes for Apache Pivot Quickstart Archetype 1.0.2:
+Release Notes for Apache Pivot Quickstart Archetype 1.0.3:
 
 ** New Feature
     * [PIVOT-397] - Initial version, using (consuming) Pivot 2.0 jars
-    * [PIVOT-397] - Updated for Pivot 2.0.1
-    * [PIVOT-397] - Updated for Pivot 2.0.2, and update some maven plugin
+    * [PIVOT-397] - Updated for Pivot 2.0.3, and update some maven plugin
 
 ** Improvement
 
