@@ -76,9 +76,10 @@ limitations under the License.
     <bxml:script>
     <![CDATA[
     // note that this script could be moved in an external js file, like that already included in this file ...
+    // importPackage(org.apache.pivot.collections);  // for collections
     importPackage(org.apache.pivot.beans);  // for BXMLSerializer
-    importPackage(org.apache.pivot.util);
-    importPackage(org.apache.pivot.wtk);
+    importPackage(org.apache.pivot.util);   // for some useful stuff
+    importPackage(org.apache.pivot.wtk);    // for application and other wtk classes
 
     log("inline script 2 - start");
 
@@ -111,8 +112,13 @@ limitations under the License.
     // decode and assign a label value to a JS variable (from the usual json resource file just used)
     // var valueFromLabel = bxmlSerializer.getNamespace().get("labelText");  // get the label value from the bxmlSerializer, but doesn't work here (in an all-JS block)...
     // working solution: get from resources, and to simplify things here use a Java helper method, but should be possible to do all from here ...
-    var valueFromLabel = application.getLabel("labelText");  // get the label value from resources
+    var valueFromLabel =   // get the label value from resources
+        // application.getLabel("labelText"); // calling the application method directly ...
+        decodeLabel("labelText");  // using a JS wrapper ...
     log("valueFromLabel (access via dedicated Java Helper) = \"" + valueFromLabel + "\"");
+
+    // decode some labels and set as list data, then reference it in the component ...
+    var templateButtonListData = buildListDataFromLabels();
 
 
     // test 5, TODO
@@ -142,8 +148,15 @@ limitations under the License.
                 <Label text=" " />
 
                 <Label text="%labelTemplates"/>
+                <!-- // ok, using static data values
                 <ListButton bxml:id="templateButton"
                     listData="[' - Choose a template - ', 'Open Frame Local', 'Open Frame Remote (from Pivot Web Site)']"
+                    selectedIndex="-1"
+                >
+                //-->
+                <!-- // new, using decoded labels as data values -->
+                <ListButton bxml:id="templateButton"
+                    listData="$templateButtonListData"
                     selectedIndex="-1"
                 >
                     <listButtonSelectionListeners>
