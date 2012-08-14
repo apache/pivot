@@ -24,6 +24,7 @@
     valuesTemplates_1: "Open Frame Local",  // future use
     valuesTemplates_2: "Open Frame Remote (from Pivot Web Site)",  // future use
     valuesTemplates_all: "[' - Choose a template - ', 'Open Frame Local', 'Open Frame Remote (from Pivot Web Site)']",  // future use, as alternative for singles valuesTemplates_* values ...
+    valuesTemplates_num: "3",
 
     labelRun: "Run",
     labelClear: "Clear",

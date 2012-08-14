@@ -30,6 +30,16 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
+/**
+ * Sample Test Application (not fully working) to show how to interact
+ * between Java code and JavaScript code (interpreted by the JVM) inside bxml files.
+ * Many things usually done in Java code are here shown but from the JS side.
+ * <p>
+ * Some utility methods present here could be moved in a dedicated utility class.
+ * <p>
+ * Note that there are many comments inside this and related sources,
+ * and it's to show different ways to do the same things, even as iterative development.
+ */
 public class JavascriptConsoleTest extends Application.Adapter {
     public static final String LANGUAGE_KEY = "language";
     public static final String MAIN_CLASS_NAME = JavascriptConsoleTest.class.getName();
@@ -75,16 +85,28 @@ public class JavascriptConsoleTest extends Application.Adapter {
         return false;
     }
 
+
+    /**
+     * Utility method to initialize secondary fields/elements during application startup.
+     *
+     * @param serializer the BXMLSerializer instance to use
+     */
     private void initializeFields(BXMLSerializer serializer) {
         logObject("initializeFields: start");
         logObject("got BXMLSerializer instance = " + serializer);
 
-        buildResources(MAIN_CLASS_NAME);
+        loadResources(MAIN_CLASS_NAME);
 
         logObject("initializeFields: end");
     }
 
-    private void buildResources(String className) {
+
+    /**
+     * Load resource files for the given classname, or if null a default will be used.
+     *
+     * @param className the full class name (to use as a base name), for loading resources
+     */
+    private void loadResources(String className) {
         if (className == null || className.length() < 1) {
             className = MAIN_CLASS_NAME;  // set a useful default
         }
@@ -196,7 +218,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
         // note that if called from bxml files, resources could be not already loaded,
         // so try to force its load with a default value ...
         if (resources == null) {
-            buildResources(null);
+            loadResources(null);
         }
 
         label = (String) resources.get(name);

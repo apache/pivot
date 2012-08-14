@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 importPackage(java.lang);  // required to use System.out and System.err
+importPackage(org.apache.pivot.collections);  // required to use Pivot class ArrayList and other collections
 importPackage(org.apache.pivot.util);  // required to use Pivot Utility class Console
 importPackage(org.apache.pivot.wtk);   // required to use Pivot WTK classes
 
@@ -24,6 +25,13 @@ function log(msg) {
 		return ;
 
     System.out.println(msg);
+}
+
+function logObject(msg) {
+	if (msg == undefined || msg == null)
+		return ;
+
+	application.logObject(msg);
 }
 
 function updateStatus(msg) {
@@ -48,6 +56,26 @@ function clearConsole() {
 	clearStatus();
 }
 
+function decodeLabel(name) {
+    return application.getLabel(name)
+}
+
+function buildListDataFromLabels() {
+    var templateButtonListData = new ArrayList();
+
+    // templateButtonListData.add(decodeLabel("valuesTemplates_all"));  // no, because it can't be added later ... but keep here, just as idea
+    var numValues = decodeLabel("valuesTemplates_num");
+    logObject(numValues);
+    log("Expected " + numValues + " number of values for list");
+    if (numValues != null && numValues.length() > 0) {
+    	for (var i = 0; i < numValues; i++) {
+            templateButtonListData.add(decodeLabel("valuesTemplates_" + i));
+        }
+    }
+
+    return templateButtonListData;
+}
+
 
 function runConsole() {
 	var text = textJSSource.text;
@@ -60,7 +88,7 @@ function runConsole() {
 	updateStatus(msg + " ...");
 	textJSOutput.text = "";
 
-// TODO: continue here ...
+// TODO: continue here, but calling a Java method inside the application, with the stuff inside ...
 	;
 }
 
