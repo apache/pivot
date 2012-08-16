@@ -3,6 +3,7 @@
 .hg
 .svn
 .cache
+.gradle
 .metadata
 .settings
 *.bak
