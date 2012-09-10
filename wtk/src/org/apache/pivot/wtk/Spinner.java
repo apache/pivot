@@ -350,6 +350,8 @@ public class Spinner extends Container {
         new SpinnerSelectionListenerList();
     private SpinnerBindingListenerList spinnerBindingListeners = new SpinnerBindingListenerList();
 
+    private static final ItemRenderer DEFAULT_ITEM_RENDERER = new SpinnerItemRenderer();
+
     /**
      * Creates a spinner populated with an empty array list.
      */
@@ -359,11 +361,18 @@ public class Spinner extends Container {
 
     /**
      * Creates a spinner populated with the given spinner data.
+     * <p>
+     * Note that the default renderer uses (as last option) the toString method on list elements,
+     * so override it to return whatever you want to display as text,
+     * or implement your own custom renderer.
      *
      * @param spinnerData
+     * The data to set.
+     *
+     * @see SpinnerItemRenderer
      */
     public Spinner(List<?> spinnerData) {
-        setItemRenderer(new SpinnerItemRenderer());
+        setItemRenderer(DEFAULT_ITEM_RENDERER);
         setSpinnerData(spinnerData);
 
         installSkin(Spinner.class);

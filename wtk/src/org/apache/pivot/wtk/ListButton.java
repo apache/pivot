@@ -311,9 +311,19 @@ public class ListButton extends Button {
 
     /**
      * Creates a list button with the given button and list data.
+     * <p>
+     * Note that the default renderer uses (as last option) the toString method on list elements,
+     * so override it to return whatever you want to display in the ListView,
+     * or implement your own custom renderer.
      *
      * @param buttonData
+     * The button data.
+     *
      * @param listData
+     * The data to set.
+     *
+     * @see ListButtonDataRenderer
+     * @see ListViewItemRenderer
      */
     public ListButton(Object buttonData, List<?> listData) {
         super(buttonData);
@@ -605,10 +615,22 @@ public class ListButton extends Button {
         }
     }
 
+    /**
+     * Returns name of the key that is used in context binding.
+     *
+     * @return
+     * The key.
+     */
     public String getListDataKey() {
         return listDataKey;
     }
 
+    /**
+     * Set the name of the key that is used in context binding.
+     *
+     * @param listDataKey
+     * The key to set.
+     */
     public void setListDataKey(String listDataKey) {
         String previousListDataKey = this.listDataKey;
         if (previousListDataKey != listDataKey) {

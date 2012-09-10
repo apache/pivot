@@ -590,8 +590,15 @@ public class ListView extends Component {
 
     /**
      * Creates a list view populated with the given list data.
+     * <p>
+     * Note that the default renderer uses (as last option) the toString method on list elements,
+     * so override it to return whatever you want to display in the ListView,
+     * or implement your own custom renderer.
      *
      * @param listData
+     * The data to set.
+     *
+     * @see ListViewItemRenderer
      */
     public ListView(List<?> listData) {
         setItemRenderer(DEFAULT_ITEM_RENDERER);
@@ -1364,10 +1371,22 @@ public class ListView extends Component {
         }
     }
 
+    /**
+     * Returns name of the key that is used in context binding.
+     *
+     * @return
+     * The key.
+     */
     public String getListDataKey() {
         return listDataKey;
     }
 
+    /**
+     * Set the name of the key that is used in context binding.
+     *
+     * @param listDataKey
+     * The key to set.
+     */
     public void setListDataKey(String listDataKey) {
         String previousListDataKey = this.listDataKey;
         if (previousListDataKey != listDataKey) {
