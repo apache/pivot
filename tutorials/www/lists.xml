@@ -262,5 +262,16 @@ limitations under the License.
         <p>
             The Java code for the example is the same seen in the previous sample.
         </p>
+
+<br/>
+<br/>
+
+        <p>
+            In case your <tt>ListView</tt> contains a bean instance, for example a <tt>Contact</tt> for any element,
+            the default renderer uses (as last option) the toString method on list elements,
+            so override it to return whatever you want to display in the ListView,
+            or implement your own custom renderer.
+        </p>
+
     </body>
 </document>
