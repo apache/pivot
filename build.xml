@@ -357,7 +357,9 @@ limitations under the License.
         <echo message="indexJars ${compiler.indexJars}"/>
         <echo message="arg ${compiler.arg}"/>
         <echo message=""/>
-        <echo message="Java environment: home at '${java.home}', version ${java.version}"/>
+        <echo message="OS: ${os.name}, version ${os.version}, architecture ${os.arch}"/>
+        <echo message=""/>
+        <echo message="Java: home at '${java.home}', version ${java.version}, vendor ${java.vendor}"/>
         <echo message=""/>
     </target>
 
