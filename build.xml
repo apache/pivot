@@ -344,6 +344,7 @@ limitations under the License.
         </sequential>
     </macrodef>
 
+
     <!-- Return some environmental info -->
     <target name="environment-info" description="Gives some info on Environment and Compiler flags"
         depends=""
@@ -361,6 +362,14 @@ limitations under the License.
         <echo message=""/>
         <echo message="Java: home at '${java.home}', version ${java.version}, vendor ${java.vendor}"/>
         <echo message=""/>
+    </target>
+
+    <!-- Display the classpath -->
+    <target name="environment-classpath" description="Gives some info on Environment and classpath"
+        depends="environment-info"
+    >
+		<property name="classpath" refid="classpath.javalib"/>
+		<echo message="Using Classpath: ${classpath}"/>
     </target>
 
 
