@@ -17,9 +17,21 @@ limitations under the License.
 -->
 
 <project name="pivot" default="environment-info"
-    xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+    xmlns:artifact="antlib:org.apache.maven.artifact.ant"
+>
+    <!-- Classpath-related properties -->
+    <property environment="env"/>
+    <path id="classpath.env">
+        <pathelement location="${env.CLASSPATH}"/>
+    </path>
     <path id="classpath.javalib">
         <fileset dir="${java.home}/lib" includes="**/*.jar"/>
+    </path>
+    <property name="classpath_env" refid="classpath.env"/>
+    <property name="classpath_javalib" refid="classpath.javalib"/>
+    <path id="classpath.general">
+        <pathelement path="${classpath_env}/"/>
+        <pathelement path="${classpath_javalib}"/>
     </path>
 
     <!-- Properties that affect the directories that are created as part of the build -->
@@ -120,7 +132,7 @@ limitations under the License.
                 <condition>
                     <not>
                         <available classname="org.junit.Test">
-                            <classpath refid="classpath.javalib" />
+                            <classpath refid="classpath.general" />
                         </available>
                     </not>
                 </condition>
@@ -134,8 +146,8 @@ limitations under the License.
 
             <mkdir dir="@{project}/${folder.bin}"/>
             <javac destDir="@{project}/${folder.bin}"
-                includejavaruntime="true"
-                includeantruntime="true"
+                includejavaruntime="no"
+                includeantruntime="no"
                 deprecation="${compiler.deprecation}"
                 debug="${compiler.debug}"
                 source="${compiler.source}"
@@ -151,7 +163,7 @@ limitations under the License.
                 </src>
                 <compilerarg line="${compiler.arg}"/>
                 <classpath>
-                    <path refid="classpath.javalib"/>
+                    <path refid="classpath.general"/>
                     <dirset dir="${basedir}" includes="**/${folder.bin}"/>
                     <fileset dir="@{project}" includes="lib/**/*.jar"/>
                     <project-lib/>
@@ -173,7 +185,7 @@ limitations under the License.
 
             <junit fork="true">
                 <classpath>
-                    <path refid="classpath.javalib"/>
+                    <path refid="classpath.general"/>
                     <dirset dir="${basedir}" includes="**/${folder.bin}"/>
                     <dirset dir="@{project}" includes="test"/>
                     <fileset dir="@{project}" includes="lib/**/*.jar"/>
@@ -298,7 +310,7 @@ limitations under the License.
                 author="true" version="true" use="true"
                 classpath="${java.class.path}">
                 <classpath>
-                    <path refid="classpath.javalib"/>
+                    <path refid="classpath.general"/>
                     <fileset dir="web-server/lib" includes="**/*.jar"/>
                     <fileset dir="wtk/lib" includes="**/*.jar"/>
 
@@ -368,8 +380,8 @@ limitations under the License.
     <target name="environment-classpath" description="Gives some info on Environment and classpath"
         depends="environment-info"
     >
-		<property name="classpath" refid="classpath.javalib"/>
-		<echo message="Using Classpath: ${classpath}"/>
+        <echo message="Classpath from env vars: ${classpath_env}"/>
+        <echo message="Classpath from Java lib folder: ${classpath_javalib}"/>
     </target>
 
 
@@ -459,7 +471,7 @@ limitations under the License.
             author="true" version="true" use="true"
             classpath="${java.class.path}">
             <classpath>
-                <path refid="classpath.javalib"/>
+                <path refid="classpath.general"/>
                 <fileset dir="web-server/lib" includes="**/*.jar"/>
                 <fileset dir="wtk/lib" includes="**/*.jar"/>
             </classpath>
@@ -522,7 +534,7 @@ limitations under the License.
             <condition>
                 <not>
                     <available classname="netscape.javascript.JSObject"
-                        classpathref="classpath.javalib"/>
+                        classpathref="classpath.general"/>
                 </not>
             </condition>
             <![CDATA[
