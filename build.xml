@@ -19,6 +19,20 @@ limitations under the License.
 <project name="pivot_build_by_jenkins" default="check" basedir="./pivot_maintenance"
     xmlns:artifact="antlib:org.apache.maven.artifact.ant"
 >
+    <!-- Classpath-related properties -->
+    <property environment="env"/>
+    <path id="classpath.env">
+        <pathelement location="${env.CLASSPATH}"/>
+    </path>
+    <path id="classpath.javalib">
+        <fileset dir="${java.home}/lib" includes="**/*.jar"/>
+    </path>
+    <property name="classpath_env" refid="classpath.env"/>
+    <property name="classpath_javalib" refid="classpath.javalib"/>
+    <path id="classpath.general">
+        <pathelement path="${classpath_env}/"/>
+        <pathelement path="${classpath_javalib}"/>
+    </path>
 
     <!-- Dynamic properties -->
     <property file="build.properties"/>
@@ -26,9 +40,10 @@ limitations under the License.
     <!-- Import Pivot build file -->
 	<import file="./pivot_maintenance/build.xml"/>
 
-    <path id="classpath.javalib">
-        <fileset dir="${java.home}/lib" includes="**/*.jar"/>
+    <path id="classpath.general">
         <fileset dir="../ci-builds-on-jenkins/lib" includes="**/*.jar"/>
+        <pathelement path="${classpath_env}/"/>
+        <pathelement path="${classpath_javalib}"/>
     </path>
 
     <!-- Set version from jenkins or not -->
@@ -43,7 +58,7 @@ limitations under the License.
 
     <!-- Help -->
     <target name="help" description="Put some help to console" depends="">
-		<property name="classpath" refid="classpath.javalib"/>
+		<property name="classpath" refid="classpath.general"/>
 		<echo message="Using Classpath: ${classpath}"/>
     </target>
 
@@ -94,7 +109,7 @@ limitations under the License.
                 <condition>
                     <not>
 						<available classname="org.junit.Test">
-							<classpath refid="classpath.javalib" />
+							<classpath refid="classpath.general" />
 						</available>
                     </not>
                 </condition>
