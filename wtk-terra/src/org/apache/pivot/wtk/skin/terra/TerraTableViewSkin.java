@@ -78,6 +78,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private boolean includeTrailingVerticalGridLine;
     private boolean includeTrailingHorizontalGridLine;
     private boolean variableRowHeight;
+    private boolean editOnMouseDown;
 
     private ArrayList<Integer> columnWidths = null;
     private ArrayList<Integer> rowBoundaries = null;
@@ -111,6 +112,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         showVerticalGridLines = true;
         includeTrailingVerticalGridLine = false;
         includeTrailingHorizontalGridLine = false;
+
+        editOnMouseDown = false;
     }
 
     @Override
@@ -1137,6 +1140,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         invalidateComponent();
     }
 
+    public boolean isEditOnMouseDown() {
+        return editOnMouseDown;
+    }
+
+    public void setEditOnMouseDown(boolean editOnMouseDown) {
+        this.editOnMouseDown = editOnMouseDown;
+    }
+
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
@@ -1243,6 +1254,21 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         tableView.requestFocus();
 
+        if (editOnMouseDown) {
+            if (selectIndex != -1
+                && button == Mouse.Button.LEFT) {
+                TableView.RowEditor rowEditor = tableView.getRowEditor();
+
+                if (rowEditor != null) {
+                    if (rowEditor.isEditing()) {
+                        rowEditor.endEdit(true);
+                    }
+
+                    rowEditor.beginEdit(tableView, selectIndex, getColumnAt(x));
+                }
+            }
+        }
+
         return consumed;
     }
 
@@ -1264,18 +1290,20 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
-        TableView tableView = (TableView)getComponent();
-        if (selectIndex != -1
-            && count == 2
-            && button == Mouse.Button.LEFT) {
-            TableView.RowEditor rowEditor = tableView.getRowEditor();
+        if (!editOnMouseDown) {
+            TableView tableView = (TableView)getComponent();
+            if (selectIndex != -1
+                && count == 2
+                && button == Mouse.Button.LEFT) {
+                TableView.RowEditor rowEditor = tableView.getRowEditor();
 
-            if (rowEditor != null) {
-                if (rowEditor.isEditing()) {
-                    rowEditor.endEdit(true);
+                if (rowEditor != null) {
+                    if (rowEditor.isEditing()) {
+                        rowEditor.endEdit(true);
+                    }
+
+                    rowEditor.beginEdit(tableView, selectIndex, getColumnAt(x));
                 }
-
-                rowEditor.beginEdit(tableView, selectIndex, getColumnAt(x));
             }
         }
 
