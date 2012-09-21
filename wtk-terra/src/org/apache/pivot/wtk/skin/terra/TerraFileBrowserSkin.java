@@ -68,7 +68,6 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Span;
-import org.apache.pivot.wtk.StackPane;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TableViewSortListener;
@@ -662,12 +661,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @BXML private PushButton goHomeButton = null;
     @BXML private TextInput searchTextInput = null;
 
-    @BXML private StackPane fileStackPane = null;
     @BXML private ScrollPane fileScrollPane = null;
     @BXML private TableView fileTableView = null;
 
-    private ActivityIndicator indicator = null;
-    private GridPane activityGrid = null;
+    @BXML private ActivityIndicator indicator = null;
+    @BXML private GridPane activityGrid = null;
 
     private boolean keyboardFolderTraversalEnabled = true;
     private boolean hideDisabledFiles = false;
@@ -1152,31 +1150,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         if (refreshFileListTask != null) {
             refreshFileListTask.abort();
 
-            if (indicator != null) {
+            if (indicator.isActive()) {
                 indicator.setActive(false);
-                fileStackPane.remove(fileStackPane.getLength() - 1, 1);
+                activityGrid.setVisible(false);
             }
         }
 
-        if (indicator == null) {
-            indicator = new ActivityIndicator();
-            activityGrid = new GridPane(5);
-            GridPane.Row row1 = new GridPane.Row();
-            GridPane.Row row2 = new GridPane.Row();
-            GridPane.Row row3 = new GridPane.Row();
-            for (int i = 0; i < 5; i++) {
-                row1.add(new GridPane.Filler());
-                if (i == 2)
-                    row2.add(indicator);
-                else
-                    row2.add(new GridPane.Filler());
-                row3.add(new GridPane.Filler());
-            }
-            activityGrid.getRows().add(row1);
-            activityGrid.getRows().add(row2);
-            activityGrid.getRows().add(row3);
-        }
-        fileStackPane.add(activityGrid);
+        activityGrid.setVisible(true);
         indicator.setActive(true);
 
         fileTableView.setTableData(new ArrayList<File>());
@@ -1202,7 +1182,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             public void taskExecuted(Task<ArrayList<File>> task) {
                 if (task == refreshFileListTask) {
                     indicator.setActive(false);
-                    fileStackPane.remove(fileStackPane.getLength() - 1, 1);
+                    activityGrid.setVisible(false);
 
                     ArrayList<File> fileList = task.getResult();
                     fileTableView.setTableData(fileList);
@@ -1217,7 +1197,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             public void executeFailed(Task<ArrayList<File>> task) {
                 if (task == refreshFileListTask) {
                     indicator.setActive(false);
-                    fileStackPane.remove(fileStackPane.getLength() - 1, 1);
+                    activityGrid.setVisible(false);
 
                     refreshFileListTask = null;
                 }

@@ -109,6 +109,31 @@ limitations under the License.
                         <TableViewHeader tableView="$fileTableView" sortMode="single_column"/>
                     </columnHeader>
                 </ScrollPane>
+
+                <GridPane bxml:id="activityGrid" columnCount="5" visible="false">
+                    <GridPane.Row>
+                        <GridPane.Filler/>
+                        <GridPane.Filler/>
+                        <GridPane.Filler/>
+                        <GridPane.Filler/>
+                        <GridPane.Filler/>
+                    </GridPane.Row>
+                    <GridPane.Row>
+                        <GridPane.Filler/>
+                        <GridPane.Filler/>
+                        <ActivityIndicator bxml:id="indicator" active="false"/>
+                        <GridPane.Filler/>
+                        <GridPane.Filler/>
+                    </GridPane.Row>
+                    <GridPane.Row>
+                        <GridPane.Filler/>
+                        <GridPane.Filler/>
+                        <GridPane.Filler/>
+                        <GridPane.Filler/>
+                        <GridPane.Filler/>
+                    </GridPane.Row>
+                </GridPane>
+
             </StackPane>
         </Border>
     </TablePane.Row>
