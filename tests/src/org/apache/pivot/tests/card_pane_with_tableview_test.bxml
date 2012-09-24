@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Table Views" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml" xmlns:collections="org.apache.pivot.collections"
+    xmlns="org.apache.pivot.wtk"
+>
+    <bxml:script>
+    <![CDATA[
+    importPackage(java.lang);  // required to use System.out and System.err
+    importPackage(org.apache.pivot.collections);  // required to use Pivot class ArrayList and other collections
+    importPackage(org.apache.pivot.util);  // required to use Pivot Utility class Console
+    importPackage(org.apache.pivot.wtk);   // required to use Pivot WTK classes
+
+    function log(msg) {
+        if (msg == undefined || msg == null || typeof msg != "string")
+            return ;
+
+        System.out.println(msg);
+    }
+    ]]>
+    </bxml:script>
+
+    <Border>
+        <BoxPane>
+            <PushButton bxml:id="prevButton" buttonData="Prev">
+                <buttonPressListeners>
+                <![CDATA[
+                function buttonPressed(button) {
+                    log("Previous button pressed");
+
+                    var cardPaneNumPanels = cardPane.getLength();
+                    var cardPaneCurrentIndex = cardPane.getSelectedIndex();
+                    log("cardPaneCurrentIndex = " + cardPaneCurrentIndex + " , in [0 .. " + (cardPaneNumPanels - 1) + "]");
+                    if (cardPaneCurrentIndex > 0) {
+                        cardPane.setSelectedIndex(cardPaneCurrentIndex - 1);
+                    } else {
+                        cardPane.setSelectedIndex(cardPaneNumPanels - 1);
+                    }
+                    // log("now cardPaneCurrentIndex = " + cardPane.getSelectedIndex());
+                }
+                ]]>
+                </buttonPressListeners>
+            </PushButton>
+            <PushButton bxml:id="nextButton" buttonData="Next">
+                <buttonPressListeners>
+                <![CDATA[
+                function buttonPressed(button) {
+                    log("Next button pressed");
+
+                    var cardPaneNumPanels = cardPane.getLength();
+                    var cardPaneCurrentIndex = cardPane.getSelectedIndex();
+                    log("cardPaneCurrentIndex = " + cardPaneCurrentIndex + " , in [0 .. " + (cardPaneNumPanels - 1) + "]");
+                    if (cardPaneCurrentIndex < (cardPaneNumPanels - 1)) {
+                        cardPane.setSelectedIndex(cardPaneCurrentIndex + 1);
+                    } else {
+                        cardPane.setSelectedIndex(0);
+                    }
+                    // log("now cardPaneCurrentIndex = " + cardPane.getSelectedIndex());
+                }
+                ]]>
+                </buttonPressListeners>
+            </PushButton>
+        </BoxPane>
+
+        <ScrollPane>
+
+            <CardPane bxml:id="cardPane" styles="{selectionChangeEffect:'crossfade'}">
+                <TableView bxml:id="cardElement1" styles="{includeTrailingVerticalGridLine:true}">
+                    <columns>
+                        <TableView.Column name="nation" width="180" headerData="Nation"/>
+                        <TableView.Column name="gold"   width="60"  headerData="Gold"/>
+                        <TableView.Column name="silver" width="60"  headerData="Silver"/>
+                        <TableView.Column name="bronze" width="60"  headerData="Bronze"/>
+                        <TableView.Column name="total"  width="60"  headerData="Total"/>
+                    </columns>
+
+                    <collections:HashMap nation="China"         gold="51" silver="21" bronze="28" total="100" />
+                    <collections:HashMap nation="United States" gold="36" silver="38" bronze="36" total="110" />
+                </TableView>
+
+                <TableView bxml:id="cardElement2" styles="{includeTrailingVerticalGridLine:true}">
+                    <columns>
+                        <TableView.Column name="nation" width="180" headerData="Nation"/>
+                        <TableView.Column name="gold"   width="60"  headerData="Gold"/>
+                        <TableView.Column name="silver" width="60"  headerData="Silver"/>
+                        <TableView.Column name="bronze" width="60"  headerData="Bronze"/>
+                        <TableView.Column name="total"  width="60"  headerData="Total"/>
+                    </columns>
+
+                    <collections:HashMap nation="China"         gold="51" silver="21" bronze="28" total="100" />
+                    <collections:HashMap nation="United States" gold="36" silver="38" bronze="36" total="110" />
+                    <collections:HashMap nation="China"         gold="51" silver="21" bronze="28" total="100" />
+                    <collections:HashMap nation="United States" gold="36" silver="38" bronze="36" total="110" />
+                    <collections:HashMap nation="China"         gold="51" silver="21" bronze="28" total="100" />
+                    <collections:HashMap nation="United States" gold="36" silver="38" bronze="36" total="110" />
+                    <collections:HashMap nation="China"         gold="51" silver="21" bronze="28" total="100" />
+                    <collections:HashMap nation="United States" gold="36" silver="38" bronze="36" total="110" />
+                    <collections:HashMap nation="China"         gold="51" silver="21" bronze="28" total="100" />
+                    <collections:HashMap nation="United States" gold="36" silver="38" bronze="36" total="110" />
+                </TableView>
+
+                <BoxPane bxml:id="cardElement3">
+                    <Label text="Test Label"
+                        styles="{font:'Helvetica bold 64', color:'#bbbbbb', wrapText:true, horizontalAlignment:'center', verticalAlignment:'center'}"
+                    />
+                </BoxPane>
+            </CardPane>
+
+            <columnHeader>
+                <TableViewHeader tableView="$cardElement2" />
+            </columnHeader>
+
+        </ScrollPane>
+    </Border>
+
+</Window>
