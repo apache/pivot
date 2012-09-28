@@ -32,7 +32,7 @@ public class Pivot721 extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window) bxmlSerializer.readObject(Pivot721.class, "pivot_721.bxml");
+        window = (Window) bxmlSerializer.readObject(Pivot734.class, "pivot_721.bxml");
 
         // force fill into button renderer, but only in some buttons ...
         ButtonDataRenderer filledButtonDataRenderer = new ButtonDataRenderer();

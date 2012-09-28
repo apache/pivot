@@ -166,7 +166,6 @@ limitations under the License.
                     <path refid="classpath.general"/>
                     <dirset dir="${basedir}" includes="**/${folder.bin}"/>
                     <fileset dir="@{project}" includes="lib/**/*.jar"/>
-                    <fileset dir="${basedir}" includes="wtk/lib/*.jar"/>
                     <project-lib/>
                 </classpath>
             </javac>

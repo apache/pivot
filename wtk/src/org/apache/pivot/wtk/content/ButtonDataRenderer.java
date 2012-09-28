@@ -38,6 +38,7 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
     public ButtonDataRenderer() {
         getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        getStyles().put("fill", true);
 
         add(imageView);
         add(label);
@@ -80,11 +81,6 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
             imageView.setImage(icon);
 
             imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
-
-            if (getFillIcon()) {
-                imageView.setPreferredWidth(button.getWidth());
-                imageView.setPreferredHeight(button.getHeight());
-            }
         }
 
         // Update the label
@@ -139,7 +135,6 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
 
     public void setFillIcon(boolean fillIcon) {
         imageView.getStyles().put("fill", fillIcon);
-        getStyles().put("fill", fillIcon);
     }
 
     @Override
