@@ -31,6 +31,7 @@ import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.List.ItemIterator;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
@@ -103,9 +104,16 @@ public class StockTrackerWindow extends Window implements Bindable {
         @Override
         public void perform(Component source) {
             int selectedIndex = stocksTableView.getFirstSelectedIndex();
-            int selectionLength = stocksTableView.getLastSelectedIndex() - selectedIndex + 1;
-            stocksTableView.getTableData().remove(selectedIndex, selectionLength);
-            symbols.remove(selectedIndex, selectionLength);
+            ArrayList<Span> spanList = new ArrayList<Span>(stocksTableView.getSelectedRanges());
+
+            // remove spans in reverse order to prevent IndexOutOfBoundsException
+            ItemIterator<Span> it = spanList.iterator();
+            it.toEnd();
+            while (it.hasPrevious()) {
+                Span span = it.previous();
+                stocksTableView.getTableData().remove(span.start, (int) span.getLength());
+                symbols.remove(span.start, (int) span.getLength());
+            }
 
             if (selectedIndex >= symbols.getLength()) {
                 selectedIndex = symbols.getLength() - 1;
