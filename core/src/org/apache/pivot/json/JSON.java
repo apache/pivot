@@ -73,8 +73,7 @@ public class JSON {
 
             String key = keys.get(i);
 
-            Map<String, T> adapter = (Map<String, T>) (value instanceof java.util.Map ? new MapAdapter<String, T>((java.util.Map<String, T>) value) :
-                    (value instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) value): new BeanAdapter(value)));
+            Map<String, T> adapter = (Map<String, T>) (value instanceof java.util.Map ? new MapAdapter<String, T>((java.util.Map<String, T>) value) : new BeanAdapter(value));
             if (adapter.containsKey(key)) {
                 value = adapter.get(key);
             } else if (value instanceof Sequence<?>) {
@@ -148,8 +147,7 @@ public class JSON {
             throw new IllegalArgumentException("Invalid path.");
         }
 
-        Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<String, T>((java.util.Map<String, T>) parent) :
-                (parent instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) parent): new BeanAdapter(parent)));
+        Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<String, T>((java.util.Map<String, T>) parent) : new BeanAdapter(parent));
 
         Object previousValue;
         if (adapter.containsKey(key)) {
@@ -234,8 +232,7 @@ public class JSON {
         if (parent == null) {
             containsKey = false;
         } else {
-            Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<String, T>((java.util.Map<String, T>) parent) :
-                    (parent instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) parent): new BeanAdapter(parent)));
+            Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<String, T>((java.util.Map<String, T>) parent) : new BeanAdapter(parent));
             containsKey = adapter.containsKey(key);
 
             if (!containsKey) {
