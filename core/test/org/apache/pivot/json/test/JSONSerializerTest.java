@@ -132,7 +132,7 @@ public class JSONSerializerTest {
 
         jsonSerializer.getJSONSerializerListeners().add(jsonSerializerListener);
         Object o1 = jsonSerializer.readObject(getClass().getResourceAsStream("map.json"));
-        assertEquals(JSON.get(o1, "count"), 8);
+        assertEquals(JSON.get(o1, "e.g"), 5);
 
         jsonSerializer.getJSONSerializerListeners().remove(jsonSerializerListener);
         Object o2 = jsonSerializer.readObject(getClass().getResourceAsStream("map.json"));
