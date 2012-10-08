@@ -42,6 +42,16 @@ import org.apache.pivot.util.ListenerList;
  * Properties may provide multiple setters; the appropriate setter to invoke
  * is determined by the type of the value being set. If the value is
  * <tt>null</tt>, the return type of the getter method is used.
+ *
+ * <p> Getter methods must be named "getProperty" where "property" is
+ * the property name.  If there is no "get" method, then an "isProperty"
+ * method can also be used.  Setter methods (if present) must be named
+ * "setProperty".
+ *
+ * <p> Getter and setter methods are checked before straight fields
+ * named "property" in order to support proper data encapsulation.
+ * And only <code>public</code> and non-<code>static</code> methods
+ * and fields can be accessed.
  */
 public class BeanAdapter implements Map<String, Object> {
     /**
@@ -171,7 +181,10 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * Creates a new bean dictionary.
+     * Creates a new bean dictionary which can ignore readonly fields
+     * (that is, straight fields marked as <code>final</code> or bean
+     * properties where there is a "get" method but no corresponding
+     * "set" method).
      *
      * @param bean
      * The bean object to wrap.
