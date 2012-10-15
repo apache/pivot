@@ -60,6 +60,7 @@ import java.util.TimerTask;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
@@ -1830,6 +1831,10 @@ public abstract class ApplicationContext {
     protected static void destroyTimer() {
         timer.cancel();
         timer = null;
+    }
+
+    public static List<Display> getDisplays() {
+        return displays;
     }
 
     protected static void invalidateDisplays() {
