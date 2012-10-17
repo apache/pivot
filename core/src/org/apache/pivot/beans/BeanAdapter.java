@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 
+import org.apache.pivot.beans.PropertyNotFoundException;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ListenerList;
@@ -259,7 +260,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * Invokes the a setter method for the given property. The method
+     * Invokes the setter method for the given property. The method
      * signature is determined by the type of the value. If the value is
      * <tt>null</tt>, the return type of the getter method is used.
      *
@@ -342,6 +343,58 @@ public class BeanAdapter implements Map<String, Object> {
         mapListeners.valueUpdated(this, key, previousValue);
 
         return previousValue;
+    }
+
+    /**
+     * Invokes the setter methods for all the given properties that are
+     * present in the map. The method signatures are determined by the
+     * type of the values. If any value is <tt>null</tt>, the return
+     * type of the getter method is used.
+     *
+     * @param valueMap
+     * The map of keys and values to be set.
+     *
+     * @throws PropertyNotFoundException
+     * If any of the given properties do not exist or are read-only.
+     */
+    public void putAll(Map<String, ?> valueMap) {
+        for (String key : valueMap) {
+            put(key, valueMap.get(key));
+        }
+    }
+
+    /**
+     * Invokes the setter methods for all the given properties that are
+     * present in the map. The method signatures are determined by the
+     * type of the values. If any value is <tt>null</tt>, the return
+     * type of the getter method is used. There is an option to ignore
+     * (that is, not throw) exceptions during the process, but to
+     * return status if any exceptions were caught and ignored.
+     *
+     * @param valueMap
+     * The map of keys and values to be set.
+     *
+     * @param ignoreErrors
+     * If <code>true</code> then any {@link PropertyNotFoundException}
+     * thrown by the {@link #put put()} method will be caught and ignored.
+     *
+     * @return
+     * <code>true</code> if any exceptions were caught, <code>false</code>
+     * if not.
+     */
+    public boolean putAll(Map<String, ?> valueMap, boolean ignoreErrors) {
+        boolean anyErrors = false;
+        for (String key : valueMap) {
+            try {
+                put(key, valueMap.get(key));
+            }
+            catch (PropertyNotFoundException ex) {
+                if (!ignoreErrors)
+                    throw ex;
+                anyErrors = true;
+            }
+        }
+        return anyErrors;
     }
 
     /**
