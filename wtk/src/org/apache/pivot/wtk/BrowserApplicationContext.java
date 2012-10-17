@@ -159,6 +159,32 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Disable focus traversal keys
                 setFocusTraversalKeysEnabled(false);
 
+                // Let pivot manage the focus inside the applet, where we have only one AWT component
+                setFocusTraversalPolicyProvider(true);
+                setFocusCycleRoot(true);
+                setFocusTraversalPolicy(new java.awt.FocusTraversalPolicy() {
+                    @Override
+                    public java.awt.Component getLastComponent(java.awt.Container aContainer) {
+                        return null;
+                    }
+                    @Override
+                    public java.awt.Component getFirstComponent(java.awt.Container aContainer) {
+                        return null;
+                    }
+                    @Override
+                    public java.awt.Component getDefaultComponent(java.awt.Container aContainer) {
+                        return null;
+                    }
+                    @Override
+                    public java.awt.Component getComponentBefore(java.awt.Container aContainer, java.awt.Component aComponent) {
+                        return HostApplet.this.displayHost;
+                    }
+                    @Override
+                    public java.awt.Component getComponentAfter(java.awt.Container aContainer, java.awt.Component aComponent) {
+                        return HostApplet.this.displayHost;
+                    }
+                });
+
                 // Clear the background
                 setBackground(null);
 
