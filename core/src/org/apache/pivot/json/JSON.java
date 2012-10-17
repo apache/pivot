@@ -25,6 +25,19 @@ import org.apache.pivot.collections.adapter.MapAdapter;
 
 /**
  * Contains utility methods for working with JSON or JSON-like data structures.
+ *
+ * <p> Special treatment is afforded to {@link java.util.Map java.util.Map} and
+ * {@link org.apache.pivot.collections.Map org.apache.pivot.collections.Map} objects at any level
+ * of the hierarchy.  Otherwise a {@link BeanAdapter} is used to
+ * fetch the value from the object.
+ *
+ * <p> If, however, the object at a given level is a
+ * {@link org.apache.pivot.collections.Sequence} then the key
+ * is assumed to be an integer index into the sequence.
+ *
+ * <p> Also, special consideration is given to an object that
+ * implements the {@link Dictionary} interface.
+ *
  */
 public class JSON {
     /**

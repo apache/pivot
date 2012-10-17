@@ -43,6 +43,15 @@ import org.apache.pivot.util.ListenerList;
  * cell, it will retain its natural size, and you can set the
  * horizontalAlignment and verticalAlignment styles of the BoxPane to, say,
  * center the button within the cell.
+ *
+ * <p> Setting the <code>fill</code> style to true will cause the BoxPane to
+ * completely fill the space allotted by its container in the direction
+ * orthogonal to the layout direction.  So, for a vertical layout, the
+ * width will be the width of its container and the children of the BoxPane
+ * will also be sized accordingly (i.e., full width of the space).  And so
+ * for a horizontal layout, with <code>fill</code> set to true the height
+ * of the BoxPane will be the height allotted by its container and the
+ * children of the BoxPane will have their heights set accordingly.
  */
 public class BoxPane extends Container {
     private static class BoxPaneListenerList extends WTKListenerList<BoxPaneListener>
