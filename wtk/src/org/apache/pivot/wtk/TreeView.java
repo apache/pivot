@@ -615,7 +615,7 @@ public class TreeView extends Component {
             }
 
             // Remove child handlers
-            clear();
+            super.clear();
 
             // Update our data structures
             clearPaths(expandedPaths, path);
