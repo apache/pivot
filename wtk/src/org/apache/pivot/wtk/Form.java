@@ -545,8 +545,36 @@ public class Form extends Container {
         return formAttributeListeners;
     }
 
+    /**
+     * Finds the {@link Form.Section} that the given component belongs to.
+     * Only finds the section if the component is a direct child of the section.
+     *
+     * @see #getEnclosingSection getEnclosingSection(Component)
+     */
     public static Section getSection(Component component) {
         return (Section)component.getAttribute(Attribute.SECTION);
+    }
+
+    /**
+     * Finds the {@link Form.Section} that the given component belongs to.
+     * Will search up the parent hierarchy in case the component is nested inside
+     * other containers inside the form.
+     *
+     * @return
+     * The form section this component (or one of its parents) belongs to or
+     * <code>null</code> if the component does not belong to a form.
+     *
+     * @see #getSection getSection(Component)
+     */
+    public static Section getEnclosingSection(Component component) {
+        Section section = (Section)component.getAttribute(Attribute.SECTION);
+        if (section == null) {
+            for (Container parent = component.getParent();
+                 parent != null && (section = (Section)parent.getAttribute(Attribute.SECTION)) == null; ) {
+                parent = parent.getParent();
+            }
+        }
+        return section;
     }
 
     public static String getLabel(Component component) {
