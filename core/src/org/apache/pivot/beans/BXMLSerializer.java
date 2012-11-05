@@ -1401,6 +1401,15 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         element = element.parent;
     }
 
+    /**
+     * Return the current location of the XML parser.  Useful to ascertain the
+     * location where an error occurred (if the error was not an XMLStreamException,
+     * which has its own {@link XMLStreamException#getLocation} method).
+     */
+    public Location getCurrentLocation() {
+        return xmlStreamReader.getLocation();
+    }
+
     private void logException() {
         Location streamReaderlocation = xmlStreamReader.getLocation();
         String message = "An error occurred at line number " + streamReaderlocation.getLineNumber();
