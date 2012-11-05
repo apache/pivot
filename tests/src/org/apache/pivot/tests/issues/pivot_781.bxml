@@ -27,6 +27,13 @@ limitations under the License.
     <bxml:script>
     <![CDATA[
     importPackage(java.lang);    // for System
+    importPackage(org.apache.pivot.wtk);    // for application and other wtk classes
+
+    function exit() {
+        // System.exit(0);  // Exit from the JVM
+        DesktopApplicationContext.exit();  // better, tell Pivot to Exit from the Application
+    }
+
 
     System.out.println("This (Test) application has to be run with --maximized=true, to test the current issue");
     System.out.println("After, run even with --fullScreen=true, and finally maybe with a combination of both ...");
@@ -39,7 +46,10 @@ limitations under the License.
                 <buttonPressListeners>
                 function buttonPressed(button) {
                     System.out.println("Exiting from application now.");
-                    System.exit(0);
+                    // System.exit(0);  // Exit from the JVM
+                    // better, tell Pivot to Exit from the Application with a normal exit,
+                    // but wrapping the method call inside a JavaScript helper method
+                    exit();
                 }
                 </buttonPressListeners>
             </PushButton>
