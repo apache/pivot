@@ -621,6 +621,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
             // Initial configuration of the windows
             setFullScreen(fullScreen, visible);
 
+            // TODO This is a workaround for Java bug #6365898 on Linux (fixed only in Java 7),
+            // revisit / remove later when we'll require Java 7
+            // System.out.println("maximized = " + maximized + ", visible = " + visible);
+            if (maximized && visible) {
+                windowedHostFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+            }
+
             // Start the application in a callback to allow the host window to
             // open first
             queueCallback(new Runnable() {
