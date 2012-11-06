@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
@@ -148,6 +149,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     private Insets padding;
 
+    private HorizontalAlignment horizontalAlignment;
+
     private Dimensions averageCharacterSize;
 
     private static final int SCROLL_RATE = 50;
@@ -167,6 +170,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
         padding = new Insets(2);
+        horizontalAlignment = HorizontalAlignment.LEFT;
 
         selectionColor = theme.getColor(4);
         selectionBackgroundColor = theme.getColor(14);
@@ -270,6 +274,30 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             && textInput.getSelectionLength() == 0);
     }
 
+    private int getAlignmentDeltaX() {
+        int alignmentDeltaX = 0;
+        switch (horizontalAlignment) {
+            case LEFT:
+                break;
+            case CENTER: {
+                TextInput textInput = (TextInput)getComponent();
+                double txtWidth = glyphVector == null ? 0 : glyphVector.getLogicalBounds().getWidth();
+                int availWidth = textInput.getWidth() - (padding.left + padding.right + 2);
+                alignmentDeltaX = (int)(availWidth - txtWidth) / 2;
+                break;
+            }
+            case RIGHT: {
+                TextInput textInput = (TextInput)getComponent();
+                double txtWidth = glyphVector == null ? 0 : glyphVector.getLogicalBounds().getWidth();
+                int availWidth = textInput.getWidth() - (padding.left + padding.right + 2 + caret.width);
+                alignmentDeltaX = (int)(availWidth - txtWidth);
+                break;
+            }
+        }
+
+        return alignmentDeltaX;
+    }
+
     @Override
     public void paint(Graphics2D graphics) {
         TextInput textInput = (TextInput)getComponent();
@@ -316,6 +344,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         String prompt = textInput.getPrompt();
 
         Color caretColor;
+
+        int alignmentDeltaX = getAlignmentDeltaX();
+        int xpos = padding.left - scrollLeft + 1 + alignmentDeltaX;
+
         if (glyphVector == null
             && prompt != null) {
             graphics.setFont(font);
@@ -324,7 +356,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 fontRenderContext.getAntiAliasingHint());
             graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
                 fontRenderContext.getFractionalMetricsHint());
-            graphics.drawString(prompt, padding.left - scrollLeft + 1,
+            graphics.drawString(prompt, xpos,
                 (height - textHeight) / 2 + ascent);
 
             caretColor = color;
@@ -350,7 +382,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 if (selection == null) {
                     // Paint the text
                     graphics.setColor(colorLocal);
-                    graphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1,
+                    graphics.drawGlyphVector(glyphVector, xpos,
                         (height - textHeight) / 2 + ascent);
                 } else {
                     // Paint the unselected text
@@ -361,7 +393,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     Graphics2D textGraphics = (Graphics2D)graphics.create();
                     textGraphics.setColor(colorLocal);
                     textGraphics.clip(unselectedArea);
-                    textGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1,
+                    textGraphics.drawGlyphVector(glyphVector, xpos,
                         (height - textHeight) / 2 + ascent);
                     textGraphics.dispose();
 
@@ -383,7 +415,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     Graphics2D selectedTextGraphics = (Graphics2D)graphics.create();
                     selectedTextGraphics.setColor(selectionColorLocal);
                     selectedTextGraphics.clip(selection.getBounds());
-                    selectedTextGraphics.drawGlyphVector(glyphVector, padding.left - scrollLeft + 1,
+                    selectedTextGraphics.drawGlyphVector(glyphVector, xpos,
                         (height - textHeight) / 2 + ascent);
                     selectedTextGraphics.dispose();
                 }
@@ -411,7 +443,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             offset = 0;
         } else {
             // Translate to glyph coordinates
-            x -= (padding.left - scrollLeft + 1);
+            x -= (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
 
             Rectangle2D textBounds = glyphVector.getLogicalBounds();
 
@@ -468,7 +500,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 width = 0;
             }
 
-            characterBounds = new Bounds(x + padding.left - scrollLeft + 1, padding.top + 1,
+            characterBounds = new Bounds(x + padding.left - scrollLeft + 1 + getAlignmentDeltaX(), padding.top + 1,
                 width, getHeight() - (padding.top + padding.bottom + 2));
         }
 
@@ -917,6 +949,19 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
 
         setPadding(Insets.decode(padding));
+    }
+
+    public HorizontalAlignment getHorizontalAlignment() {
+        return horizontalAlignment;
+    }
+
+    public final void setHorizontalAlignment(HorizontalAlignment alignment) {
+        if (alignment == null) {
+            throw new IllegalArgumentException("horizontalAlignment is null.");
+        }
+
+        this.horizontalAlignment = alignment;
+        invalidateComponent();
     }
 
     @Override
@@ -1453,6 +1498,16 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
+    public void setSize(int width, int height) {
+        boolean invalidate = (horizontalAlignment != HorizontalAlignment.LEFT) && (width != this.getWidth());
+        super.setSize(width, height);
+        if (invalidate) {
+            updateSelection();
+            invalidateComponent();
+        }
+    }
+
+    @Override
     public void removeTextVetoed(TextInput textInput, Vote reason) {
         // No-op
     }
@@ -1521,10 +1576,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             // The insertion point is after the last character
             int x;
             if (n == 0) {
-                x = padding.left - scrollLeft + 1;
+                x = padding.left - scrollLeft + 1 + getAlignmentDeltaX();
             } else {
                 Rectangle2D textBounds = glyphVector.getLogicalBounds();
-                x = (int)Math.ceil(textBounds.getWidth()) + (padding.left - scrollLeft + 1);
+                x = (int)Math.ceil(textBounds.getWidth()) + (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
             }
 
             int y = padding.top + 1;
@@ -1563,4 +1618,5 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             scheduledBlinkCaretCallback = null;
         }
     }
+
 }
