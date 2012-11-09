@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Pivot-880" maximized="true"
+    bxml:id="window"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk"
+>
+    <bxml:script>
+    <![CDATA[
+    importPackage(java.lang);  // required to use System.out and System.err
+    // importPackage(org.apache.pivot.collections);  // for collections
+    importPackage(org.apache.pivot.beans);  // for BXMLSerializer
+    importPackage(org.apache.pivot.util);   // for some useful stuff
+    importPackage(org.apache.pivot.wtk);    // for application and other wtk classes
+
+    System.out.println("inline script 1 - start");
+    System.out.println("current window = " + window);
+
+    // JS variables for (remote) resources
+    var bxmlSerializer = new BXMLSerializer();  // trick, create a new instance of BXMLSerializer ...
+    System.out.println("bxmlSerializer is " + bxmlSerializer);
+
+function openFileBrowser(root) {
+    System.out.println("Opening FileBrowser with the given folder \"" + root + "\" as root");
+
+    var fileBrowser = null;
+    if (root == undefined || root == null || root.length < 1)
+        fileBrowser = new FileBrowserSheet();
+    else {
+        // fileBrowser = new FileBrowserSheet(FileBrowserSheet.Mode.OPEN, root);  // ok in Java, but not from JavaScript ...
+        fileBrowser = new FileBrowserSheet();
+        fileBrowser.setRootFolder(root);
+    }
+
+    fileBrowser.open(window, null);
+}
+
+    System.out.println("inline script 1 - end");
+    ]]>
+    </bxml:script>
+
+    <Border styles="{padding:6}">
+        <TablePane>
+            <columns>
+                <TablePane.Column width="1*"/>
+            </columns>
+            <TablePane.Row height="-1">
+                <FlowPane styles="{padding:2, alignToBaseline:true}">
+                    <TextInput bxml:id="textInput" text="\\server\share" textSize="30"/>
+                    <Label text="  "/>
+                    <PushButton bxml:id="selectFolderButton" buttonData="Open Folder">
+                        <buttonPressListeners>
+                            function buttonPressed(button) {
+                                openFileBrowser(textInput.text);
+                            }
+                        </buttonPressListeners>
+                    </PushButton>
+                </FlowPane>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <FlowPane styles="{padding:2, alignToBaseline:true}">
+                    <TextArea editable="false" preferredWidth="400" styles="{}"
+                        text="Note: for this test you have to select a network folder, using the UNC format (typical of a Windows environment)"
+                    />
+                </FlowPane>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <Label text="  "/> <!-- spacer -->
+            </TablePane.Row>
+        </TablePane>
+    </Border>
+</Window>
