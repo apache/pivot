@@ -711,7 +711,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
                 if (previousSelectedItem != null) {
                     File drive = (File)listButton.getSelectedItem();
-                    if(drive.canRead()) {
+                    if(drive != null && drive.canRead()) {
                         fileBrowser.setRootDirectory(drive);
                     } else {
                         refreshRoots = true;
