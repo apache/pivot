@@ -110,6 +110,19 @@ public class FileBrowserSheet extends Sheet {
     /**
      * Creates a new FileBrowserSheet
      * <p>
+     * Note that this version of the constructor can be used when a custom root folder has to be set,
+     * and uses the default mode.
+     *
+     * @param rootFolder
+     * The root folder full name.
+     */
+    public FileBrowserSheet(String rootFolder) {
+        this(Mode.OPEN, rootFolder);
+    }
+
+    /**
+     * Creates a new FileBrowserSheet
+     * <p>
      * Note that this version of the constructor must be used when a custom root folder has to be set.
      *
      * @param mode
