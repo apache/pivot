@@ -37,15 +37,17 @@ limitations under the License.
     System.out.println("bxmlSerializer is " + bxmlSerializer);
 
 function openFileBrowser(root) {
-    System.out.println("Opening FileBrowser with the given folder \"" + root + "\" as root");
+    System.out.println("Opening FileBrowserSheet with the given folder \"" + root + "\" as root");
 
     var fileBrowser = null;
     if (root == undefined || root == null || root.length < 1)
         fileBrowser = new FileBrowserSheet();
     else {
         // fileBrowser = new FileBrowserSheet(FileBrowserSheet.Mode.OPEN, root);  // ok in Java, but not from JavaScript ...
-        fileBrowser = new FileBrowserSheet();
-        fileBrowser.setRootFolder(root);
+        // fileBrowser = new FileBrowserSheet();
+        // fileBrowser.setRootFolder(root);
+        // using the new constructor in FileBrowserSheet
+        fileBrowser = new FileBrowserSheet(root);
     }
 
     fileBrowser.open(window, null);
@@ -62,12 +64,13 @@ function openFileBrowser(root) {
             </columns>
             <TablePane.Row height="-1">
                 <FlowPane styles="{padding:2, alignToBaseline:true}">
-                    <TextInput bxml:id="textInput" text="\\server\share" textSize="30"/>
+                    <TextInput bxml:id="textInput" prompt="Write here the \\server\share to open" textSize="30"/>
                     <Label text="  "/>
                     <PushButton bxml:id="selectFolderButton" buttonData="Open Folder">
                         <buttonPressListeners>
                             function buttonPressed(button) {
-                                openFileBrowser(textInput.text);
+                                if (textInput.text.length() > 0)
+                                    openFileBrowser(textInput.text);
                             }
                         </buttonPressListeners>
                     </PushButton>
