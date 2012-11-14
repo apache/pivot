@@ -181,6 +181,9 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private Quadratic easing = new Quadratic();
     private TranslationDecorator translationDecorator = new TranslationDecorator(true);
 
+    private boolean closingResult;
+    private boolean doingFinalClose = false;
+
     private ComponentListener ownerListener = new ComponentListener.Adapter() {
         @Override
         public void locationChanged(Component component, int previousX, int previousY) {
@@ -653,46 +656,53 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     @Override
-    public Vote previewSheetClose(final Sheet sheet, final boolean result) {
-        // Start a close transition, return false, and close the window
-        // when the transition is complete
+    public Vote previewSheetClose(Sheet sheet, boolean result) {
         Vote vote = Vote.APPROVE;
 
         // Don't start the transition if the sheet is being closed as a result
         // of the owner closing
         Window owner = sheet.getOwner();
         if (!(owner.isClosing()
-            || owner.isClosed())) {
-            TransitionListener transitionListener = new TransitionListener() {
-                @Override
-                public void transitionCompleted(Transition transition) {
-                    sheet.close(result);
-                    openTransition = null;
-                }
-            };
-
+            || owner.isClosed()
+            || doingFinalClose)) {
             if (openTransition == null) {
-                // Start the close transition
+                // Setup for the close transition
+                // Don't start it until we know that everyone
+                // else is okay with it
                 openTransition = new OpenTransition(true);
-                openTransition.start(transitionListener);
+                closingResult = result;
             } else {
                 // Reverse the open transition
-                openTransition.reverse();
+                if (openTransition.isRunning()) {
+                    openTransition.reverse();
+                }
             }
 
-            vote = (openTransition != null
-                && openTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+            vote = (openTransition != null) ? Vote.DEFER : Vote.APPROVE;
         }
 
         return vote;
     }
 
     @Override
-    public void sheetCloseVetoed(Sheet sheet, Vote reason) {
+    public void sheetCloseVetoed(final Sheet sheet, Vote reason) {
         if (reason == Vote.DENY
             && openTransition != null) {
             openTransition.stop();
             openTransition = null;
+        } else
+        if (reason == Vote.DEFER
+            && openTransition != null
+            && !openTransition.isRunning()) {
+            openTransition.start(new TransitionListener() {
+                @Override
+                public void transitionCompleted(Transition transition) {
+                    openTransition = null;
+                    doingFinalClose = true;
+                    sheet.close(closingResult);
+                    doingFinalClose = false;
+                }
+            });
         }
     }
 
