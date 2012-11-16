@@ -735,8 +735,8 @@ public class TextArea extends Component {
                         throw new IllegalArgumentException("Text length is greater than maximum length.");
                     }
                     paragraph.append(' ');
-                    tabPosition++;
                 }
+                tabPosition += spaces;
             } else {
                 paragraph.append((char)c);
                 tabPosition++;
@@ -775,6 +775,8 @@ public class TextArea extends Component {
             Paragraph paragraph = paragraphs.get(paragraphIndex);
 
             int characterOffset = index - paragraph.offset;
+            int tabPosition = characterOffset;
+            int tabWidth = ((TextArea.Skin)getSkin()).getTabWidth();
 
             StringBuilder textBuilder = new StringBuilder();
 
@@ -793,11 +795,19 @@ public class TextArea extends Component {
                     paragraph.insertText(trailingCharacters, 0);
                     paragraphSequence.insert(paragraph, ++paragraphIndex);
                     characterOffset = 0;
+                    tabPosition = 0;
 
                     textBuilder = new StringBuilder();
+                } else if (c == '\t') {
+                    int spaces = tabWidth - (tabPosition % tabWidth);
+                    for (int j = 0; j < spaces; j++) {
+                        textBuilder.append(' ');
+                    }
+                    tabPosition += spaces;
                 } else {
                     // Append character
                     textBuilder.append(c);
+                    tabPosition++;
                 }
             }
 
