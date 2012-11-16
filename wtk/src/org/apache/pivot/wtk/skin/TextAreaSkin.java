@@ -771,6 +771,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         this.acceptsEnter = acceptsEnter;
     }
 
+    @Override
     public int getTabWidth() {
         return tabWidth;
     }
