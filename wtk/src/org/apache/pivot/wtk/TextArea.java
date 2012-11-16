@@ -283,6 +283,12 @@ public class TextArea extends Component {
          * @param index
          */
         public Bounds getCharacterBounds(int index);
+
+        /**
+         * Returns the current setting of the "tabWidth" style
+         * (so "setText" uses the same value as Ctrl-Tab from user).
+         */
+        public int getTabWidth();
     }
 
     /**
@@ -709,6 +715,8 @@ public class TextArea extends Component {
         int characterCountLocal = 0;
 
         Paragraph paragraph = new Paragraph();
+        int tabPosition = 0;
+        int tabWidth = ((TextArea.Skin)getSkin()).getTabWidth();
 
         int c = textReader.read();
         while (c != -1) {
@@ -719,8 +727,19 @@ public class TextArea extends Component {
             if (c == '\n') {
                 paragraphsLocal.add(paragraph);
                 paragraph = new Paragraph();
+                tabPosition = 0;
+            } else if (c == '\t') {
+                int spaces = tabWidth - (tabPosition % tabWidth);
+                for (int i = 0; i < spaces; i++) {
+                    if (++characterCountLocal > maximumLength) {
+                        throw new IllegalArgumentException("Text length is greater than maximum length.");
+                    }
+                    paragraph.append(' ');
+                    tabPosition++;
+                }
             } else {
                 paragraph.append((char)c);
+                tabPosition++;
             }
 
             c = textReader.read();
