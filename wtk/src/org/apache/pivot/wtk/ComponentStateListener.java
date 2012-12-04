@@ -37,16 +37,27 @@ public interface ComponentStateListener {
 
     /**
      * Called when a component's enabled state has changed.
+     * <p> Called both when the component is enabled and when it is disabled.
+     * The component's <code>enabled</code> flag has already been set when this
+     * method is called so the new state can be determined by calling the
+     * {@link Component#isEnabled} method.
      *
-     * @param component
+     * @param component The component whose enabled state is changing.
      */
     public void enabledChanged(Component component);
 
     /**
      * Called when a component's focused state has changed.
+     * <p> This will be called both when a component gains focus and when it loses
+     * focus. The currently focused component has already been set when this method
+     * is called, so that the new state of the component can be determined by calling
+     * the {@link Component#isFocused} method.
      *
-     * @param component
-     * @param obverseComponent
+     * @param component The component that is either gaining focus or the one that
+     *                  previously had focus and is now losing it.
+     * @param obverseComponent If the component is gaining focus, this is the component
+     *                         that is losing focus. If the component is losing focus
+     *                         this is the component that is gaining the focus instead.
      */
     public void focusedChanged(Component component, Component obverseComponent);
 }
