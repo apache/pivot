@@ -580,6 +580,8 @@ public class TextArea extends Component {
     private int selectionStart = 0;
     private int selectionLength = 0;
 
+    private boolean expandTabs = false;
+
     private int maximumLength = Integer.MAX_VALUE;
     private boolean editable = true;
 
@@ -728,7 +730,7 @@ public class TextArea extends Component {
                 paragraphsLocal.add(paragraph);
                 paragraph = new Paragraph();
                 tabPosition = 0;
-            } else if (c == '\t') {
+            } else if (c == '\t' && expandTabs) {
                 int spaces = tabWidth - (tabPosition % tabWidth);
                 for (int i = 0; i < spaces; i++) {
                     if (++characterCountLocal > maximumLength) {
@@ -798,7 +800,7 @@ public class TextArea extends Component {
                     tabPosition = 0;
 
                     textBuilder = new StringBuilder();
-                } else if (c == '\t') {
+                } else if (c == '\t' && expandTabs) {
                     int spaces = tabWidth - (tabPosition % tabWidth);
                     for (int j = 0; j < spaces; j++) {
                         textBuilder.append(' ');
@@ -1239,6 +1241,27 @@ public class TextArea extends Component {
         if (textKey != null) {
             setText("");
         }
+    }
+
+    public boolean getExpandTabs() {
+        return expandTabs;
+    }
+
+    /**
+     * Sets whether tab characters (<code>\t</code>) are expanded to
+     * an appropriate number of spaces during {@link #setText} and
+     * {@link #insertText} operations.
+     * @param expandTabs <code>true</code> to replace tab characters
+     *                   with space characters (depending on the
+     *                   setting of the {@link TextArea.Skin#getTabWidth}
+     *                   value) or <code>false</code> to leave tabs alone.
+     *                   Note: this only affects tabs encountered during
+     *                   program operations; tabs entered via the keyboard
+     *                   by the user are always expanded, regardless of
+     *                   this setting.
+     */
+    public void setExpandTabs(boolean expandTabs) {
+        this.expandTabs = expandTabs;
     }
 
     public int getInsertionPoint(int x, int y) {
