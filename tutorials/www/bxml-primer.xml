@@ -156,7 +156,7 @@ limitations under the License.
 
         <source type="xml">
         <![CDATA[
-        <bxml:include src="my_include.bxml"/>;
+        <bxml:include src="my_include.bxml"/>
         ]]>
         </source>
 
