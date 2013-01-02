@@ -1177,7 +1177,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         refreshFileListTask = new RefreshFileListTask(includeFileFilter, disabledFileFilter, fileComparator);
         refreshFileListTask.execute(new TaskAdapter<ArrayList<File>>(new TaskListener<ArrayList<File>>() {
-            @SuppressWarnings("unchecked")
             @Override
             public void taskExecuted(Task<ArrayList<File>> task) {
                 if (task == refreshFileListTask) {

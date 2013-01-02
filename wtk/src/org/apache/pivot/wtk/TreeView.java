@@ -1666,7 +1666,6 @@ public class TreeView extends Component {
                 Path ancestorPath = new Path(path, path.getLength() - 1);
 
                 for (int i = ancestorPath.getLength() - 1; i >= 0; i--) {
-                    @SuppressWarnings("null")  // false warning from eclipse
                     NodeCheckState ancestorPreviousCheckState = ancestorCheckStates.get(i);
                     NodeCheckState ancestorCheckState = getNodeCheckState(ancestorPath);
 

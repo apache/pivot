@@ -308,7 +308,6 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         return STYLES;
     }
 
-    @SuppressWarnings("null")  // false warning from eclipse
     @Override
     public void render(Object row, int rowIndex, int columnIndex,
         TableView tableView, String columnName,
@@ -347,7 +346,6 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         }
     }
 
-    @SuppressWarnings("null")  // false warning from eclipse
     @Override
     public String toString(Object row, String columnName) {
         Object cellData = JSON.get(row, columnName);
