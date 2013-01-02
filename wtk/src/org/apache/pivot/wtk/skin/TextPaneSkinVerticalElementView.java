@@ -101,7 +101,6 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
         return offset;
     }
 
-    @SuppressWarnings("null")  // false warning from eclipse
     @Override
     public int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction) {
         int offset = -1;

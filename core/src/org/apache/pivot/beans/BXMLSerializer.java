@@ -392,7 +392,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     /** DO NOT USE. see https://issues.apache.org/jira/browse/PIVOT-742 */
-    @SuppressWarnings("unused")
     @Deprecated
     public BXMLSerializer(final ClassLoader classLoader) {
         throw new UnsupportedOperationException("https://issues.apache.org/jira/browse/PIVOT-742");

@@ -87,7 +87,7 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
     }
 
     protected void renderStyles(ListView listView, boolean selected,
-        @SuppressWarnings("unused") boolean highlighted, boolean disabled) {
+        boolean highlighted, boolean disabled) {
         imageView.getStyles().put("opacity", listView.isEnabled() ? 1.0f : 0.5f);
 
         Font font = (Font)listView.getStyles().get("font");
