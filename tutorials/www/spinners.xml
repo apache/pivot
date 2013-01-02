@@ -74,7 +74,9 @@ limitations under the License.
                     <Spinner spinnerData="['One', 'Two', 'Three', 'Four', 'Five']"
                         circular="true" preferredWidth="80" selectedIndex="0"/>
                     <Spinner preferredWidth="40" selectedIndex="0">
-                        <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
+                        <spinnerData>
+                            <content:NumericSpinnerData lowerBound="0" upperBound="9" increment="1"/>
+                        </spinnerData>
                     </Spinner>
                 </BoxPane>
             </Window>
