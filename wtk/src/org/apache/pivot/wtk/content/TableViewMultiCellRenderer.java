@@ -324,6 +324,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             TableView.CellRenderer cellRenderer = null;
             Class<?> valueClass = (cellData == null ? null : cellData.getClass());
             while (cellRenderer == null
+                && valueClass != null
                 && valueClass != Object.class) {
                 cellRenderer = cellRenderers.get(valueClass);
 
