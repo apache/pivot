@@ -20,6 +20,7 @@ import java.util.Comparator;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
@@ -354,9 +355,14 @@ public class Spinner extends Container {
 
     /**
      * Creates a spinner populated with an empty array list.
+     * <p> The default contents is an {@link ImmutableList} so that
+     * if the default property (which is "spinnerData") is invoked in a BXML
+     * file, <code>BXMLSerializer</code> trying to add to this immutable sequence
+     * will catch an exception and will do a {@link #setSpinnerData setSpinnerData(List<?>)}
+     * instead.
      */
     public Spinner() {
-        this(new ArrayList<Object>());
+        this(new ImmutableList<Object>(new ArrayList<Object>()));
     }
 
     /**

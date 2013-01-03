@@ -1210,7 +1210,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                             if (defaultPropertyValue instanceof Sequence<?>) {
                                 Sequence<Object> sequence = (Sequence<Object>)defaultPropertyValue;
-                                sequence.add(element.value);
+                                try {
+                                    sequence.add(element.value);
+                                } catch (UnsupportedOperationException uoe) {
+                                    beanAdapter.put(defaultPropertyName, element.value);
+                                }
                             } else {
                                 beanAdapter.put(defaultPropertyName, element.value);
                             }
