@@ -127,22 +127,29 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                 int i = 0;
                 while (i < n) {
                     char c = text.charAt(i);
-                    if (Character.isWhitespace(c)) {
-                        lastWhitespaceIndex = i;
-                    }
-
-                    Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1,
-                        fontRenderContext);
-                    lineWidth += characterBounds.getWidth();
-
-                    if (lineWidth > width
-                        && lastWhitespaceIndex != -1) {
-                        i = lastWhitespaceIndex;
-
+                    if (c == '\n') {
                         lineWidth = 0;
                         lastWhitespaceIndex = -1;
 
                         preferredHeight += lineHeight;
+                    } else {
+                        if (Character.isWhitespace(c)) {
+                            lastWhitespaceIndex = i;
+                        }
+
+                        Rectangle2D characterBounds = font.getStringBounds(text, i, i + 1,
+                            fontRenderContext);
+                        lineWidth += characterBounds.getWidth();
+
+                        if (lineWidth > width
+                            && lastWhitespaceIndex != -1) {
+                            i = lastWhitespaceIndex;
+
+                            lineWidth = 0;
+                            lastWhitespaceIndex = -1;
+
+                            preferredHeight += lineHeight;
+                        }
                     }
 
                     i++;
@@ -244,21 +251,29 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     StringCharacterIterator ci = new StringCharacterIterator(text);
                     while (i < n) {
                         char c = text.charAt(i);
-                        if (Character.isWhitespace(c)) {
-                            lastWhitespaceIndex = i;
-                        }
+                        if (c == '\n') {
+                            appendLine(text, start, i, fontRenderContext);
 
-                        Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
-                        lineWidth += characterBounds.getWidth();
-
-                        if (lineWidth > width
-                            && lastWhitespaceIndex != -1) {
-                            appendLine(text, start, lastWhitespaceIndex, fontRenderContext);
-
-                            i = lastWhitespaceIndex;
                             start = i + 1;
                             lineWidth = 0;
                             lastWhitespaceIndex = -1;
+                        } else {
+                            if (Character.isWhitespace(c)) {
+                                lastWhitespaceIndex = i;
+                            }
+
+                            Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
+                            lineWidth += characterBounds.getWidth();
+
+                            if (lineWidth > width
+                                && lastWhitespaceIndex != -1) {
+                                appendLine(text, start, lastWhitespaceIndex, fontRenderContext);
+
+                                i = lastWhitespaceIndex;
+                                start = i + 1;
+                                lineWidth = 0;
+                                lastWhitespaceIndex = -1;
+                            }
                         }
 
                         i++;
@@ -647,6 +662,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * Sets whether the text of the label will be wrapped to fit the Label's width.
      * Note that for wrapping to occur, the Label must specify a preferred width or
      * be placed in a container that constrains its width.
+     * Also note that newline characters (if wrapping is set true) will cause a hard
+     * line break.
      */
     public void setWrapText(boolean wrapText) {
         this.wrapText = wrapText;
