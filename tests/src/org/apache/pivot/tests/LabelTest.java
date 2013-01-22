@@ -48,7 +48,7 @@ public class LabelTest extends Application.Adapter {
             + "our souls, there walks a lady we all know who shines white light "
             + "and wants to show how everything still turns to gold; and if you "
             + "listen very hard the tune will come to you at last when all are "
-            + "one and one is all: to be a rock and not to roll.";
+            + "one and one is all:\nto be a rock and not to roll.";
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
 
