@@ -69,7 +69,7 @@ limitations under the License.
 
         <p>
         <tt>BXMLSerializer</tt> does not implement <tt>writeObject()</tt>, but does provide some
-        additional conveniece methods for reading BXML as well as for localizing the deserialized
+        additional convenience methods for reading BXML as well as for localizing the deserialized
         structure using resource bundles.
         </p>
 
@@ -860,7 +860,7 @@ limitations under the License.
             Window window =
                 (Window)bxmlSerializer.readObject(getClass().getResource("window.bxml"));
 
-            Label label = bxmlSerializer.getNamespace().get("label");
+            Label label = (Label)bxmlSerializer.getNamespace().get("label");
             label.setText("Welcome to Pivot!");
 
             window.open(display);
@@ -909,7 +909,7 @@ limitations under the License.
         <Window xmlns="org.apache.pivot.wtk"
             xmlns:bxml="http://pivot.apache.org/bxml">
             <Label bxml:id="label" text="Hello, World!"/>
-        <Window>
+        </Window>
         ]]>
         </source>
 
@@ -925,7 +925,7 @@ limitations under the License.
         </source>
 
         <p>
-        As a result, the <tt>@BXML</tt> annotation can significanly simplify the process of
+        As a result, the <tt>@BXML</tt> annotation can significantly simplify the process of
         working with loaded BXML data in Java code. However, it is important to note that, because
         BXML binding relies on reflection to set the member variables, it can only be used with
         trusted code or to set the values of public fields. For untrusted code, the namespace
