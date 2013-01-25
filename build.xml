@@ -469,6 +469,7 @@ limitations under the License.
     <target name="doc" description="Generates API documentation in ${folder.doc}">
         <javadoc packagenames="org.apache.pivot.*" destdir="${folder.doc}"
             author="true" version="true" use="true"
+            package="true"
             classpath="${java.class.path}">
             <classpath>
                 <path refid="classpath.general"/>
