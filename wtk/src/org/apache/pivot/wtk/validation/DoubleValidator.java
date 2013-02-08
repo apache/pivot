@@ -13,16 +13,30 @@
  */
 package org.apache.pivot.wtk.validation;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 /**
  * A validator for a double value.
  */
 public class DoubleValidator extends DecimalValidator {
+    private Locale locale = null;
+
     public DoubleValidator() {
+        super(new DecimalFormat("0E0"));
     }
 
     public DoubleValidator(Locale locale) {
-        super(locale);
+        this();
+        this.locale = locale;
+        ((DecimalFormat)format).setDecimalFormatSymbols(new DecimalFormatSymbols(locale));
     }
+
+    @Override
+    public boolean isValid(String text) {
+        // We have to upper case because of the exponent symbol
+        return super.isValid(locale == null ? text.toUpperCase() : text.toUpperCase(locale));
+    }
+
 }

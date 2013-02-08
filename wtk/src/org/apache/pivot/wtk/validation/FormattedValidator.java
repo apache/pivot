@@ -20,6 +20,9 @@ import java.text.ParsePosition;
  * A validator for a {@link java.text.Format}'ed value.
  * <p>
  * This class is mostly intended to be a base-class for other validators.
+ * Subclasses will set a different {@link java.text.Format} object, which
+ * will be used in the {@link #isValid} method of this base class to do the
+ * validation.
  */
 public class FormattedValidator<F extends Format> implements Validator {
     protected final F format;
@@ -33,7 +36,7 @@ public class FormattedValidator<F extends Format> implements Validator {
         final ParsePosition pos = new ParsePosition(0);
         Object obj = format.parseObject(text, pos);
 
-        // the text is only valid is we successfully parsed ALL of it. Don't want trailing bits of
+        // The text is only valid if we successfully parsed ALL of it. Don't want trailing bits of
         // not-valid text.
         return obj != null && pos.getErrorIndex() == -1 && pos.getIndex() == text.length();
     }

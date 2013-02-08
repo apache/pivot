@@ -13,22 +13,30 @@
  */
 package org.apache.pivot.wtk.validation;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 /**
  * A validator for a float value.
  */
 public class FloatValidator extends DecimalValidator {
+    private Locale locale = null;
+
     public FloatValidator() {
+        super(new DecimalFormat("0E0"));
     }
 
     public FloatValidator(Locale locale) {
-        super(locale);
+        this();
+        this.locale = locale;
+        ((DecimalFormat)format).setDecimalFormatSymbols(new DecimalFormatSymbols(locale));
     }
 
     @Override
     public boolean isValid(String text) {
-        if (!super.isValid(text))
+        // We have to upper case because of the exponent symbol
+        if (!super.isValid(locale == null ? text.toUpperCase() : text.toUpperCase(locale)))
             return false;
 
         /*
