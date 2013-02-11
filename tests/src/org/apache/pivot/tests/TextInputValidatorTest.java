@@ -23,6 +23,8 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.validation.DoubleValidator;
+import org.apache.pivot.wtk.validation.FloatValidator;
 import org.apache.pivot.wtk.validation.FloatRangeValidator;
 import org.apache.pivot.wtk.validation.IntRangeValidator;
 import org.apache.pivot.wtk.validation.NotEmptyTextValidator;
@@ -34,6 +36,8 @@ import org.apache.pivot.wtk.validation.Validator;
  */
 public class TextInputValidatorTest  extends Application.Adapter {
     private Window window = null;
+    private TextInput textinputDouble = null;
+    private TextInput textinputFloat = null;
     private TextInput textinputFloatRange = null;
     private Label invalidLabel = null;
     private TextInput textinputIntRange = null;
@@ -47,11 +51,19 @@ public class TextInputValidatorTest  extends Application.Adapter {
         window = new Window((Component)bxmlSerializer.readObject(
             getClass().getResource("text_input_validator_test.bxml")));
 
+        textinputDouble = (TextInput)bxmlSerializer.getNamespace().get("textinputDouble");
+        textinputFloat = (TextInput)bxmlSerializer.getNamespace().get("textinputFloat");
         textinputFloatRange = (TextInput)bxmlSerializer.getNamespace().get("textinputFloatRange");
         textinputIntRange = (TextInput)bxmlSerializer.getNamespace().get("textinputIntRange");
         textinputDateRegex = (TextInput)bxmlSerializer.getNamespace().get("textinputDateRegex");
         textinputCustomBoolean = (TextInput)bxmlSerializer.getNamespace().get("textinputCustomBoolean");
         textinputNotEmptyText = (TextInput)bxmlSerializer.getNamespace().get("textinputNotEmptyText");
+
+        textinputDouble.setText("\u221E");
+        textinputDouble.setValidator(new DoubleValidator());
+
+        textinputFloat.setText("1.5");
+        textinputFloat.setValidator(new FloatValidator());
 
         // standard float range model
         textinputFloatRange.setText("0.5");

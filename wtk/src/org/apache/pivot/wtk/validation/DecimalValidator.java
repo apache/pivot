@@ -27,17 +27,23 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
         super(format);
     }
 
+    public DecimalValidator(DecimalFormat format, Locale locale) {
+        super(format, locale);
+    }
+
     public DecimalValidator() {
         super(NumberFormat.getInstance());
     }
 
     public DecimalValidator(Locale locale) {
-        super(NumberFormat.getInstance(locale));
+        super(NumberFormat.getInstance(locale), locale);
     }
 
     /** helper method that wraps the ParseException in a RuntimeException. */
     protected final Number parseNumber(String text) {
         try {
+            // We have to upper case because of the exponent symbol
+            text = (locale == null) ? text.toUpperCase() : text.toUpperCase(locale);
             return format.parse(text);
         } catch (ParseException ex) {
             // this should never happen
