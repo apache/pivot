@@ -24,13 +24,23 @@ limitations under the License.
     </columns>
 
     <TablePane.Row height="-1">
+        <Label text="double"/>
+        <TextInput bxml:id="textinputDouble"/>
+        <Label text="valid value: any double: ~4.94e-324 to ~1.79e+308 or &#x00B1;&#x221E;"/>
+    </TablePane.Row>
+    <TablePane.Row height="-1">
         <Label text="float"/>
+        <TextInput bxml:id="textinputFloat"/>
+        <Label text="valid value: any float: ~1.40e-45 to ~3.40e+38 or &#x00B1;&#x221E;"/>
+    </TablePane.Row>
+    <TablePane.Row height="-1">
+        <Label text="float range"/>
         <TextInput bxml:id="textinputFloatRange"/>
         <Label text="valid range: 0.3 .. 2000"/>
         <Label bxml:id="invalidLabel"/>
     </TablePane.Row>
     <TablePane.Row height="-1">
-        <Label text="int"/>
+        <Label text="int range"/>
         <TextInput bxml:id="textinputIntRange"/>
         <Label text="valid range: 0 .. 100"/>
     </TablePane.Row>

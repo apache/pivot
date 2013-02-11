@@ -14,7 +14,9 @@
 package org.apache.pivot.wtk.validation;
 
 import java.text.Format;
+import java.text.NumberFormat;
 import java.text.ParsePosition;
+import java.util.Locale;
 
 /**
  * A validator for a {@link java.text.Format}'ed value.
@@ -26,14 +28,25 @@ import java.text.ParsePosition;
  */
 public class FormattedValidator<F extends Format> implements Validator {
     protected final F format;
+    protected final Locale locale;
 
     public FormattedValidator(F format) {
         this.format = format;
+        this.locale = null;
+    }
+
+    public FormattedValidator(F format, Locale locale) {
+        this.format = format;
+        this.locale = locale;
     }
 
     @Override
     public boolean isValid(String text) {
         final ParsePosition pos = new ParsePosition(0);
+        if (format instanceof NumberFormat) {
+            // We have to upper case because of the exponent symbol
+            text = (locale == null) ? text.toUpperCase() : text.toUpperCase(locale);
+        }
         Object obj = format.parseObject(text, pos);
 
         // The text is only valid if we successfully parsed ALL of it. Don't want trailing bits of

@@ -21,22 +21,18 @@ import java.util.Locale;
  * A validator for a float value.
  */
 public class FloatValidator extends DecimalValidator {
-    private Locale locale = null;
 
     public FloatValidator() {
-        super(new DecimalFormat("0E0"));
+        super();
     }
 
     public FloatValidator(Locale locale) {
-        this();
-        this.locale = locale;
-        ((DecimalFormat)format).setDecimalFormatSymbols(new DecimalFormatSymbols(locale));
+        super(locale);
     }
 
     @Override
     public boolean isValid(String text) {
-        // We have to upper case because of the exponent symbol
-        if (!super.isValid(locale == null ? text.toUpperCase() : text.toUpperCase(locale)))
+        if (!super.isValid(text))
             return false;
 
         /*
@@ -44,10 +40,14 @@ public class FloatValidator extends DecimalValidator {
          * resulting number is withing range for a float.
          */
         Number number = parseNumber(text);
-        if (number.doubleValue() > Float.MAX_VALUE) {
-            return false;
+        double doubleValue = number.doubleValue();
+        if (doubleValue == Double.POSITIVE_INFINITY ||
+            doubleValue == Double.NEGATIVE_INFINITY ||
+            doubleValue == Double.NaN) {
+            return true;
         }
-        if (number.doubleValue() < -Float.MAX_VALUE) {
+        doubleValue = Math.abs(doubleValue);
+        if (doubleValue > Float.MAX_VALUE || doubleValue < Float.MIN_VALUE) {
             return false;
         }
         return true;
