@@ -34,6 +34,7 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
@@ -135,6 +136,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     private int tabWidth;
     private int lineWidth;
     private boolean acceptsEnter = true;
+    private boolean acceptsTab = false;
 
     private Dimensions averageCharacterSize;
 
@@ -165,6 +167,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         textArea.getTextAreaListeners().add(this);
         textArea.getTextAreaContentListeners().add(this);
         textArea.getTextAreaSelectionListeners().add(this);
+
+        textArea.setCursor(Cursor.TEXT);
     }
 
     @Override
@@ -771,6 +775,34 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         this.acceptsEnter = acceptsEnter;
     }
 
+    /**
+     * Gets current value of style that determines the
+     * behavior of <tt>TAB</tt> and <tt>Ctrl-TAB</tt>
+     * characters.
+     * @return <tt>true</tt> if <tt>TAB</tt> inserts an
+     * appropriate number of spaces, while <tt>Ctrl-TAB</tt>
+     * shifts focus to next component. <tt>false</tt> (default)
+     * means <tt>TAB</tt> shifts focus and <tt>Ctrl-TAB</tt>
+     * inserts spaces.
+     */
+    public boolean getAcceptsTab() {
+        return acceptsTab;
+    }
+
+    /**
+     * Sets current value of style that determines the
+     * behavior of <tt>TAB</tt> and <tt>Ctrl-TAB</tt>
+     * characters.
+     * @param acceptsTab <tt>true</tt> if <tt>TAB</tt> inserts an
+     * appropriate number of spaces, while <tt>Ctrl-TAB</tt>
+     * shifts focus to next component. <tt>false</tt> (default)
+     * means <tt>TAB</tt> shifts focus and <tt>Ctrl-TAB</tt>
+     * inserts spaces.
+     */
+    public void setAcceptsTab(boolean acceptsTab) {
+        this.acceptsTab = acceptsTab;
+    }
+
     @Override
     public int getTabWidth() {
         return tabWidth;
@@ -922,6 +954,74 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         return consumed;
     }
 
+    private void selectSpan(TextArea textArea, int start) {
+        int rowStart = textArea.getRowOffset(start);
+        int rowLength = textArea.getRowLength(start);
+        if (start - rowStart >= rowLength) {
+            start = rowStart + rowLength - 1;
+            char ch = textArea.getCharacterAt(start);
+            if (ch == '\r' || ch == '\n') {
+                start--;
+            }
+        }
+        char ch = textArea.getCharacterAt(start);
+        int selectionStart = start;
+        int selectionLength = 1;
+        if (Character.isWhitespace(ch)) {
+            // Move backward to beginning of whitespace block
+            // but not before the beginning of the line.
+            do {
+                selectionStart--;
+            } while (selectionStart >= rowStart &&
+                     Character.isWhitespace(textArea.getCharacterAt(selectionStart)));
+            selectionStart++;
+            selectionLength = start - selectionStart;
+            // Move forward to end of whitespace block
+            // but not past the end of the text or the end of line
+            do {
+                selectionLength++;
+            } while (selectionStart + selectionLength - rowStart < rowLength &&
+                     Character.isWhitespace(textArea.getCharacterAt(selectionStart + selectionLength)));
+        } else if (Character.isJavaIdentifierPart(ch)) {
+            // Move backward to beginning of identifier block
+            do {
+                selectionStart--;
+            } while (selectionStart >= rowStart &&
+                     Character.isJavaIdentifierPart(textArea.getCharacterAt(selectionStart)));
+            selectionStart++;
+            selectionLength = start - selectionStart;
+            // Move forward to end of identifier block
+            // but not past end of text
+            do {
+                selectionLength++;
+            } while (selectionStart + selectionLength - rowStart < rowLength &&
+                     Character.isJavaIdentifierPart(textArea.getCharacterAt(selectionStart + selectionLength)));
+        } else {
+            return;
+        }
+        textArea.setSelection(selectionStart, selectionLength);
+    }
+
+    @Override
+    public boolean mouseClick(Component component, Mouse.Button button,
+            int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
+        TextArea textArea = (TextArea)component;
+
+        if (button == Mouse.Button.LEFT) {
+            int index = getInsertionPoint(x, y);
+            if (index != -1) {
+                if (count == 2) {
+                    selectSpan(textArea, index);
+                } else if (count == 3) {
+                    textArea.setSelection(textArea.getRowOffset(index), textArea.getRowLength(index));
+                }
+            }
+       }
+        return consumed;
+    }
+
     @Override
     public boolean keyTyped(Component component, char character) {
         boolean consumed = super.keyTyped(component, character);
@@ -995,19 +1095,21 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     consumed = true;
                 }
             } else if (keyCode == Keyboard.KeyCode.TAB
-                && Keyboard.isPressed(Keyboard.Modifier.CTRL)
+                && (acceptsTab != Keyboard.isPressed(Keyboard.Modifier.CTRL))
                 && textArea.isEditable()) {
+                int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
 
+                int rowOffset = textArea.getRowOffset(selectionStart);
+                int linePos = selectionStart - rowOffset;
                 StringBuilder tabBuilder = new StringBuilder(tabWidth);
-                for (int i = 0; i < tabWidth; i++) {
+                for (int i = 0; i < tabWidth - (linePos % tabWidth); i++) {
                     tabBuilder.append(" ");
                 }
 
                 if (textArea.getCharacterCount() - selectionLength + tabWidth > textArea.getMaximumLength()) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
-                    int selectionStart = textArea.getSelectionStart();
                     textArea.removeText(selectionStart, selectionLength);
                     textArea.insertText(tabBuilder, selectionStart);
                 }
