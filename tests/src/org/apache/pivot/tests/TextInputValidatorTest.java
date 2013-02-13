@@ -13,6 +13,11 @@
  */
 package org.apache.pivot.tests;
 
+// import java.text.DecimalFormat;
+import java.text.NumberFormat;
+// import java.util.Formatter;
+import java.util.Locale;
+
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
@@ -24,8 +29,8 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.validation.DoubleValidator;
-import org.apache.pivot.wtk.validation.FloatValidator;
 import org.apache.pivot.wtk.validation.FloatRangeValidator;
+import org.apache.pivot.wtk.validation.FloatValidator;
 import org.apache.pivot.wtk.validation.IntRangeValidator;
 import org.apache.pivot.wtk.validation.NotEmptyTextValidator;
 import org.apache.pivot.wtk.validation.RegexTextValidator;
@@ -35,7 +40,10 @@ import org.apache.pivot.wtk.validation.Validator;
  * Text input validator test.
  */
 public class TextInputValidatorTest  extends Application.Adapter {
+    private Locale locale = Locale.getDefault();  // the default locale
+
     private Window window = null;
+    private TextInput textinputLocale = null;
     private TextInput textinputDouble = null;
     private TextInput textinputFloat = null;
     private TextInput textinputFloatRange = null;
@@ -47,10 +55,25 @@ public class TextInputValidatorTest  extends Application.Adapter {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
+        System.out.println("Starting TextInputValidatorTest ...");
+        System.out.println("current Locale is " + locale);
+
+        // sample different ways to format numbers in i18n compatible way
+        NumberFormat  nf = NumberFormat.getInstance();
+        //
+        // String customDecimalPattern = ""###,###.###"";
+        // DecimalFormat df = new DecimalFormat(customDecimalPattern);
+        //
+        // StringBuffer sb = new StringBuffer();
+        // Formatter formatter = new Formatter(sb, locale);
+        // String customDecimalFormat = "%,.3f";
+        //
+
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = new Window((Component)bxmlSerializer.readObject(
             getClass().getResource("text_input_validator_test.bxml")));
 
+        textinputLocale = (TextInput)bxmlSerializer.getNamespace().get("textinputLocale");
         textinputDouble = (TextInput)bxmlSerializer.getNamespace().get("textinputDouble");
         textinputFloat = (TextInput)bxmlSerializer.getNamespace().get("textinputFloat");
         textinputFloatRange = (TextInput)bxmlSerializer.getNamespace().get("textinputFloatRange");
@@ -59,15 +82,26 @@ public class TextInputValidatorTest  extends Application.Adapter {
         textinputCustomBoolean = (TextInput)bxmlSerializer.getNamespace().get("textinputCustomBoolean");
         textinputNotEmptyText = (TextInput)bxmlSerializer.getNamespace().get("textinputNotEmptyText");
 
-        textinputDouble.setText("\u221E");
+        textinputLocale.setText(locale.toString());
+
+        textinputDouble.setText("\u221E");  // infinite symbol
         textinputDouble.setValidator(new DoubleValidator());
 
-        textinputFloat.setText("1.5");
+        // textinputFloat.setText("123456.789");
+        // new, show different ways to format decimal values in i18n format
+        Double value = new Double("123456.789");
+        // textinputFloat.setText(value.toString());
+        // textinputFloat.setText(String.format(customDecimalFormat, value)); // sample using String.format
+        // formatter.format(customDecimalFormat, value);                      // sample using Formatter
+        // textinputFloat.setText(sb.toString());                             // sample using Formatter
+        // textinputFloat.setText(nf.format(value));                          // sample using NumberFormat
+        // textinputFloat.setText(df.format(value));                          // sample using DecimalFormat
+        textinputFloat.setText(nf.format(value));  // using this as a sample
         textinputFloat.setValidator(new FloatValidator());
 
         // standard float range model
-        textinputFloatRange.setText("0.5");
-        textinputFloatRange.setValidator(new FloatRangeValidator(0.3f, 2000f));
+        textinputFloatRange.setText(nf.format(value));
+        textinputFloatRange.setValidator(new FloatRangeValidator(2.0f, 123456789f));
 
         // test the listener by updating a label
         textinputFloatRange.getTextInputListeners().add(new TextInputListener.Adapter() {
