@@ -31,13 +31,21 @@ public class FormattedValidator<F extends Format> implements Validator {
     protected final Locale locale;
 
     public FormattedValidator(F format) {
-        this.format = format;
-        this.locale = null;
+        this(format, null);
     }
 
     public FormattedValidator(F format, Locale locale) {
+        if (format == null) {
+            throw new IllegalArgumentException("format is null.");
+        }
         this.format = format;
-        this.locale = locale;
+
+        if (locale == null) {
+            this.locale = Locale.getDefault();
+        } else {
+            this.locale = locale;
+        }
+
     }
 
     @Override
@@ -45,7 +53,7 @@ public class FormattedValidator<F extends Format> implements Validator {
         final ParsePosition pos = new ParsePosition(0);
         if (format instanceof NumberFormat) {
             // We have to upper case because of the exponent symbol
-            text = (locale == null) ? text.toUpperCase() : text.toUpperCase(locale);
+            text = text.toUpperCase(locale);
         }
         Object obj = format.parseObject(text, pos);
 

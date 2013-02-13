@@ -43,7 +43,7 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
     protected final Number parseNumber(String text) {
         try {
             // We have to upper case because of the exponent symbol
-            text = (locale == null) ? text.toUpperCase() : text.toUpperCase(locale);
+            text = text.toUpperCase(locale);
             return format.parse(text);
         } catch (ParseException ex) {
             // this should never happen
