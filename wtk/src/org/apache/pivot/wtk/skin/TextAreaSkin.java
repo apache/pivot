@@ -135,6 +135,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     private int tabWidth;
     private int lineWidth;
     private boolean acceptsEnter = true;
+    private boolean acceptsTab = false;
 
     private Dimensions averageCharacterSize;
 
@@ -771,6 +772,34 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         this.acceptsEnter = acceptsEnter;
     }
 
+    /**
+     * Gets current value of style that determines the
+     * behavior of <tt>TAB</tt> and <tt>Ctrl-TAB</tt>
+     * characters.
+     * @return <tt>true</tt> if <tt>TAB</tt> inserts an
+     * appropriate number of spaces, while <tt>Ctrl-TAB</tt>
+     * shifts focus to next component. <tt>false</tt> (default)
+     * means <tt>TAB</tt> shifts focus and <tt>Ctrl-TAB</tt>
+     * inserts spaces.
+     */
+    public boolean getAcceptsTab() {
+        return acceptsTab;
+    }
+
+    /**
+     * Sets current value of style that determines the
+     * behavior of <tt>TAB</tt> and <tt>Ctrl-TAB</tt>
+     * characters.
+     * @param acceptsTab <tt>true</tt> if <tt>TAB</tt> inserts an
+     * appropriate number of spaces, while <tt>Ctrl-TAB</tt>
+     * shifts focus to next component. <tt>false</tt> (default)
+     * means <tt>TAB</tt> shifts focus and <tt>Ctrl-TAB</tt>
+     * inserts spaces.
+     */
+    public void setAcceptsTab(boolean acceptsTab) {
+        this.acceptsTab = acceptsTab;
+    }
+
     @Override
     public int getTabWidth() {
         return tabWidth;
@@ -995,7 +1024,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     consumed = true;
                 }
             } else if (keyCode == Keyboard.KeyCode.TAB
-                && Keyboard.isPressed(Keyboard.Modifier.CTRL)
+                && (acceptsTab != Keyboard.isPressed(Keyboard.Modifier.CTRL))
                 && textArea.isEditable()) {
                 int selectionLength = textArea.getSelectionLength();
 
