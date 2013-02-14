@@ -23,6 +23,7 @@ import java.util.Locale;
  * A validator for decimal values.
  */
 public class DecimalValidator extends FormattedValidator<NumberFormat> {
+    private boolean autoTrim = false;
 
     public DecimalValidator(DecimalFormat format) {
         super(format);
@@ -56,8 +57,30 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
      * and extract later values depending on the precision needed.
      */
     protected final BigDecimal textToBigDecimal(String text) {
-        BigDecimal bd = new BigDecimal(parseNumber(text).toString());
+        BigDecimal bd;
+        try {
+            if (!autoTrim) {
+                bd = new BigDecimal(parseNumber(text).toString());
+            } else {
+                bd = new BigDecimal(parseNumber(text.trim()).toString());
+            }
+        } catch (Exception e) {
+            // ignore it
+            bd = null;
+        }
         return bd;
+    }
+
+    /** set the autoTrim mode, before parsing the text (default false) */
+    public void setAutoTrim(boolean autoTrim) {
+        this.autoTrim = autoTrim;
+    }
+
+    /** tell the autoTrim mode
+     * @return true if autoTrim is enabled, otherwise false (default)
+     * */
+    public boolean isAutoTrim() {
+        return autoTrim;
     }
 
 }

@@ -29,6 +29,19 @@ limitations under the License.
         <Label text="use separators from the current Locale"/>
     </TablePane.Row>
     <TablePane.Row height="-1">
+        <Label text="BigDecimal value"/>
+        <TextInput bxml:id="textinputComparableBigDecimal"/>
+        <Label text="any BigDecimal value (huge and precise math, but no infinite)" />
+    </TablePane.Row>
+    <TablePane.Row height="-1">
+        <Label text="comparable range"/>
+        <TextInput bxml:id="textinputComparableRange"/>
+        <Label text="valid range: (same as float range, but using BigDecimal here)"
+            styles="{wrapText:true}"
+        />
+        <Label bxml:id="invalidComparableRangeLabel"/>
+    </TablePane.Row>
+    <TablePane.Row height="-1">
         <Label text="double"/>
         <TextInput bxml:id="textinputDouble"/>
         <Label text="valid value: any double: ~4.94e-324 to ~1.79e+308 or &#x00B1;&#x221E;"/>
@@ -70,6 +83,7 @@ limitations under the License.
         <Label text="empty text"/>
         <TextInput bxml:id="textinputEmptyText"/>
         <Label text="valid values: any empty text (note that it will be trimmed)"
+            styles="{wrapText:true}"
         />
     </TablePane.Row>
 </TablePane>
