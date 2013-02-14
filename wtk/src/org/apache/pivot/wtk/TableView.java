@@ -1413,7 +1413,10 @@ public class TableView extends Component {
         if (index == -1) {
             clearSelection();
         } else {
-            setSelectedRange(index, index);
+            int tableDataLength = tableData.getLength();
+            if (tableDataLength > 0 && index < tableDataLength) {
+                setSelectedRange(index, index);
+            }
         }
     }
 
