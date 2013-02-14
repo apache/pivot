@@ -29,6 +29,7 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.validation.DoubleValidator;
+import org.apache.pivot.wtk.validation.EmptyTextValidator;
 import org.apache.pivot.wtk.validation.FloatRangeValidator;
 import org.apache.pivot.wtk.validation.FloatValidator;
 import org.apache.pivot.wtk.validation.IntRangeValidator;
@@ -52,6 +53,7 @@ public class TextInputValidatorTest  extends Application.Adapter {
     private TextInput textinputDateRegex = null;
     private TextInput textinputCustomBoolean = null;
     private TextInput textinputNotEmptyText = null;
+    private TextInput textinputEmptyText = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
@@ -81,6 +83,7 @@ public class TextInputValidatorTest  extends Application.Adapter {
         textinputDateRegex = (TextInput)bxmlSerializer.getNamespace().get("textinputDateRegex");
         textinputCustomBoolean = (TextInput)bxmlSerializer.getNamespace().get("textinputCustomBoolean");
         textinputNotEmptyText = (TextInput)bxmlSerializer.getNamespace().get("textinputNotEmptyText");
+        textinputEmptyText = (TextInput)bxmlSerializer.getNamespace().get("textinputEmptyText");
 
         textinputLocale.setText(locale.toString());
 
@@ -100,7 +103,9 @@ public class TextInputValidatorTest  extends Application.Adapter {
         textinputFloat.setValidator(new FloatValidator());
 
         // standard float range model
-        textinputFloatRange.setText(nf.format(value));
+        // note that float approximations could give errors,
+        // try to increment/decrement the initial value near a range end, to see problems ...
+        textinputFloatRange.setText("123456789");  // (nf.format(value));
         textinputFloatRange.setValidator(new FloatRangeValidator(2.0f, 123456789f));
 
         // test the listener by updating a label
@@ -134,6 +139,10 @@ public class TextInputValidatorTest  extends Application.Adapter {
         // validate any not-empty text
         textinputNotEmptyText.setText("  Not Empty, and with spaces  ");
         textinputNotEmptyText.setValidator(new NotEmptyTextValidator());
+
+        // validate any empty text, edge case
+        textinputEmptyText.setText("    ");
+        textinputEmptyText.setValidator(new EmptyTextValidator());
 
 
         window.setTitle("Text Input Validator Test");

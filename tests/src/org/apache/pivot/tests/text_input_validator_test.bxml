@@ -66,4 +66,10 @@ limitations under the License.
             styles="{wrapText:true}"
         />
     </TablePane.Row>
+    <TablePane.Row height="-1">
+        <Label text="empty text"/>
+        <TextInput bxml:id="textinputEmptyText"/>
+        <Label text="valid values: any empty text (note that it will be trimmed)"
+        />
+    </TablePane.Row>
 </TablePane>

@@ -13,6 +13,7 @@
  */
 package org.apache.pivot.wtk.validation;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -50,4 +51,13 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
             throw new RuntimeException(ex);
         }
     }
+
+    /** helper method that returns the widest number real instance,
+     * and extract later values depending on the precision needed.
+     */
+    protected final BigDecimal textToBigDecimal(String text) {
+        BigDecimal bd = new BigDecimal(parseNumber(text).toString());
+        return bd;
+    }
+
 }
