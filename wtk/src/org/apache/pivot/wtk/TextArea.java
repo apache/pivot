@@ -601,7 +601,11 @@ public class TextArea extends Component {
 
     public TextArea() {
         installSkin(TextArea.class);
-        setText("");
+        try {
+            setText(new StringReader(""));
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     @Override
