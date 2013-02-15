@@ -1242,11 +1242,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     }
                 } else {
                     if (selectMode != TableView.SelectMode.NONE) {
-                        if (tableView.isRowSelected(rowIndex)) {
-                            selectIndex = rowIndex;
-                        } else {
+                        if (!tableView.isRowSelected(rowIndex)) {
                             tableView.setSelectedIndex(rowIndex);
                         }
+                        selectIndex = rowIndex;
                     }
                 }
             }
