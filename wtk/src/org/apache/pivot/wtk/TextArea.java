@@ -684,8 +684,14 @@ public class TextArea extends Component {
             throw new IllegalArgumentException();
         }
 
+        if (text.length() > maximumLength) {
+            throw new IllegalArgumentException("Text length is greater than maximum length.");
+        }
+
         try {
-            setText(new StringReader(text));
+            if (!text.equals(this.getText())) {
+                setText(new StringReader(text));
+            }
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
