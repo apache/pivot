@@ -582,7 +582,7 @@ public class TextArea extends Component {
 
     private boolean expandTabs = false;
 
-    private int maximumLength = Integer.MAX_VALUE;
+    private int maximumLength = 1048575;
     private boolean editable = true;
 
     private String textKey = null;

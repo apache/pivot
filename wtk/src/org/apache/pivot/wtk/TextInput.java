@@ -265,7 +265,7 @@ public class TextInput extends Component {
     private int selectionLength = 0;
 
     private int textSize = DEFAULT_TEXT_SIZE;
-    private int maximumLength = Integer.MAX_VALUE;
+    private int maximumLength = 32767;
     private boolean password = false;
     private String prompt = null;
     private boolean editable = true;
