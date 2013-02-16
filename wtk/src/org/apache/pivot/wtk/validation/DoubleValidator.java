@@ -13,12 +13,14 @@
  */
 package org.apache.pivot.wtk.validation;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 /**
  * A validator for a double value.
+ * <p>
+ * Beware that usual math rules for native primitive types (and related approximations) are applied here.
+ *
+ * @see BigDecimalValidator
  */
 public class DoubleValidator extends DecimalValidator {
 

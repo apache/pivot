@@ -783,7 +783,10 @@ public class ListView extends Component {
         if (index == -1) {
             clearSelection();
         } else {
-            setSelectedRange(index, index);
+            int listDataLength = listData.getLength();
+            if (listDataLength > 0 && index < listDataLength) {
+                setSelectedRange(index, index);
+            }
         }
     }
 

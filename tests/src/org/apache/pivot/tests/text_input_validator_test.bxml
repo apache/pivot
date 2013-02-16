@@ -24,6 +24,24 @@ limitations under the License.
     </columns>
 
     <TablePane.Row height="-1">
+        <Label text="Current Locale:"/>
+        <TextInput bxml:id="textinputLocale" editable="false"/>
+        <Label text="use separators from the current Locale"/>
+    </TablePane.Row>
+    <TablePane.Row height="-1">
+        <Label text="BigDecimal value"/>
+        <TextInput bxml:id="textinputComparableBigDecimal"/>
+        <Label text="any BigDecimal value (huge and precise math, but no infinite)" />
+    </TablePane.Row>
+    <TablePane.Row height="-1">
+        <Label text="comparable range"/>
+        <TextInput bxml:id="textinputComparableRange"/>
+        <Label text="valid range: (same as float range, but using BigDecimal here)"
+            styles="{wrapText:true}"
+        />
+        <Label bxml:id="invalidComparableRangeLabel"/>
+    </TablePane.Row>
+    <TablePane.Row height="-1">
         <Label text="double"/>
         <TextInput bxml:id="textinputDouble"/>
         <Label text="valid value: any double: ~4.94e-324 to ~1.79e+308 or &#x00B1;&#x221E;"/>
@@ -36,7 +54,7 @@ limitations under the License.
     <TablePane.Row height="-1">
         <Label text="float range"/>
         <TextInput bxml:id="textinputFloatRange"/>
-        <Label text="valid range: 0.3 .. 2000"/>
+        <Label text="valid range: 2.0 .. 123456789"/>
         <Label bxml:id="invalidLabel"/>
     </TablePane.Row>
     <TablePane.Row height="-1">
@@ -58,6 +76,13 @@ limitations under the License.
         <Label text="not empty text"/>
         <TextInput bxml:id="textinputNotEmptyText"/>
         <Label text="valid values: any not empty text (note that it will be trimmed)"
+            styles="{wrapText:true}"
+        />
+    </TablePane.Row>
+    <TablePane.Row height="-1">
+        <Label text="empty text"/>
+        <TextInput bxml:id="textinputEmptyText"/>
+        <Label text="valid values: any empty text (note that it will be trimmed)"
             styles="{wrapText:true}"
         />
     </TablePane.Row>

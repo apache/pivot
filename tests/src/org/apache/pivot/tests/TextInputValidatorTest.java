@@ -13,6 +13,11 @@
  */
 package org.apache.pivot.tests;
 
+// import java.text.DecimalFormat;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
@@ -23,19 +28,29 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputListener;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.validation.BigDecimalValidator;
+import org.apache.pivot.wtk.validation.ComparableRangeValidator;
 import org.apache.pivot.wtk.validation.DoubleValidator;
-import org.apache.pivot.wtk.validation.FloatValidator;
+import org.apache.pivot.wtk.validation.EmptyTextValidator;
 import org.apache.pivot.wtk.validation.FloatRangeValidator;
+import org.apache.pivot.wtk.validation.FloatValidator;
 import org.apache.pivot.wtk.validation.IntRangeValidator;
 import org.apache.pivot.wtk.validation.NotEmptyTextValidator;
 import org.apache.pivot.wtk.validation.RegexTextValidator;
 import org.apache.pivot.wtk.validation.Validator;
+// import java.util.Formatter;
 
 /**
  * Text input validator test.
  */
 public class TextInputValidatorTest  extends Application.Adapter {
+    private Locale locale = Locale.getDefault();  // the default locale
+
     private Window window = null;
+    private TextInput textinputLocale = null;
+    private TextInput textinputComparableBigDecimal = null;
+    private TextInput textinputComparableRange = null;
+    private Label invalidComparableRangeLabel = null;
     private TextInput textinputDouble = null;
     private TextInput textinputFloat = null;
     private TextInput textinputFloatRange = null;
@@ -44,13 +59,32 @@ public class TextInputValidatorTest  extends Application.Adapter {
     private TextInput textinputDateRegex = null;
     private TextInput textinputCustomBoolean = null;
     private TextInput textinputNotEmptyText = null;
+    private TextInput textinputEmptyText = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
+        System.out.println("Starting TextInputValidatorTest ...");
+        System.out.println("current Locale is " + locale);
+
+        // sample different ways to format numbers in i18n compatible way
+        NumberFormat  nf = NumberFormat.getInstance();
+        //
+        // String customDecimalPattern = ""###,###.###"";
+        // DecimalFormat df = new DecimalFormat(customDecimalPattern);
+        //
+        // StringBuffer sb = new StringBuffer();
+        // Formatter formatter = new Formatter(sb, locale);
+        // String customDecimalFormat = "%,.3f";
+        //
+
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = new Window((Component)bxmlSerializer.readObject(
             getClass().getResource("text_input_validator_test.bxml")));
 
+        textinputLocale = (TextInput)bxmlSerializer.getNamespace().get("textinputLocale");
+
+        textinputComparableBigDecimal = (TextInput)bxmlSerializer.getNamespace().get("textinputComparableBigDecimal");
+        textinputComparableRange = (TextInput)bxmlSerializer.getNamespace().get("textinputComparableRange");
         textinputDouble = (TextInput)bxmlSerializer.getNamespace().get("textinputDouble");
         textinputFloat = (TextInput)bxmlSerializer.getNamespace().get("textinputFloat");
         textinputFloatRange = (TextInput)bxmlSerializer.getNamespace().get("textinputFloatRange");
@@ -58,16 +92,56 @@ public class TextInputValidatorTest  extends Application.Adapter {
         textinputDateRegex = (TextInput)bxmlSerializer.getNamespace().get("textinputDateRegex");
         textinputCustomBoolean = (TextInput)bxmlSerializer.getNamespace().get("textinputCustomBoolean");
         textinputNotEmptyText = (TextInput)bxmlSerializer.getNamespace().get("textinputNotEmptyText");
+        textinputEmptyText = (TextInput)bxmlSerializer.getNamespace().get("textinputEmptyText");
 
-        textinputDouble.setText("\u221E");
+        textinputLocale.setText(locale.toString());
+
+        String testValue = "123456789.0";
+        // new, validate a value but using BigDecimalValidator (subclass of ComparableValidator)
+        textinputComparableBigDecimal.setText("1e300");  // huge value, and outside double range ...
+        BigDecimalValidator bdComp = new BigDecimalValidator();
+        System.out.println("BigDecimalValidator: created instance with value: " + bdComp);
+        bdComp.setAutoTrim(true);  // enable auto-trim of input string, before validating
+        System.out.println("BigDecimalValidator: enable auto-trim of input string, before validating");
+        textinputComparableBigDecimal.setValidator(bdComp);
+
+        // new, validate in a range but using ComparableRangeValidator
+        textinputComparableRange.setText(nf.format(new BigDecimal(testValue)));
+        ComparableRangeValidator<BigDecimal> bdCompRange = new ComparableRangeValidator<BigDecimal>(
+            new BigDecimal("2.0"), new BigDecimal("123456789")
+        );
+        System.out.println("ComparableRangeValidator: created instance with value: " + bdCompRange);
+        bdCompRange.setAutoTrim(true);  // enable auto-trim of input string, before validating
+        System.out.println("ComparableRangeValidator: enable auto-trim of input string, before validating");
+        textinputComparableRange.setValidator(bdCompRange);
+        textinputComparableRange.getTextInputListeners().add(new TextInputListener.Adapter() {
+            @Override
+            public void textValidChanged(TextInput textInput) {
+                invalidComparableRangeLabel.setText(textInput.isTextValid() ? "valid" : "invalid");
+            }
+        });
+        invalidComparableRangeLabel = (Label)bxmlSerializer.getNamespace().get("invalidComparableRangeLabel");
+
+        textinputDouble.setText("\u221E");  // infinite symbol
         textinputDouble.setValidator(new DoubleValidator());
 
-        textinputFloat.setText("1.5");
+        // textinputFloat.setText("123456.789");
+        // new, show different ways to format decimal values in i18n format
+        Double value = new Double(testValue);
+        // textinputFloat.setText(value.toString());
+        // textinputFloat.setText(String.format(customDecimalFormat, value)); // sample using String.format
+        // formatter.format(customDecimalFormat, value);                      // sample using Formatter
+        // textinputFloat.setText(sb.toString());                             // sample using Formatter
+        // textinputFloat.setText(nf.format(value));                          // sample using NumberFormat
+        // textinputFloat.setText(df.format(value));                          // sample using DecimalFormat
+        textinputFloat.setText(nf.format(value));  // using this as a sample
         textinputFloat.setValidator(new FloatValidator());
 
         // standard float range model
-        textinputFloatRange.setText("0.5");
-        textinputFloatRange.setValidator(new FloatRangeValidator(0.3f, 2000f));
+        // note that float approximations could give errors,
+        // try to increment/decrement the initial value near a range end, to see problems ...
+        textinputFloatRange.setText(nf.format(new Float(testValue)));
+        textinputFloatRange.setValidator(new FloatRangeValidator(2.0f, 123456789f));
 
         // test the listener by updating a label
         textinputFloatRange.getTextInputListeners().add(new TextInputListener.Adapter() {
@@ -100,6 +174,10 @@ public class TextInputValidatorTest  extends Application.Adapter {
         // validate any not-empty text
         textinputNotEmptyText.setText("  Not Empty, and with spaces  ");
         textinputNotEmptyText.setValidator(new NotEmptyTextValidator());
+
+        // validate any empty text, edge case
+        textinputEmptyText.setText("    ");
+        textinputEmptyText.setValidator(new EmptyTextValidator());
 
 
         window.setTitle("Text Input Validator Test");

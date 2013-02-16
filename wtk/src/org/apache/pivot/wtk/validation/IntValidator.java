@@ -17,6 +17,10 @@ import java.util.Locale;
 
 /**
  * A validator for an int value.
+ * <p>
+ * Beware that usual math rules for native primitive types (and related approximations) are applied here.
+ *
+ * @see BigIntegerValidator
  */
 public class IntValidator extends DecimalValidator {
     public IntValidator() {

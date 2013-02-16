@@ -13,12 +13,14 @@
  */
 package org.apache.pivot.wtk.validation;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 /**
  * A validator for a float value.
+ * <p>
+ * Beware that usual math rules for native primitive types (and related approximations) are applied here.
+ *
+ * @see BigDecimalValidator
  */
 public class FloatValidator extends DecimalValidator {
 
@@ -37,13 +39,12 @@ public class FloatValidator extends DecimalValidator {
 
         /*
          * DecimalFormat will parse the number as a double. Make sure the
-         * resulting number is withing range for a float.
+         * resulting number is within range for a float.
          */
         Number number = parseNumber(text);
         double doubleValue = number.doubleValue();
-        if (doubleValue == Double.POSITIVE_INFINITY ||
-            doubleValue == Double.NEGATIVE_INFINITY ||
-            doubleValue == Double.NaN) {
+        if (doubleValue == Double.POSITIVE_INFINITY || doubleValue == Double.NEGATIVE_INFINITY
+            || Double.isNaN(doubleValue)) {
             return true;
         }
         doubleValue = Math.abs(doubleValue);

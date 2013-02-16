@@ -582,7 +582,7 @@ public class TextArea extends Component {
 
     private boolean expandTabs = false;
 
-    private int maximumLength = Integer.MAX_VALUE;
+    private int maximumLength = 1048575;
     private boolean editable = true;
 
     private String textKey = null;
@@ -601,7 +601,11 @@ public class TextArea extends Component {
 
     public TextArea() {
         installSkin(TextArea.class);
-        setText("");
+        try {
+            setText(new StringReader(""));
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     @Override
@@ -684,8 +688,14 @@ public class TextArea extends Component {
             throw new IllegalArgumentException();
         }
 
+        if (text.length() > maximumLength) {
+            throw new IllegalArgumentException("Text length is greater than maximum length.");
+        }
+
         try {
-            setText(new StringReader(text));
+            if (!text.equals(this.getText())) {
+                setText(new StringReader(text));
+            }
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
