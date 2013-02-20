@@ -93,11 +93,11 @@ public class ImageNode extends Node {
         if (imageLocal == null) {
             try {
                 imageLocal = Image.load(imageURL);
+                ApplicationContext.getResourceCache().put(imageURL, imageLocal);
             } catch (TaskExecutionException exception) {
                 throw new IllegalArgumentException(exception);
             }
 
-            ApplicationContext.getResourceCache().put(imageURL, imageLocal);
         }
 
         setImage(imageLocal);

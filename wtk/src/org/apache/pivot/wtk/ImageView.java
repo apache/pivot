@@ -246,11 +246,11 @@ public class ImageView extends Component {
             } else {
                 try {
                     imageLocal = Image.load(imageURL);
+                    ApplicationContext.getResourceCache().put(imageURL, imageLocal);
                 } catch (TaskExecutionException exception) {
                     throw new IllegalArgumentException(exception);
                 }
 
-                ApplicationContext.getResourceCache().put(imageURL, imageLocal);
             }
         }
 

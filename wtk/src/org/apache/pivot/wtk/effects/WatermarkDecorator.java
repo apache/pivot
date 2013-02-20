@@ -215,11 +215,11 @@ public class WatermarkDecorator implements Decorator {
         if (image == null) {
             try {
                 image = Image.load(imageURL);
+                ApplicationContext.getResourceCache().put(imageURL, image);
             } catch (TaskExecutionException exception) {
                 throw new IllegalArgumentException(exception);
             }
 
-            ApplicationContext.getResourceCache().put(imageURL, image);
         }
 
         setImage(image);

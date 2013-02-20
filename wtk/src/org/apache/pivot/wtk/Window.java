@@ -810,11 +810,11 @@ public class Window extends Container {
         if (icon == null) {
             try {
                 icon = Image.load(iconURL);
+                ApplicationContext.getResourceCache().put(iconURL, icon);
             } catch (TaskExecutionException exception) {
                 throw new IllegalArgumentException(exception);
             }
 
-            ApplicationContext.getResourceCache().put(iconURL, icon);
         }
 
         getIcons().remove(0, getIcons().getLength());

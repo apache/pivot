@@ -75,11 +75,11 @@ public class ListItem {
         if (iconLocal == null) {
             try {
                 iconLocal = Image.load(iconURL);
+                ApplicationContext.getResourceCache().put(iconURL, iconLocal);
             } catch (TaskExecutionException exception) {
                 throw new IllegalArgumentException(exception);
             }
 
-            ApplicationContext.getResourceCache().put(iconURL, iconLocal);
         }
 
         setIcon(iconLocal);

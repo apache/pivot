@@ -89,11 +89,11 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
         if (icon == null) {
             try {
                 icon = Image.load(expandedIconURL);
+                ApplicationContext.getResourceCache().put(expandedIconURL, icon);
             } catch (TaskExecutionException exception) {
                 throw new IllegalArgumentException(exception);
             }
 
-            ApplicationContext.getResourceCache().put(expandedIconURL, icon);
         }
 
         setExpandedIcon(icon);
