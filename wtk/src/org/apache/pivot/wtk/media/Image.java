@@ -139,10 +139,6 @@ public abstract class Image implements Visual {
         return imageListeners;
     }
 
-    public void clearImageListeners() {
-        this.imageListeners = new ImageListenerList();
-    }
-
     public static Image load(URL location) throws TaskExecutionException {
         LoadTask loadTask = new LoadTask(location);
         return loadTask.execute();
