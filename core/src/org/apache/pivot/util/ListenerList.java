@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.util;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -28,42 +29,27 @@ import java.util.NoSuchElementException;
  * safety during iteration.
  */
 public abstract class ListenerList<T> implements Iterable<T> {
-    // Node containing a listener in the list
-    private class Node {
-        private Node previous;
-        private Node next;
-        private T listener;
 
-        public Node(Node previous, Node next, T listener) {
-            this.previous = previous;
-            this.next = next;
-            this.listener = listener;
-        }
-    }
-
-    // Node iterator
+    // Iterator through the current array of elements
     private class NodeIterator implements Iterator<T> {
-        private Node node;
+        private int index;
 
         public NodeIterator() {
-            this.node = first;
+            this.index = 0;
         }
 
         @Override
         public boolean hasNext() {
-            return (node != null);
+            return (index < last);
         }
 
         @Override
         public T next() {
-            if (node == null) {
+            if (index >= last) {
                 throw new NoSuchElementException();
             }
 
-            T listener = node.listener;
-            node = node.next;
-
-            return listener;
+            return list[index++];
         }
 
         @Override
@@ -72,9 +58,15 @@ public abstract class ListenerList<T> implements Iterable<T> {
         }
     }
 
-    // First node in the list (we don't maintain a reference to the last
-    // node, since we need to walk the list looking for duplicates on add)
-    private Node first = null;
+    private static final int DEFAULT_SIZE = 5;
+
+    // The current array of items (some of which are null)
+    // All non-null objects are at the beginning of the array
+    // and the array is reorganized on "remove"
+    @SuppressWarnings({"unchecked"})
+    private T[] list = (T[])new Object[DEFAULT_SIZE];
+    // The current length of the active list
+    private int last = 0;
 
     /**
      * Adds a listener to the list, if it has not previously been added.
@@ -82,27 +74,17 @@ public abstract class ListenerList<T> implements Iterable<T> {
      * @param listener
      */
     public void add(T listener) {
-        if (listener == null) {
-            throw new IllegalArgumentException("listener is null.");
+        if (indexOf(listener) >= 0) {
+            System.err.println("Duplicate listener " + listener + " added to " + this);
+            return;
         }
 
-        Node node = first;
-
-        if (node == null) {
-            first = new Node(null, null, listener);
-        } else {
-            while (node.next != null
-                && node.listener != listener) {
-                node = node.next;
-            }
-
-            if (node.next == null
-                && node.listener != listener) {
-                node.next = new Node(node, null, listener);
-            } else {
-                System.err.println("Duplicate listener " + listener + " added to " + this);
-            }
+        // If no slot is available, increase the size of the array
+        if (last >= list.length) {
+            list = Arrays.copyOf(list, list.length + DEFAULT_SIZE);
         }
+
+        list[last++] = listener;
     }
 
     /**
@@ -111,33 +93,32 @@ public abstract class ListenerList<T> implements Iterable<T> {
      * @param listener
      */
     public void remove(T listener) {
+        int slot = indexOf(listener);
+
+        if (slot < 0) {
+            System.err.println("Nonexistent listener " + listener + " removed from " + this);
+            return;
+        }
+
+        // Once we find the entry in the list, copy the rest of the
+        // existing entries down by one position
+        if (slot < last - 1) {
+            System.arraycopy(list, slot + 1, list, slot, last - 1 - slot);
+        }
+
+        list[--last] = null;
+    }
+
+    private int indexOf(T listener) {
         if (listener == null) {
             throw new IllegalArgumentException("listener is null.");
         }
-
-        Node node = first;
-        while (node != null
-            && node.listener != listener) {
-            node = node.next;
-        }
-
-        if (node == null) {
-            System.err.println("Nonexistent listener " + listener + " removed from " + this);
-        } else {
-            if (node.previous == null) {
-                first = node.next;
-
-                if (first != null) {
-                    first.previous = null;
-                }
-            } else {
-                node.previous.next = node.next;
-
-                if (node.next != null) {
-                    node.next.previous = node.previous;
-                }
+        for (int i = 0; i < last; i++) {
+            if (list[i] == listener) {
+                return i;
             }
         }
+        return -1;
     }
 
     /**
@@ -150,17 +131,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
      * otherwise.
      */
     public boolean contains(T listener) {
-        if (listener == null) {
-            throw new IllegalArgumentException("listener is null.");
-        }
-
-        Node node = first;
-        while (node != null
-            && node.listener != listener) {
-            node = node.next;
-        }
-
-        return (node != null);
+        return indexOf(listener) >= 0;
     }
 
     /**
@@ -171,11 +142,12 @@ public abstract class ListenerList<T> implements Iterable<T> {
      * otherwise.
      */
     public boolean isEmpty() {
-        return (first == null);
+        return last == 0;
     }
 
     @Override
     public Iterator<T> iterator() {
         return new NodeIterator();
     }
+
 }
