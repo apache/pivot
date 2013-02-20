@@ -675,4 +675,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     public void textChanged(Label label, String previousText) {
         invalidateComponent();
     }
+
+    @Override
+    public void maximumLengthChanged(Label label, int previousMaximumLength) {
+        invalidateComponent();
+    }
+
 }
