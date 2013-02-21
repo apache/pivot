@@ -42,11 +42,12 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
     }
 
     /** helper method that wraps the ParseException in a RuntimeException. */
-    protected final Number parseNumber(String text) {
+    protected final Number parseNumber(final String text) {
+        String textToParse;
         try {
             // We have to upper case because of the exponent symbol
-            text = text.toUpperCase(locale);
-            return format.parse(text);
+            textToParse = text.toUpperCase(locale);
+            return format.parse(textToParse);
         } catch (ParseException ex) {
             // this should never happen
             throw new RuntimeException(ex);
@@ -56,7 +57,7 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
     /** helper method that returns the widest number real instance,
      * and extract later values depending on the precision needed.
      */
-    protected final BigDecimal textToBigDecimal(String text) {
+    protected final BigDecimal textToBigDecimal(final String text) {
         BigDecimal bd;
         try {
             if (!autoTrim) {

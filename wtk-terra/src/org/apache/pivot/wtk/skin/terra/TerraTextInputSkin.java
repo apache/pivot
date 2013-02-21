@@ -293,6 +293,9 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 alignmentDeltaX = (int)(availWidth - txtWidth);
                 break;
             }
+            default: {
+                break;
+            }
         }
 
         return alignmentDeltaX;

@@ -88,6 +88,10 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                     shape.lineTo(6, 0);
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             shape.closePath();
@@ -319,6 +323,10 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
                         case DESCENDING: {
                             sortImage = sortDescendingImage;
+                            break;
+                        }
+
+                        default: {
                             break;
                         }
                     }

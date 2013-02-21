@@ -360,6 +360,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     break;
                 case UNCHECKED:
                     break;
+                default:
+                    break;
             }
         }
 

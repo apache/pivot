@@ -1084,6 +1084,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         // Clear the highlight
@@ -1122,6 +1126,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     }
                 }
 
+                break;
+            }
+
+            default: {
                 break;
             }
         }

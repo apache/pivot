@@ -309,6 +309,10 @@ public class TerraCalendarSkin extends CalendarSkin {
                         nextButton.requestFocus();
                         break;
                     }
+
+                    default: {
+                        break;
+                    }
                 }
 
                 consumed = true;

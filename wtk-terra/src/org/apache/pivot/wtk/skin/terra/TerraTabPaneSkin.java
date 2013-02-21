@@ -1372,9 +1372,11 @@ public class TerraTabPaneSkin extends ContainerSkin
                 tabButtonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
                 break;
             }
-
             case VERTICAL: {
                 tabButtonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
+                break;
+            }
+            default: {
                 break;
             }
         }
@@ -1469,6 +1471,10 @@ public class TerraTabPaneSkin extends ContainerSkin
                 case Keyboard.KeyCode.KEYPAD_9:
                 case Keyboard.KeyCode.N9: {
                     selectedIndex = 8;
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }

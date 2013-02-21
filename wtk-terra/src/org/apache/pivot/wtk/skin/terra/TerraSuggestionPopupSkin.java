@@ -171,6 +171,10 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             return false;
@@ -310,6 +314,10 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
             case Keyboard.KeyCode.ESCAPE: {
                 suggestionPopup.close(false);
+                break;
+            }
+
+            default: {
                 break;
             }
         }

@@ -853,6 +853,10 @@ public class TerraAccordionSkin extends ContainerSkin
                         selectedIndex = 8;
                         break;
                     }
+
+                    default: {
+                        break;
+                    }
                 }
 
                 if (selectedIndex >= 0
@@ -881,6 +885,10 @@ public class TerraAccordionSkin extends ContainerSkin
                         } while (selectedIndex < n
                             && !panels.get(selectedIndex).isEnabled());
 
+                        break;
+                    }
+
+                    default: {
                         break;
                     }
                 }
