@@ -88,7 +88,7 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
         }
 
         // Update the label
-        label.setText(text);
+        label.setText(text != null ? text : "");
 
         if (text == null) {
             label.setVisible(false);

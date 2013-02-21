@@ -99,7 +99,7 @@ public class WatermarkDecorator implements Decorator {
         Font font = (Font)label.getStyles().get("font");
         label.getStyles().put("font", font.deriveFont(Font.BOLD, 60));
 
-        label.setText(text);
+        label.setText(text != null ? text : "");
         imageView.setImage(image);
 
         validate();
@@ -122,7 +122,7 @@ public class WatermarkDecorator implements Decorator {
      * This decorator's text
      */
     public void setText(String text) {
-        label.setText(text);
+        label.setText(text != null ? text : "");
         validate();
     }
 

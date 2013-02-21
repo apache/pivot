@@ -100,7 +100,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
                 (treeView.isEnabled() && !disabled) ? 1.0f : 0.5f);
 
             // Update the label
-            label.setText(text);
+            label.setText(text != null ? text : "");
 
             if (text == null) {
                 label.setVisible(false);

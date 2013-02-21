@@ -85,7 +85,7 @@ public class TableViewHeaderDataRenderer extends BoxPane
         }
 
         // Show/hide the label
-        label.setText(text);
+        label.setText(text != null ? text : "");
 
         if (text == null) {
             label.setVisible(false);
