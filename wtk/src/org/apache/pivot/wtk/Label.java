@@ -97,11 +97,11 @@ public class Label extends Component {
     private LabelBindingListenerList labelBindingListeners = new LabelBindingListenerList();
 
     public Label() {
-        this(null);
+        this("");
     }
 
     public Label(String text) {
-        this.text = text;
+        setText(text);
 
         installSkin(Label.class);
     }
@@ -111,13 +111,11 @@ public class Label extends Component {
     }
 
     public void setText(String text) {
-        // TODO: in 2.1 verify if enable this constraint (like in other classes)
-        // if (text == null) {
-        //     throw new IllegalArgumentException();
-        // }
-        //
-        // if (text.length() > maximumLength) {
-        if (text != null && text.length() > maximumLength) {
+        if (text == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (text.length() > maximumLength) {
             throw new IllegalArgumentException("Text length is greater than maximum length.");
         }
 
@@ -163,13 +161,9 @@ public class Label extends Component {
         if (previousMaximumLength != maximumLength) {
             this.maximumLength = maximumLength;
 
-            if (text != null) {
-                // Truncate the text, if necessary (do not allow listeners to vote on this change)
-                int length = text.length();
-                if (length > maximumLength) {
-                    setText(text.substring(0, maximumLength));
-                }
-
+            // Truncate the text, if necessary (do not allow listeners to vote on this change)
+            if (text.length() > maximumLength) {
+                setText(text.substring(0, maximumLength));
             }
 
             labelListeners.maximumLengthChanged(this, previousMaximumLength);
@@ -234,7 +228,7 @@ public class Label extends Component {
                 value = textBindMapping.toString(value);
             }
 
-            setText((String)value);
+            setText(value != null ? (String)value : "");
         }
     }
 
@@ -251,7 +245,7 @@ public class Label extends Component {
     @Override
     public void clear() {
         if (textKey != null) {
-            setText(null);
+            setText("");
         }
     }
 

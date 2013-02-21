@@ -66,7 +66,7 @@ public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer
 
             Map<String, ?> location = JSON.get(item, "['y:location']");
             if (location == null) {
-                addressLabel.setText(null);
+                addressLabel.setText("");
             } else {
                 String street = JSON.get(location, "street");
                 String city = JSON.get(location, "city");

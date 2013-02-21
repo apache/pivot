@@ -413,7 +413,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
     public void titleChanged(FakeWindow window, String previousTitle) {
         String title = window.getTitle();
         titleLabel.setVisible(title != null);
-        titleLabel.setText(title);
+        titleLabel.setText(title != null ? title : "");
     }
 
     @Override
