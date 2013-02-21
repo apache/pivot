@@ -112,6 +112,8 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
                 case UPPER_ROMAN:
                     listItemView.setIndexText(int2roman(index) + ". ");
                     break;
+                default:
+                    break;
             }
 
             index++;

@@ -118,14 +118,15 @@ public class Picture extends Image {
                     interpolationHint = RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR;
                     break;
                 }
-
                 case BILINEAR: {
                     interpolationHint = RenderingHints.VALUE_INTERPOLATION_BILINEAR;
                     break;
                 }
-
                 case BICUBIC: {
                     interpolationHint = RenderingHints.VALUE_INTERPOLATION_BICUBIC;
+                    break;
+                }
+                default: {
                     break;
                 }
             }

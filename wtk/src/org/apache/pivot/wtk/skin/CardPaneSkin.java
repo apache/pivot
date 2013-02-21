@@ -727,6 +727,10 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     }
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             if (selectionChangeTransition != null) {

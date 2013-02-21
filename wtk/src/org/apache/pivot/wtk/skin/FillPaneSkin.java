@@ -183,6 +183,10 @@ public class FillPaneSkin extends ContainerSkin
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         // Include padding
@@ -233,6 +237,10 @@ public class FillPaneSkin extends ContainerSkin
                     }
                 }
 
+                break;
+            }
+
+            default: {
                 break;
             }
         }

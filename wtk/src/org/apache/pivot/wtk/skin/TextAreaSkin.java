@@ -103,6 +103,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
         }
     }

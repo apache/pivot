@@ -107,6 +107,10 @@ public abstract class ListButtonSkin extends ButtonSkin
                     listViewPopup.close();
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             return false;

@@ -104,6 +104,10 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
 
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             return false;

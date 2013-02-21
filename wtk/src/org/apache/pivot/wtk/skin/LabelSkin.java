@@ -217,6 +217,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                 baseline = Math.round(height - (textHeightLocal + padding.bottom) + ascent);
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         return baseline;
@@ -340,6 +344,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     y = (height - textHeight) / 2;
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             for (int i = 0, n = glyphVectors.getLength(); i < n; i++) {
@@ -354,14 +362,15 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                         x = padding.left;
                         break;
                     }
-
                     case RIGHT: {
                         x = width - (lineWidth + padding.right);
                         break;
                     }
-
                     case CENTER: {
                         x = (width - lineWidth) / 2;
+                        break;
+                    }
+                    default: {
                         break;
                     }
                 }
@@ -388,9 +397,11 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                             offset = y + ascent + 2;
                             break;
                         }
-
                         case STRIKETHROUGH: {
                             offset = y + lineHeight / 2 + 1;
+                            break;
+                        }
+                        default: {
                             break;
                         }
                     }

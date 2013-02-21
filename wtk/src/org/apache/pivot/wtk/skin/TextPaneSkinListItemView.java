@@ -49,9 +49,10 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
 
     @Override
     protected void childLayout(int breakWidth) {
-        indexTextNodeView.layout(breakWidth);
+        int bw = breakWidth;
+        indexTextNodeView.layout(bw);
 
-        breakWidth -= indexTextNodeView.getWidth();
+        bw -= indexTextNodeView.getWidth();
         int itemsWidth = 0;
         int itemsY = 0;
 
@@ -61,7 +62,7 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
 
         for ( ; iterator.hasNext(); ) {
             TextPaneSkinNodeView nodeView = iterator.next();
-            nodeView.layout(breakWidth);
+            nodeView.layout(bw);
 
             nodeView.setLocation(indexTextNodeView.getWidth(), itemsY);
 

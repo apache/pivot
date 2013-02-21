@@ -113,6 +113,10 @@ public abstract class ContainerSkin extends ComponentSkin
 
                         break;
                     }
+
+                    default: {
+                        break;
+                    }
                 }
             }
 
