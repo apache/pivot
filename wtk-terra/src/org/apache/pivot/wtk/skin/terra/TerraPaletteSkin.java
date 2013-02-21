@@ -591,7 +591,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
         String title = window.getTitle();
         titleLabel.setVisible(title != null);
-        titleLabel.setText(title);
+        titleLabel.setText(title != null ? title : "");
     }
 
     @Override

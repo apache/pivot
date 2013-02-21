@@ -840,7 +840,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public void titleChanged(Window window, String previousTitle) {
         String title = window.getTitle();
         titleLabel.setVisible(title != null);
-        titleLabel.setText(title);
+        titleLabel.setText(title != null ? title : "");
     }
 
     @Override
