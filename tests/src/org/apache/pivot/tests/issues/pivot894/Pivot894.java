@@ -135,7 +135,7 @@ public class Pivot894 extends Application.Adapter {
                     e.printStackTrace();
                 }
                 return row;
-            };
+            }
         }, 100);
     }
 

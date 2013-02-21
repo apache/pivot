@@ -205,6 +205,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      *
      * @see #readObject(Reader)
      */
+    @SuppressWarnings("resource")
     @Override
     public List<?> readObject(InputStream inputStream)
         throws IOException, SerializationException {
@@ -441,6 +442,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      *
      * @see #writeObject(List, Writer)
      */
+    @SuppressWarnings("resource")
     @Override
     public void writeObject(List<?> items, OutputStream outputStream)
         throws IOException, SerializationException {

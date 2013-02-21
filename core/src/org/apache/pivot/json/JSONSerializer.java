@@ -217,6 +217,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @see #readObject(Reader)
      */
+    @SuppressWarnings("resource")
     @Override
     public Object readObject(InputStream inputStream)
         throws IOException, SerializationException {
@@ -846,6 +847,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @see #writeObject(Object, Writer)
      */
+    @SuppressWarnings("resource")
     @Override
     public void writeObject(Object object, OutputStream outputStream)
         throws IOException, SerializationException {

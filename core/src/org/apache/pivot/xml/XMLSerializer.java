@@ -211,6 +211,10 @@ public class XMLSerializer implements Serializer<Element> {
 
                         break;
                     }
+
+                    default: {
+                        break;
+                    }
                 }
             }
         } catch (XMLStreamException exception) {

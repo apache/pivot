@@ -382,6 +382,10 @@ public class ImageView extends Component {
                         value = imageBindMapping.toImageName(value);
                         break;
                     }
+
+                    default: {
+                        break;
+                    }
                 }
             }
 

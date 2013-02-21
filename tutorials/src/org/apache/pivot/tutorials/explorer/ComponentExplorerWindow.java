@@ -125,39 +125,43 @@ public class ComponentExplorerWindow extends Window implements Bindable {
                     }
 
                     switch (componentNode.getHorizontalScrollBarPolicy()) {
-                    case AUTO:
-                        horizontalScrollBarPolicyGroup.setSelection(horizontalAutoButton);
-                        break;
-                    case FILL:
-                        horizontalScrollBarPolicyGroup.setSelection(horizontalFillButton);
-                        break;
-                    case FILL_TO_CAPACITY:
-                        horizontalScrollBarPolicyGroup.setSelection(horizontalFillToCapacityButton);
-                        break;
-                    case NEVER:
-                        horizontalScrollBarPolicyGroup.setSelection(horizontalNeverButton);
-                        break;
-                    case ALWAYS:
-                        horizontalScrollBarPolicyGroup.setSelection(horizontalAlwaysButton);
-                        break;
+                        case AUTO:
+                            horizontalScrollBarPolicyGroup.setSelection(horizontalAutoButton);
+                            break;
+                        case FILL:
+                            horizontalScrollBarPolicyGroup.setSelection(horizontalFillButton);
+                            break;
+                        case FILL_TO_CAPACITY:
+                            horizontalScrollBarPolicyGroup.setSelection(horizontalFillToCapacityButton);
+                            break;
+                        case NEVER:
+                            horizontalScrollBarPolicyGroup.setSelection(horizontalNeverButton);
+                            break;
+                        case ALWAYS:
+                            horizontalScrollBarPolicyGroup.setSelection(horizontalAlwaysButton);
+                            break;
+                        default:
+                            break;
                     }
 
                     switch (componentNode.getVerticalScrollBarPolicy()) {
-                    case AUTO:
-                        verticalScrollBarPolicyGroup.setSelection(verticalAutoButton);
-                        break;
-                    case FILL:
-                        verticalScrollBarPolicyGroup.setSelection(verticalFillButton);
-                        break;
-                    case FILL_TO_CAPACITY:
-                        verticalScrollBarPolicyGroup.setSelection(verticalFillToCapacityButton);
-                        break;
-                    case NEVER:
-                        verticalScrollBarPolicyGroup.setSelection(verticalNeverButton);
-                        break;
-                    case ALWAYS:
-                        verticalScrollBarPolicyGroup.setSelection(verticalAlwaysButton);
-                        break;
+                        case AUTO:
+                            verticalScrollBarPolicyGroup.setSelection(verticalAutoButton);
+                            break;
+                        case FILL:
+                            verticalScrollBarPolicyGroup.setSelection(verticalFillButton);
+                            break;
+                        case FILL_TO_CAPACITY:
+                            verticalScrollBarPolicyGroup.setSelection(verticalFillToCapacityButton);
+                            break;
+                        case NEVER:
+                            verticalScrollBarPolicyGroup.setSelection(verticalNeverButton);
+                            break;
+                        case ALWAYS:
+                            verticalScrollBarPolicyGroup.setSelection(verticalAlwaysButton);
+                            break;
+                        default:
+                            break;
                     }
                 } else {
                     sourceTextArea.setText("");

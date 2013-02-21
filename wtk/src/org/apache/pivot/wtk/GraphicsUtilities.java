@@ -77,13 +77,17 @@ public final class GraphicsUtilities {
         final int length, final Orientation orientation, final int thickness) {
         if (length > 0 && thickness > 0) {
             switch (orientation) {
-            case HORIZONTAL:
-                graphics.fillRect(x, y, length, thickness);
-                break;
-
-            case VERTICAL:
-                graphics.fillRect(x, y, thickness, length);
-                break;
+                case HORIZONTAL: {
+                    graphics.fillRect(x, y, length, thickness);
+                    break;
+                }
+                case VERTICAL: {
+                    graphics.fillRect(x, y, thickness, length);
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
         }
     }

@@ -2170,8 +2170,14 @@ public class TableView extends Component {
 
                 break;
             }
-            case NONE:
+
+            case NONE: {
                 break;
+            }
+
+            default: {
+                break;
+            }
         }
     }
 
@@ -2241,8 +2247,14 @@ public class TableView extends Component {
 
                 break;
             }
-            case NONE:
+
+            case NONE: {
                 break;
+            }
+
+            default: {
+                break;
+            }
         }
     }
 

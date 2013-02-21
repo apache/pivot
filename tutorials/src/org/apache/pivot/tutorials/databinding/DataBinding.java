@@ -80,7 +80,7 @@ public class DataBinding extends Window implements Bindable {
             @Override
             public void buttonPressed(Button button) {
                 form.clear();
-                sourceLabel.setText(null);
+                sourceLabel.setText("");
             }
         });
     }

@@ -324,7 +324,7 @@ public interface Sequence<T> {
          * The item that was previously stored at the given path.
          */
         @SuppressWarnings("unchecked")
-        public static <T> T update(Sequence<T> sequence, Path path, T item) {
+        public static <T> T update(final Sequence<T> sequence, final Path path, final T item) {
             if (sequence == null) {
                 throw new IllegalArgumentException("sequence is null.");
             }
@@ -334,11 +334,12 @@ public interface Sequence<T> {
             }
 
             int i = 0, n = path.getLength() - 1;
+            Sequence<T> sequenceUpdated = sequence;
             while (i < n) {
-                sequence = (Sequence<T>)sequence.get(path.get(i++));
+                sequenceUpdated = (Sequence<T>)sequenceUpdated.get(path.get(i++));
             }
 
-            return sequence.update(path.get(i), item);
+            return sequenceUpdated.update(path.get(i), item);
         }
 
         /**
@@ -374,7 +375,7 @@ public interface Sequence<T> {
          * The path of the item to remove.
          */
         @SuppressWarnings("unchecked")
-        public static <T> Sequence<T> remove(Sequence<T> sequence, Path path, int count) {
+        public static <T> Sequence<T> remove(final Sequence<T> sequence, final Path path, int count) {
             if (sequence == null) {
                 throw new IllegalArgumentException("sequence is null.");
             }
@@ -384,11 +385,12 @@ public interface Sequence<T> {
             }
 
             int i = 0, n = path.getLength() - 1;
+            Sequence<T> sequenceUpdated = sequence;
             while (i < n) {
-                sequence = (Sequence<T>)sequence.get(path.get(i++));
+                sequenceUpdated = (Sequence<T>)sequenceUpdated.get(path.get(i++));
             }
 
-            return sequence.remove(path.get(i), count);
+            return sequenceUpdated.remove(path.get(i), count);
         }
 
         /**
@@ -404,7 +406,7 @@ public interface Sequence<T> {
          * The item at the given path, or <tt>null</tt> if the path is empty.
          */
         @SuppressWarnings("unchecked")
-        public static <T> T get(Sequence<T> sequence, Path path) {
+        public static <T> T get(final Sequence<T> sequence, final Path path) {
             if (sequence == null) {
                 throw new IllegalArgumentException("sequence is null.");
             }
@@ -418,11 +420,12 @@ public interface Sequence<T> {
                 item = null;
             } else {
                 int i = 0, n = path.getLength() - 1;
+                Sequence<T> sequenceUpdated = sequence;
                 while (i < n) {
-                    sequence = (Sequence<T>)sequence.get(path.get(i++));
+                    sequenceUpdated = (Sequence<T>)sequenceUpdated.get(path.get(i++));
                 }
 
-                item = sequence.get(path.get(i));
+                item = sequenceUpdated.get(path.get(i));
             }
 
             return item;
@@ -442,7 +445,7 @@ public interface Sequence<T> {
          * sequence; <tt>null</tt>, otherwise.
          */
         @SuppressWarnings("unchecked")
-        public static <T> Path pathOf(Sequence<T> sequence, T item) {
+        public static <T> Path pathOf(final Sequence<T> sequence, final T item) {
             if (sequence == null) {
                 throw new IllegalArgumentException("sequence is null.");
             }

@@ -1622,8 +1622,13 @@ public class ListView extends Component {
                 break;
             }
 
-            case NONE:
+            case NONE: {
                 break;
+            }
+
+            default: {
+                break;
+            }
         }
 
         if (checkmarksEnabled) {
@@ -1719,8 +1724,13 @@ public class ListView extends Component {
                 break;
             }
 
-            case NONE:
+            case NONE: {
                 break;
+            }
+
+            default: {
+                break;
+            }
         }
 
         if (checkmarksEnabled) {

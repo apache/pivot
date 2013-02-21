@@ -51,10 +51,12 @@ public class TestDialog extends Dialog implements Bindable {
         return dialog;
     }
 
+    @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         System.out.println("TestDialog initialize(...)");
 
         this.okButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
             public void buttonPressed(Button button) {
                 TestDialog.this.close(true);
             }

@@ -812,6 +812,10 @@ public abstract class ApplicationContext {
 
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
         }
 
@@ -834,6 +838,10 @@ public abstract class ApplicationContext {
                     focusedComponent = Component.getFocusedComponent();
                     Component.clearFocus();
 
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }
@@ -881,6 +889,10 @@ public abstract class ApplicationContext {
                     button = Mouse.Button.RIGHT;
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             // Process the event
@@ -896,6 +908,10 @@ public abstract class ApplicationContext {
 
                         case MouseEvent.MOUSE_EXITED: {
                             display.mouseOut();
+                            break;
+                        }
+
+                        default: {
                             break;
                         }
                     }
@@ -1030,6 +1046,10 @@ public abstract class ApplicationContext {
                             // Clear the drag location
                             dragLocation = null;
 
+                            break;
+                        }
+
+                        default: {
                             break;
                         }
                     }
@@ -1181,6 +1201,10 @@ public abstract class ApplicationContext {
 
                         break;
                     }
+
+                    default: {
+                        break;
+                    }
                 }
             } catch (Exception exception) {
                 handleUncaughtException(exception);
@@ -1205,6 +1229,10 @@ public abstract class ApplicationContext {
 
                 case MouseWheelEvent.WHEEL_UNIT_SCROLL: {
                     scrollType = Mouse.ScrollType.UNIT;
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }
@@ -1242,6 +1270,10 @@ public abstract class ApplicationContext {
                                 event.consume();
                             }
                         }
+                        break;
+                    }
+
+                    default: {
                         break;
                     }
                 }
@@ -1300,6 +1332,10 @@ public abstract class ApplicationContext {
 
                 case KeyEvent.KEY_LOCATION_NUMPAD: {
                     keyLocation = Keyboard.KeyLocation.KEYPAD;
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }
@@ -1408,6 +1444,10 @@ public abstract class ApplicationContext {
                             event.consume();
                         }
 
+                        break;
+                    }
+
+                    default: {
                         break;
                     }
                 }
@@ -1879,6 +1919,10 @@ public abstract class ApplicationContext {
                 dropAction = DropAction.LINK;
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         return dropAction;
@@ -1911,14 +1955,15 @@ public abstract class ApplicationContext {
                     nativeDropAction = DnDConstants.ACTION_COPY;
                     break;
                 }
-
                 case MOVE: {
                     nativeDropAction = DnDConstants.ACTION_MOVE;
                     break;
                 }
-
                 case LINK: {
                     nativeDropAction = DnDConstants.ACTION_LINK;
+                    break;
+                }
+                default: {
                     break;
                 }
             }
@@ -1939,14 +1984,15 @@ public abstract class ApplicationContext {
                     cursor = java.awt.dnd.DragSource.DefaultCopyDrop;
                     break;
                 }
-
                 case MOVE: {
                     cursor = java.awt.dnd.DragSource.DefaultMoveDrop;
                     break;
                 }
-
                 case LINK: {
                     cursor = java.awt.dnd.DragSource.DefaultLinkDrop;
+                    break;
+                }
+                default: {
                     break;
                 }
             }

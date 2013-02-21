@@ -36,12 +36,13 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
     }
 
     @Override
-    public String get(String key) {
+    public String get(final String key) {
+        String searchKey = key;
         if (!caseSensitiveKeys) {
-            key = key.toLowerCase();
+            searchKey = searchKey.toLowerCase();
         }
 
-        ArrayList<String> list = map.get(key);
+        ArrayList<String> list = map.get(searchKey);
         if (list != null && list.getLength() > 0) {
             return list.get(0);
         }
@@ -49,12 +50,13 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
         return null;
     }
 
-    public String get(String key, int index) {
+    public String get(final String key, int index) {
+        String searchKey = key;
         if (!caseSensitiveKeys) {
-            key = key.toLowerCase();
+            searchKey = searchKey.toLowerCase();
         }
 
-        ArrayList<String> list = map.get(key);
+        ArrayList<String> list = map.get(searchKey);
         if (list == null || list.getLength() <= index) {
             throw new IndexOutOfBoundsException();
         }
@@ -63,15 +65,16 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
     }
 
     @Override
-    public String put(String key, String value) {
+    public String put(final String key, final String value) {
+        String searchKey = key;
         if (!caseSensitiveKeys) {
-            key = key.toLowerCase();
+            searchKey = searchKey.toLowerCase();
         }
 
         ArrayList<String> list = new ArrayList<String>();
         list.add(value);
 
-        ArrayList<String> previous = map.put(key, list);
+        ArrayList<String> previous = map.put(searchKey, list);
         if (previous != null && previous.getLength() > 0) {
             return previous.get(0);
         }
@@ -79,14 +82,15 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
         return null;
     }
 
-    public int add(String key, String value) {
+    public int add(final String key, final String value) {
+        String searchKey = key;
         if (!caseSensitiveKeys) {
-            key = key.toLowerCase();
+            searchKey = searchKey.toLowerCase();
         }
 
-        ArrayList<String> list = map.get(key);
+        ArrayList<String> list = map.get(searchKey);
         if (list == null) {
-            put(key, value);
+            put(searchKey, value);
             return 0;
         }
 
@@ -94,12 +98,13 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
         return list.getLength() - 1;
     }
 
-    public void insert(String key, String value, int index) {
+    public void insert(final String key, final String value, int index) {
+        String searchKey = key;
         if (!caseSensitiveKeys) {
-            key = key.toLowerCase();
+            searchKey = searchKey.toLowerCase();
         }
 
-        ArrayList<String> list = map.get(key);
+        ArrayList<String> list = map.get(searchKey);
 
         // e.g if index = 0 and length = 0, throw an exception
         if (list == null || list.getLength() <= index) {
@@ -110,12 +115,13 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
     }
 
     @Override
-    public String remove(String key) {
+    public String remove(final String key) {
+        String searchKey = key;
         if (!caseSensitiveKeys) {
-            key = key.toLowerCase();
+            searchKey = searchKey.toLowerCase();
         }
 
-        ArrayList<String> list = map.remove(key);
+        ArrayList<String> list = map.remove(searchKey);
         if (list != null && list.getLength() > 0) {
             return list.get(0);
         }
@@ -123,12 +129,13 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
         return null;
     }
 
-    public String remove(String key, int index) {
+    public String remove(final String key, int index) {
+        String searchKey = key;
         if (!caseSensitiveKeys) {
-            key = key.toLowerCase();
+            searchKey = searchKey.toLowerCase();
         }
 
-        ArrayList<String> list = map.get(key);
+        ArrayList<String> list = map.get(searchKey);
         if (list == null || list.getLength() <= index) {
             throw new IndexOutOfBoundsException();
         }
@@ -141,21 +148,23 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
     }
 
     @Override
-    public boolean containsKey(String key) {
+    public boolean containsKey(final String key) {
+        String searchKey = key;
         if (!caseSensitiveKeys) {
-            key = key.toLowerCase();
+            searchKey = searchKey.toLowerCase();
         }
 
-        return map.containsKey(key);
+        return map.containsKey(searchKey);
     }
 
 
-    public int getLength(String key) {
+    public int getLength(final String key) {
+        String searchKey = key;
         if (!caseSensitiveKeys) {
-            key = key.toLowerCase();
+            searchKey = searchKey.toLowerCase();
         }
 
-        ArrayList<String> list = map.get(key);
+        ArrayList<String> list = map.get(searchKey);
         if (list == null) {
             return 0;
         }

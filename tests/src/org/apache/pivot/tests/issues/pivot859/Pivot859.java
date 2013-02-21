@@ -51,6 +51,7 @@ public class Pivot859 extends Application.Adapter {
     private String defaultURL = null;
 
 
+    @Override
     public void startup(final Display display, Map<String, String> properties) throws Exception {
         System.out.println("startup(...)");
 

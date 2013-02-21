@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.Display;
  */
 public class Pivot861 extends Application.Adapter {
 
+    @Override
     public void startup(final Display display, Map<String, String> args) throws Exception {
         System.out.println("Pivot861 startup(...)");
         System.out.println("\n"

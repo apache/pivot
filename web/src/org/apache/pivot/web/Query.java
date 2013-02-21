@@ -371,7 +371,8 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     @SuppressWarnings("unchecked")
-    protected Object execute(Method method, Object value) throws QueryException {
+    protected Object execute(final Method method, final Object value) throws QueryException {
+        Object result = value;
         URL location = getLocation();
         HttpURLConnection connection = null;
 
@@ -407,8 +408,8 @@ public abstract class Query<V> extends IOTask<V> {
             }
 
             // Set the request headers
-            if (value != null) {
-                connection.setRequestProperty("Content-Type", serializerLocal.getMIMEType(value));
+            if (result != null) {
+                connection.setRequestProperty("Content-Type", serializerLocal.getMIMEType(result));
             }
 
             for (String key : requestHeaders) {
@@ -423,18 +424,18 @@ public abstract class Query<V> extends IOTask<V> {
 
             // Set the input/output state
             connection.setDoInput(true);
-            connection.setDoOutput(value != null);
+            connection.setDoOutput(result != null);
 
             // Connect to the server
             connection.connect();
             queryListeners.connected(this);
 
             // Write the request body
-            if (value != null) {
+            if (result != null) {
                 OutputStream outputStream = null;
                 try {
                     outputStream = connection.getOutputStream();
-                    serializerLocal.writeObject(value, new MonitoredOutputStream(outputStream));
+                    serializerLocal.writeObject(result, new MonitoredOutputStream(outputStream));
                 } finally {
                     if (outputStream != null) {
                         outputStream.close();
@@ -471,7 +472,7 @@ public abstract class Query<V> extends IOTask<V> {
                 InputStream inputStream = null;
                 try {
                     inputStream = connection.getInputStream();
-                    value = serializerLocal.readObject(new MonitoredInputStream(inputStream));
+                    result = serializerLocal.readObject(new MonitoredInputStream(inputStream));
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();
@@ -492,7 +493,7 @@ public abstract class Query<V> extends IOTask<V> {
             throw exception;
         }
 
-        return value;
+        return result;
     }
 
     /**

@@ -36,12 +36,13 @@ import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 public class DataBindingTest extends Application.Adapter {
     public static class TestListButtonDataRenderer extends ListButtonDataRenderer {
         @Override
-        public void render(Object data, Button button, boolean highlighted) {
-            if (data != null) {
-                data = JSON.get(data, "text");
+        public void render(final Object data, Button button, boolean highlighted) {
+            Object dataLoaded = data;
+            if (dataLoaded != null) {
+                dataLoaded = JSON.get(data, "text");
             }
 
-            super.render(data, button, highlighted);
+            super.render(dataLoaded, button, highlighted);
         }
 
         @Override
@@ -52,13 +53,14 @@ public class DataBindingTest extends Application.Adapter {
 
     public static class TestListViewItemRenderer extends ListViewItemRenderer {
         @Override
-        public void render(Object item, int index, ListView listView, boolean selected,
+        public void render(final Object item, int index, final ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled) {
-            if (item != null) {
-                item = JSON.get(item, "text");
+            Object itemLoaded = item;
+            if (itemLoaded != null) {
+                itemLoaded = JSON.get(item, "text");
             }
 
-            super.render(item, index, listView, selected, checked, highlighted, disabled);
+            super.render(itemLoaded, index, listView, selected, checked, highlighted, disabled);
         }
 
         @Override
@@ -69,12 +71,13 @@ public class DataBindingTest extends Application.Adapter {
 
     public static class TestSpinnerItemRenderer extends SpinnerItemRenderer {
         @Override
-        public void render(Object item, Spinner spinner) {
-            if (item != null) {
-                item = JSON.get(item, "text");
+        public void render(final Object item, final Spinner spinner) {
+            Object itemLoaded = item;
+            if (itemLoaded != null) {
+                itemLoaded = JSON.get(item, "text");
             }
 
-            super.render(item, spinner);
+            super.render(itemLoaded, spinner);
         }
 
         @Override

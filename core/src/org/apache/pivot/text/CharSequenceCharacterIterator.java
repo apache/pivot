@@ -45,33 +45,35 @@ public final class CharSequenceCharacterIterator implements CharacterIterator {
             throw new IllegalArgumentException("charSequence may not be null");
         }
 
+        int endIndexUpdated = endIndex;
+
         if (endIndex == -1) {
-            endIndex = charSequence.length();
+            endIndexUpdated = charSequence.length();
         }
 
-        if (beginIndex > endIndex) {
-            throw new IllegalArgumentException("beginIndex > endIndex, " + beginIndex + ">" + endIndex);
+        if (beginIndex > endIndexUpdated) {
+            throw new IllegalArgumentException("beginIndex > endIndex, " + beginIndex + ">" + endIndexUpdated);
         }
 
         if (beginIndex < 0) {
             throw new IndexOutOfBoundsException("beginIndex < 0, " + beginIndex);
         }
 
-        if (endIndex > charSequence.length()) {
-            throw new IndexOutOfBoundsException("endIndex > char sequence length, " + endIndex + ">" + charSequence.length());
+        if (endIndexUpdated > charSequence.length()) {
+            throw new IndexOutOfBoundsException("endIndex > char sequence length, " + endIndexUpdated + ">" + charSequence.length());
         }
 
         if (index < beginIndex) {
             throw new IndexOutOfBoundsException("(index < beginIndex, " + index + "<" + beginIndex);
         }
 
-        if (index > endIndex) {
-            throw new IndexOutOfBoundsException("(index > endIndex, " + index + ">" + endIndex);
+        if (index > endIndexUpdated) {
+            throw new IndexOutOfBoundsException("(index > endIndex, " + index + ">" + endIndexUpdated);
         }
 
         this.charSequence = charSequence;
         this.beginIndex = beginIndex;
-        this.endIndex = endIndex;
+        this.endIndex = endIndexUpdated;
 
         setIndex(index);
     }

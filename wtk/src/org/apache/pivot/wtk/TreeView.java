@@ -1661,7 +1661,7 @@ public class TreeView extends Component {
             // Notify listeners
             treeViewNodeStateListeners.nodeCheckStateChanged(this, path, previousCheckState);
 
-            if (showMixedCheckmarkState) {
+            if (showMixedCheckmarkState && ancestorCheckStates != null) {
                 // Notify listeners of any changes to our ancestors' check states
                 Path ancestorPath = new Path(path, path.getLength() - 1);
 

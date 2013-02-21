@@ -403,8 +403,8 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     public void ensureCapacity(int capacity) {
         if (capacity > items.length) {
-            capacity = Math.max(this.items.length * 3 / 2, capacity);
-            Object[] itemsLocal = new Object[capacity];
+            int capacityMax = Math.max(this.items.length * 3 / 2, capacity);
+            Object[] itemsLocal = new Object[capacityMax];
             System.arraycopy(this.items, 0, itemsLocal, 0, length);
 
             this.items = itemsLocal;
