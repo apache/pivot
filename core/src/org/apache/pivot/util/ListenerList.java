@@ -145,9 +145,41 @@ public abstract class ListenerList<T> implements Iterable<T> {
         return last == 0;
     }
 
+    /**
+     * Get the number of elements in the list.
+     *
+     * @return
+     * the number of elements.
+     */
+    public int getLength() {
+        return last;
+    }
+
     @Override
     public Iterator<T> iterator() {
         return new NodeIterator();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getClass().getName());
+        sb.append(" [");
+
+        int i = 0;
+        for (T item : this) {
+            if (i > 0) {
+                sb.append(", ");
+            }
+
+            sb.append(item);
+            i++;
+        }
+
+        sb.append("]");
+
+        return sb.toString();
     }
 
 }
