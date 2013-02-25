@@ -335,6 +335,10 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                         }
                         break;
                     }
+
+                    default: {
+                        break;
+                    }
                 }
 
                 updatingSelection = false;
@@ -377,6 +381,10 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             case SAVE_TO: {
                 saveAsBoxPane.setVisible(false);
                 fileBrowser.setMultiSelect(false);
+                break;
+            }
+
+            default: {
                 break;
             }
         }
@@ -454,6 +462,10 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
             case SAVE_TO: {
                 okButton.setEnabled(selectedDirectoryCount > 0);
+                break;
+            }
+
+            default: {
                 break;
             }
         }

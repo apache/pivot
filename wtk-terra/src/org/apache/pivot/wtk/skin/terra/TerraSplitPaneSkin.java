@@ -606,9 +606,9 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
         }
 
         if (splitLocation < lower) {
-            splitLocation = lower;
+            return lower;
         } else if (splitLocation > upper) {
-            splitLocation = upper;
+            return upper;
         }
 
         return splitLocation;

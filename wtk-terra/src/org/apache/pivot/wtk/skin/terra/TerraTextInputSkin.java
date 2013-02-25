@@ -446,13 +446,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             offset = 0;
         } else {
             // Translate to glyph coordinates
-            x -= (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
+        	int xt = x - (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
 
             Rectangle2D textBounds = glyphVector.getLogicalBounds();
 
-            if (x < 0) {
+            if (xt < 0) {
                 offset = 0;
-            } else if (x > textBounds.getWidth()) {
+            } else if (xt > textBounds.getWidth()) {
                 offset = glyphVector.getNumGlyphs();
             } else {
                 int n = glyphVector.getNumGlyphs();
@@ -463,10 +463,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                     float glyphX = (float)glyphBounds2D.getX();
                     float glyphWidth = (float)glyphBounds2D.getWidth();
-                    if (x >= glyphX
-                        && x < glyphX + glyphWidth) {
+                    if (xt >= glyphX
+                        && xt < glyphX + glyphWidth) {
 
-                        if (x - glyphX > glyphWidth / 2) {
+                        if (xt - glyphX > glyphWidth / 2) {
                             // The user clicked on the right half of the character; select
                             // the next character
                             i++;
