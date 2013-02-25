@@ -67,8 +67,8 @@ public class CreateHighlightedXML {
 
     private void prettyPrint(org.w3c.dom.Element domElement, int indent) {
         newLine();
-        indent++;
-        add(createIndent(indent));
+        int indentMutable = indent + 1;
+        add(createIndent(indentMutable));
 
         add(ELEMENT_COLOR, "<" + domElement.getNodeName());
 
@@ -96,14 +96,16 @@ public class CreateHighlightedXML {
             for (int i = 0; i < childNodes.getLength(); i++) {
                 org.w3c.dom.Node node = childNodes.item(i);
                 if (node instanceof org.w3c.dom.Element) {
-                    prettyPrint((org.w3c.dom.Element) node, indent);
+                    prettyPrint((org.w3c.dom.Element) node, indentMutable);
                 }
             }
+
             newLine();
-            add(createIndent(indent));
+            add(createIndent(indentMutable));
             add(ELEMENT_COLOR, "</" + domElement.getNodeName() + ">");
         }
-        indent--;
+
+        indentMutable--;
     }
 
     private void newLine() {

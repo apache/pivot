@@ -42,7 +42,7 @@
               </ScrollPane>
             </Border>
             <Border TabPane.tabData="BXML Source">
-              <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
+              <ScrollPane horizontalScrollBarPolicy="fill_to_capacity" verticalScrollBarPolicy="fill_to_capacity">
                 <TextPane bxml:id="bxmlSourceTextPane" editable="false" styles="{wrapText:true}">
                 </TextPane>
               </ScrollPane>
