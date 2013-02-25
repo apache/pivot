@@ -1752,7 +1752,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         // Invoke the setter
         try {
-            setterMethod.invoke(null, object, value);
+            setterMethod.invoke(null, object, valueToAssign);
         } catch (Exception exception) {
             throw new SerializationException(exception);
         }
