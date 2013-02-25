@@ -446,7 +446,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             offset = 0;
         } else {
             // Translate to glyph coordinates
-        	int xt = x - (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
+            int xt = x - (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
 
             Rectangle2D textBounds = glyphVector.getLogicalBounds();
 

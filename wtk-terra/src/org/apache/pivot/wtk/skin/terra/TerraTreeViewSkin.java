@@ -1451,7 +1451,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      */
     private void removeVisibleNodes(BranchInfo parentBranchInfo, int index, int count) {
         parentBranchInfo.loadChildren();
-        
+
         int countUpdated = count;
 
         if (countUpdated == -1) {
