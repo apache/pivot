@@ -26,8 +26,6 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.concurrent.TaskExecutionException;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.media.Image;
 
 /**
@@ -76,27 +74,15 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
      * the cached value will be used. Otherwise, the icon will be loaded
      * synchronously and added to the cache.
      *
-     * @param expandedIconURL
+     * @param iconURL
      * The location of the expanded icon to set.
      */
-    public void setExpandedIcon(URL expandedIconURL) {
-        if (expandedIconURL == null) {
-            throw new IllegalArgumentException("expandedIconURL is null.");
+    public void setExpandedIcon(URL iconURL) {
+        if (iconURL == null) {
+            throw new IllegalArgumentException("iconURL is null.");
         }
 
-        Image icon = (Image)ApplicationContext.getResourceCache().get(expandedIconURL);
-
-        if (icon == null) {
-            try {
-                icon = Image.load(expandedIconURL);
-                ApplicationContext.getResourceCache().put(expandedIconURL, icon);
-            } catch (TaskExecutionException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-
-        }
-
-        setExpandedIcon(icon);
+        setIcon(Image.loadFromCache(iconURL));
     }
 
     /**

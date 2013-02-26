@@ -24,8 +24,6 @@ import java.net.URL;
 
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.util.concurrent.TaskExecutionException;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
@@ -210,19 +208,7 @@ public class WatermarkDecorator implements Decorator {
             throw new IllegalArgumentException("imageURL is null.");
         }
 
-        Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
-
-        if (image == null) {
-            try {
-                image = Image.load(imageURL);
-                ApplicationContext.getResourceCache().put(imageURL, image);
-            } catch (TaskExecutionException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-
-        }
-
-        setImage(image);
+        setImage(Image.loadFromCache(imageURL));
     }
 
     /**

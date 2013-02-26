@@ -19,8 +19,6 @@ package org.apache.pivot.wtk.text;
 import java.net.URL;
 
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.concurrent.TaskExecutionException;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.media.Image;
 
 /**
@@ -88,19 +86,7 @@ public class ImageNode extends Node {
             throw new IllegalArgumentException("imageURL is null.");
         }
 
-        Image imageLocal = (Image)ApplicationContext.getResourceCache().get(imageURL);
-
-        if (imageLocal == null) {
-            try {
-                imageLocal = Image.load(imageURL);
-                ApplicationContext.getResourceCache().put(imageURL, imageLocal);
-            } catch (TaskExecutionException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-
-        }
-
-        setImage(imageLocal);
+        setImage(Image.loadFromCache(imageURL));
     }
 
     /**

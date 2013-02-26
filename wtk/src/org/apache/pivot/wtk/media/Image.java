@@ -28,6 +28,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Visual;
 
@@ -149,4 +150,24 @@ public abstract class Image implements Visual {
         loadTask.execute(loadListener);
         return loadTask;
     }
+
+    public static Image loadFromCache(URL location) {
+        if (location == null) {
+            throw new IllegalArgumentException("location is null.");
+        }
+
+        Image image = (Image)ApplicationContext.getResourceCache().get(location);
+        if (image == null) {
+            try {
+                image = Image.load(location);
+                ApplicationContext.getResourceCache().put(location, image);
+            } catch (TaskExecutionException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+
+        }
+
+        return image;
+    }
+
 }
