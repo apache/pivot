@@ -86,9 +86,9 @@ public final class Limits implements Serializable {
      */
     public int constrain(int value) {
         if (value < minimum) {
-            value = minimum;
+            return minimum;
         } else if (value > maximum) {
-            value = maximum;
+            return maximum;
         }
 
         return value;

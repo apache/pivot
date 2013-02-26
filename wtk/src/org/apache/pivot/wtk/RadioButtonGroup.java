@@ -384,8 +384,9 @@ public class RadioButtonGroup extends ButtonGroup {
      * @see Sequence#remove(int, int)
      */
     public Sequence<Button> remove(int index, int count) {
+        int countMutable = count;
         Sequence<Button> removed = new ArrayList<Button>();
-        while (count-- > 0) {
+        while (countMutable-- > 0) {
             Button button = get(index);
             boolean result = this.remove(button);
             if (result) {
@@ -449,31 +450,32 @@ public class RadioButtonGroup extends ButtonGroup {
      * unless the group contains a selected or focused button, in which case
      * that button will be used as the starting point for the search.
      */
-    public void selectNextButton(Button button) {
+    public void selectNextButton(final Button button) {
+        Button buttonWithDefault = button;
+
         // No explicit starting point was supplied
-        if (button == null) {
+        if (buttonWithDefault == null) {
             // If there is a selected button in this group, we will try to use
             // it as the starting point.
-            button = getSelection();
-
-            if (button == null) {
+            buttonWithDefault = getSelection();
+            if (buttonWithDefault == null) {
                 // No selection, but perhaps one of the buttons has focus?
                 Component focusedComponent = Component.getFocusedComponent();
                 if (focusedComponent instanceof Button) {
                     int index = this.indexOf((Button)focusedComponent);
                     if (index != NOT_FOUND_INDEX) {
-                        button = this.get(index);
+                        buttonWithDefault = this.get(index);
                     }
                 }
             }
             // Try again, using new starting point if one was determined
-            if (button != null) {
-                selectNextButton(button);
+            if (buttonWithDefault != null) {
+                selectNextButton(buttonWithDefault);
             } else {
                 selectFirstButton();
             }
         } else {
-            int index = indexOf(button);
+            int index = indexOf(buttonWithDefault);
             if (index == NOT_FOUND_INDEX) {
                 throw new IllegalArgumentException(
                     "Button does not belong to this RadioButtonGroup.");
@@ -493,32 +495,33 @@ public class RadioButtonGroup extends ButtonGroup {
      * the group contains a selected or focused button, in which case that
      * button will be used as the starting point for the search.
      */
-    public void selectPreviousButton(Button button) {
+    public void selectPreviousButton(final Button button) {
+        Button buttonWithDefault = button;
+
         // No explicit starting point was supplied
-        if (button == null) {
+        if (buttonWithDefault == null) {
             // If there is a selected button in this group, we will try to use
             // it as the starting point.
-            button = getSelection();
-
-            if (button == null) {
+            buttonWithDefault = getSelection();
+            if (buttonWithDefault == null) {
                 // No selection, but perhaps one of the buttons has focus?
                 Component focusedComponent = Component.getFocusedComponent();
                 if (focusedComponent instanceof Button) {
                     int index = this.indexOf((Button)focusedComponent);
                     if (index != NOT_FOUND_INDEX) {
-                        button = this.get(index);
+                        buttonWithDefault = this.get(index);
                     }
                 }
             }
 
             // Try again, using new starting point if one was determined
-            if (button != null) {
-                selectPreviousButton(button);
+            if (buttonWithDefault != null) {
+                selectPreviousButton(buttonWithDefault);
             } else {
                 selectLastButton();
             }
         } else {
-            int index = indexOf(button);
+            int index = indexOf(buttonWithDefault);
             if (index == NOT_FOUND_INDEX) {
                 throw new IllegalArgumentException(
                     "Button does not belong to this RadioButtonGroup.");
@@ -542,14 +545,14 @@ public class RadioButtonGroup extends ButtonGroup {
      *
      * @see #setCircular(boolean)
      */
-    private int findNext(int index, Filter<Integer> filter, boolean circularArgument) {
-        filter = (filter == null ? defaultFilter : filter);
+    private int findNext(int index, final Filter<Integer> filter, boolean circularArgument) {
+        Filter<Integer> filterWithDefault = (filter == null ? defaultFilter : filter);
         int result = NOT_FOUND_INDEX;
         int length = buttonOrder.getLength();
         if (length > 0) {
             // (index + 1) --> last index
             for (int i = (index + 1); i < length; i++) {
-                if (filter.include(i)) {
+                if (filterWithDefault.include(i)) {
                     result = i;
                     break;
                 }
@@ -557,7 +560,7 @@ public class RadioButtonGroup extends ButtonGroup {
             if (circularArgument && result == NOT_FOUND_INDEX) {
                 // first index --> index
                 for (int i = 0; i <= index; i++) {
-                    if (filter.include(i)) {
+                    if (filterWithDefault.include(i)) {
                         result = i;
                         break;
                     }
@@ -583,14 +586,14 @@ public class RadioButtonGroup extends ButtonGroup {
      *
      * @see #setCircular(boolean)
      */
-    private int findPrevious(int index, Filter<Integer> filter, boolean circularArgument) {
-        filter = (filter == null ? defaultFilter : filter);
+    private int findPrevious(int index, final Filter<Integer> filter, boolean circularArgument) {
+        Filter<Integer> filterWithDefault = (filter == null ? defaultFilter : filter);
         int result = NOT_FOUND_INDEX;
         int length = buttonOrder.getLength();
         if (length > 0) {
             // (index - 1) --> first index
             for (int i = (index - 1); i >= 0; i--) {
-                if (filter.include(i)) {
+                if (filterWithDefault.include(i)) {
                     result = i;
                     break;
                 }
@@ -598,7 +601,7 @@ public class RadioButtonGroup extends ButtonGroup {
             if (circularArgument && result == NOT_FOUND_INDEX) {
                 // last index --> index
                 for (int i = (length - 1); i >= index; i--) {
-                    if (filter.include(i)) {
+                    if (filterWithDefault.include(i)) {
                         result = i;
                         break;
                     }

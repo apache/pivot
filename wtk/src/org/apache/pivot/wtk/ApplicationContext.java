@@ -432,27 +432,32 @@ public abstract class ApplicationContext {
 
         @Override
         public void repaint(int x, int y, int width, int height) {
+            int xMutable = x;
+            int yMutable = y;
+            int widthMutable = width;
+            int heightMutable = height;
+
             // Ensure that the repaint call is properly bounded (some
             // implementations of AWT do not properly clip the repaint call
             // when x or y is negative: the negative value is converted to 0,
             // but the width/height is not adjusted)
-            if (x < 0) {
-                width = Math.max(width + x, 0);
-                x = 0;
+            if (xMutable < 0) {
+                widthMutable = Math.max(widthMutable + xMutable, 0);
+                xMutable = 0;
             }
 
-            if (y < 0) {
-                height = Math.max(height + y, 0);
-                y = 0;
+            if (yMutable < 0) {
+                heightMutable = Math.max(heightMutable + yMutable, 0);
+                yMutable = 0;
             }
 
-            if (width > 0
-                && height > 0) {
+            if (widthMutable > 0
+                && heightMutable > 0) {
                 if (scale == 1) {
-                    super.repaint(x, y, width, height);
+                    super.repaint(xMutable, yMutable, widthMutable, heightMutable);
                 } else {
-                    super.repaint((int)Math.floor(x * scale), (int)Math.floor(y * scale),
-                        (int)Math.ceil(width * scale) + 1, (int)Math.ceil(height * scale) + 1);
+                    super.repaint((int)Math.floor(xMutable * scale), (int)Math.floor(yMutable * scale),
+                        (int)Math.ceil(widthMutable * scale) + 1, (int)Math.ceil(heightMutable * scale) + 1);
                 }
             }
         }

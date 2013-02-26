@@ -338,19 +338,19 @@ public class ScaleDecorator implements Decorator {
         // No-op
     }
 
-    public void repaint(Component component, int x, int y, int width, int height) {
+    public void repaint(final Component component, int x, int y, int width, int height) {
         Container parent = component.getParent();
 
         if (parent != null) {
             int tx = getTranslatedX(component);
             int ty = getTranslatedY(component);
 
-            x = (int)((x * scaleX) + component.getX() + tx);
-            y = (int)((y * scaleY) + component.getY() + ty);
-            width = (int)Math.ceil(width * scaleX);
-            height = (int)Math.ceil(height * scaleY);
+            int xUpdated = (int)((x * scaleX) + component.getX() + tx);
+            int yUpdated = (int)((y * scaleY) + component.getY() + ty);
+            int widthUpdated = (int)Math.ceil(width * scaleX);
+            int heightUpdated = (int)Math.ceil(height * scaleY);
 
-            parent.repaint(x, y, width, height);
+            parent.repaint(xUpdated, yUpdated, widthUpdated, heightUpdated);
         }
     }
 

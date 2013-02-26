@@ -28,11 +28,12 @@ public class MenuButtonDataRenderer extends ButtonDataRenderer {
     }
 
     @Override
-    public void render(Object data, Button button, boolean highlight) {
-        if (data == null) {
-            data = "";
+    public void render(final Object data, final Button button, boolean highlight) {
+        Object dataMutable = data;
+        if (dataMutable == null) {
+            dataMutable = "";
         }
 
-        super.render(data, button, highlight);
+        super.render(dataMutable, button, highlight);
     }
 }

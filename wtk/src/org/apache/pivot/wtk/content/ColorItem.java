@@ -66,11 +66,12 @@ public class ColorItem {
 
     public void setName(String name) {
         if (name == null) {
-            name = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(),
+            this.name = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(),
                 color.getBlue());
+        } else {
+            this.name = name;
         }
 
-        this.name = name;
     }
 
     @Override

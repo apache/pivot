@@ -167,14 +167,14 @@ public class ScrollPaneSkin extends ContainerSkin
                 // Preferred width is the sum of the constrained preferred
                 // width of the view and the unconstrained preferred width of
                 // the row header
-
-                if (height >= 0) {
+                int heightUpdated = height;
+                if (heightUpdated >= 0) {
                     // Subtract the unconstrained preferred height of the
                     // column header from the height constraint
-                    height = Math.max(height - preferredColumnHeaderHeight, 0);
+                    heightUpdated = Math.max(heightUpdated - preferredColumnHeaderHeight, 0);
                 }
 
-                preferredWidth = view.getPreferredWidth(height) +
+                preferredWidth = view.getPreferredWidth(heightUpdated) +
                     preferredRowHeaderWidth;
             }
         }
@@ -257,14 +257,14 @@ public class ScrollPaneSkin extends ContainerSkin
                 // Preferred height is the sum of the constrained preferred height
                 // of the view and the unconstrained preferred height of the column
                 // header
-
-                if (width >= 0) {
+                int widthUpdated = width;
+                if (widthUpdated >= 0) {
                     // Subtract the unconstrained preferred width of the row header
                     // from the width constraint
-                    width = Math.max(width - preferredRowHeaderWidth, 0);
+                    widthUpdated = Math.max(widthUpdated - preferredRowHeaderWidth, 0);
                 }
 
-                preferredHeight = view.getPreferredHeight(width) +
+                preferredHeight = view.getPreferredHeight(widthUpdated) +
                     preferredColumnHeaderHeight;
             }
         }

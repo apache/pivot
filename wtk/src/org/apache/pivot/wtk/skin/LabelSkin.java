@@ -108,6 +108,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
         float preferredHeight;
         if (text != null) {
+            int widthUpdated = width;
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float lineHeight = lm.getHeight();
@@ -117,9 +118,9 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             int n = text.length();
             if (n > 0
                 && wrapText
-                && width != -1) {
+                && widthUpdated != -1) {
                 // Adjust width for padding
-                width -= (padding.left + padding.right);
+                widthUpdated -= (padding.left + padding.right);
 
                 float lineWidth = 0;
                 int lastWhitespaceIndex = -1;
@@ -141,7 +142,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                             fontRenderContext);
                         lineWidth += characterBounds.getWidth();
 
-                        if (lineWidth > width
+                        if (lineWidth > widthUpdated
                             && lastWhitespaceIndex != -1) {
                             i = lastWhitespaceIndex;
 

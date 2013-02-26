@@ -93,12 +93,13 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
         Component content = border.getContent();
         if (content != null) {
-            if (height != -1) {
-                height = Math.max(height - (topThickness + thickness) -
+            int heightUpdated = height;
+            if (heightUpdated != -1) {
+                heightUpdated = Math.max(heightUpdated - (topThickness + thickness) -
                     padding.top - padding.bottom, 0);
             }
 
-            preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(height));
+            preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(heightUpdated));
         }
 
         preferredWidth += (padding.left + padding.right) + (thickness * 2);
@@ -123,12 +124,13 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
         Component content = border.getContent();
         if (content != null) {
-            if (width != -1) {
-                width = Math.max(width - (thickness * 2)
+            int widthUpdated = width;
+            if (widthUpdated != -1) {
+                widthUpdated = Math.max(widthUpdated - (thickness * 2)
                     - padding.left - padding.right, 0);
             }
 
-            preferredHeight = content.getPreferredHeight(width);
+            preferredHeight = content.getPreferredHeight(widthUpdated);
         }
 
         preferredHeight += (padding.top + padding.bottom) + (topThickness + thickness);

@@ -318,14 +318,14 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         if (documentView == null) {
             offset = -1;
         } else {
-            x = Math.min(documentView.getWidth() - 1, Math.max(x - margin.left, 0));
+            int xUpdated = Math.min(documentView.getWidth() - 1, Math.max(x - margin.left, 0));
 
             if (y < margin.top) {
-                offset = documentView.getNextInsertionPoint(x, -1, TextPane.ScrollDirection.DOWN);
+                offset = documentView.getNextInsertionPoint(xUpdated, -1, TextPane.ScrollDirection.DOWN);
             } else if (y > documentView.getHeight() + margin.top) {
-                offset = documentView.getNextInsertionPoint(x, -1, TextPane.ScrollDirection.UP);
+                offset = documentView.getNextInsertionPoint(xUpdated, -1, TextPane.ScrollDirection.UP);
             } else {
-                offset = documentView.getInsertionPoint(x, y - margin.top);
+                offset = documentView.getInsertionPoint(xUpdated, y - margin.top);
             }
         }
 

@@ -122,10 +122,11 @@ public class TablePane extends Container {
 
             if (height.endsWith(RELATIVE_SIZE_INDICATOR)) {
                 relativeLocal = true;
-                height = height.substring(0, height.length() - 1);
+                setHeight(Integer.parseInt(height.substring(0, height.length() - 1)), relativeLocal);
+            } else {
+                setHeight(Integer.parseInt(height), relativeLocal);
             }
 
-            setHeight(Integer.parseInt(height), relativeLocal);
         }
 
         /**
@@ -362,10 +363,11 @@ public class TablePane extends Container {
 
             if (width.endsWith(RELATIVE_SIZE_INDICATOR)) {
                 relativeLocal = true;
-                width = width.substring(0, width.length() - 1);
+                setWidth(Integer.parseInt(width.substring(0, width.length() - 1)), relativeLocal);
+            } else {
+                setWidth(Integer.parseInt(width), relativeLocal);
             }
 
-            setWidth(Integer.parseInt(width), relativeLocal);
         }
 
         /**

@@ -264,11 +264,12 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
 
         int totalRelativeWeight = 0;
 
-        if (width < 0) {
-            width = getPreferredWidth(-1);
+        int widthUpdated = width;
+        if (widthUpdated < 0) {
+            widthUpdated = getPreferredWidth(-1);
         }
 
-        int[] columnWidthsLocal = getColumnWidths(width);
+        int[] columnWidthsLocal = getColumnWidths(widthUpdated);
 
         // First, we calculate the base heights of the rows, giving relative
         // rows their preferred height

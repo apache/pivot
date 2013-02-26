@@ -34,21 +34,22 @@ public class CalendarButtonDataRenderer extends ButtonDataRenderer {
     }
 
     @Override
-    public void render(Object data, Button button, boolean highlight) {
+    public void render(final Object data, final Button button, boolean highlight) {
+        Object dataMutable = data;
         CalendarButton calendarButton = (CalendarButton)button;
         Locale locale = calendarButton.getLocale();
 
-        if (data == null) {
-            data = "";
+        if (dataMutable == null) {
+            dataMutable = "";
         } else {
-            if (data instanceof CalendarDate) {
-                CalendarDate date = (CalendarDate)data;
+            if (dataMutable instanceof CalendarDate) {
+                CalendarDate date = (CalendarDate)dataMutable;
 
                 DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-                data = dateFormat.format(date.toCalendar().getTime());
+                dataMutable = dateFormat.format(date.toCalendar().getTime());
             }
         }
 
-        super.render(data, button, highlight);
+        super.render(dataMutable, button, highlight);
     }
 }

@@ -193,41 +193,41 @@ public final class GraphicsUtilities {
      * illegal hexadecimal digits.
      * @throws IllegalArgumentException if the value is not in one of the formats listed above.
      */
-    public static Color decodeColor(String value) throws NumberFormatException {
+    public static Color decodeColor(final String value) throws NumberFormatException {
         if (value == null) {
             throw new IllegalArgumentException("Cannot decode a null String.");
         }
 
-        value = value.toLowerCase(Locale.ENGLISH);
+        String valueLowercase = value.toLowerCase(Locale.ENGLISH);
 
         Color color;
-        if (value.startsWith("0x")) {
-            value = value.substring(2);
-            if (value.length() != 8) {
+        if (valueLowercase.startsWith("0x")) {
+            valueLowercase = valueLowercase.substring(2);
+            if (valueLowercase.length() != 8) {
                 throw new IllegalArgumentException(
                     "Incorrect Color format.  Expecting exactly 8 digits after the '0x' prefix.");
             }
 
-            int rgb = Integer.parseInt(value.substring(0, 6), 16);
-            float alpha = Integer.parseInt(value.substring(6, 8), 16) / 255f;
+            int rgb = Integer.parseInt(valueLowercase.substring(0, 6), 16);
+            float alpha = Integer.parseInt(valueLowercase.substring(6, 8), 16) / 255f;
 
             color = getColor(rgb, alpha);
-        } else if (value.startsWith("#")) {
-            value = value.substring(1);
-            if (value.length() != 6) {
+        } else if (valueLowercase.startsWith("#")) {
+            valueLowercase = valueLowercase.substring(1);
+            if (valueLowercase.length() != 6) {
                 throw new IllegalArgumentException(
                     "Incorrect Color format.  Expecting exactly 6 digits after the '#' prefix.");
             }
 
-            int rgb = Integer.parseInt(value, 16);
+            int rgb = Integer.parseInt(valueLowercase, 16);
             float alpha = 1.0f;
 
             color = getColor(rgb, alpha);
         } else {
             try {
-                color = (Color)Color.class.getDeclaredField(value).get(null);
+                color = (Color)Color.class.getDeclaredField(valueLowercase).get(null);
             } catch (Exception exception) {
-                throw new IllegalArgumentException("\"" + value + "\" is not a valid color constant.");
+                throw new IllegalArgumentException("\"" + valueLowercase + "\" is not a valid color constant.");
             }
         }
 
