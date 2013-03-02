@@ -204,7 +204,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
 
         @Override
-        public Object evaluate(Object value) {
+        public Object evaluate(final Object value) {
+            Object result = value;
             Bindings bindings = scriptEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
             if (bindings.containsKey(functionName)) {
                 Invocable invocable;
@@ -215,7 +216,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 try {
-                    value = invocable.invokeFunction(functionName, value);
+                    result = invocable.invokeFunction(functionName, result);
                 } catch (NoSuchMethodException exception) {
                     throw new RuntimeException(exception);
                 } catch (ScriptException exception) {
@@ -225,7 +226,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 throw new RuntimeException("Mapping function \"" + functionName + "\" is not defined.");
             }
 
-            return value;
+            return result;
         }
     }
 
@@ -393,7 +394,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     /** DO NOT USE. see https://issues.apache.org/jira/browse/PIVOT-742 */
     @Deprecated
-    public BXMLSerializer(final ClassLoader classLoader) {
+    public BXMLSerializer(@SuppressWarnings("unused") final ClassLoader classLoader) {
         throw new UnsupportedOperationException("https://issues.apache.org/jira/browse/PIVOT-742");
     }
 
@@ -445,6 +446,10 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                         case XMLStreamConstants.END_ELEMENT: {
                             processEndElement();
+                            break;
+                        }
+
+                        default: {
                             break;
                         }
                     }
@@ -1393,6 +1398,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             case DEFINE: {
                 // No-op
+                break;
+            }
+
+            default: {
+                break;
             }
         }
 
@@ -1706,39 +1716,43 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     private static void setStaticProperty(Object object, Class<?> propertyClass,
-        String propertyName, Object value)
+        final String propertyName, final Object value)
         throws SerializationException {
         Class<?> objectType = object.getClass();
-        propertyName = Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+        String propertyNameUpdated =
+                Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+        Object valueToAssign = value;
 
         Method setterMethod = null;
-        if (value != null) {
-            setterMethod = getStaticSetterMethod(propertyClass, propertyName,
-                objectType, value.getClass());
+        if (valueToAssign != null) {
+            setterMethod = getStaticSetterMethod(propertyClass, propertyNameUpdated,
+                objectType, valueToAssign.getClass());
         }
 
         if (setterMethod == null) {
-            Method getterMethod = getStaticGetterMethod(propertyClass, propertyName, objectType);
+            Method getterMethod = getStaticGetterMethod(propertyClass, propertyNameUpdated, objectType);
 
             if (getterMethod != null) {
                 Class<?> propertyType = getterMethod.getReturnType();
-                setterMethod = getStaticSetterMethod(propertyClass, propertyName,
+                setterMethod = getStaticSetterMethod(propertyClass, propertyNameUpdated,
                     objectType, propertyType);
 
-                if (value instanceof String) {
-                    value = BeanAdapter.coerce((String)value, propertyType);
+                if (valueToAssign instanceof String) {
+                    valueToAssign = BeanAdapter.coerce((String)valueToAssign, propertyType);
                 }
             }
         }
 
         if (setterMethod == null) {
-            throw new SerializationException(propertyClass.getName() + "." + propertyName
-                + " is not valid static property.");
+            throw new SerializationException(propertyClass.getName()
+                + "." + propertyNameUpdated
+                + " is not valid static property."
+            );
         }
 
         // Invoke the setter
         try {
-            setterMethod.invoke(null, object, value);
+            setterMethod.invoke(null, object, valueToAssign);
         } catch (Exception exception) {
             throw new SerializationException(exception);
         }

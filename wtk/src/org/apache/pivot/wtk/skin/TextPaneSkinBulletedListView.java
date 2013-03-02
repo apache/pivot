@@ -55,6 +55,8 @@ class TextPaneSkinBulletedListView extends TextPaneSkinListView implements Bulle
                 case CIRCLE_OUTLINE:
                     listItemView.setIndexText("\u25e6 ");
                     break;
+                default:
+                    break;
             }
         }
 

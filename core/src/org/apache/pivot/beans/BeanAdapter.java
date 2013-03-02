@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 
-import org.apache.pivot.beans.PropertyNotFoundException;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ListenerList;
@@ -278,7 +277,7 @@ public class BeanAdapter implements Map<String, Object> {
      * If the given property does not exist or is read-only.
      */
     @Override
-    public Object put(String key, Object value) {
+    public Object put(final String key, final Object value) {
         if (key == null) {
             throw new IllegalArgumentException("key is null.");
         }
@@ -288,10 +287,11 @@ public class BeanAdapter implements Map<String, Object> {
         }
 
         Method setterMethod = null;
+        Object valueUpdated = value;
 
-        if (value != null) {
+        if (valueUpdated != null) {
             // Get the setter method for the value type
-            setterMethod = getSetterMethod(key, value.getClass());
+            setterMethod = getSetterMethod(key, valueUpdated.getClass());
         }
 
         if (setterMethod == null) {
@@ -300,7 +300,7 @@ public class BeanAdapter implements Map<String, Object> {
 
             if (propertyType != null) {
                 setterMethod = getSetterMethod(key, propertyType);
-                value = coerce(value, propertyType);
+                valueUpdated = coerce(valueUpdated, propertyType);
             }
         }
 
@@ -313,28 +313,28 @@ public class BeanAdapter implements Map<String, Object> {
             }
 
             Class<?> fieldType = field.getType();
-            if (value != null) {
-                Class<?> valueType = value.getClass();
+            if (valueUpdated != null) {
+                Class<?> valueType = valueUpdated.getClass();
                 if (!fieldType.isAssignableFrom(valueType)) {
-                    value = coerce(value, fieldType);
+                    valueUpdated = coerce(valueUpdated, fieldType);
                 }
             }
 
             try {
-                field.set(bean, value);
+                field.set(bean, valueUpdated);
             } catch (IllegalAccessException exception) {
                 throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                     key, bean.getClass().getName()), exception);
             }
         } else {
             try {
-                setterMethod.invoke(bean, new Object[] {value});
+                setterMethod.invoke(bean, new Object[] {valueUpdated});
             } catch (IllegalAccessException exception) {
                 throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                     key, bean.getClass().getName()), exception);
             } catch (InvocationTargetException exception) {
                 throw new RuntimeException(String.format("Error setting property \"%s\" for type %s to value \"%s\"",
-                    key, bean.getClass().getName(), "" + value), exception.getCause());
+                    key, bean.getClass().getName(), "" + valueUpdated), exception.getCause());
             }
 
         }
@@ -765,7 +765,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return
      * The getter method, or <tt>null</tt> if the method does not exist.
      */
-    public static Method getGetterMethod(Class<?> beanClass, String key) {
+    public static Method getGetterMethod(final Class<?> beanClass, final String key) {
         if (beanClass == null) {
             throw new IllegalArgumentException("beanClass is null.");
         }
@@ -779,18 +779,18 @@ public class BeanAdapter implements Map<String, Object> {
         }
 
         // Upper-case the first letter
-        key = Character.toUpperCase(key.charAt(0)) + key.substring(1);
+        String keyUpdated = Character.toUpperCase(key.charAt(0)) + key.substring(1);
         Method getterMethod = null;
 
         try {
-            getterMethod = beanClass.getMethod(GET_PREFIX + key);
+            getterMethod = beanClass.getMethod(GET_PREFIX + keyUpdated);
         } catch (NoSuchMethodException exception) {
             // No-op
         }
 
         if (getterMethod == null) {
             try {
-                getterMethod = beanClass.getMethod(IS_PREFIX + key);
+                getterMethod = beanClass.getMethod(IS_PREFIX + keyUpdated);
             } catch (NoSuchMethodException exception) {
                 // No-op
             }
@@ -811,7 +811,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return
      * The getter method, or <tt>null</tt> if the method does not exist.
      */
-    public static Method getSetterMethod(Class<?> beanClass, String key, Class<?> valueType) {
+    public static Method getSetterMethod(final Class<?> beanClass, final String key, final Class<?> valueType) {
         if (beanClass == null) {
             throw new IllegalArgumentException("beanClass is null.");
         }
@@ -829,8 +829,8 @@ public class BeanAdapter implements Map<String, Object> {
         if (valueType != null) {
             // Upper-case the first letter and prepend the "set" prefix to
             // determine the method name
-            key = Character.toUpperCase(key.charAt(0)) + key.substring(1);
-            final String methodName = SET_PREFIX + key;
+            String keyUpdated = Character.toUpperCase(key.charAt(0)) + key.substring(1);
+            final String methodName = SET_PREFIX + keyUpdated;
 
             try {
                 setterMethod = beanClass.getMethod(methodName, valueType);
@@ -841,7 +841,7 @@ public class BeanAdapter implements Map<String, Object> {
             if (setterMethod == null) {
                 // Look for a match on the value's super type
                 Class<?> superType = valueType.getSuperclass();
-                setterMethod = getSetterMethod(beanClass, key, superType);
+                setterMethod = getSetterMethod(beanClass, keyUpdated, superType);
             }
 
             if (setterMethod == null) {
@@ -860,7 +860,7 @@ public class BeanAdapter implements Map<String, Object> {
                     // No-op
                 } catch (IllegalAccessException exception) {
                     throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
-                        key, beanClass.getName()), exception);
+                            keyUpdated, beanClass.getName()), exception);
                 }
             }
 
@@ -872,7 +872,7 @@ public class BeanAdapter implements Map<String, Object> {
                 while (setterMethod == null
                     && i < n) {
                     Class<?> interfaceType = interfaces[i++];
-                    setterMethod = getSetterMethod(beanClass, key, interfaceType);
+                    setterMethod = getSetterMethod(beanClass, keyUpdated, interfaceType);
                 }
             }
         }

@@ -24,8 +24,6 @@ import java.net.URL;
 
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.util.concurrent.TaskExecutionException;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
@@ -40,7 +38,7 @@ import org.apache.pivot.wtk.media.Image;
  * Decorator that paints a watermark effect over a component.
  */
 public class WatermarkDecorator implements Decorator {
-    private float opacity = 0.075f;
+    private float opacity = 0.1f;
     private double theta = Math.PI / 4;
 
     private BoxPane boxPane = new BoxPane(Orientation.HORIZONTAL);
@@ -99,7 +97,7 @@ public class WatermarkDecorator implements Decorator {
         Font font = (Font)label.getStyles().get("font");
         label.getStyles().put("font", font.deriveFont(Font.BOLD, 60));
 
-        label.setText(text);
+        label.setText(text != null ? text : "");
         imageView.setImage(image);
 
         validate();
@@ -122,7 +120,7 @@ public class WatermarkDecorator implements Decorator {
      * This decorator's text
      */
     public void setText(String text) {
-        label.setText(text);
+        label.setText(text != null ? text : "");
         validate();
     }
 
@@ -210,19 +208,7 @@ public class WatermarkDecorator implements Decorator {
             throw new IllegalArgumentException("imageURL is null.");
         }
 
-        Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
-
-        if (image == null) {
-            try {
-                image = Image.load(imageURL);
-            } catch (TaskExecutionException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-
-            ApplicationContext.getResourceCache().put(imageURL, image);
-        }
-
-        setImage(image);
+        setImage(Image.loadFromCache(imageURL));
     }
 
     /**

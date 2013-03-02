@@ -1398,6 +1398,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         // Clear the highlight

@@ -44,6 +44,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
@@ -51,7 +52,6 @@ import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.SpinnerSelectionListener;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 import org.apache.pivot.wtk.content.NumericSpinnerData;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
@@ -309,6 +309,10 @@ public class TerraCalendarSkin extends CalendarSkin {
                         nextButton.requestFocus();
                         break;
                     }
+
+                    default: {
+                        break;
+                    }
                 }
 
                 consumed = true;
@@ -348,9 +352,9 @@ public class TerraCalendarSkin extends CalendarSkin {
             CalendarDate date = new CalendarDate(2000, (Integer)item, 0);
 
             SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", calendar.getLocale());
-            item = monthFormat.format(date.toCalendar().getTime());
+            Object itemFromFormat = monthFormat.format(date.toCalendar().getTime());
 
-            super.render(item, spinner);
+            super.render(itemFromFormat, spinner);
         }
     }
 

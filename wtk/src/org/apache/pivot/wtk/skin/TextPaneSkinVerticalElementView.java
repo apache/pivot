@@ -150,7 +150,7 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
                         }
                     }
 
-                    if (offset != -1) {
+                    if (offset != -1 && nodeView != null) {
                         offset += nodeView.getOffset();
                     }
                 }

@@ -281,10 +281,11 @@ public class TableView extends Component {
 
             if (width.endsWith("*")) {
                 relativeLocal = true;
-                width = width.substring(0, width.length() - 1);
+                setWidth(Integer.parseInt(width.substring(0, width.length() - 1)), relativeLocal);
+            } else {
+                setWidth(Integer.parseInt(width), relativeLocal);
             }
 
-            setWidth(Integer.parseInt(width), relativeLocal);
         }
 
         /**
@@ -2170,8 +2171,14 @@ public class TableView extends Component {
 
                 break;
             }
-            case NONE:
+
+            case NONE: {
                 break;
+            }
+
+            default: {
+                break;
+            }
         }
     }
 
@@ -2241,8 +2248,14 @@ public class TableView extends Component {
 
                 break;
             }
-            case NONE:
+
+            case NONE: {
                 break;
+            }
+
+            default: {
+                break;
+            }
         }
     }
 

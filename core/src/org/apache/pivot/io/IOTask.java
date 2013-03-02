@@ -193,6 +193,7 @@ public abstract class IOTask<V> extends Task<V> {
         }
     }
 
+    // TODO: use AtomicInteger instead of volatile ...
     protected volatile long bytesSent = 0;
     protected volatile long bytesReceived = 0;
 

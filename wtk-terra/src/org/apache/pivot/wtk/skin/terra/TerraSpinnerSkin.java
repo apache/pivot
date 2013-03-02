@@ -314,7 +314,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             List<?> spinnerData = spinner.getSpinnerData();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
-            character = Character.toUpperCase(character);
+            char characterUpper = Character.toUpperCase(character);
 
             for (int i = spinner.getSelectedIndex() + 1, n = spinnerData.getLength(); i < n; i++) {
                 String string = itemRenderer.toString(spinnerData.get(i));
@@ -323,7 +323,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
                     && string.length() > 0) {
                     char first = Character.toUpperCase(string.charAt(0));
 
-                    if (first == character) {
+                    if (first == characterUpper) {
                         spinner.setSelectedIndex(i);
                         consumed = true;
                         break;

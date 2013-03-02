@@ -48,9 +48,10 @@ public class FillPaneSkin extends ContainerSkin
 
         Orientation orientation = fillPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
+            int heightUpdated = height;
             // Include padding in constraint
-            if (height != -1) {
-                height = Math.max(height - (padding.top + padding.bottom), 0);
+            if (heightUpdated != -1) {
+                heightUpdated = Math.max(heightUpdated - (padding.top + padding.bottom), 0);
             }
 
             // Preferred width is the sum of the preferred widths of all components
@@ -59,7 +60,7 @@ public class FillPaneSkin extends ContainerSkin
                 Component component = fillPane.get(i);
 
                 if (component.isVisible()) {
-                    preferredWidth += component.getPreferredWidth(height);
+                    preferredWidth += component.getPreferredWidth(heightUpdated);
                     j++;
                 }
             }
@@ -104,9 +105,10 @@ public class FillPaneSkin extends ContainerSkin
                 }
             }
         } else {
+            int widthUpdated = width;
             // Include padding in constraint
-            if (width != -1) {
-                width = Math.max(width - (padding.left + padding.right), 0);
+            if (widthUpdated != -1) {
+                widthUpdated = Math.max(widthUpdated - (padding.left + padding.right), 0);
             }
 
             // Preferred height is the sum of the preferred heights of all components
@@ -115,7 +117,7 @@ public class FillPaneSkin extends ContainerSkin
                 Component component = fillPane.get(i);
 
                 if (component.isVisible()) {
-                    preferredHeight += component.getPreferredHeight(width);
+                    preferredHeight += component.getPreferredHeight(widthUpdated);
                     j++;
                 }
             }
@@ -183,6 +185,10 @@ public class FillPaneSkin extends ContainerSkin
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         // Include padding
@@ -233,6 +239,10 @@ public class FillPaneSkin extends ContainerSkin
                     }
                 }
 
+                break;
+            }
+
+            default: {
                 break;
             }
         }

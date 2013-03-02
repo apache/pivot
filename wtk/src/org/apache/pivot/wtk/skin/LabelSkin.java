@@ -108,6 +108,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
         float preferredHeight;
         if (text != null) {
+            int widthUpdated = width;
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float lineHeight = lm.getHeight();
@@ -117,9 +118,9 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             int n = text.length();
             if (n > 0
                 && wrapText
-                && width != -1) {
+                && widthUpdated != -1) {
                 // Adjust width for padding
-                width -= (padding.left + padding.right);
+                widthUpdated -= (padding.left + padding.right);
 
                 float lineWidth = 0;
                 int lastWhitespaceIndex = -1;
@@ -141,7 +142,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                             fontRenderContext);
                         lineWidth += characterBounds.getWidth();
 
-                        if (lineWidth > width
+                        if (lineWidth > widthUpdated
                             && lastWhitespaceIndex != -1) {
                             i = lastWhitespaceIndex;
 
@@ -215,6 +216,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
             case BOTTOM: {
                 baseline = Math.round(height - (textHeightLocal + padding.bottom) + ascent);
+                break;
+            }
+
+            default: {
                 break;
             }
         }
@@ -340,6 +345,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     y = (height - textHeight) / 2;
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             for (int i = 0, n = glyphVectors.getLength(); i < n; i++) {
@@ -354,14 +363,15 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                         x = padding.left;
                         break;
                     }
-
                     case RIGHT: {
                         x = width - (lineWidth + padding.right);
                         break;
                     }
-
                     case CENTER: {
                         x = (width - lineWidth) / 2;
+                        break;
+                    }
+                    default: {
                         break;
                     }
                 }
@@ -388,9 +398,11 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                             offset = y + ascent + 2;
                             break;
                         }
-
                         case STRIKETHROUGH: {
                             offset = y + lineHeight / 2 + 1;
+                            break;
+                        }
+                        default: {
                             break;
                         }
                     }
@@ -675,4 +687,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     public void textChanged(Label label, String previousText) {
         invalidateComponent();
     }
+
+    @Override
+    public void maximumLengthChanged(Label label, int previousMaximumLength) {
+        invalidateComponent();
+    }
+
 }

@@ -88,7 +88,8 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
         List<?> treeData = treeViewArgument.getTreeData();
         TreeNode treeNode = (TreeNode)Sequence.Tree.get(treeData, pathArgument);
 
-        textInput.setText(treeNode.getText());
+        String text = treeNode.getText();
+        textInput.setText(text != null ? text : "");
         textInput.selectAll();
 
         // Get the node bounds

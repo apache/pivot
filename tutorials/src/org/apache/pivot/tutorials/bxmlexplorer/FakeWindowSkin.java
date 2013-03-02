@@ -250,6 +250,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
     @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
+        int heightMutable = height;
 
         FakeWindow frame = (FakeWindow) getComponent();
 
@@ -257,24 +258,22 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
         Dimensions titleBarSize = titleBarTablePane.getPreferredSize();
         preferredWidth = Math.max(titleBarSize.width + 2, preferredWidth);
 
-        if (height != -1) {
+        if (heightMutable != -1) {
             // Subtract title bar height and top/bottom title bar borders
             // from height constraint
-            height -= titleBarSize.height + 2;
+            heightMutable -= titleBarSize.height + 2;
         }
 
         Component content = frame.getContent();
         if (content != null) {
-            if (height != -1) {
+            if (heightMutable != -1) {
                 // Subtract padding, top/bottom content borders, and content
-                // bevel
-                // from height constraint
-                height -= (padding.top + padding.bottom) + (1) + 2;
-
-                height = Math.max(height, 0);
+                // bevel from height constraint
+                heightMutable -= (padding.top + padding.bottom) + (1) + 2;
+                heightMutable = Math.max(heightMutable, 0);
             }
 
-            preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(height));
+            preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(heightMutable));
         }
 
         // Add padding and left/right content borders
@@ -286,6 +285,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
     @Override
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
+        int widthMutable = width;
 
         FakeWindow frame = (FakeWindow) getComponent();
 
@@ -294,15 +294,14 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
 
         Component content = frame.getContent();
         if (content != null) {
-            if (width != -1) {
+            if (widthMutable != -1) {
                 // Subtract padding and left/right content borders from
                 // constraint
-                width -= (padding.left + padding.right) + 2;
-
-                width = Math.max(width, 0);
+                widthMutable -= (padding.left + padding.right) + 2;
+                widthMutable = Math.max(widthMutable, 0);
             }
 
-            preferredHeight += content.getPreferredHeight(width);
+            preferredHeight += content.getPreferredHeight(widthMutable);
         }
 
         // Add padding, top/bottom content borders, and content bevel
@@ -413,7 +412,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
     public void titleChanged(FakeWindow window, String previousTitle) {
         String title = window.getTitle();
         titleLabel.setVisible(title != null);
-        titleLabel.setText(title);
+        titleLabel.setText(title != null ? title : "");
     }
 
     @Override

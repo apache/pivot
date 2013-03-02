@@ -271,7 +271,7 @@ public final class Mouse {
      *
      * @param component
      */
-    public static void setCursor(Component component) {
+    public static void setCursor(final Component component) {
         if (component == null) {
             throw new IllegalArgumentException("component is null.");
         }
@@ -280,22 +280,23 @@ public final class Mouse {
             throw new IllegalArgumentException("component is not visible.");
         }
 
+        Component componentOrParent = component;
         Cursor cursor = null;
 
-        if (component.isEnabled()) {
-            cursor = component.getCursor();
+        if (componentOrParent.isEnabled()) {
+            cursor = componentOrParent.getCursor();
             while (cursor == null
-                && component != null
-                && !(component instanceof Display)) {
-                component = component.getParent();
-                if (component != null) {
-                    cursor = component.getCursor();
+                && componentOrParent != null
+                && !(componentOrParent instanceof Display)) {
+                componentOrParent = componentOrParent.getParent();
+                if (componentOrParent != null) {
+                    cursor = componentOrParent.getCursor();
                 }
             }
         }
 
-        if (component != null) {
-            Display display = component.getDisplay();
+        if (componentOrParent != null) {
+            Display display = componentOrParent.getDisplay();
             ApplicationContext.DisplayHost displayHost = display.getDisplayHost();
             displayHost.setCursor((cursor == null) ? java.awt.Cursor.getDefaultCursor() :
                 getCursor(cursor));

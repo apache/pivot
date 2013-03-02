@@ -27,13 +27,13 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Menu;
+import org.apache.pivot.wtk.Menu.Item;
+import org.apache.pivot.wtk.Menu.Section;
 import org.apache.pivot.wtk.MenuListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Menu.Item;
-import org.apache.pivot.wtk.Menu.Section;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
@@ -570,7 +570,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
             itemIndex = section.indexOf(activeItem) + 1;
         }
 
-        character = Character.toUpperCase(character);
+        char characterUpper = Character.toUpperCase(character);
 
         while (sectionIndex < sectionCount) {
             Section section = sections.get(sectionIndex);
@@ -586,7 +586,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
                         && string.length() > 0) {
                         char first = Character.toUpperCase(string.charAt(0));
 
-                        if (first == character) {
+                        if (first == characterUpper) {
                             item.setActive(true);
                             consumed = true;
                             break;

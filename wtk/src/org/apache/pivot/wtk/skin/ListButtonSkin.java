@@ -107,6 +107,10 @@ public abstract class ListButtonSkin extends ButtonSkin
                     listViewPopup.close();
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             return false;
@@ -390,7 +394,7 @@ public abstract class ListButtonSkin extends ButtonSkin
         List<?> listData = listButton.getListData();
         ListView.ItemRenderer itemRenderer = listButton.getItemRenderer();
 
-        character = Character.toUpperCase(character);
+        char characterUpper = Character.toUpperCase(character);
 
         for (int i = listButton.getSelectedIndex() + 1, n = listData.getLength(); i < n; i++) {
             if (!listButton.isItemDisabled(i)) {
@@ -400,7 +404,7 @@ public abstract class ListButtonSkin extends ButtonSkin
                     && string.length() > 0) {
                     char first = Character.toUpperCase(string.charAt(0));
 
-                    if (first == character) {
+                    if (first == characterUpper) {
                         listButton.setSelectedIndex(i);
                         consumed = true;
                         break;

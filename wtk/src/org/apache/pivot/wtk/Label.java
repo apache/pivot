@@ -52,6 +52,14 @@ public class Label extends Component {
                 listener.textChanged(label, previousText);
             }
         }
+
+        @Override
+        public void maximumLengthChanged(Label label, int previousMaximumLength) {
+            for (LabelListener listener : this) {
+                listener.maximumLengthChanged(label, previousMaximumLength);
+            }
+        }
+
     }
 
     private static class LabelBindingListenerList extends WTKListenerList<LabelBindingListener>
@@ -79,6 +87,7 @@ public class Label extends Component {
     }
 
     private String text = null;
+    private int maximumLength = 32767;
 
     private String textKey = null;
     private BindType textBindType = BindType.BOTH;
@@ -88,11 +97,11 @@ public class Label extends Component {
     private LabelBindingListenerList labelBindingListeners = new LabelBindingListenerList();
 
     public Label() {
-        this(null);
+        this("");
     }
 
     public Label(String text) {
-        this.text = text;
+        setText(text);
 
         installSkin(Label.class);
     }
@@ -102,7 +111,15 @@ public class Label extends Component {
     }
 
     public void setText(String text) {
-        String previousText = this.text;
+        if (text == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (text.length() > maximumLength) {
+            throw new IllegalArgumentException("Text length is greater than maximum length.");
+        }
+
+       String previousText = this.text;
         if (previousText != text) {
             this.text = text;
             labelListeners.textChanged(this, previousText);
@@ -117,6 +134,40 @@ public class Label extends Component {
      */
     public String getTextKey() {
         return textKey;
+    }
+
+    /**
+     * Returns the maximum length of the label text.
+     *
+     * @return
+     * The maximum length of the label text.
+     */
+    public int getMaximumLength() {
+        return maximumLength;
+    }
+
+    /**
+     * Sets the maximum length of the label text.
+     *
+     * @param maximumLength
+     * The maximum length of the label text.
+     */
+    public void setMaximumLength(int maximumLength) {
+        if (maximumLength < 0) {
+            throw new IllegalArgumentException("maximumLength is negative.");
+        }
+
+        int previousMaximumLength = this.maximumLength;
+        if (previousMaximumLength != maximumLength) {
+            this.maximumLength = maximumLength;
+
+            // Truncate the text, if necessary (do not allow listeners to vote on this change)
+            if (text.length() > maximumLength) {
+                setText(text.substring(0, maximumLength));
+            }
+
+            labelListeners.maximumLengthChanged(this, previousMaximumLength);
+        }
     }
 
     /**
@@ -177,7 +228,7 @@ public class Label extends Component {
                 value = textBindMapping.toString(value);
             }
 
-            setText((String)value);
+            setText(value != null ? (String)value : "");
         }
     }
 
@@ -194,7 +245,7 @@ public class Label extends Component {
     @Override
     public void clear() {
         if (textKey != null) {
-            setText(null);
+            setText("");
         }
     }
 

@@ -18,8 +18,6 @@ package org.apache.pivot.wtk.content;
 
 import java.net.URL;
 
-import org.apache.pivot.util.concurrent.TaskExecutionException;
-import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.media.Image;
 
 /**
@@ -70,19 +68,7 @@ public class ListItem {
             throw new IllegalArgumentException("iconURL is null.");
         }
 
-        Image iconLocal = (Image)ApplicationContext.getResourceCache().get(iconURL);
-
-        if (iconLocal == null) {
-            try {
-                iconLocal = Image.load(iconURL);
-            } catch (TaskExecutionException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-
-            ApplicationContext.getResourceCache().put(iconURL, iconLocal);
-        }
-
-        setIcon(iconLocal);
+        setIcon(Image.loadFromCache(iconURL));
     }
 
     /**

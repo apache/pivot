@@ -62,7 +62,7 @@ public class Forms extends Window implements Bindable {
                 Form.setFlag(nameBoxPane, flag);
 
                 if (flag == null) {
-                    errorLabel.setText(null);
+                    errorLabel.setText("");
                     Prompt.prompt("Pretending to submit...", Forms.this);
                 } else {
                     errorLabel.setText("Some required information is missing.");

@@ -305,6 +305,9 @@ public class FlowPaneSkin extends ContainerSkin {
                     x = width - rowWidth - padding.right;
                     break;
                 }
+                default: {
+                    break;
+                }
             }
 
             for (Component component : row) {

@@ -34,6 +34,7 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
@@ -102,6 +103,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
         }
     }
@@ -135,6 +140,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     private int tabWidth;
     private int lineWidth;
     private boolean acceptsEnter = true;
+    private boolean acceptsTab = false;
 
     private Dimensions averageCharacterSize;
 
@@ -165,6 +171,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         textArea.getTextAreaListeners().add(this);
         textArea.getTextAreaContentListeners().add(this);
         textArea.getTextAreaSelectionListeners().add(this);
+
+        textArea.setCursor(Cursor.TEXT);
     }
 
     @Override
@@ -771,6 +779,34 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         this.acceptsEnter = acceptsEnter;
     }
 
+    /**
+     * Gets current value of style that determines the
+     * behavior of <tt>TAB</tt> and <tt>Ctrl-TAB</tt>
+     * characters.
+     * @return <tt>true</tt> if <tt>TAB</tt> inserts an
+     * appropriate number of spaces, while <tt>Ctrl-TAB</tt>
+     * shifts focus to next component. <tt>false</tt> (default)
+     * means <tt>TAB</tt> shifts focus and <tt>Ctrl-TAB</tt>
+     * inserts spaces.
+     */
+    public boolean getAcceptsTab() {
+        return acceptsTab;
+    }
+
+    /**
+     * Sets current value of style that determines the
+     * behavior of <tt>TAB</tt> and <tt>Ctrl-TAB</tt>
+     * characters.
+     * @param acceptsTab <tt>true</tt> if <tt>TAB</tt> inserts an
+     * appropriate number of spaces, while <tt>Ctrl-TAB</tt>
+     * shifts focus to next component. <tt>false</tt> (default)
+     * means <tt>TAB</tt> shifts focus and <tt>Ctrl-TAB</tt>
+     * inserts spaces.
+     */
+    public void setAcceptsTab(boolean acceptsTab) {
+        this.acceptsTab = acceptsTab;
+    }
+
     @Override
     public int getTabWidth() {
         return tabWidth;
@@ -915,10 +951,77 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
             Mouse.release();
         }
 
-        anchor = -1;
         scrollDirection = null;
         mouseX = -1;
 
+        return consumed;
+    }
+
+    private void selectSpan(TextArea textArea, int start) {
+        int rowStart = textArea.getRowOffset(start);
+        int rowLength = textArea.getRowLength(start);
+        if (start - rowStart >= rowLength) {
+            start = rowStart + rowLength - 1;
+            char ch = textArea.getCharacterAt(start);
+            if (ch == '\r' || ch == '\n') {
+                start--;
+            }
+        }
+        char ch = textArea.getCharacterAt(start);
+        int selectionStart = start;
+        int selectionLength = 1;
+        if (Character.isWhitespace(ch)) {
+            // Move backward to beginning of whitespace block
+            // but not before the beginning of the line.
+            do {
+                selectionStart--;
+            } while (selectionStart >= rowStart &&
+                     Character.isWhitespace(textArea.getCharacterAt(selectionStart)));
+            selectionStart++;
+            selectionLength = start - selectionStart;
+            // Move forward to end of whitespace block
+            // but not past the end of the text or the end of line
+            do {
+                selectionLength++;
+            } while (selectionStart + selectionLength - rowStart < rowLength &&
+                     Character.isWhitespace(textArea.getCharacterAt(selectionStart + selectionLength)));
+        } else if (Character.isJavaIdentifierPart(ch)) {
+            // Move backward to beginning of identifier block
+            do {
+                selectionStart--;
+            } while (selectionStart >= rowStart &&
+                     Character.isJavaIdentifierPart(textArea.getCharacterAt(selectionStart)));
+            selectionStart++;
+            selectionLength = start - selectionStart;
+            // Move forward to end of identifier block
+            // but not past end of text
+            do {
+                selectionLength++;
+            } while (selectionStart + selectionLength - rowStart < rowLength &&
+                     Character.isJavaIdentifierPart(textArea.getCharacterAt(selectionStart + selectionLength)));
+        } else {
+            return;
+        }
+        textArea.setSelection(selectionStart, selectionLength);
+    }
+
+    @Override
+    public boolean mouseClick(Component component, Mouse.Button button,
+            int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
+        TextArea textArea = (TextArea)component;
+
+        if (button == Mouse.Button.LEFT) {
+            int index = getInsertionPoint(x, y);
+            if (index != -1) {
+                if (count == 2) {
+                    selectSpan(textArea, index);
+                } else if (count == 3) {
+                    textArea.setSelection(textArea.getRowOffset(index), textArea.getRowLength(index));
+                }
+            }
+       }
         return consumed;
     }
 
@@ -959,12 +1062,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
         if (paragraphViews.getLength() > 0) {
             TextArea textArea = (TextArea)getComponent();
-            Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-            Keyboard.Modifier wordNavigationModifier = Platform.getWordNavigationModifier();
+            boolean commandPressed = Keyboard.isPressed(Platform.getCommandModifier());
+            boolean wordNavPressed = Keyboard.isPressed(Platform.getWordNavigationModifier());
+            boolean shiftPressed = Keyboard.isPressed(Keyboard.Modifier.SHIFT);
+            boolean ctrlPressed = Keyboard.isPressed(Keyboard.Modifier.CTRL);
+            boolean metaPressed = Keyboard.isPressed(Keyboard.Modifier.META);
+            boolean isEditable = textArea.isEditable();
 
             if (keyCode == Keyboard.KeyCode.ENTER
-                && acceptsEnter
-                && textArea.isEditable()
+                && acceptsEnter && isEditable
                 && Keyboard.getModifiers() == 0) {
                 int index = textArea.getSelectionStart();
                 textArea.removeText(index, textArea.getSelectionLength());
@@ -972,7 +1078,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.DELETE
-                && textArea.isEditable()) {
+                && isEditable) {
                 int index = textArea.getSelectionStart();
 
                 if (index < textArea.getCharacterCount()) {
@@ -982,7 +1088,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     consumed = true;
                 }
             } else if (keyCode == Keyboard.KeyCode.BACKSPACE
-                && textArea.isEditable()) {
+                && isEditable) {
                 int index = textArea.getSelectionStart();
                 int count = textArea.getSelectionLength();
 
@@ -995,19 +1101,21 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     consumed = true;
                 }
             } else if (keyCode == Keyboard.KeyCode.TAB
-                && Keyboard.isPressed(Keyboard.Modifier.CTRL)
-                && textArea.isEditable()) {
+                && (acceptsTab != ctrlPressed)
+                && isEditable) {
+                int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
 
+                int rowOffset = textArea.getRowOffset(selectionStart);
+                int linePos = selectionStart - rowOffset;
                 StringBuilder tabBuilder = new StringBuilder(tabWidth);
-                for (int i = 0; i < tabWidth; i++) {
+                for (int i = 0; i < tabWidth - (linePos % tabWidth); i++) {
                     tabBuilder.append(" ");
                 }
 
                 if (textArea.getCharacterCount() - selectionLength + tabWidth > textArea.getMaximumLength()) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
-                    int selectionStart = textArea.getSelectionStart();
                     textArea.removeText(selectionStart, selectionLength);
                     textArea.insertText(tabBuilder, selectionStart);
                 }
@@ -1016,40 +1124,53 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.HOME
-                || (keyCode == Keyboard.KeyCode.LEFT
-                    && Keyboard.isPressed(Keyboard.Modifier.META))) {
-                // Move the caret to the beginning of the line
+                || (keyCode == Keyboard.KeyCode.LEFT && metaPressed)) {
+                int start;
                 int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
-                int rowOffset = getRowOffset(selectionStart);
+                if (ctrlPressed) {
+                    // Move the caret to the beginning of the text
+                    start = 0;
+                } else {
+                    // Move the caret to the beginning of the line
+                    start = getRowOffset(selectionStart);
+                }
 
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    selectionLength += selectionStart - rowOffset;
+                if (shiftPressed) {
+                    selectionLength += selectionStart - start;
+                } else {
+                    selectionLength = 0;
                 }
 
                 if (selectionStart >= 0) {
-                    textArea.setSelection(rowOffset, selectionLength);
-                    scrollCharacterToVisible(rowOffset);
+                    textArea.setSelection(start, selectionLength);
+                    scrollCharacterToVisible(start);
 
                     caretX = caret.x;
 
                     consumed = true;
                 }
             } else if (keyCode == Keyboard.KeyCode.END
-                || (keyCode == Keyboard.KeyCode.RIGHT
-                    && Keyboard.isPressed(Keyboard.Modifier.META))) {
-                // Move the caret to the end of the line
+                || (keyCode == Keyboard.KeyCode.RIGHT && metaPressed)) {
+                int end;
                 int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
-
                 int index = selectionStart + selectionLength;
-                int rowOffset = getRowOffset(index);
-                int rowLength = getRowLength(index);
 
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    selectionLength += (rowOffset + rowLength) - index;
+                if (ctrlPressed) {
+                    // Move the caret to end of the text
+                    end = textArea.getCharacterCount();
                 } else {
-                    selectionStart = rowOffset + rowLength;
+                    // Move the caret to the end of the line
+                    int rowOffset = getRowOffset(index);
+                    int rowLength = getRowLength(index);
+                    end = rowOffset + rowLength;
+                }
+
+                if (shiftPressed) {
+                    selectionLength += end - index;
+                } else {
+                    selectionStart = end;
                     if (selectionStart < textArea.getCharacterCount()
                             && textArea.getCharacterAt(selectionStart) != '\n') {
                         selectionStart--;
@@ -1073,7 +1194,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
 
-                if (Keyboard.isPressed(wordNavigationModifier)) {
+                if (wordNavPressed) {
                     // Move the caret to the start of the next word to the left
                     if (selectionStart > 0) {
                         // Skip over any space immediately to the left
@@ -1089,7 +1210,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                             index--;
                         }
 
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        if (shiftPressed) {
                             selectionLength += selectionStart - index;
                         } else {
                             selectionLength = 0;
@@ -1097,11 +1218,28 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
                         selectionStart = index;
                     }
-                } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    // Add the previous character to the selection
-                    if (selectionStart > 0) {
-                        selectionStart--;
-                        selectionLength++;
+                } else if (shiftPressed) {
+                    if (anchor != -1) {
+                        if (selectionStart < anchor) {
+                            if (selectionStart > 0) {
+                                selectionStart--;
+                                selectionLength++;
+                            }
+                        } else {
+                            if (selectionLength > 0) {
+                                selectionLength--;
+                            } else {
+                                selectionStart--;
+                                selectionLength++;
+                            }
+                        }
+                    } else {
+                        // Add the previous character to the selection
+                        anchor = selectionStart;
+                        if (selectionStart > 0) {
+                            selectionStart--;
+                            selectionLength++;
+                        }
                     }
                 } else {
                     // Move the caret back by one character
@@ -1111,6 +1249,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     }
 
                     // Clear the selection
+                    anchor = -1;
                     selectionLength = 0;
                 }
 
@@ -1126,7 +1265,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
 
-                if (Keyboard.isPressed(wordNavigationModifier)) {
+                if (wordNavPressed) {
                     // Move the caret to the start of the next word to the right
                     if (selectionStart < textArea.getCharacterCount()) {
                         int index = selectionStart + selectionLength;
@@ -1143,16 +1282,26 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                             index++;
                         }
 
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        if (shiftPressed) {
                             selectionLength = index - selectionStart;
                         } else {
                             selectionStart = index;
                             selectionLength = 0;
                         }
                     }
-                } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    // Add the next character to the selection
-                    selectionLength++;
+                } else if (shiftPressed) {
+                    if (anchor != -1) {
+                        if (selectionStart < anchor) {
+                            selectionStart++;
+                            selectionLength--;
+                        } else {
+                            selectionLength++;
+                        }
+                    } else {
+                        // Add the next character to the selection
+                        anchor = selectionStart;
+                        selectionLength++;
+                    }
                 } else {
                     // Move the caret forward by one character
                     if (selectionLength == 0) {
@@ -1162,6 +1311,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     }
 
                     // Clear the selection
+                    anchor = -1;
                     selectionLength = 0;
                 }
 
@@ -1178,14 +1328,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 }
             } else if (keyCode == Keyboard.KeyCode.UP) {
                 int selectionStart = textArea.getSelectionStart();
+                int selectionLength = textArea.getSelectionLength();
 
                 int index = getNextInsertionPoint(caretX, selectionStart, TextArea.ScrollDirection.UP);
 
                 if (index != -1) {
-                    int selectionLength;
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        int selectionEnd = selectionStart + textArea.getSelectionLength() - 1;
-                        selectionLength = selectionEnd - index + 1;
+                    if (shiftPressed) {
+                        selectionLength = selectionStart + selectionLength - index;
                     } else {
                         selectionLength = 0;
                     }
@@ -1199,7 +1348,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
 
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                if (shiftPressed) {
                     int from;
                     int x;
                     if (selectionLength == 0) {
@@ -1247,32 +1396,33 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 }
 
                 consumed = true;
-            } else if (Keyboard.isPressed(commandModifier)) {
+            } else if (commandPressed) {
                 if (keyCode == Keyboard.KeyCode.A) {
                     textArea.setSelection(0, textArea.getCharacterCount());
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.X
-                    && textArea.isEditable()) {
+                    && isEditable) {
                     textArea.cut();
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.C) {
                     textArea.copy();
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.V
-                    && textArea.isEditable()) {
+                    && isEditable) {
                     textArea.paste();
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.Z
-                    && textArea.isEditable()) {
-                    if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                    && isEditable) {
+                    if (!shiftPressed) {
                         textArea.undo();
                     }
-
                     consumed = true;
+                } else if (keyCode == Keyboard.KeyCode.TAB) {
+                    // Only here if acceptsTab is false
+                    consumed = super.keyPressed(component, keyCode, keyLocation);
                 }
             } else if (keyCode == Keyboard.KeyCode.INSERT) {
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                    && textArea.isEditable()) {
+                if (shiftPressed && isEditable) {
                     textArea.paste();
                     consumed = true;
                 }

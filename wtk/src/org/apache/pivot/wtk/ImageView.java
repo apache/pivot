@@ -25,7 +25,6 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.concurrent.Task;
-import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.media.Image;
 
@@ -244,13 +243,7 @@ public class ImageView extends Component {
                     loadMap.put(imageURI, new ArrayList<ImageView>(this));
                 }
             } else {
-                try {
-                    imageLocal = Image.load(imageURL);
-                } catch (TaskExecutionException exception) {
-                    throw new IllegalArgumentException(exception);
-                }
-
-                ApplicationContext.getResourceCache().put(imageURL, imageLocal);
+                imageLocal = Image.loadFromCache(imageURL);
             }
         }
 
@@ -380,6 +373,10 @@ public class ImageView extends Component {
 
                     case NAME: {
                         value = imageBindMapping.toImageName(value);
+                        break;
+                    }
+
+                    default: {
                         break;
                     }
                 }

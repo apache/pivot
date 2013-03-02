@@ -97,6 +97,10 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             return false;

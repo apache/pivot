@@ -676,7 +676,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     public void titleChanged(Expander expander, String previousTitle) {
         String title = expander.getTitle();
         titleLabel.setVisible(title != null);
-        titleLabel.setText(title);
+        titleLabel.setText(title != null ? title : "");
     }
 
     /**

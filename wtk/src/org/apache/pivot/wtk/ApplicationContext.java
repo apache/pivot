@@ -432,27 +432,32 @@ public abstract class ApplicationContext {
 
         @Override
         public void repaint(int x, int y, int width, int height) {
+            int xMutable = x;
+            int yMutable = y;
+            int widthMutable = width;
+            int heightMutable = height;
+
             // Ensure that the repaint call is properly bounded (some
             // implementations of AWT do not properly clip the repaint call
             // when x or y is negative: the negative value is converted to 0,
             // but the width/height is not adjusted)
-            if (x < 0) {
-                width = Math.max(width + x, 0);
-                x = 0;
+            if (xMutable < 0) {
+                widthMutable = Math.max(widthMutable + xMutable, 0);
+                xMutable = 0;
             }
 
-            if (y < 0) {
-                height = Math.max(height + y, 0);
-                y = 0;
+            if (yMutable < 0) {
+                heightMutable = Math.max(heightMutable + yMutable, 0);
+                yMutable = 0;
             }
 
-            if (width > 0
-                && height > 0) {
+            if (widthMutable > 0
+                && heightMutable > 0) {
                 if (scale == 1) {
-                    super.repaint(x, y, width, height);
+                    super.repaint(xMutable, yMutable, widthMutable, heightMutable);
                 } else {
-                    super.repaint((int)Math.floor(x * scale), (int)Math.floor(y * scale),
-                        (int)Math.ceil(width * scale) + 1, (int)Math.ceil(height * scale) + 1);
+                    super.repaint((int)Math.floor(xMutable * scale), (int)Math.floor(yMutable * scale),
+                        (int)Math.ceil(widthMutable * scale) + 1, (int)Math.ceil(heightMutable * scale) + 1);
                 }
             }
         }
@@ -812,6 +817,10 @@ public abstract class ApplicationContext {
 
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
         }
 
@@ -834,6 +843,10 @@ public abstract class ApplicationContext {
                     focusedComponent = Component.getFocusedComponent();
                     Component.clearFocus();
 
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }
@@ -881,6 +894,10 @@ public abstract class ApplicationContext {
                     button = Mouse.Button.RIGHT;
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             // Process the event
@@ -896,6 +913,10 @@ public abstract class ApplicationContext {
 
                         case MouseEvent.MOUSE_EXITED: {
                             display.mouseOut();
+                            break;
+                        }
+
+                        default: {
                             break;
                         }
                     }
@@ -1030,6 +1051,10 @@ public abstract class ApplicationContext {
                             // Clear the drag location
                             dragLocation = null;
 
+                            break;
+                        }
+
+                        default: {
                             break;
                         }
                     }
@@ -1181,6 +1206,10 @@ public abstract class ApplicationContext {
 
                         break;
                     }
+
+                    default: {
+                        break;
+                    }
                 }
             } catch (Exception exception) {
                 handleUncaughtException(exception);
@@ -1205,6 +1234,10 @@ public abstract class ApplicationContext {
 
                 case MouseWheelEvent.WHEEL_UNIT_SCROLL: {
                     scrollType = Mouse.ScrollType.UNIT;
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }
@@ -1242,6 +1275,10 @@ public abstract class ApplicationContext {
                                 event.consume();
                             }
                         }
+                        break;
+                    }
+
+                    default: {
                         break;
                     }
                 }
@@ -1300,6 +1337,10 @@ public abstract class ApplicationContext {
 
                 case KeyEvent.KEY_LOCATION_NUMPAD: {
                     keyLocation = Keyboard.KeyLocation.KEYPAD;
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }
@@ -1408,6 +1449,10 @@ public abstract class ApplicationContext {
                             event.consume();
                         }
 
+                        break;
+                    }
+
+                    default: {
                         break;
                     }
                 }
@@ -1879,6 +1924,10 @@ public abstract class ApplicationContext {
                 dropAction = DropAction.LINK;
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         return dropAction;
@@ -1911,14 +1960,15 @@ public abstract class ApplicationContext {
                     nativeDropAction = DnDConstants.ACTION_COPY;
                     break;
                 }
-
                 case MOVE: {
                     nativeDropAction = DnDConstants.ACTION_MOVE;
                     break;
                 }
-
                 case LINK: {
                     nativeDropAction = DnDConstants.ACTION_LINK;
+                    break;
+                }
+                default: {
                     break;
                 }
             }
@@ -1939,14 +1989,15 @@ public abstract class ApplicationContext {
                     cursor = java.awt.dnd.DragSource.DefaultCopyDrop;
                     break;
                 }
-
                 case MOVE: {
                     cursor = java.awt.dnd.DragSource.DefaultMoveDrop;
                     break;
                 }
-
                 case LINK: {
                     cursor = java.awt.dnd.DragSource.DefaultLinkDrop;
+                    break;
+                }
+                default: {
                     break;
                 }
             }

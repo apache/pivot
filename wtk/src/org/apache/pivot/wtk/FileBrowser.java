@@ -165,22 +165,23 @@ public class FileBrowser extends Container {
      * <tt>true</tt> if the file was added; <tt>false</tt> if it was already
      * selected.
      */
-    public boolean addSelectedFile(File file) {
+    public boolean addSelectedFile(final File file) {
         if (file == null) {
             throw new IllegalArgumentException();
         }
 
-        if (file.isAbsolute()) {
-            if (!file.getParentFile().equals(rootDirectory)) {
+        File fileMutable = file;
+        if (fileMutable.isAbsolute()) {
+            if (!fileMutable.getParentFile().equals(rootDirectory)) {
                 throw new IllegalArgumentException();
             }
         } else {
-            file = new File(rootDirectory, file.getPath());
+            fileMutable = new File(rootDirectory, fileMutable.getPath());
         }
 
-        int index = selectedFiles.add(file);
+        int index = selectedFiles.add(fileMutable);
         if (index != -1) {
-            fileBrowserListeners.selectedFileAdded(this, file);
+            fileBrowserListeners.selectedFileAdded(this, fileMutable);
         }
 
         return (index != -1);

@@ -86,7 +86,8 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
         List<?> listData = listViewArgument.getListData();
         ListItem listItem = (ListItem)listData.get(itemIndexArgument);
 
-        textInput.setText(listItem.getText());
+        String text = listItem.getText();
+        textInput.setText(text != null ? text : "");
         textInput.selectAll();
 
         // Get the item bounds

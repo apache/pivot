@@ -83,11 +83,11 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         }
 
         imageView.setImage(icon);
-        label.setText(text);
+        label.setText(text != null ? text : "");
     }
 
     protected void renderStyles(ListView listView, boolean selected,
-        boolean highlighted, boolean disabled) {
+        @SuppressWarnings("unused") boolean highlighted, boolean disabled) {
         imageView.getStyles().put("opacity", listView.isEnabled() ? 1.0f : 0.5f);
 
         Font font = (Font)listView.getStyles().get("font");

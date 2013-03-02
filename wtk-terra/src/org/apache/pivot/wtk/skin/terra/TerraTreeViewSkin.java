@@ -360,6 +360,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     break;
                 case UNCHECKED:
                     break;
+                default:
+                    break;
             }
         }
 
@@ -1450,16 +1452,18 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     private void removeVisibleNodes(BranchInfo parentBranchInfo, int index, int count) {
         parentBranchInfo.loadChildren();
 
-        if (count == -1) {
+        int countUpdated = count;
+
+        if (countUpdated == -1) {
             assert(index == 0) : "Non-zero index with 'remove all' count";
-            count = parentBranchInfo.children.getLength();
+            countUpdated = parentBranchInfo.children.getLength();
         }
 
-        assert(index + count <= parentBranchInfo.children.getLength()) : "Value too big";
+        assert(index + countUpdated <= parentBranchInfo.children.getLength()) : "Value too big";
 
-        if (count > 0) {
+        if (countUpdated > 0) {
             NodeInfo first = parentBranchInfo.children.get(index);
-            NodeInfo last = parentBranchInfo.children.get(index + count - 1);
+            NodeInfo last = parentBranchInfo.children.get(index + countUpdated - 1);
 
             int rangeStart = visibleNodes.indexOf(first);
 

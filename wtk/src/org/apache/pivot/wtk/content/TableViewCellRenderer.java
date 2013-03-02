@@ -57,7 +57,7 @@ public class TableViewCellRenderer extends Label
             text = toString(row, columnName);
         }
 
-        setText(text);
+        setText(text != null ? text : "");
     }
 
     protected void renderStyles(TableView tableView, boolean rowSelected, boolean rowDisabled) {

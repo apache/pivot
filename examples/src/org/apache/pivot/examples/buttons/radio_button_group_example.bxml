@@ -94,7 +94,7 @@ limitations under the License.
 
         <!--
             Workaround to push the 2nd Border across to the right hand side.
-            If visisble the TablePane.Filler ends up overlayed on top of the
+            If visible the TablePane.Filler ends up overlayed on top of the
             checkboxes from the 1st Border, and prevents mouse clicks from
             reaching them.
          -->

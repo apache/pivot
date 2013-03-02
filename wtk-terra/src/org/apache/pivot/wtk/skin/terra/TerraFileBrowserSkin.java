@@ -285,6 +285,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 } else {
                     System.err.println("Unexpected column name in " + getClass().getName()
                         + ": " + columnName);
+                    text = "";
                 }
 
                 label.setText(text);

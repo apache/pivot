@@ -340,15 +340,16 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
         }
     }
 
-    private String nameForObject(Object obj) {
-        if (obj instanceof FakeWindow) {
-            obj = ((FakeWindow) obj).window;
+    private String nameForObject(final Object obj) {
+        Object objUpdated = obj;
+        if (objUpdated instanceof FakeWindow) {
+            objUpdated = ((FakeWindow) objUpdated).window;
         }
-        String bxmlID = widgetToID.get(obj);
+        String bxmlID = widgetToID.get(objUpdated);
         if (bxmlID == null) {
-            return obj.getClass().getSimpleName();
+            return objUpdated.getClass().getSimpleName();
         }
-        return obj.getClass().getSimpleName() + " " + bxmlID;
+        return objUpdated.getClass().getSimpleName() + " " + bxmlID;
     }
 
     private static class MyTreeViewNodeRenderer extends TreeViewNodeRenderer {

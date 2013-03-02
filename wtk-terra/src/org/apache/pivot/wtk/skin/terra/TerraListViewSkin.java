@@ -1084,6 +1084,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         // Clear the highlight
@@ -1124,6 +1128,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         return consumed;
@@ -1141,7 +1149,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         List<?> listData = listView.getListData();
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
-        character = Character.toUpperCase(character);
+        char characterUpper = Character.toUpperCase(character);
 
         for (int i = listView.getLastSelectedIndex() + 1, n = listData.getLength(); i < n; i++) {
             if (!listView.isItemDisabled(i)) {
@@ -1151,7 +1159,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     && string.length() > 0) {
                     char first = Character.toUpperCase(string.charAt(0));
 
-                    if (first == character) {
+                    if (first == characterUpper) {
                         listView.setSelectedIndex(i);
                         consumed = true;
                         break;
@@ -1170,7 +1178,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                             && string.length() > 0) {
                         char first = Character.toUpperCase(string.charAt(0));
 
-                        if (first == character) {
+                        if (first == characterUpper) {
                             listView.setSelectedIndex(i);
                             consumed = true;
                             break;

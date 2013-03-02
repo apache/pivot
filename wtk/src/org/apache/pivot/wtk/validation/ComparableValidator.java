@@ -50,7 +50,7 @@ public class ComparableValidator<T extends Comparable<T>> extends DecimalValidat
     }
 
     protected final Comparable<?> textToComparable(String text) {
-        return (Comparable<?>) textToBigDecimal(text);
+        return textToBigDecimal(text);
     }
 
 }

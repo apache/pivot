@@ -41,7 +41,7 @@ public class Paragraph extends Block {
     @Override
     public Node removeRange(int offset, int characterCount) {
         if (offset + characterCount == getCharacterCount()) {
-            characterCount--;
+            return super.removeRange(offset, characterCount - 1);
         }
 
         return super.removeRange(offset, characterCount);
@@ -50,7 +50,7 @@ public class Paragraph extends Block {
     @Override
     public Paragraph getRange(int offset, int characterCount) {
         if (offset + characterCount == getCharacterCount()) {
-            characterCount--;
+            return (Paragraph) super.getRange(offset, characterCount - 1);
         }
 
         return (Paragraph) super.getRange(offset, characterCount);

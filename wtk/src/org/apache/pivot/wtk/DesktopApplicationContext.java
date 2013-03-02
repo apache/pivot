@@ -239,9 +239,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     exit();
                     break;
                 }
-
                 case WindowEvent.WINDOW_CLOSED: {
                     System.exit(0);
+                    break;
+                }
+                default: {
                     break;
                 }
             }
@@ -261,7 +263,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                     break;
                 }
-
                 case WindowEvent.WINDOW_DEICONIFIED: {
                     try {
                         application.resume();
@@ -269,6 +270,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         displayException(exception);
                     }
 
+                    break;
+                }
+                default: {
                     break;
                 }
             }
@@ -337,12 +341,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                     break;
                 }
-
                 case WindowEvent.WINDOW_CLOSING: {
                     dispose();
                     break;
                 }
-
                 case WindowEvent.WINDOW_CLOSED: {
                     Display display = this.displayHost.getDisplay();
                     displays.remove(display);
@@ -351,6 +353,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         this.displayCloseListener.hostWindowClosed(display);
                     }
 
+                    break;
+                }
+                default: {
                     break;
                 }
             }

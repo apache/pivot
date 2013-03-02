@@ -85,7 +85,7 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         }
 
         // Update the label
-        label.setText(text);
+        label.setText(text != null ? text : "");
 
         if (text == null) {
             label.setVisible(false);

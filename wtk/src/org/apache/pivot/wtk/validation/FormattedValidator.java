@@ -49,13 +49,14 @@ public class FormattedValidator<F extends Format> implements Validator {
     }
 
     @Override
-    public boolean isValid(String text) {
+    public boolean isValid(final String text) {
+        String textToParse = text;
         final ParsePosition pos = new ParsePosition(0);
         if (format instanceof NumberFormat) {
             // We have to upper case because of the exponent symbol
-            text = text.toUpperCase(locale);
+            textToParse = textToParse.toUpperCase(locale);
         }
-        Object obj = format.parseObject(text, pos);
+        Object obj = format.parseObject(textToParse, pos);
 
         // The text is only valid if we successfully parsed ALL of it. Don't want trailing bits of
         // not-valid text.

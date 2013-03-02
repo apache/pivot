@@ -87,7 +87,7 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         }
 
         // Update the label
-        label.setText(text);
+        label.setText(text != null ? text : "");
 
         if (text == null) {
             label.setVisible(false);

@@ -31,16 +31,17 @@ public class ListButtonDataRenderer extends ButtonDataRenderer {
     }
 
     @Override
-    public void render(Object data, Button button, boolean highlight) {
-        if (data == null) {
-            data = "";
+    public void render(final Object data, final Button button, boolean highlight) {
+        Object dataMutable = data;
+        if (dataMutable == null) {
+            dataMutable = "";
         } else {
-            if (data instanceof ListItem) {
-                ListItem listItem = (ListItem)data;
-                data = new ButtonData(listItem.getIcon(), listItem.getText());
+            if (dataMutable instanceof ListItem) {
+                ListItem listItem = (ListItem)dataMutable;
+                dataMutable = new ButtonData(listItem.getIcon(), listItem.getText());
             }
         }
 
-        super.render(data, button, highlight);
+        super.render(dataMutable, button, highlight);
     }
 }

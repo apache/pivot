@@ -191,6 +191,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             Dimensions preferredSize = new Dimensions(preferredWidth, preferredHeight);
@@ -257,6 +261,10 @@ public class TerraTabPaneSkin extends ContainerSkin
                         buttonCornerRadius, buttonCornerRadius));
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             // Draw the border
@@ -275,6 +283,10 @@ public class TerraTabPaneSkin extends ContainerSkin
                         buttonCornerRadius, buttonCornerRadius));
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             if (!(tabButton.isSelected()
@@ -289,6 +301,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     case VERTICAL: {
                         graphics.draw(new Line2D.Double(width - 0.5, 0.5, width - 0.5, height - 0.5));
+                        break;
+                    }
+
+                    default: {
                         break;
                     }
                 }
@@ -334,6 +350,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     break;
                 }
+
+                default: {
+                    break;
+                }
             }
 
             contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
@@ -358,6 +378,10 @@ public class TerraTabPaneSkin extends ContainerSkin
                     case VERTICAL: {
                         x = (width - CLOSE_TRIGGER_SIZE) / 2;
                         y = height - (buttonPadding.bottom + CLOSE_TRIGGER_SIZE + 1);
+                        break;
+                    }
+
+                    default: {
                         break;
                     }
                 }
@@ -424,6 +448,10 @@ public class TerraTabPaneSkin extends ContainerSkin
                     bounds = new Bounds((getWidth() - CLOSE_TRIGGER_SIZE) / 2 - 2,
                         getHeight() - (CLOSE_TRIGGER_SIZE + buttonPadding.bottom + 1) - 2,
                         CLOSE_TRIGGER_SIZE + 4, CLOSE_TRIGGER_SIZE + 4);
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }
@@ -657,6 +685,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         return preferredWidth;
@@ -722,6 +754,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                 preferredHeight = Math.max(preferredHeight, buttonAreaPreferredHeight);
 
+                break;
+            }
+
+            default: {
                 break;
             }
         }
@@ -955,6 +991,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         // Lay out the tabs
@@ -973,6 +1013,10 @@ public class TerraTabPaneSkin extends ContainerSkin
 
                     case VERTICAL: {
                         tab.setSize(getPreferredTabWidth(tabHeight), tabHeight);
+                        break;
+                    }
+
+                    default: {
                         break;
                     }
                 }
@@ -1013,6 +1057,10 @@ public class TerraTabPaneSkin extends ContainerSkin
                 width = Math.max(tabPaneBounds.width - x, 0);
                 height = tabPaneBounds.height;
 
+                break;
+            }
+
+            default: {
                 break;
             }
         }
@@ -1068,6 +1116,10 @@ public class TerraTabPaneSkin extends ContainerSkin
                     graphics.draw(new Line2D.Double(left, selectedTabButtonLocation.y + activeTabButton.getHeight() - 0.5,
                         left, bottom));
 
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }
@@ -1372,9 +1424,11 @@ public class TerraTabPaneSkin extends ContainerSkin
                 tabButtonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
                 break;
             }
-
             case VERTICAL: {
                 tabButtonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
+                break;
+            }
+            default: {
                 break;
             }
         }
@@ -1469,6 +1523,10 @@ public class TerraTabPaneSkin extends ContainerSkin
                 case Keyboard.KeyCode.KEYPAD_9:
                 case Keyboard.KeyCode.N9: {
                     selectedIndex = 8;
+                    break;
+                }
+
+                default: {
                     break;
                 }
             }

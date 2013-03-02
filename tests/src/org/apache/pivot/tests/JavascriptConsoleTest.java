@@ -107,16 +107,16 @@ public class JavascriptConsoleTest extends Application.Adapter {
      * @param className the full class name (to use as a base name), for loading resources
      */
     private void loadResources(String className) {
-        if (className == null || className.length() < 1) {
-            className = MAIN_CLASS_NAME;  // set a useful default
-        }
-
         try {
             // load some resources here, just to show its usage from JS files,
             // but only if not already loaded ...
             if (resources == null) {
                 resources = new Resources(MAIN_CLASS_NAME, locale);
-                logObject("buildResources, load resources from \"" + className + "\", with locale " + locale);
+                logObject("buildResources, load resources from "
+                    + "\""
+                    + ((className != null && className.length() > 0) ? className : MAIN_CLASS_NAME)  // set a useful default
+                    + "\", with locale " + locale
+                );
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,17 +150,18 @@ public class JavascriptConsoleTest extends Application.Adapter {
      * @throws SerializationException in case of error
      * @throws IOException in case of error
      */
-    private Window loadWindow(String fileName, BXMLSerializer bxmlSerializer)
+    private Window loadWindow(String fileName, final BXMLSerializer bxmlSerializer)
         throws SerializationException, IOException {
         logObject("loadWindow from \"" + fileName + "\", with the serializer " + bxmlSerializer);
 
-        if (bxmlSerializer == null) {
-            bxmlSerializer = new BXMLSerializer();
+        BXMLSerializer serializer = bxmlSerializer;
+        if (serializer == null) {
+            serializer = new BXMLSerializer();
         }
 
         // return (Window)bxmlSerializer.readObject(JavascriptConsoleTest.class, fileName); // ok
         // better, to allow usage of resources (without having to call setLocation or setResources in the serializer) ...
-        return (Window)bxmlSerializer.readObject(JavascriptConsoleTest.class, fileName, true);
+        return (Window)serializer.readObject(JavascriptConsoleTest.class, fileName, true);
     }
 
     /**
@@ -175,11 +176,12 @@ public class JavascriptConsoleTest extends Application.Adapter {
      * @param bxmlSerializer the serializer to use, or if null a new one will be created
      * @return the Window instance
      */
-    public Window loadWindowFromURL(String urlString, BXMLSerializer bxmlSerializer) {
+    public Window loadWindowFromURL(String urlString, final BXMLSerializer bxmlSerializer) {
         logObject("loadWindow from \"" + urlString + "\", with the serializer " + bxmlSerializer);
 
-        if (bxmlSerializer == null) {
-            bxmlSerializer = new BXMLSerializer();
+        BXMLSerializer serializer = bxmlSerializer;
+        if (serializer == null) {
+            serializer = new BXMLSerializer();
         }
 
         Window loadedWindow = null;
@@ -187,9 +189,9 @@ public class JavascriptConsoleTest extends Application.Adapter {
             URL url = new URL(urlString);
 
             // force the location, so it will be possible to decode resources like labels ...
-            bxmlSerializer.setLocation(url);
+            serializer.setLocation(url);
 
-            loadedWindow = (Window)bxmlSerializer.readObject(url);
+            loadedWindow = (Window)serializer.readObject(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {

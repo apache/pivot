@@ -46,7 +46,7 @@ public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
 
     @Override
     public void render(Object item, Spinner spinner) {
-        setText(item == null ? null : item.toString());
+        setText(item != null ? item.toString() : "");
 
         renderStyles(spinner);
     }

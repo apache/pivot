@@ -51,13 +51,14 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
      };
 
     private static String int2roman(int n) {
+        int num = n;
         StringBuffer result = new StringBuffer(10);
 
         // ... Start with largest value, and work toward smallest.
         for (RomanValue equiv : ROMAN_VALUE_TABLE) {
             // ... Remove as many of this value as possible (maybe none).
-            while (n >= equiv.integerVal) {
-                n -= equiv.integerVal;
+            while (num >= equiv.integerVal) {
+                num -= equiv.integerVal;
                 result.append(equiv.romanNumeral);
             }
         }
@@ -111,6 +112,8 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
                     break;
                 case UPPER_ROMAN:
                     listItemView.setIndexText(int2roman(index) + ". ");
+                    break;
+                default:
                     break;
             }
 

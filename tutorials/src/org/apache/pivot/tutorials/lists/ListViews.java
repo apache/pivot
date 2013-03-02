@@ -63,6 +63,7 @@ public class ListViews extends Window implements Bindable {
             }
 
             private void updateSelection(ListView listViewArgument) {
+                // TODO: in future use StringBuffer instead ...
                 String selectionText = "";
 
                 Sequence<Span> selectedRanges = listViewArgument.getSelectedRanges();

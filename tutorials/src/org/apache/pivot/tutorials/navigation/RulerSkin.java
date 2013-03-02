@@ -95,6 +95,10 @@ class RulerSkin extends ComponentSkin implements RulerListener {
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
     }
 

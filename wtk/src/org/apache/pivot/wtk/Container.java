@@ -534,33 +534,34 @@ public abstract class Container extends Component
      * The direction in which to transfer focus.
      */
     public Component transferFocus(Component component, FocusTraversalDirection direction) {
+        Component componentUpdated = component;
         if (focusTraversalPolicy == null) {
             // The container has no traversal policy; move up a level
-            component = transferFocus(direction);
+            componentUpdated = transferFocus(direction);
         } else {
             do {
-                component = focusTraversalPolicy.getNextComponent(this, component, direction);
+                componentUpdated = focusTraversalPolicy.getNextComponent(this, componentUpdated, direction);
 
-                if (component != null) {
-                    if (component.isFocusable()) {
-                        component.requestFocus();
+                if (componentUpdated != null) {
+                    if (componentUpdated.isFocusable()) {
+                        componentUpdated.requestFocus();
                     } else {
-                        if (component instanceof Container) {
-                            Container container = (Container)component;
-                            component = container.transferFocus(null, direction);
+                        if (componentUpdated instanceof Container) {
+                            Container container = (Container)componentUpdated;
+                            componentUpdated = container.transferFocus(null, direction);
                         }
                     }
                 }
-            } while (component != null
-                && !component.isFocused());
+            } while (componentUpdated != null
+                && !componentUpdated.isFocused());
 
-            if (component == null) {
+            if (componentUpdated == null) {
                 // We are at the end of the traversal
-                component = transferFocus(direction);
+                componentUpdated = transferFocus(direction);
             }
         }
 
-        return component;
+        return componentUpdated;
     }
 
     /**

@@ -26,7 +26,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.media.Image;
 
 /**
@@ -805,17 +804,7 @@ public class Window extends Container {
             throw new IllegalArgumentException("iconURL is null.");
         }
 
-        Image icon = (Image)ApplicationContext.getResourceCache().get(iconURL);
-
-        if (icon == null) {
-            try {
-                icon = Image.load(iconURL);
-            } catch (TaskExecutionException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-
-            ApplicationContext.getResourceCache().put(iconURL, icon);
-        }
+        Image icon = Image.loadFromCache(iconURL);
 
         getIcons().remove(0, getIcons().getLength());
         getIcons().add(icon);

@@ -109,7 +109,7 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
 
         // Update the labels
-        textLabel.setText(text);
+        textLabel.setText(text != null ? text : "");
 
         Font font = (Font)menu.getStyles().get("font");
         textLabel.getStyles().put("font", font);
@@ -136,8 +136,8 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
 
         if (showKeyboardShortcuts) {
             keyboardShortcutLabel.setVisible(true);
-            keyboardShortcutLabel.setText(keyboardShortcut == null ?
-                null : keyboardShortcut.toString());
+            keyboardShortcutLabel.setText(
+                keyboardShortcut != null ? keyboardShortcut.toString() : "");
         } else {
             keyboardShortcutLabel.setVisible(false);
         }

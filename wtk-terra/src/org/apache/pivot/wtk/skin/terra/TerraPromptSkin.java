@@ -122,7 +122,8 @@ public class TerraPromptSkin extends TerraSheetSkin
 
     @Override
     public void messageChanged(Prompt prompt, String previousMessage) {
-        messageLabel.setText(prompt.getMessage());
+        String message = prompt.getMessage();
+        messageLabel.setText(message != null ? message : "");
     }
 
     @Override

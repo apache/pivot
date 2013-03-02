@@ -53,9 +53,10 @@ public class BoxPaneSkin extends ContainerSkin
 
         Orientation orientation = boxPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
+            int heightUpdated = height;
             // Include padding in constraint
-            if (height != -1) {
-                height = Math.max(height - (padding.top + padding.bottom), 0);
+            if (heightUpdated != -1) {
+                heightUpdated = Math.max(heightUpdated - (padding.top + padding.bottom), 0);
             }
 
             // Preferred width is the sum of the preferred widths of all components
@@ -64,7 +65,7 @@ public class BoxPaneSkin extends ContainerSkin
                 Component component = boxPane.get(i);
 
                 if (component.isVisible()) {
-                    preferredWidth += component.getPreferredWidth(fill ? height : -1);
+                    preferredWidth += component.getPreferredWidth(fill ? heightUpdated : -1);
                     j++;
                 }
             }
@@ -109,9 +110,10 @@ public class BoxPaneSkin extends ContainerSkin
                 }
             }
         } else {
+            int widthUpdated = width;
             // Include padding in constraint
-            if (width != -1) {
-                width = Math.max(width - (padding.left + padding.right), 0);
+            if (widthUpdated != -1) {
+                widthUpdated = Math.max(widthUpdated - (padding.left + padding.right), 0);
             }
 
             // Preferred height is the sum of the preferred heights of all components
@@ -120,7 +122,7 @@ public class BoxPaneSkin extends ContainerSkin
                 Component component = boxPane.get(i);
 
                 if (component.isVisible()) {
-                    preferredHeight += component.getPreferredHeight(fill ? width : -1);
+                    preferredHeight += component.getPreferredHeight(fill ? widthUpdated : -1);
                     j++;
                 }
             }
@@ -188,6 +190,10 @@ public class BoxPaneSkin extends ContainerSkin
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         // Include padding
@@ -235,13 +241,16 @@ public class BoxPaneSkin extends ContainerSkin
                                         componentBaseline += (contentHeight - size.height) / 2;
                                         break;
                                     }
-
                                     case BOTTOM: {
                                         componentBaseline += contentHeight - size.height;
                                         break;
                                     }
-                                    case TOP:
+                                    case TOP: {
                                         break;
+                                    }
+                                    default: {
+                                        break;
+                                    }
                                 }
                             }
 
@@ -281,6 +290,10 @@ public class BoxPaneSkin extends ContainerSkin
 
                 break;
             }
+
+            default: {
+                break;
+            }
         }
 
         if (baseline != -1) {
@@ -300,6 +313,10 @@ public class BoxPaneSkin extends ContainerSkin
 
                     case BOTTOM: {
                         baseline += height - (contentHeight + padding.bottom);
+                        break;
+                    }
+
+                    default: {
                         break;
                     }
                 }
@@ -329,13 +346,16 @@ public class BoxPaneSkin extends ContainerSkin
                     x = (width - preferredWidth) / 2;
                     break;
                 }
-
                 case RIGHT: {
                     x = width - preferredWidth;
                     break;
                 }
-                case LEFT:
+                case LEFT: {
                     break;
+                }
+                default: {
+                    break;
+                }
             }
 
             x += padding.left;
@@ -375,6 +395,10 @@ public class BoxPaneSkin extends ContainerSkin
                             y = height - padding.bottom - componentHeight;
                             break;
                         }
+
+                        default: {
+                            break;
+                        }
                     }
 
                     // Set the component's size and position
@@ -403,6 +427,10 @@ public class BoxPaneSkin extends ContainerSkin
                 }
                 case TOP:
                     break;
+
+                default: {
+                    break;
+                }
             }
 
             y += padding.top;
@@ -432,14 +460,15 @@ public class BoxPaneSkin extends ContainerSkin
                             x = padding.left;
                             break;
                         }
-
                         case CENTER: {
                             x = (width - componentWidth) / 2;
                             break;
                         }
-
                         case RIGHT: {
                             x = width - padding.right - componentWidth;
+                            break;
+                        }
+                        default: {
                             break;
                         }
                     }

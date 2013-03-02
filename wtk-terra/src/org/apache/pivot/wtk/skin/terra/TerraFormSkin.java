@@ -154,6 +154,10 @@ public class TerraFormSkin extends ContainerSkin
                                         messageBackgroundColor = infoMessageBackgroundColor;
                                         break;
                                     }
+
+                                    default: {
+                                        break;
+                                    }
                                 }
 
                                 // Draw the label
@@ -281,6 +285,10 @@ public class TerraFormSkin extends ContainerSkin
                             case INFO: {
                                 color = infoMessageColor;
                                 backgroundColor = infoMessageBackgroundColor;
+                                break;
+                            }
+
+                            default: {
                                 break;
                             }
                         }
@@ -892,6 +900,10 @@ public class TerraFormSkin extends ContainerSkin
 
                                 case INFO: {
                                     highlightColor = infoHighlightColor;
+                                    break;
+                                }
+
+                                default: {
                                     break;
                                 }
                             }
