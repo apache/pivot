@@ -256,4 +256,10 @@ public class Label extends Component {
     public ListenerList<LabelBindingListener> getLabelBindingListeners() {
         return labelBindingListeners;
     }
+
+    @Override
+    public String toString() {
+        return getClass().getName() + " [\"" + getText() + "\"]";
+    }
+
 }
