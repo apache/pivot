@@ -43,7 +43,7 @@ limitations under the License.
                         </dataRenderer>
 
                         <buttonData>
-                            <content:ButtonData icon="@logo-64x64.png" text="Say Hello to PNG"/>
+                            <content:ButtonData icon="@logo-64x64.png" text="Say Hello"/>
                         </buttonData>
 
                         <buttonPressListeners>
