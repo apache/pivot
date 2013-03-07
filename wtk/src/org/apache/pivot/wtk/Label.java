@@ -146,7 +146,7 @@ public class Label extends Component {
      * @param text
      * The text to set
      *
-     * @see setText()
+     * @see #setText
      */
     public void setTextOrEmpty(String text) {
         this.setText(text != null ? text : "");
