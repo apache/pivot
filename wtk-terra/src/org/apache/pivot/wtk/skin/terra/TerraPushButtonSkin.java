@@ -97,7 +97,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             }
 
             preferredWidth = dataRenderer.getPreferredWidth(contentHeight)
-                + paddingWitdh();
+                + paddingWidth();
 
             // Adjust for preferred aspect ratio
             if (!Float.isNaN(minimumAspectRatio)
@@ -124,7 +124,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             // Include padding in constraint
             int contentWidth = width;
             if (contentWidth != -1) {
-                contentWidth = Math.max(contentWidth - paddingWitdh(), 0);
+                contentWidth = Math.max(contentWidth - paddingWidth(), 0);
             }
 
             preferredHeight = dataRenderer.getPreferredHeight(contentWidth)
@@ -148,7 +148,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
         Dimensions preferredContentSize = dataRenderer.getPreferredSize();
-        int preferredWidth = preferredContentSize.width + paddingWitdh();
+        int preferredWidth = preferredContentSize.width + paddingWidth();
         int preferredHeight = preferredContentSize.height + paddingHeight();
 
         // Adjust for preferred aspect ratio
@@ -174,7 +174,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
         dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
-        int clientWidth = Math.max(width - paddingWitdh(), 0);
+        int clientWidth = Math.max(width - paddingWidth(), 0);
         int clientHeight = Math.max(height - paddingHeight(), 0);
 
         int baseline = dataRenderer.getBaseline(clientWidth, clientHeight);
@@ -230,7 +230,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
         dataRenderer.render(pushButton.getButtonData(), pushButton, highlighted);
         dataRenderer.setSize(
-            Math.max(width - paddingWitdh(), 0),
+            Math.max(width - paddingWidth(), 0),
             Math.max(getHeight() - paddingHeight(), 0)
         );
 
@@ -505,7 +505,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         setPadding(Insets.decode(padding));
     }
 
-    private int paddingWitdh() {
+    private int paddingWidth() {
         return padding.left + padding.right + 2;
     }
 
