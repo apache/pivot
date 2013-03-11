@@ -23,6 +23,7 @@ import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
+import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
@@ -82,15 +83,22 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
             imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
 
             if (getFillIcon()) {
-                imageView.setPreferredWidth(button.getWidth());
-                imageView.setPreferredHeight(button.getHeight());
+                int buttonWidth = button.getWidth();
+                int buttonHeight = button.getHeight();
+                Insets padding = (Insets) button.getStyles().get("padding");
+                if (buttonWidth > 0) {
+                    imageView.setPreferredWidth(Math.max(buttonWidth - (padding.left + padding.right + 2), 0));
+                }
+                if (buttonHeight > 0) {
+                    imageView.setPreferredWidth(Math.max(buttonHeight - (padding.top + padding.bottom + 2), 0));
+                }
             }
         }
 
         // Update the label
         label.setText(text != null ? text : "");
 
-        if (text == null) {
+        if (text == null || text.length() == 0) {
             label.setVisible(false);
         } else {
             label.setVisible(true);

@@ -26,14 +26,38 @@ limitations under the License.
             <BoxPane orientation="vertical" styles="{padding:12,
                 horizontalAlignment:'center', verticalAlignment:'center'}">
                 <Label text="Welcome to Apache Pivot!" styles="{font:{size:16}}"/>
+                <Label text="" styles="{font:{size:16}}"/> <!-- spacer //-->
 
-                <ImageView image="@logo.svg" styles="{verticalAlignment:'top'}"/>
+                <ImageView image="@logo.svg" styles="{verticalAlignment:'top'}"
+                     tooltipText="Pivot Logo as SVG Image"
+                />
+                <Label text="" styles="{font:{size:16}}"/> <!-- spacer //-->
 
                 <BoxPane>
-                    <PushButton>
+                    <PushButton tooltipText="Button with PNG Image inside">
                         <dataRenderer>
-                            <content:ButtonDataRenderer orientation="vertical" iconWidth="64" iconHeight="64"
-                                fillIcon="true"/>
+                            <content:ButtonDataRenderer orientation="vertical"
+                                iconWidth="64" iconHeight="64"
+                                fillIcon="true"
+                            />
+                        </dataRenderer>
+
+                        <buttonData>
+                            <content:ButtonData icon="@logo-64x64.png" text="Say Hello"/>
+                        </buttonData>
+
+                        <buttonPressListeners>
+                        function buttonPressed(button) {
+                            org.apache.pivot.wtk.Prompt.prompt("Hello from Pivot", button.window);
+                        }
+                        </buttonPressListeners>
+                    </PushButton>
+                    <PushButton tooltipText="Button with SVG Image inside">
+                        <dataRenderer>
+                            <content:ButtonDataRenderer orientation="vertical"
+                                iconWidth="64" iconHeight="64"
+                                fillIcon="true"
+                            />
                         </dataRenderer>
 
                         <buttonData>
@@ -47,6 +71,8 @@ limitations under the License.
                         </buttonPressListeners>
                     </PushButton>
                 </BoxPane>
+                <Label text="" styles="{font:{size:16}}"/> <!-- spacer //-->
+
             </BoxPane>
         </ScrollPane>
     </Border>
