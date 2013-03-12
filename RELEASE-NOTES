@@ -56,6 +56,7 @@ Release Notes for Pivot 2.0.3:
     * [PIVOT-888] - Nullpointer Exception while editing TextArea with text property two-way bounded
     * [PIVOT-892] - DoubleValidator and FloatValidator do not allow exponents to be entered
     * [PIVOT-898] - fillIcon in buttons seems to let images display with wrong dimension
+    * [PIVOT-901] - List Buttons are rendered very thin when there is no list item selected or when item with empty string is selected
 
 ** Task
 
