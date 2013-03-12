@@ -39,7 +39,7 @@ limitations under the License.
     <Border>
 
       <BoxPane orientation="vertical">
-          <!-- Test empty value as first element in ListView -->
+          <!-- Test appearance when ListButton has an empty value as first element -->
           <Label text="Select one element (listDataKey not set):"/>
           <ListButton bxml:id="listButton" buttonData="Number"
               listData="['', 'One', 'Two', 'Three']"
