@@ -22,6 +22,10 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Container that provides a scrollable view of a component, with optional
  * fixed row and column headers.
+ * <p> The single component to be scrolled will typically be a {@link Container}
+ * and should be specified by the {@link #setView setView()} method (the "view" property).
+ * So, even then though this class is a {@link Container}, you should not add
+ * components to it via the {@link #add add()} method.
  */
 public class ScrollPane extends Viewport {
     /**
