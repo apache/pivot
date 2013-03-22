@@ -1759,7 +1759,7 @@ public abstract class ApplicationContext {
      * The task to execute.
      *
      * @param delay
-     * The length of time to wait before executing the task.
+     * The length of time to wait before executing the task (in milliseconds).
      */
     public static ScheduledCallback scheduleCallback(Runnable callback, long delay) {
         ScheduledCallback scheduledCallback = new ScheduledCallback(callback);
@@ -1787,7 +1787,7 @@ public abstract class ApplicationContext {
      * The task to execute.
      *
      * @param period
-     * The interval at which the task will be repeated.
+     * The interval at which the task will be repeated (in milliseconds).
      */
     public static ScheduledCallback scheduleRecurringCallback(Runnable callback, long period) {
         return scheduleRecurringCallback(callback, 0, period);
@@ -1801,10 +1801,10 @@ public abstract class ApplicationContext {
      * The task to execute.
      *
      * @param delay
-     * The length of time to wait before the first execution of the task
+     * The length of time to wait before the first execution of the task (milliseconds).
      *
      * @param period
-     * The interval at which the task will be repeated.
+     * The interval at which the task will be repeated (also in milliseconds).
      */
     public static ScheduledCallback scheduleRecurringCallback(Runnable callback, long delay, long period) {
         ScheduledCallback scheduledCallback = new ScheduledCallback(callback);
