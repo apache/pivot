@@ -364,7 +364,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     @Override
     public int getNextInsertionPoint(int x, int from, TextArea.ScrollDirection direction) {
         int index = -1;
-
         if (paragraphViews.getLength() > 0) {
             if (from == -1) {
                 int i = (direction == TextArea.ScrollDirection.DOWN) ? 0 : paragraphViews.getLength() - 1;
@@ -1021,7 +1020,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     textArea.setSelection(textArea.getRowOffset(index), textArea.getRowLength(index));
                 }
             }
-       }
+        }
         return consumed;
     }
 
@@ -1330,17 +1329,48 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
 
-                int index = getNextInsertionPoint(caretX, selectionStart, TextArea.ScrollDirection.UP);
-
-                if (index != -1) {
-                    if (shiftPressed) {
-                        selectionLength = selectionStart + selectionLength - index;
+                int index = -1;
+                if (shiftPressed) {
+                    if (anchor == -1) {
+                        anchor = selectionStart;
+                        index = getNextInsertionPoint(caretX, selectionStart, TextArea.ScrollDirection.UP);
+                        if (index != -1) {
+                            selectionLength = selectionStart - index;
+                        }
                     } else {
+                        if (selectionStart < anchor) {
+                            // continue upwards
+                            index = getNextInsertionPoint(caretX, selectionStart, TextArea.ScrollDirection.UP);
+                            if (index != -1) {
+                                selectionLength = selectionStart + selectionLength - index;
+                            }
+                        } else {
+                            // reduce downward size
+                            Bounds trailingSelectionBounds = getCharacterBounds(selectionStart + selectionLength - 1);
+                            int x = trailingSelectionBounds.x + trailingSelectionBounds.width;
+                            index = getNextInsertionPoint(x, selectionStart + selectionLength - 1, TextArea.ScrollDirection.UP);
+                            if (index != -1) {
+                                if (index < anchor) {
+                                    selectionLength = anchor - index;
+                                } else {
+                                    selectionLength = index - selectionStart;
+                                    index = selectionStart;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    index = getNextInsertionPoint(caretX, selectionStart, TextArea.ScrollDirection.UP);
+                    if (index != -1) {
                         selectionLength = 0;
                     }
+                    anchor = -1;
+                }
 
+                if (index != -1) {
                     textArea.setSelection(index, selectionLength);
                     scrollCharacterToVisible(index);
+                    caretX = caret.x;
                 }
 
                 consumed = true;
@@ -1351,31 +1381,58 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 if (shiftPressed) {
                     int from;
                     int x;
-                    if (selectionLength == 0) {
-                        // Get next insertion point from leading selection character
-                        from = selectionStart;
-                        x = caretX;
-                    } else {
-                        // Get next insertion point from right edge of trailing selection
-                        // character
-                        from = selectionStart + selectionLength;
+                    int index;
 
-                        Bounds trailingSelectionBounds = getCharacterBounds(from);
-                        x = trailingSelectionBounds.x + trailingSelectionBounds.width;
-                    }
-
-                    int index = getNextInsertionPoint(x, from, TextArea.ScrollDirection.DOWN);
-
-                    if (index != -1) {
-                        // If the next character is a paragraph terminator and is
-                        // not the final terminator character, increment the selection
-                        if (index < textArea.getCharacterCount() - 1
-                            && textArea.getCharacterAt(index) == '\n') {
-                            index++;
+                    if (anchor == -1) {
+                        anchor = selectionStart;
+                        index = getNextInsertionPoint(caretX, selectionStart, TextArea.ScrollDirection.DOWN);
+                        if (index != -1) {
+                            selectionLength = index - selectionStart;
                         }
+                    } else {
+                        if (selectionStart < anchor) {
+                            // Reducing upward size
+                            // Get next insertion point from leading selection character
+                            from = selectionStart;
+                            x = caretX;
 
-                        textArea.setSelection(selectionStart, index - selectionStart);
-                        scrollCharacterToVisible(index);
+                            index = getNextInsertionPoint(x, from, TextArea.ScrollDirection.DOWN);
+
+                            if (index != -1) {
+                                if (index < anchor) {
+                                    selectionStart = index;
+                                    selectionLength = anchor - index;
+                                } else {
+                                    selectionStart = anchor;
+                                    selectionLength = index - anchor;
+                                }
+
+                                textArea.setSelection(selectionStart, selectionLength);
+                                scrollCharacterToVisible(selectionStart);
+                            }
+                        } else {
+                            // Increasing downward size
+                            // Get next insertion point from right edge of trailing selection
+                            // character
+                            from = selectionStart + selectionLength - 1;
+
+                            Bounds trailingSelectionBounds = getCharacterBounds(from);
+                            x = trailingSelectionBounds.x + trailingSelectionBounds.width;
+
+                            index = getNextInsertionPoint(x, from, TextArea.ScrollDirection.DOWN);
+
+                            if (index != -1) {
+                                // If the next character is a paragraph terminator and is
+                                // not the final terminator character, increment the selection
+                                if (index < textArea.getCharacterCount() - 1
+                                    && textArea.getCharacterAt(index) == '\n') {
+                                    index++;
+                                }
+
+                                textArea.setSelection(selectionStart, index - selectionStart);
+                                scrollCharacterToVisible(index);
+                            }
+                        }
                     }
                 } else {
                     int from;
@@ -1392,7 +1449,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     if (index != -1) {
                         textArea.setSelection(index, 0);
                         scrollCharacterToVisible(index);
+                        caretX = caret.x;
                     }
+                    anchor = -1;
                 }
 
                 consumed = true;
