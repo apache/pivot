@@ -16,24 +16,24 @@ in their associated libraries:
 Distribution JARs
 =================
 
-* Core (pivot-core-2.0.2.jar):
+* Core (pivot-core-2.0.3.jar):
   A set of common, non-UI-specific classes.
 
-* WTK (pivot-wtk-2.0.2.jar):
+* WTK (pivot-wtk-2.0.3.jar):
   Classes for user interface development, including windows, dialogs, buttons,
   lists, text input, layout, drag and drop, XML markup, etc.
 
-* WTK Terra Theme (pivot-wtk-terra-2.0.2.jar):
+* WTK Terra Theme (pivot-wtk-terra-2.0.3.jar):
   The default WTK theme provider for Pivot, responsible for the look & feel of
   the user interface components.
 
-* Web (pivot-web-2.0.2.jar):
+* Web (pivot-web-2.0.3.jar):
   Classes to facilitate communication with remote data services.
 
-* Web Server (pivot-web-server-2.0.2.jar):
+* Web Server (pivot-web-server-2.0.3.jar):
   Classes to facilitate implementation of server-side data services.
 
-* Charting (pivot-charts-2.0.2.jar):
+* Charting (pivot-charts-2.0.3.jar):
   Classes for adding interactive charting capabilities to Pivot applications.
 
 To begin developing with Pivot, simply include the necessary libraries on your
@@ -90,4 +90,4 @@ Documentation
 Pivot home page: http://pivot.apache.org/
 Demos:           http://pivot.apache.org/demos/
 Tutorials:       http://pivot.apache.org/tutorials/
-Javadoc:         http://pivot.apache.org/2.0.2/docs/api/
+Javadoc:         http://pivot.apache.org/2.0.3/docs/api/

@@ -106,10 +106,22 @@ public class Label extends Component {
         installSkin(Label.class);
     }
 
+    /**
+     * Returns the label's text.
+     *
+     * @return
+     * The text.
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Set the text of the Label.
+     *
+     * @param text
+     * The text to set, must be not null.
+     */
     public void setText(String text) {
         if (text == null) {
             throw new IllegalArgumentException();
@@ -124,6 +136,20 @@ public class Label extends Component {
             this.text = text;
             labelListeners.textChanged(this, previousText);
         }
+    }
+
+    /**
+     * Utility method to set text to the given value,
+     * or to an empty string if null (to avoid the setText throw an IllegalArgumentException).
+     * This is useful to be called by code.
+     *
+     * @param text
+     * The text to set
+     *
+     * @see #setText
+     */
+    public void setTextOrEmpty(String text) {
+        this.setText(text != null ? text : "");
     }
 
     /**
@@ -256,4 +282,10 @@ public class Label extends Component {
     public ListenerList<LabelBindingListener> getLabelBindingListeners() {
         return labelBindingListeners;
     }
+
+    @Override
+    public String toString() {
+        return getClass().getName() + " [\"" + getText() + "\"]";
+    }
+
 }

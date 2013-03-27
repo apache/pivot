@@ -93,11 +93,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             // Include padding in constraint
             int contentHeight = height;
             if (contentHeight != -1) {
-                contentHeight = Math.max(contentHeight - (padding.top + padding.bottom + 2), 0);
+                contentHeight = Math.max(contentHeight - paddingHeight(), 0);
             }
 
             preferredWidth = dataRenderer.getPreferredWidth(contentHeight)
-                + padding.left + padding.right + 2;
+                + paddingWidth();
 
             // Adjust for preferred aspect ratio
             if (!Float.isNaN(minimumAspectRatio)
@@ -124,11 +124,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
             // Include padding in constraint
             int contentWidth = width;
             if (contentWidth != -1) {
-                contentWidth = Math.max(contentWidth - (padding.left + padding.right + 2), 0);
+                contentWidth = Math.max(contentWidth - paddingWidth(), 0);
             }
 
             preferredHeight = dataRenderer.getPreferredHeight(contentWidth)
-                + padding.top + padding.bottom + 2;
+                + paddingHeight();
 
             // Adjust for preferred aspect ratio
             if (!Float.isNaN(maximumAspectRatio)
@@ -148,12 +148,8 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
         Dimensions preferredContentSize = dataRenderer.getPreferredSize();
-
-        int preferredWidth = preferredContentSize.width
-            + padding.left + padding.right + 2;
-
-        int preferredHeight = preferredContentSize.height
-            + padding.top + padding.bottom + 2;
+        int preferredWidth = preferredContentSize.width + paddingWidth();
+        int preferredHeight = preferredContentSize.height + paddingHeight();
 
         // Adjust for preferred aspect ratio
         float aspectRatio = (float) preferredWidth / (float) preferredHeight;
@@ -178,11 +174,10 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
         dataRenderer.render(pushButton.getButtonData(), pushButton, false);
 
-        int clientWidth = Math.max(width - (padding.left + padding.right + 2), 0);
-        int clientHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
+        int clientWidth = Math.max(width - paddingWidth(), 0);
+        int clientHeight = Math.max(height - paddingHeight(), 0);
 
         int baseline = dataRenderer.getBaseline(clientWidth, clientHeight);
-
         if (baseline != -1) {
             baseline += padding.top + 1;
         }
@@ -234,8 +229,10 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
         dataRenderer.render(pushButton.getButtonData(), pushButton, highlighted);
-        dataRenderer.setSize(Math.max(width - (padding.left + padding.right + 2), 0),
-            Math.max(getHeight() - (padding.top + padding.bottom + 2), 0));
+        dataRenderer.setSize(
+            Math.max(width - paddingWidth(), 0),
+            Math.max(getHeight() - paddingHeight(), 0)
+        );
 
         Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(padding.left + 1, padding.top + 1);
@@ -508,6 +505,14 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         setPadding(Insets.decode(padding));
     }
 
+    private int paddingWidth() {
+        return padding.left + padding.right + 2;
+    }
+
+    private int paddingHeight() {
+        return padding.top + padding.bottom + 2;
+    }
+
     public float getMinimumAspectRatio() {
         return minimumAspectRatio;
     }
@@ -585,4 +590,5 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
         return super.mouseClick(component, button, x, y, count);
     }
+
 }

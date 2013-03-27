@@ -16,21 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Pivot-880" maximized="true"
-    bxml:id="window"
+<Window title="ImageView Test" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
-    xmlns="org.apache.pivot.wtk"
->
-
-<Form>
-    <Form.Section>
-        <TextInput bxml:id="textInput" text="${textArea.text}"/>
-        <Border>
-            <FillPane minimumWidth="300" minimumHeight="100">
-                <TextArea bxml:id="textArea" text="${textInput.text}"/>
-            </FillPane>
-        </Border>
-    </Form.Section>
-</Form>
-
+    xmlns="org.apache.pivot.wtk">
+    <ImageView image="@logo.svg"
+        styles="{fill:false, preserveAspectRatio:false,
+            horizontalAlignment:'left', verticalAlignment:'bottom'}"/>
 </Window>

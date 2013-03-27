@@ -140,6 +140,11 @@ public abstract class Image implements Visual {
         return imageListeners;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getName() + " [" + getWidth() + "," + getHeight() + "]";
+    }
+
     public static Image load(URL location) throws TaskExecutionException {
         LoadTask loadTask = new LoadTask(location);
         return loadTask.execute();

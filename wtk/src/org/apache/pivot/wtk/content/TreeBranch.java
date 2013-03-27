@@ -82,7 +82,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
             throw new IllegalArgumentException("iconURL is null.");
         }
 
-        setIcon(Image.loadFromCache(iconURL));
+        setExpandedIcon(Image.loadFromCache(iconURL));
     }
 
     /**

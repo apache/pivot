@@ -24,6 +24,10 @@ import org.apache.pivot.util.ListenerList;
  * Abstract base class for viewport components. Viewports provide a windowed
  * view on a component (called the "view") that is too large to fit within a
  * given area. They are generally scrollable.
+ * <p> Even though this class is a {@link Container}, no components should be
+ * added to it via the {@link #add add()} method.  The component that gets the
+ * windowed (or scrollable) view should be added via the {@link #setView setView()}
+ * method (or the "view" property).
  */
 @DefaultProperty("view")
 public abstract class Viewport extends Container {
@@ -107,10 +111,18 @@ public abstract class Viewport extends Container {
         }
     }
 
+    /**
+     * Returns the (single) component (typically a {@link Container})
+     * that we are providing a windowed (or scrollable) view of.
+     */
     public Component getView() {
         return view;
     }
 
+    /**
+     * Set the single component (typically a {@link Container}) that
+     * we will provide a windowed (or scrollable) view of.
+     */
     public void setView(Component view) {
        Component previousView = this.view;
 
@@ -176,6 +188,13 @@ public abstract class Viewport extends Container {
         }
     }
 
+    /**
+     * This method should not be called to remove child components
+     * from the Viewport because the viewable child(ren) are set
+     * by the {@link #setView} method instead.  Any attempt to
+     * remove the "view" component with this method will result
+     * in an exception.
+     */
     @Override
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {

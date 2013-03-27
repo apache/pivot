@@ -589,11 +589,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
         } else {
             rowIndex = (y / (fixedRowHeight + 1));
+        }
 
-            List<Object> tableData = (List<Object>)tableView.getTableData();
-            if (rowIndex >= tableData.getLength()) {
-                rowIndex = -1;
-            }
+        List<Object> tableData = (List<Object>)tableView.getTableData();
+        if (rowIndex >= tableData.getLength()) {
+            rowIndex = -1;
         }
 
         return rowIndex;
