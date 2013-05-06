@@ -213,19 +213,26 @@ public abstract class Viewport extends Container {
     }
 
     /**
-     * Tell if the viewport mode is optimized (repaint only needed area, default), or repaint all
+     * Tell if the viewport painting mode is optimized (repaint only needed area, default), or repaint all.
+     * <p> This is implemented as a workaround for various painting issues on some platforms.
+     * So, if you experience problems with the scrolled-in area not being painted properly
+     * by default, consider setting this property <tt>true</tt> using the
+     * {@link #setRepaintAllViewport setRepaintAllViewport} method.
      *
-     * @return true if optimized, otherwise false
+     * @return <tt>false</tt> if optimized, otherwise <tt>true</tt> (repaint entire viewport)
      */
     public boolean isRepaintAllViewport() {
         return repaintAllViewport;
     }
 
     /**
-     * Set the viewport mode
+     * Set the viewport painting mode.
+     * <p> This is implemented as a workaround for various painting issues on some platforms.
+     * So, if you experience problems with the scrolled-in area not being painted properly
+     * by default, consider setting this property <tt>true</tt> (default is <tt>false</tt>).
      *
      * @param repaintAllViewport
-     * true means optimized (repaint only needed area, default), while false means repaint all
+     * <tt>false</tt> means optimized (repaint only needed area, default), while <tt>true</tt> means repaint all
      */
     public void setRepaintAllViewport(boolean repaintAllViewport) {
         this.repaintAllViewport = repaintAllViewport;
