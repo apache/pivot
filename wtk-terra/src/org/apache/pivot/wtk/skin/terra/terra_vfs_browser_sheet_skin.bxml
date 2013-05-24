@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Border styles="{padding:10}"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns="org.apache.pivot.wtk">
+    <TablePane bxml:id="tablePane" styles="{verticalSpacing:8}">
+        <columns>
+            <TablePane.Column width="1*"/>
+        </columns>
+
+        <TablePane.Row height="-1">
+            <Form>
+                <Form.Section>
+                    <BoxPane bxml:id="saveAsBoxPane" orientation="vertical" styles="{fill:true}">
+                        <BoxPane styles="{verticalAlignment:'center'}">
+                            <Label text="%saveAs"/>
+                            <TextInput bxml:id="saveAsTextInput" textSize="32"/>
+                        </BoxPane>
+                        <Separator styles="{padding:2}"/>
+                    </BoxPane>
+                </Form.Section>
+            </Form>
+        </TablePane.Row>
+
+        <TablePane.Row height="1*">
+            <VFSBrowser bxml:id="fileBrowser"
+                preferredWidth="480" preferredHeight="240"/>
+        </TablePane.Row>
+
+        <TablePane.Row height="-1">
+            <BoxPane styles="{horizontalAlignment:'right', verticalAlignment:'center'}">
+                <PushButton bxml:id="okButton" buttonData="%ok"
+                    styleName="org.apache.pivot.wtk.skin.terra.commandButton"/>
+                <PushButton bxml:id="cancelButton" buttonData="%cancel"
+                    styleName="org.apache.pivot.wtk.skin.terra.commandButton"/>
+            </BoxPane>
+        </TablePane.Row>
+    </TablePane>
+</Border>

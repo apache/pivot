@@ -496,7 +496,9 @@ limitations under the License.
     </target>
 
     <target name="core">
-        <compile project="core"/>
+        <compile project="core">
+            <fileset dir="wtk" includes="lib/**/*.jar"/>
+        </compile>
     </target>
 
     <target name="demos" depends="core, wtk, wtk-terra, web">
@@ -510,7 +512,9 @@ limitations under the License.
     </target>
 
     <target name="tests" depends="core, web, wtk, wtk-terra">
-        <compile project="tests"/>
+        <compile project="tests">
+            <fileset dir="wtk" includes="lib/**/*.jar"/>
+        </compile>
     </target>
 
     <target name="tutorials" depends="core, wtk, web">
@@ -551,7 +555,9 @@ limitations under the License.
     </target>
 
     <target name="wtk-terra" depends="core, wtk">
-        <compile project="wtk-terra"/>
+        <compile project="wtk-terra">
+            <fileset dir="wtk" includes="lib/**/*.jar"/>
+        </compile>
     </target>
 
     <!-- Package source distribution -->

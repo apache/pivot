@@ -83,6 +83,8 @@ import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Tooltip;
 import org.apache.pivot.wtk.TreeView;
+import org.apache.pivot.wtk.VFSBrowser;
+import org.apache.pivot.wtk.VFSBrowserSheet;
 import org.apache.pivot.wtk.media.Image;
 
 /**
@@ -155,6 +157,8 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(TextInput.class, TerraTextInputSkin.class);
         componentSkinMap.put(Tooltip.class, TerraTooltipSkin.class);
         componentSkinMap.put(TreeView.class, TerraTreeViewSkin.class);
+        componentSkinMap.put(VFSBrowser.class, TerraVFSBrowserSkin.class);
+        componentSkinMap.put(VFSBrowserSheet.class, TerraVFSBrowserSheetSkin.class);
 
         componentSkinMap.put(TerraCalendarSkin.DateButton.class, TerraCalendarSkin.DateButtonSkin.class);
         componentSkinMap.put(TerraExpanderSkin.ShadeButton.class, TerraExpanderSkin.ShadeButtonSkin.class);

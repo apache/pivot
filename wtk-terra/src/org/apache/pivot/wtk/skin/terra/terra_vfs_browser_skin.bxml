@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<TablePane styles="{verticalSpacing:6}"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns:terra="org.apache.pivot.wtk.skin.terra"
+    xmlns="org.apache.pivot.wtk">
+    <columns>
+        <TablePane.Column width="1*"/>
+    </columns>
+
+    <TablePane.Row height="-1">
+        <TablePane styles="{horizontalSpacing:2}">
+            <columns>
+                <TablePane.Column width="-1"/>
+                <TablePane.Column width="2*"/>
+                <TablePane.Column width="-1"/>
+                <TablePane.Column width="1*"/>
+                <TablePane.Column width="3*"/>
+            </columns>
+
+            <TablePane.Row>
+                <ListButton bxml:id="driveListButton" tooltipText="%selectDrive">
+                    <dataRenderer>
+                        <terra:TerraVFSBrowserSkin.ListButtonDriveRenderer/>
+                    </dataRenderer>
+                    <itemRenderer>
+                        <terra:TerraVFSBrowserSkin.ListViewDriveRenderer/>
+                    </itemRenderer>
+                </ListButton>
+
+                <ListButton bxml:id="pathListButton" tooltipText="%goTo">
+                    <dataRenderer>
+                        <terra:TerraVFSBrowserSkin.ListButtonFileRenderer/>
+                    </dataRenderer>
+                    <itemRenderer>
+                        <terra:TerraVFSBrowserSkin.ListViewFileRenderer/>
+                    </itemRenderer>
+                </ListButton>
+
+                <BoxPane styles="{verticalAlignment:'center', spacing:0}">
+                    <PushButton bxml:id="goUpButton" styles="{toolbar:true}" tooltipText="%goUp">
+                        <content:ButtonData icon="@folder_up.png"/>
+                    </PushButton>
+                    <PushButton bxml:id="newFolderButton" styles="{toolbar:true}" tooltipText="%newFolder"
+                        visible="false">
+                        <content:ButtonData icon="@folder_add.png"/>
+                    </PushButton>
+                    <PushButton bxml:id="goHomeButton" styles="{toolbar:true}" tooltipText="%goHome">
+                        <content:ButtonData icon="@house.png"/>
+                    </PushButton>
+                </BoxPane>
+
+                <TablePane.Filler/>
+
+                <BoxPane orientation="vertical"
+                    styles="{horizontalAlignment:'right', verticalAlignment:'center', fill:true}">
+                    <BoxPane orientation="vertical" styles="{verticalAlignment:'center', fill:true}">
+                        <TextInput bxml:id="searchTextInput" prompt="%search" tooltipText="%searchFor"/>
+                    </BoxPane>
+                </BoxPane>
+            </TablePane.Row>
+        </TablePane>
+    </TablePane.Row>
+
+    <TablePane.Row height="1*">
+        <Border styles="{color:10}">
+            <StackPane bxml:id="fileStackPane">
+                <ScrollPane bxml:id="fileScrollPane"
+                    horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="fill_to_capacity">
+                    <TableView bxml:id="fileTableView"
+                        styles="{showHorizontalGridLines:false, showVerticalGridLines:false}">
+                        <columns>
+                            <TableView.Column name="name" width="3*" headerData="%fileName">
+                                <cellRenderer>
+                                    <terra:TerraVFSBrowserSkin.TableViewFileRenderer/>
+                                </cellRenderer>
+                            </TableView.Column>
+                            <TableView.Column name="size" width="1*" headerData="%size">
+                                <cellRenderer>
+                                    <terra:TerraVFSBrowserSkin.TableViewFileRenderer/>
+                                </cellRenderer>
+                            </TableView.Column>
+                            <TableView.Column name="lastModified" width="2*" headerData="%lastModified">
+                                <cellRenderer>
+                                    <terra:TerraVFSBrowserSkin.TableViewFileRenderer/>
+                                </cellRenderer>
+                            </TableView.Column>
+                        </columns>
+                    </TableView>
+
+                    <columnHeader>
+                        <TableViewHeader tableView="$fileTableView" sortMode="single_column"/>
+                    </columnHeader>
+                </ScrollPane>
+            </StackPane>
+        </Border>
+    </TablePane.Row>
+</TablePane>
