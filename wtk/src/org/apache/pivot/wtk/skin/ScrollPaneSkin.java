@@ -1109,8 +1109,15 @@ public class ScrollPaneSkin extends ContainerSkin
                 scrollPane.setConsumeRepaint(false);
             }
 
-            scrollPane.repaint(rowHeaderWidth + (deltaScrollLeft > 0 ? blitWidth : 0), blitY,
-                Math.abs(deltaScrollLeft), blitHeight, true);
+            boolean repaintAllViewport = scrollPane.isRepaintAllViewport();
+            if (!repaintAllViewport) {
+                scrollPane.repaint(rowHeaderWidth + (deltaScrollLeft > 0 ? blitWidth : 0), blitY,
+                    Math.abs(deltaScrollLeft), blitHeight, true);
+            } else {
+                Bounds viewportBounds = getViewportBounds();
+                scrollPane.repaint(viewportBounds.x, viewportBounds.y,
+                    viewportBounds.width, viewportBounds.height, true);
+            }
         } else {
             if (view != null) {
                 view.setLocation(rowHeaderWidth - scrollLeft, view.getY());
