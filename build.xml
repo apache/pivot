@@ -92,6 +92,7 @@ limitations under the License.
                 <or>
                     <contains string="${ant.version}" substring="1.7"/>
                     <contains string="${ant.version}" substring="1.8"/>
+                    <contains string="${ant.version}" substring="1.9"/>
                 </or>
             </not>
         </condition>
