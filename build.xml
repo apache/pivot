@@ -111,7 +111,6 @@ limitations under the License.
                 <condition>
                     <not>
                         <or>
-                            <equals arg1="${ant.java.version}" arg2="1.6"/>
                             <equals arg1="${ant.java.version}" arg2="1.7"/>
                         </or>
                     </not>
@@ -119,7 +118,7 @@ limitations under the License.
                 <![CDATA[
                 Error:
 
-                Building Pivot requires JDK 1.6 or greater. Please see the
+                Building Pivot requires JDK 1.7 or greater. Please see the
                 BUILD file for more information.
                 ]]>
             </fail>
