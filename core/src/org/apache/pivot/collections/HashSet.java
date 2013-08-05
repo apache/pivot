@@ -87,9 +87,9 @@ public class HashSet<E> implements Set<E>, Serializable {
         }
     }
 
+    @SafeVarargs
     public HashSet(E... elements) {
-        for (int i = 0; i < elements.length; i++) {
-            E element = elements[i];
+        for (E element : elements) {
             add(element);
         }
     }

@@ -153,6 +153,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         items = new Object[capacity];
     }
 
+    @SuppressWarnings({"unchecked", "varargs"})
     public ArrayList(T... items) {
         this(items, 0, items.length);
     }

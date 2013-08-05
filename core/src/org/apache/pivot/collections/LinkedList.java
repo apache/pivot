@@ -248,9 +248,10 @@ public class LinkedList<T> implements List<T>, Serializable {
         this.comparator = comparator;
     }
 
+    @SafeVarargs
     public LinkedList(T... items) {
-        for (int i = 0; i < items.length; i++) {
-            add(items[i]);
+        for (T item : items) {
+            add(item);
         }
     }
 

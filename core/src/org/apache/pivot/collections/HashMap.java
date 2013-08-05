@@ -123,6 +123,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         rehash(capacity);
     }
 
+    @SafeVarargs
     public HashMap(Pair<K, V>... entries) {
         this(Math.max((int)(entries.length / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
 

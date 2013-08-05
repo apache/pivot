@@ -28,6 +28,7 @@ public class ArrayAdapter<T> implements Sequence<T>, Serializable {
 
     private T[] array;
 
+    @SuppressWarnings({"unchecked", "varargs"})
     public ArrayAdapter(T... array) {
         if (array == null) {
             throw new IllegalArgumentException();
