@@ -1,10 +1,10 @@
 System Requirements
 ===================
 
-* JDK 1.6 or greater (http://java.sun.com/)
-* Ant 1.7 or greater (http://ant.apache.org/)
-* JUnit 4.3 or greater (http://www.junit.org/)
-* Maven Ant Tasks 2.0.10 or greater (http://maven.apache.org/) (optional)
+* JDK 1.7 or greater (http://java.sun.com/)
+* Ant 1.8 or greater (http://ant.apache.org/)
+* JUnit 4.8.2 or greater (http://www.junit.org/)
+* Maven Ant Tasks 2.1.3 or greater (http://maven.apache.org/) (optional)
 
 Project Set-Up
 ==============
@@ -23,10 +23,12 @@ Project Set-Up
   Mac OS X:
   http://developer.apple.com/qa/qa2004/qa1364.html
 
-  IMPORTANT This document has not been updated for Java 6 on Mac OS X. Under
-  Java 6, this file is located in the following directory:
+  IMPORTANT This document has not been updated for Java on Mac OS X.
 
-  /System/Library/Frameworks/JavaVM.framework/Resources/Deploy.bundle/Contents/Home/lib
+
+  Using Java 7, ensure to have jfxrt.jar file excluded from compile classpath
+  (build files are already setup for this), or build errors will happen
+  (due to duplicate class in classpath).
 
 * Ensure that the JNLP APIs are on your classpath; follow the same process as
   described in the previous step, substituting javaws.jar for plugin.jar.

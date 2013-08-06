@@ -63,14 +63,14 @@ distribution.
 Dependencies
 ============
 
-* Pivot requires Java 6 or greater.
+* Pivot requires Java 7 or greater.
 
 * Pivot's charting components require a compatible chart provider. No such
   provider is included in this release, but one is available here:
 
   http://code.google.com/a/apache-extras.org/p/pivot-jfree/
 
-  Version 2.0 of this provider is compatible with Pivot 2.0.x. Please note that
+  Version 2.1 of this provider is compatible with Pivot 2.1.x. Please note that
   this provider has a dependency on JFreeChart, which is licensed under LGPL.
 
 * SVG support requires SVG Salamander, which is licensed under a dual LGPL/BSD

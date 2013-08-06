@@ -89,13 +89,13 @@ limitations under the License.
     <fail>
         <condition>
             <not>
-                <antversion atleast="1.7.0"/>
+                <antversion atleast="1.8.0"/>
             </not>
         </condition>
         <![CDATA[
         Error:
 
-        Building Pivot requires Apache Ant 1.7 or greater. Please see the BUILD
+        Building Pivot requires Apache Ant 1.8 or greater. Please see the BUILD
         file for more information.
         ]]>
     </fail>
@@ -323,7 +323,7 @@ limitations under the License.
 
                 <packageset dir="@{project}/src" includes="**/*"/>
 
-                <link href="http://download.oracle.com/javase/6/docs/api"/>
+                <link href="http://download.oracle.com/javase/7/docs/api"/>
                 <link href="http://download.oracle.com/javaee/1.4/api/"/>
             </javadoc>
 
@@ -481,7 +481,7 @@ limitations under the License.
             <packageset dir="wtk/src" includes="**/*"/>
             <packageset dir="wtk-terra/src" includes="**/*"/>
 
-            <link href="http://download.oracle.com/javase/6/docs/api"/>
+            <link href="http://download.oracle.com/javase/7/docs/api"/>
             <link href="http://download.oracle.com/javaee/1.4/api/"/>
         </javadoc>
     </target>
@@ -657,7 +657,7 @@ limitations under the License.
 
     <!-- Generate deployment files -->
     <target name="deploy" depends="package">
-        <!-- Copy library depenencies lib directory -->
+        <!-- Copy library dependencies lib directory -->
         <copy todir="${folder.lib}">
             <fileset dir="wtk/lib">
                 <include name="*.jar"/>

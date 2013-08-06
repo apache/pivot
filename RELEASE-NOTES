@@ -15,48 +15,13 @@
   limitations under the License.
 ================================================================================
 
-Release Notes for Pivot 2.0.3:
+Release Notes for Pivot 2.1.0:
 
 ** New Feature
-    * [PIVOT-455] - Add an alignment style to TerraTextInputSkin
-    * [PIVOT-731] - Ignore Flag for controls within a Rollup Heading
-    * [PIVOT-834] - Form.getSection(Component) to return the section for nested components
 
 ** Improvement
-    * [PIVOT-536] - BXMLSerializer should provide a structure error object when a serializer error occurs
-    * [PIVOT-558] - BeanAdapter should have a putAll method to allow multiple property set in one method call...especially useful when setting properties from a JSON string
-    * [PIVOT-679] - TableViewImageCellRenderer should render disabled rows with an opacity of 0.5f
-    * [PIVOT-783] - Calling setScale on scaleDecorator doesn't update the display
-    * [PIVOT-784] - Improvement in clear() and clearSelection() methods in some components
-    * [PIVOT-857] - Add activity indicator to file browser while loading a directory
-    * [PIVOT-867] - Ability to selectively enable/disable a Tree node
-    * [PIVOT-870] - Small improvements in BXMLSerializer for interacting with JavaScript (inside the JVM)
-    * [PIVOT-875] - JSON should support using pivot.collections.Map directly
-    * [PIVOT-879] - Need access to Displays list in order to support multiple host windows
-    * [PIVOT-883] - Update Javadoc for ComponentStateListener method arguments
-    * [PIVOT-889] - Allow newline to do hard break in Label text when wrapping
-    * [PIVOT-893] - Set lower default value for maximumLength in TextInput and TextArea
-    * [PIVOT-896] - do not allow to set text to null in Labels
 
 ** Bug
-    * [PIVOT-655] - FileBrowserSheet save dialog appends the saveas field content to the selected folders/file
-    * [PIVOT-721] - ButtonDataRenderer#setFillIcon has no effect, because its BoxPane doesn't have fill style
-    * [PIVOT-781] - Unable to get an initially maximized HostFrame in DesktopApplicationContext due to bug in Java 6 under ubuntu/linux
-    * [PIVOT-843] - Copy Paste issues with CF_DIB clipboard type image
-    * [PIVOT-859] - Multi-page applet failed to route to respond
-    * [PIVOT-860] - CPU Usage at 100% when displaying an Expander
-    * [PIVOT-861] - Memory leak: Window icon ImageListenerList retains reference to closed windows, preventing garbage collection
-    * [PIVOT-862] - FileBrowser [Sheet] display the contents of the root instead of actual folder in some circumstancies
-    * [PIVOT-865] - Crash in Save, As dialog when path + filename entered in text field
-    * [PIVOT-872] - Build error with JDK 7 Update 7
-    * [PIVOT-874] - StockTracker: removing multiple symbols may remove unselected ones too
-    * [PIVOT-876] - When user presses the tab key the applet loses focus and never regains it
-    * [PIVOT-880] - NPE when calling FileBrowser.setRootDirectory using a UNC path
-    * [PIVOT-887] - Tutorial example code for NumericSpinnerData doesn't work as shown
-    * [PIVOT-888] - Nullpointer Exception while editing TextArea with text property two-way bounded
-    * [PIVOT-892] - DoubleValidator and FloatValidator do not allow exponents to be entered
-    * [PIVOT-898] - fillIcon in buttons seems to let images display with wrong dimension
-    * [PIVOT-901] - List Buttons are rendered very thin when there is no list item selected or when item with empty string is selected
 
 ** Task
 
