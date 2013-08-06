@@ -25,7 +25,7 @@ limitations under the License.
         <pathelement location="${env.CLASSPATH}"/>
     </path>
     <path id="classpath.javalib">
-        <fileset dir="${java.home}/lib" includes="**/*.jar"/>
+        <fileset dir="${java.home}/lib" includes="**/*.jar" excludes="**/jfxrt.jar"/>
     </path>
     <property name="classpath_env" refid="classpath.env"/>
     <property name="classpath_javalib" refid="classpath.javalib"/>
@@ -38,7 +38,7 @@ limitations under the License.
     <property file="build.properties"/>
 
     <!-- Import Pivot build file -->
-	<import file="./pivot_maintenance/build.xml"/>
+    <import file="./pivot_maintenance/build.xml"/>
 
     <path id="classpath.general">
         <fileset dir="../ci-builds-on-jenkins/lib" includes="**/*.jar"/>
@@ -48,41 +48,38 @@ limitations under the License.
 
     <!-- Set version from jenkins or not -->
     <condition property="version" value="${base.version}-${jenkins.build}">
-      <isset property="jenkins.job"/>
+        <isset property="jenkins.job"/>
     </condition>
     <condition property="version" value="${base.version}">
-      <not>
-        <isset property="jenkins.job"/>
-      </not>
+        <not>
+            <isset property="jenkins.job"/>
+        </not>
     </condition>
 
     <!-- Help -->
     <target name="help" description="Put some help to console" depends="">
-		<property name="classpath" refid="classpath.general"/>
-		<echo message="Using Classpath: ${classpath}"/>
+        <property name="classpath" refid="classpath.general"/>
+        <echo message="Using Classpath: ${classpath}"/>
     </target>
 
     <!-- Check -->
     <target name="check" description="Check environment" depends="help">
 
         <sequential>
-		    <!-- Ant version check -->
-		    <fail>
-		        <condition>
-		            <not>
-		                <or>
-		                    <contains string="${ant.version}" substring="1.7"/>
-        		            <contains string="${ant.version}" substring="1.8"/>
-		                </or>
-		            </not>
-		        </condition>
-		        <![CDATA[
-		        Error:
+            <!-- Ant version check -->
+            <fail>
+                <condition>
+                    <not>
+                        <antversion atleast="1.7.0"/>
+                    </not>
+                </condition>
+                <![CDATA[
+                Error:
 
-		        Building Pivot requires Apache Ant 1.7 or greater. Please see the BUILD
-		        file for more information.
-		        ]]>
-		    </fail>
+                Building Pivot requires Apache Ant 1.7 or greater. Please see the BUILD
+                file for more information.
+                ]]>
+            </fail>
         </sequential>
 
         <sequential>
@@ -108,9 +105,9 @@ limitations under the License.
             <fail>
                 <condition>
                     <not>
-						<available classname="org.junit.Test">
-							<classpath refid="classpath.general" />
-						</available>
+                        <available classname="org.junit.Test">
+                            <classpath refid="classpath.general" />
+                        </available>
                     </not>
                 </condition>
                 <![CDATA[
