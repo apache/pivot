@@ -25,7 +25,7 @@ limitations under the License.
         <pathelement location="${env.CLASSPATH}"/>
     </path>
     <path id="classpath.javalib">
-        <fileset dir="${java.home}/lib" includes="**/*.jar"/>
+        <fileset dir="${java.home}/lib" includes="**/*.jar" excludes="**/jfxrt.jar"/>
     </path>
     <property name="classpath_env" refid="classpath.env"/>
     <property name="classpath_javalib" refid="classpath.javalib"/>
