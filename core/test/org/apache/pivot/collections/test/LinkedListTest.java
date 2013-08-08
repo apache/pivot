@@ -30,7 +30,7 @@ import org.junit.Test;
 public class LinkedListTest {
     @Test
     public void basicTest() {
-        LinkedList<String> list = new LinkedList<String>();
+        LinkedList<String> list = new LinkedList<>();
         list.insert("B", 0);
         list.insert("C", 1);
         list.insert("D", 2);
@@ -63,7 +63,7 @@ public class LinkedListTest {
 
         assertEquals(4, list.getLength());
 
-        ArrayList<String> copy = new ArrayList<String>("G", "B", "F", "D");
+        ArrayList<String> copy = new ArrayList<>("G", "B", "F", "D");
         int i = 0;
         for (String item : list) {
             assertEquals(item, copy.get(i++));
@@ -106,7 +106,7 @@ public class LinkedListTest {
 
     @Test
     public void sortTest1() {
-        LinkedList<String> linkedList = new LinkedList<String>();
+        LinkedList<String> linkedList = new LinkedList<>();
         linkedList.setComparator(new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
@@ -125,7 +125,7 @@ public class LinkedListTest {
 
     @Test
     public void sortTest2() {
-        LinkedList<String> linkedList = new LinkedList<String>();
+        LinkedList<String> linkedList = new LinkedList<>();
 
         linkedList.add("N");
         linkedList.add("P");
@@ -145,7 +145,7 @@ public class LinkedListTest {
 
     @Test(expected=ConcurrentModificationException.class)
     public void simpleConcurrentModificationTest() {
-        LinkedList<String> linkedList = new LinkedList<String>("a", "b", "c", "d", "e");
+        LinkedList<String> linkedList = new LinkedList<>("a", "b", "c", "d", "e");
         List.ItemIterator<String> iterator = linkedList.iterator();
         linkedList.remove(0, 1);
         iterator.next();
@@ -153,7 +153,7 @@ public class LinkedListTest {
 
     @Test(expected=ConcurrentModificationException.class)
     public void advancedConcurrentModificationTest() {
-        LinkedList<String> linkedList = new LinkedList<String>("a", "b", "c", "d", "e");
+        LinkedList<String> linkedList = new LinkedList<>("a", "b", "c", "d", "e");
 
         List.ItemIterator<String> iterator1 = linkedList.iterator();
         List.ItemIterator<String> iterator2 = linkedList.iterator();

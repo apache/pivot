@@ -240,9 +240,9 @@ public class FlowPaneSkin extends ContainerSkin {
         int contentWidth = Math.max(width - (padding.left + padding.right), 0);
 
         // Break the components into multiple rows
-        ArrayList<ArrayList<Component>> rows = new ArrayList<ArrayList<Component>>();
+        ArrayList<ArrayList<Component>> rows = new ArrayList<>();
 
-        ArrayList<Component> row = new ArrayList<Component>();
+        ArrayList<Component> row = new ArrayList<>();
         int rowWidth = 0;
 
         for (int i = 0, n = flowPane.getLength(); i < n; i++) {
@@ -257,7 +257,7 @@ public class FlowPaneSkin extends ContainerSkin {
                     // The component is too big to fit in the remaining space,
                     // and it is not the only component in this row
                     rows.add(row);
-                    row = new ArrayList<Component>();
+                    row = new ArrayList<>();
                     rowWidth = 0;
                 }
 

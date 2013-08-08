@@ -150,8 +150,8 @@ public class JSONSerializerTest {
     {
         System.out.println("Test interaction with Standard java.util.Map");
 
-        java.util.HashMap<String, java.util.Map<String, String>> root  = new java.util.HashMap<String, java.util.Map<String, String>>();
-        java.util.HashMap<String, String> child = new java.util.HashMap<String, String>();
+        java.util.HashMap<String, java.util.Map<String, String>> root  = new java.util.HashMap<>();
+        java.util.HashMap<String, String> child = new java.util.HashMap<>();
 
         child.put("name", "John Doe");
         root.put("child", child);

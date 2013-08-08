@@ -263,7 +263,7 @@ public class TabPane extends Container {
         }
     }
 
-    private ArrayList<Component> tabs = new ArrayList<Component>();
+    private ArrayList<Component> tabs = new ArrayList<>();
     private TabSequence tabSequence = new TabSequence();
     private Component corner = null;
     private int selectedIndex = -1;

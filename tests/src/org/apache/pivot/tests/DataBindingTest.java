@@ -124,14 +124,14 @@ public class DataBindingTest extends Application.Adapter {
         window = (Window)bxmlSerializer.readObject(DataBindingTest.class, "data_binding_test.bxml");
         window.open(display);
 
-        HashMap<String, Object> context = new HashMap<String, Object>();
+        HashMap<String, Object> context = new HashMap<>();
         context.put("id1", "1");
         context.put("id2", "2");
         context.put("id3", "3");
 
         window.getContent().load(context);
 
-        context = new HashMap<String, Object>();
+        context = new HashMap<>();
         window.getContent().store(context);
 
         System.out.println(JSONSerializer.toString(context));

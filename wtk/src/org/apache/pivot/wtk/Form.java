@@ -43,7 +43,7 @@ public class Form extends Container {
     public static class Section implements Sequence<Component>, Iterable<Component> {
         private Form form = null;
         private String heading = null;
-        private ArrayList<Component> fields = new ArrayList<Component>();
+        private ArrayList<Component> fields = new ArrayList<>();
 
         public Form getForm() {
             return form;
@@ -420,7 +420,7 @@ public class Form extends Container {
         }
     }
 
-    private ArrayList<Section> sections = new ArrayList<Section>();
+    private ArrayList<Section> sections = new ArrayList<>();
     private SectionSequence sectionSequence = new SectionSequence();
 
     private FormListenerList formListeners = new FormListenerList();

@@ -78,7 +78,7 @@ public class NumericSpinnerData implements List<Integer> {
     private int upperBound;
     private int increment;
 
-    private ListListenerList<Integer> listListeners = new ListListenerList<Integer>();
+    private ListListenerList<Integer> listListeners = new ListListenerList<>();
 
     /**
      * Creates a new <tt>NumericSpinnerData</tt> instance bounded from

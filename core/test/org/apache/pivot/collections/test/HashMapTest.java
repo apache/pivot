@@ -38,7 +38,7 @@ public class HashMapTest {
     @Test
     public void basicTest() {
 
-        HashMap<String, Integer> map = new HashMap<String, Integer>();
+        HashMap<String, Integer> map = new HashMap<>();
 
         assertTrue(map.isEmpty());
         assertEquals(0, map.getCount());
@@ -149,7 +149,7 @@ public class HashMapTest {
 
     @Test
     public void iteratorConcurrentModificationTest() {
-        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> map = new HashMap<>();
 
         map.put(1, 1);
         map.put(2, 2);
@@ -169,7 +169,7 @@ public class HashMapTest {
     @Test
     public void pivotHashMapSpeedTest() {
         long t0 = System.currentTimeMillis();
-        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < LOAD_COUNT; i++) {
             map.put(Integer.valueOf(i), Integer.valueOf(i));
         }
@@ -180,7 +180,7 @@ public class HashMapTest {
     @Test
     public void javaHashMapSpeedTest() {
         long t0 = System.currentTimeMillis();
-        java.util.HashMap<Integer, Integer> map = new java.util.HashMap<Integer, Integer>();
+        java.util.HashMap<Integer, Integer> map = new java.util.HashMap<>();
         for (int i = 0; i < LOAD_COUNT; i++) {
             map.put(Integer.valueOf(i), Integer.valueOf(i));
         }
@@ -190,7 +190,7 @@ public class HashMapTest {
 
     @Test
     public void iteratorTest() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
+        HashMap<String, Object> map = new HashMap<>();
         map.put("font", "Verdana 11");
         map.put("colors", "#ff0000");
 
@@ -203,12 +203,12 @@ public class HashMapTest {
 
     @Test
     public void equalsTest() {
-        HashMap<String, String> map1 = new HashMap<String, String>();
+        HashMap<String, String> map1 = new HashMap<>();
         map1.put("a", "one");
         map1.put("b", "two");
         map1.put("c", "three");
 
-        HashMap<String, String> map2 = new HashMap<String, String>();
+        HashMap<String, String> map2 = new HashMap<>();
         map2.put("a", "one");
         map2.put("b", "two");
         map2.put("c", "three");

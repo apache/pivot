@@ -390,7 +390,7 @@ public abstract class ChartView extends Component {
     private String verticalAxisLabel = null;
     private boolean showLegend;
 
-    private ArrayList<Category> categories = new ArrayList<Category>();
+    private ArrayList<Category> categories = new ArrayList<>();
     private CategorySequence categorySequence = new CategorySequence();
 
     private ListHandler chartDataHandler = new ListHandler();

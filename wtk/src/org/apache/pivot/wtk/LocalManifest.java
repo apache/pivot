@@ -35,7 +35,7 @@ public class LocalManifest implements Manifest {
     private String text = null;
     private Image image = null;
     private FileList fileList = null;
-    private HashMap<String, Object> values = new HashMap<String, Object>();
+    private HashMap<String, Object> values = new HashMap<>();
 
     @Override
     public String getText() {
@@ -108,7 +108,7 @@ public class LocalManifest implements Manifest {
 
 class LocalManifestAdapter implements Transferable {
     private LocalManifest localManifest;
-    private ArrayList<DataFlavor> transferDataFlavors = new ArrayList<DataFlavor>();
+    private ArrayList<DataFlavor> transferDataFlavors = new ArrayList<>();
 
     private static final String URI_LIST_MIME_TYPE = "text/uri-list; class=java.lang.String";
 

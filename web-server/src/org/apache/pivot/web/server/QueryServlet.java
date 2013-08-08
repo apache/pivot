@@ -123,15 +123,15 @@ public abstract class QueryServlet extends HttpServlet {
 
     private boolean determineContentLength = false;
 
-    private transient ThreadLocal<String> hostname = new ThreadLocal<String>();
-    private transient ThreadLocal<Integer> port = new ThreadLocal<Integer>();
-    private transient ThreadLocal<String> contextPath = new ThreadLocal<String>();
-    private transient ThreadLocal<String> servletPath = new ThreadLocal<String>();
-    private transient ThreadLocal<Boolean> secure = new ThreadLocal<Boolean>();
+    private transient ThreadLocal<String> hostname = new ThreadLocal<>();
+    private transient ThreadLocal<Integer> port = new ThreadLocal<>();
+    private transient ThreadLocal<String> contextPath = new ThreadLocal<>();
+    private transient ThreadLocal<String> servletPath = new ThreadLocal<>();
+    private transient ThreadLocal<Boolean> secure = new ThreadLocal<>();
 
-    private transient ThreadLocal<QueryDictionary> parameters = new ThreadLocal<QueryDictionary>();
-    private transient ThreadLocal<QueryDictionary> requestHeaders = new ThreadLocal<QueryDictionary>();
-    private transient ThreadLocal<QueryDictionary> responseHeaders = new ThreadLocal<QueryDictionary>();
+    private transient ThreadLocal<QueryDictionary> parameters = new ThreadLocal<>();
+    private transient ThreadLocal<QueryDictionary> requestHeaders = new ThreadLocal<>();
+    private transient ThreadLocal<QueryDictionary> responseHeaders = new ThreadLocal<>();
 
     public static final String HTTP_PROTOCOL = "http";
     public static final String HTTPS_PROTOCOL = "https";

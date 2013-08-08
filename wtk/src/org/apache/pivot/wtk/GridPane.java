@@ -33,7 +33,7 @@ public class GridPane extends Container {
      * Represents a grid pane row.
      */
     public static class Row implements Sequence<Component>, Iterable<Component> {
-        private ArrayList<Component> cells = new ArrayList<Component>();
+        private ArrayList<Component> cells = new ArrayList<>();
 
         private GridPane gridPane = null;
 
@@ -313,7 +313,7 @@ public class GridPane extends Container {
 
     private int columnCount;
 
-    private ArrayList<Row> rows = new ArrayList<Row>();
+    private ArrayList<Row> rows = new ArrayList<>();
     private RowSequence rowSequence = new RowSequence();
 
     private GridPaneListenerList gridPaneListeners = new GridPaneListenerList();

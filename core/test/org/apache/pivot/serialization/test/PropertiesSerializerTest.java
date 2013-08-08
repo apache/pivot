@@ -35,7 +35,7 @@ public class PropertiesSerializerTest
     public static Map<String, Object> testMap = null;
 
     static {
-        testMap = new HashMap<String, Object>();
+        testMap = new HashMap<>();
         testMap.put("hello",   "Hello World");
         testMap.put("number",  123.456);
         testMap.put("boolean", true);

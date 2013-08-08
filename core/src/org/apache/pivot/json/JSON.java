@@ -277,7 +277,7 @@ public class JSON {
             throw new IllegalArgumentException("path is null.");
         }
 
-        ArrayList<String> keys = new ArrayList<String>();
+        ArrayList<String> keys = new ArrayList<>();
 
         int i = 0;
         int n = path.length();

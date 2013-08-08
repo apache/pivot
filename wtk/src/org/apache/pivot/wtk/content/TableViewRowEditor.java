@@ -82,7 +82,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     private RowImage rowImage = new RowImage();
 
-    private HashMap<String, Component> cellEditors = new HashMap<String, Component>();
+    private HashMap<String, Component> cellEditors = new HashMap<>();
 
     private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
         @Override

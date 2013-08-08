@@ -30,7 +30,7 @@ import org.apache.pivot.util.ImmutableIterator;
  */
 public class TaskSequence extends Task<Void>
     implements Sequence<Task<?>>, Iterable<Task<?>> {
-    private ArrayList<Task<?>> tasks = new ArrayList<Task<?>>();
+    private ArrayList<Task<?>> tasks = new ArrayList<>();
 
     public TaskSequence() {
         this(DEFAULT_EXECUTOR_SERVICE);

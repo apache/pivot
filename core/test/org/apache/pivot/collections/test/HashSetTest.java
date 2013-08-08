@@ -26,7 +26,7 @@ import org.junit.Test;
 public class HashSetTest {
     @Test
     public void basicTest() {
-        HashSet<String> set = new HashSet<String>();
+        HashSet<String> set = new HashSet<>();
 
         set.add("A");
         assertTrue(set.contains("A"));
@@ -79,12 +79,12 @@ public class HashSetTest {
 
     @Test
     public void equalsTest() {
-        HashSet<String> set1 = new HashSet<String>();
+        HashSet<String> set1 = new HashSet<>();
         set1.add("one");
         set1.add("two");
         set1.add("three");
 
-        HashSet<String> set2 = new HashSet<String>();
+        HashSet<String> set2 = new HashSet<>();
         set2.add("one");
         set2.add("two");
         set2.add("three");

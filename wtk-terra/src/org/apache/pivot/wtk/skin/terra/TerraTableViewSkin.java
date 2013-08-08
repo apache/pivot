@@ -1218,7 +1218,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                             Span selectedRange = (rowIndex > startIndex) ?
                                 new Span(startIndex, rowIndex) : new Span(rowIndex, endIndex);
 
-                            ArrayList<Span> selectedRanges = new ArrayList<Span>();
+                            ArrayList<Span> selectedRanges = new ArrayList<>();
                             selectedRanges.add(selectedRange);
 
                             tableView.setSelectedRanges(selectedRanges);

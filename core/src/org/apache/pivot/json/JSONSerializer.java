@@ -549,7 +549,7 @@ public class JSONSerializer implements Serializer<Object> {
 
         if (typeArgument == Object.class) {
             // Return the default sequence and item types
-            sequence = new ArrayList<Object>();
+            sequence = new ArrayList<>();
             itemType = Object.class;
         } else {
             // Determine the item type from generic parameters
@@ -661,7 +661,7 @@ public class JSONSerializer implements Serializer<Object> {
 
         if (typeArgument == Object.class) {
             // Return the default dictionary and value types
-            dictionary = new HashMap<String, Object>();
+            dictionary = new HashMap<>();
             valueType = Object.class;
         } else {
             // Determine the value type from generic parameters

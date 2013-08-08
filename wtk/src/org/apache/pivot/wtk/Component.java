@@ -637,7 +637,7 @@ public abstract class Component implements ConstrainedVisual {
     private boolean visible = true;
 
     // The component's decorators
-    private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
+    private ArrayList<Decorator> decorators = new ArrayList<>();
     private DecoratorSequence decoratorSequence = new DecoratorSequence();
 
     // The component's enabled flag
@@ -671,7 +671,7 @@ public abstract class Component implements ConstrainedVisual {
     private StyleDictionary styleDictionary = new StyleDictionary();
 
     // User data
-    private HashMap<String, Object> userData = new HashMap<String, Object>();
+    private HashMap<String, Object> userData = new HashMap<>();
     private UserDataDictionary userDataDictionary = new UserDataDictionary();
 
     // Container attributes
@@ -696,9 +696,8 @@ public abstract class Component implements ConstrainedVisual {
     private static Component focusedComponent = null;
 
     // Typed and named styles
-    private static HashMap<Class<? extends Component>, Map<String, ?>> typedStyles =
-        new HashMap<Class<? extends Component>, Map<String,?>>();
-    private static HashMap<String, Map<String, ?>> namedStyles = new HashMap<String, Map<String,?>>();
+    private static HashMap<Class<? extends Component>, Map<String, ?>> typedStyles = new HashMap<>();
+    private static HashMap<String, Map<String, ?>> namedStyles = new HashMap<>();
 
     // Class event listeners
     private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
@@ -769,7 +768,7 @@ public abstract class Component implements ConstrainedVisual {
         skin.install(this);
 
         // Apply any defined type styles
-        LinkedList<Class<?>> styleTypes = new LinkedList<Class<?>>();
+        LinkedList<Class<?>> styleTypes = new LinkedList<>();
 
         Class<?> type = getClass();
         while (type != Object.class) {
@@ -2719,7 +2718,7 @@ public abstract class Component implements ConstrainedVisual {
     @SuppressWarnings("unchecked")
     public <T extends Enum<T>> Object setAttribute(T key, Object value) {
         if (attributes == null) {
-            attributes = new HashMap<T, Object>();
+            attributes = new HashMap<>();
         }
 
         Object previousValue;

@@ -65,7 +65,7 @@ public class Pivot811 extends Application.Adapter {
         boxPane.add(scrollPane);
 
         final ListView listView = new ListView();
-        List<String> listData = new ArrayList<String>();
+        List<String> listData = new ArrayList<>();
         for (int i = 0; i < 50; ++i) {
             listData.add("List Item " + i);
         }

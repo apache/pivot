@@ -572,7 +572,7 @@ public class TextArea extends Component {
         }
     }
 
-    private ArrayList<Paragraph> paragraphs = new ArrayList<Paragraph>();
+    private ArrayList<Paragraph> paragraphs = new ArrayList<>();
     private ParagraphSequence paragraphSequence = new ParagraphSequence();
 
     private int characterCount = 0;
@@ -589,7 +589,7 @@ public class TextArea extends Component {
     private BindType textBindType = BindType.BOTH;
     private TextBindMapping textBindMapping = null;
 
-    private LinkedList<Edit> editHistory = new LinkedList<Edit>();
+    private LinkedList<Edit> editHistory = new LinkedList<>();
 
     private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
     private TextAreaContentListenerList textAreaContentListeners = new TextAreaContentListenerList();
@@ -723,7 +723,7 @@ public class TextArea extends Component {
         }
 
         // Construct the paragraph list
-        ArrayList<Paragraph> paragraphsLocal = new ArrayList<Paragraph>();
+        ArrayList<Paragraph> paragraphsLocal = new ArrayList<>();
         int characterCountLocal = 0;
 
         Paragraph paragraph = new Paragraph();

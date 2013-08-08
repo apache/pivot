@@ -58,7 +58,7 @@ public class Pivot714 extends Application.Adapter {
 
         final ListButton motif = (ListButton)bxmlSerializer.getNamespace().get("motif");
 
-        ArrayList<String> al = new ArrayList<String>();
+        ArrayList<String> al = new ArrayList<>();
         al.add("One");
         al.add("Two");
         motif.setListData(al);

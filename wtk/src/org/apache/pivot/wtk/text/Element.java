@@ -88,7 +88,7 @@ public abstract class Element extends Node
     }
 
     private int characterCount = 0;
-    private ArrayList<Node> nodes = new ArrayList<Node>();
+    private ArrayList<Node> nodes = new ArrayList<>();
     private java.awt.Font font;
     private Color foregroundColor;
     private Color backgroundColor;
@@ -527,7 +527,7 @@ public abstract class Element extends Node
             Element element = (Element)node;
             path = element.getPathAt(offset - element.getOffset());
         } else {
-            path = new ArrayList<Integer>();
+            path = new ArrayList<>();
         }
 
         path.insert(index, 0);

@@ -58,7 +58,7 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
     private int rowOffset = 0;
 
     private boolean valid = false;
-    private ArrayList<Row> rows = new ArrayList<Row>();
+    private ArrayList<Row> rows = new ArrayList<>();
 
     private static final int PARAGRAPH_TERMINATOR_WIDTH = 2;
 
@@ -194,7 +194,7 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
         // TODO Validate from known invalid offset rather than 0, so we don't need to
         // recalculate all glyph vectors
         if (!valid) {
-            rows = new ArrayList<Row>();
+            rows = new ArrayList<>();
             width = 0;
             height = 0;
 

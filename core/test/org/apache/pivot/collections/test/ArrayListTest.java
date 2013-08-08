@@ -26,7 +26,7 @@ import org.junit.Test;
 public class ArrayListTest {
     @Test
     public void basicTest() {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.insert("B", 0);
         list.insert("C", 1);
         list.insert("D", 2);

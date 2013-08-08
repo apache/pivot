@@ -34,7 +34,7 @@ public class TextInputs extends Window implements Bindable {
 
     public TextInputs() {
         // Populate the lookup values, ensuring that they are sorted
-        states = new ArrayList<String>();
+        states = new ArrayList<>();
         states.setComparator(String.CASE_INSENSITIVE_ORDER);
 
         states.add("Alabama");

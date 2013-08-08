@@ -56,7 +56,7 @@ public class ListViewSelectionTest extends Application.Adapter {
 
     @Override
     public void startup(Display display, Map<String, String> properties) {
-        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+        ArrayList<Span> selectedRanges = new ArrayList<>();
         selectedRanges.add(new Span(0, 0));
 
         listView.setSelectedRanges(selectedRanges);

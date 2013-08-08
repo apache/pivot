@@ -38,7 +38,7 @@ public class ExpenseServlet extends QueryServlet {
     private static final long serialVersionUID = 0;
 
     private List<Expense> expenses = null;
-    private HashMap<Integer, Expense> expenseMap = new HashMap<Integer, Expense>();
+    private HashMap<Integer, Expense> expenseMap = new HashMap<>();
 
     private static int nextID = 0;
 

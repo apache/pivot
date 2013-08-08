@@ -232,7 +232,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         Label label = (Label)getComponent();
         String text = label.getText();
 
-        glyphVectors = new ArrayList<GlyphVector>();
+        glyphVectors = new ArrayList<>();
         textHeight = 0;
 
         if (text != null) {

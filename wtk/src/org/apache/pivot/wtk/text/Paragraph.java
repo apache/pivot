@@ -94,7 +94,7 @@ public class Paragraph extends Block {
         if (offset < super.getCharacterCount()) {
             path = super.getPathAt(offset);
         } else {
-            path = new ArrayList<Integer>();
+            path = new ArrayList<>();
         }
 
         return path;

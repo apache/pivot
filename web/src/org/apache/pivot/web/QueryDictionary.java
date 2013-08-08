@@ -29,7 +29,7 @@ import org.apache.pivot.collections.HashMap;
  */
 public final class QueryDictionary implements Dictionary<String, String>, Iterable<String> {
     private boolean caseSensitiveKeys;
-    private HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+    private HashMap<String, ArrayList<String>> map = new HashMap<>();
 
     public QueryDictionary(boolean caseSensitiveKeys) {
         this.caseSensitiveKeys = caseSensitiveKeys;
@@ -71,7 +71,7 @@ public final class QueryDictionary implements Dictionary<String, String>, Iterab
             searchKey = searchKey.toLowerCase();
         }
 
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add(value);
 
         ArrayList<String> previous = map.put(searchKey, list);

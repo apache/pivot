@@ -435,7 +435,7 @@ public class ListView extends Component {
     private SelectMode selectMode = SelectMode.SINGLE;
 
     private boolean checkmarksEnabled = false;
-    private ArrayList<Integer> checkedIndexes = new ArrayList<Integer>();
+    private ArrayList<Integer> checkedIndexes = new ArrayList<>();
 
     private Filter<?> disabledItemFilter = null;
     private Filter<?> disabledCheckmarkFilter = null;
@@ -797,7 +797,7 @@ public class ListView extends Component {
      * @param end
      */
     public void setSelectedRange(int start, int end) {
-        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+        ArrayList<Span> selectedRanges = new ArrayList<>();
         selectedRanges.add(new Span(start, end));
 
         setSelectedRanges(selectedRanges);
@@ -895,7 +895,7 @@ public class ListView extends Component {
     @SuppressWarnings("unchecked")
     private static Sequence<Span> parseSelectedRanges(String json)
         throws SerializationException {
-        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+        ArrayList<Span> selectedRanges = new ArrayList<>();
 
         List<?> list = JSONSerializer.parseList(json);
         for (Object item : list) {
@@ -1111,7 +1111,7 @@ public class ListView extends Component {
     }
 
     public Sequence<?> getSelectedItems() {
-        ArrayList<Object> items = new ArrayList<Object>();
+        ArrayList<Object> items = new ArrayList<>();
 
         for (int i = 0, n = rangeSelection.getLength(); i < n; i++) {
             Span range = rangeSelection.get(i);
@@ -1131,7 +1131,7 @@ public class ListView extends Component {
             throw new IllegalArgumentException();
         }
 
-        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+        ArrayList<Span> selectedRanges = new ArrayList<>();
 
         for (int i = 0, n = items.getLength(); i < n; i++) {
             Object item = items.get(i);
@@ -1255,7 +1255,7 @@ public class ListView extends Component {
      */
     public void clearCheckmarks() {
         ArrayList<Integer> checkedIndexesLocal = this.checkedIndexes;
-        this.checkedIndexes = new ArrayList<Integer>();
+        this.checkedIndexes = new ArrayList<>();
 
         for (Integer index : checkedIndexesLocal) {
             listViewItemStateListeners.itemCheckedChanged(this, index);
@@ -1700,7 +1700,7 @@ public class ListView extends Component {
                 // Bind using selected items key
                 if (selectedItemsKey != null
                     && selectedItemsBindType != BindType.LOAD) {
-                    ArrayList<Object> items = new ArrayList<Object>();
+                    ArrayList<Object> items = new ArrayList<>();
 
                     Sequence<Span> selectedRanges = getSelectedRanges();
                     for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
@@ -1737,7 +1737,7 @@ public class ListView extends Component {
             if (checkedItemsKey != null
                 && JSON.containsKey(context, checkedItemsKey)
                 && checkedItemsBindType != BindType.LOAD) {
-                ArrayList<Object> items = new ArrayList<Object>();
+                ArrayList<Object> items = new ArrayList<>();
 
                 for (int i = 0, n = checkedIndexes.getLength(); i < n; i++) {
                     Integer index = checkedIndexes.get(i);

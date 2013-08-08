@@ -153,7 +153,7 @@ public class CSVSerializerTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testBasicWriteObject() throws IOException {
-        List<Object> items = new ArrayList<Object>();
+        List<Object> items = new ArrayList<>();
         items.add(new HashMap<String, Object>(
             new Dictionary.Pair<String, Object>("A", "a1"),
             new Dictionary.Pair<String, Object>("B", "b1"),
@@ -178,7 +178,7 @@ public class CSVSerializerTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testQuotedCommaWriteObject() throws IOException {
-        List<Object> items = new ArrayList<Object>();
+        List<Object> items = new ArrayList<>();
         items.add(new HashMap<String, Object>(
             new Dictionary.Pair<String, Object>("A", "a"),
             new Dictionary.Pair<String, Object>("B", ",b,"),
@@ -198,7 +198,7 @@ public class CSVSerializerTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testQuotedQuoteWriteObject() throws IOException {
-        List<Object> items = new ArrayList<Object>();
+        List<Object> items = new ArrayList<>();
         items.add(new HashMap<String, Object>(
             new Dictionary.Pair<String, Object>("A", "a"),
             new Dictionary.Pair<String, Object>("B", "\"b\""),
@@ -218,7 +218,7 @@ public class CSVSerializerTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testQuotedNewlineWriteObject() throws IOException {
-        List<Object> items = new ArrayList<Object>();
+        List<Object> items = new ArrayList<>();
         items.add(new HashMap<String, Object>(
             new Dictionary.Pair<String, Object>("A", "a"),
             new Dictionary.Pair<String, Object>("B", "\nb\n"),

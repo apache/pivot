@@ -143,7 +143,7 @@ public class StockTrackerWindow extends Window implements Bindable {
 
     public StockTrackerWindow() {
         // Create the symbol list
-        symbols = new ArrayList<String>();
+        symbols = new ArrayList<>();
 
         // Set a comparator on the symbol list so the entries are sorted
         symbols.setComparator(new Comparator<String>() {

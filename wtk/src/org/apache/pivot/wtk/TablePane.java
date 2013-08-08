@@ -45,7 +45,7 @@ public class TablePane extends Container {
         private boolean relative;
         private boolean highlighted;
 
-        private ArrayList<Component> cells = new ArrayList<Component>();
+        private ArrayList<Component> cells = new ArrayList<>();
 
         private TablePane tablePane = null;
 
@@ -766,8 +766,8 @@ public class TablePane extends Container {
             throw new IllegalArgumentException("columns is null");
         }
 
-        this.rows = new ArrayList<Row>();
-        this.columns = new ArrayList<Column>(columns);
+        this.rows = new ArrayList<>();
+        this.columns = new ArrayList<>(columns);
 
         installSkin(TablePane.class);
     }

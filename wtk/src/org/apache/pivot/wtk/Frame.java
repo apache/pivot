@@ -88,7 +88,7 @@ public class Frame extends Window {
     @Override
     protected void descendantGainedFocus(Component descendant, Component previousFocusedComponent) {
         if (menuBar != null) {
-            LinkedList<Component> path = new LinkedList<Component>();
+            LinkedList<Component> path = new LinkedList<>();
 
             Component ancestor = descendant;
             while (!(ancestor instanceof Display)) {
@@ -111,7 +111,7 @@ public class Frame extends Window {
     @Override
     protected void descendantLostFocus(Component descendant) {
         if (menuBar != null) {
-            LinkedList<Component> path = new LinkedList<Component>();
+            LinkedList<Component> path = new LinkedList<>();
 
             Component ancestor = descendant;
             while (!(ancestor instanceof Display)) {

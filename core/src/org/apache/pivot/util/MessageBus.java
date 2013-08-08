@@ -23,7 +23,7 @@ import org.apache.pivot.collections.HashMap;
  */
 public class MessageBus {
     private static HashMap<Class<?>, ListenerList<MessageBusListener<?>>> messageTopics
-        = new HashMap<Class<?>, ListenerList<MessageBusListener<?>>>();
+        = new HashMap<>();
 
     /**
      * Subscribes a listener to a message topic.

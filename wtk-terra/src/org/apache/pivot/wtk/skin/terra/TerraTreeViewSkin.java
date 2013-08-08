@@ -422,7 +422,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     private BranchInfo rootBranchInfo = null;
-    private List<NodeInfo> visibleNodes = new ArrayList<NodeInfo>();
+    private List<NodeInfo> visibleNodes = new ArrayList<>();
 
     private NodeInfo highlightedNode = null;
     private Path selectPath = null;
@@ -1308,7 +1308,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * The callback to execute on each node info object
      */
     protected final void accept(NodeInfoVisitor visitor) {
-        Sequence<NodeInfo> nodes = new ArrayList<NodeInfo>();
+        Sequence<NodeInfo> nodes = new ArrayList<>();
         nodes.add(rootBranchInfo);
 
         while (nodes.getLength() > 0) {
@@ -1349,7 +1349,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
 
         if (insertIndex >= 0) {
-            Sequence<NodeInfo> nodes = new ArrayList<NodeInfo>();
+            Sequence<NodeInfo> nodes = new ArrayList<>();
 
             // The parent branch's children are the baseline nodes to make
             // visible
@@ -2081,7 +2081,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             // The check state of all *branch* nodes may have changed, so we
             // need to update the cached check state of all BranchNode
             // instances in our hierarchy
-            Sequence<NodeInfo> nodes = new ArrayList<NodeInfo>();
+            Sequence<NodeInfo> nodes = new ArrayList<>();
             nodes.add(rootBranchInfo);
 
             while (nodes.getLength() > 0) {

@@ -20,7 +20,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 
 public class SampleBean2Dictionary implements Dictionary<String, SampleBean2> {
-    private HashMap<String, SampleBean2> values = new HashMap<String, SampleBean2>();
+    private HashMap<String, SampleBean2> values = new HashMap<>();
 
     @Override
     public SampleBean2 get(String key) {

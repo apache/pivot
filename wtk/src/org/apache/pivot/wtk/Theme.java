@@ -56,7 +56,7 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  */
 public abstract class Theme {
     protected HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap =
-        new HashMap<Class<? extends Component>, Class<? extends Skin>>();
+        new HashMap<>();
 
     private static Theme theme = null;
 

@@ -36,7 +36,7 @@ public class SynchronizedStackTest {
 
     private static void testSynchronizedStack(Stack<String> stack) {
         final SynchronizedStack<String> synchronizedStack =
-            new SynchronizedStack<String>(stack);
+            new SynchronizedStack<>(stack);
 
         Task<Void> testTask = new Task<Void>() {
             @Override

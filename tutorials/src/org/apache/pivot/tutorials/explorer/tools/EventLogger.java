@@ -193,13 +193,13 @@ public class EventLogger extends Container {
 
     private Component source = null;
 
-    private HashMap<Class<?>, Object> eventListenerProxies = new HashMap<Class<?>, Object>();
+    private HashMap<Class<?>, Object> eventListenerProxies = new HashMap<>();
     private LoggerInvocationHandler loggerInvocationHandler = new LoggerInvocationHandler();
 
-    private HashSet<Method> declaredEvents = new HashSet<Method>();
+    private HashSet<Method> declaredEvents = new HashSet<>();
     private DeclaredEventGroup declaredEventGroup = new DeclaredEventGroup();
 
-    private HashSet<Method> includeEvents = new HashSet<Method>();
+    private HashSet<Method> includeEvents = new HashSet<>();
     private IncludeEventGroup includeEventGroup = new IncludeEventGroup();
 
     private EventLoggerListenerList eventLoggerListeners = new EventLoggerListenerList();

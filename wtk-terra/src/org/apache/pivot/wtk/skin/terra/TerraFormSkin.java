@@ -210,8 +210,8 @@ public class TerraFormSkin extends ContainerSkin
         }
     }
 
-    private ArrayList<Separator> separators = new ArrayList<Separator>();
-    private ArrayList<ArrayList<Label>> labels = new ArrayList<ArrayList<Label>>();
+    private ArrayList<Separator> separators = new ArrayList<>();
+    private ArrayList<ArrayList<Label>> labels = new ArrayList<>();
 
     private Label flagMessageLabel = new Label();
     private Window flagMessageWindow = new Window(flagMessageLabel);
@@ -1197,7 +1197,7 @@ public class TerraFormSkin extends ContainerSkin
         form.add(separator);
 
         // Insert label list
-        ArrayList<Label> sectionLabels = new ArrayList<Label>();
+        ArrayList<Label> sectionLabels = new ArrayList<>();
         labels.insert(sectionLabels, index);
 
         // Insert fields

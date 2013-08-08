@@ -86,8 +86,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         public Object value;
 
         public String id = null;
-        public final HashMap<String, String> properties = new HashMap<String, String>();
-        public final LinkedList<Attribute> attributes = new LinkedList<Attribute>();
+        public final HashMap<String, String> properties = new HashMap<>();
+        public final LinkedList<Attribute> attributes = new LinkedList<>();
 
         public Element(Element parent, Type type, String name, Class<?> propertyClass, Object value) {
             this.parent = parent;
@@ -233,7 +233,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;
 
-    private Map<String, Object> namespace = new HashMap<String, Object>();
+    private Map<String, Object> namespace = new HashMap<>();
     private URL location = null;
     private Resources resources = null;
 
@@ -244,11 +244,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private String language = null;
     private int nextID = 0;
 
-    private LinkedList<Attribute> namespaceBindingAttributes = new LinkedList<Attribute>();
+    private LinkedList<Attribute> namespaceBindingAttributes = new LinkedList<>();
 
-    private static HashMap<String, String> fileExtensions = new HashMap<String, String>();
+    private static HashMap<String, String> fileExtensions = new HashMap<>();
     private static HashMap<String, Class<? extends Serializer<?>>> mimeTypes =
-        new HashMap<String, Class<? extends Serializer<?>>>();
+        new HashMap<>();
 
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
@@ -357,7 +357,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             @Override
             public java.util.Set<String> keySet() {
-                java.util.HashSet<String> keySet = new java.util.HashSet<String>();
+                java.util.HashSet<String> keySet = new java.util.HashSet<>();
                 for (String key : namespace) {
                     keySet.add(key);
                 }
@@ -367,7 +367,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             @Override
             public java.util.Set<Entry<String, Object>> entrySet() {
-                java.util.HashMap<String, Object> hashMap = new java.util.HashMap<String, Object>();
+                java.util.HashMap<String, Object> hashMap = new java.util.HashMap<>();
                 for (String key : namespace) {
                     hashMap.put(key, namespace.get(key));
                 }
@@ -382,7 +382,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             @Override
             public Collection<Object> values() {
-                java.util.ArrayList<Object> values = new java.util.ArrayList<Object>();
+                java.util.ArrayList<Object> values = new java.util.ArrayList<>();
                 for (String key : namespace) {
                     values.add(namespace.get(key));
                 }

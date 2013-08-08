@@ -59,7 +59,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     protected Form form = new Form();
 
     // Maps key to corresponding control component
-    private HashMap<String, Component> controls = new HashMap<String, Component>();
+    private HashMap<String, Component> controls = new HashMap<>();
 
     @Override
     public void install(Component component) {
@@ -421,7 +421,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         final String key, Class<? extends Enum<?>> type, Form.Section section) {
         Enum<?> value = (Enum<?>)dictionary.get(key);
 
-        ArrayList<Object> listData = new ArrayList<Object>();
+        ArrayList<Object> listData = new ArrayList<>();
         listData.add(null);
 
         Enum<?>[] enumConstants = type.getEnumConstants();

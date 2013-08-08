@@ -425,7 +425,7 @@ public class TextPaneDemo extends Application.Adapter {
         // I can't apply the styles while iterating over the tree, because I
         // need to update the tree.
         // So first collect a list of all the nodes in the tree.
-        List<Node> nodeList = new ArrayList<Node>();
+        List<Node> nodeList = new ArrayList<>();
         collectNodes(document, nodeList);
 
         final int selectionStart = textPane.getSelectionStart();

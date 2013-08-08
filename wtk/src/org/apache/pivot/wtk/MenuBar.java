@@ -283,7 +283,7 @@ public class MenuBar extends Container {
         }
     }
 
-    private ArrayList<Item> items = new ArrayList<Item>();
+    private ArrayList<Item> items = new ArrayList<>();
     private ItemSequence itemSequence = new ItemSequence();
 
     private Item activeItem = null;

@@ -237,7 +237,7 @@ public class RadioButtonGroup extends ButtonGroup {
     };
 
     private final FirstCharacterFilter firstCharacterFilter = new FirstCharacterFilter();
-    private final List<Button> buttonOrder = new ArrayList<Button>();
+    private final List<Button> buttonOrder = new ArrayList<>();
     private boolean circular = false;
     private boolean intraGroupFocusTransferEnabled = false;
 
@@ -385,7 +385,7 @@ public class RadioButtonGroup extends ButtonGroup {
      */
     public Sequence<Button> remove(int index, int count) {
         int countMutable = count;
-        Sequence<Button> removed = new ArrayList<Button>();
+        Sequence<Button> removed = new ArrayList<>();
         while (countMutable-- > 0) {
             Button button = get(index);
             boolean result = this.remove(button);

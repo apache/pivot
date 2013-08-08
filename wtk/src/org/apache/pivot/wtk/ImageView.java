@@ -139,7 +139,7 @@ public class ImageView extends Component {
     // Maintains a mapping of image URL to image views that should be notified when
     // an asynchronously loaded image is available
     private static HashMap<java.net.URI, ArrayList<ImageView>> loadMap =
-        new HashMap<java.net.URI, ArrayList<ImageView>>();
+        new HashMap<>();
 
     /**
      * Creates an empty image view.

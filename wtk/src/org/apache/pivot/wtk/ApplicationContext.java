@@ -744,7 +744,7 @@ public abstract class ApplicationContext {
                 }
             };
 
-            java.util.List<InputEvent> inputEvents = new java.util.ArrayList<InputEvent>();
+            java.util.List<InputEvent> inputEvents = new java.util.ArrayList<>();
             inputEvents.add(mouseEvent);
 
             // TODO If current user drop action is supported by drag source, use it
@@ -1632,12 +1632,12 @@ public abstract class ApplicationContext {
     }
 
     protected static URL origin = null;
-    protected static ArrayList<Display> displays = new ArrayList<Display>();
-    protected static ArrayList<Application> applications = new ArrayList<Application>();
+    protected static ArrayList<Display> displays = new ArrayList<>();
+    protected static ArrayList<Application> applications = new ArrayList<>();
 
     private static Timer timer = null;
 
-    private static HashMap<URI, Object> resourceCache = new HashMap<URI, Object>();
+    private static HashMap<URI, Object> resourceCache = new HashMap<>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
     private static Version jvmVersion = null;

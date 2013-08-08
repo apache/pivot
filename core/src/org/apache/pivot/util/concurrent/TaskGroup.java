@@ -30,7 +30,7 @@ import org.apache.pivot.util.ImmutableIterator;
  */
 public class TaskGroup extends Task<Void>
     implements Group<Task<?>>, Iterable<Task<?>> {
-    private HashSet<Task<?>> tasks = new HashSet<Task<?>>();
+    private HashSet<Task<?>> tasks = new HashSet<>();
     private int complete = 0;
 
     public TaskGroup() {

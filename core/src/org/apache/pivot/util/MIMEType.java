@@ -26,7 +26,7 @@ import org.apache.pivot.collections.HashMap;
  */
 public class MIMEType implements Dictionary<String, String>, Iterable<String> {
     private String baseType;
-    private HashMap<String, String> parameters = new HashMap<String, String>();
+    private HashMap<String, String> parameters = new HashMap<>();
 
     public MIMEType(String baseType) {
         this.baseType = baseType;

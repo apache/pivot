@@ -125,7 +125,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
      * developers to define their multi-cell renderer in BXML.
      */
     private class RendererMappingSequence implements Sequence<RendererMapping> {
-        private ArrayList<RendererMapping> mappings = new ArrayList<RendererMapping>();
+        private ArrayList<RendererMapping> mappings = new ArrayList<>();
 
         @Override
         public int add(RendererMapping item) {
@@ -235,8 +235,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     private int width;
     private int height;
 
-    private HashMap<Class<?>, TableView.CellRenderer> cellRenderers =
-        new HashMap<Class<?>, TableView.CellRenderer>();
+    private HashMap<Class<?>, TableView.CellRenderer> cellRenderers = new HashMap<>();
 
     private TableView.CellRenderer defaultRenderer = new TableViewCellRenderer();
     private TableView.CellRenderer currentRenderer = defaultRenderer;

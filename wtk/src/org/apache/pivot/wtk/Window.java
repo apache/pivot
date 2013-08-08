@@ -437,15 +437,15 @@ public class Window extends Container {
     }
 
     private Window owner = null;
-    private ArrayList<Window> ownedWindows = new ArrayList<Window>();
+    private ArrayList<Window> ownedWindows = new ArrayList<>();
 
-    private ArrayList<ActionMapping> actionMappings = new ArrayList<ActionMapping>();
+    private ArrayList<ActionMapping> actionMappings = new ArrayList<>();
     private ActionMappingSequence actionMappingSequence = new ActionMappingSequence();
 
-    private HashMap<Keyboard.KeyStroke, Action> actionMap = new HashMap<Keyboard.KeyStroke, Action>();
+    private HashMap<Keyboard.KeyStroke, Action> actionMap = new HashMap<>();
 
     private String title = null;
-    private ArrayList<Image> iconImageList = new ArrayList<Image>();
+    private ArrayList<Image> iconImageList = new ArrayList<>();
     private IconImageSequence iconImageSequence = new IconImageSequence();
     private Component content = null;
     private Component focusDescendant = null;

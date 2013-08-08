@@ -74,7 +74,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     private transient int length;
 
     private ListListenerList<CalendarDate> listListeners =
-        new ListListenerList<CalendarDate>();
+        new ListListenerList<>();
 
     /**
      * Creates a new <tt>CalendarDateSpinnerData</tt> bounded from

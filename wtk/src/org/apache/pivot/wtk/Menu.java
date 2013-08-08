@@ -252,7 +252,7 @@ public class Menu extends Container {
         private Menu menu = null;
 
         private String name = null;
-        private ArrayList<Item> items = new ArrayList<Item>();
+        private ArrayList<Item> items = new ArrayList<>();
 
         private SectionListenerList sectionListeners = new SectionListenerList();
 
@@ -510,7 +510,7 @@ public class Menu extends Container {
 
     private Item item = null;
 
-    private ArrayList<Section> sections = new ArrayList<Section>();
+    private ArrayList<Section> sections = new ArrayList<>();
     private SectionSequence sectionSequence = new SectionSequence();
 
     private Item activeItem = null;

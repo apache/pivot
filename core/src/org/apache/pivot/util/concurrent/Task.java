@@ -81,7 +81,7 @@ public abstract class Task<V> {
         @Override
         public java.util.List<Runnable> shutdownNow() {
             shutdown = true;
-            return new java.util.ArrayList<Runnable>();
+            return new java.util.ArrayList<>();
         }
 
         @Override

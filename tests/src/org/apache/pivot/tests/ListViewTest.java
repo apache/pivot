@@ -33,7 +33,7 @@ public class ListViewTest extends Application.Adapter {
     public void startup(Display display, Map<String, String> properties) {
         ListView listView = new ListView();
 
-        List<String> listData = new ArrayList<String>();
+        List<String> listData = new ArrayList<>();
         listData.add("0");
         listData.add("1");
         listData.add("2");

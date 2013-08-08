@@ -53,7 +53,7 @@ class ComponentStyleInspectorSkin extends ComponentInspectorSkin {
 
             Component.StyleDictionary styles = source.getStyles();
 
-            ArrayList<String> keys = new ArrayList<String>(new Comparator<String>() {
+            ArrayList<String> keys = new ArrayList<>(new Comparator<String>() {
                 @Override
                 public int compare(String key1, String key2) {
                     return key1.compareTo(key2);

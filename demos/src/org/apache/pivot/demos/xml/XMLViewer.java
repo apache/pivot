@@ -173,11 +173,11 @@ public class XMLViewer extends Application.Adapter {
 
             // Populate the namespaces table
             ArrayList<HashMap<String, String>> namespacesTableData =
-                new ArrayList<HashMap<String, String>>();
+                new ArrayList<>();
 
             String defaultNamespaceURI = element.getDefaultNamespaceURI();
             if (defaultNamespaceURI != null) {
-                HashMap<String, String> row = new HashMap<String, String>();
+                HashMap<String, String> row = new HashMap<>();
                 row.put("prefix", "(default)");
                 row.put("uri", defaultNamespaceURI);
                 namespacesTableData.add(row);
@@ -185,7 +185,7 @@ public class XMLViewer extends Application.Adapter {
 
             Element.NamespaceDictionary namespaceDictionary = element.getNamespaces();
             for (String prefix : namespaceDictionary) {
-                HashMap<String, String> row = new HashMap<String, String>();
+                HashMap<String, String> row = new HashMap<>();
                 row.put("prefix", prefix);
                 row.put("uri", namespaceDictionary.get(prefix));
                 namespacesTableData.add(row);
@@ -195,10 +195,10 @@ public class XMLViewer extends Application.Adapter {
 
             // Populate the attributes table
             ArrayList<HashMap<String, String>> attributesTableData =
-                new ArrayList<HashMap<String, String>>();
+                new ArrayList<>();
 
             for (Element.Attribute attribute : element.getAttributes()) {
-                HashMap<String, String> row = new HashMap<String, String>();
+                HashMap<String, String> row = new HashMap<>();
 
                 String attributeName = attribute.getName();
                 row.put("name", attributeName);
@@ -221,7 +221,7 @@ public class XMLViewer extends Application.Adapter {
             promptDecorator = null;
         }
 
-        ArrayList<Element> treeData = new ArrayList<Element>();
+        ArrayList<Element> treeData = new ArrayList<>();
         treeData.add(document);
         treeView.setTreeData(treeData);
 

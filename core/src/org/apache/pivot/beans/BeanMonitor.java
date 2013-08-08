@@ -88,9 +88,9 @@ public class BeanMonitor {
 
     private Object bean = null;
 
-    private HashMap<Class<?>, Object> beanListenerProxies = new HashMap<Class<?>, Object>();
+    private HashMap<Class<?>, Object> beanListenerProxies = new HashMap<>();
     private BeanInvocationHandler invocationHandler = new BeanInvocationHandler();
-    private HashSet<String> notifyingProperties = new HashSet<String>();
+    private HashSet<String> notifyingProperties = new HashSet<>();
 
     private PropertyChangeListenerList propertyChangeListeners = new PropertyChangeListenerList();
 

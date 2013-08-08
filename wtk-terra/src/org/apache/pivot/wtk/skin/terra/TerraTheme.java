@@ -256,12 +256,12 @@ public final class TerraTheme extends Theme {
 
                 Map<String, String> messageIconNames =
                     (Map<String, String>)properties.get("messageIcons");
-                messageIcons = new HashMap<MessageType, Image>();
+                messageIcons = new HashMap<>();
                 loadMessageIcons(messageIconNames, messageIcons);
 
                 Map<String, String> smallMessageIconNames =
                     (Map<String, String>)properties.get("smallMessageIcons");
-                smallMessageIcons = new HashMap<MessageType, Image>();
+                smallMessageIcons = new HashMap<>();
                 loadMessageIcons(smallMessageIconNames, smallMessageIcons);
             } finally {
                 inputStream.close();

@@ -167,7 +167,7 @@ public class Prompt extends Sheet {
     private String message = null;
     private Component body = null;
 
-    private ArrayList<Object> options = new ArrayList<Object>();
+    private ArrayList<Object> options = new ArrayList<>();
     private OptionSequence optionSequence = new OptionSequence();
     private int selectedOptionIndex = -1;
 

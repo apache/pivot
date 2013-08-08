@@ -123,7 +123,7 @@ public abstract class Action {
 
     private ActionListenerList actionListeners = new ActionListenerList();
 
-    private static HashMap<String, Action> namedActions = new HashMap<String, Action>();
+    private static HashMap<String, Action> namedActions = new HashMap<>();
     private static NamedActionDictionary namedActionDictionary = new NamedActionDictionary();
 
     private static ActionClassListenerList actionClassListeners = new ActionClassListenerList();

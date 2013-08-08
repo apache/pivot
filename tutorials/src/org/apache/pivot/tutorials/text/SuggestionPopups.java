@@ -36,7 +36,7 @@ public class SuggestionPopups extends Window implements Bindable {
 
     public SuggestionPopups() {
         // Populate the lookup values, ensuring that they are sorted
-        states = new ArrayList<String>();
+        states = new ArrayList<>();
         states.setComparator(String.CASE_INSENSITIVE_ORDER);
 
         states.add("Alabama");
@@ -99,7 +99,7 @@ public class SuggestionPopups extends Window implements Bindable {
             @Override
             public void textInserted(TextInput textInput, int index, int count) {
                 String text = textInput.getText();
-                ArrayList<String> suggestions = new ArrayList<String>();
+                ArrayList<String> suggestions = new ArrayList<>();
 
                 for (String state : states) {
                     if (state.toUpperCase().startsWith(text.toUpperCase())) {

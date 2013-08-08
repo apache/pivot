@@ -37,7 +37,7 @@ import org.apache.pivot.wtk.text.Node;
  */
 abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
     implements Sequence<TextPaneSkinNodeView>, Iterable<TextPaneSkinNodeView>, ElementListener {
-    private ArrayList<TextPaneSkinNodeView> nodeViews = new ArrayList<TextPaneSkinNodeView>();
+    private ArrayList<TextPaneSkinNodeView> nodeViews = new ArrayList<>();
     private int skinX = 0;
     private int skinY = 0;
 

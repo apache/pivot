@@ -38,7 +38,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         public int y = 0;
         public int width = 0;
         public int height = 0;
-        public ArrayList<RowSegment> rowSegments = new ArrayList<RowSegment>();
+        public ArrayList<RowSegment> rowSegments = new ArrayList<>();
     }
 
     private static class RowSegment {
@@ -68,7 +68,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         // Break the views into multiple rows
 
         Paragraph paragraph = (Paragraph)getNode();
-        rows = new ArrayList<Row>();
+        rows = new ArrayList<>();
         int offset = 0;
 
         ParagraphChildLayouter layouter = new ParagraphChildLayouter();
@@ -153,7 +153,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         // Break the views into multiple rows
 
         Paragraph paragraph = (Paragraph)getNode();
-        ArrayList<Row> rowsLocal = new ArrayList<Row>();
+        ArrayList<Row> rowsLocal = new ArrayList<>();
         int offset = 0;
 
         ParagraphChildLayouter layouter = new ParagraphChildLayouter();

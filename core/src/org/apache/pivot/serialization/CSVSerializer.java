@@ -73,7 +73,7 @@ public class CSVSerializer implements Serializer<List<?>> {
     private Charset charset;
     private Type itemType;
 
-    private ArrayList<String> keys = new ArrayList<String>();
+    private ArrayList<String> keys = new ArrayList<>();
 
     private boolean writeKeys = false;
     private boolean verbose = false;
@@ -260,7 +260,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         }
 
         // Create the list and notify the listeners
-        ArrayList<Object> items = new ArrayList<Object>();
+        ArrayList<Object> items = new ArrayList<>();
 
         if (csvSerializerListeners != null) {
             csvSerializerListeners.beginList(this, items);

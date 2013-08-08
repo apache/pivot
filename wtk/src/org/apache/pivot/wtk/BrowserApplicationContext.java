@@ -123,7 +123,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 }
 
                 // Load properties specified in the startup properties parameter
-                HostApplet.this.startupProperties = new HashMap<String, String>();
+                HostApplet.this.startupProperties = new HashMap<>();
 
                 String startupPropertiesParameter = getParameter(STARTUP_PROPERTIES_PARAMETER);
                 if (startupPropertiesParameter != null) {
@@ -349,7 +349,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
         }
     }
 
-    private static ArrayList<HostApplet> hostApplets = new ArrayList<HostApplet>();
+    private static ArrayList<HostApplet> hostApplets = new ArrayList<>();
 
     public static boolean isActive() {
         return (hostApplets.getLength() > 0);

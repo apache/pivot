@@ -1135,7 +1135,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
     @Override
     public void rootDirectoryChanged(VFSBrowser fileBrowser, FileObject previousRootDirectory) {
-        ArrayList<FileObject> path = new ArrayList<FileObject>();
+        ArrayList<FileObject> path = new ArrayList<>();
 
         FileSystemManager manager = fileBrowser.getManager();
         FileObject rootDirectory = fileBrowser.getRootDirectory();
@@ -1158,7 +1158,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 /*            try {
                 FileObject[] roots = new FileObject[1];
                 roots[0] = manager.resolveFile(manager.getBaseFile().getName().getRoot().getPath());
-                drives = new ArrayList<FileObject>();
+                drives = new ArrayList<>();
                 for (int i = 0; i < roots.length; i++) {
                     FileObject root = roots[i];
                     if (root.exists()) {
@@ -1237,7 +1237,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         if (!updatingSelection) {
             Sequence<FileObject> selectedFiles = fileBrowser.getSelectedFiles();
 
-            ArrayList<Span> selectedRanges = new ArrayList<Span>();
+            ArrayList<Span> selectedRanges = new ArrayList<>();
             for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
                 FileObject selectedFile = selectedFiles.get(i);
 

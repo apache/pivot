@@ -58,8 +58,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
     @BXML private PushButton resetPaletteButton = null;
     @BXML private Border sampleContentBorder = null;
 
-    private ArrayList<ColorChooserButton> colorChooserButtons = new ArrayList<ColorChooserButton>();
-    private ArrayList<Color> themeOriginalColors = new ArrayList<Color>(8);
+    private ArrayList<ColorChooserButton> colorChooserButtons = new ArrayList<>();
+    private ArrayList<Color> themeOriginalColors = new ArrayList<>(8);
 
 
     @Override

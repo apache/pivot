@@ -206,7 +206,7 @@ public class ExpensesWindow extends Window implements Bindable {
             public void sheetClosed(Sheet sheet) {
                 if (sheet.getResult()) {
                     // Get the expense data from the sheet
-                    final HashMap<String, Object> expense = new HashMap<String, Object>();
+                    final HashMap<String, Object> expense = new HashMap<>();
                     expenseSheet.store(expense);
 
                     // POST expense to server and then add to table
@@ -259,7 +259,7 @@ public class ExpensesWindow extends Window implements Bindable {
             public void sheetClosed(Sheet sheet) {
                 if (sheet.getResult()) {
                     // Get the expense data from the sheet
-                    final HashMap<String, Object> expenseLocal = new HashMap<String, Object>();
+                    final HashMap<String, Object> expenseLocal = new HashMap<>();
                     expenseSheet.store(expenseLocal);
 
                     // PUT expense to server and then update table

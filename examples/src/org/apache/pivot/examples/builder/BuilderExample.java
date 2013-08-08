@@ -43,7 +43,7 @@ public class BuilderExample extends Application.Adapter {
     }
 
     private static MyWindow buildWindow() {
-        final HashMap<String, Object> namespace = new HashMap<String, Object>();
+        final HashMap<String, Object> namespace = new HashMap<>();
 
         return new MyWindow() {
             {   setContent(new TabPane() {

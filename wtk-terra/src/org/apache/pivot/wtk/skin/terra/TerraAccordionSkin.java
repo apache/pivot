@@ -283,7 +283,7 @@ public class TerraAccordionSkin extends ContainerSkin
     }
 
     private ButtonGroup panelHeaderGroup = new ButtonGroup();
-    private ArrayList<PanelHeader> panelHeaders = new ArrayList<PanelHeader>();
+    private ArrayList<PanelHeader> panelHeaders = new ArrayList<>();
 
     private Color borderColor;
     private Insets padding;

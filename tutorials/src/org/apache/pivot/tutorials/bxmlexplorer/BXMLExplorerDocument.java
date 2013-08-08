@@ -212,7 +212,7 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
                     + " which is not a subtype of Component");
             }
             // create an inverse map so we can IDs for widgets
-            widgetToID = new HashMap<Object, String>();
+            widgetToID = new HashMap<>();
             for (String key : serializer.getNamespace()) {
                 widgetToID.put(serializer.getNamespace().get(key), key);
             }
@@ -221,7 +221,7 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
                 obj = new FakeWindow((Window) obj);
             }
             // create the explorer tree
-            componentToTreeNode = new HashMap<Object, TreeNode>();
+            componentToTreeNode = new HashMap<>();
             // the root node is not visible
             final TreeBranch rootbranch = new TreeBranch("");
             rootbranch.add(analyseObjectTree(obj));

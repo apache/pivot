@@ -42,7 +42,7 @@ public class SheetExampleWindow extends Window implements Bindable {
         editGreetingButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                HashMap<String, Object> context = new HashMap<String, Object>();
+                HashMap<String, Object> context = new HashMap<>();
                 store(context);
                 editGreetingSheet.load(context);
 
@@ -50,7 +50,7 @@ public class SheetExampleWindow extends Window implements Bindable {
                     @Override
                     public void sheetClosed(Sheet sheet) {
                         if (sheet.getResult()) {
-                            HashMap<String, Object> contextLocal = new HashMap<String, Object>();
+                            HashMap<String, Object> contextLocal = new HashMap<>();
                             editGreetingSheet.store(contextLocal);
                             load(contextLocal);
                         }

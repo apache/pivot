@@ -1027,7 +1027,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     @Override
     public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
-        ArrayList<File> path = new ArrayList<File>();
+        ArrayList<File> path = new ArrayList<>();
 
         File rootDirectory = fileBrowser.getRootDirectory();
 
@@ -1041,7 +1041,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         ArrayList<File> drives = (ArrayList<File>) driveListButton.getListData();
         if(refreshRoots) {
             File[] roots = File.listRoots();
-            drives = new ArrayList<File>();
+            drives = new ArrayList<>();
             for (int i = 0; i < roots.length; i++) {
                 File root = roots[i];
                 if (root.exists()) {
@@ -1117,7 +1117,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         if (!updatingSelection) {
             Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
 
-            ArrayList<Span> selectedRanges = new ArrayList<Span>();
+            ArrayList<Span> selectedRanges = new ArrayList<>();
             for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
                 File selectedFile = selectedFiles.get(i);
 

@@ -1099,7 +1099,7 @@ public class TableView extends Component {
         }
     }
 
-    private ArrayList<Column> columns = new ArrayList<Column>();
+    private ArrayList<Column> columns = new ArrayList<>();
     private ColumnSequence columnSequence = new ColumnSequence();
 
     private List<?> tableData = null;
@@ -1110,8 +1110,8 @@ public class TableView extends Component {
     private RangeSelection rangeSelection = new RangeSelection();
     private SelectMode selectMode = SelectMode.SINGLE;
 
-    private HashMap<String, SortDirection> sortMap = new HashMap<String, SortDirection>();
-    private ArrayList<String> sortList = new ArrayList<String>();
+    private HashMap<String, SortDirection> sortMap = new HashMap<>();
+    private ArrayList<String> sortList = new ArrayList<>();
     private SortDictionary sortDictionary = new SortDictionary();
 
     private Filter<?> disabledRowFilter = null;
@@ -1428,7 +1428,7 @@ public class TableView extends Component {
      * @param end
      */
     public void setSelectedRange(int start, int end) {
-        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+        ArrayList<Span> selectedRanges = new ArrayList<>();
         selectedRanges.add(new Span(start, end));
 
         setSelectedRanges(selectedRanges);
@@ -1530,7 +1530,7 @@ public class TableView extends Component {
     @SuppressWarnings("unchecked")
     private static Sequence<Span> parseSelectedRanges(String json)
         throws SerializationException {
-        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+        ArrayList<Span> selectedRanges = new ArrayList<>();
 
         List<?> list = JSONSerializer.parseList(json);
         for (Object item : list) {
@@ -1754,7 +1754,7 @@ public class TableView extends Component {
     }
 
     public Sequence<?> getSelectedRows() {
-        ArrayList<Object> rows = new ArrayList<Object>();
+        ArrayList<Object> rows = new ArrayList<>();
 
         for (int i = 0, n = rangeSelection.getLength(); i < n; i++) {
             Span range = rangeSelection.get(i);
@@ -1774,7 +1774,7 @@ public class TableView extends Component {
             throw new IllegalArgumentException("rows is null");
         }
 
-        ArrayList<Span> selectedRanges = new ArrayList<Span>();
+        ArrayList<Span> selectedRanges = new ArrayList<>();
 
         for (int i = 0, n = rows.getLength(); i < n; i++) {
             Object row = rows.get(i);
@@ -1902,15 +1902,14 @@ public class TableView extends Component {
     @SuppressWarnings("unchecked")
     private static Sequence<Dictionary.Pair<String, SortDirection>> parseSort(String json)
         throws SerializationException {
-        ArrayList<Dictionary.Pair<String, SortDirection>> sort =
-            new ArrayList<Dictionary.Pair<String, SortDirection>>();
+        ArrayList<Dictionary.Pair<String, SortDirection>> sort = new ArrayList<>();
 
         List<?> list = JSONSerializer.parseList(json);
         for (Object item : list) {
             Map<String, ?> map = (Map<String, ?>)item;
 
             Dictionary.Pair<String, SortDirection> pair =
-                new Dictionary.Pair<String, SortDirection>((String)map.get(COLUMN_NAME_KEY),
+                new Dictionary.Pair<>((String)map.get(COLUMN_NAME_KEY),
                     SortDirection.valueOf(((String)map.get(SORT_DIRECTION_KEY)).toUpperCase(Locale.ENGLISH)));
             sort.add(pair);
         }
@@ -2225,7 +2224,7 @@ public class TableView extends Component {
                 // Bind using selected rows key
                 if (selectedRowsKey != null
                     && selectedRowsBindType != BindType.LOAD) {
-                    ArrayList<Object> rows = new ArrayList<Object>();
+                    ArrayList<Object> rows = new ArrayList<>();
 
                     Sequence<Span> selectedRanges = getSelectedRanges();
                     for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {

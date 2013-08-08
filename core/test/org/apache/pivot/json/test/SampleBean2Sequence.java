@@ -20,7 +20,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 
 public class SampleBean2Sequence implements Sequence<SampleBean2> {
-    private ArrayList<SampleBean2> items = new ArrayList<SampleBean2>();
+    private ArrayList<SampleBean2> items = new ArrayList<>();
 
     @Override
     public int add(SampleBean2 item) {

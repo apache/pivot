@@ -34,8 +34,8 @@ import org.apache.pivot.wtk.media.Image;
 public class TreeBranch extends TreeNode implements List<TreeNode> {
     private Image expandedIcon = null;
 
-    private ArrayList<TreeNode> treeNodes = new ArrayList<TreeNode>();
-    private ListListenerList<TreeNode> listListeners = new ListListenerList<TreeNode>();
+    private ArrayList<TreeNode> treeNodes = new ArrayList<>();
+    private ListListenerList<TreeNode> listListeners = new ListListenerList<>();
 
     public TreeBranch() {
         this(null, null, null);

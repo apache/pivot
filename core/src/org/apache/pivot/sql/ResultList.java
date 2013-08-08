@@ -123,7 +123,7 @@ public class ResultList implements List<Map<String, Object>> {
                throw new NoSuchElementException();
            }
 
-           HashMap<String, Object> item = new HashMap<String, Object>();
+           HashMap<String, Object> item = new HashMap<>();
 
            try {
                for (Field field : fields) {
@@ -182,10 +182,10 @@ public class ResultList implements List<Map<String, Object>> {
    }
 
    private ResultSet resultSet;
-   private ArrayList<Field> fields = new ArrayList<Field>();
+   private ArrayList<Field> fields = new ArrayList<>();
    private boolean includeNullValues = false;
 
-   private ListListenerList<Map<String, Object>> listListeners = new ListListenerList<Map<String,Object>>();
+   private ListListenerList<Map<String, Object>> listListeners = new ListListenerList<>();
 
    public ResultList(ResultSet resultSet) {
        if (resultSet == null) {

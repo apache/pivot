@@ -144,7 +144,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
     private Dimensions averageCharacterSize;
 
-    private ArrayList<TextAreaSkinParagraphView> paragraphViews = new ArrayList<TextAreaSkinParagraphView>();
+    private ArrayList<TextAreaSkinParagraphView> paragraphViews = new ArrayList<>();
 
     private static final int SCROLL_RATE = 30;
 

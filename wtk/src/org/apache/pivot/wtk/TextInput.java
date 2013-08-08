@@ -278,7 +278,7 @@ public class TextInput extends Component {
     private boolean strictValidation = false;
     private boolean textValid = true;
 
-    private LinkedList<Edit> editHistory = new LinkedList<Edit>();
+    private LinkedList<Edit> editHistory = new LinkedList<>();
 
     private TextInputListenerList textInputListeners = new TextInputListenerList();
     private TextInputContentListenerList textInputContentListeners = new TextInputContentListenerList();

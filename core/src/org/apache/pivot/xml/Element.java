@@ -552,17 +552,17 @@ public class Element extends Node implements List<Node> {
     private String localName;
 
     private String defaultNamespaceURI = null;
-    private HashMap<String, String> namespaces = new HashMap<String, String>();
+    private HashMap<String, String> namespaces = new HashMap<>();
     private NamespaceDictionary namespaceDictionary = new NamespaceDictionary();
     private ElementDictionary elementDictionary = new ElementDictionary();
 
-    private ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+    private ArrayList<Attribute> attributes = new ArrayList<>();
     private AttributeSequence attributeSequence = new AttributeSequence();
-    private HashMap<String, Attribute> attributeMap = new HashMap<String, Attribute>();
+    private HashMap<String, Attribute> attributeMap = new HashMap<>();
 
-    private ArrayList<Node> nodes = new ArrayList<Node>();
+    private ArrayList<Node> nodes = new ArrayList<>();
 
-    private ListListenerList<Node> listListeners = new ListListenerList<Node>();
+    private ListListenerList<Node> listListeners = new ListListenerList<>();
     private ElementListenerList elementListeners = new ElementListenerList();
 
     public Element(String localName) {
@@ -870,7 +870,7 @@ public class Element extends Node implements List<Node> {
      * elements matched the given tag name.
      */
     public List<Element> getElements(String name) {
-        ArrayList<Element> elements = new ArrayList<Element>();
+        ArrayList<Element> elements = new ArrayList<>();
 
         for (int i = 0, n = getLength(); i < n; i++) {
             Node node = get(i);

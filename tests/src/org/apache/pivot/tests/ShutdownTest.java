@@ -44,7 +44,7 @@ public class ShutdownTest extends Application.Adapter {
         System.out.println("shutdown()");
 
         if (alert == null) {
-            ArrayList<String> options = new ArrayList<String>();
+            ArrayList<String> options = new ArrayList<>();
             options.add("Yes");
             options.add("No");
 

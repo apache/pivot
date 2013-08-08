@@ -170,7 +170,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         } else {
                             ((TitledWindow)hostWindow).setTitle(DesktopDisplayHost.this.rootOwner.getTitle());
 
-                            java.util.ArrayList<BufferedImage> iconImages = new java.util.ArrayList<BufferedImage>();
+                            java.util.ArrayList<BufferedImage> iconImages = new java.util.ArrayList<>();
                             for (Image icon : DesktopDisplayHost.this.rootOwner.getIcons()) {
                                 if (icon instanceof Picture) {
                                     iconImages.add(((Picture) icon).getBufferedImage());
@@ -470,7 +470,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         applicationClassName = args[0];
 
         // Get the startup properties
-        properties = new HashMap<String, String>();
+        properties = new HashMap<>();
 
         int x = 0;
         int y = 0;

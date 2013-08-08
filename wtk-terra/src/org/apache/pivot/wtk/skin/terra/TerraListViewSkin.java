@@ -876,7 +876,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
                         if (disabledItemFilter == null) {
                             // Select the range
-                            ArrayList<Span> selectedRanges = new ArrayList<Span>();
+                            ArrayList<Span> selectedRanges = new ArrayList<>();
                             int startIndex = listView.getFirstSelectedIndex();
                             int endIndex = listView.getLastSelectedIndex();
 

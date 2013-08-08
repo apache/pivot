@@ -71,7 +71,7 @@ public class QueryDictionaryTest {
 
         dict.add("key3", "something");
 
-        Set<String> validKeys = new HashSet<String>();
+        Set<String> validKeys = new HashSet<>();
         validKeys.add("key2");
         validKeys.add("key3");
 

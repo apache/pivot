@@ -38,19 +38,19 @@ public interface Sequence<T> {
             private ArrayList<Integer> elements;
 
             public Path() {
-                elements = new ArrayList<Integer>();
+                elements = new ArrayList<>();
             }
 
             public Path(Integer... elements) {
-                this.elements = new ArrayList<Integer>(elements);
+                this.elements = new ArrayList<>(elements);
             }
 
             public Path(Path path) {
-                elements = new ArrayList<Integer>(path.elements);
+                elements = new ArrayList<>(path.elements);
             }
 
             public Path(Path path, int depth) {
-                elements = new ArrayList<Integer>(path.elements, 0, depth);
+                elements = new ArrayList<>(path.elements, 0, depth);
             }
 
             private Path(ArrayList<Integer> elements) {
@@ -183,7 +183,7 @@ public interface Sequence<T> {
         }
 
         private static class DepthFirstItemIterator<T> implements ItemIterator<T> {
-            private ArrayStack<Sequence<T>> stack = new ArrayStack<Sequence<T>>();
+            private ArrayStack<Sequence<T>> stack = new ArrayStack<>();
             private Path previousPath = null;
             private Path nextPath = new Path();
 

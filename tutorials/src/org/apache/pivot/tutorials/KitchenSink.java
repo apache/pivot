@@ -686,7 +686,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 ArrayList<Object> tableData = new ArrayList<Object>(10000);
 
                 for (int i = 0, n = tableData.getCapacity(); i < n; i++) {
-                    HashMap<String, Integer> tableRow = new HashMap<String, Integer>();
+                    HashMap<String, Integer> tableRow = new HashMap<>();
 
                     tableRow.put("i", i);
                     tableRow.put("a", (int)Math.round(Math.random() * 10));
@@ -1015,7 +1015,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         String messageType = (String)userData.get("messageType");
 
                         if (messageType == null) {
-                            ArrayList<String> options = new ArrayList<String>();
+                            ArrayList<String> options = new ArrayList<>();
                             options.add("OK");
                             options.add("Cancel");
 
@@ -1055,7 +1055,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         String messageType = (String)userData.get("messageType");
 
                         if (messageType == null) {
-                            ArrayList<String> options = new ArrayList<String>();
+                            ArrayList<String> options = new ArrayList<>();
                             options.add("OK");
                             options.add("Cancel");
 

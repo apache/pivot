@@ -157,7 +157,7 @@ public class BeanAdapter implements Map<String, Object> {
     private Object bean;
     private boolean ignoreReadOnlyProperties;
 
-    private MapListenerList<String, Object> mapListeners = new MapListenerList<String, Object>();
+    private MapListenerList<String, Object> mapListeners = new MapListenerList<>();
 
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";

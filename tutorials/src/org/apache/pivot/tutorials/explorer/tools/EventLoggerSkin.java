@@ -234,21 +234,21 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
     public void sourceChanged(EventLogger eventLogger, Component previousSource) {
         //Component source = eventLogger.getSource();
 
-        HashMap<Class<?>, ArrayList<Method>> buckets = new HashMap<Class<?>, ArrayList<Method>>();
+        HashMap<Class<?>, ArrayList<Method>> buckets = new HashMap<>();
 
         for (Method event : eventLogger.getDeclaredEvents()) {
             Class<?> listenerInterface = event.getDeclaringClass();
 
             ArrayList<Method> bucket = buckets.get(listenerInterface);
             if (bucket == null) {
-                bucket = new ArrayList<Method>();
+                bucket = new ArrayList<>();
                 buckets.put(listenerInterface, bucket);
             }
 
             bucket.add(event);
         }
 
-        ArrayList<TreeNode> treeData = new ArrayList<TreeNode>(treeNodeComparator);
+        ArrayList<TreeNode> treeData = new ArrayList<>(treeNodeComparator);
         declaredEventsTreeView.setTreeData(treeData);
 
         updating = true;
@@ -306,7 +306,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
     @Override
     @SuppressWarnings("unchecked")
     public void eventFired(EventLogger eventLogger, Method event, Object[] arguments) {
-        HashMap<String, Object> row = new HashMap<String, Object>();
+        HashMap<String, Object> row = new HashMap<>();
         row.put("interface", event.getDeclaringClass().getSimpleName());
         row.put("method", event.getName());
         row.put("arguments", Arrays.toString(arguments));

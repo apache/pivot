@@ -113,7 +113,7 @@ public abstract class Container extends Component
         }
     }
 
-    private ArrayList<Component> components = new ArrayList<Component>();
+    private ArrayList<Component> components = new ArrayList<>();
 
     private FocusTraversalPolicy focusTraversalPolicy = null;
 

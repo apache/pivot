@@ -51,7 +51,7 @@ public class ButtonGroup implements Group<Button>, Iterable<Button> {
         }
     }
 
-    private HashSet<Button> buttons = new HashSet<Button>();
+    private HashSet<Button> buttons = new HashSet<>();
     private Button selection = null;
 
     private ButtonGroupListenerList buttonGroupListeners = new ButtonGroupListenerList();

@@ -44,7 +44,7 @@ import org.apache.pivot.wtk.skin.terra.TerraFileBrowserSheetSkin;
 
 public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Application
 {
-    private ArrayList<String> choices = new ArrayList<String>();
+    private ArrayList<String> choices = new ArrayList<>();
     private ListButton lb = new ListButton();
 
     public FileBrowserWithCharsetTest() {

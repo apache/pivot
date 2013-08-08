@@ -27,7 +27,7 @@ import org.apache.pivot.collections.immutable.ImmutableList;
  */
 public class RangeSelection {
     // The coalesced selected ranges
-    private ArrayList<Span> selectedRanges = new ArrayList<Span>();
+    private ArrayList<Span> selectedRanges = new ArrayList<>();
 
     // Comparator that determines the index of the first intersecting range.
     private static final Comparator<Span> START_COMPARATOR = new Comparator<Span>() {
@@ -64,7 +64,7 @@ public class RangeSelection {
      * A sequence containing the ranges that were added.
      */
     public Sequence<Span> addRange(int start, int end) {
-        ArrayList<Span> addedRanges = new ArrayList<Span>();
+        ArrayList<Span> addedRanges = new ArrayList<>();
 
         Span range = normalize(start, end);
         assert(range.start >= 0);
@@ -163,7 +163,7 @@ public class RangeSelection {
      * A sequence containing the ranges that were removed.
      */
     public Sequence<Span> removeRange(int start, int end) {
-        ArrayList<Span> removedRanges = new ArrayList<Span>();
+        ArrayList<Span> removedRanges = new ArrayList<>();
 
         Span range = normalize(start, end);
         assert(range.start >= 0);

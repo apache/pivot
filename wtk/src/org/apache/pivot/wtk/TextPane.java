@@ -287,7 +287,7 @@ public class TextPane extends Container {
         }
     };
 
-    private LinkedList<Edit> editHistory = new LinkedList<Edit>();
+    private LinkedList<Edit> editHistory = new LinkedList<>();
 
     private TextPaneListenerList textPaneListeners = new TextPaneListenerList();
     private TextPaneCharacterListenerList textPaneCharacterListeners = new TextPaneCharacterListenerList();
