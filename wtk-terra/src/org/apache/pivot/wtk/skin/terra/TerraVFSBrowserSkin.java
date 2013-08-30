@@ -143,6 +143,8 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         public static Image getIcon(FileObject file) {
             Image icon;
             if (file.getName().getType() == FileType.FOLDER) {
+                // TODO: should this check be the full URI?  What about remote file systems?
+                // seems like it should be the original home directory, and not the local file system home
                 icon = file.getName().getPath().equals(HOME_DIRECTORY) ? HOME_FOLDER_IMAGE : FOLDER_IMAGE;
             } else {
                 icon = FILE_IMAGE;
@@ -232,7 +234,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
                 // Update the label
                 // TODO: should this be the full path or the base name?
-                String text = file.getName().getPath();
+                String text = file.getName().getBaseName();
                 if (text.length() == 0) {
                     text = FileName.ROOT_PATH;
                 }
@@ -245,7 +247,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         public String toString(Object item) {
             FileObject file = (FileObject)item;
             // TODO: should this be the full path or the base name?
-            String text = file.getName().getPath();
+            String text = file.getName().getBaseName();
             if (text.length() == 0) {
                 text = FileName.ROOT_PATH;
             }
@@ -279,12 +281,13 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                 Image icon = null;
 
                 try {
+                    FileType type = file.getType();
                     if (columnName.equals(NAME_KEY)) {
                         text = file.getName().getBaseName();
                         icon = getIcon(file);
                         getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
                     } else if (columnName.equals(SIZE_KEY)) {
-                        if (file.getType() == FileType.FOLDER) {
+                        if (type == FileType.FOLDER || type == FileType.IMAGINARY) {
                             text = "";
                         } else {
                             long length = file.getContent().getSize();
@@ -292,10 +295,14 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                         }
                         getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
                     } else if (columnName.equals(LAST_MODIFIED_KEY)) {
-                        long lastModified = file.getContent().getLastModifiedTime();
-                        Date lastModifiedDate = new Date(lastModified);
-                        text = DATE_FORMAT.format(lastModifiedDate);
-                        getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+                        if (type == FileType.FOLDER || type == FileType.IMAGINARY) {
+                            text = "";
+                        } else {
+                            long lastModified = file.getContent().getLastModifiedTime();
+                            Date lastModifiedDate = new Date(lastModified);
+                            text = DATE_FORMAT.format(lastModifiedDate);
+                            getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+                        }
                     } else {
                         System.err.println("Unexpected column name in " + getClass().getName()
                             + ": " + columnName);
@@ -336,19 +343,24 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
             FileObject file = (FileObject)row;
             try {
+                FileType type = file.getType();
                 if (columnName.equals(NAME_KEY)) {
                     string = file.getName().getBaseName();
                 } else if (columnName.equals(SIZE_KEY)) {
-                    if (file.getType() == FileType.FOLDER) {
+                    if (type == FileType.FOLDER || type == FileType.IMAGINARY) {
                         string = "";
                     } else {
                         long length = file.getContent().getSize();
                         string = FileSizeFormat.getInstance().format(length);
                     }
                 } else if (columnName.equals(LAST_MODIFIED_KEY)) {
-                    long lastModified = file.getContent().getLastModifiedTime();
-                    Date lastModifiedDate = new Date(lastModified);
-                    string = DATE_FORMAT.format(lastModifiedDate);
+                    if (type == FileType.FOLDER || type == FileType.IMAGINARY) {
+                        string = "";
+                    } else {
+                        long lastModified = file.getContent().getLastModifiedTime();
+                        Date lastModifiedDate = new Date(lastModified);
+                        string = DATE_FORMAT.format(lastModifiedDate);
+                    }
                 } else {
                     System.err.println("Unexpected column name in " + getClass().getName()
                         + ": " + columnName);
@@ -493,13 +505,15 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         private static final long serialVersionUID = 1L;
         @Override
         public int compare(FileObject f1, FileObject f2) {
-            boolean file1IsDirectory = f1.getName().getType() == FileType.FOLDER;
-            boolean file2IsDirectory = f2.getName().getType() == FileType.FOLDER;
+            FileType f1Type = f1.getName().getType();
+            FileType f2Type = f2.getName().getType();
+            boolean file1IsFile = f1Type == FileType.FILE || f1Type == FileType.FILE_OR_FOLDER;
+            boolean file2IsFile = f2Type == FileType.FILE || f2Type == FileType.FILE_OR_FOLDER;
 
             int result;
-            if (file1IsDirectory && !file2IsDirectory) {
+            if (!file1IsFile && file2IsFile) {
                 result = -1;
-            } else if (!file1IsDirectory && file2IsDirectory) {
+            } else if (file1IsFile && !file2IsFile) {
                 result = 1;
             } else {
                 // Do the compare according to the rules of the file system
@@ -513,13 +527,15 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         private static final long serialVersionUID = 1L;
         @Override
         public int compare(FileObject f1, FileObject f2) {
-            boolean file1IsDirectory = f1.getName().getType() == FileType.FOLDER;
-            boolean file2IsDirectory = f2.getName().getType() == FileType.FOLDER;
+            FileType f1Type = f1.getName().getType();
+            FileType f2Type = f2.getName().getType();
+            boolean file1IsFile = f1Type == FileType.FILE || f1Type == FileType.FILE_OR_FOLDER;
+            boolean file2IsFile = f2Type == FileType.FILE || f2Type == FileType.FILE_OR_FOLDER;
 
             int result;
-            if (file1IsDirectory && !file2IsDirectory) {
+            if (!file1IsFile && file2IsFile) {
                 result = -1;
-            } else if (!file1IsDirectory && file2IsDirectory) {
+            } else if (file1IsFile && !file2IsFile) {
                 result = 1;
             } else {
                 // Do the compare according to the rules of the file system
@@ -534,10 +550,12 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         @Override
         public int compare(FileObject f1, FileObject f2) {
             try {
-                boolean file1IsDirectory = f1.getType() == FileType.FOLDER;
-                boolean file2IsDirectory = f2.getType() == FileType.FOLDER;
-                long size1 = file1IsDirectory ? 0L : f1.getContent().getSize();
-                long size2 = file2IsDirectory ? 0L : f2.getContent().getSize();
+                FileType f1Type = f1.getName().getType();
+                FileType f2Type = f2.getName().getType();
+                boolean file1IsFile = f1Type == FileType.FILE || f1Type == FileType.FILE_OR_FOLDER;
+                boolean file2IsFile = f2Type == FileType.FILE || f2Type == FileType.FILE_OR_FOLDER;
+                long size1 = file1IsFile ? f1.getContent().getSize() : 0L;
+                long size2 = file2IsFile ? f2.getContent().getSize() : 0L;
                 return Long.signum(size1 - size2);
             } catch (FileSystemException fse) {
                 throw new RuntimeException(fse);
@@ -550,10 +568,12 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         @Override
         public int compare(FileObject f1, FileObject f2) {
             try {
-                boolean file1IsDirectory = f1.getType() == FileType.FOLDER;
-                boolean file2IsDirectory = f2.getType() == FileType.FOLDER;
-                long size1 = file1IsDirectory ? 0L : f1.getContent().getSize();
-                long size2 = file2IsDirectory ? 0L : f2.getContent().getSize();
+                FileType f1Type = f1.getName().getType();
+                FileType f2Type = f2.getName().getType();
+                boolean file1IsFile = f1Type == FileType.FILE || f1Type == FileType.FILE_OR_FOLDER;
+                boolean file2IsFile = f2Type == FileType.FILE || f2Type == FileType.FILE_OR_FOLDER;
+                long size1 = file1IsFile ? f1.getContent().getSize() : 0L;
+                long size2 = file2IsFile ? f2.getContent().getSize() : 0L;
                 return Long.signum(size2 - size1);
             } catch (FileSystemException fse) {
                 throw new RuntimeException(fse);
@@ -566,7 +586,13 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         @Override
         public int compare(FileObject f1, FileObject f2) {
             try {
-                return Long.signum(f1.getContent().getLastModifiedTime() - f2.getContent().getLastModifiedTime());
+                FileType f1Type = f1.getName().getType();
+                FileType f2Type = f2.getName().getType();
+                boolean file1IsFile = f1Type == FileType.FILE || f1Type == FileType.FILE_OR_FOLDER;
+                boolean file2IsFile = f2Type == FileType.FILE || f2Type == FileType.FILE_OR_FOLDER;
+                long time1 = file1IsFile ? f1.getContent().getLastModifiedTime() : 0L;
+                long time2 = file2IsFile ? f2.getContent().getLastModifiedTime() : 0L;
+                return Long.signum(time1 - time2);
             } catch (FileSystemException fse) {
                 throw new RuntimeException(fse);
             }
@@ -578,7 +604,13 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         @Override
         public int compare(FileObject f1, FileObject f2) {
             try {
-                return Long.signum(f2.getContent().getLastModifiedTime() - f1.getContent().getLastModifiedTime());
+                FileType f1Type = f1.getName().getType();
+                FileType f2Type = f2.getName().getType();
+                boolean file1IsFile = f1Type == FileType.FILE || f1Type == FileType.FILE_OR_FOLDER;
+                boolean file2IsFile = f2Type == FileType.FILE || f2Type == FileType.FILE_OR_FOLDER;
+                long time1 = file1IsFile ? f1.getContent().getLastModifiedTime() : 0L;
+                long time2 = file2IsFile ? f2.getContent().getLastModifiedTime() : 0L;
+                return Long.signum(time2 - time1);
             } catch (FileSystemException fse) {
                 throw new RuntimeException(fse);
             }
@@ -833,6 +865,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             @Override
             public void buttonPressed(Button button) {
                 try {
+                    // TODO: should this be the remote file system's home and not the local home?
                     fileBrowser.setRootDirectory(HOME_DIRECTORY);
                 } catch (FileSystemException fse) {
                     throw new RuntimeException(fse);
@@ -1157,7 +1190,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             // There is an open question on the Dev list about adding "getFileRoots()" to the VFS API.
 /*            try {
                 FileObject[] roots = new FileObject[1];
-                roots[0] = manager.resolveFile(manager.getBaseFile().getName().getRoot().getPath());
+                roots[0] = manager.resolveFile(manager.getBaseFile().getName().getRoot().getURI());
                 drives = new ArrayList<>();
                 for (int i = 0; i < roots.length; i++) {
                     FileObject root = roots[i];

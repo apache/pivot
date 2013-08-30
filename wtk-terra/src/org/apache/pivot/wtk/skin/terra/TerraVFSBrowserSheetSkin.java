@@ -318,7 +318,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                         try {
                             FileObject selectedFile = manager.resolveFile(fileName);
                             //if (!selectedFile.isAbsolute() && !fileName.startsWith(File.separator)) {
-                            if (!baseFileName.isDescendent(selectedFile.getName())) {
+                            if (baseFileName == null || !baseFileName.isAncestor(selectedFile.getName())) {
                                 selectedFile = manager.resolveFile(fileBrowser.getRootDirectory(), fileName);
                             } else {
                                 // TODO: is there really anything to do here?
@@ -343,7 +343,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                                         // TODO: canonical file again
                                         //fileBrowserSheet.setRootDirectory(root.getCanonicalFile());
                                         fileBrowserSheet.setRootDirectory(root);
-                                        selectedFile = manager.resolveFile(selectedFile.getName().getPath());
+                                        selectedFile = manager.resolveFile(selectedFile.getName().getURI());
                                     }
                                     catch (IOException ioe) {
                                         Form.setFlag(saveAsBoxPane, new Form.Flag());

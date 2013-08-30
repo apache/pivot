@@ -265,12 +265,12 @@ public class VFSBrowser extends Container {
 
         // TODO: is this a good way to do this?
         //if (file.isAbsolute()) {
-        if (baseFileName != null && baseFileName.isDescendent(file.getName())) {
+        if (baseFileName != null && baseFileName.isAncestor(file.getName())) {
             if (!file.getParent().equals(rootDirectory)) {
                 throw new IllegalArgumentException();
             }
         } else {
-            file = manager.resolveFile(rootDirectory, file.getName().getPath());
+            file = manager.resolveFile(rootDirectory, file.getName().getBaseName());
         }
 
         int index = selectedFiles.add(file);
@@ -330,7 +330,7 @@ public class VFSBrowser extends Container {
         } else {
             // TODO: adequate replacement for "isAbsolute"?
             //if (file.isAbsolute()) {
-            if (baseFileName != null && baseFileName.isDescendent(file.getName())) {
+            if (baseFileName != null && baseFileName.isAncestor(file.getName())) {
                 setRootDirectory(file.getParent());
             }
 
@@ -384,8 +384,8 @@ public class VFSBrowser extends Container {
 
             // TODO: is this correct?
             //if (!file.isAbsolute()) {
-            if (baseFileName == null || !baseFileName.isDescendent(file.getName())) {
-                file = manager.resolveFile(rootDirectory, file.getName().getPath());
+            if (baseFileName == null || !baseFileName.isAncestor(file.getName())) {
+                file = manager.resolveFile(rootDirectory, file.getName().getBaseName());
             }
 
             // TODO: don't do this for now -- revisit later

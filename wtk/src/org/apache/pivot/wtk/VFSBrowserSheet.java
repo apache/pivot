@@ -165,11 +165,11 @@ public class VFSBrowserSheet extends Sheet {
             throws FileSystemException
     {
         if (mode == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Mode is null.");
         }
 
         if (rootFolder == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Root folder is null.");
         }
 
         setManager(manager);
@@ -215,7 +215,7 @@ public class VFSBrowserSheet extends Sheet {
 
     public void setMode(Mode mode) {
         if (mode == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Mode is null.");
         }
 
         Mode previousMode = this.mode;
@@ -235,12 +235,12 @@ public class VFSBrowserSheet extends Sheet {
              throws FileSystemException
     {
         if (rootFolder == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Root folder is null.");
         }
 
         rootDirectory = manager.resolveFile(rootFolder);
         if (rootDirectory.getType() != FileType.FOLDER) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Root file is not a directory.");
         }
 
     }
@@ -256,7 +256,7 @@ public class VFSBrowserSheet extends Sheet {
     {
         if (rootDirectory == null
             || rootDirectory.getType() != FileType.FOLDER) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Root file is not a directory.");
         }
 
         if (rootDirectory.exists()) {
@@ -299,7 +299,7 @@ public class VFSBrowserSheet extends Sheet {
         } else {
             // TODO: will this work right?
             //if (file.isAbsolute()) {
-            if (baseFileName != null && baseFileName.isDescendent(file.getName())) {
+            if (baseFileName != null && baseFileName.isAncestor(file.getName())) {
                 setRootDirectory(file.getParent());
             }
 
@@ -348,17 +348,17 @@ public class VFSBrowserSheet extends Sheet {
             FileObject file = selectedFiles.get(i);
 
             if (file == null) {
-                throw new IllegalArgumentException("file is null.");
+                throw new IllegalArgumentException("Selected file is null.");
             }
 
             // TODO: is this correct?
             //if (!file.isAbsolute()) {
-            if (baseFileName == null || !baseFileName.isDescendent(file.getName())) {
-                file = manager.resolveFile(rootDirectory, file.getName().getPath());
+            if (baseFileName == null || !baseFileName.isAncestor(file.getName())) {
+                file = manager.resolveFile(rootDirectory, file.getName().getBaseName());
             }
 
             if (!file.getParent().equals(rootDirectory)) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Selected file doesn't appear to belong to the current directory.");
             }
 
             fileList.add(file);
