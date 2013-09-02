@@ -236,7 +236,7 @@ public class FileBrowser extends Container {
                 setRootDirectory(file.getParentFile());
             }
 
-            setSelectedFiles(new ArrayList<File>(file));
+            setSelectedFiles(new ArrayList<>(file));
         }
     }
 
@@ -249,7 +249,7 @@ public class FileBrowser extends Container {
      * selection state will be reflected in the list, but events will not be fired.
      */
     public ImmutableList<File> getSelectedFiles() {
-        return new ImmutableList<File>(selectedFiles);
+        return new ImmutableList<>(selectedFiles);
     }
 
     /**

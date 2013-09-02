@@ -749,7 +749,7 @@ public class TableView extends Component {
 
         @Override
         public Iterator<Column> iterator() {
-            return new ImmutableIterator<Column>(columns.iterator());
+            return new ImmutableIterator<>(columns.iterator());
         }
     }
 
@@ -809,7 +809,7 @@ public class TableView extends Component {
             String columnName = sortList.get(index);
             SortDirection sortDirection = sortMap.get(columnName);
 
-            return new Dictionary.Pair<String, SortDirection>(columnName, sortDirection);
+            return new Dictionary.Pair<>(columnName, sortDirection);
         }
 
         public int getLength() {
@@ -1223,7 +1223,7 @@ public class TableView extends Component {
      * Creates a new table view populated with an empty array list.
      */
     public TableView() {
-        this(new ArrayList<Object>());
+        this(new ArrayList<>());
     }
 
     /**
@@ -1841,9 +1841,9 @@ public class TableView extends Component {
     @SuppressWarnings("unchecked")
     public Dictionary<String, SortDirection> setSort(String columnName, SortDirection sortDirection) {
         Dictionary.Pair<String, SortDirection> sort =
-            new Dictionary.Pair<String, SortDirection>(columnName, sortDirection);
+            new Dictionary.Pair<>(columnName, sortDirection);
 
-        setSort(new ArrayList<Dictionary.Pair<String, SortDirection>>(sort));
+        setSort(new ArrayList<>(sort));
 
         return getSort();
     }
@@ -2261,7 +2261,7 @@ public class TableView extends Component {
     @Override
     public void clear() {
         if (tableDataKey != null) {
-            setTableData(new ArrayList<Object>());
+            setTableData(new ArrayList<>());
         }
 
         if (selectedRowKey != null

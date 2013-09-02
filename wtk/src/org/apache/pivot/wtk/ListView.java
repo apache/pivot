@@ -585,7 +585,7 @@ public class ListView extends Component {
      * Creates a list view populated with an empty array list.
      */
     public ListView() {
-        this(new ArrayList<Object>());
+        this(new ArrayList<>());
     }
 
     /**
@@ -1247,7 +1247,7 @@ public class ListView extends Component {
      * Returns the indexes of currently checked items.
      */
     public ImmutableList<Integer> getCheckedIndexes() {
-        return new ImmutableList<Integer>(checkedIndexes);
+        return new ImmutableList<>(checkedIndexes);
     }
 
     /**
@@ -1760,7 +1760,7 @@ public class ListView extends Component {
     @Override
     public void clear() {
         if (listDataKey != null) {
-            setListData(new ArrayList<Object>());
+            setListData(new ArrayList<>());
         }
 
         if (selectedItemKey != null

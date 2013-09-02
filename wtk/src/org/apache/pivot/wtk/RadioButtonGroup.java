@@ -402,7 +402,7 @@ public class RadioButtonGroup extends ButtonGroup {
      */
     @Override
     public Iterator<Button> iterator() {
-        return new ImmutableIterator<Button>(buttonOrder.iterator());
+        return new ImmutableIterator<>(buttonOrder.iterator());
     }
 
     /**

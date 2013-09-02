@@ -42,8 +42,8 @@ public class ExpenseServlet extends QueryServlet {
 
     private static int nextID = 0;
 
+    @SuppressWarnings("resource")
     @Override
-    @SuppressWarnings("unchecked")
     public void init() throws ServletException {
         CSVSerializer expenseSerializer = new CSVSerializer(Expense.class);
         expenseSerializer.setKeys("date", "type", "amount", "description");

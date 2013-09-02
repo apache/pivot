@@ -48,7 +48,7 @@ public class SuggestionPopupTest extends Application.Adapter {
         textInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textInserted(TextInput textInputArgument, int index, int count) {
-                ArrayList<String> suggestions = new ArrayList<String>("One", "Two", "Three", "Four", "Five");
+                ArrayList<String> suggestions = new ArrayList<>("One", "Two", "Three", "Four", "Five");
                 suggestionPopup.setSuggestionData(suggestions);
                 suggestionPopup.open(textInputArgument, new SuggestionPopupCloseListener() {
                     @Override

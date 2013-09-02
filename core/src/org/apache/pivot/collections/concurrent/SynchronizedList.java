@@ -68,7 +68,7 @@ public class SynchronizedList<T> implements List<T> {
     }
 
     private List<T> list;
-    private SynchronizedListListenerList<T> listListeners = new SynchronizedListListenerList<T>();
+    private SynchronizedListListenerList<T> listListeners = new SynchronizedListListenerList<>();
 
     public SynchronizedList(List<T> list) {
         if (list == null) {
@@ -168,7 +168,7 @@ public class SynchronizedList<T> implements List<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new ImmutableIterator<T>(list.iterator());
+        return new ImmutableIterator<>(list.iterator());
     }
 
     @Override

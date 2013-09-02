@@ -67,7 +67,7 @@ public class SynchronizedMap<K, V> implements Map<K, V> {
     }
 
     private Map<K, V> map;
-    private SynchronizedMapListenerList<K, V> mapListeners = new SynchronizedMapListenerList<K, V>();
+    private SynchronizedMapListenerList<K, V> mapListeners = new SynchronizedMapListenerList<>();
 
     public SynchronizedMap(Map<K, V> map) {
         if (map == null) {
@@ -150,7 +150,7 @@ public class SynchronizedMap<K, V> implements Map<K, V> {
      */
     @Override
     public Iterator<K> iterator() {
-        return new ImmutableIterator<K>(map.iterator());
+        return new ImmutableIterator<>(map.iterator());
     }
 
     @Override

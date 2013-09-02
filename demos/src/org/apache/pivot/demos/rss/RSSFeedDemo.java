@@ -84,7 +84,7 @@ public class RSSFeedDemo extends Window implements Bindable {
         getQuery.setSerializer(new XMLSerializer());
         getQuery.getParameters().put("format", "xml");
 
-        getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
+        getQuery.execute(new TaskAdapter<>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
                 Element root = (Element)task.getResult();

@@ -413,7 +413,7 @@ public abstract class ChartView extends Component {
     }
 
     public ChartView() {
-        this(DEFAULT_SERIES_NAME_KEY, new ArrayList<Object>());
+        this(DEFAULT_SERIES_NAME_KEY, new ArrayList<>());
     }
 
     public ChartView(String seriesNameKey, List<?> chartData) {

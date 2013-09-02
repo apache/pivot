@@ -31,8 +31,8 @@ import org.apache.pivot.util.ListenerList;
 public class LinkedQueue<T> implements Queue<T>, Serializable {
     private static final long serialVersionUID = 1598074020226109253L;
 
-    private LinkedList<T> linkedList = new LinkedList<T>();
-    private transient QueueListenerList<T> queueListeners = new QueueListenerList<T>();
+    private LinkedList<T> linkedList = new LinkedList<>();
+    private transient QueueListenerList<T> queueListeners = new QueueListenerList<>();
 
     public LinkedQueue() {
         this(null);
@@ -110,7 +110,7 @@ public class LinkedQueue<T> implements Queue<T>, Serializable {
 
     @Override
     public Iterator<T> iterator() {
-        return new ImmutableIterator<T>(linkedList.iterator());
+        return new ImmutableIterator<>(linkedList.iterator());
     }
 
     @Override

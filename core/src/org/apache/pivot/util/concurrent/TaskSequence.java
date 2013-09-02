@@ -138,6 +138,6 @@ public class TaskSequence extends Task<Void>
 
     @Override
     public Iterator<Task<?>> iterator() {
-        return new ImmutableIterator<Task<?>>(tasks.iterator());
+        return new ImmutableIterator<>(tasks.iterator());
     }
 }

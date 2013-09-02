@@ -51,7 +51,7 @@ public class SheetSlideDirectionWindow extends Window implements Bindable {
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
 
         // Populate the ListButton with values from the enum
-        listButton.setListData(new ArrayList<SheetPlacement>(SheetPlacement.values()));
+        listButton.setListData(new ArrayList<>(SheetPlacement.values()));
         listButton = null;
 
         // Populate the form with data from the Sheet's styles

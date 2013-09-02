@@ -126,7 +126,6 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void endEdit(boolean result) {
         if (result) {
             // Update the item data

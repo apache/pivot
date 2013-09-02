@@ -649,7 +649,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
             Arrays.sort(files, fileComparator);
 
-            return new ArrayList<File>(files, 0, files.length);
+            return new ArrayList<>(files, 0, files.length);
         }
     }
 
@@ -789,7 +789,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         fileTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
             @Override
-            @SuppressWarnings("unchecked")
             public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
                 if (!updatingSelection) {
                     updatingSelection = true;
@@ -805,7 +804,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
 
             @Override
-            @SuppressWarnings("unchecked")
             public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
                 if (!updatingSelection) {
                     updatingSelection = true;
@@ -821,7 +819,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
 
             @Override
-            @SuppressWarnings("unchecked")
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
                 if (!updatingSelection && previousSelectedRanges != null) {
                     updatingSelection = true;
@@ -846,7 +843,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         fileTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
-            @SuppressWarnings("unchecked")
             public void sortChanged(TableView tableView) {
                 TableView.SortDictionary sort = fileTableView.getSort();
 
@@ -1037,7 +1033,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             ancestorDirectory = ancestorDirectory.getParentFile();
         }
 
-        @SuppressWarnings("unchecked")
         ArrayList<File> drives = (ArrayList<File>) driveListButton.getListData();
         if(refreshRoots) {
             File[] roots = File.listRoots();
@@ -1080,7 +1075,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
             List<File> files = (List<File>)fileTableView.getTableData();
@@ -1094,7 +1088,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
             List<File> files = (List<File>)fileTableView.getTableData();
@@ -1112,7 +1105,6 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         updateSelectedFiles(fileBrowser);
     }
 
-    @SuppressWarnings("unchecked")
     private void updateSelectedFiles(FileBrowser fileBrowser) {
         if (!updatingSelection) {
             Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
@@ -1177,7 +1169,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         refreshFileListTask = new RefreshFileListTask(includeFileFilter, disabledFileFilter, fileComparator);
-        refreshFileListTask.execute(new TaskAdapter<ArrayList<File>>(new TaskListener<ArrayList<File>>() {
+        refreshFileListTask.execute(new TaskAdapter<>(new TaskListener<ArrayList<File>>() {
             @Override
             public void taskExecuted(Task<ArrayList<File>> task) {
                 if (task == refreshFileListTask) {

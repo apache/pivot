@@ -62,7 +62,7 @@ public class SynchronizedSet<E> implements Set<E> {
     }
 
     private Set<E> set;
-    private SynchronizedSetListenerList<E> setListeners = new SynchronizedSetListenerList<E>();
+    private SynchronizedSetListenerList<E> setListeners = new SynchronizedSetListenerList<>();
 
     public SynchronizedSet(Set<E> set) {
         if (set == null) {
@@ -141,7 +141,7 @@ public class SynchronizedSet<E> implements Set<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new ImmutableIterator<E>(set.iterator());
+        return new ImmutableIterator<>(set.iterator());
     }
 
     @Override

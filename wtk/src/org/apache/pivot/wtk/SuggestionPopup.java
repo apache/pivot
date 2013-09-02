@@ -235,7 +235,7 @@ public class SuggestionPopup extends Window {
     private static final ListView.ItemRenderer DEFAULT_SUGGESTION_RENDERER = new ListViewItemRenderer();
 
     public SuggestionPopup() {
-        this(new ArrayList<Object>());
+        this(new ArrayList<>());
     }
 
     public SuggestionPopup(List<?> suggestions) {

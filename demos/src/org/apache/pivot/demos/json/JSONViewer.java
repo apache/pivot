@@ -124,6 +124,7 @@ public class JSONViewer extends Application.Adapter {
                 File file = fileList.get(0);
 
                 JSONSerializer jsonSerializer = new JSONSerializer();
+                @SuppressWarnings("resource")
                 FileInputStream fileInputStream = null;
                 try {
                     try {

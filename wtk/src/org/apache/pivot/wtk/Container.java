@@ -264,7 +264,7 @@ public abstract class Container extends Component
     @Override
     public Iterator<Component> iterator() {
         assertEventDispatchThread();
-        return new ImmutableIterator<Component>(components.iterator());
+        return new ImmutableIterator<>(components.iterator());
     }
 
     @Override

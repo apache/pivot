@@ -96,7 +96,7 @@ public class SuggestionDemo extends Window implements Bindable {
         suggestionQuery.getParameters().put("query", text);
         suggestionQuery.getParameters().put("output", "json");
 
-        suggestionQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
+        suggestionQuery.execute(new TaskAdapter<>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
                 if (task == suggestionQuery) {

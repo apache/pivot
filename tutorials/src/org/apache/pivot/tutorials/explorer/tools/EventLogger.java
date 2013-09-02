@@ -82,7 +82,7 @@ public class EventLogger extends Container {
 
         @Override
         public Iterator<Method> iterator() {
-            return new ImmutableIterator<Method>(declaredEvents.iterator());
+            return new ImmutableIterator<>(declaredEvents.iterator());
         }
     }
 
@@ -131,7 +131,7 @@ public class EventLogger extends Container {
 
         @Override
         public Iterator<Method> iterator() {
-            return new ImmutableIterator<Method>(includeEvents.iterator());
+            return new ImmutableIterator<>(includeEvents.iterator());
         }
     }
 

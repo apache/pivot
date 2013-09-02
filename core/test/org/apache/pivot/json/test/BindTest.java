@@ -52,7 +52,6 @@ public class BindTest {
      * @throws SerializationException
      */
     @Test
-    @SuppressWarnings("unchecked")
     public void testTypedList() throws IOException, SerializationException {
         JSONSerializer listSerializer = new JSONSerializer();
         List<Object> list =
@@ -77,7 +76,6 @@ public class BindTest {
      * @throws SerializationException
      */
     @Test
-    @SuppressWarnings("unchecked")
     public void testListSubclass() throws IOException, SerializationException {
         JSONSerializer listSerializer = new JSONSerializer();
         List<Object> list =
@@ -99,7 +97,6 @@ public class BindTest {
      * @throws SerializationException
      */
     @Test
-    @SuppressWarnings("unchecked")
     public void testSequence() throws IOException, SerializationException {
         JSONSerializer listSerializer = new JSONSerializer();
         List<Object> list =
@@ -122,7 +119,6 @@ public class BindTest {
      * @throws SerializationException
      */
     @Test
-    @SuppressWarnings("unchecked")
     public void testUntypedMap() throws IOException, SerializationException {
         JSONSerializer mapSerializer = new JSONSerializer(HashMap.class);
         HashMap<String, ?> map = (HashMap<String, ?>)mapSerializer.readObject(new StringReader("{a:1, b:2, c:'3'}"));
@@ -136,7 +132,6 @@ public class BindTest {
      * @throws SerializationException
      */
     @Test
-    @SuppressWarnings("unchecked")
     public void testTypedMap() throws IOException, SerializationException {
         JSONSerializer typedMapSerializer =
             new JSONSerializer((new TypeLiteral<HashMap<String, SampleBean2>>() {
@@ -191,7 +186,6 @@ public class BindTest {
      * @throws SerializationException
      */
     @Test
-    @SuppressWarnings("unchecked")
     public void testBean() throws IOException, SerializationException {
         JSONSerializer mapSerializer = new JSONSerializer();
         Map<String, Object> map =

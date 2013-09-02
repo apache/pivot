@@ -88,7 +88,6 @@ public class DataBindingTest extends Application.Adapter {
 
     public static class TestBindMapping implements ListView.ItemBindMapping, Spinner.ItemBindMapping {
         @Override
-        @SuppressWarnings("unchecked")
         public int indexOf(List<?> list, Object value) {
             int i = 0;
             int n = list.getLength();
@@ -109,7 +108,6 @@ public class DataBindingTest extends Application.Adapter {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public Object get(List<?> list, int index) {
             Map<String, ?> map = (Map<String, ?>)list.get(index);
             return map.get("id");

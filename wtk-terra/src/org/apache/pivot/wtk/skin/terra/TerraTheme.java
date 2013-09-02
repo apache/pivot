@@ -102,7 +102,6 @@ public final class TerraTheme extends Theme {
     public static final String LOCATION_PROPERTY = "location";
     public static final String COMMAND_BUTTON_STYLE = "commandButton";
 
-    @SuppressWarnings("unchecked")
     public TerraTheme() {
         componentSkinMap.put(Accordion.class, TerraAccordionSkin.class);
         componentSkinMap.put(ActivityIndicator.class, TerraActivityIndicatorSkin.class);
@@ -225,7 +224,6 @@ public final class TerraTheme extends Theme {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void load(URL location) {
         if (location == null) {
             throw new IllegalArgumentException("location URL is null");
@@ -243,7 +241,7 @@ public final class TerraTheme extends Theme {
                 List<String> colorCodes = (List<String>)properties.get("colors");
                 numberOfPaletteColors = colorCodes.getLength();
                 int numberOfColors = numberOfPaletteColors * 3;
-                colors = new ArrayList<Color>(numberOfColors);
+                colors = new ArrayList<>(numberOfColors);
 
                 colorMultiplier = ((Double)properties.get("colorMultiplier")).floatValue();
 

@@ -866,9 +866,9 @@ public class TreeView extends Component {
     private List<?> treeData = null;
 
     // Ancillary data models
-    private ArrayList<Path> expandedPaths = new ArrayList<Path>(PATH_COMPARATOR);
-    private ArrayList<Path> selectedPaths = new ArrayList<Path>(PATH_COMPARATOR);
-    private ArrayList<Path> checkedPaths = new ArrayList<Path>(PATH_COMPARATOR);
+    private ArrayList<Path> expandedPaths = new ArrayList<>(PATH_COMPARATOR);
+    private ArrayList<Path> selectedPaths = new ArrayList<>(PATH_COMPARATOR);
+    private ArrayList<Path> checkedPaths = new ArrayList<>(PATH_COMPARATOR);
 
     // Properties
     private SelectMode selectMode = SelectMode.SINGLE;
@@ -908,7 +908,7 @@ public class TreeView extends Component {
      * Creates a new <tt>TreeView</tt> with empty tree data.
      */
     public TreeView() {
-        this(new ArrayList<Object>());
+        this(new ArrayList<>());
     }
 
     /**
@@ -1131,7 +1131,7 @@ public class TreeView extends Component {
      * selection state will be reflected in the list, but events will not be fired.
      */
     public ImmutableList<Path> getSelectedPaths() {
-        return new ImmutableList<Path>(selectedPaths);
+        return new ImmutableList<>(selectedPaths);
     }
 
     /**
@@ -1160,7 +1160,7 @@ public class TreeView extends Component {
         // TODO Only add and monitor non-duplicates
 
         if (selectedPaths != previousSelectedPaths) {
-            this.selectedPaths = new ArrayList<Path>(PATH_COMPARATOR);
+            this.selectedPaths = new ArrayList<>(PATH_COMPARATOR);
 
             for (int i = 0, n = selectedPaths.getLength(); i < n; i++) {
                 Path path = selectedPaths.get(i);
@@ -1345,7 +1345,7 @@ public class TreeView extends Component {
     @Override
     public void clear() {
         if (treeDataKey != null) {
-            setTreeData(new ArrayList<Object>());
+            setTreeData(new ArrayList<>());
         }
 
         clearSelection();
@@ -1359,7 +1359,7 @@ public class TreeView extends Component {
             Sequence<Path> previousSelectedPaths = selectedPaths;
 
             // Update the selection
-            selectedPaths = new ArrayList<Path>(PATH_COMPARATOR);
+            selectedPaths = new ArrayList<>(PATH_COMPARATOR);
 
             // Notify listeners
             treeViewSelectionListeners.selectedPathsChanged(this, previousSelectedPaths);
@@ -1636,7 +1636,7 @@ public class TreeView extends Component {
             if (showMixedCheckmarkState) {
                 // Record the check states of our ancestors before we change
                 // anything so we know which events to fire after we're done
-                ancestorCheckStates = new ArrayList<NodeCheckState>(path.getLength() - 1);
+                ancestorCheckStates = new ArrayList<>(path.getLength() - 1);
 
                 Path ancestorPath = new Path(path, path.getLength() - 1);
 
@@ -1694,7 +1694,7 @@ public class TreeView extends Component {
      * non-<tt>null</tt>.
      */
     public Sequence<Path> getCheckedPaths() {
-        return new ImmutableList<Path>(checkedPaths);
+        return new ImmutableList<>(checkedPaths);
     }
 
     /**

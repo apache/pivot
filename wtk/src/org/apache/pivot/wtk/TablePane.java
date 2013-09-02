@@ -276,7 +276,7 @@ public class TablePane extends Container {
 
         @Override
         public Iterator<Component> iterator() {
-            return new ImmutableIterator<Component>(cells.iterator());
+            return new ImmutableIterator<>(cells.iterator());
         }
     }
 
@@ -528,7 +528,7 @@ public class TablePane extends Container {
 
         @Override
         public Iterator<Row> iterator() {
-            return new ImmutableIterator<Row>(rows.iterator());
+            return new ImmutableIterator<>(rows.iterator());
         }
     }
 
@@ -614,7 +614,7 @@ public class TablePane extends Container {
 
         @Override
         public Iterator<Column> iterator() {
-            return new ImmutableIterator<Column>(columns.iterator());
+            return new ImmutableIterator<>(columns.iterator());
         }
     }
 

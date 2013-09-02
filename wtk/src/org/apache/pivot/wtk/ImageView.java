@@ -217,7 +217,7 @@ public class ImageView extends Component {
                     // the image at this URL
                     loadMap.get(imageURI).add(this);
                 } else {
-                    Image.load(imageURL, new TaskAdapter<Image>(new TaskListener<Image>() {
+                    Image.load(imageURL, new TaskAdapter<>(new TaskListener<Image>() {
                         @Override
                         public void taskExecuted(Task<Image> task) {
                             Image imageLoadedLocal = task.getResult();
@@ -240,7 +240,7 @@ public class ImageView extends Component {
                         }
                     }));
 
-                    loadMap.put(imageURI, new ArrayList<ImageView>(this));
+                    loadMap.put(imageURI, new ArrayList<>(this));
                 }
             } else {
                 imageLocal = Image.loadFromCache(imageURL);

@@ -639,7 +639,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 public void run() {
                     try {
                         application.startup(primaryDisplayHost.getDisplay(),
-                            new ImmutableMap<String, String>(properties));
+                            new ImmutableMap<>(properties));
                     } catch (Exception exception) {
                         displayException(exception);
                     }

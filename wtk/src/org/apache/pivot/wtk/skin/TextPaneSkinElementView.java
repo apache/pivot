@@ -297,6 +297,6 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
 
     @Override
     public Iterator<TextPaneSkinNodeView> iterator() {
-        return new ImmutableIterator<TextPaneSkinNodeView>(nodeViews.iterator());
+        return new ImmutableIterator<>(nodeViews.iterator());
     }
 }

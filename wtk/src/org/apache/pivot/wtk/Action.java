@@ -80,7 +80,7 @@ public abstract class Action {
 
         @Override
         public Iterator<String> iterator() {
-            return new ImmutableIterator<String>(namedActions.iterator());
+            return new ImmutableIterator<>(namedActions.iterator());
         }
     }
 

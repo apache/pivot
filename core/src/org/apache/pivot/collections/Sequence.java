@@ -29,6 +29,7 @@ public interface Sequence<T> {
      * Collection of static utility methods providing path access to nested
      * sequence data.
      */
+    @SuppressWarnings("unused")
     public static class Tree<T> {
         /**
          * An object representing a path to a nested node in nested sequence
@@ -99,7 +100,7 @@ public interface Sequence<T> {
 
             @Override
             public Iterator<Integer> iterator() {
-                return new ImmutableIterator<Integer>(elements.iterator());
+                return new ImmutableIterator<>(elements.iterator());
             }
 
             @Override
@@ -481,7 +482,7 @@ public interface Sequence<T> {
          * nested sequence.
          */
         public static <T> ItemIterator<T> depthFirstIterator(Sequence<T> sequence) {
-            return new DepthFirstItemIterator<T>(sequence);
+            return new DepthFirstItemIterator<>(sequence);
         }
 
         /**

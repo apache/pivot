@@ -34,6 +34,7 @@ import org.apache.pivot.web.server.QueryServlet;
 public class RESTDemoServlet extends QueryServlet {
     private static final long serialVersionUID = 0;
 
+    @SuppressWarnings("resource")
     @Override
     protected Object doGet(Path path) throws QueryException {
         if (path.getLength() != 1) {
@@ -60,6 +61,7 @@ public class RESTDemoServlet extends QueryServlet {
         return value;
     }
 
+    @SuppressWarnings("resource")
     @Override
     protected URL doPost(Path path, Object value) throws QueryException {
         if (path.getLength() > 0
@@ -92,6 +94,7 @@ public class RESTDemoServlet extends QueryServlet {
         return location;
     }
 
+    @SuppressWarnings("resource")
     @Override
     protected boolean doPut(Path path, Object value) throws QueryException {
         if (path.getLength() != 1

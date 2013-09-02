@@ -34,7 +34,6 @@ import static org.junit.Assert.assertEquals;
 
 public class CSVSerializerTest {
     @Test
-    @SuppressWarnings("unchecked")
     public void testBasicReadObject() throws IOException, SerializationException {
         // Test multiple line break formats
         StringBuilder buf = new StringBuilder();
@@ -94,7 +93,6 @@ public class CSVSerializerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testQuotedCommaReadObject() throws IOException, SerializationException {
         StringBuilder buf = new StringBuilder();
         buf.append("a,\",b,\",c\r\n");
@@ -113,7 +111,6 @@ public class CSVSerializerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testQuotedQuoteReadObject() throws IOException, SerializationException {
         StringBuilder buf = new StringBuilder();
         buf.append("a,\"\"\"b\"\"\",c\r\n");
@@ -132,7 +129,6 @@ public class CSVSerializerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testQuotedNewlineReadObject() throws IOException, SerializationException {
         StringBuilder buf = new StringBuilder();
         buf.append("a,\"b\nb  \",c\r\n");
@@ -151,15 +147,14 @@ public class CSVSerializerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testBasicWriteObject() throws IOException {
         List<Object> items = new ArrayList<>();
-        items.add(new HashMap<String, Object>(
+        items.add(new HashMap<>(
             new Dictionary.Pair<String, Object>("A", "a1"),
             new Dictionary.Pair<String, Object>("B", "b1"),
             new Dictionary.Pair<String, Object>("C", "c1")
         ));
-        items.add(new HashMap<String, Object>(
+        items.add(new HashMap<>(
             new Dictionary.Pair<String, Object>("A", "a2"),
             new Dictionary.Pair<String, Object>("B", "b2"),
             new Dictionary.Pair<String, Object>("C", "c2")
@@ -176,10 +171,9 @@ public class CSVSerializerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testQuotedCommaWriteObject() throws IOException {
         List<Object> items = new ArrayList<>();
-        items.add(new HashMap<String, Object>(
+        items.add(new HashMap<>(
             new Dictionary.Pair<String, Object>("A", "a"),
             new Dictionary.Pair<String, Object>("B", ",b,"),
             new Dictionary.Pair<String, Object>("C", "c")
@@ -196,10 +190,9 @@ public class CSVSerializerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testQuotedQuoteWriteObject() throws IOException {
         List<Object> items = new ArrayList<>();
-        items.add(new HashMap<String, Object>(
+        items.add(new HashMap<>(
             new Dictionary.Pair<String, Object>("A", "a"),
             new Dictionary.Pair<String, Object>("B", "\"b\""),
             new Dictionary.Pair<String, Object>("C", "c")
@@ -216,10 +209,9 @@ public class CSVSerializerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testQuotedNewlineWriteObject() throws IOException {
         List<Object> items = new ArrayList<>();
-        items.add(new HashMap<String, Object>(
+        items.add(new HashMap<>(
             new Dictionary.Pair<String, Object>("A", "a"),
             new Dictionary.Pair<String, Object>("B", "\nb\n"),
             new Dictionary.Pair<String, Object>("C", "c")
@@ -241,7 +233,6 @@ public class CSVSerializerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testInlineKeys() throws IOException, SerializationException {
         StringBuilder buf = new StringBuilder();
         buf.append("A \t, B ,C \n");

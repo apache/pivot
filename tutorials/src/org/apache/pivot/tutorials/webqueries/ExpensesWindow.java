@@ -135,7 +135,7 @@ public class ExpensesWindow extends Window implements Bindable {
         }
 
         // Create the delete confirmation prompt
-        ArrayList<String> options = new ArrayList<String>((String) resources.get("ok"), (String) resources.get("cancel"));
+        ArrayList<String> options = new ArrayList<>((String) resources.get("ok"), (String) resources.get("cancel"));
         deleteConfirmationPrompt = new Prompt(MessageType.QUESTION, (String)resources.get("confirmDelete"),
             options);
 
@@ -178,7 +178,7 @@ public class ExpensesWindow extends Window implements Bindable {
         activityIndicatorBoxPane.setVisible(true);
         activityIndicator.setActive(true);
 
-        expenseListQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
+        expenseListQuery.execute(new TaskAdapter<>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
                 activityIndicatorBoxPane.setVisible(false);
@@ -198,7 +198,6 @@ public class ExpensesWindow extends Window implements Bindable {
         }));
     }
 
-    @SuppressWarnings("unchecked")
     private void addExpense() {
         expenseSheet.clear();
         expenseSheet.open(this, new SheetCloseListener() {
@@ -220,7 +219,7 @@ public class ExpensesWindow extends Window implements Bindable {
                     activityIndicatorBoxPane.setVisible(true);
                     activityIndicator.setActive(true);
 
-                    addExpenseQuery.execute(new TaskAdapter<URL>(new TaskListener<URL>() {
+                    addExpenseQuery.execute(new TaskAdapter<>(new TaskListener<URL>() {
                         @Override
                         public void taskExecuted(Task<URL> task) {
                             activityIndicatorBoxPane.setVisible(false);
@@ -248,7 +247,6 @@ public class ExpensesWindow extends Window implements Bindable {
         });
     }
 
-    @SuppressWarnings("unchecked")
     private void updateSelectedExpense() {
         Object expense = expenseTableView.getSelectedRow();
         final int id = JSON.getInt(expense, "id");
@@ -273,7 +271,7 @@ public class ExpensesWindow extends Window implements Bindable {
                     activityIndicatorBoxPane.setVisible(true);
                     activityIndicator.setActive(true);
 
-                    updateExpenseQuery.execute(new TaskAdapter<Boolean>(new TaskListener<Boolean>() {
+                    updateExpenseQuery.execute(new TaskAdapter<>(new TaskListener<Boolean>() {
                         @Override
                         public void taskExecuted(Task<Boolean> task) {
                             activityIndicatorBoxPane.setVisible(false);
@@ -302,7 +300,6 @@ public class ExpensesWindow extends Window implements Bindable {
         });
     }
 
-    @SuppressWarnings("unchecked")
     private void deleteSelectedExpense() {
         Object expense = expenseTableView.getSelectedRow();
         final int id = JSON.getInt(expense, "id");
@@ -322,7 +319,7 @@ public class ExpensesWindow extends Window implements Bindable {
                     activityIndicatorBoxPane.setVisible(true);
                     activityIndicator.setActive(true);
 
-                    deleteExpenseQuery.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+                    deleteExpenseQuery.execute(new TaskAdapter<>(new TaskListener<Void>() {
                         @Override
                         public void taskExecuted(Task<Void> task) {
                             activityIndicatorBoxPane.setVisible(false);

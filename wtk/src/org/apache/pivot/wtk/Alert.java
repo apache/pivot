@@ -114,7 +114,7 @@ public class Alert extends Dialog {
 
         @Override
         public Iterator<Object> iterator() {
-            return new ImmutableIterator<Object>(options.iterator());
+            return new ImmutableIterator<>(options.iterator());
         }
     }
 
@@ -208,7 +208,7 @@ public class Alert extends Dialog {
 
         setMessageType((messageType == null) ? MessageType.INFO : messageType);
         setMessage(message);
-        setOptions((options == null) ? new ArrayList<Object>(resources.get("defaultOption")) : options);
+        setOptions((options == null) ? new ArrayList<>(resources.get("defaultOption")) : options);
         setBody(body);
 
         if (messageType == null) {

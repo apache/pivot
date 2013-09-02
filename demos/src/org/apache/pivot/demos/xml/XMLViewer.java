@@ -132,6 +132,7 @@ public class XMLViewer extends Application.Adapter {
                 File file = fileList.get(0);
 
                 XMLSerializer xmlSerializer = new XMLSerializer();
+                @SuppressWarnings("resource")
                 FileInputStream fileInputStream = null;
                 try {
                     try {

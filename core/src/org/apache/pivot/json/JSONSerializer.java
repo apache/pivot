@@ -541,7 +541,6 @@ public class JSONSerializer implements Serializer<Object> {
         return BeanAdapter.coerce(value, (Class<?>)typeArgument);
     }
 
-    @SuppressWarnings("unchecked")
     private Object readListValue(Reader reader, Type typeArgument)
         throws IOException, SerializationException {
         Sequence<Object> sequence = null;
@@ -653,7 +652,6 @@ public class JSONSerializer implements Serializer<Object> {
         return sequence;
     }
 
-    @SuppressWarnings("unchecked")
     private Object readMapValue(Reader reader, Type typeArgument)
         throws IOException, SerializationException {
         Dictionary<String, Object> dictionary = null;

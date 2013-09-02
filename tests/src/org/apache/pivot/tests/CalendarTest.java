@@ -89,7 +89,7 @@ public class CalendarTest extends Application.Adapter {
 
                 System.out.println("STARTING TASK");
 
-                task.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+                task.execute(new TaskAdapter<>(new TaskListener<Void>() {
                     @Override
                     public void taskExecuted(Task<Void> taskArgument) {
                         System.out.println("EXECUTED");

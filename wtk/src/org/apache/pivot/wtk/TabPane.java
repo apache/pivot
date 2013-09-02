@@ -146,7 +146,7 @@ public class TabPane extends Container {
 
         @Override
         public Iterator<Component> iterator() {
-            return new ImmutableIterator<Component>(tabs.iterator());
+            return new ImmutableIterator<>(tabs.iterator());
         }
     }
 

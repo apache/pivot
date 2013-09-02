@@ -216,7 +216,6 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
         firedEventsTableView.getTableData().clear();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void selectAllEvents(boolean select) {
         List<TreeNode> treeData = (List<TreeNode>)declaredEventsTreeView.getTreeData();
@@ -284,7 +283,6 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
         setEventIncluded(method, false);
     }
 
-    @SuppressWarnings("unchecked")
     private void setEventIncluded(Method event, boolean included) {
         List<TreeNode> treeData = (List<TreeNode>)declaredEventsTreeView.getTreeData();
 
@@ -304,7 +302,6 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void eventFired(EventLogger eventLogger, Method event, Object[] arguments) {
         HashMap<String, Object> row = new HashMap<>();
         row.put("interface", event.getDeclaringClass().getSimpleName());

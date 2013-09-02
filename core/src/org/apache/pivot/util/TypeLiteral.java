@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
  * <a href="http://code.google.com/p/google-guice/">Google Guice</a>'s
  * {@code TypeLiteral} class, written by Bob Lee and Jesse Wilson.
  */
+@SuppressWarnings("unused")
 public class TypeLiteral<T> {
     private final Type type;
 

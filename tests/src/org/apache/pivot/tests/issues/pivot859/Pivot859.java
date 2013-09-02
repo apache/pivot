@@ -178,6 +178,7 @@ public class Pivot859 extends Application.Adapter {
 
             long start = System.currentTimeMillis();
             Serializer<String> serializer = new StringSerializer();
+            @SuppressWarnings("resource")
             InputStream inputStream = url.openStream();
             String result = serializer.readObject(inputStream);
             if (result == null){

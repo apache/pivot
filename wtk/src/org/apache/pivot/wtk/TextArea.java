@@ -457,7 +457,7 @@ public class TextArea extends Component {
 
         @Override
         public Iterator<Paragraph> iterator() {
-            return new ImmutableIterator<Paragraph>(paragraphs.iterator());
+            return new ImmutableIterator<>(paragraphs.iterator());
         }
     }
 

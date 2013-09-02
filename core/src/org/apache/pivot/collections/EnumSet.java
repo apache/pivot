@@ -77,7 +77,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     private boolean[] members;
     private int count = 0;
 
-    private transient SetListenerList<E> setListeners = new SetListenerList<E>();
+    private transient SetListenerList<E> setListeners = new SetListenerList<>();
 
     public EnumSet(Class<E> enumClass) {
         this.enumClass = enumClass;

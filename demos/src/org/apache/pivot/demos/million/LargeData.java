@@ -72,7 +72,7 @@ public class LargeData extends Application.Adapter {
                     CSVSerializer csvSerializer = new CSVSerializer();
                     csvSerializer.setKeys("c0", "c1", "c2", "c3");
                     csvSerializer.getCSVSerializerListeners().add(new CSVSerializerListener.Adapter() {
-                        private ArrayList<Object> page = new ArrayList<Object>(pageSize);
+                        private ArrayList<Object> page = new ArrayList<>(pageSize);
 
                         @Override
                         public void endList(CSVSerializer csvSerializerArgument) {
@@ -87,7 +87,7 @@ public class LargeData extends Application.Adapter {
 
                             if (page.getLength() == pageSize) {
                                 ApplicationContext.queueCallback(new AddRowsCallback(page));
-                                page = new ArrayList<Object>(pageSize);
+                                page = new ArrayList<>(pageSize);
                             }
                         }
                     });
@@ -115,7 +115,6 @@ public class LargeData extends Application.Adapter {
             this.page = page;
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public void run() {
             List<Object> tableData = (List<Object>)tableView.getTableData();
@@ -198,7 +197,6 @@ public class LargeData extends Application.Adapter {
 
         tableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
-            @SuppressWarnings("unchecked")
             public void sortChanged(TableView tableViewArgument) {
                 List<Object> tableData = (List<Object>)tableViewArgument.getTableData();
 
@@ -225,7 +223,7 @@ public class LargeData extends Application.Adapter {
     private void loadData() {
         int index = fileListButton.getSelectedIndex();
         int capacity = (int)Math.pow(10, index + 1);
-        tableView.setTableData(new ArrayList<Object>(capacity));
+        tableView.setTableData(new ArrayList<>(capacity));
 
         pageSize = Math.max(capacity / 1000, 100);
 
@@ -245,7 +243,7 @@ public class LargeData extends Application.Adapter {
             System.out.println("Loading \"" + fileURL + "\" ...");
 
             loadDataTask = new LoadDataTask(fileURL);
-            loadDataTask.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+            loadDataTask.execute(new TaskAdapter<>(new TaskListener<Void>() {
                 @Override
                 public void taskExecuted(Task<Void> task) {
                     long t1 = System.currentTimeMillis();

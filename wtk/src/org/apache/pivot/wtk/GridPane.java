@@ -142,7 +142,7 @@ public class GridPane extends Container {
 
         @Override
         public Iterator<Component> iterator() {
-            return new ImmutableIterator<Component>(cells.iterator());
+            return new ImmutableIterator<>(cells.iterator());
         }
     }
 
@@ -250,7 +250,7 @@ public class GridPane extends Container {
 
         @Override
         public Iterator<Row> iterator() {
-            return new ImmutableIterator<Row>(rows.iterator());
+            return new ImmutableIterator<>(rows.iterator());
         }
     }
 

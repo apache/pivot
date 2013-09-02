@@ -114,7 +114,7 @@ public class Prompt extends Sheet {
 
         @Override
         public Iterator<Object> iterator() {
-            return new ImmutableIterator<Object>(options.iterator());
+            return new ImmutableIterator<>(options.iterator());
         }
     }
 
@@ -198,7 +198,7 @@ public class Prompt extends Sheet {
     public Prompt(MessageType messageType, String message, Sequence<?> options, Component body) {
         setMessageType((messageType == null) ? MessageType.INFO : messageType);
         setMessage(message);
-        setOptions((options == null) ? new ArrayList<Object>(resources.get("defaultOption")) : options);
+        setOptions((options == null) ? new ArrayList<>(resources.get("defaultOption")) : options);
         setBody(body);
 
         installSkin(Prompt.class);

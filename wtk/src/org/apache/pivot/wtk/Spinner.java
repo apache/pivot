@@ -362,7 +362,7 @@ public class Spinner extends Container {
      * instead.
      */
     public Spinner() {
-        this(new ImmutableList<Object>(new ArrayList<Object>()));
+        this(new ImmutableList<>(new ArrayList<>()));
     }
 
     /**
@@ -695,7 +695,7 @@ public class Spinner extends Container {
     @Override
     public void clear() {
         if (spinnerDataKey != null) {
-            setSpinnerData(new ArrayList<Object>());
+            setSpinnerData(new ArrayList<>());
         }
 
         if (selectedItemKey != null) {

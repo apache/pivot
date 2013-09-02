@@ -30,7 +30,7 @@ import org.apache.pivot.util.ListenerList;
 public class ImmutableSet<E> implements Set<E> {
     private Set<E> set = null;
 
-    private SetListenerList<E> setListeners = new SetListenerList<E>();
+    private SetListenerList<E> setListeners = new SetListenerList<>();
 
     public ImmutableSet(Set<E> set) {
         if (set == null) {
@@ -82,7 +82,7 @@ public class ImmutableSet<E> implements Set<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new ImmutableIterator<E>(set.iterator());
+        return new ImmutableIterator<>(set.iterator());
     }
 
     @Override

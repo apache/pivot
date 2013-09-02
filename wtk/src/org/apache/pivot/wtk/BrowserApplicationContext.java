@@ -220,7 +220,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 if (HostApplet.this.application != null) {
                     try {
                         HostApplet.this.application.startup(HostApplet.this.displayHost.getDisplay(),
-                            new ImmutableMap<String, String>(HostApplet.this.startupProperties));
+                            new ImmutableMap<>(HostApplet.this.startupProperties));
                     } catch (Exception exception) {
                         displayException(exception);
                     }

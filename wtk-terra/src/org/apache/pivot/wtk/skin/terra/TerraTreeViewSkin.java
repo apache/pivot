@@ -224,7 +224,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         public static final byte CHECK_STATE_MASK = CHECK_STATE_CHECKED_MASK
             | CHECK_STATE_MIXED_MASK;
 
-        @SuppressWarnings("unchecked")
         private NodeInfo(TreeView treeView, BranchInfo parent, Object data) {
             this.treeView = treeView;
             this.parent = parent;
@@ -398,7 +397,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 List<Object> dataLocal = (List<Object>)this.data;
                 int count = dataLocal.getLength();
 
-                children = new ArrayList<NodeInfo>(count);
+                children = new ArrayList<>(count);
 
                 for (int i = 0; i < count; i++) {
                     Object nodeData = dataLocal.get(i);
@@ -2032,7 +2031,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     // TreeViewListener methods
 
     @Override
-    @SuppressWarnings("unchecked")
     public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
         List<Object> treeData = (List<Object>)treeView.getTreeData();
 
@@ -2110,7 +2108,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
         final Filter<Object> disabledNodeFilter = (Filter<Object>)treeView.getDisabledNodeFilter();
 
@@ -2128,7 +2125,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void disabledCheckmarkFilterChanged(TreeView treeView,
         Filter<?> previousDisabledCheckmarkFilter) {
         final Filter<Object> disabledCheckmarkFilter = (Filter<Object>)

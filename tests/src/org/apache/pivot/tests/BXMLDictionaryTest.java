@@ -21,7 +21,6 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSONSerializer;
 
 public class BXMLDictionaryTest {
-    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         HashMap<String, Object> hashMap =

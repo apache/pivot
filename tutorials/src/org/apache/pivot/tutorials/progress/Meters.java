@@ -81,7 +81,7 @@ public class Meters extends Window implements Bindable {
                     // task adapter so the result handlers are called on the
                     // UI thread
                     sampleTask = new SampleTask();
-                    sampleTask.execute(new TaskAdapter<Void>(new TaskListener<Void>() {
+                    sampleTask.execute(new TaskAdapter<>(new TaskListener<Void>() {
                         @Override
                         public void taskExecuted(Task<Void> task) {
                             reset();

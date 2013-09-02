@@ -113,7 +113,7 @@ public abstract class Component implements ConstrainedVisual {
 
         @Override
         public Iterator<String> iterator() {
-            return new ImmutableIterator<String>(styles.iterator());
+            return new ImmutableIterator<>(styles.iterator());
         }
     }
 
@@ -164,7 +164,7 @@ public abstract class Component implements ConstrainedVisual {
 
         @Override
         public Iterator<String> iterator() {
-            return new ImmutableIterator<String>(userData.iterator());
+            return new ImmutableIterator<>(userData.iterator());
         }
     }
 
@@ -280,7 +280,7 @@ public abstract class Component implements ConstrainedVisual {
 
         @Override
         public Iterator<Decorator> iterator() {
-            return new ImmutableIterator<Decorator>(decorators.iterator());
+            return new ImmutableIterator<>(decorators.iterator());
         }
     }
 
@@ -882,7 +882,6 @@ public abstract class Component implements ConstrainedVisual {
         return (Container)component;
     }
 
-    @SuppressWarnings("unchecked")
     public Container getAncestor(String ancestorTypeName) throws ClassNotFoundException {
         if (ancestorTypeName == null) {
             throw new IllegalArgumentException();

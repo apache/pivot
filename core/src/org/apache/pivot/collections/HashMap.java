@@ -206,7 +206,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             if (entry.key.equals(key)) {
                 // Update the entry
                 previousValue = entry.value;
-                iterator.update(new Pair<K, V>(key, value));
+                iterator.update(new Pair<>(key, value));
 
                 if (mapListeners != null
                     && notifyListeners) {
@@ -221,7 +221,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
         if (i == bucket.getLength()) {
             // Add the entry
-            bucket.add(new Pair<K, V>(key, value));
+            bucket.add(new Pair<>(key, value));
 
             if (keys != null) {
                 keys.add(key);
@@ -357,7 +357,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     private void rehash(int capacity) {
         ArrayList<LinkedList<Pair<K, V>>> previousBuckets = this.buckets;
-        buckets = new ArrayList<LinkedList<Pair<K, V>>>(capacity);
+        buckets = new ArrayList<>(capacity);
 
         for (int i = 0; i < capacity; i++) {
             buckets.add(null);
@@ -386,7 +386,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
         LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndex);
         if (bucket == null) {
-            bucket = new LinkedList<Pair<K, V>>();
+            bucket = new LinkedList<>();
             buckets.update(bucketIndex, bucket);
         }
 
@@ -407,7 +407,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         } else {
             if (keys == null) {
                 // Populate key list
-                ArrayList<K> keysLocal = new ArrayList<K>((int)(getCapacity() * loadFactor));
+                ArrayList<K> keysLocal = new ArrayList<>((int)(getCapacity() * loadFactor));
                 for (K key : this) {
                     keysLocal.add(key);
                 }
@@ -425,13 +425,13 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     @Override
     public Iterator<K> iterator() {
-        return (keys == null) ? new KeyIterator() : new ImmutableIterator<K>(keys.iterator());
+        return (keys == null) ? new KeyIterator() : new ImmutableIterator<>(keys.iterator());
     }
 
     @Override
     public ListenerList<MapListener<K, V>> getMapListeners() {
         if (mapListeners == null) {
-            mapListeners = new MapListenerList<K, V>();
+            mapListeners = new MapListenerList<>();
         }
 
         return mapListeners;

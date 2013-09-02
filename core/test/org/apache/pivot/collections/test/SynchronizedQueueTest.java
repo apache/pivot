@@ -36,7 +36,7 @@ public class SynchronizedQueueTest {
 
     private static void testSynchronizedQueue(Queue<String> queue) {
         final SynchronizedQueue<String> synchronizedQueue =
-            new SynchronizedQueue<String>(queue);
+            new SynchronizedQueue<>(queue);
 
         Task<Void> testTask = new Task<Void>() {
             @Override

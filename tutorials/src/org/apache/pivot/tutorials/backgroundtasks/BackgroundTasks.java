@@ -92,7 +92,7 @@ public class BackgroundTasks extends Window implements Bindable {
                     }
                 };
 
-                sleepTask.execute(new TaskAdapter<String>(taskListener));
+                sleepTask.execute(new TaskAdapter<>(taskListener));
             }
         });
     }

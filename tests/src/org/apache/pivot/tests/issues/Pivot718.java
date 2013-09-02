@@ -88,7 +88,6 @@ public class Pivot718 extends Application.Adapter {
         listDelButton.getButtonPressListeners().add(new ButtonPressListener() {
 
             @Override
-            @SuppressWarnings("unchecked")
             public void buttonPressed(Button button) {
                 Object x = list.getSelectedItem();
                 System.out.println("delete :: " + x);

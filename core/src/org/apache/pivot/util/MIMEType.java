@@ -62,7 +62,7 @@ public class MIMEType implements Dictionary<String, String>, Iterable<String> {
 
     @Override
     public Iterator<String> iterator() {
-        return new ImmutableIterator<String>(this.parameters.iterator());
+        return new ImmutableIterator<>(this.parameters.iterator());
     }
 
     @Override

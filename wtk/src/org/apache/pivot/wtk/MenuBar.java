@@ -255,7 +255,7 @@ public class MenuBar extends Container {
 
         @Override
         public Iterator<Item> iterator() {
-            return new ImmutableIterator<Item>(items.iterator());
+            return new ImmutableIterator<>(items.iterator());
         }
     }
 

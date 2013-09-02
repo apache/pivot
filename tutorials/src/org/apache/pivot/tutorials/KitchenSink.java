@@ -257,7 +257,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
         public ListsRollupStateHandler() {
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
             if (this.component == null) {
@@ -683,7 +682,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 columns.get(4).setHeaderData(new TableViewHeaderData("D"));
 
                 // Populate table
-                ArrayList<Object> tableData = new ArrayList<Object>(10000);
+                ArrayList<Object> tableData = new ArrayList<>(10000);
 
                 for (int i = 0, n = tableData.getCapacity(); i < n; i++) {
                     HashMap<String, Integer> tableRow = new HashMap<>();
@@ -721,7 +720,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         resort(tableView);
                     }
 
-                    @SuppressWarnings("unchecked")
                     private void resort(TableView tableView) {
                         List<Object> tableDataOfTableView = (List<Object>)tableView.getTableData();
                         tableDataOfTableView.setComparator(new TableViewRowComparator(tableView));
@@ -730,7 +728,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 this.customTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
                     @Override
-                    @SuppressWarnings("unchecked")
                     public boolean mouseClick(Component comp, Mouse.Button button, int x, int y, int count) {
                        if (button == Mouse.Button.LEFT) {
                            List<CustomTableRow> customTableData =

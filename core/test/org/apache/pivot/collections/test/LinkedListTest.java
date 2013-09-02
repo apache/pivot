@@ -57,9 +57,9 @@ public class LinkedListTest {
         assertTrue(list.get(1).equals("F"));
 
         list.insert("G", 0);
-        assertTrue(list.equals(new LinkedList<String>("G", "B", "F", "D")));
-        assertFalse(list.equals(new LinkedList<String>("G", "B", "F", "D", "E")));
-        assertFalse(list.equals(new LinkedList<String>("B", "F", "E")));
+        assertTrue(list.equals(new LinkedList<>("G", "B", "F", "D")));
+        assertFalse(list.equals(new LinkedList<>("G", "B", "F", "D", "E")));
+        assertFalse(list.equals(new LinkedList<>("B", "F", "E")));
 
         assertEquals(4, list.getLength());
 
@@ -90,11 +90,11 @@ public class LinkedListTest {
 
         iterator = list.iterator();
         iterator.insert("M");
-        assertEquals(list, new LinkedList<String>("M", "G", "B", "F", "D"));
+        assertEquals(list, new LinkedList<>("M", "G", "B", "F", "D"));
 
         assertEquals(iterator.next(), "M");
         iterator.insert("N");
-        assertEquals(list, new LinkedList<String>("M", "N", "G", "B", "F", "D"));
+        assertEquals(list, new LinkedList<>("M", "N", "G", "B", "F", "D"));
 
         iterator = list.iterator();
         iterator.toEnd();
@@ -120,7 +120,7 @@ public class LinkedListTest {
         linkedList.add("A");
         linkedList.add("z");
 
-        assertEquals(linkedList, new LinkedList<String>("A", "d", "N", "P", "z"));
+        assertEquals(linkedList, new LinkedList<>("A", "d", "N", "P", "z"));
     }
 
     @Test
@@ -140,7 +140,7 @@ public class LinkedListTest {
             }
         });
 
-        assertEquals(linkedList, new LinkedList<String>("A", "d", "N", "P", "z"));
+        assertEquals(linkedList, new LinkedList<>("A", "d", "N", "P", "z"));
     }
 
     @Test(expected=ConcurrentModificationException.class)

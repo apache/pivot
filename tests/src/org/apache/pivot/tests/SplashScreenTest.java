@@ -210,7 +210,7 @@ public class SplashScreenTest extends Application.Adapter {
         };
 
         // Run the Task asynchronously
-        prepareApplicationTask.execute(new TaskAdapter<Void>(taskListener));
+        prepareApplicationTask.execute(new TaskAdapter<>(taskListener));
     }
 
 

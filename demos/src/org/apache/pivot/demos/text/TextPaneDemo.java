@@ -118,7 +118,7 @@ public class TextPaneDemo extends Application.Adapter {
         Font italicButtonFont = (Font)italicButton.getStyles().get("font");
         italicButton.getStyles().put("font", italicButtonFont.deriveFont(Font.ITALIC));
 
-        fontFamilyListButton.setListData(new ArrayList<String>(
+        fontFamilyListButton.setListData(new ArrayList<>(
             GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()));
         fontSizeListButton.setSelectedItem(fontFamilyListButton.getListData().get(0));
         fontFamilyListButton.setItemRenderer(new ListViewItemRenderer() {

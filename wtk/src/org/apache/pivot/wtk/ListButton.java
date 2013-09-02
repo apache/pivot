@@ -289,7 +289,7 @@ public class ListButton extends Button {
      * Creates an empty list button.
      */
     public ListButton() {
-        this(new ArrayList<Object>());
+        this(new ArrayList<>());
     }
 
     /**
@@ -298,7 +298,7 @@ public class ListButton extends Button {
      * @param buttonData
      */
     public ListButton(Object buttonData) {
-        this(buttonData, new ArrayList<Object>());
+        this(buttonData, new ArrayList<>());
     }
 
     /**
@@ -785,7 +785,7 @@ public class ListButton extends Button {
     @Override
     public void clear() {
         if (listDataKey != null) {
-            setListData(new ArrayList<Object>());
+            setListData(new ArrayList<>());
         }
 
         if (selectedItemKey != null) {

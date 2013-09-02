@@ -153,7 +153,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         items = new Object[capacity];
     }
 
-    @SuppressWarnings({"unchecked", "varargs"})
+    @SuppressWarnings({"unchecked"})
     public ArrayList(T... items) {
         this(items, 0, items.length);
     }
@@ -305,7 +305,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     public Sequence<T> remove(int index, int count) {
         verifyIndexBounds(index, count, 0, length);
 
-        ArrayList<T> removed = new ArrayList<T>((T[])items, index, count);
+        ArrayList<T> removed = new ArrayList<>((T[])items, index, count);
 
         // Remove items
         if (count > 0) {
@@ -452,7 +452,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     @Override
     public ListenerList<ListListener<T>> getListListeners() {
         if (listListeners == null) {
-            listListeners = new ListListenerList<T>();
+            listListeners = new ListListenerList<>();
         }
 
         return listListeners;

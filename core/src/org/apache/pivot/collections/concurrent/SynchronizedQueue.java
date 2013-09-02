@@ -52,7 +52,7 @@ public class SynchronizedQueue<T> implements Queue<T> {
     }
 
     private Queue<T> queue;
-    private SynchronizedQueueListenerList<T> queueListeners = new SynchronizedQueueListenerList<T>();
+    private SynchronizedQueueListenerList<T> queueListeners = new SynchronizedQueueListenerList<>();
 
     public SynchronizedQueue(Queue<T> queue) {
         if (queue == null) {
@@ -128,7 +128,7 @@ public class SynchronizedQueue<T> implements Queue<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new ImmutableIterator<T>(queue.iterator());
+        return new ImmutableIterator<>(queue.iterator());
     }
 
     @Override

@@ -35,7 +35,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     private static final long serialVersionUID = -816891924416727900L;
 
     private java.util.Set<E> set = null;
-    private transient SetListenerList<E> setListeners = new SetListenerList<E>();
+    private transient SetListenerList<E> setListeners = new SetListenerList<>();
 
     public SetAdapter(java.util.Set<E> set) {
         if (set == null) {
@@ -100,7 +100,6 @@ public class SetAdapter<E> implements Set<E>, Serializable {
         return set.size();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Comparator<E> getComparator() {
         if (this.set instanceof java.util.SortedSet<?>) {
@@ -109,7 +108,6 @@ public class SetAdapter<E> implements Set<E>, Serializable {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void setComparator(Comparator<E> comparator) {
         Comparator<E> previousComparator = getComparator();
@@ -143,7 +141,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
 
     @Override
     public Iterator<E> iterator() {
-        return new ImmutableIterator<E>(set.iterator());
+        return new ImmutableIterator<>(set.iterator());
     }
 
     @Override

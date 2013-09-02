@@ -208,7 +208,7 @@ public class ResultList implements List<Map<String, Object>> {
            throw new IllegalArgumentException();
        }
 
-       this.fields = new ArrayList<Field>(fields);
+       this.fields = new ArrayList<>(fields);
    }
 
    public void setFields(Field... fields) {
@@ -216,7 +216,7 @@ public class ResultList implements List<Map<String, Object>> {
            throw new IllegalArgumentException();
        }
 
-       setFields(new ArrayAdapter<Field>(fields));
+       setFields(new ArrayAdapter<>(fields));
    }
 
    public boolean getIncludeNullValues() {

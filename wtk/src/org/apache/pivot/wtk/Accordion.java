@@ -138,7 +138,7 @@ public class Accordion extends Container {
 
         @Override
         public Iterator<Component> iterator() {
-            return new ImmutableIterator<Component>(panels.iterator());
+            return new ImmutableIterator<>(panels.iterator());
         }
     }
 

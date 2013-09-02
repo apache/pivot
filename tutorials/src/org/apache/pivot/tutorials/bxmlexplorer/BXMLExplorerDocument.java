@@ -184,7 +184,6 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
         });
     }
 
-    @SuppressWarnings("unchecked")
     private static Path getPathForNode(TreeView treeView, TreeNode treeNode) {
         List<Object> treeData = (List<Object>) treeView.getTreeData();
         Sequence.Tree.ItemIterator<Object> itemIterator = Sequence.Tree.depthFirstIterator(treeData);

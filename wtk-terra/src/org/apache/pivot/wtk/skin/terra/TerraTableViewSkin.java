@@ -212,7 +212,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public int getBaseline(int width, int height) {
         TableView tableView = (TableView)getComponent();
         List<Object> tableData = (List<Object>)tableView.getTableData();
@@ -248,7 +247,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void layout() {
         columnWidths = getColumnWidths((TableView)getComponent(), getWidth());
 
@@ -259,7 +257,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             List<Object> tableData = (List<Object>)tableView.getTableData();
 
             int n = tableData.getLength();
-            rowBoundaries = new ArrayList<Integer>(n);
+            rowBoundaries = new ArrayList<>(n);
 
             int rowY = 0;
             for (int i = 0; i < n; i++) {
@@ -329,7 +327,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void paint(Graphics2D graphics) {
         TableView tableView = (TableView)getComponent();
         List<Object> tableData = (List<Object>)tableView.getTableData();
@@ -547,7 +544,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         return rowHeight;
     }
 
-    @SuppressWarnings("unchecked")
     protected int getVariableRowHeight(int rowIndex, ArrayList<Integer> columnWidthsArgument) {
         TableView tableView = (TableView)getComponent();
         List<Object> tableData = (List<Object>)tableView.getTableData();
@@ -569,7 +565,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     // Table view skin methods
     @Override
-    @SuppressWarnings("unchecked")
     public int getRowAt(int y) {
         if (y < 0) {
             throw new IllegalArgumentException("y is negative");
@@ -641,7 +636,6 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Bounds getCellBounds(int rowIndex, int columnIndex) {
         TableView tableView = (TableView)getComponent();
         List<Object> tableData = (List<Object>)tableView.getTableData();
@@ -668,7 +662,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         TableView.ColumnSequence columns = tableView.getColumns();
         int n = columns.getLength();
 
-        ArrayList<Integer> columnWidths = new ArrayList<Integer>(n);
+        ArrayList<Integer> columnWidths = new ArrayList<>(n);
 
         for (int i = 0; i < n; i++) {
             TableView.Column column = columns.get(i);

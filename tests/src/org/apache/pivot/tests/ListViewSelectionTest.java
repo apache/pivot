@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.Span;
 public class ListViewSelectionTest extends Application.Adapter {
     private ListView listView = new ListView();
 
-    @SuppressWarnings("unchecked")
     public ListViewSelectionTest() {
         List<Object> listData = (List<Object>)listView.getListData();
 

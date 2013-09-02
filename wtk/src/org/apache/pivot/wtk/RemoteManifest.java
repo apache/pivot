@@ -104,7 +104,6 @@ public class RemoteManifest implements Manifest {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public FileList getFileList() throws IOException {
         FileList fileList = null;
 

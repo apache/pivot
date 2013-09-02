@@ -79,7 +79,7 @@ public class RepeatableListButtons extends Window implements Bindable {
             }
         };
 
-        ArrayList<String> numbers = new ArrayList<String>("One", "Two", "Three", "Four", "Five",
+        ArrayList<String> numbers = new ArrayList<>("One", "Two", "Three", "Four", "Five",
             "Six", "Seven", "Eight", "Nine", "Ten");
 
         for (String number : numbers) {

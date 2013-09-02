@@ -245,7 +245,6 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void endEdit(boolean result) {
         if (result) {
             // Update the row data

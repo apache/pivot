@@ -265,7 +265,7 @@ public class RangeSelection {
      * Returns an immutable wrapper around the selected ranges.
      */
     public ImmutableList<Span> getSelectedRanges() {
-        return new ImmutableList<Span>(selectedRanges);
+        return new ImmutableList<>(selectedRanges);
     }
 
     /**

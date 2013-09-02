@@ -55,11 +55,11 @@ public class ArrayListTest {
         assertNotNull(list.get(1));
         assertTrue(list.get(1).equals("E"));
 
-        assertTrue(list.equals(new ArrayList<String>("B", "E", "D")));
-        assertFalse(list.equals(new ArrayList<String>("B", "E", "D", "C")));
-        assertFalse(list.equals(new ArrayList<String>("E", "C", "D")));
+        assertTrue(list.equals(new ArrayList<>("B", "E", "D")));
+        assertFalse(list.equals(new ArrayList<>("B", "E", "D", "C")));
+        assertFalse(list.equals(new ArrayList<>("E", "C", "D")));
 
-        ArrayList<String> copy = new ArrayList<String>("B", "E", "D");
+        ArrayList<String> copy = new ArrayList<>("B", "E", "D");
         int i = 0;
         for (String item : list) {
             assertEquals(item, copy.get(i++));
@@ -87,11 +87,11 @@ public class ArrayListTest {
         iterator = list.iterator();
         iterator.insert("M");
 
-        assertEquals(list, new ArrayList<String>("M", "B", "E", "D"));
+        assertEquals(list, new ArrayList<>("M", "B", "E", "D"));
 
         assertEquals(iterator.next(), "M");
         iterator.insert("N");
-        assertEquals(list, new ArrayList<String>("M", "N", "B", "E", "D"));
+        assertEquals(list, new ArrayList<>("M", "N", "B", "E", "D"));
 
         iterator = list.iterator();
         iterator.toEnd();
@@ -107,7 +107,7 @@ public class ArrayListTest {
         ArrayList<Object> list = new ArrayList<Object>("a", "b", "c");
 
         Sequence<?> sequence = list;
-        list = new ArrayList<Object>((Sequence<Object>)sequence);
+        list = new ArrayList<>((Sequence<Object>)sequence);
 
         assertEquals(list.getLength(), 3);
         assertEquals(list.get(0), "a");

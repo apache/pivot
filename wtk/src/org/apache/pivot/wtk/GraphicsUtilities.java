@@ -287,7 +287,6 @@ public final class GraphicsUtilities {
      * with keys {@value #OFFSET_KEY} and {@value #COLOR_KEY})</li>
      * </ul>
      */
-    @SuppressWarnings("unchecked")
     public static Paint decodePaint(Dictionary<String, ?> dictionary) {
         String paintType = JSON.get(dictionary, PAINT_TYPE_KEY);
         if (paintType == null) {

@@ -115,7 +115,6 @@ public class SearchDemo implements Application {
      * @throws IllegalStateException
      * If a query is already executing.
      */
-    @SuppressWarnings("unchecked")
     public void executeQuery(String term) {
         if (term == null
             || term.length() == 0) {
@@ -140,7 +139,7 @@ public class SearchDemo implements Application {
         statusLabel.setText("Searching...");
         updateActivityState();
 
-        getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
+        getQuery.execute(new TaskAdapter<>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
                 if (task == getQuery) {
@@ -223,7 +222,6 @@ public class SearchDemo implements Application {
     /**
      * Updates the artwork to reflect the current selection.
      */
-    @SuppressWarnings("unchecked")
     public void updateArtwork() {
         Map<String, Object> result = (Map<String, Object>)resultsTableView.getSelectedRow();
 
@@ -239,7 +237,7 @@ public class SearchDemo implements Application {
         if (artworkURL == null) {
             artworkImageView.setImage((Image)null);
         } else {
-            Image.load(artworkURL, new TaskAdapter<Image>(new TaskListener<Image>() {
+            Image.load(artworkURL, new TaskAdapter<>(new TaskListener<Image>() {
                 @Override
                 public void taskExecuted(Task<Image> task) {
                     artworkImageView.setImage(task.getResult());

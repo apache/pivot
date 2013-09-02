@@ -36,7 +36,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     private static final long serialVersionUID = 4005649560306864969L;
 
     private java.util.Map<K, V> map = null;
-    private transient MapListenerList<K, V> mapListeners = new MapListenerList<K, V>();
+    private transient MapListenerList<K, V> mapListeners = new MapListenerList<>();
 
     public MapAdapter(java.util.Map<K, V> map) {
         if (map == null) {
@@ -104,7 +104,6 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         return map.size();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Comparator<K> getComparator() {
         if (this.map instanceof SortedMap<?, ?>) {
@@ -113,7 +112,6 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void setComparator(Comparator<K> comparator) {
         Comparator<K> previousComparator = getComparator();
@@ -147,7 +145,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
 
     @Override
     public Iterator<K> iterator() {
-        return new ImmutableIterator<K>(map.keySet().iterator());
+        return new ImmutableIterator<>(map.keySet().iterator());
     }
 
     @Override

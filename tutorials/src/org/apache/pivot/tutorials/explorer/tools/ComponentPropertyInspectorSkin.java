@@ -92,7 +92,7 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
 
             Class<?> sourceType = source.getClass();
             HashMap<Class<?>, List<String>> declaringClassPartitions =
-                new HashMap<Class<?>, List<String>>(classComparator);
+                new HashMap<>(classComparator);
 
             // Partition the properties by their declaring class
             BeanAdapter beanAdapter = new BeanAdapter(source);
@@ -104,7 +104,7 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
 
                     List<String> propertyNames = declaringClassPartitions.get(declaringClass);
                     if (propertyNames == null) {
-                        propertyNames = new ArrayList<String>(nameComparator);
+                        propertyNames = new ArrayList<>(nameComparator);
                         declaringClassPartitions.put(declaringClass, propertyNames);
                     }
 

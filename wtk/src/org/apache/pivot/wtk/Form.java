@@ -143,7 +143,7 @@ public class Form extends Container {
 
         @Override
         public Iterator<Component> iterator() {
-            return new ImmutableIterator<Component>(fields.iterator());
+            return new ImmutableIterator<>(fields.iterator());
         }
     }
 
@@ -229,7 +229,7 @@ public class Form extends Container {
 
         @Override
         public Iterator<Section> iterator() {
-            return new ImmutableIterator<Section>(sections.iterator());
+            return new ImmutableIterator<>(sections.iterator());
         }
     }
 

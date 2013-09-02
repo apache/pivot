@@ -102,17 +102,16 @@ public class HashMapTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void constructorTests() {
 // TODO Verify that this does not generate a warning under JDK 7
-        HashMap<String, Integer> map = new HashMap<String, Integer>(new Map.Pair<String, Integer>(
-            "a", 1), new Map.Pair<String, Integer>("b", 2));
+        HashMap<String, Integer> map = new HashMap<>(new Map.Pair<>(
+            "a", 1), new Map.Pair<>("b", 2));
         assertEquals(2, map.getCount());
 
-        map = new HashMap<String, Integer>(map);
+        map = new HashMap<>(map);
         assertEquals(2, map.getCount());
 
-        map = new HashMap<String, Integer>(map);
+        map = new HashMap<>(map);
         assertEquals(2, map.getCount());
 
     }

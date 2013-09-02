@@ -45,7 +45,6 @@ public class CheckedListViewTest extends Application.Adapter {
 
         listView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
-            @SuppressWarnings("unchecked")
             public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.DELETE) {
                     List<Object> listData = (List<Object>)listView.getListData();

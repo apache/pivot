@@ -80,7 +80,6 @@ public class StockTrackerWindow extends Window implements Bindable {
     // Action invoked to add a new symbol
     private Action addSymbolAction = new Action(false) {
         @Override
-        @SuppressWarnings("unchecked")
         public void perform(Component source) {
             String symbol = symbolTextInput.getText().toUpperCase();
             if (symbols.indexOf(symbol) == -1) {
@@ -104,7 +103,7 @@ public class StockTrackerWindow extends Window implements Bindable {
         @Override
         public void perform(Component source) {
             int selectedIndex = stocksTableView.getFirstSelectedIndex();
-            ArrayList<Span> spanList = new ArrayList<Span>(stocksTableView.getSelectedRanges());
+            ArrayList<Span> spanList = new ArrayList<>(stocksTableView.getSelectedRanges());
 
             // remove spans in reverse order to prevent IndexOutOfBoundsException
             ItemIterator<Span> it = spanList.iterator();
@@ -194,7 +193,6 @@ public class StockTrackerWindow extends Window implements Bindable {
 
         stocksTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
-            @SuppressWarnings("unchecked")
             public void sortChanged(TableView tableView) {
                 List<Object> tableData = (List<Object>)tableView.getTableData();
                 tableData.setComparator(new TableViewRowComparator(tableView));
@@ -278,7 +276,6 @@ public class StockTrackerWindow extends Window implements Bindable {
         symbolTextInput.requestFocus();
     }
 
-    @SuppressWarnings("unchecked")
     private void refreshTable() {
         // Abort any outstanding query
         if (getQuery != null) {
@@ -327,7 +324,7 @@ public class StockTrackerWindow extends Window implements Bindable {
 
             getQuery.setSerializer(quoteSerializer);
 
-            getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
+            getQuery.execute(new TaskAdapter<>(new TaskListener<Object>() {
                 @Override
                 public void taskExecuted(Task<Object> task) {
                     if (task == getQuery) {
@@ -387,7 +384,6 @@ public class StockTrackerWindow extends Window implements Bindable {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void refreshDetail() {
         StockQuote stockQuote = null;
 

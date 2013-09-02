@@ -31,8 +31,8 @@ import org.apache.pivot.util.ListenerList;
 public class ArrayStack<T> implements Stack<T>, Serializable {
     private static final long serialVersionUID = 3175064065273930731L;
 
-    private ArrayList<T> arrayList = new ArrayList<T>();
-    private transient StackListenerList<T> stackListeners = new StackListenerList<T>();
+    private ArrayList<T> arrayList = new ArrayList<>();
+    private transient StackListenerList<T> stackListeners = new StackListenerList<>();
 
     public ArrayStack() {
         this(null);
@@ -113,7 +113,7 @@ public class ArrayStack<T> implements Stack<T>, Serializable {
 
     @Override
     public Iterator<T> iterator() {
-        return new ImmutableIterator<T>(arrayList.iterator());
+        return new ImmutableIterator<>(arrayList.iterator());
     }
 
     @Override

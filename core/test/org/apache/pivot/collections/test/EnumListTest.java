@@ -31,7 +31,7 @@ public class EnumListTest {
 
     @Test
     public void basicTest() {
-        EnumList<TestEnum> enumList = new EnumList<TestEnum>(TestEnum.class);
+        EnumList<TestEnum> enumList = new EnumList<>(TestEnum.class);
 
         assertEquals(enumList.get(0), TestEnum.A);
         assertEquals(enumList.get(1), TestEnum.B);

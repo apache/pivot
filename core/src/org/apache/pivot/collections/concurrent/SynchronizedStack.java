@@ -52,7 +52,7 @@ public class SynchronizedStack<T> implements Stack<T> {
     }
 
     private Stack<T> stack;
-    private SynchronizedStackListenerList<T> stackListeners = new SynchronizedStackListenerList<T>();
+    private SynchronizedStackListenerList<T> stackListeners = new SynchronizedStackListenerList<>();
 
     public SynchronizedStack(Stack<T> stack) {
         if (stack == null) {
@@ -129,7 +129,7 @@ public class SynchronizedStack<T> implements Stack<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new ImmutableIterator<T>(stack.iterator());
+        return new ImmutableIterator<>(stack.iterator());
     }
 
     @Override

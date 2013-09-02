@@ -146,7 +146,7 @@ public class CSVSerializer implements Serializer<List<?>> {
             throw new IllegalArgumentException();
         }
 
-        this.keys = new ArrayList<String>(keys);
+        this.keys = new ArrayList<>(keys);
     }
 
     /**
@@ -159,7 +159,7 @@ public class CSVSerializer implements Serializer<List<?>> {
             throw new IllegalArgumentException();
         }
 
-        setKeys(new ArrayAdapter<String>(keys));
+        setKeys(new ArrayAdapter<>(keys));
     }
 
     /**
@@ -251,7 +251,7 @@ public class CSVSerializer implements Serializer<List<?>> {
             }
 
             String[] keysLocal = line.split(",");
-            this.keys = new ArrayList<String>(keysLocal.length);
+            this.keys = new ArrayList<>(keysLocal.length);
 
             for (int i = 0; i < keysLocal.length; i++) {
                 String key = keysLocal[i];

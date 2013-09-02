@@ -232,7 +232,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
     }
 
     private void copyToClipboard() {
-        ArrayList<String> colors = new ArrayList<String>(8);
+        ArrayList<String> colors = new ArrayList<>(8);
         for (int i = 0; i < 8; i++) {
             ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
             Color color = colorChooserButton.getSelectedColor();
@@ -254,7 +254,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
     }
 
     private void resetPalette() {
-        ArrayList<String> colors = new ArrayList<String>(8);
+        ArrayList<String> colors = new ArrayList<>(8);
         for (int i = 0; i < 8; i++) {
             ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
 

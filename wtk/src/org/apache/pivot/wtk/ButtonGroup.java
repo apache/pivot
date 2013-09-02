@@ -134,7 +134,7 @@ public class ButtonGroup implements Group<Button>, Iterable<Button> {
 
     @Override
     public Iterator<Button> iterator() {
-        return new ImmutableIterator<Button>(buttons.iterator());
+        return new ImmutableIterator<>(buttons.iterator());
     }
 
     public ListenerList<ButtonGroupListener> getButtonGroupListeners() {

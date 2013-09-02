@@ -54,7 +54,7 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
         Properties properties = new Properties();
         properties.load(inputStream);
 
-        return new MapAdapter<Object, Object>(properties);
+        return new MapAdapter<>(properties);
     }
 
     /**

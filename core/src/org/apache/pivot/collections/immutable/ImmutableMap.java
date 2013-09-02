@@ -30,7 +30,7 @@ import org.apache.pivot.util.ListenerList;
 public class ImmutableMap<K, V> implements Map<K, V> {
     private Map<K, V> map = null;
 
-    private MapListenerList<K, V> mapListeners = new MapListenerList<K, V>();
+    private MapListenerList<K, V> mapListeners = new MapListenerList<>();
 
     public ImmutableMap(Map<K, V> map) {
         if (map == null) {
@@ -88,7 +88,7 @@ public class ImmutableMap<K, V> implements Map<K, V> {
 
     @Override
     public Iterator<K> iterator() {
-        return new ImmutableIterator<K>(map.iterator());
+        return new ImmutableIterator<>(map.iterator());
     }
 
     @Override

@@ -55,7 +55,7 @@ public class XML {
             throw new IllegalArgumentException("path is empty.");
         }
 
-        ArrayList<String> pathComponents = new ArrayList<String>(path.split("/"));
+        ArrayList<String> pathComponents = new ArrayList<>(path.split("/"));
         Element current = root;
 
         for (int i = 0, n = pathComponents.getLength(); i < n; i++) {

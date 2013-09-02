@@ -64,7 +64,7 @@ public class FileBrowsing extends Window implements Bindable {
                             Sequence<File> selectedFiles = fileBrowserSheet.getSelectedFiles();
 
                             ListView listView = new ListView();
-                            listView.setListData(new ArrayList<File>(selectedFiles));
+                            listView.setListData(new ArrayList<>(selectedFiles));
                             listView.setSelectMode(ListView.SelectMode.NONE);
                             listView.getStyles().put("backgroundColor", null);
 

@@ -366,6 +366,8 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                         }
                         break;
                     }
+                    default:
+                        break;
                 }
 
                 updatingSelection = false;
@@ -416,6 +418,8 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                 fileBrowser.setMultiSelect(false);
                 break;
             }
+            default:
+                break;
         }
 
         updateDisabledFileFilter();
@@ -505,6 +509,8 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                 okButton.setEnabled(selectedDirectoryCount > 0);
                 break;
             }
+            default:
+                break;
         }
     }
 

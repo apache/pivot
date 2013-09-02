@@ -347,7 +347,7 @@ public class Menu extends Container {
 
         @Override
         public Iterator<Item> iterator() {
-            return new ImmutableIterator<Item>(items.iterator());
+            return new ImmutableIterator<>(items.iterator());
         }
 
         public ListenerList<SectionListener> getSectionListeners() {
@@ -470,7 +470,7 @@ public class Menu extends Container {
 
         @Override
         public Iterator<Section> iterator() {
-            return new ImmutableIterator<Section>(sections.iterator());
+            return new ImmutableIterator<>(sections.iterator());
         }
     }
 

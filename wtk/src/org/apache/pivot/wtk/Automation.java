@@ -26,7 +26,7 @@ public final class Automation {
     private Automation() {
     }
 
-    private static HashMap<String, Component> components = new HashMap<String, Component>();
+    private static HashMap<String, Component> components = new HashMap<>();
 
     public static Component get(String automationID) {
         return components.get(automationID);

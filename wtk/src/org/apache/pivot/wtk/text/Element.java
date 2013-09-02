@@ -588,7 +588,7 @@ public abstract class Element extends Node
 
     @Override
     public Iterator<Node> iterator() {
-        return new ImmutableIterator<Node>(nodes.iterator());
+        return new ImmutableIterator<>(nodes.iterator());
     }
 
     public void dumpOffsets() {

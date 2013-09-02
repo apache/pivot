@@ -284,7 +284,7 @@ public class Window extends Container {
 
         @Override
         public Iterator<Image> iterator() {
-            return new ImmutableIterator<Image>(iconImageList.iterator());
+            return new ImmutableIterator<>(iconImageList.iterator());
         }
     }
 
@@ -713,7 +713,7 @@ public class Window extends Container {
             // list so owned windows can remove themselves from the list
             // without interrupting the iteration)
             boolean cancel = false;
-            for (Window ownedWindow : new ArrayList<Window>(this.ownedWindows)) {
+            for (Window ownedWindow : new ArrayList<>(this.ownedWindows)) {
                 ownedWindow.close();
                 cancel |= !(ownedWindow.isClosing()
                     || ownedWindow.isClosed());
@@ -1038,7 +1038,7 @@ public class Window extends Container {
         } else {
             // Move all open owned windows to the front of this window, preserving the
             // current z-order
-            ArrayList<Integer> ownedWindowIndexes = new ArrayList<Integer>(ownedWindowCount);
+            ArrayList<Integer> ownedWindowIndexes = new ArrayList<>(ownedWindowCount);
 
             for (Window ownedWindow : ownedWindows) {
                 if (ownedWindow.isOpen()) {
@@ -1048,7 +1048,7 @@ public class Window extends Container {
 
             ArrayList.sort(ownedWindowIndexes);
 
-            ArrayList<Window> sortedOwnedWindows = new ArrayList<Window>(ownedWindows.getLength());
+            ArrayList<Window> sortedOwnedWindows = new ArrayList<>(ownedWindows.getLength());
             for (Integer index : ownedWindowIndexes) {
                 sortedOwnedWindows.add((Window)display.get(index));
             }

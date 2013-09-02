@@ -110,7 +110,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
@@ -134,7 +133,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
@@ -170,7 +168,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public int getBaseline(int width, int height) {
         ListView listView = (ListView)getComponent();
 
@@ -209,7 +206,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void layout() {
         ListView listView = (ListView)getComponent();
         List<Object> listData = (List<Object>)listView.getListData();
@@ -225,7 +221,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             }
 
             int n = listData.getLength();
-            itemBoundaries = new ArrayList<Integer>(n);
+            itemBoundaries = new ArrayList<>(n);
 
             int itemY = 0;
             for (int i = 0; i < n; i++) {
@@ -284,7 +280,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void paint(Graphics2D graphics) {
         ListView listView = (ListView)getComponent();
         List<Object> listData = (List<Object>)listView.getListData();
@@ -399,7 +394,6 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     // List view skin methods
     @Override
-    @SuppressWarnings("unchecked")
     public int getItemAt(int y) {
         if (y < 0) {
             throw new IllegalArgumentException("y is negative");

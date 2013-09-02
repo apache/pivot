@@ -302,7 +302,7 @@ public class Element extends Node implements List<Node> {
          */
         @Override
         public Iterator<Attribute> iterator() {
-            return new ImmutableIterator<Attribute>(attributes.iterator());
+            return new ImmutableIterator<>(attributes.iterator());
         }
     }
 
@@ -397,7 +397,7 @@ public class Element extends Node implements List<Node> {
          */
         @Override
         public Iterator<String> iterator() {
-            return new ImmutableIterator<String>(namespaces.iterator());
+            return new ImmutableIterator<>(namespaces.iterator());
         }
     }
 
@@ -843,7 +843,7 @@ public class Element extends Node implements List<Node> {
      */
     @Override
     public Iterator<Node> iterator() {
-        return new ImmutableIterator<Node>(nodes.iterator());
+        return new ImmutableIterator<>(nodes.iterator());
     }
 
     /**

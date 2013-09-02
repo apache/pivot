@@ -193,7 +193,6 @@ public class LinkedList<T> implements List<T>, Serializable {
             }
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public void remove() {
             if (current == null) {
@@ -225,7 +224,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             LinkedList.this.modificationCount++;
 
             if (listListeners != null) {
-                LinkedList<T> removed = new LinkedList<T>(item);
+                LinkedList<T> removed = new LinkedList<>(item);
 
                 listListeners.itemsRemoved(LinkedList.this, index, removed);
             }
@@ -327,7 +326,7 @@ public class LinkedList<T> implements List<T>, Serializable {
     }
 
     private void insert(T item, Node<T> previous, Node<T> next) {
-        Node<T> node = new Node<T>(previous, next, item);
+        Node<T> node = new Node<>(previous, next, item);
 
         if (previous == null) {
             first = node;
@@ -404,7 +403,7 @@ public class LinkedList<T> implements List<T>, Serializable {
     public Sequence<T> remove(int index, int count) {
         verifyIndexBounds(index, count, 0, length);
 
-        LinkedList<T> removed = new LinkedList<T>();
+        LinkedList<T> removed = new LinkedList<>();
 
         if (count > 0) {
             // Identify the bounding nodes and build the removed item list
@@ -562,7 +561,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             Node<T> node = null;
             for (i = 0; i < length; i++) {
                 Node<T> previousNode = node;
-                node = new Node<T>(previousNode, null, array[i]);
+                node = new Node<>(previousNode, null, array[i]);
 
                 if (previousNode == null) {
                     first = node;
@@ -592,7 +591,7 @@ public class LinkedList<T> implements List<T>, Serializable {
     @Override
     public ListenerList<ListListener<T>> getListListeners() {
         if (listListeners == null) {
-            listListeners = new ListListenerList<T>();
+            listListeners = new ListListenerList<>();
         }
 
         return listListeners;

@@ -59,7 +59,7 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     private Class<E> enumClass;
     private E[] items;
 
-    private transient ListListenerList<E> listListeners = new ListListenerList<E>();
+    private transient ListListenerList<E> listListeners = new ListListenerList<>();
 
     public EnumList(Class<E> enumClass) {
         this.enumClass = enumClass;

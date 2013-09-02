@@ -32,7 +32,7 @@ public class EnumMapTest {
 
     @Test
     public void basicTest() {
-        EnumMap<TestEnum, String> enumMap = new EnumMap<TestEnum, String>(TestEnum.class);
+        EnumMap<TestEnum, String> enumMap = new EnumMap<>(TestEnum.class);
 
         enumMap.put(TestEnum.A, "a");
         assertTrue(enumMap.containsKey(TestEnum.A));

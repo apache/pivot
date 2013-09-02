@@ -115,7 +115,6 @@ public class FixedColumnTableDemo extends Window implements Bindable {
         // Keep header state in sync
         primaryTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
-            @SuppressWarnings("unchecked")
             public void sortChanged(TableView tableView) {
                 if (!tableView.getSort().isEmpty()) {
                     fixedTableView.clearSort();
@@ -128,7 +127,6 @@ public class FixedColumnTableDemo extends Window implements Bindable {
 
         fixedTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
-            @SuppressWarnings("unchecked")
             public void sortChanged(TableView tableView) {
                 if (!tableView.getSort().isEmpty()) {
                     primaryTableView.clearSort();

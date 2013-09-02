@@ -58,7 +58,7 @@ public abstract class QueryServlet extends HttpServlet {
         }
 
         public Path(String[] elements) {
-            this.elements = new ArrayList<String>(elements);
+            this.elements = new ArrayList<>(elements);
         }
 
         @Override
@@ -103,7 +103,7 @@ public abstract class QueryServlet extends HttpServlet {
 
         @Override
         public Iterator<String> iterator() {
-            return new ImmutableIterator<String>(elements.iterator());
+            return new ImmutableIterator<>(elements.iterator());
         }
 
         @Override
@@ -335,7 +335,6 @@ public abstract class QueryServlet extends HttpServlet {
         throws QueryException;
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         try {
@@ -408,7 +407,7 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "resource" })
     protected final void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         Path path = getPath(request);

@@ -38,6 +38,7 @@ public class Service {
      * resource is expected to be a text file containing a single line that is
      * the name of the provider class.
      */
+    @SuppressWarnings("resource")
     public static Object getProvider(String providerName) {
         String providerClassName = null;
 

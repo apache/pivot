@@ -331,7 +331,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                             }
                         }
                         if (selectedFile != null) {
-                            fileBrowserSheet.setSelectedFiles(new ArrayList<File>(selectedFile));
+                            fileBrowserSheet.setSelectedFiles(new ArrayList<>(selectedFile));
                         }
                         break;
                     }

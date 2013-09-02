@@ -63,6 +63,7 @@ public class DataBinding extends Window implements Bindable {
             @Override
             public void buttonPressed(Button button) {
                 JSONSerializer serializer = new JSONSerializer();
+                @SuppressWarnings("resource")
                 InputStream inputStream = getClass().getResourceAsStream("contact.json");
 
                 try {

@@ -78,7 +78,7 @@ public class SheetTest extends Application.Adapter {
         Label promptBody = new Label("Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
         promptBody.getStyles().put("wrapText", true);
 
-        final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<String>("OK"), promptBody);
+        final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<>("OK"), promptBody);
         prompt.setTitle("Prompt");
         prompt.getStyles().put("resizable", true);
 
@@ -97,7 +97,7 @@ public class SheetTest extends Application.Adapter {
         Label alertBody = new Label("Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
         alertBody.getStyles().put("wrapText", true);
 
-        final Alert alert = new Alert(MessageType.INFO, "Alert", new ArrayList<String>("OK"), alertBody);
+        final Alert alert = new Alert(MessageType.INFO, "Alert", new ArrayList<>("OK"), alertBody);
         alert.setTitle("Alert");
 
         BoxPane boxPane = new BoxPane();

@@ -39,7 +39,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
     private java.util.List<T> list = null;
     private Comparator<T> comparator = null;
 
-    private transient ListListenerList<T> listListeners = new ListListenerList<T>();
+    private transient ListListenerList<T> listListeners = new ListListenerList<>();
 
     public ListAdapter(java.util.List<T> list) {
         if (list == null) {
@@ -166,7 +166,6 @@ public class ListAdapter<T> implements List<T>, Serializable {
         return index;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Sequence<T> remove(int index, int count) {
         java.util.List<T> removedList = null;
@@ -178,7 +177,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
             throw new RuntimeException(exception);
         }
 
-        List<T> removed = new ListAdapter<T>(removedList);
+        List<T> removed = new ListAdapter<>(removedList);
 
         if (count > 0) {
             for (int i = count - 1; i >= 0; i--) {
@@ -241,7 +240,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
 
     @Override
     public Iterator<T> iterator() {
-        return new ImmutableIterator<T>(list.iterator());
+        return new ImmutableIterator<>(list.iterator());
     }
 
     @Override

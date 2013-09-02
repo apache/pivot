@@ -54,7 +54,7 @@ public class WebQueries extends Application.Adapter {
         getQuery.getParameters().put("_id", "43115761f2da5af5341ae2e56a93d646");
         getQuery.getParameters().put("_render", "json");
 
-        getQuery.execute(new TaskAdapter<Object>(new TaskListener<Object>() {
+        getQuery.execute(new TaskAdapter<>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
                 List<?> items = (List<?>)JSON.get(task.getResult(), "value.items");

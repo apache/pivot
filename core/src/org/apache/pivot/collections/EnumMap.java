@@ -32,10 +32,10 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     private EnumSet<E> keySet;
     private Object[] values;
 
-    private transient MapListenerList<E, V> mapListeners = new MapListenerList<E, V>();
+    private transient MapListenerList<E, V> mapListeners = new MapListenerList<>();
 
     public EnumMap(Class<E> enumClass) {
-        keySet = new EnumSet<E>(enumClass);
+        keySet = new EnumSet<>(enumClass);
 
         E[] constants = enumClass.getEnumConstants();
         values = new Object[constants.length];

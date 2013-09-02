@@ -266,7 +266,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     @Override
     public Iterator<TreeNode> iterator() {
-        return new ImmutableIterator<TreeNode>(treeNodes.iterator());
+        return new ImmutableIterator<>(treeNodes.iterator());
     }
 
     @Override

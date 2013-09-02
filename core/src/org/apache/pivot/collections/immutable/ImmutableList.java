@@ -31,7 +31,7 @@ import org.apache.pivot.util.ListenerList;
 public final class ImmutableList<T> implements List<T> {
     private List<T> list = null;
 
-    private ListListenerList<T> listListeners = new ListListenerList<T>();
+    private ListListenerList<T> listListeners = new ListListenerList<>();
 
     public ImmutableList(List<T> list) {
         if (list == null) {
@@ -102,7 +102,7 @@ public final class ImmutableList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new ImmutableIterator<T>(list.iterator());
+        return new ImmutableIterator<>(list.iterator());
     }
 
     @Override

@@ -107,7 +107,7 @@ public class TextInputValidatorTest  extends Application.Adapter {
 
         // new, validate in a range but using ComparableRangeValidator
         textinputComparableRange.setText(nf.format(new BigDecimal(testValue)));
-        ComparableRangeValidator<BigDecimal> bdCompRange = new ComparableRangeValidator<BigDecimal>(
+        ComparableRangeValidator<BigDecimal> bdCompRange = new ComparableRangeValidator<>(
             new BigDecimal("2.0"), new BigDecimal("123456789")
         );
         System.out.println("ComparableRangeValidator: created instance with value: " + bdCompRange);
