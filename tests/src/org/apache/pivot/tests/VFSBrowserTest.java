@@ -18,7 +18,6 @@ package org.apache.pivot.tests;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
-
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
@@ -29,18 +28,13 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.VFSBrowserSheet;
 import org.apache.pivot.wtk.Frame;
-import org.apache.pivot.wtk.Label;
-import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
-import org.apache.pivot.wtk.VerticalAlignment;
-import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.skin.terra.TerraVFSBrowserSheetSkin;
+import org.apache.pivot.wtk.VFSBrowserSheet;
 
 public class VFSBrowserTest implements Application
 {
@@ -69,7 +63,7 @@ public class VFSBrowserTest implements Application
                                 Sequence<FileObject> selectedFiles = vfsBrowserSheet.getSelectedFiles();
 
                                 ListView listView = new ListView();
-                                listView.setListData(new ArrayList<FileObject>(selectedFiles));
+                                listView.setListData(new ArrayList<>(selectedFiles));
                                 listView.setSelectMode(ListView.SelectMode.NONE);
                                 listView.getStyles().put("backgroundColor", null);
 

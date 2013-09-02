@@ -358,7 +358,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                                 }
                             }
                             if (selectedFile != null) {
-                                fileBrowserSheet.setSelectedFiles(new ArrayList<FileObject>(selectedFile));
+                                fileBrowserSheet.setSelectedFiles(new ArrayList<>(selectedFile));
                             }
                         } catch (FileSystemException fse) {
                             Form.setFlag(saveAsBoxPane, new Form.Flag());

@@ -303,7 +303,7 @@ public class VFSBrowserSheet extends Sheet {
                 setRootDirectory(file.getParent());
             }
 
-            setSelectedFiles(new ArrayList<FileObject>(file));
+            setSelectedFiles(new ArrayList<>(file));
         }
     }
 
@@ -316,7 +316,7 @@ public class VFSBrowserSheet extends Sheet {
      * selection state will be reflected in the list, but events will not be fired.
      */
     public ImmutableList<FileObject> getSelectedFiles() {
-        return new ImmutableList<FileObject>(selectedFiles);
+        return new ImmutableList<>(selectedFiles);
     }
 
     /**

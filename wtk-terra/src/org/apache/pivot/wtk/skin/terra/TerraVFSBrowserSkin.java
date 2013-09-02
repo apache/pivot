@@ -743,7 +743,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
                 Arrays.sort(files, fileComparator);
 
-                return new ArrayList<FileObject>(files, 0, files.length);
+                return new ArrayList<>(files, 0, files.length);
 
             } catch (FileSystemException fse) {
                 throw new RuntimeException(fse);
@@ -906,7 +906,6 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
         fileTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
             @Override
-            @SuppressWarnings("unchecked")
             public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
                 if (!updatingSelection) {
                     updatingSelection = true;
@@ -926,7 +925,6 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             }
 
             @Override
-            @SuppressWarnings("unchecked")
             public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
                 if (!updatingSelection) {
                     updatingSelection = true;
@@ -942,7 +940,6 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             }
 
             @Override
-            @SuppressWarnings("unchecked")
             public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
                 if (!updatingSelection && previousSelectedRanges != null) {
                     updatingSelection = true;
@@ -971,7 +968,6 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
         fileTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
-            @SuppressWarnings("unchecked")
             public void sortChanged(TableView tableView) {
                 TableView.SortDictionary sort = fileTableView.getSort();
 
@@ -1170,7 +1166,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     public void rootDirectoryChanged(VFSBrowser fileBrowser, FileObject previousRootDirectory) {
         ArrayList<FileObject> path = new ArrayList<>();
 
-        FileSystemManager manager = fileBrowser.getManager();
+        // FileSystemManager manager = fileBrowser.getManager();
         FileObject rootDirectory = fileBrowser.getRootDirectory();
 
         try {
@@ -1183,7 +1179,6 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             throw new RuntimeException(fse);
         }
 
-        @SuppressWarnings("unchecked")
         ArrayList<FileObject> drives = (ArrayList<FileObject>) driveListButton.getListData();
         if(refreshRoots) {
             // TODO: this is ugly -- need to do much better at managing drive list with VFS
@@ -1233,7 +1228,6 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void selectedFileAdded(VFSBrowser fileBrowser, FileObject file) {
         if (!updatingSelection) {
             List<FileObject> files = (List<FileObject>)fileTableView.getTableData();
@@ -1247,7 +1241,6 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void selectedFileRemoved(VFSBrowser fileBrowser, FileObject file) {
         if (!updatingSelection) {
             List<FileObject> files = (List<FileObject>)fileTableView.getTableData();
@@ -1265,7 +1258,6 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         updateSelectedFiles(fileBrowser);
     }
 
-    @SuppressWarnings("unchecked")
     private void updateSelectedFiles(VFSBrowser fileBrowser) {
         if (!updatingSelection) {
             Sequence<FileObject> selectedFiles = fileBrowser.getSelectedFiles();
@@ -1348,8 +1340,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         }
 
         refreshFileListTask = new RefreshFileListTask(includeFileFilter, disabledFileFilter, fileComparator);
-        refreshFileListTask.execute(new TaskAdapter<ArrayList<FileObject>>(new TaskListener<ArrayList<FileObject>>() {
-            @SuppressWarnings("unchecked")
+        refreshFileListTask.execute(new TaskAdapter<>(new TaskListener<ArrayList<FileObject>>() {
             @Override
             public void taskExecuted(Task<ArrayList<FileObject>> task) {
                 if (task == refreshFileListTask) {

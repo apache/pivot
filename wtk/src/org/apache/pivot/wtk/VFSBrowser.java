@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
@@ -334,7 +333,7 @@ public class VFSBrowser extends Container {
                 setRootDirectory(file.getParent());
             }
 
-            setSelectedFiles(new ArrayList<FileObject>(file));
+            setSelectedFiles(new ArrayList<>(file));
         }
     }
 
@@ -347,7 +346,7 @@ public class VFSBrowser extends Container {
      * selection state will be reflected in the list, but events will not be fired.
      */
     public ImmutableList<FileObject> getSelectedFiles() {
-        return new ImmutableList<FileObject>(selectedFiles);
+        return new ImmutableList<>(selectedFiles);
     }
 
     /**
