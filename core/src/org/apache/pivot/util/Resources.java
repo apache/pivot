@@ -208,6 +208,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private Map<String, Object> readJSONResource(String name)
         throws IOException, SerializationException {
         Map<String, Object> resourceMapFromResource = null;

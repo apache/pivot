@@ -54,6 +54,7 @@ public class BindTest {
     @Test
     public void testTypedList() throws IOException, SerializationException {
         JSONSerializer listSerializer = new JSONSerializer();
+        @SuppressWarnings("unchecked")
         List<Object> list =
             (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
@@ -61,6 +62,7 @@ public class BindTest {
             new JSONSerializer((new TypeLiteral<ArrayList<SampleBean2>>() {
                 // empty block
             }).getType());
+        @SuppressWarnings("unchecked")
         ArrayList<SampleBean2> typedList =
             (ArrayList<SampleBean2>)typedListSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
@@ -78,6 +80,7 @@ public class BindTest {
     @Test
     public void testListSubclass() throws IOException, SerializationException {
         JSONSerializer listSerializer = new JSONSerializer();
+        @SuppressWarnings("unchecked")
         List<Object> list =
             (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
@@ -99,6 +102,7 @@ public class BindTest {
     @Test
     public void testSequence() throws IOException, SerializationException {
         JSONSerializer listSerializer = new JSONSerializer();
+        @SuppressWarnings("unchecked")
         List<Object> list =
             (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
 
@@ -121,6 +125,7 @@ public class BindTest {
     @Test
     public void testUntypedMap() throws IOException, SerializationException {
         JSONSerializer mapSerializer = new JSONSerializer(HashMap.class);
+        @SuppressWarnings("unchecked")
         HashMap<String, ?> map = (HashMap<String, ?>)mapSerializer.readObject(new StringReader("{a:1, b:2, c:'3'}"));
         assertEquals(map.get("a"), 1);
     }
@@ -138,6 +143,7 @@ public class BindTest {
                 // empty block
             }).getType());
 
+        @SuppressWarnings("unchecked")
         HashMap<String, SampleBean2> map =
             (HashMap<String, SampleBean2>)typedMapSerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
 
@@ -188,6 +194,7 @@ public class BindTest {
     @Test
     public void testBean() throws IOException, SerializationException {
         JSONSerializer mapSerializer = new JSONSerializer();
+        @SuppressWarnings("unchecked")
         Map<String, Object> map =
             (Map<String, Object>)mapSerializer.readObject(getClass().getResourceAsStream("map.json"));
 

@@ -218,6 +218,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
     @Override
     public void selectAllEvents(boolean select) {
+        @SuppressWarnings("unchecked")
         List<TreeNode> treeData = (List<TreeNode>)declaredEventsTreeView.getTreeData();
 
         ItemIterator<TreeNode> iter = Sequence.Tree.depthFirstIterator(treeData);
@@ -284,6 +285,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
     }
 
     private void setEventIncluded(Method event, boolean included) {
+        @SuppressWarnings("unchecked")
         List<TreeNode> treeData = (List<TreeNode>)declaredEventsTreeView.getTreeData();
 
         Sequence.Tree.ItemIterator<TreeNode> iter = Sequence.Tree.depthFirstIterator(treeData);
@@ -308,6 +310,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
         row.put("method", event.getName());
         row.put("arguments", Arrays.toString(arguments));
 
+        @SuppressWarnings("unchecked")
         List<Object> tableData = (List<Object>)firedEventsTableView.getTableData();
         final int rowIndex = tableData.add(row);
 

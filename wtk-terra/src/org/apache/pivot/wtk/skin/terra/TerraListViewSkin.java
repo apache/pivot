@@ -114,6 +114,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         int preferredWidth = 0;
 
         ListView listView = (ListView)getComponent();
+        @SuppressWarnings("unchecked")
         List<Object> listData = (List<Object>)listView.getListData();
 
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
@@ -137,6 +138,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         int preferredHeight = 0;
 
         ListView listView = (ListView)getComponent();
+        @SuppressWarnings("unchecked")
         List<Object> listData = (List<Object>)listView.getListData();
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
@@ -180,6 +182,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
+        @SuppressWarnings("unchecked")
         List<Object> listData = (List<Object>)listView.getListData();
         if (variableItemHeight && listData.getLength() > 0) {
             itemRenderer.render(listData.get(0), 0, listView, false, false, false, false);
@@ -208,6 +211,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     @Override
     public void layout() {
         ListView listView = (ListView)getComponent();
+        @SuppressWarnings("unchecked")
         List<Object> listData = (List<Object>)listView.getListData();
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
@@ -282,6 +286,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     @Override
     public void paint(Graphics2D graphics) {
         ListView listView = (ListView)getComponent();
+        @SuppressWarnings("unchecked")
         List<Object> listData = (List<Object>)listView.getListData();
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
@@ -414,6 +419,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         } else {
             index = (y / fixedItemHeight);
 
+            @SuppressWarnings("unchecked")
             List<Object> listData = (List<Object>)listView.getListData();
             if (index >= listData.getLength()) {
                 index = -1;

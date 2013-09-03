@@ -42,7 +42,7 @@ public class ExpenseServlet extends QueryServlet {
 
     private static int nextID = 0;
 
-    @SuppressWarnings("resource")
+    @SuppressWarnings({ "resource", "unchecked" })
     @Override
     public void init() throws ServletException {
         CSVSerializer expenseSerializer = new CSVSerializer(Expense.class);

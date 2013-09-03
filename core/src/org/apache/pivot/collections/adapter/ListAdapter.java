@@ -166,6 +166,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
         return index;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Sequence<T> remove(int index, int count) {
         java.util.List<T> removedList = null;

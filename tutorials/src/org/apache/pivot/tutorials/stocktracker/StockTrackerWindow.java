@@ -85,6 +85,7 @@ public class StockTrackerWindow extends Window implements Bindable {
             if (symbols.indexOf(symbol) == -1) {
                 symbols.add(symbol);
 
+                @SuppressWarnings("unchecked")
                 List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
                 StockQuote stockQuote = new StockQuote();
                 stockQuote.setSymbol(symbol);
@@ -194,6 +195,7 @@ public class StockTrackerWindow extends Window implements Bindable {
         stocksTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
             public void sortChanged(TableView tableView) {
+                @SuppressWarnings("unchecked")
                 List<Object> tableData = (List<Object>)tableView.getTableData();
                 tableData.setComparator(new TableViewRowComparator(tableView));
             }
@@ -328,11 +330,13 @@ public class StockTrackerWindow extends Window implements Bindable {
                 @Override
                 public void taskExecuted(Task<Object> task) {
                     if (task == getQuery) {
+                        @SuppressWarnings("unchecked")
                         List<Object> quotes = (List<Object>)task.getResult();
 
                         // Preserve any existing sort and selection
                         Sequence<?> selectedStocks = stocksTableView.getSelectedRows();
 
+                        @SuppressWarnings("unchecked")
                         List<Object> tableData = (List<Object>)stocksTableView.getTableData();
                         Comparator<Object> comparator = tableData.getComparator();
                         quotes.setComparator(comparator);
@@ -392,6 +396,7 @@ public class StockTrackerWindow extends Window implements Bindable {
             int lastSelectedIndex = stocksTableView.getLastSelectedIndex();
 
             if (firstSelectedIndex == lastSelectedIndex) {
+                @SuppressWarnings("unchecked")
                 List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
                 stockQuote = tableData.get(firstSelectedIndex);
             } else {

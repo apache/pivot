@@ -27,12 +27,12 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.serialization.CSVSerializerListener;
 import org.apache.pivot.serialization.CSVSerializer;
 import org.apache.pivot.serialization.SerializationException;
-
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CSVSerializerTest {
+    @SuppressWarnings("unchecked")
     @Test
     public void testBasicReadObject() throws IOException, SerializationException {
         // Test multiple line break formats
@@ -104,6 +104,7 @@ public class CSVSerializerTest {
 
         List<?> result = serializer.readObject(reader);
 
+        @SuppressWarnings("unchecked")
         Dictionary<String, Object> row = (Dictionary<String, Object>)result.get(0);
         assertEquals("a", row.get("A"));
         assertEquals(",b,", row.get("B"));
@@ -122,6 +123,7 @@ public class CSVSerializerTest {
 
         List<?> result = serializer.readObject(reader);
 
+        @SuppressWarnings("unchecked")
         Dictionary<String, Object> row = (Dictionary<String, Object>)result.get(0);
         assertEquals("a", row.get("A"));
         assertEquals("\"b\"", row.get("B"));
@@ -140,12 +142,14 @@ public class CSVSerializerTest {
 
         List<?> result = serializer.readObject(reader);
 
+        @SuppressWarnings("unchecked")
         Dictionary<String, Object> row = (Dictionary<String, Object>)result.get(0);
         assertEquals("a", row.get("A"));
         assertEquals("b\nb", row.get("B"));
         assertEquals("c", row.get("C"));
     }
 
+    @SuppressWarnings("unchecked")  // or it will generate a warning during build with Java 7
     @Test
     public void testBasicWriteObject() throws IOException {
         List<Object> items = new ArrayList<>();
@@ -170,6 +174,7 @@ public class CSVSerializerTest {
         assertEquals("a1,b1,c1\r\na2,b2,c2\r\n", writer.toString());
     }
 
+    @SuppressWarnings("unchecked")  // or it will generate a warning during build with Java 7
     @Test
     public void testQuotedCommaWriteObject() throws IOException {
         List<Object> items = new ArrayList<>();
@@ -189,6 +194,7 @@ public class CSVSerializerTest {
         assertEquals("a,\",b,\",c\r\n", writer.toString());
     }
 
+    @SuppressWarnings("unchecked")  // or it will generate a warning during build with Java 7
     @Test
     public void testQuotedQuoteWriteObject() throws IOException {
         List<Object> items = new ArrayList<>();
@@ -208,6 +214,7 @@ public class CSVSerializerTest {
         assertEquals("a,\"\"\"b\"\"\",c\r\n", writer.toString());
     }
 
+    @SuppressWarnings("unchecked")  // or it will generate a warning during build with Java 7
     @Test
     public void testQuotedNewlineWriteObject() throws IOException {
         List<Object> items = new ArrayList<>();
@@ -242,6 +249,7 @@ public class CSVSerializerTest {
 
         CSVSerializer serializer = new CSVSerializer();
         List<?> result = serializer.readObject(reader);
+        @SuppressWarnings("unchecked")
         Dictionary<String, Object> row = (Dictionary<String, Object>)result.get(0);
         assertEquals(row.get("A"), "a1");
         assertEquals(row.get("B"), "b1");

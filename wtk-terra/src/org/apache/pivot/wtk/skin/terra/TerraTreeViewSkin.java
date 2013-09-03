@@ -235,11 +235,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             // but they may be disabled or have their checkmarks disabled, so
             // we set those flags appropriately here.
 
+            @SuppressWarnings("unchecked")
             Filter<Object> disabledNodeFilter = (Filter<Object>)treeView.getDisabledNodeFilter();
             if (disabledNodeFilter != null) {
                 setDisabled(disabledNodeFilter.include(data));
             }
 
+            @SuppressWarnings("unchecked")
             Filter<Object> disabledCheckmarkFilter = (Filter<Object>)
                 treeView.getDisabledCheckmarkFilter();
             if (disabledCheckmarkFilter != null) {
@@ -2032,6 +2034,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
+        @SuppressWarnings("unchecked")
         List<Object> treeData = (List<Object>)treeView.getTreeData();
 
         visibleNodes.clear();
@@ -2109,6 +2112,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
+        @SuppressWarnings("unchecked")
         final Filter<Object> disabledNodeFilter = (Filter<Object>)treeView.getDisabledNodeFilter();
 
         accept(new NodeInfoVisitor() {
@@ -2127,6 +2131,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     @Override
     public void disabledCheckmarkFilterChanged(TreeView treeView,
         Filter<?> previousDisabledCheckmarkFilter) {
+        @SuppressWarnings("unchecked")
         final Filter<Object> disabledCheckmarkFilter = (Filter<Object>)
             treeView.getDisabledCheckmarkFilter();
 

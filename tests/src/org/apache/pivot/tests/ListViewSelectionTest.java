@@ -31,6 +31,7 @@ public class ListViewSelectionTest extends Application.Adapter {
     private ListView listView = new ListView();
 
     public ListViewSelectionTest() {
+        @SuppressWarnings("unchecked")
         List<Object> listData = (List<Object>)listView.getListData();
 
         listData.add("0");

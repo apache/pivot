@@ -143,10 +143,13 @@ public class SearchDemo implements Application {
             @Override
             public void taskExecuted(Task<Object> task) {
                 if (task == getQuery) {
+                    @SuppressWarnings("unchecked")
                     Map<String, Object> result = (Map<String, Object>)task.getResult();
+                    @SuppressWarnings("unchecked")
                     List<Object> results = (List<Object>)result.get("results");
 
                     // Preserve any existing sort
+                    @SuppressWarnings("unchecked")
                     List<Object> tableData = (List<Object>)resultsTableView.getTableData();
                     Comparator<Object> comparator = tableData.getComparator();
                     results.setComparator(comparator);
@@ -223,6 +226,7 @@ public class SearchDemo implements Application {
      * Updates the artwork to reflect the current selection.
      */
     public void updateArtwork() {
+        @SuppressWarnings("unchecked")
         Map<String, Object> result = (Map<String, Object>)resultsTableView.getSelectedRow();
 
         URL artworkURL = null;

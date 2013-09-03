@@ -25,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -142,11 +143,13 @@ public class ProxyServlet extends HttpServlet {
         connection.setUseCaches(false);
 
         // Write request headers to connection
+        @SuppressWarnings("unchecked")
         Enumeration<String> headerNames = request.getHeaderNames();
 
         if (headerNames != null) {
             while (headerNames.hasMoreElements()) {
                 String headerName = headerNames.nextElement();
+                @SuppressWarnings("unchecked")
                 Enumeration<String> headerValues = request.getHeaders(headerName);
 
                 while (headerValues.hasMoreElements()) {

@@ -73,6 +73,7 @@ public class ComparableRangeValidator<T extends Comparable<T>> extends Comparabl
         boolean valid = false;
 
         if (super.isValid(text)) {
+            @SuppressWarnings("unchecked")
             final Comparable<T> value = (Comparable<T>) textToComparable(text);
             if (value != null) {
                 valid = (value.compareTo(minValue) >= 0 && value.compareTo(maxValue) <= 0);

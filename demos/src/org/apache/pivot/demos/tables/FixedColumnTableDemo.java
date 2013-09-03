@@ -120,6 +120,7 @@ public class FixedColumnTableDemo extends Window implements Bindable {
                     fixedTableView.clearSort();
                 }
 
+                @SuppressWarnings("unchecked")
                 List<Object> tableData = (List<Object>)tableView.getTableData();
                 tableData.setComparator(new TableViewRowComparator(tableView));
             }
@@ -132,6 +133,7 @@ public class FixedColumnTableDemo extends Window implements Bindable {
                     primaryTableView.clearSort();
                 }
 
+                @SuppressWarnings("unchecked")
                 List<Object> tableData = (List<Object>)tableView.getTableData();
                 tableData.setComparator(new TableViewRowComparator(tableView));
             }

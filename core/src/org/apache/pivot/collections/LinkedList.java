@@ -224,6 +224,7 @@ public class LinkedList<T> implements List<T>, Serializable {
             LinkedList.this.modificationCount++;
 
             if (listListeners != null) {
+                @SuppressWarnings("unchecked")  // or it will generate a warning during build with Java 7
                 LinkedList<T> removed = new LinkedList<>(item);
 
                 listListeners.itemsRemoved(LinkedList.this, index, removed);

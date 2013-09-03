@@ -100,6 +100,7 @@ public class PropertiesSerializerTest
         log("serializer instance created: " + serializer);
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(testBytes);
+        @SuppressWarnings("unchecked")
         Map<String, Object> readData = (Map<String, Object>) serializer.readObject(inputStream);
         assertNotNull(readData);
 

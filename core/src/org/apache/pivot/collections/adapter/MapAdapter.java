@@ -104,6 +104,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
         return map.size();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Comparator<K> getComparator() {
         if (this.map instanceof SortedMap<?, ?>) {
@@ -121,6 +122,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
             try {
                 Constructor<?> constructor = this.map.getClass().getConstructor(Comparator.class);
                 if (constructor != null) {
+                    @SuppressWarnings("unchecked")
                     java.util.Map<K, V> mapLocal = (java.util.Map<K, V>)constructor.newInstance(comparator);
                     mapLocal.putAll(this.map);
                     this.map = mapLocal;

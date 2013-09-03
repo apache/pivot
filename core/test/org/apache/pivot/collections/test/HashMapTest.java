@@ -24,9 +24,11 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+
 // import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+
 
 // import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
@@ -103,7 +105,7 @@ public class HashMapTest {
 
     @Test
     public void constructorTests() {
-// TODO Verify that this does not generate a warning under JDK 7
+        @SuppressWarnings("unchecked")  // or it will generate a warning during build with Java 7
         HashMap<String, Integer> map = new HashMap<>(new Map.Pair<>(
             "a", 1), new Map.Pair<>("b", 2));
         assertEquals(2, map.getCount());

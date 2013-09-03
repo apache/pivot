@@ -102,6 +102,7 @@ public final class TerraTheme extends Theme {
     public static final String LOCATION_PROPERTY = "location";
     public static final String COMMAND_BUTTON_STYLE = "commandButton";
 
+    @SuppressWarnings("unchecked")
     public TerraTheme() {
         componentSkinMap.put(Accordion.class, TerraAccordionSkin.class);
         componentSkinMap.put(ActivityIndicator.class, TerraActivityIndicatorSkin.class);
@@ -234,10 +235,12 @@ public final class TerraTheme extends Theme {
 
             try {
                 JSONSerializer serializer = new JSONSerializer();
+                @SuppressWarnings("unchecked")
                 Map<String, ?> properties = (Map<String, ?>)serializer.readObject(inputStream);
 
                 font = Font.decode((String)properties.get("font"));
 
+                @SuppressWarnings("unchecked")
                 List<String> colorCodes = (List<String>)properties.get("colors");
                 numberOfPaletteColors = colorCodes.getLength();
                 int numberOfColors = numberOfPaletteColors * 3;
@@ -252,11 +255,13 @@ public final class TerraTheme extends Theme {
                     colors.add(brighten(baseColor));
                 }
 
+                @SuppressWarnings("unchecked")
                 Map<String, String> messageIconNames =
                     (Map<String, String>)properties.get("messageIcons");
                 messageIcons = new HashMap<>();
                 loadMessageIcons(messageIconNames, messageIcons);
 
+                @SuppressWarnings("unchecked")
                 Map<String, String> smallMessageIconNames =
                     (Map<String, String>)properties.get("smallMessageIcons");
                 smallMessageIcons = new HashMap<>();

@@ -131,6 +131,7 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
             // Update the item data
             String text = textInput.getText();
 
+            @SuppressWarnings("unchecked")
             List<Object> listData = (List<Object>)listView.getListData();
             ListItem listItem = (ListItem)listData.get(itemIndex);
 

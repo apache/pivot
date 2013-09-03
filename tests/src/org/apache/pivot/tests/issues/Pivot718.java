@@ -92,6 +92,7 @@ public class Pivot718 extends Application.Adapter {
                 Object x = list.getSelectedItem();
                 System.out.println("delete :: " + x);
                 // List data = list.getListData();
+                @SuppressWarnings("unchecked")
                 List<Object> data = (List<Object>) list.getListData();
                 data.remove(x);
             }

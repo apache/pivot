@@ -318,6 +318,7 @@ public final class GraphicsUtilities {
                 float endX = JSON.getFloat(dictionary, END_X_KEY);
                 float endY = JSON.getFloat(dictionary, END_Y_KEY);
 
+                @SuppressWarnings("unchecked")
                 List<Dictionary<String, ?>> stops =
                     (List<Dictionary<String, ?>>)JSON.get(dictionary, STOPS_KEY);
 
@@ -343,6 +344,7 @@ public final class GraphicsUtilities {
                 float centerY = JSON.getFloat(dictionary, CENTER_Y_KEY);
                 float radius = JSON.getFloat(dictionary, RADIUS_KEY);
 
+                @SuppressWarnings("unchecked")
                 List<Dictionary<String, ?>> stops =
                     (List<Dictionary<String, ?>>)JSON.get(dictionary, STOPS_KEY);
 

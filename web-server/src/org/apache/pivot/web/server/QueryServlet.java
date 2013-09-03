@@ -371,6 +371,7 @@ public abstract class QueryServlet extends HttpServlet {
 
             // Copy the request headers into the request properties dictionary
             QueryDictionary requestHeaderDictionary = requestHeaders.get();
+            @SuppressWarnings("unchecked")
             Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()) {
                 String headerName = headerNames.nextElement();

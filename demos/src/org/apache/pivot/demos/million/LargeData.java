@@ -117,6 +117,7 @@ public class LargeData extends Application.Adapter {
 
         @Override
         public void run() {
+            @SuppressWarnings("unchecked")
             List<Object> tableData = (List<Object>)tableView.getTableData();
             for (Object item : page) {
                 tableData.add(item);
@@ -198,6 +199,7 @@ public class LargeData extends Application.Adapter {
         tableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
             public void sortChanged(TableView tableViewArgument) {
+                @SuppressWarnings("unchecked")
                 List<Object> tableData = (List<Object>)tableViewArgument.getTableData();
 
                 long startTime = System.currentTimeMillis();

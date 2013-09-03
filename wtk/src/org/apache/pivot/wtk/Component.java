@@ -882,6 +882,7 @@ public abstract class Component implements ConstrainedVisual {
         return (Container)component;
     }
 
+    @SuppressWarnings("unchecked")
     public Container getAncestor(String ancestorTypeName) throws ClassNotFoundException {
         if (ancestorTypeName == null) {
             throw new IllegalArgumentException();

@@ -92,6 +92,7 @@ public class DataBindingTest extends Application.Adapter {
             int i = 0;
             int n = list.getLength();
             while (i < n) {
+                @SuppressWarnings("unchecked")
                 Map<String, ?> map = (Map<String, ?>)list.get(i);
                 if (map.get("id").equals(value)) {
                     break;
@@ -109,6 +110,7 @@ public class DataBindingTest extends Application.Adapter {
 
         @Override
         public Object get(List<?> list, int index) {
+            @SuppressWarnings("unchecked")
             Map<String, ?> map = (Map<String, ?>)list.get(index);
             return map.get("id");
         }

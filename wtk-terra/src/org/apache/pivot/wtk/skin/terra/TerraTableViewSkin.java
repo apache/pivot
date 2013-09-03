@@ -214,6 +214,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @Override
     public int getBaseline(int width, int height) {
         TableView tableView = (TableView)getComponent();
+        @SuppressWarnings("unchecked")
         List<Object> tableData = (List<Object>)tableView.getTableData();
 
         int baseline = -1;
@@ -254,6 +255,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         TableView.ColumnSequence columns = tableView.getColumns();
 
         if (variableRowHeight) {
+            @SuppressWarnings("unchecked")
             List<Object> tableData = (List<Object>)tableView.getTableData();
 
             int n = tableData.getLength();
@@ -329,6 +331,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @Override
     public void paint(Graphics2D graphics) {
         TableView tableView = (TableView)getComponent();
+        @SuppressWarnings("unchecked")
         List<Object> tableData = (List<Object>)tableView.getTableData();
         TableView.ColumnSequence columns = tableView.getColumns();
 
@@ -546,6 +549,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     protected int getVariableRowHeight(int rowIndex, ArrayList<Integer> columnWidthsArgument) {
         TableView tableView = (TableView)getComponent();
+        @SuppressWarnings("unchecked")
         List<Object> tableData = (List<Object>)tableView.getTableData();
 
         TableView.ColumnSequence columns = tableView.getColumns();
@@ -586,6 +590,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             rowIndex = (y / (fixedRowHeight + 1));
         }
 
+        @SuppressWarnings("unchecked")
         List<Object> tableData = (List<Object>)tableView.getTableData();
         if (rowIndex >= tableData.getLength()) {
             rowIndex = -1;
@@ -638,6 +643,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @Override
     public Bounds getCellBounds(int rowIndex, int columnIndex) {
         TableView tableView = (TableView)getComponent();
+        @SuppressWarnings("unchecked")
         List<Object> tableData = (List<Object>)tableView.getTableData();
 
         if (rowIndex < 0

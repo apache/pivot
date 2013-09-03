@@ -230,6 +230,7 @@ public class ExpensesWindow extends Window implements Bindable {
                             int id = Integer.parseInt(file.substring(file.lastIndexOf('/') + 1));
                             expense.put("id", id);
 
+                            @SuppressWarnings("unchecked")
                             List<Object> expenses = (List<Object>)expenseTableView.getTableData();
                             expenses.add(expense);
                         }
@@ -278,6 +279,7 @@ public class ExpensesWindow extends Window implements Bindable {
                             activityIndicator.setActive(false);
 
                             // Find matching row and update
+                            @SuppressWarnings("unchecked")
                             List<Object> expenses = (List<Object>)expenseTableView.getTableData();
                             for (int i = 0, n = expenses.getLength(); i < n; i++) {
                                 if (JSON.get(expenses.get(i), "id").equals(id)) {
@@ -326,6 +328,7 @@ public class ExpensesWindow extends Window implements Bindable {
                             activityIndicator.setActive(false);
 
                             // Find matching row and remove
+                            @SuppressWarnings("unchecked")
                             List<Object> expenses = (List<Object>)expenseTableView.getTableData();
                             for (int i = 0, n = expenses.getLength(); i < n; i++) {
                                 if (JSON.get(expenses.get(i), "id").equals(id)) {

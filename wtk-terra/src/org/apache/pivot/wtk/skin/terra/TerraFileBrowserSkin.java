@@ -794,6 +794,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     updatingSelection = true;
 
                     for (int i = rangeStart; i <= rangeEnd; i++) {
+                        @SuppressWarnings("unchecked")
                         List<File> files = (List<File>)fileTableView.getTableData();
                         File file = files.get(i);
                         fileBrowser.addSelectedFile(file);
@@ -809,6 +810,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     updatingSelection = true;
 
                     for (int i = rangeStart; i <= rangeEnd; i++) {
+                        @SuppressWarnings("unchecked")
                         List<File> files = (List<File>)fileTableView.getTableData();
                         File file = files.get(i);
                         fileBrowser.removeSelectedFile(file);
@@ -823,6 +825,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 if (!updatingSelection && previousSelectedRanges != null) {
                     updatingSelection = true;
 
+                    @SuppressWarnings("unchecked")
                     Sequence<File> files = (Sequence<File>)tableView.getSelectedRows();
                     for (int i = 0, n = files.getLength(); i < n; i++) {
                         File file = files.get(i);
@@ -848,6 +851,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                 if (!sort.isEmpty()) {
                     Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
+                    @SuppressWarnings("unchecked")
                     List<File> files = (List<File>)fileTableView.getTableData();
                     files.setComparator(getFileComparator(pair.key, pair.value));
                 }
@@ -1033,6 +1037,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             ancestorDirectory = ancestorDirectory.getParentFile();
         }
 
+        @SuppressWarnings("unchecked")
         ArrayList<File> drives = (ArrayList<File>) driveListButton.getListData();
         if(refreshRoots) {
             File[] roots = File.listRoots();
@@ -1077,6 +1082,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @Override
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
+            @SuppressWarnings("unchecked")
             List<File> files = (List<File>)fileTableView.getTableData();
             int index = files.indexOf(file);
             if (index != -1) {
@@ -1090,6 +1096,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     @Override
     public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
+            @SuppressWarnings("unchecked")
             List<File> files = (List<File>)fileTableView.getTableData();
             int index = files.indexOf(file);
             if (index != -1) {
@@ -1113,6 +1120,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
                 File selectedFile = selectedFiles.get(i);
 
+                @SuppressWarnings("unchecked")
                 List<File> files = (List<File>)fileTableView.getTableData();
                 int index = files.indexOf(selectedFile);
                 if (index != -1) {

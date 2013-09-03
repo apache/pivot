@@ -276,6 +276,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 rollup.setContent(this.component);
 
+                @SuppressWarnings("unchecked")
                 List<ListItem> listData = (List<ListItem>)this.editableListView.getListData();
                 listData.setComparator(new Comparator<ListItem>() {
                     @Override
@@ -721,6 +722,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     }
 
                     private void resort(TableView tableView) {
+                        @SuppressWarnings("unchecked")
                         List<Object> tableDataOfTableView = (List<Object>)tableView.getTableData();
                         tableDataOfTableView.setComparator(new TableViewRowComparator(tableView));
                     }
@@ -730,7 +732,8 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     @Override
                     public boolean mouseClick(Component comp, Mouse.Button button, int x, int y, int count) {
                        if (button == Mouse.Button.LEFT) {
-                           List<CustomTableRow> customTableData =
+                           @SuppressWarnings("unchecked")
+                        List<CustomTableRow> customTableData =
                                (List<CustomTableRow>)TablesRollupStateHandler.this.customTableView.getTableData();
 
                           int columnIndex = TablesRollupStateHandler.this.customTableView.getColumnAt(x);

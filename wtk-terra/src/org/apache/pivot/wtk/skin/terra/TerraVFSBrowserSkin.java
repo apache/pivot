@@ -912,6 +912,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
                     try {
                         for (int i = rangeStart; i <= rangeEnd; i++) {
+                            @SuppressWarnings("unchecked")
                             List<FileObject> files = (List<FileObject>)fileTableView.getTableData();
                             FileObject file = files.get(i);
                             fileBrowser.addSelectedFile(file);
@@ -930,6 +931,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                     updatingSelection = true;
 
                     for (int i = rangeStart; i <= rangeEnd; i++) {
+                        @SuppressWarnings("unchecked")
                         List<FileObject> files = (List<FileObject>)fileTableView.getTableData();
                         FileObject file = files.get(i);
                         fileBrowser.removeSelectedFile(file);
@@ -944,6 +946,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                 if (!updatingSelection && previousSelectedRanges != null) {
                     updatingSelection = true;
 
+                    @SuppressWarnings("unchecked")
                     Sequence<FileObject> files = (Sequence<FileObject>)tableView.getSelectedRows();
                     for (int i = 0, n = files.getLength(); i < n; i++) {
                         FileObject file = files.get(i);
@@ -973,6 +976,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
                 if (!sort.isEmpty()) {
                     Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
+                    @SuppressWarnings("unchecked")
                     List<FileObject> files = (List<FileObject>)fileTableView.getTableData();
                     files.setComparator(getFileComparator(pair.key, pair.value));
                 }
@@ -1179,6 +1183,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             throw new RuntimeException(fse);
         }
 
+        @SuppressWarnings("unchecked")
         ArrayList<FileObject> drives = (ArrayList<FileObject>) driveListButton.getListData();
         if(refreshRoots) {
             // TODO: this is ugly -- need to do much better at managing drive list with VFS
@@ -1230,6 +1235,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     @Override
     public void selectedFileAdded(VFSBrowser fileBrowser, FileObject file) {
         if (!updatingSelection) {
+            @SuppressWarnings("unchecked")
             List<FileObject> files = (List<FileObject>)fileTableView.getTableData();
             int index = files.indexOf(file);
             if (index != -1) {
@@ -1243,6 +1249,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     @Override
     public void selectedFileRemoved(VFSBrowser fileBrowser, FileObject file) {
         if (!updatingSelection) {
+            @SuppressWarnings("unchecked")
             List<FileObject> files = (List<FileObject>)fileTableView.getTableData();
             int index = files.indexOf(file);
             if (index != -1) {
@@ -1266,6 +1273,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
                 FileObject selectedFile = selectedFiles.get(i);
 
+                @SuppressWarnings("unchecked")
                 List<FileObject> files = (List<FileObject>)fileTableView.getTableData();
                 int index = files.indexOf(selectedFile);
                 if (index != -1) {

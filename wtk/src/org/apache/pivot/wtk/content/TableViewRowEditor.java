@@ -248,6 +248,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     public void endEdit(boolean result) {
         if (result) {
             // Update the row data
+            @SuppressWarnings("unchecked")
             List<Object> tableData = (List<Object>)tableView.getTableData();
             Object tableRow = tableData.get(rowIndex);
             tablePane.store(tableRow);

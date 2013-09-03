@@ -103,6 +103,7 @@ public class RemoteManifest implements Manifest {
         return (imageDataFlavor != null);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public FileList getFileList() throws IOException {
         FileList fileList = null;
