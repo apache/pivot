@@ -667,6 +667,49 @@ public class TextPane extends Container {
         // TODO
     }
 
+    private void addToText(StringBuilder text, Element element) {
+        for (Node node : element) {
+            if (node instanceof TextNode) {
+                text.append(((TextNode)node).getCharacters());
+            }
+            else if (node instanceof Element) {
+                addToText(text, (Element)node);
+            }
+            // TODO: anything more that could/should be handled?
+        }
+        if (element instanceof Paragraph) {
+            text.append('\n');
+        }
+    }
+
+    /**
+     * Convenience method to get all the text from the current document
+     * into a single string.
+     * @see #setText
+     */
+    public String getText() {
+        Document document = getDocument();
+        if (document != null && getCharacterCount() != 0) {
+            StringBuilder text = new StringBuilder(getCharacterCount());
+            addToText(text, document);
+            return text.toString();
+        }
+        return null;
+    }
+
+    /**
+     * Convenience method to create a text-only document consisting
+     * of one paragraph per line of the given text.
+     */
+    public void setText(String text) {
+        Document document = new Document();
+        String[] lines = text.split("\r?\n");
+        for (int i = 0; i < lines.length; i++) {
+            Paragraph paragraph = new Paragraph(lines[i]);
+            document.add(paragraph);
+        }
+        setDocument(document);
+    }
 
     /**
      * Returns the starting index of the selection.
