@@ -623,7 +623,7 @@ public class Window extends Container {
      * The display on which the window will be opened.
      *
      * @param ownerArgument
-     * The window's owner, or <tt>null<tt> if the window has no owner.
+     * The window's owner, or <tt>null</tt> if the window has no owner.
      */
     public void open(Display display, Window ownerArgument) {
         if (display == null) {
