@@ -77,7 +77,6 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         if (data instanceof ButtonData) {
             ButtonData buttonData = (ButtonData)data;
             icon = buttonData.getIcon();
-            text = buttonData.getText();
 
             if (buttonData instanceof MenuItemData) {
                 MenuItemData menuItemData = (MenuItemData)buttonData;
@@ -85,11 +84,8 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
             }
         } else if (data instanceof Image) {
             icon = (Image)data;
-        } else {
-            if (data != null) {
-                text = data.toString();
-            }
         }
+        text = toString(data);
 
         // If the button is selected, icon is a checkmark; otherwise,
         // attempt to retrieve icon from button data
