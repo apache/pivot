@@ -238,9 +238,14 @@ public class VFSBrowserSheet extends Sheet {
             throw new IllegalArgumentException("Root folder is null.");
         }
 
+        // Give some grace to set the root folder to an actual file and
+        // have it work (by using the parent folder instead)
         rootDirectory = manager.resolveFile(rootFolder);
         if (rootDirectory.getType() != FileType.FOLDER) {
-            throw new IllegalArgumentException("Root file is not a directory.");
+            rootDirectory = rootDirectory.getParent();
+            if (rootDirectory == null || rootDirectory.getType() != FileType.FOLDER) {
+                throw new IllegalArgumentException("Root file is not a directory.");
+            }
         }
 
     }
@@ -254,9 +259,17 @@ public class VFSBrowserSheet extends Sheet {
     public void setRootDirectory(FileObject rootDirectory)
             throws FileSystemException
     {
-        if (rootDirectory == null
-            || rootDirectory.getType() != FileType.FOLDER) {
-            throw new IllegalArgumentException("Root file is not a directory.");
+        if (rootDirectory == null) {
+            throw new IllegalArgumentException("Root file is null.");
+        }
+
+        // Give some grace to set the root folder to an actual file and
+        // have it work (by using the parent folder instead)
+        if (rootDirectory.getType() != FileType.FOLDER) {
+            rootDirectory = rootDirectory.getParent();
+            if (rootDirectory == null || rootDirectory.getType() != FileType.FOLDER) {
+                throw new IllegalArgumentException("Root file is not a directory.");
+            }
         }
 
         if (rootDirectory.exists()) {

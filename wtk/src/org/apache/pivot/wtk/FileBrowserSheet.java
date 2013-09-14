@@ -172,20 +172,35 @@ public class FileBrowserSheet extends Sheet {
     // set the root folder but without firing events
     public void setRootFolder(String rootFolder) {
         if (rootFolder == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Root folder is null.");
         }
 
         rootDirectory = new File(rootFolder);
         if (!rootDirectory.isDirectory()) {
-            throw new IllegalArgumentException();
+            // Give some grace here to allow setting the root directory
+            // to a regular file and have it work (by using its parent)
+            rootDirectory = rootDirectory.getParentFile();
+            if (rootDirectory == null
+                || !rootDirectory.isDirectory()) {
+                throw new IllegalArgumentException("Root folder is not a directory.");
+            }
         }
 
     }
 
     public void setRootDirectory(File rootDirectory) {
-        if (rootDirectory == null
-            || !rootDirectory.isDirectory()) {
-            throw new IllegalArgumentException();
+        if (rootDirectory == null) {
+            throw new IllegalArgumentException("Root directory is null.");
+        }
+
+        if (!rootDirectory.isDirectory()) {
+            // Give some grace here to allow setting the root directory
+            // to a regular file and have it work (by using its parent)
+            rootDirectory = rootDirectory.getParentFile();
+            if (rootDirectory == null
+                || !rootDirectory.isDirectory()) {
+                throw new IllegalArgumentException("Root directory is not a directory.");
+            }
         }
 
         if (rootDirectory.exists()) {
