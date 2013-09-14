@@ -371,6 +371,18 @@ public class TextPane extends Container {
         }
     }
 
+    private Node getRightmostDescendant(Element element) {
+        int n = element.getLength();
+        if (n > 0) {
+            Node node = element.get(n - 1);
+            if (node instanceof Element) {
+                return getRightmostDescendant((Element)node);
+            }
+            return node;
+        }
+        return element;
+    }
+
     public void insert(char character) {
         // TODO Don't make every character undoable; break at word boundaries?
 
@@ -405,19 +417,18 @@ public class TextPane extends Container {
                 textNode.insertText(text, offset);
             } else if (descendant instanceof Paragraph) {
                 // The caret is positioned on the paragraph terminator
+                // so get to the bottom rightmost descendant and add there
                 Paragraph paragraph = (Paragraph)descendant;
 
-                int n = paragraph.getLength();
-                if (n > 0) {
-                    Node node = paragraph.get(n - 1);
-                    if (node instanceof TextNode) {
-                        // Insert the text into the existing node
-                        TextNode textNode = (TextNode)node;
-                        textNode.insertText(text, offset - textNode.getOffset());
-                    } else {
-                        // Append a new text node
-                        paragraph.add(new TextNode(text));
-                    }
+                Node node = getRightmostDescendant(paragraph);
+                if (node instanceof TextNode) {
+                    // Insert the text into the existing node
+                    TextNode textNode = (TextNode)node;
+                    textNode.insertText(text, selectionStart - textNode.getDocumentOffset());
+                } else if (node instanceof Element) {
+                    // Append a new text node
+                    Element element = (Element)node;
+                    element.add(new TextNode(text));
                 } else {
                     // The paragraph is currently empty
                     paragraph.add(new TextNode(text));
