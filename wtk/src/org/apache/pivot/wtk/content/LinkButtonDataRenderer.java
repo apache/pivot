@@ -65,14 +65,10 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         if (data instanceof ButtonData) {
             ButtonData buttonData = (ButtonData)data;
             icon = buttonData.getIcon();
-            text = buttonData.getText();
         } else if (data instanceof Image) {
             icon = (Image)data;
-        } else {
-            if (data != null) {
-                text = data.toString();
-            }
         }
+        text = toString(data);
 
         // Update the image view
         if (icon == null) {

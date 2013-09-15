@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Default tree node renderer, which knows how to render instances of
  * {@link TreeNode} and {@link Image}. Anything else will be rendered as a
- * string (by calling <tt>node.toString()</tt>.
+ * string (by calling {@link #toString}.
  */
 public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRenderer {
     protected ImageView imageView = new ImageView();
@@ -86,13 +86,10 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
                 } else {
                     icon = treeNode.getIcon();
                 }
-
-                text = treeNode.getText();
             } else if (node instanceof Image) {
                 icon = (Image)node;
-            } else {
-                text = node.toString();
             }
+            text = toString(node);
 
             // Update the image view
             imageView.setImage(icon);
