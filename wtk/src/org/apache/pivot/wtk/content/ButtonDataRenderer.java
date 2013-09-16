@@ -153,7 +153,7 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
         if (data instanceof ButtonData) {
             ButtonData buttonData = (ButtonData)data;
             string = buttonData.getText();
-        } else {
+        } else if (!(data instanceof Image)) {
             if (data != null) {
                 string = data.toString();
             }

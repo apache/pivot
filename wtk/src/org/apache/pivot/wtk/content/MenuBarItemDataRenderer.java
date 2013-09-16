@@ -115,7 +115,7 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         if (data instanceof ButtonData) {
             ButtonData buttonData = (ButtonData)data;
             string = buttonData.getText();
-        } else {
+        } else if (!(data instanceof Image)) {
             if (data != null) {
                 string = data.toString();
             }
