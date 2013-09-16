@@ -65,14 +65,10 @@ public class TableViewHeaderDataRenderer extends BoxPane
         if (data instanceof TableViewHeaderData) {
             TableViewHeaderData tableViewHeaderData = (TableViewHeaderData)data;
             icon = tableViewHeaderData.getIcon();
-            text = tableViewHeaderData.getText();
         } else if (data instanceof Image) {
             icon = (Image)data;
-        } else {
-            if (data != null) {
-                text = data.toString();
-            }
         }
+        text = toString(data);
 
         // Update the icon image view
         imageView.setImage(icon);
@@ -115,16 +111,15 @@ public class TableViewHeaderDataRenderer extends BoxPane
 
     @Override
     public String toString(Object data) {
-        if (data == null) {
-            throw new IllegalArgumentException();
-        }
+        String string = null;
 
-        String string;
         if (data instanceof TableViewHeaderData) {
             TableViewHeaderData tableViewHeaderData = (TableViewHeaderData)data;
             string = tableViewHeaderData.getText();
-        } else {
-            string = data.toString();
+        } else if (!(data instanceof Image)) {
+            if (data != null) {
+                string = data.toString();
+            }
         }
 
         return string;
