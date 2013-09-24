@@ -210,6 +210,7 @@ public class TextPane extends Container {
 
     private boolean editable = true;
     private boolean undoingHistory = false;
+    private boolean bulkOperation = false;
 
     private ComponentNodeListener componentNodeListener = new ComponentNodeListener() {
         @Override
@@ -235,7 +236,9 @@ public class TextPane extends Container {
                 addHistoryItem(new RangeInsertedEdit(node, offset, characterCount));
             }
 
-            textPaneCharacterListeners.charactersInserted(TextPane.this, offset, characterCount);
+            if (!bulkOperation) {
+                textPaneCharacterListeners.charactersInserted(TextPane.this, offset, characterCount);
+            }
         }
 
         @Override
@@ -283,7 +286,9 @@ public class TextPane extends Container {
                 }
             }
 
-            textPaneCharacterListeners.charactersRemoved(TextPane.this, offset, characterCount);
+            if (!bulkOperation) {
+                textPaneCharacterListeners.charactersRemoved(TextPane.this, offset, characterCount);
+            }
         }
     };
 
@@ -383,6 +388,20 @@ public class TextPane extends Container {
         return element;
     }
 
+    /**
+     * Helper function to remove a range of characters from the document
+     * and notify the listeners just once (instead of once per node).
+     */
+    private Node removeDocumentRange(int start, int count) {
+        bulkOperation = true;
+        Node node = document.removeRange(start, count);
+        bulkOperation = false;
+
+        textPaneCharacterListeners.charactersRemoved(this, start, count);
+
+        return node;
+    }
+
     public void insert(char character) {
         // TODO Don't make every character undoable; break at word boundaries?
 
@@ -457,7 +476,7 @@ public class TextPane extends Container {
         }
 
         if (selectionLength > 0) {
-            document.removeRange(selectionStart, selectionLength);
+            removeDocumentRange(selectionStart, selectionLength);
         }
 
         // TODO If the caret is placed in the middle of a text node, split it;
@@ -475,7 +494,7 @@ public class TextPane extends Container {
         }
 
         if (selectionLength > 0) {
-            document.removeRange(selectionStart, selectionLength);
+            removeDocumentRange(selectionStart, selectionLength);
         }
 
         // Walk up the tree until we find a paragraph
@@ -550,7 +569,7 @@ public class TextPane extends Container {
                     paragraph.insertRange(nextParagraph, paragraph.getCharacterCount() - 1);
                 }
             } else {
-                document.removeRange(offset, characterCount);
+                removeDocumentRange(offset, characterCount);
             }
         }
 
@@ -573,7 +592,7 @@ public class TextPane extends Container {
 
         if (selectionLength > 0) {
             // Copy selection to clipboard
-            Document selection = (Document)document.removeRange(selectionStart, selectionLength);
+            Document selection = (Document)removeDocumentRange(selectionStart, selectionLength);
 
             String selectedText = null;
             try {
@@ -646,7 +665,12 @@ public class TextPane extends Container {
                     documentLocal = serializer.readObject(reader);
                     n = documentLocal.getCharacterCount();
 
-                    this.document.insertRange(documentLocal, selectionStart);
+                    bulkOperation = true;
+                    int start = selectionStart;
+                    this.document.insertRange(documentLocal, start);
+                    bulkOperation = false;
+
+                    textPaneCharacterListeners.charactersInserted(this, start, n);
                 } catch(IOException exception) {
                     throw new RuntimeException(exception);
                 }
