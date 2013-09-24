@@ -29,6 +29,11 @@ public class TextSpan extends Element {
         super(span, recursive);
     }
 
+    public TextSpan(String text) {
+        super();
+        add(text);
+    }
+
     public int add(String text) {
         return add(new TextNode(text));
     }
