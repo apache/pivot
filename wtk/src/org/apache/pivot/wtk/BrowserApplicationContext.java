@@ -34,6 +34,7 @@ import org.apache.pivot.collections.immutable.ImmutableMap;
 /**
  * Application context used to execute applications in a web browser.
  */
+@SuppressWarnings("restriction")
 public final class BrowserApplicationContext extends ApplicationContext {
     /**
      * Applet used to host applications in a web browser.

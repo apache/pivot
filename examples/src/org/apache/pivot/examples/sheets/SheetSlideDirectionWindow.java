@@ -42,10 +42,10 @@ import org.apache.pivot.wtk.skin.terra.TerraSheetSkin.SheetPlacement;
 
 public class SheetSlideDirectionWindow extends Window implements Bindable {
 
-    @BXML private Sheet sheet;
-    @BXML private TablePane tablePane;
-    @BXML private Form form;
-    @BXML private ListButton listButton;
+    @BXML Sheet sheet;
+    @BXML TablePane tablePane;
+    @BXML Form form;
+    @BXML ListButton listButton;
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
