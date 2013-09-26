@@ -86,14 +86,24 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         Label label = (Label)getComponent();
         String text = label.getText();
 
-        int preferredWidth;
-        if (text != null
-            && text.length() > 0) {
+        int preferredWidth = 0;
+        if (text != null && text.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
-            preferredWidth = (int)Math.ceil(stringBounds.getWidth());
-        } else {
-            preferredWidth = 0;
+            String str[];
+            if (wrapText) {
+                str = text.split("\n");
+            } else {
+                str = new String[] { text };
+            }
+
+            for (String line : str) {
+                Rectangle2D stringBounds = font.getStringBounds(line, fontRenderContext);
+                int w = (int)Math.ceil(stringBounds.getWidth());
+
+                if (w > preferredWidth) {
+                    preferredWidth = w;
+                }
+            }
         }
 
         preferredWidth += (padding.left + padding.right);
@@ -172,19 +182,41 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
-        int preferredWidth;
-        if (text != null
-            && text.length() > 0) {
-            Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
-            preferredWidth = (int)Math.ceil(stringBounds.getWidth());
-        } else {
-            preferredWidth = 0;
-        }
-
-        preferredWidth += (padding.left + padding.right);
+//        int preferredWidth;
+//        if (text != null
+//            && text.length() > 0) {
+//            Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
+//            preferredWidth = (int)Math.ceil(stringBounds.getWidth());
+//        } else {
+//            preferredWidth = 0;
 
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-        int preferredHeight = (int)Math.ceil(lm.getHeight()) + (padding.top + padding.bottom);
+        int lineHeight = (int)Math.ceil(lm.getHeight());
+
+        int preferredHeight = 0;
+        int preferredWidth = 0;
+
+        if (text != null && text.length() > 0) {
+            String str[];
+            if (wrapText) {
+                str = text.split("\n");
+            } else {
+                str = new String[] { text };
+            }
+
+            for (String line : str) {
+                Rectangle2D stringBounds = font.getStringBounds(line, fontRenderContext);
+                int w = (int)Math.ceil(stringBounds.getWidth());
+
+                if (w > preferredWidth) {
+                    preferredWidth = w;
+                }
+                preferredHeight += lineHeight;
+            }
+        }
+
+        preferredHeight += (padding.top + padding.bottom);
+        preferredWidth += (padding.left + padding.right);
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
