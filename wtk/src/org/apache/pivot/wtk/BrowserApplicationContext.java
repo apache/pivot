@@ -223,7 +223,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                         HostApplet.this.application.startup(HostApplet.this.displayHost.getDisplay(),
                             new ImmutableMap<String, String>(HostApplet.this.startupProperties));
                     } catch (Exception exception) {
-                        displayException(exception);
+                        handleUncaughtException(exception);
                     }
 
                     // Add the application to the application list
@@ -242,7 +242,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     try {
                         HostApplet.this.application.shutdown(false);
                     } catch (Exception exception) {
-                        displayException(exception);
+                        handleUncaughtException(exception);
                     }
 
                     // Remove the application from the application list
@@ -331,23 +331,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
             paint(graphics);
         }
 
-        private void displayException(Exception exception) {
-            exception.printStackTrace();
-
-            String message = exception.getClass().getName();
-
-            TextArea body = null;
-            String bodyText = exception.getMessage();
-            if (bodyText != null
-                && bodyText.length() > 0) {
-                body = new TextArea();
-                body.setText(bodyText);
-                body.setEditable(false);
-            }
-
-            Alert alert = new Alert(MessageType.ERROR, message, null, body, false);
-            alert.open(this.displayHost.getDisplay());
-        }
     }
 
     private static ArrayList<HostApplet> hostApplets = new ArrayList<HostApplet>();

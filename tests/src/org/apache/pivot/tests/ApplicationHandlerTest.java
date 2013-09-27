@@ -25,11 +25,13 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Window;
 
 public class ApplicationHandlerTest extends Application.Adapter
-    implements Application.UnprocessedKeyHandler, Application.UncaughtExceptionHandler {
+    implements Application.UnprocessedKeyHandler {
     private Window window = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
+        super.startup(display, properties);  // optional, but useful to set display and properties
+
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window)bxmlSerializer.readObject(ApplicationHandlerTest.class,
             "application_handler_test.bxml");
@@ -64,13 +66,8 @@ public class ApplicationHandlerTest extends Application.Adapter
         System.out.println("Unprocessed key released: " + keyCode + "; " + keyLocation);
     }
 
-    @Override
-    public void uncaughtExceptionThrown(Exception exception) {
-        System.out.println("Uncaught exception thrown.");
-        exception.printStackTrace();
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(ApplicationHandlerTest.class, args);
     }
+
 }

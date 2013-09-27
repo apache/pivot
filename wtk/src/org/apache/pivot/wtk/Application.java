@@ -29,10 +29,12 @@ public interface Application {
     /**
      * Application adapter.
      */
-    public static class Adapter implements Application {
+    public static class Adapter implements Application, UncaughtExceptionHandler {
+        private Display disp;
+
         @Override
         public void startup(Display display, Map<String, String> properties) throws Exception {
-            // empty block
+            this.disp = display;
         }
 
         @Override
@@ -49,6 +51,36 @@ public interface Application {
         public void resume() throws Exception {
             // empty block
         }
+
+        @Override
+        public void uncaughtExceptionThrown(Exception exception) {
+            exception.printStackTrace();
+            displayException(exception);
+        }
+
+        protected Display getDisplay() {
+            return disp;
+        }
+
+        private void displayException(Exception exception) {
+            if (getDisplay() == null) {
+                return;
+            }
+
+            String message = exception.getClass().getName();
+
+            TextArea body = null;
+            String bodyText = exception.getMessage();
+            if (bodyText != null && bodyText.length() > 0) {
+                body = new TextArea();
+                body.setText(bodyText);
+                body.setEditable(false);
+            }
+
+            Alert alert = new Alert(MessageType.ERROR, message, null, body, false);
+            alert.open(getDisplay());
+        }
+
     }
 
     /**
