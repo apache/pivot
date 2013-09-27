@@ -205,6 +205,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                 }
                 preferredHeight += lineHeight;
             }
+        } else {
+            preferredHeight += lineHeight;
         }
 
         preferredHeight += (padding.top + padding.bottom);

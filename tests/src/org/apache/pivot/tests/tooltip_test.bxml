@@ -38,18 +38,25 @@ limitations under the License.
             <Label text="Select one element:"/>
             <ListButton bxml:id="listButton2" buttonData="Number"
                 listData="['One', 'Two', 'Three']"
+                tooltipText="multi-line&#10;tooltip for the List"
             />
         </FlowPane>
         <Separator/>
         <FlowPane>
            <Label text="TableView:"/>
-            <TableView bxml:id="tableView1" styles="{variableRowHeight:true, backgroundColor:'#ffeeee'}"
-                selectMode="multi" tableDataKey="tableDataKey"
+            <TableView bxml:id="tableView" styles="{variableRowHeight:true, backgroundColor:'#ffeeee'}"
+                tooltipText="multi-line&#10;tooltip for the Table"
             >
                 <columns>
-                    <TableView.Column name="value" width="1*"/>
+                    <TableView.Column name="value" width="300">
+                        <cellRenderer>
+                            <content:TableViewCellRenderer styles="{wrapText:true}"/>
+                        </cellRenderer>
+                    </TableView.Column>
+
                     <TableView.Column width="1*"/>
                 </columns>
+
                 <collections:HashMap value="Single Line"/>
                 <collections:HashMap value="Double&#xA;Line Line Line Line!"/>
                 <collections:HashMap value="Single Line"/>
