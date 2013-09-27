@@ -18,17 +18,44 @@ limitations under the License.
 
 <Window title="Test BXML" maximized="true"
     xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk"
 >
 
-    <BoxPane styles="{padding:4, verticalAlignment:'center'}">
-        <Label text="Multi-line&#10;Label:"
-            tooltipText="multi-line&#10;tooltip for the Label"
-            styles="{wrapText:true}"
-        />
-        <PushButton bxml:id="pushButton" buttonData="Button with multi-line tooltip"
-            tooltipText="multi-line&#10;tooltip for the Button"
-        />
+    <BoxPane orientation="vertical" styles="{padding:4, verticalAlignment:'center'}">
+        <FlowPane>
+            <Label text="Multi-line&#10;Label:"
+                tooltipText="multi-line&#10;tooltip for the Label"
+                styles="{wrapText:true}"
+            />
+            <PushButton bxml:id="pushButton" buttonData="Button with multi-line tooltip"
+                tooltipText="multi-line&#10;tooltip for the Button"
+            />
+        </FlowPane>
+        <Separator/>
+        <FlowPane>
+            <Label text="Select one element:"/>
+            <ListButton bxml:id="listButton2" buttonData="Number"
+                listData="['One', 'Two', 'Three']"
+            />
+        </FlowPane>
+        <Separator/>
+        <FlowPane>
+           <Label text="TableView:"/>
+            <TableView bxml:id="tableView1" styles="{variableRowHeight:true, backgroundColor:'#ffeeee'}"
+                selectMode="multi" tableDataKey="tableDataKey"
+            >
+                <columns>
+                    <TableView.Column name="value" width="1*"/>
+                    <TableView.Column width="1*"/>
+                </columns>
+                <collections:HashMap value="Single Line"/>
+                <collections:HashMap value="Double&#xA;Line Line Line Line!"/>
+                <collections:HashMap value="Single Line"/>
+                <collections:HashMap value="Double&#xA;Line"/>
+            </TableView>
+        </FlowPane>
     </BoxPane>
 
 </Window>

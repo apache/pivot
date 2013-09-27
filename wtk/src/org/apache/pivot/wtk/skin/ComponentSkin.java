@@ -296,7 +296,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
         if (tooltipText != null) {
             Label tooltipLabel = new Label(tooltipText);
-            tooltipLabel.getStyles().put("wrapText", true);  // TODO: set wrapText style accordingly to what is set in the tooltip ...
+            tooltipLabel.getStyles().put("wrapText", true);  // by default here set wrapText style to true
+// TODO: set wrapText style to false only if specified ...
             Tooltip tooltip = new Tooltip(tooltipLabel);
 
             Display display = component.getDisplay();
