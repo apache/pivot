@@ -63,6 +63,19 @@ limitations under the License.
                 <collections:HashMap value="Double&#xA;Line"/>
             </TableView>
         </FlowPane>
+        <Separator/>
+        <FlowPane>
+            <Label text="Multi-line&#10;Label2:"
+                tooltipText="multi-line&#10;tooltip for the Label, but with wrapText false"
+                tooltipWrapText="false"
+                styles="{wrapText:true}"
+            />
+            <PushButton buttonData="Button 2"
+                tooltipText="multi-line&#10;tooltip for the Button, but with wrapText false"
+                tooltipWrapText="false"
+            />
+        </FlowPane>
+        <Separator/>
     </BoxPane>
 
 </Window>
