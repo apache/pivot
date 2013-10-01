@@ -219,15 +219,15 @@ public final class BrowserApplicationContext extends ApplicationContext {
             public void run() {
                 // Start the application
                 if (HostApplet.this.application != null) {
+                    // Add the application to the application list
+                    applications.add(HostApplet.this.application);
+
                     try {
                         HostApplet.this.application.startup(HostApplet.this.displayHost.getDisplay(),
                             new ImmutableMap<String, String>(HostApplet.this.startupProperties));
                     } catch (Exception exception) {
                         handleUncaughtException(exception);
                     }
-
-                    // Add the application to the application list
-                    applications.add(HostApplet.this.application);
                 }
             }
         }
