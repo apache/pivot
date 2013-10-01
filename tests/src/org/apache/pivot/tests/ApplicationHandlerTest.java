@@ -30,8 +30,6 @@ public class ApplicationHandlerTest extends Application.Adapter
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        super.startup(display, properties);  // optional, but useful to set display and properties
-
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window)bxmlSerializer.readObject(ApplicationHandlerTest.class,
             "application_handler_test.bxml");
