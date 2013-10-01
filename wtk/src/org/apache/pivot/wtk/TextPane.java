@@ -723,10 +723,10 @@ public class TextPane extends Container {
      * @see #setText
      */
     public String getText() {
-        Document document = getDocument();
-        if (document != null && getCharacterCount() != 0) {
+        Document doc = getDocument();
+        if (doc != null && getCharacterCount() != 0) {
             StringBuilder text = new StringBuilder(getCharacterCount());
-            addToText(text, document);
+            addToText(text, doc);
             return text.toString();
         }
         return null;
@@ -737,13 +737,13 @@ public class TextPane extends Container {
      * of one paragraph per line of the given text.
      */
     public void setText(String text) {
-        Document document = new Document();
+        Document doc = new Document();
         String[] lines = text.split("\r?\n");
         for (int i = 0; i < lines.length; i++) {
             Paragraph paragraph = new Paragraph(lines[i]);
-            document.add(paragraph);
+            doc.add(paragraph);
         }
-        setDocument(document);
+        setDocument(doc);
     }
 
     /**

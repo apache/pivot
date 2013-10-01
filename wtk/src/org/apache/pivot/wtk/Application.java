@@ -30,6 +30,7 @@ public interface Application {
      * Application adapter.
      */
     public static class Adapter implements Application {
+
         @Override
         public void startup(Display display, Map<String, String> properties) throws Exception {
             // empty block
@@ -49,6 +50,7 @@ public interface Application {
         public void resume() throws Exception {
             // empty block
         }
+
     }
 
     /**

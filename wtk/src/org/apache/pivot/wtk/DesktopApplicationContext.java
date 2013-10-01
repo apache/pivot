@@ -258,7 +258,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         application.suspend();
                     } catch(Exception exception) {
-                        displayException(exception);
+                        handleUncaughtException(exception);
                     }
 
                     break;
@@ -267,7 +267,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     try {
                         application.resume();
                     } catch(Exception exception) {
-                        displayException(exception);
+                        handleUncaughtException(exception);
                     }
 
                     break;
@@ -416,7 +416,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             try {
                 cancelShutdown = application.shutdown(optional);
             } catch(Exception exception) {
-                displayException(exception);
+                handleUncaughtException(exception);
             }
 
             if (!cancelShutdown) {
@@ -641,7 +641,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         application.startup(primaryDisplayHost.getDisplay(),
                             new ImmutableMap<>(properties));
                     } catch (Exception exception) {
-                        displayException(exception);
+                        handleUncaughtException(exception);
                     }
                 }
             });
@@ -704,24 +704,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 System.err.println("Unable to attach EAWT hooks: " + throwable);
             }
         }
-    }
-
-    private static void displayException(Exception exception) {
-        exception.printStackTrace();
-
-        String message = exception.getClass().getName();
-
-        TextArea body = null;
-        String bodyText = exception.getMessage();
-        if (bodyText != null
-            && bodyText.length() > 0) {
-            body = new TextArea();
-            body.setText(bodyText);
-            body.setEditable(false);
-        }
-
-        Alert alert = new Alert(MessageType.ERROR, message, null, body, false);
-        alert.open(primaryDisplayHost.getDisplay());
     }
 
     /**

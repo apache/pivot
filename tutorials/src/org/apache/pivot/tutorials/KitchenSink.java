@@ -731,20 +731,20 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 this.customTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
                     @Override
                     public boolean mouseClick(Component comp, Mouse.Button button, int x, int y, int count) {
-                       if (button == Mouse.Button.LEFT) {
-                           @SuppressWarnings("unchecked")
-                        List<CustomTableRow> customTableData =
-                               (List<CustomTableRow>)TablesRollupStateHandler.this.customTableView.getTableData();
+                        if (button == Mouse.Button.LEFT) {
+                            @SuppressWarnings("unchecked")
+                            List<CustomTableRow> customTableData =
+                                (List<CustomTableRow>)TablesRollupStateHandler.this.customTableView.getTableData();
 
-                          int columnIndex = TablesRollupStateHandler.this.customTableView.getColumnAt(x);
-                          if (columnIndex == 0) {
-                             int rowIndex = TablesRollupStateHandler.this.customTableView.getRowAt(y);
-                             CustomTableRow row = customTableData.get(rowIndex);
+                            int columnIndex = TablesRollupStateHandler.this.customTableView.getColumnAt(x);
+                            if (columnIndex == 0) {
+                                int rowIndex = TablesRollupStateHandler.this.customTableView.getRowAt(y);
+                                CustomTableRow row = customTableData.get(rowIndex);
 
-                             row.setA(!row.getA());
-                             customTableData.update(rowIndex, row);
-                          }
-                       }
+                                row.setA(!row.getA());
+                                customTableData.update(rowIndex, row);
+                            }
+                        }
 
                        return false;
                     }

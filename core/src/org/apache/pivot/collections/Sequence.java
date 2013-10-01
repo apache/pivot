@@ -28,8 +28,8 @@ public interface Sequence<T> {
     /**
      * Collection of static utility methods providing path access to nested
      * sequence data.
+     * @param <T> note that in Tree the type parameter currently it's not used
      */
-    @SuppressWarnings("unused")
     public static class Tree<T> {
         /**
          * An object representing a path to a nested node in nested sequence

@@ -34,6 +34,7 @@ import org.apache.pivot.collections.immutable.ImmutableMap;
 /**
  * Application context used to execute applications in a web browser.
  */
+@SuppressWarnings("restriction")
 public final class BrowserApplicationContext extends ApplicationContext {
     /**
      * Applet used to host applications in a web browser.
@@ -218,15 +219,15 @@ public final class BrowserApplicationContext extends ApplicationContext {
             public void run() {
                 // Start the application
                 if (HostApplet.this.application != null) {
+                    // Add the application to the application list
+                    applications.add(HostApplet.this.application);
+
                     try {
                         HostApplet.this.application.startup(HostApplet.this.displayHost.getDisplay(),
                             new ImmutableMap<>(HostApplet.this.startupProperties));
                     } catch (Exception exception) {
-                        displayException(exception);
+                        handleUncaughtException(exception);
                     }
-
-                    // Add the application to the application list
-                    applications.add(HostApplet.this.application);
                 }
             }
         }
@@ -241,7 +242,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     try {
                         HostApplet.this.application.shutdown(false);
                     } catch (Exception exception) {
-                        displayException(exception);
+                        handleUncaughtException(exception);
                     }
 
                     // Remove the application from the application list
@@ -330,23 +331,6 @@ public final class BrowserApplicationContext extends ApplicationContext {
             paint(graphics);
         }
 
-        private void displayException(Exception exception) {
-            exception.printStackTrace();
-
-            String message = exception.getClass().getName();
-
-            TextArea body = null;
-            String bodyText = exception.getMessage();
-            if (bodyText != null
-                && bodyText.length() > 0) {
-                body = new TextArea();
-                body.setText(bodyText);
-                body.setEditable(false);
-            }
-
-            Alert alert = new Alert(MessageType.ERROR, message, null, body, false);
-            alert.open(this.displayHost.getDisplay());
-        }
     }
 
     private static ArrayList<HostApplet> hostApplets = new ArrayList<>();

@@ -534,9 +534,10 @@ public class TerraScrollBarSkin extends ContainerSkin
                 int realValue = (int)(pixelValue / getValueScale());
 
                 // Bound the value
+                int start = scrollBar.getStart();
                 int end = scrollBar.getEnd();
                 int extent = scrollBar.getExtent();
-                realValue = Math.min(Math.max(realValue, 0), end - extent);
+                realValue = Math.min(Math.max(realValue - start, start), end - extent);
 
                 // Update the scroll bar
                 scrollBar.setValue(realValue);
@@ -718,7 +719,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                 // scale that maps logical value to pixel value
                 int numLegalPixelValues = availableWidth - handleWidth + 1;
                 float valueScale = (float)numLegalPixelValues / (float)numLegalRealValues;
-                int handleX = (int)(value * valueScale) +
+                int handleX = (int)((value - start) * valueScale) +
                     scrollUpButton.getWidth() - 1;
 
                 if (handleWidth > availableWidth) {
@@ -754,7 +755,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                 // scale maps logical value to pixel value
                 int numLegalPixelValues = availableHeight - handleHeight + 1;
                 float valueScale = (float)numLegalPixelValues / (float)numLegalRealValues;
-                int handleY = (int)(value * valueScale) +
+                int handleY = (int)((value - start) * valueScale) +
                     scrollUpButton.getHeight() - 1;
 
                 if (handleHeight > availableHeight) {
@@ -1222,15 +1223,16 @@ public class TerraScrollBarSkin extends ContainerSkin
         // would be overkill. If all that has changed is the value, we can just
         // update the handle's location and save the work of full invalidation.
         if (handle.isVisible()) {
+           int start = scrollBar.getStart();
            int value = scrollBar.getValue();
 
            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-              int handleX = (int)(value * getValueScale()) +
+               int handleX = (int)((value - start) * getValueScale()) +
                  scrollUpButton.getWidth() - 1;
 
               handle.setLocation(handleX, 0);
            } else {
-              int handleY = (int)(value * getValueScale()) +
+               int handleY = (int)((value - start) * getValueScale()) +
                  scrollUpButton.getHeight() - 1;
 
               handle.setLocation(0, handleY);

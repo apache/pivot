@@ -50,7 +50,7 @@ public class JavaWindow extends Window implements Bindable {
         sayHelloButton.requestFocus();
     }
 
-    private void sayHello() {
+    void sayHello() {
         Prompt.prompt("Hello from Java!", this);
     }
 }

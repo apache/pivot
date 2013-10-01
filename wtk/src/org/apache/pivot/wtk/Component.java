@@ -649,10 +649,11 @@ public abstract class Component implements ConstrainedVisual {
     // The cursor that is displayed over the component
     private Cursor cursor = null;
 
-    // The tooltip text, delay, and trigger callback
+    // The tooltip text, delay, trigger callback, flag for wrapping its text
     private String tooltipText = null;
     private int tooltipDelay = 1000;
     private ApplicationContext.ScheduledCallback triggerTooltipCallback = null;
+    private boolean tooltipWrapText = true;
 
     // The component's drag source
     private DragSource dragSource = null;
@@ -2312,6 +2313,31 @@ public abstract class Component implements ConstrainedVisual {
         if (previousTooltipDelay != tooltipDelay) {
             this.tooltipDelay = tooltipDelay;
             componentListeners.tooltipDelayChanged(this, previousTooltipDelay);
+        }
+    }
+
+    /**
+     * Returns the tooltip's mode for wrapping its text.
+     *
+     * @return
+     * <tt>true</tt> if the tooltip text wrap mode is enabled; </tt>false</tt> if not.
+     */
+    public boolean getTooltipWrapText() {
+        return tooltipWrapText;
+    }
+
+    /**
+     * Sets the tooltip's text wrapping mode.
+     *
+     * @param tooltipWrapText
+     * The component's tooltip text wrap mode.
+     */
+    public void setTooltipWrapText(boolean tooltipWrapText) {
+        boolean previousTooltipWrapText = this.tooltipWrapText;
+
+        if (previousTooltipWrapText != tooltipWrapText) {
+            this.tooltipWrapText = tooltipWrapText;
+            // componentListeners.tooltipTextWrapChanged(this, previousTooltipWrapText);  // verify if/when to implement it ...
         }
     }
 

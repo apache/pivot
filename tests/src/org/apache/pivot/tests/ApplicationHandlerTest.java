@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Window;
 
 public class ApplicationHandlerTest extends Application.Adapter
-    implements Application.UnprocessedKeyHandler, Application.UncaughtExceptionHandler {
+    implements Application.UnprocessedKeyHandler {
     private Window window = null;
 
     @Override
@@ -64,13 +64,8 @@ public class ApplicationHandlerTest extends Application.Adapter
         System.out.println("Unprocessed key released: " + keyCode + "; " + keyLocation);
     }
 
-    @Override
-    public void uncaughtExceptionThrown(Exception exception) {
-        System.out.println("Uncaught exception thrown.");
-        exception.printStackTrace();
-    }
-
     public static void main(String[] args) {
         DesktopApplicationContext.main(ApplicationHandlerTest.class, args);
     }
+
 }

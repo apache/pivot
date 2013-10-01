@@ -37,6 +37,8 @@ import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropTarget;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Mouse;
@@ -44,8 +46,6 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Skin;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Tooltip;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Keyboard.Modifier;
 
 /**
  * Abstract base class for component skins.
@@ -295,7 +295,10 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         String tooltipText = component.getTooltipText();
 
         if (tooltipText != null) {
-            Tooltip tooltip = new Tooltip(new Label(tooltipText));
+            Label tooltipLabel = new Label(tooltipText);
+            boolean tooltipWrapText = component.getTooltipWrapText();
+            tooltipLabel.getStyles().put("wrapText", tooltipWrapText);
+            Tooltip tooltip = new Tooltip(tooltipLabel);
 
             Display display = component.getDisplay();
             Point location = component.mapPointToAncestor(display, x, y);

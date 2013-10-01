@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Test BXML" maximized="true"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:collections="org.apache.pivot.collections"
+    xmlns:content="org.apache.pivot.wtk.content"
+    xmlns="org.apache.pivot.wtk"
+>
+
+    <BoxPane orientation="vertical" styles="{padding:4, verticalAlignment:'center'}">
+        <FlowPane>
+            <Label text="Multi-line&#10;Label:"
+                tooltipText="multi-line&#10;tooltip for the Label"
+                styles="{wrapText:true}"
+            />
+            <PushButton bxml:id="pushButton" buttonData="Button with multi-line tooltip"
+                tooltipText="multi-line&#10;tooltip for the Button"
+            />
+        </FlowPane>
+        <Separator/>
+        <FlowPane>
+            <Label text="Select one element:"/>
+            <ListButton bxml:id="listButton2" buttonData="Number"
+                listData="['One', 'Two', 'Three']"
+                tooltipText="multi-line&#10;tooltip for the List"
+            />
+        </FlowPane>
+        <Separator/>
+        <FlowPane>
+           <Label text="TableView:"/>
+            <TableView bxml:id="tableView" styles="{variableRowHeight:true, backgroundColor:'#ffeeee'}"
+                tooltipText="multi-line&#10;tooltip for the Table"
+            >
+                <columns>
+                    <TableView.Column name="value" width="300">
+                        <cellRenderer>
+                            <content:TableViewCellRenderer styles="{wrapText:true}"/>
+                        </cellRenderer>
+                    </TableView.Column>
+
+                    <TableView.Column width="1*"/>
+                </columns>
+
+                <collections:HashMap value="Single Line"/>
+                <collections:HashMap value="Double&#xA;Line Line Line Line!"/>
+                <collections:HashMap value="Single Line"/>
+                <collections:HashMap value="Double&#xA;Line"/>
+            </TableView>
+        </FlowPane>
+        <Separator/>
+        <FlowPane>
+            <Label text="Multi-line&#10;Label2:"
+                tooltipText="multi-line&#10;tooltip for the Label, but with wrapText false"
+                tooltipWrapText="false"
+                styles="{wrapText:true}"
+            />
+            <PushButton buttonData="Button 2"
+                tooltipText="multi-line&#10;tooltip for the Button, but with wrapText false"
+                tooltipWrapText="false"
+            />
+        </FlowPane>
+        <Separator/>
+    </BoxPane>
+
+</Window>
