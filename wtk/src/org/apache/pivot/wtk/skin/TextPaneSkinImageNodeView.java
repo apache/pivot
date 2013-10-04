@@ -26,7 +26,8 @@ import org.apache.pivot.wtk.media.ImageListener;
 import org.apache.pivot.wtk.text.ImageNode;
 import org.apache.pivot.wtk.text.ImageNodeListener;
 
-class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNodeListener, ImageListener {
+class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNodeListener,
+    ImageListener {
     public TextPaneSkinImageNodeView(ImageNode imageNode) {
         super(imageNode);
     }
@@ -35,7 +36,7 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
     protected void attach() {
         super.attach();
 
-        ImageNode imageNode = (ImageNode)getNode();
+        ImageNode imageNode = (ImageNode) getNode();
         imageNode.getImageNodeListeners().add(this);
 
         Image image = imageNode.getImage();
@@ -48,13 +49,13 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
     protected void detach() {
         super.detach();
 
-        ImageNode imageNode = (ImageNode)getNode();
+        ImageNode imageNode = (ImageNode) getNode();
         imageNode.getImageNodeListeners().remove(this);
     }
 
     @Override
     protected void childLayout(int breakWidth) {
-        ImageNode imageNode = (ImageNode)getNode();
+        ImageNode imageNode = (ImageNode) getNode();
         Image image = imageNode.getImage();
 
         if (image == null) {
@@ -66,7 +67,7 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
 
     @Override
     public Dimensions getPreferredSize(int breakWidth) {
-        ImageNode imageNode = (ImageNode)getNode();
+        ImageNode imageNode = (ImageNode) getNode();
         Image image = imageNode.getImage();
 
         if (image == null) {
@@ -82,7 +83,7 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
 
     @Override
     public int getBaseline() {
-        ImageNode imageNode = (ImageNode)getNode();
+        ImageNode imageNode = (ImageNode) getNode();
         Image image = imageNode.getImage();
 
         int baseline = -1;
@@ -96,7 +97,7 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
 
     @Override
     public void paint(Graphics2D graphics) {
-        ImageNode imageNode = (ImageNode)getNode();
+        ImageNode imageNode = (ImageNode) getNode();
         Image image = imageNode.getImage();
 
         if (image != null) {

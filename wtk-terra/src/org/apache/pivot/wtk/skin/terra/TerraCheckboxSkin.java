@@ -35,9 +35,7 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.CheckboxSkin;
 
 /**
- * Terra checkbox skin.
- * <p>
- * TODO Button alignment style (vertical only).
+ * Terra checkbox skin. <p> TODO Button alignment style (vertical only).
  */
 public class TerraCheckboxSkin extends CheckboxSkin {
     private Font font;
@@ -56,7 +54,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     private static final int CHECKMARK_SIZE = 10;
 
     public TerraCheckboxSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -72,7 +70,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        Checkbox checkbox = (Checkbox)getComponent();
+        Checkbox checkbox = (Checkbox) getComponent();
         Button.DataRenderer dataRenderer = checkbox.getDataRenderer();
 
         int preferredWidth = CHECKBOX_SIZE;
@@ -80,8 +78,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         Object buttonData = checkbox.getButtonData();
         if (buttonData != null) {
             dataRenderer.render(buttonData, checkbox, false);
-            preferredWidth += dataRenderer.getPreferredWidth(height)
-                + spacing * 2;
+            preferredWidth += dataRenderer.getPreferredWidth(height) + spacing * 2;
         }
 
         return preferredWidth;
@@ -89,7 +86,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        Checkbox checkbox = (Checkbox)getComponent();
+        Checkbox checkbox = (Checkbox) getComponent();
         Button.DataRenderer dataRenderer = checkbox.getDataRenderer();
 
         int preferredHeight = CHECKBOX_SIZE;
@@ -102,8 +99,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
             dataRenderer.render(checkbox.getButtonData(), checkbox, false);
 
-            preferredHeight = Math.max(preferredHeight,
-                dataRenderer.getPreferredHeight(width));
+            preferredHeight = Math.max(preferredHeight, dataRenderer.getPreferredHeight(width));
         }
 
         return preferredHeight;
@@ -111,7 +107,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        Checkbox checkbox = (Checkbox)getComponent();
+        Checkbox checkbox = (Checkbox) getComponent();
         Button.DataRenderer dataRenderer = checkbox.getDataRenderer();
 
         dataRenderer.render(checkbox.getButtonData(), checkbox, false);
@@ -122,11 +118,9 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         Object buttonData = checkbox.getButtonData();
         if (buttonData != null) {
             dataRenderer.render(buttonData, checkbox, false);
-            preferredWidth += dataRenderer.getPreferredWidth(-1)
-                + spacing * 2;
+            preferredWidth += dataRenderer.getPreferredWidth(-1) + spacing * 2;
 
-            preferredHeight = Math.max(preferredHeight,
-                dataRenderer.getPreferredHeight(-1));
+            preferredHeight = Math.max(preferredHeight, dataRenderer.getPreferredHeight(-1));
         }
 
         return new Dimensions(preferredWidth, preferredHeight);
@@ -149,7 +143,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
     @Override
     public void paint(Graphics2D graphics) {
-        Checkbox checkbox = (Checkbox)getComponent();
+        Checkbox checkbox = (Checkbox) getComponent();
         int width = getWidth();
         int height = getHeight();
 
@@ -165,7 +159,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         dataRenderer.render(buttonData, checkbox, false);
         dataRenderer.setSize(Math.max(width - (CHECKBOX_SIZE + spacing * 2), 0), height);
 
-        Graphics2D contentGraphics = (Graphics2D)graphics.create();
+        Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(CHECKBOX_SIZE + spacing, 0);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
@@ -175,13 +169,12 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         if (checkbox.isFocused()) {
             if (buttonData == null) {
                 Color focusColor = new Color(buttonSelectionColor.getRed(),
-                    buttonSelectionColor.getGreen(),
-                    buttonSelectionColor.getBlue(), 0x44);
+                    buttonSelectionColor.getGreen(), buttonSelectionColor.getBlue(), 0x44);
                 graphics.setColor(focusColor);
                 graphics.fillRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
             } else {
                 BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+                    BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
 
                 graphics.setStroke(dashStroke);
                 graphics.setColor(buttonBorderColor);
@@ -190,8 +183,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
                 Rectangle2D focusRectangle = new Rectangle2D.Double(CHECKBOX_SIZE + 1, 0.5,
-                    dataRenderer.getWidth() + spacing * 2 - 2,
-                    dataRenderer.getHeight() - 1);
+                    dataRenderer.getWidth() + spacing * 2 - 2, dataRenderer.getHeight() - 1);
                 graphics.draw(focusRectangle);
             }
         }
@@ -235,15 +227,13 @@ public class TerraCheckboxSkin extends CheckboxSkin {
             int offsetX = (CHECKBOX_SIZE - (n + m)) / 2;
             int offsetY = (CHECKBOX_SIZE - n) / 2;
 
-            graphics.drawLine(offsetX, (n - m) + offsetY,
-                m + offsetX, n + offsetY);
-            graphics.drawLine(m + offsetX, n + offsetY,
-                (m + n) + offsetX, offsetY);
+            graphics.drawLine(offsetX, (n - m) + offsetY, m + offsetX, n + offsetY);
+            graphics.drawLine(m + offsetX, n + offsetY, (m + n) + offsetX, offsetY);
         } else {
             if (state == Button.State.MIXED) {
                 graphics.setColor(buttonSelectionColorLocal);
-                GraphicsUtilities.drawLine(graphics, 4, (CHECKBOX_SIZE - 3) / 2 + 1, CHECKBOX_SIZE - 8,
-                    Orientation.HORIZONTAL, 2);
+                GraphicsUtilities.drawLine(graphics, 4, (CHECKBOX_SIZE - 3) / 2 + 1,
+                    CHECKBOX_SIZE - 8, Orientation.HORIZONTAL, 2);
             }
         }
 

@@ -28,10 +28,10 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 
 /**
- * This test will check that the previewWindowOpen method is called
- * before the ListPopup of the MenuButton is opened. This is crucial because
- * one need to populate the Menu before the Window opens, so that correct sizing
- * and layout can be performed.
+ * This test will check that the previewWindowOpen method is called before the
+ * ListPopup of the MenuButton is opened. This is crucial because one need to
+ * populate the Menu before the Window opens, so that correct sizing and layout
+ * can be performed.
  */
 public class Pivot765 extends Application.Adapter {
     private boolean menuPopulated = false;
@@ -58,8 +58,10 @@ public class Pivot765 extends Application.Adapter {
             @Override
             public void windowOpened(Window windowArgument) {
                 if (!menuPopulated)
-                    Alert.alert("Window was opened before the menu was populated." +
-                            "Either previewWindowOpen threw an exception, or it wasn't called before the Window was opened.", windowArgument);
+                    Alert.alert(
+                        "Window was opened before the menu was populated."
+                            + "Either previewWindowOpen threw an exception, or it wasn't called before the Window was opened.",
+                        windowArgument);
             }
 
             @Override
@@ -70,7 +72,6 @@ public class Pivot765 extends Application.Adapter {
             }
         });
 
-
         window.open(display);
     }
 
@@ -80,7 +81,7 @@ public class Pivot765 extends Application.Adapter {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main( new String[] { Pivot765.class.getName() });
+        DesktopApplicationContext.main(new String[] { Pivot765.class.getName() });
     }
 
 }

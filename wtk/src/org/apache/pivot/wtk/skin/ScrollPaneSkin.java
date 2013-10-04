@@ -42,9 +42,8 @@ import org.apache.pivot.wtk.ViewportListener;
 /**
  * Scroll pane skin.
  */
-public class ScrollPaneSkin extends ContainerSkin
-    implements Viewport.Skin, ScrollPaneListener, ViewportListener,
-               ScrollBarValueListener {
+public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, ScrollPaneListener,
+    ViewportListener, ScrollBarValueListener {
 
     private ScrollBar horizontalScrollBar = new ScrollBar(Orientation.HORIZONTAL);
     private ScrollBar verticalScrollBar = new ScrollBar(Orientation.VERTICAL);
@@ -76,7 +75,7 @@ public class ScrollPaneSkin extends ContainerSkin
     public void install(Component component) {
         super.install(component);
 
-        ScrollPane scrollPane = (ScrollPane)component;
+        ScrollPane scrollPane = (ScrollPane) component;
         scrollPane.getViewportListeners().add(this);
         scrollPane.getScrollPaneListeners().add(this);
 
@@ -96,7 +95,7 @@ public class ScrollPaneSkin extends ContainerSkin
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+        ScrollPane scrollPane = (ScrollPane) getComponent();
         Component view = scrollPane.getView();
 
         if (view != null) {
@@ -127,8 +126,8 @@ public class ScrollPaneSkin extends ContainerSkin
                     if (height < 0) {
                         verticalPolicy = ScrollBarPolicy.AUTO;
                     } else {
-                        int preferredHeight = preferredViewSize.height +
-                            preferredColumnHeaderHeight;
+                        int preferredHeight = preferredViewSize.height
+                            + preferredColumnHeaderHeight;
 
                         if (preferredHeight < height) {
                             verticalPolicy = ScrollBarPolicy.FILL;
@@ -147,17 +146,15 @@ public class ScrollPaneSkin extends ContainerSkin
                 if (verticalPolicy == ScrollBarPolicy.ALWAYS
                     || verticalPolicy == ScrollBarPolicy.NEVER
                     || verticalPolicy == ScrollBarPolicy.AUTO) {
-                    preferredWidth = preferredViewSize.width +
-                        preferredRowHeaderWidth;
+                    preferredWidth = preferredViewSize.width + preferredRowHeaderWidth;
 
                     // If the sum of the preferred heights of the view and the
                     // column header is greater than the height constraint,
                     // include the preferred width of the scroll bar in the
                     // preferred width calculation
                     if (verticalPolicy == ScrollBarPolicy.ALWAYS
-                        || (verticalPolicy == ScrollBarPolicy.AUTO
-                        && height > 0
-                        && preferredViewSize.height + preferredColumnHeaderHeight > height)) {
+                        || (verticalPolicy == ScrollBarPolicy.AUTO && height > 0 && preferredViewSize.height
+                            + preferredColumnHeaderHeight > height)) {
                         preferredWidth += verticalScrollBar.getPreferredWidth(-1);
                     }
                 }
@@ -174,8 +171,7 @@ public class ScrollPaneSkin extends ContainerSkin
                     heightUpdated = Math.max(heightUpdated - preferredColumnHeaderHeight, 0);
                 }
 
-                preferredWidth = view.getPreferredWidth(heightUpdated) +
-                    preferredRowHeaderWidth;
+                preferredWidth = view.getPreferredWidth(heightUpdated) + preferredRowHeaderWidth;
             }
         }
 
@@ -186,7 +182,7 @@ public class ScrollPaneSkin extends ContainerSkin
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+        ScrollPane scrollPane = (ScrollPane) getComponent();
         Component view = scrollPane.getView();
 
         if (view != null) {
@@ -217,8 +213,7 @@ public class ScrollPaneSkin extends ContainerSkin
                     if (width < 0) {
                         horizontalPolicy = ScrollBarPolicy.AUTO;
                     } else {
-                        int preferredWidth = preferredViewSize.width +
-                            preferredRowHeaderWidth;
+                        int preferredWidth = preferredViewSize.width + preferredRowHeaderWidth;
 
                         if (preferredWidth < width) {
                             horizontalPolicy = ScrollBarPolicy.FILL;
@@ -237,35 +232,36 @@ public class ScrollPaneSkin extends ContainerSkin
                 if (horizontalPolicy == ScrollBarPolicy.ALWAYS
                     || horizontalPolicy == ScrollBarPolicy.NEVER
                     || horizontalPolicy == ScrollBarPolicy.AUTO) {
-                    preferredHeight = preferredViewSize.height +
-                        preferredColumnHeaderHeight;
+                    preferredHeight = preferredViewSize.height + preferredColumnHeaderHeight;
 
                     // If the sum of the preferred widths of the view and the
                     // row header is greater than the width constraint, include
                     // the preferred height of the scroll bar in the preferred
                     // height calculation
                     if (horizontalPolicy == ScrollBarPolicy.ALWAYS
-                        || (horizontalPolicy == ScrollBarPolicy.AUTO
-                        && width > 0
-                        && preferredViewSize.width + preferredRowHeaderWidth > width)) {
+                        || (horizontalPolicy == ScrollBarPolicy.AUTO && width > 0 && preferredViewSize.width
+                            + preferredRowHeaderWidth > width)) {
                         preferredHeight += horizontalScrollBar.getPreferredHeight(-1);
                     }
                 }
             }
 
             if (horizontalPolicy == ScrollBarPolicy.FILL) {
-                // Preferred height is the sum of the constrained preferred height
-                // of the view and the unconstrained preferred height of the column
+                // Preferred height is the sum of the constrained preferred
+                // height
+                // of the view and the unconstrained preferred height of the
+                // column
                 // header
                 int widthUpdated = width;
                 if (widthUpdated >= 0) {
-                    // Subtract the unconstrained preferred width of the row header
+                    // Subtract the unconstrained preferred width of the row
+                    // header
                     // from the width constraint
                     widthUpdated = Math.max(widthUpdated - preferredRowHeaderWidth, 0);
                 }
 
-                preferredHeight = view.getPreferredHeight(widthUpdated) +
-                    preferredColumnHeaderHeight;
+                preferredHeight = view.getPreferredHeight(widthUpdated)
+                    + preferredColumnHeaderHeight;
             }
         }
 
@@ -274,7 +270,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
     @Override
     public Dimensions getPreferredSize() {
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+        ScrollPane scrollPane = (ScrollPane) getComponent();
 
         int preferredWidth = 0;
         int preferredHeight = 0;
@@ -310,7 +306,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
     @Override
     public int getBaseline(int width, int height) {
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+        ScrollPane scrollPane = (ScrollPane) getComponent();
 
         Component view = scrollPane.getView();
         Component rowHeader = scrollPane.getRowHeader();
@@ -335,8 +331,7 @@ public class ScrollPaneSkin extends ContainerSkin
             baseline = columnHeader.getBaseline(clientWidth, columnHeaderHeight);
         }
 
-        if (baseline == -1
-            && rowHeader != null) {
+        if (baseline == -1 && rowHeader != null) {
             baseline = rowHeader.getBaseline(rowHeaderWidth, clientHeight);
 
             if (baseline != -1) {
@@ -344,8 +339,7 @@ public class ScrollPaneSkin extends ContainerSkin
             }
         }
 
-        if (baseline == -1
-            && view != null) {
+        if (baseline == -1 && view != null) {
             baseline = view.getBaseline(clientWidth, clientHeight);
 
             if (baseline != -1) {
@@ -361,7 +355,7 @@ public class ScrollPaneSkin extends ContainerSkin
         int wheelRotation, int x, int y) {
         boolean consumed = false;
 
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+        ScrollPane scrollPane = (ScrollPane) getComponent();
         Component view = scrollPane.getView();
 
         if (view != null) {
@@ -370,8 +364,8 @@ public class ScrollPaneSkin extends ContainerSkin
             if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Treat the mouse wheel as a horizontal scroll event
                 int previousScrollLeft = scrollPane.getScrollLeft();
-                int newScrollLeft = previousScrollLeft + (scrollAmount * wheelRotation *
-                    horizontalScrollBar.getUnitIncrement());
+                int newScrollLeft = previousScrollLeft
+                    + (scrollAmount * wheelRotation * horizontalScrollBar.getUnitIncrement());
 
                 if (wheelRotation > 0) {
                     int maxScrollLeft = getMaxScrollLeft();
@@ -392,8 +386,8 @@ public class ScrollPaneSkin extends ContainerSkin
             } else {
                 // Treat the mouse wheel as a vertical scroll event
                 int previousScrollTop = scrollPane.getScrollTop();
-                int newScrollTop = previousScrollTop + (scrollAmount * wheelRotation *
-                    verticalScrollBar.getUnitIncrement());
+                int newScrollTop = previousScrollTop
+                    + (scrollAmount * wheelRotation * verticalScrollBar.getUnitIncrement());
 
                 if (wheelRotation > 0) {
                     int maxScrollTop = getMaxScrollTop();
@@ -425,7 +419,7 @@ public class ScrollPaneSkin extends ContainerSkin
      * {@link KeyCode#RIGHT RIGHT} Scroll right a single scroll unit.<br>
      * {@link KeyCode#PAGE_UP PAGE_UP} Scroll up a single scroll block.<br>
      * {@link KeyCode#PAGE_DOWN PAGE_DOWN} Scroll down a single scroll block.
-     *
+     * 
      * @see ScrollBar#getBlockIncrement()
      * @see ScrollBar#getUnitIncrement()
      */
@@ -434,35 +428,33 @@ public class ScrollPaneSkin extends ContainerSkin
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         if (!consumed) {
-            ScrollPane scrollPane = (ScrollPane)getComponent();
+            ScrollPane scrollPane = (ScrollPane) getComponent();
 
             int scrollTop = scrollPane.getScrollTop();
             int scrollLeft = scrollPane.getScrollLeft();
 
             if (keyCode == Keyboard.KeyCode.UP) {
-                int newScrollTop = Math.max(scrollTop -
-                    verticalScrollBar.getUnitIncrement(), 0);
+                int newScrollTop = Math.max(scrollTop - verticalScrollBar.getUnitIncrement(), 0);
 
                 scrollPane.setScrollTop(newScrollTop);
 
                 consumed = (newScrollTop != scrollTop);
             } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                int newScrollTop = Math.min(scrollTop +
-                    verticalScrollBar.getUnitIncrement(), getMaxScrollTop());
+                int newScrollTop = Math.min(scrollTop + verticalScrollBar.getUnitIncrement(),
+                    getMaxScrollTop());
 
                 scrollPane.setScrollTop(newScrollTop);
 
                 consumed = (newScrollTop != scrollTop);
             } else if (keyCode == Keyboard.KeyCode.LEFT) {
-                int newScrollLeft = Math.max(scrollLeft -
-                    horizontalScrollBar.getUnitIncrement(), 0);
+                int newScrollLeft = Math.max(scrollLeft - horizontalScrollBar.getUnitIncrement(), 0);
 
                 scrollPane.setScrollLeft(newScrollLeft);
 
                 consumed = (newScrollLeft != scrollLeft);
             } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-                int newScrollLeft = Math.min(scrollLeft +
-                    horizontalScrollBar.getUnitIncrement(), getMaxScrollLeft());
+                int newScrollLeft = Math.min(scrollLeft + horizontalScrollBar.getUnitIncrement(),
+                    getMaxScrollLeft());
 
                 scrollPane.setScrollLeft(newScrollLeft);
 
@@ -491,14 +483,13 @@ public class ScrollPaneSkin extends ContainerSkin
      * Gets the maximum legal <tt>scrollTop</tt> value this this skin imposes.
      * This is the largest value possible that still shows as much of the view
      * component as it can.
-     *
-     * @return
-     * The maximum scrollTop value
+     * 
+     * @return The maximum scrollTop value
      */
     private int getMaxScrollTop() {
         int maxScrollTop = 0;
 
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+        ScrollPane scrollPane = (ScrollPane) getComponent();
         Component view = scrollPane.getView();
 
         if (view != null) {
@@ -516,8 +507,8 @@ public class ScrollPaneSkin extends ContainerSkin
                 horizontalScrollBarHeight = horizontalScrollBar.getHeight();
             }
 
-            maxScrollTop = Math.max(viewHeight + columnHeaderHeight +
-                horizontalScrollBarHeight - height, 0);
+            maxScrollTop = Math.max(viewHeight + columnHeaderHeight + horizontalScrollBarHeight
+                - height, 0);
         }
 
         return maxScrollTop;
@@ -527,14 +518,13 @@ public class ScrollPaneSkin extends ContainerSkin
      * Gets the maximum legal <tt>scrollLeft</tt> value this this skin imposes.
      * This is the largest value possible that still shows as much of the view
      * component as it can.
-     *
-     * @return
-     * The maximum scrollLeft value
+     * 
+     * @return The maximum scrollLeft value
      */
     private int getMaxScrollLeft() {
         int maxScrollLeft = 0;
 
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+        ScrollPane scrollPane = (ScrollPane) getComponent();
         Component view = scrollPane.getView();
 
         if (view != null) {
@@ -552,8 +542,7 @@ public class ScrollPaneSkin extends ContainerSkin
                 verticalScrollBarWidth = verticalScrollBar.getWidth();
             }
 
-            maxScrollLeft = Math.max(viewWidth + rowHeaderWidth +
-                verticalScrollBarWidth - width, 0);
+            maxScrollLeft = Math.max(viewWidth + rowHeaderWidth + verticalScrollBarWidth - width, 0);
         }
 
         return maxScrollLeft;
@@ -561,7 +550,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
     @Override
     public void layout() {
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+        ScrollPane scrollPane = (ScrollPane) getComponent();
 
         ScrollBarPolicy horizontalPolicy = scrollPane.getHorizontalScrollBarPolicy();
         ScrollBarPolicy verticalPolicy = scrollPane.getVerticalScrollBarPolicy();
@@ -594,8 +583,8 @@ public class ScrollPaneSkin extends ContainerSkin
                 Component rowHeader = scrollPane.getRowHeader();
                 int rowHeaderWidth = rowHeader != null ? rowHeader.getWidth() : 0;
 
-                int verticalScrollBarWidth = verticalScrollBar.isVisible() ?
-                    verticalScrollBar.getWidth() : 0;
+                int verticalScrollBarWidth = verticalScrollBar.isVisible() ? verticalScrollBar.getWidth()
+                    : 0;
                 int minViewWidth = getWidth() - rowHeaderWidth - verticalScrollBarWidth;
 
                 if (view.getWidth() < minViewWidth) {
@@ -606,13 +595,11 @@ public class ScrollPaneSkin extends ContainerSkin
 
             if (fillHeightToCapacity) {
                 Component columnHeader = scrollPane.getColumnHeader();
-                int columnHeaderHeight = columnHeader != null ?
-                    columnHeader.getHeight() : 0;
+                int columnHeaderHeight = columnHeader != null ? columnHeader.getHeight() : 0;
 
-                int horizontalScrollBarHeight = horizontalScrollBar.isVisible() ?
-                    horizontalScrollBar.getHeight() : 0;
-                int minViewHeight = getHeight() - columnHeaderHeight -
-                    horizontalScrollBarHeight;
+                int horizontalScrollBarHeight = horizontalScrollBar.isVisible() ? horizontalScrollBar.getHeight()
+                    : 0;
+                int minViewHeight = getHeight() - columnHeaderHeight - horizontalScrollBarHeight;
 
                 if (view.getHeight() < minViewHeight) {
                     verticalPolicy = ScrollBarPolicy.FILL;
@@ -632,16 +619,14 @@ public class ScrollPaneSkin extends ContainerSkin
     /**
      * Layout helper method that assumes that the <tt>FILL_TO_CAPACITY</tt>
      * scroll policy doesn't exist.
-     *
-     * @param horizontalPolicy
-     * The assumed horizontal scroll policy; musn't be <tt>FILL_TO_CAPACITY</tt>
-     *
-     * @param verticalPolicy
-     * The assumed vertical scroll policy; musn't be <tt>FILL_TO_CAPACITY</tt>
+     * 
+     * @param horizontalPolicy The assumed horizontal scroll policy; musn't be
+     * <tt>FILL_TO_CAPACITY</tt>
+     * @param verticalPolicy The assumed vertical scroll policy; musn't be
+     * <tt>FILL_TO_CAPACITY</tt>
      */
-    private void layoutHelper(ScrollBarPolicy horizontalPolicy,
-        ScrollBarPolicy verticalPolicy) {
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+    private void layoutHelper(ScrollBarPolicy horizontalPolicy, ScrollBarPolicy verticalPolicy) {
+        ScrollPane scrollPane = (ScrollPane) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -678,17 +663,15 @@ public class ScrollPaneSkin extends ContainerSkin
 
             if (view != null) {
                 if (constrainWidth && constrainHeight) {
-                    viewWidth = Math.max
-                        (width - rowHeaderWidth - verticalScrollBarWidth, 0);
-                    viewHeight = Math.max
-                        (height - columnHeaderHeight - horizontalScrollBarHeight, 0);
+                    viewWidth = Math.max(width - rowHeaderWidth - verticalScrollBarWidth, 0);
+                    viewHeight = Math.max(height - columnHeaderHeight - horizontalScrollBarHeight,
+                        0);
                 } else if (constrainWidth) {
-                    viewWidth = Math.max
-                        (width - rowHeaderWidth - verticalScrollBarWidth, 0);
+                    viewWidth = Math.max(width - rowHeaderWidth - verticalScrollBarWidth, 0);
                     viewHeight = view.getPreferredHeight(viewWidth);
                 } else if (constrainHeight) {
-                    viewHeight = Math.max
-                        (height - columnHeaderHeight - horizontalScrollBarHeight, 0);
+                    viewHeight = Math.max(height - columnHeaderHeight - horizontalScrollBarHeight,
+                        0);
                     viewWidth = view.getPreferredWidth(viewHeight);
                 } else {
                     Dimensions viewPreferredSize = view.getPreferredSize();
@@ -698,16 +681,16 @@ public class ScrollPaneSkin extends ContainerSkin
             }
 
             if (horizontalPolicy == ScrollBarPolicy.ALWAYS
-                || (horizontalPolicy == ScrollBarPolicy.AUTO
-                && viewWidth > width - rowHeaderWidth - verticalScrollBarWidth)) {
+                || (horizontalPolicy == ScrollBarPolicy.AUTO && viewWidth > width - rowHeaderWidth
+                    - verticalScrollBarWidth)) {
                 horizontalScrollBarHeight = horizontalScrollBar.getPreferredHeight(-1);
             } else {
                 horizontalScrollBarHeight = 0;
             }
 
             if (verticalPolicy == ScrollBarPolicy.ALWAYS
-                || (verticalPolicy == ScrollBarPolicy.AUTO
-                && viewHeight > height - columnHeaderHeight - horizontalScrollBarHeight)) {
+                || (verticalPolicy == ScrollBarPolicy.AUTO && viewHeight > height
+                    - columnHeaderHeight - horizontalScrollBarHeight)) {
                 verticalScrollBarWidth = verticalScrollBar.getPreferredWidth(-1);
             } else {
                 verticalScrollBarWidth = 0;
@@ -718,8 +701,7 @@ public class ScrollPaneSkin extends ContainerSkin
                 System.err.println("Breaking out of potential infinite loop");
                 break;
             }
-        } while (viewWidth != previousViewWidth
-            || viewHeight != previousViewHeight
+        } while (viewWidth != previousViewWidth || viewHeight != previousViewHeight
             || horizontalScrollBarHeight != previousHorizontalScrollBarHeight
             || verticalScrollBarWidth != previousVerticalScrollBarWidth);
 
@@ -744,12 +726,10 @@ public class ScrollPaneSkin extends ContainerSkin
         if (horizontalScrollBarHeight > 0) {
             horizontalScrollBar.setVisible(true);
 
-            int horizontalScrollBarWidth = Math.max
-               (width - rowHeaderWidth - verticalScrollBarWidth, 0);
-            horizontalScrollBar.setSize(horizontalScrollBarWidth,
-                horizontalScrollBarHeight);
-            horizontalScrollBar.setLocation(rowHeaderWidth,
-                height - horizontalScrollBarHeight);
+            int horizontalScrollBarWidth = Math.max(
+                width - rowHeaderWidth - verticalScrollBarWidth, 0);
+            horizontalScrollBar.setSize(horizontalScrollBarWidth, horizontalScrollBarHeight);
+            horizontalScrollBar.setLocation(rowHeaderWidth, height - horizontalScrollBarHeight);
         } else {
             horizontalScrollBar.setVisible(false);
         }
@@ -757,20 +737,17 @@ public class ScrollPaneSkin extends ContainerSkin
         if (verticalScrollBarWidth > 0) {
             verticalScrollBar.setVisible(true);
 
-            int verticalScrollBarHeight = Math.max
-               (height - columnHeaderHeight - horizontalScrollBarHeight, 0);
-            verticalScrollBar.setSize(verticalScrollBarWidth,
-                verticalScrollBarHeight);
-            verticalScrollBar.setLocation(width - verticalScrollBarWidth,
-                columnHeaderHeight);
+            int verticalScrollBarHeight = Math.max(height - columnHeaderHeight
+                - horizontalScrollBarHeight, 0);
+            verticalScrollBar.setSize(verticalScrollBarWidth, verticalScrollBarHeight);
+            verticalScrollBar.setLocation(width - verticalScrollBarWidth, columnHeaderHeight);
         } else {
             verticalScrollBar.setVisible(false);
         }
 
         // Handle corner components
 
-        if (columnHeaderHeight > 0
-            && rowHeaderWidth > 0) {
+        if (columnHeaderHeight > 0 && rowHeaderWidth > 0) {
             if (corner != null) {
                 corner.setVisible(true);
                 corner.setSize(rowHeaderWidth, columnHeaderHeight);
@@ -790,8 +767,7 @@ public class ScrollPaneSkin extends ContainerSkin
             topLeftCorner.setVisible(false);
         }
 
-        if (rowHeaderWidth > 0
-            && horizontalScrollBarHeight > 0) {
+        if (rowHeaderWidth > 0 && horizontalScrollBarHeight > 0) {
             bottomLeftCorner.setVisible(true);
             bottomLeftCorner.setSize(rowHeaderWidth, horizontalScrollBarHeight);
             bottomLeftCorner.setLocation(0, height - horizontalScrollBarHeight);
@@ -799,18 +775,16 @@ public class ScrollPaneSkin extends ContainerSkin
             bottomLeftCorner.setVisible(false);
         }
 
-        if (verticalScrollBarWidth > 0
-            && horizontalScrollBarHeight > 0) {
+        if (verticalScrollBarWidth > 0 && horizontalScrollBarHeight > 0) {
             bottomRightCorner.setVisible(true);
             bottomRightCorner.setSize(verticalScrollBarWidth, horizontalScrollBarHeight);
-            bottomRightCorner.setLocation(width - verticalScrollBarWidth,
-                height - horizontalScrollBarHeight);
+            bottomRightCorner.setLocation(width - verticalScrollBarWidth, height
+                - horizontalScrollBarHeight);
         } else {
             bottomRightCorner.setVisible(false);
         }
 
-        if (columnHeaderHeight > 0
-            && verticalScrollBarWidth > 0) {
+        if (columnHeaderHeight > 0 && verticalScrollBarWidth > 0) {
             topRightCorner.setVisible(true);
             topRightCorner.setSize(verticalScrollBarWidth, columnHeaderHeight);
             topRightCorner.setLocation(width - verticalScrollBarWidth, 0);
@@ -850,8 +824,7 @@ public class ScrollPaneSkin extends ContainerSkin
     public void setBackgroundPaint(Paint backgroundPaint) {
         super.setBackgroundPaint(backgroundPaint);
 
-        optimizeScrolling = (backgroundPaint != null
-            && backgroundPaint.getTransparency() == Transparency.OPAQUE);
+        optimizeScrolling = (backgroundPaint != null && backgroundPaint.getTransparency() == Transparency.OPAQUE);
     }
 
     public int getHorizontalIncrement() {
@@ -897,12 +870,10 @@ public class ScrollPaneSkin extends ContainerSkin
             // host is obscured. For a full description of why this is the case,
             // see http://people.apache.org/~tvolkert/tests/scrolling/
 
-            ScrollPane scrollPane = (ScrollPane)getComponent();
+            ScrollPane scrollPane = (ScrollPane) getComponent();
             ApplicationContext.DisplayHost displayHost = scrollPane.getDisplay().getDisplayHost();
 
-            optimizeScrollingLocal = (displayHost.getScale() == 1
-                && (DesktopApplicationContext.isActive()
-                && displayHost.isDisplayable()));
+            optimizeScrollingLocal = (displayHost.getScale() == 1 && (DesktopApplicationContext.isActive() && displayHost.isDisplayable()));
         }
 
         return optimizeScrollingLocal;
@@ -917,7 +888,7 @@ public class ScrollPaneSkin extends ContainerSkin
         int width = getWidth();
         int height = getHeight();
 
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+        ScrollPane scrollPane = (ScrollPane) getComponent();
 
         Component rowHeader = scrollPane.getRowHeader();
         if (rowHeader != null) {
@@ -982,7 +953,7 @@ public class ScrollPaneSkin extends ContainerSkin
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and row header. Invalidating would yield
         // the correct positioning, but it would do much more work than needed.
-        ScrollPane scrollPane = (ScrollPane)viewport;
+        ScrollPane scrollPane = (ScrollPane) viewport;
 
         Component view = scrollPane.getView();
         Component rowHeader = scrollPane.getRowHeader();
@@ -995,9 +966,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
         int scrollTop = scrollPane.getScrollTop();
 
-        if (view != null
-            && view.isShowing()
-            && isOptimizeScrolling()) {
+        if (view != null && view.isShowing() && isOptimizeScrolling()) {
             Bounds blitArea = view.getVisibleArea();
 
             int blitX = blitArea.x + view.getX();
@@ -1033,12 +1002,12 @@ public class ScrollPaneSkin extends ContainerSkin
 
             boolean repaintAllViewport = scrollPane.isRepaintAllViewport();
             if (!repaintAllViewport) {
-                scrollPane.repaint(blitX, (columnHeaderHeight + (deltaScrollTop > 0 ? blitHeight : 0)),
-                    blitWidth, Math.abs(deltaScrollTop), true);
+                scrollPane.repaint(blitX, (columnHeaderHeight + (deltaScrollTop > 0 ? blitHeight
+                    : 0)), blitWidth, Math.abs(deltaScrollTop), true);
             } else {
                 Bounds viewportBounds = getViewportBounds();
-                scrollPane.repaint(viewportBounds.x, viewportBounds.y,
-                    viewportBounds.width, viewportBounds.height, true);
+                scrollPane.repaint(viewportBounds.x, viewportBounds.y, viewportBounds.width,
+                    viewportBounds.height, true);
             }
 
         } else {
@@ -1061,7 +1030,7 @@ public class ScrollPaneSkin extends ContainerSkin
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and column header. Invalidating would yield
         // the correct positioning, but it would do much more work than needed.
-        ScrollPane scrollPane = (ScrollPane)viewport;
+        ScrollPane scrollPane = (ScrollPane) viewport;
 
         Component view = scrollPane.getView();
         Component rowHeader = scrollPane.getRowHeader();
@@ -1074,9 +1043,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
         int scrollLeft = scrollPane.getScrollLeft();
 
-        if (view != null
-            && view.isShowing()
-            && isOptimizeScrolling()) {
+        if (view != null && view.isShowing() && isOptimizeScrolling()) {
             Bounds blitArea = view.getVisibleArea();
 
             int blitX = blitArea.x + view.getX();
@@ -1115,8 +1082,8 @@ public class ScrollPaneSkin extends ContainerSkin
                     Math.abs(deltaScrollLeft), blitHeight, true);
             } else {
                 Bounds viewportBounds = getViewportBounds();
-                scrollPane.repaint(viewportBounds.x, viewportBounds.y,
-                    viewportBounds.width, viewportBounds.height, true);
+                scrollPane.repaint(viewportBounds.x, viewportBounds.y, viewportBounds.width,
+                    viewportBounds.height, true);
             }
         } else {
             if (view != null) {
@@ -1142,7 +1109,7 @@ public class ScrollPaneSkin extends ContainerSkin
 
     @Override
     public void valueChanged(ScrollBar scrollBar, int previousValue) {
-        ScrollPane scrollPane = (ScrollPane)getComponent();
+        ScrollPane scrollPane = (ScrollPane) getComponent();
 
         int value = scrollBar.getValue();
 

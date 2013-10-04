@@ -18,10 +18,10 @@ package org.apache.pivot.wtk.skin.terra;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
@@ -34,8 +34,7 @@ import org.apache.pivot.wtk.Window;
 /**
  * Prompt skin.
  */
-public class TerraPromptSkin extends TerraSheetSkin
-    implements PromptListener {
+public class TerraPromptSkin extends TerraSheetSkin implements PromptListener {
     private ImageView typeImageView = null;
     private Label messageLabel = null;
     private BoxPane messageBoxPane = null;
@@ -47,7 +46,7 @@ public class TerraPromptSkin extends TerraSheetSkin
             int optionIndex = optionButtonBoxPane.indexOf(button);
 
             if (optionIndex >= 0) {
-                Prompt prompt = (Prompt)getComponent();
+                Prompt prompt = (Prompt) getComponent();
                 prompt.setSelectedOptionIndex(optionIndex);
                 prompt.close(true);
             }
@@ -62,7 +61,7 @@ public class TerraPromptSkin extends TerraSheetSkin
     public void install(Component component) {
         super.install(component);
 
-        Prompt prompt = (Prompt)component;
+        Prompt prompt = (Prompt) component;
         prompt.setPreferredWidth(320);
         prompt.setMinimumWidth(160);
 
@@ -73,23 +72,23 @@ public class TerraPromptSkin extends TerraSheetSkin
 
         Component content;
         try {
-            content = (Component)bxmlSerializer.readObject(TerraPromptSkin.class,
+            content = (Component) bxmlSerializer.readObject(TerraPromptSkin.class,
                 "terra_prompt_skin.bxml");
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
 
         prompt.setContent(content);
 
-        typeImageView = (ImageView)bxmlSerializer.getNamespace().get("typeImageView");
-        messageLabel = (Label)bxmlSerializer.getNamespace().get("messageLabel");
-        messageBoxPane = (BoxPane)bxmlSerializer.getNamespace().get("messageBoxPane");
-        optionButtonBoxPane = (BoxPane)bxmlSerializer.getNamespace().get("optionButtonBoxPane");
+        typeImageView = (ImageView) bxmlSerializer.getNamespace().get("typeImageView");
+        messageLabel = (Label) bxmlSerializer.getNamespace().get("messageLabel");
+        messageBoxPane = (BoxPane) bxmlSerializer.getNamespace().get("messageBoxPane");
+        optionButtonBoxPane = (BoxPane) bxmlSerializer.getNamespace().get("optionButtonBoxPane");
 
         for (Object option : prompt.getOptions()) {
             PushButton optionButton = new PushButton(option);
-            optionButton.setStyleName(TerraPromptSkin.class.getPackage().getName()
-                + "." + TerraTheme.COMMAND_BUTTON_STYLE);
+            optionButton.setStyleName(TerraPromptSkin.class.getPackage().getName() + "."
+                + TerraTheme.COMMAND_BUTTON_STYLE);
             optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
             optionButtonBoxPane.add(optionButton);
@@ -104,7 +103,7 @@ public class TerraPromptSkin extends TerraSheetSkin
     public void windowOpened(Window window) {
         super.windowOpened(window);
 
-        Prompt prompt = (Prompt)window;
+        Prompt prompt = (Prompt) window;
         int index = prompt.getSelectedOptionIndex();
 
         if (index >= 0) {
@@ -116,7 +115,7 @@ public class TerraPromptSkin extends TerraSheetSkin
 
     @Override
     public void messageTypeChanged(Prompt prompt, MessageType previousMessageType) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         typeImageView.setImage(theme.getMessageIcon(prompt.getMessageType()));
     }
 
@@ -143,8 +142,8 @@ public class TerraPromptSkin extends TerraSheetSkin
         Object option = prompt.getOptions().get(index);
 
         PushButton optionButton = new PushButton(option);
-        optionButton.setStyleName(TerraPromptSkin.class.getPackage().getName()
-            + "." + TerraTheme.COMMAND_BUTTON_STYLE);
+        optionButton.setStyleName(TerraPromptSkin.class.getPackage().getName() + "."
+            + TerraTheme.COMMAND_BUTTON_STYLE);
         optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
         optionButtonBoxPane.insert(optionButton, index);
@@ -159,8 +158,7 @@ public class TerraPromptSkin extends TerraSheetSkin
     public void selectedOptionChanged(Prompt prompt, int previousSelectedOption) {
         int index = prompt.getSelectedOptionIndex();
 
-        if (prompt.isOpen()
-            && index >= 0) {
+        if (prompt.isOpen() && index >= 0) {
             optionButtonBoxPane.get(index).requestFocus();
         }
     }

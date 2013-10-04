@@ -51,7 +51,7 @@ public interface EventLoggerListener {
 
     /**
      * Called when an event logger's source has changed.
-     *
+     * 
      * @param eventLogger
      * @param previousSource
      */
@@ -60,7 +60,7 @@ public interface EventLoggerListener {
     /**
      * Called when a declared event has been included in the list of logged
      * events.
-     *
+     * 
      * @param eventLogger
      * @param event
      */
@@ -69,7 +69,7 @@ public interface EventLoggerListener {
     /**
      * Called when a declared event has been excluded from the list of logged
      * events.
-     *
+     * 
      * @param eventLogger
      * @param event
      */
@@ -78,7 +78,7 @@ public interface EventLoggerListener {
     /**
      * Called when an included event has been fired by the event logger's
      * source.
-     *
+     * 
      * @param eventLogger
      * @param event
      * @param arguments

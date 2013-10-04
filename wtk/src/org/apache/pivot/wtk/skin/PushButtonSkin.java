@@ -18,9 +18,9 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Abstract base class for push button skins.
@@ -73,7 +73,7 @@ public abstract class PushButtonSkin extends ButtonSkin {
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
-        PushButton pushButton = (PushButton)getComponent();
+        PushButton pushButton = (PushButton) getComponent();
         pushButton.press();
 
         return consumed;
@@ -82,7 +82,7 @@ public abstract class PushButtonSkin extends ButtonSkin {
     /**
      * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
      * state.
-     *
+     * 
      * @see #keyReleased(Component, int,
      * org.apache.pivot.wtk.Keyboard.KeyLocation)
      */
@@ -107,7 +107,7 @@ public abstract class PushButtonSkin extends ButtonSkin {
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        PushButton pushButton = (PushButton)getComponent();
+        PushButton pushButton = (PushButton) getComponent();
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = false;

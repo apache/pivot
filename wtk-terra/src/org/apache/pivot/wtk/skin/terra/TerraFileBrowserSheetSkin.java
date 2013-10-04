@@ -59,18 +59,22 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         @Override
         public boolean include(File file) {
-            return (!file.isDirectory()
-                || (sourceFilter != null
-                    && sourceFilter.include(file)));
+            return (!file.isDirectory() || (sourceFilter != null && sourceFilter.include(file)));
         }
     }
 
-    @BXML private TablePane tablePane = null;
-    @BXML private BoxPane saveAsBoxPane = null;
-    @BXML private TextInput saveAsTextInput = null;
-    @BXML private FileBrowser fileBrowser = null;
-    @BXML private PushButton okButton = null;
-    @BXML private PushButton cancelButton = null;
+    @BXML
+    private TablePane tablePane = null;
+    @BXML
+    private BoxPane saveAsBoxPane = null;
+    @BXML
+    private TextInput saveAsTextInput = null;
+    @BXML
+    private FileBrowser fileBrowser = null;
+    @BXML
+    private PushButton okButton = null;
+    @BXML
+    private PushButton cancelButton = null;
 
     private boolean updatingSelection = false;
     private int selectedDirectoryCount = 0;
@@ -83,7 +87,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     public void install(Component component) {
         super.install(component);
 
-        final FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)component;
+        final FileBrowserSheet fileBrowserSheet = (FileBrowserSheet) component;
         fileBrowserSheet.setMinimumWidth(360);
         fileBrowserSheet.setMinimumHeight(180);
 
@@ -92,7 +96,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         Component content;
         try {
-            content = (Component)bxmlSerializer.readObject(TerraFileBrowserSheetSkin.class,
+            content = (Component) bxmlSerializer.readObject(TerraFileBrowserSheetSkin.class,
                 "terra_file_browser_sheet_skin.bxml", true);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -164,8 +168,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 if (!fileBrowserArgument.isMultiSelect()) {
                     File selectedFile = fileBrowserArgument.getSelectedFile();
 
-                    if (selectedFile != null
-                        && !selectedFile.isDirectory()) {
+                    if (selectedFile != null && !selectedFile.isDirectory()) {
                         saveAsTextInput.setText(selectedFile.getName());
                     }
                 }
@@ -174,37 +177,37 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
         });
 
-        fileBrowser.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-            private File file = null;
+        fileBrowser.getComponentMouseButtonListeners().add(
+            new ComponentMouseButtonListener.Adapter() {
+                private File file = null;
 
-            @Override
-            public boolean mouseClick(Component componentArgument, Mouse.Button button, int x, int y, int count) {
-                boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
+                @Override
+                public boolean mouseClick(Component componentArgument, Mouse.Button button, int x,
+                    int y, int count) {
+                    boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
 
-                FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
+                    FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 
-                if (count == 1) {
-                    file = fileBrowser.getFileAt(x, y);
-                } else if (count == 2) {
-                    File fileLocal = fileBrowser.getFileAt(x, y);
+                    if (count == 1) {
+                        file = fileBrowser.getFileAt(x, y);
+                    } else if (count == 2) {
+                        File fileLocal = fileBrowser.getFileAt(x, y);
 
-                    if (fileLocal != null
-                        && this.file != null
-                        && fileLocal.equals(this.file)
-                        && fileBrowser.isFileSelected(fileLocal)) {
-                        if (mode == FileBrowserSheet.Mode.OPEN
-                            || mode == FileBrowserSheet.Mode.OPEN_MULTIPLE) {
-                            if (!fileLocal.isDirectory()) {
-                                fileBrowserSheet.close(true);
-                                consumed = true;
+                        if (fileLocal != null && this.file != null && fileLocal.equals(this.file)
+                            && fileBrowser.isFileSelected(fileLocal)) {
+                            if (mode == FileBrowserSheet.Mode.OPEN
+                                || mode == FileBrowserSheet.Mode.OPEN_MULTIPLE) {
+                                if (!fileLocal.isDirectory()) {
+                                    fileBrowserSheet.close(true);
+                                    consumed = true;
+                                }
                             }
                         }
                     }
-                }
 
-                return consumed;
-            }
-        });
+                    return consumed;
+                }
+            });
 
         okButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -229,7 +232,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     }
 
     public boolean isHideDisabledFiles() {
-        return (Boolean)fileBrowser.getStyles().get("hideDisabledFiles");
+        return (Boolean) fileBrowser.getStyles().get("hideDisabledFiles");
     }
 
     public void setHideDisabledFiles(boolean hideDisabledFiles) {
@@ -267,14 +270,13 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     public Vote previewSheetClose(final Sheet sheet, final boolean result) {
         Vote vote = null;
 
-        if (result
-            && !okButton.isEnabled()) {
+        if (result && !okButton.isEnabled()) {
             vote = Vote.DENY;
         } else {
             if (result) {
                 updatingSelection = true;
 
-                FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)sheet;
+                FileBrowserSheet fileBrowserSheet = (FileBrowserSheet) sheet;
                 FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 
                 switch (mode) {
@@ -289,10 +291,12 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                         String fileName = saveAsTextInput.getText();
                         // Contents of the entry field could be:
                         // 1. Just a new file name in the current root directory
-                        // 2. A relative or absolute path that is an existing directory
-                        //    to navigate to
-                        // 3. A relative or absolute path including the new file name
-                        //    in an existing directory
+                        // 2. A relative or absolute path that is an existing
+                        // directory
+                        // to navigate to
+                        // 3. A relative or absolute path including the new file
+                        // name
+                        // in an existing directory
                         // So, first make it an absolute path
                         File selectedFile = new File(fileName);
                         if (!selectedFile.isAbsolute() && !fileName.startsWith(File.separator)) {
@@ -317,14 +321,14 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                                 try {
                                     fileBrowserSheet.setRootDirectory(root.getCanonicalFile());
                                     selectedFile = new File(selectedFile.getName());
-                                }
-                                catch (IOException ioe) {
+                                } catch (IOException ioe) {
                                     Form.setFlag(saveAsBoxPane, new Form.Flag());
                                     selectedFile = null;
                                     vote = Vote.DENY;
                                 }
                             } else {
-                                // Could be an error message here ("Directory does not exist")
+                                // Could be an error message here
+                                // ("Directory does not exist")
                                 Form.setFlag(saveAsBoxPane, new Form.Flag());
                                 selectedFile = null;
                                 vote = Vote.DENY;
@@ -352,8 +356,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     }
 
     @Override
-    public void modeChanged(FileBrowserSheet fileBrowserSheet,
-        FileBrowserSheet.Mode previousMode) {
+    public void modeChanged(FileBrowserSheet fileBrowserSheet, FileBrowserSheet.Mode previousMode) {
         FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 
         fileBrowser.getStyles().put("keyboardFolderTraversalEnabled",
@@ -394,8 +397,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     }
 
     @Override
-    public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
-        File previousRootDirectory) {
+    public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet, File previousRootDirectory) {
         if (!updatingSelection) {
             fileBrowser.setRootDirectory(fileBrowserSheet.getRootDirectory());
         }
@@ -408,8 +410,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             Sequence<File> selectedFiles = fileBrowserSheet.getSelectedFiles();
             fileBrowser.setSelectedFiles(selectedFiles);
 
-            if (fileBrowser.getSelectedFiles().getLength() == 0
-                && selectedFiles.getLength() == 1) {
+            if (fileBrowser.getSelectedFiles().getLength() == 0 && selectedFiles.getLength() == 1) {
                 // The file does not currently exist; set the file name in the
                 // text input if the parent directory is the same as the root
                 // directory
@@ -430,7 +431,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     }
 
     private void updateDisabledFileFilter() {
-        FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)getComponent();
+        FileBrowserSheet fileBrowserSheet = (FileBrowserSheet) getComponent();
         Filter<File> disabledFileFilter = fileBrowserSheet.getDisabledFileFilter();
 
         FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
@@ -442,7 +443,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     }
 
     private void updateOKButtonState() {
-        FileBrowserSheet fileBrowserSheet = (FileBrowserSheet)getComponent();
+        FileBrowserSheet fileBrowserSheet = (FileBrowserSheet) getComponent();
 
         FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
         Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
@@ -450,8 +451,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         switch (mode) {
             case OPEN:
             case OPEN_MULTIPLE: {
-                okButton.setEnabled(selectedFiles.getLength() > 0
-                    && selectedDirectoryCount == 0);
+                okButton.setEnabled(selectedFiles.getLength() > 0 && selectedDirectoryCount == 0);
                 break;
             }
 

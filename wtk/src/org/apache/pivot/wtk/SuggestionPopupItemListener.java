@@ -52,7 +52,7 @@ public interface SuggestionPopupItemListener {
 
     /**
      * Called when an item is inserted into a list button's list data.
-     *
+     * 
      * @param suggestionPopup
      * @param index
      */
@@ -60,7 +60,7 @@ public interface SuggestionPopupItemListener {
 
     /**
      * Called when items are removed from a list button's list data.
-     *
+     * 
      * @param suggestionPopup
      * @param index
      * @param count
@@ -69,7 +69,7 @@ public interface SuggestionPopupItemListener {
 
     /**
      * Called when an item is updated within a list button's list data.
-     *
+     * 
      * @param suggestionPopup
      * @param index
      */
@@ -77,14 +77,14 @@ public interface SuggestionPopupItemListener {
 
     /**
      * Called when a list button's list data has been cleared.
-     *
+     * 
      * @param suggestionPopup
      */
     public void itemsCleared(SuggestionPopup suggestionPopup);
 
     /**
      * Called when a list button's list data is sorted.
-     *
+     * 
      * @param suggestionPopup
      */
     public void itemsSorted(SuggestionPopup suggestionPopup);

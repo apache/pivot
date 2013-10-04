@@ -22,26 +22,22 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 
 /**
- * Allows {@link BXMLSerializer} to initialize an instance of a deserialized class.
+ * Allows {@link BXMLSerializer} to initialize an instance of a deserialized
+ * class.
  */
 public interface Bindable {
     /**
-     * Called to initialize the class after it has been completely
-     * processed and bound by the serializer.
-     *
-     * @param namespace
-     * The serializer's namespace. The bindable object can use this to extract named
-     * values defined in the BXML file. Alternatively, the {@link BXML} annotation
-     * can be used by trusted code to automatically map namespace values to member
-     * variables.
-     *
-     * @param location
-     * The location of the BXML source. May be <tt>null</tt> if the location of the
-     * source is not known.
-     *
-     * @param resources
-     * The resources that were used to localize the deserialized content. May be
-     * <tt>null</tt> if no resources were specified.
+     * Called to initialize the class after it has been completely processed and
+     * bound by the serializer.
+     * 
+     * @param namespace The serializer's namespace. The bindable object can use
+     * this to extract named values defined in the BXML file. Alternatively, the
+     * {@link BXML} annotation can be used by trusted code to automatically map
+     * namespace values to member variables.
+     * @param location The location of the BXML source. May be <tt>null</tt> if
+     * the location of the source is not known.
+     * @param resources The resources that were used to localize the deserialized
+     * content. May be <tt>null</tt> if no resources were specified.
      */
     public void initialize(Map<String, Object> namespace, URL location, Resources resources);
 }

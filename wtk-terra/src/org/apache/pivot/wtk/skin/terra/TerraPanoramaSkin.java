@@ -75,8 +75,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = {0, 3, 6};
-            int[] yPoints = {5, 1, 5};
+            int[] xPoints = { 0, 3, 6 };
+            int[] yPoints = { 5, 1, 5 };
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -90,8 +90,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = {0, 3, 6};
-            int[] yPoints = {1, 5, 1};
+            int[] xPoints = { 0, 3, 6 };
+            int[] yPoints = { 1, 5, 1 };
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -105,8 +105,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = {1, 5, 1};
-            int[] yPoints = {0, 3, 6};
+            int[] xPoints = { 1, 5, 1 };
+            int[] yPoints = { 0, 3, 6 };
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -120,8 +120,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = {5, 1, 5};
-            int[] yPoints = {0, 3, 6};
+            int[] xPoints = { 5, 1, 5 };
+            int[] yPoints = { 0, 3, 6 };
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -159,7 +159,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
 
         @Override
         public void paint(Graphics2D graphics) {
-            ScrollButton scrollButton = (ScrollButton)getComponent();
+            ScrollButton scrollButton = (ScrollButton) getComponent();
             int width = getWidth();
             int height = getHeight();
 
@@ -177,8 +177,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         }
 
         /**
-         * @return
-         * <tt>false</tt>; link buttons are not focusable.
+         * @return <tt>false</tt>; link buttons are not focusable.
          */
         @Override
         public boolean isFocusable() {
@@ -189,13 +188,11 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     private class ScrollCallback implements Runnable {
         @Override
         public void run() {
-            Panorama panorama = (Panorama)getComponent();
+            Panorama panorama = (Panorama) getComponent();
 
             if (northButton.isMouseOver()) {
-                int scrollTop = Math.max(panorama.getScrollTop()
-                    - (int)scrollDistance, 0);
-                if (scrollTop == 0
-                    && scheduledScrollCallback != null) {
+                int scrollTop = Math.max(panorama.getScrollTop() - (int) scrollDistance, 0);
+                if (scrollTop == 0 && scheduledScrollCallback != null) {
                     scheduledScrollCallback.cancel();
                     scheduledScrollCallback = null;
                 }
@@ -203,10 +200,9 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
                 panorama.setScrollTop(scrollTop);
             } else if (southButton.isMouseOver()) {
                 int maxScrollTop = getMaxScrollTop();
-                int scrollTop = Math.min(panorama.getScrollTop()
-                    + (int)scrollDistance, maxScrollTop);
-                if (scrollTop == maxScrollTop
-                    && scheduledScrollCallback != null) {
+                int scrollTop = Math.min(panorama.getScrollTop() + (int) scrollDistance,
+                    maxScrollTop);
+                if (scrollTop == maxScrollTop && scheduledScrollCallback != null) {
                     scheduledScrollCallback.cancel();
                     scheduledScrollCallback = null;
                 }
@@ -214,20 +210,17 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
                 panorama.setScrollTop(scrollTop);
             } else if (eastButton.isMouseOver()) {
                 int maxScrollLeft = getMaxScrollLeft();
-                int scrollLeft = Math.min(panorama.getScrollLeft()
-                    + (int)scrollDistance, maxScrollLeft);
-                if (scrollLeft == maxScrollLeft
-                    && scheduledScrollCallback != null) {
+                int scrollLeft = Math.min(panorama.getScrollLeft() + (int) scrollDistance,
+                    maxScrollLeft);
+                if (scrollLeft == maxScrollLeft && scheduledScrollCallback != null) {
                     scheduledScrollCallback.cancel();
                     scheduledScrollCallback = null;
                 }
 
                 panorama.setScrollLeft(scrollLeft);
             } else if (westButton.isMouseOver()) {
-                int scrollLeft = Math.max(panorama.getScrollLeft()
-                    - (int)scrollDistance, 0);
-                if (scrollLeft == 0
-                    && scheduledScrollCallback != null) {
+                int scrollLeft = Math.max(panorama.getScrollLeft() - (int) scrollDistance, 0);
+                if (scrollLeft == 0 && scheduledScrollCallback != null) {
                     scheduledScrollCallback.cancel();
                     scheduledScrollCallback = null;
                 }
@@ -235,8 +228,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
                 panorama.setScrollLeft(scrollLeft);
             }
 
-            scrollDistance = Math.min(scrollDistance * SCROLL_ACCELERATION,
-                MAXIMUM_SCROLL_DISTANCE);
+            scrollDistance = Math.min(scrollDistance * SCROLL_ACCELERATION, MAXIMUM_SCROLL_DISTANCE);
         }
     }
 
@@ -253,7 +245,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
     public TerraPanoramaSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         buttonColor = theme.getColor(1);
         buttonBackgroundColor = null;
         buttonPadding = 4;
@@ -264,8 +256,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public void mouseOver(Component component) {
             // Start scroll timer
             scrollDistance = INITIAL_SCROLL_DISTANCE;
-            scheduledScrollCallback =
-                ApplicationContext.scheduleRecurringCallback(scrollCallback, SCROLL_RATE);
+            scheduledScrollCallback = ApplicationContext.scheduleRecurringCallback(scrollCallback,
+                SCROLL_RATE);
         }
 
         @Override
@@ -293,7 +285,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     public void install(Component component) {
         super.install(component);
 
-        Panorama panorama = (Panorama)component;
+        Panorama panorama = (Panorama) component;
         panorama.getViewportListeners().add(this);
 
         // Add scroll arrow link buttons and attach mouse listeners
@@ -319,7 +311,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         int preferredWidth = 0;
 
         // The panorama's preferred width is the preferred width of the view
-        Panorama panorama = (Panorama)getComponent();
+        Panorama panorama = (Panorama) getComponent();
         Component view = panorama.getView();
         if (view != null) {
             preferredWidth = view.getPreferredWidth(height);
@@ -333,7 +325,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         int preferredHeight = 0;
 
         // The panorama's preferred height is the preferred height of the view
-        Panorama panorama = (Panorama)getComponent();
+        Panorama panorama = (Panorama) getComponent();
         Component view = panorama.getView();
         if (view != null) {
             preferredHeight = view.getPreferredHeight(width);
@@ -347,7 +339,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         Dimensions preferredSize = null;
 
         // The panorama's preferred size is the preferred size of the view
-        Panorama panorama = (Panorama)getComponent();
+        Panorama panorama = (Panorama) getComponent();
         Component view = panorama.getView();
         if (view == null) {
             preferredSize = new Dimensions(0, 0);
@@ -360,7 +352,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
 
     @Override
     public void layout() {
-        Panorama panorama = (Panorama)getComponent();
+        Panorama panorama = (Panorama) getComponent();
         int width = getWidth();
         int height = getHeight();
 
@@ -440,7 +432,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         int wheelRotation, int x, int y) {
         boolean consumed = false;
 
-        Panorama panorama = (Panorama)getComponent();
+        Panorama panorama = (Panorama) getComponent();
         Component view = panorama.getView();
 
         if (view != null) {
@@ -449,8 +441,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
             if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                 // Treat the mouse wheel as a horizontal scroll event
                 int previousScrollLeft = panorama.getScrollLeft();
-                int newScrollLeft = previousScrollLeft + (scrollAmount * wheelRotation *
-                    (int)INITIAL_SCROLL_DISTANCE);
+                int newScrollLeft = previousScrollLeft
+                    + (scrollAmount * wheelRotation * (int) INITIAL_SCROLL_DISTANCE);
 
                 if (wheelRotation > 0) {
                     int maxScrollLeft = getMaxScrollLeft();
@@ -471,8 +463,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
             } else {
                 // Treat the mouse wheel as a vertical scroll event
                 int previousScrollTop = panorama.getScrollTop();
-                int newScrollTop = previousScrollTop + (scrollAmount * wheelRotation *
-                    (int)INITIAL_SCROLL_DISTANCE);
+                int newScrollTop = previousScrollTop
+                    + (scrollAmount * wheelRotation * (int) INITIAL_SCROLL_DISTANCE);
 
                 if (wheelRotation > 0) {
                     int maxScrollTop = getMaxScrollTop();
@@ -539,7 +531,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     public final void setButtonBackgroundColor(int buttonBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setButtonBackgroundColor(theme.getColor(buttonBackgroundColor));
     }
 
@@ -576,7 +568,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     protected int getMaxScrollTop() {
         int maxScrollTop = 0;
 
-        Panorama panorama = (Panorama)getComponent();
+        Panorama panorama = (Panorama) getComponent();
         int height = getHeight();
 
         Component view = panorama.getView();
@@ -590,7 +582,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     protected int getMaxScrollLeft() {
         int maxScrollLeft = 0;
 
-        Panorama panorama = (Panorama)getComponent();
+        Panorama panorama = (Panorama) getComponent();
         int width = getWidth();
 
         Component view = panorama.getView();
@@ -602,22 +594,18 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     protected void updateScrollButtonVisibility() {
-        Panorama panorama = (Panorama)getComponent();
+        Panorama panorama = (Panorama) getComponent();
         boolean mouseOver = panorama.isMouseOver();
 
         int scrollTop = panorama.getScrollTop();
         int maxScrollTop = getMaxScrollTop();
-        northButton.setVisible((alwaysShowScrollButtons
-            || mouseOver) && scrollTop > 0);
-        southButton.setVisible((alwaysShowScrollButtons
-            || mouseOver) && scrollTop < maxScrollTop);
+        northButton.setVisible((alwaysShowScrollButtons || mouseOver) && scrollTop > 0);
+        southButton.setVisible((alwaysShowScrollButtons || mouseOver) && scrollTop < maxScrollTop);
 
         int scrollLeft = panorama.getScrollLeft();
         int maxScrollLeft = getMaxScrollLeft();
-        westButton.setVisible((alwaysShowScrollButtons
-            || mouseOver) && scrollLeft > 0);
-        eastButton.setVisible((alwaysShowScrollButtons
-            || mouseOver) && scrollLeft < maxScrollLeft);
+        westButton.setVisible((alwaysShowScrollButtons || mouseOver) && scrollLeft > 0);
+        eastButton.setVisible((alwaysShowScrollButtons || mouseOver) && scrollLeft < maxScrollLeft);
     }
 
     // User input

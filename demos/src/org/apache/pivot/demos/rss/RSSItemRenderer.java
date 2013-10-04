@@ -63,7 +63,7 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
     public void render(Object item, int index, ListView listView, boolean selected,
         boolean checked, boolean highlighted, boolean disabled) {
         if (item != null) {
-            Element itemElement = (Element)item;
+            Element itemElement = (Element) item;
 
             String title = XML.getText(itemElement, "title");
             titleLabel.setText(title);
@@ -72,7 +72,7 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
             List<Element> categoryElements = itemElement.getElements("category");
             for (int i = 0, n = categoryElements.getLength(); i < n; i++) {
                 Element categoryElement = categoryElements.get(i);
-                TextNode categoryTextNode = (TextNode)categoryElement.get(0);
+                TextNode categoryTextNode = (TextNode) categoryElement.get(0);
                 String category = categoryTextNode.getText();
 
                 if (i > 0) {
@@ -88,7 +88,7 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
             submitterLabel.setText("Submitter: " + submitter);
         }
 
-        Font font = (Font)listView.getStyles().get("font");
+        Font font = (Font) listView.getStyles().get("font");
         Font largeFont = font.deriveFont(Font.BOLD, 14);
         titleLabel.getStyles().put("font", largeFont);
         categoriesLabel.getStyles().put("font", font);
@@ -98,15 +98,15 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
         if (listView.isEnabled() && !disabled) {
             if (selected) {
                 if (listView.isFocused()) {
-                    color = (Color)listView.getStyles().get("selectionColor");
+                    color = (Color) listView.getStyles().get("selectionColor");
                 } else {
-                    color = (Color)listView.getStyles().get("inactiveSelectionColor");
+                    color = (Color) listView.getStyles().get("inactiveSelectionColor");
                 }
             } else {
-                color = (Color)listView.getStyles().get("color");
+                color = (Color) listView.getStyles().get("color");
             }
         } else {
-            color = (Color)listView.getStyles().get("disabledColor");
+            color = (Color) listView.getStyles().get("disabledColor");
         }
 
         titleLabel.getStyles().put("color", color);
@@ -116,6 +116,6 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
 
     @Override
     public String toString(Object item) {
-        return XML.getText((Element)item, "title");
+        return XML.getText((Element) item, "title");
     }
 }

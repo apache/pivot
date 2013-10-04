@@ -50,7 +50,8 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowComparator;
 
 public class LargeData extends Application.Adapter {
-    private static String USER_HOME;  // useful for local tests as Java Application
+    private static String USER_HOME; // useful for local tests as Java
+                                     // Application
 
     URL origin = null;
 
@@ -71,26 +72,27 @@ public class LargeData extends Application.Adapter {
 
                     CSVSerializer csvSerializer = new CSVSerializer();
                     csvSerializer.setKeys("c0", "c1", "c2", "c3");
-                    csvSerializer.getCSVSerializerListeners().add(new CSVSerializerListener.Adapter() {
-                        private ArrayList<Object> page = new ArrayList<>(pageSize);
+                    csvSerializer.getCSVSerializerListeners().add(
+                        new CSVSerializerListener.Adapter() {
+                            private ArrayList<Object> page = new ArrayList<>(pageSize);
 
-                        @Override
-                        public void endList(CSVSerializer csvSerializerArgument) {
-                            if (page.getLength() > 0) {
-                                ApplicationContext.queueCallback(new AddRowsCallback(page));
+                            @Override
+                            public void endList(CSVSerializer csvSerializerArgument) {
+                                if (page.getLength() > 0) {
+                                    ApplicationContext.queueCallback(new AddRowsCallback(page));
+                                }
                             }
-                        }
 
-                        @Override
-                        public void readItem(CSVSerializer csvSerializerArgument, Object item) {
-                            page.add(item);
+                            @Override
+                            public void readItem(CSVSerializer csvSerializerArgument, Object item) {
+                                page.add(item);
 
-                            if (page.getLength() == pageSize) {
-                                ApplicationContext.queueCallback(new AddRowsCallback(page));
-                                page = new ArrayList<>(pageSize);
+                                if (page.getLength() == pageSize) {
+                                    ApplicationContext.queueCallback(new AddRowsCallback(page));
+                                    page = new ArrayList<>(pageSize);
+                                }
                             }
-                        }
-                    });
+                        });
 
                     csvSerializer.readObject(inputStream);
                 } finally {
@@ -98,9 +100,9 @@ public class LargeData extends Application.Adapter {
                         inputStream.close();
                     }
                 }
-            } catch(IOException exception) {
+            } catch (IOException exception) {
                 throw new TaskExecutionException(exception);
-            } catch(SerializationException exception) {
+            } catch (SerializationException exception) {
                 throw new TaskExecutionException(exception);
             }
 
@@ -118,7 +120,7 @@ public class LargeData extends Application.Adapter {
         @Override
         public void run() {
             @SuppressWarnings("unchecked")
-            List<Object> tableData = (List<Object>)tableView.getTableData();
+            List<Object> tableData = (List<Object>) tableView.getTableData();
             for (Object item : page) {
                 tableData.add(item);
             }
@@ -148,7 +150,8 @@ public class LargeData extends Application.Adapter {
 
         origin = ApplicationContext.getOrigin();
         if (origin == null) {
-            System.out.println("Running as a Standalone Java Application, with user home: \"" + USER_HOME + "\"");
+            System.out.println("Running as a Standalone Java Application, with user home: \""
+                + USER_HOME + "\"");
             if (USER_HOME != null) {
                 System.out.println("Set as origin the user home");
                 origin = (new File(USER_HOME).toURI()).toURL();
@@ -156,23 +159,25 @@ public class LargeData extends Application.Adapter {
         }
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(LargeData.class, "large_data.bxml");
-        fileListButton = (ListButton)bxmlSerializer.getNamespace().get("fileListButton");
-        loadDataButton = (PushButton)bxmlSerializer.getNamespace().get("loadDataButton");
-        cancelButton = (PushButton)bxmlSerializer.getNamespace().get("cancelButton");
-        statusLabel = (Label)bxmlSerializer.getNamespace().get("statusLabel");
-        tableView = (TableView)bxmlSerializer.getNamespace().get("tableView");
+        window = (Window) bxmlSerializer.readObject(LargeData.class, "large_data.bxml");
+        fileListButton = (ListButton) bxmlSerializer.getNamespace().get("fileListButton");
+        loadDataButton = (PushButton) bxmlSerializer.getNamespace().get("loadDataButton");
+        cancelButton = (PushButton) bxmlSerializer.getNamespace().get("cancelButton");
+        statusLabel = (Label) bxmlSerializer.getNamespace().get("statusLabel");
+        tableView = (TableView) bxmlSerializer.getNamespace().get("tableView");
 
-        fileListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener.Adapter() {
-            @Override
-            public void selectedItemChanged(ListButton listButtonArgument, Object previousSelectedItem) {
-                Object selectedItem = listButtonArgument.getSelectedItem();
+        fileListButton.getListButtonSelectionListeners().add(
+            new ListButtonSelectionListener.Adapter() {
+                @Override
+                public void selectedItemChanged(ListButton listButtonArgument,
+                    Object previousSelectedItem) {
+                    Object selectedItem = listButtonArgument.getSelectedItem();
 
-                System.out.println("Selected: " + selectedItem.toString()
-                    + ", now clear table data ...");
-                tableView.getTableData().clear();  // empty the table
-            }
-        });
+                    System.out.println("Selected: " + selectedItem.toString()
+                        + ", now clear table data ...");
+                    tableView.getTableData().clear(); // empty the table
+                }
+            });
 
         loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -200,7 +205,7 @@ public class LargeData extends Application.Adapter {
             @Override
             public void sortChanged(TableView tableViewArgument) {
                 @SuppressWarnings("unchecked")
-                List<Object> tableData = (List<Object>)tableViewArgument.getTableData();
+                List<Object> tableData = (List<Object>) tableViewArgument.getTableData();
 
                 long startTime = System.currentTimeMillis();
                 tableData.setComparator(new TableViewRowComparator(tableViewArgument));
@@ -224,17 +229,17 @@ public class LargeData extends Application.Adapter {
 
     private void loadData() {
         int index = fileListButton.getSelectedIndex();
-        int capacity = (int)Math.pow(10, index + 1);
+        int capacity = (int) Math.pow(10, index + 1);
         tableView.setTableData(new ArrayList<>(capacity));
 
         pageSize = Math.max(capacity / 1000, 100);
 
-        String fileName = (String)fileListButton.getSelectedItem();
+        String fileName = (String) fileListButton.getSelectedItem();
 
         URL fileURL = null;
         try {
             fileURL = new URL(origin, basePath + "/" + fileName);
-        } catch(MalformedURLException exception) {
+        } catch (MalformedURLException exception) {
             System.err.println(exception.getMessage());
         }
 
@@ -276,10 +281,11 @@ public class LargeData extends Application.Adapter {
 
     public static void main(String[] args) {
         try {
-            // moved here because in some cases (for example when running as unsigned code via Web Start) this would not be accessible
+            // moved here because in some cases (for example when running as
+            // unsigned code via Web Start) this would not be accessible
             USER_HOME = System.getProperty("user.home");
         } catch (Exception e) {
-            // e.printStackTrace();  // ignore the exception, and set a fallback
+            // e.printStackTrace(); // ignore the exception, and set a fallback
             USER_HOME = null;
         }
 

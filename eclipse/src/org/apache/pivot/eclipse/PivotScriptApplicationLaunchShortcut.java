@@ -45,7 +45,7 @@ public class PivotScriptApplicationLaunchShortcut implements ILaunchShortcut {
     @Override
     public void launch(ISelection selection, String mode) {
         if (selection instanceof IStructuredSelection) {
-            IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+            IStructuredSelection structuredSelection = (IStructuredSelection) selection;
             Object[] elements = structuredSelection.toArray();
 
             if (elements.length == 1) {
@@ -61,7 +61,7 @@ public class PivotScriptApplicationLaunchShortcut implements ILaunchShortcut {
 
     private void launch(Object element, String mode) {
         if (element instanceof IAdaptable) {
-            IFile file = (IFile)((IAdaptable)element).getAdapter(IFile.class);
+            IFile file = (IFile) ((IAdaptable) element).getAdapter(IFile.class);
 
             if (file != null) {
                 ILaunchConfiguration launchConfiguration = getExistingLaunchConfiguration(file);
@@ -79,22 +79,24 @@ public class PivotScriptApplicationLaunchShortcut implements ILaunchShortcut {
 
     private ILaunchConfiguration getExistingLaunchConfiguration(IFile file) {
         ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-        ILaunchConfigurationType launchConfigurationType =
-            launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+        ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
 
         ILaunchConfiguration existingLaunchConfiguration = null;
         try {
             String fileProjectName = file.getProject().getName();
 
-            ILaunchConfiguration[] launchConfigurations =
-                DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(launchConfigurationType);
+            ILaunchConfiguration[] launchConfigurations = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(
+                launchConfigurationType);
 
             for (int i = 0; i < launchConfigurations.length; i++) {
                 ILaunchConfiguration launchConfiguration = launchConfigurations[i];
 
-                String mainTypeName = launchConfiguration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "");
-                String projectName = launchConfiguration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
-                String programArguments = launchConfiguration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, "");
+                String mainTypeName = launchConfiguration.getAttribute(
+                    IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "");
+                String projectName = launchConfiguration.getAttribute(
+                    IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
+                String programArguments = launchConfiguration.getAttribute(
+                    IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, "");
 
                 if (mainTypeName.equals(PivotPlugin.MAIN_TYPE_NAME)
                     && projectName.equals(fileProjectName)
@@ -104,8 +106,7 @@ public class PivotScriptApplicationLaunchShortcut implements ILaunchShortcut {
                 }
             }
         } catch (CoreException exception) {
-            MessageDialog.openError(PivotPlugin.getActiveWorkbenchShell(),
-                exception.getMessage(),
+            MessageDialog.openError(PivotPlugin.getActiveWorkbenchShell(), exception.getMessage(),
                 exception.getStatus().getMessage());
         }
 
@@ -120,23 +121,22 @@ public class PivotScriptApplicationLaunchShortcut implements ILaunchShortcut {
             String fileName = file.getName();
 
             ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-            ILaunchConfigurationType configurationType =
-                launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+            ILaunchConfigurationType configurationType = launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
             String name = launchManager.generateUniqueLaunchConfigurationNameFrom(fileName);
 
-            ILaunchConfigurationWorkingCopy workingLaunchConfiguration = configurationType.newInstance(null, name);
-            workingLaunchConfiguration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
-                PivotPlugin.MAIN_TYPE_NAME);
-            workingLaunchConfiguration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
-                fileProjectName);
-            workingLaunchConfiguration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS,
-                getProgramArguments(file));
-            workingLaunchConfiguration.setMappedResources(new IResource[] {file});
+            ILaunchConfigurationWorkingCopy workingLaunchConfiguration = configurationType.newInstance(
+                null, name);
+            workingLaunchConfiguration.setAttribute(
+                IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, PivotPlugin.MAIN_TYPE_NAME);
+            workingLaunchConfiguration.setAttribute(
+                IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, fileProjectName);
+            workingLaunchConfiguration.setAttribute(
+                IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, getProgramArguments(file));
+            workingLaunchConfiguration.setMappedResources(new IResource[] { file });
 
             launchConfiguration = workingLaunchConfiguration.doSave();
         } catch (CoreException exception) {
-            MessageDialog.openError(PivotPlugin.getActiveWorkbenchShell(),
-                exception.getMessage(),
+            MessageDialog.openError(PivotPlugin.getActiveWorkbenchShell(), exception.getMessage(),
                 exception.getStatus().getMessage());
         }
 
@@ -145,7 +145,7 @@ public class PivotScriptApplicationLaunchShortcut implements ILaunchShortcut {
 
     private static final String getProgramArguments(IFile file) {
         IContainer parent = file.getParent();
-        IJavaElement javaElement = (IJavaElement)parent.getAdapter(IJavaElement.class);
+        IJavaElement javaElement = (IJavaElement) parent.getAdapter(IJavaElement.class);
         String src = "/" + javaElement.getElementName().replace('.', '/') + "/" + file.getName();
 
         return APPLICATION_TYPE_NAME + " " + "--" + SRC_ARGUMENT + "=" + src;

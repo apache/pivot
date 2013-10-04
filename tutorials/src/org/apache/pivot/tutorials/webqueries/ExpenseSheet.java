@@ -49,12 +49,12 @@ public class ExpenseSheet extends Sheet implements Bindable {
     public void initialize(Map<String, Object> namespace, URL location, Resources resource) {
         this.resources = resource;
 
-        dateSpinner = (Spinner)namespace.get("dateSpinner");
-        typeListButton = (ListButton)namespace.get("typeListButton");
-        amountTextInput = (TextInput)namespace.get("amountTextInput");
+        dateSpinner = (Spinner) namespace.get("dateSpinner");
+        typeListButton = (ListButton) namespace.get("typeListButton");
+        amountTextInput = (TextInput) namespace.get("amountTextInput");
 
-        cancelButton = (PushButton)namespace.get("cancelButton");
-        okButton = (PushButton)namespace.get("okButton");
+        cancelButton = (PushButton) namespace.get("cancelButton");
+        okButton = (PushButton) namespace.get("okButton");
 
         cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -78,19 +78,19 @@ public class ExpenseSheet extends Sheet implements Bindable {
         if (result) {
             // Validate the form contents
             if (typeListButton.getSelectedIndex() == -1) {
-                Form.setFlag(typeListButton, new Form.Flag(MessageType.ERROR,
-                    (String)resources.get("typeRequired")));
+                Form.setFlag(typeListButton,
+                    new Form.Flag(MessageType.ERROR, (String) resources.get("typeRequired")));
                 errorCount++;
             } else {
-                Form.setFlag(typeListButton, (Form.Flag)null);
+                Form.setFlag(typeListButton, (Form.Flag) null);
             }
 
             if (amountTextInput.getCharacterCount() == 0) {
-                Form.setFlag(amountTextInput, new Form.Flag(MessageType.ERROR,
-                    (String)resources.get("amountRequired")));
+                Form.setFlag(amountTextInput,
+                    new Form.Flag(MessageType.ERROR, (String) resources.get("amountRequired")));
                 errorCount++;
             } else {
-                Form.setFlag(amountTextInput, (Form.Flag)null);
+                Form.setFlag(amountTextInput, (Form.Flag) null);
             }
         }
 

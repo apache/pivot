@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface DialogCloseListener {
     /**
      * Called when a dialog has closed.
-     *
+     * 
      * @param dialog
      */
     public void dialogClosed(Dialog dialog, boolean modal);

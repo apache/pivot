@@ -24,11 +24,9 @@ import java.util.Properties;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.adapter.MapAdapter;
 
-
 /**
- * Implementation of the {@link Serializer} interface that reads data from
- * and writes data to the Java properties file format.
- *
+ * Implementation of the {@link Serializer} interface that reads data from and
+ * writes data to the Java properties file format.
  */
 public class PropertiesSerializer implements Serializer<Map<?, ?>> {
     public static final String PROPERTIES_EXTENSION = "properties";
@@ -36,17 +34,13 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
 
     /**
      * Reads data from a properties stream.
-     *
-     * @param inputStream
-     * The input stream from which data will be read.
-     *
-     * @return
-     * An instance of {@link Map} containing the data read from the properties
-     * file. Both keys and values are strings.
+     * 
+     * @param inputStream The input stream from which data will be read.
+     * @return An instance of {@link Map} containing the data read from the
+     * properties file. Both keys and values are strings.
      */
     @Override
-    public Map<?, ?> readObject(InputStream inputStream) throws IOException,
-        SerializationException {
+    public Map<?, ?> readObject(InputStream inputStream) throws IOException, SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
         }
@@ -59,14 +53,11 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
 
     /**
      * Writes data to a properties stream.
-     *
-     * @param object
-     * An instance of {@link Map} containing the data to be written to the
-     * properties file. Keys must be strings, and values will be converted to
-     * strings.
-     *
-     * @param outputStream
-     * The output stream to which data will be written.
+     * 
+     * @param object An instance of {@link Map} containing the data to be
+     * written to the properties file. Keys must be strings, and values will be
+     * converted to strings.
+     * @param outputStream The output stream to which data will be written.
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -80,7 +71,7 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
             throw new IllegalArgumentException("outputStream is null.");
         }
 
-        Map<Object, Object> map = (Map<Object, Object>)object;
+        Map<Object, Object> map = (Map<Object, Object>) object;
 
         Properties properties = new Properties();
 

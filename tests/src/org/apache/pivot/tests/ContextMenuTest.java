@@ -30,15 +30,17 @@ import org.apache.pivot.wtk.Window;
 public class ContextMenuTest extends Application.Adapter {
     private Window window = null;
 
-    @BXML private Menu.Section globalSection;
-    @BXML private Menu.Section helpSection;
-    @BXML private Menu.Section hoursSection;
+    @BXML
+    private Menu.Section globalSection;
+    @BXML
+    private Menu.Section helpSection;
+    @BXML
+    private Menu.Section hoursSection;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(ContextMenuTest.class,
-            "context_menu_test.bxml");
+        window = (Window) bxmlSerializer.readObject(ContextMenuTest.class, "context_menu_test.bxml");
         bxmlSerializer.bind(this, ContextMenuTest.class);
 
         window.setMenuHandler(new MenuHandler.Adapter() {

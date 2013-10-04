@@ -16,7 +16,10 @@
  */
 package org.apache.pivot.collections.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Iterator;
 
@@ -39,8 +42,7 @@ public class HashSetTest {
 
         int i = 0;
         for (String element : set) {
-            assertTrue(element.equals("A")
-                || element.equals("B"));
+            assertTrue(element.equals("A") || element.equals("B"));
             i++;
         }
 

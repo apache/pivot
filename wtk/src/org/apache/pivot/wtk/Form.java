@@ -259,9 +259,8 @@ public class Form extends Container {
 
         /**
          * Creates a new flag with the given message type and no message.
-         *
-         * @param messageType
-         * The type of the flag.
+         * 
+         * @param messageType The type of the flag.
          */
         public Flag(MessageType messageType) {
             this(messageType, null);
@@ -269,13 +268,10 @@ public class Form extends Container {
 
         /**
          * Creates a new flag with the given type and message.
-         *
-         * @param messageType
-         * The type of the flag.
-         *
-         * @param message
-         * The message text associated with the flag, or <tt>null</tt> for
-         * no message.
+         * 
+         * @param messageType The type of the flag.
+         * @param message The message text associated with the flag, or
+         * <tt>null</tt> for no message.
          */
         public Flag(MessageType messageType, String message) {
             if (messageType == null) {
@@ -288,9 +284,8 @@ public class Form extends Container {
 
         /**
          * Returns the flag's message type.
-         *
-         * @return
-         * The message type of the flag.
+         * 
+         * @return The message type of the flag.
          */
         public MessageType getMessageType() {
             return messageType;
@@ -298,7 +293,7 @@ public class Form extends Container {
 
         /**
          * Sets the flag's message type.
-         *
+         * 
          * @param messageType
          */
         public void setMessageType(MessageType messageType) {
@@ -311,10 +306,9 @@ public class Form extends Container {
 
         /**
          * Returns the flag message.
-         *
-         * @return
-         * The message text associated with the flag, or <tt>null</tt> if
-         * there is no message.
+         * 
+         * @return The message text associated with the flag, or <tt>null</tt>
+         * if there is no message.
          */
         public String getMessage() {
             return message;
@@ -322,10 +316,9 @@ public class Form extends Container {
 
         /**
          * Sets the flag message.
-         *
-         * @param message
-         * The message text associated with the flag, or <tt>null</tt> if
-         * there is no message.
+         * 
+         * @param message The message text associated with the flag, or
+         * <tt>null</tt> if there is no message.
          */
         public void setMessage(String message) {
             this.message = message;
@@ -339,27 +332,24 @@ public class Form extends Container {
                 throw new IllegalArgumentException(exception);
             }
 
-            String messageType = (String)map.get(MESSAGE_TYPE_KEY);
+            String messageType = (String) map.get(MESSAGE_TYPE_KEY);
             if (messageType == null) {
                 throw new IllegalArgumentException(MESSAGE_TYPE_KEY + " is required.");
             }
 
             Flag value = new Flag(MessageType.valueOf(messageType.toUpperCase(Locale.ENGLISH)),
-                (String)map.get(MESSAGE_KEY));
+                (String) map.get(MESSAGE_KEY));
 
             return value;
         }
     }
 
     private enum Attribute {
-        SECTION,
-        LABEL,
-        REQUIRED,
-        FLAG;
+        SECTION, LABEL, REQUIRED, FLAG;
     }
 
-    private static class FormListenerList extends WTKListenerList<FormListener>
-        implements FormListener {
+    private static class FormListenerList extends WTKListenerList<FormListener> implements
+        FormListener {
         @Override
         public void sectionInserted(Form form, int index) {
             for (FormListener listener : this) {
@@ -437,9 +427,8 @@ public class Form extends Container {
 
     /**
      * Returns the form's field sequence.
-     *
-     * @return
-     * The form's field sequence.
+     * 
+     * @return The form's field sequence.
      */
     public SectionSequence getSections() {
         return sectionSequence;
@@ -451,17 +440,16 @@ public class Form extends Container {
     public void clearFlags() {
         for (Section section : sections) {
             for (Component field : section) {
-                setFlag(field, (Flag)null);
+                setFlag(field, (Flag) null);
             }
         }
     }
 
     /**
      * Returns the number of fields that are flagged with a given message type.
-     *
-     * @param messageType
-     * The message type to count, or <tt>null</tt> to return the count of all
-     * flagged fields regardless of message type.
+     * 
+     * @param messageType The message type to count, or <tt>null</tt> to return
+     * the count of all flagged fields regardless of message type.
      */
     public int getFlaggedFieldCount(MessageType messageType) {
         int count = 0;
@@ -470,9 +458,7 @@ public class Form extends Container {
             for (Component field : section) {
                 Flag flag = getFlag(field);
 
-                if (flag != null
-                   && (messageType == null
-                       || flag.getMessageType() == messageType)) {
+                if (flag != null && (messageType == null || flag.getMessageType() == messageType)) {
                     count++;
                 }
             }
@@ -483,10 +469,9 @@ public class Form extends Container {
 
     /**
      * Ensures that the first field with the given flag type is visible.
-     *
-     * @param messageType
-     * The message type, or <tt>null</tt> to scroll the first flag of any
-     * type to visible.
+     * 
+     * @param messageType The message type, or <tt>null</tt> to scroll the first
+     * flag of any type to visible.
      */
     public void scrollFirstFlagToVisible(MessageType messageType) {
         Flag flag = null;
@@ -495,9 +480,7 @@ public class Form extends Container {
             for (Component field : section) {
                 flag = getFlag(field);
 
-                if (flag != null
-                   && (messageType == null
-                       || flag.getMessageType() == messageType)) {
+                if (flag != null && (messageType == null || flag.getMessageType() == messageType)) {
                     field.scrollAreaToVisible(0, 0, field.getWidth(), field.getHeight());
                     break;
                 }
@@ -527,9 +510,8 @@ public class Form extends Container {
 
     /**
      * Returns the form listener list.
-     *
-     * @return
-     * The form listener list.
+     * 
+     * @return The form listener list.
      */
     public ListenerList<FormListener> getFormListeners() {
         return formListeners;
@@ -537,40 +519,37 @@ public class Form extends Container {
 
     /**
      * Returns the form attribute listener list.
-     *
-     * @return
-     * The form attribute listener list.
+     * 
+     * @return The form attribute listener list.
      */
     public ListenerList<FormAttributeListener> getFormAttributeListeners() {
         return formAttributeListeners;
     }
 
     /**
-     * Finds the {@link Form.Section} that the given component belongs to.
-     * Only finds the section if the component is a direct child of the section.
-     *
+     * Finds the {@link Form.Section} that the given component belongs to. Only
+     * finds the section if the component is a direct child of the section.
+     * 
      * @see #getEnclosingSection getEnclosingSection(Component)
      */
     public static Section getSection(Component component) {
-        return (Section)component.getAttribute(Attribute.SECTION);
+        return (Section) component.getAttribute(Attribute.SECTION);
     }
 
     /**
-     * Finds the {@link Form.Section} that the given component belongs to.
-     * Will search up the parent hierarchy in case the component is nested inside
+     * Finds the {@link Form.Section} that the given component belongs to. Will
+     * search up the parent hierarchy in case the component is nested inside
      * other containers inside the form.
-     *
-     * @return
-     * The form section this component (or one of its parents) belongs to or
-     * <code>null</code> if the component does not belong to a form.
-     *
+     * 
+     * @return The form section this component (or one of its parents) belongs
+     * to or <code>null</code> if the component does not belong to a form.
      * @see #getSection getSection(Component)
      */
     public static Section getEnclosingSection(Component component) {
-        Section section = (Section)component.getAttribute(Attribute.SECTION);
+        Section section = (Section) component.getAttribute(Attribute.SECTION);
         if (section == null) {
-            for (Container parent = component.getParent();
-                 parent != null && (section = (Section)parent.getAttribute(Attribute.SECTION)) == null; ) {
+            for (Container parent = component.getParent(); parent != null
+                && (section = (Section) parent.getAttribute(Attribute.SECTION)) == null;) {
                 parent = parent.getParent();
             }
         }
@@ -578,53 +557,53 @@ public class Form extends Container {
     }
 
     public static String getLabel(Component component) {
-        return (String)component.getAttribute(Attribute.LABEL);
+        return (String) component.getAttribute(Attribute.LABEL);
     }
 
     public static void setLabel(Component component, String label) {
-        String previousLabel = (String)component.setAttribute(Attribute.LABEL, label);
+        String previousLabel = (String) component.setAttribute(Attribute.LABEL, label);
 
         if (previousLabel != label) {
             Container parent = component.getParent();
 
             if (parent instanceof Form) {
-                Form form = (Form)parent;
+                Form form = (Form) parent;
                 form.formAttributeListeners.labelChanged(form, component, previousLabel);
             }
         }
     }
 
     public static boolean isRequired(Component component) {
-        Boolean value = (Boolean)component.getAttribute(Attribute.REQUIRED);
+        Boolean value = (Boolean) component.getAttribute(Attribute.REQUIRED);
         return (value == null) ? false : value;
     }
 
     public static void setRequired(Component component, boolean required) {
-        Boolean previousValue = (Boolean)component.setAttribute(Attribute.REQUIRED, required);
+        Boolean previousValue = (Boolean) component.setAttribute(Attribute.REQUIRED, required);
         boolean previousRequired = (previousValue == null) ? false : previousValue;
 
         if (previousRequired != required) {
             Container parent = component.getParent();
 
             if (parent instanceof Form) {
-                Form form = (Form)parent;
+                Form form = (Form) parent;
                 form.formAttributeListeners.requiredChanged(form, component);
             }
         }
     }
 
     public static Flag getFlag(Component component) {
-        return (Flag)component.getAttribute(Attribute.FLAG);
+        return (Flag) component.getAttribute(Attribute.FLAG);
     }
 
     public static void setFlag(Component component, Flag flag) {
-        Flag previousFlag = (Flag)component.setAttribute(Attribute.FLAG, flag);
+        Flag previousFlag = (Flag) component.setAttribute(Attribute.FLAG, flag);
 
         if (previousFlag != flag) {
             Container parent = component.getParent();
 
             if (parent instanceof Form) {
-                Form form = (Form)parent;
+                Form form = (Form) parent;
                 form.formAttributeListeners.flagChanged(form, component, previousFlag);
             }
         }
@@ -639,6 +618,6 @@ public class Form extends Container {
     }
 
     public static final void clearFlag(Component component) {
-        setFlag(component, (Flag)null);
+        setFlag(component, (Flag) null);
     }
 }

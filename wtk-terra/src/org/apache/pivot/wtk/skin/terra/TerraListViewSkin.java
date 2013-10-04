@@ -50,9 +50,8 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 /**
  * List view skin.
  */
-public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
-    ListViewListener, ListViewItemListener, ListViewItemStateListener,
-    ListViewSelectionListener {
+public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, ListViewListener,
+    ListViewItemListener, ListViewItemStateListener, ListViewSelectionListener {
     private Font font;
     private Color color;
     private Color disabledColor;
@@ -83,7 +82,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public TerraListViewSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -102,7 +101,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void install(Component component) {
         super.install(component);
 
-        ListView listView = (ListView)component;
+        ListView listView = (ListView) component;
         listView.getListViewListeners().add(this);
         listView.getListViewItemListeners().add(this);
         listView.getListViewItemStateListeners().add(this);
@@ -113,9 +112,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         @SuppressWarnings("unchecked")
-        List<Object> listData = (List<Object>)listView.getListData();
+        List<Object> listData = (List<Object>) listView.getListData();
 
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
@@ -126,8 +125,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         if (listView.getCheckmarksEnabled()) {
-            preferredWidth += CHECKBOX.getWidth() + (checkboxPadding.left
-                + checkboxPadding.right);
+            preferredWidth += CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right);
         }
 
         return preferredWidth;
@@ -137,16 +135,16 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         @SuppressWarnings("unchecked")
-        List<Object> listData = (List<Object>)listView.getListData();
+        List<Object> listData = (List<Object>) listView.getListData();
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
         if (variableItemHeight) {
             int clientWidth = width;
             if (listView.getCheckmarksEnabled()) {
-                clientWidth = Math.max(clientWidth - (CHECKBOX.getWidth() + (checkboxPadding.left
-                    + checkboxPadding.right)), 0);
+                clientWidth = Math.max(clientWidth
+                    - (CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right)), 0);
             }
 
             int index = 0;
@@ -159,8 +157,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
             int fixedItemHeightLocal = itemRenderer.getPreferredHeight(-1);
             if (listView.getCheckmarksEnabled()) {
-                fixedItemHeightLocal = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
-                    + checkboxPadding.bottom), fixedItemHeightLocal);
+                fixedItemHeightLocal = Math.max(CHECKBOX.getHeight()
+                    + (checkboxPadding.top + checkboxPadding.bottom), fixedItemHeightLocal);
             }
 
             preferredHeight = listData.getLength() * fixedItemHeightLocal;
@@ -171,25 +169,25 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     public int getBaseline(int width, int height) {
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
 
         int baseline = -1;
 
         int clientWidth = width;
         if (listView.getCheckmarksEnabled()) {
-            clientWidth = Math.max(clientWidth - (CHECKBOX.getWidth() + (checkboxPadding.left
-                + checkboxPadding.right)), 0);
+            clientWidth = Math.max(clientWidth
+                - (CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right)), 0);
         }
 
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
         @SuppressWarnings("unchecked")
-        List<Object> listData = (List<Object>)listView.getListData();
+        List<Object> listData = (List<Object>) listView.getListData();
         if (variableItemHeight && listData.getLength() > 0) {
             itemRenderer.render(listData.get(0), 0, listView, false, false, false, false);
             int itemHeight = itemRenderer.getPreferredHeight(clientWidth);
             if (listView.getCheckmarksEnabled()) {
-                itemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
-                    + checkboxPadding.bottom), itemHeight);
+                itemHeight = Math.max(CHECKBOX.getHeight()
+                    + (checkboxPadding.top + checkboxPadding.bottom), itemHeight);
             }
 
             baseline = itemRenderer.getBaseline(clientWidth, itemHeight);
@@ -198,8 +196,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
             int fixedItemHeightLocal = itemRenderer.getPreferredHeight(-1);
             if (listView.getCheckmarksEnabled()) {
-                fixedItemHeightLocal = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
-                    + checkboxPadding.bottom), fixedItemHeightLocal);
+                fixedItemHeightLocal = Math.max(CHECKBOX.getHeight()
+                    + (checkboxPadding.top + checkboxPadding.bottom), fixedItemHeightLocal);
             }
 
             baseline = itemRenderer.getBaseline(clientWidth, fixedItemHeightLocal);
@@ -210,9 +208,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     public void layout() {
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         @SuppressWarnings("unchecked")
-        List<Object> listData = (List<Object>)listView.getListData();
+        List<Object> listData = (List<Object>) listView.getListData();
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
         if (variableItemHeight) {
@@ -220,8 +218,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
             int checkboxHeight = 0;
             if (listView.getCheckmarksEnabled()) {
-                checkboxHeight = CHECKBOX.getHeight() + (checkboxPadding.top
-                    + checkboxPadding.bottom);
+                checkboxHeight = CHECKBOX.getHeight()
+                    + (checkboxPadding.top + checkboxPadding.bottom);
             }
 
             int n = listData.getLength();
@@ -256,8 +254,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             fixedItemHeight = itemRenderer.getPreferredHeight(-1);
 
             if (listView.getCheckmarksEnabled()) {
-                fixedItemHeight = Math.max(CHECKBOX.getHeight() + (checkboxPadding.top
-                    + checkboxPadding.bottom), fixedItemHeight);
+                fixedItemHeight = Math.max(CHECKBOX.getHeight()
+                    + (checkboxPadding.top + checkboxPadding.bottom), fixedItemHeight);
             }
         }
 
@@ -285,9 +283,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     public void paint(Graphics2D graphics) {
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         @SuppressWarnings("unchecked")
-        List<Object> listData = (List<Object>)listView.getListData();
+        List<Object> listData = (List<Object>) listView.getListData();
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
         int width = getWidth();
@@ -318,10 +316,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     itemEnd = getItemAt(clipBottom);
                 }
             } else {
-                itemStart = Math.max(itemStart, (int)Math.floor(clipBounds.y
-                    / (double)fixedItemHeight));
-                itemEnd = Math.min(itemEnd, (int)Math.ceil((clipBounds.y
-                    + clipBounds.height) / (double)fixedItemHeight) - 1);
+                itemStart = Math.max(itemStart,
+                    (int) Math.floor(clipBounds.y / (double) fixedItemHeight));
+                itemEnd = Math.min(
+                    itemEnd,
+                    (int) Math.ceil((clipBounds.y + clipBounds.height) / (double) fixedItemHeight) - 1);
             }
         }
 
@@ -340,8 +339,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         // Paint the item content
         for (int itemIndex = itemStart; itemIndex <= itemEnd; itemIndex++) {
             Object item = listData.get(itemIndex);
-            boolean highlighted = (itemIndex == highlightIndex
-                && listView.getSelectMode() != ListView.SelectMode.NONE);
+            boolean highlighted = (itemIndex == highlightIndex && listView.getSelectMode() != ListView.SelectMode.NONE);
             boolean selected = listView.isItemSelected(itemIndex);
             boolean disabled = listView.isItemDisabled(itemIndex);
             int itemY = getItemY(itemIndex);
@@ -349,8 +347,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
             Color itemBackgroundColor = null;
             if (selected) {
-                itemBackgroundColor = (listView.isFocused())
-                    ? this.selectionBackgroundColor : inactiveSelectionBackgroundColor;
+                itemBackgroundColor = (listView.isFocused()) ? this.selectionBackgroundColor
+                    : inactiveSelectionBackgroundColor;
             } else {
                 if (highlighted && showHighlight && !disabled) {
                     itemBackgroundColor = highlightBackgroundColor;
@@ -370,7 +368,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 checked = listView.isItemChecked(itemIndex);
 
                 int checkboxY = (itemHeight - CHECKBOX.getHeight()) / 2;
-                Graphics2D checkboxGraphics = (Graphics2D)graphics.create(checkboxPadding.left,
+                Graphics2D checkboxGraphics = (Graphics2D) graphics.create(checkboxPadding.left,
                     itemY + checkboxY, CHECKBOX.getWidth(), CHECKBOX.getHeight());
 
                 CHECKBOX.setSelected(checked);
@@ -378,15 +376,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                 CHECKBOX.paint(checkboxGraphics);
                 checkboxGraphics.dispose();
 
-                itemX = CHECKBOX.getWidth() + (checkboxPadding.left
-                    + checkboxPadding.right);
+                itemX = CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right);
 
                 itemWidth -= itemX;
             }
 
             // Paint the data
-            Graphics2D rendererGraphics = (Graphics2D)graphics.create(itemX, itemY,
-                itemWidth, itemHeight);
+            Graphics2D rendererGraphics = (Graphics2D) graphics.create(itemX, itemY, itemWidth,
+                itemHeight);
 
             itemRenderer.render(item, itemIndex, listView, selected, checked, highlighted, disabled);
             itemRenderer.setSize(itemWidth, itemHeight);
@@ -404,7 +401,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             throw new IllegalArgumentException("y is negative");
         }
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
 
         int index;
         if (variableItemHeight) {
@@ -420,7 +417,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             index = (y / fixedItemHeight);
 
             @SuppressWarnings("unchecked")
-            List<Object> listData = (List<Object>)listView.getListData();
+            List<Object> listData = (List<Object>) listView.getListData();
             if (index >= listData.getLength()) {
                 index = -1;
             }
@@ -438,7 +435,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public int getItemIndent() {
         int itemIndent = 0;
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         if (listView.getCheckmarksEnabled()) {
             itemIndent = CHECKBOX.getWidth() + checkboxPadding.left + checkboxPadding.right;
         }
@@ -480,14 +477,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     @Override
     public boolean isFocusable() {
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         return (listView.getSelectMode() != ListView.SelectMode.NONE);
     }
 
     @Override
     public boolean isOpaque() {
-        return (backgroundColor != null
-            && backgroundColor.getTransparency() == Transparency.OPAQUE);
+        return (backgroundColor != null && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     public Font getFont() {
@@ -541,7 +537,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -567,7 +563,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -589,7 +585,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -615,7 +611,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public final void setSelectionColor(int selectionColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setSelectionColor(theme.getColor(selectionColor));
     }
 
@@ -641,7 +637,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
     }
 
@@ -667,7 +663,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setInactiveSelectionColor(theme.getColor(inactiveSelectionColor));
     }
 
@@ -693,7 +689,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setInactiveSelectionBackgroundColor(theme.getColor(inactiveSelectionBackgroundColor));
     }
 
@@ -719,7 +715,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 
@@ -741,7 +737,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     public final void setAlternateItemColor(int alternateItemBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setAlternateItemBackgroundColor(theme.getColor(alternateItemBackgroundColor));
     }
 
@@ -816,14 +812,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
 
         int previousHighlightIndex = this.highlightIndex;
         highlightIndex = getItemAt(y);
 
         if (previousHighlightIndex != highlightIndex
-            && listView.getSelectMode() != ListView.SelectMode.NONE
-            && showHighlight) {
+            && listView.getSelectMode() != ListView.SelectMode.NONE && showHighlight) {
             if (previousHighlightIndex != -1) {
                 repaintComponent(getItemBounds(previousHighlightIndex));
             }
@@ -840,10 +835,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public void mouseOut(Component component) {
         super.mouseOut(component);
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
 
-        if (highlightIndex != -1
-            && listView.getSelectMode() != ListView.SelectMode.NONE
+        if (highlightIndex != -1 && listView.getSelectMode() != ListView.SelectMode.NONE
             && showHighlight) {
             Bounds itemBounds = getItemBounds(highlightIndex);
             repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height);
@@ -857,13 +851,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         int itemIndex = getItemAt(y);
 
-        if (itemIndex != -1
-            && !listView.isItemDisabled(itemIndex)) {
-            if (!listView.getCheckmarksEnabled()
-                || listView.isCheckmarkDisabled(itemIndex)
+        if (itemIndex != -1 && !listView.isItemDisabled(itemIndex)) {
+            if (!listView.getCheckmarksEnabled() || listView.isCheckmarkDisabled(itemIndex)
                 || !getCheckboxBounds(itemIndex).contains(x, y)) {
                 ListView.SelectMode selectMode = listView.getSelectMode();
 
@@ -880,8 +872,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                             int startIndex = listView.getFirstSelectedIndex();
                             int endIndex = listView.getLastSelectedIndex();
 
-                            Span selectedRange = (itemIndex > startIndex) ?
-                                new Span(startIndex, itemIndex) : new Span(itemIndex, endIndex);
+                            Span selectedRange = (itemIndex > startIndex) ? new Span(startIndex,
+                                itemIndex) : new Span(itemIndex, endIndex);
                             selectedRanges.add(selectedRange);
 
                             listView.setSelectedRanges(selectedRanges);
@@ -924,7 +916,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         if (selectIndex != -1
             && listView.getFirstSelectedIndex() != listView.getLastSelectedIndex()) {
             listView.setSelectedIndex(selectIndex);
@@ -938,19 +930,15 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         int itemIndex = getItemAt(y);
 
-        if (itemIndex != -1
-            && !listView.isItemDisabled(itemIndex)) {
-            if (listView.getCheckmarksEnabled()
-                && !listView.isCheckmarkDisabled(itemIndex)
+        if (itemIndex != -1 && !listView.isItemDisabled(itemIndex)) {
+            if (listView.getCheckmarksEnabled() && !listView.isCheckmarkDisabled(itemIndex)
                 && getCheckboxBounds(itemIndex).contains(x, y)) {
                 listView.setItemChecked(itemIndex, !listView.isItemChecked(itemIndex));
             } else {
-                if (selectIndex != -1
-                    && count == 1
-                    && button == Mouse.Button.LEFT) {
+                if (selectIndex != -1 && count == 1 && button == Mouse.Button.LEFT) {
                     ListView.ItemEditor itemEditor = listView.getItemEditor();
 
                     if (itemEditor != null) {
@@ -973,26 +961,23 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         Bounds itemBounds = getItemBounds(itemIndex);
 
         int checkboxHeight = CHECKBOX.getHeight();
-        return new Bounds(checkboxPadding.left,
-            itemBounds.y + (itemBounds.height - checkboxHeight) / 2,
-            CHECKBOX.getWidth(),
-            checkboxHeight);
+        return new Bounds(checkboxPadding.left, itemBounds.y + (itemBounds.height - checkboxHeight)
+            / 2, CHECKBOX.getWidth(), checkboxHeight);
     }
 
     @Override
     public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
 
         if (highlightIndex != -1) {
             Bounds itemBounds = getItemBounds(highlightIndex);
 
             highlightIndex = -1;
 
-            if (listView.getSelectMode() != ListView.SelectMode.NONE
-                && showHighlight) {
-                repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width,
-                    itemBounds.height, true);
+            if (listView.getSelectMode() != ListView.SelectMode.NONE && showHighlight) {
+                repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height,
+                    true);
             }
         }
 
@@ -1001,21 +986,20 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
     /**
      * {@link KeyCode#UP UP} Selects the previous enabled list item when select
-     * mode is not {@link SelectMode#NONE}<br>
-     * {@link KeyCode#DOWN DOWN} Selects the next enabled list item when select
-     * mode is not {@link SelectMode#NONE}<p>
-     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the
-     * selection size by including the previous enabled list item when select
-     * mode is {@link SelectMode#MULTI}<br>
-     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases the
-     * selection size by including the next enabled list item when select mode
-     * is {@link SelectMode#MULTI}
+     * mode is not {@link SelectMode#NONE}<br> {@link KeyCode#DOWN DOWN} Selects
+     * the next enabled list item when select mode is not
+     * {@link SelectMode#NONE}<p> {@link Modifier#SHIFT SHIFT} +
+     * {@link KeyCode#UP UP} Increases the selection size by including the
+     * previous enabled list item when select mode is {@link SelectMode#MULTI}
+     * <br> {@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases
+     * the selection size by including the next enabled list item when select
+     * mode is {@link SelectMode#MULTI}
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         ListView.SelectMode selectMode = listView.getSelectMode();
 
         switch (keyCode) {
@@ -1026,8 +1010,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
                     do {
                         index--;
-                    } while (index >= 0
-                        && listView.isItemDisabled(index));
+                    } while (index >= 0 && listView.isItemDisabled(index));
 
                     if (index >= 0) {
                         if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
@@ -1036,12 +1019,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         } else {
                             listView.setSelectedIndex(index);
                         }
-                    } else if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT) && listView.getSelectMode() == ListView.SelectMode.MULTI && count == listView.getSelectedItems().getLength()) {
+                    } else if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                        && listView.getSelectMode() == ListView.SelectMode.MULTI
+                        && count == listView.getSelectedItems().getLength()) {
                         index = listView.getLastSelectedIndex();
                         do {
                             index--;
-                        } while (index >= 0 &&
-                                listView.isItemDisabled(index));
+                        } while (index >= 0 && listView.isItemDisabled(index));
 
                         listView.setSelectedIndex(Math.max(0, index));
                     }
@@ -1059,8 +1043,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
 
                     do {
                         index++;
-                    } while (index < count
-                        && listView.isItemDisabled(index));
+                    } while (index < count && listView.isItemDisabled(index));
 
                     if (index < count) {
                         if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
@@ -1069,12 +1052,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                         } else {
                             listView.setSelectedIndex(index);
                         }
-                    } else if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT) && listView.getSelectMode() == ListView.SelectMode.MULTI && count == listView.getSelectedItems().getLength()) {
+                    } else if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                        && listView.getSelectMode() == ListView.SelectMode.MULTI
+                        && count == listView.getSelectedItems().getLength()) {
                         index = 0;
                         do {
                             index++;
-                        } while (index < count &&
-                                listView.isItemDisabled(index));
+                        } while (index < count && listView.isItemDisabled(index));
 
                         listView.setSelectedIndex(Math.min(count - 1, index));
                     }
@@ -1091,10 +1075,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
         }
 
         // Clear the highlight
-        if (highlightIndex != -1
-            && listView.getSelectMode() != ListView.SelectMode.NONE
-            && showHighlight
-            && consumed) {
+        if (highlightIndex != -1 && listView.getSelectMode() != ListView.SelectMode.NONE
+            && showHighlight && consumed) {
             repaintComponent(getItemBounds(highlightIndex));
         }
 
@@ -1104,14 +1086,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     }
 
     /**
-     * {@link KeyCode#SPACE SPACE} Toggles check mark selection when select
-     * mode is {@link SelectMode#SINGLE}
+     * {@link KeyCode#SPACE SPACE} Toggles check mark selection when select mode
+     * is {@link SelectMode#SINGLE}
      */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
 
         switch (keyCode) {
             case Keyboard.KeyCode.SPACE: {
@@ -1145,7 +1127,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
     public boolean keyTyped(Component component, char character) {
         boolean consumed = super.keyTyped(component, character);
 
-        ListView listView = (ListView)getComponent();
+        ListView listView = (ListView) getComponent();
         List<?> listData = listView.getListData();
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
 
@@ -1155,8 +1137,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             if (!listView.isItemDisabled(i)) {
                 String string = itemRenderer.toString(listData.get(i));
 
-                if (string != null
-                    && string.length() > 0) {
+                if (string != null && string.length() > 0) {
                     char first = Character.toUpperCase(string.charAt(0));
 
                     if (first == characterUpper) {
@@ -1168,14 +1149,12 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
             }
         }
 
-        if (!consumed
-            && wrapSelectNext) {
+        if (!consumed && wrapSelectNext) {
             for (int i = 0, n = listData.getLength(); i < n; i++) {
                 if (!listView.isItemDisabled(i)) {
                     String string = itemRenderer.toString(listData.get(i));
 
-                    if (string != null
-                            && string.length() > 0) {
+                    if (string != null && string.length() > 0) {
                         char first = Character.toUpperCase(string.charAt(0));
 
                         if (first == characterUpper) {
@@ -1337,7 +1316,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin,
                     Bounds visibleSelectionBounds = listView.getVisibleArea(selectionBounds);
                     if (visibleSelectionBounds != null
                         && visibleSelectionBounds.height < selectionBounds.height) {
-                        // Repainting the entire component is a workaround for PIVOT-490
+                        // Repainting the entire component is a workaround for
+                        // PIVOT-490
                         repaintComponent();
 
                         listView.scrollAreaToVisible(selectionBounds);

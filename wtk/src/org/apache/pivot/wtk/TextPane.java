@@ -45,64 +45,55 @@ public class TextPane extends Container {
      * Enum representing a scroll direction.
      */
     public enum ScrollDirection {
-        UP,
-        DOWN
+        UP, DOWN
     }
 
     /**
-     * Text pane skin interface. Text pane skins are required to implement
-     * this.
+     * Text pane skin interface. Text pane skins are required to implement this.
      */
     public interface Skin {
         /**
          * Returns the insertion point for a given location.
-         *
+         * 
          * @param x
          * @param y
-         *
-         * @return
-         * The insertion point for the given location.
+         * @return The insertion point for the given location.
          */
         public int getInsertionPoint(int x, int y);
 
         /**
-         * Returns the next insertion point given an x coordinate and a character offset.
-         *
+         * Returns the next insertion point given an x coordinate and a
+         * character offset.
+         * 
          * @param x
          * @param from
          * @param direction
-         *
-         * @return
-         * The next insertion point.
+         * @return The next insertion point.
          */
         public int getNextInsertionPoint(int x, int from, ScrollDirection direction);
 
         /**
-         * Returns the row index of the character at a given offset within the document.
-         *
+         * Returns the row index of the character at a given offset within the
+         * document.
+         * 
          * @param offset
-         *
-         * @return
-         * The row index of the character at the given offset.
+         * @return The row index of the character at the given offset.
          */
         public int getRowAt(int offset);
 
         /**
          * Returns the total number of rows in the document.
-         *
-         * @return
-         * The number of rows in the document.
+         * 
+         * @return The number of rows in the document.
          */
         public int getRowCount();
 
         /**
          * Returns the bounds of the character at a given offset within the
          * document.
-         *
+         * 
          * @param offset
-         *
-         * @return
-         * The bounds of the character at the given offset.
+         * @return The bounds of the character at the given offset.
          */
         public Bounds getCharacterBounds(int offset);
     }
@@ -125,7 +116,7 @@ public class TextPane extends Container {
         @Override
         public void undo() {
             Document tmp = new Document();
-            for (int i=0; i<removed.getLength(); i++) {
+            for (int i = 0; i < removed.getLength(); i++) {
                 tmp.add(removed.get(i));
             }
             node.insertRange(tmp, offset);
@@ -158,8 +149,8 @@ public class TextPane extends Container {
         }
     }
 
-    private static class TextPaneListenerList extends WTKListenerList<TextPaneListener>
-        implements TextPaneListener {
+    private static class TextPaneListenerList extends WTKListenerList<TextPaneListener> implements
+        TextPaneListener {
         @Override
         public void documentChanged(TextPane textPane, Document previousText) {
             for (TextPaneListener listener : this) {
@@ -175,8 +166,8 @@ public class TextPane extends Container {
         }
     }
 
-    private static class TextPaneCharacterListenerList extends WTKListenerList<TextPaneCharacterListener>
-        implements TextPaneCharacterListener {
+    private static class TextPaneCharacterListenerList extends
+        WTKListenerList<TextPaneCharacterListener> implements TextPaneCharacterListener {
         @Override
         public void charactersInserted(TextPane textPane, int index, int count) {
             for (TextPaneCharacterListener listener : this) {
@@ -192,11 +183,11 @@ public class TextPane extends Container {
         }
     }
 
-    private static class TextPaneSelectionListenerList extends WTKListenerList<TextPaneSelectionListener>
-        implements TextPaneSelectionListener {
+    private static class TextPaneSelectionListenerList extends
+        WTKListenerList<TextPaneSelectionListener> implements TextPaneSelectionListener {
         @Override
-        public void selectionChanged(TextPane textPane,
-            int previousSelectionStart, int previousSelectionLength) {
+        public void selectionChanged(TextPane textPane, int previousSelectionStart,
+            int previousSelectionLength) {
             for (TextPaneSelectionListener listener : this) {
                 listener.selectionChanged(textPane, previousSelectionStart, previousSelectionLength);
             }
@@ -322,10 +313,10 @@ public class TextPane extends Container {
     }
 
     /**
-     * Sets the document that backs the text pane.
-     * Documents are not shareable across multiple TextPanes;
-     * because a Document may contain Components, and a Component may only be in one Container at a time.
-     *
+     * Sets the document that backs the text pane. Documents are not shareable
+     * across multiple TextPanes; because a Document may contain Components, and
+     * a Component may only be in one Container at a time.
+     * 
      * @param document
      */
     public void setDocument(Document document) {
@@ -381,7 +372,7 @@ public class TextPane extends Container {
         if (n > 0) {
             Node node = element.get(n - 1);
             if (node instanceof Element) {
-                return getRightmostDescendant((Element)node);
+                return getRightmostDescendant((Element) node);
             }
             return node;
         }
@@ -389,8 +380,8 @@ public class TextPane extends Container {
     }
 
     /**
-     * Helper function to remove a range of characters from the document
-     * and notify the listeners just once (instead of once per node).
+     * Helper function to remove a range of characters from the document and
+     * notify the listeners just once (instead of once per node).
      */
     private Node removeDocumentRange(int start, int count) {
         bulkOperation = true;
@@ -432,21 +423,21 @@ public class TextPane extends Container {
 
             if (descendant instanceof TextNode) {
                 // The caret is positioned within an existing text node
-                TextNode textNode = (TextNode)descendant;
+                TextNode textNode = (TextNode) descendant;
                 textNode.insertText(text, offset);
             } else if (descendant instanceof Paragraph) {
                 // The caret is positioned on the paragraph terminator
                 // so get to the bottom rightmost descendant and add there
-                Paragraph paragraph = (Paragraph)descendant;
+                Paragraph paragraph = (Paragraph) descendant;
 
                 Node node = getRightmostDescendant(paragraph);
                 if (node instanceof TextNode) {
                     // Insert the text into the existing node
-                    TextNode textNode = (TextNode)node;
+                    TextNode textNode = (TextNode) node;
                     textNode.insertText(text, selectionStart - textNode.getDocumentOffset());
                 } else if (node instanceof Element) {
                     // Append a new text node
-                    Element element = (Element)node;
+                    Element element = (Element) node;
                     element.add(new TextNode(text));
                 } else {
                     // The paragraph is currently empty
@@ -470,8 +461,7 @@ public class TextPane extends Container {
             throw new IllegalArgumentException("image is null.");
         }
 
-        if (document == null
-            || document.getCharacterCount() == 0) {
+        if (document == null || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
@@ -488,8 +478,7 @@ public class TextPane extends Container {
     }
 
     public void insertParagraph() {
-        if (document == null
-            || document.getCharacterCount() == 0) {
+        if (document == null || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
@@ -504,11 +493,11 @@ public class TextPane extends Container {
         }
 
         // Split the paragraph at the insertion point
-        Paragraph leadingSegment = (Paragraph)descendant;
+        Paragraph leadingSegment = (Paragraph) descendant;
         int offset = selectionStart - leadingSegment.getDocumentOffset();
         int characterCount = leadingSegment.getCharacterCount() - offset;
 
-        Paragraph trailingSegment = (Paragraph)leadingSegment.removeRange(offset, characterCount);
+        Paragraph trailingSegment = (Paragraph) leadingSegment.removeRange(offset, characterCount);
 
         Element parent = leadingSegment.getParent();
         int index = parent.indexOf(leadingSegment);
@@ -520,17 +509,16 @@ public class TextPane extends Container {
 
     /**
      * Returns character count of the document.
-     *
-     * @return
-     * The document's character count, or <tt>0</tt> if the document is <tt>null</tt>.
+     * 
+     * @return The document's character count, or <tt>0</tt> if the document is
+     * <tt>null</tt>.
      */
     public int getCharacterCount() {
         return (document == null) ? 0 : document.getCharacterCount();
     }
 
     public void delete(boolean backspace) {
-        if (document == null
-            || document.getCharacterCount() == 0) {
+        if (document == null || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
@@ -547,14 +535,12 @@ public class TextPane extends Container {
             characterCount = 1;
         }
 
-        if (offset >= 0
-            && offset < document.getCharacterCount()) {
+        if (offset >= 0 && offset < document.getCharacterCount()) {
             Node descendant = document.getDescendantAt(offset);
 
-            if (selectionLength == 0
-                && descendant instanceof Paragraph) {
+            if (selectionLength == 0 && descendant instanceof Paragraph) {
                 // We are deleting a paragraph terminator
-                Paragraph paragraph = (Paragraph)descendant;
+                Paragraph paragraph = (Paragraph) descendant;
 
                 Element parent = paragraph.getParent();
                 int index = parent.indexOf(paragraph);
@@ -565,7 +551,7 @@ public class TextPane extends Container {
                     // find the next paragraph by walking the tree, then
                     // remove any empty nodes
                     Sequence<Node> removed = parent.remove(index + 1, 1);
-                    Paragraph nextParagraph = (Paragraph)removed.get(0);
+                    Paragraph nextParagraph = (Paragraph) removed.get(0);
                     paragraph.insertRange(nextParagraph, paragraph.getCharacterCount() - 1);
                 }
             } else {
@@ -585,14 +571,13 @@ public class TextPane extends Container {
     }
 
     public void cut() {
-        if (document == null
-            || document.getCharacterCount() == 0) {
+        if (document == null || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
         if (selectionLength > 0) {
             // Copy selection to clipboard
-            Document selection = (Document)removeDocumentRange(selectionStart, selectionLength);
+            Document selection = (Document) removeDocumentRange(selectionStart, selectionLength);
 
             String selectedText = null;
             try {
@@ -600,7 +585,7 @@ public class TextPane extends Container {
                 StringWriter writer = new StringWriter();
                 serializer.writeObject(selection, writer);
                 selectedText = writer.toString();
-            } catch(IOException exception) {
+            } catch (IOException exception) {
                 throw new RuntimeException(exception);
             }
 
@@ -615,8 +600,7 @@ public class TextPane extends Container {
     }
 
     public void copy() {
-        if (document == null
-            || document.getCharacterCount() == 0) {
+        if (document == null || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
@@ -630,25 +614,22 @@ public class TextPane extends Container {
     }
 
     public void paste() {
-        if (document == null
-            || document.getCharacterCount() == 0) {
+        if (document == null || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
         Manifest clipboardContent = Clipboard.getContent();
 
-        if (clipboardContent != null
-            && clipboardContent.containsText()) {
+        if (clipboardContent != null && clipboardContent.containsText()) {
             // Paste the string representation of the content
             String text = null;
             try {
                 text = clipboardContent.getText();
-            } catch(IOException exception) {
+            } catch (IOException exception) {
                 // No-op
             }
 
-            if (text != null
-                && text.length() > 0) {
+            if (text != null && text.length() > 0) {
                 // Remove any existing selection
                 if (selectionLength > 0) {
                     // TODO Make this part of the undoable action (for all such
@@ -671,7 +652,7 @@ public class TextPane extends Container {
                     bulkOperation = false;
 
                     textPaneCharacterListeners.charactersInserted(this, start, n);
-                } catch(IOException exception) {
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 }
 
@@ -705,10 +686,9 @@ public class TextPane extends Container {
     private void addToText(StringBuilder text, Element element) {
         for (Node node : element) {
             if (node instanceof TextNode) {
-                text.append(((TextNode)node).getCharacters());
-            }
-            else if (node instanceof Element) {
-                addToText(text, (Element)node);
+                text.append(((TextNode) node).getCharacters());
+            } else if (node instanceof Element) {
+                addToText(text, (Element) node);
             }
             // TODO: anything more that could/should be handled?
         }
@@ -718,8 +698,9 @@ public class TextPane extends Container {
     }
 
     /**
-     * Convenience method to get all the text from the current document
-     * into a single string.
+     * Convenience method to get all the text from the current document into a
+     * single string.
+     * 
      * @see #setText
      */
     public String getText() {
@@ -733,8 +714,8 @@ public class TextPane extends Container {
     }
 
     /**
-     * Convenience method to create a text-only document consisting
-     * of one paragraph per line of the given text.
+     * Convenience method to create a text-only document consisting of one
+     * paragraph per line of the given text.
      */
     public void setText(String text) {
         Document doc = new Document();
@@ -748,9 +729,8 @@ public class TextPane extends Container {
 
     /**
      * Returns the starting index of the selection.
-     *
-     * @return
-     * The starting index of the selection.
+     * 
+     * @return The starting index of the selection.
      */
     public int getSelectionStart() {
         return selectionStart;
@@ -758,9 +738,8 @@ public class TextPane extends Container {
 
     /**
      * Returns the length of the selection.
-     *
-     * @return
-     * The length of the selection; may be <tt>0</tt>.
+     * 
+     * @return The length of the selection; may be <tt>0</tt>.
      */
     public int getSelectionLength() {
         return selectionLength;
@@ -768,61 +747,56 @@ public class TextPane extends Container {
 
     /**
      * Returns a span representing the current selection.
-     *
-     * @return
-     * A span containing the current selection. Both start and end points are
-     * inclusive. Returns <tt>null</tt> if the selection is empty.
+     * 
+     * @return A span containing the current selection. Both start and end
+     * points are inclusive. Returns <tt>null</tt> if the selection is empty.
      */
     public Span getSelection() {
-        return (selectionLength == 0) ? null : new Span(selectionStart,
-            selectionStart + selectionLength - 1);
+        return (selectionLength == 0) ? null : new Span(selectionStart, selectionStart
+            + selectionLength - 1);
     }
 
     /**
      * Sets the selection. The sum of the selection start and length must be
      * less than the length of the text input's content.
-     *
-     * @param selectionStart
-     * The starting index of the selection.
-     *
-     * @param selectionLength
-     * The length of the selection.
+     * 
+     * @param selectionStart The starting index of the selection.
+     * @param selectionLength The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
-        if (document == null
-            || document.getCharacterCount() == 0) {
+        if (document == null || document.getCharacterCount() == 0) {
             throw new IllegalStateException();
         }
 
         if (selectionLength < 0) {
-            throw new IllegalArgumentException("selectionLength is negative, selectionLength=" + selectionLength);
+            throw new IllegalArgumentException("selectionLength is negative, selectionLength="
+                + selectionLength);
         }
 
         indexBoundsCheck("selectionStart", selectionStart, 0, document.getCharacterCount() - 1);
 
         if (selectionStart + selectionLength > document.getCharacterCount()) {
-            throw new IndexOutOfBoundsException("selectionStart=" + selectionStart + ", selectionLength=" + selectionLength
-                + ", document.characterCount=" + document.getCharacterCount());
+            throw new IndexOutOfBoundsException("selectionStart=" + selectionStart
+                + ", selectionLength=" + selectionLength + ", document.characterCount="
+                + document.getCharacterCount());
         }
 
         int previousSelectionStart = this.selectionStart;
         int previousSelectionLength = this.selectionLength;
 
-        if (previousSelectionStart != selectionStart
-            || previousSelectionLength != selectionLength) {
+        if (previousSelectionStart != selectionStart || previousSelectionLength != selectionLength) {
             this.selectionStart = selectionStart;
             this.selectionLength = selectionLength;
 
-            textPaneSelectionListeners.selectionChanged(this,
-                previousSelectionStart, previousSelectionLength);
+            textPaneSelectionListeners.selectionChanged(this, previousSelectionStart,
+                previousSelectionLength);
         }
     }
 
     /**
      * Sets the selection.
-     *
+     * 
      * @param selection
-     *
      * @see #setSelection(int, int)
      */
     public final void setSelection(Span selection) {
@@ -830,7 +804,7 @@ public class TextPane extends Container {
             throw new IllegalArgumentException("selection is null.");
         }
 
-        setSelection(Math.min(selection.start, selection.end), (int)selection.getLength());
+        setSelection(Math.min(selection.start, selection.end), (int) selection.getLength());
     }
 
     /**
@@ -853,23 +827,22 @@ public class TextPane extends Container {
 
     /**
      * Returns the currently selected text.
-     *
-     * @return
-     * A new string containing a copy of the text in the selected range, or
-     * <tt>null</tt> if nothing is selected.
+     * 
+     * @return A new string containing a copy of the text in the selected range,
+     * or <tt>null</tt> if nothing is selected.
      */
     public String getSelectedText() {
         String selectedText = null;
 
         if (selectionLength > 0) {
-            Document selection = (Document)document.getRange(selectionStart, selectionLength);
+            Document selection = (Document) document.getRange(selectionStart, selectionLength);
 
             try {
                 PlainTextSerializer serializer = new PlainTextSerializer();
                 StringWriter writer = new StringWriter();
                 serializer.writeObject(selection, writer);
                 selectedText = writer.toString();
-            } catch(IOException exception) {
+            } catch (IOException exception) {
                 throw new RuntimeException(exception);
             }
         }
@@ -886,7 +859,7 @@ public class TextPane extends Container {
 
     /**
      * Sets the text pane's editable flag.
-     *
+     * 
      * @param editable
      */
     public void setEditable(boolean editable) {
@@ -904,30 +877,31 @@ public class TextPane extends Container {
     }
 
     public int getInsertionPoint(int x, int y) {
-        TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
+        TextPane.Skin textPaneSkin = (TextPane.Skin) getSkin();
         return textPaneSkin.getInsertionPoint(x, y);
     }
 
     public int getNextInsertionPoint(int x, int from, ScrollDirection direction) {
-        TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
+        TextPane.Skin textPaneSkin = (TextPane.Skin) getSkin();
         return textPaneSkin.getNextInsertionPoint(x, from, direction);
     }
 
     public int getRowAt(int offset) {
-        TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
+        TextPane.Skin textPaneSkin = (TextPane.Skin) getSkin();
         return textPaneSkin.getRowAt(offset);
     }
 
     public int getRowCount() {
-        TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
+        TextPane.Skin textPaneSkin = (TextPane.Skin) getSkin();
         return textPaneSkin.getRowCount();
     }
 
     public Bounds getCharacterBounds(int offset) {
         // We need to validate in case we get called from user-code after
-        // a user-code initiated modification, but before another layout has run.
+        // a user-code initiated modification, but before another layout has
+        // run.
         validate();
-        TextPane.Skin textPaneSkin = (TextPane.Skin)getSkin();
+        TextPane.Skin textPaneSkin = (TextPane.Skin) getSkin();
         return textPaneSkin.getCharacterBounds(offset);
     }
 

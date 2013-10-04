@@ -28,8 +28,7 @@ import org.apache.pivot.util.ListenerList;
  * Synchronized implementation of the {@link Set} interface.
  */
 public class SynchronizedSet<E> implements Set<E> {
-    private static class SynchronizedSetListenerList<E>
-        extends SetListenerList<E> {
+    private static class SynchronizedSetListenerList<E> extends SetListenerList<E> {
         @Override
         public synchronized void add(SetListener<E> listener) {
             super.add(listener);
@@ -136,8 +135,8 @@ public class SynchronizedSet<E> implements Set<E> {
     }
 
     /**
-     * NOTE Callers must manually synchronize on the SynchronizedSet
-     * instance to ensure thread safety during iteration.
+     * NOTE Callers must manually synchronize on the SynchronizedSet instance to
+     * ensure thread safety during iteration.
      */
     @Override
     public Iterator<E> iterator() {

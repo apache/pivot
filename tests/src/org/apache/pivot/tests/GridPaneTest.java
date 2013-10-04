@@ -27,10 +27,9 @@ public class GridPaneTest extends Application.Adapter {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(GridPaneTest.class, "gridpane_test.bxml");
+        window = (Window) bxmlSerializer.readObject(GridPaneTest.class, "gridpane_test.bxml");
         window.open(display);
     }
 

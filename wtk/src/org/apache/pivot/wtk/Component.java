@@ -41,8 +41,8 @@ import org.apache.pivot.wtk.effects.Decorator;
  * Top level abstract base class for all components. In MVC terminology, a
  * component represents the "controller". It has no inherent visual
  * representation and acts as an intermediary between the component's data (the
- * "model") and the skin, an implementation of {@link Skin} which serves as
- * the "view".
+ * "model") and the skin, an implementation of {@link Skin} which serves as the
+ * "view".
  */
 @IDProperty("name")
 public abstract class Component implements ConstrainedVisual {
@@ -60,19 +60,16 @@ public abstract class Component implements ConstrainedVisual {
 
         /**
          * Stores the supplied value for the specified style.<br/><br/>
-         *
          * <strong>NOTE</strong> The current implementation always returns
          * <code>null</code> due to the use of BeanAdapter to set the the new
          * value. (BeanAdapter does not look up the previous value for
-         * performance reasons)<br/><br/>
-         *
-         * This also means that the logic determining whether to fire the the
-         * event differs from other Pivot event firing code.  The event will be
-         * fired each time this method is executed, regardless of whether the
-         * new value differs from the old value or not.<br/><br/>
-         *
-         * This behaviour may change in the future so should not be relied upon.
-         *
+         * performance reasons)<br/><br/> This also means that the logic
+         * determining whether to fire the the event differs from other Pivot
+         * event firing code. The event will be fired each time this method is
+         * executed, regardless of whether the new value differs from the old
+         * value or not.<br/><br/> This behaviour may change in the future so
+         * should not be relied upon.
+         * 
          * @param key Style whose value will be overwritten
          * @param value Value to be stored
          * @return The previous value of the specified style (See note above)
@@ -85,9 +82,8 @@ public abstract class Component implements ConstrainedVisual {
             try {
                 previousValue = styles.put(key, value);
                 componentStyleListeners.styleUpdated(Component.this, key, previousValue);
-            } catch(PropertyNotFoundException exception) {
-                System.err.println("\"" + key + "\" is not a valid style for "
-                    + Component.this);
+            } catch (PropertyNotFoundException exception) {
+                System.err.println("\"" + key + "\" is not a valid style for " + Component.this);
             }
 
             return previousValue;
@@ -120,8 +116,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * User data dictionary implementation.
      */
-    public final class UserDataDictionary implements
-        Dictionary<String, Object>, Iterable<String> {
+    public final class UserDataDictionary implements Dictionary<String, Object>, Iterable<String> {
         private UserDataDictionary() {
         }
 
@@ -171,8 +166,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Decorator sequence implementation.
      */
-    public final class DecoratorSequence implements Sequence<Decorator>,
-        Iterable<Decorator> {
+    public final class DecoratorSequence implements Sequence<Decorator>, Iterable<Decorator> {
         @Override
         public int add(Decorator decorator) {
             int index = getLength();
@@ -220,8 +214,7 @@ public abstract class Component implements ConstrainedVisual {
                 parent.repaint(getDecoratedBounds());
             }
 
-            componentDecoratorListeners.decoratorUpdated(Component.this, index,
-                previousDecorator);
+            componentDecoratorListeners.decoratorUpdated(Component.this, index, previousDecorator);
 
             return previousDecorator;
         }
@@ -284,8 +277,8 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentListenerList extends WTKListenerList<ComponentListener>
-        implements ComponentListener {
+    private static class ComponentListenerList extends WTKListenerList<ComponentListener> implements
+        ComponentListener {
         @Override
         public void parentChanged(Component component, Container previousParent) {
             for (ComponentListener listener : this) {
@@ -313,8 +306,7 @@ public abstract class Component implements ConstrainedVisual {
         public void widthLimitsChanged(Component component, int previousMinimumWidth,
             int previousMaximumWidth) {
             for (ComponentListener listener : this) {
-                listener.widthLimitsChanged(component, previousMinimumWidth,
-                    previousMaximumWidth);
+                listener.widthLimitsChanged(component, previousMinimumWidth, previousMaximumWidth);
             }
         }
 
@@ -391,8 +383,8 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentStateListenerList extends
-        WTKListenerList<ComponentStateListener> implements ComponentStateListener {
+    private static class ComponentStateListenerList extends WTKListenerList<ComponentStateListener>
+        implements ComponentStateListener {
         @Override
         public void enabledChanged(Component component) {
             for (ComponentStateListener listener : this) {
@@ -425,16 +417,15 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         @Override
-        public void decoratorsRemoved(Component component, int index,
-            Sequence<Decorator> decorators) {
+        public void decoratorsRemoved(Component component, int index, Sequence<Decorator> decorators) {
             for (ComponentDecoratorListener listener : this) {
                 listener.decoratorsRemoved(component, index, decorators);
             }
         }
     }
 
-    private static class ComponentStyleListenerList
-        extends WTKListenerList<ComponentStyleListener> implements ComponentStyleListener {
+    private static class ComponentStyleListenerList extends WTKListenerList<ComponentStyleListener>
+        implements ComponentStyleListener {
         @Override
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
             for (ComponentStyleListener listener : this) {
@@ -471,8 +462,8 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentMouseButtonListenerList extends WTKListenerList<ComponentMouseButtonListener>
-        implements ComponentMouseButtonListener {
+    private static class ComponentMouseButtonListenerList extends
+        WTKListenerList<ComponentMouseButtonListener> implements ComponentMouseButtonListener {
         @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = false;
@@ -507,16 +498,16 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentMouseWheelListenerList extends WTKListenerList<ComponentMouseWheelListener>
-        implements ComponentMouseWheelListener {
+    private static class ComponentMouseWheelListenerList extends
+        WTKListenerList<ComponentMouseWheelListener> implements ComponentMouseWheelListener {
         @Override
         public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
             boolean consumed = false;
 
             for (ComponentMouseWheelListener listener : this) {
-                consumed |= listener.mouseWheel(component, scrollType, scrollAmount,
-                    wheelRotation, x, y);
+                consumed |= listener.mouseWheel(component, scrollType, scrollAmount, wheelRotation,
+                    x, y);
             }
 
             return consumed;
@@ -548,7 +539,8 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         @Override
-        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyReleased(Component component, int keyCode,
+            Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
             for (ComponentKeyListener listener : this) {
@@ -559,8 +551,8 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentTooltipListenerList extends WTKListenerList<ComponentTooltipListener>
-        implements ComponentTooltipListener {
+    private static class ComponentTooltipListenerList extends
+        WTKListenerList<ComponentTooltipListener> implements ComponentTooltipListener {
         @Override
         public void tooltipTriggered(Component component, int x, int y) {
             for (ComponentTooltipListener listener : this) {
@@ -705,10 +697,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's automation ID.
-     *
-     * @return
-     * The component's automation ID, or <tt>null</tt> if the component does not
-     * have an automation ID.
+     * 
+     * @return The component's automation ID, or <tt>null</tt> if the component
+     * does not have an automation ID.
      */
     public String getAutomationID() {
         return automationID;
@@ -718,10 +709,9 @@ public abstract class Component implements ConstrainedVisual {
      * Sets the component's automation ID. This value can be used to obtain a
      * reference to the component via {@link Automation#get(String)} when the
      * component is attached to a component hierarchy.
-     *
-     * @param automationID
-     * The automation ID to use for the component, or <tt>null</tt> to clear the
-     * automation ID.
+     * 
+     * @param automationID The automation ID to use for the component, or
+     * <tt>null</tt> to clear the automation ID.
      */
     public void setAutomationID(String automationID) {
         String previousAutomationID = this.automationID;
@@ -740,9 +730,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the currently installed skin.
-     *
-     * @return
-     * The currently installed skin.
+     * 
+     * @return The currently installed skin.
      */
     protected Skin getSkin() {
         return skin;
@@ -750,9 +739,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the skin, replacing any previous skin.
-     *
-     * @param skin
-     * The new skin.
+     * 
+     * @param skin The new skin.
      */
     @SuppressWarnings("unchecked")
     protected void setSkin(Skin skin) {
@@ -778,7 +766,7 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         for (Class<?> styleType : styleTypes) {
-            Map<String, ?> stylesLocal = typedStyles.get((Class<? extends Component>)styleType);
+            Map<String, ?> stylesLocal = typedStyles.get((Class<? extends Component>) styleType);
 
             if (stylesLocal != null) {
                 setStyles(stylesLocal);
@@ -790,9 +778,9 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Installs the skin for the given component class, as defined by the current
-     * theme.
-     *
+     * Installs the skin for the given component class, as defined by the
+     * current theme.
+     * 
      * @param componentClass
      */
     @SuppressWarnings("unchecked")
@@ -804,35 +792,32 @@ public abstract class Component implements ConstrainedVisual {
         Class<?> type = getClass();
 
         Theme theme = Theme.getTheme();
-        Class<? extends org.apache.pivot.wtk.Skin> skinClass =
-            theme.getSkinClass((Class<? extends Component>)type);
+        Class<? extends org.apache.pivot.wtk.Skin> skinClass = theme.getSkinClass((Class<? extends Component>) type);
 
-        while (skinClass == null
-            && type != componentClass
-            && type != Component.class) {
+        while (skinClass == null && type != componentClass && type != Component.class) {
             type = type.getSuperclass();
 
             if (type != Component.class) {
-                skinClass = theme.getSkinClass((Class<? extends Component>)type);
+                skinClass = theme.getSkinClass((Class<? extends Component>) type);
             }
         }
 
         if (type == Component.class) {
-            throw new IllegalArgumentException(componentClass.getName()
-                + " is not an ancestor of " + getClass().getName());
+            throw new IllegalArgumentException(componentClass.getName() + " is not an ancestor of "
+                + getClass().getName());
         }
 
         if (skinClass == null) {
-            throw new IllegalArgumentException("No skin mapping for "
-                + componentClass.getName() + " found.");
+            throw new IllegalArgumentException("No skin mapping for " + componentClass.getName()
+                + " found.");
         }
 
         if (type == componentClass) {
             try {
                 setSkin(skinClass.newInstance());
-            } catch(InstantiationException exception) {
+            } catch (InstantiationException exception) {
                 throw new IllegalArgumentException(exception);
-            } catch(IllegalAccessException exception) {
+            } catch (IllegalAccessException exception) {
                 throw new IllegalArgumentException(exception);
             }
         }
@@ -845,8 +830,7 @@ public abstract class Component implements ConstrainedVisual {
     protected void setParent(Container parent) {
         // If this component is being removed from the component hierarchy
         // and is currently focused, clear the focus
-        if (parent == null
-            && isFocused()) {
+        if (parent == null && isFocused()) {
             clearFocus();
         }
 
@@ -865,22 +849,21 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public Window getWindow() {
-        return (Window)getAncestor(Window.class);
+        return (Window) getAncestor(Window.class);
     }
 
     public Display getDisplay() {
-        return (Display)getAncestor(Display.class);
+        return (Display) getAncestor(Display.class);
     }
 
     public Container getAncestor(Class<? extends Container> ancestorType) {
         Component component = this;
 
-        while (component != null
-            && !(ancestorType.isInstance(component))) {
+        while (component != null && !(ancestorType.isInstance(component))) {
             component = component.getParent();
         }
 
-        return (Container)component;
+        return (Container) component;
     }
 
     @SuppressWarnings("unchecked")
@@ -889,7 +872,7 @@ public abstract class Component implements ConstrainedVisual {
             throw new IllegalArgumentException();
         }
 
-        return getAncestor((Class<? extends Container>)Class.forName(ancestorTypeName));
+        return getAncestor((Class<? extends Container>) Class.forName(ancestorTypeName));
     }
 
     @Override
@@ -923,9 +906,9 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * NOTE This method should only be called during layout. Callers should
-     * use {@link #setPreferredSize(int, int)}.
-     *
+     * NOTE This method should only be called during layout. Callers should use
+     * {@link #setPreferredSize(int, int)}.
+     * 
      * @param width
      * @param height
      */
@@ -942,8 +925,7 @@ public abstract class Component implements ConstrainedVisual {
         int previousWidth = getWidth();
         int previousHeight = getHeight();
 
-        if (width != previousWidth
-            || height != previousHeight) {
+        if (width != previousWidth || height != previousHeight) {
             // This component's size changed, most likely as a result
             // of being laid out; it must be flagged as invalid to ensure
             // that layout is propagated downward when validate() is
@@ -976,13 +958,10 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's constrained preferred width.
-     *
-     * @param height
-     * The height value by which the preferred width should be constrained, or
-     * <tt>-1</tt> for no constraint.
-     *
-     * @return
-     * The constrained preferred width.
+     * 
+     * @param height The height value by which the preferred width should be
+     * constrained, or <tt>-1</tt> for no constraint.
+     * @return The constrained preferred width.
      */
     @Override
     public int getPreferredWidth(int height) {
@@ -992,8 +971,7 @@ public abstract class Component implements ConstrainedVisual {
             if (height == -1) {
                 preferredWidthLocal = getPreferredSize().width;
             } else {
-                if (preferredSize != null
-                    && preferredSize.height == height) {
+                if (preferredSize != null && preferredSize.height == height) {
                     preferredWidthLocal = preferredSize.width;
                 } else {
                     Limits widthLimits = getWidthLimits();
@@ -1009,22 +987,20 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's preferred width.
-     *
-     * @param preferredWidth
-     * The preferred width value, or <tt>-1</tt> to use the default
-     * value determined by the skin.
+     * 
+     * @param preferredWidth The preferred width value, or <tt>-1</tt> to use
+     * the default value determined by the skin.
      */
     public void setPreferredWidth(int preferredWidth) {
         setPreferredSize(preferredWidth, preferredHeight);
     }
 
     /**
-     * Returns a flag indicating whether the preferred width was explicitly
-     * set by the caller or is the default value determined by the skin.
-     *
-     * @return
-     * <tt>true</tt> if the preferred width was explicitly set; <tt>false</tt>,
-     * otherwise.
+     * Returns a flag indicating whether the preferred width was explicitly set
+     * by the caller or is the default value determined by the skin.
+     * 
+     * @return <tt>true</tt> if the preferred width was explicitly set;
+     * <tt>false</tt>, otherwise.
      */
     public boolean isPreferredWidthSet() {
         return (preferredWidth != -1);
@@ -1039,13 +1015,10 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's constrained preferred height.
-     *
-     * @param width
-     * The width value by which the preferred height should be constrained, or
-     * <tt>-1</tt> for no constraint.
-     *
-     * @return
-     * The constrained preferred height.
+     * 
+     * @param width The width value by which the preferred height should be
+     * constrained, or <tt>-1</tt> for no constraint.
+     * @return The constrained preferred height.
      */
     @Override
     public int getPreferredHeight(int width) {
@@ -1055,8 +1028,7 @@ public abstract class Component implements ConstrainedVisual {
             if (width == -1) {
                 preferredHeightLocal = getPreferredSize().height;
             } else {
-                if (preferredSize != null
-                    && preferredSize.width == width) {
+                if (preferredSize != null && preferredSize.width == width) {
                     preferredHeightLocal = preferredSize.height;
                 } else {
                     Limits heightLimits = getHeightLimits();
@@ -1072,22 +1044,20 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's preferred height.
-     *
-     * @param preferredHeight
-     * The preferred height value, or <tt>-1</tt> to use the default
-     * value determined by the skin.
+     * 
+     * @param preferredHeight The preferred height value, or <tt>-1</tt> to use
+     * the default value determined by the skin.
      */
     public void setPreferredHeight(int preferredHeight) {
         setPreferredSize(preferredWidth, preferredHeight);
     }
 
     /**
-     * Returns a flag indicating whether the preferred height was explicitly
-     * set by the caller or is the default value determined by the skin.
-     *
-     * @return
-     * <tt>true</tt> if the preferred height was explicitly set; <tt>false</tt>,
-     * otherwise.
+     * Returns a flag indicating whether the preferred height was explicitly set
+     * by the caller or is the default value determined by the skin.
+     * 
+     * @return <tt>true</tt> if the preferred height was explicitly set;
+     * <tt>false</tt>, otherwise.
      */
     public boolean isPreferredHeightSet() {
         return (preferredHeight != -1);
@@ -1100,8 +1070,7 @@ public abstract class Component implements ConstrainedVisual {
     public Dimensions getPreferredSize() {
         if (preferredSize == null) {
             Dimensions preferredSizeLocal;
-            if (preferredWidth == -1
-                && preferredHeight == -1) {
+            if (preferredWidth == -1 && preferredHeight == -1) {
                 preferredSizeLocal = skin.getPreferredSize();
             } else if (preferredWidth == -1) {
                 preferredSizeLocal = new Dimensions(skin.getPreferredWidth(preferredHeight),
@@ -1143,14 +1112,11 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's preferred size.
-     *
-     * @param preferredWidth
-     * The preferred width value, or <tt>-1</tt> to use the default
-     * value determined by the skin.
-     *
-     * @param preferredHeight
-     * The preferred height value, or <tt>-1</tt> to use the default
-     * value determined by the skin.
+     * 
+     * @param preferredWidth The preferred width value, or <tt>-1</tt> to use
+     * the default value determined by the skin.
+     * @param preferredHeight The preferred height value, or <tt>-1</tt> to use
+     * the default value determined by the skin.
      */
     public void setPreferredSize(int preferredWidth, int preferredHeight) {
         if (preferredWidth < -1) {
@@ -1166,8 +1132,7 @@ public abstract class Component implements ConstrainedVisual {
         int previousPreferredWidth = this.preferredWidth;
         int previousPreferredHeight = this.preferredHeight;
 
-        if (previousPreferredWidth != preferredWidth
-            || previousPreferredHeight != preferredHeight) {
+        if (previousPreferredWidth != preferredWidth || previousPreferredHeight != preferredHeight) {
             this.preferredWidth = preferredWidth;
             this.preferredHeight = preferredHeight;
 
@@ -1179,16 +1144,14 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns a flag indicating whether the preferred size was explicitly
-     * set by the caller or is the default value determined by the skin.
-     *
-     * @return
-     * <tt>true</tt> if the preferred size was explicitly set; <tt>false</tt>,
-     * otherwise.
+     * Returns a flag indicating whether the preferred size was explicitly set
+     * by the caller or is the default value determined by the skin.
+     * 
+     * @return <tt>true</tt> if the preferred size was explicitly set;
+     * <tt>false</tt>, otherwise.
      */
     public boolean isPreferredSizeSet() {
-        return isPreferredWidthSet()
-            && isPreferredHeightSet();
+        return isPreferredWidthSet() && isPreferredHeightSet();
     }
 
     /**
@@ -1200,7 +1163,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the minimum width of this component.
-     *
+     * 
      * @param minimumWidth
      */
     public void setMinimumWidth(int minimumWidth) {
@@ -1216,7 +1179,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the maximum width of this component.
-     *
+     * 
      * @param maximumWidth
      */
     public void setMaximumWidth(int maximumWidth) {
@@ -1232,7 +1195,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the width limits for this component.
-     *
+     * 
      * @param minimumWidth
      * @param maximumWidth
      */
@@ -1240,8 +1203,7 @@ public abstract class Component implements ConstrainedVisual {
         int previousMinimumWidth = this.minimumWidth;
         int previousMaximumWidth = this.maximumWidth;
 
-        if (previousMinimumWidth != minimumWidth
-            || previousMaximumWidth != maximumWidth) {
+        if (previousMinimumWidth != minimumWidth || previousMaximumWidth != maximumWidth) {
             if (minimumWidth < 0) {
                 throw new IllegalArgumentException("minimumWidth is negative.");
             }
@@ -1261,7 +1223,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the width limits for this component.
-     *
+     * 
      * @param widthLimits
      */
     public final void setWidthLimits(Limits widthLimits) {
@@ -1281,7 +1243,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the minimum height of this component.
-     *
+     * 
      * @param minimumHeight
      */
     public void setMinimumHeight(int minimumHeight) {
@@ -1297,7 +1259,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the maximum height of this component.
-     *
+     * 
      * @param maximumHeight
      */
     public void setMaximumHeight(int maximumHeight) {
@@ -1313,7 +1275,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the height limits for this component.
-     *
+     * 
      * @param minimumHeight
      * @param maximumHeight
      */
@@ -1321,8 +1283,7 @@ public abstract class Component implements ConstrainedVisual {
         int previousMinimumHeight = this.minimumHeight;
         int previousMaximumHeight = this.maximumHeight;
 
-        if (previousMinimumHeight != minimumHeight
-            || previousMaximumHeight != maximumHeight) {
+        if (previousMinimumHeight != minimumHeight || previousMaximumHeight != maximumHeight) {
             if (minimumHeight < 0) {
                 throw new IllegalArgumentException("minimumHeight is negative.");
             }
@@ -1336,13 +1297,14 @@ public abstract class Component implements ConstrainedVisual {
 
             invalidate();
 
-            componentListeners.heightLimitsChanged(this, previousMinimumHeight, previousMaximumHeight);
+            componentListeners.heightLimitsChanged(this, previousMinimumHeight,
+                previousMaximumHeight);
         }
     }
 
     /**
      * Sets the height limits for this component.
-     *
+     * 
      * @param heightLimits
      */
     public final void setHeightLimits(Limits heightLimits) {
@@ -1355,9 +1317,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's x-coordinate.
-     *
-     * @return
-     * The component's horizontal position relative to the origin of the
+     * 
+     * @return The component's horizontal position relative to the origin of the
      * parent container.
      */
     public int getX() {
@@ -1366,10 +1327,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's x-coordinate.
-     *
-     * @param x
-     * The component's horizontal position relative to the origin of the
-     * parent container.
+     * 
+     * @param x The component's horizontal position relative to the origin of
+     * the parent container.
      */
     public void setX(int x) {
         setLocation(x, getY());
@@ -1377,9 +1337,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's y-coordinate.
-     *
-     * @return
-     * The component's vertical position relative to the origin of the
+     * 
+     * @return The component's vertical position relative to the origin of the
      * parent container.
      */
     public int getY() {
@@ -1388,9 +1347,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's y-coordinate.
-     *
-     * @param y
-     * The component's vertical position relative to the origin of the
+     * 
+     * @param y The component's vertical position relative to the origin of the
      * parent container.
      */
     public void setY(int y) {
@@ -1399,9 +1357,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's location.
-     *
-     * @return
-     * A point value containing the component's horizontal and vertical
+     * 
+     * @return A point value containing the component's horizontal and vertical
      * position relative to the origin of the parent container.
      */
     public Point getLocation() {
@@ -1409,27 +1366,21 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Sets the component's location.
-     *
-     * NOTE This method should only be called when performing layout.
-     * However, since some containers do not reposition components during
-     * layout, it is valid for callers to invoke this method directly when
-     * such containers.
-     *
-     * @param x
-     * The component's horizontal position relative to the origin of the
-     * parent container.
-     *
-     * @param y
-     * The component's vertical position relative to the origin of the
+     * Sets the component's location. NOTE This method should only be called
+     * when performing layout. However, since some containers do not reposition
+     * components during layout, it is valid for callers to invoke this method
+     * directly when such containers.
+     * 
+     * @param x The component's horizontal position relative to the origin of
+     * the parent container.
+     * @param y The component's vertical position relative to the origin of the
      * parent container.
      */
     public void setLocation(int x, int y) {
         int previousX = this.x;
         int previousY = this.y;
 
-        if (previousX != x
-            || previousY != y) {
+        if (previousX != x || previousY != y) {
             // Redraw the region formerly occupied by this component
             if (parent != null) {
                 parent.repaint(getDecoratedBounds());
@@ -1450,11 +1401,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's location.
-     *
-     * @param location
-     * A point value containing the component's horizontal and vertical
-     * position relative to the origin of the parent container.
-     *
+     * 
+     * @param location A point value containing the component's horizontal and
+     * vertical position relative to the origin of the parent container.
      * @see #setLocation(int, int)
      */
     public final void setLocation(Point location) {
@@ -1467,10 +1416,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's baseline.
-     *
-     * @return
-     * The baseline relative to the origin of this component, or <tt>-1</tt> if
-     * this component does not have a baseline.
+     * 
+     * @return The baseline relative to the origin of this component, or
+     * <tt>-1</tt> if this component does not have a baseline.
      */
     @Override
     public int getBaseline() {
@@ -1483,10 +1431,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's baseline for a given width and height.
-     *
-     * @return
-     * The baseline relative to the origin of this component, or <tt>-1</tt> if
-     * this component does not have a baseline.
+     * 
+     * @return The baseline relative to the origin of this component, or
+     * <tt>-1</tt> if this component does not have a baseline.
      */
     @Override
     public int getBaseline(int width, int height) {
@@ -1495,10 +1442,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's bounding area.
-     *
-     * @return
-     * The component's bounding area. The <tt>x</tt> and <tt>y</tt> values are
-     * relative to the parent container.
+     * 
+     * @return The component's bounding area. The <tt>x</tt> and <tt>y</tt>
+     * values are relative to the parent container.
      */
     public Bounds getBounds() {
         return new Bounds(x, y, getWidth(), getHeight());
@@ -1506,10 +1452,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's bounding area including decorators.
-     *
-     * @return
-     * The decorated bounding area. The <tt>x</tt> and <tt>y</tt> values are
-     * relative to the parent container.
+     * 
+     * @return The decorated bounding area. The <tt>x</tt> and <tt>y</tt> values
+     * are relative to the parent container.
      */
     public Bounds getDecoratedBounds() {
         Bounds decoratedBounds = new Bounds(0, 0, getWidth(), getHeight());
@@ -1518,23 +1463,20 @@ public abstract class Component implements ConstrainedVisual {
             decoratedBounds = decoratedBounds.union(decorator.getBounds(this));
         }
 
-        return new Bounds(decoratedBounds.x + x, decoratedBounds.y + y,
-            decoratedBounds.width, decoratedBounds.height);
+        return new Bounds(decoratedBounds.x + x, decoratedBounds.y + y, decoratedBounds.width,
+            decoratedBounds.height);
     }
 
     /**
-     * Determines if the component contains a given location. This method facilitates
-     * mouse interaction with non-rectangular components.
-     *
+     * Determines if the component contains a given location. This method
+     * facilitates mouse interaction with non-rectangular components.
+     * 
      * @param xArgument
      * @param yArgument
-     *
-     * @return
-     * <tt>true</tt> if the component's shape contains the given location; <tt>false</tt>,
-     * otherwise.
-     *
-     * @throws UnsupportedOperationException
-     * This method is not currently implemented.
+     * @return <tt>true</tt> if the component's shape contains the given
+     * location; <tt>false</tt>, otherwise.
+     * @throws UnsupportedOperationException This method is not currently
+     * implemented.
      */
     public boolean contains(int xArgument, int yArgument) {
         // TODO
@@ -1543,9 +1485,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's visibility.
-     *
-     * @return
-     * <tt>true</tt> if the component will be painted; <tt>false</tt>,
+     * 
+     * @return <tt>true</tt> if the component will be painted; <tt>false</tt>,
      * otherwise.
      */
     public boolean isVisible() {
@@ -1554,10 +1495,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's visibility.
-     *
-     * @param visible
-     * <tt>true</tt> if the component should be painted; <tt>false</tt>,
-     * otherwise.
+     * 
+     * @param visible <tt>true</tt> if the component should be painted;
+     * <tt>false</tt>, otherwise.
      */
     public void setVisible(boolean visible) {
         if (this.visible != visible) {
@@ -1587,8 +1527,7 @@ public abstract class Component implements ConstrainedVisual {
             }
 
             // Ensure the layout is valid
-            if (visible
-                && !valid) {
+            if (visible && !valid) {
                 validate();
             }
 
@@ -1603,9 +1542,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's decorator sequence.
-     *
-     * @return
-     * The component's decorator sequence
+     * 
+     * @return The component's decorator sequence
      */
     public DecoratorSequence getDecorators() {
         return decoratorSequence;
@@ -1614,16 +1552,11 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Maps a point in this component's coordinate system to the specified
      * ancestor's coordinate space.
-     *
-     * @param xArgument
-     * The x-coordinate in this component's coordinate space
-     *
-     * @param yArgument
-     * The y-coordinate in this component's coordinate space
-     *
-     * @return
-     * A point containing the translated coordinates, or <tt>null</tt> if the
-     * component is not a descendant of the specified ancestor.
+     * 
+     * @param xArgument The x-coordinate in this component's coordinate space
+     * @param yArgument The y-coordinate in this component's coordinate space
+     * @return A point containing the translated coordinates, or <tt>null</tt> if
+     * the component is not a descendant of the specified ancestor.
      */
     public Point mapPointToAncestor(final Container ancestor, int xArgument, int yArgument) {
         if (ancestor == null) {
@@ -1637,8 +1570,7 @@ public abstract class Component implements ConstrainedVisual {
 
         Component component = this;
 
-        while (component != null
-            && coordinates == null) {
+        while (component != null && coordinates == null) {
             if (component == ancestor) {
                 coordinates = new Point(xArgumentMutable, yArgumentMutable);
             } else {
@@ -1655,12 +1587,10 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Maps a point in this component's coordinate system to the specified
      * ancestor's coordinate space.
-     *
+     * 
      * @param location The coordinates in this component's coordinate space
-     *
-     * @return
-     * A point containing the translated coordinates, or <tt>null</tt> if the
-     * component is not a descendant of the specified ancestor.
+     * @return A point containing the translated coordinates, or <tt>null</tt> if
+     * the component is not a descendant of the specified ancestor.
      */
     public Point mapPointToAncestor(Container ancestor, Point location) {
         if (location == null) {
@@ -1673,16 +1603,11 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Maps a point in the specified ancestor's coordinate space to this
      * component's coordinate system.
-     *
-     * @param xArgument
-     * The x-coordinate in the ancestors's coordinate space.
-     *
-     * @param yArgument
-     * The y-coordinate in the ancestor's coordinate space.
-     *
-     * @return
-     * A point containing the translated coordinates, or <tt>null</tt> if the
-     * component is not a descendant of the specified ancestor.
+     * 
+     * @param xArgument The x-coordinate in the ancestors's coordinate space.
+     * @param yArgument The y-coordinate in the ancestor's coordinate space.
+     * @return A point containing the translated coordinates, or <tt>null</tt> if
+     * the component is not a descendant of the specified ancestor.
      */
     public Point mapPointFromAncestor(final Container ancestor, int xArgument, int yArgument) {
         if (ancestor == null) {
@@ -1695,8 +1620,7 @@ public abstract class Component implements ConstrainedVisual {
         Point coordinates = null;
         Component component = this;
 
-        while (component != null
-            && coordinates == null) {
+        while (component != null && coordinates == null) {
             if (component == ancestor) {
                 coordinates = new Point(xArgumentMutable, yArgumentMutable);
             } else {
@@ -1719,34 +1643,30 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Determines if this component is showing. To be showing, the component
-     * and all of its ancestors must be visible and attached to a display.
-     *
-     * @return
-     * <tt>true</tt> if this component is showing; <tt>false</tt> otherwise.
+     * Determines if this component is showing. To be showing, the component and
+     * all of its ancestors must be visible and attached to a display.
+     * 
+     * @return <tt>true</tt> if this component is showing; <tt>false</tt>
+     * otherwise.
      */
     public boolean isShowing() {
         Component component = this;
 
-        while (component != null
-            && component.isVisible()
-            && !(component instanceof Display)) {
+        while (component != null && component.isVisible() && !(component instanceof Display)) {
             component = component.getParent();
         }
 
-        return (component != null
-            && component.isVisible());
+        return (component != null && component.isVisible());
     }
 
     /**
      * Determines the visible area of a component. The visible area is defined
      * as the intersection of the component's area with the visible area of its
      * ancestors, or, in the case of a Viewport, the viewport bounds.
-     *
-     * @return
-     * The visible area of the component in the component's coordinate space, or
-     * <tt>null</tt> if the component is either not showing or not part of the
-     * component hierarchy.
+     * 
+     * @return The visible area of the component in the component's coordinate
+     * space, or <tt>null</tt> if the component is either not showing or not
+     * part of the component hierarchy.
      */
     public Bounds getVisibleArea() {
         return getVisibleArea(0, 0, getWidth(), getHeight());
@@ -1756,13 +1676,11 @@ public abstract class Component implements ConstrainedVisual {
      * Determines the visible area of a component. The visible area is defined
      * as the intersection of the component's area with the visible area of its
      * ancestors, or, in the case of a Viewport, the viewport bounds.
-     *
+     * 
      * @param area
-     *
-     * @return
-     * The visible area of the component in the component's coordinate space, or
-     * <tt>null</tt> if the component is either not showing or not part of the
-     * component hierarchy.
+     * @return The visible area of the component in the component's coordinate
+     * space, or <tt>null</tt> if the component is either not showing or not
+     * part of the component hierarchy.
      */
     public Bounds getVisibleArea(Bounds area) {
         if (area == null) {
@@ -1776,16 +1694,14 @@ public abstract class Component implements ConstrainedVisual {
      * Determines the visible area of a component. The visible area is defined
      * as the intersection of the component's area with the visible area of its
      * ancestors, or, in the case of a Viewport, the viewport bounds.
-     *
+     * 
      * @param xArgument
      * @param yArgument
      * @param width
      * @param height
-     *
-     * @return
-     * The visible area of the component in the component's coordinate space, or
-     * <tt>null</tt> if the component is either not showing or not part of the
-     * component hierarchy.
+     * @return The visible area of the component in the component's coordinate
+     * space, or <tt>null</tt> if the component is either not showing or not
+     * part of the component hierarchy.
      */
     public Bounds getVisibleArea(int xArgument, int yArgument, int width, int height) {
         Bounds visibleArea = null;
@@ -1800,15 +1716,14 @@ public abstract class Component implements ConstrainedVisual {
         int xOffset = 0;
         int yOffset = 0;
 
-        while (component != null
-            && component.isVisible()) {
+        while (component != null && component.isVisible()) {
             int minTop = 0;
             int minLeft = 0;
             int maxBottom = component.getHeight() - 1;
             int maxRight = component.getWidth() - 1;
 
             if (component instanceof Viewport) {
-                Viewport viewport = (Viewport)component;
+                Viewport viewport = (Viewport) component;
                 Bounds bounds = viewport.getViewportBounds();
                 minTop = bounds.y;
                 minLeft = bounds.x;
@@ -1825,8 +1740,8 @@ public abstract class Component implements ConstrainedVisual {
             yOffset += component.y;
 
             if (component instanceof Display) {
-                visibleArea = new Bounds(left - xOffset, top - yOffset, right - left + 1,
-                    bottom - top + 1);
+                visibleArea = new Bounds(left - xOffset, top - yOffset, right - left + 1, bottom
+                    - top + 1);
             }
 
             component = component.getParent();
@@ -1838,7 +1753,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Ensures that the given area of a component is visible within the
      * viewports of all applicable ancestors.
-     *
+     * 
      * @param area
      */
     public void scrollAreaToVisible(Bounds area) {
@@ -1852,7 +1767,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Ensures that the given area of a component is visible within the
      * viewports of all applicable ancestors.
-     *
+     * 
      * @param xArgument
      * @param yArgument
      * @param width
@@ -1868,7 +1783,7 @@ public abstract class Component implements ConstrainedVisual {
 
         while (component != null) {
             if (component instanceof Viewport) {
-                Viewport viewport = (Viewport)component;
+                Viewport viewport = (Viewport) component;
                 Component view = viewport.getView();
 
                 try {
@@ -1877,8 +1792,8 @@ public abstract class Component implements ConstrainedVisual {
                     int deltaX = 0;
 
                     int leftDisplacement = xArgumentMutable - viewportBounds.x;
-                    int rightDisplacement = (xArgumentMutable + widthMutable) -
-                        (viewportBounds.x + viewportBounds.width);
+                    int rightDisplacement = (xArgumentMutable + widthMutable)
+                        - (viewportBounds.x + viewportBounds.width);
 
                     if ((leftDisplacement & rightDisplacement) < 0) {
                         // Both leftDisplacement and rightDisplacement are
@@ -1909,8 +1824,8 @@ public abstract class Component implements ConstrainedVisual {
                     int deltaY = 0;
 
                     int topDisplacement = yArgumentMutable - viewportBounds.y;
-                    int bottomDisplacement = (yArgumentMutable + heightMutable) -
-                        (viewportBounds.y + viewportBounds.height);
+                    int bottomDisplacement = (yArgumentMutable + heightMutable)
+                        - (viewportBounds.y + viewportBounds.height);
 
                     if ((topDisplacement & bottomDisplacement) < 0) {
                         // Both topDisplacement and bottomDisplacement are
@@ -1978,8 +1893,7 @@ public abstract class Component implements ConstrainedVisual {
      * Lays out the component by calling {@link Skin#layout()}.
      */
     public void validate() {
-        if (!valid
-            && visible) {
+        if (!valid && visible) {
             layout();
             valid = true;
         }
@@ -2001,7 +1915,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Flags the entire component as needing to be repainted.
-     *
+     * 
      * @param immediate
      */
     public final void repaint(boolean immediate) {
@@ -2010,7 +1924,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Flags an area as needing to be repainted.
-     *
+     * 
      * @param area
      */
     public final void repaint(Bounds area) {
@@ -2020,7 +1934,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Flags an area as needing to be repainted or repaints the rectangle
      * immediately.
-     *
+     * 
      * @param area
      * @param immediate
      */
@@ -2034,7 +1948,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Flags an area as needing to be repainted.
-     *
+     * 
      * @param xArgument
      * @param yArgument
      * @param width
@@ -2046,7 +1960,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Flags an area as needing to be repainted.
-     *
+     * 
      * @param xArgument
      * @param yArgument
      * @param width
@@ -2072,10 +1986,10 @@ public abstract class Component implements ConstrainedVisual {
             widthMutable = Math.min(right, getWidth() - 1) - xArgumentMutable + 1;
             heightMutable = Math.min(bottom, getHeight() - 1) - yArgumentMutable + 1;
 
-            if (widthMutable > 0
-                && heightMutable > 0) {
+            if (widthMutable > 0 && heightMutable > 0) {
                 // Notify the parent that the region needs updating
-                parent.repaint(xArgumentMutable + this.x, yArgumentMutable + this.y, widthMutable, heightMutable, immediate);
+                parent.repaint(xArgumentMutable + this.x, yArgumentMutable + this.y, widthMutable,
+                    heightMutable, immediate);
 
                 // Repaint any affected decorators
                 for (Decorator decorator : decorators) {
@@ -2083,7 +1997,8 @@ public abstract class Component implements ConstrainedVisual {
 
                     if (!transform.isIdentity()) {
                         // Apply the decorator's transform to the repaint area
-                        Rectangle area = new Rectangle(xArgumentMutable, yArgumentMutable, widthMutable, heightMutable);
+                        Rectangle area = new Rectangle(xArgumentMutable, yArgumentMutable,
+                            widthMutable, heightMutable);
                         Shape transformedShape = transform.createTransformedShape(area);
                         Bounds tranformedBounds = new Bounds(transformedShape.getBounds());
 
@@ -2108,14 +2023,12 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Creates a graphics context for this component. This graphics context
-     * will not be double buffered. In other words, drawing operations on it
-     * will operate directly on the video RAM.
-     *
-     * @return
-     * A graphics context for this component, or <tt>null</tt> if this
+     * Creates a graphics context for this component. This graphics context will
+     * not be double buffered. In other words, drawing operations on it will
+     * operate directly on the video RAM.
+     * 
+     * @return A graphics context for this component, or <tt>null</tt> if this
      * component is not showing.
-     *
      * @see #isShowing()
      */
     public Graphics2D getGraphics() {
@@ -2126,19 +2039,16 @@ public abstract class Component implements ConstrainedVisual {
 
         Component component = this;
 
-        while (component != null
-            && component.isVisible()
-            && !(component instanceof Display)) {
+        while (component != null && component.isVisible() && !(component instanceof Display)) {
             xLocal += component.x;
             yLocal += component.y;
 
             component = component.getParent();
         }
 
-        if (component != null
-            && component.isVisible()) {
-            Display display = (Display)component;
-            graphics = (Graphics2D)display.getDisplayHost().getGraphics();
+        if (component != null && component.isVisible()) {
+            Display display = (Display) component;
+            graphics = (Graphics2D) display.getDisplayHost().getGraphics();
 
             double scale = display.getDisplayHost().getScale();
             if (scale != 1) {
@@ -2154,9 +2064,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's enabled state.
-     *
-     * @return
-     * <tt>true</tt> if the component is enabled; <tt>false</tt>, otherwise.
+     * 
+     * @return <tt>true</tt> if the component is enabled; <tt>false</tt>,
+     * otherwise.
      */
     public boolean isEnabled() {
         return enabled;
@@ -2165,9 +2075,9 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Sets the component's enabled state. Enabled components respond to user
      * input events; disabled components do not.
-     *
-     * @param enabled
-     * <tt>true</tt> if the component is enabled; <tt>false</tt>, otherwise.
+     * 
+     * @param enabled <tt>true</tt> if the component is enabled; <tt>false</tt>,
+     * otherwise.
      */
     public void setEnabled(boolean enabled) {
         if (this.enabled != enabled) {
@@ -2192,17 +2102,16 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Determines if this component is blocked. A component is blocked if the
      * component or any of its ancestors is disabled.
-     *
-     * @return
-     * <tt>true</tt> if the component is blocked; <tt>false</tt>, otherwise.
+     * 
+     * @return <tt>true</tt> if the component is blocked; <tt>false</tt>,
+     * otherwise.
      */
     public boolean isBlocked() {
         boolean blocked = false;
 
         Component component = this;
 
-        while (component != null
-            && !blocked) {
+        while (component != null && !blocked) {
             blocked = !component.isEnabled();
             component = component.getParent();
         }
@@ -2212,10 +2121,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Determines if the mouse is positioned over this component.
-     *
-     * @return
-     * <tt>true</tt> if the mouse is currently located over this component;
-     * <tt>false</tt>, otherwise.
+     * 
+     * @return <tt>true</tt> if the mouse is currently located over this
+     * component; <tt>false</tt>, otherwise.
      */
     public boolean isMouseOver() {
         return (mouseLocation != null);
@@ -2223,9 +2131,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the current mouse location in the component's coordinate space.
-     *
-     * @return
-     * The current mouse location, or <tt>null</tt> if the mouse is not
+     * 
+     * @return The current mouse location, or <tt>null</tt> if the mouse is not
      * currently positioned over this component.
      */
     public Point getMouseLocation() {
@@ -2233,23 +2140,21 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the cursor that is displayed when the mouse pointer is over
-     * this component.
-     *
-     * @return
-     * The cursor that is displayed over the component.
+     * Returns the cursor that is displayed when the mouse pointer is over this
+     * component.
+     * 
+     * @return The cursor that is displayed over the component.
      */
     public Cursor getCursor() {
         return cursor;
     }
 
     /**
-     * Sets the cursor that is displayed when the mouse pointer is over
-     * this component.
-     *
-     * @param cursor
-     * The cursor to display over the component, or <tt>null</tt> to inherit
-     * the cursor of the parent container.
+     * Sets the cursor that is displayed when the mouse pointer is over this
+     * component.
+     * 
+     * @param cursor The cursor to display over the component, or <tt>null</tt>
+     * to inherit the cursor of the parent container.
      */
     public void setCursor(Cursor cursor) {
         Cursor previousCursor = this.cursor;
@@ -2267,9 +2172,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's tooltip text.
-     *
-     * @return
-     * The component's tooltip text, or <tt>null</tt> if no tooltip is
+     * 
+     * @return The component's tooltip text, or <tt>null</tt> if no tooltip is
      * specified.
      */
     public String getTooltipText() {
@@ -2278,9 +2182,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's tooltip text.
-     *
-     * @param tooltipText
-     * The component's tooltip text, or <tt>null</tt> for no tooltip.
+     * 
+     * @param tooltipText The component's tooltip text, or <tt>null</tt> for no
+     * tooltip.
      */
     public void setTooltipText(String tooltipText) {
         String previousTooltipText = this.tooltipText;
@@ -2293,9 +2197,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's tooltip delay.
-     *
-     * @return
-     * The tooltip delay, in milliseconds.
+     * 
+     * @return The tooltip delay, in milliseconds.
      */
     public int getTooltipDelay() {
         return tooltipDelay;
@@ -2303,9 +2206,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's tooltip delay.
-     *
-     * @param tooltipDelay
-     * The tooltip delay, in milliseconds.
+     * 
+     * @param tooltipDelay The tooltip delay, in milliseconds.
      */
     public void setTooltipDelay(int tooltipDelay) {
         int previousTooltipDelay = this.tooltipDelay;
@@ -2318,9 +2220,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the tooltip's mode for wrapping its text.
-     *
-     * @return
-     * <tt>true</tt> if the tooltip text wrap mode is enabled; </tt>false</tt> if not.
+     * 
+     * @return <tt>true</tt> if the tooltip text wrap mode is enabled;
+     * </tt>false</tt> if not.
      */
     public boolean getTooltipWrapText() {
         return tooltipWrapText;
@@ -2328,25 +2230,24 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the tooltip's text wrapping mode.
-     *
-     * @param tooltipWrapText
-     * The component's tooltip text wrap mode.
+     * 
+     * @param tooltipWrapText The component's tooltip text wrap mode.
      */
     public void setTooltipWrapText(boolean tooltipWrapText) {
         boolean previousTooltipWrapText = this.tooltipWrapText;
 
         if (previousTooltipWrapText != tooltipWrapText) {
             this.tooltipWrapText = tooltipWrapText;
-            // componentListeners.tooltipTextWrapChanged(this, previousTooltipWrapText);  // verify if/when to implement it ...
+            // componentListeners.tooltipTextWrapChanged(this,
+            // previousTooltipWrapText); // verify if/when to implement it ...
         }
     }
 
     /**
      * Tells whether or not this component is fully opaque when painted.
-     *
-     * @return
-     * <tt>true</tt> if this component is opaque; </tt>false</tt> if any part
-     * of it is transparent or translucent.
+     * 
+     * @return <tt>true</tt> if this component is opaque; </tt>false</tt> if any
+     * part of it is transparent or translucent.
      */
     public boolean isOpaque() {
         return skin.isOpaque();
@@ -2356,9 +2257,8 @@ public abstract class Component implements ConstrainedVisual {
      * Returns this component's focusability. A focusable component is capable
      * of receiving the focus only when it is showing, unblocked, and its window
      * is not closing.
-     *
-     * @return
-     * <tt>true</tt> if the component is capable of receiving the focus;
+     * 
+     * @return <tt>true</tt> if the component is capable of receiving the focus;
      * <tt>false</tt>, otherwise.
      */
     public boolean isFocusable() {
@@ -2367,25 +2267,19 @@ public abstract class Component implements ConstrainedVisual {
         if (focusable) {
             Component component = this;
 
-            while (focusable
-                && component != null
-                && !(component instanceof Window)) {
-                focusable = component.isVisible()
-                    && isEnabled();
+            while (focusable && component != null && !(component instanceof Window)) {
+                focusable = component.isVisible() && isEnabled();
 
                 component = component.getParent();
                 focusable &= component != null;
             }
 
             if (focusable) {
-                Window window = (Window)component;
+                Window window = (Window) component;
                 if (window != null) {
-                    focusable = window.isVisible()
-                            && window.isEnabled()
-                            && window.isOpen()
-                            && !window.isClosing();
-                }
-                else {
+                    focusable = window.isVisible() && window.isEnabled() && window.isOpen()
+                        && !window.isClosing();
+                } else {
                     focusable = false;
                 }
             }
@@ -2396,10 +2290,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's focused state.
-     *
-     * @return
-     * <tt>true</tt> if the component has the input focus; <tt>false</tt>
-     * otherwise.
+     * 
+     * @return <tt>true</tt> if the component has the input focus;
+     * <tt>false</tt> otherwise.
      */
     public boolean isFocused() {
         return (focusedComponent == this);
@@ -2407,14 +2300,11 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Called to notify a component that its focus state has changed.
-     *
-     * @param focused
-     * <tt>true</tt> if the component has received the input focus;
-     * <tt>false</tt> if the component has lost the focus.
-     *
-     * @param obverseComponent
-     * If <tt>focused</tt> is true, the component that has lost the focus;
-     * otherwise, the component that has gained the focus.
+     * 
+     * @param focused <tt>true</tt> if the component has received the input
+     * focus; <tt>false</tt> if the component has lost the focus.
+     * @param obverseComponent If <tt>focused</tt> is true, the component that
+     * has lost the focus; otherwise, the component that has gained the focus.
      */
     protected void setFocused(boolean focused, Component obverseComponent) {
         if (focused) {
@@ -2428,9 +2318,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Requests that focus be given to this component.
-     *
-     * @return
-     * <tt>true</tt> if the component gained the focus; <tt>false</tt>
+     * 
+     * @return <tt>true</tt> if the component gained the focus; <tt>false</tt>
      * otherwise.
      */
     public boolean requestFocus() {
@@ -2448,9 +2337,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Transfers focus to the next focusable component.
-     *
-     * @param direction
-     * The direction in which to transfer focus.
+     * 
+     * @param direction The direction in which to transfer focus.
      */
     public Component transferFocus(FocusTraversalDirection direction) {
         Component component = null;
@@ -2465,10 +2353,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the currently focused component.
-     *
-     * @return
-     * The component that currently has the focus, or <tt>null</tt> if no
-     * component is focused.
+     * 
+     * @return The component that currently has the focus, or <tt>null</tt> if
+     * no component is focused.
      */
     public static Component getFocusedComponent() {
         return focusedComponent;
@@ -2476,9 +2363,9 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the focused component.
-     *
-     * @param focusedComponent
-     * The component to focus, or <tt>null</tt> to clear the focus.
+     * 
+     * @param focusedComponent The component to focus, or <tt>null</tt> to clear
+     * the focus.
      */
     private static void setFocusedComponent(Component focusedComponent) {
         Component previousFocusedComponent = Component.focusedComponent;
@@ -2509,7 +2396,7 @@ public abstract class Component implements ConstrainedVisual {
      * Copies bound values from the bind context to the component. This
      * functionality must be provided by the subclass; the base implementation
      * is a no-op.
-     *
+     * 
      * @param context
      */
     public void load(Object context) {
@@ -2520,7 +2407,7 @@ public abstract class Component implements ConstrainedVisual {
      * Copies bound values from the component to the bind context. This
      * functionality must be provided by the subclass; the base implementation
      * is a no-op.
-     *
+     * 
      * @param context
      */
     public void store(Object context) {
@@ -2582,7 +2469,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's name.
-     *
+     * 
      * @param name
      */
     public void setName(String name) {
@@ -2603,9 +2490,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Applies a set of styles.
-     *
-     * @param styles
-     * A map containing the styles to apply.
+     * 
+     * @param styles A map containing the styles to apply.
      */
     public void setStyles(Map<String, ?> styles) {
         if (styles == null) {
@@ -2619,9 +2505,8 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Applies a set of styles.
-     *
-     * @param styles
-     * The styles encoded as a JSON map.
+     * 
+     * @param styles The styles encoded as a JSON map.
      */
     public void setStyles(String styles) throws SerializationException {
         if (styles == null) {
@@ -2647,7 +2532,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Applies a set of named styles.
-     *
+     * 
      * @param styleName
      */
     public void setStyleName(String styleName) {
@@ -2666,7 +2551,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Applies a set of named styles.
-     *
+     * 
      * @param styleNames
      */
     public void setStyleNames(Sequence<String> styleNames) {
@@ -2681,7 +2566,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Applies a set of named styles.
-     *
+     * 
      * @param styleNames
      */
     public void setStyleNames(String styleNames) {
@@ -2708,19 +2593,16 @@ public abstract class Component implements ConstrainedVisual {
      * Gets the specified component attribute. While attributes can be used to
      * store arbitrary data, they are intended to be used by containers to store
      * layout-related metadata in their child components.
-     *
-     * @param key
-     * The attribute key
-     *
-     * @return
-     * The attribute value, or <tt>null</tt> if no such attribute exists
+     * 
+     * @param key The attribute key
+     * @return The attribute value, or <tt>null</tt> if no such attribute exists
      */
     @SuppressWarnings("unchecked")
     public <T extends Enum<T>> Object getAttribute(T key) {
         Object attribute = null;
 
         if (attributes != null) {
-            attribute = ((HashMap<T, Object>)attributes).get(key);
+            attribute = ((HashMap<T, Object>) attributes).get(key);
         }
 
         return attribute;
@@ -2730,16 +2612,11 @@ public abstract class Component implements ConstrainedVisual {
      * Sets the specified component attribute. While attributes can be used to
      * store arbitrary data, they are intended to be used by containers to store
      * layout-related metadata in their child components.
-     *
-     * @param key
-     * The attribute key
-     *
-     * @param value
-     * The attribute value, or <tt>null</tt> to clear the attribute
-     *
-     * @return
-     * The previous value of the attribute, or <tt>null</tt> if the attribute
-     * was unset
+     * 
+     * @param key The attribute key
+     * @param value The attribute value, or <tt>null</tt> to clear the attribute
+     * @return The previous value of the attribute, or <tt>null</tt> if the
+     * attribute was unset
      */
     @SuppressWarnings("unchecked")
     public <T extends Enum<T>> Object setAttribute(T key, Object value) {
@@ -2750,9 +2627,9 @@ public abstract class Component implements ConstrainedVisual {
         Object previousValue;
 
         if (value != null) {
-            previousValue = ((HashMap<T, Object>)attributes).put(key, value);
+            previousValue = ((HashMap<T, Object>) attributes).put(key, value);
         } else {
-            previousValue = ((HashMap<T, Object>)attributes).remove(key);
+            previousValue = ((HashMap<T, Object>) attributes).remove(key);
         }
 
         return previousValue;
@@ -2761,11 +2638,9 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * If the mouse is currently over the component, causes the component to
      * fire <tt>mouseOut()</tt> and a <tt>mouseMove()</tt> at the current mouse
-     * location.
-     * <p>
-     * This method is primarily useful when consuming container mouse motion
-     * events, since it allows a caller to reset the mouse state based on the
-     * event consumption logic.
+     * location. <p> This method is primarily useful when consuming container
+     * mouse motion events, since it allows a caller to reset the mouse state
+     * based on the event consumption logic.
      */
     public void reenterMouse() {
         if (isMouseOver()) {
@@ -2854,19 +2729,20 @@ public abstract class Component implements ConstrainedVisual {
         boolean consumed = false;
 
         if (isEnabled()) {
-            consumed = componentMouseButtonListeners.mouseClick(this, button, xArgument, yArgument, count);
+            consumed = componentMouseButtonListeners.mouseClick(this, button, xArgument, yArgument,
+                count);
         }
 
         return consumed;
     }
 
-    protected boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
-        int wheelRotation, int xArgument, int yArgument) {
+    protected boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount, int wheelRotation,
+        int xArgument, int yArgument) {
         boolean consumed = false;
 
         if (isEnabled()) {
-            consumed = componentMouseWheelListeners.mouseWheel(this, scrollType,
-                scrollAmount, wheelRotation, xArgument, yArgument);
+            consumed = componentMouseWheelListeners.mouseWheel(this, scrollType, scrollAmount,
+                wheelRotation, xArgument, yArgument);
         }
 
         return consumed;
@@ -2971,18 +2847,21 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Provide a nice exception message for out of range values.
-     *
+     * 
      * @throws IndexOutOfBoundsException if index is out of range.
      */
-    protected static final void indexBoundsCheck(String indexName, int index, int min, int max) throws IndexOutOfBoundsException {
+    protected static final void indexBoundsCheck(String indexName, int index, int min, int max)
+        throws IndexOutOfBoundsException {
         if (max < min) {
             throw new IllegalArgumentException("max (" + max + ") < " + "min (" + min + ")");
         }
         if (index < min) {
-            throw new IndexOutOfBoundsException(indexName + ": index (" + index + ") < min (" + min + ")");
+            throw new IndexOutOfBoundsException(indexName + ": index (" + index + ") < min (" + min
+                + ")");
         }
         if (index > max) {
-            throw new IndexOutOfBoundsException(indexName + ": index (" + index + ") > max (" + max + ")");
+            throw new IndexOutOfBoundsException(indexName + ": index (" + index + ") > max (" + max
+                + ")");
         }
     }
 }

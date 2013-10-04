@@ -19,11 +19,9 @@ package org.apache.pivot.util;
 import java.io.Serializable;
 
 /**
- * Represents a version number. Version numbers are defined as:
- * <p>
- * <i>major</i>.<i>minor</i>.<i>maintenance</i>_<i>update</i>
- * <p>
- * for example, "JDK 1.6.0_10".
+ * Represents a version number. Version numbers are defined as: <p>
+ * <i>major</i>.<i>minor</i>.<i>maintenance</i>_<i>update</i> <p> for example,
+ * "JDK 1.6.0_10".
  */
 public class Version implements Comparable<Version>, Serializable {
     private static final long serialVersionUID = -3677773163272115116L;
@@ -34,37 +32,33 @@ public class Version implements Comparable<Version>, Serializable {
     private byte updateRevision = 0;
     private String build = null;
 
-    public Version(int majorRevision, int minorRevision, int maintenanceRevision,
-        int updateRevision) {
+    public Version(int majorRevision, int minorRevision, int maintenanceRevision, int updateRevision) {
         this(majorRevision, minorRevision, maintenanceRevision, updateRevision, null);
     }
 
     public Version(int majorRevision, int minorRevision, int maintenanceRevision,
         int updateRevision, String build) {
         if (majorRevision > 0x7f) {
-            throw new IllegalArgumentException("majorRevision must be less than "
-                + 0x7f + ".");
+            throw new IllegalArgumentException("majorRevision must be less than " + 0x7f + ".");
         }
 
         if (minorRevision > 0xff) {
-            throw new IllegalArgumentException("minorRevision must be less than "
-                + 0xff + ".");
+            throw new IllegalArgumentException("minorRevision must be less than " + 0xff + ".");
         }
 
         if (maintenanceRevision > 0xff) {
-            throw new IllegalArgumentException("maintenanceRevision must be less than "
-                + 0xff + ".");
+            throw new IllegalArgumentException("maintenanceRevision must be less than " + 0xff
+                + ".");
         }
 
         if (updateRevision > 0xff) {
-            throw new IllegalArgumentException("updateRevision must be less than "
-                + 0xff + ".");
+            throw new IllegalArgumentException("updateRevision must be less than " + 0xff + ".");
         }
 
-        this.majorRevision = (byte)majorRevision;
-        this.minorRevision = (byte)minorRevision;
-        this.maintenanceRevision = (byte)maintenanceRevision;
-        this.updateRevision = (byte)updateRevision;
+        this.majorRevision = (byte) majorRevision;
+        this.minorRevision = (byte) minorRevision;
+        this.maintenanceRevision = (byte) maintenanceRevision;
+        this.updateRevision = (byte) updateRevision;
         this.build = build;
     }
 
@@ -100,8 +94,7 @@ public class Version implements Comparable<Version>, Serializable {
 
     @Override
     public boolean equals(Object object) {
-        return (object instanceof Version
-            && compareTo((Version)object) == 0);
+        return (object instanceof Version && compareTo((Version) object) == 0);
     }
 
     @Override
@@ -111,10 +104,8 @@ public class Version implements Comparable<Version>, Serializable {
 
     @Override
     public String toString() {
-        String string = this.majorRevision
-            + "." + this.minorRevision
-            + "." + this.maintenanceRevision
-            + "_" + String.format("%02d", this.updateRevision);
+        String string = this.majorRevision + "." + this.minorRevision + "."
+            + this.maintenanceRevision + "_" + String.format("%02d", this.updateRevision);
 
         if (this.build != null) {
             string += "-" + this.build;

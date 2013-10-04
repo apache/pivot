@@ -16,6 +16,9 @@
  */
 package org.apache.pivot.serialization.test;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
@@ -23,19 +26,12 @@ import org.apache.pivot.serialization.BinarySerializer;
 import org.apache.pivot.serialization.Serializer;
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.fail;
-
 public class BinarySerializerTest {
     @Test
     public void testBinarySerializer() {
         Serializer<Object> serializer = new BinarySerializer();
 
-        Object[] outputData = {
-            "Hello World",
-            123.456,
-            true
-        };
+        Object[] outputData = { "Hello World", 123.456, true };
         Object[] inputData;
 
         try {
@@ -48,13 +44,13 @@ public class BinarySerializerTest {
 
             ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
             try {
-                inputData = (Object[])serializer.readObject(inputStream);
+                inputData = (Object[]) serializer.readObject(inputStream);
             } finally {
                 inputStream.close();
             }
 
             assertArrayEquals(outputData, inputData);
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             fail(exception.getMessage());
         }
     }

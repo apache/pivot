@@ -33,8 +33,7 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot832 extends Application.Adapter
-{
+public class Pivot832 extends Application.Adapter {
     private Window window = null;
     private String selectedFolder = null;
 
@@ -43,7 +42,6 @@ public class Pivot832 extends Application.Adapter
 
     @BXML
     private PushButton openFileButton = null;
-
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
@@ -56,7 +54,13 @@ public class Pivot832 extends Application.Adapter
             public void buttonPressed(Button button) {
                 final FileBrowserSheet fileBrowserSheet = new FileBrowserSheet();
 
-                fileBrowserSheet.setMode(FileBrowserSheet.Mode.SAVE_TO);  // to be able to select a folder
+                fileBrowserSheet.setMode(FileBrowserSheet.Mode.SAVE_TO); // to
+                                                                         // be
+                                                                         // able
+                                                                         // to
+                                                                         // select
+                                                                         // a
+                                                                         // folder
                 fileBrowserSheet.open(window, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
@@ -91,7 +95,8 @@ public class Pivot832 extends Application.Adapter
             public void buttonPressed(Button button) {
                 System.out.println("Now opening a BrowserSheet starting from the previous selected folder: \""
                     + selectedFolder + "\"");
-                final FileBrowserSheet fileBrowserSheet = new FileBrowserSheet(FileBrowserSheet.Mode.OPEN, selectedFolder);
+                final FileBrowserSheet fileBrowserSheet = new FileBrowserSheet(
+                    FileBrowserSheet.Mode.OPEN, selectedFolder);
 
                 try {
                     // multiple tests ...

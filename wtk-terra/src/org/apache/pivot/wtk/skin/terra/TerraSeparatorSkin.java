@@ -24,18 +24,18 @@ import org.apache.pivot.wtk.skin.SeparatorSkin;
  */
 public class TerraSeparatorSkin extends SeparatorSkin {
     public TerraSeparatorSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(7));
         setHeadingColor(theme.getColor(12));
     }
 
     public void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
     public void setHeadingColor(int headingColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setHeadingColor(theme.getColor(headingColor));
     }
 }

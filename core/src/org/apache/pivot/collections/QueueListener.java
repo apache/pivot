@@ -49,7 +49,7 @@ public interface QueueListener<T> {
 
     /**
      * Called when an item has been inserted into the tail of a queue.
-     *
+     * 
      * @param queue
      * @param item
      */
@@ -57,7 +57,7 @@ public interface QueueListener<T> {
 
     /**
      * Called when an item has been removed from the head of a queue.
-     *
+     * 
      * @param queue
      * @param item
      */
@@ -65,14 +65,14 @@ public interface QueueListener<T> {
 
     /**
      * Called when a queue has been cleared.
-     *
+     * 
      * @param queue
      */
     public void queueCleared(Queue<T> queue);
 
     /**
      * Called when a queue's comparator has changed.
-     *
+     * 
      * @param queue
      * @param previousComparator
      */

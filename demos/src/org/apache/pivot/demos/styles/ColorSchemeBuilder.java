@@ -27,8 +27,8 @@ public class ColorSchemeBuilder extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (ColorSchemeBuilderWindow)bxmlSerializer.readObject(ColorSchemeBuilderWindow.class,
-            "color_scheme_builder_window.bxml");
+        window = (ColorSchemeBuilderWindow) bxmlSerializer.readObject(
+            ColorSchemeBuilderWindow.class, "color_scheme_builder_window.bxml");
         window.open(display);
     }
 

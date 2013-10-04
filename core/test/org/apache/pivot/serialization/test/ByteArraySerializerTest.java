@@ -28,10 +28,9 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.junit.Test;
 
-
 public class ByteArraySerializerTest {
     public static final String testString = "// \n" + "// Hello from "
-            + ByteArraySerializerTest.class.getName() + "\n" + "// \n";
+        + ByteArraySerializerTest.class.getName() + "\n" + "// \n";
     public static final byte[] testBytes = testString.getBytes();
 
     public void log(String msg) {

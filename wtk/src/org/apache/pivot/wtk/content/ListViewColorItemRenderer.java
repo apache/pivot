@@ -81,9 +81,9 @@ public class ListViewColorItemRenderer extends ListViewItemRenderer {
         if (item != null) {
             ColorItem colorItem;
             if (item instanceof ColorItem) {
-                colorItem = (ColorItem)item;
+                colorItem = (ColorItem) item;
             } else if (item instanceof Color) {
-                colorItem = new ColorItem((Color)item);
+                colorItem = new ColorItem((Color) item);
             } else {
                 colorItem = new ColorItem(GraphicsUtilities.decodeColor(item.toString()));
             }
@@ -91,8 +91,8 @@ public class ListViewColorItemRenderer extends ListViewItemRenderer {
             Color color = colorItem.getColor();
             String name = colorItem.getName();
 
-            colorBadge.setColor(listView.isEnabled() ?
-                color : new Color(color.getRed(), color.getGreen(), color.getBlue(), 0x99));
+            colorBadge.setColor(listView.isEnabled() ? color : new Color(color.getRed(),
+                color.getGreen(), color.getBlue(), 0x99));
             listItem.setText(name);
         }
 

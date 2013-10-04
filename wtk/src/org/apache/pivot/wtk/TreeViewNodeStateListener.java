@@ -24,7 +24,7 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 public interface TreeViewNodeStateListener {
     /**
      * Called when a node's checked state has changed.
-     *
+     * 
      * @param treeView
      * @param path
      * @param previousCheckState

@@ -20,10 +20,10 @@ import java.util.Comparator;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
@@ -36,32 +36,28 @@ import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 @DefaultProperty("spinnerData")
 public class Spinner extends Container {
     /**
-     * {@link Renderer} interface to customize the appearance of the data in a Spinner.
+     * {@link Renderer} interface to customize the appearance of the data in a
+     * Spinner.
      */
     public interface ItemRenderer extends Renderer {
         /**
          * Prepares the renderer for layout or paint.
-         *
-         * @param item
-         * The item to render, or <tt>null</tt> if called to calculate preferred
-         * height for skins that assume a fixed renderer height.
-         *
-         * @param spinner
-         * The host component.
+         * 
+         * @param item The item to render, or <tt>null</tt> if called to
+         * calculate preferred height for skins that assume a fixed renderer
+         * height.
+         * @param spinner The host component.
          */
         public void render(Object item, Spinner spinner);
 
         /**
          * Converts a spinner item to a string representation.
-         *
+         * 
          * @param item
-         *
-         * @return
-         * The item's string representation, or <tt>null</tt> if the item does not
-         * have a string representation.
-         * <p>
-         * Note that this method may be called often during keyboard navigation, so
-         * implementations should avoid unnecessary string allocations.
+         * @return The item's string representation, or <tt>null</tt> if the item
+         * does not have a string representation. <p> Note that this method may
+         * be called often during keyboard navigation, so implementations should
+         * avoid unnecessary string allocations.
          */
         public String toString(Object item);
     }
@@ -73,7 +69,7 @@ public class Spinner extends Container {
         /**
          * Converts a context value to spinner data during a
          * {@link Component#load(Object)} operation.
-         *
+         * 
          * @param value
          */
         public List<?> toSpinnerData(Object value);
@@ -81,7 +77,7 @@ public class Spinner extends Container {
         /**
          * Converts spinner data to a context value during a
          * {@link Component#store(Object)} operation.
-         *
+         * 
          * @param spinnerData
          */
         public Object valueOf(List<?> spinnerData);
@@ -102,34 +98,26 @@ public class Spinner extends Container {
         /**
          * Returns the index of the item in the source list during a
          * {@link Component#load(Object)} operation.
-         *
-         * @param spinnerData
-         * The source spinner data.
-         *
-         * @param value
-         * The value to locate.
-         *
-         * @return
-         * The index of first occurrence of the value if it exists in the list;
-         * <tt>-1</tt>, otherwise.
+         * 
+         * @param spinnerData The source spinner data.
+         * @param value The value to locate.
+         * @return The index of first occurrence of the value if it exists in the
+         * list; <tt>-1</tt>, otherwise.
          */
         public int indexOf(List<?> spinnerData, Object value);
 
         /**
          * Retrieves the item at the given index during a
          * {@link Component#store(Object)} operation.
-         *
-         * @param spinnerData
-         * The source spinner data.
-         *
-         * @param index
-         * The index of the value to retrieve.
+         * 
+         * @param spinnerData The source spinner data.
+         * @param index The index of the value to retrieve.
          */
         public Object get(List<?> spinnerData, int index);
     }
 
-    private static class SpinnerListenerList extends WTKListenerList<SpinnerListener>
-        implements SpinnerListener {
+    private static class SpinnerListenerList extends WTKListenerList<SpinnerListener> implements
+        SpinnerListener {
         @Override
         public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
             for (SpinnerListener listener : this) {
@@ -138,8 +126,7 @@ public class Spinner extends Container {
         }
 
         @Override
-        public void itemRendererChanged(Spinner spinner,
-            Spinner.ItemRenderer previousItemRenderer) {
+        public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
             for (SpinnerListener listener : this) {
                 listener.itemRendererChanged(spinner, previousItemRenderer);
             }
@@ -191,9 +178,8 @@ public class Spinner extends Container {
         }
     }
 
-    private static class SpinnerSelectionListenerList
-        extends WTKListenerList<SpinnerSelectionListener>
-        implements SpinnerSelectionListener {
+    private static class SpinnerSelectionListenerList extends
+        WTKListenerList<SpinnerSelectionListener> implements SpinnerSelectionListener {
         @Override
         public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
             for (SpinnerSelectionListener listener : this) {
@@ -241,14 +227,16 @@ public class Spinner extends Container {
         }
 
         @Override
-        public void selectedItemBindTypeChanged(Spinner spinner, BindType previousSelectedItemBindType) {
+        public void selectedItemBindTypeChanged(Spinner spinner,
+            BindType previousSelectedItemBindType) {
             for (SpinnerBindingListener listener : this) {
                 listener.selectedItemBindTypeChanged(spinner, previousSelectedItemBindType);
             }
         }
 
         @Override
-        public void selectedItemBindMappingChanged(Spinner spinner, ItemBindMapping previousSelectedItemBindMapping) {
+        public void selectedItemBindMappingChanged(Spinner spinner,
+            ItemBindMapping previousSelectedItemBindMapping) {
             for (SpinnerBindingListener listener : this) {
                 listener.selectedItemBindMappingChanged(spinner, previousSelectedItemBindMapping);
             }
@@ -347,34 +335,30 @@ public class Spinner extends Container {
 
     private SpinnerListenerList spinnerListeners = new SpinnerListenerList();
     private SpinnerItemListenerList spinnerItemListeners = new SpinnerItemListenerList();
-    private SpinnerSelectionListenerList spinnerSelectionListeners =
-        new SpinnerSelectionListenerList();
+    private SpinnerSelectionListenerList spinnerSelectionListeners = new SpinnerSelectionListenerList();
     private SpinnerBindingListenerList spinnerBindingListeners = new SpinnerBindingListenerList();
 
     private static final ItemRenderer DEFAULT_ITEM_RENDERER = new SpinnerItemRenderer();
 
     /**
-     * Creates a spinner populated with an empty array list.
-     * <p> The default contents is an {@link ImmutableList} so that
-     * if the default property (which is "spinnerData") is invoked in a BXML
-     * file, <code>BXMLSerializer</code> trying to add to this immutable sequence
-     * will catch an exception and will do a {@link #setSpinnerData setSpinnerData(List<?>)}
-     * instead.
+     * Creates a spinner populated with an empty array list. <p> The default
+     * contents is an {@link ImmutableList} so that if the default property
+     * (which is "spinnerData") is invoked in a BXML file,
+     * <code>BXMLSerializer</code> trying to add to this immutable sequence will
+     * catch an exception and will do a {@link #setSpinnerData
+     * setSpinnerData(List<?>)} instead.
      */
     public Spinner() {
         this(new ImmutableList<>(new ArrayList<>()));
     }
 
     /**
-     * Creates a spinner populated with the given spinner data.
-     * <p>
-     * Note that the default renderer uses (as last option) the toString method on list elements,
-     * so override it to return whatever you want to display as text,
+     * Creates a spinner populated with the given spinner data. <p> Note that
+     * the default renderer uses (as last option) the toString method on list
+     * elements, so override it to return whatever you want to display as text,
      * or implement your own custom renderer.
-     *
-     * @param spinnerData
-     * The data to set.
-     *
+     * 
+     * @param spinnerData The data to set.
      * @see SpinnerItemRenderer
      */
     public Spinner(List<?> spinnerData) {
@@ -386,9 +370,8 @@ public class Spinner extends Container {
 
     /**
      * Returns the spinner data.
-     *
-     * @return
-     * The data currently presented by the spinner.
+     * 
+     * @return The data currently presented by the spinner.
      */
     public List<?> getSpinnerData() {
         return spinnerData;
@@ -396,9 +379,8 @@ public class Spinner extends Container {
 
     /**
      * Sets the spinner data. Clears any existing selection state.
-     *
-     * @param spinnerData
-     * The data to be presented by the spinner.
+     * 
+     * @param spinnerData The data to be presented by the spinner.
      */
     @SuppressWarnings("unchecked")
     public void setSpinnerData(List<?> spinnerData) {
@@ -415,10 +397,10 @@ public class Spinner extends Container {
                 // Clear any existing selection
                 selectedIndex = -1;
 
-                ((List<Object>)previousSpinnerData).getListListeners().remove(spinnerDataListener);
+                ((List<Object>) previousSpinnerData).getListListeners().remove(spinnerDataListener);
             }
 
-            ((List<Object>)spinnerData).getListListeners().add(spinnerDataListener);
+            ((List<Object>) spinnerData).getListListeners().add(spinnerDataListener);
 
             // Update the spinner data and fire change event
             this.spinnerData = spinnerData;
@@ -462,9 +444,8 @@ public class Spinner extends Container {
 
     /**
      * Sets the item renderer to be used for items in this list.
-     *
-     * @param itemRenderer
-     * The item renderer for the list.
+     * 
+     * @param itemRenderer The item renderer for the list.
      */
     public void setItemRenderer(ItemRenderer itemRenderer) {
         if (itemRenderer == null) {
@@ -496,9 +477,8 @@ public class Spinner extends Container {
 
     /**
      * Returns the currently selected index.
-     *
-     * @return
-     * The currently selected index.
+     * 
+     * @return The currently selected index.
      */
     public int getSelectedIndex() {
         return selectedIndex;
@@ -506,9 +486,9 @@ public class Spinner extends Container {
 
     /**
      * Sets the selection to the specified index.
-     *
-     * @param selectedIndex
-     * The index to select, or <tt>-1</tt> to clear the selection.
+     * 
+     * @param selectedIndex The index to select, or <tt>-1</tt> to clear the
+     * selection.
      */
     public void setSelectedIndex(int selectedIndex) {
         indexBoundsCheck("selectedIndex", selectedIndex, -1, spinnerData.getLength() - 1);
@@ -518,8 +498,8 @@ public class Spinner extends Container {
         if (previousSelectedIndex != selectedIndex) {
             this.selectedIndex = selectedIndex;
             spinnerSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
-            spinnerSelectionListeners.selectedItemChanged(this, (previousSelectedIndex == -1) ?
-                null : spinnerData.get(previousSelectedIndex));
+            spinnerSelectionListeners.selectedItemChanged(this,
+                (previousSelectedIndex == -1) ? null : spinnerData.get(previousSelectedIndex));
         }
     }
 
@@ -536,7 +516,7 @@ public class Spinner extends Container {
 
     @SuppressWarnings("unchecked")
     public void setSelectedItem(Object item) {
-        setSelectedIndex((item == null) ? -1 : ((List<Object>)spinnerData).indexOf(item));
+        setSelectedIndex((item == null) ? -1 : ((List<Object>) spinnerData).indexOf(item));
     }
 
     public String getSpinnerDataKey() {
@@ -577,7 +557,8 @@ public class Spinner extends Container {
 
         if (previousSpinnerDataBindMapping != spinnerDataBindMapping) {
             this.spinnerDataBindMapping = spinnerDataBindMapping;
-            spinnerBindingListeners.spinnerDataBindMappingChanged(this, previousSpinnerDataBindMapping);
+            spinnerBindingListeners.spinnerDataBindMappingChanged(this,
+                previousSpinnerDataBindMapping);
         }
     }
 
@@ -619,7 +600,8 @@ public class Spinner extends Container {
 
         if (previousSelectedItemBindMapping != selectedItemBindMapping) {
             this.selectedItemBindMapping = selectedItemBindMapping;
-            spinnerBindingListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
+            spinnerBindingListeners.selectedItemBindMappingChanged(this,
+                previousSelectedItemBindMapping);
         }
     }
 
@@ -627,14 +609,13 @@ public class Spinner extends Container {
     @SuppressWarnings("unchecked")
     public void load(Object context) {
         // Bind to spinner data
-        if (spinnerDataKey != null
-            && spinnerDataBindType != BindType.STORE
+        if (spinnerDataKey != null && spinnerDataBindType != BindType.STORE
             && JSON.containsKey(context, spinnerDataKey)) {
             Object value = JSON.get(context, spinnerDataKey);
 
             List<?> spinnerDataLocal;
             if (spinnerDataBindMapping == null) {
-                spinnerDataLocal = (List<?>)value;
+                spinnerDataLocal = (List<?>) value;
             } else {
                 spinnerDataLocal = spinnerDataBindMapping.toSpinnerData(value);
             }
@@ -643,14 +624,13 @@ public class Spinner extends Container {
         }
 
         // Bind to selected item
-        if (selectedItemKey != null
-            && JSON.containsKey(context, selectedItemKey)
+        if (selectedItemKey != null && JSON.containsKey(context, selectedItemKey)
             && selectedItemBindType != BindType.STORE) {
             Object item = JSON.get(context, selectedItemKey);
 
             int index;
             if (selectedItemBindMapping == null) {
-                index = ((List<Object>)spinnerData).indexOf(item);
+                index = ((List<Object>) spinnerData).indexOf(item);
             } else {
                 index = selectedItemBindMapping.indexOf(spinnerData, item);
             }
@@ -662,8 +642,7 @@ public class Spinner extends Container {
     @Override
     public void store(Object context) {
         // Bind to spinner data
-        if (spinnerDataKey != null
-            && spinnerDataBindType != BindType.LOAD) {
+        if (spinnerDataKey != null && spinnerDataBindType != BindType.LOAD) {
             Object value;
             if (spinnerDataBindMapping == null) {
                 value = spinnerData;
@@ -675,8 +654,7 @@ public class Spinner extends Container {
         }
 
         // Bind to selected item
-        if (selectedItemKey != null
-            && selectedItemBindType != BindType.LOAD) {
+        if (selectedItemKey != null && selectedItemBindType != BindType.LOAD) {
             Object item;
             if (selectedIndex == -1) {
                 item = null;
@@ -711,14 +689,13 @@ public class Spinner extends Container {
     }
 
     /**
-     * Gets the bounding area of the spinner content (the area in which the
-     * item renderer will render the content).
-     *
-     * @return
-     * The bounding area of the spinner content.
+     * Gets the bounding area of the spinner content (the area in which the item
+     * renderer will render the content).
+     * 
+     * @return The bounding area of the spinner content.
      */
     public Bounds getContentBounds() {
-        Spinner.Skin spinnerSkin = (Spinner.Skin)getSkin();
+        Spinner.Skin spinnerSkin = (Spinner.Skin) getSkin();
         return spinnerSkin.getContentBounds();
     }
 

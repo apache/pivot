@@ -150,7 +150,8 @@ public class BXMLExplorerWindow extends Window implements Bindable {
                         }
                         File f = fileBrowserSheet.getSelectedFile();
 
-                        // if we have already loaded the file, select the appropriate tab and return
+                        // if we have already loaded the file, select the
+                        // appropriate tab and return
                         int idx = 0;
                         for (Component comp : tabPane.getTabs()) {
                             if (f.equals(((BXMLExplorerDocument) comp).getLoadedFile())) {

@@ -39,7 +39,7 @@ public abstract class LinkButtonSkin extends ButtonSkin {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         if (button == Mouse.Button.LEFT) {
-            LinkButton linkButton = (LinkButton)getComponent();
+            LinkButton linkButton = (LinkButton) getComponent();
             linkButton.press();
         }
 

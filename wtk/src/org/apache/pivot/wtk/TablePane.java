@@ -27,12 +27,10 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Container that arranges components in a two-dimensional grid, optionally
  * spanning multiple rows and columns, much like an HTML <tt>&lt;table&gt;</tt>
- * element.
- * <p>
- * Note that unlike an HTML <tt>&lt;table&gt;</tt>, components that span
- * multiple rows or columns will not "push" other components out of their way.
- * Instead, the spanning components will simply overlay the cells into which
- * they span. This means that application developers may have to use
+ * element. <p> Note that unlike an HTML <tt>&lt;table&gt;</tt>, components that
+ * span multiple rows or columns will not "push" other components out of their
+ * way. Instead, the spanning components will simply overlay the cells into
+ * which they span. This means that application developers may have to use
  * {@link Filler filler cells} in the cells that are spanned.
  */
 @DefaultProperty("rows")
@@ -69,9 +67,8 @@ public class TablePane extends Container {
 
         /**
          * Returns the table pane with which this row is associated.
-         *
-         * @return
-         * The row's table pane, or <tt>null</tt> if the row does not
+         * 
+         * @return The row's table pane, or <tt>null</tt> if the row does not
          * currently belong to a table.
          */
         public TablePane getTablePane() {
@@ -80,9 +77,8 @@ public class TablePane extends Container {
 
         /**
          * Returns the row height.
-         *
-         * @return
-         * The height of the row.
+         * 
+         * @return The height of the row.
          */
         public int getHeight() {
             return height;
@@ -90,10 +86,9 @@ public class TablePane extends Container {
 
         /**
          * Returns the relative flag.
-         *
-         * @return
-         * <tt>true</tt> if the row height is relative, <tt>false</tt> if it
-         * is fixed.
+         * 
+         * @return <tt>true</tt> if the row height is relative, <tt>false</tt>
+         * if it is fixed.
          */
         public boolean isRelative() {
             return relative;
@@ -101,9 +96,8 @@ public class TablePane extends Container {
 
         /**
          * Set the row height.
-         *
-         * @param height
-         * The absolute height of the row.
+         * 
+         * @param height The absolute height of the row.
          */
         public void setHeight(int height) {
             setHeight(height, false);
@@ -111,11 +105,10 @@ public class TablePane extends Container {
 
         /**
          * Set the row height.
-         *
-         * @param height
-         * The encoded height of the row. If the string ends with the '*'
-         * character, it is treated as a relative value. Otherwise, it is
-         * considered an absolute value.
+         * 
+         * @param height The encoded height of the row. If the string ends with
+         * the '*' character, it is treated as a relative value. Otherwise, it
+         * is considered an absolute value.
          */
         public void setHeight(String height) {
             boolean relativeLocal = false;
@@ -131,35 +124,31 @@ public class TablePane extends Container {
 
         /**
          * Sets the row height.
-         *
-         * @param height
-         * The height of the row.
-         *
-         * @param relative
-         * <tt>true</tt> if the row height is relative, <tt>false</tt> if it
-         * is fixed.
+         * 
+         * @param height The height of the row.
+         * @param relative <tt>true</tt> if the row height is relative,
+         * <tt>false</tt> if it is fixed.
          */
         public void setHeight(int height, boolean relative) {
             int previousHeight = this.height;
             boolean previousRelative = this.relative;
 
-            if (previousHeight != height
-                || previousRelative != relative) {
+            if (previousHeight != height || previousRelative != relative) {
                 this.height = height;
                 this.relative = relative;
 
                 if (tablePane != null) {
-                    tablePane.tablePaneListeners.rowHeightChanged(this,
-                        previousHeight, previousRelative);
+                    tablePane.tablePaneListeners.rowHeightChanged(this, previousHeight,
+                        previousRelative);
                 }
             }
         }
 
         /**
          * Returns the highlighted flag.
-         *
-         * @return
-         * <tt>true</tt> if the row is highlighted, <tt>false</tt> if it is not
+         * 
+         * @return <tt>true</tt> if the row is highlighted, <tt>false</tt> if it
+         * is not
          */
         public boolean isHighlighted() {
             return highlighted;
@@ -167,10 +156,9 @@ public class TablePane extends Container {
 
         /**
          * Sets the highlighted flag.
-         *
-         * @param highlighted
-         * <tt>true</tt> to set the row as highlighted, <tt>false</tt> to set
-         * it as not highlighted
+         * 
+         * @param highlighted <tt>true</tt> to set the row as highlighted,
+         * <tt>false</tt> to set it as not highlighted
          */
         public void setHighlighted(boolean highlighted) {
             if (highlighted != this.highlighted) {
@@ -310,10 +298,9 @@ public class TablePane extends Container {
 
         /**
          * Returns the table pane with which this column is associated.
-         *
-         * @return
-         * The column's table pane, or <tt>null</tt> if the column does not
-         * currently belong to a table.
+         * 
+         * @return The column's table pane, or <tt>null</tt> if the column does
+         * not currently belong to a table.
          */
         public TablePane getTablePane() {
             return tablePane;
@@ -321,9 +308,8 @@ public class TablePane extends Container {
 
         /**
          * Returns the column width.
-         *
-         * @return
-         * The width of the column.
+         * 
+         * @return The width of the column.
          */
         public int getWidth() {
             return width;
@@ -331,10 +317,9 @@ public class TablePane extends Container {
 
         /**
          * Returns the relative flag.
-         *
-         * @return
-         * <tt>true</tt> if the column width is relative, <tt>false</tt> if it
-         * is fixed.
+         * 
+         * @return <tt>true</tt> if the column width is relative, <tt>false</tt>
+         * if it is fixed.
          */
         public boolean isRelative() {
             return relative;
@@ -342,9 +327,8 @@ public class TablePane extends Container {
 
         /**
          * Set the column width.
-         *
-         * @param width
-         * The absolute width of the column.
+         * 
+         * @param width The absolute width of the column.
          */
         public void setWidth(int width) {
             setWidth(width, false);
@@ -352,11 +336,10 @@ public class TablePane extends Container {
 
         /**
          * Set the column width.
-         *
-         * @param width
-         * The encoded width of the row. If the string ends with the '*'
-         * character, it is treated as a relative value. Otherwise, it is
-         * considered an absolute value.
+         * 
+         * @param width The encoded width of the row. If the string ends with
+         * the '*' character, it is treated as a relative value. Otherwise, it
+         * is considered an absolute value.
          */
         public void setWidth(String width) {
             boolean relativeLocal = false;
@@ -372,35 +355,31 @@ public class TablePane extends Container {
 
         /**
          * Sets the column width.
-         *
-         * @param width
-         * The width of the column.
-         *
-         * @param relative
-         * <tt>true</tt> if the column width is relative, <tt>false</tt> if it
-         * is fixed.
+         * 
+         * @param width The width of the column.
+         * @param relative <tt>true</tt> if the column width is relative,
+         * <tt>false</tt> if it is fixed.
          */
         public void setWidth(int width, boolean relative) {
             int previousWidth = this.width;
             boolean previousRelative = this.relative;
 
-            if (previousWidth != width
-                || previousRelative != relative) {
+            if (previousWidth != width || previousRelative != relative) {
                 this.width = width;
                 this.relative = relative;
 
                 if (tablePane != null) {
-                    tablePane.tablePaneListeners.columnWidthChanged(this,
-                        previousWidth, previousRelative);
+                    tablePane.tablePaneListeners.columnWidthChanged(this, previousWidth,
+                        previousRelative);
                 }
             }
         }
 
         /**
          * Returns the highlighted flag.
-         *
-         * @return
-         * <tt>true</tt> if the column is highlighted, <tt>false</tt> if it is not
+         * 
+         * @return <tt>true</tt> if the column is highlighted, <tt>false</tt> if
+         * it is not
          */
         public boolean isHighlighted() {
             return highlighted;
@@ -408,10 +387,9 @@ public class TablePane extends Container {
 
         /**
          * Sets the highlighted flag.
-         *
-         * @param highlighted
-         * <tt>true</tt> to set the column as highlighted, <tt>false</tt> to set
-         * it as not highlighted
+         * 
+         * @param highlighted <tt>true</tt> to set the column as highlighted,
+         * <tt>false</tt> to set it as not highlighted
          */
         public void setHighlighted(boolean highlighted) {
             if (highlighted != this.highlighted) {
@@ -425,20 +403,23 @@ public class TablePane extends Container {
     }
 
     /**
-     * Table pane skin interface. Table pane skins must implement
-     * this interface to facilitate additional communication between the
-     * component and the skin.
+     * Table pane skin interface. Table pane skins must implement this interface
+     * to facilitate additional communication between the component and the
+     * skin.
      */
     public interface Skin {
         public int getRowAt(int y);
+
         public Bounds getRowBounds(int row);
+
         public int getColumnAt(int x);
+
         public Bounds getColumnBounds(int column);
     }
 
     /**
-     * Class that manages a table pane's row list. Callers get access to the
-     * row sequence via {@link TablePane#getRows()}.
+     * Class that manages a table pane's row list. Callers get access to the row
+     * sequence via {@link TablePane#getRows()}.
      */
     public final class RowSequence implements Sequence<Row>, Iterable<Row> {
         private RowSequence() {
@@ -459,8 +440,7 @@ public class TablePane extends Container {
             }
 
             if (row.tablePane != null) {
-                throw new IllegalArgumentException
-                    ("row is already in use by another table pane.");
+                throw new IllegalArgumentException("row is already in use by another table pane.");
             }
 
             rows.insert(row, index);
@@ -555,8 +535,8 @@ public class TablePane extends Container {
             }
 
             if (column.tablePane != null) {
-                throw new IllegalArgumentException
-                    ("column is already in use by another table pane.");
+                throw new IllegalArgumentException(
+                    "column is already in use by another table pane.");
             }
 
             columns.insert(column, index);
@@ -628,12 +608,11 @@ public class TablePane extends Container {
     }
 
     private enum Attribute {
-        ROW_SPAN,
-        COLUMN_SPAN;
+        ROW_SPAN, COLUMN_SPAN;
     }
 
-    private static class TablePaneListenerList extends WTKListenerList<TablePaneListener>
-        implements TablePaneListener {
+    private static class TablePaneListenerList extends WTKListenerList<TablePaneListener> implements
+        TablePaneListener {
         @Override
         public void rowInserted(TablePane tablePane, int index) {
             for (TablePaneListener listener : this) {
@@ -642,16 +621,14 @@ public class TablePane extends Container {
         }
 
         @Override
-        public void rowsRemoved(TablePane tablePane, int index,
-            Sequence<TablePane.Row> rows) {
+        public void rowsRemoved(TablePane tablePane, int index, Sequence<TablePane.Row> rows) {
             for (TablePaneListener listener : this) {
                 listener.rowsRemoved(tablePane, index, rows);
             }
         }
 
         @Override
-        public void rowHeightChanged(TablePane.Row row, int previousHeight,
-            boolean previousRelative) {
+        public void rowHeightChanged(TablePane.Row row, int previousHeight, boolean previousRelative) {
             for (TablePaneListener listener : this) {
                 listener.rowHeightChanged(row, previousHeight, previousRelative);
             }
@@ -702,27 +679,24 @@ public class TablePane extends Container {
         }
 
         @Override
-        public void cellsRemoved(TablePane.Row row, int column,
-            Sequence<Component> removed) {
+        public void cellsRemoved(TablePane.Row row, int column, Sequence<Component> removed) {
             for (TablePaneListener listener : this) {
                 listener.cellsRemoved(row, column, removed);
             }
         }
 
         @Override
-        public void cellUpdated(TablePane.Row row, int column,
-            Component previousComponent) {
+        public void cellUpdated(TablePane.Row row, int column, Component previousComponent) {
             for (TablePaneListener listener : this) {
                 listener.cellUpdated(row, column, previousComponent);
             }
         }
     }
 
-    private static class TablePaneAttributeListenerList extends WTKListenerList<TablePaneAttributeListener>
-        implements TablePaneAttributeListener {
+    private static class TablePaneAttributeListenerList extends
+        WTKListenerList<TablePaneAttributeListener> implements TablePaneAttributeListener {
         @Override
-        public void rowSpanChanged(TablePane tablePane, Component component,
-            int previousRowSpan) {
+        public void rowSpanChanged(TablePane tablePane, Component component, int previousRowSpan) {
             for (TablePaneAttributeListener listener : this) {
                 listener.rowSpanChanged(tablePane, component, previousRowSpan);
             }
@@ -757,9 +731,9 @@ public class TablePane extends Container {
 
     /**
      * Creates a new <tt>TablePane</tt> with the specified columns.
-     *
-     * @param columns
-     * The column sequence to use. A copy of this sequence will be made
+     * 
+     * @param columns The column sequence to use. A copy of this sequence will
+     * be made
      */
     public TablePane(Sequence<Column> columns) {
         if (columns == null) {
@@ -784,9 +758,8 @@ public class TablePane extends Container {
 
     /**
      * Returns the table pane row sequence.
-     *
-     * @return
-     * The table pane row sequence
+     * 
+     * @return The table pane row sequence
      */
     public RowSequence getRows() {
         return rowSequence;
@@ -794,35 +767,30 @@ public class TablePane extends Container {
 
     /**
      * Returns the index of the row at a given location.
-     *
-     * @param y
-     * The y-coordinate of the row to identify.
-     *
-     * @return
-     * The row index, or <tt>-1</tt> if there is no row at the given
+     * 
+     * @param y The y-coordinate of the row to identify.
+     * @return The row index, or <tt>-1</tt> if there is no row at the given
      * y-coordinate.
      */
     public int getRowAt(int y) {
-        TablePane.Skin tablePaneSkin = (TablePane.Skin)getSkin();
+        TablePane.Skin tablePaneSkin = (TablePane.Skin) getSkin();
         return tablePaneSkin.getRowAt(y);
     }
 
     /**
      * Returns the bounds of a given row.
-     *
-     * @param row
-     * The row index.
+     * 
+     * @param row The row index.
      */
     public Bounds getRowBounds(int row) {
-        TablePane.Skin tablePaneSkin = (TablePane.Skin)getSkin();
+        TablePane.Skin tablePaneSkin = (TablePane.Skin) getSkin();
         return tablePaneSkin.getRowBounds(row);
     }
 
     /**
      * Returns the table pane column sequence.
-     *
-     * @return
-     * The table pane column sequence
+     * 
+     * @return The table pane column sequence
      */
     public ColumnSequence getColumns() {
         return columnSequence;
@@ -830,42 +798,33 @@ public class TablePane extends Container {
 
     /**
      * Returns the index of the column at a given location.
-     *
-     * @param x
-     * The x-coordinate of the column to identify.
-     *
-     * @return
-     * The column index, or <tt>-1</tt> if there is no column at the given
-     * x-coordinate.
+     * 
+     * @param x The x-coordinate of the column to identify.
+     * @return The column index, or <tt>-1</tt> if there is no column at the
+     * given x-coordinate.
      */
     public int getColumnAt(int x) {
-        TablePane.Skin tablePaneSkin = (TablePane.Skin)getSkin();
+        TablePane.Skin tablePaneSkin = (TablePane.Skin) getSkin();
         return tablePaneSkin.getColumnAt(x);
     }
 
     /**
      * Returns the bounds of a given column.
-     *
-     * @param column
-     * The column index.
+     * 
+     * @param column The column index.
      */
     public Bounds getColumnBounds(int column) {
-        TablePane.Skin tablePaneSkin = (TablePane.Skin)getSkin();
+        TablePane.Skin tablePaneSkin = (TablePane.Skin) getSkin();
         return tablePaneSkin.getColumnBounds(column);
     }
 
     /**
      * Gets the component at the specified cell in this table pane.
-     *
-     * @param rowIndex
-     * The row index of the cell
-     *
-     * @param columnIndex
-     * The column index of the cell
-     *
-     * @return
-     * The component in the specified cell, or <tt>null</tt> if the cell is
-     * empty
+     * 
+     * @param rowIndex The row index of the cell
+     * @param columnIndex The column index of the cell
+     * @return The component in the specified cell, or <tt>null</tt> if the cell
+     * is empty
      */
     public Component getCellComponent(int rowIndex, int columnIndex) {
         Row row = rows.get(rowIndex);
@@ -882,15 +841,10 @@ public class TablePane extends Container {
     /**
      * Overrides the base method to check whether or not a cell component is
      * being removed, and fires the appropriate event in that case.
-     *
-     * @param index
-     * The index at which components were removed
-     *
-     * @param count
-     * The number of components removed
-     *
-     * @return
-     * The sequence of components that were removed
+     * 
+     * @param index The index at which components were removed
+     * @param count The number of components removed
+     * @return The sequence of components that were removed
      */
     @Override
     public Sequence<Component> remove(int index, int count) {
@@ -923,41 +877,41 @@ public class TablePane extends Container {
     }
 
     public static int getRowSpan(Component component) {
-        Integer value = (Integer)component.getAttribute(Attribute.ROW_SPAN);
+        Integer value = (Integer) component.getAttribute(Attribute.ROW_SPAN);
         return (value == null) ? 1 : value;
     }
 
     public static void setRowSpan(Component component, int rowSpan) {
-        Integer previousValue = (Integer)component.setAttribute(Attribute.ROW_SPAN, rowSpan);
+        Integer previousValue = (Integer) component.setAttribute(Attribute.ROW_SPAN, rowSpan);
         int previousRowSpan = (previousValue == null) ? 1 : previousValue;
 
         if (previousRowSpan != rowSpan) {
             Container parent = component.getParent();
 
             if (parent instanceof TablePane) {
-                TablePane tablePane = (TablePane)parent;
-                tablePane.tablePaneAttributeListeners.rowSpanChanged(tablePane,
-                    component, previousRowSpan);
+                TablePane tablePane = (TablePane) parent;
+                tablePane.tablePaneAttributeListeners.rowSpanChanged(tablePane, component,
+                    previousRowSpan);
             }
         }
     }
 
     public static int getColumnSpan(Component component) {
-        Integer value = (Integer)component.getAttribute(Attribute.COLUMN_SPAN);
+        Integer value = (Integer) component.getAttribute(Attribute.COLUMN_SPAN);
         return (value == null) ? 1 : value;
     }
 
     public static void setColumnSpan(Component component, int columnSpan) {
-        Integer previousValue = (Integer)component.setAttribute(Attribute.COLUMN_SPAN, columnSpan);
+        Integer previousValue = (Integer) component.setAttribute(Attribute.COLUMN_SPAN, columnSpan);
         int previousColumnSpan = (previousValue == null) ? 1 : previousValue;
 
         if (previousColumnSpan != columnSpan) {
             Container parent = component.getParent();
 
             if (parent instanceof TablePane) {
-                TablePane tablePane = (TablePane)parent;
-                tablePane.tablePaneAttributeListeners.columnSpanChanged(tablePane,
-                    component, previousColumnSpan);
+                TablePane tablePane = (TablePane) parent;
+                tablePane.tablePaneAttributeListeners.columnSpanChanged(tablePane, component,
+                    previousColumnSpan);
             }
         }
     }

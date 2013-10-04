@@ -38,9 +38,9 @@ public class BackgroundTasks extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        activityIndicator = (ActivityIndicator)namespace.get("activityIndicator");
-        executeSynchronousButton = (PushButton)namespace.get("executeSynchronousButton");
-        executeAsynchronousButton = (PushButton)namespace.get("executeAsynchronousButton");
+        activityIndicator = (ActivityIndicator) namespace.get("activityIndicator");
+        executeSynchronousButton = (PushButton) namespace.get("executeSynchronousButton");
+        executeAsynchronousButton = (PushButton) namespace.get("executeAsynchronousButton");
 
         executeSynchronousButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

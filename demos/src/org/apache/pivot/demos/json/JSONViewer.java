@@ -46,13 +46,14 @@ import org.apache.pivot.wtk.content.TreeNode;
 import org.apache.pivot.wtk.effects.OverlayDecorator;
 
 /**
- * Utility application that allows the user to browse a JSON structure
- * using a tree view component.
+ * Utility application that allows the user to browse a JSON structure using a
+ * tree view component.
  */
 public class JSONViewer extends Application.Adapter {
     private Window window = null;
 
-    @BXML private TreeView treeView = null;
+    @BXML
+    private TreeView treeView = null;
 
     private OverlayDecorator promptDecorator = new OverlayDecorator();
 
@@ -60,12 +61,11 @@ public class JSONViewer extends Application.Adapter {
     public static final String WINDOW_TITLE = "JSON Viewer";
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         bxmlSerializer.getNamespace().put(APPLICATION_KEY, this);
 
-        window = (Window)bxmlSerializer.readObject(JSONViewer.class, "json_viewer.bxml");
+        window = (Window) bxmlSerializer.readObject(JSONViewer.class, "json_viewer.bxml");
         bxmlSerializer.bind(this);
 
         Label prompt = new Label("Drag or paste JSON here");
@@ -100,8 +100,7 @@ public class JSONViewer extends Application.Adapter {
     public void paste() {
         Manifest clipboardContent = Clipboard.getContent();
 
-        if (clipboardContent != null
-            && clipboardContent.containsText()) {
+        if (clipboardContent != null && clipboardContent.containsText()) {
             String json = null;
             JSONSerializer jsonSerializer = new JSONSerializer();
             try {
@@ -145,7 +144,7 @@ public class JSONViewer extends Application.Adapter {
             } else {
                 Prompt.prompt("Multiple files not supported.", window);
             }
-        } catch(IOException exception) {
+        } catch (IOException exception) {
             Prompt.prompt(exception.getMessage(), window);
         }
 
@@ -153,8 +152,7 @@ public class JSONViewer extends Application.Adapter {
     }
 
     private void setValue(Object value) {
-        assert (value instanceof Map<?, ?>
-            || value instanceof List<?>);
+        assert (value instanceof Map<?, ?> || value instanceof List<?>);
         // Remove prompt decorator
         if (promptDecorator != null) {
             treeView.getDecorators().remove(promptDecorator);
@@ -180,7 +178,7 @@ public class JSONViewer extends Application.Adapter {
                 }
             });
 
-            Map<String, Object> map = (Map<String, Object>)value;
+            Map<String, Object> map = (Map<String, Object>) value;
             for (String key : map) {
                 TreeNode valueNode = build(map.get(key));
 
@@ -198,7 +196,7 @@ public class JSONViewer extends Application.Adapter {
         } else if (value instanceof List<?>) {
             TreeBranch treeBranch = new TreeBranch("[]");
 
-            List<Object> list = (List<Object>)value;
+            List<Object> list = (List<Object>) value;
             for (int i = 0, n = list.getLength(); i < n; i++) {
                 TreeNode itemNode = build(list.get(i));
 

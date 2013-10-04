@@ -29,7 +29,6 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 
-
 /**
  * Default list view item renderer.
  */
@@ -71,10 +70,10 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         String text = null;
 
         if (item instanceof ListItem) {
-            ListItem listItem = (ListItem)item;
+            ListItem listItem = (ListItem) item;
             icon = listItem.getIcon();
         } else if (item instanceof Image) {
-            icon = (Image)item;
+            icon = (Image) item;
         }
         text = toString(item);
 
@@ -82,26 +81,26 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         label.setText(text != null ? text : "");
     }
 
-    protected void renderStyles(ListView listView, boolean selected,
-        @SuppressWarnings("unused") boolean highlighted, boolean disabled) {
+    protected void renderStyles(ListView listView, boolean selected, @SuppressWarnings("unused")
+    boolean highlighted, boolean disabled) {
         imageView.getStyles().put("opacity", listView.isEnabled() ? 1.0f : 0.5f);
 
-        Font font = (Font)listView.getStyles().get("font");
+        Font font = (Font) listView.getStyles().get("font");
         label.getStyles().put("font", font);
 
         Color color;
         if (listView.isEnabled() && !disabled) {
             if (selected) {
                 if (listView.isFocused()) {
-                    color = (Color)listView.getStyles().get("selectionColor");
+                    color = (Color) listView.getStyles().get("selectionColor");
                 } else {
-                    color = (Color)listView.getStyles().get("inactiveSelectionColor");
+                    color = (Color) listView.getStyles().get("inactiveSelectionColor");
                 }
             } else {
-                color = (Color)listView.getStyles().get("color");
+                color = (Color) listView.getStyles().get("color");
             }
         } else {
-            color = (Color)listView.getStyles().get("disabledColor");
+            color = (Color) listView.getStyles().get("disabledColor");
         }
 
         label.getStyles().put("color", color);
@@ -112,7 +111,7 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
         String string = null;
 
         if (item instanceof ListItem) {
-            ListItem listItem = (ListItem)item;
+            ListItem listItem = (ListItem) item;
             string = listItem.getText();
         } else if (!(item instanceof Image)) {
             if (item != null) {
@@ -148,7 +147,7 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
     }
 
     public boolean getFillIcon() {
-        return (Boolean)imageView.getStyles().get("fill");
+        return (Boolean) imageView.getStyles().get("fill");
     }
 
     public void setFillIcon(boolean fillIcon) {
@@ -157,10 +156,9 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
 
     /**
      * Gets the bounds of the text that is rendered by this renderer.
-     *
-     * @return
-     * The bounds of the rendered text, or <tt>null</tt> if this renderer did
-     * not render any text.
+     * 
+     * @return The bounds of the rendered text, or <tt>null</tt> if this
+     * renderer did not render any text.
      */
     public Bounds getTextBounds() {
         return (label.isVisible() ? label.getBounds() : null);

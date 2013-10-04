@@ -19,9 +19,8 @@ package org.apache.pivot.web;
 import org.apache.pivot.util.Base64;
 
 /**
- * Implementation of the {@link Authentication} interface supporting the
- * HTTP <a href="http://tools.ietf.org/rfc/rfc2617.txt">Basic
- * Authentication</a> scheme.
+ * Implementation of the {@link Authentication} interface supporting the HTTP <a
+ * href="http://tools.ietf.org/rfc/rfc2617.txt">Basic Authentication</a> scheme.
  */
 public class BasicAuthentication implements Authentication {
     private String username;

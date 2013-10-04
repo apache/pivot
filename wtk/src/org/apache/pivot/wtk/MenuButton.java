@@ -20,16 +20,14 @@ import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 
-
 /**
  * Component that allows a user to select one of several menu options. The
- * options are hidden until the user pushes the button.
- * <p>
- * The repeatable flag is used to trigger "split button" behavior.
- * When true, the button reflects the selected value and allows a user to
- * repeatedly press the left half of the button, firing additional menu
- * selection events for the selected item. Pressing the right half of the
- * button continues to fire button press events and display the menu.
+ * options are hidden until the user pushes the button. <p> The repeatable flag
+ * is used to trigger "split button" behavior. When true, the button reflects
+ * the selected value and allows a user to repeatedly press the left half of the
+ * button, firing additional menu selection events for the selected item.
+ * Pressing the right half of the button continues to fire button press events
+ * and display the menu.
  */
 @DefaultProperty("menu")
 public class MenuButton extends Button {
@@ -44,9 +42,9 @@ public class MenuButton extends Button {
     }
 
     /**
-     * MenuButton skin interface. MenuButton skins must implement
-     * this interface to facilitate additional communication between the
-     * component and the skin.
+     * MenuButton skin interface. MenuButton skins must implement this interface
+     * to facilitate additional communication between the component and the
+     * skin.
      */
     public interface Skin {
         public Window getMenuPopup();
@@ -90,8 +88,7 @@ public class MenuButton extends Button {
     }
 
     public void setMenu(Menu menu) {
-        if (menu != null
-            && menu.getItem() != null) {
+        if (menu != null && menu.getItem() != null) {
             throw new IllegalArgumentException("menu already belongs to an item.");
         }
 

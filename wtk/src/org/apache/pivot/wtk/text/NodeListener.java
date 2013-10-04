@@ -57,7 +57,7 @@ public interface NodeListener {
     /**
      * Called when a node's parent has changed, either as a result of being
      * added to or removed from an element.
-     *
+     * 
      * @param node
      * @param previousParent
      */
@@ -65,7 +65,7 @@ public interface NodeListener {
 
     /**
      * Called when a node's offset has changed within it's parent element.
-     *
+     * 
      * @param node
      * @param previousOffset
      */
@@ -73,7 +73,7 @@ public interface NodeListener {
 
     /**
      * Called when a child node has been inserted into a node.
-     *
+     * 
      * @param node
      * @param offset
      */
@@ -81,7 +81,7 @@ public interface NodeListener {
 
     /**
      * Called when child nodes have been removed from a node.
-     *
+     * 
      * @param node
      * @param removed
      * @param offset
@@ -90,7 +90,7 @@ public interface NodeListener {
 
     /**
      * Called when a text range has been inserted into a node.
-     *
+     * 
      * @param node
      * @param offset
      * @param span
@@ -99,7 +99,7 @@ public interface NodeListener {
 
     /**
      * Called when a text range has been removed from a node.
-     *
+     * 
      * @param node
      * @param offset
      * @param characterCount

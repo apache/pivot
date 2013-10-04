@@ -111,8 +111,7 @@ public class SaturationDecorator implements Decorator {
                 int srcRGB = buffer[i * width + j];
 
                 // Adjust color saturation
-                Color.RGBtoHSB((srcRGB >> 16) & 0xff,
-                    (srcRGB >> 8) & 0xff, srcRGB & 0xff, hsb);
+                Color.RGBtoHSB((srcRGB >> 16) & 0xff, (srcRGB >> 8) & 0xff, srcRGB & 0xff, hsb);
                 int dstRGB = Color.HSBtoRGB(hsb[0],
                     Math.min(Math.max(hsb[1] * multiplier, 0f), 1f), hsb[2]);
 

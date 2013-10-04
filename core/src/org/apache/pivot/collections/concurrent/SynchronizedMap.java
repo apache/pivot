@@ -28,8 +28,7 @@ import org.apache.pivot.util.ListenerList;
  * Synchronized implementation of the {@link Map} interface.
  */
 public class SynchronizedMap<K, V> implements Map<K, V> {
-    private static class SynchronizedMapListenerList<K, V>
-        extends MapListenerList<K, V> {
+    private static class SynchronizedMapListenerList<K, V> extends MapListenerList<K, V> {
         @Override
         public synchronized void add(MapListener<K, V> listener) {
             super.add(listener);
@@ -89,8 +88,7 @@ public class SynchronizedMap<K, V> implements Map<K, V> {
 
         if (update) {
             mapListeners.valueUpdated(this, key, previousValue);
-        }
-        else {
+        } else {
             mapListeners.valueAdded(this, key);
         }
 
@@ -145,8 +143,8 @@ public class SynchronizedMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * NOTE Callers must manually synchronize on the SynchronizedMap
-     * instance to ensure thread safety during iteration.
+     * NOTE Callers must manually synchronize on the SynchronizedMap instance to
+     * ensure thread safety during iteration.
      */
     @Override
     public Iterator<K> iterator() {

@@ -28,10 +28,7 @@ public final class Keyboard {
      * Enumeration representing keyboard modifiers.
      */
     public enum Modifier {
-        SHIFT,
-        CTRL,
-        ALT,
-        META;
+        SHIFT, CTRL, ALT, META;
 
         public int getMask() {
             return 1 << ordinal();
@@ -42,10 +39,7 @@ public final class Keyboard {
      * Enumeration representing key locations.
      */
     public enum KeyLocation {
-        STANDARD,
-        LEFT,
-        RIGHT,
-        KEYPAD
+        STANDARD, LEFT, RIGHT, KEYPAD
     }
 
     /**
@@ -75,9 +69,8 @@ public final class Keyboard {
             boolean equals = false;
 
             if (object instanceof KeyStroke) {
-                KeyStroke keyStroke = (KeyStroke)object;
-                equals = (this.keyCode == keyStroke.keyCode
-                    && this.modifiersLocal == keyStroke.modifiersLocal);
+                KeyStroke keyStroke = (KeyStroke) object;
+                equals = (this.keyCode == keyStroke.keyCode && this.modifiersLocal == keyStroke.modifiersLocal);
             }
 
             return equals;
@@ -114,8 +107,8 @@ public final class Keyboard {
             }
 
             if (awtModifiers != 0x00) {
-                return KeyEvent.getModifiersExText(awtModifiers) + Platform.getKeyStrokeModifierSeparator()
-                    + KeyEvent.getKeyText(keyCode);
+                return KeyEvent.getModifiersExText(awtModifiers)
+                    + Platform.getKeyStrokeModifierSeparator() + KeyEvent.getKeyText(keyCode);
             }
 
             return KeyEvent.getKeyText(keyCode);
@@ -147,8 +140,8 @@ public final class Keyboard {
                     // Keycode
                     try {
                         Field keyCodeField = KeyCode.class.getField(keys[i].toUpperCase(Locale.ENGLISH));
-                        keyCode = (Integer)keyCodeField.get(null);
-                    } catch(Exception exception) {
+                        keyCode = (Integer) keyCodeField.get(null);
+                    } catch (Exception exception) {
                         throw new IllegalArgumentException(exception);
                     }
                 }
@@ -262,8 +255,8 @@ public final class Keyboard {
     private static int modifiers = 0;
 
     /**
-     * Returns a bitfield representing the keyboard modifiers that are
-     * currently pressed.
+     * Returns a bitfield representing the keyboard modifiers that are currently
+     * pressed.
      */
     public static int getModifiers() {
         return modifiers;
@@ -275,11 +268,10 @@ public final class Keyboard {
 
     /**
      * Tests the pressed state of a modifier.
-     *
+     * 
      * @param modifier
-     *
-     * @return
-     * <tt>true</tt> if the modifier is pressed; <tt>false</tt>, otherwise.
+     * @return <tt>true</tt> if the modifier is pressed; <tt>false</tt>,
+     * otherwise.
      */
     public static boolean isPressed(Modifier modifier) {
         return (modifiers & modifier.getMask()) > 0;
@@ -287,10 +279,9 @@ public final class Keyboard {
 
     /**
      * Returns the current drop action.
-     *
-     * @return
-     * The drop action corresponding to the currently pressed modifier keys,
-     * or <tt>null</tt> if no modifiers are pressed.
+     * 
+     * @return The drop action corresponding to the currently pressed modifier
+     * keys, or <tt>null</tt> if no modifiers are pressed.
      */
     public static DropAction getDropAction() {
         // TODO Return an appropriate action for OS:
@@ -299,8 +290,7 @@ public final class Keyboard {
 
         DropAction dropAction = null;
 
-        if (isPressed(Modifier.CTRL)
-            && isPressed(Modifier.SHIFT)) {
+        if (isPressed(Modifier.CTRL) && isPressed(Modifier.SHIFT)) {
             dropAction = DropAction.LINK;
         } else if (isPressed(Modifier.CTRL)) {
             dropAction = DropAction.COPY;

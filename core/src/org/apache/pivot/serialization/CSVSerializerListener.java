@@ -44,7 +44,7 @@ public interface CSVSerializerListener {
 
     /**
      * Called when the serializer has begun reading the list.
-     *
+     * 
      * @param csvSerializer
      * @param list
      */
@@ -52,14 +52,14 @@ public interface CSVSerializerListener {
 
     /**
      * Called when the serializer has finished reading the list.
-     *
+     * 
      * @param csvSerializer
      */
     public void endList(CSVSerializer csvSerializer);
 
     /**
      * Called when the serializer has read an item.
-     *
+     * 
      * @param csvSerializer
      * @param item
      */

@@ -19,8 +19,8 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Keyboard;
-import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Mouse;
 
 /**
  * Abstract base class for checkbox skins.
@@ -35,7 +35,7 @@ public abstract class CheckboxSkin extends ButtonSkin {
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
-        Checkbox checkbox = (Checkbox)getComponent();
+        Checkbox checkbox = (Checkbox) getComponent();
 
         checkbox.requestFocus();
         checkbox.press();
@@ -50,7 +50,7 @@ public abstract class CheckboxSkin extends ButtonSkin {
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        Checkbox checkbox = (Checkbox)getComponent();
+        Checkbox checkbox = (Checkbox) getComponent();
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
             checkbox.press();

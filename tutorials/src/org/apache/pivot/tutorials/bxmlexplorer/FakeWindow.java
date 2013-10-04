@@ -30,8 +30,8 @@ import org.apache.pivot.wtk.WindowListener;
 import org.apache.pivot.wtk.media.Image;
 
 /**
- * Because we can't render a real Window object inside our container, create a fake window
- * that looks mostly like a real window.
+ * Because we can't render a real Window object inside our container, create a
+ * fake window that looks mostly like a real window.
  */
 @DefaultProperty("content")
 public class FakeWindow extends Container {

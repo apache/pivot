@@ -28,15 +28,15 @@ import org.apache.pivot.wtk.Cursor;
 /**
  * Abstract base class for button skins.
  */
-public abstract class ButtonSkin extends ComponentSkin
-    implements ButtonListener, ButtonStateListener, ButtonPressListener {
+public abstract class ButtonSkin extends ComponentSkin implements ButtonListener,
+    ButtonStateListener, ButtonPressListener {
     protected boolean highlighted = false;
 
     @Override
     public void install(Component component) {
         super.install(component);
 
-        Button button = (Button)component;
+        Button button = (Button) component;
         button.getButtonListeners().add(this);
         button.getButtonStateListeners().add(this);
         button.getButtonPressListeners().add(this);

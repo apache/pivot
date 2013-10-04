@@ -160,17 +160,25 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(VFSBrowser.class, TerraVFSBrowserSkin.class);
         componentSkinMap.put(VFSBrowserSheet.class, TerraVFSBrowserSheetSkin.class);
 
-        componentSkinMap.put(TerraCalendarSkin.DateButton.class, TerraCalendarSkin.DateButtonSkin.class);
-        componentSkinMap.put(TerraExpanderSkin.ShadeButton.class, TerraExpanderSkin.ShadeButtonSkin.class);
+        componentSkinMap.put(TerraCalendarSkin.DateButton.class,
+            TerraCalendarSkin.DateButtonSkin.class);
+        componentSkinMap.put(TerraExpanderSkin.ShadeButton.class,
+            TerraExpanderSkin.ShadeButtonSkin.class);
         componentSkinMap.put(TerraFrameSkin.FrameButton.class, TerraFrameSkin.FrameButtonSkin.class);
-        componentSkinMap.put(TerraRollupSkin.RollupButton.class, TerraRollupSkin.RollupButtonSkin.class);
-        componentSkinMap.put(TerraScrollBarSkin.ScrollButton.class, TerraScrollBarSkin.ScrollButtonSkin.class);
+        componentSkinMap.put(TerraRollupSkin.RollupButton.class,
+            TerraRollupSkin.RollupButtonSkin.class);
+        componentSkinMap.put(TerraScrollBarSkin.ScrollButton.class,
+            TerraScrollBarSkin.ScrollButtonSkin.class);
         componentSkinMap.put(TerraScrollBarSkin.Handle.class, TerraScrollBarSkin.HandleSkin.class);
         componentSkinMap.put(TerraSliderSkin.Thumb.class, TerraSliderSkin.ThumbSkin.class);
-        componentSkinMap.put(TerraSpinnerSkin.SpinButton.class, TerraSpinnerSkin.SpinButtonSkin.class);
-        componentSkinMap.put(TerraSpinnerSkin.SpinnerContent.class, TerraSpinnerSkin.SpinnerContentSkin.class);
-        componentSkinMap.put(TerraSplitPaneSkin.Splitter.class, TerraSplitPaneSkin.SplitterSkin.class);
-        componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class, TerraSplitPaneSkin.SplitterShadowSkin.class);
+        componentSkinMap.put(TerraSpinnerSkin.SpinButton.class,
+            TerraSpinnerSkin.SpinButtonSkin.class);
+        componentSkinMap.put(TerraSpinnerSkin.SpinnerContent.class,
+            TerraSpinnerSkin.SpinnerContentSkin.class);
+        componentSkinMap.put(TerraSplitPaneSkin.Splitter.class,
+            TerraSplitPaneSkin.SplitterSkin.class);
+        componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class,
+            TerraSplitPaneSkin.SplitterShadowSkin.class);
         componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
 
         String packageName = getClass().getPackage().getName();
@@ -184,7 +192,6 @@ public final class TerraTheme extends Theme {
             // No-op
         }
 
-
         URL locationURL;
         if (location == null) {
             locationURL = getClass().getResource("TerraTheme_default.json");
@@ -194,12 +201,14 @@ public final class TerraTheme extends Theme {
             if (location.startsWith("/")) {
                 locationURL = classLoader.getResource(location.substring(1));
             } else {
-                locationURL = classLoader.getResource(packageName.replace('.', '/') + "/" + location);
+                locationURL = classLoader.getResource(packageName.replace('.', '/') + "/"
+                    + location);
             }
         }
 
         if (locationURL == null) {
-            throw new RuntimeException("Unable to locate color scheme resource \"" + location + "\".");
+            throw new RuntimeException("Unable to locate color scheme resource \"" + location
+                + "\".");
         }
 
         load(locationURL);
@@ -210,10 +219,11 @@ public final class TerraTheme extends Theme {
 
             try {
                 JSONSerializer serializer = new JSONSerializer();
-                Map<String, ?> terraThemeStyles = (Map<String, ?>)serializer.readObject(inputStream);
+                Map<String, ?> terraThemeStyles = (Map<String, ?>) serializer.readObject(inputStream);
 
                 for (String name : terraThemeStyles) {
-                    Component.getNamedStyles().put(packageName + "." + name, (Map<String, ?>)terraThemeStyles.get(name));
+                    Component.getNamedStyles().put(packageName + "." + name,
+                        (Map<String, ?>) terraThemeStyles.get(name));
                 }
             } finally {
                 inputStream.close();
@@ -236,17 +246,17 @@ public final class TerraTheme extends Theme {
             try {
                 JSONSerializer serializer = new JSONSerializer();
                 @SuppressWarnings("unchecked")
-                Map<String, ?> properties = (Map<String, ?>)serializer.readObject(inputStream);
+                Map<String, ?> properties = (Map<String, ?>) serializer.readObject(inputStream);
 
-                font = Font.decode((String)properties.get("font"));
+                font = Font.decode((String) properties.get("font"));
 
                 @SuppressWarnings("unchecked")
-                List<String> colorCodes = (List<String>)properties.get("colors");
+                List<String> colorCodes = (List<String>) properties.get("colors");
                 numberOfPaletteColors = colorCodes.getLength();
                 int numberOfColors = numberOfPaletteColors * 3;
                 colors = new ArrayList<>(numberOfColors);
 
-                colorMultiplier = ((Double)properties.get("colorMultiplier")).floatValue();
+                colorMultiplier = ((Double) properties.get("colorMultiplier")).floatValue();
 
                 for (String colorCode : colorCodes) {
                     Color baseColor = Color.decode(colorCode);
@@ -256,14 +266,12 @@ public final class TerraTheme extends Theme {
                 }
 
                 @SuppressWarnings("unchecked")
-                Map<String, String> messageIconNames =
-                    (Map<String, String>)properties.get("messageIcons");
+                Map<String, String> messageIconNames = (Map<String, String>) properties.get("messageIcons");
                 messageIcons = new HashMap<>();
                 loadMessageIcons(messageIconNames, messageIcons);
 
                 @SuppressWarnings("unchecked")
-                Map<String, String> smallMessageIconNames =
-                    (Map<String, String>)properties.get("smallMessageIcons");
+                Map<String, String> smallMessageIconNames = (Map<String, String>) properties.get("smallMessageIcons");
                 smallMessageIcons = new HashMap<>();
                 loadMessageIcons(smallMessageIconNames, smallMessageIcons);
             } finally {
@@ -288,7 +296,8 @@ public final class TerraTheme extends Theme {
                 throw new RuntimeException(exception);
             }
 
-            messageIconsLocal.put(MessageType.valueOf(messageIconType.toUpperCase(Locale.ENGLISH)), messageIcon);
+            messageIconsLocal.put(MessageType.valueOf(messageIconType.toUpperCase(Locale.ENGLISH)),
+                messageIcon);
         }
     }
 
@@ -314,7 +323,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets a value from the theme's color palette.
-     *
+     * 
      * @param index
      */
     public Color getColor(int index) {
@@ -323,7 +332,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Sets a value in the theme's color palette.
-     *
+     * 
      * @param index
      * @param color
      */
@@ -337,7 +346,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets a base color from the theme's color palette.
-     *
+     * 
      * @param index
      */
     public Color getBaseColor(int index) {
@@ -346,7 +355,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Sets a base color in the theme's color palette.
-     *
+     * 
      * @param index
      * @param baseColor
      */
@@ -363,18 +372,20 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets the number of Palette Colors
+     * 
      * @return the number
      */
-    // @Override  // TODO: re-enable this override for PIVOT-689
+    // @Override // TODO: re-enable this override for PIVOT-689
     public int getNumberOfPaletteColors() {
         return numberOfPaletteColors;
     }
 
     /**
      * Gets the total number of Colors
+     * 
      * @return the number
      */
-    // @Override  // TODO: re-enable this override for PIVOT-689
+    // @Override // TODO: re-enable this override for PIVOT-689
     public int getNumberOfColors() {
         return colors == null ? 0 : colors.getLength();
     }
@@ -382,7 +393,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets the image that this theme uses to represent messages of the
      * specified type.
-     *
+     * 
      * @param messageType
      */
     public Image getMessageIcon(MessageType messageType) {
@@ -392,13 +403,12 @@ public final class TerraTheme extends Theme {
     /**
      * Sets the image that this theme uses to represent messages of the
      * specified type.
-     *
+     * 
      * @param messageType
      * @param messageIcon
      */
     public void setMessageIcon(MessageType messageType, Image messageIcon) {
-        if (messageType == null
-            || messageIcon == null) {
+        if (messageType == null || messageIcon == null) {
             throw new IllegalArgumentException();
         }
 
@@ -408,7 +418,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets the small image that this theme uses to represent messages of the
      * specified type.
-     *
+     * 
      * @param messageType
      */
     public Image getSmallMessageIcon(MessageType messageType) {
@@ -418,13 +428,12 @@ public final class TerraTheme extends Theme {
     /**
      * Sets the small image that this theme uses to represent messages of the
      * specified type.
-     *
+     * 
      * @param messageType
      * @param smallMessageIcon
      */
     public void setSmallMessageIcon(MessageType messageType, Image smallMessageIcon) {
-        if (messageType == null
-            || smallMessageIcon == null) {
+        if (messageType == null || smallMessageIcon == null) {
             throw new IllegalArgumentException();
         }
 

@@ -31,12 +31,12 @@ import org.apache.pivot.wtk.Window;
 public class ComponentKeyListenerExample extends Window implements Bindable {
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        TextInput textInput = (TextInput)namespace.get("textInput");
+        TextInput textInput = (TextInput) namespace.get("textInput");
         textInput.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
-            public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-                if (keyCode == Keyboard.KeyCode.S
-                    && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+            public boolean keyPressed(Component component, int keyCode,
+                Keyboard.KeyLocation keyLocation) {
+                if (keyCode == Keyboard.KeyCode.S && Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
                     Alert.alert("You pressed Control-S!", component.getWindow());
                 }
 

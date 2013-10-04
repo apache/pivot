@@ -40,8 +40,7 @@ public class NativeDragDropTest extends Application.Adapter {
     private Frame frame = null;
 
     @Override
-    public void startup(final Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(final Display display, Map<String, String> properties) throws Exception {
         final Label label = new Label("http://pivot.apache.org/");
         label.getStyles().put("font", new Font("Arial", Font.PLAIN, 24));
         label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
@@ -125,10 +124,10 @@ public class NativeDragDropTest extends Application.Adapter {
                 DropAction dropAction = null;
 
                 if (dragContent.containsText()) {
-                    Label labelLocal = (Label)component;
+                    Label labelLocal = (Label) component;
                     try {
                         labelLocal.setText(dragContent.getText());
-                    } catch(IOException exception) {
+                    } catch (IOException exception) {
                         System.err.println(exception);
                     }
                 }

@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface WindowClassListener {
     /**
      * Called when the active window has changed.
-     *
+     * 
      * @param previousActiveWindow
      */
     public void activeWindowChanged(Window previousActiveWindow);

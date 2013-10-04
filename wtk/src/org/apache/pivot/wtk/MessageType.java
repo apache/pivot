@@ -20,8 +20,5 @@ package org.apache.pivot.wtk;
  * Enumeration defining a message's type.
  */
 public enum MessageType {
-    ERROR,
-    WARNING,
-    QUESTION,
-    INFO
+    ERROR, WARNING, QUESTION, INFO
 }

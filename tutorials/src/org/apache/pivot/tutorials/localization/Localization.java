@@ -44,7 +44,7 @@ public class Localization extends Application.Adapter {
         Font font = theme.getFont();
 
         // Search for a font that can support the sample string
-        String sampleResource = (String)resources.get("firstName");
+        String sampleResource = (String) resources.get("firstName");
         if (font.canDisplayUpTo(sampleResource) != -1) {
             Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
 
@@ -57,7 +57,8 @@ public class Localization extends Application.Adapter {
         }
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(Localization.class.getResource("localization.bxml"), resources);
+        window = (Window) bxmlSerializer.readObject(
+            Localization.class.getResource("localization.bxml"), resources);
         window.open(display);
     }
 

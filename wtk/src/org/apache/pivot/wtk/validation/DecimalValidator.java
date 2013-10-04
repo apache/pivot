@@ -54,8 +54,9 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
         }
     }
 
-    /** helper method that returns the widest number real instance,
-     * and extract later values depending on the precision needed.
+    /**
+     * helper method that returns the widest number real instance, and extract
+     * later values depending on the precision needed.
      */
     protected final BigDecimal textToBigDecimal(final String text) {
         BigDecimal bd;
@@ -77,9 +78,11 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
         this.autoTrim = autoTrim;
     }
 
-    /** tell the autoTrim mode
+    /**
+     * tell the autoTrim mode
+     * 
      * @return true if autoTrim is enabled, otherwise false (default)
-     * */
+     */
     public boolean isAutoTrim() {
         return autoTrim;
     }

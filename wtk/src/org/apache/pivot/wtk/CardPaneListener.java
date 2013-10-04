@@ -44,35 +44,27 @@ public interface CardPaneListener {
 
     /**
      * Called to preview a selected index change.
-     *
-     * @param cardPane
-     * The source of the event.
-     *
-     * @param selectedIndex
-     * The index that will be selected.
+     * 
+     * @param cardPane The source of the event.
+     * @param selectedIndex The index that will be selected.
      */
     public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex);
 
     /**
      * Called when a selected index change has been vetoed.
-     *
-     * @param cardPane
-     * The source of the event.
-     *
-     * @param reason
-     * The reason the event was vetoed.
+     * 
+     * @param cardPane The source of the event.
+     * @param reason The reason the event was vetoed.
      */
     public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason);
 
     /**
      * Called when a card pane's selected index has changed.
-     *
-     * @param cardPane
-     * The source of the event.
-     *
-     * @param previousSelectedIndex
-     * If the selection changed directly, contains the index that was previously
-     * selected. Otherwise, contains the current selection.
+     * 
+     * @param cardPane The source of the event.
+     * @param previousSelectedIndex If the selection changed directly, contains
+     * the index that was previously selected. Otherwise, contains the current
+     * selection.
      */
     public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex);
 }

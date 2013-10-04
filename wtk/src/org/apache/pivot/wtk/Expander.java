@@ -27,8 +27,8 @@ import org.apache.pivot.util.Vote;
  */
 @DefaultProperty("content")
 public class Expander extends Container {
-    private static class ExpanderListenerList extends WTKListenerList<ExpanderListener>
-    implements ExpanderListener {
+    private static class ExpanderListenerList extends WTKListenerList<ExpanderListener> implements
+        ExpanderListener {
         @Override
         public void titleChanged(Expander expander, String previousTitle) {
             for (ExpanderListener listener : this) {
@@ -89,9 +89,8 @@ public class Expander extends Container {
 
     /**
      * Returns the expander's title.
-     *
-     * @return
-     * The pane's title, or <tt>null</tt> if no title is set.
+     * 
+     * @return The pane's title, or <tt>null</tt> if no title is set.
      */
     public String getTitle() {
         return title;
@@ -99,9 +98,8 @@ public class Expander extends Container {
 
     /**
      * Sets the expander's title.
-     *
-     * @param title
-     * The new title, or <tt>null</tt> for no title.
+     * 
+     * @param title The new title, or <tt>null</tt> for no title.
      */
     public void setTitle(String title) {
         String previousTitle = this.title;
@@ -114,9 +112,8 @@ public class Expander extends Container {
 
     /**
      * Returns the expander's collapsible flag.
-     *
-     * @return
-     * The collapsible flag
+     * 
+     * @return The collapsible flag
      */
     public boolean isCollapsible() {
         return collapsible;
@@ -124,14 +121,12 @@ public class Expander extends Container {
 
     /**
      * Sets the expander's collapsible flag.
-     *
-     * @param collapsible
-     * The collapsible flag
+     * 
+     * @param collapsible The collapsible flag
      */
     public void setCollapsible(boolean collapsible) {
         if (collapsible != this.collapsible) {
-            if (!collapsible
-                && !expanded) {
+            if (!collapsible && !expanded) {
                 throw new IllegalStateException();
             }
 
@@ -146,8 +141,7 @@ public class Expander extends Container {
 
     public void setExpanded(boolean expanded) {
         if (expanded != this.expanded) {
-            if (!collapsible
-                && !expanded) {
+            if (!collapsible && !expanded) {
                 throw new IllegalStateException();
             }
 

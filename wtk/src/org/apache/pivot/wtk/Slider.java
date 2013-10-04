@@ -23,8 +23,8 @@ import org.apache.pivot.util.ListenerList;
  * Allows a user to select one of a range of values.
  */
 public class Slider extends Container {
-    private static class SliderListenerList extends WTKListenerList<SliderListener>
-        implements SliderListener {
+    private static class SliderListenerList extends WTKListenerList<SliderListener> implements
+        SliderListener {
         @Override
         public void orientationChanged(Slider slider) {
             for (SliderListener listener : this) {
@@ -90,15 +90,15 @@ public class Slider extends Container {
 
     public void setRange(int start, int end) {
         if (start > end) {
-            throw new IllegalArgumentException("start " + start + " is greater than maximum " + end + ".");
+            throw new IllegalArgumentException("start " + start + " is greater than maximum " + end
+                + ".");
         }
 
         int previousStart = this.start;
         int previousEnd = this.end;
         int previousValue = this.value;
 
-        if (start != previousStart
-            || end != previousEnd) {
+        if (start != previousStart || end != previousEnd) {
             this.start = start;
             if (value < start) {
                 this.value = start;
@@ -111,8 +111,7 @@ public class Slider extends Container {
 
             sliderListeners.rangeChanged(this, previousStart, previousEnd);
 
-            if (previousValue < start
-                || previousValue > end) {
+            if (previousValue < start || previousValue > end) {
                 sliderValueListeners.valueChanged(this, previousValue);
             }
         }
@@ -148,11 +147,13 @@ public class Slider extends Container {
 
     public void setValue(int value) {
         if (value < start) {
-            throw new IllegalArgumentException("value " + value + " is less than minimum " + start + ".");
+            throw new IllegalArgumentException("value " + value + " is less than minimum " + start
+                + ".");
         }
 
         if (value > end) {
-            throw new IllegalArgumentException("value " + value + " is greater than maximum " + end + ".");
+            throw new IllegalArgumentException("value " + value + " is greater than maximum " + end
+                + ".");
         }
 
         int previousValue = this.value;
@@ -177,6 +178,7 @@ public class Slider extends Container {
             sliderListeners.orientationChanged(this);
         }
     }
+
     public ListenerList<SliderListener> getSliderListeners() {
         return sliderListeners;
     }

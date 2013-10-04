@@ -91,11 +91,11 @@ public class TextPaneDemo extends Application.Adapter {
     @BXML
     private Checkbox wrapTextCheckbox = null;
     @BXML
-    private PushButton alignLeftButton= null;
+    private PushButton alignLeftButton = null;
     @BXML
-    private PushButton alignCentreButton= null;
+    private PushButton alignCentreButton = null;
     @BXML
-    private PushButton alignRightButton= null;
+    private PushButton alignRightButton = null;
 
     private File loadedFile = null;
 
@@ -105,17 +105,17 @@ public class TextPaneDemo extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(TextPaneDemo.class, "text_pane_demo.bxml");
+        window = (Window) bxmlSerializer.readObject(TextPaneDemo.class, "text_pane_demo.bxml");
         bxmlSerializer.bind(this, TextPaneDemo.class);
 
         window.setTitle("Apache Pivot Rich Text Editor Demo");
 
         // make the text on the "bold" button bold
-        Font boldButtonFont = (Font)boldButton.getStyles().get("font");
+        Font boldButtonFont = (Font) boldButton.getStyles().get("font");
         boldButton.getStyles().put("font", boldButtonFont.deriveFont(Font.BOLD));
 
         // make the text on the "italic" button italic
-        Font italicButtonFont = (Font)italicButton.getStyles().get("font");
+        Font italicButtonFont = (Font) italicButton.getStyles().get("font");
         italicButton.getStyles().put("font", italicButtonFont.deriveFont(Font.ITALIC));
 
         fontFamilyListButton.setListData(new ArrayList<>(
@@ -127,7 +127,7 @@ public class TextPaneDemo extends Application.Adapter {
                 boolean checked, boolean highlighted, boolean disabled) {
                 super.render(item, index, listView, selected, checked, highlighted, disabled);
                 if (item != null) {
-                    String fontFamilyName = (String)item;
+                    String fontFamilyName = (String) item;
                     label.getStyles().put("font", Font.decode(fontFamilyName + "-12"));
                 }
             }
@@ -137,7 +137,7 @@ public class TextPaneDemo extends Application.Adapter {
             public void render(Object data, Button button, boolean highlight) {
                 super.render(data, button, highlight);
                 if (data != null) {
-                    String fontFamilyName = (String)data;
+                    String fontFamilyName = (String) data;
                     label.getStyles().put("font", Font.decode(fontFamilyName + "-12"));
                 }
             }
@@ -159,7 +159,8 @@ public class TextPaneDemo extends Application.Adapter {
                             loadedFile = fileBrowserSheet.getSelectedFile();
 
                             try {
-                                BufferedReader reader = new BufferedReader(new FileReader(loadedFile));
+                                BufferedReader reader = new BufferedReader(new FileReader(
+                                    loadedFile));
                                 PlainTextSerializer serializer = new PlainTextSerializer();
                                 textPane.setDocument(serializer.readObject(reader));
                                 reader.close();
@@ -312,8 +313,8 @@ public class TextPaneDemo extends Application.Adapter {
         ListButtonSelectionListener fontButtonPressListener = new ListButtonSelectionListener.Adapter() {
             @Override
             public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
-                int selectedFontSize = (Integer)fontSizeListButton.getSelectedItem();
-                String selectedFontFamily = (String)fontFamilyListButton.getSelectedItem();
+                int selectedFontSize = (Integer) fontSizeListButton.getSelectedItem();
+                String selectedFontFamily = (String) fontFamilyListButton.getSelectedItem();
                 final Font derivedFont = Font.decode(selectedFontFamily + " " + selectedFontSize);
 
                 applyStyleToSelection(new StyleApplicator() {
@@ -387,7 +388,7 @@ public class TextPaneDemo extends Application.Adapter {
         }
         printStream.append("<" + node.getClass().getSimpleName() + ">");
         if (node instanceof TextNode) {
-            TextNode textNode = (TextNode)node;
+            TextNode textNode = (TextNode) node;
             String text = textNode.getText();
             printStream.append(text);
             printStream.append("</" + node.getClass().getSimpleName() + ">");
@@ -395,7 +396,7 @@ public class TextPaneDemo extends Application.Adapter {
         } else {
             printStream.println();
             if (node instanceof Element) {
-                Element element = (Element)node;
+                Element element = (Element) node;
 
                 for (Node childNode : element) {
                     dumpDocumentNode(childNode, printStream, indent + 1);
@@ -433,7 +434,7 @@ public class TextPaneDemo extends Application.Adapter {
 
         for (Node node : nodeList) {
             if (node instanceof TextSpan) {
-                TextSpan span = (TextSpan)node;
+                TextSpan span = (TextSpan) node;
                 int documentOffset = node.getDocumentOffset();
                 int characterCount = node.getCharacterCount();
                 org.apache.pivot.wtk.Span textSpan = new org.apache.pivot.wtk.Span(documentOffset,
@@ -444,7 +445,7 @@ public class TextPaneDemo extends Application.Adapter {
                 }
             }
             if (node instanceof org.apache.pivot.wtk.text.TextNode) {
-                org.apache.pivot.wtk.text.TextNode textNode = (org.apache.pivot.wtk.text.TextNode)node;
+                org.apache.pivot.wtk.text.TextNode textNode = (org.apache.pivot.wtk.text.TextNode) node;
                 int documentOffset = node.getDocumentOffset();
                 int characterCount = node.getCharacterCount();
                 org.apache.pivot.wtk.Span textSpan = new org.apache.pivot.wtk.Span(documentOffset,
@@ -526,8 +527,8 @@ public class TextPaneDemo extends Application.Adapter {
     }
 
     private static void applyStyleToSpanNode(org.apache.pivot.wtk.Span selectionSpan,
-        StyleApplicator styleApplicator, TextSpan spanNode,
-        int characterCount, org.apache.pivot.wtk.Span textSpan) {
+        StyleApplicator styleApplicator, TextSpan spanNode, int characterCount,
+        org.apache.pivot.wtk.Span textSpan) {
         if (selectionSpan.contains(textSpan)) {
             // if the span-node is contained wholly inside the
             // selection, apply the style
@@ -548,8 +549,8 @@ public class TextPaneDemo extends Application.Adapter {
             // the last part of the span-node, and apply the style to it
             int intersectionStart = selectionSpan.start - textSpan.start;
             TextSpan part1 = spanNode.getRange(0, intersectionStart);
-            TextSpan part2 = spanNode.getRange(intersectionStart,
-                characterCount - intersectionStart);
+            TextSpan part2 = spanNode.getRange(intersectionStart, characterCount
+                - intersectionStart);
 
             styleApplicator.apply(part2);
 
@@ -564,10 +565,8 @@ public class TextPaneDemo extends Application.Adapter {
             int part2Start = selectionSpan.start - textSpan.start;
             int part2End = selectionSpan.end - textSpan.start;
             TextSpan part1 = spanNode.getRange(0, part2Start);
-            TextSpan part2 = spanNode.getRange(part2Start, part2End
-                - part2Start);
-            TextSpan part3 = spanNode.getRange(part2End, characterCount
-                - part2End);
+            TextSpan part2 = spanNode.getRange(part2Start, part2End - part2Start);
+            TextSpan part3 = spanNode.getRange(part2End, characterCount - part2End);
 
             styleApplicator.apply(part2);
 
@@ -585,7 +584,7 @@ public class TextPaneDemo extends Application.Adapter {
             return;
         }
         if (node instanceof org.apache.pivot.wtk.text.Element) {
-            Element element = (Element)node;
+            Element element = (Element) node;
             for (Node child : element) {
                 nodeList.add(child);
                 collectNodes(child, nodeList);

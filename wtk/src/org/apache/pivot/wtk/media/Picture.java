@@ -30,9 +30,7 @@ public class Picture extends Image {
      * Enum defining the algorithms to apply when resizing a picture.
      */
     public enum Interpolation {
-        NEAREST_NEIGHBOR,
-        BILINEAR,
-        BICUBIC
+        NEAREST_NEIGHBOR, BILINEAR, BICUBIC
     }
 
     private BufferedImage bufferedImage = null;
@@ -69,12 +67,12 @@ public class Picture extends Image {
         int width = getWidth();
         int height = getHeight();
 
-        float aspectRatio = (float)width / (float)height;
+        float aspectRatio = (float) width / (float) height;
         if (aspectRatio > 1) {
             width = size;
-            height = (int)(size / aspectRatio);
+            height = (int) (size / aspectRatio);
         } else {
-            width = (int)(size * aspectRatio);
+            width = (int) (size * aspectRatio);
             height = size;
         }
 
@@ -93,15 +91,14 @@ public class Picture extends Image {
         int previousWidth = getWidth();
         int previousHeight = getHeight();
 
-        if (previousWidth != width
-            || previousHeight != height) {
+        if (previousWidth != width || previousHeight != height) {
             int type = bufferedImage.getType();
 
-            float scaleX = ((float)width / (float)previousWidth);
-            float scaleY = ((float)height / (float)previousHeight);
+            float scaleX = ((float) width / (float) previousWidth);
+            float scaleY = ((float) height / (float) previousHeight);
 
             java.awt.image.BufferedImage bufferedImageLocal = new BufferedImage(width, height, type);
-            Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImageLocal.getGraphics();
+            Graphics2D bufferedImageGraphics = (Graphics2D) bufferedImageLocal.getGraphics();
 
             // Clear the background
             if (this.bufferedImage.getTransparency() != Transparency.OPAQUE) {
@@ -131,7 +128,8 @@ public class Picture extends Image {
                 }
             }
 
-            bufferedImageGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, interpolationHint);
+            bufferedImageGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                interpolationHint);
 
             // Draw the image
             bufferedImageGraphics.scale(scaleX, scaleY);

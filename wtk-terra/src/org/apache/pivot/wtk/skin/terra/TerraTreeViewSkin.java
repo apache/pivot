@@ -57,9 +57,9 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 /**
  * Tree view skin.
  */
-public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
-    TreeViewListener, TreeViewBranchListener, TreeViewNodeListener,
-    TreeViewNodeStateListener, TreeViewSelectionListener{
+public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, TreeViewListener,
+    TreeViewBranchListener, TreeViewNodeListener, TreeViewNodeStateListener,
+    TreeViewSelectionListener {
 
     /**
      * Node info visitor interface.
@@ -67,17 +67,16 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     protected interface NodeInfoVisitor {
         /**
          * Visits the specified node info.
-         *
-         * @param nodeInfo
-         * The object to visit
+         * 
+         * @param nodeInfo The object to visit
          */
         public void visit(NodeInfo nodeInfo);
     }
 
     /**
-     * Iterates through the visible nodes. For callers who wish to know the
-     * path of each visible node, using this iterator will be much more
-     * efficient than manually iterating over the visible nodes and calling
+     * Iterates through the visible nodes. For callers who wish to know the path
+     * of each visible node, using this iterator will be much more efficient
+     * than manually iterating over the visible nodes and calling
      * <tt>getPath()</tt> on each node.
      */
     protected final class VisibleNodeIterator implements Iterator<NodeInfo> {
@@ -94,16 +93,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         /**
          * Creates a new visible node iterator that will iterate over a portion
          * of the visible nodes list (useful during painting).
-         *
-         * @param start
-         * The start index, inclusive
-         *
-         * @param end
-         * The end index, inclusive
+         * 
+         * @param start The start index, inclusive
+         * @param end The end index, inclusive
          */
         public VisibleNodeIterator(int start, int end) {
-            if (start < 0
-                || end >= visibleNodes.getLength()) {
+            if (start < 0 || end >= visibleNodes.getLength()) {
                 throw new IndexOutOfBoundsException();
             }
 
@@ -154,7 +149,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         /**
          * This operation is not supported by this iterator.
-         *
+         * 
          * @throws UnsupportedOperationException
          */
         @Override
@@ -163,14 +158,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         }
 
         /**
-         * Gets the index of the node last returned by a call to
-         * {@link #next()}, as seen in the current visible nodes list. Note
-         * that as branches are expanded and collapsed, the row index of any
-         * given node in the tree will change.
-         *
-         * @return
-         * The row index of the current node, or <tt>-1</tt> if <tt>next()</tt>
-         * has not yet been called.
+         * Gets the index of the node last returned by a call to {@link #next()}
+         * , as seen in the current visible nodes list. Note that as branches
+         * are expanded and collapsed, the row index of any given node in the
+         * tree will change.
+         * 
+         * @return The row index of the current node, or <tt>-1</tt> if
+         * <tt>next()</tt> has not yet been called.
          */
         public int getRowIndex() {
             return (path == null ? -1 : index - 1);
@@ -178,10 +172,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
         /**
          * Gets the path of the node last returned by a call to {@link #next()}.
-         *
-         * @return
-         * The path to the node, or <tt>null</tt> if <tt>next()</tt> has not
-         * yet been called.
+         * 
+         * @return The path to the node, or <tt>null</tt> if <tt>next()</tt> has
+         * not yet been called.
          */
         public Path getPath() {
             return path;
@@ -189,18 +182,17 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     /**
-     * An internal data structure that keeps track of skin-related metadata
-     * for a tree node. The justification for the existence of this class lies
-     * in the <tt>visibleNodes</tt> data structure, which is a flat list of
-     * nodes that are visible at any given time. In this context, visible means
-     * that their parent hierarchy is expanded, <b>not</b> that they are being
-     * painted. This list, combined with <tt>getNodeHeight()</tt>, enables us
-     * to quickly determine which nodes to paint given a graphics clip rect.
-     * It also enables us to quickly traverse the tree view when handling key
-     * events.
-     * <p>
-     * NOTE: some of this data is managed by <tt>TreeView</tt> and cached here
-     * to provide further optimizations during painting and user input.
+     * An internal data structure that keeps track of skin-related metadata for
+     * a tree node. The justification for the existence of this class lies in
+     * the <tt>visibleNodes</tt> data structure, which is a flat list of nodes
+     * that are visible at any given time. In this context, visible means that
+     * their parent hierarchy is expanded, <b>not</b> that they are being
+     * painted. This list, combined with <tt>getNodeHeight()</tt>, enables us to
+     * quickly determine which nodes to paint given a graphics clip rect. It
+     * also enables us to quickly traverse the tree view when handling key
+     * events. <p> NOTE: some of this data is managed by <tt>TreeView</tt> and
+     * cached here to provide further optimizations during painting and user
+     * input.
      */
     protected static class NodeInfo {
         // Core metadata
@@ -236,14 +228,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             // we set those flags appropriately here.
 
             @SuppressWarnings("unchecked")
-            Filter<Object> disabledNodeFilter = (Filter<Object>)treeView.getDisabledNodeFilter();
+            Filter<Object> disabledNodeFilter = (Filter<Object>) treeView.getDisabledNodeFilter();
             if (disabledNodeFilter != null) {
                 setDisabled(disabledNodeFilter.include(data));
             }
 
             @SuppressWarnings("unchecked")
-            Filter<Object> disabledCheckmarkFilter = (Filter<Object>)
-                treeView.getDisabledCheckmarkFilter();
+            Filter<Object> disabledCheckmarkFilter = (Filter<Object>) treeView.getDisabledCheckmarkFilter();
             if (disabledCheckmarkFilter != null) {
                 setCheckmarkDisabled(disabledCheckmarkFilter.include(data));
             }
@@ -254,7 +245,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             NodeInfo nodeInfo = null;
 
             if (data instanceof List<?>) {
-                nodeInfo = new BranchInfo(treeView, parent, (List<Object>)data);
+                nodeInfo = new BranchInfo(treeView, parent, (List<Object>) data);
             } else {
                 nodeInfo = new NodeInfo(treeView, parent, data);
             }
@@ -269,7 +260,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             NodeInfo nodeInfo = this;
 
             while (nodeInfo.parent != null) {
-                List<Object> parentData = (List<Object>)nodeInfo.parent.data;
+                List<Object> parentData = (List<Object>) nodeInfo.parent.data;
                 int index = parentData.indexOf(nodeInfo.data);
                 path.insert(index, 0);
 
@@ -331,15 +322,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             TreeView.NodeCheckState checkState;
 
             switch (fields & CHECK_STATE_MASK) {
-            case CHECK_STATE_CHECKED_MASK:
-                checkState = TreeView.NodeCheckState.CHECKED;
-                break;
-            case CHECK_STATE_MIXED_MASK:
-                checkState = TreeView.NodeCheckState.MIXED;
-                break;
-            default:
-                checkState = TreeView.NodeCheckState.UNCHECKED;
-                break;
+                case CHECK_STATE_CHECKED_MASK:
+                    checkState = TreeView.NodeCheckState.CHECKED;
+                    break;
+                case CHECK_STATE_MIXED_MASK:
+                    checkState = TreeView.NodeCheckState.MIXED;
+                    break;
+                default:
+                    checkState = TreeView.NodeCheckState.UNCHECKED;
+                    break;
             }
 
             return checkState;
@@ -372,8 +363,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     /**
-     * An internal data structure that keeps track of skin-related metadata
-     * for a tree branch.
+     * An internal data structure that keeps track of skin-related metadata for
+     * a tree branch.
      */
     protected static final class BranchInfo extends NodeInfo {
         // Core skin metadata
@@ -396,7 +387,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         @SuppressWarnings("unchecked")
         public void loadChildren() {
             if (children == null) {
-                List<Object> dataLocal = (List<Object>)this.data;
+                List<Object> dataLocal = (List<Object>) this.data;
                 int count = dataLocal.getLength();
 
                 children = new ArrayList<>(count);
@@ -465,7 +456,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public TerraTreeViewSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -493,7 +484,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     public void install(Component component) {
         super.install(component);
 
-        TreeView treeView = (TreeView)component;
+        TreeView treeView = (TreeView) component;
         treeView.getTreeViewListeners().add(this);
         treeView.getTreeViewBranchListeners().add(this);
         treeView.getTreeViewNodeListeners().add(this);
@@ -505,7 +496,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public int getPreferredWidth(int height) {
-        TreeView treeView = (TreeView)getComponent();
+        TreeView treeView = (TreeView) getComponent();
         TreeView.NodeRenderer nodeRenderer = treeView.getNodeRenderer();
 
         int preferredWidth = 0;
@@ -554,7 +545,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         int baseline = -1;
 
         if (visibleNodes.getLength() > 0) {
-            TreeView treeView = (TreeView)getComponent();
+            TreeView treeView = (TreeView) getComponent();
             TreeView.NodeRenderer nodeRenderer = treeView.getNodeRenderer();
 
             NodeInfo nodeInfo = visibleNodes.get(0);
@@ -569,7 +560,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
             if (showBranchControls) {
                 if (nodeInfo instanceof BranchInfo) {
-                    BranchInfo branchInfo = (BranchInfo)nodeInfo;
+                    BranchInfo branchInfo = (BranchInfo) nodeInfo;
                     expanded = branchInfo.isExpanded();
                 }
 
@@ -602,7 +593,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void paint(Graphics2D graphics) {
-        TreeView treeView = (TreeView)getComponent();
+        TreeView treeView = (TreeView) getComponent();
         TreeView.NodeRenderer nodeRenderer = treeView.getNodeRenderer();
 
         int width = getWidth();
@@ -623,10 +614,11 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         // Ensure that we only paint items that are visible
         Rectangle clipBounds = graphics.getClipBounds();
         if (clipBounds != null) {
-            nodeStart = Math.max(nodeStart, (int)(clipBounds.y
-                / (double)(nodeHeight + VERTICAL_SPACING)));
-            nodeEnd = Math.min(nodeEnd, (int)((clipBounds.y +
-                clipBounds.height) / (double)(nodeHeight + VERTICAL_SPACING)));
+            nodeStart = Math.max(nodeStart,
+                (int) (clipBounds.y / (double) (nodeHeight + VERTICAL_SPACING)));
+            nodeEnd = Math.min(
+                nodeEnd,
+                (int) ((clipBounds.y + clipBounds.height) / (double) (nodeHeight + VERTICAL_SPACING)));
         }
 
         int nodeY = nodeStart * (nodeHeight + VERTICAL_SPACING);
@@ -645,8 +637,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             if (treeView.isEnabled()) {
                 if (selected) {
                     // Paint the selection state
-                    Color selectionBackgroundColorLocal = treeView.isFocused() ?
-                        this.selectionBackgroundColor : inactiveSelectionBackgroundColor;
+                    Color selectionBackgroundColorLocal = treeView.isFocused() ? this.selectionBackgroundColor
+                        : inactiveSelectionBackgroundColor;
                     graphics.setPaint(selectionBackgroundColorLocal);
                     graphics.fillRect(0, nodeY, width, nodeHeight);
                 } else if (highlighted && !disabled) {
@@ -659,7 +651,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             // Paint the expand/collapse control
             if (showBranchControls) {
                 if (nodeInfo instanceof BranchInfo) {
-                    BranchInfo branchInfo = (BranchInfo)nodeInfo;
+                    BranchInfo branchInfo = (BranchInfo) nodeInfo;
 
                     boolean showBranchControl = true;
                     if (!showEmptyBranchControls) {
@@ -699,13 +691,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
                         shape.closePath();
 
-                        Graphics2D branchControlGraphics = (Graphics2D)graphics.create();
+                        Graphics2D branchControlGraphics = (Graphics2D) graphics.create();
                         branchControlGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                             RenderingHints.VALUE_ANTIALIAS_ON);
-                        if (!treeView.isEnabled()
-                            || disabled) {
-                            branchControlGraphics.setComposite
-                                (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+                        if (!treeView.isEnabled() || disabled) {
+                            branchControlGraphics.setComposite(AlphaComposite.getInstance(
+                                AlphaComposite.SRC_OVER, 0.5f));
                         }
                         branchControlGraphics.setPaint(branchControlColorLocal);
                         branchControlGraphics.fill(shape);
@@ -726,20 +717,20 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
                 int checkboxX = Math.max(indent - checkboxWidth, 0) / 2;
                 int checkboxY = (nodeHeight - checkboxHeight) / 2;
-                Graphics2D checkboxGraphics = (Graphics2D)graphics.create(nodeX + checkboxX,
-                    nodeY + checkboxY, checkboxWidth, checkboxHeight);
+                Graphics2D checkboxGraphics = (Graphics2D) graphics.create(nodeX + checkboxX, nodeY
+                    + checkboxY, checkboxWidth, checkboxHeight);
 
                 Button.State state;
                 switch (checkState) {
-                case CHECKED:
-                    state = Button.State.SELECTED;
-                    break;
-                case MIXED:
-                    state = Button.State.MIXED;
-                    break;
-                default:
-                    state = Button.State.UNSELECTED;
-                    break;
+                    case CHECKED:
+                        state = Button.State.SELECTED;
+                        break;
+                    case MIXED:
+                        state = Button.State.MIXED;
+                        break;
+                    default:
+                        state = Button.State.UNSELECTED;
+                        break;
                 }
 
                 CHECKBOX.setState(state);
@@ -754,11 +745,11 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             int nodeWidth = Math.max(width - nodeX, 0);
 
             // Paint the node data
-            Graphics2D rendererGraphics = (Graphics2D)graphics.create(nodeX, nodeY,
-                nodeWidth, nodeHeight);
+            Graphics2D rendererGraphics = (Graphics2D) graphics.create(nodeX, nodeY, nodeWidth,
+                nodeHeight);
             nodeRenderer.render(nodeInfo.data, visibleNodeIterator.getPath(),
-                visibleNodeIterator.getRowIndex(), treeView, expanded, selected,
-                checkState, highlighted, disabled);
+                visibleNodeIterator.getRowIndex(), treeView, expanded, selected, checkState,
+                highlighted, disabled);
             nodeRenderer.setSize(nodeWidth, nodeHeight);
             nodeRenderer.paint(rendererGraphics);
             rendererGraphics.dispose();
@@ -826,7 +817,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -852,7 +843,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -874,7 +865,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -900,7 +891,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setSelectionColor(int selectionColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setSelectionColor(theme.getColor(selectionColor));
     }
 
@@ -926,7 +917,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
     }
 
@@ -952,7 +943,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setInactiveSelectionColor(theme.getColor(inactiveSelectionColor));
     }
 
@@ -978,7 +969,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setInactiveSelectionBackgroundColor(theme.getColor(inactiveSelectionBackgroundColor));
     }
 
@@ -1004,7 +995,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setHighlightColor(int highlightColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setHighlightColor(theme.getColor(highlightColor));
     }
 
@@ -1030,7 +1021,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 
@@ -1123,7 +1114,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setBranchControlColor(int branchControlColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBranchControlColor(theme.getColor(branchControlColor));
     }
 
@@ -1149,7 +1140,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setBranchControlSelectionColor(int branchControlSelectionColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBranchControlSelectionColor(theme.getColor(branchControlSelectionColor));
     }
 
@@ -1175,7 +1166,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setBranchControlInactiveSelectionColor(int branchControlInactiveSelectionColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBranchControlInactiveSelectionColor(theme.getColor(branchControlInactiveSelectionColor));
     }
 
@@ -1201,7 +1192,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     public final void setGridColor(int gridColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setGridColor(theme.getColor(gridColor));
     }
 
@@ -1218,14 +1209,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
      * Gets the fixed node height of this skin.
      */
     protected int getNodeHeight() {
-        TreeView treeView = (TreeView)getComponent();
+        TreeView treeView = (TreeView) getComponent();
         TreeView.NodeRenderer nodeRenderer = treeView.getNodeRenderer();
         nodeRenderer.render(null, null, -1, treeView, false, false,
             TreeView.NodeCheckState.UNCHECKED, false, false);
 
         int nodeHeight = nodeRenderer.getPreferredHeight(-1);
         if (treeView.getCheckmarksEnabled()) {
-            nodeHeight = Math.max(CHECKBOX.getHeight() + (2 * CHECKBOX_VERTICAL_PADDING), nodeHeight);
+            nodeHeight = Math.max(CHECKBOX.getHeight() + (2 * CHECKBOX_VERTICAL_PADDING),
+                nodeHeight);
         }
 
         return nodeHeight;
@@ -1241,8 +1233,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         int nodeHeight = getNodeHeight();
         int index = y / (nodeHeight + VERTICAL_SPACING);
 
-        if (index >= 0
-            && index < visibleNodes.getLength()) {
+        if (index >= 0 && index < visibleNodes.getLength()) {
             nodeInfo = visibleNodes.get(index);
         }
 
@@ -1250,12 +1241,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     /**
-     * Gets the metadata associated with the node at the specified path.
-     * The path must be valid. The empty path is supported and represents the
-     * root node info.
+     * Gets the metadata associated with the node at the specified path. The
+     * path must be valid. The empty path is supported and represents the root
+     * node info.
      */
     protected final NodeInfo getNodeInfoAt(Path path) {
-        assert(path != null) : "Path is null";
+        assert (path != null) : "Path is null";
 
         NodeInfo result = null;
 
@@ -1270,9 +1261,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 branchInfo.loadChildren();
                 NodeInfo nodeInfo = branchInfo.children.get(path.get(i));
 
-                assert(nodeInfo instanceof BranchInfo) : "Invalid path";
+                assert (nodeInfo instanceof BranchInfo) : "Invalid path";
 
-                branchInfo = (BranchInfo)nodeInfo;
+                branchInfo = (BranchInfo) nodeInfo;
             }
 
             branchInfo.loadChildren();
@@ -1283,8 +1274,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     /**
-     * Gets the bounding box defined by the specified node, or <tt>null</tt>
-     * if the node is not currently visible.
+     * Gets the bounding box defined by the specified node, or <tt>null</tt> if
+     * the node is not currently visible.
      */
     protected final Bounds getNodeBounds(NodeInfo nodeInfo) {
         Bounds bounds = null;
@@ -1302,11 +1293,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     /**
-     * Accepts the specified visitor on all node info objects that exist in
-     * this skin's node info hierarchy.
-     *
-     * @param visitor
-     * The callback to execute on each node info object
+     * Accepts the specified visitor on all node info objects that exist in this
+     * skin's node info hierarchy.
+     * 
+     * @param visitor The callback to execute on each node info object
      */
     protected final void accept(NodeInfoVisitor visitor) {
         Sequence<NodeInfo> nodes = new ArrayList<>();
@@ -1319,7 +1309,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             visitor.visit(nodeInfo);
 
             if (nodeInfo instanceof BranchInfo) {
-                BranchInfo branchInfo = (BranchInfo)nodeInfo;
+                BranchInfo branchInfo = (BranchInfo) nodeInfo;
 
                 if (branchInfo.children != null) {
                     for (int i = 0, n = branchInfo.children.getLength(); i < n; i++) {
@@ -1331,10 +1321,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     /**
-     * Adds all children of the specified branch to the visible node list.
-     * Any children nodes that are expanded [branches] will also have their
-     * children made visible, and so on. Invalidates the component only
-     * if necessary.
+     * Adds all children of the specified branch to the visible node list. Any
+     * children nodes that are expanded [branches] will also have their children
+     * made visible, and so on. Invalidates the component only if necessary.
      */
     private void addVisibleNodes(BranchInfo parentBranchInfo) {
         int insertIndex = -1;
@@ -1368,7 +1357,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 // If we encounter an expanded branch, we add that branch's
                 // children to our list of nodes that are to become visible
                 if (nodeInfo instanceof BranchInfo) {
-                    BranchInfo branchInfo = (BranchInfo)nodeInfo;
+                    BranchInfo branchInfo = (BranchInfo) nodeInfo;
 
                     if (branchInfo.isExpanded()) {
                         branchInfo.loadChildren();
@@ -1385,20 +1374,17 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     /**
      * Adds the specified child of the specified branch to the visible node
-     * list. It is assumed that the child in question is not an expanded
-     * branch. Invalidates the component only if necessary.
-     *
-     * @param parentBranchInfo
-     * The branch info of the parent node.
-     *
-     * @param index
-     * The index of the child within its parent.
+     * list. It is assumed that the child in question is not an expanded branch.
+     * Invalidates the component only if necessary.
+     * 
+     * @param parentBranchInfo The branch info of the parent node.
+     * @param index The index of the child within its parent.
      */
     private void addVisibleNode(BranchInfo parentBranchInfo, int index) {
         parentBranchInfo.loadChildren();
 
-        assert(index >= 0) : "Index is too small";
-        assert(index < parentBranchInfo.children.getLength()) : "Index is too large";
+        assert (index >= 0) : "Index is too small";
+        assert (index < parentBranchInfo.children.getLength()) : "Index is too large";
 
         int branchIndex = visibleNodes.indexOf(parentBranchInfo);
 
@@ -1421,9 +1407,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 // Continue looking as long as the node at our insert index
                 // has a greater depth than we do, which means that it's a
                 // descendant of our younger sibling
-                for (int n = visibleNodes.getLength(), nodeDepth = youngerSibling.depth;
-                    insertIndex < n && visibleNodes.get(insertIndex).depth > nodeDepth;
-                    insertIndex++) {
+                for (int n = visibleNodes.getLength(), nodeDepth = youngerSibling.depth; insertIndex < n
+                    && visibleNodes.get(insertIndex).depth > nodeDepth; insertIndex++) {
                     // empty block
                 }
             }
@@ -1436,19 +1421,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     /**
      * Removes the specified children of the specified branch from the visible
-     * node list if necessary. If they are not already in the visible node
-     * list, nothing happens. Invalidates the component only if necessary.
-     *
-     * @param parentBranchInfo
-     * The branch info of the parent node.
-     *
-     * @param index
-     * The index of the first child node to remove from the visible nodes
-     * sequence.
-     *
-     * @param count
-     * The number of child nodes to remove, or <tt>-1</tt> to remove all
-     * child nodes from the visible nodes sequence.
+     * node list if necessary. If they are not already in the visible node list,
+     * nothing happens. Invalidates the component only if necessary.
+     * 
+     * @param parentBranchInfo The branch info of the parent node.
+     * @param index The index of the first child node to remove from the visible
+     * nodes sequence.
+     * @param count The number of child nodes to remove, or <tt>-1</tt> to remove
+     * all child nodes from the visible nodes sequence.
      */
     private void removeVisibleNodes(BranchInfo parentBranchInfo, int index, int count) {
         parentBranchInfo.loadChildren();
@@ -1456,11 +1436,11 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         int countUpdated = count;
 
         if (countUpdated == -1) {
-            assert(index == 0) : "Non-zero index with 'remove all' count";
+            assert (index == 0) : "Non-zero index with 'remove all' count";
             countUpdated = parentBranchInfo.children.getLength();
         }
 
-        assert(index + countUpdated <= parentBranchInfo.children.getLength()) : "Value too big";
+        assert (index + countUpdated <= parentBranchInfo.children.getLength()) : "Value too big";
 
         if (countUpdated > 0) {
             NodeInfo first = parentBranchInfo.children.get(index);
@@ -1471,14 +1451,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             if (rangeStart >= 0) {
                 int rangeEnd = visibleNodes.indexOf(last) + 1;
 
-                assert(rangeEnd > rangeStart) : "Invalid visible node structure";
+                assert (rangeEnd > rangeStart) : "Invalid visible node structure";
 
                 // Continue looking as long as the node at our endpoint has a
                 // greater depth than the last child node, which means that
                 // it's a descendant of the last child node
-                for (int n = visibleNodes.getLength(), nodeDepth = last.depth;
-                    rangeEnd < n && visibleNodes.get(rangeEnd).depth > nodeDepth;
-                    rangeEnd++) {
+                for (int n = visibleNodes.getLength(), nodeDepth = last.depth; rangeEnd < n
+                    && visibleNodes.get(rangeEnd).depth > nodeDepth; rangeEnd++) {
                     // empty block
                 }
 
@@ -1513,9 +1492,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     /**
      * Clears our <tt>NodeInfo</tt> hierarchy of the specified cached field.
-     *
-     * @param mask
-     * The bitmask specifying which field to clear.
+     * 
+     * @param mask The bitmask specifying which field to clear.
      */
     private void clearFields(final byte mask) {
         accept(new NodeInfoVisitor() {
@@ -1528,12 +1506,11 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     /**
      * Scrolls the last visible (expanded) selected node into viewport
-     * visibility. If no such node exists, nothing happens.
-     * <p>
-     * This should only be called when the tree view is valid.
+     * visibility. If no such node exists, nothing happens. <p> This should only
+     * be called when the tree view is valid.
      */
     private void scrollSelectionToVisible() {
-        TreeView treeView = (TreeView)getComponent();
+        TreeView treeView = (TreeView) getComponent();
 
         Sequence<Path> selectedPaths = treeView.getSelectedPaths();
         int n = selectedPaths.getLength();
@@ -1560,10 +1537,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
 
-        TreeView treeView = (TreeView)getComponent();
+        TreeView treeView = (TreeView) getComponent();
 
-        if (showHighlight
-            && treeView.getSelectMode() != TreeView.SelectMode.NONE) {
+        if (showHighlight && treeView.getSelectMode() != TreeView.SelectMode.NONE) {
             NodeInfo previousHighlightedNode = highlightedNode;
             highlightedNode = getNodeInfoAt(y);
 
@@ -1596,11 +1572,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         boolean consumed = super.mouseDown(component, button, x, y);
 
         if (!consumed) {
-            TreeView treeView = (TreeView)getComponent();
+            TreeView treeView = (TreeView) getComponent();
             NodeInfo nodeInfo = getNodeInfoAt(y);
 
-            if (nodeInfo != null
-                && !nodeInfo.isDisabled()) {
+            if (nodeInfo != null && !nodeInfo.isDisabled()) {
                 int nodeHeight = getNodeHeight();
                 int baseNodeX = (nodeInfo.depth - 1) * (indent + spacing);
 
@@ -1614,21 +1589,16 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 int checkboxY = (nodeHeight - checkboxHeight) / 2;
 
                 // Only proceed if the user DIDN'T click on a checkbox
-                if (!treeView.getCheckmarksEnabled()
-                    || nodeInfo.isCheckmarkDisabled()
-                    || x < nodeX + checkboxX
-                    || x >= nodeX + checkboxX + checkboxWidth
-                    || y < nodeY + checkboxY
-                    || y >= nodeY + checkboxY + checkboxHeight) {
+                if (!treeView.getCheckmarksEnabled() || nodeInfo.isCheckmarkDisabled()
+                    || x < nodeX + checkboxX || x >= nodeX + checkboxX + checkboxWidth
+                    || y < nodeY + checkboxY || y >= nodeY + checkboxY + checkboxHeight) {
                     Path path = nodeInfo.getPath();
 
                     // See if the user clicked on an expand/collapse control of
                     // a branch. If so, expand/collapse the branch
-                    if (showBranchControls
-                        && nodeInfo instanceof BranchInfo
-                        && x >= baseNodeX
+                    if (showBranchControls && nodeInfo instanceof BranchInfo && x >= baseNodeX
                         && x < baseNodeX + indent) {
-                        BranchInfo branchInfo = (BranchInfo)nodeInfo;
+                        BranchInfo branchInfo = (BranchInfo) nodeInfo;
 
                         treeView.setBranchExpanded(path, !branchInfo.isExpanded());
                         consumed = true;
@@ -1682,7 +1652,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
 
-        TreeView treeView = (TreeView)getComponent();
+        TreeView treeView = (TreeView) getComponent();
         if (selectPath != null
             && !treeView.getFirstSelectedPath().equals(treeView.getLastSelectedPath())) {
             treeView.setSelectedPath(selectPath);
@@ -1697,12 +1667,11 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         if (!consumed) {
-            TreeView treeView = (TreeView)getComponent();
+            TreeView treeView = (TreeView) getComponent();
 
             NodeInfo nodeInfo = getNodeInfoAt(y);
 
-            if (nodeInfo != null
-                && !nodeInfo.isDisabled()) {
+            if (nodeInfo != null && !nodeInfo.isDisabled()) {
                 int nodeHeight = getNodeHeight();
                 int baseNodeX = (nodeInfo.depth - 1) * (indent + spacing);
 
@@ -1715,18 +1684,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                 int checkboxX = Math.max(indent - checkboxWidth, 0) / 2;
                 int checkboxY = (nodeHeight - checkboxHeight) / 2;
 
-                if (treeView.getCheckmarksEnabled()
-                    && !nodeInfo.isCheckmarkDisabled()
-                    && x >= nodeX + checkboxX
-                    && x < nodeX + checkboxX + checkboxWidth
-                    && y >= nodeY + checkboxY
-                    && y < nodeY + checkboxY + checkboxHeight) {
+                if (treeView.getCheckmarksEnabled() && !nodeInfo.isCheckmarkDisabled()
+                    && x >= nodeX + checkboxX && x < nodeX + checkboxX + checkboxWidth
+                    && y >= nodeY + checkboxY && y < nodeY + checkboxY + checkboxHeight) {
                     Path path = nodeInfo.getPath();
                     treeView.setNodeChecked(path, !nodeInfo.isChecked());
                 } else {
-                    if (selectPath != null
-                        && count == 1
-                        && button == Mouse.Button.LEFT) {
+                    if (selectPath != null && count == 1 && button == Mouse.Button.LEFT) {
                         TreeView.NodeEditor nodeEditor = treeView.getNodeEditor();
 
                         if (nodeEditor != null) {
@@ -1756,8 +1720,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             highlightedNode = null;
 
             if (nodeBounds != null) {
-                repaintComponent(nodeBounds.x, nodeBounds.y, nodeBounds.width,
-                    nodeBounds.height, true);
+                repaintComponent(nodeBounds.x, nodeBounds.y, nodeBounds.width, nodeBounds.height,
+                    true);
             }
         }
 
@@ -1766,144 +1730,138 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     /**
      * {@link KeyCode#UP UP} Selects the previous enabled node when select mode
-     * is not {@link SelectMode#NONE}<br>
-     * {@link KeyCode#DOWN DOWN} Selects the next enabled node when select mode
-     * is not {@link SelectMode#NONE}<p>
+     * is not {@link SelectMode#NONE}<br> {@link KeyCode#DOWN DOWN} Selects the
+     * next enabled node when select mode is not {@link SelectMode#NONE}<p>
      * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the
-     * selection size by including the previous enabled node when select  mode
-     * is {@link SelectMode#MULTI}<br>
-     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases the
-     * selection size by including the next enabled node when select mode is
-     * {@link SelectMode#MULTI}
+     * selection size by including the previous enabled node when select mode is
+     * {@link SelectMode#MULTI}<br> {@link Modifier#SHIFT SHIFT} +
+     * {@link KeyCode#DOWN DOWN} Increases the selection size by including the
+     * next enabled node when select mode is {@link SelectMode#MULTI}
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        TreeView treeView = (TreeView)getComponent();
+        TreeView treeView = (TreeView) getComponent();
         TreeView.SelectMode selectMode = treeView.getSelectMode();
 
         switch (keyCode) {
-        case Keyboard.KeyCode.UP: {
-            if (selectMode != TreeView.SelectMode.NONE) {
-                Path firstSelectedPath = treeView.getFirstSelectedPath();
+            case Keyboard.KeyCode.UP: {
+                if (selectMode != TreeView.SelectMode.NONE) {
+                    Path firstSelectedPath = treeView.getFirstSelectedPath();
 
-                int index;
-                if (firstSelectedPath != null) {
-                    NodeInfo previousSelectedNode = getNodeInfoAt(firstSelectedPath);
-                    index = visibleNodes.indexOf(previousSelectedNode);
-                } else {
-                    // Select the last visible node
-                    index = visibleNodes.getLength();
-                }
-
-                NodeInfo newSelectedNode = null;
-                do {
-                    newSelectedNode = (--index >= 0) ? visibleNodes.get(index) : null;
-                } while (newSelectedNode != null
-                    && newSelectedNode.isDisabled());
-
-                if (newSelectedNode != null) {
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                        && treeView.getSelectMode() == TreeView.SelectMode.MULTI) {
-                        treeView.addSelectedPath(newSelectedNode.getPath());
+                    int index;
+                    if (firstSelectedPath != null) {
+                        NodeInfo previousSelectedNode = getNodeInfoAt(firstSelectedPath);
+                        index = visibleNodes.indexOf(previousSelectedNode);
                     } else {
-                        treeView.setSelectedPath(newSelectedNode.getPath());
+                        // Select the last visible node
+                        index = visibleNodes.getLength();
                     }
-                    treeView.scrollAreaToVisible(getNodeBounds(newSelectedNode));
-                }
-                consumed = true;
-            }
 
-            break;
-        }
+                    NodeInfo newSelectedNode = null;
+                    do {
+                        newSelectedNode = (--index >= 0) ? visibleNodes.get(index) : null;
+                    } while (newSelectedNode != null && newSelectedNode.isDisabled());
 
-        case Keyboard.KeyCode.DOWN: {
-            if (selectMode != TreeView.SelectMode.NONE) {
-                Path lastSelectedPath = treeView.getLastSelectedPath();
-
-                int index;
-                if (lastSelectedPath != null) {
-                    NodeInfo previousSelectedNode = getNodeInfoAt(lastSelectedPath);
-                    index = visibleNodes.indexOf(previousSelectedNode);
-                } else {
-                    // Select the first visible node
-                    index = -1;
-                }
-
-                NodeInfo newSelectedNode = null;
-                int n = visibleNodes.getLength();
-                do {
-                    newSelectedNode = (++index <= n - 1) ? visibleNodes.get(index) : null;
-                } while (newSelectedNode != null
-                    && newSelectedNode.isDisabled());
-
-                if (newSelectedNode != null) {
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                        && treeView.getSelectMode() == TreeView.SelectMode.MULTI) {
-                        treeView.addSelectedPath(newSelectedNode.getPath());
-                    } else {
-                        treeView.setSelectedPath(newSelectedNode.getPath());
-                    }
-                    treeView.scrollAreaToVisible(getNodeBounds(newSelectedNode));
-                }
-                consumed = true;
-            }
-
-            break;
-        }
-
-        case Keyboard.KeyCode.LEFT: {
-            if (showBranchControls) {
-                Sequence<Path> paths = treeView.getSelectedPaths();
-
-                if (paths != null
-                    && paths.getLength() > 0) {
-                    Path path = paths.get(paths.getLength() - 1);
-                    NodeInfo nodeInfo = getNodeInfoAt(path);
-
-                    if (nodeInfo instanceof BranchInfo) {
-                        BranchInfo branchInfo = (BranchInfo)nodeInfo;
-
-                        if (branchInfo.isExpanded()) {
-                            treeView.collapseBranch(branchInfo.getPath());
+                    if (newSelectedNode != null) {
+                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                            && treeView.getSelectMode() == TreeView.SelectMode.MULTI) {
+                            treeView.addSelectedPath(newSelectedNode.getPath());
+                        } else {
+                            treeView.setSelectedPath(newSelectedNode.getPath());
                         }
+                        treeView.scrollAreaToVisible(getNodeBounds(newSelectedNode));
                     }
-
                     consumed = true;
                 }
+
+                break;
             }
 
-            break;
-        }
+            case Keyboard.KeyCode.DOWN: {
+                if (selectMode != TreeView.SelectMode.NONE) {
+                    Path lastSelectedPath = treeView.getLastSelectedPath();
 
-        case Keyboard.KeyCode.RIGHT: {
-            if (showBranchControls) {
-                Sequence<Path> paths = treeView.getSelectedPaths();
-
-                if (paths != null
-                    && paths.getLength() > 0) {
-                    Path path = paths.get(paths.getLength() - 1);
-                    NodeInfo nodeInfo = getNodeInfoAt(path);
-
-                    if (nodeInfo instanceof BranchInfo) {
-                        BranchInfo branchInfo = (BranchInfo)nodeInfo;
-
-                        if (!branchInfo.isExpanded()) {
-                            treeView.expandBranch(branchInfo.getPath());
-                        }
+                    int index;
+                    if (lastSelectedPath != null) {
+                        NodeInfo previousSelectedNode = getNodeInfoAt(lastSelectedPath);
+                        index = visibleNodes.indexOf(previousSelectedNode);
+                    } else {
+                        // Select the first visible node
+                        index = -1;
                     }
 
+                    NodeInfo newSelectedNode = null;
+                    int n = visibleNodes.getLength();
+                    do {
+                        newSelectedNode = (++index <= n - 1) ? visibleNodes.get(index) : null;
+                    } while (newSelectedNode != null && newSelectedNode.isDisabled());
+
+                    if (newSelectedNode != null) {
+                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
+                            && treeView.getSelectMode() == TreeView.SelectMode.MULTI) {
+                            treeView.addSelectedPath(newSelectedNode.getPath());
+                        } else {
+                            treeView.setSelectedPath(newSelectedNode.getPath());
+                        }
+                        treeView.scrollAreaToVisible(getNodeBounds(newSelectedNode));
+                    }
                     consumed = true;
                 }
+
+                break;
             }
 
-            break;
-        }
+            case Keyboard.KeyCode.LEFT: {
+                if (showBranchControls) {
+                    Sequence<Path> paths = treeView.getSelectedPaths();
 
-        default:
-            consumed = super.keyPressed(component, keyCode, keyLocation);
-            break;
+                    if (paths != null && paths.getLength() > 0) {
+                        Path path = paths.get(paths.getLength() - 1);
+                        NodeInfo nodeInfo = getNodeInfoAt(path);
+
+                        if (nodeInfo instanceof BranchInfo) {
+                            BranchInfo branchInfo = (BranchInfo) nodeInfo;
+
+                            if (branchInfo.isExpanded()) {
+                                treeView.collapseBranch(branchInfo.getPath());
+                            }
+                        }
+
+                        consumed = true;
+                    }
+                }
+
+                break;
+            }
+
+            case Keyboard.KeyCode.RIGHT: {
+                if (showBranchControls) {
+                    Sequence<Path> paths = treeView.getSelectedPaths();
+
+                    if (paths != null && paths.getLength() > 0) {
+                        Path path = paths.get(paths.getLength() - 1);
+                        NodeInfo nodeInfo = getNodeInfoAt(path);
+
+                        if (nodeInfo instanceof BranchInfo) {
+                            BranchInfo branchInfo = (BranchInfo) nodeInfo;
+
+                            if (!branchInfo.isExpanded()) {
+                                treeView.expandBranch(branchInfo.getPath());
+                            }
+                        }
+
+                        consumed = true;
+                    }
+                }
+
+                break;
+            }
+
+            default:
+                consumed = super.keyPressed(component, keyCode, keyLocation);
+                break;
         }
 
         if (consumed) {
@@ -1914,14 +1872,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     /**
-     * {@link KeyCode#SPACE SPACE} toggles check mark selection when select
-     * mode is {@link SelectMode#SINGLE}
+     * {@link KeyCode#SPACE SPACE} toggles check mark selection when select mode
+     * is {@link SelectMode#SINGLE}
      */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        TreeView treeView = (TreeView)getComponent();
+        TreeView treeView = (TreeView) getComponent();
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
             if (treeView.getCheckmarksEnabled()
@@ -1932,8 +1890,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
                     NodeInfo nodeInfo = getNodeInfoAt(selectedPath);
 
                     if (!nodeInfo.isCheckmarkDisabled()) {
-                        treeView.setNodeChecked(selectedPath,
-                            !treeView.isNodeChecked(selectedPath));
+                        treeView.setNodeChecked(selectedPath, !treeView.isNodeChecked(selectedPath));
                     }
                 }
             }
@@ -1946,14 +1903,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public boolean isFocusable() {
-        TreeView treeView = (TreeView)getComponent();
+        TreeView treeView = (TreeView) getComponent();
         return (treeView.getSelectMode() != TreeView.SelectMode.NONE);
     }
 
     @Override
     public boolean isOpaque() {
-        return (backgroundColor != null
-            && backgroundColor.getTransparency() == Transparency.OPAQUE);
+        return (backgroundColor != null && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     // ComponentStateListener methods
@@ -2002,7 +1958,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public int getNodeIndent(int depth) {
-        TreeView treeView = (TreeView)getComponent();
+        TreeView treeView = (TreeView) getComponent();
 
         int nodeIndent = (depth - 1) * (indent + spacing);
 
@@ -2035,7 +1991,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     @Override
     public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
         @SuppressWarnings("unchecked")
-        List<Object> treeData = (List<Object>)treeView.getTreeData();
+        List<Object> treeData = (List<Object>) treeView.getTreeData();
 
         visibleNodes.clear();
 
@@ -2060,8 +2016,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    public void selectModeChanged(TreeView treeView,
-        TreeView.SelectMode previousSelectMode) {
+    public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode) {
         // The selection has implicitly been cleared
         clearFields(NodeInfo.SELECTED_MASK);
 
@@ -2091,7 +2046,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
                 // Only branch nodes can be affected by this event
                 if (nodeInfo instanceof BranchInfo) {
-                    BranchInfo branchInfo = (BranchInfo)nodeInfo;
+                    BranchInfo branchInfo = (BranchInfo) nodeInfo;
 
                     // Update the cached entry for this branch
                     Path path = branchInfo.getPath();
@@ -2113,7 +2068,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     @Override
     public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
         @SuppressWarnings("unchecked")
-        final Filter<Object> disabledNodeFilter = (Filter<Object>)treeView.getDisabledNodeFilter();
+        final Filter<Object> disabledNodeFilter = (Filter<Object>) treeView.getDisabledNodeFilter();
 
         accept(new NodeInfoVisitor() {
             @Override
@@ -2132,8 +2087,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     public void disabledCheckmarkFilterChanged(TreeView treeView,
         Filter<?> previousDisabledCheckmarkFilter) {
         @SuppressWarnings("unchecked")
-        final Filter<Object> disabledCheckmarkFilter = (Filter<Object>)
-            treeView.getDisabledCheckmarkFilter();
+        final Filter<Object> disabledCheckmarkFilter = (Filter<Object>) treeView.getDisabledCheckmarkFilter();
 
         accept(new NodeInfoVisitor() {
             @Override
@@ -2152,7 +2106,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void branchExpanded(TreeView treeView, Path path) {
-        BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
+        BranchInfo branchInfo = (BranchInfo) getNodeInfoAt(path);
 
         branchInfo.setExpanded(true);
         addVisibleNodes(branchInfo);
@@ -2162,7 +2116,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void branchCollapsed(TreeView treeView, Path path) {
-        BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
+        BranchInfo branchInfo = (BranchInfo) getNodeInfoAt(path);
 
         branchInfo.setExpanded(false);
         removeVisibleNodes(branchInfo, 0, -1);
@@ -2175,8 +2129,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     @Override
     @SuppressWarnings("unchecked")
     public void nodeInserted(TreeView treeView, Path path, int index) {
-        BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
-        List<Object> branchData = (List<Object>)branchInfo.data;
+        BranchInfo branchInfo = (BranchInfo) getNodeInfoAt(path);
+        List<Object> branchData = (List<Object>) branchInfo.data;
 
         // Update our internal branch info
         if (branchInfo.children != null) {
@@ -2189,9 +2143,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     }
 
     @Override
-    public void nodesRemoved(TreeView treeView, Path path, int index,
-        int count) {
-        BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
+    public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
+        BranchInfo branchInfo = (BranchInfo) getNodeInfoAt(path);
 
         // Remove the node from the visible nodes list
         removeVisibleNodes(branchInfo, index, count);
@@ -2205,8 +2158,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
     @Override
     @SuppressWarnings("unchecked")
     public void nodeUpdated(TreeView treeView, Path path, int index) {
-        BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
-        List<Object> branchData = (List<Object>)branchInfo.data;
+        BranchInfo branchInfo = (BranchInfo) getNodeInfoAt(path);
+        List<Object> branchData = (List<Object>) branchInfo.data;
 
         branchInfo.loadChildren();
         NodeInfo nodeInfo = branchInfo.children.get(index);
@@ -2226,9 +2179,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
             addVisibleNode(branchInfo, index);
         } else {
             // This update might affect the node's disabled state
-            Filter<Object> disabledNodeFilter = (Filter<Object>)treeView.getDisabledNodeFilter();
-            nodeInfo.setDisabled(disabledNodeFilter != null
-                && disabledNodeFilter.include(nodeData));
+            Filter<Object> disabledNodeFilter = (Filter<Object>) treeView.getDisabledNodeFilter();
+            nodeInfo.setDisabled(disabledNodeFilter != null && disabledNodeFilter.include(nodeData));
 
             if (visibleNodes.indexOf(nodeInfo) >= 0) {
                 // The updated node data might affect our preferred width
@@ -2239,7 +2191,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void nodesCleared(TreeView treeView, Path path) {
-        BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
+        BranchInfo branchInfo = (BranchInfo) getNodeInfoAt(path);
 
         // Remove the node from the visible nodes list
         removeVisibleNodes(branchInfo, 0, -1);
@@ -2252,7 +2204,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void nodesSorted(TreeView treeView, Path path) {
-        BranchInfo branchInfo = (BranchInfo)getNodeInfoAt(path);
+        BranchInfo branchInfo = (BranchInfo) getNodeInfoAt(path);
 
         // Remove the child nodes from the visible nodes list
         removeVisibleNodes(branchInfo, 0, -1);
@@ -2313,8 +2265,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin,
 
     @Override
     public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
-        if (previousSelectedPaths != null
-            && previousSelectedPaths != treeView.getSelectedPaths()) {
+        if (previousSelectedPaths != null && previousSelectedPaths != treeView.getSelectedPaths()) {
             // Ensure that the selection is visible
             if (treeView.isValid()) {
                 scrollSelectionToVisible();

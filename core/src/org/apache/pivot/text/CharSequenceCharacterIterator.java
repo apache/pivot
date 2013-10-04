@@ -40,7 +40,8 @@ public final class CharSequenceCharacterIterator implements CharacterIterator {
         this(charSequence, beginIndex, endIndex, beginIndex);
     }
 
-    public CharSequenceCharacterIterator(CharSequence charSequence, int beginIndex, int endIndex, int index) {
+    public CharSequenceCharacterIterator(CharSequence charSequence, int beginIndex, int endIndex,
+        int index) {
         if (charSequence == null) {
             throw new IllegalArgumentException("charSequence may not be null");
         }
@@ -52,7 +53,8 @@ public final class CharSequenceCharacterIterator implements CharacterIterator {
         }
 
         if (beginIndex > endIndexUpdated) {
-            throw new IllegalArgumentException("beginIndex > endIndex, " + beginIndex + ">" + endIndexUpdated);
+            throw new IllegalArgumentException("beginIndex > endIndex, " + beginIndex + ">"
+                + endIndexUpdated);
         }
 
         if (beginIndex < 0) {
@@ -60,7 +62,8 @@ public final class CharSequenceCharacterIterator implements CharacterIterator {
         }
 
         if (endIndexUpdated > charSequence.length()) {
-            throw new IndexOutOfBoundsException("endIndex > char sequence length, " + endIndexUpdated + ">" + charSequence.length());
+            throw new IndexOutOfBoundsException("endIndex > char sequence length, "
+                + endIndexUpdated + ">" + charSequence.length());
         }
 
         if (index < beginIndex) {
@@ -68,7 +71,8 @@ public final class CharSequenceCharacterIterator implements CharacterIterator {
         }
 
         if (index > endIndexUpdated) {
-            throw new IndexOutOfBoundsException("(index > endIndex, " + index + ">" + endIndexUpdated);
+            throw new IndexOutOfBoundsException("(index > endIndex, " + index + ">"
+                + endIndexUpdated);
         }
 
         this.charSequence = charSequence;
@@ -120,8 +124,7 @@ public final class CharSequenceCharacterIterator implements CharacterIterator {
 
     @Override
     public char setIndex(int index) {
-        if (index < beginIndex
-            || index > endIndex) {
+        if (index < beginIndex || index > endIndex) {
             throw new IndexOutOfBoundsException();
         }
 

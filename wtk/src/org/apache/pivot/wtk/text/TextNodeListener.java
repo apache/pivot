@@ -22,7 +22,7 @@ package org.apache.pivot.wtk.text;
 public interface TextNodeListener {
     /**
      * Called when characters have been inserted into a text node.
-     *
+     * 
      * @param textNode
      * @param index
      * @param count
@@ -31,7 +31,7 @@ public interface TextNodeListener {
 
     /**
      * Called when characters have been removed from a text node.
-     *
+     * 
      * @param textNode
      * @param index
      * @param count

@@ -41,7 +41,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     private int spacing;
 
     public TerraMenuBarSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         font = theme.getFont().deriveFont(Font.BOLD);
         color = theme.getColor(1);
@@ -55,7 +55,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     public void install(Component component) {
         super.install(component);
 
-        MenuBar menuBar = (MenuBar)component;
+        MenuBar menuBar = (MenuBar) component;
         menuBar.getMenuBarListeners().add(this);
     }
 
@@ -63,7 +63,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        MenuBar menuBar = (MenuBar)getComponent();
+        MenuBar menuBar = (MenuBar) getComponent();
         MenuBar.ItemSequence items = menuBar.getItems();
 
         int j = 0;
@@ -86,7 +86,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        MenuBar menuBar = (MenuBar)getComponent();
+        MenuBar menuBar = (MenuBar) getComponent();
         MenuBar.ItemSequence items = menuBar.getItems();
 
         for (int i = 0, n = items.getLength(); i < n; i++) {
@@ -104,7 +104,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        MenuBar menuBar = (MenuBar)getComponent();
+        MenuBar menuBar = (MenuBar) getComponent();
         MenuBar.ItemSequence items = menuBar.getItems();
 
         int j = 0;
@@ -125,7 +125,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
 
     @Override
     public void layout() {
-        MenuBar menuBar = (MenuBar)getComponent();
+        MenuBar menuBar = (MenuBar) getComponent();
 
         int height = getHeight();
         int itemX = 0;
@@ -141,7 +141,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public final void setBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(color));
     }
 
@@ -196,7 +196,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -222,7 +222,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public final void setDisabledColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledColor(theme.getColor(color));
     }
 
@@ -248,7 +248,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public final void setActiveColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setActiveColor(theme.getColor(color));
     }
 
@@ -274,7 +274,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public final void setActiveBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setActiveBackgroundColor(theme.getColor(color));
     }
 

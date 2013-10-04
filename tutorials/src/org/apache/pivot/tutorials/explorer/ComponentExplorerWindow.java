@@ -76,27 +76,27 @@ public class ComponentExplorerWindow extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        splitPane = (SplitPane)namespace.get("splitPane");
-        treeView = (TreeView)namespace.get("treeView");
-        contentScrollPane = (ScrollPane)namespace.get("contentScrollPane");
-        contentPane = (Border)namespace.get("contentPane");
-        sourceTextArea = (TextArea)namespace.get("sourceTextArea");
-        componentPropertyInspector = (ComponentPropertyInspector)namespace.get("componentPropertyInspector");
-        componentStyleInspector = (ComponentStyleInspector)namespace.get("componentStyleInspector");
-        eventLogger = (EventLogger)namespace.get("eventLogger");
+        splitPane = (SplitPane) namespace.get("splitPane");
+        treeView = (TreeView) namespace.get("treeView");
+        contentScrollPane = (ScrollPane) namespace.get("contentScrollPane");
+        contentPane = (Border) namespace.get("contentPane");
+        sourceTextArea = (TextArea) namespace.get("sourceTextArea");
+        componentPropertyInspector = (ComponentPropertyInspector) namespace.get("componentPropertyInspector");
+        componentStyleInspector = (ComponentStyleInspector) namespace.get("componentStyleInspector");
+        eventLogger = (EventLogger) namespace.get("eventLogger");
 
-        horizontalScrollBarPolicyGroup = (ButtonGroup)namespace.get("horizontalScrollBarPolicyGroup");
-        verticalScrollBarPolicyGroup = (ButtonGroup)namespace.get("verticalScrollBarPolicyGroup");
-        horizontalAutoButton = (Button)namespace.get("horizontalAutoButton");
-        horizontalFillButton = (Button)namespace.get("horizontalFillButton");
-        horizontalFillToCapacityButton = (Button)namespace.get("horizontalFillToCapacityButton");
-        horizontalNeverButton = (Button)namespace.get("horizontalNeverButton");
-        horizontalAlwaysButton = (Button)namespace.get("horizontalAlwaysButton");
-        verticalAutoButton = (Button)namespace.get("verticalAutoButton");
-        verticalFillButton = (Button)namespace.get("verticalFillButton");
-        verticalFillToCapacityButton = (Button)namespace.get("verticalFillToCapacityButton");
-        verticalNeverButton = (Button)namespace.get("verticalNeverButton");
-        verticalAlwaysButton = (Button)namespace.get("verticalAlwaysButton");
+        horizontalScrollBarPolicyGroup = (ButtonGroup) namespace.get("horizontalScrollBarPolicyGroup");
+        verticalScrollBarPolicyGroup = (ButtonGroup) namespace.get("verticalScrollBarPolicyGroup");
+        horizontalAutoButton = (Button) namespace.get("horizontalAutoButton");
+        horizontalFillButton = (Button) namespace.get("horizontalFillButton");
+        horizontalFillToCapacityButton = (Button) namespace.get("horizontalFillToCapacityButton");
+        horizontalNeverButton = (Button) namespace.get("horizontalNeverButton");
+        horizontalAlwaysButton = (Button) namespace.get("horizontalAlwaysButton");
+        verticalAutoButton = (Button) namespace.get("verticalAutoButton");
+        verticalFillButton = (Button) namespace.get("verticalFillButton");
+        verticalFillToCapacityButton = (Button) namespace.get("verticalFillToCapacityButton");
+        verticalNeverButton = (Button) namespace.get("verticalNeverButton");
+        verticalAlwaysButton = (Button) namespace.get("verticalAlwaysButton");
 
         treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener.Adapter() {
             @Override
@@ -106,7 +106,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
 
                 Object node = treeViewArgument.getSelectedNode();
                 if (node instanceof ComponentNode) {
-                    ComponentNode componentNode = (ComponentNode)node;
+                    ComponentNode componentNode = (ComponentNode) node;
                     URL url = componentNode.getSrc();
 
                     try {
@@ -117,7 +117,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
 
                     BXMLSerializer bxmlSerializer = new BXMLSerializer();
                     try {
-                        component = (Component)bxmlSerializer.readObject(url);
+                        component = (Component) bxmlSerializer.readObject(url);
                     } catch (IOException exception) {
                         throw new RuntimeException(exception);
                     } catch (SerializationException exception) {
@@ -196,55 +196,57 @@ public class ComponentExplorerWindow extends Window implements Bindable {
             }
         });
 
-        horizontalScrollBarPolicyGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
-            @Override
-            public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
-                Button button = buttonGroup.getSelection();
+        horizontalScrollBarPolicyGroup.getButtonGroupListeners().add(
+            new ButtonGroupListener.Adapter() {
+                @Override
+                public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
+                    Button button = buttonGroup.getSelection();
 
-                ScrollBarPolicy horizontalScrollBarPolicy = null;
+                    ScrollBarPolicy horizontalScrollBarPolicy = null;
 
-                if (button == horizontalAutoButton) {
-                    horizontalScrollBarPolicy = ScrollBarPolicy.AUTO;
-                } else if (button == horizontalFillButton) {
-                    horizontalScrollBarPolicy = ScrollBarPolicy.FILL;
-                } else if (button == horizontalFillToCapacityButton) {
-                    horizontalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
-                } else if (button == horizontalNeverButton) {
-                    horizontalScrollBarPolicy = ScrollBarPolicy.NEVER;
-                } else if (button == horizontalAlwaysButton) {
-                    horizontalScrollBarPolicy = ScrollBarPolicy.ALWAYS;
+                    if (button == horizontalAutoButton) {
+                        horizontalScrollBarPolicy = ScrollBarPolicy.AUTO;
+                    } else if (button == horizontalFillButton) {
+                        horizontalScrollBarPolicy = ScrollBarPolicy.FILL;
+                    } else if (button == horizontalFillToCapacityButton) {
+                        horizontalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
+                    } else if (button == horizontalNeverButton) {
+                        horizontalScrollBarPolicy = ScrollBarPolicy.NEVER;
+                    } else if (button == horizontalAlwaysButton) {
+                        horizontalScrollBarPolicy = ScrollBarPolicy.ALWAYS;
+                    }
+
+                    if (horizontalScrollBarPolicy != null) {
+                        contentScrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
+                    }
                 }
+            });
 
-                if (horizontalScrollBarPolicy != null) {
-                    contentScrollPane.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
+        verticalScrollBarPolicyGroup.getButtonGroupListeners().add(
+            new ButtonGroupListener.Adapter() {
+                @Override
+                public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
+                    Button button = buttonGroup.getSelection();
+
+                    ScrollBarPolicy verticalScrollBarPolicy = null;
+
+                    if (button == verticalAutoButton) {
+                        verticalScrollBarPolicy = ScrollBarPolicy.AUTO;
+                    } else if (button == verticalFillButton) {
+                        verticalScrollBarPolicy = ScrollBarPolicy.FILL;
+                    } else if (button == verticalFillToCapacityButton) {
+                        verticalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
+                    } else if (button == verticalNeverButton) {
+                        verticalScrollBarPolicy = ScrollBarPolicy.NEVER;
+                    } else if (button == verticalAlwaysButton) {
+                        verticalScrollBarPolicy = ScrollBarPolicy.ALWAYS;
+                    }
+
+                    if (verticalScrollBarPolicy != null) {
+                        contentScrollPane.setVerticalScrollBarPolicy(verticalScrollBarPolicy);
+                    }
                 }
-            }
-        });
-
-        verticalScrollBarPolicyGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
-            @Override
-            public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
-                Button button = buttonGroup.getSelection();
-
-                ScrollBarPolicy verticalScrollBarPolicy = null;
-
-                if (button == verticalAutoButton) {
-                    verticalScrollBarPolicy = ScrollBarPolicy.AUTO;
-                } else if (button == verticalFillButton) {
-                    verticalScrollBarPolicy = ScrollBarPolicy.FILL;
-                } else if (button == verticalFillToCapacityButton) {
-                    verticalScrollBarPolicy = ScrollBarPolicy.FILL_TO_CAPACITY;
-                } else if (button == verticalNeverButton) {
-                    verticalScrollBarPolicy = ScrollBarPolicy.NEVER;
-                } else if (button == verticalAlwaysButton) {
-                    verticalScrollBarPolicy = ScrollBarPolicy.ALWAYS;
-                }
-
-                if (verticalScrollBarPolicy != null) {
-                    contentScrollPane.setVerticalScrollBarPolicy(verticalScrollBarPolicy);
-                }
-            }
-        });
+            });
     }
 
     @Override
@@ -259,7 +261,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
             Object node = itemIterator.next();
 
             if (node instanceof ComponentNode) {
-                ComponentNode componentNode = (ComponentNode)node;
+                ComponentNode componentNode = (ComponentNode) node;
                 Path path = itemIterator.getPath();
 
                 if (firstComponentPath == null) {

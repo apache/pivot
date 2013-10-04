@@ -23,9 +23,9 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 /**
- * Implementation of the {@link Serializer} interface that uses Java's
- * internal serialization mechanism to read and write values. All values in the
- * object hierarchy are required to implement {@link java.io.Serializable}.
+ * Implementation of the {@link Serializer} interface that uses Java's internal
+ * serialization mechanism to read and write values. All values in the object
+ * hierarchy are required to implement {@link java.io.Serializable}.
  */
 public class BinarySerializer implements Serializer<Object> {
     public static final String MIME_TYPE = "application/x-java-serialized-object";
@@ -35,8 +35,7 @@ public class BinarySerializer implements Serializer<Object> {
      * Reads a graph of serialized objects from an input stream.
      */
     @Override
-    public Object readObject(InputStream inputStream) throws IOException,
-        SerializationException {
+    public Object readObject(InputStream inputStream) throws IOException, SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
         }
@@ -46,7 +45,7 @@ public class BinarySerializer implements Serializer<Object> {
         try {
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
             object = objectInputStream.readObject();
-        } catch(ClassNotFoundException exception) {
+        } catch (ClassNotFoundException exception) {
             throw new SerializationException(exception);
         }
 
@@ -57,8 +56,8 @@ public class BinarySerializer implements Serializer<Object> {
      * Writes a graph of serializable objects to an output stream.
      */
     @Override
-    public void writeObject(Object object, OutputStream outputStream)
-        throws IOException, SerializationException {
+    public void writeObject(Object object, OutputStream outputStream) throws IOException,
+        SerializationException {
         if (object == null) {
             throw new IllegalArgumentException("object is null.");
         }

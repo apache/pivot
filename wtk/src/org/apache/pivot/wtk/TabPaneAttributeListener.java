@@ -30,14 +30,15 @@ public interface TabPaneAttributeListener {
         }
 
         @Override
-        public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
+        public void tooltipTextChanged(TabPane tabPane, Component component,
+            String previousTooltipText) {
             // empty block
         }
     }
 
     /**
      * Called when a tab's tab data attribute has changed.
-     *
+     * 
      * @param tabPane
      * @param component
      * @param previousTabData
@@ -46,7 +47,7 @@ public interface TabPaneAttributeListener {
 
     /**
      * Called when a tab's tooltipText attribute has changed.
-     *
+     * 
      * @param tabPane
      * @param component
      */

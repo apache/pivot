@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 
-
 /**
  * Default button data renderer.
  */
@@ -61,10 +60,10 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
         String text = null;
 
         if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData)data;
+            ButtonData buttonData = (ButtonData) data;
             icon = buttonData.getIcon();
         } else if (data instanceof Image) {
-            icon = (Image)data;
+            icon = (Image) data;
         }
         text = toString(data);
 
@@ -83,10 +82,12 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
                 int buttonHeight = button.getHeight();
                 Insets padding = (Insets) button.getStyles().get("padding");
                 if (buttonWidth > 0) {
-                    imageView.setPreferredWidth(Math.max(buttonWidth - (padding.left + padding.right + 2), 0));
+                    imageView.setPreferredWidth(Math.max(buttonWidth
+                        - (padding.left + padding.right + 2), 0));
                 }
                 if (buttonHeight > 0) {
-                    imageView.setPreferredWidth(Math.max(buttonHeight - (padding.top + padding.bottom + 2), 0));
+                    imageView.setPreferredWidth(Math.max(buttonHeight
+                        - (padding.top + padding.bottom + 2), 0));
                 }
             }
         }
@@ -99,14 +100,14 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
         } else {
             label.setVisible(true);
 
-            Font font = (Font)button.getStyles().get("font");
+            Font font = (Font) button.getStyles().get("font");
             label.getStyles().put("font", font);
 
             Color color;
             if (button.isEnabled()) {
-                color = (Color)button.getStyles().get("color");
+                color = (Color) button.getStyles().get("color");
             } else {
-                color = (Color)button.getStyles().get("disabledColor");
+                color = (Color) button.getStyles().get("disabledColor");
             }
 
             label.getStyles().put("color", color);
@@ -138,7 +139,7 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
     }
 
     public boolean getFillIcon() {
-        return (Boolean)imageView.getStyles().get("fill");
+        return (Boolean) imageView.getStyles().get("fill");
     }
 
     public void setFillIcon(boolean fillIcon) {
@@ -151,7 +152,7 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
         String string = null;
 
         if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData)data;
+            ButtonData buttonData = (ButtonData) data;
             string = buttonData.getText();
         } else if (!(data instanceof Image)) {
             if (data != null) {

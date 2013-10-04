@@ -37,25 +37,20 @@ public interface SpinnerSelectionListener {
 
     /**
      * Called when a spinner's selected index has changed.
-     *
-     * @param spinner
-     * The source of the event.
-     *
-     * @param previousSelectedIndex
-     * If the selection changed directly, contains the index that was previously
-     * selected. Otherwise, contains the current selection.
+     * 
+     * @param spinner The source of the event.
+     * @param previousSelectedIndex If the selection changed directly, contains
+     * the index that was previously selected. Otherwise, contains the current
+     * selection.
      */
     public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex);
 
     /**
      * Called when a spinners's selected item has changed.
-     *
-     * @param spinner
-     * The source of the event.
-     *
-     * @param previousSelectedItem
-     * The item that was previously selected, or <tt>null</tt> if the previous selection
-     * cannot be determined.
+     * 
+     * @param spinner The source of the event.
+     * @param previousSelectedItem The item that was previously selected, or
+     * <tt>null</tt> if the previous selection cannot be determined.
      */
     public void selectedItemChanged(Spinner spinner, Object previousSelectedItem);
 }

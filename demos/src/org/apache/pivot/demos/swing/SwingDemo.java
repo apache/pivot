@@ -24,9 +24,9 @@ import javax.swing.ButtonGroup;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
@@ -153,7 +153,7 @@ public class SwingDemo extends ApplicationContext {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         Window window;
         try {
-            window = (Window)bxmlSerializer.readObject(SwingDemo.class.getResource("pivot_window.bxml"));
+            window = (Window) bxmlSerializer.readObject(SwingDemo.class.getResource("pivot_window.bxml"));
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         } catch (SerializationException exception) {

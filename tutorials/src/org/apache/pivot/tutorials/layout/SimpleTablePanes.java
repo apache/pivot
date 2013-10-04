@@ -37,40 +37,41 @@ public class SimpleTablePanes extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        tablePane = (TablePane)namespace.get("tablePane");
+        tablePane = (TablePane) namespace.get("tablePane");
 
-        tablePane.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-            @Override
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-                int rowIndex = tablePane.getRowAt(y);
-                int columnIndex = tablePane.getColumnAt(x);
+        tablePane.getComponentMouseButtonListeners().add(
+            new ComponentMouseButtonListener.Adapter() {
+                @Override
+                public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
+                    int count) {
+                    int rowIndex = tablePane.getRowAt(y);
+                    int columnIndex = tablePane.getColumnAt(x);
 
-                if (rowIndex >= 0
-                    && columnIndex >= 0) {
-                    TablePane.Row row = tablePane.getRows().get(rowIndex);
-                    TablePane.Column column = tablePane.getColumns().get(columnIndex);
+                    if (rowIndex >= 0 && columnIndex >= 0) {
+                        TablePane.Row row = tablePane.getRows().get(rowIndex);
+                        TablePane.Column column = tablePane.getColumns().get(columnIndex);
 
-                    int rowHeight = row.getHeight();
-                    int columnWidth = column.getWidth();
+                        int rowHeight = row.getHeight();
+                        int columnWidth = column.getWidth();
 
-                    String message = "Registered Click At " + rowIndex + "," + columnIndex;
+                        String message = "Registered Click At " + rowIndex + "," + columnIndex;
 
-                    Label heightLabel = new Label(String.format("The row's height is %d (%s)",
-                        rowHeight,
-                        rowHeight == -1 ? "default" : (row.isRelative() ? "relative" : "absolute")));
-                    Label widthLabel = new Label(String.format("The column's width is %d (%s)",
-                        columnWidth,
-                        columnWidth == -1 ? "default" : (column.isRelative() ? "relative" : "absolute")));
+                        Label heightLabel = new Label(String.format("The row's height is %d (%s)",
+                            rowHeight, rowHeight == -1 ? "default" : (row.isRelative() ? "relative"
+                                : "absolute")));
+                        Label widthLabel = new Label(String.format("The column's width is %d (%s)",
+                            columnWidth, columnWidth == -1 ? "default"
+                                : (column.isRelative() ? "relative" : "absolute")));
 
-                    BoxPane body = new BoxPane(Orientation.VERTICAL);
-                    body.add(heightLabel);
-                    body.add(widthLabel);
+                        BoxPane body = new BoxPane(Orientation.VERTICAL);
+                        body.add(heightLabel);
+                        body.add(widthLabel);
 
-                    Prompt.prompt(MessageType.INFO, message, body, SimpleTablePanes.this);
+                        Prompt.prompt(MessageType.INFO, message, body, SimpleTablePanes.this);
+                    }
+
+                    return false;
                 }
-
-                return false;
-            }
-        });
+            });
     }
 }

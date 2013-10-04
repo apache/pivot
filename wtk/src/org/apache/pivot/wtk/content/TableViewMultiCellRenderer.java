@@ -143,8 +143,8 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
             Class<?> valueClass = item.getValueClass();
 
             if (cellRenderers.containsKey(valueClass)) {
-                throw new IllegalArgumentException("Duplicate value class mapping: " +
-                    (valueClass == null ? "null" : valueClass.getName()));
+                throw new IllegalArgumentException("Duplicate value class mapping: "
+                    + (valueClass == null ? "null" : valueClass.getName()));
             }
 
             mappings.insert(item, index);
@@ -171,10 +171,9 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                 Class<?> valueClass = item.getValueClass();
                 Class<?> previousValueClass = previousItem.getValueClass();
 
-                if (cellRenderers.containsKey(valueClass)
-                    && valueClass != previousValueClass) {
-                    throw new IllegalArgumentException("Duplicate value class mapping: " +
-                        valueClass.getName());
+                if (cellRenderers.containsKey(valueClass) && valueClass != previousValueClass) {
+                    throw new IllegalArgumentException("Duplicate value class mapping: "
+                        + valueClass.getName());
                 }
 
                 mappings.update(index, item);
@@ -285,8 +284,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
 
         for (Class<?> key : cellRenderers) {
             TableView.CellRenderer renderer = cellRenderers.get(key);
-            preferredHeight = Math.max(preferredHeight,
-                renderer.getPreferredHeight(widthArgument));
+            preferredHeight = Math.max(preferredHeight, renderer.getPreferredHeight(widthArgument));
         }
 
         return preferredHeight;
@@ -308,23 +306,20 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     }
 
     @Override
-    public void render(Object row, int rowIndex, int columnIndex,
-        TableView tableView, String columnName,
-        boolean selected, boolean highlighted, boolean disabled) {
+    public void render(Object row, int rowIndex, int columnIndex, TableView tableView,
+        String columnName, boolean selected, boolean highlighted, boolean disabled) {
         if (row == null) {
             for (Class<?> key : cellRenderers) {
                 TableView.CellRenderer renderer = cellRenderers.get(key);
-                renderer.render(null, rowIndex, columnIndex, tableView, columnName,
-                    selected, highlighted, disabled);
+                renderer.render(null, rowIndex, columnIndex, tableView, columnName, selected,
+                    highlighted, disabled);
             }
         } else {
             Object cellData = JSON.get(row, columnName);
 
             TableView.CellRenderer cellRenderer = null;
             Class<?> valueClass = (cellData == null ? null : cellData.getClass());
-            while (cellRenderer == null
-                && valueClass != null
-                && valueClass != Object.class) {
+            while (cellRenderer == null && valueClass != null && valueClass != Object.class) {
                 cellRenderer = cellRenderers.get(valueClass);
 
                 if (cellRenderer == null) {
@@ -341,8 +336,8 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
                 cellRenderer.setSize(width, height);
             }
 
-            cellRenderer.render(row, rowIndex, columnIndex, tableView, columnName,
-                selected, highlighted, disabled);
+            cellRenderer.render(row, rowIndex, columnIndex, tableView, columnName, selected,
+                highlighted, disabled);
         }
     }
 
@@ -352,8 +347,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
 
         TableView.CellRenderer cellRenderer = null;
         Class<?> valueClass = (cellData == null ? null : cellData.getClass());
-        while (cellRenderer == null
-            && valueClass != Object.class) {
+        while (cellRenderer == null && valueClass != Object.class) {
             cellRenderer = cellRenderers.get(valueClass);
 
             if (cellRenderer == null && valueClass != null) {

@@ -28,7 +28,7 @@ public class ValueMapping implements Label.TextBindMapping {
 
     @Override
     public String toString(Object value) {
-        return Float.isNaN((Float)value) ? null : FORMAT.format(value);
+        return Float.isNaN((Float) value) ? null : FORMAT.format(value);
     }
 
     @Override

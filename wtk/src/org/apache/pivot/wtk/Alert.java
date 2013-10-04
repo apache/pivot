@@ -118,8 +118,8 @@ public class Alert extends Dialog {
         }
     }
 
-    private static class AlertListenerList extends WTKListenerList<AlertListener>
-        implements AlertListener {
+    private static class AlertListenerList extends WTKListenerList<AlertListener> implements
+        AlertListener {
         @Override
         public void messageTypeChanged(Alert alert, MessageType previousMessageType) {
             for (AlertListener listener : this) {
@@ -178,7 +178,7 @@ public class Alert extends Dialog {
     static {
         try {
             resources = new Resources(Alert.class.getName());
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
     }
@@ -203,7 +203,8 @@ public class Alert extends Dialog {
         this(messageType, message, options, body, true);
     }
 
-    public Alert(MessageType messageType, String message, Sequence<?> options, Component body, boolean modal) {
+    public Alert(MessageType messageType, String message, Sequence<?> options, Component body,
+        boolean modal) {
         super(modal);
 
         setMessageType((messageType == null) ? MessageType.INFO : messageType);
@@ -212,23 +213,23 @@ public class Alert extends Dialog {
         setBody(body);
 
         if (messageType == null) {
-            setTitle((String)resources.get("defaultTitle"));
+            setTitle((String) resources.get("defaultTitle"));
         } else {
             switch (messageType) {
                 case ERROR:
-                    setTitle((String)resources.get("defaultErrorTitle"));
+                    setTitle((String) resources.get("defaultErrorTitle"));
                     break;
                 case WARNING:
-                    setTitle((String)resources.get("defaultWarningTitle"));
+                    setTitle((String) resources.get("defaultWarningTitle"));
                     break;
                 case QUESTION:
-                    setTitle((String)resources.get("defaultQuestionTitle"));
+                    setTitle((String) resources.get("defaultQuestionTitle"));
                     break;
                 case INFO:
-                    setTitle((String)resources.get("defaultInfoTitle"));
+                    setTitle((String) resources.get("defaultInfoTitle"));
                     break;
                 default:
-                    setTitle((String)resources.get("defaultTitle"));
+                    setTitle((String) resources.get("defaultTitle"));
                     break;
             }
         }

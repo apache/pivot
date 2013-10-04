@@ -30,14 +30,13 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Window;
 
-
 public class CheckedListViewTest extends Application.Adapter {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
-        final ListView listView = new ListView(JSONSerializer.parseList("['One', 'Two', 'Three', 'Four']"));
+    public void startup(Display display, Map<String, String> properties) throws Exception {
+        final ListView listView = new ListView(
+            JSONSerializer.parseList("['One', 'Two', 'Three', 'Four']"));
         listView.setSelectMode(ListView.SelectMode.MULTI);
         listView.setCheckmarksEnabled(true);
         listView.setItemChecked(0, true);
@@ -45,15 +44,17 @@ public class CheckedListViewTest extends Application.Adapter {
 
         listView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
-            public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            public boolean keyPressed(Component component, int keyCode,
+                Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.DELETE) {
                     @SuppressWarnings("unchecked")
-                    List<Object> listData = (List<Object>)listView.getListData();
+                    List<Object> listData = (List<Object>) listView.getListData();
 
                     Sequence<Span> selectedRanges = listView.getSelectedRanges();
                     for (int i = selectedRanges.getLength() - 1; i >= 0; i--) {
                         Span selectedRange = selectedRanges.get(i);
-                        listData.remove(selectedRange.start, selectedRange.end - selectedRange.start + 1);
+                        listData.remove(selectedRange.start, selectedRange.end
+                            - selectedRange.start + 1);
                     }
                 }
 

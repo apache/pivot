@@ -23,15 +23,13 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-
 public class ExpanderTest extends Application.Adapter {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(ExpanderTest.class, "expander_test.bxml");
+        window = (Window) bxmlSerializer.readObject(ExpanderTest.class, "expander_test.bxml");
         window.open(display);
     }
 

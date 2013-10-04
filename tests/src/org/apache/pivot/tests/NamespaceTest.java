@@ -28,10 +28,9 @@ public class NamespaceTest extends Application.Adapter {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(NamespaceTest.class, "namespace_test.bxml");
+        window = (Window) bxmlSerializer.readObject(NamespaceTest.class, "namespace_test.bxml");
         System.out.println(JSON.get(bxmlSerializer.getNamespace(), "content.text"));
         System.out.println(JSON.get(bxmlSerializer.getNamespace(), "content['text']"));
         window.open(display);

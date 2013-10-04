@@ -30,8 +30,7 @@ public interface ImageViewBindingListener {
         }
 
         @Override
-        public void imageBindTypeChanged(ImageView imageView,
-            BindType previousImageBindType) {
+        public void imageBindTypeChanged(ImageView imageView, BindType previousImageBindType) {
             // empty block
         }
 
@@ -44,7 +43,7 @@ public interface ImageViewBindingListener {
 
     /**
      * Called when an image view's image key has changed.
-     *
+     * 
      * @param imageView
      * @param previousImageKey
      */
@@ -52,16 +51,15 @@ public interface ImageViewBindingListener {
 
     /**
      * Called when a image views's image bind type has changed.
-     *
+     * 
      * @param imageView
      * @param previousImageBindType
      */
-    public void imageBindTypeChanged(ImageView imageView,
-        BindType previousImageBindType);
+    public void imageBindTypeChanged(ImageView imageView, BindType previousImageBindType);
 
     /**
      * Called when an image view's text bind mapping has changed.
-     *
+     * 
      * @param imageView
      * @param previousImageBindMapping
      */

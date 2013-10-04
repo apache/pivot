@@ -83,15 +83,15 @@ public final class Time implements Comparable<Time>, Serializable {
             }
 
             if (startRange instanceof String) {
-                this.start = Time.decode((String)startRange);
+                this.start = Time.decode((String) startRange);
             } else {
-                this.start = (Time)startRange;
+                this.start = (Time) startRange;
             }
 
             if (endRange instanceof String) {
-                this.end = Time.decode((String)endRange);
+                this.end = Time.decode((String) endRange);
             } else {
-                this.end = (Time)endRange;
+                this.end = (Time) endRange;
             }
         }
 
@@ -108,11 +108,9 @@ public final class Time implements Comparable<Time>, Serializable {
 
             boolean contains;
             if (this.start.compareTo(this.end) < 0) {
-                contains = (this.start.compareTo(normalizedRange.start) <= 0
-                    && this.end.compareTo(normalizedRange.end) >= 0);
+                contains = (this.start.compareTo(normalizedRange.start) <= 0 && this.end.compareTo(normalizedRange.end) >= 0);
             } else {
-                contains = (this.end.compareTo(normalizedRange.start) <= 0
-                    && this.start.compareTo(normalizedRange.end) >= 0);
+                contains = (this.end.compareTo(normalizedRange.start) <= 0 && this.start.compareTo(normalizedRange.end) >= 0);
             }
 
             return contains;
@@ -125,11 +123,9 @@ public final class Time implements Comparable<Time>, Serializable {
 
             boolean contains;
             if (this.start.compareTo(this.end) < 0) {
-                contains = (this.start.compareTo(time) <= 0
-                    && this.end.compareTo(time) >= 0);
+                contains = (this.start.compareTo(time) <= 0 && this.end.compareTo(time) >= 0);
             } else {
-                contains = (this.end.compareTo(time) <= 0
-                    && this.start.compareTo(time) >= 0);
+                contains = (this.end.compareTo(time) <= 0 && this.start.compareTo(time) >= 0);
             }
 
             return contains;
@@ -144,11 +140,9 @@ public final class Time implements Comparable<Time>, Serializable {
 
             boolean intersects;
             if (this.start.compareTo(this.end) < 0) {
-                intersects = (this.start.compareTo(normalizedRange.end) <= 0
-                    && this.end.compareTo(normalizedRange.start) >= 0);
+                intersects = (this.start.compareTo(normalizedRange.end) <= 0 && this.end.compareTo(normalizedRange.start) >= 0);
             } else {
-                intersects = (this.end.compareTo(normalizedRange.end) <= 0
-                    && this.start.compareTo(normalizedRange.start) >= 0);
+                intersects = (this.end.compareTo(normalizedRange.end) <= 0 && this.start.compareTo(normalizedRange.start) >= 0);
             }
 
             return intersects;
@@ -269,14 +263,11 @@ public final class Time implements Comparable<Time>, Serializable {
 
     /**
      * Adds the specified milliseconds of days to this time and returns the
-     * resulting time. The number of milliseconds may be negative, in which
-     * case the result will be a time prior to this time.
-     *
-     * @param milliseconds
-     * The number of milliseconds to add to this time.
-     *
-     * @return
-     * The resulting time.
+     * resulting time. The number of milliseconds may be negative, in which case
+     * the result will be a time prior to this time.
+     * 
+     * @param milliseconds The number of milliseconds to add to this time.
+     * @return The resulting time.
      */
     public Time add(int milliseconds) {
         return new Time(toMilliseconds() + milliseconds);
@@ -286,14 +277,11 @@ public final class Time implements Comparable<Time>, Serializable {
      * Gets the number of milliseconds in between this time and the specified
      * time. If this time represents a time later than the specified time, the
      * difference will be positive. If this time represents a time before the
-     * specified time, the difference will be negative. If the two times represent
-     * the same time, the difference will be zero.
-     *
-     * @param time
-     * The time to subtract from this time.
-     *
-     * @return
-     * The number of milliseconds in between this time and <tt>time</tt>.
+     * specified time, the difference will be negative. If the two times
+     * represent the same time, the difference will be zero.
+     * 
+     * @param time The time to subtract from this time.
+     * @return The number of milliseconds in between this time and <tt>time</tt>.
      */
     public int subtract(Time time) {
         if (time == null) {
@@ -304,17 +292,15 @@ public final class Time implements Comparable<Time>, Serializable {
     }
 
     /**
-     * Returns the number of milliseconds since midnight represented by
-     * this time.
-     *
-     * @return
-     * The number of milliseconds since midnight represented by this time.
+     * Returns the number of milliseconds since midnight represented by this
+     * time.
+     * 
+     * @return The number of milliseconds since midnight represented by this
+     * time.
      */
     public int toMilliseconds() {
-        return this.hour * MILLISECONDS_PER_HOUR
-            + this.minute * MILLISECONDS_PER_MINUTE
-            + this.second * MILLISECONDS_PER_SECOND
-            + this.millisecond;
+        return this.hour * MILLISECONDS_PER_HOUR + this.minute * MILLISECONDS_PER_MINUTE
+            + this.second * MILLISECONDS_PER_SECOND + this.millisecond;
     }
 
     @Override
@@ -338,11 +324,8 @@ public final class Time implements Comparable<Time>, Serializable {
 
     @Override
     public boolean equals(Object o) {
-        return (o instanceof Time
-            && ((Time)o).hour == this.hour
-            && ((Time)o).minute == this.minute
-            && ((Time)o).second == this.second
-            && ((Time)o).millisecond == this.millisecond);
+        return (o instanceof Time && ((Time) o).hour == this.hour
+            && ((Time) o).minute == this.minute && ((Time) o).second == this.second && ((Time) o).millisecond == this.millisecond);
     }
 
     @Override
@@ -383,11 +366,10 @@ public final class Time implements Comparable<Time>, Serializable {
     /**
      * Creates a new time representing the specified time string. The time
      * string must be in the full <tt>ISO 8601</tt> extended "time" format,
-     * which  is <tt>[hh]:[mm]:[ss]</tt>. An optional millisecond suffix of
-     * the form <tt>.[nnn]</tt> is also supported.
-     *
-     * @param value
-     * A string in the form of <tt>[hh]:[mm]:[ss]</tt> or
+     * which is <tt>[hh]:[mm]:[ss]</tt>. An optional millisecond suffix of the
+     * form <tt>.[nnn]</tt> is also supported.
+     * 
+     * @param value A string in the form of <tt>[hh]:[mm]:[ss]</tt> or
      * <tt>[hh]:[mm]:[ss].[nnn]</tt> (e.g. 17:19:20 or 17:19:20.412).
      */
     public static Time decode(String value) {
@@ -402,8 +384,8 @@ public final class Time implements Comparable<Time>, Serializable {
         int second = Integer.parseInt(matcher.group(3));
 
         String millisecondSequence = matcher.group(4);
-        int millisecond = (millisecondSequence == null) ?
-            0 : Integer.parseInt(millisecondSequence.substring(1));
+        int millisecond = (millisecondSequence == null) ? 0
+            : Integer.parseInt(millisecondSequence.substring(1));
 
         return new Time(hour, minute, second, millisecond);
     }

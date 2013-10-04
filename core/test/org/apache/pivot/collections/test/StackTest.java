@@ -23,7 +23,6 @@ import org.apache.pivot.collections.LinkedStack;
 import org.apache.pivot.collections.Stack;
 import org.junit.Test;
 
-
 public class StackTest {
     @Test
     public void stackTest() {

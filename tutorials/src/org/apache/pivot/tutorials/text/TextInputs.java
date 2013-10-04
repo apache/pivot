@@ -92,14 +92,13 @@ public class TextInputs extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        stateTextInput = (TextInput)namespace.get("stateTextInput");
+        stateTextInput = (TextInput) namespace.get("stateTextInput");
         stateTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textInserted(final TextInput textInput, int index, int count) {
                 String text = textInput.getText();
 
-                int i = ArrayList.binarySearch(states, text,
-                    states.getComparator());
+                int i = ArrayList.binarySearch(states, text, states.getComparator());
 
                 if (i < 0) {
                     i = -(i + 1);
@@ -110,11 +109,9 @@ public class TextInputs extends Window implements Bindable {
                         final String state = states.get(i);
 
                         if (state.toLowerCase().startsWith(text)) {
-                            String nextState = (i == n - 1) ?
-                                null : states.get(i + 1);
+                            String nextState = (i == n - 1) ? null : states.get(i + 1);
 
-                            if (nextState == null
-                                || !nextState.toLowerCase().startsWith(text)) {
+                            if (nextState == null || !nextState.toLowerCase().startsWith(text)) {
                                 textInput.setText(state);
 
                                 int selectionStart = text.length();

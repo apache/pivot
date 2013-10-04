@@ -32,8 +32,8 @@ public class Sliders extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        slider = (Slider)namespace.get("slider");
-        label = (Label)namespace.get("label");
+        slider = (Slider) namespace.get("slider");
+        label = (Label) namespace.get("label");
 
         slider.getSliderValueListeners().add(new SliderValueListener() {
             @Override

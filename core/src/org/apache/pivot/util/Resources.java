@@ -45,13 +45,11 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         this(null, baseName, Locale.getDefault(), Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
-    public Resources(Resources parent, String baseName) throws IOException,
-        SerializationException {
+    public Resources(Resources parent, String baseName) throws IOException, SerializationException {
         this(parent, baseName, Locale.getDefault(), Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
-    public Resources(String baseName, Locale locale) throws IOException,
-        SerializationException {
+    public Resources(String baseName, Locale locale) throws IOException, SerializationException {
         this(null, baseName, locale, Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
@@ -60,8 +58,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         this(parent, baseName, locale, Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
-    public Resources(String baseName, Charset charset) throws IOException,
-        SerializationException {
+    public Resources(String baseName, Charset charset) throws IOException, SerializationException {
         this(null, baseName, Locale.getDefault(), charset);
     }
 
@@ -72,31 +69,19 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     /**
      * Creates a new resource bundle.
-     *
-     * @param parent
-     * The parent resource defer to if a resource cannot be found in this
-     * instance or null.
-     *
-     * @param baseName
-     * The base name of this resource as a fully qualified class name.
-     *
-     * @param locale
-     * The locale to use when reading this resource.
-     *
-     * @param charset
-     * The character encoding to use when reading this resource.
-     *
-     * @throws IOException
-     * If there is a problem when reading the resource.
-     *
-     * @throws SerializationException
-     * If there is a problem deserializing the resource from its JSON format.
-     *
-     * @throws IllegalArgumentException
-     * If baseName or locale or charset is null.
-     *
-     * @throws MissingResourceException
-     * If no resource for the specified base name can be found.
+     * 
+     * @param parent The parent resource defer to if a resource cannot be found
+     * in this instance or null.
+     * @param baseName The base name of this resource as a fully qualified class
+     * name.
+     * @param locale The locale to use when reading this resource.
+     * @param charset The character encoding to use when reading this resource.
+     * @throws IOException If there is a problem when reading the resource.
+     * @throws SerializationException If there is a problem deserializing the
+     * resource from its JSON format.
+     * @throws IllegalArgumentException If baseName or locale or charset is null.
+     * @throws MissingResourceException If no resource for the specified base
+     * name can be found.
      */
     public Resources(Resources parent, String baseName, Locale locale, Charset charset)
         throws IOException, SerializationException {
@@ -132,7 +117,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         }
 
         // Try to find resource for the entire locale (e.g. resourceName_en_GB)
-        overrideMap = readJSONResource(resourceName + "_" + locale.toString() + "." + JSONSerializer.JSON_EXTENSION);
+        overrideMap = readJSONResource(resourceName + "_" + locale.toString() + "."
+            + JSONSerializer.JSON_EXTENSION);
         if (overrideMap != null) {
             if (this.resourceMap == null) {
                 this.resourceMap = overrideMap;
@@ -142,8 +128,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
         }
 
         if (this.resourceMap == null) {
-            throw new MissingResourceException("Can't find resource for base name "
-                + baseName + ", locale " + locale, baseName, "");
+            throw new MissingResourceException("Can't find resource for base name " + baseName
+                + ", locale " + locale, baseName, "");
         }
     }
 
@@ -165,8 +151,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     @Override
     public Object get(String key) {
-        return (this.resourceMap.containsKey(key)) ?
-            this.resourceMap.get(key) : (this.parent == null) ? null : this.parent.get(key);
+        return (this.resourceMap.containsKey(key)) ? this.resourceMap.get(key)
+            : (this.parent == null) ? null : this.parent.get(key);
     }
 
     @Override
@@ -182,8 +168,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     @Override
     public boolean containsKey(String key) {
         return this.resourceMap.containsKey(key)
-            || (this.parent != null
-                && this.parent.containsKey(key));
+            || (this.parent != null && this.parent.containsKey(key));
     }
 
     @Override
@@ -198,9 +183,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
                 Object source = sourceMap.get(key);
                 Object override = overridesMap.get(key);
 
-                if (source instanceof Map<?, ?>
-                    && override instanceof Map<?, ?>) {
-                    applyOverrides((Map<String, Object>)source, (Map<String, Object>)override);
+                if (source instanceof Map<?, ?> && override instanceof Map<?, ?>) {
+                    applyOverrides((Map<String, Object>) source, (Map<String, Object>) override);
                 } else {
                     sourceMap.put(key, overridesMap.get(key));
                 }
@@ -209,8 +193,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     @SuppressWarnings("unchecked")
-    private Map<String, Object> readJSONResource(String name)
-        throws IOException, SerializationException {
+    private Map<String, Object> readJSONResource(String name) throws IOException,
+        SerializationException {
         Map<String, Object> resourceMapFromResource = null;
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -220,7 +204,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
             JSONSerializer serializer = new JSONSerializer(this.charset);
 
             try {
-                resourceMapFromResource = (Map<String, Object>)serializer.readObject(inputStream);
+                resourceMapFromResource = (Map<String, Object>) serializer.readObject(inputStream);
             } finally {
                 inputStream.close();
             }

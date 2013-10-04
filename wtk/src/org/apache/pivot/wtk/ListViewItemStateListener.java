@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface ListViewItemStateListener {
     /**
      * Called when an item's checked state has changed.
-     *
+     * 
      * @param listView
      * @param index
      */

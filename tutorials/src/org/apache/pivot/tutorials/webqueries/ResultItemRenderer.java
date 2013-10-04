@@ -61,8 +61,8 @@ public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer
     public void render(Object item, int index, ListView listView, boolean selected,
         boolean checked, boolean highlighted, boolean disabled) {
         if (item != null) {
-            titleLabel.setText((String)JSON.get(item, "title"));
-            phoneLabel.setText((String)JSON.get(item, "Phone"));
+            titleLabel.setText((String) JSON.get(item, "title"));
+            phoneLabel.setText((String) JSON.get(item, "Phone"));
 
             Map<String, ?> location = JSON.get(item, "['y:location']");
             if (location == null) {
@@ -75,7 +75,7 @@ public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer
             }
         }
 
-        Font font = (Font)listView.getStyles().get("font");
+        Font font = (Font) listView.getStyles().get("font");
         titleLabel.getStyles().put("font", font.deriveFont(font.getStyle() | Font.BOLD));
         phoneLabel.getStyles().put("font", font);
         addressLabel.getStyles().put("font", font);
@@ -84,15 +84,15 @@ public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer
         if (listView.isEnabled() && !disabled) {
             if (selected) {
                 if (listView.isFocused()) {
-                    color = (Color)listView.getStyles().get("selectionColor");
+                    color = (Color) listView.getStyles().get("selectionColor");
                 } else {
-                    color = (Color)listView.getStyles().get("inactiveSelectionColor");
+                    color = (Color) listView.getStyles().get("inactiveSelectionColor");
                 }
             } else {
-                color = (Color)listView.getStyles().get("color");
+                color = (Color) listView.getStyles().get("color");
             }
         } else {
-            color = (Color)listView.getStyles().get("disabledColor");
+            color = (Color) listView.getStyles().get("disabledColor");
         }
 
         titleLabel.getStyles().put("color", color);

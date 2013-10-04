@@ -16,7 +16,9 @@
  */
 package org.apache.pivot.json.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -34,20 +36,21 @@ import org.junit.Test;
 public class BindTest {
     /**
      * Tests returning an untyped list.
-     *
+     * 
      * @throws IOException
      * @throws SerializationException
      */
     @Test
     public void testUntypedList() throws IOException, SerializationException {
         JSONSerializer listSerializer = new JSONSerializer(ArrayList.class);
-        List<?> list = (List<?>)listSerializer.readObject(new StringReader("[1, 2, 3, 4, 5]"));
+        List<?> list = (List<?>) listSerializer.readObject(new StringReader("[1, 2, 3, 4, 5]"));
         assertEquals(list.get(0), 1);
     }
 
     /**
-     * Tests returning a typed list using {@code org.apache.pivot.util.TypeLiteral}.
-     *
+     * Tests returning a typed list using
+     * {@code org.apache.pivot.util.TypeLiteral}.
+     * 
      * @throws IOException
      * @throws SerializationException
      */
@@ -55,16 +58,16 @@ public class BindTest {
     public void testTypedList() throws IOException, SerializationException {
         JSONSerializer listSerializer = new JSONSerializer();
         @SuppressWarnings("unchecked")
-        List<Object> list =
-            (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
+        List<Object> list = (List<Object>) listSerializer.readObject(getClass().getResourceAsStream(
+            "list.json"));
 
-        JSONSerializer typedListSerializer =
-            new JSONSerializer((new TypeLiteral<ArrayList<SampleBean2>>() {
+        JSONSerializer typedListSerializer = new JSONSerializer(
+            (new TypeLiteral<ArrayList<SampleBean2>>() {
                 // empty block
             }).getType());
         @SuppressWarnings("unchecked")
-        ArrayList<SampleBean2> typedList =
-            (ArrayList<SampleBean2>)typedListSerializer.readObject(getClass().getResourceAsStream("list.json"));
+        ArrayList<SampleBean2> typedList = (ArrayList<SampleBean2>) typedListSerializer.readObject(getClass().getResourceAsStream(
+            "list.json"));
 
         Object item0 = typedList.get(0);
         assertTrue(item0 instanceof SampleBean2);
@@ -72,8 +75,9 @@ public class BindTest {
     }
 
     /**
-     * Tests returning a subclass of a generic {@code org.apache.pivot.collections.List}.
-     *
+     * Tests returning a subclass of a generic
+     * {@code org.apache.pivot.collections.List}.
+     * 
      * @throws IOException
      * @throws SerializationException
      */
@@ -81,12 +85,12 @@ public class BindTest {
     public void testListSubclass() throws IOException, SerializationException {
         JSONSerializer listSerializer = new JSONSerializer();
         @SuppressWarnings("unchecked")
-        List<Object> list =
-            (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
+        List<Object> list = (List<Object>) listSerializer.readObject(getClass().getResourceAsStream(
+            "list.json"));
 
         JSONSerializer typedListSerializer = new JSONSerializer(SampleBean2ListSubclass.class);
-        SampleBean2List typedList =
-            (SampleBean2List)typedListSerializer.readObject(getClass().getResourceAsStream("list.json"));
+        SampleBean2List typedList = (SampleBean2List) typedListSerializer.readObject(getClass().getResourceAsStream(
+            "list.json"));
 
         Object item0 = typedList.get(0);
         assertTrue(item0 instanceof SampleBean2);
@@ -94,8 +98,9 @@ public class BindTest {
     }
 
     /**
-     * Tests returning a class that implements {@code org.apache.pivot.collections.Sequence}.
-     *
+     * Tests returning a class that implements
+     * {@code org.apache.pivot.collections.Sequence}.
+     * 
      * @throws IOException
      * @throws SerializationException
      */
@@ -103,22 +108,22 @@ public class BindTest {
     public void testSequence() throws IOException, SerializationException {
         JSONSerializer listSerializer = new JSONSerializer();
         @SuppressWarnings("unchecked")
-        List<Object> list =
-            (List<Object>)listSerializer.readObject(getClass().getResourceAsStream("list.json"));
+        List<Object> list = (List<Object>) listSerializer.readObject(getClass().getResourceAsStream(
+            "list.json"));
 
         JSONSerializer sequenceSerializer = new JSONSerializer(SampleBean2SequenceSubclass.class);
-        SampleBean2Sequence sequence =
-            (SampleBean2Sequence)sequenceSerializer.readObject(getClass().getResourceAsStream("list.json"));
+        SampleBean2Sequence sequence = (SampleBean2Sequence) sequenceSerializer.readObject(getClass().getResourceAsStream(
+            "list.json"));
 
         Object item0 = sequence.get(0);
         assertNotNull(item0);
-        // assertTrue(item0 instanceof SampleBean2);  // true but superfluous
+        // assertTrue(item0 instanceof SampleBean2); // true but superfluous
         assertEquals(sequence.get(0).getA(), JSON.get(list, "[0].a"));
     }
 
     /**
      * Tests returning an untyped map.
-     *
+     * 
      * @throws IOException
      * @throws SerializationException
      */
@@ -126,34 +131,37 @@ public class BindTest {
     public void testUntypedMap() throws IOException, SerializationException {
         JSONSerializer mapSerializer = new JSONSerializer(HashMap.class);
         @SuppressWarnings("unchecked")
-        HashMap<String, ?> map = (HashMap<String, ?>)mapSerializer.readObject(new StringReader("{a:1, b:2, c:'3'}"));
+        HashMap<String, ?> map = (HashMap<String, ?>) mapSerializer.readObject(new StringReader(
+            "{a:1, b:2, c:'3'}"));
         assertEquals(map.get("a"), 1);
     }
 
     /**
-     * Tests returning a typed map using {@code org.apache.pivot.util.TypeLiteral}.
-     *
+     * Tests returning a typed map using
+     * {@code org.apache.pivot.util.TypeLiteral}.
+     * 
      * @throws IOException
      * @throws SerializationException
      */
     @Test
     public void testTypedMap() throws IOException, SerializationException {
-        JSONSerializer typedMapSerializer =
-            new JSONSerializer((new TypeLiteral<HashMap<String, SampleBean2>>() {
+        JSONSerializer typedMapSerializer = new JSONSerializer(
+            (new TypeLiteral<HashMap<String, SampleBean2>>() {
                 // empty block
             }).getType());
 
         @SuppressWarnings("unchecked")
-        HashMap<String, SampleBean2> map =
-            (HashMap<String, SampleBean2>)typedMapSerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
+        HashMap<String, SampleBean2> map = (HashMap<String, SampleBean2>) typedMapSerializer.readObject(new StringReader(
+            "{foo: {a:1, b:2, c:'3'}}"));
 
         assertTrue(JSON.get(map, "foo") instanceof SampleBean2);
         assertEquals(JSON.get(map, "foo.c"), "3");
     }
 
     /**
-     * Tests returning a subclass of a generic {@code org.apache.pivot.collections.Map}.
-     *
+     * Tests returning a subclass of a generic
+     * {@code org.apache.pivot.collections.Map}.
+     * 
      * @throws IOException
      * @throws SerializationException
      */
@@ -161,25 +169,27 @@ public class BindTest {
     public void testMapSubclass() throws IOException, SerializationException {
         JSONSerializer typedMapSerializer = new JSONSerializer(SampleBean2MapSubclass.class);
 
-        SampleBean2Map map =
-            (SampleBean2Map)typedMapSerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
+        SampleBean2Map map = (SampleBean2Map) typedMapSerializer.readObject(new StringReader(
+            "{foo: {a:1, b:2, c:'3'}}"));
 
         assertTrue(JSON.get(map, "foo") instanceof SampleBean2);
         assertEquals(JSON.get(map, "foo.c"), "3");
     }
 
     /**
-     * Tests returning a class that implements {@code org.apache.pivot.collections.Dictionary}.
-     *
+     * Tests returning a class that implements
+     * {@code org.apache.pivot.collections.Dictionary}.
+     * 
      * @throws IOException
      * @throws SerializationException
      */
     @Test
     public void testDictionary() throws IOException, SerializationException {
-        JSONSerializer dictionarySerializer = new JSONSerializer(SampleBean2DictionarySubclass.class);
+        JSONSerializer dictionarySerializer = new JSONSerializer(
+            SampleBean2DictionarySubclass.class);
 
-        SampleBean2Dictionary dictionary =
-            (SampleBean2Dictionary)dictionarySerializer.readObject(new StringReader("{foo: {a:1, b:2, c:'3'}}"));
+        SampleBean2Dictionary dictionary = (SampleBean2Dictionary) dictionarySerializer.readObject(new StringReader(
+            "{foo: {a:1, b:2, c:'3'}}"));
 
         assertTrue(JSON.get(dictionary, "foo") instanceof SampleBean2);
         assertEquals(JSON.get(dictionary, "foo.c"), "3");
@@ -187,7 +197,7 @@ public class BindTest {
 
     /**
      * Tests returning a Java bean value.
-     *
+     * 
      * @throws IOException
      * @throws SerializationException
      */
@@ -195,12 +205,12 @@ public class BindTest {
     public void testBean() throws IOException, SerializationException {
         JSONSerializer mapSerializer = new JSONSerializer();
         @SuppressWarnings("unchecked")
-        Map<String, Object> map =
-            (Map<String, Object>)mapSerializer.readObject(getClass().getResourceAsStream("map.json"));
+        Map<String, Object> map = (Map<String, Object>) mapSerializer.readObject(getClass().getResourceAsStream(
+            "map.json"));
 
         JSONSerializer beanSerializer = new JSONSerializer(SampleBean1.class);
-        SampleBean1 typedMap =
-            (SampleBean1)beanSerializer.readObject(getClass().getResourceAsStream("map.json"));
+        SampleBean1 typedMap = (SampleBean1) beanSerializer.readObject(getClass().getResourceAsStream(
+            "map.json"));
 
         assertEquals(typedMap.getA(), JSON.get(map, "a"));
         assertEquals(typedMap.getB(), JSON.get(map, "b"));

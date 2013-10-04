@@ -29,7 +29,7 @@ public class ResolveTest extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(ResolveTest.class, "resolve_test.bxml", true);
+        window = (Window) bxmlSerializer.readObject(ResolveTest.class, "resolve_test.bxml", true);
         window.open(display);
     }
 

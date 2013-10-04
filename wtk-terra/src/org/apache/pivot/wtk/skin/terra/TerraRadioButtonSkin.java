@@ -35,9 +35,7 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.RadioButtonSkin;
 
 /**
- * Terra radio button skin.
- * <p>
- * TODO Button alignment style (vertical only).
+ * Terra radio button skin. <p> TODO Button alignment style (vertical only).
  */
 public class TerraRadioButtonSkin extends RadioButtonSkin {
     private Font font;
@@ -56,7 +54,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
     private static final int BUTTON_SELECTION_DIAMETER = 6;
 
     public TerraRadioButtonSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -72,7 +70,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        RadioButton radioButton = (RadioButton)getComponent();
+        RadioButton radioButton = (RadioButton) getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
 
         int preferredWidth = BUTTON_DIAMETER;
@@ -80,8 +78,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         Object buttonData = radioButton.getButtonData();
         if (buttonData != null) {
             dataRenderer.render(buttonData, radioButton, false);
-            preferredWidth += dataRenderer.getPreferredWidth(height)
-                + spacing * 2;
+            preferredWidth += dataRenderer.getPreferredWidth(height) + spacing * 2;
         }
 
         return preferredWidth;
@@ -89,7 +86,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        RadioButton radioButton = (RadioButton)getComponent();
+        RadioButton radioButton = (RadioButton) getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
 
         int preferredHeight = BUTTON_DIAMETER;
@@ -102,8 +99,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
             dataRenderer.render(buttonData, radioButton, false);
 
-            preferredHeight = Math.max(preferredHeight,
-                dataRenderer.getPreferredHeight(width));
+            preferredHeight = Math.max(preferredHeight, dataRenderer.getPreferredHeight(width));
         }
 
         return preferredHeight;
@@ -111,7 +107,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        RadioButton radioButton = (RadioButton)getComponent();
+        RadioButton radioButton = (RadioButton) getComponent();
         Button.DataRenderer dataRenderer = radioButton.getDataRenderer();
 
         int preferredWidth = BUTTON_DIAMETER;
@@ -120,20 +116,17 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         Object buttonData = radioButton.getButtonData();
         if (buttonData != null) {
             dataRenderer.render(buttonData, radioButton, false);
-            preferredWidth += dataRenderer.getPreferredWidth(-1)
-                + spacing * 2;
+            preferredWidth += dataRenderer.getPreferredWidth(-1) + spacing * 2;
 
-            preferredHeight = Math.max(preferredHeight,
-                dataRenderer.getPreferredHeight(-1));
+            preferredHeight = Math.max(preferredHeight, dataRenderer.getPreferredHeight(-1));
         }
-
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
 
     @Override
     public int getBaseline(int width, int height) {
-        RadioButton radioButton = (RadioButton)getComponent();
+        RadioButton radioButton = (RadioButton) getComponent();
 
         int baseline = -1;
 
@@ -148,7 +141,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
     @Override
     public void paint(Graphics2D graphics) {
-        RadioButton radioButton = (RadioButton)getComponent();
+        RadioButton radioButton = (RadioButton) getComponent();
         int width = getWidth();
         int height = getHeight();
 
@@ -164,7 +157,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         dataRenderer.render(buttonData, radioButton, false);
         dataRenderer.setSize(Math.max(width - (BUTTON_DIAMETER + spacing * 2), 0), height);
 
-        Graphics2D contentGraphics = (Graphics2D)graphics.create();
+        Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(BUTTON_DIAMETER + spacing, 0);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
@@ -174,13 +167,12 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         if (radioButton.isFocused()) {
             if (buttonData == null) {
                 Color focusColor = new Color(buttonSelectionColor.getRed(),
-                    buttonSelectionColor.getGreen(),
-                    buttonSelectionColor.getBlue(), 0x44);
+                    buttonSelectionColor.getGreen(), buttonSelectionColor.getBlue(), 0x44);
                 graphics.setColor(focusColor);
                 graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
             } else {
                 BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+                    BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
 
                 graphics.setStroke(dashStroke);
                 graphics.setColor(buttonBorderColor);
@@ -189,8 +181,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
                 Rectangle2D focusRectangle = new Rectangle2D.Double(BUTTON_DIAMETER + 1, 0.5,
-                    dataRenderer.getWidth() + spacing * 2 - 2,
-                    dataRenderer.getHeight() - 1);
+                    dataRenderer.getWidth() + spacing * 2 - 2, dataRenderer.getHeight() - 1);
                 graphics.draw(focusRectangle);
             }
         }
@@ -201,19 +192,18 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         Color buttonBorderColorLocal = null;
         Color buttonSelectionColorLocal = null;
 
-        Ellipse2D buttonBackgroundCircle = new Ellipse2D.Double(1, 1,
-            BUTTON_DIAMETER - 3, BUTTON_DIAMETER - 3);
+        Ellipse2D buttonBackgroundCircle = new Ellipse2D.Double(1, 1, BUTTON_DIAMETER - 3,
+            BUTTON_DIAMETER - 3);
 
         if (enabled) {
-            buttonPaint = new RadialGradientPaint((float)buttonBackgroundCircle.getCenterX(),
-                (float)buttonBackgroundCircle.getCenterY(),
-                (float)buttonBackgroundCircle.getWidth() * 2 / 3,
-                new float[] {0f, 1f}, new Color[] {TerraTheme.darken(buttonColor), buttonColor});
+            buttonPaint = new RadialGradientPaint((float) buttonBackgroundCircle.getCenterX(),
+                (float) buttonBackgroundCircle.getCenterY(),
+                (float) buttonBackgroundCircle.getWidth() * 2 / 3, new float[] { 0f, 1f },
+                new Color[] { TerraTheme.darken(buttonColor), buttonColor });
 
             buttonBorderColorLocal = this.buttonBorderColor;
             buttonSelectionColorLocal = this.buttonSelectionColor;
-        }
-        else {
+        } else {
             buttonPaint = disabledButtonColor;
             buttonBorderColorLocal = disabledButtonBorderColor;
             buttonSelectionColorLocal = disabledButtonSelectionColor;
@@ -232,8 +222,8 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
         // Paint the selection
         if (selected) {
-            Ellipse2D buttonSelectionCircle = new Ellipse2D.Double((BUTTON_DIAMETER
-                - (BUTTON_SELECTION_DIAMETER - 1)) / 2,
+            Ellipse2D buttonSelectionCircle = new Ellipse2D.Double(
+                (BUTTON_DIAMETER - (BUTTON_SELECTION_DIAMETER - 1)) / 2,
                 (BUTTON_DIAMETER - (BUTTON_SELECTION_DIAMETER - 1)) / 2,
                 BUTTON_SELECTION_DIAMETER - 1, BUTTON_SELECTION_DIAMETER - 1);
             graphics.setColor(buttonSelectionColorLocal);

@@ -22,7 +22,7 @@ package org.apache.pivot.beans;
 public interface PropertyChangeListener {
     /**
      * Called when a Java bean property has changed.
-     *
+     * 
      * @param bean
      * @param propertyName
      */

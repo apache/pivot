@@ -31,7 +31,6 @@ import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.MenuItemSkin;
 
-
 /**
  * Terra menu item skin.
  */
@@ -52,10 +51,10 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
         @Override
         public void paint(Graphics2D graphics) {
-            Menu.Item menuItem = (Menu.Item)getComponent();
-            Menu menu = (Menu)menuItem.getParent();
+            Menu.Item menuItem = (Menu.Item) getComponent();
+            Menu menu = (Menu) menuItem.getParent();
 
-            Color color = (Color)menu.getStyles().get("color");
+            Color color = (Color) menu.getStyles().get("color");
             graphics.setColor(color);
             graphics.setStroke(new BasicStroke(2.5f));
 
@@ -68,10 +67,8 @@ public class TerraMenuItemSkin extends MenuItemSkin {
             int offsetX = (SIZE - (n + m)) / 2;
             int offsetY = (SIZE - n) / 2;
 
-            graphics.drawLine(offsetX, (n - m) + offsetY,
-                m + offsetX, n + offsetY);
-            graphics.drawLine(m + offsetX, n + offsetY,
-                (m + n) + offsetX, offsetY);
+            graphics.drawLine(offsetX, (n - m) + offsetY, m + offsetX, n + offsetY);
+            graphics.drawLine(m + offsetX, n + offsetY, (m + n) + offsetX, offsetY);
         }
     }
 
@@ -84,13 +81,13 @@ public class TerraMenuItemSkin extends MenuItemSkin {
     public void install(Component component) {
         super.install(component);
 
-        Menu.Item menuItem = (Menu.Item)component;
+        Menu.Item menuItem = (Menu.Item) component;
         menuItem.setCursor(Cursor.DEFAULT);
     }
 
     @Override
     public int getPreferredWidth(int height) {
-        Menu.Item menuItem = (Menu.Item)getComponent();
+        Menu.Item menuItem = (Menu.Item) getComponent();
 
         Button.DataRenderer dataRenderer = menuItem.getDataRenderer();
         dataRenderer.render(menuItem.getButtonData(), menuItem, false);
@@ -100,7 +97,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        Menu.Item menuItem = (Menu.Item)getComponent();
+        Menu.Item menuItem = (Menu.Item) getComponent();
 
         Button.DataRenderer dataRenderer = menuItem.getDataRenderer();
         dataRenderer.render(menuItem.getButtonData(), menuItem, false);
@@ -110,15 +107,15 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        Menu.Item menuItem = (Menu.Item)getComponent();
+        Menu.Item menuItem = (Menu.Item) getComponent();
 
         Button.DataRenderer dataRenderer = menuItem.getDataRenderer();
         dataRenderer.render(menuItem.getButtonData(), menuItem, false);
 
         Dimensions preferredSize = dataRenderer.getPreferredSize();
 
-        return new Dimensions(preferredSize.width + EXPANDER_SIZE,
-            Math.max(preferredSize.height, EXPANDER_SIZE));
+        return new Dimensions(preferredSize.width + EXPANDER_SIZE, Math.max(preferredSize.height,
+            EXPANDER_SIZE));
     }
 
     @Override
@@ -128,8 +125,8 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
     @Override
     public void paint(Graphics2D graphics) {
-        Menu.Item menuItem = (Menu.Item)getComponent();
-        Menu menu = (Menu)menuItem.getParent();
+        Menu.Item menuItem = (Menu.Item) getComponent();
+        Menu menu = (Menu) menuItem.getParent();
 
         int width = getWidth();
         int height = getHeight();
@@ -138,9 +135,10 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
         // Paint highlight state
         if (highlight) {
-            Color activeBackgroundColor = (Color)menu.getStyles().get("activeBackgroundColor");
-            graphics.setPaint(new GradientPaint(width / 2f, 0, TerraTheme.brighten(activeBackgroundColor),
-                width / 2f, height, activeBackgroundColor));
+            Color activeBackgroundColor = (Color) menu.getStyles().get("activeBackgroundColor");
+            graphics.setPaint(new GradientPaint(width / 2f, 0,
+                TerraTheme.brighten(activeBackgroundColor), width / 2f, height,
+                activeBackgroundColor));
             graphics.fillRect(0, 0, width, height);
         }
 
@@ -153,8 +151,8 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
         // Paint the expander
         if (menuItem.getMenu() != null) {
-            Color color = (Color)(highlight ?
-                menu.getStyles().get("activeColor") : menu.getStyles().get("color"));
+            Color color = (Color) (highlight ? menu.getStyles().get("activeColor")
+                : menu.getStyles().get("color"));
             graphics.setColor(color);
             graphics.setStroke(new BasicStroke(0));
 
@@ -164,8 +162,8 @@ public class TerraMenuItemSkin extends MenuItemSkin {
             graphics.translate(dataRenderer.getWidth() + (EXPANDER_SIZE - EXPANDER_ICON_SIZE) / 2,
                 (height - EXPANDER_ICON_SIZE) / 2);
 
-            int[] xPoints = {0, EXPANDER_ICON_SIZE, 0};
-            int[] yPoints = {0, EXPANDER_ICON_SIZE / 2, EXPANDER_ICON_SIZE};
+            int[] xPoints = { 0, EXPANDER_ICON_SIZE, 0 };
+            int[] yPoints = { 0, EXPANDER_ICON_SIZE / 2, EXPANDER_ICON_SIZE };
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -175,11 +173,11 @@ public class TerraMenuItemSkin extends MenuItemSkin {
     public boolean isOpaque() {
         boolean opaque = false;
 
-        Menu.Item menuItem = (Menu.Item)getComponent();
+        Menu.Item menuItem = (Menu.Item) getComponent();
 
         if (menuItem.isActive()) {
-            Menu menu = (Menu)menuItem.getParent();
-            Color activeBackgroundColor = (Color)menu.getStyles().get("activeBackgroundColor");
+            Menu menu = (Menu) menuItem.getParent();
+            Color activeBackgroundColor = (Color) menu.getStyles().get("activeBackgroundColor");
             opaque = (activeBackgroundColor.getTransparency() == Transparency.OPAQUE);
         }
 
@@ -191,7 +189,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
     }
 
     public Color getPopupBorderColor() {
-        return (Color)menuPopup.getStyles().get("borderColor");
+        return (Color) menuPopup.getStyles().get("borderColor");
     }
 
     public void setPopupBorderColor(Color popupBorderColor) {

@@ -45,16 +45,15 @@ public interface ColorChooserBindingListener {
 
     /**
      * Called when a color chooser's selected color key has changed.
-     *
+     * 
      * @param colorChooser
      * @param previousSelectedColorKey
      */
-    public void selectedColorKeyChanged(ColorChooser colorChooser,
-        String previousSelectedColorKey);
+    public void selectedColorKeyChanged(ColorChooser colorChooser, String previousSelectedColorKey);
 
     /**
      * Called when a color chooser's selected color bind type has changed.
-     *
+     * 
      * @param colorChooser
      * @param previousSelectedColorBindType
      */
@@ -63,7 +62,7 @@ public interface ColorChooserBindingListener {
 
     /**
      * Called when a color chooser's selected color bind mapping has changed.
-     *
+     * 
      * @param colorChooser
      * @param previousSelectedColorBindMapping
      */

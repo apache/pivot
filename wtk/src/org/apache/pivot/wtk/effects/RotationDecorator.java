@@ -37,9 +37,8 @@ public class RotationDecorator implements Decorator {
 
     /**
      * Creates a new rotation decorator with the specified theta value.
-     *
-     * @param theta
-     * The rotation angle, in radians.
+     * 
+     * @param theta The rotation angle, in radians.
      */
     public RotationDecorator(double theta) {
         setTheta(theta);
@@ -87,10 +86,10 @@ public class RotationDecorator implements Decorator {
         double sinTheta = Math.abs(Math.sin(theta));
         double cosTheta = Math.abs(Math.cos(theta));
 
-        int transformedWidth = (int)Math.ceil((height * sinTheta) + (width * cosTheta));
-        int transformedHeight = (int)Math.ceil((height * cosTheta) + (width * sinTheta));
-        int transformedX = (int)Math.floor((width - transformedWidth) * 0.5);
-        int transformedY = (int)Math.floor((height - transformedHeight) * 0.5);
+        int transformedWidth = (int) Math.ceil((height * sinTheta) + (width * cosTheta));
+        int transformedHeight = (int) Math.ceil((height * cosTheta) + (width * sinTheta));
+        int transformedX = (int) Math.floor((width - transformedWidth) * 0.5);
+        int transformedY = (int) Math.floor((height - transformedHeight) * 0.5);
 
         return new Bounds(transformedX, transformedY, transformedWidth, transformedHeight);
     }

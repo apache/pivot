@@ -33,7 +33,7 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     protected void attach() {
         super.attach();
 
-        TextSpan span = (TextSpan)getNode();
+        TextSpan span = (TextSpan) getNode();
 
         // for now, assume that span contains at most one child, and
         // that child is a TextNode
@@ -75,7 +75,8 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     }
 
     /**
-     * Used by TextPaneSkinParagraphView when it breaks child nodes into multiple views.
+     * Used by TextPaneSkinParagraphView when it breaks child nodes into
+     * multiple views.
      */
     public TextPaneSkinTextNodeView getNext() {
         if (getLength() == 0) {

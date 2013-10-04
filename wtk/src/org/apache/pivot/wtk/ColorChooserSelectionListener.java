@@ -24,10 +24,9 @@ import java.awt.Color;
 public interface ColorChooserSelectionListener {
     /**
      * Called when a color chooser's selected color has changed.
-     *
+     * 
      * @param colorChooser
      * @param previousSelectedColor
      */
-    public void selectedColorChanged(ColorChooser colorChooser,
-        Color previousSelectedColor);
+    public void selectedColorChanged(ColorChooser colorChooser, Color previousSelectedColor);
 }

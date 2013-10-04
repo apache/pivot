@@ -25,10 +25,8 @@ import org.apache.pivot.wtk.ImageView;
 /**
  * List button renderer for displaying color swatches.
  */
-public class ListButtonColorItemRenderer extends ImageView
-    implements Button.DataRenderer {
-    private ListViewColorItemRenderer.ColorBadge colorBadge =
-        new ListViewColorItemRenderer.ColorBadge();
+public class ListButtonColorItemRenderer extends ImageView implements Button.DataRenderer {
+    private ListViewColorItemRenderer.ColorBadge colorBadge = new ListViewColorItemRenderer.ColorBadge();
 
     public ListButtonColorItemRenderer() {
         setImage(colorBadge);
@@ -49,16 +47,16 @@ public class ListButtonColorItemRenderer extends ImageView
         if (data == null) {
             color = Color.WHITE;
         } else if (data instanceof ColorItem) {
-            ColorItem colorItem = (ColorItem)data;
+            ColorItem colorItem = (ColorItem) data;
             color = colorItem.getColor();
         } else if (data instanceof Color) {
-            color = (Color)data;
+            color = (Color) data;
         } else {
             color = GraphicsUtilities.decodeColor(data.toString());
         }
 
-        colorBadge.setColor(button.isEnabled() ?
-            color : new Color(color.getRed(), color.getGreen(), color.getBlue(), 0x99));
+        colorBadge.setColor(button.isEnabled() ? color : new Color(color.getRed(),
+            color.getGreen(), color.getBlue(), 0x99));
     }
 
     @Override

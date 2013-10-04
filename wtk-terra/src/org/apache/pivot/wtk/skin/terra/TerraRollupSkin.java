@@ -124,7 +124,7 @@ public class TerraRollupSkin extends RollupSkin {
 
         @Override
         public void paint(Graphics2D graphics) {
-            Rollup rollup = (Rollup)TerraRollupSkin.this.getComponent();
+            Rollup rollup = (Rollup) TerraRollupSkin.this.getComponent();
 
             graphics.setStroke(new BasicStroke(0));
             if (rollup.isEnabled()) {
@@ -138,14 +138,14 @@ public class TerraRollupSkin extends RollupSkin {
             if (rollup.isCollapsible()) {
                 if (rollup.isExpanded()) {
                     // Paint the collapse image
-                    int[] xPoints = {0, 3, 6};
-                    int[] yPoints = {0, 6, 0};
+                    int[] xPoints = { 0, 3, 6 };
+                    int[] yPoints = { 0, 6, 0 };
                     graphics.fillPolygon(xPoints, yPoints, 3);
                     graphics.drawPolygon(xPoints, yPoints, 3);
                 } else {
                     // Paint the expand image
-                    int[] xPoints = {0, 6, 0};
-                    int[] yPoints = {0, 3, 6};
+                    int[] xPoints = { 0, 6, 0 };
+                    int[] yPoints = { 0, 3, 6 };
                     graphics.fillPolygon(xPoints, yPoints, 3);
                     graphics.drawPolygon(xPoints, yPoints, 3);
                 }
@@ -159,7 +159,7 @@ public class TerraRollupSkin extends RollupSkin {
 
         @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            Rollup rollup = (Rollup)TerraRollupSkin.this.getComponent();
+            Rollup rollup = (Rollup) TerraRollupSkin.this.getComponent();
             rollup.setExpanded(!rollup.isExpanded());
             return true;
         }
@@ -185,9 +185,8 @@ public class TerraRollupSkin extends RollupSkin {
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             boolean consumed = false;
 
-            Rollup rollup = (Rollup)getComponent();
-            if (headingToggles
-                && rollup.isCollapsible()) {
+            Rollup rollup = (Rollup) getComponent();
+            if (headingToggles && rollup.isCollapsible()) {
                 rollup.setExpanded(!rollup.isExpanded());
                 consumed = true;
             }
@@ -200,7 +199,7 @@ public class TerraRollupSkin extends RollupSkin {
     private static final int DEFAULT_EXPAND_RATE = 30;
 
     public TerraRollupSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         buttonColor = theme.getColor(1);
         disabledButtonColor = theme.getColor(7);
@@ -214,7 +213,7 @@ public class TerraRollupSkin extends RollupSkin {
     public void install(Component component) {
         super.install(component);
 
-        Rollup rollup = (Rollup)component;
+        Rollup rollup = (Rollup) component;
 
         // Add the rollup button
         rollupButton = new RollupButton();
@@ -228,7 +227,7 @@ public class TerraRollupSkin extends RollupSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        Rollup rollup = (Rollup)getComponent();
+        Rollup rollup = (Rollup) getComponent();
 
         Component heading = rollup.getHeading();
         Component content = rollup.getContent();
@@ -240,9 +239,7 @@ public class TerraRollupSkin extends RollupSkin {
         }
 
         if (content != null
-            && (rollup.isExpanded()
-                || (expandTransition != null
-                    && !expandTransition.isReversed()))) {
+            && (rollup.isExpanded() || (expandTransition != null && !expandTransition.isReversed()))) {
             preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(-1));
         }
 
@@ -253,7 +250,7 @@ public class TerraRollupSkin extends RollupSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        Rollup rollup = (Rollup)getComponent();
+        Rollup rollup = (Rollup) getComponent();
 
         Component heading = rollup.getHeading();
         Component content = rollup.getContent();
@@ -278,7 +275,7 @@ public class TerraRollupSkin extends RollupSkin {
                 }
             } else {
                 float scale = expandTransition.getScale();
-                preferredHeight += (int)(scale * (spacing + content.getPreferredHeight(width)));
+                preferredHeight += (int) (scale * (spacing + content.getPreferredHeight(width)));
             }
         }
 
@@ -289,7 +286,7 @@ public class TerraRollupSkin extends RollupSkin {
 
     @Override
     public int getBaseline(int width, int height) {
-        Rollup rollup = (Rollup)getComponent();
+        Rollup rollup = (Rollup) getComponent();
         Component heading = rollup.getHeading();
 
         int baseline = -1;
@@ -313,7 +310,7 @@ public class TerraRollupSkin extends RollupSkin {
 
     @Override
     public void layout() {
-        Rollup rollup = (Rollup)getComponent();
+        Rollup rollup = (Rollup) getComponent();
 
         Component heading = rollup.getHeading();
         Component content = rollup.getContent();
@@ -343,9 +340,7 @@ public class TerraRollupSkin extends RollupSkin {
         }
 
         if (content != null) {
-            if (rollup.isExpanded()
-                || (expandTransition != null
-                && !expandTransition.isReversed())) {
+            if (rollup.isExpanded() || (expandTransition != null && !expandTransition.isReversed())) {
                 int contentWidth, contentHeight;
                 if (fill) {
                     contentWidth = justifiedWidth;
@@ -376,7 +371,7 @@ public class TerraRollupSkin extends RollupSkin {
     }
 
     public final void setButtonColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setButtonColor(theme.getColor(color));
     }
 
@@ -402,7 +397,7 @@ public class TerraRollupSkin extends RollupSkin {
     }
 
     public final void setDisabledButtonColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledButtonColor(theme.getColor(color));
     }
 
@@ -433,7 +428,7 @@ public class TerraRollupSkin extends RollupSkin {
         }
         this.spacing = spacing;
 
-        Rollup rollup = (Rollup)getComponent();
+        Rollup rollup = (Rollup) getComponent();
         if (rollup.isExpanded()) {
             invalidateComponent();
         }
@@ -506,9 +501,7 @@ public class TerraRollupSkin extends RollupSkin {
     public Vote previewExpandedChange(final Rollup rollup) {
         Vote vote;
 
-        if (rollup.isShowing()
-            && expandTransition == null
-            && rollup.getContent() != null) {
+        if (rollup.isShowing() && expandTransition == null && rollup.getContent() != null) {
             final boolean expanded = rollup.isExpanded();
             expandTransition = new ExpandTransition(expanded);
 
@@ -521,8 +514,7 @@ public class TerraRollupSkin extends RollupSkin {
             });
         }
 
-        if (expandTransition == null
-            || !expandTransition.isRunning()) {
+        if (expandTransition == null || !expandTransition.isRunning()) {
             vote = Vote.APPROVE;
         } else {
             vote = Vote.DEFER;
@@ -533,8 +525,7 @@ public class TerraRollupSkin extends RollupSkin {
 
     @Override
     public void expandedChangeVetoed(Rollup rollup, Vote reason) {
-        if (reason == Vote.DENY
-            && expandTransition != null) {
+        if (reason == Vote.DENY && expandTransition != null) {
             // NOTE We stop, rather than end, the transition so the completion
             // event isn't fired; if the event fires, the listener will set
             // the expanded state

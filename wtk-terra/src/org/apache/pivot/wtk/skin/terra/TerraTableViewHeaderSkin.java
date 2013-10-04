@@ -40,19 +40,18 @@ import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewColumnListener;
 import org.apache.pivot.wtk.TableViewHeader;
+import org.apache.pivot.wtk.TableViewHeader.SortMode;
 import org.apache.pivot.wtk.TableViewHeaderListener;
 import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.TableViewHeader.SortMode;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
  * Table view header skin.
  */
-public class TerraTableViewHeaderSkin extends ComponentSkin
-    implements TableViewHeader.Skin, TableViewHeaderListener, TableViewColumnListener,
-        TableViewSortListener {
+public class TerraTableViewHeaderSkin extends ComponentSkin implements TableViewHeader.Skin,
+    TableViewHeaderListener, TableViewColumnListener, TableViewSortListener {
     private class SortIndicatorImage extends Image {
         private SortDirection sortDirection = null;
 
@@ -132,10 +131,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public static final int MINIMUM_COLUMN_WIDTH = 2;
 
     private SortIndicatorImage sortAscendingImage = new SortIndicatorImage(SortDirection.ASCENDING);
-    private SortIndicatorImage sortDescendingImage = new SortIndicatorImage(SortDirection.DESCENDING);
+    private SortIndicatorImage sortDescendingImage = new SortIndicatorImage(
+        SortDirection.DESCENDING);
 
     public TerraTableViewHeaderSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -158,7 +158,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public void install(Component component) {
         super.install(component);
 
-        TableViewHeader tableViewHeader = (TableViewHeader)component;
+        TableViewHeader tableViewHeader = (TableViewHeader) component;
         tableViewHeader.getTableViewHeaderListeners().add(this);
 
         TableView tableView = tableViewHeader.getTableView();
@@ -172,7 +172,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableViewHeader tableViewHeader = (TableViewHeader) getComponent();
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
@@ -187,7 +187,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableViewHeader tableViewHeader = (TableViewHeader) getComponent();
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
@@ -196,8 +196,10 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             for (int i = 0, n = columns.getLength(); i < n; i++) {
                 TableView.Column column = columns.get(i);
                 TableView.HeaderDataRenderer headerDataRenderer = column.getHeaderDataRenderer();
-                headerDataRenderer.render(column.getHeaderData(), i, tableViewHeader, column.getName(), false);
-                preferredHeight = Math.max(preferredHeight, headerDataRenderer.getPreferredHeight(-1));
+                headerDataRenderer.render(column.getHeaderData(), i, tableViewHeader,
+                    column.getName(), false);
+                preferredHeight = Math.max(preferredHeight,
+                    headerDataRenderer.getPreferredHeight(-1));
             }
 
             // Include the bottom border
@@ -216,11 +218,12 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public int getBaseline(int width, int height) {
         int baseline = -1;
 
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableViewHeader tableViewHeader = (TableViewHeader) getComponent();
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            ArrayList<Integer> headerWidthsLocal = TerraTableViewSkin.getColumnWidths(tableView, width);
+            ArrayList<Integer> headerWidthsLocal = TerraTableViewSkin.getColumnWidths(tableView,
+                width);
             int rowHeight = getPreferredHeight(width) - 1;
 
             TableView.ColumnSequence columns = tableView.getColumns();
@@ -228,8 +231,10 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             for (int i = 0, n = columns.getLength(); i < n; i++) {
                 TableView.Column column = columns.get(i);
                 TableView.HeaderDataRenderer headerDataRenderer = column.getHeaderDataRenderer();
-                headerDataRenderer.render(column.getHeaderData(), i, tableViewHeader, column.getName(), false);
-                baseline = Math.max(baseline, headerDataRenderer.getBaseline(headerWidthsLocal.get(i), rowHeight));
+                headerDataRenderer.render(column.getHeaderData(), i, tableViewHeader,
+                    column.getName(), false);
+                baseline = Math.max(baseline,
+                    headerDataRenderer.getBaseline(headerWidthsLocal.get(i), rowHeight));
             }
         }
 
@@ -238,7 +243,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
     @Override
     public void layout() {
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableViewHeader tableViewHeader = (TableViewHeader) getComponent();
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
@@ -253,7 +258,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         int width = getWidth();
         int height = getHeight();
 
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableViewHeader tableViewHeader = (TableViewHeader) getComponent();
 
         Color backgroundColorLocal = null;
         Color bevelColorLocal = null;
@@ -270,8 +275,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         }
 
         // Paint the background
-        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal,
-            width / 2f, height, backgroundColorLocal));
+        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f, height,
+            backgroundColorLocal));
         graphics.fillRect(0, 0, width, height);
 
         // Paint the border
@@ -286,8 +291,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             TableView.ColumnSequence columns = tableView.getColumns();
 
             int headerX = 0;
-            for (int columnIndex = 0, columnCount = columns.getLength();
-                columnIndex < columnCount; columnIndex++) {
+            for (int columnIndex = 0, columnCount = columns.getLength(); columnIndex < columnCount; columnIndex++) {
                 TableView.Column column = columns.get(columnIndex);
                 int headerWidth = headerWidths.get(columnIndex);
 
@@ -301,11 +305,12 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 // Paint the header data
                 Object headerData = column.getHeaderData();
                 TableView.HeaderDataRenderer headerDataRenderer = column.getHeaderDataRenderer();
-                headerDataRenderer.render(headerData, columnIndex, tableViewHeader, column.getName(), false);
+                headerDataRenderer.render(headerData, columnIndex, tableViewHeader,
+                    column.getName(), false);
                 headerDataRenderer.setSize(headerWidth, height - 1);
 
-                Graphics2D rendererGraphics = (Graphics2D)graphics.create(headerX, 0,
-                    headerWidth, height - 1);
+                Graphics2D rendererGraphics = (Graphics2D) graphics.create(headerX, 0, headerWidth,
+                    height - 1);
                 headerDataRenderer.paint(rendererGraphics);
                 rendererGraphics.dispose();
 
@@ -336,7 +341,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                     int sortImageMargin = sortImage.getWidth() + SORT_INDICATOR_PADDING * 2;
 
                     if (headerWidth >= headerDataRenderer.getPreferredWidth(-1) + sortImageMargin) {
-                        Graphics2D sortImageGraphics = (Graphics2D)graphics.create();
+                        Graphics2D sortImageGraphics = (Graphics2D) graphics.create();
                         sortImageGraphics.translate(headerX + headerWidth - sortImageMargin,
                             (height - sortImage.getHeight()) / 2);
                         sortImage.paint(sortImageGraphics);
@@ -347,8 +352,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                 // Draw the divider
                 headerX += headerWidth;
 
-                if (columnIndex < columnCount - 1
-                    || includeTrailingVerticalGridLine) {
+                if (columnIndex < columnCount - 1 || includeTrailingVerticalGridLine) {
                     graphics.setPaint(borderColorLocal);
                     graphics.draw(new Line2D.Double(headerX + 0.5, 0.5, headerX + 0.5, height - 0.5));
                 }
@@ -366,15 +370,14 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
         int headerIndex = -1;
 
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableViewHeader tableViewHeader = (TableViewHeader) getComponent();
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
             int i = 0;
             int n = tableView.getColumns().getLength();
             int headerX = 0;
-            while (i < n
-                && x > headerX) {
+            while (i < n && x > headerX) {
                 headerX += (headerWidths.get(i) + 1);
                 i++;
             }
@@ -391,12 +394,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     public Bounds getHeaderBounds(int headerIndex) {
         Bounds headerBounds = null;
 
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableViewHeader tableViewHeader = (TableViewHeader) getComponent();
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            if (headerIndex < 0
-                || headerIndex >= headerWidths.getLength()) {
+            if (headerIndex < 0 || headerIndex >= headerWidths.getLength()) {
                 throw new IndexOutOfBoundsException();
             }
 
@@ -467,7 +469,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -493,7 +495,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -521,7 +523,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -548,7 +550,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
@@ -574,7 +576,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -600,7 +602,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 
@@ -644,12 +646,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     @Override
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
-        TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+        TableViewHeader tableViewHeader = (TableViewHeader) getComponent();
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            if (resizeHeaderIndex != -1
-                && Mouse.getCapturer() != tableViewHeader) {
+            if (resizeHeaderIndex != -1 && Mouse.getCapturer() != tableViewHeader) {
                 Mouse.capture(tableViewHeader);
             }
 
@@ -661,20 +662,18 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
             } else {
                 int headerIndex = getHeaderAt(x);
 
-                if (headerIndex != -1
-                    && columnsResizable) {
+                if (headerIndex != -1 && columnsResizable) {
                     Bounds headerBounds = getHeaderBounds(headerIndex);
                     TableView.Column column = tableView.getColumns().get(headerIndex);
 
-                    if (!column.isRelative()
-                        && column.getWidth() != -1
+                    if (!column.isRelative() && column.getWidth() != -1
                         && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                         tableViewHeader.setCursor(Cursor.RESIZE_EAST);
                     } else {
-                        tableViewHeader.setCursor((Cursor)null);
+                        tableViewHeader.setCursor((Cursor) null);
                     }
                 } else {
-                    tableViewHeader.setCursor((Cursor)null);
+                    tableViewHeader.setCursor((Cursor) null);
                 }
             }
         }
@@ -698,7 +697,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         boolean consumed = super.mouseDown(component, button, x, y);
 
         if (button == Mouse.Button.LEFT) {
-            TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+            TableViewHeader tableViewHeader = (TableViewHeader) getComponent();
             TableView tableView = tableViewHeader.getTableView();
 
             if (tableView != null) {
@@ -708,9 +707,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
                     Bounds headerBounds = getHeaderBounds(headerIndex);
                     TableView.Column column = tableView.getColumns().get(headerIndex);
 
-                    if (columnsResizable
-                        && !column.isRelative()
-                        && column.getWidth() != -1
+                    if (columnsResizable && !column.isRelative() && column.getWidth() != -1
                         && x > headerBounds.x + headerBounds.width - RESIZE_HANDLE_SIZE) {
                         resizeHeaderIndex = headerIndex;
                     } else if (headersPressable) {
@@ -747,15 +744,13 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         if (button == Mouse.Button.LEFT) {
-            TableViewHeader tableViewHeader = (TableViewHeader)getComponent();
+            TableViewHeader tableViewHeader = (TableViewHeader) getComponent();
             TableView tableView = tableViewHeader.getTableView();
 
             if (resizeHeaderIndex != -1) {
                 TableView.Column column = tableView.getColumns().get(resizeHeaderIndex);
 
-                if (count == 2
-                    && !column.isRelative()
-                    && column.getWidth() != -1) {
+                if (count == 2 && !column.isRelative() && column.getWidth() != -1) {
                     // Size the column to fit its contents
                     int columnWidth = 0;
 
@@ -811,8 +806,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
 
     // Table view header events
     @Override
-    public void tableViewChanged(TableViewHeader tableViewHeader,
-        TableView previousTableView) {
+    public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
         if (previousTableView != null) {
             previousTableView.getTableViewColumnListeners().remove(this);
             previousTableView.getTableViewSortListeners().remove(this);
@@ -860,12 +854,14 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative) {
+    public void columnWidthChanged(TableView.Column column, int previousWidth,
+        boolean previousRelative) {
         invalidateComponent();
     }
 
     @Override
-    public void columnWidthLimitsChanged(TableView.Column column, int  previousMinimumWidth, int previousMaximumWidth) {
+    public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth,
+        int previousMaximumWidth) {
         invalidateComponent();
     }
 
@@ -875,7 +871,8 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public void columnCellRendererChanged(TableView.Column column, TableView.CellRenderer previousCellRenderer) {
+    public void columnCellRendererChanged(TableView.Column column,
+        TableView.CellRenderer previousCellRenderer) {
         // No-op
     }
 
@@ -892,8 +889,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin
     }
 
     @Override
-    public void sortRemoved(TableView tableView, String columnName,
-        SortDirection sortDirection) {
+    public void sortRemoved(TableView tableView, String columnName, SortDirection sortDirection) {
         repaintComponent();
     }
 

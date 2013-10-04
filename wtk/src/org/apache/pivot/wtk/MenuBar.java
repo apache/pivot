@@ -35,8 +35,8 @@ public class MenuBar extends Container {
      */
     @DefaultProperty("menu")
     public static class Item extends Button {
-        private static class ItemListenerList extends WTKListenerList<ItemListener>
-            implements ItemListener {
+        private static class ItemListenerList extends WTKListenerList<ItemListener> implements
+            ItemListener {
             @Override
             public void menuChanged(Item item, Menu previousMenu) {
                 for (ItemListener listener : this) {
@@ -72,8 +72,7 @@ public class MenuBar extends Container {
 
         @Override
         protected void setParent(Container parent) {
-            if (parent != null
-                && !(parent instanceof MenuBar)) {
+            if (parent != null && !(parent instanceof MenuBar)) {
                 throw new IllegalArgumentException("Parent must be an instance of "
                     + MenuBar.class.getName());
             }
@@ -97,8 +96,7 @@ public class MenuBar extends Container {
         }
 
         public void setMenu(Menu menu) {
-            if (menu != null
-                && menu.getItem() != null) {
+            if (menu != null && menu.getItem() != null) {
                 throw new IllegalArgumentException("menu already belongs to an item.");
             }
 
@@ -115,9 +113,7 @@ public class MenuBar extends Container {
         }
 
         public void setActive(boolean active) {
-            if (active
-                && (getParent() == null
-                || !isEnabled())) {
+            if (active && (getParent() == null || !isEnabled())) {
                 throw new IllegalStateException();
             }
 
@@ -125,7 +121,7 @@ public class MenuBar extends Container {
                 this.active = active;
 
                 // Update the active item
-                MenuBar menuBar = (MenuBar)getParent();
+                MenuBar menuBar = (MenuBar) getParent();
                 Item activeItem = menuBar.getActiveItem();
 
                 if (active) {
@@ -138,8 +134,7 @@ public class MenuBar extends Container {
                     if (activeItem != null) {
                         activeItem.setActive(false);
                     }
-                }
-                else {
+                } else {
                     // If this item is currently active, clear the
                     // selection
                     if (activeItem == this) {
@@ -158,8 +153,7 @@ public class MenuBar extends Container {
 
         @Override
         public boolean isEnabled() {
-            return (super.isEnabled()
-                && menu != null);
+            return (super.isEnabled() && menu != null);
         }
 
         public ListenerList<ItemListener> getItemListeners() {
@@ -173,7 +167,7 @@ public class MenuBar extends Container {
     public interface ItemListener {
         /**
          * Called when an item's menu has changed.
-         *
+         * 
          * @param item
          * @param previousMenu
          */
@@ -181,7 +175,7 @@ public class MenuBar extends Container {
 
         /**
          * Called when an item's active state has changed.
-         *
+         * 
          * @param item
          */
         public void activeChanged(Item item);
@@ -259,8 +253,8 @@ public class MenuBar extends Container {
         }
     }
 
-    private static class MenuBarListenerList extends WTKListenerList<MenuBarListener>
-        implements MenuBarListener {
+    private static class MenuBarListenerList extends WTKListenerList<MenuBarListener> implements
+        MenuBarListener {
         @Override
         public void itemInserted(MenuBar menuBar, int index) {
             for (MenuBarListener listener : this) {
@@ -316,7 +310,7 @@ public class MenuBar extends Container {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
 
-            if (items.indexOf((Item)component) >= 0) {
+            if (items.indexOf((Item) component) >= 0) {
                 throw new UnsupportedOperationException();
             }
         }

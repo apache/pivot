@@ -20,7 +20,6 @@ import java.util.Iterator;
 
 import org.apache.pivot.wtk.text.TextNode;
 
-
 class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
 
     private TextNode indexTextNode;
@@ -60,7 +59,7 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
         Iterator<TextPaneSkinNodeView> iterator = this.iterator();
         iterator.next();
 
-        for ( ; iterator.hasNext(); ) {
+        for (; iterator.hasNext();) {
             TextPaneSkinNodeView nodeView = iterator.next();
             nodeView.layout(bw);
 

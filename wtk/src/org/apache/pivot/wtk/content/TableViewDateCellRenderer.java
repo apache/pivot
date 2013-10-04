@@ -25,8 +25,8 @@ import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.CalendarDate;
 
 /**
- * Default renderer for table view cells that contain date data. Renders
- * cell contents as a formatted date.
+ * Default renderer for table view cells that contain date data. Renders cell
+ * contents as a formatted date.
  */
 public class TableViewDateCellRenderer extends TableViewCellRenderer {
     private DateFormat dateFormat = DateFormat.getDateInstance();
@@ -53,13 +53,13 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
 
         String string;
         if (cellData instanceof Date) {
-            string = dateFormat.format((Date)cellData);
+            string = dateFormat.format((Date) cellData);
         } else if (cellData instanceof Long) {
-            string = dateFormat.format(new Date((Long)cellData));
+            string = dateFormat.format(new Date((Long) cellData));
         } else if (cellData instanceof Calendar) {
-            string = dateFormat.format(((Calendar)cellData).getTime());
+            string = dateFormat.format(((Calendar) cellData).getTime());
         } else if (cellData instanceof CalendarDate) {
-            string = dateFormat.format(((CalendarDate)cellData).toCalendar().getTime());
+            string = dateFormat.format(((CalendarDate) cellData).toCalendar().getTime());
         } else {
             string = (cellData == null) ? null : cellData.toString();
         }

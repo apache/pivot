@@ -33,37 +33,37 @@ public class TerraTextPaneSkin extends TextPaneSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
     public final void setInactiveColor(int inactiveColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setInactiveColor(theme.getColor(inactiveColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
     public final void setSelectionColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setSelectionColor(theme.getColor(backgroundColor));
     }
 
     public final void setSelectionBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setSelectionBackgroundColor(theme.getColor(backgroundColor));
     }
 
     public final void setInactiveSelectionColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setInactiveSelectionColor(theme.getColor(backgroundColor));
     }
 
     public final void setInactiveSelectionBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setInactiveSelectionBackgroundColor(theme.getColor(backgroundColor));
     }
 }

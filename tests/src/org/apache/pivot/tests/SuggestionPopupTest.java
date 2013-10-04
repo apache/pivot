@@ -33,22 +33,25 @@ import org.apache.pivot.wtk.Window;
 public class SuggestionPopupTest extends Application.Adapter {
     private Window window = null;
 
-    @BXML private TextInput textInput = null;
-    @BXML private Label selectedIndexLabel = null;
+    @BXML
+    private TextInput textInput = null;
+    @BXML
+    private Label selectedIndexLabel = null;
 
     private SuggestionPopup suggestionPopup = new SuggestionPopup();
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(SuggestionPopupTest.class,
+        window = (Window) bxmlSerializer.readObject(SuggestionPopupTest.class,
             "suggestion_popup_test.bxml");
         bxmlSerializer.bind(this);
 
         textInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textInserted(TextInput textInputArgument, int index, int count) {
-                ArrayList<String> suggestions = new ArrayList<>("One", "Two", "Three", "Four", "Five");
+                ArrayList<String> suggestions = new ArrayList<>("One", "Two", "Three", "Four",
+                    "Five");
                 suggestionPopup.setSuggestionData(suggestions);
                 suggestionPopup.open(textInputArgument, new SuggestionPopupCloseListener() {
                     @Override

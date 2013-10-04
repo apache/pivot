@@ -34,17 +34,16 @@ public class RadioButtons extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        selectButton = (PushButton)namespace.get("selectButton");
+        selectButton = (PushButton) namespace.get("selectButton");
 
         // Get a reference to the button group
-        final ButtonGroup numbersGroup = (ButtonGroup)namespace.get("numbers");
+        final ButtonGroup numbersGroup = (ButtonGroup) namespace.get("numbers");
 
         // Add a button press listener
         selectButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                String message = "You selected \""
-                    + numbersGroup.getSelection().getButtonData()
+                String message = "You selected \"" + numbersGroup.getSelection().getButtonData()
                     + "\".";
                 Alert.alert(MessageType.INFO, message, RadioButtons.this);
             }

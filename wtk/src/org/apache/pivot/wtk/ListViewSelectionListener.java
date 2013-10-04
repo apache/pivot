@@ -49,53 +49,40 @@ public interface ListViewSelectionListener {
 
     /**
      * Called when a range has been added to a list view's selection.
-     *
-     * @param listView
-     * The source of the event.
-     *
-     * @param rangeStart
-     * The start index of the range that was added, inclusive.
-     *
-     * @param rangeEnd
-     * The end index of the range that was added, inclusive.
+     * 
+     * @param listView The source of the event.
+     * @param rangeStart The start index of the range that was added, inclusive.
+     * @param rangeEnd The end index of the range that was added, inclusive.
      */
     public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd);
 
     /**
      * Called when a range has been removed from a list view's selection.
-     *
-     * @param listView
-     * The source of the event.
-     *
-     * @param rangeStart
-     * The starting index of the range that was removed, inclusive.
-     *
-     * @param rangeEnd
-     * The starting index of the range that was removed, inclusive.
+     * 
+     * @param listView The source of the event.
+     * @param rangeStart The starting index of the range that was removed,
+     * inclusive.
+     * @param rangeEnd The starting index of the range that was removed,
+     * inclusive.
      */
     public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd);
 
     /**
      * Called when a list view's selection state has changed.
-     *
-     * @param listView
-     * The source of the event.
-     *
-     * @param previousSelectedRanges
-     * If the selection changed directly, contains the ranges that were previously
-     * selected. If the selection changed indirectly as a result of a model change,
-     * contains the current selection. Otherwise, contains <tt>null</tt>.
+     * 
+     * @param listView The source of the event.
+     * @param previousSelectedRanges If the selection changed directly, contains
+     * the ranges that were previously selected. If the selection changed
+     * indirectly as a result of a model change, contains the current selection.
+     * Otherwise, contains <tt>null</tt>.
      */
     public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges);
 
     /**
      * Called when a list view's selected item has changed.
-     *
-     * @param listView
-     * The source of the event.
-     *
-     * @param previousSelectedItem
-     * The item that was previously selected.
+     * 
+     * @param listView The source of the event.
+     * @param previousSelectedItem The item that was previously selected.
      */
     public void selectedItemChanged(ListView listView, Object previousSelectedItem);
 }

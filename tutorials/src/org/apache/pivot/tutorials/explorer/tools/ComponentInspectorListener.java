@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.Component;
 public interface ComponentInspectorListener {
     /**
      * Called when an component inspector's source component has changed.
-     *
+     * 
      * @param componentInspector
      * @param previousSource
      */

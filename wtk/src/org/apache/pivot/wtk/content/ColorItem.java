@@ -76,8 +76,7 @@ public class ColorItem {
 
     @Override
     public boolean equals(Object o) {
-        return (o instanceof ColorItem
-            && ((ColorItem)o).color.equals(color));
+        return (o instanceof ColorItem && ((ColorItem) o).color.equals(color));
     }
 
     @Override

@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface ButtonPressListener {
     /**
      * Called when a button is pressed.
-     *
+     * 
      * @param button
      */
     public void buttonPressed(Button button);

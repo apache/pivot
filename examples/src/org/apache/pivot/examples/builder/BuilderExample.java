@@ -27,8 +27,7 @@ public class BuilderExample extends Application.Adapter {
     private MyWindow myWindow = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         myWindow = buildWindow();
         myWindow.open(display);
     }
@@ -46,23 +45,28 @@ public class BuilderExample extends Application.Adapter {
         final HashMap<String, Object> namespace = new HashMap<>();
 
         return new MyWindow() {
-            {   setContent(new TabPane() {
-                    {   namespace.put("tabPane", this);
+            {
+                setContent(new TabPane() {
+                    {
+                        namespace.put("tabPane", this);
 
                         getTabs().add(new Label() {
-                            {   setText("Label 1");
+                            {
+                                setText("Label 1");
                                 TabPane.setTabData(this, "Label 1");
                             }
                         });
 
                         getTabs().add(new Label() {
-                            {   setText("Label 2");
+                            {
+                                setText("Label 2");
                                 TabPane.setTabData(this, "Label 2");
                             }
                         });
 
                         getTabs().add(new Label() {
-                            {   setText("Label 3");
+                            {
+                                setText("Label 3");
                                 TabPane.setTabData(this, "Label 3");
                             }
                         });

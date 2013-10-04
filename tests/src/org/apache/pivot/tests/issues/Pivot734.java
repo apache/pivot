@@ -54,8 +54,10 @@ public class Pivot734 extends Application.Adapter {
         treeButtonAdd = (PushButton) bxmlSerializer.getNamespace().get("treeButtonAdd");
         treeButtonRemove = (PushButton) bxmlSerializer.getNamespace().get("treeButtonRemove");
         tree = (TreeView) bxmlSerializer.getNamespace().get("tree");
-        String treeStyleForShowEmptyBranchControls = ((Boolean) tree.getStyles().get("showEmptyBranchControls")).toString();
-        System.out.println("tree style for showEmptyBranchControls is " + treeStyleForShowEmptyBranchControls);
+        String treeStyleForShowEmptyBranchControls = ((Boolean) tree.getStyles().get(
+            "showEmptyBranchControls")).toString();
+        System.out.println("tree style for showEmptyBranchControls is "
+            + treeStyleForShowEmptyBranchControls);
 
         tree.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
             @Override
@@ -85,10 +87,9 @@ public class Pivot734 extends Application.Adapter {
                 Object x = tree.getSelectedNode();
                 System.out.println("add a 'new branch' element to the selected element :: " + x);
 
-                if (x != null && x instanceof TreeBranch)
-                {
+                if (x != null && x instanceof TreeBranch) {
                     TreeBranch treeBranch = new TreeBranch("new branch");
-                    ((TreeBranch)x).add(treeBranch);
+                    ((TreeBranch) x).add(treeBranch);
                 }
 
             }
@@ -98,12 +99,12 @@ public class Pivot734 extends Application.Adapter {
             @Override
             public void buttonPressed(Button button) {
                 Object x = tree.getSelectedNode();
-                System.out.println("remove a 'new branch' element under the selected element :: " + x);
+                System.out.println("remove a 'new branch' element under the selected element :: "
+                    + x);
 
-                if (x != null && x instanceof TreeBranch)
-                {
+                if (x != null && x instanceof TreeBranch) {
                     TreeBranch treeBranch = new TreeBranch("new branch");
-                    ((TreeBranch)x).remove(treeBranch);
+                    ((TreeBranch) x).remove(treeBranch);
                 }
 
             }

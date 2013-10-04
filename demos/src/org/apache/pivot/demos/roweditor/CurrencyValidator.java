@@ -38,11 +38,8 @@ public class CurrencyValidator implements Validator {
         if (text.length() > 0) {
             ParsePosition parsePosition = new ParsePosition(0);
             BigDecimal numericAmount = (BigDecimal) FORMAT.parse(text, parsePosition);
-            valid = (numericAmount != null &&
-                numericAmount.scale() <= 2 &&
-                numericAmount.signum() >= 0 &&
-                parsePosition.getErrorIndex() == -1 &&
-                parsePosition.getIndex() == text.length());
+            valid = (numericAmount != null && numericAmount.scale() <= 2
+                && numericAmount.signum() >= 0 && parsePosition.getErrorIndex() == -1 && parsePosition.getIndex() == text.length());
         }
 
         return valid;

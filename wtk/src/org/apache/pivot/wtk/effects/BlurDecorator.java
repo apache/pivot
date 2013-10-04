@@ -25,25 +25,20 @@ import java.awt.image.Kernel;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 
-
 /**
- * Decorator that applies a blur to a component.
- * <p>
- * Blurs are given an integer magnitude, which represents the intensity of
- * the blur. This value translates to a grid of pixels (<tt>blurMagnitude^2</tt>),
- * where each pixel value is calculated by consulting its neighboring pixels
- * according to the grid. Because of this, note that you will get "prettier"
- * blurring if you choose odd values for the blur magnitude; this allows the
- * pixel in question to reside at the center of the grid, thus preventing any
- * arbitrary shifting of pixels. Also note that the greater the intensity of
- * the blur, the greater the intensity of the calculations necessary to
- * accomplish the blur (and the longer it will take to perform the blur).
- * <p>
- * TODO Increase size of buffered image to account for edge conditions of the
- * blur.
- * <p>
- * TODO Use unequal values in the blur kernel to make pixels that are farther
- * away count less towards the blur.
+ * Decorator that applies a blur to a component. <p> Blurs are given an integer
+ * magnitude, which represents the intensity of the blur. This value translates
+ * to a grid of pixels (<tt>blurMagnitude^2</tt>), where each pixel value is
+ * calculated by consulting its neighboring pixels according to the grid.
+ * Because of this, note that you will get "prettier" blurring if you choose odd
+ * values for the blur magnitude; this allows the pixel in question to reside at
+ * the center of the grid, thus preventing any arbitrary shifting of pixels.
+ * Also note that the greater the intensity of the blur, the greater the
+ * intensity of the calculations necessary to accomplish the blur (and the
+ * longer it will take to perform the blur). <p> TODO Increase size of buffered
+ * image to account for edge conditions of the blur. <p> TODO Use unequal values
+ * in the blur kernel to make pixels that are farther away count less towards
+ * the blur.
  */
 public class BlurDecorator implements Decorator {
     private int blurMagnitude;
@@ -55,7 +50,7 @@ public class BlurDecorator implements Decorator {
 
     /**
      * Creates a <tt>BlurDecorator</tt> with the default blur magnitude.
-     *
+     * 
      * @see #BlurDecorator(int)
      */
     public BlurDecorator() {
@@ -64,9 +59,8 @@ public class BlurDecorator implements Decorator {
 
     /**
      * Creates a <tt>BlurDecorator</tt> with the specified blur magnitude.
-     *
-     * @param blurMagnitude
-     * The intensity of the blur.
+     * 
+     * @param blurMagnitude The intensity of the blur.
      */
     public BlurDecorator(int blurMagnitude) {
         this.blurMagnitude = blurMagnitude;
@@ -79,8 +73,7 @@ public class BlurDecorator implements Decorator {
         int width = component.getWidth();
         int height = component.getHeight();
 
-        if (bufferedImage == null
-            || bufferedImage.getWidth() != width
+        if (bufferedImage == null || bufferedImage.getWidth() != width
             || bufferedImage.getHeight() != height) {
             bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         }
@@ -103,8 +96,8 @@ public class BlurDecorator implements Decorator {
             kernel[i] = 1f / n;
         }
 
-        ConvolveOp blur = new ConvolveOp(new Kernel(blurMagnitude, blurMagnitude,
-            kernel), ConvolveOp.EDGE_NO_OP, null);
+        ConvolveOp blur = new ConvolveOp(new Kernel(blurMagnitude, blurMagnitude, kernel),
+            ConvolveOp.EDGE_NO_OP, null);
         bufferedImage = blur.filter(bufferedImage, null);
 
         graphics.drawImage(bufferedImage, 0, 0, null);

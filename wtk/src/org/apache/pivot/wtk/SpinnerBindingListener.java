@@ -46,19 +46,21 @@ public interface SpinnerBindingListener {
         }
 
         @Override
-        public void selectedItemBindTypeChanged(Spinner spinner, BindType previousSelectedItemBindType) {
+        public void selectedItemBindTypeChanged(Spinner spinner,
+            BindType previousSelectedItemBindType) {
             // empty block
         }
 
         @Override
-        public void selectedItemBindMappingChanged(Spinner spinner, Spinner.ItemBindMapping previousSelectedItemBindMapping) {
+        public void selectedItemBindMappingChanged(Spinner spinner,
+            Spinner.ItemBindMapping previousSelectedItemBindMapping) {
             // empty block
         }
     }
 
     /**
      * Called when a spinner's spinner data key has changed.
-     *
+     * 
      * @param spinner
      * @param previousSpinnerDataKey
      */
@@ -66,7 +68,7 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's spinner data bind type has changed.
-     *
+     * 
      * @param spinner
      * @param previousSpinnerDataBindType
      */
@@ -74,7 +76,7 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's spinner data bind mapping has changed.
-     *
+     * 
      * @param spinner
      * @param previousSpinnerDataBindMapping
      */
@@ -83,7 +85,7 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's selected item key has changed.
-     *
+     * 
      * @param spinner
      * @param previousSelectedItemKey
      */
@@ -91,7 +93,7 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's selected item bind type has changed.
-     *
+     * 
      * @param spinner
      * @param previousSelectedItemBindType
      */
@@ -99,9 +101,10 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's selected item bind mapping has changed.
-     *
+     * 
      * @param spinner
      * @param previousSelectedItemBindMapping
      */
-    public void selectedItemBindMappingChanged(Spinner spinner, Spinner.ItemBindMapping previousSelectedItemBindMapping);
+    public void selectedItemBindMappingChanged(Spinner spinner,
+        Spinner.ItemBindMapping previousSelectedItemBindMapping);
 }

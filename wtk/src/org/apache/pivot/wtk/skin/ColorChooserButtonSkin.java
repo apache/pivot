@@ -30,17 +30,17 @@ import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Keyboard.Modifier;
 
 /**
  * Abstract base class for color chooser button skins.
  */
-public abstract class ColorChooserButtonSkin extends ButtonSkin
-    implements ColorChooserButton.Skin, ColorChooserButtonSelectionListener {
+public abstract class ColorChooserButtonSkin extends ButtonSkin implements ColorChooserButton.Skin,
+    ColorChooserButtonSelectionListener {
     /**
      * A focusable window class used by color chooser button skins.
      */
@@ -74,14 +74,12 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
          * {@link KeyCode#ESCAPE ESCAPE} Close the popup.<br>
          * {@link KeyCode#ENTER ENTER} Choose the selected color.<br>
          * {@link KeyCode#TAB TAB} Choose the selected color and transfer focus
-         * forwards.<br>
-         * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Choose the
-         * selected color and transfer focus backwards.
+         * forwards.<br> {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT}
+         * Choose the selected color and transfer focus backwards.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode,
-            Keyboard.KeyLocation keyLocation) {
-            ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
 
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
@@ -94,8 +92,8 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
                     colorChooserPopup.close();
 
                     if (keyCode == Keyboard.KeyCode.TAB) {
-                        FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                            FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
+                        FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
+                            : FocusTraversalDirection.FORWARD;
                         colorChooserButton.transferFocus(direction);
                     }
 
@@ -144,23 +142,18 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
             display.getContainerMouseListeners().remove(displayMouseListener);
 
             Window componentWindow = getComponent().getWindow();
-            if (componentWindow != null
-                && componentWindow.isOpen()
-                && !componentWindow.isClosing()) {
+            if (componentWindow != null && componentWindow.isOpen() && !componentWindow.isClosing()) {
                 componentWindow.moveToFront();
             }
         }
     };
 
-    private ComponentMouseButtonListener colorChooserMouseButtonListener =
-        new ComponentMouseButtonListener.Adapter() {
+    private ComponentMouseButtonListener colorChooserMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
         @Override
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
-            int count) {
-            ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
 
-            if (button == Mouse.Button.LEFT
-                && count == 2) {
+            if (button == Mouse.Button.LEFT && count == 2) {
                 colorChooserPopup.close();
 
                 Color color = colorChooser.getSelectedColor();
@@ -174,13 +167,12 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+            ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
 
-            Display display = (Display)container;
+            Display display = (Display) container;
             Component descendant = display.getDescendantAt(x, y);
 
-            if (!colorChooserPopup.isAncestor(descendant)
-                && descendant != colorChooserButton) {
+            if (!colorChooserPopup.isAncestor(descendant) && descendant != colorChooserButton) {
                 colorChooserPopup.close();
 
                 Color color = colorChooser.getSelectedColor();
@@ -214,7 +206,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
     public void install(Component component) {
         super.install(component);
 
-        ColorChooserButton colorChooserButton = (ColorChooserButton)component;
+        ColorChooserButton colorChooserButton = (ColorChooserButton) component;
         colorChooserButton.getColorChooserButtonSelectionListeners().add(this);
     }
 
@@ -300,7 +292,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin
     /**
      * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
      * state.
-     *
+     * 
      * @see #keyReleased(Component, int,
      * org.apache.pivot.wtk.Keyboard.KeyLocation)
      */

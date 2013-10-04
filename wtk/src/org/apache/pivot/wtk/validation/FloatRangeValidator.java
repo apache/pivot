@@ -16,10 +16,10 @@ package org.apache.pivot.wtk.validation;
 import java.util.Locale;
 
 /**
- * A validator for a float value limited to a range.
- * <p>
- * Beware that usual math rules for native primitive types (and related approximations) are applied here.
- *
+ * A validator for a float value limited to a range. <p> Beware that usual math
+ * rules for native primitive types (and related approximations) are applied
+ * here.
+ * 
  * @see ComparableRangeValidator
  */
 public class FloatRangeValidator extends FloatValidator {

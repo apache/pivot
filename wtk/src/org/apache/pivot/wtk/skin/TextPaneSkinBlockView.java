@@ -20,8 +20,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.text.Block;
 import org.apache.pivot.wtk.text.BlockListener;
 
-abstract class TextPaneSkinBlockView extends TextPaneSkinElementView implements
-    BlockListener {
+abstract class TextPaneSkinBlockView extends TextPaneSkinElementView implements BlockListener {
 
     public TextPaneSkinBlockView(Block block) {
         super(block);
@@ -31,7 +30,7 @@ abstract class TextPaneSkinBlockView extends TextPaneSkinElementView implements
     protected void attach() {
         super.attach();
 
-        Block block = (Block)getNode();
+        Block block = (Block) getNode();
         block.getBlockListeners().add(this);
     }
 
@@ -39,12 +38,13 @@ abstract class TextPaneSkinBlockView extends TextPaneSkinElementView implements
     protected void detach() {
         super.detach();
 
-        Block block = (Block)getNode();
+        Block block = (Block) getNode();
         block.getBlockListeners().remove(this);
     }
 
     @Override
-    public void horizontalAlignmentChanged(Block block, HorizontalAlignment previousHorizontalAlignment) {
+    public void horizontalAlignmentChanged(Block block,
+        HorizontalAlignment previousHorizontalAlignment) {
         invalidateUpTree();
     }
 }

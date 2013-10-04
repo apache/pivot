@@ -29,8 +29,7 @@ public class PushButtonTest extends Application.Adapter {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         window = new Window();
         BoxPane boxPane = new BoxPane();
         boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);

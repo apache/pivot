@@ -91,14 +91,13 @@ class ComponentPropertyInspectorSkin extends ComponentInspectorSkin {
             beanMonitor.getPropertyChangeListeners().add(propertyChangeListener);
 
             Class<?> sourceType = source.getClass();
-            HashMap<Class<?>, List<String>> declaringClassPartitions =
-                new HashMap<>(classComparator);
+            HashMap<Class<?>, List<String>> declaringClassPartitions = new HashMap<>(
+                classComparator);
 
             // Partition the properties by their declaring class
             BeanAdapter beanAdapter = new BeanAdapter(source);
             for (String propertyName : beanAdapter) {
-                if (beanMonitor.isNotifying(propertyName)
-                    && !beanAdapter.isReadOnly(propertyName)) {
+                if (beanMonitor.isNotifying(propertyName) && !beanAdapter.isReadOnly(propertyName)) {
                     Method method = BeanAdapter.getGetterMethod(sourceType, propertyName);
                     Class<?> declaringClass = method.getDeclaringClass();
 

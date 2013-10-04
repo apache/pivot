@@ -49,15 +49,14 @@ public class Pivot894 extends Application.Adapter {
         System.out.println("\n"
             + "Attention: now the application will go in an infinite loop, to be able to see the memory leak.\n"
             + "Note that probably you'll have to kill the application from outside (kill the Java process).\n"
-            + "\n"
-        );
+            + "\n");
 
         // add some sleep to let users see the warning messages in console ...
         Thread.sleep(2000);
 
-
         final CardPane cardPane = new CardPane();
-        cardPane.getStyles().put("selectionChangeEffect", CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);
+        cardPane.getStyles().put("selectionChangeEffect",
+            CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);
 
         final Window window = new Window(cardPane);
         window.open(display);
@@ -67,32 +66,31 @@ public class Pivot894 extends Application.Adapter {
             public void run() {
                 Thread.currentThread().setName("switcher-thread");
 
-                System.out.println("Run num " + num++);  // temp
-
+                System.out.println("Run num " + num++); // temp
 
                 /*
-                //
-                // method 1:
-                //
-                // Seems to be working just fine
-                final GridPane grid = new GridPane(3);
-                grid.getRows().add(createGridRow());
-                grid.getRows().add(createGridRow());
-                grid.getRows().add(createGridRow());
+                 * // // method 1: // // Seems to be working just fine final
+                 * GridPane grid = new GridPane(3);
+                 * grid.getRows().add(createGridRow());
+                 * grid.getRows().add(createGridRow());
+                 * grid.getRows().add(createGridRow());
                  */
-
 
                 //
                 // method 2:
                 //
                 try {
-                    // Before the fixes for PIVOT-861 (part two) it was causing out of memory ...
+                    // Before the fixes for PIVOT-861 (part two) it was causing
+                    // out of memory ...
                     //
-                    // Note that this has been moved to another issue, but the problem is due to the usage
-                    // of dataRenderer tags (and then instancing ButtonDataRenderer) in the loaded bxml,
+                    // Note that this has been moved to another issue, but the
+                    // problem is due to the usage
+                    // of dataRenderer tags (and then instancing
+                    // ButtonDataRenderer) in the loaded bxml,
                     // so probably even this test will be updated ...
                     //
-                    final GridPane grid = (GridPane) new BXMLSerializer().readObject(Pivot894.class, "btn_grid.bxml");
+                    final GridPane grid = (GridPane) new BXMLSerializer().readObject(
+                        Pivot894.class, "btn_grid.bxml");
 
                     EventQueue.invokeLater(new Runnable() {
                         @Override
@@ -125,10 +123,14 @@ public class Pivot894 extends Application.Adapter {
             private Row createGridRow() {
                 Row row = new Row();
                 try {
-                    // note that this method doesn't use ApplicationContext cache for images ...
-                    row.add(new PushButton(new ButtonData(Image.load(new File("clock_icon.png").toURI().toURL()), "Clock")));
-                    row.add(new PushButton(new ButtonData(Image.load(new File("clock_icon.png").toURI().toURL()), "Clock")));
-                    row.add(new PushButton(new ButtonData(Image.load(new File("clock_icon.png").toURI().toURL()), "Clock")));
+                    // note that this method doesn't use ApplicationContext
+                    // cache for images ...
+                    row.add(new PushButton(new ButtonData(
+                        Image.load(new File("clock_icon.png").toURI().toURL()), "Clock")));
+                    row.add(new PushButton(new ButtonData(
+                        Image.load(new File("clock_icon.png").toURI().toURL()), "Clock")));
+                    row.add(new PushButton(new ButtonData(
+                        Image.load(new File("clock_icon.png").toURI().toURL()), "Clock")));
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (TaskExecutionException e) {

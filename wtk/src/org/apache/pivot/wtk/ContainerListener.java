@@ -21,7 +21,7 @@ import org.apache.pivot.collections.Sequence;
 /**
  * Container listener interface.
  */
-public interface ContainerListener  {
+public interface ContainerListener {
     /**
      * Container listener adapter.
      */
@@ -51,7 +51,7 @@ public interface ContainerListener  {
     /**
      * Called when a component has been inserted into a container's component
      * sequence.
-     *
+     * 
      * @param container
      * @param index
      */
@@ -60,7 +60,7 @@ public interface ContainerListener  {
     /**
      * Called when components have been removed from a container's component
      * sequence.
-     *
+     * 
      * @param container
      * @param index
      * @param removed
@@ -70,7 +70,7 @@ public interface ContainerListener  {
     /**
      * Called when a component has moved from one z-index to another within a
      * container.
-     *
+     * 
      * @param container
      * @param from
      * @param to
@@ -79,7 +79,7 @@ public interface ContainerListener  {
 
     /**
      * Called when a container's focus traversal policy has changed.
-     *
+     * 
      * @param container
      * @param previousFocusTraversalPolicy
      */

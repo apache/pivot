@@ -27,8 +27,8 @@ public interface Set<E> extends Group<E>, Collection<E> {
     /**
      * Set listener list.
      */
-    public static class SetListenerList<E>
-        extends ListenerList<SetListener<E>> implements SetListener<E> {
+    public static class SetListenerList<E> extends ListenerList<SetListener<E>> implements
+        SetListener<E> {
         @Override
         public void elementAdded(Set<E> set, E element) {
             for (SetListener<E> listener : this) {

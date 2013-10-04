@@ -30,7 +30,6 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Movie;
 import org.apache.pivot.wtk.media.MovieListener;
 
-
 /**
  * Movie view skin.
  */
@@ -51,10 +50,9 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
 
         @Override
         public void regionUpdated(Movie movie, int x, int y, int width, int height) {
-            repaintComponent(movieX + (int)Math.floor(x * scale),
-                movieY + (int)Math.floor(y * scale),
-                (int)Math.ceil(width * scale) + 1,
-                (int)Math.ceil(height * scale) + 1);
+            repaintComponent(movieX + (int) Math.floor(x * scale),
+                movieY + (int) Math.floor(y * scale), (int) Math.ceil(width * scale) + 1,
+                (int) Math.ceil(height * scale) + 1);
         }
     };
 
@@ -62,7 +60,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     public void install(Component component) {
         super.install(component);
 
-        MovieView movieView = (MovieView)component;
+        MovieView movieView = (MovieView) component;
         movieView.getMovieViewListeners().add(this);
 
         Movie movie = movieView.getMovie();
@@ -73,7 +71,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
 
     @Override
     public int getPreferredWidth(int height) {
-        MovieView movieView = (MovieView)getComponent();
+        MovieView movieView = (MovieView) getComponent();
         Movie movie = movieView.getMovie();
 
         return (movie == null) ? 0 : Math.round(movie.getWidth() * scale);
@@ -81,7 +79,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
 
     @Override
     public int getPreferredHeight(int width) {
-        MovieView movieView = (MovieView)getComponent();
+        MovieView movieView = (MovieView) getComponent();
         Movie movie = movieView.getMovie();
 
         return (movie == null) ? 0 : Math.round(movie.getHeight() * scale);
@@ -89,17 +87,16 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
 
     @Override
     public Dimensions getPreferredSize() {
-        MovieView movieView = (MovieView)getComponent();
+        MovieView movieView = (MovieView) getComponent();
         Movie movie = movieView.getMovie();
 
-        return (movie == null) ? new Dimensions(0, 0) :
-            new Dimensions(Math.round(movie.getWidth() * scale),
-            Math.round(movie.getHeight() * scale));
+        return (movie == null) ? new Dimensions(0, 0) : new Dimensions(Math.round(movie.getWidth()
+            * scale), Math.round(movie.getHeight() * scale));
     }
 
     @Override
     public void layout() {
-        MovieView movieView = (MovieView)getComponent();
+        MovieView movieView = (MovieView) getComponent();
         Movie movie = movieView.getMovie();
 
         if (movie != null) {
@@ -110,34 +107,34 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
             int movieHeight = movie.getHeight();
 
             switch (horizontalAlignment) {
-            case CENTER:
-                movieX = (width - movieWidth) / 2;
-                break;
-            case RIGHT:
-                movieX = width - movieWidth;
-                break;
-            default:
-                movieX = 0;
-                break;
+                case CENTER:
+                    movieX = (width - movieWidth) / 2;
+                    break;
+                case RIGHT:
+                    movieX = width - movieWidth;
+                    break;
+                default:
+                    movieX = 0;
+                    break;
             }
 
             switch (verticalAlignment) {
-            case CENTER:
-                movieY = (height - movieHeight) / 2;
-                break;
-            case BOTTOM:
-                movieY = height - movieHeight;
-                break;
-            default:
-                movieY = 0;
-                break;
+                case CENTER:
+                    movieY = (height - movieHeight) / 2;
+                    break;
+                case BOTTOM:
+                    movieY = height - movieHeight;
+                    break;
+                default:
+                    movieY = 0;
+                    break;
             }
         }
     }
 
     @Override
     public void paint(Graphics2D graphics) {
-        MovieView movieView = (MovieView)getComponent();
+        MovieView movieView = (MovieView) getComponent();
         Movie movie = movieView.getMovie();
 
         int width = getWidth();
@@ -159,8 +156,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     }
 
     /**
-     * @return
-     * <tt>false</tt>; movie views are not focusable.
+     * @return <tt>false</tt>; movie views are not focusable.
      */
     @Override
     public boolean isFocusable() {
@@ -169,8 +165,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
 
     @Override
     public boolean isOpaque() {
-        return (backgroundColor != null
-            && backgroundColor.getTransparency() == Transparency.OPAQUE);
+        return (backgroundColor != null && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     public Color getBackgroundColor() {

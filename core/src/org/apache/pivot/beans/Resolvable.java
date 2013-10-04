@@ -22,8 +22,8 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 
 /**
- * Interface representing a resolvable include. Serializers that want to
- * support BXML's resolution operators should implement this interface.
+ * Interface representing a resolvable include. Serializers that want to support
+ * BXML's resolution operators should implement this interface.
  */
 public interface Resolvable {
     /**
@@ -33,7 +33,7 @@ public interface Resolvable {
 
     /**
      * Sets the serializer's namespace. This is used for variable resolution.
-     *
+     * 
      * @param namespace
      */
     public void setNamespace(Map<String, Object> namespace);
@@ -45,7 +45,7 @@ public interface Resolvable {
 
     /**
      * Sets the serializer's location. This is used for URL resolution.
-     *
+     * 
      * @param location
      */
     public void setLocation(URL location);
@@ -58,7 +58,7 @@ public interface Resolvable {
     /**
      * Sets the serializer's resource bundle. This is used for resource
      * resolution.
-     *
+     * 
      * @param resources
      */
     public void setResources(Resources resources);

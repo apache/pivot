@@ -73,12 +73,12 @@ public class BeanAdapterTest {
     }
 
     @Test
-    public void testSerializeBigDecimal()
-    {
+    public void testSerializeBigDecimal() {
         System.out.println("testSerializeBigDecimal");
 
         double random_double = rnd.nextDouble();
-        System.out.println("random_double = " + random_double + " (value will be truncated to 4 digits in this test)");
+        System.out.println("random_double = " + random_double
+            + " (value will be truncated to 4 digits in this test)");
 
         src_test.setBd(new BigDecimal(random_double, new MathContext(4)));
 
@@ -108,8 +108,7 @@ public class BeanAdapterTest {
     }
 
     @Test
-    public void testSerializeBigInteger()
-    {
+    public void testSerializeBigInteger() {
         System.out.println("testSerializeBigInteger");
 
         int random_int = rnd.nextInt();
@@ -143,8 +142,7 @@ public class BeanAdapterTest {
     }
 
     @Test
-    public void testSerializeString()
-    {
+    public void testSerializeString() {
         System.out.println("testSerializeString");
 
         String value = "A test String";

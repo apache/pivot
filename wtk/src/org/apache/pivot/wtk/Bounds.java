@@ -77,25 +77,25 @@ public final class Bounds implements Serializable {
         }
 
         if (bounds.containsKey(X_KEY)) {
-            x = (Integer)bounds.get(X_KEY);
+            x = (Integer) bounds.get(X_KEY);
         } else {
             x = 0;
         }
 
         if (bounds.containsKey(Y_KEY)) {
-            y = (Integer)bounds.get(Y_KEY);
+            y = (Integer) bounds.get(Y_KEY);
         } else {
             y = 0;
         }
 
         if (bounds.containsKey(WIDTH_KEY)) {
-            width = (Integer)bounds.get(WIDTH_KEY);
+            width = (Integer) bounds.get(WIDTH_KEY);
         } else {
             width = 0;
         }
 
         if (bounds.containsKey(HEIGHT_KEY)) {
-            height = (Integer)bounds.get(HEIGHT_KEY);
+            height = (Integer) bounds.get(HEIGHT_KEY);
         } else {
             height = 0;
         }
@@ -168,10 +168,8 @@ public final class Bounds implements Serializable {
     }
 
     public boolean contains(int xArgument, int yArgument) {
-        return (xArgument >= this.x
-            && yArgument >= this.y
-            && xArgument < this.x + width
-            && yArgument < this.y + height);
+        return (xArgument >= this.x && yArgument >= this.y && xArgument < this.x + width && yArgument < this.y
+            + height);
     }
 
     public boolean contains(Bounds bounds) {
@@ -183,11 +181,9 @@ public final class Bounds implements Serializable {
     }
 
     public boolean contains(int xArgument, int yArgument, int widthArgument, int heightArgument) {
-        return (!isEmpty()
-            && xArgument >= this.x
-            && yArgument >= this.y
-            && xArgument + widthArgument <= this.x + this.width
-            && yArgument + heightArgument <= this.y + this.height);
+        return (!isEmpty() && xArgument >= this.x && yArgument >= this.y
+            && xArgument + widthArgument <= this.x + this.width && yArgument + heightArgument <= this.y
+            + this.height);
     }
 
     public boolean intersects(Bounds bounds) {
@@ -199,16 +195,13 @@ public final class Bounds implements Serializable {
     }
 
     public boolean intersects(int xArgument, int yArgument, int widthArgument, int heightArgument) {
-        return (!isEmpty()
-            && xArgument + widthArgument > this.x
-            && yArgument + heightArgument > this.y
-            && xArgument < this.x + this.width
-            && yArgument < this.y + this.height);
+        return (!isEmpty() && xArgument + widthArgument > this.x
+            && yArgument + heightArgument > this.y && xArgument < this.x + this.width && yArgument < this.y
+            + this.height);
     }
 
     public boolean isEmpty() {
-        return (width <= 0
-            || height <= 0);
+        return (width <= 0 || height <= 0);
     }
 
     @Override
@@ -216,11 +209,8 @@ public final class Bounds implements Serializable {
         boolean equals = false;
 
         if (object instanceof Bounds) {
-            Bounds bounds = (Bounds)object;
-            equals = (x == bounds.x
-                && y == bounds.y
-                && width == bounds.width
-                && height == bounds.height);
+            Bounds bounds = (Bounds) object;
+            equals = (x == bounds.x && y == bounds.y && width == bounds.width && height == bounds.height);
         }
 
         return equals;
@@ -236,7 +226,6 @@ public final class Bounds implements Serializable {
         result = prime * result + y;
         return result;
     }
-
 
     public java.awt.Rectangle toRectangle() {
         return new java.awt.Rectangle(x, y, width, height);

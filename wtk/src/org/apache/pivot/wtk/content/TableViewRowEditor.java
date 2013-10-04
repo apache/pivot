@@ -87,12 +87,11 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
+            Display display = (Display) container;
+            Window window = (Window) display.getComponentAt(x, y);
 
             boolean consumed;
-            if (window != TableViewRowEditor.this
-                && (window == null || !isOwner(window))) {
+            if (window != TableViewRowEditor.this && (window == null || !isOwner(window))) {
                 endEdit(true);
                 consumed = true;
             } else {
@@ -105,8 +104,8 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         @Override
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
+            Display display = (Display) container;
+            Window window = (Window) display.getComponentAt(x, y);
 
             return (window != TableViewRowEditor.this);
         }
@@ -157,16 +156,13 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * explicit editor components and place them in this dictionary by their
      * table view column names. Any column that does not have an entry in this
      * dictionary will have a {@link TextInput} implicitly associated with it
-     * during editing.
-     * <p>
-     * This row editor uses data binding to populate the cell editor components
-     * and to get the data back out of those components, so it is the caller's
-     * responsibility to set up the data binding keys in each component they
-     * specify in this dictionary. The data binding key should equal the column
-     * name that the cell editor serves.
-     *
-     * @return
-     * The cell editor dictionary.
+     * during editing. <p> This row editor uses data binding to populate the
+     * cell editor components and to get the data back out of those components,
+     * so it is the caller's responsibility to set up the data binding keys in
+     * each component they specify in this dictionary. The data binding key
+     * should equal the column name that the cell editor serves.
+     * 
+     * @return The cell editor dictionary.
      */
     public Dictionary<String, Component> getCellEditors() {
         return cellEditors;
@@ -179,7 +175,8 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         this.columnIndex = columnIndexArgument;
 
         Container tableViewParent = tableViewArgument.getParent();
-        tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane)tableViewParent : null;
+        tableViewScrollPane = (tableViewParent instanceof ScrollPane) ? (ScrollPane) tableViewParent
+            : null;
 
         // Add/create the editor components
         TableView.ColumnSequence tableViewColumns = tableViewArgument.getColumns();
@@ -223,11 +220,13 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         rowImage.bounds = rowBounds;
 
         // Scroll to make the row as visible as possible
-        tableViewArgument.scrollAreaToVisible(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
+        tableViewArgument.scrollAreaToVisible(rowBounds.x, rowBounds.y, rowBounds.width,
+            rowBounds.height);
 
         // Constrain the bounds by what is visible through viewport ancestors
         rowBounds = tableViewArgument.getVisibleArea(rowBounds);
-        Point location = tableViewArgument.mapPointToAncestor(tableViewArgument.getDisplay(), rowBounds.x, rowBounds.y);
+        Point location = tableViewArgument.mapPointToAncestor(tableViewArgument.getDisplay(),
+            rowBounds.x, rowBounds.y);
 
         // Set size and location and match scroll left
         setPreferredWidth(rowBounds.width);
@@ -249,7 +248,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
         if (result) {
             // Update the row data
             @SuppressWarnings("unchecked")
-            List<Object> tableData = (List<Object>)tableView.getTableData();
+            List<Object> tableData = (List<Object>) tableView.getTableData();
             Object tableRow = tableData.get(rowIndex);
             tablePane.store(tableRow);
 
@@ -294,19 +293,18 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     /**
      * Returns the effect that is applied when the editor opens or closes.
-     *
-     * @return
-     * The edit effect, or <tt>null</tt> for no effect.
+     * 
+     * @return The edit effect, or <tt>null</tt> for no effect.
      */
     public CardPaneSkin.SelectionChangeEffect getEditEffect() {
-        return (CardPaneSkin.SelectionChangeEffect)cardPane.getStyles().get("selectionChangeEffect");
+        return (CardPaneSkin.SelectionChangeEffect) cardPane.getStyles().get(
+            "selectionChangeEffect");
     }
 
     /**
      * Sets the effect that is applied when the editor opens or closes.
-     *
-     * @param editEffect
-     * The edit effect, or <tt>null</tt> for no effect.
+     * 
+     * @param editEffect The edit effect, or <tt>null</tt> for no effect.
      */
     public void setEditEffect(CardPaneSkin.SelectionChangeEffect editEffect) {
         cardPane.getStyles().put("selectionChangeEffect", editEffect);
@@ -314,19 +312,17 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     /**
      * Returns the edit effect duration.
-     *
-     * @return
-     * The effect duration in milliseconds.
+     * 
+     * @return The effect duration in milliseconds.
      */
     public int getEditEffectDuration() {
-        return (Integer)cardPane.getStyles().get("selectionChangeDuration");
+        return (Integer) cardPane.getStyles().get("selectionChangeDuration");
     }
 
     /**
      * Sets the edit effect duration.
-     *
-     * @param effectDuration
-     * The effect duration in milliseconds.
+     * 
+     * @param effectDuration The effect duration in milliseconds.
      */
     public void setEditEffectDuration(int effectDuration) {
         cardPane.getStyles().put("selectionChangeDuration", effectDuration);
@@ -334,19 +330,17 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     /**
      * Returns the edit effect rate.
-     *
-     * @return
-     * The effect rate.
+     * 
+     * @return The effect rate.
      */
     public int getEditEffectRate() {
-        return (Integer)cardPane.getStyles().get("selectionChangeRate");
+        return (Integer) cardPane.getStyles().get("selectionChangeRate");
     }
 
     /**
      * Sets the edit effect rate.
-     *
-     * @param effectRate
-     * The effect rate.
+     * 
+     * @param effectRate The effect rate.
      */
     public void setEditEffectRate(int effectRate) {
         cardPane.getStyles().put("selectionChangeRate", effectRate);

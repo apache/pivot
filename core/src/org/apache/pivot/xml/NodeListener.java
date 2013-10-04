@@ -22,7 +22,7 @@ package org.apache.pivot.xml;
 public interface NodeListener {
     /**
      * Called when a node's parent has changed.
-     *
+     * 
      * @param node
      * @param previousParent
      */

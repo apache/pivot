@@ -41,8 +41,7 @@ public class Meters extends Window implements Bindable {
             // Simulate a long-running operation
             percentage = 0;
 
-            while (percentage < 100
-                && !abort) {
+            while (percentage < 100 && !abort) {
                 try {
                     Thread.sleep(100);
                     percentage++;
@@ -51,10 +50,10 @@ public class Meters extends Window implements Bindable {
                     ApplicationContext.queueCallback(new Runnable() {
                         @Override
                         public void run() {
-                            meter.setPercentage((double)percentage / 100);
+                            meter.setPercentage((double) percentage / 100);
                         }
                     });
-                } catch(InterruptedException exception) {
+                } catch (InterruptedException exception) {
                     throw new TaskExecutionException(exception);
                 }
             }
@@ -70,8 +69,8 @@ public class Meters extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        meter = (Meter)namespace.get("meter");
-        progressButton = (PushButton)namespace.get("progressButton");
+        meter = (Meter) namespace.get("meter");
+        progressButton = (PushButton) namespace.get("progressButton");
 
         progressButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

@@ -30,7 +30,7 @@ public class ComponentExplorer extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (ComponentExplorerWindow)bxmlSerializer.readObject(ComponentExplorer.class,
+        window = (ComponentExplorerWindow) bxmlSerializer.readObject(ComponentExplorer.class,
             "component_explorer_window.bxml", true);
         window.setClassProperty(properties.get(CLASS_PROPERTY));
         window.open(display);
@@ -50,4 +50,3 @@ public class ComponentExplorer extends Application.Adapter {
     }
 
 }
-

@@ -30,8 +30,8 @@ import org.apache.pivot.wtk.content.ListViewItemRenderer;
  * Popup that presents a list of text suggestions to the user.
  */
 public class SuggestionPopup extends Window {
-    private static class SuggestionPopupListenerList extends WTKListenerList<SuggestionPopupListener>
-        implements SuggestionPopupListener {
+    private static class SuggestionPopupListenerList extends
+        WTKListenerList<SuggestionPopupListener> implements SuggestionPopupListener {
         @Override
         public void suggestionDataChanged(SuggestionPopup suggestionPopup,
             List<?> previousSuggestionData) {
@@ -56,8 +56,8 @@ public class SuggestionPopup extends Window {
         }
     }
 
-    private static class SuggestionPopupItemListenerList extends WTKListenerList<SuggestionPopupItemListener>
-        implements SuggestionPopupItemListener {
+    private static class SuggestionPopupItemListenerList extends
+        WTKListenerList<SuggestionPopupItemListener> implements SuggestionPopupItemListener {
         @Override
         public void itemInserted(SuggestionPopup suggestionPopup, int index) {
             for (SuggestionPopupItemListener listener : this) {
@@ -94,26 +94,27 @@ public class SuggestionPopup extends Window {
         }
     }
 
-    private static class SuggestionPopupSelectionListenerList extends WTKListenerList<SuggestionPopupSelectionListener>
-        implements SuggestionPopupSelectionListener {
+    private static class SuggestionPopupSelectionListenerList extends
+        WTKListenerList<SuggestionPopupSelectionListener> implements
+        SuggestionPopupSelectionListener {
         @Override
-        public void selectedIndexChanged(SuggestionPopup suggestionPopup,
-            int previousSelectedIndex) {
+        public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex) {
             for (SuggestionPopupSelectionListener listener : this) {
                 listener.selectedIndexChanged(suggestionPopup, previousSelectedIndex);
             }
         }
 
         @Override
-        public void selectedSuggestionChanged(SuggestionPopup suggestionPopup, Object previousSelectedSuggestion) {
+        public void selectedSuggestionChanged(SuggestionPopup suggestionPopup,
+            Object previousSelectedSuggestion) {
             for (SuggestionPopupSelectionListener listener : this) {
                 listener.selectedSuggestionChanged(suggestionPopup, previousSelectedSuggestion);
             }
         }
     }
 
-    private static class SuggestionPopupStateListenerList extends WTKListenerList<SuggestionPopupStateListener>
-        implements SuggestionPopupStateListener {
+    private static class SuggestionPopupStateListenerList extends
+        WTKListenerList<SuggestionPopupStateListener> implements SuggestionPopupStateListener {
         @Override
         public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result) {
             Vote vote = Vote.APPROVE;
@@ -164,7 +165,8 @@ public class SuggestionPopup extends Window {
             suggestionPopupItemListeners.itemInserted(SuggestionPopup.this, index);
 
             if (selectedIndex != previousSelectedIndex) {
-                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this,
+                    selectedIndex);
             }
         }
 
@@ -185,10 +187,12 @@ public class SuggestionPopup extends Window {
             suggestionPopupItemListeners.itemsRemoved(SuggestionPopup.this, index, count);
 
             if (selectedIndex != previousSelectedIndex) {
-                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
+                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this,
+                    selectedIndex);
 
                 if (selectedIndex == -1) {
-                    suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this, null);
+                    suggestionPopupSelectionListeners.selectedSuggestionChanged(
+                        SuggestionPopup.this, null);
                 }
             }
         }
@@ -206,8 +210,10 @@ public class SuggestionPopup extends Window {
             suggestionPopupItemListeners.itemsCleared(SuggestionPopup.this);
 
             if (previousSelectedIndex != selectedIndex) {
-                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
-                suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this, getSelectedSuggestion());
+                suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this,
+                    selectedIndex);
+                suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this,
+                    getSelectedSuggestion());
             }
         }
 
@@ -220,8 +226,10 @@ public class SuggestionPopup extends Window {
                 suggestionPopupItemListeners.itemsSorted(SuggestionPopup.this);
 
                 if (previousSelectedIndex != selectedIndex) {
-                    suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this, selectedIndex);
-                    suggestionPopupSelectionListeners.selectedSuggestionChanged(SuggestionPopup.this, getSelectedSuggestion());
+                    suggestionPopupSelectionListeners.selectedIndexChanged(SuggestionPopup.this,
+                        selectedIndex);
+                    suggestionPopupSelectionListeners.selectedSuggestionChanged(
+                        SuggestionPopup.this, getSelectedSuggestion());
                 }
             }
         }
@@ -261,7 +269,7 @@ public class SuggestionPopup extends Window {
 
     /**
      * Sets the list of suggestions presented by the popup.
-     *
+     * 
      * @param suggestionData
      */
     @SuppressWarnings("unchecked")
@@ -279,10 +287,11 @@ public class SuggestionPopup extends Window {
                 // Clear any existing selection
                 selectedIndex = -1;
 
-                ((List<Object>)previousSuggestionData).getListListeners().remove(suggestionDataListener);
+                ((List<Object>) previousSuggestionData).getListListeners().remove(
+                    suggestionDataListener);
             }
 
-            ((List<Object>)suggestionData).getListListeners().add(suggestionDataListener);
+            ((List<Object>) suggestionData).getListListeners().add(suggestionDataListener);
 
             // Update the list data and fire change event
             this.suggestionData = suggestionData;
@@ -304,7 +313,7 @@ public class SuggestionPopup extends Window {
 
     /**
      * Sets the list view item renderer used to present suggestions.
-     *
+     * 
      * @param suggestionRenderer
      */
     public void setSuggestionRenderer(ListView.ItemRenderer suggestionRenderer) {
@@ -318,9 +327,8 @@ public class SuggestionPopup extends Window {
 
     /**
      * Returns the current selection.
-     *
-     * @return
-     * The index of the currently selected suggestion, or <tt>-1</tt> if
+     * 
+     * @return The index of the currently selected suggestion, or <tt>-1</tt> if
      * nothing is selected.
      */
     public int getSelectedIndex() {
@@ -329,10 +337,9 @@ public class SuggestionPopup extends Window {
 
     /**
      * Sets the selection.
-     *
-     * @param selectedIndex
-     * The index of the suggestion to select, or <tt>-1</tt> to clear the
-     * selection.
+     * 
+     * @param selectedIndex The index of the suggestion to select, or
+     * <tt>-1</tt> to clear the selection.
      */
     public void setSelectedIndex(int selectedIndex) {
         indexBoundsCheck("selectedIndex", selectedIndex, -1, suggestionData.getLength() - 1);
@@ -342,8 +349,8 @@ public class SuggestionPopup extends Window {
         if (previousSelectedIndex != selectedIndex) {
             this.selectedIndex = selectedIndex;
             suggestionPopupSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
-            suggestionPopupSelectionListeners.selectedSuggestionChanged(this, (previousSelectedIndex == -1) ?
-                null : suggestionData.get(previousSelectedIndex));
+            suggestionPopupSelectionListeners.selectedSuggestionChanged(this,
+                (previousSelectedIndex == -1) ? null : suggestionData.get(previousSelectedIndex));
         }
     }
 
@@ -360,7 +367,8 @@ public class SuggestionPopup extends Window {
 
     @SuppressWarnings("unchecked")
     public void setSelectedSuggestion(Object suggestion) {
-        setSelectedIndex((suggestion == null) ? -1 : ((List<Object>)suggestionData).indexOf(suggestion));
+        setSelectedIndex((suggestion == null) ? -1
+            : ((List<Object>) suggestionData).indexOf(suggestion));
     }
 
     /**
@@ -371,9 +379,9 @@ public class SuggestionPopup extends Window {
     }
 
     /**
-     * Sets the list size. If the number of items in the list exceeds this value,
-     * the list will scroll.
-     *
+     * Sets the list size. If the number of items in the list exceeds this
+     * value, the list will scroll.
+     * 
      * @param listSize
      */
     public void setListSize(int listSize) {
@@ -401,9 +409,9 @@ public class SuggestionPopup extends Window {
 
     /**
      * Opens the suggestion popup window.
-     *
-     * @param textInputArgument
-     * The text input for which suggestions will be provided.
+     * 
+     * @param textInputArgument The text input for which suggestions will be
+     * provided.
      */
     public final void open(TextInput textInputArgument) {
         open(textInputArgument, null);
@@ -411,14 +419,14 @@ public class SuggestionPopup extends Window {
 
     /**
      * Opens the suggestion popup window.
-     *
-     * @param textInputArgument
-     * The text input for which suggestions will be provided.
-     *
-     * @param suggestionPopupCloseListenerArgument
-     * A listener that will be called when the suggestion popup has closed.
+     * 
+     * @param textInputArgument The text input for which suggestions will be
+     * provided.
+     * @param suggestionPopupCloseListenerArgument A listener that will be called
+     * when the suggestion popup has closed.
      */
-    public void open(TextInput textInputArgument, SuggestionPopupCloseListener suggestionPopupCloseListenerArgument) {
+    public void open(TextInput textInputArgument,
+        SuggestionPopupCloseListener suggestionPopupCloseListenerArgument) {
         if (textInputArgument == null) {
             throw new IllegalArgumentException();
         }
@@ -445,7 +453,8 @@ public class SuggestionPopup extends Window {
         if (!isClosed()) {
             closing = true;
 
-            Vote vote = suggestionPopupStateListeners.previewSuggestionPopupClose(this, resultArgument);
+            Vote vote = suggestionPopupStateListeners.previewSuggestionPopupClose(this,
+                resultArgument);
 
             if (vote == Vote.APPROVE) {
                 super.close();

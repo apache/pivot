@@ -54,13 +54,13 @@ public final class Point implements Serializable {
         }
 
         if (point.containsKey(X_KEY)) {
-            x = (Integer)point.get(X_KEY);
+            x = (Integer) point.get(X_KEY);
         } else {
             x = 0;
         }
 
         if (point.containsKey(Y_KEY)) {
-            y = (Integer)point.get(Y_KEY);
+            y = (Integer) point.get(Y_KEY);
         } else {
             y = 0;
         }
@@ -75,9 +75,8 @@ public final class Point implements Serializable {
         boolean equals = false;
 
         if (object instanceof Point) {
-            Point point = (Point)object;
-            equals = (x == point.x
-                && y == point.y);
+            Point point = (Point) object;
+            equals = (x == point.x && y == point.y);
         }
 
         return equals;
@@ -85,7 +84,7 @@ public final class Point implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31 * x  + y;
+        return 31 * x + y;
     }
 
     @Override

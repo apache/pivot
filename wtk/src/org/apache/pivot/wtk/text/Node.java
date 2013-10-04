@@ -21,7 +21,7 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Abstract base class for document nodes.
-*/
+ */
 public abstract class Node {
     private static class NodeListenerList extends ListenerList<NodeListener> implements
         NodeListener {
@@ -75,9 +75,9 @@ public abstract class Node {
 
     /**
      * Returns the parent element of this node.
-     *
-     * @return
-     * The node's parent, or <tt>null</tt> if the node does not have a parent.
+     * 
+     * @return The node's parent, or <tt>null</tt> if the node does not have a
+     * parent.
      */
     public Element getParent() {
         return parent;
@@ -94,10 +94,9 @@ public abstract class Node {
 
     /**
      * Returns the node's offset within its parent.
-     *
-     * @return
-     * The integer offset of the node's first character within its parent
-     * element.
+     * 
+     * @return The integer offset of the node's first character within its
+     * parent element.
      */
     public int getOffset() {
         return offset;
@@ -122,7 +121,7 @@ public abstract class Node {
     /**
      * Inserts a range into the node. Note that the contents of the range,
      * rather than the range itself, is added to the node.
-     *
+     * 
      * @param range
      * @param offsetArgument
      */
@@ -130,26 +129,22 @@ public abstract class Node {
 
     /**
      * Removes a range from the node.
-     *
+     * 
      * @param offsetArgument
      * @param characterCount
-     *
-     * @return
-     * The removed range. This will be a copy of the node structure relative
-     * to this node.
+     * @return The removed range. This will be a copy of the node structure
+     * relative to this node.
      */
     public abstract Node removeRange(int offsetArgument, int characterCount);
 
     /**
      * Replaces an existing range with a new range.
-     *
+     * 
      * @param offsetArgument
      * @param characterCount
      * @param range
-     *
-     * @return
-     * The removed range. This will be a copy of the node structure relative
-     * to this node.
+     * @return The removed range. This will be a copy of the node structure
+     * relative to this node.
      */
     public Node replaceRange(int offsetArgument, int characterCount, Node range) {
         Node removed = removeRange(offsetArgument, characterCount);
@@ -160,19 +155,17 @@ public abstract class Node {
 
     /**
      * Returns a range from the node.
-     *
+     * 
      * @param offsetArgument
      * @param characterCount
-     *
-     * @return
-     * A node containing a copy of the node structure spanning the given range,
-     * relative to this node.
+     * @return A node containing a copy of the node structure spanning the given
+     * range, relative to this node.
      */
     public abstract Node getRange(int offsetArgument, int characterCount);
 
     /**
      * Returns the character at the given offset.
-     *
+     * 
      * @param offsetArgument
      */
     public abstract char getCharacterAt(int offsetArgument);
@@ -184,14 +177,14 @@ public abstract class Node {
 
     /**
      * Creates a copy of this node.
-     *
+     * 
      * @param recursive
      */
     public abstract Node duplicate(boolean recursive);
 
     /**
      * Called to notify a node that a range has been inserted.
-     *
+     * 
      * @param offsetArgument
      * @param characterCount
      */
@@ -205,7 +198,7 @@ public abstract class Node {
 
     /**
      * Called to notify a node that a range has been removed.
-     *
+     * 
      * @param offsetArgument
      * @param characterCount
      */
@@ -219,7 +212,7 @@ public abstract class Node {
 
     /**
      * Called to notify a node that some child nodes has been removed.
-     *
+     * 
      * @param removed
      * @param offsetArgument
      */
@@ -233,7 +226,7 @@ public abstract class Node {
 
     /**
      * Called to notify a node that a child node has been inserted.
-     *
+     * 
      * @param offsetArgument
      */
     protected void nodeInserted(int offsetArgument) {

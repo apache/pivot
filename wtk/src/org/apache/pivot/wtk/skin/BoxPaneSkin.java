@@ -29,8 +29,7 @@ import org.apache.pivot.wtk.VerticalAlignment;
 /**
  * Box pane skin.
  */
-public class BoxPaneSkin extends ContainerSkin
-    implements BoxPaneListener {
+public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     private HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
     private VerticalAlignment verticalAlignment = VerticalAlignment.TOP;
     private Insets padding = Insets.NONE;
@@ -41,13 +40,13 @@ public class BoxPaneSkin extends ContainerSkin
     public void install(Component component) {
         super.install(component);
 
-        BoxPane boxPane = (BoxPane)component;
+        BoxPane boxPane = (BoxPane) component;
         boxPane.getBoxPaneListeners().add(this);
     }
 
     @Override
     public int getPreferredWidth(int height) {
-        BoxPane boxPane = (BoxPane)getComponent();
+        BoxPane boxPane = (BoxPane) getComponent();
 
         int preferredWidth = 0;
 
@@ -59,7 +58,8 @@ public class BoxPaneSkin extends ContainerSkin
                 heightUpdated = Math.max(heightUpdated - (padding.top + padding.bottom), 0);
             }
 
-            // Preferred width is the sum of the preferred widths of all components
+            // Preferred width is the sum of the preferred widths of all
+            // components
             int j = 0;
             for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
@@ -80,8 +80,7 @@ public class BoxPaneSkin extends ContainerSkin
                 Component component = boxPane.get(i);
 
                 if (component.isVisible()) {
-                    preferredWidth = Math.max(preferredWidth,
-                        component.getPreferredWidth());
+                    preferredWidth = Math.max(preferredWidth, component.getPreferredWidth());
                 }
             }
         }
@@ -94,19 +93,19 @@ public class BoxPaneSkin extends ContainerSkin
 
     @Override
     public int getPreferredHeight(int width) {
-        BoxPane boxPane = (BoxPane)getComponent();
+        BoxPane boxPane = (BoxPane) getComponent();
 
         int preferredHeight = 0;
 
         Orientation orientation = boxPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
-            // Preferred height is the maximum preferred height of all components
+            // Preferred height is the maximum preferred height of all
+            // components
             for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
 
                 if (component.isVisible()) {
-                    preferredHeight = Math.max(preferredHeight,
-                        component.getPreferredHeight());
+                    preferredHeight = Math.max(preferredHeight, component.getPreferredHeight());
                 }
             }
         } else {
@@ -116,7 +115,8 @@ public class BoxPaneSkin extends ContainerSkin
                 widthUpdated = Math.max(widthUpdated - (padding.left + padding.right), 0);
             }
 
-            // Preferred height is the sum of the preferred heights of all components
+            // Preferred height is the sum of the preferred heights of all
+            // components
             int j = 0;
             for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
@@ -141,14 +141,15 @@ public class BoxPaneSkin extends ContainerSkin
 
     @Override
     public Dimensions getPreferredSize() {
-        BoxPane boxPane = (BoxPane)getComponent();
+        BoxPane boxPane = (BoxPane) getComponent();
 
         int preferredWidth = 0;
         int preferredHeight = 0;
 
         switch (boxPane.getOrientation()) {
             case HORIZONTAL: {
-                // Preferred width is the sum of the preferred widths of all components
+                // Preferred width is the sum of the preferred widths of all
+                // components
                 int j = 0;
                 for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                     Component component = boxPane.get(i);
@@ -170,7 +171,8 @@ public class BoxPaneSkin extends ContainerSkin
             }
 
             case VERTICAL: {
-                // Preferred height is the sum of the preferred heights of all components
+                // Preferred height is the sum of the preferred heights of all
+                // components
                 int j = 0;
                 for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                     Component component = boxPane.get(i);
@@ -205,7 +207,7 @@ public class BoxPaneSkin extends ContainerSkin
 
     @Override
     public int getBaseline(int width, int height) {
-        BoxPane boxPane = (BoxPane)getComponent();
+        BoxPane boxPane = (BoxPane) getComponent();
 
         int baseline = -1;
         int contentHeight = 0;
@@ -218,7 +220,8 @@ public class BoxPaneSkin extends ContainerSkin
                     for (Component component : boxPane) {
                         if (component.isVisible()) {
                             int componentWidth = component.getPreferredWidth(clientHeight);
-                            baseline = Math.max(baseline, component.getBaseline(componentWidth, clientHeight));
+                            baseline = Math.max(baseline,
+                                component.getBaseline(componentWidth, clientHeight));
                         }
                     }
                 } else {
@@ -328,7 +331,7 @@ public class BoxPaneSkin extends ContainerSkin
 
     @Override
     public void layout() {
-        BoxPane boxPane = (BoxPane)getComponent();
+        BoxPane boxPane = (BoxPane) getComponent();
         int n = boxPane.getLength();
 
         int width = getWidth();
@@ -370,8 +373,7 @@ public class BoxPaneSkin extends ContainerSkin
                     int y = 0;
 
                     if (fill) {
-                        componentHeight = Math.max(height - (padding.top
-                            + padding.bottom), 0);
+                        componentHeight = Math.max(height - (padding.top + padding.bottom), 0);
 
                         componentWidth = component.getPreferredWidth(componentHeight);
                     } else {
@@ -445,8 +447,7 @@ public class BoxPaneSkin extends ContainerSkin
                     int x = 0;
 
                     if (fill) {
-                        componentWidth = Math.max(width - (padding.left
-                            + padding.right), 0);
+                        componentWidth = Math.max(width - (padding.left + padding.right), 0);
 
                         componentHeight = component.getPreferredHeight(componentWidth);
                     } else {
@@ -485,22 +486,21 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     /**
-     * Returns the horizontal alignment of the BoxPane's components within the pane.
+     * Returns the horizontal alignment of the BoxPane's components within the
+     * pane.
      */
     public HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
     }
 
     /**
-     * Sets the horizontal alignment of the BoxPane's components within the pane.
-     *
-     * <p>If the orientation of the pane is HORIZONTAL, this means the collective alignment
-     * all the components as group, which are still laid out close together according
-     * to the value of the <code>spacing</code> style.
-     *
-     * <p>If the orientation of the pane is VERTICAL, this means the alignment of each
-     * individual component within the pane.  It has no effect if the <code>fill</code>
-     * style is true.
+     * Sets the horizontal alignment of the BoxPane's components within the
+     * pane. <p>If the orientation of the pane is HORIZONTAL, this means the
+     * collective alignment all the components as group, which are still laid
+     * out close together according to the value of the <code>spacing</code>
+     * style. <p>If the orientation of the pane is VERTICAL, this means the
+     * alignment of each individual component within the pane. It has no effect
+     * if the <code>fill</code> style is true.
      */
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
         if (horizontalAlignment == null) {
@@ -512,7 +512,8 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     /**
-     * Returns the vertical alignment of the BoxPane's components within the pane.
+     * Returns the vertical alignment of the BoxPane's components within the
+     * pane.
      */
     public VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
@@ -520,14 +521,12 @@ public class BoxPaneSkin extends ContainerSkin
 
     /**
      * Sets the vertical alignment of the BoxPane's components within the pane.
-     *
-     * <p>If the orientation of the pane is VERTICAL, this means the collective alignment
-     * all the components as group, which are still laid out close together according
-     * to the value of the <code>spacing</code> style.
-     *
-     * <p>If the orientation of the pane is HORIZONTAL, this means the alignment of each
-     * individual component within the pane.  It has no effect if the <code>fill</code>
-     * style is true.
+     * <p>If the orientation of the pane is VERTICAL, this means the collective
+     * alignment all the components as group, which are still laid out close
+     * together according to the value of the <code>spacing</code> style. <p>If
+     * the orientation of the pane is HORIZONTAL, this means the alignment of
+     * each individual component within the pane. It has no effect if the
+     * <code>fill</code> style is true.
      */
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
         if (verticalAlignment == null) {
@@ -539,14 +538,16 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     /**
-     * Returns the amount of space between the edge of the BoxPane and its components.
+     * Returns the amount of space between the edge of the BoxPane and its
+     * components.
      */
     public Insets getPadding() {
         return padding;
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the BoxPane and its components.
+     * Sets the amount of space to leave between the edge of the BoxPane and its
+     * components.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -558,9 +559,11 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the BoxPane and its components.
-     *
-     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     * Sets the amount of space to leave between the edge of the BoxPane and its
+     * components.
+     * 
+     * @param padding A dictionary with keys in the set {left, top, bottom,
+     * right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
@@ -571,16 +574,16 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the BoxPane and its components,
-     * uniformly on all four edges.
+     * Sets the amount of space to leave between the edge of the BoxPane and its
+     * components, uniformly on all four edges.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the BoxPane and its components,
-     * uniformly on all four edges.
+     * Sets the amount of space to leave between the edge of the BoxPane and its
+     * components, uniformly on all four edges.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {
@@ -591,10 +594,11 @@ public class BoxPaneSkin extends ContainerSkin
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the BoxPane and its components.
-     *
-     * @param padding A string containing an integer or a JSON dictionary with keys
-     * left, top, bottom, and/or right.
+     * Sets the amount of space to leave between the edge of the BoxPane and its
+     * components.
+     * 
+     * @param padding A string containing an integer or a JSON dictionary with
+     * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
         if (padding == null) {
@@ -635,7 +639,8 @@ public class BoxPaneSkin extends ContainerSkin
 
     /**
      * Returns a value indicating whether the BoxPane's components fill the
-     * available space in the pane in the dimension orthogonal to its orientation.
+     * available space in the pane in the dimension orthogonal to its
+     * orientation.
      */
     public boolean getFill() {
         return fill;
@@ -643,20 +648,20 @@ public class BoxPaneSkin extends ContainerSkin
 
     /**
      * Sets whether the BoxPane's components fill to the edges of the pane.
-     *
-     * @param fill If <b>true</b>, the components are given all the available space
-     * in the dimension orthogonal to the pane's orientation (e.g., vertically
-     * in a BoxPane with orientation=horizontal).  It has no effect on the layout
-     * of components in the direction of the pane's orientation, which are always
-     * given exactly their preferred size.
-     * If <b>false</b>, the pane's components are laid out to their preferred size,
-     * regardless of the size of the BoxPane.  Their alignment along the axis orthogonal
-     * to the pane's orientation is controlled by the corresponding alignment style
-     * (e.g., verticalAlignment in a BoxPane with orientation=horizontal).
-     * <p>
-     * Note that to Scale Up Images, other that fill=true it will be needed to set
-     * even the preferredWidth/preferredHeight as with container preferredHeight/preferredWidth
-     * just set, depending on the pane's orientation.
+     * 
+     * @param fill If <b>true</b>, the components are given all the available
+     * space in the dimension orthogonal to the pane's orientation (e.g.,
+     * vertically in a BoxPane with orientation=horizontal). It has no effect on
+     * the layout of components in the direction of the pane's orientation,
+     * which are always given exactly their preferred size. If <b>false</b>, the
+     * pane's components are laid out to their preferred size, regardless of the
+     * size of the BoxPane. Their alignment along the axis orthogonal to the
+     * pane's orientation is controlled by the corresponding alignment style
+     * (e.g., verticalAlignment in a BoxPane with orientation=horizontal). <p>
+     * Note that to Scale Up Images, other that fill=true it will be needed to
+     * set even the preferredWidth/preferredHeight as with container
+     * preferredHeight/preferredWidth just set, depending on the pane's
+     * orientation.
      */
     public void setFill(boolean fill) {
         this.fill = fill;

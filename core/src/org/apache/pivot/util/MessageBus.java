@@ -22,12 +22,11 @@ import org.apache.pivot.collections.HashMap;
  * Provides support for basic intra-application message passing.
  */
 public class MessageBus {
-    private static HashMap<Class<?>, ListenerList<MessageBusListener<?>>> messageTopics
-        = new HashMap<>();
+    private static HashMap<Class<?>, ListenerList<MessageBusListener<?>>> messageTopics = new HashMap<>();
 
     /**
      * Subscribes a listener to a message topic.
-     *
+     * 
      * @param topic
      * @param messageListener
      */
@@ -46,7 +45,7 @@ public class MessageBus {
 
     /**
      * Unsubscribe a listener from a message topic.
-     *
+     * 
      * @param topic
      * @param messageListener
      */
@@ -65,7 +64,7 @@ public class MessageBus {
 
     /**
      * Sends a message to subscribed topic listeners.
-     *
+     * 
      * @param message
      */
     @SuppressWarnings("unchecked")
@@ -75,7 +74,7 @@ public class MessageBus {
 
         if (topicListeners != null) {
             for (MessageBusListener<?> listener : topicListeners) {
-                ((MessageBusListener<T>)listener).messageSent(message);
+                ((MessageBusListener<T>) listener).messageSent(message);
             }
         }
     }

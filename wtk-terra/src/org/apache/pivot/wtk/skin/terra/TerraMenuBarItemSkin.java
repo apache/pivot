@@ -27,7 +27,6 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.skin.MenuBarItemSkin;
 
-
 /**
  * Terra menu bar item skin.
  */
@@ -36,13 +35,13 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
     public void install(Component component) {
         super.install(component);
 
-        MenuBar.Item menuBarItem = (MenuBar.Item)component;
+        MenuBar.Item menuBarItem = (MenuBar.Item) component;
         menuBarItem.setCursor(Cursor.DEFAULT);
     }
 
     @Override
     public int getPreferredWidth(int height) {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
 
         Button.DataRenderer dataRenderer = menuBarItem.getDataRenderer();
         dataRenderer.render(menuBarItem.getButtonData(), menuBarItem, false);
@@ -52,7 +51,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
 
         Button.DataRenderer dataRenderer = menuBarItem.getDataRenderer();
         dataRenderer.render(menuBarItem.getButtonData(), menuBarItem, false);
@@ -62,7 +61,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
 
         Button.DataRenderer dataRenderer = menuBarItem.getDataRenderer();
         dataRenderer.render(menuBarItem.getButtonData(), menuBarItem, false);
@@ -77,7 +76,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
 
     @Override
     public void paint(Graphics2D graphics) {
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -86,8 +85,8 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
 
         // Paint highlight state
         if (highlight) {
-            MenuBar menuBar = (MenuBar)menuBarItem.getParent();
-            Color activeBackgroundColor = (Color)menuBar.getStyles().get("activeBackgroundColor");
+            MenuBar menuBar = (MenuBar) menuBarItem.getParent();
+            Color activeBackgroundColor = (Color) menuBar.getStyles().get("activeBackgroundColor");
             graphics.setColor(activeBackgroundColor);
             graphics.fillRect(0, 0, width, height);
         }
@@ -104,11 +103,11 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
     public boolean isOpaque() {
         boolean opaque = false;
 
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
 
         if (menuBarItem.isActive()) {
-            MenuBar menuBar = (MenuBar)menuBarItem.getParent();
-            Color activeBackgroundColor = (Color)menuBar.getStyles().get("activeBackgroundColor");
+            MenuBar menuBar = (MenuBar) menuBarItem.getParent();
+            Color activeBackgroundColor = (Color) menuBar.getStyles().get("activeBackgroundColor");
             opaque = (activeBackgroundColor.getTransparency() == Transparency.OPAQUE);
         }
 
@@ -116,7 +115,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
     }
 
     public Color getPopupBorderColor() {
-        return (Color)menuPopup.getStyles().get("borderColor");
+        return (Color) menuPopup.getStyles().get("borderColor");
     }
 
     public void setPopupBorderColor(Color popupBorderColor) {

@@ -31,14 +31,13 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
 /**
- * Sample Test Application (not fully working) to show how to interact
- * between Java code and JavaScript code (interpreted by the JVM) inside bxml files.
+ * Sample Test Application (not fully working) to show how to interact between
+ * Java code and JavaScript code (interpreted by the JVM) inside bxml files.
  * Many things usually done in Java code are here shown but from the JS side.
- * <p>
- * Some utility methods present here could be moved in a dedicated utility class.
- * <p>
- * Note that there are many comments inside this and related sources,
- * and it's to show different ways to do the same things, even as iterative development.
+ * <p> Some utility methods present here could be moved in a dedicated utility
+ * class. <p> Note that there are many comments inside this and related sources,
+ * and it's to show different ways to do the same things, even as iterative
+ * development.
  */
 public class JavascriptConsoleTest extends Application.Adapter {
     public static final String LANGUAGE_KEY = "language";
@@ -63,11 +62,13 @@ public class JavascriptConsoleTest extends Application.Adapter {
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
-        // add a reference to the application itself in bxml namespace, to be used by JS inside bxml files
+        // add a reference to the application itself in bxml namespace, to be
+        // used by JS inside bxml files
         bxmlSerializer.getNamespace().put("application", this);
         logObject("put a reference to application in serializer namespace");
         bxmlSerializer.getNamespace().put("mainClassName", MAIN_CLASS_NAME);
-        logObject("put a reference to main class name in serializer namespace \"" + MAIN_CLASS_NAME + "\"");
+        logObject("put a reference to main class name in serializer namespace \"" + MAIN_CLASS_NAME
+            + "\"");
 
         window = loadWindow("javascript_console_test.bxml", bxmlSerializer);
         initializeFields(bxmlSerializer);
@@ -85,10 +86,10 @@ public class JavascriptConsoleTest extends Application.Adapter {
         return false;
     }
 
-
     /**
-     * Utility method to initialize secondary fields/elements during application startup.
-     *
+     * Utility method to initialize secondary fields/elements during application
+     * startup.
+     * 
      * @param serializer the BXMLSerializer instance to use
      */
     private void initializeFields(BXMLSerializer serializer) {
@@ -100,11 +101,12 @@ public class JavascriptConsoleTest extends Application.Adapter {
         logObject("initializeFields: end");
     }
 
-
     /**
-     * Load resource files for the given classname, or if null a default will be used.
-     *
-     * @param className the full class name (to use as a base name), for loading resources
+     * Load resource files for the given classname, or if null a default will be
+     * used.
+     * 
+     * @param className the full class name (to use as a base name), for loading
+     * resources
      */
     private void loadResources(String className) {
         try {
@@ -112,11 +114,12 @@ public class JavascriptConsoleTest extends Application.Adapter {
             // but only if not already loaded ...
             if (resources == null) {
                 resources = new Resources(MAIN_CLASS_NAME, locale);
-                logObject("buildResources, load resources from "
-                    + "\""
-                    + ((className != null && className.length() > 0) ? className : MAIN_CLASS_NAME)  // set a useful default
-                    + "\", with locale " + locale
-                );
+                logObject("buildResources, load resources from " + "\""
+                    + ((className != null && className.length() > 0) ? className : MAIN_CLASS_NAME) // set
+                                                                                                    // a
+                                                                                                    // useful
+                                                                                                    // default
+                    + "\", with locale " + locale);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,13 +127,11 @@ public class JavascriptConsoleTest extends Application.Adapter {
 
     }
 
-
     /**
-     * Load (and returns) a Window, given its file name
-     * <p>
-     * Note that if public this method could be called even from JS in a bxml file
-     * (but a reference to the current application has to be put in serializer namespace).
-     *
+     * Load (and returns) a Window, given its file name <p> Note that if public
+     * this method could be called even from JS in a bxml file (but a reference
+     * to the current application has to be put in serializer namespace).
+     * 
      * @param fileName the file name for the bxml file to load
      * @return the Window instance
      * @throws SerializationException in case of error
@@ -143,9 +144,10 @@ public class JavascriptConsoleTest extends Application.Adapter {
 
     /**
      * Load (and returns) a Window, given its file name and serializer to use
-     *
+     * 
      * @param fileName the file name for the bxml file to load
-     * @param bxmlSerializer the serializer to use, or if null a new one will be created
+     * @param bxmlSerializer the serializer to use, or if null a new one will be
+     * created
      * @return the Window instance
      * @throws SerializationException in case of error
      * @throws IOException in case of error
@@ -159,21 +161,23 @@ public class JavascriptConsoleTest extends Application.Adapter {
             serializer = new BXMLSerializer();
         }
 
-        // return (Window)bxmlSerializer.readObject(JavascriptConsoleTest.class, fileName); // ok
-        // better, to allow usage of resources (without having to call setLocation or setResources in the serializer) ...
-        return (Window)serializer.readObject(JavascriptConsoleTest.class, fileName, true);
+        // return (Window)bxmlSerializer.readObject(JavascriptConsoleTest.class,
+        // fileName); // ok
+        // better, to allow usage of resources (without having to call
+        // setLocation or setResources in the serializer) ...
+        return (Window) serializer.readObject(JavascriptConsoleTest.class, fileName, true);
     }
 
     /**
-     * Load (and returns) a Window, given its URL and serializer to use
-     * <p>
-     * Note that if public this method could be called even from JS in a bxml file
-     * (but a reference to the current application has to be put in serializer namespace).
-     * <p>
-     * Note that all Exceptions are catched inside this method, to not expose them to JS code.
-     *
+     * Load (and returns) a Window, given its URL and serializer to use <p> Note
+     * that if public this method could be called even from JS in a bxml file
+     * (but a reference to the current application has to be put in serializer
+     * namespace). <p> Note that all Exceptions are catched inside this method,
+     * to not expose them to JS code.
+     * 
      * @param urlString the URL of the bxml file to load, as a String
-     * @param bxmlSerializer the serializer to use, or if null a new one will be created
+     * @param bxmlSerializer the serializer to use, or if null a new one will be
+     * created
      * @return the Window instance
      */
     public Window loadWindowFromURL(String urlString, final BXMLSerializer bxmlSerializer) {
@@ -188,10 +192,11 @@ public class JavascriptConsoleTest extends Application.Adapter {
         try {
             URL url = new URL(urlString);
 
-            // force the location, so it will be possible to decode resources like labels ...
+            // force the location, so it will be possible to decode resources
+            // like labels ...
             serializer.setLocation(url);
 
-            loadedWindow = (Window)serializer.readObject(url);
+            loadedWindow = (Window) serializer.readObject(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -203,11 +208,10 @@ public class JavascriptConsoleTest extends Application.Adapter {
         return loadedWindow;
     }
 
-
     /**
-     * Return the value for the given label,
-     * from the resource file loaded at application startup.
-     *
+     * Return the value for the given label, from the resource file loaded at
+     * application startup.
+     * 
      * @param name the label name
      * @return the value or the label, or empty string if not found
      */
@@ -217,7 +221,8 @@ public class JavascriptConsoleTest extends Application.Adapter {
             throw new IllegalArgumentException("name must be a valid string");
         }
 
-        // note that if called from bxml files, resources could be not already loaded,
+        // note that if called from bxml files, resources could be not already
+        // loaded,
         // so try to force its load with a default value ...
         if (resources == null) {
             loadResources(null);
@@ -226,28 +231,28 @@ public class JavascriptConsoleTest extends Application.Adapter {
         label = (String) resources.get(name);
         logObject("search label with name \"" + name + "\", find value \"" + label + "\"");
 
-        return ((label == null) ? "": label);
+        return ((label == null) ? "" : label);
     }
 
-
     /**
-     * Sample utility method to log a formatted dump of the given object to System.out .
-     * <p>
-     * Note that it has been set public, static, and accepting Object (and not String as usual),
-     * even to make some tests on it from JS code.
-     *
+     * Sample utility method to log a formatted dump of the given object to
+     * System.out . <p> Note that it has been set public, static, and accepting
+     * Object (and not String as usual), even to make some tests on it from JS
+     * code.
+     * 
      * @param msg the object (or message) to log
      */
     public static final void logObject(Object obj) {
         if (obj != null) {
-            System.out.println(new java.util.Date() + ", log: { class: \"" + obj.getClass().getName() + "\", msg:\"" + obj + "\" }");
+            System.out.println(new java.util.Date() + ", log: { class: \""
+                + obj.getClass().getName() + "\", msg:\"" + obj + "\" }");
         }
     }
 
-
     /**
-     * Application entry point, when run as a Standard (Desktop) Java Application.
-     *
+     * Application entry point, when run as a Standard (Desktop) Java
+     * Application.
+     * 
      * @param args command line arguments
      */
     public static void main(String[] args) {

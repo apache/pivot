@@ -42,14 +42,14 @@ public interface ActionClassListener {
 
     /**
      * Called when an action has been added to the named action dictionary.
-     *
+     * 
      * @param id
      */
     public void actionAdded(String id);
 
     /**
      * Called when an action has been updated in the named action dictionary.
-     *
+     * 
      * @param id
      * @param previousAction
      */
@@ -57,7 +57,7 @@ public interface ActionClassListener {
 
     /**
      * Called when an action has been removed from the named action dictionary.
-     *
+     * 
      * @param id
      * @param action
      */

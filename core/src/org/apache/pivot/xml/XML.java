@@ -25,22 +25,14 @@ import org.apache.pivot.collections.List;
 public class XML {
     /**
      * Returns the element matching a given path.
-     *
-     * @param root
-     * The element from which to begin the search.
-     *
-     * @param path
-     * A path of the form:
-     * <pre>
-     * tag[n]/tag[n]/...
-     * </pre>
-     * The bracketed index values are optional and refer to the <i>n</i>th
-     * occurrence of the given tag name within its parent element. If
-     * omitted, the path refers to the first occurrence of the named
-     * element (i.e. the element at index 0).
-     *
-     * @return
-     * The matching element, or {@code null} if no such element exists.
+     * 
+     * @param root The element from which to begin the search.
+     * @param path A path of the form: <pre> tag[n]/tag[n]/... </pre> The
+     * bracketed index values are optional and refer to the <i>n</i>th
+     * occurrence of the given tag name within its parent element. If omitted,
+     * the path refers to the first occurrence of the named element (i.e. the
+     * element at index 0).
+     * @return The matching element, or {@code null} if no such element exists.
      */
     public static Element getElement(Element root, String path) {
         if (root == null) {
@@ -79,12 +71,11 @@ public class XML {
                     trailingBracketIndex));
             }
 
-
             int j = 0;
             int k = 0;
             for (Node node : current) {
                 if (node instanceof Element) {
-                    Element element = (Element)node;
+                    Element element = (Element) node;
 
                     if (element.getName().equals(tagName)) {
                         if (k == index) {
@@ -99,7 +90,7 @@ public class XML {
             }
 
             if (j < current.getLength()) {
-                current = (Element)current.get(j);
+                current = (Element) current.get(j);
             } else {
                 current = null;
                 break;
@@ -112,19 +103,12 @@ public class XML {
     /**
      * Returns the sub-elements of a descendant of {@code root} whose tag names
      * match the given name.
-     *
-     * @param root
-     * The element from which to begin the search.
-     *
-     * @param path
-     * The path to the descendant, relative to {@code root}.
-     *
-     * @param name
-     * The tag name to match.
-     *
-     * @return
-     * The matching elements, or {@code null} if no such descendant exists.
-     *
+     * 
+     * @param root The element from which to begin the search.
+     * @param path The path to the descendant, relative to {@code root}.
+     * @param name The tag name to match.
+     * @return The matching elements, or {@code null} if no such descendant
+     * exists.
      * @see #getElement(Element, String)
      * @see Element#getElements(String)
      */
@@ -135,17 +119,11 @@ public class XML {
 
     /**
      * Returns the text content of a descendant of {@code root}.
-     *
-     * @param root
-     * The element from which to begin the search.
-     *
-     * @param path
-     * The path to the descendant, relative to {@code root}.
-     *
-     * @return
-     * The text of the descedant, or {@code null} if no such descendant
+     * 
+     * @param root The element from which to begin the search.
+     * @param path The path to the descendant, relative to {@code root}.
+     * @return The text of the descedant, or {@code null} if no such descendant
      * exists.
-     *
      * @see #getElement(Element, String)
      * @see Element#getText()
      */

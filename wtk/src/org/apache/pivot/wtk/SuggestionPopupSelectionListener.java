@@ -25,20 +25,20 @@ public interface SuggestionPopupSelectionListener {
      */
     public static class Adapter implements SuggestionPopupSelectionListener {
         @Override
-        public void selectedIndexChanged(SuggestionPopup suggestionPopup,
-            int previousSelectedIndex) {
+        public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex) {
             // empty block
         }
 
         @Override
-        public void selectedSuggestionChanged(SuggestionPopup suggestionPopup, Object previousSelectedSuggestion) {
+        public void selectedSuggestionChanged(SuggestionPopup suggestionPopup,
+            Object previousSelectedSuggestion) {
             // empty block
         }
     }
 
     /**
      * Called when a suggestion popup's selected index has changed.
-     *
+     * 
      * @param suggestionPopup
      * @param previousSelectedIndex
      */
@@ -46,13 +46,11 @@ public interface SuggestionPopupSelectionListener {
 
     /**
      * Called when a suggestion popup's selected suggestion has changed.
-     *
-     * @param suggestionPopup
-     * The source of the event.
-     *
-     * @param previousSelectedSuggestion
-     * The item that was previously selected, or <tt>null</tt> if the previous selection
-     * cannot be determined.
+     * 
+     * @param suggestionPopup The source of the event.
+     * @param previousSelectedSuggestion The item that was previously selected,
+     * or <tt>null</tt> if the previous selection cannot be determined.
      */
-    public void selectedSuggestionChanged(SuggestionPopup suggestionPopup, Object previousSelectedSuggestion);
+    public void selectedSuggestionChanged(SuggestionPopup suggestionPopup,
+        Object previousSelectedSuggestion);
 }

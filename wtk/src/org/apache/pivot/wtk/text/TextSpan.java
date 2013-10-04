@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk.text;
 
-
 /**
  * Element representing an inline range of styled characters.
  */

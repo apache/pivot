@@ -46,7 +46,8 @@ public interface ListViewBindingListener {
         }
 
         @Override
-        public void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType) {
+        public void selectedItemBindTypeChanged(ListView listView,
+            BindType previousSelectedItemBindType) {
             // empty block
         }
 
@@ -62,7 +63,8 @@ public interface ListViewBindingListener {
         }
 
         @Override
-        public void selectedItemsBindTypeChanged(ListView listView, BindType previousSelectedItemsBindType) {
+        public void selectedItemsBindTypeChanged(ListView listView,
+            BindType previousSelectedItemsBindType) {
             // empty block
         }
 
@@ -78,7 +80,8 @@ public interface ListViewBindingListener {
         }
 
         @Override
-        public void checkedItemsBindTypeChanged(ListView listView, BindType previousCheckedItemsBindType) {
+        public void checkedItemsBindTypeChanged(ListView listView,
+            BindType previousCheckedItemsBindType) {
             // empty block
         }
 
@@ -91,7 +94,7 @@ public interface ListViewBindingListener {
 
     /**
      * Called when a list view's list data key has changed.
-     *
+     * 
      * @param listView
      * @param previousListDataKey
      */
@@ -99,7 +102,7 @@ public interface ListViewBindingListener {
 
     /**
      * Called when a list view's list data bind type has changed.
-     *
+     * 
      * @param listView
      * @param previousListDataBindType
      */
@@ -107,15 +110,16 @@ public interface ListViewBindingListener {
 
     /**
      * Called when a list view's list data bind mapping has changed.
-     *
+     * 
      * @param listView
      * @param previousListDataBindMapping
      */
-    public void listDataBindMappingChanged(ListView listView, ListView.ListDataBindMapping previousListDataBindMapping);
+    public void listDataBindMappingChanged(ListView listView,
+        ListView.ListDataBindMapping previousListDataBindMapping);
 
     /**
      * Called when a list view's selected item key has changed.
-     *
+     * 
      * @param listView
      * @param previousSelectedItemKey
      */
@@ -123,7 +127,7 @@ public interface ListViewBindingListener {
 
     /**
      * Called when a list view's selected item bind type has changed.
-     *
+     * 
      * @param listView
      * @param previousSelectedItemBindType
      */
@@ -131,7 +135,7 @@ public interface ListViewBindingListener {
 
     /**
      * Called when a list view's selected item bind mapping has changed.
-     *
+     * 
      * @param listView
      * @param previousSelectedItemBindMapping
      */
@@ -140,7 +144,7 @@ public interface ListViewBindingListener {
 
     /**
      * Called when a list view's selected items key has changed.
-     *
+     * 
      * @param listView
      * @param previousSelectedItemsKey
      */
@@ -148,15 +152,16 @@ public interface ListViewBindingListener {
 
     /**
      * Called when a list view's selected items bind type has changed.
-     *
+     * 
      * @param listView
      * @param previousSelectedItemsBindType
      */
-    public void selectedItemsBindTypeChanged(ListView listView, BindType previousSelectedItemsBindType);
+    public void selectedItemsBindTypeChanged(ListView listView,
+        BindType previousSelectedItemsBindType);
 
     /**
      * Called when a list view's selected items bind mapping has changed.
-     *
+     * 
      * @param listView
      * @param previousSelectedItemsBindMapping
      */
@@ -165,7 +170,7 @@ public interface ListViewBindingListener {
 
     /**
      * Called when a list view's checked items key has changed.
-     *
+     * 
      * @param listView
      * @param previousCheckedItemsKey
      */
@@ -173,7 +178,7 @@ public interface ListViewBindingListener {
 
     /**
      * Called when a list view's checked items bind type has changed.
-     *
+     * 
      * @param listView
      * @param previousCheckedItemsBindType
      */
@@ -181,7 +186,7 @@ public interface ListViewBindingListener {
 
     /**
      * Called when a list view's checked items bind mapping has changed.
-     *
+     * 
      * @param listView
      * @param previousCheckedItemsBindMapping
      */

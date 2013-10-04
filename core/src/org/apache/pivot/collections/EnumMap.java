@@ -23,8 +23,8 @@ import java.util.Iterator;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Implementation of the {@link Set} interface whose keys are backed by a set
- * of enum values.
+ * Implementation of the {@link Set} interface whose keys are backed by a set of
+ * enum values.
  */
 public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     private static final long serialVersionUID = -8446839779287452516L;
@@ -46,7 +46,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     public V get(E key) {
         verifyNotNull("key", key);
 
-        return (V)values[key.ordinal()];
+        return (V) values[key.ordinal()];
     }
 
     @SuppressWarnings("unchecked")
@@ -55,7 +55,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
         verifyNotNull("key", key);
 
         int ordinal = key.ordinal();
-        V previousValue = (V)values[ordinal];
+        V previousValue = (V) values[ordinal];
         values[ordinal] = value;
 
         if (keySet.contains(key)) {
@@ -76,7 +76,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
         V value = null;
         if (keySet.contains(key)) {
             int ordinal = key.ordinal();
-            value = (V)values[ordinal];
+            value = (V) values[ordinal];
             values[ordinal] = null;
             keySet.remove(key);
             mapListeners.valueRemoved(this, key, value);

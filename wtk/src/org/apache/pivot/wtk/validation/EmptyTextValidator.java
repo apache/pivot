@@ -14,9 +14,8 @@
 package org.apache.pivot.wtk.validation;
 
 /**
- * A validator for a (trimmed) text.
- * <p>
- * This is useful only when a value to be valid has to be absent.
+ * A validator for a (trimmed) text. <p> This is useful only when a value to be
+ * valid has to be absent.
  */
 public class EmptyTextValidator implements Validator {
 

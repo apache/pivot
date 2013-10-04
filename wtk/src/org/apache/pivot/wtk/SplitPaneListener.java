@@ -55,77 +55,63 @@ public interface SplitPaneListener {
         }
 
         @Override
-        public void resizeModeChanged(SplitPane splitPane,
-            SplitPane.ResizeMode previousResizeMode) {
+        public void resizeModeChanged(SplitPane splitPane, SplitPane.ResizeMode previousResizeMode) {
             // empty block
         }
     }
 
     /**
      * Called when a split pane's top left component has changed.
-     *
-     * @param splitPane
-     * The source of the event.
-     *
-     * @param previousTopLeft
-     * The previous component. The new component can be found inside the splitPane.
+     * 
+     * @param splitPane The source of the event.
+     * @param previousTopLeft The previous component. The new component can be
+     * found inside the splitPane.
      */
     public void topLeftChanged(SplitPane splitPane, Component previousTopLeft);
 
     /**
      * Called when a split pane's bottom right component has changed.
-     *
-     * @param splitPane
-     * The source of the event.
-     *
-     * @param previousBottomRight
-     * The previous component. The new component can be found inside the splitPane.
+     * 
+     * @param splitPane The source of the event.
+     * @param previousBottomRight The previous component. The new component can
+     * be found inside the splitPane.
      */
     public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight);
 
     /**
      * Called when a split pane's orientation has changed.
-     *
-     * @param splitPane
-     * The source of the event.
+     * 
+     * @param splitPane The source of the event.
      */
     public void orientationChanged(SplitPane splitPane);
 
     /**
      * Called when a split pane's primary region has changed.
-     *
-     * @param splitPane
-     * The source of the event.
+     * 
+     * @param splitPane The source of the event.
      */
     public void primaryRegionChanged(SplitPane splitPane);
 
     /**
      * Called when a split pane's split location has changed.
-     *
-     * @param splitPane
-     * The source of the event.
-     *
-     * @param previousSplitRatio
-     * The previous setting of the splitRatio.
+     * 
+     * @param splitPane The source of the event.
+     * @param previousSplitRatio The previous setting of the splitRatio.
      */
     public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio);
 
     /**
      * Called when a split pane's locked flag has changed.
-     *
-     * @param splitPane
-     * The source of the event.
+     * 
+     * @param splitPane The source of the event.
      */
     public void lockedChanged(SplitPane splitPane);
 
     /**
      * Called when a split pane's split location has changed.
-     *
-     * @param splitPane
-     * The source of the event.
-     *
-     * @param previousResizeMode
-     * The previous setting of the resizeMode.
+     * 
+     * @param splitPane The source of the event.
+     * @param previousResizeMode The previous setting of the resizeMode.
      */
     public void resizeModeChanged(SplitPane splitPane, SplitPane.ResizeMode previousResizeMode);
 }

@@ -20,10 +20,10 @@ import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.AlertListener;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
@@ -34,8 +34,7 @@ import org.apache.pivot.wtk.Window;
 /**
  * Alert skin.
  */
-public class TerraAlertSkin extends TerraDialogSkin
-    implements AlertListener {
+public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
     private ImageView typeImageView = null;
     private Label messageLabel = null;
     private BoxPane messageBoxPane = null;
@@ -47,7 +46,7 @@ public class TerraAlertSkin extends TerraDialogSkin
             int optionIndex = optionButtonBoxPane.indexOf(button);
 
             if (optionIndex >= 0) {
-                Alert alert = (Alert)getComponent();
+                Alert alert = (Alert) getComponent();
                 alert.setSelectedOptionIndex(optionIndex);
                 alert.close(true);
             }
@@ -55,7 +54,7 @@ public class TerraAlertSkin extends TerraDialogSkin
     };
 
     public TerraAlertSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(9));
     }
 
@@ -63,7 +62,7 @@ public class TerraAlertSkin extends TerraDialogSkin
     public void install(Component component) {
         super.install(component);
 
-        Alert alert = (Alert)component;
+        Alert alert = (Alert) component;
         alert.setPreferredWidth(320);
         alert.setMinimumWidth(160);
 
@@ -74,23 +73,23 @@ public class TerraAlertSkin extends TerraDialogSkin
 
         Component content;
         try {
-            content = (Component)bxmlSerializer.readObject(TerraAlertSkin.class,
+            content = (Component) bxmlSerializer.readObject(TerraAlertSkin.class,
                 "terra_alert_skin.bxml");
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
 
         alert.setContent(content);
 
-        typeImageView = (ImageView)bxmlSerializer.getNamespace().get("typeImageView");
-        messageLabel = (Label)bxmlSerializer.getNamespace().get("messageLabel");
-        messageBoxPane = (BoxPane)bxmlSerializer.getNamespace().get("messageBoxPane");
-        optionButtonBoxPane = (BoxPane)bxmlSerializer.getNamespace().get("optionButtonBoxPane");
+        typeImageView = (ImageView) bxmlSerializer.getNamespace().get("typeImageView");
+        messageLabel = (Label) bxmlSerializer.getNamespace().get("messageLabel");
+        messageBoxPane = (BoxPane) bxmlSerializer.getNamespace().get("messageBoxPane");
+        optionButtonBoxPane = (BoxPane) bxmlSerializer.getNamespace().get("optionButtonBoxPane");
 
         for (Object option : alert.getOptions()) {
             PushButton optionButton = new PushButton(option);
-            optionButton.setStyleName(TerraAlertSkin.class.getPackage().getName()
-                + "." + TerraTheme.COMMAND_BUTTON_STYLE);
+            optionButton.setStyleName(TerraAlertSkin.class.getPackage().getName() + "."
+                + TerraTheme.COMMAND_BUTTON_STYLE);
             optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
             optionButtonBoxPane.add(optionButton);
@@ -105,7 +104,7 @@ public class TerraAlertSkin extends TerraDialogSkin
     public void windowOpened(Window window) {
         super.windowOpened(window);
 
-        Alert alert = (Alert)window;
+        Alert alert = (Alert) window;
         int index = alert.getSelectedOptionIndex();
 
         if (index >= 0) {
@@ -117,7 +116,7 @@ public class TerraAlertSkin extends TerraDialogSkin
 
     @Override
     public void messageTypeChanged(Alert alert, MessageType previousMessageType) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         typeImageView.setImage(theme.getMessageIcon(alert.getMessageType()));
     }
 
@@ -143,8 +142,8 @@ public class TerraAlertSkin extends TerraDialogSkin
         Object option = alert.getOptions().get(index);
 
         PushButton optionButton = new PushButton(option);
-        optionButton.setStyleName(TerraAlertSkin.class.getPackage().getName()
-            + "." + TerraTheme.COMMAND_BUTTON_STYLE);
+        optionButton.setStyleName(TerraAlertSkin.class.getPackage().getName() + "."
+            + TerraTheme.COMMAND_BUTTON_STYLE);
         optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
         optionButtonBoxPane.insert(optionButton, index);
@@ -159,8 +158,7 @@ public class TerraAlertSkin extends TerraDialogSkin
     public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
         int index = alert.getSelectedOptionIndex();
 
-        if (alert.isOpen()
-            && index >= 0) {
+        if (alert.isOpen() && index >= 0) {
             optionButtonBoxPane.get(index).requestFocus();
         }
     }

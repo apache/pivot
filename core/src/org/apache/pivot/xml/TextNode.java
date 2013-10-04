@@ -41,7 +41,7 @@ public class TextNode extends Node {
         if (this == o) {
             equals = true;
         } else if (o instanceof TextNode) {
-            TextNode textNode = (TextNode)o;
+            TextNode textNode = (TextNode) o;
             equals = (text.equals(textNode.text));
         }
 

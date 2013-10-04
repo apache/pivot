@@ -68,14 +68,12 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     }
 
     /**
-     * Sets the tree branch's expanded icon by URL.
-     * <p>
-     * If the icon already exists in the application context resource cache,
-     * the cached value will be used. Otherwise, the icon will be loaded
-     * synchronously and added to the cache.
-     *
-     * @param iconURL
-     * The location of the expanded icon to set.
+     * Sets the tree branch's expanded icon by URL. <p> If the icon already
+     * exists in the application context resource cache, the cached value will
+     * be used. Otherwise, the icon will be loaded synchronously and added to
+     * the cache.
+     * 
+     * @param iconURL The location of the expanded icon to set.
      */
     public void setExpandedIcon(URL iconURL) {
         if (iconURL == null) {
@@ -86,12 +84,10 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     }
 
     /**
-     * Sets the tree branch's expanded icon by {@linkplain ClassLoader#getResource(String)
-     * resource name}.
-     *
-     * @param expandedIconName
-     * The resource name of the expanded icon to set.
-     *
+     * Sets the tree branch's expanded icon by
+     * {@linkplain ClassLoader#getResource(String) resource name}.
+     * 
+     * @param expandedIconName The resource name of the expanded icon to set.
      * @see #setExpandedIcon(URL)
      */
     public void setExpandedIcon(String expandedIconName) {
@@ -102,7 +98,8 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL url = classLoader.getResource(expandedIconName.substring(1));
         if (url == null) {
-            throw new IllegalArgumentException("cannot find expandedIcon resource " + expandedIconName);
+            throw new IllegalArgumentException("cannot find expandedIcon resource "
+                + expandedIconName);
         }
         setExpandedIcon(url);
     }
@@ -171,7 +168,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     public Sequence<TreeNode> remove(int index, int count) {
         Sequence<TreeNode> removed = treeNodes.remove(index, count);
         if (count > 0) {
-            for (int i = 0, n = removed.getLength(); i < n; i++ ) {
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
                 TreeNode treeNode = removed.get(i);
                 treeNode.setParent(null);
             }
@@ -202,7 +199,8 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     @Override
     public int indexOf(TreeNode treeNode) {
-        // We can't use the ArrayList indexOf method, because if we have a comparator, it
+        // We can't use the ArrayList indexOf method, because if we have a
+        // comparator, it
         // might return the wrong answer.
         int index = 0;
         int length = treeNodes.getLength();
@@ -255,7 +253,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
                 TreeNode treeNode = treeNodes.get(i);
 
                 if (treeNode instanceof TreeBranch) {
-                    TreeBranch treeBranch = (TreeBranch)treeNode;
+                    TreeBranch treeBranch = (TreeBranch) treeNode;
                     treeBranch.setComparator(comparator);
                 }
             }

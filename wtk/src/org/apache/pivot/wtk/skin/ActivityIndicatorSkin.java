@@ -23,13 +23,13 @@ import org.apache.pivot.wtk.Component;
 /**
  * Abstract base class for activity indicator skins.
  */
-public abstract class ActivityIndicatorSkin extends ComponentSkin
-    implements ActivityIndicatorListener {
+public abstract class ActivityIndicatorSkin extends ComponentSkin implements
+    ActivityIndicatorListener {
     @Override
     public void install(Component component) {
         super.install(component);
 
-        ActivityIndicator activityIndicator = (ActivityIndicator)component;
+        ActivityIndicator activityIndicator = (ActivityIndicator) component;
         activityIndicator.getActivityIndicatorListeners().add(this);
     }
 

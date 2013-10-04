@@ -36,8 +36,7 @@ public interface VFSBrowserSheetListener {
         }
 
         @Override
-        public void modeChanged(VFSBrowserSheet fileBrowserSheet,
-            VFSBrowserSheet.Mode previousMode) {
+        public void modeChanged(VFSBrowserSheet fileBrowserSheet, VFSBrowserSheet.Mode previousMode) {
             // empty block
         }
 
@@ -61,9 +60,9 @@ public interface VFSBrowserSheetListener {
     }
 
     /**
-     * Called when a file browser's file system manager has changed
-     * (as when browsing into a new virtual file system).
-     *
+     * Called when a file browser's file system manager has changed (as when
+     * browsing into a new virtual file system).
+     * 
      * @param fileBrowserSheet
      * @param previousManager
      */
@@ -71,7 +70,7 @@ public interface VFSBrowserSheetListener {
 
     /**
      * Called when a file browser sheet's mode has changed.
-     *
+     * 
      * @param fileBrowserSheet
      * @param previousMode
      */
@@ -79,7 +78,7 @@ public interface VFSBrowserSheetListener {
 
     /**
      * Called when a file browser sheet's root directory has changed.
-     *
+     * 
      * @param fileBrowserSheet
      * @param previousRootDirectory
      */
@@ -88,7 +87,7 @@ public interface VFSBrowserSheetListener {
 
     /**
      * Called when a file browser sheet's selection state has been reset.
-     *
+     * 
      * @param fileBrowserSheet
      * @param previousSelectedFiles
      */
@@ -97,7 +96,7 @@ public interface VFSBrowserSheetListener {
 
     /**
      * Called when a file browser sheet's disabled file filter has changed.
-     *
+     * 
      * @param fileBrowserSheet
      * @param previousDisabledFileFilter
      */

@@ -33,17 +33,13 @@ public class FileBrowserSheet extends Sheet {
      * Enumeration defining supported modes.
      */
     public enum Mode {
-        OPEN,
-        OPEN_MULTIPLE,
-        SAVE_AS,
-        SAVE_TO
+        OPEN, OPEN_MULTIPLE, SAVE_AS, SAVE_TO
     }
 
     private static final String USER_HOME = System.getProperty("user.home");
 
-    private static class FileBrowserSheetListenerList
-        extends WTKListenerList<FileBrowserSheetListener>
-        implements FileBrowserSheetListener {
+    private static class FileBrowserSheetListenerList extends
+        WTKListenerList<FileBrowserSheetListener> implements FileBrowserSheetListener {
         @Override
         public void modeChanged(FileBrowserSheet fileBrowserSheet,
             FileBrowserSheet.Mode previousMode) {
@@ -72,8 +68,7 @@ public class FileBrowserSheet extends Sheet {
         public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
             Filter<File> previousDisabledFileFilter) {
             for (FileBrowserSheetListener listener : this) {
-                listener.disabledFileFilterChanged(fileBrowserSheet,
-                    previousDisabledFileFilter);
+                listener.disabledFileFilterChanged(fileBrowserSheet, previousDisabledFileFilter);
             }
         }
     }
@@ -86,21 +81,18 @@ public class FileBrowserSheet extends Sheet {
     private FileBrowserSheetListenerList fileBrowserSheetListeners = new FileBrowserSheetListenerList();
 
     /**
-     * Creates a new FileBrowserSheet
-     * <p>
-     * Note that this version set by default mode to open and user home as root folder.
+     * Creates a new FileBrowserSheet <p> Note that this version set by default
+     * mode to open and user home as root folder.
      */
     public FileBrowserSheet() {
         this(Mode.OPEN);
     }
 
     /**
-     * Creates a new FileBrowserSheet
-     * <p>
-     * Note that this version set by default the user home as root folder.
-     *
-     * @param mode
-     * The mode for opening the sheet.
+     * Creates a new FileBrowserSheet <p> Note that this version set by default
+     * the user home as root folder.
+     * 
+     * @param mode The mode for opening the sheet.
      * @see Mode
      */
     public FileBrowserSheet(Mode mode) {
@@ -108,29 +100,23 @@ public class FileBrowserSheet extends Sheet {
     }
 
     /**
-     * Creates a new FileBrowserSheet
-     * <p>
-     * Note that this version of the constructor can be used when a custom root folder has to be set,
-     * and uses the default mode.
-     *
-     * @param rootFolder
-     * The root folder full name.
+     * Creates a new FileBrowserSheet <p> Note that this version of the
+     * constructor can be used when a custom root folder has to be set, and uses
+     * the default mode.
+     * 
+     * @param rootFolder The root folder full name.
      */
     public FileBrowserSheet(String rootFolder) {
         this(Mode.OPEN, rootFolder);
     }
 
     /**
-     * Creates a new FileBrowserSheet
-     * <p>
-     * Note that this version of the constructor must be used when a custom root folder has to be set.
-     *
-     * @param mode
-     * The mode for opening the sheet.
+     * Creates a new FileBrowserSheet <p> Note that this version of the
+     * constructor must be used when a custom root folder has to be set.
+     * 
+     * @param mode The mode for opening the sheet.
      * @see Mode
-     *
-     * @param rootFolder
-     * The root folder full name.
+     * @param rootFolder The root folder full name.
      */
     public FileBrowserSheet(Mode mode, String rootFolder) {
         if (mode == null) {
@@ -180,8 +166,7 @@ public class FileBrowserSheet extends Sheet {
             // Give some grace here to allow setting the root directory
             // to a regular file and have it work (by using its parent)
             rootDirectory = rootDirectory.getParentFile();
-            if (rootDirectory == null
-                || !rootDirectory.isDirectory()) {
+            if (rootDirectory == null || !rootDirectory.isDirectory()) {
                 throw new IllegalArgumentException("Root folder is not a directory.");
             }
         }
@@ -197,8 +182,7 @@ public class FileBrowserSheet extends Sheet {
             // Give some grace here to allow setting the root directory
             // to a regular file and have it work (by using its parent)
             rootDirectory = rootDirectory.getParentFile();
-            if (rootDirectory == null
-                || !rootDirectory.isDirectory()) {
+            if (rootDirectory == null || !rootDirectory.isDirectory()) {
                 throw new IllegalArgumentException("Root directory is not a directory.");
             }
         }
@@ -218,9 +202,8 @@ public class FileBrowserSheet extends Sheet {
 
     /**
      * When in single-select mode, returns the currently selected file.
-     *
-     * @return
-     * The currently selected file.
+     * 
+     * @return The currently selected file.
      */
     public File getSelectedFile() {
         if (mode == Mode.OPEN_MULTIPLE) {
@@ -232,7 +215,7 @@ public class FileBrowserSheet extends Sheet {
 
     /**
      * Sets the selection to a single file.
-     *
+     * 
      * @param file
      */
     public void setSelectedFile(File file) {
@@ -249,11 +232,11 @@ public class FileBrowserSheet extends Sheet {
 
     /**
      * Returns the currently selected files.
-     *
-     * @return
-     * An immutable list containing the currently selected files. Note that the returned
-     * list is a wrapper around the actual selection, not a copy. Any changes made to the
-     * selection state will be reflected in the list, but events will not be fired.
+     * 
+     * @return An immutable list containing the currently selected files. Note
+     * that the returned list is a wrapper around the actual selection, not a
+     * copy. Any changes made to the selection state will be reflected in the
+     * list, but events will not be fired.
      */
     public ImmutableList<File> getSelectedFiles() {
         return new ImmutableList<>(selectedFiles);
@@ -261,20 +244,16 @@ public class FileBrowserSheet extends Sheet {
 
     /**
      * Sets the selected files.
-     *
-     * @param selectedFiles
-     * The files to select.
-     *
-     * @return
-     * The files that were selected, with duplicates eliminated.
+     * 
+     * @param selectedFiles The files to select.
+     * @return The files that were selected, with duplicates eliminated.
      */
     public Sequence<File> setSelectedFiles(Sequence<File> selectedFiles) {
         if (selectedFiles == null) {
             throw new IllegalArgumentException("selectedFiles is null.");
         }
 
-        if (mode != Mode.OPEN_MULTIPLE
-            && selectedFiles.getLength() > 1) {
+        if (mode != Mode.OPEN_MULTIPLE && selectedFiles.getLength() > 1) {
             throw new IllegalArgumentException("Multi-select is not enabled.");
         }
 

@@ -34,21 +34,11 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
         }
     }
 
-    private static final RomanValue[] ROMAN_VALUE_TABLE = {
-        new RomanValue(1000, "M"),
-        new RomanValue(900, "CM"),
-        new RomanValue(500, "D"),
-        new RomanValue(400, "CD"),
-        new RomanValue(100, "C"),
-        new RomanValue(90, "XC"),
-        new RomanValue(50, "L"),
-        new RomanValue(40, "XL"),
-        new RomanValue(10, "X"),
-        new RomanValue(9, "IX"),
-        new RomanValue(5, "V"),
-        new RomanValue(4, "IV"),
-        new RomanValue(1, "I")
-     };
+    private static final RomanValue[] ROMAN_VALUE_TABLE = { new RomanValue(1000, "M"),
+        new RomanValue(900, "CM"), new RomanValue(500, "D"), new RomanValue(400, "CD"),
+        new RomanValue(100, "C"), new RomanValue(90, "XC"), new RomanValue(50, "L"),
+        new RomanValue(40, "XL"), new RomanValue(10, "X"), new RomanValue(9, "IX"),
+        new RomanValue(5, "V"), new RomanValue(4, "IV"), new RomanValue(1, "I") };
 
     private static String int2roman(int n) {
         int num = n;
@@ -66,7 +56,7 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
     }
 
     private static String int2alpha(int n) {
-        return (char)('A' + n - 1) + "";
+        return (char) ('A' + n - 1) + "";
     }
 
     public TextPaneSkinNumberedListView(NumberedList numberedList) {
@@ -77,7 +67,7 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
     protected void attach() {
         super.attach();
 
-        NumberedList numberedList = (NumberedList)getNode();
+        NumberedList numberedList = (NumberedList) getNode();
         numberedList.getNumberedListListeners().add(this);
     }
 
@@ -85,17 +75,17 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
     protected void detach() {
         super.detach();
 
-        NumberedList numberedList = (NumberedList)getNode();
+        NumberedList numberedList = (NumberedList) getNode();
         numberedList.getNumberedListListeners().remove(this);
     }
 
     @Override
     protected void childLayout(int breakWidth) {
-        NumberedList numberedList = (NumberedList)getNode();
+        NumberedList numberedList = (NumberedList) getNode();
 
         int index = 1;
         for (TextPaneSkinNodeView nodeView : this) {
-            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
+            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView) nodeView;
 
             switch (numberedList.getStyle()) {
                 case DECIMAL:
@@ -122,7 +112,7 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
 
         this.maxIndexTextWidth = 0;
         for (TextPaneSkinNodeView nodeView : this) {
-            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
+            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView) nodeView;
             this.maxIndexTextWidth = Math.max(this.maxIndexTextWidth,
                 listItemView.getIndexTextWidth());
         }

@@ -26,25 +26,23 @@ public class TableViewHeader extends Component {
      * Enumeration representing a sort mode.
      */
     public enum SortMode {
-        NONE,
-        SINGLE_COLUMN,
-        MULTI_COLUMN
+        NONE, SINGLE_COLUMN, MULTI_COLUMN
     }
 
     /**
-     * Table view header skin interface. Table view header skins must
-     * implement this.
+     * Table view header skin interface. Table view header skins must implement
+     * this.
      */
     public interface Skin {
         public int getHeaderAt(int x);
+
         public Bounds getHeaderBounds(int index);
     }
 
-    private static class TableViewHeaderListenerList extends WTKListenerList<TableViewHeaderListener>
-        implements TableViewHeaderListener {
+    private static class TableViewHeaderListenerList extends
+        WTKListenerList<TableViewHeaderListener> implements TableViewHeaderListener {
         @Override
-        public void tableViewChanged(TableViewHeader tableViewHeader,
-            TableView previousTableView) {
+        public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
             for (TableViewHeaderListener listener : this) {
                 listener.tableViewChanged(tableViewHeader, previousTableView);
             }
@@ -58,8 +56,8 @@ public class TableViewHeader extends Component {
         }
     }
 
-    private static class TableViewHeaderPressListenerList extends WTKListenerList<TableViewHeaderPressListener>
-        implements TableViewHeaderPressListener {
+    private static class TableViewHeaderPressListenerList extends
+        WTKListenerList<TableViewHeaderPressListener> implements TableViewHeaderPressListener {
         @Override
         public void headerPressed(TableViewHeader tableViewHeader, int index) {
             for (TableViewHeaderPressListener listener : this) {
@@ -128,30 +126,24 @@ public class TableViewHeader extends Component {
 
     /**
      * Returns the index of the header at a given location.
-     *
-     * @param x
-     * The x-coordinate of the header to identify.
-     *
-     * @return
-     * The column index, or <tt>-1</tt> if there is no column at the given
-     * x-coordinate.
+     * 
+     * @param x The x-coordinate of the header to identify.
+     * @return The column index, or <tt>-1</tt> if there is no column at the
+     * given x-coordinate.
      */
     public int getHeaderAt(int x) {
-        TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin)getSkin();
+        TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin) getSkin();
         return tableViewHeaderSkin.getHeaderAt(x);
     }
 
     /**
      * Returns the bounding area of a given header.
-     *
-     * @param index
-     * The index of the header.
-     *
-     * @return
-     * The bounding area of the header.
+     * 
+     * @param index The index of the header.
+     * @return The bounding area of the header.
      */
     public Bounds getHeaderBounds(int index) {
-        TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin)getSkin();
+        TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin) getSkin();
         return tableViewHeaderSkin.getHeaderBounds(index);
     }
 

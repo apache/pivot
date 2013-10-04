@@ -31,10 +31,10 @@ import org.apache.pivot.wtk.effects.Decorator;
 /**
  * Abstract base class for containers.
  */
-public abstract class Container extends Component
-    implements Sequence<Component>, Iterable<Component> {
-    private static class ContainerListenerList extends WTKListenerList<ContainerListener>
-        implements ContainerListener {
+public abstract class Container extends Component implements Sequence<Component>,
+    Iterable<Component> {
+    private static class ContainerListenerList extends WTKListenerList<ContainerListener> implements
+        ContainerListener {
         @Override
         public void componentInserted(Container container, int index) {
             for (ContainerListener listener : this) {
@@ -106,7 +106,8 @@ public abstract class Container extends Component
             boolean consumed = false;
 
             for (ContainerMouseListener listener : this) {
-                consumed |= listener.mouseWheel(container, scrollType, scrollAmount, wheelRotation, x, y);
+                consumed |= listener.mouseWheel(container, scrollType, scrollAmount, wheelRotation,
+                    x, y);
             }
 
             return consumed;
@@ -147,8 +148,7 @@ public abstract class Container extends Component
             throw new IllegalArgumentException("component is null.");
         }
 
-        if (component instanceof Container
-            && ((Container)component).isAncestor(this)) {
+        if (component instanceof Container && ((Container) component).isAncestor(this)) {
             throw new IllegalArgumentException("Component already exists in ancestry.");
         }
 
@@ -219,7 +219,7 @@ public abstract class Container extends Component
 
     /**
      * Moves a component within the component sequence.
-     *
+     * 
      * @param from
      * @param to
      */
@@ -271,8 +271,7 @@ public abstract class Container extends Component
     protected void setParent(Container parent) {
         // If this container is being removed from the component hierarchy
         // and contains the focused component, clear the focus
-        if (parent == null
-            && containsFocus()) {
+        if (parent == null && containsFocus()) {
             clearFocus();
         }
 
@@ -307,9 +306,8 @@ public abstract class Container extends Component
         Component component = getComponentAt(x, y);
 
         if (component instanceof Container) {
-            Container container = (Container)component;
-            component = container.getDescendantAt(x - container.getX(),
-                y - container.getY());
+            Container container = (Container) component;
+            component = container.getDescendantAt(x - container.getX(), y - container.getY());
         }
 
         if (component == null) {
@@ -338,8 +336,7 @@ public abstract class Container extends Component
 
     @Override
     public void setVisible(boolean visible) {
-        if (!visible
-            && containsFocus()) {
+        if (!visible && containsFocus()) {
             clearFocus();
         }
 
@@ -365,12 +362,12 @@ public abstract class Container extends Component
             if (doubleBufferImage == null) {
                 GraphicsConfiguration gc = graphics.getDeviceConfiguration();
                 doubleBufferImage = gc.createCompatibleImage(getWidth(), getHeight(),
-                        Transparency.OPAQUE);
+                    Transparency.OPAQUE);
                 doubleBufferedRepaintRequired = true;
                 freshImage = true;
             }
 
-            Graphics2D bufferedImageGraphics = (Graphics2D)doubleBufferImage.getGraphics();
+            Graphics2D bufferedImageGraphics = (Graphics2D) doubleBufferImage.getGraphics();
             try {
                 if (doubleBufferedRepaintRequired) {
                     if (!freshImage) {
@@ -403,8 +400,7 @@ public abstract class Container extends Component
         for (int i = 0; i < count; i++) {
             Component component = get(i);
 
-            if (component.isVisible()
-                && component.isOpaque()
+            if (component.isVisible() && component.isOpaque()
                 && component.getBounds().contains(paintBounds)) {
                 paintContainer = false;
                 break;
@@ -415,7 +411,7 @@ public abstract class Container extends Component
             // Give the base method a copy of the graphics context; otherwise,
             // container skins can change the graphics state before it is passed
             // to subcomponents
-            Graphics2D containerGraphics = (Graphics2D)graphics.create();
+            Graphics2D containerGraphics = (Graphics2D) graphics.create();
             super.paint(containerGraphics);
             containerGraphics.dispose();
         }
@@ -428,13 +424,12 @@ public abstract class Container extends Component
 
             // Only paint components that are visible and intersect the
             // current clip rectangle
-            if (component.isVisible()
-                && decoratedBounds.intersects(paintBounds)) {
+            if (component.isVisible() && decoratedBounds.intersects(paintBounds)) {
                 Bounds componentBounds = component.getBounds();
 
                 // Create a copy of the current graphics context and
                 // translate to the component's coordinate system
-                Graphics2D decoratedGraphics = (Graphics2D)graphics.create();
+                Graphics2D decoratedGraphics = (Graphics2D) graphics.create();
                 decoratedGraphics.translate(componentBounds.x, componentBounds.y);
 
                 // Prepare the decorators
@@ -446,7 +441,7 @@ public abstract class Container extends Component
                 }
 
                 // Paint the component
-                Graphics2D componentGraphics = (Graphics2D)decoratedGraphics.create();
+                Graphics2D componentGraphics = (Graphics2D) decoratedGraphics.create();
                 componentGraphics.clipRect(0, 0, componentBounds.width, componentBounds.height);
                 component.paint(componentGraphics);
                 componentGraphics.dispose();
@@ -463,38 +458,34 @@ public abstract class Container extends Component
     /**
      * Tests if this container is an ancestor of a given component. A container
      * is considered to be its own ancestor.
-     *
-     * @param component
-     * The component to test.
-     *
-     * @return
-     * <tt>true</tt> if this container is an ancestor of <tt>component</tt>;
-     * <tt>false</tt> otherwise.
+     * 
+     * @param component The component to test.
+     * @return <tt>true</tt> if this container is an ancestor of
+     * <tt>component</tt>; <tt>false</tt> otherwise.
      */
     public boolean isAncestor(Component component) {
         boolean ancestor = false;
 
         Component parent = component;
         while (parent != null) {
-           if (parent == this) {
-              ancestor = true;
-              break;
-           }
+            if (parent == this) {
+                ancestor = true;
+                break;
+            }
 
-           parent = parent.getParent();
+            parent = parent.getParent();
         }
 
         return ancestor;
-     }
+    }
 
     /**
      * Requests that focus be given to this container. If this container is not
      * focusable, this requests that focus be set to the first focusable
      * descendant in this container.
-     *
-     * @return
-     * The component that got the focus, or <tt>null</tt> if the focus request
-     * was denied
+     * 
+     * @return The component that got the focus, or <tt>null</tt> if the focus
+     * request was denied
      */
     @Override
     public boolean requestFocus() {
@@ -504,12 +495,13 @@ public abstract class Container extends Component
             focused = super.requestFocus();
         } else {
             if (focusTraversalPolicy != null) {
-                Component first = focusTraversalPolicy.getNextComponent(this, null, FocusTraversalDirection.FORWARD);
+                Component first = focusTraversalPolicy.getNextComponent(this, null,
+                    FocusTraversalDirection.FORWARD);
 
                 Component component = first;
-                while (component != null
-                    && !component.requestFocus()) {
-                    component = focusTraversalPolicy.getNextComponent(this, component, FocusTraversalDirection.FORWARD);
+                while (component != null && !component.requestFocus()) {
+                    component = focusTraversalPolicy.getNextComponent(this, component,
+                        FocusTraversalDirection.FORWARD);
 
                     // Ensure that we don't get into an infinite loop
                     if (component == first) {
@@ -526,12 +518,9 @@ public abstract class Container extends Component
 
     /**
      * Transfers focus to the next focusable component.
-     *
-     * @param component
-     * The component from which focus will be transferred.
-     *
-     * @param direction
-     * The direction in which to transfer focus.
+     * 
+     * @param component The component from which focus will be transferred.
+     * @param direction The direction in which to transfer focus.
      */
     public Component transferFocus(Component component, FocusTraversalDirection direction) {
         Component componentUpdated = component;
@@ -540,20 +529,20 @@ public abstract class Container extends Component
             componentUpdated = transferFocus(direction);
         } else {
             do {
-                componentUpdated = focusTraversalPolicy.getNextComponent(this, componentUpdated, direction);
+                componentUpdated = focusTraversalPolicy.getNextComponent(this, componentUpdated,
+                    direction);
 
                 if (componentUpdated != null) {
                     if (componentUpdated.isFocusable()) {
                         componentUpdated.requestFocus();
                     } else {
                         if (componentUpdated instanceof Container) {
-                            Container container = (Container)componentUpdated;
+                            Container container = (Container) componentUpdated;
                             componentUpdated = container.transferFocus(null, direction);
                         }
                     }
                 }
-            } while (componentUpdated != null
-                && !componentUpdated.isFocused());
+            } while (componentUpdated != null && !componentUpdated.isFocused());
 
             if (componentUpdated == null) {
                 // We are at the end of the traversal
@@ -573,9 +562,9 @@ public abstract class Container extends Component
 
     /**
      * Sets this container's focus traversal policy.
-     *
-     * @param focusTraversalPolicy
-     * The focus traversal policy to use with this container.
+     * 
+     * @param focusTraversalPolicy The focus traversal policy to use with this
+     * container.
      */
     public void setFocusTraversalPolicy(FocusTraversalPolicy focusTraversalPolicy) {
         FocusTraversalPolicy previousFocusTraversalPolicy = this.focusTraversalPolicy;
@@ -589,15 +578,13 @@ public abstract class Container extends Component
     /**
      * Tests whether this container is an ancestor of the currently focused
      * component.
-     *
-     * @return
-     * <tt>true</tt> if a component is focused and this container is an
+     * 
+     * @return <tt>true</tt> if a component is focused and this container is an
      * ancestor of the component; <tt>false</tt>, otherwise.
      */
     public boolean containsFocus() {
         Component focusedComponent = getFocusedComponent();
-        return (focusedComponent != null
-            && isAncestor(focusedComponent));
+        return (focusedComponent != null && isAncestor(focusedComponent));
     }
 
     protected void descendantAdded(Component descendant) {
@@ -634,7 +621,7 @@ public abstract class Container extends Component
 
     /**
      * Propagates binding to subcomponents.
-     *
+     * 
      * @param context
      */
     @Override
@@ -646,7 +633,7 @@ public abstract class Container extends Component
 
     /**
      * Propagates binding to subcomponents.
-     *
+     * 
      * @param context
      */
     @Override
@@ -673,8 +660,7 @@ public abstract class Container extends Component
         // Clear the mouse over component if its mouse-over state has
         // changed (e.g. if its enabled or visible properties have
         // changed)
-        if (mouseOverComponent != null
-            && !mouseOverComponent.isMouseOver()) {
+        if (mouseOverComponent != null && !mouseOverComponent.isMouseOver()) {
             mouseOverComponent = null;
         }
 
@@ -706,8 +692,7 @@ public abstract class Container extends Component
 
                 // Propagate event to subcomponents
                 if (component != null) {
-                    consumed = component.mouseMove(x - component.getX(),
-                        y - component.getY());
+                    consumed = component.mouseMove(x - component.getX(), y - component.getY());
                 }
 
                 // Notify the base class
@@ -723,8 +708,7 @@ public abstract class Container extends Component
     @Override
     protected void mouseOut() {
         // Ensure that mouse out is called on descendant components
-        if (mouseOverComponent != null
-            && mouseOverComponent.isMouseOver()) {
+        if (mouseOverComponent != null && mouseOverComponent.isMouseOver()) {
             mouseOverComponent.mouseOut();
         }
 
@@ -798,8 +782,7 @@ public abstract class Container extends Component
                         component.mouseOver();
                     }
 
-                    consumed = component.mouseUp(button, x - component.getX(),
-                        y - component.getY());
+                    consumed = component.mouseUp(button, x - component.getX(), y - component.getY());
                 }
 
                 // Notify the base class
@@ -808,13 +791,10 @@ public abstract class Container extends Component
                 }
 
                 // Synthesize mouse click event
-                if (mouseDown
-                    && component != null
-                    && component == mouseDownComponent
-                    && component.isEnabled()
-                    && component.isVisible()) {
-                    mouseClickConsumed = component.mouseClick(button, x - component.getX(),
-                        y - component.getY(), mouseClickCount);
+                if (mouseDown && component != null && component == mouseDownComponent
+                    && component.isEnabled() && component.isVisible()) {
+                    mouseClickConsumed = component.mouseClick(button, x - component.getX(), y
+                        - component.getY(), mouseClickCount);
                 }
             }
         }
@@ -837,8 +817,8 @@ public abstract class Container extends Component
     }
 
     @Override
-    protected boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount,
-        int wheelRotation, int x, int y) {
+    protected boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount, int wheelRotation,
+        int x, int y) {
         boolean consumed = false;
 
         if (isEnabled()) {
@@ -856,8 +836,8 @@ public abstract class Container extends Component
                         component.mouseOver();
                     }
 
-                    consumed = component.mouseWheel(scrollType, scrollAmount, wheelRotation,
-                        x - component.getX(), y - component.getY());
+                    consumed = component.mouseWheel(scrollType, scrollAmount, wheelRotation, x
+                        - component.getX(), y - component.getY());
                 }
 
                 // Notify the base class
@@ -900,13 +880,13 @@ public abstract class Container extends Component
     }
 
     public void setDoubleBuffered(boolean b) {
-       doubleBuffering = b;
-       if (b) {
-           invalidate();
-       } else {
-           doubleBufferImage = null;
-           doubleBufferedRepaintRequired = false;
-       }
+        doubleBuffering = b;
+        if (b) {
+            invalidate();
+        } else {
+            doubleBufferImage = null;
+            doubleBufferedRepaintRequired = false;
+        }
     }
 
     public ListenerList<ContainerListener> getContainerListeners() {
@@ -929,8 +909,9 @@ public abstract class Container extends Component
         @Override
         public void check(Component component) {
             String threadName = Thread.currentThread().getName();
-            /* Currently, application startup happens on the main thread, so we need to allow
-             * that thread to modify WTK state.
+            /*
+             * Currently, application startup happens on the main thread, so we
+             * need to allow that thread to modify WTK state.
              */
             if (threadName.equals("main") || threadName.equals("javawsApplicationMain")) {
                 return;
@@ -940,15 +921,17 @@ public abstract class Container extends Component
                 return;
             }
             /*
-             * See Sun/Oracle bug 6424157. There is a race condition where we can be running on the event thread
-             * but isDispatchThread() will return false.
+             * See Sun/Oracle bug 6424157. There is a race condition where we
+             * can be running on the event thread but isDispatchThread() will
+             * return false.
              */
             if (threadName.startsWith("AWT-EventQueue-")) {
                 return;
             }
             if (!java.awt.EventQueue.isDispatchThread()) {
-                throw new IllegalStateException("this method can only be called from the AWT event dispatch thread"
-                    + ", and not from \"" + threadName + "\"");
+                throw new IllegalStateException(
+                    "this method can only be called from the AWT event dispatch thread"
+                        + ", and not from \"" + threadName + "\"");
             }
         }
     };

@@ -31,25 +31,21 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * A file browser sheet that uses the Apache Commons VFS (Virtual File System)
- * to be able to browse local and remote file systems, and browse inside
- * of .zip, .tar, etc. archives as well.
+ * to be able to browse local and remote file systems, and browse inside of
+ * .zip, .tar, etc. archives as well.
  */
 public class VFSBrowserSheet extends Sheet {
     /**
      * Enumeration defining supported modes.
      */
     public enum Mode {
-        OPEN,
-        OPEN_MULTIPLE,
-        SAVE_AS,
-        SAVE_TO
+        OPEN, OPEN_MULTIPLE, SAVE_AS, SAVE_TO
     }
 
     private static final String USER_HOME = System.getProperty("user.home");
 
-    private static class FileBrowserSheetListenerList
-        extends WTKListenerList<VFSBrowserSheetListener>
-        implements VFSBrowserSheetListener {
+    private static class FileBrowserSheetListenerList extends
+        WTKListenerList<VFSBrowserSheetListener> implements VFSBrowserSheetListener {
         @Override
         public void managerChanged(VFSBrowserSheet fileBrowserSheet,
             FileSystemManager previousManager) {
@@ -59,8 +55,7 @@ public class VFSBrowserSheet extends Sheet {
         }
 
         @Override
-        public void modeChanged(VFSBrowserSheet fileBrowserSheet,
-            VFSBrowserSheet.Mode previousMode) {
+        public void modeChanged(VFSBrowserSheet fileBrowserSheet, VFSBrowserSheet.Mode previousMode) {
             for (VFSBrowserSheetListener listener : this) {
                 listener.modeChanged(fileBrowserSheet, previousMode);
             }
@@ -86,8 +81,7 @@ public class VFSBrowserSheet extends Sheet {
         public void disabledFileFilterChanged(VFSBrowserSheet fileBrowserSheet,
             Filter<FileObject> previousDisabledFileFilter) {
             for (VFSBrowserSheetListener listener : this) {
-                listener.disabledFileFilterChanged(fileBrowserSheet,
-                    previousDisabledFileFilter);
+                listener.disabledFileFilterChanged(fileBrowserSheet, previousDisabledFileFilter);
             }
         }
     }
@@ -102,68 +96,48 @@ public class VFSBrowserSheet extends Sheet {
     private FileBrowserSheetListenerList fileBrowserSheetListeners = new FileBrowserSheetListenerList();
 
     /**
-     * Creates a new VFSBrowserSheet
-     * <p>
-     * Note that this version set by default mode to open and user home as root folder.
+     * Creates a new VFSBrowserSheet <p> Note that this version set by default
+     * mode to open and user home as root folder.
      */
-    public VFSBrowserSheet()
-            throws FileSystemException
-    {
+    public VFSBrowserSheet() throws FileSystemException {
         this(Mode.OPEN);
     }
 
     /**
-     * Creates a new VFSBrowserSheet
-     * <p>
-     * Note that this version set by default the user home as root folder.
-     *
-     * @param mode
-     * The mode for opening the sheet.
+     * Creates a new VFSBrowserSheet <p> Note that this version set by default
+     * the user home as root folder.
+     * 
+     * @param mode The mode for opening the sheet.
      * @see Mode
      */
-    public VFSBrowserSheet(Mode mode)
-            throws FileSystemException
-    {
+    public VFSBrowserSheet(Mode mode) throws FileSystemException {
         this(mode, USER_HOME);
     }
 
     /**
-     * Creates a new VFSBrowserSheet
-     * <p>
-     * Note that this version of the constructor must be used when a custom root folder has to be set.
-     *
-     * @param mode
-     * The mode for opening the sheet.
+     * Creates a new VFSBrowserSheet <p> Note that this version of the
+     * constructor must be used when a custom root folder has to be set.
+     * 
+     * @param mode The mode for opening the sheet.
      * @see Mode
-     *
-     * @param rootFolder
-     * The root folder full name.
+     * @param rootFolder The root folder full name.
      */
-    public VFSBrowserSheet(Mode mode, String rootFolder)
-            throws FileSystemException
-    {
+    public VFSBrowserSheet(Mode mode, String rootFolder) throws FileSystemException {
         this(null, mode, rootFolder);
     }
 
     /**
-     * Creates a new VFSBrowserSheet
-     * <p>
-     * Note that this version of the constructor must be used when a custom root folder has to be set.
-     *
-     * @param manager
-     * The VFS FileSystemManager that we will be browsing.  If <tt>null</tt> the default (local) will
-     * be used.
-     *
-     * @param mode
-     * The mode for opening the sheet.
+     * Creates a new VFSBrowserSheet <p> Note that this version of the
+     * constructor must be used when a custom root folder has to be set.
+     * 
+     * @param manager The VFS FileSystemManager that we will be browsing. If
+     * <tt>null</tt> the default (local) will be used.
+     * @param mode The mode for opening the sheet.
      * @see Mode
-     *
-     * @param rootFolder
-     * The root folder full name.
+     * @param rootFolder The root folder full name.
      */
     public VFSBrowserSheet(FileSystemManager manager, Mode mode, String rootFolder)
-            throws FileSystemException
-    {
+        throws FileSystemException {
         if (mode == null) {
             throw new IllegalArgumentException("Mode is null.");
         }
@@ -185,9 +159,7 @@ public class VFSBrowserSheet extends Sheet {
         return manager;
     }
 
-    public void setManager(FileSystemManager manager)
-            throws FileSystemException
-    {
+    public void setManager(FileSystemManager manager) throws FileSystemException {
         FileSystemManager previousManager = this.manager;
 
         if (manager == null) {
@@ -231,9 +203,7 @@ public class VFSBrowserSheet extends Sheet {
     }
 
     // set the root folder but without firing events
-    public void setRootFolder(String rootFolder)
-             throws FileSystemException
-    {
+    public void setRootFolder(String rootFolder) throws FileSystemException {
         if (rootFolder == null) {
             throw new IllegalArgumentException("Root folder is null.");
         }
@@ -250,15 +220,11 @@ public class VFSBrowserSheet extends Sheet {
 
     }
 
-    public void setRootDirectory(String rootDirectory)
-            throws FileSystemException
-    {
+    public void setRootDirectory(String rootDirectory) throws FileSystemException {
         setRootDirectory(manager.resolveFile(rootDirectory));
     }
 
-    public void setRootDirectory(FileObject rootDirectory)
-            throws FileSystemException
-    {
+    public void setRootDirectory(FileObject rootDirectory) throws FileSystemException {
         if (rootDirectory == null) {
             throw new IllegalArgumentException("Root file is null.");
         }
@@ -287,9 +253,8 @@ public class VFSBrowserSheet extends Sheet {
 
     /**
      * When in single-select mode, returns the currently selected file.
-     *
-     * @return
-     * The currently selected file.
+     * 
+     * @return The currently selected file.
      */
     public FileObject getSelectedFile() {
         if (mode == Mode.OPEN_MULTIPLE) {
@@ -301,17 +266,15 @@ public class VFSBrowserSheet extends Sheet {
 
     /**
      * Sets the selection to a single file.
-     *
+     * 
      * @param file
      */
-    public void setSelectedFile(FileObject file)
-            throws FileSystemException
-    {
+    public void setSelectedFile(FileObject file) throws FileSystemException {
         if (file == null) {
             clearSelection();
         } else {
             // TODO: will this work right?
-            //if (file.isAbsolute()) {
+            // if (file.isAbsolute()) {
             if (baseFileName != null && baseFileName.isAncestor(file.getName())) {
                 setRootDirectory(file.getParent());
             }
@@ -322,11 +285,11 @@ public class VFSBrowserSheet extends Sheet {
 
     /**
      * Returns the currently selected files.
-     *
-     * @return
-     * An immutable list containing the currently selected files. Note that the returned
-     * list is a wrapper around the actual selection, not a copy. Any changes made to the
-     * selection state will be reflected in the list, but events will not be fired.
+     * 
+     * @return An immutable list containing the currently selected files. Note
+     * that the returned list is a wrapper around the actual selection, not a
+     * copy. Any changes made to the selection state will be reflected in the
+     * list, but events will not be fired.
      */
     public ImmutableList<FileObject> getSelectedFiles() {
         return new ImmutableList<>(selectedFiles);
@@ -334,22 +297,17 @@ public class VFSBrowserSheet extends Sheet {
 
     /**
      * Sets the selected files.
-     *
-     * @param selectedFiles
-     * The files to select.
-     *
-     * @return
-     * The files that were selected, with duplicates eliminated.
+     * 
+     * @param selectedFiles The files to select.
+     * @return The files that were selected, with duplicates eliminated.
      */
     public Sequence<FileObject> setSelectedFiles(Sequence<FileObject> selectedFiles)
-            throws FileSystemException
-    {
+        throws FileSystemException {
         if (selectedFiles == null) {
             throw new IllegalArgumentException("selectedFiles is null.");
         }
 
-        if (mode != Mode.OPEN_MULTIPLE
-            && selectedFiles.getLength() > 1) {
+        if (mode != Mode.OPEN_MULTIPLE && selectedFiles.getLength() > 1) {
             throw new IllegalArgumentException("Multi-select is not enabled.");
         }
 
@@ -365,13 +323,14 @@ public class VFSBrowserSheet extends Sheet {
             }
 
             // TODO: is this correct?
-            //if (!file.isAbsolute()) {
+            // if (!file.isAbsolute()) {
             if (baseFileName == null || !baseFileName.isAncestor(file.getName())) {
                 file = manager.resolveFile(rootDirectory, file.getName().getBaseName());
             }
 
             if (!file.getParent().equals(rootDirectory)) {
-                throw new IllegalArgumentException("Selected file doesn't appear to belong to the current directory.");
+                throw new IllegalArgumentException(
+                    "Selected file doesn't appear to belong to the current directory.");
             }
 
             fileList.add(file);
@@ -388,9 +347,7 @@ public class VFSBrowserSheet extends Sheet {
     /**
      * Clears the selection.
      */
-    public void clearSelection()
-            throws FileSystemException
-    {
+    public void clearSelection() throws FileSystemException {
         setSelectedFiles(new ArrayList<FileObject>());
     }
 

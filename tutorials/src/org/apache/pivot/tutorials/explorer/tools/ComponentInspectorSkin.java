@@ -65,7 +65,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     public void install(Component component) {
         super.install(component);
 
-        ComponentInspector componentInspector = (ComponentInspector)component;
+        ComponentInspector componentInspector = (ComponentInspector) component;
 
         componentInspector.getComponentInspectorListeners().add(this);
         componentInspector.add(form);
@@ -102,25 +102,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     /**
      * Adds a new control component to the specified form section. The component
      * will control the specified property.
-     *
-     * @param dictionary
-     * The property dictionary
-     *
-     * @param key
-     * The property key
-     *
-     * @param type
-     * The type of the property
-     *
-     * @param section
-     * The form section
-     *
-     * @throws IllegalArgumentException
-     * If the form section does not belong to this skin's form
+     * 
+     * @param dictionary The property dictionary
+     * @param key The property key
+     * @param type The type of the property
+     * @param section The form section
+     * @throws IllegalArgumentException If the form section does not belong to
+     * this skin's form
      */
     @SuppressWarnings("unchecked")
-    protected void addControl(Dictionary<String, Object> dictionary, String key,
-        Class<?> type, Form.Section section) {
+    protected void addControl(Dictionary<String, Object> dictionary, String key, Class<?> type,
+        Form.Section section) {
         if (section.getForm() != form) {
             throw new IllegalArgumentException("section does not belong to form.");
         }
@@ -138,7 +130,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         } else if (type == String.class) {
             control = addStringControl(dictionary, key, section);
         } else if (type.isEnum()) {
-            control = addEnumControl(dictionary, key, (Class<? extends Enum<?>>)type, section);
+            control = addEnumControl(dictionary, key, (Class<? extends Enum<?>>) type, section);
         } else if (type == Point.class) {
             control = addPointControl(dictionary, key, section);
         } else if (type == Dimensions.class) {
@@ -178,15 +170,10 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     /**
      * Updates the control component associated with the specified property to
      * the appropriate state based on the property value.
-     *
-     * @param dictionary
-     * The property dictionary
-     *
-     * @param key
-     * The property key
-     *
-     * @param type
-     * The type of the property
+     * 
+     * @param dictionary The property dictionary
+     * @param key The property key
+     * @param type The type of the property
      */
     protected void updateControl(Dictionary<String, Object> dictionary, String key, Class<?> type) {
         if (type == Boolean.TYPE) {
@@ -220,7 +207,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private Component addBooleanControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        boolean value = (Boolean)dictionary.get(key);
+        boolean value = (Boolean) dictionary.get(key);
 
         Checkbox checkbox = new Checkbox();
         checkbox.setSelected(value);
@@ -250,17 +237,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updateBooleanControl(Dictionary<String, Object> dictionary, String key) {
-        Checkbox checkbox = (Checkbox)controls.get(key);
+        Checkbox checkbox = (Checkbox) controls.get(key);
 
         if (checkbox != null) {
-            boolean value = (Boolean)dictionary.get(key);
+            boolean value = (Boolean) dictionary.get(key);
             checkbox.setSelected(value);
         }
     }
 
     private static Component addIntControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        int value = (Integer)dictionary.get(key);
+        int value = (Integer) dictionary.get(key);
 
         TextInput textInput = new TextInput();
         textInput.setTextSize(10);
@@ -274,13 +261,13 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
+                    TextInput textInputLocal = (TextInput) component;
 
                     try {
                         dictionary.put(key, Integer.parseInt(textInputLocal.getText()));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        int valueLocal = (Integer)dictionary.get(key);
+                        int valueLocal = (Integer) dictionary.get(key);
                         textInputLocal.setText(String.valueOf(valueLocal));
                     }
                 }
@@ -291,17 +278,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updateIntControl(Dictionary<String, Object> dictionary, String key) {
-        TextInput textInput = (TextInput)controls.get(key);
+        TextInput textInput = (TextInput) controls.get(key);
 
         if (textInput != null) {
-            int value = (Integer)dictionary.get(key);
+            int value = (Integer) dictionary.get(key);
             textInput.setText(String.valueOf(value));
         }
     }
 
     private static Component addFloatControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        float value = (Float)dictionary.get(key);
+        float value = (Float) dictionary.get(key);
 
         TextInput textInput = new TextInput();
         textInput.setTextSize(10);
@@ -314,13 +301,13 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
+                    TextInput textInputLocal = (TextInput) component;
 
                     try {
                         dictionary.put(key, Float.parseFloat(textInputLocal.getText()));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        float valueLocal = (Float)dictionary.get(key);
+                        float valueLocal = (Float) dictionary.get(key);
                         textInputLocal.setText(String.valueOf(valueLocal));
                     }
                 }
@@ -331,17 +318,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updateFloatControl(Dictionary<String, Object> dictionary, String key) {
-        TextInput textInput = (TextInput)controls.get(key);
+        TextInput textInput = (TextInput) controls.get(key);
 
         if (textInput != null) {
-            float value = (Float)dictionary.get(key);
+            float value = (Float) dictionary.get(key);
             textInput.setText(String.valueOf(value));
         }
     }
 
     private static Component addDoubleControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        double value = (Double)dictionary.get(key);
+        double value = (Double) dictionary.get(key);
 
         TextInput textInput = new TextInput();
         textInput.setTextSize(14);
@@ -354,13 +341,13 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
+                    TextInput textInputLocal = (TextInput) component;
 
                     try {
                         dictionary.put(key, Double.parseDouble(textInputLocal.getText()));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        double valueLocal = (Double)dictionary.get(key);
+                        double valueLocal = (Double) dictionary.get(key);
                         textInputLocal.setText(String.valueOf(valueLocal));
                     }
                 }
@@ -371,17 +358,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updateDoubleControl(Dictionary<String, Object> dictionary, String key) {
-        TextInput textInput = (TextInput)controls.get(key);
+        TextInput textInput = (TextInput) controls.get(key);
 
         if (textInput != null) {
-            double value = (Double)dictionary.get(key);
+            double value = (Double) dictionary.get(key);
             textInput.setText(String.valueOf(value));
         }
     }
 
     private static Component addStringControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        String value = (String)dictionary.get(key);
+        String value = (String) dictionary.get(key);
 
         TextInput textInput = new TextInput();
         textInput.setText(value == null ? "" : value);
@@ -392,13 +379,13 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
+                    TextInput textInputLocal = (TextInput) component;
 
                     try {
                         dictionary.put(key, textInputLocal.getText());
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        String valueLocal = (String)dictionary.get(key);
+                        String valueLocal = (String) dictionary.get(key);
                         textInputLocal.setText(valueLocal == null ? "" : valueLocal);
                     }
                 }
@@ -409,17 +396,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updateStringControl(Dictionary<String, Object> dictionary, String key) {
-        TextInput textInput = (TextInput)controls.get(key);
+        TextInput textInput = (TextInput) controls.get(key);
 
         if (textInput != null) {
-            String value = (String)dictionary.get(key);
+            String value = (String) dictionary.get(key);
             textInput.setText(value == null ? "" : value);
         }
     }
 
-    private Component addEnumControl(final Dictionary<String, Object> dictionary,
-        final String key, Class<? extends Enum<?>> type, Form.Section section) {
-        Enum<?> value = (Enum<?>)dictionary.get(key);
+    private Component addEnumControl(final Dictionary<String, Object> dictionary, final String key,
+        Class<? extends Enum<?>> type, Form.Section section) {
+        Enum<?> value = (Enum<?>) dictionary.get(key);
 
         ArrayList<Object> listData = new ArrayList<>();
         listData.add(null);
@@ -439,7 +426,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             private boolean updating = false;
 
             @Override
-            public void selectedIndexChanged(ListButton listButtonArgument, int previousSelectedIndex) {
+            public void selectedIndexChanged(ListButton listButtonArgument,
+                int previousSelectedIndex) {
                 if (!updating) {
                     updating = true;
                     try {
@@ -458,17 +446,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updateEnumControl(Dictionary<String, Object> dictionary, String key) {
-        ListButton listButton = (ListButton)controls.get(key);
+        ListButton listButton = (ListButton) controls.get(key);
 
         if (listButton != null) {
-            Enum<?> value = (Enum<?>)dictionary.get(key);
+            Enum<?> value = (Enum<?>) dictionary.get(key);
             listButton.setSelectedItem(value);
         }
     }
 
     private static Component addPointControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        Point point = (Point)dictionary.get(key);
+        Point point = (Point) dictionary.get(key);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
         section.add(boxPane);
@@ -490,8 +478,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Point pointLocal = (Point)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Point pointLocal = (Point) dictionary.get(key);
 
                     try {
                         int x = Integer.parseInt(textInputLocal.getText());
@@ -524,8 +512,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Point pointLocal = (Point)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Point pointLocal = (Point) dictionary.get(key);
 
                     try {
                         int y = Integer.parseInt(textInputLocal.getText());
@@ -546,13 +534,13 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updatePointControl(Dictionary<String, Object> dictionary, String key) {
-        BoxPane boxPane = (BoxPane)controls.get(key);
+        BoxPane boxPane = (BoxPane) controls.get(key);
 
         if (boxPane != null) {
-            Point point = (Point)dictionary.get(key);
+            Point point = (Point) dictionary.get(key);
 
-            TextInput xTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
-            TextInput yTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
+            TextInput xTextInput = (TextInput) ((FlowPane) boxPane.get(0)).get(0);
+            TextInput yTextInput = (TextInput) ((FlowPane) boxPane.get(1)).get(0);
 
             xTextInput.setText(String.valueOf(point.x));
             yTextInput.setText(String.valueOf(point.y));
@@ -561,7 +549,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private static Component addDimensionsControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        Dimensions dimensions = (Dimensions)dictionary.get(key);
+        Dimensions dimensions = (Dimensions) dictionary.get(key);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
         section.add(boxPane);
@@ -583,8 +571,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Dimensions dimensionsLocal = (Dimensions)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Dimensions dimensionsLocal = (Dimensions) dictionary.get(key);
 
                     try {
                         int width = Integer.parseInt(textInputLocal.getText());
@@ -617,8 +605,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Dimensions dimensionsLocal = (Dimensions)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Dimensions dimensionsLocal = (Dimensions) dictionary.get(key);
 
                     try {
                         int height = Integer.parseInt(textInputLocal.getText());
@@ -639,13 +627,13 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updateDimensionsControl(Dictionary<String, Object> dictionary, String key) {
-        BoxPane boxPane = (BoxPane)controls.get(key);
+        BoxPane boxPane = (BoxPane) controls.get(key);
 
         if (boxPane != null) {
-            Dimensions dimensions = (Dimensions)dictionary.get(key);
+            Dimensions dimensions = (Dimensions) dictionary.get(key);
 
-            TextInput widthTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
-            TextInput heightTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
+            TextInput widthTextInput = (TextInput) ((FlowPane) boxPane.get(0)).get(0);
+            TextInput heightTextInput = (TextInput) ((FlowPane) boxPane.get(1)).get(0);
 
             widthTextInput.setText(String.valueOf(dimensions.width));
             heightTextInput.setText(String.valueOf(dimensions.height));
@@ -654,7 +642,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private static Component addLimitsControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        Limits limits = (Limits)dictionary.get(key);
+        Limits limits = (Limits) dictionary.get(key);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
         section.add(boxPane);
@@ -676,8 +664,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Limits limitsLocal = (Limits)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Limits limitsLocal = (Limits) dictionary.get(key);
 
                     try {
                         int min = Integer.parseInt(textInputLocal.getText());
@@ -710,8 +698,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Limits limitsLocal = (Limits)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Limits limitsLocal = (Limits) dictionary.get(key);
 
                     try {
                         int max = Integer.parseInt(textInputLocal.getText());
@@ -732,13 +720,13 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updateLimitsControl(Dictionary<String, Object> dictionary, String key) {
-        BoxPane boxPane = (BoxPane)controls.get(key);
+        BoxPane boxPane = (BoxPane) controls.get(key);
 
         if (boxPane != null) {
-            Limits limits = (Limits)dictionary.get(key);
+            Limits limits = (Limits) dictionary.get(key);
 
-            TextInput minTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
-            TextInput maxTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
+            TextInput minTextInput = (TextInput) ((FlowPane) boxPane.get(0)).get(0);
+            TextInput maxTextInput = (TextInput) ((FlowPane) boxPane.get(1)).get(0);
 
             minTextInput.setText(String.valueOf(limits.minimum));
             maxTextInput.setText(String.valueOf(limits.maximum));
@@ -747,7 +735,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private static Component addInsetsControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        Insets insets = (Insets)dictionary.get(key);
+        Insets insets = (Insets) dictionary.get(key);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
         section.add(boxPane);
@@ -769,8 +757,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Insets insetsLocal = (Insets)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Insets insetsLocal = (Insets) dictionary.get(key);
 
                     try {
                         int top = Integer.parseInt(textInputLocal.getText());
@@ -804,8 +792,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Insets insetsLocal = (Insets)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Insets insetsLocal = (Insets) dictionary.get(key);
 
                     try {
                         int left = Integer.parseInt(textInputLocal.getText());
@@ -839,8 +827,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Insets insetsLocal = (Insets)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Insets insetsLocal = (Insets) dictionary.get(key);
 
                     try {
                         int bottom = Integer.parseInt(textInputLocal.getText());
@@ -874,13 +862,13 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Insets insetsLocal = (Insets)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Insets insetsLocal = (Insets) dictionary.get(key);
 
                     try {
                         int right = Integer.parseInt(textInputLocal.getText());
-                        dictionary.put(key, new Insets(insetsLocal.top, insetsLocal.left, insetsLocal.bottom,
-                            right));
+                        dictionary.put(key, new Insets(insetsLocal.top, insetsLocal.left,
+                            insetsLocal.bottom, right));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
                         textInputLocal.setText(String.valueOf(insetsLocal.right));
@@ -898,7 +886,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private static Component addSpanControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        Span span = (Span)dictionary.get(key);
+        Span span = (Span) dictionary.get(key);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
         section.add(boxPane);
@@ -920,15 +908,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Span spanLocal = (Span)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Span spanLocal = (Span) dictionary.get(key);
 
                     try {
                         int start = Integer.parseInt(textInputLocal.getText());
-                        dictionary.put(key, new Span(start, spanLocal == null ? start : spanLocal.end));
+                        dictionary.put(key, new Span(start, spanLocal == null ? start
+                            : spanLocal.end));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInputLocal.setText(spanLocal == null ? "" : String.valueOf(spanLocal.start));
+                        textInputLocal.setText(spanLocal == null ? ""
+                            : String.valueOf(spanLocal.start));
                     }
                 }
             }
@@ -954,15 +944,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Span spanLocal = (Span)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Span spanLocal = (Span) dictionary.get(key);
 
                     try {
                         int end = Integer.parseInt(textInputLocal.getText());
-                        dictionary.put(key, new Span(spanLocal == null ? end : spanLocal.start, end));
+                        dictionary.put(key,
+                            new Span(spanLocal == null ? end : spanLocal.start, end));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInputLocal.setText(spanLocal == null ? "" : String.valueOf(spanLocal.end));
+                        textInputLocal.setText(spanLocal == null ? ""
+                            : String.valueOf(spanLocal.end));
                     }
                 }
             }
@@ -976,13 +968,13 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updateSpanControl(Dictionary<String, Object> dictionary, String key) {
-        BoxPane boxPane = (BoxPane)controls.get(key);
+        BoxPane boxPane = (BoxPane) controls.get(key);
 
         if (boxPane != null) {
-            Span span = (Span)dictionary.get(key);
+            Span span = (Span) dictionary.get(key);
 
-            TextInput startTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
-            TextInput endTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
+            TextInput startTextInput = (TextInput) ((FlowPane) boxPane.get(0)).get(0);
+            TextInput endTextInput = (TextInput) ((FlowPane) boxPane.get(1)).get(0);
 
             startTextInput.setText(span == null ? "" : String.valueOf(span.start));
             endTextInput.setText(span == null ? "" : String.valueOf(span.end));
@@ -991,7 +983,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private static Component addCornerRadiiControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        CornerRadii cornerRadii = (CornerRadii)dictionary.get(key);
+        CornerRadii cornerRadii = (CornerRadii) dictionary.get(key);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
         section.add(boxPane);
@@ -1013,8 +1005,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    CornerRadii cornerRadiiLocal = (CornerRadii)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    CornerRadii cornerRadiiLocal = (CornerRadii) dictionary.get(key);
 
                     try {
                         int topLeft = Integer.parseInt(textInputLocal.getText());
@@ -1048,8 +1040,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    CornerRadii cornerRadiiLocal = (CornerRadii)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    CornerRadii cornerRadiiLocal = (CornerRadii) dictionary.get(key);
 
                     try {
                         int topRight = Integer.parseInt(textInputLocal.getText());
@@ -1083,8 +1075,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    CornerRadii cornerRadiiLocal = (CornerRadii)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    CornerRadii cornerRadiiLocal = (CornerRadii) dictionary.get(key);
 
                     try {
                         int bottomLeft = Integer.parseInt(textInputLocal.getText());
@@ -1118,8 +1110,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    CornerRadii cornerRadiiLocal = (CornerRadii)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    CornerRadii cornerRadiiLocal = (CornerRadii) dictionary.get(key);
 
                     try {
                         int bottomRight = Integer.parseInt(textInputLocal.getText());
@@ -1142,7 +1134,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private static Component addScopeControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        Scope scope = (Scope)dictionary.get(key);
+        Scope scope = (Scope) dictionary.get(key);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
         section.add(boxPane);
@@ -1164,16 +1156,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Scope scopeLocal = (Scope)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Scope scopeLocal = (Scope) dictionary.get(key);
 
                     try {
                         int start = Integer.parseInt(textInputLocal.getText());
-                        dictionary.put(key, new Scope(start, scopeLocal == null ? start : scopeLocal.end,
-                            scopeLocal == null ? start : scopeLocal.extent));
+                        dictionary.put(key, new Scope(start, scopeLocal == null ? start
+                            : scopeLocal.end, scopeLocal == null ? start : scopeLocal.extent));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInputLocal.setText(scopeLocal == null ? "" : String.valueOf(scopeLocal.start));
+                        textInputLocal.setText(scopeLocal == null ? ""
+                            : String.valueOf(scopeLocal.start));
                     }
                 }
             }
@@ -1199,16 +1192,17 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Scope scopeLocal = (Scope)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Scope scopeLocal = (Scope) dictionary.get(key);
 
                     try {
                         int end = Integer.parseInt(textInputLocal.getText());
-                        dictionary.put(key, new Scope(scopeLocal == null ? end : scopeLocal.start, end,
-                            scopeLocal == null ? end : scopeLocal.extent));
+                        dictionary.put(key, new Scope(scopeLocal == null ? end : scopeLocal.start,
+                            end, scopeLocal == null ? end : scopeLocal.extent));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInputLocal.setText(scopeLocal == null ? "" : String.valueOf(scopeLocal.end));
+                        textInputLocal.setText(scopeLocal == null ? ""
+                            : String.valueOf(scopeLocal.end));
                     }
                 }
             }
@@ -1234,16 +1228,18 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
-                    TextInput textInputLocal = (TextInput)component;
-                    Scope scopeLocal = (Scope)dictionary.get(key);
+                    TextInput textInputLocal = (TextInput) component;
+                    Scope scopeLocal = (Scope) dictionary.get(key);
 
                     try {
                         int extent = Integer.parseInt(textInputLocal.getText());
-                        dictionary.put(key, new Scope(scopeLocal == null ? extent : scopeLocal.start,
-                            scopeLocal == null ? extent : scopeLocal.end, extent));
+                        dictionary.put(key, new Scope(scopeLocal == null ? extent
+                            : scopeLocal.start, scopeLocal == null ? extent : scopeLocal.end,
+                            extent));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        textInputLocal.setText(scopeLocal == null ? "" : String.valueOf(scopeLocal.extent));
+                        textInputLocal.setText(scopeLocal == null ? ""
+                            : String.valueOf(scopeLocal.extent));
                     }
                 }
             }
@@ -1257,14 +1253,14 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     }
 
     private void updateScopeControl(Dictionary<String, Object> dictionary, String key) {
-        BoxPane boxPane = (BoxPane)controls.get(key);
+        BoxPane boxPane = (BoxPane) controls.get(key);
 
         if (boxPane != null) {
-            Scope scope = (Scope)dictionary.get(key);
+            Scope scope = (Scope) dictionary.get(key);
 
-            TextInput startTextInput = (TextInput)((FlowPane)boxPane.get(0)).get(0);
-            TextInput endTextInput = (TextInput)((FlowPane)boxPane.get(1)).get(0);
-            TextInput extentTextInput = (TextInput)((FlowPane)boxPane.get(2)).get(0);
+            TextInput startTextInput = (TextInput) ((FlowPane) boxPane.get(0)).get(0);
+            TextInput endTextInput = (TextInput) ((FlowPane) boxPane.get(1)).get(0);
+            TextInput extentTextInput = (TextInput) ((FlowPane) boxPane.get(2)).get(0);
 
             startTextInput.setText(scope == null ? "" : String.valueOf(scope.start));
             endTextInput.setText(scope == null ? "" : String.valueOf(scope.end));
@@ -1274,42 +1270,42 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private static Component addColorControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        Color color = (Color)dictionary.get(key);
+        Color color = (Color) dictionary.get(key);
 
         ColorChooserButton colorChooserButton = new ColorChooserButton();
         colorChooserButton.setSelectedColor(color);
         section.add(colorChooserButton);
         Form.setLabel(colorChooserButton, key);
 
-        colorChooserButton.getColorChooserButtonSelectionListeners().add
-            (new ColorChooserButtonSelectionListener() {
-            @Override
-            public void selectedColorChanged(ColorChooserButton colorChooserButtonArgument,
-                Color previousSelectedColor) {
-                try {
-                    dictionary.put(key, colorChooserButtonArgument.getSelectedColor());
-                } catch (Exception exception) {
-                    displayErrorMessage(exception, colorChooserButtonArgument.getWindow());
-                    dictionary.put(key, previousSelectedColor);
+        colorChooserButton.getColorChooserButtonSelectionListeners().add(
+            new ColorChooserButtonSelectionListener() {
+                @Override
+                public void selectedColorChanged(ColorChooserButton colorChooserButtonArgument,
+                    Color previousSelectedColor) {
+                    try {
+                        dictionary.put(key, colorChooserButtonArgument.getSelectedColor());
+                    } catch (Exception exception) {
+                        displayErrorMessage(exception, colorChooserButtonArgument.getWindow());
+                        dictionary.put(key, previousSelectedColor);
+                    }
                 }
-            }
-        });
+            });
 
         return colorChooserButton;
     }
 
     private void updateColorControl(Dictionary<String, Object> dictionary, String key) {
-        ColorChooserButton colorChooserButton = (ColorChooserButton)controls.get(key);
+        ColorChooserButton colorChooserButton = (ColorChooserButton) controls.get(key);
 
         if (colorChooserButton != null) {
-            Color value = (Color)dictionary.get(key);
+            Color value = (Color) dictionary.get(key);
             colorChooserButton.setSelectedColor(value);
         }
     }
 
     private static Component addCalendarDateControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        CalendarDate calendarDate = (CalendarDate)dictionary.get(key);
+        CalendarDate calendarDate = (CalendarDate) dictionary.get(key);
 
         CalendarButton calendarButton = new CalendarButton();
         calendarButton.setMinimumWidth(75);
@@ -1317,28 +1313,28 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         section.add(calendarButton);
         Form.setLabel(calendarButton, key);
 
-        calendarButton.getCalendarButtonSelectionListeners().add
-            (new CalendarButtonSelectionListener() {
-            @Override
-            public void selectedDateChanged(CalendarButton calendarButtonArgument,
-                CalendarDate previousSelectedDate) {
-                try {
-                    dictionary.put(key, calendarButtonArgument.getSelectedDate());
-                } catch (Exception exception) {
-                    displayErrorMessage(exception, calendarButtonArgument.getWindow());
-                    dictionary.put(key, previousSelectedDate);
+        calendarButton.getCalendarButtonSelectionListeners().add(
+            new CalendarButtonSelectionListener() {
+                @Override
+                public void selectedDateChanged(CalendarButton calendarButtonArgument,
+                    CalendarDate previousSelectedDate) {
+                    try {
+                        dictionary.put(key, calendarButtonArgument.getSelectedDate());
+                    } catch (Exception exception) {
+                        displayErrorMessage(exception, calendarButtonArgument.getWindow());
+                        dictionary.put(key, previousSelectedDate);
+                    }
                 }
-            }
-        });
+            });
 
         return calendarButton;
     }
 
     private void updateCalendarDateControl(Dictionary<String, Object> dictionary, String key) {
-        CalendarButton calendarButton = (CalendarButton)controls.get(key);
+        CalendarButton calendarButton = (CalendarButton) controls.get(key);
 
         if (calendarButton != null) {
-            CalendarDate value = (CalendarDate)dictionary.get(key);
+            CalendarDate value = (CalendarDate) dictionary.get(key);
             calendarButton.setSelectedDate(value);
         }
     }

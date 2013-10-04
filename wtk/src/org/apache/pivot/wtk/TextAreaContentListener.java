@@ -32,7 +32,8 @@ public interface TextAreaContentListener {
         }
 
         @Override
-        public void paragraphsRemoved(TextArea textArea, int index, Sequence<TextArea.Paragraph> removed) {
+        public void paragraphsRemoved(TextArea textArea, int index,
+            Sequence<TextArea.Paragraph> removed) {
             // empty block
         }
 
@@ -45,35 +46,26 @@ public interface TextAreaContentListener {
     /**
      * Called when a paragraph has been inserted into a text area's paragraph
      * sequence.
-     *
-     * @param textArea
-     * The source of the event.
-     *
-     * @param index
-     * The index at which the paragraph was inserted.
+     * 
+     * @param textArea The source of the event.
+     * @param index The index at which the paragraph was inserted.
      */
     public void paragraphInserted(TextArea textArea, int index);
 
     /**
      * Called when paragraphs have been removed from a text area's paragraph
      * sequence.
-     *
-     * @param textArea
-     * The source of the event.
-     *
-     * @param index
-     * The starting index from which the paragraphs were removed.
-     *
-     * @param removed
-     * The paragraphs that were removed.
+     * 
+     * @param textArea The source of the event.
+     * @param index The starting index from which the paragraphs were removed.
+     * @param removed The paragraphs that were removed.
      */
     public void paragraphsRemoved(TextArea textArea, int index, Sequence<TextArea.Paragraph> removed);
 
     /**
      * Called when a text area's text has changed.
-     *
-     * @param textArea
-     * The source of the event.
+     * 
+     * @param textArea The source of the event.
      */
     public void textChanged(TextArea textArea);
 }

@@ -28,10 +28,10 @@ public class FormTest extends Application.Adapter {
     private Frame frame = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        frame = new Frame((Component)bxmlSerializer.readObject(getClass().getResource("form_test.bxml")));
+        frame = new Frame((Component) bxmlSerializer.readObject(getClass().getResource(
+            "form_test.bxml")));
         frame.setTitle("Form Test");
         frame.setPreferredSize(480, 360);
         frame.open(display);

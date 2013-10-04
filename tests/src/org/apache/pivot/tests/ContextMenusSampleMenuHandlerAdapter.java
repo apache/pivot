@@ -57,7 +57,8 @@ public class ContextMenusSampleMenuHandlerAdapter extends MenuHandler.Adapter {
         whatIsThisMenuItem.setAction(new Action() {
             @Override
             public void perform(Component source) {
-                String description = (descendant != null) ? (String)descendant.getUserData().get("description") : "empty";
+                String description = (descendant != null) ? (String) descendant.getUserData().get(
+                    "description") : "empty";
                 String message = "This is a " + description + " description.";
 
                 System.out.println("perform: " + message);

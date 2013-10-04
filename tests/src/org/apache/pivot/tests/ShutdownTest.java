@@ -54,10 +54,10 @@ public class ShutdownTest extends Application.Adapter {
                 @Override
                 public void dialogClosed(Dialog dialog, boolean modal) {
                     if (!(dialog instanceof Alert)) {
-                        return ;
+                        return;
                     }
 
-                    Alert alertLocal = (Alert)dialog;
+                    Alert alertLocal = (Alert) dialog;
                     if (alertLocal.getResult()) {
                         if (alertLocal.getSelectedOptionIndex() == 1) {
                             cancelShutdown = false;

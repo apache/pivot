@@ -37,14 +37,16 @@ public class RowEditorDemo extends Application.Adapter {
         String language = properties.get(LANGUAGE_KEY);
         Locale locale = (language == null) ? Locale.getDefault() : new Locale(language);
         Resources resources = new Resources(RESOURCE_NAME, locale);
-        System.out.println("Loaded Resources from: " + resources.getBaseName() + ", for locale " + locale);
+        System.out.println("Loaded Resources from: " + resources.getBaseName() + ", for locale "
+            + locale);
 
         // Search for a font that can support the sample string
-        String title = (String)resources.get("title");
+        String title = (String) resources.get("title");
         System.out.println("Title from Resources file is: \"" + title + "\"");
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(RowEditorDemo.class.getResource("row_editor_demo.bxml"), resources);
+        window = (Window) bxmlSerializer.readObject(
+            RowEditorDemo.class.getResource("row_editor_demo.bxml"), resources);
         window.open(display);
     }
 

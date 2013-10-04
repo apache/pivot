@@ -23,17 +23,16 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
- * Abstract base class for "actions". Actions are common application
- * behaviors generally triggered by buttons and keyboard shortcuts.
+ * Abstract base class for "actions". Actions are common application behaviors
+ * generally triggered by buttons and keyboard shortcuts.
  */
 public abstract class Action {
     /**
      * Action dictionary implementation.
      */
-    public static final class NamedActionDictionary
-        implements Dictionary<String, Action>, Iterable<String> {
+    public static final class NamedActionDictionary implements Dictionary<String, Action>,
+        Iterable<String> {
         private NamedActionDictionary() {
         }
 
@@ -53,8 +52,7 @@ public abstract class Action {
 
             if (update) {
                 actionClassListeners.actionUpdated(id, previousAction);
-            }
-            else {
+            } else {
                 actionClassListeners.actionAdded(id);
             }
 
@@ -84,8 +82,8 @@ public abstract class Action {
         }
     }
 
-    private static class ActionListenerList extends WTKListenerList<ActionListener>
-        implements ActionListener {
+    private static class ActionListenerList extends WTKListenerList<ActionListener> implements
+        ActionListener {
         @Override
         public void enabledChanged(Action action) {
             for (ActionListener listener : this) {
@@ -118,7 +116,6 @@ public abstract class Action {
         }
     }
 
-
     private boolean enabled = true;
 
     private ActionListenerList actionListeners = new ActionListenerList();
@@ -146,9 +143,8 @@ public abstract class Action {
 
     /**
      * Performs the action.
-     *
-     * @param source
-     * The component that initiated the action.
+     * 
+     * @param source The component that initiated the action.
      */
     public abstract void perform(Component source);
 

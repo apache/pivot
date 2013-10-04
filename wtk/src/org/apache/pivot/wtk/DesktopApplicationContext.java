@@ -41,8 +41,7 @@ import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
 
 /**
- * Application context used to execute applications in a native frame
- * window.
+ * Application context used to execute applications in a native frame window.
  */
 public final class DesktopApplicationContext extends ApplicationContext {
     /**
@@ -66,14 +65,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         /**
          * Called when the host window for secondary display has been opened.
-         *
+         * 
          * @param display
          */
         public void hostWindowOpened(Display display);
 
         /**
          * Called when the host window for secondary display has been closed.
-         *
+         * 
          * @param display
          */
         public void hostWindowClosed(Display display);
@@ -115,7 +114,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 }
 
                 @Override
-                public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+                public void componentsRemoved(Container container, int index,
+                    Sequence<Component> removed) {
                     if (index == container.getLength()) {
                         updateFrameTitleBar();
                     }
@@ -125,8 +125,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 public void componentMoved(Container container, int from, int to) {
                     int n = container.getLength();
 
-                    if (from == n - 1
-                        || to == n - 1) {
+                    if (from == n - 1 || to == n - 1) {
                         updateFrameTitleBar();
                     }
                 }
@@ -141,7 +140,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             if (n == 0) {
                 rootOwnerLocal = null;
             } else {
-                Window topWindow = (Window)display.get(display.getLength() - 1);
+                Window topWindow = (Window) display.get(display.getLength() - 1);
                 rootOwnerLocal = topWindow.getRootOwner();
             }
 
@@ -165,10 +164,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         java.awt.Window hostWindow = getDisplay().getHostWindow();
 
                         if (DesktopDisplayHost.this.rootOwner == null) {
-                            ((TitledWindow)hostWindow).setTitle(DEFAULT_HOST_WINDOW_TITLE);
+                            ((TitledWindow) hostWindow).setTitle(DEFAULT_HOST_WINDOW_TITLE);
                             hostWindow.setIconImage(null);
                         } else {
-                            ((TitledWindow)hostWindow).setTitle(DesktopDisplayHost.this.rootOwner.getTitle());
+                            ((TitledWindow) hostWindow).setTitle(DesktopDisplayHost.this.rootOwner.getTitle());
 
                             java.util.ArrayList<BufferedImage> iconImages = new java.util.ArrayList<>();
                             for (Image icon : DesktopDisplayHost.this.rootOwner.getIcons()) {
@@ -193,10 +192,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
-    // The AWT Window class does not define a title property; this interface allows
+    // The AWT Window class does not define a title property; this interface
+    // allows
     // the HostFrame and HostDialog titles to be handled polymorphically
     private interface TitledWindow {
         public String getTitle();
+
         public void setTitle(String title);
     }
 
@@ -205,8 +206,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         private static final long serialVersionUID = 5340356674429280196L;
 
         public HostFrame() {
-            enableEvents(AWTEvent.WINDOW_EVENT_MASK
-                | AWTEvent.WINDOW_STATE_EVENT_MASK);
+            enableEvents(AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_STATE_EVENT_MASK);
 
             // Disable focus traversal keys
             setFocusTraversalKeysEnabled(false);
@@ -234,7 +234,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         public void processWindowEvent(WindowEvent event) {
             super.processWindowEvent(event);
 
-            switch(event.getID()) {
+            switch (event.getID()) {
                 case WindowEvent.WINDOW_CLOSING: {
                     exit();
                     break;
@@ -253,11 +253,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
         protected void processWindowStateEvent(WindowEvent event) {
             super.processWindowStateEvent(event);
 
-            switch(event.getID()) {
+            switch (event.getID()) {
                 case WindowEvent.WINDOW_ICONIFIED: {
                     try {
                         application.suspend();
-                    } catch(Exception exception) {
+                    } catch (Exception exception) {
                         handleUncaughtException(exception);
                     }
 
@@ -266,7 +266,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 case WindowEvent.WINDOW_DEICONIFIED: {
                     try {
                         application.resume();
-                    } catch(Exception exception) {
+                    } catch (Exception exception) {
                         handleUncaughtException(exception);
                     }
 
@@ -288,8 +288,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
         private DisplayListener displayCloseListener;
 
         public HostDialog(java.awt.Window owner, boolean modal, DisplayListener displayCloseListener) {
-            super(owner, modal ?
-                java.awt.Dialog.ModalityType.APPLICATION_MODAL : java.awt.Dialog.ModalityType.MODELESS);
+            super(owner, modal ? java.awt.Dialog.ModalityType.APPLICATION_MODAL
+                : java.awt.Dialog.ModalityType.MODELESS);
 
             this.displayCloseListener = displayCloseListener;
 
@@ -328,7 +328,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         public void processWindowEvent(WindowEvent event) {
             super.processWindowEvent(event);
 
-            switch(event.getID()) {
+            switch (event.getID()) {
                 case WindowEvent.WINDOW_OPENED: {
                     Display display = this.displayHost.getDisplay();
                     displays.add(display);
@@ -395,8 +395,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     /**
-     * Terminates the application context.
-     * this call is the same as exit(true)
+     * Terminates the application context. this call is the same as exit(true)
      */
     public static void exit() {
         exit(true);
@@ -404,10 +403,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Terminates the application context.
-     *
-     * @param optional
-     * If <tt>true</tt>, shutdown is optional and may be cancelled. If
-     * <tt>false</tt>, shutdown cannot be cancelled.
+     * 
+     * @param optional If <tt>true</tt>, shutdown is optional and may be
+     * cancelled. If <tt>false</tt>, shutdown cannot be cancelled.
      */
     public static boolean exit(boolean optional) {
         boolean cancelShutdown = false;
@@ -415,7 +413,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         if (application != null) {
             try {
                 cancelShutdown = application.shutdown(optional);
-            } catch(Exception exception) {
+            } catch (Exception exception) {
                 handleUncaughtException(exception);
             }
 
@@ -430,8 +428,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
                 preferences = preferences.node(applicationClassName);
 
-                boolean maximized = (windowedHostFrame.getExtendedState()
-                    & java.awt.Frame.MAXIMIZED_BOTH) == java.awt.Frame.MAXIMIZED_BOTH;
+                boolean maximized = (windowedHostFrame.getExtendedState() & java.awt.Frame.MAXIMIZED_BOTH) == java.awt.Frame.MAXIMIZED_BOTH;
                 if (!maximized) {
                     preferences.putInt(X_ARGUMENT, windowedHostFrame.getX());
                     preferences.putInt(Y_ARGUMENT, windowedHostFrame.getY());
@@ -457,7 +454,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Primary application entry point.
-     *
+     * 
      * @param args
      */
     public static void main(String[] args) {
@@ -604,8 +601,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Load the application
         try {
             Class<?> applicationClass = Class.forName(applicationClassName);
-            application = (Application)applicationClass.newInstance();
-        } catch(ClassNotFoundException exception) {
+            application = (Application) applicationClass.newInstance();
+        } catch (ClassNotFoundException exception) {
             exception.printStackTrace();
         } catch (InstantiationException exception) {
             exception.printStackTrace();
@@ -626,7 +623,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
             // Initial configuration of the windows
             setFullScreen(fullScreen, visible);
 
-            // TODO This is a workaround for Java bug #6365898 on Linux (fixed only in Java 7),
+            // TODO This is a workaround for Java bug #6365898 on Linux (fixed
+            // only in Java 7),
             // revisit / remove later when we'll require Java 7
             if (maximized && visible) {
                 windowedHostFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
@@ -638,8 +636,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 @Override
                 public void run() {
                     try {
-                        application.startup(primaryDisplayHost.getDisplay(),
-                            new ImmutableMap<>(properties));
+                        application.startup(primaryDisplayHost.getDisplay(), new ImmutableMap<>(
+                            properties));
                     } catch (Exception exception) {
                         handleUncaughtException(exception);
                     }
@@ -658,32 +656,32 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 Class<?> eawtApplicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
                 Class<?> eawtApplicationEventClass = Class.forName("com.apple.eawt.ApplicationEvent");
 
-                Method setEnabledAboutMenuMethod = eawtApplicationClass.getMethod("setEnabledAboutMenu",
-                    new Class<?>[] {Boolean.TYPE});
+                Method setEnabledAboutMenuMethod = eawtApplicationClass.getMethod(
+                    "setEnabledAboutMenu", new Class<?>[] { Boolean.TYPE });
 
-                Method addApplicationListenerMethod = eawtApplicationClass.getMethod("addApplicationListener",
-                    new Class<?>[] {eawtApplicationListenerClass});
+                Method addApplicationListenerMethod = eawtApplicationClass.getMethod(
+                    "addApplicationListener", new Class<?>[] { eawtApplicationListenerClass });
 
                 final Method setHandledMethod = eawtApplicationEventClass.getMethod("setHandled",
-                    new Class<?>[] {Boolean.TYPE});
+                    new Class<?>[] { Boolean.TYPE });
 
                 // Create the proxy handler
                 InvocationHandler handler = new InvocationHandler() {
-                @Override
+                    @Override
                     public Object invoke(Object proxy, Method method, Object[] args)
                         throws Throwable {
                         boolean handled = true;
 
                         String methodName = method.getName();
-                        if (methodName.equals("handleAbout"))  {
-                            Application.AboutHandler aboutHandler = (Application.AboutHandler)application;
+                        if (methodName.equals("handleAbout")) {
+                            Application.AboutHandler aboutHandler = (Application.AboutHandler) application;
                             aboutHandler.aboutRequested();
                         } else if (methodName.equals("handleQuit")) {
                             handled = !exit(true);
                         }
 
                         // Invoke setHandled()
-                        setHandledMethod.invoke(args[0], new Object[] {handled});
+                        setHandledMethod.invoke(args[0], new Object[] { handled });
 
                         return null;
                     }
@@ -694,12 +692,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 setEnabledAboutMenuMethod.invoke(eawtApplication,
                     application instanceof Application.AboutHandler);
 
-                Object eawtApplicationListener =
-                    Proxy.newProxyInstance(DesktopApplicationContext.class.getClassLoader(),
-                        new Class<?>[]{eawtApplicationListenerClass}, handler);
+                Object eawtApplicationListener = Proxy.newProxyInstance(
+                    DesktopApplicationContext.class.getClassLoader(),
+                    new Class<?>[] { eawtApplicationListenerClass }, handler);
 
-                // Invoke the addApplicationListener() method with the proxy listener
-                addApplicationListenerMethod.invoke(eawtApplication, new Object[] {eawtApplicationListener});
+                // Invoke the addApplicationListener() method with the proxy
+                // listener
+                addApplicationListenerMethod.invoke(eawtApplication,
+                    new Object[] { eawtApplicationListener });
             } catch (Throwable throwable) {
                 System.err.println("Unable to attach EAWT hooks: " + throwable);
             }
@@ -715,7 +715,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Sets the full-screen mode flag.
-     *
+     * 
      * @param fullScreen
      */
     public static void setFullScreen(boolean fullScreen) {
@@ -771,7 +771,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * its UI and the SplashScreen is ready to be dismissed, but can be safely
      * called regardless of whether there is now, or used to be, a visible
      * SplashScreen.
-     *
+     * 
      * @param display Display to make visible
      * @see java.awt.SplashScreen
      */
@@ -786,7 +786,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Sizes the window's native host frame to match its preferred size.
-     *
+     * 
      * @param window
      */
     public static void sizeHostToFit(Window window) {
@@ -801,13 +801,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
         Dimensions size = window.getPreferredSize();
         java.awt.Window hostWindow = window.getDisplay().getHostWindow();
         java.awt.Insets frameInsets = hostWindow.getInsets();
-        hostWindow.setSize(size.width + (frameInsets.left + frameInsets.right),
-            size.height + (frameInsets.top + frameInsets.bottom));
+        hostWindow.setSize(size.width + (frameInsets.left + frameInsets.right), size.height
+            + (frameInsets.top + frameInsets.bottom));
     }
 
     /**
      * Creates a new secondary display.
-     *
+     * 
      * @param width
      * @param height
      * @param x
@@ -828,7 +828,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
         hostDialog.setResizable(resizable);
         hostDialog.setUndecorated(undecorated);
 
-        // Open the window in a callback; otherwise, if it is modal, it will block the
+        // Open the window in a callback; otherwise, if it is modal, it will
+        // block the
         // calling thread
         ApplicationContext.queueCallback(new Runnable() {
             @Override
@@ -842,16 +843,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Utility method to make it easier to define <tt>main()</tt> entry-points
-     * into applications. For example:
-     *
-     * <code>
-     * public class MyApp implements Application {
-     *   public static void main(String[] args) throws Exception {
-     *     DesktopApplicationContext.main(MyApp.class, args);
-     *   }
-     * }
-     * </code>
-     *
+     * into applications. For example: <code> public class MyApp implements
+     * Application { public static void main(String[] args) throws Exception {
+     * DesktopApplicationContext.main(MyApp.class, args); } } </code>
+     * 
      * @param applicationClass
      * @param applicationArgs
      */

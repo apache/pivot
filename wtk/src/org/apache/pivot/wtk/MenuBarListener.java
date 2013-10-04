@@ -44,7 +44,7 @@ public interface MenuBarListener {
 
     /**
      * Called when a menu bar item has been inserted.
-     *
+     * 
      * @param menuBar
      * @param index
      */
@@ -52,7 +52,7 @@ public interface MenuBarListener {
 
     /**
      * Called when menu bar items have been removed.
-     *
+     * 
      * @param menuBar
      * @param index
      * @param removed
@@ -61,7 +61,7 @@ public interface MenuBarListener {
 
     /**
      * Called when a menu bar's active item has changed.
-     *
+     * 
      * @param menuBar
      * @param previousActiveItem
      */

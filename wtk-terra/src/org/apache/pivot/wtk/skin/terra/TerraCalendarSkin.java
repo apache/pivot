@@ -100,7 +100,7 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         @Override
         public int getPreferredWidth(int height) {
-            DateButton dateButton = (DateButton)getComponent();
+            DateButton dateButton = (DateButton) getComponent();
 
             int preferredWidth = 0;
 
@@ -116,7 +116,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         public int getPreferredHeight(int width) {
             int preferredHeight = 0;
 
-            DateButton dateButton = (DateButton)getComponent();
+            DateButton dateButton = (DateButton) getComponent();
 
             Button.DataRenderer dataRenderer = dateButton.getDataRenderer();
             dataRenderer.render(dateButton.getButtonData(), dateButton, false);
@@ -128,28 +128,28 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         @Override
         public Dimensions getPreferredSize() {
-            DateButton dateButton = (DateButton)getComponent();
+            DateButton dateButton = (DateButton) getComponent();
 
             Button.DataRenderer dataRenderer = dateButton.getDataRenderer();
             dataRenderer.render(dateButton.getButtonData(), dateButton, false);
 
             Dimensions preferredSize = dataRenderer.getPreferredSize();
 
-            return new Dimensions(preferredSize.width + padding * 2,
-                preferredSize.height + padding * 2);
+            return new Dimensions(preferredSize.width + padding * 2, preferredSize.height + padding
+                * 2);
         }
 
         @Override
         public void paint(Graphics2D graphics) {
-            DateButton dateButton = (DateButton)getComponent();
+            DateButton dateButton = (DateButton) getComponent();
 
             int width = getWidth();
             int height = getHeight();
 
             // Paint the background
             if (dateButton.isSelected()) {
-                graphics.setPaint(new GradientPaint(width / 2f, 0, selectionBevelColor,
-                    width / 2f, height, selectionBackgroundColor));
+                graphics.setPaint(new GradientPaint(width / 2f, 0, selectionBevelColor, width / 2f,
+                    height, selectionBackgroundColor));
 
                 graphics.fillRect(0, 0, width, height);
             } else {
@@ -160,7 +160,7 @@ public class TerraCalendarSkin extends CalendarSkin {
             }
 
             // Paint a border if this button represents today
-            CalendarDate date = (CalendarDate)dateButton.getButtonData();
+            CalendarDate date = (CalendarDate) dateButton.getButtonData();
             if (date.equals(today)) {
                 graphics.setColor(dividerColor);
                 GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
@@ -203,7 +203,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         public void mouseOver(Component component) {
             super.mouseOver(component);
 
-            Calendar calendar = (Calendar)TerraCalendarSkin.this.getComponent();
+            Calendar calendar = (Calendar) TerraCalendarSkin.this.getComponent();
 
             if (calendar.containsFocus()) {
                 component.requestFocus();
@@ -214,7 +214,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             boolean consumed = super.mouseClick(component, button, x, y, count);
 
-            DateButton dateButton = (DateButton)getComponent();
+            DateButton dateButton = (DateButton) getComponent();
             dateButton.requestFocus();
             dateButton.press();
 
@@ -231,17 +231,15 @@ public class TerraCalendarSkin extends CalendarSkin {
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
-            DateButton dateButton = (DateButton)getComponent();
+            DateButton dateButton = (DateButton) getComponent();
 
             if (keyCode == Keyboard.KeyCode.ENTER) {
                 dateButton.press();
-            } else if (keyCode == Keyboard.KeyCode.UP
-                || keyCode == Keyboard.KeyCode.DOWN
-                || keyCode == Keyboard.KeyCode.LEFT
-                || keyCode == Keyboard.KeyCode.RIGHT) {
-                CalendarDate date = (CalendarDate)dateButton.getButtonData();
+            } else if (keyCode == Keyboard.KeyCode.UP || keyCode == Keyboard.KeyCode.DOWN
+                || keyCode == Keyboard.KeyCode.LEFT || keyCode == Keyboard.KeyCode.RIGHT) {
+                CalendarDate date = (CalendarDate) dateButton.getButtonData();
 
-                Calendar calendar = (Calendar)TerraCalendarSkin.this.getComponent();
+                Calendar calendar = (Calendar) TerraCalendarSkin.this.getComponent();
                 int cellIndex = getCellIndex(date.year, date.month, date.day, calendar.getLocale());
                 int rowIndex = cellIndex / 7;
                 int columnIndex = cellIndex % 7;
@@ -327,10 +325,11 @@ public class TerraCalendarSkin extends CalendarSkin {
          * {@link KeyCode#SPACE SPACE} 'presses' the button.
          */
         @Override
-        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyReleased(Component component, int keyCode,
+            Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
-            DateButton dateButton = (DateButton)getComponent();
+            DateButton dateButton = (DateButton) getComponent();
 
             if (keyCode == Keyboard.KeyCode.SPACE) {
                 dateButton.press();
@@ -346,10 +345,11 @@ public class TerraCalendarSkin extends CalendarSkin {
     public class MonthSpinnerItemRenderer extends SpinnerItemRenderer {
         @Override
         public void render(Object item, Spinner spinner) {
-            Calendar calendar = (Calendar)getComponent();
+            Calendar calendar = (Calendar) getComponent();
 
-            // Since we're only rendering the month, the year and day do not matter here
-            CalendarDate date = new CalendarDate(2000, (Integer)item, 0);
+            // Since we're only rendering the month, the year and day do not
+            // matter here
+            CalendarDate date = new CalendarDate(2000, (Integer) item, 0);
 
             SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", calendar.getLocale());
             Object itemFromFormat = monthFormat.format(date.toCalendar().getTime());
@@ -361,7 +361,7 @@ public class TerraCalendarSkin extends CalendarSkin {
     private static class DateButtonDataRenderer extends ButtonDataRenderer {
         @Override
         public void render(Object data, Button button, boolean highlighted) {
-            CalendarDate date = (CalendarDate)data;
+            CalendarDate date = (CalendarDate) data;
             super.render(date.day + 1, button, highlighted);
 
             if (button.isSelected()) {
@@ -396,7 +396,7 @@ public class TerraCalendarSkin extends CalendarSkin {
     private Color selectionBevelColor;
 
     public TerraCalendarSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -424,8 +424,8 @@ public class TerraCalendarSkin extends CalendarSkin {
         monthSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener.Adapter() {
             @Override
             public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
-                Calendar calendar = (Calendar)getComponent();
-                calendar.setMonth((Integer)spinner.getSelectedItem());
+                Calendar calendar = (Calendar) getComponent();
+                calendar.setMonth((Integer) spinner.getSelectedItem());
             }
         });
 
@@ -436,15 +436,16 @@ public class TerraCalendarSkin extends CalendarSkin {
         yearSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener.Adapter() {
             @Override
             public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
-                Calendar calendar = (Calendar)getComponent();
-                calendar.setYear((Integer)spinner.getSelectedItem());
+                Calendar calendar = (Calendar) getComponent();
+                calendar.setYear((Integer) spinner.getSelectedItem());
             }
         });
 
         // Attach a listener to consume mouse clicks
         ComponentMouseButtonListener spinnerMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
             @Override
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
+                int count) {
                 return true;
             }
         };
@@ -492,7 +493,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         dateButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
             @Override
             public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
-                Calendar calendar = (Calendar)getComponent();
+                Calendar calendar = (Calendar) getComponent();
 
                 Button selection = buttonGroup.getSelection();
                 if (selection == null) {
@@ -502,12 +503,11 @@ public class TerraCalendarSkin extends CalendarSkin {
                     // result of the user toggling the date button (as opposed
                     // to changing the month or year), clear the selection
                     if (selectedDate == null
-                        || (selectedDate.year == yearSpinner.getSelectedIndex()
-                            && selectedDate.month == monthSpinner.getSelectedIndex())) {
-                        calendar.setSelectedDate((CalendarDate)null);
+                        || (selectedDate.year == yearSpinner.getSelectedIndex() && selectedDate.month == monthSpinner.getSelectedIndex())) {
+                        calendar.setSelectedDate((CalendarDate) null);
                     }
                 } else {
-                    calendar.setSelectedDate((CalendarDate)selection.getButtonData());
+                    calendar.setSelectedDate((CalendarDate) selection.getButtonData());
                 }
             }
         });
@@ -542,7 +542,7 @@ public class TerraCalendarSkin extends CalendarSkin {
     public void install(Component component) {
         super.install(component);
 
-        Calendar calendar = (Calendar)component;
+        Calendar calendar = (Calendar) component;
         calendar.add(calendarTablePane);
 
         yearSpinner.setSelectedIndex(calendar.getYear());
@@ -584,27 +584,28 @@ public class TerraCalendarSkin extends CalendarSkin {
         int width = getWidth();
         Bounds monthYearRowBounds = calendarTablePane.getRowBounds(0);
         graphics.setColor(highlightBackgroundColor);
-        graphics.fillRect(monthYearRowBounds.x, monthYearRowBounds.y,
-            monthYearRowBounds.width, monthYearRowBounds.height);
+        graphics.fillRect(monthYearRowBounds.x, monthYearRowBounds.y, monthYearRowBounds.width,
+            monthYearRowBounds.height);
 
         Bounds labelRowBounds = calendarTablePane.getRowBounds(1);
 
         graphics.setColor(dividerColor);
         int dividerY = labelRowBounds.y + labelRowBounds.height - 2;
-        GraphicsUtilities.drawLine(graphics, 2, dividerY, Math.max(0, width - 4), Orientation.HORIZONTAL);
+        GraphicsUtilities.drawLine(graphics, 2, dividerY, Math.max(0, width - 4),
+            Orientation.HORIZONTAL);
     }
 
     private void updateLabels() {
         TablePane.Row row = calendarTablePane.getRows().get(1);
 
-        Calendar calendar = (Calendar)getComponent();
+        Calendar calendar = (Calendar) getComponent();
         Locale locale = calendar.getLocale();
         GregorianCalendar gregorianCalendar = new GregorianCalendar(locale);
         SimpleDateFormat monthFormat = new SimpleDateFormat("E", locale);
         int firstDayOfWeek = gregorianCalendar.getFirstDayOfWeek();
 
         for (int i = 0; i < 7; i++) {
-            Label label = (Label)row.get(i);
+            Label label = (Label) row.get(i);
             gregorianCalendar.set(java.util.Calendar.DAY_OF_WEEK, firstDayOfWeek + i);
             String text = monthFormat.format(gregorianCalendar.getTime());
             text = Character.toString(text.charAt(weekdayCharacterIndex));
@@ -613,7 +614,7 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     private void updateCalendar() {
-        Calendar calendar = (Calendar)getComponent();
+        Calendar calendar = (Calendar) getComponent();
         int month = calendar.getMonth();
         int year = calendar.getYear();
 
@@ -626,9 +627,9 @@ public class TerraCalendarSkin extends CalendarSkin {
         Locale locale = calendar.getLocale();
         GregorianCalendar gregorianCalendar = new GregorianCalendar(locale);
         gregorianCalendar.set(year, month, 1);
-        int firstIndex = (7 + gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK)
-            - gregorianCalendar.getFirstDayOfWeek()) % 7;
-        int lastIndex = firstIndex + gregorianCalendar.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+        int firstIndex = (7 + gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK) - gregorianCalendar.getFirstDayOfWeek()) % 7;
+        int lastIndex = firstIndex
+            + gregorianCalendar.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
 
         // Determine the last day of last month
         gregorianCalendar.add(java.util.Calendar.MONTH, -1);
@@ -669,13 +670,12 @@ public class TerraCalendarSkin extends CalendarSkin {
                 CalendarDate buttonData = new CalendarDate(year, month, day);
                 dateButton.setButtonData(buttonData);
                 dateButton.setEnabled(enabled
-                    && (disabledDateFilter == null
-                        || !disabledDateFilter.include(buttonData)));
+                    && (disabledDateFilter == null || !disabledDateFilter.include(buttonData)));
             }
         }
 
         // Show/hide last row
-        CalendarDate lastWeekStartDate = (CalendarDate)dateButtons[5][0].getButtonData();
+        CalendarDate lastWeekStartDate = (CalendarDate) dateButtons[5][0].getButtonData();
         boolean visible = (lastWeekStartDate.month == calendar.getMonth());
         for (Component component : calendarTablePane.getRows().get(7)) {
             component.setVisible(visible);
@@ -686,7 +686,7 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     private void updateSelection(CalendarDate selectedDate) {
-        Calendar calendar = (Calendar)getComponent();
+        Calendar calendar = (Calendar) getComponent();
         Button selection = dateButtonGroup.getSelection();
 
         if (selectedDate == null) {
@@ -697,8 +697,7 @@ public class TerraCalendarSkin extends CalendarSkin {
             int year = selectedDate.year;
             int month = selectedDate.month;
 
-            if (year == calendar.getYear()
-                && month == calendar.getMonth()) {
+            if (year == calendar.getYear() && month == calendar.getMonth()) {
                 int day = selectedDate.day;
 
                 // Update the button group
@@ -707,7 +706,7 @@ public class TerraCalendarSkin extends CalendarSkin {
                 int columnIndex = cellIndex % 7;
 
                 TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
-                DateButton dateButton = (DateButton)row.get(columnIndex);
+                DateButton dateButton = (DateButton) row.get(columnIndex);
                 dateButton.setSelected(true);
             } else {
                 if (selection != null) {
@@ -720,8 +719,7 @@ public class TerraCalendarSkin extends CalendarSkin {
     private static int getCellIndex(int year, int month, int day, Locale locale) {
         GregorianCalendar gregorianCalendar = new GregorianCalendar(locale);
         gregorianCalendar.set(year, month, 1);
-        int firstDay = ((gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK)
-            - gregorianCalendar.getFirstDayOfWeek()) + 7) % 7;
+        int firstDay = ((gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK) - gregorianCalendar.getFirstDayOfWeek()) + 7) % 7;
         int cellIndex = firstDay + day;
 
         return cellIndex;
@@ -743,7 +741,7 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         TablePane.Row row = calendarTablePane.getRows().get(1);
         for (int i = 0; i < 7; i++) {
-            Label label = (Label)row.get(i);
+            Label label = (Label) row.get(i);
             label.getStyles().put("font", font);
         }
 
@@ -957,7 +955,8 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     @Override
-    public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter) {
+    public void disabledDateFilterChanged(Calendar calendar,
+        Filter<CalendarDate> previousDisabledDateFilter) {
         updateCalendar();
     }
 

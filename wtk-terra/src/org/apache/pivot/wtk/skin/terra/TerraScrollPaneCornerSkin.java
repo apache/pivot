@@ -32,7 +32,7 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
     private Color backgroundColor;
 
     public TerraScrollPaneCornerSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         backgroundColor = theme.getColor(11);
     }
 
@@ -88,7 +88,7 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 }

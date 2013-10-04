@@ -61,9 +61,9 @@ public class ScrollBar extends Container {
                 throw new IllegalArgumentException(EXTENT_KEY + " is required.");
             }
 
-            start = (Integer)scope.get(START_KEY);
-            end = (Integer)scope.get(END_KEY);
-            extent = (Integer)scope.get(EXTENT_KEY);
+            start = (Integer) scope.get(START_KEY);
+            end = (Integer) scope.get(END_KEY);
+            extent = (Integer) scope.get(EXTENT_KEY);
         }
 
         @Override
@@ -87,11 +87,10 @@ public class ScrollBar extends Container {
         }
     }
 
-    private static class ScrollBarListenerList extends WTKListenerList<ScrollBarListener>
-        implements ScrollBarListener {
+    private static class ScrollBarListenerList extends WTKListenerList<ScrollBarListener> implements
+        ScrollBarListener {
         @Override
-        public void orientationChanged(ScrollBar scrollBar,
-            Orientation previousOrientation) {
+        public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
             for (ScrollBarListener listener : this) {
                 listener.orientationChanged(scrollBar, previousOrientation);
             }
@@ -101,8 +100,7 @@ public class ScrollBar extends Container {
         public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
             int previousExtent) {
             for (ScrollBarListener listener : this) {
-                listener.scopeChanged(scrollBar, previousStart, previousEnd,
-                    previousExtent);
+                listener.scopeChanged(scrollBar, previousStart, previousEnd, previousExtent);
             }
         }
 
@@ -114,8 +112,7 @@ public class ScrollBar extends Container {
         }
 
         @Override
-        public void blockIncrementChanged(ScrollBar scrollBar,
-            int previousBlockIncrement) {
+        public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement) {
             for (ScrollBarListener listener : this) {
                 listener.blockIncrementChanged(scrollBar, previousBlockIncrement);
             }
@@ -141,8 +138,7 @@ public class ScrollBar extends Container {
     private int blockIncrement = 1;
 
     private ScrollBarListenerList scrollBarListeners = new ScrollBarListenerList();
-    private ScrollBarValueListenerList scrollBarValueListeners =
-        new ScrollBarValueListenerList();
+    private ScrollBarValueListenerList scrollBarValueListeners = new ScrollBarValueListenerList();
 
     public ScrollBar() {
         this(Orientation.HORIZONTAL);
@@ -240,30 +236,26 @@ public class ScrollBar extends Container {
         int previousEnd = this.end;
         int previousExtent = this.extent;
 
-        if (start != previousStart
-            || end != previousEnd
-            || extent != previousExtent) {
+        if (start != previousStart || end != previousEnd || extent != previousExtent) {
             if (start > value) {
-                throw new IllegalArgumentException(String.format
-                    ("start (%d) is greater than value (%d)", start, value));
+                throw new IllegalArgumentException(String.format(
+                    "start (%d) is greater than value (%d)", start, value));
             }
 
             if (extent < 0) {
-                throw new IllegalArgumentException(String.format
-                    ("extent (%d) is negative", extent));
+                throw new IllegalArgumentException(String.format("extent (%d) is negative", extent));
             }
 
             if (end < value + extent) {
-                throw new IllegalArgumentException(String.format
-                    ("end (%d) is less than value (%d) + extent (%d)", end, value, extent));
+                throw new IllegalArgumentException(String.format(
+                    "end (%d) is less than value (%d) + extent (%d)", end, value, extent));
             }
 
             this.start = start;
             this.end = end;
             this.extent = extent;
 
-            scrollBarListeners.scopeChanged(this, previousStart, previousEnd,
-                previousExtent);
+            scrollBarListeners.scopeChanged(this, previousStart, previousEnd, previousExtent);
         }
     }
 
@@ -300,13 +292,13 @@ public class ScrollBar extends Container {
 
         if (value != previousValue) {
             if (value < start) {
-                throw new IllegalArgumentException(String.format
-                    ("value (%d) is less than start (%d)", value, start));
+                throw new IllegalArgumentException(String.format(
+                    "value (%d) is less than start (%d)", value, start));
             }
 
             if (value + extent > end) {
-                throw new IllegalArgumentException(String.format
-                    ("value (%d) + extent (%d) is greater than end (%d)", value, extent, end));
+                throw new IllegalArgumentException(String.format(
+                    "value (%d) + extent (%d) is greater than end (%d)", value, extent, end));
             }
 
             this.value = value;

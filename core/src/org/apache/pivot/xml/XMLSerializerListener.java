@@ -42,7 +42,7 @@ public interface XMLSerializerListener {
 
     /**
      * Called when the serializer has begun reading an element.
-     *
+     * 
      * @param xmlSerializer
      * @param element
      */
@@ -50,14 +50,14 @@ public interface XMLSerializerListener {
 
     /**
      * Called when the serializer has finished reading an element.
-     *
+     * 
      * @param xmlSerializer
      */
     public void endElement(XMLSerializer xmlSerializer);
 
     /**
      * Called when the serializer has read a text node.
-     *
+     * 
      * @param xmlSerializer
      * @param textNode
      */

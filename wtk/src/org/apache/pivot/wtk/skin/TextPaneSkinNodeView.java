@@ -87,8 +87,8 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     }
 
     protected void setSize(int width, int height) {
-        assert(width >= 0);
-        assert(height >= 0);
+        assert (width >= 0);
+        assert (height >= 0);
 
         // Redraw the region formerly occupied by this view
         repaint();
@@ -124,9 +124,9 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     }
 
     /**
-     * Set location of the NodeView relative to the skin component.
-     * This is needed by the ComponentViewNode to correctly position child Component's.
-     *
+     * Set location of the NodeView relative to the skin component. This is
+     * needed by the ComponentViewNode to correctly position child Component's.
+     * 
      * @param skinX the X coordinate in the skin's frame of reference
      * @param skinY the Y coordinate in the skin's frame of reference
      */
@@ -141,8 +141,8 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     }
 
     public void repaint(int xArgument, int yArgument, int widthArgument, int heightArgument) {
-        assert(widthArgument >= 0);
-        assert(heightArgument >= 0);
+        assert (widthArgument >= 0);
+        assert (heightArgument >= 0);
 
         if (parent != null) {
             parent.repaint(xArgument + this.x, yArgument + this.y, widthArgument, heightArgument);
@@ -166,7 +166,8 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     }
 
     public final void layout(int breakWidth) {
-        // reduce the number of layout calculations we need to do by only redoing them if necessary
+        // reduce the number of layout calculations we need to do by only
+        // redoing them if necessary
         if (!valid || previousBreakWidth != breakWidth) {
             childLayout(breakWidth);
             valid = true;
@@ -191,9 +192,14 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     }
 
     public abstract int getInsertionPoint(int xArgument, int yArgument);
-    public abstract int getNextInsertionPoint(int xArgument, int from, TextPane.ScrollDirection direction);
+
+    public abstract int getNextInsertionPoint(int xArgument, int from,
+        TextPane.ScrollDirection direction);
+
     public abstract int getRowAt(int offset);
+
     public abstract int getRowCount();
+
     public abstract Bounds getCharacterBounds(int offset);
 
     @Override

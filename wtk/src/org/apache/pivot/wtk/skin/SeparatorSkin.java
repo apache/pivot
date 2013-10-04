@@ -36,7 +36,6 @@ import org.apache.pivot.wtk.Separator;
 import org.apache.pivot.wtk.SeparatorListener;
 import org.apache.pivot.wtk.Theme;
 
-
 /**
  * Separator skin.
  */
@@ -60,7 +59,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     public void install(Component component) {
         super.install(component);
 
-        Separator separator = (Separator)component;
+        Separator separator = (Separator) component;
         separator.getSeparatorListeners().add(this);
     }
 
@@ -68,14 +67,13 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        Separator separator = (Separator)getComponent();
+        Separator separator = (Separator) getComponent();
         String heading = separator.getHeading();
 
-        if (heading != null
-            && heading.length() > 0) {
+        if (heading != null && heading.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             Rectangle2D headingBounds = font.getStringBounds(heading, fontRenderContext);
-            preferredWidth = (int)Math.ceil(headingBounds.getWidth())
+            preferredWidth = (int) Math.ceil(headingBounds.getWidth())
                 + (padding.left + padding.right);
         }
 
@@ -86,15 +84,15 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = thickness;
 
-        Separator separator = (Separator)getComponent();
+        Separator separator = (Separator) getComponent();
         String heading = separator.getHeading();
 
-        if (heading != null
-            && heading.length() > 0) {
+        if (heading != null && heading.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(heading, fontRenderContext);
-            preferredHeight = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
-                + lm.getLeading()), preferredHeight);
+            preferredHeight = Math.max(
+                (int) Math.ceil(lm.getAscent() + lm.getDescent() + lm.getLeading()),
+                preferredHeight);
         }
 
         preferredHeight += (padding.top + padding.bottom);
@@ -107,17 +105,17 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         int preferredWidth = 0;
         int preferredHeight = thickness;
 
-        Separator separator = (Separator)getComponent();
+        Separator separator = (Separator) getComponent();
         String heading = separator.getHeading();
 
-        if (heading != null
-            && heading.length() > 0) {
+        if (heading != null && heading.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             Rectangle2D headingBounds = font.getStringBounds(heading, fontRenderContext);
             LineMetrics lm = font.getLineMetrics(heading, fontRenderContext);
-            preferredWidth = (int)Math.ceil(headingBounds.getWidth());
-            preferredHeight = Math.max((int)Math.ceil(lm.getAscent() + lm.getDescent()
-                + lm.getLeading()), preferredHeight);
+            preferredWidth = (int) Math.ceil(headingBounds.getWidth());
+            preferredHeight = Math.max(
+                (int) Math.ceil(lm.getAscent() + lm.getDescent() + lm.getLeading()),
+                preferredHeight);
         }
 
         preferredHeight += (padding.top + padding.bottom);
@@ -133,14 +131,13 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
 
     @Override
     public void paint(Graphics2D graphics) {
-        Separator separator = (Separator)getComponent();
+        Separator separator = (Separator) getComponent();
         int width = getWidth();
         int separatorY = padding.top;
 
         String heading = separator.getHeading();
 
-        if (heading != null
-            && heading.length() > 0) {
+        if (heading != null && heading.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(heading, fontRenderContext);
 
@@ -169,8 +166,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * @return
-     * <tt>false</tt>; spacers are not focusable.
+     * @return <tt>false</tt>; spacers are not focusable.
      */
     @Override
     public boolean isFocusable() {
@@ -198,6 +194,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
 
     /**
      * Sets the font used in rendering the Separator's heading
+     * 
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
@@ -210,6 +207,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
 
     /**
      * Sets the font used in rendering the Separator's heading
+     * 
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
@@ -241,7 +239,9 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
 
     /**
      * Sets the color of the Separator's horizontal rule
-     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     * 
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
+     * values recognized by Pivot}.
      */
     public final void setColor(String color) {
         if (color == null) {
@@ -272,7 +272,9 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
 
     /**
      * Sets the color of the text in the heading
-     * @param headingColor Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     * 
+     * @param headingColor Any of the {@linkplain GraphicsUtilities#decodeColor
+     * color values recognized by Pivot}.
      */
     public final void setHeadingColor(String headingColor) {
         if (headingColor == null) {
@@ -312,16 +314,16 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Returns the amount of space surrounding (left/right) the Separator's heading,
-     * and above and below the entire component.
+     * Returns the amount of space surrounding (left/right) the Separator's
+     * heading, and above and below the entire component.
      */
     public Insets getPadding() {
         return padding;
     }
 
     /**
-     * Sets the amount of space to leave around the Separator's heading,
-     * and above and below the entire component.
+     * Sets the amount of space to leave around the Separator's heading, and
+     * above and below the entire component.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -333,9 +335,11 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Sets the amount of space to leave around the Separator's heading,
-     * and above and below the entire component.
-     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     * Sets the amount of space to leave around the Separator's heading, and
+     * above and below the entire component.
+     * 
+     * @param padding A dictionary with keys in the set {left, top, bottom,
+     * right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
@@ -346,16 +350,16 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Sets the amount of space to leave around the Separator's heading,
-     * and above and below the entire component.
+     * Sets the amount of space to leave around the Separator's heading, and
+     * above and below the entire component.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
     /**
-     * Sets the amount of space to leave around the Separator's heading,
-     * and above and below the entire component.
+     * Sets the amount of space to leave around the Separator's heading, and
+     * above and below the entire component.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {
@@ -366,10 +370,11 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Sets the amount of space to leave around the Separator's heading,
-     * and above and below the entire component.
-     * @param padding A string containing an integer or a JSON dictionary with keys
-     * left, top, bottom, and/or right.
+     * Sets the amount of space to leave around the Separator's heading, and
+     * above and below the entire component.
+     * 
+     * @param padding A string containing an integer or a JSON dictionary with
+     * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
         if (padding == null) {

@@ -104,8 +104,10 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
 
         if (component != null) {
             // I have to un-translate the x and y coordinates because the
-            // component is painted by the Container object, and it's co-ordinates
-            // are relative to the Container object, not to the document node hierarchy.
+            // component is painted by the Container object, and it's
+            // co-ordinates
+            // are relative to the Container object, not to the document node
+            // hierarchy.
             component.setLocation(skinX, skinY);
         }
     }

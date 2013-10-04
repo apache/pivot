@@ -24,10 +24,9 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.VerticalAlignment;
 
-
 /**
- * Default spinner item renderer, which renders all items as strings by
- * calling <tt>toString()</tt> on them.
+ * Default spinner item renderer, which renders all items as strings by calling
+ * <tt>toString()</tt> on them.
  */
 public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     public SpinnerItemRenderer() {
@@ -53,14 +52,14 @@ public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     }
 
     protected void renderStyles(Spinner spinner) {
-        Font font = (Font)spinner.getStyles().get("font");
+        Font font = (Font) spinner.getStyles().get("font");
         getStyles().put("font", font);
 
         Color color;
         if (spinner.isEnabled()) {
-            color = (Color)spinner.getStyles().get("color");
+            color = (Color) spinner.getStyles().get("color");
         } else {
-            color = (Color)spinner.getStyles().get("disabledColor");
+            color = (Color) spinner.getStyles().get("disabledColor");
         }
 
         getStyles().put("color", color);

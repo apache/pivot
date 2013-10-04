@@ -30,15 +30,15 @@ public class MemGameButtonData extends ButtonData {
         setDefaultURL();
     }
 
-    public void setDefaultURL(){
+    public void setDefaultURL() {
         this.setIcon(defaultURL);
     }
 
-    public void setButtonURL(){
+    public void setButtonURL() {
         this.setIcon(buttonURL);
     }
 
-    public Image getButtonURL(){
+    public Image getButtonURL() {
         return this.getIcon();
     }
 

@@ -93,21 +93,18 @@ public class FileBrowser extends Container {
     private FileBrowserListenerList fileBrowserListeners = new FileBrowserListenerList();
 
     /**
-     * Creates a new FileBrowser
-     * <p>
-     * Note that this version set by default mode to open.
+     * Creates a new FileBrowser <p> Note that this version set by default mode
+     * to open.
      */
     public FileBrowser() {
         this(USER_HOME);
     }
 
     /**
-     * Creates a new FileBrowser
-     * <p>
-     * Note that this version of the constructor must be used when a custom root folder has to be set.
-     *
-     * @param rootFolder
-     * The root folder full name.
+     * Creates a new FileBrowser <p> Note that this version of the constructor
+     * must be used when a custom root folder has to be set.
+     * 
+     * @param rootFolder The root folder full name.
      */
     public FileBrowser(String rootFolder) {
         if (rootFolder == null) {
@@ -124,9 +121,8 @@ public class FileBrowser extends Container {
 
     /**
      * Returns the current root directory.
-     *
-     * @return
-     * The current root directory.
+     * 
+     * @return The current root directory.
      */
     public File getRootDirectory() {
         return rootDirectory;
@@ -134,12 +130,11 @@ public class FileBrowser extends Container {
 
     /**
      * Sets the root directory. Clears any existing file selection.
-     *
+     * 
      * @param rootDirectory
      */
     public void setRootDirectory(File rootDirectory) {
-        if (rootDirectory == null
-            || !rootDirectory.isDirectory()) {
+        if (rootDirectory == null || !rootDirectory.isDirectory()) {
             throw new IllegalArgumentException();
         }
 
@@ -158,12 +153,10 @@ public class FileBrowser extends Container {
 
     /**
      * Adds a file to the file selection.
-     *
+     * 
      * @param file
-     *
-     * @return
-     * <tt>true</tt> if the file was added; <tt>false</tt> if it was already
-     * selected.
+     * @return <tt>true</tt> if the file was added; <tt>false</tt> if it was
+     * already selected.
      */
     public boolean addSelectedFile(final File file) {
         if (file == null) {
@@ -189,12 +182,10 @@ public class FileBrowser extends Container {
 
     /**
      * Removes a file from the file selection.
-     *
+     * 
      * @param file
-     *
-     * @return
-     * <tt>true</tt> if the file was removed; <tt>false</tt> if it was not
-     * already selected.
+     * @return <tt>true</tt> if the file was removed; <tt>false</tt> if it was
+     * not already selected.
      */
     public boolean removeSelectedFile(File file) {
         if (file == null) {
@@ -211,9 +202,8 @@ public class FileBrowser extends Container {
 
     /**
      * When in single-select mode, returns the currently selected file.
-     *
-     * @return
-     * The currently selected file.
+     * 
+     * @return The currently selected file.
      */
     public File getSelectedFile() {
         if (multiSelect) {
@@ -225,7 +215,7 @@ public class FileBrowser extends Container {
 
     /**
      * Sets the selection to a single file.
-     *
+     * 
      * @param file
      */
     public void setSelectedFile(File file) {
@@ -242,11 +232,11 @@ public class FileBrowser extends Container {
 
     /**
      * Returns the currently selected files.
-     *
-     * @return
-     * An immutable list containing the currently selected files. Note that the returned
-     * list is a wrapper around the actual selection, not a copy. Any changes made to the
-     * selection state will be reflected in the list, but events will not be fired.
+     * 
+     * @return An immutable list containing the currently selected files. Note
+     * that the returned list is a wrapper around the actual selection, not a
+     * copy. Any changes made to the selection state will be reflected in the
+     * list, but events will not be fired.
      */
     public ImmutableList<File> getSelectedFiles() {
         return new ImmutableList<>(selectedFiles);
@@ -254,20 +244,16 @@ public class FileBrowser extends Container {
 
     /**
      * Sets the selected files.
-     *
-     * @param selectedFiles
-     * The files to select.
-     *
-     * @return
-     * The files that were selected, with duplicates eliminated.
+     * 
+     * @param selectedFiles The files to select.
+     * @return The files that were selected, with duplicates eliminated.
      */
     public Sequence<File> setSelectedFiles(Sequence<File> selectedFiles) {
         if (selectedFiles == null) {
             throw new IllegalArgumentException("selectedFiles is null.");
         }
 
-        if (!multiSelect
-            && selectedFiles.getLength() > 1) {
+        if (!multiSelect && selectedFiles.getLength() > 1) {
             throw new IllegalArgumentException("Multi-select is not enabled.");
         }
 
@@ -321,9 +307,9 @@ public class FileBrowser extends Container {
 
     /**
      * Sets the file browser's multi-select state.
-     *
-     * @param multiSelect
-     * <tt>true</tt> if multi-select is enabled; <tt>false</tt>, otherwise.
+     * 
+     * @param multiSelect <tt>true</tt> if multi-select is enabled;
+     * <tt>false</tt>, otherwise.
      */
     public void setMultiSelect(boolean multiSelect) {
         if (this.multiSelect != multiSelect) {
@@ -338,9 +324,8 @@ public class FileBrowser extends Container {
 
     /**
      * Returns the current file filter.
-     *
-     * @return
-     * The current file filter, or <tt>null</tt> if no filter is set.
+     * 
+     * @return The current file filter, or <tt>null</tt> if no filter is set.
      */
     public Filter<File> getDisabledFileFilter() {
         return disabledFileFilter;
@@ -348,9 +333,9 @@ public class FileBrowser extends Container {
 
     /**
      * Sets the file filter.
-     *
-     * @param disabledFileFilter
-     * The file filter to use, or <tt>null</tt> for no filter.
+     * 
+     * @param disabledFileFilter The file filter to use, or <tt>null</tt> for no
+     * filter.
      */
     public void setDisabledFileFilter(Filter<File> disabledFileFilter) {
         Filter<File> previousDisabledFileFilter = this.disabledFileFilter;
@@ -362,7 +347,7 @@ public class FileBrowser extends Container {
     }
 
     public File getFileAt(int x, int y) {
-        FileBrowser.Skin fileBrowserSkin = (FileBrowser.Skin)getSkin();
+        FileBrowser.Skin fileBrowserSkin = (FileBrowser.Skin) getSkin();
         return fileBrowserSkin.getFileAt(x, y);
     }
 

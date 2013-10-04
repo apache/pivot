@@ -22,8 +22,8 @@ import org.apache.pivot.util.ListenerList;
  * Abstract base class for XML nodes.
  */
 public abstract class Node {
-    private static class NodeListenerList extends ListenerList<NodeListener>
-        implements NodeListener {
+    private static class NodeListenerList extends ListenerList<NodeListener> implements
+        NodeListener {
         @Override
         public void parentChanged(Node node, Element previousParent) {
             for (NodeListener listener : this) {
@@ -45,7 +45,7 @@ public abstract class Node {
 
     /**
      * Sets the parent element of the node.
-     *
+     * 
      * @param parent
      */
     protected void setParent(Element parent) {

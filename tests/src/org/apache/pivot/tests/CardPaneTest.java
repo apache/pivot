@@ -40,8 +40,7 @@ public class CardPaneTest extends Application.Adapter {
     private ButtonGroup sizeGroup = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         frame = new Frame(new BoxPane());
         frame.getStyles().put("padding", 0);
         frame.setTitle("Component Pane Test");
@@ -49,19 +48,21 @@ public class CardPaneTest extends Application.Adapter {
         frame.setLocation(20, 20);
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        sheet = (Sheet)bxmlSerializer.readObject(CardPaneTest.class, "card_pane_test.bxml");
-        cardPane = (CardPane)bxmlSerializer.getNamespace().get("cardPane");
-        sizeGroup = (ButtonGroup)bxmlSerializer.getNamespace().get("sizeGroup");
+        sheet = (Sheet) bxmlSerializer.readObject(CardPaneTest.class, "card_pane_test.bxml");
+        cardPane = (CardPane) bxmlSerializer.getNamespace().get("cardPane");
+        sizeGroup = (ButtonGroup) bxmlSerializer.getNamespace().get("sizeGroup");
 
         sizeGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
             @Override
             public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                 final Button selection = buttonGroup.getSelection();
-                int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(selection);
+                int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(
+                    selection);
 
                 cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
                     @Override
-                    public Vote previewSelectedIndexChange(CardPane cardPaneArgument, int selectedIndexArgument) {
+                    public Vote previewSelectedIndexChange(CardPane cardPaneArgument,
+                        int selectedIndexArgument) {
                         if (selection != null) {
                             selection.getParent().setEnabled(false);
                         }
@@ -71,14 +72,14 @@ public class CardPaneTest extends Application.Adapter {
 
                     @Override
                     public void selectedIndexChangeVetoed(CardPane cardPaneArgument, Vote reason) {
-                        if (selection != null
-                            && reason == Vote.DENY) {
+                        if (selection != null && reason == Vote.DENY) {
                             selection.getParent().setEnabled(true);
                         }
                     }
 
                     @Override
-                    public void selectedIndexChanged(CardPane cardPaneArgument, int previousSelectedIndex) {
+                    public void selectedIndexChanged(CardPane cardPaneArgument,
+                        int previousSelectedIndex) {
                         if (selection != null) {
                             selection.getParent().setEnabled(true);
                         }

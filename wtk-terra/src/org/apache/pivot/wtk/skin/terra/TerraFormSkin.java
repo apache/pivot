@@ -50,13 +50,10 @@ import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
- * Terra form skin.
- * <p>
- * TODO Animate preferred size calculations when flags change (make this configurable via
- * a style flag)
+ * Terra form skin. <p> TODO Animate preferred size calculations when flags
+ * change (make this configurable via a style flag)
  */
-public class TerraFormSkin extends ContainerSkin
-    implements FormListener, FormAttributeListener {
+public class TerraFormSkin extends ContainerSkin implements FormListener, FormAttributeListener {
     private class PopupFieldIndicatorDecorator implements Decorator {
         private Graphics2D graphics = null;
 
@@ -70,7 +67,8 @@ public class TerraFormSkin extends ContainerSkin
         public void update() {
             GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
             arrow.moveTo(POPUP_FIELD_INDICATOR_OFFSET, 0);
-            arrow.lineTo(POPUP_FIELD_INDICATOR_OFFSET + POPUP_FIELD_INDICATOR_WIDTH / 2, -POPUP_FIELD_INDICATOR_HEIGHT);
+            arrow.lineTo(POPUP_FIELD_INDICATOR_OFFSET + POPUP_FIELD_INDICATOR_WIDTH / 2,
+                -POPUP_FIELD_INDICATOR_HEIGHT);
             arrow.lineTo(POPUP_FIELD_INDICATOR_OFFSET + POPUP_FIELD_INDICATOR_WIDTH, 0);
             arrow.closePath();
 
@@ -78,7 +76,7 @@ public class TerraFormSkin extends ContainerSkin
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
             graphics.setStroke(new BasicStroke(0));
-            graphics.setColor((Color)flagMessageWindow.getStyles().get("backgroundColor"));
+            graphics.setColor((Color) flagMessageWindow.getStyles().get("backgroundColor"));
 
             graphics.draw(arrow);
             graphics.fill(arrow);
@@ -110,15 +108,13 @@ public class TerraFormSkin extends ContainerSkin
         @Override
         public void update() {
             if (showFlagMessagesInline) {
-                Form form = (Form)getComponent();
+                Form form = (Form) getComponent();
                 Form.SectionSequence sections = form.getSections();
 
-                for (int sectionIndex = 0, sectionCount = sections.getLength();
-                    sectionIndex < sectionCount; sectionIndex++) {
+                for (int sectionIndex = 0, sectionCount = sections.getLength(); sectionIndex < sectionCount; sectionIndex++) {
                     Form.Section section = sections.get(sectionIndex);
 
-                    for (int fieldIndex = 0, fieldCount = section.getLength();
-                        fieldIndex < fieldCount; fieldIndex++) {
+                    for (int fieldIndex = 0, fieldCount = section.getLength(); fieldIndex < fieldCount; fieldIndex++) {
                         Component field = section.get(fieldIndex);
 
                         if (field.isVisible()) {
@@ -165,7 +161,8 @@ public class TerraFormSkin extends ContainerSkin
                                 flagMessageLabel.setSize(flagMessageLabel.getPreferredSize());
                                 flagMessageLabel.validate();
                                 flagMessageLabel.getStyles().put("color", messageColor);
-                                flagMessageLabel.getStyles().put("backgroundColor", messageBackgroundColor);
+                                flagMessageLabel.getStyles().put("backgroundColor",
+                                    messageBackgroundColor);
 
                                 int flagMessageX = field.getX() + field.getWidth()
                                     + INLINE_FIELD_INDICATOR_WIDTH - 2;
@@ -178,7 +175,8 @@ public class TerraFormSkin extends ContainerSkin
                                 // Draw the arrow
                                 GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
                                 arrow.moveTo(0, 0);
-                                arrow.lineTo(-INLINE_FIELD_INDICATOR_WIDTH, (float)flagMessageLabel.getHeight() / 2);
+                                arrow.lineTo(-INLINE_FIELD_INDICATOR_WIDTH,
+                                    (float) flagMessageLabel.getHeight() / 2);
                                 arrow.lineTo(0, flagMessageLabel.getHeight());
                                 arrow.closePath();
 
@@ -342,7 +340,7 @@ public class TerraFormSkin extends ContainerSkin
         delimiter = DEFAULT_DELIMITER;
 
         // Get theme icons/colors
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         errorIcon = theme.getSmallMessageIcon(MessageType.ERROR);
         errorMessageColor = theme.getColor(4);
@@ -392,9 +390,8 @@ public class TerraFormSkin extends ContainerSkin
                     }
                 };
 
-                scheduledHideFlagMessageCallback =
-                    ApplicationContext.scheduleCallback(hideFlagMessageCallback,
-                        HIDE_POPUP_MESSAGE_DELAY);
+                scheduledHideFlagMessageCallback = ApplicationContext.scheduleCallback(
+                    hideFlagMessageCallback, HIDE_POPUP_MESSAGE_DELAY);
             }
 
             @Override
@@ -428,22 +425,19 @@ public class TerraFormSkin extends ContainerSkin
         int maximumFieldWidth = 0;
         int maximumSeparatorWidth = 0;
 
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
-        for (int sectionIndex = 0, sectionCount = sections.getLength();
-            sectionIndex < sectionCount; sectionIndex++) {
+        for (int sectionIndex = 0, sectionCount = sections.getLength(); sectionIndex < sectionCount; sectionIndex++) {
             Form.Section section = sections.get(sectionIndex);
 
-            if (sectionIndex > 0
-                || section.getHeading() != null) {
+            if (sectionIndex > 0 || section.getHeading() != null) {
                 Separator separator = separators.get(sectionIndex);
                 maximumSeparatorWidth = Math.max(maximumSeparatorWidth,
                     separator.getPreferredWidth());
             }
 
-            for (int fieldIndex = 0, fieldCount = section.getLength();
-                fieldIndex < fieldCount; fieldIndex++) {
+            for (int fieldIndex = 0, fieldCount = section.getLength(); fieldIndex < fieldCount; fieldIndex++) {
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
@@ -488,25 +482,22 @@ public class TerraFormSkin extends ContainerSkin
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
         // Determine the field width constraint
         int fieldWidth = (fill && width != -1) ? getFieldWidth(width) : -1;
 
-        for (int sectionIndex = 0, sectionCount = sections.getLength();
-            sectionIndex < sectionCount; sectionIndex++) {
+        for (int sectionIndex = 0, sectionCount = sections.getLength(); sectionIndex < sectionCount; sectionIndex++) {
             Form.Section section = sections.get(sectionIndex);
 
-            if (sectionIndex > 0
-                || section.getHeading() != null) {
+            if (sectionIndex > 0 || section.getHeading() != null) {
                 Separator separator = separators.get(sectionIndex);
                 preferredHeight += separator.getPreferredHeight(width);
                 preferredHeight += verticalSpacing;
             }
 
-            for (int fieldIndex = 0, fieldCount = section.getLength();
-                fieldIndex < fieldCount; fieldIndex++) {
+            for (int fieldIndex = 0, fieldCount = section.getLength(); fieldIndex < fieldCount; fieldIndex++) {
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
@@ -560,7 +551,7 @@ public class TerraFormSkin extends ContainerSkin
     public int getBaseline(int width, int height) {
         int baseline = -1;
 
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
         // Determine the field width constraint
@@ -570,12 +561,10 @@ public class TerraFormSkin extends ContainerSkin
         int sectionIndex = 0;
 
         int rowY = 0;
-        while (sectionIndex < sectionCount
-            && baseline == -1) {
+        while (sectionIndex < sectionCount && baseline == -1) {
             Form.Section section = sections.get(sectionIndex);
 
-            if (sectionIndex > 0
-                || section.getHeading() != null) {
+            if (sectionIndex > 0 || section.getHeading() != null) {
                 Separator separator = separators.get(sectionIndex);
                 rowY += separator.getPreferredHeight(width);
                 rowY += verticalSpacing;
@@ -584,8 +573,7 @@ public class TerraFormSkin extends ContainerSkin
             int fieldCount = section.getLength();
             int fieldIndex = 0;
 
-            while (fieldIndex < fieldCount
-                && baseline == -1) {
+            while (fieldIndex < fieldCount && baseline == -1) {
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
@@ -627,15 +615,13 @@ public class TerraFormSkin extends ContainerSkin
         int maximumLabelWidth = 0;
         int maximumFlagMessageWidth = 0;
 
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
-        for (int sectionIndex = 0, sectionCount = sections.getLength();
-            sectionIndex < sectionCount; sectionIndex++) {
+        for (int sectionIndex = 0, sectionCount = sections.getLength(); sectionIndex < sectionCount; sectionIndex++) {
             Form.Section section = sections.get(sectionIndex);
 
-            for (int fieldIndex = 0, fieldCount = section.getLength();
-                fieldIndex < fieldCount; fieldIndex++) {
+            for (int fieldIndex = 0, fieldCount = section.getLength(); fieldIndex < fieldCount; fieldIndex++) {
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
@@ -667,8 +653,8 @@ public class TerraFormSkin extends ContainerSkin
         }
 
         if (showFlagMessagesInline) {
-            fieldWidth = Math.max(0, fieldWidth - (maximumFlagMessageWidth
-                + (INLINE_FIELD_INDICATOR_WIDTH - 2)));
+            fieldWidth = Math.max(0, fieldWidth
+                - (maximumFlagMessageWidth + (INLINE_FIELD_INDICATOR_WIDTH - 2)));
         }
 
         fieldWidth = Math.max(0, fieldWidth - (padding.left + padding.right));
@@ -678,19 +664,17 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public void layout() {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
         // Determine the maximum label and flag message width
         int maximumLabelWidth = 0;
         int maximumFlagMessageWidth = 0;
 
-        for (int sectionIndex = 0, sectionCount = sections.getLength();
-            sectionIndex < sectionCount; sectionIndex++) {
+        for (int sectionIndex = 0, sectionCount = sections.getLength(); sectionIndex < sectionCount; sectionIndex++) {
             Form.Section section = sections.get(sectionIndex);
 
-            for (int fieldIndex = 0, fieldCount = section.getLength();
-                fieldIndex < fieldCount; fieldIndex++) {
+            for (int fieldIndex = 0, fieldCount = section.getLength(); fieldIndex < fieldCount; fieldIndex++) {
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
@@ -724,8 +708,8 @@ public class TerraFormSkin extends ContainerSkin
         }
 
         if (showFlagMessagesInline) {
-            fieldWidth = Math.max(0, fieldWidth - (maximumFlagMessageWidth
-                + (INLINE_FIELD_INDICATOR_WIDTH - 2)));
+            fieldWidth = Math.max(0, fieldWidth
+                - (maximumFlagMessageWidth + (INLINE_FIELD_INDICATOR_WIDTH - 2)));
         }
 
         fieldWidth = Math.max(0, fieldWidth - (padding.left + padding.right));
@@ -733,13 +717,11 @@ public class TerraFormSkin extends ContainerSkin
         // Lay out the components
         int rowY = padding.top;
 
-        for (int sectionIndex = 0, sectionCount = sections.getLength();
-            sectionIndex < sectionCount; sectionIndex++) {
+        for (int sectionIndex = 0, sectionCount = sections.getLength(); sectionIndex < sectionCount; sectionIndex++) {
             Form.Section section = sections.get(sectionIndex);
 
             Separator separator = separators.get(sectionIndex);
-            if (sectionIndex > 0
-                || section.getHeading() != null) {
+            if (sectionIndex > 0 || section.getHeading() != null) {
                 int separatorWidth = Math.max(width - (padding.left + padding.right), 0);
                 separator.setVisible(true);
                 separator.setSize(separatorWidth, separator.getPreferredHeight(separatorWidth));
@@ -749,8 +731,7 @@ public class TerraFormSkin extends ContainerSkin
                 separator.setVisible(false);
             }
 
-            for (int fieldIndex = 0, fieldCount = section.getLength();
-                fieldIndex < fieldCount; fieldIndex++) {
+            for (int fieldIndex = 0, fieldCount = section.getLength(); fieldIndex < fieldCount; fieldIndex++) {
                 Label label = labels.get(sectionIndex).get(fieldIndex);
                 Component field = section.get(fieldIndex);
 
@@ -827,15 +808,13 @@ public class TerraFormSkin extends ContainerSkin
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
-        for (int sectionIndex = 0, sectionCount = sections.getLength();
-            sectionIndex < sectionCount; sectionIndex++) {
+        for (int sectionIndex = 0, sectionCount = sections.getLength(); sectionIndex < sectionCount; sectionIndex++) {
             Form.Section section = sections.get(sectionIndex);
 
-            for (int fieldIndex = 0, fieldCount = section.getLength();
-                fieldIndex < fieldCount; fieldIndex++) {
+            for (int fieldIndex = 0, fieldCount = section.getLength(); fieldIndex < fieldCount; fieldIndex++) {
                 Component field = section.get(fieldIndex);
 
                 if (field.isVisible()) {
@@ -871,7 +850,8 @@ public class TerraFormSkin extends ContainerSkin
 
                             Label label = labels.get(sectionIndex).get(fieldIndex);
                             int flagIconX = label.getX() - (flagIcon.getWidth() + flagIconOffset);
-                            int flagIconY = label.getY() + (label.getHeight() - flagIcon.getHeight()) / 2;
+                            int flagIconY = label.getY()
+                                + (label.getHeight() - flagIcon.getHeight()) / 2;
 
                             graphics.translate(flagIconX, flagIconY);
                             flagIcon.paint(graphics);
@@ -912,10 +892,10 @@ public class TerraFormSkin extends ContainerSkin
 
                             graphics.setColor(highlightColor);
                             graphics.setStroke(new BasicStroke(1));
-                            graphics.drawRect(fieldBounds.x - FLAG_HIGHLIGHT_PADDING,
-                                fieldBounds.y - FLAG_HIGHLIGHT_PADDING,
-                                fieldBounds.width + FLAG_HIGHLIGHT_PADDING * 2 - 1,
-                                fieldBounds.height + FLAG_HIGHLIGHT_PADDING * 2 - 1);
+                            graphics.drawRect(fieldBounds.x - FLAG_HIGHLIGHT_PADDING, fieldBounds.y
+                                - FLAG_HIGHLIGHT_PADDING, fieldBounds.width
+                                + FLAG_HIGHLIGHT_PADDING * 2 - 1, fieldBounds.height
+                                + FLAG_HIGHLIGHT_PADDING * 2 - 1);
                         }
                     }
                 }
@@ -1083,7 +1063,7 @@ public class TerraFormSkin extends ContainerSkin
 
         this.delimiter = delimiter;
 
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
 
         for (int i = 0, n = sections.getLength(); i < n; i++) {
@@ -1160,7 +1140,7 @@ public class TerraFormSkin extends ContainerSkin
 
     @Override
     public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         removeFields(form.getSections().indexOf(section), index, fields);
     }
 
@@ -1186,7 +1166,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void insertSection(Form.Section section, int index) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
 
         // Insert separator
         Separator separator = new Separator(section.getHeading());
@@ -1209,7 +1189,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void removeSections(int index, Sequence<Form.Section> removed) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         int count = removed.getLength();
 
         // Remove fields
@@ -1230,7 +1210,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void insertField(Form.Section section, Component field, int index) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         int sectionIndex = form.getSections().indexOf(section);
 
         // Create the label
@@ -1248,7 +1228,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void removeFields(int sectionIndex, int index, Sequence<Component> removed) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         int count = removed.getLength();
 
         // Remove the labels
@@ -1266,7 +1246,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void updateSectionHeading(Form.Section section) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         int sectionIndex = form.getSections().indexOf(section);
 
         Separator separator = separators.get(sectionIndex);
@@ -1274,7 +1254,7 @@ public class TerraFormSkin extends ContainerSkin
     }
 
     private void updateFieldLabel(Form.Section section, int fieldIndex) {
-        Form form = (Form)getComponent();
+        Form form = (Form) getComponent();
         Component field = section.get(fieldIndex);
 
         int sectionIndex = form.getSections().indexOf(section);

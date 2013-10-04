@@ -32,12 +32,11 @@ import org.apache.pivot.wtk.FocusTraversalPolicy;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Mouse;
 
-
 /**
  * Abstract base class for container skins.
  */
-public abstract class ContainerSkin extends ComponentSkin
-    implements ContainerListener, ContainerMouseListener {
+public abstract class ContainerSkin extends ComponentSkin implements ContainerListener,
+    ContainerMouseListener {
     /**
      * Focus traversal policy that determines traversal order based on the order
      * of components in the container's component sequence.
@@ -54,7 +53,8 @@ public abstract class ContainerSkin extends ComponentSkin
         }
 
         @Override
-        public Component getNextComponent(Container container, Component component, FocusTraversalDirection direction) {
+        public Component getNextComponent(Container container, Component component,
+            FocusTraversalDirection direction) {
             if (container == null) {
                 throw new IllegalArgumentException("container is null.");
             }
@@ -132,7 +132,7 @@ public abstract class ContainerSkin extends ComponentSkin
     public void install(Component component) {
         super.install(component);
 
-        Container container = (Container)component;
+        Container container = (Container) component;
 
         // Add this as a container listener
         container.getContainerListeners().add(this);
@@ -161,8 +161,7 @@ public abstract class ContainerSkin extends ComponentSkin
     }
 
     /**
-     * @return
-     * <tt>false</tt>; by default, containers are not focusable.
+     * @return <tt>false</tt>; by default, containers are not focusable.
      */
     @Override
     public boolean isFocusable() {
@@ -171,12 +170,12 @@ public abstract class ContainerSkin extends ComponentSkin
 
     @Override
     public boolean isOpaque() {
-        return (backgroundPaint != null
-            && backgroundPaint.getTransparency() == Transparency.OPAQUE);
+        return (backgroundPaint != null && backgroundPaint.getTransparency() == Transparency.OPAQUE);
     }
 
     /**
-     * Returns the {@link Paint} object used to paint the background of the container
+     * Returns the {@link Paint} object used to paint the background of the
+     * container
      */
     public Paint getBackgroundPaint() {
         return backgroundPaint;
@@ -184,6 +183,7 @@ public abstract class ContainerSkin extends ComponentSkin
 
     /**
      * Sets the object used to paint the background of the container.
+     * 
      * @param backgroundPaint The {@link Paint} object
      */
     public void setBackgroundPaint(Paint backgroundPaint) {
@@ -193,6 +193,7 @@ public abstract class ContainerSkin extends ComponentSkin
 
     /**
      * Sets the object used to paint the background of the container.
+     * 
      * @param backgroundPaint A string recognized by Pivot as a
      * {@linkplain GraphicsUtilities#decodePaint(String) Color or Paint value}.
      */
@@ -206,6 +207,7 @@ public abstract class ContainerSkin extends ComponentSkin
 
     /**
      * Sets the object used to paint the background of the container.
+     * 
      * @param backgroundPaint A dictionary containing a
      * {@linkplain GraphicsUtilities#decodePaint(Dictionary) Paint description}.
      */
@@ -222,7 +224,7 @@ public abstract class ContainerSkin extends ComponentSkin
      * set as the background; otherwise null.
      */
     public Color getBackgroundColor() {
-        return (backgroundPaint instanceof Color) ? (Color)backgroundPaint : null;
+        return (backgroundPaint instanceof Color) ? (Color) backgroundPaint : null;
     }
 
     /**
@@ -234,7 +236,10 @@ public abstract class ContainerSkin extends ComponentSkin
 
     /**
      * Sets the background of the container to a solid color.
-     * @param backgroundColor Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     * 
+     * @param backgroundColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by
+     * Pivot}.
      */
     public final void setBackgroundColor(String backgroundColor) {
         if (backgroundColor == null) {
@@ -282,8 +287,8 @@ public abstract class ContainerSkin extends ComponentSkin
     }
 
     @Override
-    public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
-        int scrollAmount, int wheelRotation, int x, int y) {
+    public boolean mouseWheel(Container container, Mouse.ScrollType scrollType, int scrollAmount,
+        int wheelRotation, int x, int y) {
         return false;
     }
 }

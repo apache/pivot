@@ -44,7 +44,7 @@ public interface SuggestionPopupStateListener extends SuggestionPopupCloseListen
 
     /**
      * Called to preview a suggestion popup close event.
-     *
+     * 
      * @param suggestionPopup
      * @param result
      */
@@ -52,7 +52,7 @@ public interface SuggestionPopupStateListener extends SuggestionPopupCloseListen
 
     /**
      * Called when a suggestion popup close event has been vetoed.
-     *
+     * 
      * @param suggestionPopup
      * @param reason
      */

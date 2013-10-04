@@ -21,17 +21,16 @@ import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Visual;
 
-
 /**
- * Abstract base class for movies. A movie is either a bitmapped "video"
- * or a vector "animation".
+ * Abstract base class for movies. A movie is either a bitmapped "video" or a
+ * vector "animation".
  */
 public abstract class Movie implements Visual {
     /**
      * Movie listener list.
      */
-    protected static class MovieListenerList extends ListenerList<MovieListener>
-        implements MovieListener {
+    protected static class MovieListenerList extends ListenerList<MovieListener> implements
+        MovieListener {
         @Override
         public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
             for (MovieListener listener : this) {
@@ -154,7 +153,7 @@ public abstract class Movie implements Visual {
         }
 
         scheduledCallback = ApplicationContext.scheduleRecurringCallback(nextFrameCallback,
-            (int)((1 / (double)frameRate) * 1000));
+            (int) ((1 / (double) frameRate) * 1000));
 
         movieListeners.movieStarted(this);
     }

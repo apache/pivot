@@ -29,7 +29,7 @@ public class WatermarkDecoratorTest extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(WatermarkDecoratorTest.class,
+        window = (Window) bxmlSerializer.readObject(WatermarkDecoratorTest.class,
             "watermark_decorator_test.bxml");
 
         window.open(display);
@@ -37,7 +37,7 @@ public class WatermarkDecoratorTest extends Application.Adapter {
 
     @Override
     public boolean shutdown(boolean optional) {
-        if (window!= null) {
+        if (window != null) {
             window.close();
         }
 

@@ -48,9 +48,11 @@ public class ActionMappingTest extends Application.Adapter {
         });
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(ActionMappingTest.class, "action_mapping_test.bxml");
-        window.getActionMappings().add(new Window.ActionMapping(new Keyboard.KeyStroke(Keyboard.KeyCode.B,
-            Keyboard.Modifier.SHIFT.getMask()), "action2"));
+        window = (Window) bxmlSerializer.readObject(ActionMappingTest.class,
+            "action_mapping_test.bxml");
+        window.getActionMappings().add(
+            new Window.ActionMapping(new Keyboard.KeyStroke(Keyboard.KeyCode.B,
+                Keyboard.Modifier.SHIFT.getMask()), "action2"));
 
         window.open(display);
         window.requestFocus();

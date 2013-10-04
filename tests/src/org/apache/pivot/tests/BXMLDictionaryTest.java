@@ -24,8 +24,7 @@ public class BXMLDictionaryTest {
     public static void main(String[] args) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         @SuppressWarnings("unchecked")
-        HashMap<String, Object> hashMap =
-            (HashMap<String, Object>)bxmlSerializer.readObject(BXMLDictionaryTest.class.getResource("bxml_dictionary_test.bxml"));
+        HashMap<String, Object> hashMap = (HashMap<String, Object>) bxmlSerializer.readObject(BXMLDictionaryTest.class.getResource("bxml_dictionary_test.bxml"));
         System.out.println(JSONSerializer.toString(hashMap));
     }
 }

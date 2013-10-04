@@ -43,15 +43,24 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Image;
 
 public class DragAndDropDemo extends Window implements Bindable {
-    @BXML private Label label;
-    @BXML private PushButton copyTextButton;
-    @BXML private PushButton pasteTextButton;
-    @BXML private ImageView imageView;
-    @BXML private PushButton copyImageButton;
-    @BXML private PushButton pasteImageButton;
-    @BXML private ListView listView;
-    @BXML private PushButton copyFilesButton;
-    @BXML private PushButton pasteFilesButton;
+    @BXML
+    private Label label;
+    @BXML
+    private PushButton copyTextButton;
+    @BXML
+    private PushButton pasteTextButton;
+    @BXML
+    private ImageView imageView;
+    @BXML
+    private PushButton copyImageButton;
+    @BXML
+    private PushButton pasteImageButton;
+    @BXML
+    private ListView listView;
+    @BXML
+    private PushButton copyFilesButton;
+    @BXML
+    private PushButton pasteFilesButton;
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
@@ -107,8 +116,7 @@ public class DragAndDropDemo extends Window implements Bindable {
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (dragContent.containsText()
-                    && DropAction.COPY.isSelected(supportedDropActions)) {
+                if (dragContent.containsText() && DropAction.COPY.isSelected(supportedDropActions)) {
                     dropAction = DropAction.COPY;
                 }
 
@@ -141,7 +149,7 @@ public class DragAndDropDemo extends Window implements Bindable {
                     try {
                         label.setText(dragContent.getText());
                         dropAction = DropAction.COPY;
-                    } catch(IOException exception) {
+                    } catch (IOException exception) {
                         System.err.println(exception);
                     }
                 }
@@ -167,11 +175,10 @@ public class DragAndDropDemo extends Window implements Bindable {
             public void buttonPressed(Button button) {
                 Manifest clipboardContent = Clipboard.getContent();
 
-                if (clipboardContent != null
-                    && clipboardContent.containsText()) {
+                if (clipboardContent != null && clipboardContent.containsText()) {
                     try {
                         label.setText(clipboardContent.getText());
-                    } catch(IOException exception) {
+                    } catch (IOException exception) {
                         System.err.println(exception);
                     }
                 }
@@ -231,8 +238,7 @@ public class DragAndDropDemo extends Window implements Bindable {
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                if (dragContent.containsImage()
-                    && DropAction.COPY.isSelected(supportedDropActions)) {
+                if (dragContent.containsImage() && DropAction.COPY.isSelected(supportedDropActions)) {
                     dropAction = DropAction.COPY;
                 }
 
@@ -265,7 +271,7 @@ public class DragAndDropDemo extends Window implements Bindable {
                     try {
                         imageView.setImage(dragContent.getImage());
                         dropAction = DropAction.COPY;
-                    } catch(IOException exception) {
+                    } catch (IOException exception) {
                         System.err.println(exception);
                     }
                 }
@@ -293,11 +299,10 @@ public class DragAndDropDemo extends Window implements Bindable {
             public void buttonPressed(Button button) {
                 Manifest clipboardContent = Clipboard.getContent();
 
-                if (clipboardContent != null
-                    && clipboardContent.containsImage()) {
+                if (clipboardContent != null && clipboardContent.containsImage()) {
                     try {
                         imageView.setImage(clipboardContent.getImage());
-                    } catch(IOException exception) {
+                    } catch (IOException exception) {
                         System.err.println(exception);
                     }
                 }
@@ -312,8 +317,8 @@ public class DragAndDropDemo extends Window implements Bindable {
 
             @Override
             public boolean beginDrag(Component component, int x, int y) {
-                ListView listViewLocal = (ListView)component;
-                FileList fileList = (FileList)listViewLocal.getListData();
+                ListView listViewLocal = (ListView) component;
+                FileList fileList = (FileList) listViewLocal.getListData();
 
                 if (fileList.getLength() > 0) {
                     content = new LocalManifest();
@@ -394,7 +399,7 @@ public class DragAndDropDemo extends Window implements Bindable {
                     try {
                         listView.setListData(dragContent.getFileList());
                         dropAction = DropAction.COPY;
-                    } catch(IOException exception) {
+                    } catch (IOException exception) {
                         System.err.println(exception);
                     }
                 }

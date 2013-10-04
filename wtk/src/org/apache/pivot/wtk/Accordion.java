@@ -143,12 +143,11 @@ public class Accordion extends Container {
     }
 
     private enum Attribute {
-        HEADER_DATA,
-        TOOLTIP_TEXT;
+        HEADER_DATA, TOOLTIP_TEXT;
     }
 
-    private static class AccordionListenerList extends WTKListenerList<AccordionListener>
-        implements AccordionListener {
+    private static class AccordionListenerList extends WTKListenerList<AccordionListener> implements
+        AccordionListener {
         @Override
         public void panelInserted(Accordion accordion, int index) {
             for (AccordionListener listener : this) {
@@ -164,15 +163,16 @@ public class Accordion extends Container {
         }
 
         @Override
-        public void headerDataRendererChanged(Accordion accordion, Button.DataRenderer previousHeaderDataRenderer) {
+        public void headerDataRendererChanged(Accordion accordion,
+            Button.DataRenderer previousHeaderDataRenderer) {
             for (AccordionListener listener : this) {
                 listener.headerDataRendererChanged(accordion, previousHeaderDataRenderer);
             }
         }
     }
 
-    private static class AccordionSelectionListenerList extends WTKListenerList<AccordionSelectionListener>
-        implements AccordionSelectionListener {
+    private static class AccordionSelectionListenerList extends
+        WTKListenerList<AccordionSelectionListener> implements AccordionSelectionListener {
         @Override
         public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
             Vote vote = Vote.APPROVE;
@@ -199,17 +199,19 @@ public class Accordion extends Container {
         }
     }
 
-    private static class AccordionAttributeListenerList extends WTKListenerList<AccordionAttributeListener>
-        implements AccordionAttributeListener {
+    private static class AccordionAttributeListenerList extends
+        WTKListenerList<AccordionAttributeListener> implements AccordionAttributeListener {
         @Override
-        public void headerDataChanged(Accordion accordion, Component component, Object previousHeaderData) {
+        public void headerDataChanged(Accordion accordion, Component component,
+            Object previousHeaderData) {
             for (AccordionAttributeListener listener : this) {
                 listener.headerDataChanged(accordion, component, previousHeaderData);
             }
         }
 
         @Override
-        public void tooltipTextChanged(Accordion accordion, Component component, String previousTooltipText) {
+        public void tooltipTextChanged(Accordion accordion, Component component,
+            String previousTooltipText) {
             for (AccordionAttributeListener listener : this) {
                 listener.tooltipTextChanged(accordion, component, previousTooltipText);
             }
@@ -313,7 +315,7 @@ public class Accordion extends Container {
             Container parent = component.getParent();
 
             if (parent instanceof Accordion) {
-                Accordion accordion = (Accordion)parent;
+                Accordion accordion = (Accordion) parent;
                 accordion.accordionAttributeListeners.headerDataChanged(accordion, component,
                     previousHeaderData);
             }
@@ -321,17 +323,18 @@ public class Accordion extends Container {
     }
 
     public static String getTooltipText(Component component) {
-        return (String)component.getAttribute(Attribute.TOOLTIP_TEXT);
+        return (String) component.getAttribute(Attribute.TOOLTIP_TEXT);
     }
 
     public static void setTooltipText(Component component, String tooltipText) {
-        String previousTooltipText = (String)component.setAttribute(Attribute.TOOLTIP_TEXT, tooltipText);
+        String previousTooltipText = (String) component.setAttribute(Attribute.TOOLTIP_TEXT,
+            tooltipText);
 
         if (previousTooltipText != tooltipText) {
             Container parent = component.getParent();
 
             if (parent instanceof Accordion) {
-                Accordion accordion = (Accordion)parent;
+                Accordion accordion = (Accordion) parent;
                 accordion.accordionAttributeListeners.tooltipTextChanged(accordion, component,
                     previousTooltipText);
             }

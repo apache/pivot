@@ -35,14 +35,15 @@ public interface TextInputBindingListener {
         }
 
         @Override
-        public void textBindMappingChanged(TextInput textInput, TextInput.TextBindMapping previousTextBindMapping) {
+        public void textBindMappingChanged(TextInput textInput,
+            TextInput.TextBindMapping previousTextBindMapping) {
             // empty block
         }
     }
 
     /**
      * Called when a text input's text key has changed.
-     *
+     * 
      * @param textInput
      * @param previousTextKey
      */
@@ -50,7 +51,7 @@ public interface TextInputBindingListener {
 
     /**
      * Called when a text input's text bind type has changed.
-     *
+     * 
      * @param textInput
      * @param previousTextBindType
      */
@@ -58,9 +59,10 @@ public interface TextInputBindingListener {
 
     /**
      * Called when a text input's text bind mapping has changed.
-     *
+     * 
      * @param textInput
      * @param previousTextBindMapping
      */
-    public void textBindMappingChanged(TextInput textInput, TextInput.TextBindMapping previousTextBindMapping);
+    public void textBindMappingChanged(TextInput textInput,
+        TextInput.TextBindMapping previousTextBindMapping);
 }

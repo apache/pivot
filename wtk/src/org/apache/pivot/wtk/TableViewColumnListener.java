@@ -79,7 +79,7 @@ public interface TableViewColumnListener {
 
     /**
      * Called when a column is inserted into a table view's column sequence.
-     *
+     * 
      * @param tableView
      * @param index
      */
@@ -87,7 +87,7 @@ public interface TableViewColumnListener {
 
     /**
      * Called when columns are removed from a table view's column sequence.
-     *
+     * 
      * @param tableView
      * @param index
      * @param columns
@@ -96,7 +96,7 @@ public interface TableViewColumnListener {
 
     /**
      * Called when a column's name has changed.
-     *
+     * 
      * @param column
      * @param previousName
      */
@@ -104,7 +104,7 @@ public interface TableViewColumnListener {
 
     /**
      * Called when a column's header data has changed.
-     *
+     * 
      * @param column
      * @param previousHeaderData
      */
@@ -112,7 +112,7 @@ public interface TableViewColumnListener {
 
     /**
      * Called when a column's header data renderer has changed.
-     *
+     * 
      * @param column
      * @param previousHeaderDataRenderer
      */
@@ -121,7 +121,7 @@ public interface TableViewColumnListener {
 
     /**
      * Called when a column's width has changed.
-     *
+     * 
      * @param column
      * @param previousWidth
      * @param previousRelative
@@ -131,7 +131,7 @@ public interface TableViewColumnListener {
 
     /**
      * Called when a column's width limits have changed.
-     *
+     * 
      * @param column
      * @param previousMinimumWidth
      * @param previousMaximumWidth
@@ -141,7 +141,7 @@ public interface TableViewColumnListener {
 
     /**
      * Called when a column's filter has changed.
-     *
+     * 
      * @param column
      * @param previousFilter
      */
@@ -149,7 +149,7 @@ public interface TableViewColumnListener {
 
     /**
      * Called when a column's cell renderer has changed.
-     *
+     * 
      * @param column
      * @param previousCellRenderer
      */

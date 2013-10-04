@@ -48,22 +48,21 @@ public class LabelAntialiasTest extends Application.Adapter {
         label.getStyles().put("color", Color.RED);
         label.getStyles().put("font", fontDerived);
         label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-        label.getStyles().put("verticalAlignment",   VerticalAlignment.TOP);
+        label.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
 
         return label;
     }
 
     /**
      * Write to console some details of Desktop Hints, for Font Rendering.
-     *
+     * 
      * @see org.apache.pivot.wtk.Platform#initializeFontRenderContext
      */
     private void showFontDesktopHints() {
         System.out.println("Show Font Desktop Hints:");
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        java.util.Map<?, ?> fontDesktopHints =
-            (java.util.Map<?, ?>)toolkit.getDesktopProperty("awt.font.desktophints");
+        java.util.Map<?, ?> fontDesktopHints = (java.util.Map<?, ?>) toolkit.getDesktopProperty("awt.font.desktophints");
 
         System.out.println(fontDesktopHints);
     }
@@ -75,10 +74,10 @@ public class LabelAntialiasTest extends Application.Adapter {
         System.out.println("Show Font Families:");
 
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        String []fontFamilies = ge.getAvailableFontFamilyNames();
+        String[] fontFamilies = ge.getAvailableFontFamilyNames();
         int fontFamiliesNumber = fontFamilies.length;
         StringBuffer fontFamilyNames = new StringBuffer(1024);
-        for (int i=0; i < fontFamiliesNumber; i++) {
+        for (int i = 0; i < fontFamiliesNumber; i++) {
             if (i > 0) {
                 fontFamilyNames.append(", ");
             }

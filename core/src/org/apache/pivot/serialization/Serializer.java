@@ -16,47 +16,40 @@
  */
 package org.apache.pivot.serialization;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
 
 /**
  * Defines an interface for writing objects to and reading objects from a data
  * stream.
- *
- * @param <T>
- * The type of data being read and written.
+ * 
+ * @param <T> The type of data being read and written.
  */
 public interface Serializer<T> {
     /**
      * Reads an object from an input stream.
-     *
-     * @param inputStream
-     * The data stream from which the object will be read.
-     *
-     * @return
-     * The deserialized object.
+     * 
+     * @param inputStream The data stream from which the object will be read.
+     * @return The deserialized object.
      */
     public T readObject(InputStream inputStream) throws IOException, SerializationException;
 
     /**
      * Writes an object to an output stream.
-     *
-     * @param object
-     * The object to serialize.
-     *
-     * @param outputStream
-     * The data stream to which the object will be written.
+     * 
+     * @param object The object to serialize.
+     * @param outputStream The data stream to which the object will be written.
      */
-    public void writeObject(T object, OutputStream outputStream) throws IOException, SerializationException;
+    public void writeObject(T object, OutputStream outputStream) throws IOException,
+        SerializationException;
 
     /**
      * Returns the MIME type of the data read and written by this serializer.
-     *
-     * @param object
-     * If provided, allows the serializer to attach parameters to the returned
-     * MIME type containing more detailed information about the data. If
-     * <tt>null</tt>, the base MIME type is returned.
+     * 
+     * @param object If provided, allows the serializer to attach parameters to
+     * the returned MIME type containing more detailed information about the
+     * data. If <tt>null</tt>, the base MIME type is returned.
      */
     public String getMIMEType(T object);
 }

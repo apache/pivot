@@ -22,8 +22,8 @@ import org.apache.pivot.util.ListenerList;
  * Node representing a sequence of characters.
  */
 public final class TextNode extends Node {
-    private static class TextNodeListenerList extends ListenerList<TextNodeListener>
-        implements TextNodeListener {
+    private static class TextNodeListenerList extends ListenerList<TextNodeListener> implements
+        TextNodeListener {
         @Override
         public void charactersInserted(TextNode textNode, int index, int count) {
             for (TextNodeListener listener : this) {
@@ -80,8 +80,7 @@ public final class TextNode extends Node {
             throw new IllegalArgumentException("text is null.");
         }
 
-        if (index < 0
-            || index > characters.length()) {
+        if (index < 0 || index > characters.length()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -94,8 +93,7 @@ public final class TextNode extends Node {
     }
 
     public void removeText(int index, int count) {
-        if (index < 0
-            || index + count > characters.length()) {
+        if (index < 0 || index + count > characters.length()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -117,8 +115,7 @@ public final class TextNode extends Node {
 
     @Override
     public char getCharacterAt(int index) {
-        if (index < 0
-            || index >= characters.length()) {
+        if (index < 0 || index >= characters.length()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -136,7 +133,7 @@ public final class TextNode extends Node {
             throw new IllegalArgumentException("range is not a text node.");
         }
 
-        TextNode textNode = (TextNode)range;
+        TextNode textNode = (TextNode) range;
         insertText(textNode.getText(), offset);
     }
 
@@ -159,8 +156,7 @@ public final class TextNode extends Node {
             throw new IllegalArgumentException("characterCount is negative.");
         }
 
-        if (offset < 0
-            || offset + characterCount > characters.length()) {
+        if (offset < 0 || offset + characterCount > characters.length()) {
             throw new IndexOutOfBoundsException();
         }
 

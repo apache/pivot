@@ -85,15 +85,15 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
             }
 
             if (startRange instanceof String) {
-                this.start = CalendarDate.decode((String)startRange);
+                this.start = CalendarDate.decode((String) startRange);
             } else {
-                this.start = (CalendarDate)startRange;
+                this.start = (CalendarDate) startRange;
             }
 
             if (endRange instanceof String) {
-                this.end = CalendarDate.decode((String)endRange);
+                this.end = CalendarDate.decode((String) endRange);
             } else {
-                this.end = (CalendarDate)endRange;
+                this.end = (CalendarDate) endRange;
             }
         }
 
@@ -110,11 +110,9 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
 
             boolean contains;
             if (this.start.compareTo(this.end) < 0) {
-                contains = (this.start.compareTo(normalizedRange.start) <= 0
-                    && this.end.compareTo(normalizedRange.end) >= 0);
+                contains = (this.start.compareTo(normalizedRange.start) <= 0 && this.end.compareTo(normalizedRange.end) >= 0);
             } else {
-                contains = (this.end.compareTo(normalizedRange.start) <= 0
-                    && this.start.compareTo(normalizedRange.end) >= 0);
+                contains = (this.end.compareTo(normalizedRange.start) <= 0 && this.start.compareTo(normalizedRange.end) >= 0);
             }
 
             return contains;
@@ -127,11 +125,9 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
 
             boolean contains;
             if (this.start.compareTo(this.end) < 0) {
-                contains = (this.start.compareTo(calendarDate) <= 0
-                    && this.end.compareTo(calendarDate) >= 0);
+                contains = (this.start.compareTo(calendarDate) <= 0 && this.end.compareTo(calendarDate) >= 0);
             } else {
-                contains = (this.end.compareTo(calendarDate) <= 0
-                    && this.start.compareTo(calendarDate) >= 0);
+                contains = (this.end.compareTo(calendarDate) <= 0 && this.start.compareTo(calendarDate) >= 0);
             }
 
             return contains;
@@ -146,11 +142,9 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
 
             boolean intersects;
             if (this.start.compareTo(this.end) < 0) {
-                intersects = (this.start.compareTo(normalizedRange.end) <= 0
-                    && this.end.compareTo(normalizedRange.start) >= 0);
+                intersects = (this.start.compareTo(normalizedRange.end) <= 0 && this.end.compareTo(normalizedRange.start) >= 0);
             } else {
-                intersects = (this.end.compareTo(normalizedRange.end) <= 0
-                    && this.start.compareTo(normalizedRange.start) >= 0);
+                intersects = (this.end.compareTo(normalizedRange.end) <= 0 && this.start.compareTo(normalizedRange.start) >= 0);
             }
 
             return intersects;
@@ -197,9 +191,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      */
     public final int day;
 
-    private static final int[] MONTH_LENGTHS = {
-        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-    };
+    private static final int[] MONTH_LENGTHS = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
     private static final int GREGORIAN_CUTOVER_YEAR = 1582;
     private static final Pattern PATTERN = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
@@ -213,12 +205,11 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
     }
 
     /**
-     * Creates a new <tt>CalendarDate</tt> representing the day contained in
-     * the specified Gregorian calendar (assuming the default locale and the
-     * default timezone).
-     *
-     * @param calendar
-     * The calendar containing the year, month, and day fields.
+     * Creates a new <tt>CalendarDate</tt> representing the day contained in the
+     * specified Gregorian calendar (assuming the default locale and the default
+     * timezone).
+     * 
+     * @param calendar The calendar containing the year, month, and day fields.
      */
     public CalendarDate(GregorianCalendar calendar) {
         this(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
@@ -228,15 +219,10 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
     /**
      * Creates a new <tt>CalendarDate</tt> representing the specified year,
      * month, and day of month.
-     *
-     * @param year
-     * The year field. (e.g. <tt>2008</tt>)
-     *
-     * @param month
-     * The month field, 0-based. (e.g. <tt>2</tt> for March)
-     *
-     * @param day
-     * The day of the month, 0-based. (e.g. <tt>14</tt> for the 15th)
+     * 
+     * @param year The year field. (e.g. <tt>2008</tt>)
+     * @param month The month field, 0-based. (e.g. <tt>2</tt> for March)
+     * @param day The day of the month, 0-based. (e.g. <tt>14</tt> for the 15th)
      */
     public CalendarDate(int year, int month, int day) {
         if (year <= GREGORIAN_CUTOVER_YEAR || year > 9999) {
@@ -266,20 +252,14 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
     /**
      * Adds the specified number of days to this calendar date and returns the
      * resulting calendar date. The number of days may be negative, in which
-     * case the result will be a date before this calendar date.
-     * <p>
-     * More formally, it is defined that given calendar dates <tt>c1</tt> and
-     * <tt>c2</tt>, the following will return <tt>true</tt>:
-     * <pre>
-     *    c1.add(c2.subtract(c1)).equals(c2);
-     * </pre>
-     *
-     * @param days
-     * The number of days to add to (or subtract from if negative) this
-     * calendar date.
-     *
-     * @return
-     * The resulting calendar date.
+     * case the result will be a date before this calendar date. <p> More
+     * formally, it is defined that given calendar dates <tt>c1</tt> and
+     * <tt>c2</tt>, the following will return <tt>true</tt>: <pre>
+     * c1.add(c2.subtract(c1)).equals(c2); </pre>
+     * 
+     * @param days The number of days to add to (or subtract from if negative)
+     * this calendar date.
+     * @return The resulting calendar date.
      */
     public CalendarDate add(int days) {
         GregorianCalendar calendar = toCalendar();
@@ -289,23 +269,17 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
 
     /**
      * Gets the number of days in between this calendar date and the specified
-     * calendar date. If this calendar date represents a day after the
-     * specified calendar date, the difference will be positive. If this
-     * calendar date represents a day before the specified calendar date, the
-     * difference will be negative. If the two calendar dates represent the
-     * same day, the difference will be zero.
-     * <p>
-     * More formally, it is defined that given calendar dates <tt>c1</tt> and
-     * <tt>c2</tt>, the following will return <tt>true</tt>:
-     * <pre>
-     *    c1.add(c2.subtract(c1)).equals(c2);
-     * </pre>
-     *
-     * @param calendarDate
-     * The calendar date to subtract from this calendar date.
-     *
-     * @return
-     * The number of days in between this calendar date and
+     * calendar date. If this calendar date represents a day after the specified
+     * calendar date, the difference will be positive. If this calendar date
+     * represents a day before the specified calendar date, the difference will
+     * be negative. If the two calendar dates represent the same day, the
+     * difference will be zero. <p> More formally, it is defined that given
+     * calendar dates <tt>c1</tt> and <tt>c2</tt>, the following will return
+     * <tt>true</tt>: <pre> c1.add(c2.subtract(c1)).equals(c2); </pre>
+     * 
+     * @param calendarDate The calendar date to subtract from this calendar
+     * date.
+     * @return The number of days in between this calendar date and
      * <tt>calendarDate</tt>.
      */
     public int subtract(CalendarDate calendarDate) {
@@ -315,7 +289,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
         long t1 = c1.getTimeInMillis();
         long t2 = c2.getTimeInMillis();
 
-        return (int)((t1 - t2) / (1000l * 60 * 60 * 24));
+        return (int) ((t1 - t2) / (1000l * 60 * 60 * 24));
     }
 
     /**
@@ -323,9 +297,8 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * <tt>GregorianCalendar</tt>, with the <tt>year</tt>, <tt>month</tt>, and
      * <tt>dayOfMonth</tt> fields set in the default time zone with the default
      * locale.
-     *
-     * @return
-     * This calendar date as a <tt>GregorianCalendar</tt>.
+     * 
+     * @return This calendar date as a <tt>GregorianCalendar</tt>.
      */
     public GregorianCalendar toCalendar() {
         return toCalendar(new Time(0, 0, 0));
@@ -336,12 +309,9 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * <tt>GregorianCalendar</tt>, with the <tt>year</tt>, <tt>month</tt>, and
      * <tt>dayOfMonth</tt> fields set in the default time zone with the default
      * locale.
-     *
-     * @param time
-     * The time of day.
-     *
-     * @return
-     * This calendar date as a <tt>GregorianCalendar</tt>.
+     * 
+     * @param time The time of day.
+     * @return This calendar date as a <tt>GregorianCalendar</tt>.
      */
     public GregorianCalendar toCalendar(Time time) {
         GregorianCalendar calendar = new GregorianCalendar(this.year, this.month, this.day + 1,
@@ -353,13 +323,10 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
 
     /**
      * Compares this calendar date with another calendar date.
-     *
-     * @param calendarDate
-     * The calendar date against which to compare.
-     *
-     * @return
-     * A negative number, zero, or a positive number if the specified calendar
-     * date is less than, equal to, or greater than this calendar date,
+     * 
+     * @param calendarDate The calendar date against which to compare.
+     * @return A negative number, zero, or a positive number if the specified
+     * calendar date is less than, equal to, or greater than this calendar date,
      * respectively.
      */
     @Override
@@ -378,19 +345,16 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
     }
 
     /**
-     * Indicates whether some other object is "equal to" this one.
-     * This is the case if the object is a calendar date that represents the
-     * same day as this one.
-     *
-     * @param o
-     * Reference to the object against which to compare.
+     * Indicates whether some other object is "equal to" this one. This is the
+     * case if the object is a calendar date that represents the same day as
+     * this one.
+     * 
+     * @param o Reference to the object against which to compare.
      */
     @Override
     public boolean equals(Object o) {
-        return (o instanceof CalendarDate
-            && ((CalendarDate)o).year == this.year
-            && ((CalendarDate)o).month == this.month
-            && ((CalendarDate)o).day == this.day);
+        return (o instanceof CalendarDate && ((CalendarDate) o).year == this.year
+            && ((CalendarDate) o).month == this.month && ((CalendarDate) o).day == this.day);
     }
 
     /**
@@ -432,11 +396,11 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
 
     /**
      * Creates a new date representing the specified date string. The date
-     * string must be in the <tt>ISO 8601</tt> "calendar date" format,
-     * which is <tt>[YYYY]-[MM]-[DD]</tt>.
-     *
-     * @param value
-     * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23).
+     * string must be in the <tt>ISO 8601</tt> "calendar date" format, which is
+     * <tt>[YYYY]-[MM]-[DD]</tt>.
+     * 
+     * @param value A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g.
+     * 2008-07-23).
      */
     public static CalendarDate decode(String value) {
         Matcher matcher = PATTERN.matcher(value);

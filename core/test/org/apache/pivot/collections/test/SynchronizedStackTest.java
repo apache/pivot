@@ -26,7 +26,6 @@ import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.junit.Test;
 
-
 public class SynchronizedStackTest {
     @Test
     public void synchronizedStackTest() {
@@ -35,8 +34,7 @@ public class SynchronizedStackTest {
     }
 
     private static void testSynchronizedStack(Stack<String> stack) {
-        final SynchronizedStack<String> synchronizedStack =
-            new SynchronizedStack<>(stack);
+        final SynchronizedStack<String> synchronizedStack = new SynchronizedStack<>(stack);
 
         Task<Void> testTask = new Task<Void>() {
             @Override
@@ -71,7 +69,7 @@ public class SynchronizedStackTest {
 
             try {
                 Thread.sleep(500);
-            } catch(InterruptedException exception) {
+            } catch (InterruptedException exception) {
                 throw new RuntimeException(exception);
             }
 
@@ -82,7 +80,7 @@ public class SynchronizedStackTest {
             if (testTask.isPending()) {
                 try {
                     testTask.wait(10000);
-                } catch(InterruptedException exception) {
+                } catch (InterruptedException exception) {
                     throw new RuntimeException(exception);
                 }
             }

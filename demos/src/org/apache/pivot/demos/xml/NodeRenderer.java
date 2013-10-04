@@ -47,10 +47,10 @@ public class NodeRenderer extends Label implements TreeView.NodeRenderer {
         if (node != null) {
             String text;
             if (node instanceof Element) {
-                Element element = (Element)node;
+                Element element = (Element) node;
                 text = "<" + element.getName() + ">";
             } else if (node instanceof TextNode) {
-                TextNode textNode = (TextNode)node;
+                TextNode textNode = (TextNode) node;
                 text = textNode.getText();
 
                 if (text.length() > MAXIMUM_TEXT_LENGTH) {
@@ -64,22 +64,22 @@ public class NodeRenderer extends Label implements TreeView.NodeRenderer {
 
             setText(text);
 
-            Font font = (Font)treeView.getStyles().get("font");
+            Font font = (Font) treeView.getStyles().get("font");
             getStyles().put("font", font);
 
             Color color;
             if (treeView.isEnabled() && !disabled) {
                 if (selected) {
                     if (treeView.isFocused()) {
-                        color = (Color)treeView.getStyles().get("selectionColor");
+                        color = (Color) treeView.getStyles().get("selectionColor");
                     } else {
-                        color = (Color)treeView.getStyles().get("inactiveSelectionColor");
+                        color = (Color) treeView.getStyles().get("inactiveSelectionColor");
                     }
                 } else {
-                    color = (Color)treeView.getStyles().get("color");
+                    color = (Color) treeView.getStyles().get("color");
                 }
             } else {
-                color = (Color)treeView.getStyles().get("disabledColor");
+                color = (Color) treeView.getStyles().get("disabledColor");
             }
 
             getStyles().put("color", color);
@@ -90,10 +90,10 @@ public class NodeRenderer extends Label implements TreeView.NodeRenderer {
     public String toString(Object node) {
         String string;
         if (node instanceof Element) {
-            Element element = (Element)node;
+            Element element = (Element) node;
             string = element.getName();
         } else if (node instanceof TextNode) {
-            TextNode textNode = (TextNode)node;
+            TextNode textNode = (TextNode) node;
             string = textNode.getText();
         } else {
             throw new IllegalArgumentException();

@@ -39,7 +39,7 @@ public interface TextPaneListener {
 
     /**
      * Called when a text pane's document has changed.
-     *
+     * 
      * @param textPane
      * @param previousDocument
      */
@@ -47,7 +47,7 @@ public interface TextPaneListener {
 
     /**
      * Called when a text pane's editable state has changed.
-     *
+     * 
      * @param textPane
      */
     public void editableChanged(TextPane textPane);

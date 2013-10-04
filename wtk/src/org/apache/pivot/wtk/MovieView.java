@@ -20,14 +20,13 @@ import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.media.Movie;
 
-
 /**
  * Component that plays a movie.
  */
 @DefaultProperty("movie")
 public class MovieView extends Component {
-    private static class MovieViewListenerList extends WTKListenerList<MovieViewListener>
-        implements MovieViewListener {
+    private static class MovieViewListenerList extends WTKListenerList<MovieViewListener> implements
+        MovieViewListener {
         @Override
         public void movieChanged(MovieView movieView, Movie previousMovie) {
             for (MovieViewListener listener : this) {
@@ -49,9 +48,8 @@ public class MovieView extends Component {
 
     /**
      * Creates an movie view with the given movie.
-     *
-     * @param movie
-     * The initial movie to set, or <tt>null</tt> for no movie.
+     * 
+     * @param movie The initial movie to set, or <tt>null</tt> for no movie.
      */
     public MovieView(Movie movie) {
         setMovie(movie);
@@ -61,9 +59,8 @@ public class MovieView extends Component {
 
     /**
      * Returns the movie view's current movie.
-     *
-     * @return
-     * The current movie, or <tt>null</tt> if no movie is set.
+     * 
+     * @return The current movie, or <tt>null</tt> if no movie is set.
      */
     public Movie getMovie() {
         return movie;
@@ -71,9 +68,8 @@ public class MovieView extends Component {
 
     /**
      * Sets the movie view's current movie.
-     *
-     * @param movie
-     * The movie to set, or <tt>null</tt> for no movie.
+     * 
+     * @param movie The movie to set, or <tt>null</tt> for no movie.
      */
     public void setMovie(Movie movie) {
         Movie previousMovie = this.movie;
@@ -86,9 +82,8 @@ public class MovieView extends Component {
 
     /**
      * Returns the movie view listener list.
-     *
-     * @return
-     * The movie view listener list.
+     * 
+     * @return The movie view listener list.
      */
     public ListenerList<MovieViewListener> getMovieViewListeners() {
         return movieViewListeners;

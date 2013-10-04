@@ -27,10 +27,9 @@ public class TablePaneTest extends Application.Adapter {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(TablePaneTest.class, "table_pane_test.bxml");
+        window = (Window) bxmlSerializer.readObject(TablePaneTest.class, "table_pane_test.bxml");
         window.open(display);
     }
 

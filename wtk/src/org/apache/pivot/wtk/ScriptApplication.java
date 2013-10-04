@@ -67,7 +67,7 @@ public class ScriptApplication implements Application {
 
         // Load the file and open the window
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        this.window = (Window)bxmlSerializer.readObject(location, resources);
+        this.window = (Window) bxmlSerializer.readObject(location, resources);
         this.window.open(display);
     }
 

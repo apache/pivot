@@ -42,21 +42,22 @@ public class Transitions extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        button1 = (PushButton)namespace.get("button1");
-        button2 = (PushButton)namespace.get("button2");
-        button3 = (PushButton)namespace.get("button3");
-        button4 = (PushButton)namespace.get("button4");
+        button1 = (PushButton) namespace.get("button1");
+        button2 = (PushButton) namespace.get("button2");
+        button3 = (PushButton) namespace.get("button3");
+        button4 = (PushButton) namespace.get("button4");
 
         ButtonPressListener buttonPressListener = new ButtonPressListener() {
             @Override
             public void buttonPressed(final Button button) {
                 if (collapseTransition == null) {
-                    collapseTransition = new CollapseTransition(button, TRANSITION_DURATION, TRANSITION_RATE);
+                    collapseTransition = new CollapseTransition(button, TRANSITION_DURATION,
+                        TRANSITION_RATE);
 
                     TransitionListener transitionListener = new TransitionListener() {
                         @Override
                         public void transitionCompleted(Transition transition) {
-                            CollapseTransition collapseTransitionLocal = (CollapseTransition)transition;
+                            CollapseTransition collapseTransitionLocal = (CollapseTransition) transition;
 
                             if (!transition.isReversed()) {
                                 Component component = collapseTransitionLocal.getComponent();

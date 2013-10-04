@@ -24,8 +24,7 @@ import java.util.NoSuchElementException;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Implementation of the {@link Set} interface that is backed by a
- * hash table.
+ * Implementation of the {@link Set} interface that is backed by a hash table.
  */
 public class HashSet<E> implements Set<E>, Serializable {
     private static final long serialVersionUID = 4095129319373194969L;
@@ -194,7 +193,7 @@ public class HashSet<E> implements Set<E>, Serializable {
         if (this == o) {
             equals = true;
         } else if (o instanceof Set<?>) {
-            Set<E> set = (Set<E>)o;
+            Set<E> set = (Set<E>) o;
 
             if (getCount() == set.getCount()) {
                 for (E element : this) {

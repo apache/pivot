@@ -28,13 +28,13 @@ public class ComparableValidator<T extends Comparable<T>> extends DecimalValidat
         super(locale);
     }
 
-//    @Override
-//    public boolean isValid(String text) {
-//        if (!super.isValid(text))
-//            return false;
-//
-//        return true;
-//    }
+    // @Override
+    // public boolean isValid(String text) {
+    // if (!super.isValid(text))
+    // return false;
+    //
+    // return true;
+    // }
 
     @Override
     public boolean isValid(String text) {

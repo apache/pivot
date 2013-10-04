@@ -25,8 +25,8 @@ import org.apache.pivot.wtk.media.Image;
  * Node representing an image.
  */
 public class ImageNode extends Node {
-    private static class ImageNodeListenerList extends ListenerList<ImageNodeListener>
-        implements ImageNodeListener {
+    private static class ImageNodeListenerList extends ListenerList<ImageNodeListener> implements
+        ImageNodeListener {
         @Override
         public void imageChanged(ImageNode imageNode, Image previousImage) {
             for (ImageNodeListener listener : this) {
@@ -72,14 +72,12 @@ public class ImageNode extends Node {
     }
 
     /**
-     * Sets the image node's current image by URL.
-     * <p>
-     * If the icon already exists in the application context resource cache,
-     * the cached value will be used. Otherwise, the icon will be loaded
-     * synchronously and added to the cache.
-     *
-     * @param imageURL
-     * The location of the image to set.
+     * Sets the image node's current image by URL. <p> If the icon already
+     * exists in the application context resource cache, the cached value will
+     * be used. Otherwise, the icon will be loaded synchronously and added to
+     * the cache.
+     * 
+     * @param imageURL The location of the image to set.
      */
     public void setImage(URL imageURL) {
         if (imageURL == null) {
@@ -90,12 +88,10 @@ public class ImageNode extends Node {
     }
 
     /**
-     * Sets the image node's icon by {@linkplain ClassLoader#getResource(String)
-     * resource name}.
-     *
-     * @param imageName
-     * The resource name of the image to set.
-     *
+     * Sets the image node's icon by
+     * {@linkplain ClassLoader#getResource(String) resource name}.
+     * 
+     * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
      */
     public void setImage(String imageName) {
@@ -133,8 +129,7 @@ public class ImageNode extends Node {
 
     @Override
     public Node getRange(int offset, int characterCount) {
-        if (offset < 0
-            || offset > 1) {
+        if (offset < 0 || offset > 1) {
             throw new IndexOutOfBoundsException();
         }
 

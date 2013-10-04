@@ -22,12 +22,10 @@ package org.apache.pivot.util;
 public interface Filter<T> {
     /**
      * Determines item inclusion.
-     *
-     * @param item
-     * The item to test for inclusion.
-     *
-     * @return
-     * <tt>true</tt> if the item should be included; <tt>false</tt>, otherwise.
+     * 
+     * @param item The item to test for inclusion.
+     * @return <tt>true</tt> if the item should be included; <tt>false</tt>,
+     * otherwise.
      */
     public boolean include(T item);
 }

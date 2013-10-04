@@ -47,8 +47,8 @@ import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Implementation of the {@link Serializer} interface that reads data from
- * and writes data to a JavaScript Object Notation (JSON) file.
+ * Implementation of the {@link Serializer} interface that reads data from and
+ * writes data to a JavaScript Object Notation (JSON) file.
  */
 public class JSONSerializer implements Serializer<Object> {
     private static class JSONSerializerListenerList extends ListenerList<JSONSerializerListener>
@@ -167,7 +167,8 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     /**
-     * Returns the type of the object that will be returned by {@link #readObject(Reader)}.
+     * Returns the type of the object that will be returned by
+     * {@link #readObject(Reader)}.
      */
     public Type getType() {
         return type;
@@ -183,10 +184,9 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Sets a flag indicating that map keys should always be quote-delimited.
-     *
-     * @param alwaysDelimitMapKeys
-     * <tt>true</tt> to bound map keys in double quotes; <tt>false</tt> to
-     * only quote-delimit keys as necessary.
+     * 
+     * @param alwaysDelimitMapKeys <tt>true</tt> to bound map keys in double
+     * quotes; <tt>false</tt> to only quote-delimit keys as necessary.
      */
     public void setAlwaysDelimitMapKeys(boolean alwaysDelimitMapKeys) {
         this.alwaysDelimitMapKeys = alwaysDelimitMapKeys;
@@ -200,9 +200,9 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     /**
-     * Sets the serializer's verbosity flag. When verbosity is enabled, all data read or
-     * written will be echoed to the console.
-     *
+     * Sets the serializer's verbosity flag. When verbosity is enabled, all data
+     * read or written will be echoed to the console.
+     * 
      * @param verbose
      */
     public void setVerbose(boolean verbose) {
@@ -211,16 +211,13 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Reads data from a JSON stream.
-     *
-     * @param inputStream
-     * The input stream from which data will be read.
-     *
+     * 
+     * @param inputStream The input stream from which data will be read.
      * @see #readObject(Reader)
      */
     @SuppressWarnings("resource")
     @Override
-    public Object readObject(InputStream inputStream)
-        throws IOException, SerializationException {
+    public Object readObject(InputStream inputStream) throws IOException, SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
         }
@@ -235,26 +232,16 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Reads data from a JSON stream.
-     *
-     * @param reader
-     * The reader from which data will be read.
-     *
-     * @return
-     * One of the following types, depending on the content of the stream
-     * and the value of {@link #getType()}:
-     *
-     * <ul>
-     * <li>pivot.collections.Dictionary</li>
-     * <li>pivot.collections.Sequence</li>
-     * <li>java.lang.String</li>
-     * <li>java.lang.Number</li>
-     * <li>java.lang.Boolean</li>
-     * <li><tt>null</tt></li>
-     * <li>A JavaBean object</li>
-     * </ul>
+     * 
+     * @param reader The reader from which data will be read.
+     * @return One of the following types, depending on the content of the stream
+     * and the value of {@link #getType()}: <ul>
+     * <li>pivot.collections.Dictionary</li> <li>pivot.collections.Sequence</li>
+     * <li>java.lang.String</li> <li>java.lang.Number</li>
+     * <li>java.lang.Boolean</li> <li><tt>null</tt></li> <li>A JavaBean
+     * object</li> </ul>
      */
-    public Object readObject(Reader reader)
-        throws IOException, SerializationException {
+    public Object readObject(Reader reader) throws IOException, SerializationException {
         if (reader == null) {
             throw new IllegalArgumentException("reader is null.");
         }
@@ -282,8 +269,8 @@ public class JSONSerializer implements Serializer<Object> {
         return object;
     }
 
-    private Object readValue(Reader reader, Type typeArgument)
-        throws IOException, SerializationException {
+    private Object readValue(Reader reader, Type typeArgument) throws IOException,
+        SerializationException {
         Object object = null;
 
         skipWhitespaceAndComments(reader);
@@ -311,11 +298,9 @@ public class JSONSerializer implements Serializer<Object> {
         return object;
     }
 
-    private void skipWhitespaceAndComments(Reader reader)
-        throws IOException, SerializationException {
-        while (c != -1
-            && (Character.isWhitespace(c)
-                || c == '/')) {
+    private void skipWhitespaceAndComments(Reader reader) throws IOException,
+        SerializationException {
+        while (c != -1 && (Character.isWhitespace(c) || c == '/')) {
             boolean comment = (c == '/');
 
             // Read the next character
@@ -324,17 +309,14 @@ public class JSONSerializer implements Serializer<Object> {
             if (comment) {
                 if (c == '/') {
                     // Single-line comment
-                    while (c != -1
-                        && c != '\n'
-                        && c != '\r') {
+                    while (c != -1 && c != '\n' && c != '\r') {
                         c = reader.read();
                     }
                 } else if (c == '*') {
                     // Multi-line comment
                     boolean closed = false;
 
-                    while (c != -1
-                        && !closed) {
+                    while (c != -1 && !closed) {
                         c = reader.read();
 
                         if (c == '*') {
@@ -357,8 +339,7 @@ public class JSONSerializer implements Serializer<Object> {
         }
     }
 
-    private Object readNullValue(Reader reader)
-        throws IOException, SerializationException {
+    private Object readNullValue(Reader reader) throws IOException, SerializationException {
         String nullString = "null";
 
         int n = nullString.length();
@@ -385,8 +366,7 @@ public class JSONSerializer implements Serializer<Object> {
         return null;
     }
 
-    private String readString(Reader reader)
-        throws IOException, SerializationException {
+    private String readString(Reader reader) throws IOException, SerializationException {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Use the same delimiter to close the string
@@ -414,23 +394,20 @@ public class JSONSerializer implements Serializer<Object> {
                         StringBuilder unicodeBuilder = new StringBuilder();
                         while (unicodeBuilder.length() < 4) {
                             c = reader.read();
-                            unicodeBuilder.append((char)c);
+                            unicodeBuilder.append((char) c);
                         }
 
                         String unicode = unicodeBuilder.toString();
-                        c = (char)Integer.parseInt(unicode, 16);
+                        c = (char) Integer.parseInt(unicode, 16);
                     } else {
-                        if (!(c == '\\'
-                            || c == '/'
-                            || c == '\"'
-                            || c == '\''
-                            || c == t)) {
-                            throw new SerializationException("Unsupported escape sequence in input stream.");
+                        if (!(c == '\\' || c == '/' || c == '\"' || c == '\'' || c == t)) {
+                            throw new SerializationException(
+                                "Unsupported escape sequence in input stream.");
                         }
                     }
                 }
 
-                stringBuilder.append((char)c);
+                stringBuilder.append((char) c);
             }
 
             c = reader.read();
@@ -446,8 +423,8 @@ public class JSONSerializer implements Serializer<Object> {
         return stringBuilder.toString();
     }
 
-    private Object readStringValue(Reader reader, Type typeArgument)
-        throws IOException, SerializationException {
+    private Object readStringValue(Reader reader, Type typeArgument) throws IOException,
+        SerializationException {
         if (!(typeArgument instanceof Class<?>)) {
             throw new SerializationException("Cannot convert string to " + typeArgument + ".");
         }
@@ -459,11 +436,11 @@ public class JSONSerializer implements Serializer<Object> {
             jsonSerializerListeners.readString(this, string);
         }
 
-        return BeanAdapter.coerce(string, (Class<?>)typeArgument);
+        return BeanAdapter.coerce(string, (Class<?>) typeArgument);
     }
 
-    private Object readNumberValue(Reader reader, Type typeArgument)
-        throws IOException, SerializationException {
+    private Object readNumberValue(Reader reader, Type typeArgument) throws IOException,
+        SerializationException {
         if (!(typeArgument instanceof Class<?>)) {
             throw new SerializationException("Cannot convert number to " + typeArgument + ".");
         }
@@ -479,9 +456,8 @@ public class JSONSerializer implements Serializer<Object> {
             c = reader.read();
         }
 
-        while (c != -1 && (Character.isDigit(c) || c == '.'
-            || c == 'e' || c == 'E' || c == '-')) {
-            stringBuilder.append((char)c);
+        while (c != -1 && (Character.isDigit(c) || c == '.' || c == 'e' || c == 'E' || c == '-')) {
+            stringBuilder.append((char) c);
             integer &= !(c == '.');
             c = reader.read();
         }
@@ -489,11 +465,10 @@ public class JSONSerializer implements Serializer<Object> {
         if (integer) {
             long value = Long.parseLong(stringBuilder.toString()) * (negative ? -1 : 1);
 
-            if (value > Integer.MAX_VALUE
-                || value < Integer.MIN_VALUE) {
+            if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
                 number = value;
             } else {
-                number = (int)value;
+                number = (int) value;
             }
         } else {
             number = Double.parseDouble(stringBuilder.toString()) * (negative ? -1.0d : 1.0d);
@@ -504,11 +479,11 @@ public class JSONSerializer implements Serializer<Object> {
             jsonSerializerListeners.readNumber(this, number);
         }
 
-        return BeanAdapter.coerce(number, (Class<?>)typeArgument);
+        return BeanAdapter.coerce(number, (Class<?>) typeArgument);
     }
 
-    private Object readBooleanValue(Reader reader, Type typeArgument)
-        throws IOException, SerializationException {
+    private Object readBooleanValue(Reader reader, Type typeArgument) throws IOException,
+        SerializationException {
         if (!(typeArgument instanceof Class<?>)) {
             throw new SerializationException("Cannot convert boolean to " + typeArgument + ".");
         }
@@ -538,12 +513,12 @@ public class JSONSerializer implements Serializer<Object> {
             jsonSerializerListeners.readBoolean(this, value);
         }
 
-        return BeanAdapter.coerce(value, (Class<?>)typeArgument);
+        return BeanAdapter.coerce(value, (Class<?>) typeArgument);
     }
 
     @SuppressWarnings("unchecked")
-    private Object readListValue(Reader reader, Type typeArgument)
-        throws IOException, SerializationException {
+    private Object readListValue(Reader reader, Type typeArgument) throws IOException,
+        SerializationException {
         Sequence<Object> sequence = null;
         Type itemType = null;
 
@@ -556,8 +531,8 @@ public class JSONSerializer implements Serializer<Object> {
             Type parentType = typeArgument;
             while (parentType != null) {
                 if (parentType instanceof ParameterizedType) {
-                    ParameterizedType parameterizedType = (ParameterizedType)parentType;
-                    Class<?> rawType = (Class<?>)parameterizedType.getRawType();
+                    ParameterizedType parameterizedType = (ParameterizedType) parentType;
+                    Class<?> rawType = (Class<?>) parameterizedType.getRawType();
 
                     if (Sequence.class.isAssignableFrom(rawType)) {
                         itemType = parameterizedType.getActualTypeArguments()[0];
@@ -566,15 +541,15 @@ public class JSONSerializer implements Serializer<Object> {
                     break;
                 }
 
-                Class<?> classType = (Class<?>)parentType;
+                Class<?> classType = (Class<?>) parentType;
                 Type[] genericInterfaces = classType.getGenericInterfaces();
 
                 for (int i = 0; i < genericInterfaces.length; i++) {
                     Type genericInterface = genericInterfaces[i];
 
                     if (genericInterface instanceof ParameterizedType) {
-                        ParameterizedType parameterizedType = (ParameterizedType)genericInterface;
-                        Class<?> interfaceType = (Class<?>)parameterizedType.getRawType();
+                        ParameterizedType parameterizedType = (ParameterizedType) genericInterface;
+                        Class<?> interfaceType = (Class<?>) parameterizedType.getRawType();
 
                         if (Sequence.class.isAssignableFrom(interfaceType)) {
                             itemType = parameterizedType.getActualTypeArguments()[0];
@@ -602,14 +577,14 @@ public class JSONSerializer implements Serializer<Object> {
             // Instantiate the sequence type
             Class<?> sequenceType;
             if (typeArgument instanceof ParameterizedType) {
-                ParameterizedType parameterizedType = (ParameterizedType)typeArgument;
-                sequenceType = (Class<?>)parameterizedType.getRawType();
+                ParameterizedType parameterizedType = (ParameterizedType) typeArgument;
+                sequenceType = (Class<?>) parameterizedType.getRawType();
             } else {
-                sequenceType = (Class<?>)typeArgument;
+                sequenceType = (Class<?>) typeArgument;
             }
 
             try {
-                sequence = (Sequence<Object>)sequenceType.newInstance();
+                sequence = (Sequence<Object>) sequenceType.newInstance();
             } catch (InstantiationException exception) {
                 throw new RuntimeException(exception);
             } catch (IllegalAccessException exception) {
@@ -654,8 +629,8 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     @SuppressWarnings("unchecked")
-    private Object readMapValue(Reader reader, Type typeArgument)
-        throws IOException, SerializationException {
+    private Object readMapValue(Reader reader, Type typeArgument) throws IOException,
+        SerializationException {
         Dictionary<String, Object> dictionary = null;
         Type valueType = null;
 
@@ -668,8 +643,8 @@ public class JSONSerializer implements Serializer<Object> {
             Type parentType = typeArgument;
             while (parentType != null) {
                 if (parentType instanceof ParameterizedType) {
-                    ParameterizedType parameterizedType = (ParameterizedType)parentType;
-                    Class<?> rawType = (Class<?>)parameterizedType.getRawType();
+                    ParameterizedType parameterizedType = (ParameterizedType) parentType;
+                    Class<?> rawType = (Class<?>) parameterizedType.getRawType();
 
                     if (Dictionary.class.isAssignableFrom(rawType)) {
                         valueType = parameterizedType.getActualTypeArguments()[1];
@@ -678,15 +653,15 @@ public class JSONSerializer implements Serializer<Object> {
                     break;
                 }
 
-                Class<?> classType = (Class<?>)parentType;
+                Class<?> classType = (Class<?>) parentType;
                 Type[] genericInterfaces = classType.getGenericInterfaces();
 
                 for (int i = 0; i < genericInterfaces.length; i++) {
                     Type genericInterface = genericInterfaces[i];
 
                     if (genericInterface instanceof ParameterizedType) {
-                        ParameterizedType parameterizedType = (ParameterizedType)genericInterface;
-                        Class<?> interfaceType = (Class<?>)parameterizedType.getRawType();
+                        ParameterizedType parameterizedType = (ParameterizedType) genericInterface;
+                        Class<?> interfaceType = (Class<?>) parameterizedType.getRawType();
 
                         if (Dictionary.class.isAssignableFrom(interfaceType)) {
                             valueType = parameterizedType.getActualTypeArguments()[1];
@@ -709,7 +684,7 @@ public class JSONSerializer implements Serializer<Object> {
 
             // Instantiate the dictionary or bean type
             if (valueType == null) {
-                Class<?> beanType = (Class<?>)typeArgument;
+                Class<?> beanType = (Class<?>) typeArgument;
 
                 try {
                     dictionary = new BeanAdapter(beanType.newInstance());
@@ -721,14 +696,14 @@ public class JSONSerializer implements Serializer<Object> {
             } else {
                 Class<?> dictionaryType;
                 if (typeArgument instanceof ParameterizedType) {
-                    ParameterizedType parameterizedType = (ParameterizedType)typeArgument;
-                    dictionaryType = (Class<?>)parameterizedType.getRawType();
+                    ParameterizedType parameterizedType = (ParameterizedType) typeArgument;
+                    dictionaryType = (Class<?>) parameterizedType.getRawType();
                 } else {
-                    dictionaryType = (Class<?>)typeArgument;
+                    dictionaryType = (Class<?>) typeArgument;
                 }
 
                 try {
-                    dictionary = (Dictionary<String, Object>)dictionaryType.newInstance();
+                    dictionary = (Dictionary<String, Object>) dictionaryType.newInstance();
                 } catch (InstantiationException exception) {
                     throw new RuntimeException(exception);
                 } catch (IllegalAccessException exception) {
@@ -761,13 +736,12 @@ public class JSONSerializer implements Serializer<Object> {
                     throw new SerializationException("Illegal identifier start character.");
                 }
 
-                while (c != -1
-                    && c != ':' && !Character.isWhitespace(c)) {
+                while (c != -1 && c != ':' && !Character.isWhitespace(c)) {
                     if (!Character.isJavaIdentifierPart(c)) {
                         throw new SerializationException("Illegal identifier character.");
                     }
 
-                    keyBuilder.append((char)c);
+                    keyBuilder.append((char) c);
                     c = reader.read();
                 }
 
@@ -778,8 +752,7 @@ public class JSONSerializer implements Serializer<Object> {
                 key = keyBuilder.toString();
             }
 
-            if (key == null
-                || key.length() == 0) {
+            if (key == null || key.length() == 0) {
                 throw new SerializationException("\"" + key + "\" is not a valid key.");
             }
 
@@ -798,8 +771,9 @@ public class JSONSerializer implements Serializer<Object> {
             c = reader.read();
 
             if (valueType == null) {
-                // The map is a bean instance; get the generic type of the property
-                Type genericValueType = ((BeanAdapter)dictionary).getGenericType(key);
+                // The map is a bean instance; get the generic type of the
+                // property
+                Type genericValueType = ((BeanAdapter) dictionary).getGenericType(key);
 
                 if (genericValueType != null) {
                     // Set the value in the bean
@@ -834,28 +808,27 @@ public class JSONSerializer implements Serializer<Object> {
             jsonSerializerListeners.endDictionary(this);
         }
 
-        return (dictionary instanceof BeanAdapter) ? ((BeanAdapter)dictionary).getBean() : dictionary;
+        return (dictionary instanceof BeanAdapter) ? ((BeanAdapter) dictionary).getBean()
+            : dictionary;
     }
 
     /**
      * Writes data to a JSON stream.
-     *
+     * 
      * @param object
-     *
-     * @param outputStream
-     * The output stream to which data will be written.
-     *
+     * @param outputStream The output stream to which data will be written.
      * @see #writeObject(Object, Writer)
      */
     @SuppressWarnings("resource")
     @Override
-    public void writeObject(Object object, OutputStream outputStream)
-        throws IOException, SerializationException {
+    public void writeObject(Object object, OutputStream outputStream) throws IOException,
+        SerializationException {
         if (outputStream == null) {
             throw new IllegalArgumentException("outputStream is null.");
         }
 
-        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset), BUFFER_SIZE);
+        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
+            BUFFER_SIZE);
         if (verbose) {
             writer = new EchoWriter(writer);
         }
@@ -865,25 +838,17 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Writes data to a JSON stream.
-     *
-     * @param object
-     * The object to serialize. Must be one of the following types:
-     *
-     * <ul>
-     * <li>pivot.collections.Map</li>
-     * <li>pivot.collections.List</li>
-     * <li>java.lang.String</li>
-     * <li>java.lang.Number</li>
-     * <li>java.lang.Boolean</li>
-     * <li><tt>null</tt></li>
-     * </ul>
-     *
-     * @param writer
-     * The writer to which data will be written.
+     * 
+     * @param object The object to serialize. Must be one of the following
+     * types: <ul> <li>pivot.collections.Map</li>
+     * <li>pivot.collections.List</li> <li>java.lang.String</li>
+     * <li>java.lang.Number</li> <li>java.lang.Boolean</li>
+     * <li><tt>null</tt></li> </ul>
+     * @param writer The writer to which data will be written.
      */
     @SuppressWarnings("unchecked")
-    public void writeObject(Object object, Writer writer)
-        throws IOException, SerializationException {
+    public void writeObject(Object object, Writer writer) throws IOException,
+        SerializationException {
         if (writer == null) {
             throw new IllegalArgumentException("writer is null.");
         }
@@ -891,13 +856,13 @@ public class JSONSerializer implements Serializer<Object> {
         if (object == null) {
             writer.append("null");
         } else if (object instanceof String) {
-            String string = (String)object;
+            String string = (String) object;
             StringBuilder stringBuilder = new StringBuilder();
 
             for (int i = 0, n = string.length(); i < n; i++) {
                 char ci = string.charAt(i);
 
-                switch(ci) {
+                switch (ci) {
                     case '\t': {
                         stringBuilder.append("\\t");
                         break;
@@ -916,12 +881,11 @@ public class JSONSerializer implements Serializer<Object> {
                     }
 
                     default: {
-                        if (charset.name().startsWith("UTF")
-                            || ci <= 0xFF) {
+                        if (charset.name().startsWith("UTF") || ci <= 0xFF) {
                             stringBuilder.append(ci);
                         } else {
                             stringBuilder.append("\\u");
-                            stringBuilder.append(String.format("%04x", (short)ci));
+                            stringBuilder.append(String.format("%04x", (short) ci));
                         }
                     }
                 }
@@ -930,18 +894,16 @@ public class JSONSerializer implements Serializer<Object> {
 
             writer.append("\"" + stringBuilder.toString() + "\"");
         } else if (object instanceof Number) {
-            Number number = (Number)object;
+            Number number = (Number) object;
 
             if (number instanceof Float) {
-                Float f = (Float)number;
-                if (f.isNaN()
-                    || f.isInfinite()) {
+                Float f = (Float) number;
+                if (f.isNaN() || f.isInfinite()) {
                     throw new SerializationException(number + " is not a valid value.");
                 }
             } else if (number instanceof Double) {
-                Double d = (Double)number;
-                if (d.isNaN()
-                    || d.isInfinite()) {
+                Double d = (Double) number;
+                if (d.isNaN() || d.isInfinite()) {
                     throw new SerializationException(number + " is not a valid value.");
                 }
             }
@@ -950,7 +912,7 @@ public class JSONSerializer implements Serializer<Object> {
         } else if (object instanceof Boolean) {
             writer.append(object.toString());
         } else if (object instanceof List<?>) {
-            List<Object> list = (List<Object>)object;
+            List<Object> list = (List<Object>) object;
             writer.append("[");
 
             int i = 0;
@@ -967,7 +929,7 @@ public class JSONSerializer implements Serializer<Object> {
         } else {
             Map<String, Object> map;
             if (object instanceof Map<?, ?>) {
-                map = (Map<String, Object>)object;
+                map = (Map<String, Object>) object;
             } else {
                 map = new BeanAdapter(object, true);
             }
@@ -1030,12 +992,9 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a Java object.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed object.
+     * 
+     * @param json The JSON value.
+     * @return The parsed object.
      */
     public static Object parse(String json) throws SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
@@ -1043,7 +1002,7 @@ public class JSONSerializer implements Serializer<Object> {
         Object object;
         try {
             object = jsonSerializer.readObject(new StringReader(json));
-        } catch(IOException exception) {
+        } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
 
@@ -1052,145 +1011,111 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a string.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed string.
+     * 
+     * @param json The JSON value.
+     * @return The parsed string.
      */
     public static String parseString(String json) throws SerializationException {
-        return (String)parse(json);
+        return (String) parse(json);
     }
 
     /**
      * Converts a JSON value to a number.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed number.
+     * 
+     * @param json The JSON value.
+     * @return The parsed number.
      */
     public static Number parseNumber(String json) throws SerializationException {
-        return (Number)parse(json);
+        return (Number) parse(json);
     }
 
     /**
      * Converts a JSON value to a short.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed short.
+     * 
+     * @param json The JSON value.
+     * @return The parsed short.
      */
     public static Short parseShort(String json) throws SerializationException {
-        return (Short)parse(json);
+        return (Short) parse(json);
     }
 
     /**
      * Converts a JSON value to a integer.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed integer.
+     * 
+     * @param json The JSON value.
+     * @return The parsed integer.
      */
     public static Integer parseInteger(String json) throws SerializationException {
-        return (Integer)parse(json);
+        return (Integer) parse(json);
     }
 
     /**
      * Converts a JSON value to a long.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed number.
+     * 
+     * @param json The JSON value.
+     * @return The parsed number.
      */
     public static Long parseLong(String json) throws SerializationException {
-        return (Long)parse(json);
+        return (Long) parse(json);
     }
 
     /**
      * Converts a JSON value to a float.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed float.
+     * 
+     * @param json The JSON value.
+     * @return The parsed float.
      */
     public static Float parseFloat(String json) throws SerializationException {
-        return (Float)parse(json);
+        return (Float) parse(json);
     }
 
     /**
      * Converts a JSON value to a double.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed double.
+     * 
+     * @param json The JSON value.
+     * @return The parsed double.
      */
     public static Double parseDouble(String json) throws SerializationException {
-        return (Double)parse(json);
+        return (Double) parse(json);
     }
 
     /**
      * Converts a JSON value to a boolean.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed boolean.
+     * 
+     * @param json The JSON value.
+     * @return The parsed boolean.
      */
     public static Boolean parseBoolean(String json) throws SerializationException {
-        return (Boolean)parse(json);
+        return (Boolean) parse(json);
     }
 
     /**
      * Converts a JSON value to a list.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed list.
+     * 
+     * @param json The JSON value.
+     * @return The parsed list.
      */
     public static List<?> parseList(String json) throws SerializationException {
-        return (List<?>)parse(json);
+        return (List<?>) parse(json);
     }
 
     /**
      * Converts a JSON value to a map.
-     *
-     * @param json
-     * The JSON value.
-     *
-     * @return
-     * The parsed map.
+     * 
+     * @param json The JSON value.
+     * @return The parsed map.
      */
     @SuppressWarnings("unchecked")
     public static Map<String, ?> parseMap(String json) throws SerializationException {
-        return (Map<String, ?>)parse(json);
+        return (Map<String, ?>) parse(json);
     }
 
     /**
-     * Converts a object to a JSON string representation. The map keys will always
-     * be quote-delimited.
-     *
-     * @param value
-     * The object to convert.
-     *
-     * @return
-     * The resulting JSON string.
-     *
+     * Converts a object to a JSON string representation. The map keys will
+     * always be quote-delimited.
+     * 
+     * @param value The object to convert.
+     * @return The resulting JSON string.
      * @see #toString(Object, boolean)
      */
     public static String toString(Object value) throws SerializationException {
@@ -1199,17 +1124,14 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a object to a JSON string representation.
-     *
-     * @param value
-     * The object to convert.
-     *
-     * @param alwaysDelimitMapKeys
-     * A flag indicating whether or not map keys will always be quote-delimited.
-     *
-     * @return
-     * The resulting JSON string.
+     * 
+     * @param value The object to convert.
+     * @param alwaysDelimitMapKeys A flag indicating whether or not map keys will
+     * always be quote-delimited.
+     * @return The resulting JSON string.
      */
-    public static String toString(Object value, boolean alwaysDelimitMapKeys) throws SerializationException {
+    public static String toString(Object value, boolean alwaysDelimitMapKeys)
+        throws SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
         jsonSerializer.setAlwaysDelimitMapKeys(alwaysDelimitMapKeys);
 
@@ -1217,7 +1139,7 @@ public class JSONSerializer implements Serializer<Object> {
 
         try {
             jsonSerializer.writeObject(value, writer);
-        } catch(IOException exception) {
+        } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
 

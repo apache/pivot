@@ -173,7 +173,8 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
 
     // Derived colors
     private Color titleBarBevelColor;
-    // private Color contentBevelColor;  // TODO: future use
+
+    // private Color contentBevelColor; // TODO: future use
 
     public FakeWindowSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();

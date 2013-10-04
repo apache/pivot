@@ -31,14 +31,14 @@ public class ColorChooser extends Container {
     public interface SelectedColorBindMapping {
         /**
          * Converts a context value to a color.
-         *
+         * 
          * @param value
          */
         public Color toColor(Object value);
 
         /**
          * Converts a color to a context value.
-         *
+         * 
          * @param color
          */
         public Object valueOf(Color color);
@@ -47,13 +47,11 @@ public class ColorChooser extends Container {
     /**
      * Color chooser selection listener list.
      */
-    private static class ColorChooserSelectionListenerList
-        extends WTKListenerList<ColorChooserSelectionListener>
-        implements ColorChooserSelectionListener {
+    private static class ColorChooserSelectionListenerList extends
+        WTKListenerList<ColorChooserSelectionListener> implements ColorChooserSelectionListener {
 
         @Override
-        public void selectedColorChanged(ColorChooser colorChooser,
-            Color previousSelectedColor) {
+        public void selectedColorChanged(ColorChooser colorChooser, Color previousSelectedColor) {
             for (ColorChooserSelectionListener listener : this) {
                 listener.selectedColorChanged(colorChooser, previousSelectedColor);
             }
@@ -63,9 +61,8 @@ public class ColorChooser extends Container {
     /**
      * Color chooser binding listener list.
      */
-    private static class ColorChooserBindingListenerList
-        extends WTKListenerList<ColorChooserBindingListener>
-        implements ColorChooserBindingListener {
+    private static class ColorChooserBindingListenerList extends
+        WTKListenerList<ColorChooserBindingListener> implements ColorChooserBindingListener {
         @Override
         public void selectedColorKeyChanged(ColorChooser colorChooser,
             String previousSelectedColorKey) {
@@ -98,10 +95,8 @@ public class ColorChooser extends Container {
     private BindType selectedColorBindType = BindType.BOTH;
     private SelectedColorBindMapping selectedColorBindMapping = null;
 
-    private ColorChooserSelectionListenerList colorChooserSelectionListeners =
-        new ColorChooserSelectionListenerList();
-    private ColorChooserBindingListenerList colorChooserBindingListeners =
-        new ColorChooserBindingListenerList();
+    private ColorChooserSelectionListenerList colorChooserSelectionListeners = new ColorChooserSelectionListenerList();
+    private ColorChooserBindingListenerList colorChooserBindingListeners = new ColorChooserBindingListenerList();
 
     public ColorChooser() {
         installSkin(ColorChooser.class);
@@ -117,16 +112,15 @@ public class ColorChooser extends Container {
 
     /**
      * Sets the selected color.
-     *
-     * @param selectedColor
-     * The color to select, or <tt>null</tt> to clear the selection.
+     * 
+     * @param selectedColor The color to select, or <tt>null</tt> to clear the
+     * selection.
      */
     public void setSelectedColor(Color selectedColor) {
         Color previousSelectedColor = this.selectedColor;
 
         if (previousSelectedColor != selectedColor
-            && (previousSelectedColor == null
-                || !previousSelectedColor.equals(selectedColor))) {
+            && (previousSelectedColor == null || !previousSelectedColor.equals(selectedColor))) {
             this.selectedColor = selectedColor;
             colorChooserSelectionListeners.selectedColorChanged(this, previousSelectedColor);
         }
@@ -134,9 +128,9 @@ public class ColorChooser extends Container {
 
     /**
      * Sets the selected color.
-     *
-     * @param selectedColor
-     * The color to select, or <tt>null</tt> to clear the selection.
+     * 
+     * @param selectedColor The color to select, or <tt>null</tt> to clear the
+     * selection.
      */
     public void setSelectedColor(String selectedColor) {
         if (selectedColor == null) {
@@ -203,15 +197,14 @@ public class ColorChooser extends Container {
      */
     @Override
     public void load(Object context) {
-        if (selectedColorKey != null
-            && JSON.containsKey(context, selectedColorKey)
+        if (selectedColorKey != null && JSON.containsKey(context, selectedColorKey)
             && selectedColorBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedColorKey);
 
             Color selectedColorLocal = null;
 
             if (value instanceof Color) {
-                selectedColorLocal = (Color)value;
+                selectedColorLocal = (Color) value;
             } else if (selectedColorBindMapping == null) {
                 if (value != null) {
                     selectedColorLocal = Color.decode(value.toString());
@@ -225,15 +218,14 @@ public class ColorChooser extends Container {
     }
 
     /**
-     * Stores the selected color into the specified bind context using this color
-     * chooser's bind key, if one is set.
+     * Stores the selected color into the specified bind context using this
+     * color chooser's bind key, if one is set.
      */
     @Override
     public void store(Object context) {
-        if (selectedColorKey != null
-            && selectedColorBindType != BindType.LOAD) {
-            JSON.put(context, selectedColorKey, (selectedColorBindMapping == null) ?
-                selectedColor : selectedColorBindMapping.valueOf(selectedColor));
+        if (selectedColorKey != null && selectedColorBindType != BindType.LOAD) {
+            JSON.put(context, selectedColorKey, (selectedColorBindMapping == null) ? selectedColor
+                : selectedColorBindMapping.valueOf(selectedColor));
         }
     }
 
@@ -243,7 +235,7 @@ public class ColorChooser extends Container {
     @Override
     public void clear() {
         if (selectedColorKey != null) {
-            setSelectedColor((Color)null);
+            setSelectedColor((Color) null);
         }
     }
 

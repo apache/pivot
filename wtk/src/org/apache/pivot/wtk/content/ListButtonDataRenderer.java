@@ -20,10 +20,9 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.HorizontalAlignment;
 
 /**
- * Default list button data renderer.
- * <p>
- * TODO Add showIcon property to this class so the size of the button doesn't
- * change when changing selection between items with and without icons.
+ * Default list button data renderer. <p> TODO Add showIcon property to this
+ * class so the size of the button doesn't change when changing selection
+ * between items with and without icons.
  */
 public class ListButtonDataRenderer extends ButtonDataRenderer {
     public ListButtonDataRenderer() {
@@ -37,7 +36,7 @@ public class ListButtonDataRenderer extends ButtonDataRenderer {
             dataMutable = "";
         } else {
             if (dataMutable instanceof ListItem) {
-                ListItem listItem = (ListItem)dataMutable;
+                ListItem listItem = (ListItem) dataMutable;
                 dataMutable = new ButtonData(listItem.getIcon(), listItem.getText());
             }
         }

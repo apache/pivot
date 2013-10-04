@@ -29,7 +29,7 @@ public class SaturationDecoratorTest extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(SaturationDecoratorTest.class,
+        window = (Window) bxmlSerializer.readObject(SaturationDecoratorTest.class,
             "saturation_decorator_test.bxml");
 
         window.open(display);
@@ -37,7 +37,7 @@ public class SaturationDecoratorTest extends Application.Adapter {
 
     @Override
     public boolean shutdown(boolean optional) {
-        if (window!= null) {
+        if (window != null) {
             window.close();
         }
 

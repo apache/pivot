@@ -89,7 +89,6 @@ public class ExpensesWindow extends Window implements Bindable {
         }
     }
 
-
     private Expenses expensesApplication = null;
 
     private RefreshExpenseListAction refreshExpenseListAction = new RefreshExpenseListAction();
@@ -119,14 +118,14 @@ public class ExpensesWindow extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        expenseTableView = (TableView)namespace.get("expenseTableView");
-        activityIndicator = (ActivityIndicator)namespace.get("activityIndicator");
-        activityIndicatorBoxPane = (BoxPane)namespace.get("activityIndicatorBoxPane");
+        expenseTableView = (TableView) namespace.get("expenseTableView");
+        activityIndicator = (ActivityIndicator) namespace.get("activityIndicator");
+        activityIndicatorBoxPane = (BoxPane) namespace.get("activityIndicatorBoxPane");
 
         // Load the add/edit sheet
         try {
             BXMLSerializer bxmlSerializer = new BXMLSerializer();
-            expenseSheet = (ExpenseSheet)bxmlSerializer.readObject(ExpenseSheet.class,
+            expenseSheet = (ExpenseSheet) bxmlSerializer.readObject(ExpenseSheet.class,
                 "expense_sheet.bxml", true);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -135,21 +134,22 @@ public class ExpensesWindow extends Window implements Bindable {
         }
 
         // Create the delete confirmation prompt
-        ArrayList<String> options = new ArrayList<>((String) resources.get("ok"), (String) resources.get("cancel"));
-        deleteConfirmationPrompt = new Prompt(MessageType.QUESTION, (String)resources.get("confirmDelete"),
-            options);
+        ArrayList<String> options = new ArrayList<>((String) resources.get("ok"),
+            (String) resources.get("cancel"));
+        deleteConfirmationPrompt = new Prompt(MessageType.QUESTION,
+            (String) resources.get("confirmDelete"), options);
 
         // Attach event listeners
-        expenseTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
-            @Override
-            public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
-                int selectedIndex = expenseTableView.getSelectedIndex();
-                editSelectedExpenseAction.setEnabled(selectedIndex != -1);
-                deleteSelectedExpenseAction.setEnabled(selectedIndex != -1);
-            }
-        });
+        expenseTableView.getTableViewSelectionListeners().add(
+            new TableViewSelectionListener.Adapter() {
+                @Override
+                public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+                    int selectedIndex = expenseTableView.getSelectedIndex();
+                    editSelectedExpenseAction.setEnabled(selectedIndex != -1);
+                    deleteSelectedExpenseAction.setEnabled(selectedIndex != -1);
+                }
+            });
     }
-
 
     public Expenses getExpensesApplication() {
         return expensesApplication;
@@ -158,7 +158,6 @@ public class ExpensesWindow extends Window implements Bindable {
     public void setExpensesApplication(Expenses expensesApplication) {
         this.expensesApplication = expensesApplication;
     }
-
 
     @Override
     public void open(Display display, Window owner) {
@@ -172,8 +171,7 @@ public class ExpensesWindow extends Window implements Bindable {
         Expenses expensesApplicationLocal = getExpensesApplication();
         GetQuery expenseListQuery = new GetQuery(expensesApplicationLocal.getHostname(),
             expensesApplicationLocal.getPort(), "/pivot-tutorials/expenses",
-            expensesApplicationLocal.isSecure()
-        );
+            expensesApplicationLocal.isSecure());
 
         activityIndicatorBoxPane.setVisible(true);
         activityIndicator.setActive(true);
@@ -184,7 +182,7 @@ public class ExpensesWindow extends Window implements Bindable {
                 activityIndicatorBoxPane.setVisible(false);
                 activityIndicator.setActive(false);
 
-                List<?> expenseData = (List<?>)task.getResult();
+                List<?> expenseData = (List<?>) task.getResult();
                 expenseTableView.setTableData(expenseData);
             }
 
@@ -210,10 +208,9 @@ public class ExpensesWindow extends Window implements Bindable {
 
                     // POST expense to server and then add to table
                     Expenses expensesApplicationLocal = getExpensesApplication();
-                    PostQuery addExpenseQuery = new PostQuery(expensesApplicationLocal.getHostname(),
-                        expensesApplicationLocal.getPort(), "/pivot-tutorials/expenses",
-                        expensesApplicationLocal.isSecure()
-                    );
+                    PostQuery addExpenseQuery = new PostQuery(
+                        expensesApplicationLocal.getHostname(), expensesApplicationLocal.getPort(),
+                        "/pivot-tutorials/expenses", expensesApplicationLocal.isSecure());
                     addExpenseQuery.setValue(expense);
 
                     activityIndicatorBoxPane.setVisible(true);
@@ -231,7 +228,7 @@ public class ExpensesWindow extends Window implements Bindable {
                             expense.put("id", id);
 
                             @SuppressWarnings("unchecked")
-                            List<Object> expenses = (List<Object>)expenseTableView.getTableData();
+                            List<Object> expenses = (List<Object>) expenseTableView.getTableData();
                             expenses.add(expense);
                         }
 
@@ -240,7 +237,8 @@ public class ExpensesWindow extends Window implements Bindable {
                             activityIndicatorBoxPane.setVisible(false);
                             activityIndicator.setActive(false);
 
-                            Prompt.prompt(MessageType.ERROR, task.getFault().getMessage(), ExpensesWindow.this);
+                            Prompt.prompt(MessageType.ERROR, task.getFault().getMessage(),
+                                ExpensesWindow.this);
                         }
                     }));
                 }
@@ -263,10 +261,10 @@ public class ExpensesWindow extends Window implements Bindable {
 
                     // PUT expense to server and then update table
                     Expenses expensesApplicationLocal = getExpensesApplication();
-                    PutQuery updateExpenseQuery = new PutQuery(expensesApplicationLocal.getHostname(),
-                        expensesApplicationLocal.getPort(), "/pivot-tutorials/expenses/" + JSON.get(expenseLocal, "id"),
-                        expensesApplicationLocal.isSecure()
-                    );
+                    PutQuery updateExpenseQuery = new PutQuery(
+                        expensesApplicationLocal.getHostname(), expensesApplicationLocal.getPort(),
+                        "/pivot-tutorials/expenses/" + JSON.get(expenseLocal, "id"),
+                        expensesApplicationLocal.isSecure());
                     updateExpenseQuery.setValue(expenseLocal);
 
                     activityIndicatorBoxPane.setVisible(true);
@@ -280,7 +278,7 @@ public class ExpensesWindow extends Window implements Bindable {
 
                             // Find matching row and update
                             @SuppressWarnings("unchecked")
-                            List<Object> expenses = (List<Object>)expenseTableView.getTableData();
+                            List<Object> expenses = (List<Object>) expenseTableView.getTableData();
                             for (int i = 0, n = expenses.getLength(); i < n; i++) {
                                 if (JSON.get(expenses.get(i), "id").equals(id)) {
                                     expenses.update(i, expenseLocal);
@@ -294,7 +292,8 @@ public class ExpensesWindow extends Window implements Bindable {
                             activityIndicatorBoxPane.setVisible(false);
                             activityIndicator.setActive(false);
 
-                            Prompt.prompt(MessageType.ERROR, task.getFault().getMessage(), ExpensesWindow.this);
+                            Prompt.prompt(MessageType.ERROR, task.getFault().getMessage(),
+                                ExpensesWindow.this);
                         }
                     }));
                 }
@@ -309,14 +308,12 @@ public class ExpensesWindow extends Window implements Bindable {
         deleteConfirmationPrompt.open(this, new SheetCloseListener() {
             @Override
             public void sheetClosed(Sheet sheet) {
-                if (sheet.getResult()
-                    && ((Prompt)sheet).getSelectedOptionIndex() == 1) {
+                if (sheet.getResult() && ((Prompt) sheet).getSelectedOptionIndex() == 1) {
                     // DELETE expense from server and then remove from table
                     Expenses expensesApplicationLocal = getExpensesApplication();
-                    DeleteQuery deleteExpenseQuery = new DeleteQuery(expensesApplicationLocal.getHostname(),
-                        expensesApplicationLocal.getPort(), "/pivot-tutorials/expenses/" + id,
-                        expensesApplicationLocal.isSecure()
-                    );
+                    DeleteQuery deleteExpenseQuery = new DeleteQuery(
+                        expensesApplicationLocal.getHostname(), expensesApplicationLocal.getPort(),
+                        "/pivot-tutorials/expenses/" + id, expensesApplicationLocal.isSecure());
 
                     activityIndicatorBoxPane.setVisible(true);
                     activityIndicator.setActive(true);
@@ -329,7 +326,7 @@ public class ExpensesWindow extends Window implements Bindable {
 
                             // Find matching row and remove
                             @SuppressWarnings("unchecked")
-                            List<Object> expenses = (List<Object>)expenseTableView.getTableData();
+                            List<Object> expenses = (List<Object>) expenseTableView.getTableData();
                             for (int i = 0, n = expenses.getLength(); i < n; i++) {
                                 if (JSON.get(expenses.get(i), "id").equals(id)) {
                                     expenses.remove(i, 1);
@@ -343,7 +340,8 @@ public class ExpensesWindow extends Window implements Bindable {
                             activityIndicatorBoxPane.setVisible(false);
                             activityIndicator.setActive(false);
 
-                            Prompt.prompt(MessageType.ERROR, task.getFault().getMessage(), ExpensesWindow.this);
+                            Prompt.prompt(MessageType.ERROR, task.getFault().getMessage(),
+                                ExpensesWindow.this);
                         }
                     }));
                 }

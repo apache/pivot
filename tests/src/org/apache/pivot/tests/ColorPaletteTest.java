@@ -36,8 +36,7 @@ public class ColorPaletteTest extends Application.Adapter {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         TablePane tablePane = new TablePane();
         tablePane.getColumns().add(new TablePane.Column(1, true));
         tablePane.getColumns().add(new TablePane.Column(1, true));

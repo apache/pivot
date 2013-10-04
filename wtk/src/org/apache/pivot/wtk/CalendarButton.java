@@ -28,8 +28,8 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.CalendarButtonDataRenderer;
 
 /**
- * A component that allows a user to select a calendar date. The calendar
- * is hidden until the user pushes the button.
+ * A component that allows a user to select a calendar date. The calendar is
+ * hidden until the user pushes the button.
  */
 public class CalendarButton extends Button {
     private static class CalendarButtonListenerList extends WTKListenerList<CalendarButtonListener>
@@ -64,9 +64,8 @@ public class CalendarButton extends Button {
         }
     }
 
-    private static class CalendarButtonSelectionListenerList
-        extends WTKListenerList<CalendarButtonSelectionListener>
-        implements CalendarButtonSelectionListener {
+    private static class CalendarButtonSelectionListenerList extends
+        WTKListenerList<CalendarButtonSelectionListener> implements CalendarButtonSelectionListener {
 
         @Override
         public void selectedDateChanged(CalendarButton calendarButton,
@@ -77,8 +76,8 @@ public class CalendarButton extends Button {
         }
     }
 
-    private static class CalendarButtonBindingListenerList extends WTKListenerList<CalendarButtonBindingListener>
-        implements CalendarButtonBindingListener {
+    private static class CalendarButtonBindingListenerList extends
+        WTKListenerList<CalendarButtonBindingListener> implements CalendarButtonBindingListener {
         @Override
         public void selectedDateKeyChanged(CalendarButton calendarButton,
             String previousSelectedDateKey) {
@@ -99,15 +98,16 @@ public class CalendarButton extends Button {
         public void selectedDateBindMappingChanged(CalendarButton calendarButton,
             Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
             for (CalendarButtonBindingListener listener : this) {
-                listener.selectedDateBindMappingChanged(calendarButton, previousSelectedDateBindMapping);
+                listener.selectedDateBindMappingChanged(calendarButton,
+                    previousSelectedDateBindMapping);
             }
         }
     }
 
     /**
-     * CalendarButton skin interface. CalendarButton skins must implement
-     * this interface to facilitate additional communication between the
-     * component and the skin.
+     * CalendarButton skin interface. CalendarButton skins must implement this
+     * interface to facilitate additional communication between the component
+     * and the skin.
      */
     public interface Skin {
         public Window getCalendarPopup();
@@ -124,12 +124,9 @@ public class CalendarButton extends Button {
     private BindType selectedDateBindType = BindType.BOTH;
     private Calendar.SelectedDateBindMapping selectedDateBindMapping = null;
 
-    private CalendarButtonListenerList calendarButtonListeners =
-        new CalendarButtonListenerList();
-    private CalendarButtonSelectionListenerList calendarButtonSelectionListeners =
-        new CalendarButtonSelectionListenerList();
-    private CalendarButtonBindingListenerList calendarButtonBindingListeners =
-        new CalendarButtonBindingListenerList();
+    private CalendarButtonListenerList calendarButtonListeners = new CalendarButtonListenerList();
+    private CalendarButtonSelectionListenerList calendarButtonSelectionListeners = new CalendarButtonSelectionListenerList();
+    private CalendarButtonBindingListenerList calendarButtonBindingListeners = new CalendarButtonBindingListenerList();
 
     public static final String LANGUAGE_KEY = "language";
     public static final String COUNTRY_KEY = "country";
@@ -173,8 +170,8 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * This method is not supported by CalendarButton.
+     * @throws UnsupportedOperationException This method is not supported by
+     * CalendarButton.
      */
     @Override
     public void setToggleButton(boolean toggleButton) {
@@ -221,9 +218,9 @@ public class CalendarButton extends Button {
 
     /**
      * Returns the currently selected date.
-     *
-     * @return
-     * The currently selected date, or <tt>null</tt> if nothing is selected.
+     * 
+     * @return The currently selected date, or <tt>null</tt> if nothing is
+     * selected.
      */
     public CalendarDate getSelectedDate() {
         return selectedDate;
@@ -231,17 +228,16 @@ public class CalendarButton extends Button {
 
     /**
      * Sets the selected date.
-     *
-     * @param selectedDate
-     * The date to select, or <tt>null</tt> to clear the selection.
+     * 
+     * @param selectedDate The date to select, or <tt>null</tt> to clear the
+     * selection.
      */
     public void setSelectedDate(CalendarDate selectedDate) {
         CalendarDate previousSelectedDate = this.selectedDate;
 
         if (previousSelectedDate != selectedDate) {
             this.selectedDate = selectedDate;
-            calendarButtonSelectionListeners.selectedDateChanged(this,
-                previousSelectedDate);
+            calendarButtonSelectionListeners.selectedDateChanged(this, previousSelectedDate);
         }
     }
 
@@ -249,9 +245,9 @@ public class CalendarButton extends Button {
      * Sets the selected date to the date represented by the specified date
      * string. The date string must be in the <tt>ISO 8601</tt> "calendar date"
      * format, which is <tt>[YYYY]-[MM]-[DD]</tt>.
-     *
-     * @param selectedDate
-     * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23)
+     * 
+     * @param selectedDate A string in the form of <tt>[YYYY]-[MM]-[DD]</tt>
+     * (e.g. 2008-07-23)
      */
     public final void setSelectedDate(String selectedDate) {
         if (selectedDate == null) {
@@ -270,7 +266,7 @@ public class CalendarButton extends Button {
 
     /**
      * Sets the locale used to present calendar data.
-     *
+     * 
      * @param locale
      */
     public void setLocale(Locale locale) {
@@ -287,26 +283,21 @@ public class CalendarButton extends Button {
 
     /**
      * Sets the locale used to present calendar data.
-     *
-     * @param locale
-     * An dictionary containing values for language, country, and variant.
-     * Country and variant are optional but the must adhere to the following
-     * rules:
-     *
-     * <ul>
-     * <li>If variant is specified, language and country are required;</li>
-     * <li>Otherwise, if country is specified, language is required;</li>
-     * <li>Otherwise, language is required.</li>
-     * </ul>
+     * 
+     * @param locale An dictionary containing values for language, country, and
+     * variant. Country and variant are optional but the must adhere to the
+     * following rules: <ul> <li>If variant is specified, language and country
+     * are required;</li> <li>Otherwise, if country is specified, language is
+     * required;</li> <li>Otherwise, language is required.</li> </ul>
      */
     public void setLocale(Dictionary<String, ?> locale) {
         if (locale == null) {
             throw new IllegalArgumentException("locale is null.");
         }
 
-        String language = (String)locale.get(LANGUAGE_KEY);
-        String country = (String)locale.get(COUNTRY_KEY);
-        String variant = (String)locale.get(VARIANT_KEY);
+        String language = (String) locale.get(LANGUAGE_KEY);
+        String country = (String) locale.get(COUNTRY_KEY);
+        String variant = (String) locale.get(VARIANT_KEY);
 
         if (variant != null) {
             setLocale(new Locale(language, country, variant));
@@ -319,10 +310,9 @@ public class CalendarButton extends Button {
 
     /**
      * Sets the locale used to present calendar data.
-     *
-     * @param locale
-     * A JSON map containing values for language, country, and variant.
-     *
+     * 
+     * @param locale A JSON map containing values for language, country, and
+     * variant.
      * @see #setLocale(Dictionary)
      */
     public void setLocale(String locale) {
@@ -382,7 +372,8 @@ public class CalendarButton extends Button {
 
         if (previousSelectedDateBindType != selectedDateBindType) {
             this.selectedDateBindType = selectedDateBindType;
-            calendarButtonBindingListeners.selectedDateBindTypeChanged(this, previousSelectedDateBindType);
+            calendarButtonBindingListeners.selectedDateBindTypeChanged(this,
+                previousSelectedDateBindType);
         }
     }
 
@@ -395,21 +386,21 @@ public class CalendarButton extends Button {
 
         if (previousSelectedDateBindMapping != bindMapping) {
             this.selectedDateBindMapping = bindMapping;
-            calendarButtonBindingListeners.selectedDateBindMappingChanged(this, previousSelectedDateBindMapping);
+            calendarButtonBindingListeners.selectedDateBindMappingChanged(this,
+                previousSelectedDateBindMapping);
         }
     }
 
     @Override
     public void load(Object context) {
-        if (selectedDateKey != null
-            && JSON.containsKey(context, selectedDateKey)
+        if (selectedDateKey != null && JSON.containsKey(context, selectedDateKey)
             && selectedDateBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedDateKey);
 
             CalendarDate selectedDateLocal = null;
 
             if (value instanceof CalendarDate) {
-                selectedDateLocal = (CalendarDate)value;
+                selectedDateLocal = (CalendarDate) value;
             } else if (selectedDateBindMapping == null) {
                 if (value != null) {
                     selectedDateLocal = CalendarDate.decode(value.toString());
@@ -424,19 +415,18 @@ public class CalendarButton extends Button {
 
     @Override
     public void store(Object context) {
-        if (selectedDateKey != null
-            && selectedDateBindType != BindType.LOAD) {
-            JSON.put(context, selectedDateKey, (selectedDateBindMapping == null) ?
-                selectedDate : selectedDateBindMapping.valueOf(selectedDate));
+        if (selectedDateKey != null && selectedDateBindType != BindType.LOAD) {
+            JSON.put(context, selectedDateKey, (selectedDateBindMapping == null) ? selectedDate
+                : selectedDateBindMapping.valueOf(selectedDate));
         }
     }
 
     @Override
     public void clear() {
-        super.clear();  // for better consistency with superclass
+        super.clear(); // for better consistency with superclass
 
         if (selectedDateKey != null) {
-            setSelectedDate((CalendarDate)null);
+            setSelectedDate((CalendarDate) null);
         }
 
     }
@@ -445,7 +435,7 @@ public class CalendarButton extends Button {
      * Clears the selection.
      */
     public void clearSelection() {
-        setSelectedDate((CalendarDate)null);
+        setSelectedDate((CalendarDate) null);
     }
 
     /**

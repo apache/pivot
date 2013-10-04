@@ -41,12 +41,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * Defines the supported selection change effects.
      */
     public enum SelectionChangeEffect {
-        CROSSFADE,
-        HORIZONTAL_SLIDE,
-        VERTICAL_SLIDE,
-        HORIZONTAL_FLIP,
-        VERTICAL_FLIP,
-        ZOOM
+        CROSSFADE, HORIZONTAL_SLIDE, VERTICAL_SLIDE, HORIZONTAL_FLIP, VERTICAL_FLIP, ZOOM
     }
 
     /**
@@ -65,18 +60,15 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             this.from = from;
             this.to = to;
 
-            CardPane cardPane = (CardPane)getComponent();
+            CardPane cardPane = (CardPane) getComponent();
             fromCard = (from == -1) ? null : cardPane.get(from);
             toCard = (to == -1) ? null : cardPane.get(to);
 
             int length = cardPane.getLength();
-            if (circular
-                && length >= 3) {
-                if (from == length - 1
-                    && to == 0) {
+            if (circular && length >= 3) {
+                if (from == length - 1 && to == 0) {
                     direction = 1;
-                } else if (from == 0
-                    && to == length - 1) {
+                } else if (from == 0 && to == length - 1) {
                     direction = -1;
                 } else {
                     direction = Integer.signum(to - from);
@@ -172,8 +164,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
             float percentComplete = slideEasing.easeOut(getElapsedTime(), 0, 1, getDuration());
 
-            int dx = (int)(width * percentComplete) * -direction;
-            int dy = (int)(height * percentComplete) * -direction;
+            int dx = (int) (width * percentComplete) * -direction;
+            int dy = (int) (height * percentComplete) * -direction;
 
             if (selectionChangeEffect == SelectionChangeEffect.HORIZONTAL_SLIDE) {
                 fromCard.setLocation(padding.left + dx, padding.top);
@@ -220,7 +212,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             if (percentComplete < 1f) {
                 theta = Math.PI * percentComplete;
 
-                float scale = (float)Math.abs(Math.cos(theta));
+                float scale = (float) Math.abs(Math.cos(theta));
 
                 if (orientation == Orientation.HORIZONTAL) {
                     scaleDecorator.setScale(scale, 1.0f);
@@ -307,7 +299,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public void install(Component component) {
         super.install(component);
 
-        CardPane cardPane = (CardPane)component;
+        CardPane cardPane = (CardPane) component;
         cardPane.getCardPaneListeners().add(this);
     }
 
@@ -315,7 +307,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        CardPane cardPane = (CardPane)getComponent();
+        CardPane cardPane = (CardPane) getComponent();
 
         if (sizeToSelection) {
             if (selectionChangeTransition == null) {
@@ -341,7 +333,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     width = selectionChangeTransition.toCard.getPreferredWidth(height);
                 }
 
-                preferredWidth = previousWidth + (int)((width - previousWidth) * percentComplete);
+                preferredWidth = previousWidth + (int) ((width - previousWidth) * percentComplete);
             }
         } else {
             for (Component card : cardPane) {
@@ -358,7 +350,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        CardPane cardPane = (CardPane)getComponent();
+        CardPane cardPane = (CardPane) getComponent();
 
         if (sizeToSelection) {
             if (selectionChangeTransition == null) {
@@ -384,7 +376,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     height = selectionChangeTransition.toCard.getPreferredHeight(width);
                 }
 
-                preferredHeight = previousHeight + (int)((height - previousHeight) * percentComplete);
+                preferredHeight = previousHeight
+                    + (int) ((height - previousHeight) * percentComplete);
             }
         } else {
             for (Component card : cardPane) {
@@ -402,7 +395,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        CardPane cardPane = (CardPane)getComponent();
+        CardPane cardPane = (CardPane) getComponent();
 
         if (sizeToSelection) {
             if (selectionChangeTransition == null) {
@@ -438,8 +431,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                     height = toSize.height;
                 }
 
-                preferredWidth = previousWidth + (int)((width - previousWidth) * percentComplete);
-                preferredHeight = previousHeight + (int)((height - previousHeight) * percentComplete);
+                preferredWidth = previousWidth + (int) ((width - previousWidth) * percentComplete);
+                preferredHeight = previousHeight
+                    + (int) ((height - previousHeight) * percentComplete);
             }
         } else {
             for (Component card : cardPane) {
@@ -461,7 +455,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         int baseline = -1;
 
         if (sizeToSelection) {
-            CardPane cardPane = (CardPane)getComponent();
+            CardPane cardPane = (CardPane) getComponent();
             Component selectedCard = cardPane.getSelectedCard();
 
             if (selectedCard != null) {
@@ -483,7 +477,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public void layout() {
         // Set the size of all components to match the size of the card pane,
         // minus padding
-        CardPane cardPane = (CardPane)getComponent();
+        CardPane cardPane = (CardPane) getComponent();
         int width = Math.max(getWidth() - (padding.left + padding.right), 0);
         int height = Math.max(getHeight() - (padding.top + padding.bottom), 0);
 
@@ -494,14 +488,16 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     /**
-     * Returns the amount of space between the edge of the CardPane and its content.
+     * Returns the amount of space between the edge of the CardPane and its
+     * content.
      */
     public Insets getPadding() {
         return padding;
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the CardPane and its content.
+     * Sets the amount of space to leave between the edge of the CardPane and
+     * its content.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -513,9 +509,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the CardPane and its content.
-     *
-     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     * Sets the amount of space to leave between the edge of the CardPane and
+     * its content.
+     * 
+     * @param padding A dictionary with keys in the set {left, top, bottom,
+     * right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
@@ -526,16 +524,16 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the CardPane and its content,
-     * uniformly on all four edges.
+     * Sets the amount of space to leave between the edge of the CardPane and
+     * its content, uniformly on all four edges.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the CardPane and its content,
-     * uniformly on all four edges.
+     * Sets the amount of space to leave between the edge of the CardPane and
+     * its content, uniformly on all four edges.
      */
     public void setPadding(Number padding) {
         if (padding == null) {
@@ -546,10 +544,11 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the CardPane and its content.
-     *
-     * @param padding A string containing an integer or a JSON dictionary with keys
-     * left, top, bottom, and/or right.
+     * Sets the amount of space to leave between the edge of the CardPane and
+     * its content.
+     * 
+     * @param padding A string containing an integer or a JSON dictionary with
+     * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
         if (padding == null) {
@@ -599,22 +598,20 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public void setSelectionChangeRate(int selectionChangeRate) {
         this.selectionChangeRate = selectionChangeRate;
     }
+
     /**
      * Sets the circular style, which controls the direction of certain
      * transitions (transitions for which a direction makes sense) when looping
-     * from the first index of a card pane to the last, or vice versa. When
-     * this style is <tt>false</tt> (the default), directional transitions will
+     * from the first index of a card pane to the last, or vice versa. When this
+     * style is <tt>false</tt> (the default), directional transitions will
      * always appear to move forward when transitioning from a lower card index
      * to a higher card index, and vice versa. When this style is <tt>true</tt>,
      * directional transitions will appear to move forward when transitioning
      * from the last card to the first, and backward when they transition from
-     * the first card to the last.
-     * <p>
-     * Note: to avoid ambiguity, the circular style will be ignored if the card
-     * pane has fewer than three cards.
-     *
-     * @return
-     * <tt>true</tt> if directional transitions will be circular;
+     * the first card to the last. <p> Note: to avoid ambiguity, the circular
+     * style will be ignored if the card pane has fewer than three cards.
+     * 
+     * @return <tt>true</tt> if directional transitions will be circular;
      * <tt>false</tt> otherwise
      */
     public boolean isCircular() {
@@ -624,20 +621,17 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     /**
      * Sets the circular style, which controls the direction of certain
      * transitions (transitions for which a direction makes sense) when looping
-     * from the first index of a card pane to the last, or vice versa. When
-     * this style is <tt>false</tt> (the default), directional transitions will
+     * from the first index of a card pane to the last, or vice versa. When this
+     * style is <tt>false</tt> (the default), directional transitions will
      * always appear to move forward when transitioning from a lower card index
      * to a higher card index, and vice versa. When this style is <tt>true</tt>,
      * directional transitions will appear to move forward when transitioning
      * from the last card to the first, and backward when they transition from
-     * the first card to the last.
-     * <p>
-     * Note: to avoid ambiguity, the circular style will be ignored if the card
-     * pane has fewer than three cards.
-     *
-     * @param circular
-     * <tt>true</tt> if directional transitions should be circular;
-     * <tt>false</tt> otherwise
+     * the first card to the last. <p> Note: to avoid ambiguity, the circular
+     * style will be ignored if the card pane has fewer than three cards.
+     * 
+     * @param circular <tt>true</tt> if directional transitions should be
+     * circular; <tt>false</tt> otherwise
      */
     public void setCircular(boolean circular) {
         this.circular = circular;
@@ -651,7 +645,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
         super.componentInserted(container, index);
 
-        CardPane cardPane = (CardPane)container;
+        CardPane cardPane = (CardPane) container;
         Component card = cardPane.get(index);
         card.setVisible(false);
 
@@ -670,7 +664,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
         super.componentsRemoved(container, index, removed);
 
-        for (int i = 0, n = removed.getLength(); i < n; i++){
+        for (int i = 0, n = removed.getLength(); i < n; i++) {
             Component card = removed.get(i);
             card.setVisible(true);
         }
@@ -682,29 +676,28 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
         Vote vote;
 
-        if (cardPane.isShowing()
-            && selectionChangeEffect != null
+        if (cardPane.isShowing() && selectionChangeEffect != null
             && selectionChangeTransition == null) {
             int previousSelectedIndex = cardPane.getSelectedIndex();
 
             switch (selectionChangeEffect) {
                 case CROSSFADE: {
-                    selectionChangeTransition = new CrossfadeTransition(previousSelectedIndex, selectedIndex);
+                    selectionChangeTransition = new CrossfadeTransition(previousSelectedIndex,
+                        selectedIndex);
                     break;
                 }
 
                 case HORIZONTAL_SLIDE:
                 case VERTICAL_SLIDE: {
-                    if (previousSelectedIndex != -1
-                        && selectedIndex != -1) {
-                        selectionChangeTransition = new SlideTransition(previousSelectedIndex, selectedIndex);
+                    if (previousSelectedIndex != -1 && selectedIndex != -1) {
+                        selectionChangeTransition = new SlideTransition(previousSelectedIndex,
+                            selectedIndex);
                     }
                     break;
                 }
 
                 case HORIZONTAL_FLIP: {
-                    if (previousSelectedIndex != -1
-                        && selectedIndex != -1) {
+                    if (previousSelectedIndex != -1 && selectedIndex != -1) {
                         selectionChangeTransition = new FlipTransition(Orientation.HORIZONTAL,
                             previousSelectedIndex, selectedIndex);
                     }
@@ -712,8 +705,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 }
 
                 case VERTICAL_FLIP: {
-                    if (previousSelectedIndex != -1
-                        && selectedIndex != -1) {
+                    if (previousSelectedIndex != -1 && selectedIndex != -1) {
                         selectionChangeTransition = new FlipTransition(Orientation.VERTICAL,
                             previousSelectedIndex, selectedIndex);
                     }
@@ -721,9 +713,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 }
 
                 case ZOOM: {
-                    if (previousSelectedIndex != -1
-                        && selectedIndex != -1) {
-                        selectionChangeTransition = new ZoomTransition(previousSelectedIndex, selectedIndex);
+                    if (previousSelectedIndex != -1 && selectedIndex != -1) {
+                        selectionChangeTransition = new ZoomTransition(previousSelectedIndex,
+                            selectedIndex);
                     }
                     break;
                 }
@@ -737,10 +729,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 selectionChangeTransition.start(new TransitionListener() {
                     @Override
                     public void transitionCompleted(Transition transition) {
-                        CardPane cardPaneLocal = (CardPane)getComponent();
+                        CardPane cardPaneLocal = (CardPane) getComponent();
 
-                        SelectionChangeTransition selectionChangeTransitionLocal =
-                            (SelectionChangeTransition)transition;
+                        SelectionChangeTransition selectionChangeTransitionLocal = (SelectionChangeTransition) transition;
 
                         int selectedIndexLocal = cardPaneLocal.indexOf(selectionChangeTransitionLocal.toCard);
                         cardPaneLocal.setSelectedIndex(selectedIndexLocal);
@@ -750,8 +741,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             }
         }
 
-        if (selectionChangeTransition == null
-            || !selectionChangeTransition.isRunning()) {
+        if (selectionChangeTransition == null || !selectionChangeTransition.isRunning()) {
             vote = Vote.APPROVE;
         } else {
             vote = Vote.DEFER;
@@ -762,8 +752,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
 
     @Override
     public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
-        if (reason == Vote.DENY
-            && selectionChangeTransition != null) {
+        if (reason == Vote.DENY && selectionChangeTransition != null) {
             // NOTE We stop, rather than end, the transition so the completion
             // event isn't fired; if the event fires, the listener will set
             // the selection state
@@ -792,9 +781,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 previousSelectedCard.setVisible(false);
             }
 
-            if (selectedIndex == -1
-                || previousSelectedIndex == -1
-                || sizeToSelection) {
+            if (selectedIndex == -1 || previousSelectedIndex == -1 || sizeToSelection) {
                 invalidateComponent();
             }
         }

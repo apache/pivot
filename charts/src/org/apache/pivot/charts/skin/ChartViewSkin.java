@@ -30,9 +30,8 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 /**
  * Abstract base class for chart view skins.
  */
-public abstract class ChartViewSkin extends ComponentSkin
-    implements ChartView.Skin,
-        ChartViewListener, ChartViewCategoryListener, ChartViewSeriesListener {
+public abstract class ChartViewSkin extends ComponentSkin implements ChartView.Skin,
+    ChartViewListener, ChartViewCategoryListener, ChartViewSeriesListener {
     private Color backgroundColor = Color.WHITE;
 
     @Override
@@ -40,7 +39,7 @@ public abstract class ChartViewSkin extends ComponentSkin
         super.install(component);
 
         // Add listeners
-        ChartView chartView = (ChartView)component;
+        ChartView chartView = (ChartView) component;
         chartView.getChartViewListeners().add(this);
         chartView.getChartViewCategoryListeners().add(this);
         chartView.getChartViewSeriesListeners().add(this);
@@ -98,7 +97,8 @@ public abstract class ChartViewSkin extends ComponentSkin
     }
 
     @Override
-    public void categoriesRemoved(ChartView chartView, int index, Sequence<ChartView.Category> categories) {
+    public void categoriesRemoved(ChartView chartView, int index,
+        Sequence<ChartView.Category> categories) {
         repaintComponent();
     }
 

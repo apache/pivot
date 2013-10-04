@@ -44,7 +44,7 @@ public interface MenuPopupStateListener {
 
     /**
      * Called to preview a menu popup close event.
-     *
+     * 
      * @param menuPopup
      * @param immediate
      */
@@ -52,7 +52,7 @@ public interface MenuPopupStateListener {
 
     /**
      * Called when a menu popup close event has been vetoed.
-     *
+     * 
      * @param menuPopup
      * @param reason
      */
@@ -60,7 +60,7 @@ public interface MenuPopupStateListener {
 
     /**
      * Called when a menu popup has closed.
-     *
+     * 
      * @param menuPopup
      */
     public void menuPopupClosed(MenuPopup menuPopup);

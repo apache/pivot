@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface FillPaneListener {
     /**
      * Called when a fill pane's orientation has changed.
-     *
+     * 
      * @param fillPane
      */
     public void orientationChanged(FillPane fillPane);

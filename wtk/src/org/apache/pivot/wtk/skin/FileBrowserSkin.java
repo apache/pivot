@@ -19,18 +19,17 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FileBrowserListener;
-import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Abstract base class for file browser skins.
  */
-public abstract class FileBrowserSkin extends ContainerSkin
-    implements FileBrowser.Skin, FileBrowserListener {
+public abstract class FileBrowserSkin extends ContainerSkin implements FileBrowser.Skin,
+    FileBrowserListener {
     @Override
     public void install(Component component) {
         super.install(component);
 
-        FileBrowser fileBrowser = (FileBrowser)component;
+        FileBrowser fileBrowser = (FileBrowser) component;
         fileBrowser.getFileBrowserListeners().add(this);
     }
 }

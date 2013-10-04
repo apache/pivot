@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Point;
 
-
 /**
  * Decorator that adds a rectangular region to the current clip.
  */

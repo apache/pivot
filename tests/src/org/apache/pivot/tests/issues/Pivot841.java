@@ -26,34 +26,35 @@ import org.apache.pivot.wtk.TextArea.ParagraphListener;
 import org.apache.pivot.wtk.TextAreaContentListener;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot841 extends Application.Adapter
-{
+public class Pivot841 extends Application.Adapter {
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception
-    {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         TextArea textArea = new TextArea();
         textArea.setText("abcxyz");
 
         final ParagraphListener paragraphListener = new ParagraphListener.Adapter() {
             @Override
             public void textInserted(Paragraph paragraph, int index, int count) {
-                System.out.println("Text inserted\n\tparagraph content: '" + paragraph.getCharacters() + "" + "'\n\tindex: " + index + "\n\tcount: " + count);
+                System.out.println("Text inserted\n\tparagraph content: '"
+                    + paragraph.getCharacters() + "" + "'\n\tindex: " + index + "\n\tcount: "
+                    + count);
             }
 
             @Override
             public void textRemoved(Paragraph paragraph, int index, int count) {
-                System.out.println("Text removed\n\tparagraph content: '" + paragraph.getCharacters() + "'\n\tindex: " + index + "\n\tcount: " + count);
+                System.out.println("Text removed\n\tparagraph content: '"
+                    + paragraph.getCharacters() + "'\n\tindex: " + index + "\n\tcount: " + count);
             }
         };
 
         textArea.getParagraphs().get(0).getParagraphListeners().add(paragraphListener);
         textArea.getTextAreaContentListeners().add(new TextAreaContentListener.Adapter() {
             @Override
-            public void paragraphInserted(TextArea textAreaArgument, int index)
-            {
+            public void paragraphInserted(TextArea textAreaArgument, int index) {
                 Paragraph paragraph = textAreaArgument.getParagraphs().get(index);
-                System.out.println("Paragraph inserted\n\tparagraph content: '" + paragraph.getCharacters() + "'\n\tindex: " + index);
+                System.out.println("Paragraph inserted\n\tparagraph content: '"
+                    + paragraph.getCharacters() + "'\n\tindex: " + index);
 
                 paragraph.getParagraphListeners().add(paragraphListener);
             }
@@ -61,7 +62,7 @@ public class Pivot841 extends Application.Adapter
 
         Window window = new Window(textArea);
         window.open(display);
-      }
+    }
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(Pivot841.class, args);

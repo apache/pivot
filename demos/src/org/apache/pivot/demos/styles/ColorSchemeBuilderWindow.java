@@ -52,15 +52,19 @@ import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 import org.apache.pivot.wtk.skin.terra.TerraTheme;
 
 public class ColorSchemeBuilderWindow extends Window implements Bindable {
-    @BXML private TablePane colorChooserTablePane = null;
-    @BXML private TablePane colorPaletteTablePane = null;
-    @BXML private PushButton copyToClipboardButton = null;
-    @BXML private PushButton resetPaletteButton = null;
-    @BXML private Border sampleContentBorder = null;
+    @BXML
+    private TablePane colorChooserTablePane = null;
+    @BXML
+    private TablePane colorPaletteTablePane = null;
+    @BXML
+    private PushButton copyToClipboardButton = null;
+    @BXML
+    private PushButton resetPaletteButton = null;
+    @BXML
+    private Border sampleContentBorder = null;
 
     private ArrayList<ColorChooserButton> colorChooserButtons = new ArrayList<>();
     private ArrayList<Color> themeOriginalColors = new ArrayList<>(8);
-
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
@@ -73,7 +77,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
 
             NumericSpinnerData colorSpinnerData = new NumericSpinnerData(0, 255);
             SpinnerItemRenderer colorSpinnerItemRenderer = new SpinnerItemRenderer();
-            colorSpinnerItemRenderer.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+            colorSpinnerItemRenderer.getStyles().put("horizontalAlignment",
+                HorizontalAlignment.RIGHT);
 
             final Spinner redSpinner = new Spinner();
             redSpinner.setSpinnerData(colorSpinnerData);
@@ -107,8 +112,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             colorChooserTablePane.getRows().add(row);
 
             // Add listeners
-            ColorChooserButtonSelectionListener colorChooserButtonSelectionListener =
-                new ColorChooserButtonSelectionListener() {
+            ColorChooserButtonSelectionListener colorChooserButtonSelectionListener = new ColorChooserButtonSelectionListener() {
                 @Override
                 public void selectedColorChanged(ColorChooserButton colorChooserButtonArgument,
                     Color previousSelectedColor) {
@@ -118,14 +122,16 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                     blueSpinner.setSelectedItem(selectedColor.getBlue());
 
                     // Update the theme
-                    TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
+                    TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
                     int iLocal = colorChooserButtons.indexOf(colorChooserButtonArgument);
-                    terraTheme.setBaseColor(iLocal, colorChooserButtons.get(iLocal).getSelectedColor());
+                    terraTheme.setBaseColor(iLocal,
+                        colorChooserButtons.get(iLocal).getSelectedColor());
 
                     // Update the palette
                     int offset = iLocal * 3;
                     for (int j = 0; j < 3; j++) {
-                        Component colorPaletteCell = colorPaletteTablePane.getRows().get(iLocal).get(j);
+                        Component colorPaletteCell = colorPaletteTablePane.getRows().get(iLocal).get(
+                            j);
                         colorPaletteCell.getStyles().put("backgroundColor", offset + j);
                     }
 
@@ -133,14 +139,15 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                 }
             };
 
-            colorChooserButton.getColorChooserButtonSelectionListeners().add(colorChooserButtonSelectionListener);
+            colorChooserButton.getColorChooserButtonSelectionListeners().add(
+                colorChooserButtonSelectionListener);
 
             SpinnerSelectionListener spinnerSelectionListener = new SpinnerSelectionListener.Adapter() {
                 @Override
                 public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
-                    int red = (Integer)redSpinner.getSelectedItem();
-                    int green = (Integer)greenSpinner.getSelectedItem();
-                    int blue = (Integer)blueSpinner.getSelectedItem();
+                    int red = (Integer) redSpinner.getSelectedItem();
+                    int green = (Integer) greenSpinner.getSelectedItem();
+                    int blue = (Integer) blueSpinner.getSelectedItem();
 
                     colorChooserButton.setSelectedColor(new Color(red, green, blue));
                 }
@@ -151,7 +158,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             blueSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
 
             // Initialize the button color with the theme default
-            TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
+            TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
             themeOriginalColors.add(terraTheme.getBaseColor(i));
             colorChooserButton.setSelectedColor(terraTheme.getBaseColor(i));
         }
@@ -198,7 +205,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         Border border = new Border();
         border.getStyles().put("backgroundColor", index);
 
-        TerraTheme terraTheme = (TerraTheme)Theme.getTheme();
+        TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
 
         Label label = new Label();
         label.setText(Integer.toString(index));
@@ -221,8 +228,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
         try {
-            Component sampleContent = (Component)bxmlSerializer.readObject(ColorSchemeBuilderWindow.class,
-                "sample_content.bxml");
+            Component sampleContent = (Component) bxmlSerializer.readObject(
+                ColorSchemeBuilderWindow.class, "sample_content.bxml");
             sampleContentBorder.setContent(sampleContent);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -236,9 +243,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         for (int i = 0; i < 8; i++) {
             ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
             Color color = colorChooserButton.getSelectedColor();
-            colors.add(String.format("#%02X%02X%02X",
-                color.getRed(),
-                color.getGreen(),
+            colors.add(String.format("#%02X%02X%02X", color.getRed(), color.getGreen(),
                 color.getBlue()));
         }
 
@@ -261,9 +266,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             colorChooserButton.setSelectedColor(themeOriginalColors.get(i));
 
             Color color = colorChooserButton.getSelectedColor();
-            colors.add(String.format("#%02X%02X%02X",
-                color.getRed(),
-                color.getGreen(),
+            colors.add(String.format("#%02X%02X%02X", color.getRed(), color.getGreen(),
                 color.getBlue()));
         }
 

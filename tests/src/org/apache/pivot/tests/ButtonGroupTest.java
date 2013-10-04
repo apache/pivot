@@ -31,8 +31,7 @@ public class ButtonGroupTest extends Application.Adapter {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
             @Override

@@ -49,53 +49,39 @@ public interface TableViewSelectionListener {
 
     /**
      * Called when a range has been added to a table view's selection.
-     *
-     * @param tableView
-     * The source of the event.
-     *
-     * @param rangeStart
-     * The start index of the range that was added, inclusive.
-     *
-     * @param rangeEnd
-     * The end index of the range that was added, inclusive.
+     * 
+     * @param tableView The source of the event.
+     * @param rangeStart The start index of the range that was added, inclusive.
+     * @param rangeEnd The end index of the range that was added, inclusive.
      */
     public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd);
 
     /**
      * Called when a range has been removed from a table view's selection.
-     *
-     * @param tableView
-     * The source of the event.
-     *
-     * @param rangeStart
-     * The start index of the range that was removed, inclusive.
-     *
-     * @param rangeEnd
-     * The end index of the range that was removed, inclusive.
+     * 
+     * @param tableView The source of the event.
+     * @param rangeStart The start index of the range that was removed,
+     * inclusive.
+     * @param rangeEnd The end index of the range that was removed, inclusive.
      */
     public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd);
 
     /**
      * Called when a table view's selection state has been reset.
-     *
-     * @param tableView
-     * The source of the event.
-     *
-     * @param previousSelectedRanges
-     * If the selection changed directly, contains the ranges that were previously
-     * selected. If the selection changed indirectly as a result of a model change,
-     * contains the current selection. Otherwise, contains <tt>null</tt>.
+     * 
+     * @param tableView The source of the event.
+     * @param previousSelectedRanges If the selection changed directly, contains
+     * the ranges that were previously selected. If the selection changed
+     * indirectly as a result of a model change, contains the current selection.
+     * Otherwise, contains <tt>null</tt>.
      */
     public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges);
 
     /**
      * Called when a table view's selected item has changed.
-     *
-     * @param tableView
-     * The source of the event.
-     *
-     * @param previousSelectedRow
-     * The row that was previously selected.
+     * 
+     * @param tableView The source of the event.
+     * @param previousSelectedRow The row that was previously selected.
      */
     public void selectedRowChanged(TableView tableView, Object previousSelectedRow);
 }

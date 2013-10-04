@@ -46,9 +46,9 @@ import org.apache.pivot.web.QueryException;
  */
 public abstract class QueryServlet extends HttpServlet {
     /**
-     * Immutable string sequence representing a query path. The path is constructed
-     * by splitting the path info provided by the base servlet on the path separator
-     * character ("/").
+     * Immutable string sequence representing a query path. The path is
+     * constructed by splitting the path info provided by the base servlet on
+     * the path separator character ("/").
      */
     public static class Path implements Sequence<String>, Iterable<String> {
         private ArrayList<String> elements;
@@ -190,8 +190,8 @@ public abstract class QueryServlet extends HttpServlet {
     public URL getLocation() {
         URL location;
         try {
-            location = new URL(isSecure() ? HTTPS_PROTOCOL : HTTP_PROTOCOL, getHostname(), getPort(),
-                getContextPath() + getServletPath() + "/");
+            location = new URL(isSecure() ? HTTPS_PROTOCOL : HTTP_PROTOCOL, getHostname(),
+                getPort(), getContextPath() + getServletPath() + "/");
         } catch (MalformedURLException exception) {
             throw new RuntimeException(exception);
         }
@@ -200,8 +200,8 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     * Returns the servlet's parameter dictionary, which holds the values
-     * passed in the HTTP request query string.
+     * Returns the servlet's parameter dictionary, which holds the values passed
+     * in the HTTP request query string.
      */
     public QueryDictionary getParameters() {
         return parameters.get();
@@ -224,11 +224,10 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     * Prepares a servlet for request execution. This method is called immediately
-     * prior to the {@link #validate(Query.Method, Path)} method.
-     * <p>
-     * The default implementation is a no-op.
-     *
+     * Prepares a servlet for request execution. This method is called
+     * immediately prior to the {@link #validate(Query.Method, Path)} method.
+     * <p> The default implementation is a no-op.
+     * 
      * @throws ServletException
      */
     protected void prepare() throws ServletException {
@@ -237,10 +236,9 @@ public abstract class QueryServlet extends HttpServlet {
 
     /**
      * Disposes any resources allocated in {@link #prepare()}. This method is
-     * guaranteed to be called even if the HTTP handler method throws.
-     * <p>
-     * The default implementation is a no-op.
-     *
+     * guaranteed to be called even if the HTTP handler method throws. <p> The
+     * default implementation is a no-op.
+     * 
      * @throws ServletException
      */
     protected void dispose() throws ServletException {
@@ -248,14 +246,12 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     * Validates a servlet for request execution. This method is called immediately
-     * prior to the HTTP handler method.
-     * <p>
-     * The default implementation is a no-op.
-     *
+     * Validates a servlet for request execution. This method is called
+     * immediately prior to the HTTP handler method. <p> The default
+     * implementation is a no-op.
+     * 
      * @param method
      * @param path
-     *
      * @throws QueryException
      */
     protected void validate(Query.Method method, Path path) throws QueryException {
@@ -265,12 +261,9 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Handles an HTTP GET request. The default implementation throws an HTTP
      * 405 query exception.
-     *
+     * 
      * @param path
-     *
-     * @return
-     * The result of the GET.
-     *
+     * @return The result of the GET.
      * @throws QueryException
      */
     protected Object doGet(Path path) throws QueryException {
@@ -280,14 +273,11 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Handles an HTTP POST request. The default implementation throws an HTTP
      * 405 query exception.
-     *
+     * 
      * @param path
      * @param value
-     *
-     * @return
-     * A URL containing the location of the created resource, or <tt>null</tt> if
-     * operation did not result in the creation of a resource.
-     *
+     * @return A URL containing the location of the created resource, or
+     * <tt>null</tt> if operation did not result in the creation of a resource.
      * @throws QueryException
      */
     protected URL doPost(Path path, Object value) throws QueryException {
@@ -297,14 +287,11 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Handles an HTTP GET request. The default implementation throws an HTTP
      * 405 query exception.
-     *
+     * 
      * @param path
      * @param value
-     *
-     * @return
-     * <tt>true</tt> if the operation resulted in the creation of a resource;
-     * <tt>false</tt>, otherwise.
-     *
+     * @return <tt>true</tt> if the operation resulted in the creation of a
+     * resource; <tt>false</tt>, otherwise.
      * @throws QueryException
      */
     protected boolean doPut(Path path, Object value) throws QueryException {
@@ -314,9 +301,8 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Handles an HTTP GET request. The default implementation throws an HTTP
      * 405 query exception.
-     *
+     * 
      * @param path
-     *
      * @throws QueryException
      */
     protected void doDelete(Path path) throws QueryException {
@@ -324,11 +310,11 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     * Creates a serializer that will be used to serialize the current request data.
-     *
+     * Creates a serializer that will be used to serialize the current request
+     * data.
+     * 
      * @param method
      * @param path
-     *
      * @throws QueryException
      */
     protected abstract Serializer<?> createSerializer(Query.Method method, Path path)
@@ -419,14 +405,13 @@ public abstract class QueryServlet extends HttpServlet {
         try {
             validate(Query.Method.GET, path);
             result = doGet(path);
-            serializer = (Serializer<Object>)createSerializer(Query.Method.GET, path);
+            serializer = (Serializer<Object>) createSerializer(Query.Method.GET, path);
         } catch (QueryException exception) {
             response.setStatus(exception.getStatus());
             response.flushBuffer();
         }
 
-        if (!response.isCommitted()
-            && serializer != null) {
+        if (!response.isCommitted() && serializer != null) {
             response.setStatus(Query.Status.OK);
             setResponseHeaders(response);
 
@@ -587,11 +572,10 @@ public abstract class QueryServlet extends HttpServlet {
     private static Path getPath(HttpServletRequest request) {
         String pathInfo = request.getPathInfo();
         Path path;
-        if (pathInfo == null
-            || pathInfo.length() == 0) {
+        if (pathInfo == null || pathInfo.length() == 0) {
             path = new Path();
         } else {
-           path = new Path(pathInfo.substring(1).split("/"));
+            path = new Path(pathInfo.substring(1).split("/"));
         }
 
         return path;

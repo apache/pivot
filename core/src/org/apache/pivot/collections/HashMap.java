@@ -27,8 +27,7 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Implementation of the {@link Map} interface that is backed by a
- * hash table.
+ * Implementation of the {@link Map} interface that is backed by a hash table.
  */
 public class HashMap<K, V> implements Map<K, V>, Serializable {
     private static final long serialVersionUID = -7079717428744528670L;
@@ -54,10 +53,9 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             }
 
             // Move to the next bucket
-            while (entryIterator != null
-                && !entryIterator.hasNext()) {
-                entryIterator = (++bucketIndex < buckets.getLength()) ?
-                    getBucketIterator(bucketIndex) : null;
+            while (entryIterator != null && !entryIterator.hasNext()) {
+                entryIterator = (++bucketIndex < buckets.getLength()) ? getBucketIterator(bucketIndex)
+                    : null;
             }
 
             return (entryIterator != null);
@@ -75,8 +73,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
         @Override
         public void remove() {
-            if (entry == null
-                || entryIterator == null) {
+            if (entry == null || entryIterator == null) {
                 throw new IllegalStateException();
             }
 
@@ -94,7 +91,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         private Iterator<Pair<K, V>> getBucketIterator(int bucketIndexArgument) {
             LinkedList<Pair<K, V>> bucket = buckets.get(bucketIndexArgument);
 
-            return (bucket == null) ? new EmptyIterator<Pair<K,V>>() : bucket.iterator();
+            return (bucket == null) ? new EmptyIterator<Pair<K, V>>() : bucket.iterator();
         }
     }
 
@@ -125,7 +122,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     @SafeVarargs
     public HashMap(Pair<K, V>... entries) {
-        this(Math.max((int)(entries.length / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
+        this(Math.max((int) (entries.length / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
 
         for (int i = 0; i < entries.length; i++) {
             Pair<K, V> entry = entries[i];
@@ -134,7 +131,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     public HashMap(Map<K, V> map) {
-        this(Math.max((int)(map.getCount() / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
+        this(Math.max((int) (map.getCount() / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
 
         for (K key : map) {
             put(key, map.get(key));
@@ -149,9 +146,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws IllegalArgumentException
-     * If {@code key} is {@literal null}.
+     * 
+     * @throws IllegalArgumentException If {@code key} is {@literal null}.
      */
     @Override
     public V get(K key) {
@@ -179,9 +175,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws IllegalArgumentException
-     * If {@code key} is {@literal null}.
+     * 
+     * @throws IllegalArgumentException If {@code key} is {@literal null}.
      */
     @Override
     public V put(K key, V value) {
@@ -208,8 +203,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
                 previousValue = entry.value;
                 iterator.update(new Pair<>(key, value));
 
-                if (mapListeners != null
-                    && notifyListeners) {
+                if (mapListeners != null && notifyListeners) {
                     mapListeners.valueUpdated(this, key, previousValue);
                 }
 
@@ -231,12 +225,11 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
             count++;
 
             int capacity = getCapacity();
-            if (count > (int)(capacity * loadFactor)) {
+            if (count > (int) (capacity * loadFactor)) {
                 rehash(capacity * 2);
             }
 
-            if (mapListeners != null
-                && notifyListeners) {
+            if (mapListeners != null && notifyListeners) {
                 mapListeners.valueAdded(this, key);
             }
         }
@@ -246,9 +239,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws IllegalArgumentException
-     * If {@code key} is {@literal null}.
+     * 
+     * @throws IllegalArgumentException If {@code key} is {@literal null}.
      */
     @Override
     public V remove(K key) {
@@ -313,9 +305,8 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws IllegalArgumentException
-     * If {@code key} is {@literal null}.
+     * 
+     * @throws IllegalArgumentException If {@code key} is {@literal null}.
      */
     @Override
     public boolean containsKey(K key) {
@@ -407,7 +398,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         } else {
             if (keys == null) {
                 // Populate key list
-                ArrayList<K> keysLocal = new ArrayList<>((int)(getCapacity() * loadFactor));
+                ArrayList<K> keysLocal = new ArrayList<>((int) (getCapacity() * loadFactor));
                 for (K key : this) {
                     keysLocal.add(key);
                 }
@@ -445,15 +436,14 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         if (this == o) {
             equals = true;
         } else if (o instanceof Map<?, ?>) {
-            Map<K, V> map = (Map<K, V>)o;
+            Map<K, V> map = (Map<K, V>) o;
 
             if (count == map.getCount()) {
                 for (K key : this) {
                     V value = get(key);
 
                     if (value == null) {
-                        equals = (map.containsKey(key)
-                            && map.get(key) == null);
+                        equals = (map.containsKey(key) && map.get(key) == null);
                     } else {
                         equals = value.equals(map.get(key));
                     }

@@ -45,14 +45,15 @@ public interface CalendarListener {
         }
 
         @Override
-        public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter) {
+        public void disabledDateFilterChanged(Calendar calendar,
+            Filter<CalendarDate> previousDisabledDateFilter) {
             // empty block
         }
     }
 
     /**
      * Called when a calendar's year value has changed.
-     *
+     * 
      * @param calendar
      * @param previousYear
      */
@@ -60,7 +61,7 @@ public interface CalendarListener {
 
     /**
      * Called when a calendar's month value has changed.
-     *
+     * 
      * @param calendar
      * @param previousMonth
      */
@@ -68,7 +69,7 @@ public interface CalendarListener {
 
     /**
      * Called when a calendar's locale has changed.
-     *
+     * 
      * @param calendar
      * @param previousLocale
      */
@@ -76,9 +77,10 @@ public interface CalendarListener {
 
     /**
      * Called when a calendar's disabled date filter has changed.
-     *
+     * 
      * @param calendar
      * @param previousDisabledDateFilter
      */
-    public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter);
+    public void disabledDateFilterChanged(Calendar calendar,
+        Filter<CalendarDate> previousDisabledDateFilter);
 }

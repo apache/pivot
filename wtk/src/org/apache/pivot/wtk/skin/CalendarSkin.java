@@ -20,18 +20,17 @@ import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarListener;
 import org.apache.pivot.wtk.CalendarSelectionListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Abstract base class for calendar skins.
  */
-public abstract class CalendarSkin extends ContainerSkin
-    implements CalendarListener, CalendarSelectionListener {
+public abstract class CalendarSkin extends ContainerSkin implements CalendarListener,
+    CalendarSelectionListener {
     @Override
     public void install(Component component) {
         super.install(component);
 
-        Calendar calendar = (Calendar)component;
+        Calendar calendar = (Calendar) component;
         calendar.getCalendarListeners().add(this);
         calendar.getCalendarSelectionListeners().add(this);
     }

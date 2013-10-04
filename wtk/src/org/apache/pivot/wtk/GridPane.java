@@ -25,7 +25,8 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Container that arranges components in a two-dimensional grid, where every cell is the same size.
+ * Container that arranges components in a two-dimensional grid, where every
+ * cell is the same size.
  */
 @DefaultProperty("rows")
 public class GridPane extends Container {
@@ -39,9 +40,8 @@ public class GridPane extends Container {
 
         /**
          * Returns the grid pane with which this row is associated.
-         *
-         * @return
-         * The row's grid pane, or <tt>null</tt> if the row does not
+         * 
+         * @return The row's grid pane, or <tt>null</tt> if the row does not
          * currently belong to a grid.
          */
         public GridPane getGridPane() {
@@ -147,20 +147,23 @@ public class GridPane extends Container {
     }
 
     /**
-     * Grid pane skin interface. Grid pane skins must implement
-     * this interface to facilitate additional communication between the
-     * component and the skin.
+     * Grid pane skin interface. Grid pane skins must implement this interface
+     * to facilitate additional communication between the component and the
+     * skin.
      */
     public interface Skin {
         public int getRowAt(int y);
+
         public Bounds getRowBounds(int row);
+
         public int getColumnAt(int x);
+
         public Bounds getColumnBounds(int column);
     }
 
     /**
-     * Class that manages a grid pane's row list. Callers get access to the
-     * row sequence via {@link GridPane#getRows()}.
+     * Class that manages a grid pane's row list. Callers get access to the row
+     * sequence via {@link GridPane#getRows()}.
      */
     public final class RowSequence implements Sequence<Row>, Iterable<Row> {
         private RowSequence() {
@@ -181,8 +184,7 @@ public class GridPane extends Container {
             }
 
             if (row.getGridPane() != null) {
-                throw new IllegalArgumentException
-                    ("row is already in use by another grid pane.");
+                throw new IllegalArgumentException("row is already in use by another grid pane.");
             }
 
             rows.insert(row, index);
@@ -263,8 +265,8 @@ public class GridPane extends Container {
         }
     }
 
-    private static class GridPaneListenerList extends WTKListenerList<GridPaneListener>
-        implements GridPaneListener {
+    private static class GridPaneListenerList extends WTKListenerList<GridPaneListener> implements
+        GridPaneListener {
         @Override
         public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
             for (GridPaneListener listener : this) {
@@ -280,8 +282,7 @@ public class GridPane extends Container {
         }
 
         @Override
-        public void rowsRemoved(GridPane gridPane, int index,
-            Sequence<GridPane.Row> rows) {
+        public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
             for (GridPaneListener listener : this) {
                 listener.rowsRemoved(gridPane, index, rows);
             }
@@ -295,16 +296,14 @@ public class GridPane extends Container {
         }
 
         @Override
-        public void cellsRemoved(GridPane.Row row, int column,
-            Sequence<Component> removed) {
+        public void cellsRemoved(GridPane.Row row, int column, Sequence<Component> removed) {
             for (GridPaneListener listener : this) {
                 listener.cellsRemoved(row, column, removed);
             }
         }
 
         @Override
-        public void cellUpdated(GridPane.Row row, int column,
-            Component previousComponent) {
+        public void cellUpdated(GridPane.Row row, int column, Component previousComponent) {
             for (GridPaneListener listener : this) {
                 listener.cellUpdated(row, column, previousComponent);
             }
@@ -327,7 +326,7 @@ public class GridPane extends Container {
 
     /**
      * Creates a new grid pane with the specified column count.
-     *
+     * 
      * @param columnCount
      */
     public GridPane(int columnCount) {
@@ -359,7 +358,7 @@ public class GridPane extends Container {
 
     /**
      * Sets the number of columns in the grid pane.
-     *
+     * 
      * @param columnCount
      */
     public void setColumnCount(int columnCount) {
@@ -373,9 +372,8 @@ public class GridPane extends Container {
 
     /**
      * Returns the grid pane row sequence.
-     *
-     * @return
-     * The grid pane row sequence
+     * 
+     * @return The grid pane row sequence
      */
     public RowSequence getRows() {
         return rowSequence;
@@ -383,68 +381,55 @@ public class GridPane extends Container {
 
     /**
      * Returns the index of the row at a given location.
-     *
-     * @param y
-     * The y-coordinate of the row to identify.
-     *
-     * @return
-     * The row index, or <tt>-1</tt> if there is no row at the given
+     * 
+     * @param y The y-coordinate of the row to identify.
+     * @return The row index, or <tt>-1</tt> if there is no row at the given
      * y-coordinate.
      */
     public int getRowAt(int y) {
-        GridPane.Skin gridPaneSkin = (GridPane.Skin)getSkin();
+        GridPane.Skin gridPaneSkin = (GridPane.Skin) getSkin();
         return gridPaneSkin.getRowAt(y);
     }
 
     /**
      * Returns the bounds of a given row.
-     *
-     * @param row
-     * The row index.
+     * 
+     * @param row The row index.
      */
     public Bounds getRowBounds(int row) {
-        GridPane.Skin gridPaneSkin = (GridPane.Skin)getSkin();
+        GridPane.Skin gridPaneSkin = (GridPane.Skin) getSkin();
         return gridPaneSkin.getRowBounds(row);
     }
 
     /**
      * Returns the index of the column at a given location.
-     *
-     * @param x
-     * The x-coordinate of the column to identify.
-     *
-     * @return
-     * The column index, or <tt>-1</tt> if there is no column at the given
-     * x-coordinate.
+     * 
+     * @param x The x-coordinate of the column to identify.
+     * @return The column index, or <tt>-1</tt> if there is no column at the
+     * given x-coordinate.
      */
     public int getColumnAt(int x) {
-        GridPane.Skin gridPaneSkin = (GridPane.Skin)getSkin();
+        GridPane.Skin gridPaneSkin = (GridPane.Skin) getSkin();
         return gridPaneSkin.getColumnAt(x);
     }
 
     /**
      * Returns the bounds of a given column.
-     *
-     * @param column
-     * The column index.
+     * 
+     * @param column The column index.
      */
     public Bounds getColumnBounds(int column) {
-        GridPane.Skin gridPaneSkin = (GridPane.Skin)getSkin();
+        GridPane.Skin gridPaneSkin = (GridPane.Skin) getSkin();
         return gridPaneSkin.getColumnBounds(column);
     }
 
     /**
      * Gets the component at the specified cell in this grid pane.
-     *
-     * @param rowIndex
-     * The row index of the cell
-     *
-     * @param columnIndex
-     * The column index of the cell
-     *
-     * @return
-     * The component in the specified cell, or <tt>null</tt> if the cell is
-     * empty
+     * 
+     * @param rowIndex The row index of the cell
+     * @param columnIndex The column index of the cell
+     * @return The component in the specified cell, or <tt>null</tt> if the cell
+     * is empty
      */
     public Component getCellComponent(int rowIndex, int columnIndex) {
         Row row = rows.get(rowIndex);
@@ -461,15 +446,10 @@ public class GridPane extends Container {
     /**
      * Overrides the base method to check whether or not a cell component is
      * being removed, and fires the appropriate event in that case.
-     *
-     * @param index
-     * The index at which components were removed
-     *
-     * @param count
-     * The number of components removed
-     *
-     * @return
-     * The sequence of components that were removed
+     * 
+     * @param index The index at which components were removed
+     * @param count The number of components removed
+     * @return The sequence of components that were removed
      */
     @Override
     public Sequence<Component> remove(int index, int count) {

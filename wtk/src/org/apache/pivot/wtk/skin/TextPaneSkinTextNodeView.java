@@ -60,7 +60,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     protected void attach() {
         super.attach();
 
-        TextNode textNode = (TextNode)getNode();
+        TextNode textNode = (TextNode) getNode();
         textNode.getTextNodeListeners().add(this);
     }
 
@@ -68,7 +68,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     protected void detach() {
         super.detach();
 
-        TextNode textNode = (TextNode)getNode();
+        TextNode textNode = (TextNode) getNode();
         textNode.getTextNodeListeners().remove(this);
     }
 
@@ -83,24 +83,25 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
     @Override
     protected void childLayout(int breakWidth) {
-        TextNode textNode = (TextNode)getNode();
+        TextNode textNode = (TextNode) getNode();
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
-        CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(textNode.getCharacters(), start);
+        CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(
+            textNode.getCharacters(), start);
 
         float lineWidth = 0;
         int lastWhitespaceIndex = -1;
 
         Font effectiveFont = getEffectiveFont();
         char c = ci.first();
-        while (c != CharacterIterator.DONE
-            && lineWidth < breakWidth) {
+        while (c != CharacterIterator.DONE && lineWidth < breakWidth) {
             if (Character.isWhitespace(c)) {
                 lastWhitespaceIndex = ci.getIndex();
             }
 
             int i = ci.getIndex();
-            Rectangle2D characterBounds = effectiveFont.getStringBounds(ci, i, i + 1, fontRenderContext);
+            Rectangle2D characterBounds = effectiveFont.getStringBounds(ci, i, i + 1,
+                fontRenderContext);
             lineWidth += characterBounds.getWidth();
 
             c = ci.current();
@@ -137,35 +138,36 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             next.setParent(getParent());
         } else {
             length = ci.getEndIndex() - start;
-            // set to null in case this node used to be broken across multiple, but is no longer
+            // set to null in case this node used to be broken across multiple,
+            // but is no longer
             next = null;
         }
 
         Rectangle2D textBounds = glyphVector.getLogicalBounds();
-        setSize((int)Math.ceil(textBounds.getWidth()),
-            (int)Math.ceil(textBounds.getHeight()));
+        setSize((int) Math.ceil(textBounds.getWidth()), (int) Math.ceil(textBounds.getHeight()));
     }
 
     @Override
     public Dimensions getPreferredSize(int breakWidth) {
-        TextNode textNode = (TextNode)getNode();
+        TextNode textNode = (TextNode) getNode();
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
-        CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(textNode.getCharacters(), start);
+        CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(
+            textNode.getCharacters(), start);
 
         float lineWidth = 0;
         int lastWhitespaceIndex = -1;
 
         Font effectiveFont = getEffectiveFont();
         char c = ci.first();
-        while (c != CharacterIterator.DONE
-            && lineWidth < breakWidth) {
+        while (c != CharacterIterator.DONE && lineWidth < breakWidth) {
             if (Character.isWhitespace(c)) {
                 lastWhitespaceIndex = ci.getIndex();
             }
 
             int i = ci.getIndex();
-            Rectangle2D characterBounds = effectiveFont.getStringBounds(ci, i, i + 1, fontRenderContext);
+            Rectangle2D characterBounds = effectiveFont.getStringBounds(ci, i, i + 1,
+                fontRenderContext);
             lineWidth += characterBounds.getWidth();
 
             c = ci.current();
@@ -197,8 +199,8 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             new CharSequenceCharacterIterator(textNode.getCharacters(), start, end));
 
         Rectangle2D textBounds = glyphVectorLocal.getLogicalBounds();
-        return new Dimensions((int)Math.ceil(textBounds.getWidth()),
-            (int)Math.ceil(textBounds.getHeight()));
+        return new Dimensions((int) Math.ceil(textBounds.getWidth()),
+            (int) Math.ceil(textBounds.getHeight()));
     }
 
     @Override
@@ -217,7 +219,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     @Override
     public void paint(Graphics2D graphics) {
         if (glyphVector != null) {
-            TextPane textPane = (TextPane)getTextPaneSkin().getComponent();
+            TextPane textPane = (TextPane) getTextPaneSkin().getComponent();
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = getEffectiveFont().getLineMetrics("", fontRenderContext);
@@ -239,12 +241,12 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             int width = getWidth();
             int height = getHeight();
 
-            if (selectionLength > 0
-                && characterRange.intersects(selectionRange)) {
+            if (selectionLength > 0 && characterRange.intersects(selectionRange)) {
                 // Determine the selection bounds
                 int x0;
                 if (selectionRange.start > characterRange.start) {
-                    Bounds leadingSelectionBounds = getCharacterBounds(selectionRange.start - documentOffset);
+                    Bounds leadingSelectionBounds = getCharacterBounds(selectionRange.start
+                        - documentOffset);
                     x0 = leadingSelectionBounds.x;
                 } else {
                     x0 = 0;
@@ -252,7 +254,8 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
                 int x1;
                 if (selectionRange.end < characterRange.end) {
-                    Bounds trailingSelectionBounds = getCharacterBounds(selectionRange.end - documentOffset);
+                    Bounds trailingSelectionBounds = getCharacterBounds(selectionRange.end
+                        - documentOffset);
                     x1 = trailingSelectionBounds.x + trailingSelectionBounds.width;
                 } else {
                     x1 = width;
@@ -265,7 +268,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                 unselectedArea.add(new Area(new Rectangle(0, 0, width, height)));
                 unselectedArea.subtract(new Area(selection));
 
-                Graphics2D textGraphics = (Graphics2D)graphics.create();
+                Graphics2D textGraphics = (Graphics2D) graphics.create();
                 textGraphics.setColor(getEffectiveForegroundColor());
                 textGraphics.clip(unselectedArea);
                 textGraphics.drawGlyphVector(glyphVector, 0, ascent);
@@ -285,9 +288,9 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                     selectionColor = getTextPaneSkin().getInactiveSelectionColor();
                 }
 
-                Graphics2D selectedTextGraphics = (Graphics2D)graphics.create();
-                selectedTextGraphics.setColor(textPane.isFocused() &&
-                    textPane.isEditable() ? selectionColor : getTextPaneSkin().getInactiveSelectionColor());
+                Graphics2D selectedTextGraphics = (Graphics2D) graphics.create();
+                selectedTextGraphics.setColor(textPane.isFocused() && textPane.isEditable() ? selectionColor
+                    : getTextPaneSkin().getInactiveSelectionColor());
                 selectedTextGraphics.clip(selection.getBounds());
                 selectedTextGraphics.drawGlyphVector(glyphVector, 0, ascent);
                 if (underline) {
@@ -322,7 +325,8 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     /**
-     * Used by TextPaneSkinParagraphView when it breaks child nodes into multiple views.
+     * Used by TextPaneSkinParagraphView when it breaks child nodes into
+     * multiple views.
      */
     public TextPaneSkinNodeView getNext() {
         return next;
@@ -343,9 +347,9 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             if (glyphBounds.contains(x, y - ascent)) {
                 Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-                if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2
-                    && i < n - 1) {
-                    // The user clicked on the right half of the character; select
+                if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2 && i < n - 1) {
+                    // The user clicked on the right half of the character;
+                    // select
                     // the next character
                     i++;
                 }
@@ -435,13 +439,13 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                 Shape glyphBounds = glyphVector.getGlyphLogicalBounds(i);
                 Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-                float glyphX = (float)glyphBounds2D.getX();
-                float glyphWidth = (float)glyphBounds2D.getWidth();
+                float glyphX = (float) glyphBounds2D.getX();
+                float glyphWidth = (float) glyphBounds2D.getWidth();
 
                 if (x >= glyphX && x < glyphX + glyphWidth) {
-                    if (x - glyphX > glyphWidth / 2
-                        && i < n - 1) {
-                        // The x position falls within the right half of the character;
+                    if (x - glyphX > glyphWidth / 2 && i < n - 1) {
+                        // The x position falls within the right half of the
+                        // character;
                         // select the next character
                         i++;
                     }
@@ -472,8 +476,8 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         Shape glyphBounds = glyphVector.getGlyphLogicalBounds(offset);
         Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-        return new Bounds((int)Math.floor(glyphBounds2D.getX()), 0,
-            (int)Math.ceil(glyphBounds2D.getWidth()), getHeight());
+        return new Bounds((int) Math.floor(glyphBounds2D.getX()), 0,
+            (int) Math.ceil(glyphBounds2D.getWidth()), getHeight());
     }
 
     @Override
@@ -488,7 +492,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
     @Override
     public String toString() {
-        TextNode textNode = (TextNode)getNode();
+        TextNode textNode = (TextNode) getNode();
         String text = textNode.getText();
         return "[" + text.substring(start, start + length) + "]";
     }

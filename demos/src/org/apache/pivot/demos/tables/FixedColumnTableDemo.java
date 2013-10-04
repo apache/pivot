@@ -38,8 +38,8 @@ public class FixedColumnTableDemo extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        primaryTableView = (TableView)namespace.get("primaryTableView");
-        fixedTableView = (TableView)namespace.get("fixedTableView");
+        primaryTableView = (TableView) namespace.get("primaryTableView");
+        fixedTableView = (TableView) namespace.get("fixedTableView");
 
         // Keep selection state in sync
         primaryTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
@@ -62,9 +62,9 @@ public class FixedColumnTableDemo extends Window implements Bindable {
             }
 
             @Override
-            public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-                if (previousSelectedRanges != null
-                    && !synchronizingSelection) {
+            public void selectedRangesChanged(TableView tableView,
+                Sequence<Span> previousSelectedRanges) {
+                if (previousSelectedRanges != null && !synchronizingSelection) {
                     synchronizingSelection = true;
                     fixedTableView.setSelectedRanges(tableView.getSelectedRanges());
                     synchronizingSelection = false;
@@ -97,9 +97,9 @@ public class FixedColumnTableDemo extends Window implements Bindable {
             }
 
             @Override
-            public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-                if (previousSelectedRanges != null
-                    && !synchronizingSelection) {
+            public void selectedRangesChanged(TableView tableView,
+                Sequence<Span> previousSelectedRanges) {
+                if (previousSelectedRanges != null && !synchronizingSelection) {
                     synchronizingSelection = true;
                     primaryTableView.setSelectedRanges(tableView.getSelectedRanges());
                     synchronizingSelection = false;
@@ -121,7 +121,7 @@ public class FixedColumnTableDemo extends Window implements Bindable {
                 }
 
                 @SuppressWarnings("unchecked")
-                List<Object> tableData = (List<Object>)tableView.getTableData();
+                List<Object> tableData = (List<Object>) tableView.getTableData();
                 tableData.setComparator(new TableViewRowComparator(tableView));
             }
         });
@@ -134,7 +134,7 @@ public class FixedColumnTableDemo extends Window implements Bindable {
                 }
 
                 @SuppressWarnings("unchecked")
-                List<Object> tableData = (List<Object>)tableView.getTableData();
+                List<Object> tableData = (List<Object>) tableView.getTableData();
                 tableData.setComparator(new TableViewRowComparator(tableView));
             }
         });

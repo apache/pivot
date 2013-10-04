@@ -48,7 +48,8 @@ public class Pivot800 extends Application.Adapter {
             sheet.setRootDirectory(homeFolder);
             System.out.println("selecting file " + firstFolderInHome);
             sheet.setSelectedFile(firstFolderInHome);
-            System.out.println("Selected file is " + sheet.getSelectedFile() + ", but button state is not updated!");
+            System.out.println("Selected file is " + sheet.getSelectedFile()
+                + ", but button state is not updated!");
         }
     }
 

@@ -61,7 +61,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             caretOn = !caretOn;
 
             if (selection == null) {
-                TextPane textPane = (TextPane)getComponent();
+                TextPane textPane = (TextPane) getComponent();
                 textPane.repaint(caret.x, caret.y, caret.width, caret.height);
             }
         }
@@ -70,7 +70,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     private class ScrollSelectionCallback implements Runnable {
         @Override
         public void run() {
-            TextPane textPane = (TextPane)getComponent();
+            TextPane textPane = (TextPane) getComponent();
             int selectionStart = textPane.getSelectionStart();
             int selectionLength = textPane.getSelectionLength();
             int selectionEnd = selectionStart + selectionLength - 1;
@@ -93,7 +93,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     int offset = getNextInsertionPoint(mouseX, selectionEnd, scrollDirection);
 
                     if (offset != -1) {
-                        // If the next character is a paragraph terminator and is not the
+                        // If the next character is a paragraph terminator and
+                        // is not the
                         // final terminator character, increment the selection
                         Document document = textPane.getDocument();
                         if (document.getCharacterAt(offset) == '\n'
@@ -162,7 +163,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     public void install(Component component) {
         super.install(component);
 
-        TextPane textPane = (TextPane)component;
+        TextPane textPane = (TextPane) component;
         textPane.getTextPaneListeners().add(this);
         textPane.getTextPaneSelectionListeners().add(this);
 
@@ -170,7 +171,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
         Document document = textPane.getDocument();
         if (document != null) {
-            documentView = (TextPaneSkinDocumentView)createNodeView(document);
+            documentView = (TextPaneSkinDocumentView) createNodeView(document);
             documentView.attach();
             updateSelection();
         }
@@ -186,7 +187,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         int preferredWidth;
 
         if (documentView == null) {
-           preferredWidth = 0;
+            preferredWidth = 0;
         } else {
             Dimensions documentDimensions = documentView.getPreferredSize(Integer.MAX_VALUE);
 
@@ -200,8 +201,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     public int getPreferredHeight(int width) {
         int preferredHeight;
 
-        if (documentView == null
-            || width == -1) {
+        if (documentView == null || width == -1) {
             preferredHeight = 0;
         } else {
             int breakWidth;
@@ -225,8 +225,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         int preferredWidth;
 
         if (documentView == null) {
-           preferredWidth = 0;
-           preferredHeight = 0;
+            preferredWidth = 0;
+            preferredHeight = 0;
         } else {
             Dimensions documentDimensions = documentView.getPreferredSize(Integer.MAX_VALUE);
 
@@ -248,7 +248,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     @Override
     public void layout() {
         if (documentView != null) {
-            TextPane textPane = (TextPane)getComponent();
+            TextPane textPane = (TextPane) getComponent();
             int width = getWidth();
 
             int breakWidth;
@@ -267,8 +267,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 scrollCharacterToVisible(textPane.getSelectionStart());
             }
 
-            showCaret(textPane.isFocused()
-                && textPane.getSelectionLength() == 0);
+            showCaret(textPane.isFocused() && textPane.getSelectionLength() == 0);
         }
     }
 
@@ -276,14 +275,13 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
-        TextPane textPane = (TextPane)getComponent();
+        TextPane textPane = (TextPane) getComponent();
 
         if (documentView != null) {
             // Draw the selection highlight
             if (selection != null) {
-                graphics.setColor(textPane.isFocused()
-                    && textPane.isEditable() ?
-                    selectionBackgroundColor : inactiveSelectionBackgroundColor);
+                graphics.setColor(textPane.isFocused() && textPane.isEditable() ? selectionBackgroundColor
+                    : inactiveSelectionBackgroundColor);
                 graphics.fill(selection);
             }
 
@@ -302,9 +300,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             graphics.translate(-margin.left, -margin.top);
 
             // Draw the caret
-            if (selection == null
-                && caretOn
-                && textPane.isFocused()) {
+            if (selection == null && caretOn && textPane.isFocused()) {
                 graphics.setColor(textPane.isEditable() ? color : inactiveColor);
                 graphics.fill(caret);
             }
@@ -321,9 +317,11 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             int xUpdated = Math.min(documentView.getWidth() - 1, Math.max(x - margin.left, 0));
 
             if (y < margin.top) {
-                offset = documentView.getNextInsertionPoint(xUpdated, -1, TextPane.ScrollDirection.DOWN);
+                offset = documentView.getNextInsertionPoint(xUpdated, -1,
+                    TextPane.ScrollDirection.DOWN);
             } else if (y > documentView.getHeight() + margin.top) {
-                offset = documentView.getNextInsertionPoint(xUpdated, -1, TextPane.ScrollDirection.UP);
+                offset = documentView.getNextInsertionPoint(xUpdated, -1,
+                    TextPane.ScrollDirection.UP);
             } else {
                 offset = documentView.getInsertionPoint(xUpdated, y - margin.top);
             }
@@ -389,7 +387,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     private void scrollCharacterToVisible(int offset) {
-        TextPane textPane = (TextPane)getComponent();
+        TextPane textPane = (TextPane) getComponent();
         Bounds characterBounds = getCharacterBounds(offset);
 
         if (characterBounds != null) {
@@ -419,6 +417,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the font of the text
+     * 
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
@@ -431,6 +430,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the font of the text
+     * 
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
@@ -462,7 +462,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the foreground color of the text
-     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     * 
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
+     * values recognized by Pivot}.
      */
     public final void setColor(String color) {
         if (color == null) {
@@ -578,14 +580,16 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Returns the amount of space between the edge of the TextPane and its Document
+     * Returns the amount of space between the edge of the TextPane and its
+     * Document
      */
     public Insets getMargin() {
         return margin;
     }
 
     /**
-     * Sets the amount of space between the edge of the TextPane and its Document
+     * Sets the amount of space between the edge of the TextPane and its
+     * Document
      */
     public void setMargin(Insets margin) {
         if (margin == null) {
@@ -597,8 +601,11 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Sets the amount of space between the edge of the TextPane and its Document
-     * @param margin A dictionary with keys in the set {left, top, bottom, right}.
+     * Sets the amount of space between the edge of the TextPane and its
+     * Document
+     * 
+     * @param margin A dictionary with keys in the set {left, top, bottom,
+     * right}.
      */
     public final void setMargin(Dictionary<String, ?> margin) {
         if (margin == null) {
@@ -609,14 +616,16 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Sets the amount of space between the edge of the TextPane and its Document
+     * Sets the amount of space between the edge of the TextPane and its
+     * Document
      */
     public final void setMargin(int margin) {
         setMargin(new Insets(margin));
     }
 
     /**
-     * Sets the amount of space between the edge of the TextPane and its Document
+     * Sets the amount of space between the edge of the TextPane and its
+     * Document
      */
     public final void setMargin(Number margin) {
         if (margin == null) {
@@ -627,9 +636,11 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Sets the amount of space between the edge of the TextPane and its Document
-     * @param margin A string containing an integer or a JSON dictionary with keys
-     * left, top, bottom, and/or right.
+     * Sets the amount of space between the edge of the TextPane and its
+     * Document
+     * 
+     * @param margin A string containing an integer or a JSON dictionary with
+     * keys left, top, bottom, and/or right.
      */
     public final void setMargin(String margin) {
         if (margin == null) {
@@ -658,14 +669,13 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         boolean consumed = super.mouseMove(component, x, y);
 
         if (Mouse.getCapturer() == component) {
-            TextPane textPane = (TextPane)getComponent();
+            TextPane textPane = (TextPane) getComponent();
 
             Bounds visibleArea = textPane.getVisibleArea();
-            visibleArea = new Bounds(visibleArea.x, visibleArea.y,
-                visibleArea.width, visibleArea.height);
+            visibleArea = new Bounds(visibleArea.x, visibleArea.y, visibleArea.width,
+                visibleArea.height);
 
-            if (y >= visibleArea.y
-                && y < visibleArea.y + visibleArea.height) {
+            if (y >= visibleArea.y && y < visibleArea.y + visibleArea.height) {
                 // Stop the scroll selection timer
                 if (scheduledScrollSelectionCallback != null) {
                     scheduledScrollSelectionCallback.cancel();
@@ -685,22 +695,21 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 }
             } else {
                 if (scheduledScrollSelectionCallback == null) {
-                    scrollDirection = (y < visibleArea.y) ? TextPane.ScrollDirection.UP : TextPane.ScrollDirection.DOWN;
+                    scrollDirection = (y < visibleArea.y) ? TextPane.ScrollDirection.UP
+                        : TextPane.ScrollDirection.DOWN;
 
-                    scheduledScrollSelectionCallback =
-                        ApplicationContext.scheduleRecurringCallback(scrollSelectionCallback,
-                            SCROLL_RATE);
+                    scheduledScrollSelectionCallback = ApplicationContext.scheduleRecurringCallback(
+                        scrollSelectionCallback, SCROLL_RATE);
 
-                    // Run the callback once now to scroll the selection immediately
+                    // Run the callback once now to scroll the selection
+                    // immediately
                     scrollSelectionCallback.run();
                 }
             }
 
             mouseX = x;
         } else {
-            if (Mouse.isPressed(Mouse.Button.LEFT)
-                && Mouse.getCapturer() == null
-                && anchor != -1) {
+            if (Mouse.isPressed(Mouse.Button.LEFT) && Mouse.getCapturer() == null && anchor != -1) {
                 // Capture the mouse so we can select text
                 Mouse.capture(component);
             }
@@ -714,7 +723,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         boolean consumed = super.mouseDown(component, button, x, y);
 
         if (button == Mouse.Button.LEFT) {
-            TextPane textPane = (TextPane)component;
+            TextPane textPane = (TextPane) component;
 
             anchor = getInsertionPoint(x, y);
 
@@ -765,12 +774,11 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         return consumed;
     }
 
-
     @Override
     public boolean keyTyped(final Component component, char character) {
         boolean consumed = super.keyTyped(component, character);
 
-        final TextPane textPane = (TextPane)getComponent();
+        final TextPane textPane = (TextPane) getComponent();
 
         if (textPane.isEditable()) {
             Document document = textPane.getDocument();
@@ -778,8 +786,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             if (document != null) {
                 // Ignore characters in the control range and the ASCII delete
                 // character as well as meta key presses
-                if (character > 0x1F
-                    && character != 0x7F
+                if (character > 0x1F && character != 0x7F
                     && !Keyboard.isPressed(Keyboard.Modifier.META)) {
                     textPane.insert(character);
                     showCaret(true);
@@ -791,26 +798,24 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     @Override
-    public boolean keyPressed(final Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(final Component component, int keyCode,
+        Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        final TextPane textPane = (TextPane)getComponent();
+        final TextPane textPane = (TextPane) getComponent();
         Document document = textPane.getDocument();
 
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
         if (document != null) {
-            if (keyCode == Keyboard.KeyCode.ENTER
-                && textPane.isEditable()) {
+            if (keyCode == Keyboard.KeyCode.ENTER && textPane.isEditable()) {
                 textPane.insertParagraph();
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.DELETE
-                && textPane.isEditable()) {
+            } else if (keyCode == Keyboard.KeyCode.DELETE && textPane.isEditable()) {
                 textPane.delete(false);
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.BACKSPACE
-                && textPane.isEditable()) {
+            } else if (keyCode == Keyboard.KeyCode.BACKSPACE && textPane.isEditable()) {
                 textPane.delete(true);
 
                 consumed = true;
@@ -829,12 +834,12 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     if (selectionStart > 0) {
                         // first, skip over any space immediately to our left
                         while (selectionStart > 0
-                                && Character.isWhitespace(document.getCharacterAt(selectionStart - 1))) {
+                            && Character.isWhitespace(document.getCharacterAt(selectionStart - 1))) {
                             selectionStart--;
                         }
                         // then, skip over any word-letters to our left
                         while (selectionStart > 0
-                                && !Character.isWhitespace(document.getCharacterAt(selectionStart - 1))) {
+                            && !Character.isWhitespace(document.getCharacterAt(selectionStart - 1))) {
                             selectionStart--;
                         }
 
@@ -843,8 +848,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 } else {
                     // Clear the selection and move the caret back by one
                     // character
-                    if (selectionLength == 0
-                        && selectionStart > 0) {
+                    if (selectionLength == 0 && selectionStart > 0) {
                         selectionStart--;
                     }
 
@@ -874,12 +878,12 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     if (selectionStart < document.getCharacterCount()) {
                         // first, skip over any word-letters to our right
                         while (selectionStart < document.getCharacterCount() - 1
-                                && !Character.isWhitespace(document.getCharacterAt(selectionStart))) {
+                            && !Character.isWhitespace(document.getCharacterAt(selectionStart))) {
                             selectionStart++;
                         }
                         // then, skip over any space immediately to our right
                         while (selectionStart < document.getCharacterCount() - 1
-                                && Character.isWhitespace(document.getCharacterAt(selectionStart))) {
+                            && Character.isWhitespace(document.getCharacterAt(selectionStart))) {
                             selectionStart++;
                         }
 
@@ -909,7 +913,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             } else if (keyCode == Keyboard.KeyCode.UP) {
                 int selectionStart = textPane.getSelectionStart();
 
-                int offset = getNextInsertionPoint(caretX, selectionStart, TextPane.ScrollDirection.UP);
+                int offset = getNextInsertionPoint(caretX, selectionStart,
+                    TextPane.ScrollDirection.UP);
 
                 if (offset == -1) {
                     offset = 0;
@@ -935,11 +940,13 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     int from;
                     int x;
                     if (selectionLength == 0) {
-                        // Get next insertion point from leading selection character
+                        // Get next insertion point from leading selection
+                        // character
                         from = selectionStart;
                         x = caretX;
                     } else {
-                        // Get next insertion point from right edge of trailing selection
+                        // Get next insertion point from right edge of trailing
+                        // selection
                         // character
                         from = selectionStart + selectionLength - 1;
 
@@ -952,7 +959,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     if (offset == -1) {
                         offset = documentView.getCharacterCount() - 1;
                     } else {
-                        // If the next character is a paragraph terminator and is not the
+                        // If the next character is a paragraph terminator and
+                        // is not the
                         // final terminator character, increment the selection
                         if (document.getCharacterAt(offset) == '\n'
                             && offset < documentView.getCharacterCount() - 1) {
@@ -965,10 +973,12 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 } else {
                     int from;
                     if (selectionLength == 0) {
-                        // Get next insertion point from leading selection character
+                        // Get next insertion point from leading selection
+                        // character
                         from = selectionStart;
                     } else {
-                        // Get next insertion point from trailing selection character
+                        // Get next insertion point from trailing selection
+                        // character
                         from = selectionStart + selectionLength - 1;
                     }
 
@@ -983,30 +993,26 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 }
 
                 consumed = true;
-            } else if (Keyboard.isPressed(commandModifier)
-                    && keyCode == Keyboard.KeyCode.TAB
-                    && textPane.isEditable()) {
-                    textPane.insert("\t");
-                    showCaret(true);
+            } else if (Keyboard.isPressed(commandModifier) && keyCode == Keyboard.KeyCode.TAB
+                && textPane.isEditable()) {
+                textPane.insert("\t");
+                showCaret(true);
 
-                    consumed = true;
+                consumed = true;
             } else if (Keyboard.isPressed(commandModifier)) {
                 if (keyCode == Keyboard.KeyCode.A) {
                     textPane.setSelection(0, document.getCharacterCount());
                     consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.X
-                    && textPane.isEditable()) {
+                } else if (keyCode == Keyboard.KeyCode.X && textPane.isEditable()) {
                     textPane.cut();
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.C) {
                     textPane.copy();
                     consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.V
-                    && textPane.isEditable()) {
+                } else if (keyCode == Keyboard.KeyCode.V && textPane.isEditable()) {
                     textPane.paste();
                     consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.Z
-                    && textPane.isEditable()) {
+                } else if (keyCode == Keyboard.KeyCode.Z && textPane.isEditable()) {
                     if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                         textPane.redo();
                     } else {
@@ -1038,8 +1044,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.INSERT) {
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                    && textPane.isEditable()) {
+                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT) && textPane.isEditable()) {
                     textPane.paste();
                     consumed = true;
                 }
@@ -1063,9 +1068,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
-        TextPane textPane = (TextPane)getComponent();
-        if (textPane.isFocused()
-            && textPane.getSelectionLength() == 0) {
+        TextPane textPane = (TextPane) getComponent();
+        if (textPane.isFocused() && textPane.getSelectionLength() == 0) {
             scrollCharacterToVisible(textPane.getSelectionStart());
             showCaret(true);
         } else {
@@ -1085,7 +1089,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
         Document document = textPane.getDocument();
         if (document != null) {
-            documentView = (TextPaneSkinDocumentView)createNodeView(document);
+            documentView = (TextPaneSkinDocumentView) createNodeView(document);
             documentView.attach();
         }
 
@@ -1101,10 +1105,10 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     @Override
     public void selectionChanged(TextPane textPane, int previousSelectionStart,
         int previousSelectionLength) {
-        // If the document view is valid, repaint the selection state; otherwise,
+        // If the document view is valid, repaint the selection state;
+        // otherwise,
         // the selection will be updated in layout()
-        if (documentView != null
-            && documentView.isValid()) {
+        if (documentView != null && documentView.isValid()) {
             if (selection == null) {
                 // Repaint previous caret bounds
                 textPane.repaint(caret.x, caret.y, caret.width, caret.height);
@@ -1132,23 +1136,23 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         TextPaneSkinNodeView nodeView = null;
 
         if (node instanceof Document) {
-            nodeView = new TextPaneSkinDocumentView(this, (Document)node);
+            nodeView = new TextPaneSkinDocumentView(this, (Document) node);
         } else if (node instanceof Paragraph) {
-            nodeView = new TextPaneSkinParagraphView((Paragraph)node);
+            nodeView = new TextPaneSkinParagraphView((Paragraph) node);
         } else if (node instanceof TextNode) {
-            nodeView = new TextPaneSkinTextNodeView((TextNode)node);
+            nodeView = new TextPaneSkinTextNodeView((TextNode) node);
         } else if (node instanceof ImageNode) {
-            nodeView = new TextPaneSkinImageNodeView((ImageNode)node);
+            nodeView = new TextPaneSkinImageNodeView((ImageNode) node);
         } else if (node instanceof ComponentNode) {
-            nodeView = new TextPaneSkinComponentNodeView((ComponentNode)node);
+            nodeView = new TextPaneSkinComponentNodeView((ComponentNode) node);
         } else if (node instanceof TextSpan) {
-            nodeView = new TextPaneSkinSpanView((TextSpan)node);
+            nodeView = new TextPaneSkinSpanView((TextSpan) node);
         } else if (node instanceof NumberedList) {
-            nodeView = new TextPaneSkinNumberedListView((NumberedList)node);
+            nodeView = new TextPaneSkinNumberedListView((NumberedList) node);
         } else if (node instanceof BulletedList) {
-            nodeView = new TextPaneSkinBulletedListView((BulletedList)node);
+            nodeView = new TextPaneSkinBulletedListView((BulletedList) node);
         } else if (node instanceof List.Item) {
-            nodeView = new TextPaneSkinListItemView((List.Item)node);
+            nodeView = new TextPaneSkinListItemView((List.Item) node);
         } else {
             throw new IllegalArgumentException("Unsupported node type: "
                 + node.getClass().getName());
@@ -1159,7 +1163,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     private void updateSelection() {
         if (documentView.getCharacterCount() > 0) {
-            TextPane textPane = (TextPane)getComponent();
+            TextPane textPane = (TextPane) getComponent();
 
             // Update the caret
             int selectionStart = textPane.getSelectionStart();
@@ -1184,23 +1188,23 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 int lastRowIndex = getRowAt(selectionEnd);
 
                 if (firstRowIndex == lastRowIndex) {
-                    selection.add(new Area(new Rectangle(leadingSelectionBounds.x, leadingSelectionBounds.y,
-                        trailingSelectionBounds.x + trailingSelectionBounds.width - leadingSelectionBounds.x,
-                        trailingSelectionBounds.y + trailingSelectionBounds.height - leadingSelectionBounds.y)));
+                    selection.add(new Area(new Rectangle(leadingSelectionBounds.x,
+                        leadingSelectionBounds.y, trailingSelectionBounds.x
+                            + trailingSelectionBounds.width - leadingSelectionBounds.x,
+                        trailingSelectionBounds.y + trailingSelectionBounds.height
+                            - leadingSelectionBounds.y)));
                 } else {
                     int width = getWidth();
 
                     selection.add(new Area(new Rectangle(leadingSelectionBounds.x,
-                        leadingSelectionBounds.y,
-                        width - margin.right - leadingSelectionBounds.x,
+                        leadingSelectionBounds.y, width - margin.right - leadingSelectionBounds.x,
                         leadingSelectionBounds.height)));
 
                     if (lastRowIndex - firstRowIndex > 0) {
-                        selection.add(new Area(new Rectangle(margin.left,
-                            leadingSelectionBounds.y + leadingSelectionBounds.height,
-                            width - (margin.left + margin.right),
-                            trailingSelectionBounds.y - (leadingSelectionBounds.y
-                                + leadingSelectionBounds.height))));
+                        selection.add(new Area(new Rectangle(margin.left, leadingSelectionBounds.y
+                            + leadingSelectionBounds.height, width - (margin.left + margin.right),
+                            trailingSelectionBounds.y
+                                - (leadingSelectionBounds.y + leadingSelectionBounds.height))));
                     }
 
                     selection.add(new Area(new Rectangle(margin.left, trailingSelectionBounds.y,
@@ -1224,9 +1228,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
         if (show) {
             caretOn = true;
-            scheduledBlinkCaretCallback =
-                ApplicationContext.scheduleRecurringCallback(blinkCaretCallback,
-                    Platform.getCursorBlinkRate());
+            scheduledBlinkCaretCallback = ApplicationContext.scheduleRecurringCallback(
+                blinkCaretCallback, Platform.getCursorBlinkRate());
 
             // Run the callback once now to show the cursor immediately
             blinkCaretCallback.run();

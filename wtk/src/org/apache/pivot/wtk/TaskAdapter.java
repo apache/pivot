@@ -57,17 +57,15 @@ public class TaskAdapter<T> implements TaskListener<T> {
         }
     }
 
-
     // The TaskListener that we're adapting
     private TaskListener<T> taskListener;
-
 
     /**
      * Creates a new <tt>TaskAdapter</tt> that wraps the specified task
      * listener.
-     *
-     * @param taskListener
-     * The task listener that will be notified on the UI thread
+     * 
+     * @param taskListener The task listener that will be notified on the UI
+     * thread
      */
     public TaskAdapter(TaskListener<T> taskListener) {
         if (taskListener == null) {

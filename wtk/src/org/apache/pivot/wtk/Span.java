@@ -21,10 +21,9 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 
 /**
- * Class representing a range of integer values. The range includes all
- * values in the interval <i>[start, end]</i>. Values may be negative, and the
- * value of <tt>start</tt> may be less than or equal to the value of
- * <tt>end</tt>.
+ * Class representing a range of integer values. The range includes all values
+ * in the interval <i>[start, end]</i>. Values may be negative, and the value of
+ * <tt>start</tt> may be less than or equal to the value of <tt>end</tt>.
  */
 public final class Span {
     public final int start;
@@ -65,28 +64,24 @@ public final class Span {
             throw new IllegalArgumentException(END_KEY + " is required.");
         }
 
-        start = (Integer)span.get(START_KEY);
-        end = (Integer)span.get(END_KEY);
+        start = (Integer) span.get(START_KEY);
+        end = (Integer) span.get(END_KEY);
     }
 
     /**
      * Returns the length of the span.
-     *
-     * @return
-     * The absolute value of (<tt>end</tt> minus <tt>start</tt>) + 1.
+     * 
+     * @return The absolute value of (<tt>end</tt> minus <tt>start</tt>) + 1.
      */
     public long getLength() {
-        return Math.abs((long)end - (long)start) + 1;
+        return Math.abs((long) end - (long) start) + 1;
     }
 
     /**
      * Determines whether this span contains another span.
-     *
-     * @param span
-     * The span to test for containment.
-     *
-     * @return
-     * <tt>true</tt> if this span contains <tt>span</tt>; <tt>false</tt>,
+     * 
+     * @param span The span to test for containment.
+     * @return <tt>true</tt> if this span contains <tt>span</tt>; <tt>false</tt>,
      * otherwise.
      */
     public boolean contains(Span span) {
@@ -98,11 +93,9 @@ public final class Span {
 
         boolean contains;
         if (start < end) {
-            contains = (start <= normalizedSpan.start
-                && end >= normalizedSpan.end);
+            contains = (start <= normalizedSpan.start && end >= normalizedSpan.end);
         } else {
-            contains = (end <= normalizedSpan.start
-                && start >= normalizedSpan.end);
+            contains = (end <= normalizedSpan.start && start >= normalizedSpan.end);
         }
 
         return contains;
@@ -110,12 +103,9 @@ public final class Span {
 
     /**
      * Determines whether this span intersects with another span.
-     *
-     * @param span
-     * The span to test for intersection.
-     *
-     * @return
-     * <tt>true</tt> if this span intersects with <tt>span</tt>;
+     * 
+     * @param span The span to test for intersection.
+     * @return <tt>true</tt> if this span intersects with <tt>span</tt>;
      * <tt>false</tt>, otherwise.
      */
     public boolean intersects(Span span) {
@@ -127,11 +117,9 @@ public final class Span {
 
         boolean intersects;
         if (start < end) {
-            intersects = (start <= normalizedSpan.end
-                && end >= normalizedSpan.start);
+            intersects = (start <= normalizedSpan.end && end >= normalizedSpan.start);
         } else {
-            intersects = (end <= normalizedSpan.end
-                && start >= normalizedSpan.start);
+            intersects = (end <= normalizedSpan.end && start >= normalizedSpan.start);
         }
 
         return intersects;
@@ -139,12 +127,9 @@ public final class Span {
 
     /**
      * Calculates the intersection of this span and another span.
-     *
-     * @param span
-     * The span to intersect with this span.
-     *
-     * @return
-     * A new Span instance representing the intersection of this span and
+     * 
+     * @param span The span to intersect with this span.
+     * @return A new Span instance representing the intersection of this span and
      * <tt>span</tt>, or null if the spans do not intersect.
      */
     public Span intersect(Span span) {
@@ -155,8 +140,7 @@ public final class Span {
         Span intersection = null;
 
         if (intersects(span)) {
-            intersection = new Span(Math.max(start, span.start),
-                Math.min(end, span.end));
+            intersection = new Span(Math.max(start, span.start), Math.min(end, span.end));
         }
 
         return intersection;
@@ -164,12 +148,9 @@ public final class Span {
 
     /**
      * Calculates the union of this span and another span.
-     *
-     * @param span
-     * The span to union with this span.
-     *
-     * @return
-     * A new Span instance representing the union of this span and
+     * 
+     * @param span The span to union with this span.
+     * @return A new Span instance representing the union of this span and
      * <tt>span</tt>.
      */
     public Span union(Span span) {
@@ -177,13 +158,12 @@ public final class Span {
             throw new IllegalArgumentException("span is null.");
         }
 
-        return new Span(Math.min(start, span.start),
-            Math.max(end, span.end));
+        return new Span(Math.min(start, span.start), Math.max(end, span.end));
     }
 
     /**
-     * Returns a normalized equivalent of the span in which
-     * <tt>start</tt> is guaranteed to be less than end.
+     * Returns a normalized equivalent of the span in which <tt>start</tt> is
+     * guaranteed to be less than end.
      */
     public Span normalize() {
         return new Span(Math.min(start, end), Math.max(start, end));
@@ -194,9 +174,8 @@ public final class Span {
         boolean equal = false;
 
         if (o instanceof Span) {
-            Span span = (Span)o;
-            equal = (start == span.start
-                && end == span.end);
+            Span span = (Span) o;
+            equal = (start == span.start && end == span.end);
         }
 
         return equal;

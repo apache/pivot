@@ -31,40 +31,30 @@ import org.apache.pivot.wtk.Keyboard.Modifier;
 /**
  * Extension of {@link ButtonGroup} providing keyboard navigation within the
  * group and modified focus navigation that treats the group as a single
- * focusable entity.<br/><br/>
- *
- * {@link KeyCode#UP UP} & {@link KeyCode#LEFT LEFT} Select the previous
- * button<br/>
- * {@link KeyCode#DOWN DOWN} & {@link KeyCode#RIGHT RIGHT} Select the next
- * button<br/>
- * {@link KeyCode#HOME HOME} Select the first button<br/>
- * {@link KeyCode#END END} Select the last button<br/><br/>
- *
- * (Note that only {@link Component#isFocusable() focusable} buttons are
- * considered when searching for a Button to select)<br/><br/>
- *
- * When a button within the group is focused and key is typed, an attempt is
- * made to find the next button (default) or previous button (when the SHIFT
- * modifier is pressed) whose renderer text starts with the typed character.
- * This search will always behave as if the <code>circular</code> property were
- * set.<br/><br/>
- *
- * By default, {@link KeyCode#TAB TAB} and {@link KeyCode#TAB SHIFT+TAB}
- * key presses will transfer focus out of the group (forwards or backwards
- * respectively).
- * This is managed by the {@link #setIntraGroupFocusTransferEnabled(boolean)
- * intraGroupFocusTransferEnabled} property.<br/><br/>
- *
- * The {@link #setCircular(boolean) circular} property can be enabled to allow
- * the selection to transfer seamlessly from one end of the group to the other.
+ * focusable entity.<br/><br/> {@link KeyCode#UP UP} & {@link KeyCode#LEFT LEFT}
+ * Select the previous button<br/> {@link KeyCode#DOWN DOWN} &
+ * {@link KeyCode#RIGHT RIGHT} Select the next button<br/> {@link KeyCode#HOME
+ * HOME} Select the first button<br/> {@link KeyCode#END END} Select the last
+ * button<br/><br/> (Note that only {@link Component#isFocusable() focusable}
+ * buttons are considered when searching for a Button to select)<br/><br/> When
+ * a button within the group is focused and key is typed, an attempt is made to
+ * find the next button (default) or previous button (when the SHIFT modifier is
+ * pressed) whose renderer text starts with the typed character. This search
+ * will always behave as if the <code>circular</code> property were
+ * set.<br/><br/> By default, {@link KeyCode#TAB TAB} and {@link KeyCode#TAB
+ * SHIFT+TAB} key presses will transfer focus out of the group (forwards or
+ * backwards respectively). This is managed by the
+ * {@link #setIntraGroupFocusTransferEnabled(boolean)
+ * intraGroupFocusTransferEnabled} property.<br/><br/> The
+ * {@link #setCircular(boolean) circular} property can be enabled to allow the
+ * selection to transfer seamlessly from one end of the group to the other.
  * (i.e. holding down an arrow key will cycle through all focusable buttons)
- * <br/><br/>
- *
- * Note that due to the conflicting return types of the <code>add(T)</code> and
- * <code>remove(T)</code> methods in the {@link Group#add(Object) Group} and
- * {@link Sequence#add(Object) Sequence} interfaces, this class cannot actually
- * implement <code>Sequence&lt;Button&gt;</code>, although most of the same
- * methods are implemented.<br/>
+ * <br/><br/> Note that due to the conflicting return types of the
+ * <code>add(T)</code> and <code>remove(T)</code> methods in the
+ * {@link Group#add(Object) Group} and {@link Sequence#add(Object) Sequence}
+ * interfaces, this class cannot actually implement
+ * <code>Sequence&lt;Button&gt;</code>, although most of the same methods are
+ * implemented.<br/>
  */
 public class RadioButtonGroup extends ButtonGroup {
 
@@ -98,12 +88,11 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * ComponentKeyListener to be applied to all buttons as they are added to
-     * the group.<br/><br/>
-     *
-     * At least one button in the group must be focused for this listener to be
-     * executed, but that won't necessarily be a selected button.<br/>
-     * This also means that the group will not be empty, although some of the
-     * buttons contained within may not be focusable, or even visible.
+     * the group.<br/><br/> At least one button in the group must be focused for
+     * this listener to be executed, but that won't necessarily be a selected
+     * button.<br/> This also means that the group will not be empty, although
+     * some of the buttons contained within may not be focusable, or even
+     * visible.
      */
     private final ComponentKeyListener componentKeyListener = new ComponentKeyListener.Adapter() {
         /**
@@ -116,7 +105,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
             /*
              * Potentially transfer focus away from the buttons in this group.
-             *
+             * 
              * At this point we know that at least one button is focused, so we
              * just need to find the first or last (and possibly only) focusable
              * button depending on the focus transfer direction and then
@@ -209,8 +198,8 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Ensure that all buttons in this group have the custom
-     * ComponentKeyListener.<br/>
-     * This relies on the logic within ButtonGroup to prevent duplicates.
+     * ComponentKeyListener.<br/> This relies on the logic within ButtonGroup to
+     * prevent duplicates.
      */
     private final ButtonGroupListener buttonGroupListener = new ButtonGroupListener.Adapter() {
         @Override
@@ -253,13 +242,9 @@ public class RadioButtonGroup extends ButtonGroup {
      * {@link RadioButtonGroup#selectPreviousButton(Button) previous} or
      * {@link RadioButtonGroup#selectNextButton(Button) next} focusable button
      * will not stop when the group's lower or upper bounds (respectively) are
-     * reached.<br/>
-     *
-     * Instead, the search will 'wrap' and continue from the opposite bound
-     * until each button in the entire group has been tested for inclusion.
-     * <br/><br/>
-     *
-     * Defaults to <code>false</code>
+     * reached.<br/> Instead, the search will 'wrap' and continue from the
+     * opposite bound until each button in the entire group has been tested for
+     * inclusion. <br/><br/> Defaults to <code>false</code>
      */
     public boolean isCircular() {
         return circular;
@@ -270,10 +255,9 @@ public class RadioButtonGroup extends ButtonGroup {
      * {@link RadioButtonGroup#selectPreviousButton(Button) previous} or
      * {@link RadioButtonGroup#selectNextButton(Button) next} focusable button
      * will not stop when the group's lower or upper bounds (respectively) are
-     * reached.<br/>
-     *
-     * Instead, the search will 'wrap' and continue from the opposite bound
-     * until each button in the entire group has been tested for inclusion.
+     * reached.<br/> Instead, the search will 'wrap' and continue from the
+     * opposite bound until each button in the entire group has been tested for
+     * inclusion.
      */
     public void setCircular(boolean circular) {
         this.circular = circular;
@@ -281,8 +265,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * When true, TAB and SHIFT+TAB transfer focus out of the RadioButtonGroup.
-     * <br/>
-     * Defaults to <code>false</code>
+     * <br/> Defaults to <code>false</code>
      */
     public boolean isIntraGroupFocusTransferEnabled() {
         return intraGroupFocusTransferEnabled;
@@ -298,7 +281,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Add a button to the group.
-     *
+     * 
      * @see Group#add(Object)
      * @see Sequence#add(Object)
      */
@@ -316,7 +299,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Return the button at the specified index.
-     *
+     * 
      * @see Sequence#get(int)
      */
     public Button get(int index) {
@@ -325,7 +308,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Return the number of buttons in the group.
-     *
+     * 
      * @see Sequence#getLength()
      */
     public int getLength() {
@@ -334,10 +317,9 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Return the index (order) of the button within the group.
-     *
+     * 
      * @return The index or -1 if the button does not belong to this
      * RadioButtonGroup
-     *
      * @see Sequence#indexOf(Object)
      */
     public int indexOf(Button button) {
@@ -346,7 +328,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Insert a button at the specified index.
-     *
+     * 
      * @see Sequence#insert(Object, int)
      */
     public void insert(Button button, int index) {
@@ -361,7 +343,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Remove the button from the group.
-     *
+     * 
      * @see Group#remove(Object)
      * @see Sequence#remove(Object)
      */
@@ -380,7 +362,7 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Remove <code>count</code> buttons from the group starting at
      * <code>index</code>.
-     *
+     * 
      * @see Sequence#remove(int, int)
      */
     public Sequence<Button> remove(int index, int count) {
@@ -396,7 +378,6 @@ public class RadioButtonGroup extends ButtonGroup {
         return removed;
     }
 
-
     /**
      * Return an iterator for the <strong>ordered</strong> list of buttons
      */
@@ -407,7 +388,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Select and <strong>focus</strong> the specified button.
-     *
+     * 
      * @see ButtonGroup#setSelection(Button)
      */
     @Override
@@ -445,7 +426,7 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Working forwards from the specified button, select the first focusable
      * button.
-     *
+     * 
      * @param button If null, the first available button will be selected,
      * unless the group contains a selected or focused button, in which case
      * that button will be used as the starting point for the search.
@@ -462,7 +443,7 @@ public class RadioButtonGroup extends ButtonGroup {
                 // No selection, but perhaps one of the buttons has focus?
                 Component focusedComponent = Component.getFocusedComponent();
                 if (focusedComponent instanceof Button) {
-                    int index = this.indexOf((Button)focusedComponent);
+                    int index = this.indexOf((Button) focusedComponent);
                     if (index != NOT_FOUND_INDEX) {
                         buttonWithDefault = this.get(index);
                     }
@@ -490,7 +471,7 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Working backwards from the specified button, select the first focusable
      * button.
-     *
+     * 
      * @param button If null, the last available button will be selected, unless
      * the group contains a selected or focused button, in which case that
      * button will be used as the starting point for the search.
@@ -507,7 +488,7 @@ public class RadioButtonGroup extends ButtonGroup {
                 // No selection, but perhaps one of the buttons has focus?
                 Component focusedComponent = Component.getFocusedComponent();
                 if (focusedComponent instanceof Button) {
-                    int index = this.indexOf((Button)focusedComponent);
+                    int index = this.indexOf((Button) focusedComponent);
                     if (index != NOT_FOUND_INDEX) {
                         buttonWithDefault = this.get(index);
                     }
@@ -537,12 +518,11 @@ public class RadioButtonGroup extends ButtonGroup {
      * Iterate forwards over the buttons in the group, looping back to the start
      * if the upper bound is reached and the <code>circular</code> parameter is
      * true.
-     *
+     * 
      * @param index Index to which the 'next' is relative
      * @param filter Alternative filter to use during the search.
      * @param circularArgument Loop when upper bound is reached
      * @return The first button found to satisfy the filter
-     *
      * @see #setCircular(boolean)
      */
     private int findNext(int index, final Filter<Integer> filter, boolean circularArgument) {
@@ -578,12 +558,11 @@ public class RadioButtonGroup extends ButtonGroup {
      * Iterate backwards over the buttons in the group, looping back to the end
      * if the lower bound is reached and the <code>circular</code> parameter is
      * true.
-     *
+     * 
      * @param index Index to which the 'previous' is relative
      * @param filter Alternative filter to use during the search.
      * @param circularArgument Loop when lower bound is reached
      * @return The first focusable button found
-     *
      * @see #setCircular(boolean)
      */
     private int findPrevious(int index, final Filter<Integer> filter, boolean circularArgument) {

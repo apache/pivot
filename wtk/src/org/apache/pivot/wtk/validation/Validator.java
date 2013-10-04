@@ -15,21 +15,16 @@ package org.apache.pivot.wtk.validation;
 
 /**
  * Validation interface for text components. Allows the programmer to specify
- * constraints on text data.
- * <p>
- * This is indicated visually to the user (a red background would be typical),
- * and events are fired by the TextInput if the programmer wishes to take
- * further action.
+ * constraints on text data. <p> This is indicated visually to the user (a red
+ * background would be typical), and events are fired by the TextInput if the
+ * programmer wishes to take further action.
  */
 public interface Validator {
     /**
-     * Determines if a text value is valid based on the rules of the
-     * validator.
-     *
+     * Determines if a text value is valid based on the rules of the validator.
+     * 
      * @param text
-     *
-     * @return
-     * <tt>true</tt> if the value is valid; <tt>false</tt>, otherwise.
+     * @return <tt>true</tt> if the value is valid; <tt>false</tt>, otherwise.
      */
     public boolean isValid(String text);
 }

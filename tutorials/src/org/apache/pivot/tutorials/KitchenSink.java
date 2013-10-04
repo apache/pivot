@@ -86,9 +86,8 @@ import org.apache.pivot.wtk.media.Image;
 public class KitchenSink implements Application, Application.AboutHandler {
 
     /**
-     * A sample of a Custom Table Row.
-     * <p>
-     * Note that this is public because it's references in one of bxml files of this application.
+     * A sample of a Custom Table Row. <p> Note that this is public because it's
+     * references in one of bxml files of this application.
      */
     public static final class CustomTableRow {
         private boolean a = false;
@@ -112,7 +111,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         }
 
         public void setB(URL bURL) {
-            Image imageFromURL = (Image)ApplicationContext.getResourceCache().get(bURL);
+            Image imageFromURL = (Image) ApplicationContext.getResourceCache().get(bURL);
 
             if (imageFromURL == null) {
                 try {
@@ -166,7 +165,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
         }
     }
 
-
     private abstract class RollupStateHandler implements RollupStateListener {
         public RollupStateHandler() {
         }
@@ -196,22 +194,29 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "info.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "info.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                this.infoPivotVersion = (Label)bxmlSerializer.getNamespace().get("info-pivot-version");
-                this.infoPivotVersion.setText(this.infoPivotVersion.getText() + ApplicationContext.getPivotVersion().toString());
+                this.infoPivotVersion = (Label) bxmlSerializer.getNamespace().get(
+                    "info-pivot-version");
+                this.infoPivotVersion.setText(this.infoPivotVersion.getText()
+                    + ApplicationContext.getPivotVersion().toString());
 
-                this.infoPivotOrigin = (Label)bxmlSerializer.getNamespace().get("info-pivot-origin");
-                String origin = (ApplicationContext.getOrigin() != null) ? ApplicationContext.getOrigin().toString() : "";
+                this.infoPivotOrigin = (Label) bxmlSerializer.getNamespace().get(
+                    "info-pivot-origin");
+                String origin = (ApplicationContext.getOrigin() != null) ? ApplicationContext.getOrigin().toString()
+                    : "";
                 this.infoPivotOrigin.setText(this.infoPivotOrigin.getText() + "\"" + origin + "\"");
 
-                this.infoJavaVersion = (Label)bxmlSerializer.getNamespace().get("info-java-version");
-                // String javaVersion = ApplicationContext.getJVMVersion().toString();
+                this.infoJavaVersion = (Label) bxmlSerializer.getNamespace().get(
+                    "info-java-version");
+                // String javaVersion =
+                // ApplicationContext.getJVMVersion().toString();
                 String javaVersion = System.getProperty("java.version");
                 this.infoJavaVersion.setText(this.infoJavaVersion.getText() + javaVersion);
 
@@ -233,10 +238,11 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "buttons.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "buttons.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
@@ -262,22 +268,26 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "lists.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "lists.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                this.editableListView = (ListView)bxmlSerializer.getNamespace().get("editableListView");
-                this.iconListView = (ListView)bxmlSerializer.getNamespace().get("iconListView");
-                this.checkedListView = (ListView)bxmlSerializer.getNamespace().get("checkedListView");
-                this.iconListButton = (ListButton)bxmlSerializer.getNamespace().get("iconListButton");
+                this.editableListView = (ListView) bxmlSerializer.getNamespace().get(
+                    "editableListView");
+                this.iconListView = (ListView) bxmlSerializer.getNamespace().get("iconListView");
+                this.checkedListView = (ListView) bxmlSerializer.getNamespace().get(
+                    "checkedListView");
+                this.iconListButton = (ListButton) bxmlSerializer.getNamespace().get(
+                    "iconListButton");
 
                 rollup.setContent(this.component);
 
                 @SuppressWarnings("unchecked")
-                List<ListItem> listData = (List<ListItem>)this.editableListView.getListData();
+                List<ListItem> listData = (List<ListItem>) this.editableListView.getListData();
                 listData.setComparator(new Comparator<ListItem>() {
                     @Override
                     public int compare(ListItem listItem1, ListItem listItem2) {
@@ -286,7 +296,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         return text1.compareToIgnoreCase(text2);
                     }
                 });
-
 
                 Filter<ListItem> disabledItemFilter = new Filter<ListItem>() {
                     @Override
@@ -318,10 +327,11 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "text.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "text.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
@@ -343,10 +353,11 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "calendars.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "calendars.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
@@ -368,10 +379,11 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "color_choosers.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "color_choosers.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
@@ -393,10 +405,11 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "navigation.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "navigation.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
@@ -418,10 +431,11 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "splitters.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "splitters.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
@@ -456,12 +470,13 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     public void perform(Component source) {
                         Button selectedItem = MenusRollupStateHandler.this.imageMenuGroup.getSelection();
 
-                        String imageName = (String)selectedItem.getUserData().get("image");
+                        String imageName = (String) selectedItem.getUserData().get("image");
                         URL imageURL = getClass().getResource(imageName);
 
-                        // If the image has not been added to the resource cache yet,
+                        // If the image has not been added to the resource cache
+                        // yet,
                         // add it
-                        Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+                        Image image = (Image) ApplicationContext.getResourceCache().get(imageURL);
 
                         if (image == null) {
                             try {
@@ -480,24 +495,28 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "menus.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "menus.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                this.menuImageView = (ImageView)bxmlSerializer.getNamespace().get("menuImageView");
-                this.helpAboutMenuItem  = (Menu.Item)bxmlSerializer.getNamespace().get("helpAboutMenuItem");
+                this.menuImageView = (ImageView) bxmlSerializer.getNamespace().get("menuImageView");
+                this.helpAboutMenuItem = (Menu.Item) bxmlSerializer.getNamespace().get(
+                    "helpAboutMenuItem");
 
                 rollup.setContent(this.component);
 
                 try {
-                    this.menuSection = (Menu.Section)bxmlSerializer.readObject(KitchenSink.class, "menu_section.bxml");
-                    this.imageMenuGroup = (ButtonGroup)bxmlSerializer.getNamespace().get("imageMenuGroup");
-                } catch(IOException exception) {
+                    this.menuSection = (Menu.Section) bxmlSerializer.readObject(KitchenSink.class,
+                        "menu_section.bxml");
+                    this.imageMenuGroup = (ButtonGroup) bxmlSerializer.getNamespace().get(
+                        "imageMenuGroup");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
@@ -535,38 +554,43 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "meters.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "meters.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                this.activityIndicator1 = (ActivityIndicator)bxmlSerializer.getNamespace().get("activityIndicator1");
-                this.activityIndicator2 = (ActivityIndicator)bxmlSerializer.getNamespace().get("activityIndicator2");
-                this.activityIndicator3 = (ActivityIndicator)bxmlSerializer.getNamespace().get("activityIndicator3");
+                this.activityIndicator1 = (ActivityIndicator) bxmlSerializer.getNamespace().get(
+                    "activityIndicator1");
+                this.activityIndicator2 = (ActivityIndicator) bxmlSerializer.getNamespace().get(
+                    "activityIndicator2");
+                this.activityIndicator3 = (ActivityIndicator) bxmlSerializer.getNamespace().get(
+                    "activityIndicator3");
 
                 rollup.setContent(this.component);
 
-                KitchenSink.this.metersRollup.getRollupStateListeners().add(new RollupStateListener() {
-                    @Override
-                    public Vote previewExpandedChange(Rollup roll) {
-                        return Vote.APPROVE;
-                    }
+                KitchenSink.this.metersRollup.getRollupStateListeners().add(
+                    new RollupStateListener() {
+                        @Override
+                        public Vote previewExpandedChange(Rollup roll) {
+                            return Vote.APPROVE;
+                        }
 
-                    @Override
-                    public void expandedChangeVetoed(Rollup roll, Vote reason) {
-                        // No-op
-                    }
+                        @Override
+                        public void expandedChangeVetoed(Rollup roll, Vote reason) {
+                            // No-op
+                        }
 
-                    @Override
-                    public void expandedChanged(Rollup roll) {
-                        MetersRollupStateHandler.this.activityIndicator1.setActive(roll.isExpanded());
-                        MetersRollupStateHandler.this.activityIndicator2.setActive(roll.isExpanded());
-                        MetersRollupStateHandler.this.activityIndicator3.setActive(roll.isExpanded());
-                    }
-                });
-}
+                        @Override
+                        public void expandedChanged(Rollup roll) {
+                            MetersRollupStateHandler.this.activityIndicator1.setActive(roll.isExpanded());
+                            MetersRollupStateHandler.this.activityIndicator2.setActive(roll.isExpanded());
+                            MetersRollupStateHandler.this.activityIndicator3.setActive(roll.isExpanded());
+                        }
+                    });
+            }
 
             return Vote.APPROVE;
         }
@@ -591,20 +615,21 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "spinners.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "spinners.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                this.numericSpinner = (Spinner)bxmlSerializer.getNamespace().get("numericSpinner");
-                this.dateSpinner = (Spinner)bxmlSerializer.getNamespace().get("dateSpinner");
+                this.numericSpinner = (Spinner) bxmlSerializer.getNamespace().get("numericSpinner");
+                this.dateSpinner = (Spinner) bxmlSerializer.getNamespace().get("dateSpinner");
 
-                this.redSlider = (Slider)bxmlSerializer.getNamespace().get("redSlider");
-                this.greenSlider = (Slider)bxmlSerializer.getNamespace().get("greenSlider");
-                this.blueSlider = (Slider)bxmlSerializer.getNamespace().get("blueSlider");
-                this.colorBorder = (Border)bxmlSerializer.getNamespace().get("colorBorder");
+                this.redSlider = (Slider) bxmlSerializer.getNamespace().get("redSlider");
+                this.greenSlider = (Slider) bxmlSerializer.getNamespace().get("greenSlider");
+                this.blueSlider = (Slider) bxmlSerializer.getNamespace().get("blueSlider");
+                this.colorBorder = (Border) bxmlSerializer.getNamespace().get("colorBorder");
 
                 rollup.setContent(this.component);
 
@@ -614,9 +639,12 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 SliderValueListener sliderValueListener = new SliderValueListener() {
                     @Override
                     public void valueChanged(Slider slider, int previousValue) {
-                        Color color = new Color(SpinnersRollupStateHandler.this.redSlider.getValue(), SpinnersRollupStateHandler.this.greenSlider.getValue(),
+                        Color color = new Color(
+                            SpinnersRollupStateHandler.this.redSlider.getValue(),
+                            SpinnersRollupStateHandler.this.greenSlider.getValue(),
                             SpinnersRollupStateHandler.this.blueSlider.getValue());
-                        SpinnersRollupStateHandler.this.colorBorder.getStyles().put("backgroundColor", color);
+                        SpinnersRollupStateHandler.this.colorBorder.getStyles().put(
+                            "backgroundColor", color);
                     }
                 };
 
@@ -641,7 +669,8 @@ public class KitchenSink implements Application, Application.AboutHandler {
         private void initializeDateSpinner(Spinner spinner) {
             CalendarDate lowerBound = new CalendarDate(2008, 0, 0);
             CalendarDate upperBound = new CalendarDate(2019, 11, 30);
-            CalendarDateSpinnerData spinnerData = new CalendarDateSpinnerData(lowerBound, upperBound);
+            CalendarDateSpinnerData spinnerData = new CalendarDateSpinnerData(lowerBound,
+                upperBound);
 
             CalendarDate today = new CalendarDate();
             spinner.setSpinnerData(spinnerData);
@@ -662,15 +691,18 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "tables.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "tables.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                this.sortableTableView = (TableView)bxmlSerializer.getNamespace().get("sortableTableView");
-                this.customTableView = (TableView)bxmlSerializer.getNamespace().get("customTableView");
+                this.sortableTableView = (TableView) bxmlSerializer.getNamespace().get(
+                    "sortableTableView");
+                this.customTableView = (TableView) bxmlSerializer.getNamespace().get(
+                    "customTableView");
 
                 rollup.setContent(this.component);
 
@@ -689,10 +721,10 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     HashMap<String, Integer> tableRow = new HashMap<>();
 
                     tableRow.put("i", i);
-                    tableRow.put("a", (int)Math.round(Math.random() * 10));
-                    tableRow.put("b", (int)Math.round(Math.random() * 100));
-                    tableRow.put("c", (int)Math.round(Math.random() * 1000));
-                    tableRow.put("d", (int)Math.round(Math.random() * 10000));
+                    tableRow.put("a", (int) Math.round(Math.random() * 10));
+                    tableRow.put("b", (int) Math.round(Math.random() * 100));
+                    tableRow.put("c", (int) Math.round(Math.random() * 1000));
+                    tableRow.put("d", (int) Math.round(Math.random() * 10000));
 
                     tableData.add(tableRow);
                 }
@@ -723,32 +755,33 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                     private void resort(TableView tableView) {
                         @SuppressWarnings("unchecked")
-                        List<Object> tableDataOfTableView = (List<Object>)tableView.getTableData();
+                        List<Object> tableDataOfTableView = (List<Object>) tableView.getTableData();
                         tableDataOfTableView.setComparator(new TableViewRowComparator(tableView));
                     }
                 });
 
-                this.customTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-                    @Override
-                    public boolean mouseClick(Component comp, Mouse.Button button, int x, int y, int count) {
-                        if (button == Mouse.Button.LEFT) {
-                            @SuppressWarnings("unchecked")
-                            List<CustomTableRow> customTableData =
-                                (List<CustomTableRow>)TablesRollupStateHandler.this.customTableView.getTableData();
+                this.customTableView.getComponentMouseButtonListeners().add(
+                    new ComponentMouseButtonListener.Adapter() {
+                        @Override
+                        public boolean mouseClick(Component comp, Mouse.Button button, int x,
+                            int y, int count) {
+                            if (button == Mouse.Button.LEFT) {
+                                @SuppressWarnings("unchecked")
+                                List<CustomTableRow> customTableData = (List<CustomTableRow>) TablesRollupStateHandler.this.customTableView.getTableData();
 
-                            int columnIndex = TablesRollupStateHandler.this.customTableView.getColumnAt(x);
-                            if (columnIndex == 0) {
-                                int rowIndex = TablesRollupStateHandler.this.customTableView.getRowAt(y);
-                                CustomTableRow row = customTableData.get(rowIndex);
+                                int columnIndex = TablesRollupStateHandler.this.customTableView.getColumnAt(x);
+                                if (columnIndex == 0) {
+                                    int rowIndex = TablesRollupStateHandler.this.customTableView.getRowAt(y);
+                                    CustomTableRow row = customTableData.get(rowIndex);
 
-                                row.setA(!row.getA());
-                                customTableData.update(rowIndex, row);
+                                    row.setA(!row.getA());
+                                    customTableData.update(rowIndex, row);
+                                }
                             }
-                        }
 
-                       return false;
-                    }
-                });
+                            return false;
+                        }
+                    });
             }
 
             return Vote.APPROVE;
@@ -768,19 +801,21 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "trees.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "trees.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                this.editableTreeView = (TreeView)bxmlSerializer.getNamespace().get("editableTreeView");
-                this.checkTreeView = (TreeView)bxmlSerializer.getNamespace().get("checkTreeView");
+                this.editableTreeView = (TreeView) bxmlSerializer.getNamespace().get(
+                    "editableTreeView");
+                this.checkTreeView = (TreeView) bxmlSerializer.getNamespace().get("checkTreeView");
 
                 rollup.setContent(this.component);
 
-                TreeBranch treeData = (TreeBranch)this.editableTreeView.getTreeData();
+                TreeBranch treeData = (TreeBranch) this.editableTreeView.getTreeData();
                 treeData.setComparator(new TreeNodeComparator());
 
                 this.checkTreeView.setDisabledNodeFilter(new Filter<TreeNode>() {
@@ -827,16 +862,17 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "dragdrop.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "dragdrop.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                this.imageView1 = (ImageView)bxmlSerializer.getNamespace().get("imageView1");
-                this.imageView2 = (ImageView)bxmlSerializer.getNamespace().get("imageView2");
-                this.imageView3 = (ImageView)bxmlSerializer.getNamespace().get("imageView3");
+                this.imageView1 = (ImageView) bxmlSerializer.getNamespace().get("imageView1");
+                this.imageView2 = (ImageView) bxmlSerializer.getNamespace().get("imageView2");
+                this.imageView3 = (ImageView) bxmlSerializer.getNamespace().get("imageView3");
 
                 rollup.setContent(this.component);
 
@@ -847,15 +883,16 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                     @Override
                     public boolean beginDrag(Component comp, int x, int y) {
-                        ImageView imageView = (ImageView)comp;
+                        ImageView imageView = (ImageView) comp;
                         this.image = imageView.getImage();
 
                         if (this.image != null) {
-                            imageView.setImage((Image)null);
+                            imageView.setImage((Image) null);
                             this.content = new LocalManifest();
                             this.content.putImage(this.image);
-                            this.offset = new Point(x - (imageView.getWidth() - this.image.getWidth()) / 2,
-                                y - (imageView.getHeight() - this.image.getHeight()) / 2);
+                            this.offset = new Point(x
+                                - (imageView.getWidth() - this.image.getWidth()) / 2, y
+                                - (imageView.getHeight() - this.image.getHeight()) / 2);
                         }
 
                         return (this.image != null);
@@ -864,7 +901,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     @Override
                     public void endDrag(Component comp, DropAction dropAction) {
                         if (dropAction == null) {
-                            ImageView imageView = (ImageView)comp;
+                            ImageView imageView = (ImageView) comp;
                             imageView.setImage(this.image);
                         }
 
@@ -905,9 +942,8 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         int supportedDropActions, DropAction userDropAction) {
                         DropAction dropAction = null;
 
-                        ImageView imageView = (ImageView)comp;
-                        if (imageView.getImage() == null
-                            && dragContent.containsImage()
+                        ImageView imageView = (ImageView) comp;
+                        if (imageView.getImage() == null && dragContent.containsImage()
                             && DropAction.MOVE.isSelected(supportedDropActions)) {
                             dropAction = DropAction.MOVE;
                             comp.getStyles().put("backgroundColor", "#f0e68c");
@@ -924,17 +960,17 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     @Override
                     public DropAction dragMove(Component comp, Manifest dragContent,
                         int supportedDropActions, int x, int y, DropAction userDropAction) {
-                        ImageView imageView = (ImageView)comp;
-                        return (imageView.getImage() == null
-                            && dragContent.containsImage() ? DropAction.MOVE : null);
+                        ImageView imageView = (ImageView) comp;
+                        return (imageView.getImage() == null && dragContent.containsImage() ? DropAction.MOVE
+                            : null);
                     }
 
                     @Override
                     public DropAction userDropActionChange(Component comp, Manifest dragContent,
                         int supportedDropActions, int x, int y, DropAction userDropAction) {
-                        ImageView imageView = (ImageView)comp;
-                        return (imageView.getImage() == null
-                            && dragContent.containsImage() ? DropAction.MOVE : null);
+                        ImageView imageView = (ImageView) comp;
+                        return (imageView.getImage() == null && dragContent.containsImage() ? DropAction.MOVE
+                            : null);
                     }
 
                     @Override
@@ -942,13 +978,12 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         int supportedDropActions, int x, int y, DropAction userDropAction) {
                         DropAction dropAction = null;
 
-                        ImageView imageView = (ImageView)comp;
-                        if (imageView.getImage() == null
-                            && dragContent.containsImage()) {
+                        ImageView imageView = (ImageView) comp;
+                        if (imageView.getImage() == null && dragContent.containsImage()) {
                             try {
                                 imageView.setImage(dragContent.getImage());
                                 dropAction = DropAction.MOVE;
-                            } catch(IOException exception) {
+                            } catch (IOException exception) {
                                 System.err.println(exception);
                             }
                         }
@@ -987,16 +1022,18 @@ public class KitchenSink implements Application, Application.AboutHandler {
             if (this.component == null) {
                 BXMLSerializer bxmlSerializer = new BXMLSerializer();
                 try {
-                    this.component = (Component)bxmlSerializer.readObject(KitchenSink.class, "alerts.bxml");
-                } catch(IOException exception) {
+                    this.component = (Component) bxmlSerializer.readObject(KitchenSink.class,
+                        "alerts.bxml");
+                } catch (IOException exception) {
                     throw new RuntimeException(exception);
-                } catch(SerializationException exception) {
+                } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
                 }
 
-                this.alertButton = (PushButton)bxmlSerializer.getNamespace().get("alertButton");
-                this.promptButton = (PushButton)bxmlSerializer.getNamespace().get("promptButton");
-                this.messageTypeGroup = (ButtonGroup)bxmlSerializer.getNamespace().get("messageTypeGroup");
+                this.alertButton = (PushButton) bxmlSerializer.getNamespace().get("alertButton");
+                this.promptButton = (PushButton) bxmlSerializer.getNamespace().get("promptButton");
+                this.messageTypeGroup = (ButtonGroup) bxmlSerializer.getNamespace().get(
+                    "messageTypeGroup");
 
                 rollup.setContent(this.component);
 
@@ -1007,12 +1044,13 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                         Map<String, ?> userData;
                         try {
-                            userData = JSONSerializer.parseMap((String)selection.getUserData().get("messageInfo"));
+                            userData = JSONSerializer.parseMap((String) selection.getUserData().get(
+                                "messageInfo"));
                         } catch (SerializationException exception) {
                             throw new RuntimeException(exception);
                         }
 
-                        String messageType = (String)userData.get("messageType");
+                        String messageType = (String) userData.get("messageType");
 
                         if (messageType == null) {
                             ArrayList<String> options = new ArrayList<>();
@@ -1022,20 +1060,22 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             Component body = null;
                             BXMLSerializer serializer = new BXMLSerializer();
                             try {
-                                body = (Component)serializer.readObject(KitchenSink.class, "alert.bxml");
-                            } catch(Exception exception) {
+                                body = (Component) serializer.readObject(KitchenSink.class,
+                                    "alert.bxml");
+                            } catch (Exception exception) {
                                 System.err.println(exception);
                             }
 
-                            Alert alert = new Alert(MessageType.QUESTION, "Please select your favorite icon:",
-                                options, body);
+                            Alert alert = new Alert(MessageType.QUESTION,
+                                "Please select your favorite icon:", options, body);
                             alert.setTitle("Select Icon");
                             alert.setSelectedOptionIndex(0);
                             alert.getDecorators().update(0, new ReflectionDecorator());
                             alert.open(KitchenSink.this.window);
                         } else {
-                            String message = (String)userData.get("message");
-                            Alert.alert(MessageType.valueOf(messageType.toUpperCase()), message, KitchenSink.this.window);
+                            String message = (String) userData.get("message");
+                            Alert.alert(MessageType.valueOf(messageType.toUpperCase()), message,
+                                KitchenSink.this.window);
                         }
                     }
                 });
@@ -1047,12 +1087,13 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                         Map<String, ?> userData;
                         try {
-                            userData = JSONSerializer.parseMap((String)selection.getUserData().get("messageInfo"));
+                            userData = JSONSerializer.parseMap((String) selection.getUserData().get(
+                                "messageInfo"));
                         } catch (SerializationException exception) {
                             throw new RuntimeException(exception);
                         }
 
-                        String messageType = (String)userData.get("messageType");
+                        String messageType = (String) userData.get("messageType");
 
                         if (messageType == null) {
                             ArrayList<String> options = new ArrayList<>();
@@ -1062,20 +1103,22 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             Component body = null;
                             BXMLSerializer serializer = new BXMLSerializer();
                             try {
-                                body = (Component)serializer.readObject(KitchenSink.class, "alert.bxml");
-                            } catch(Exception exception) {
+                                body = (Component) serializer.readObject(KitchenSink.class,
+                                    "alert.bxml");
+                            } catch (Exception exception) {
                                 System.err.println(exception);
                             }
 
-                            Prompt prompt = new Prompt(MessageType.QUESTION, "Please select your favorite icon:",
-                                options, body);
+                            Prompt prompt = new Prompt(MessageType.QUESTION,
+                                "Please select your favorite icon:", options, body);
                             prompt.setTitle("Select Icon");
                             prompt.setSelectedOptionIndex(0);
                             prompt.getDecorators().update(0, new ReflectionDecorator());
                             prompt.open(KitchenSink.this.window);
                         } else {
-                            String message = (String)userData.get("message");
-                            Prompt.prompt(MessageType.valueOf(messageType.toUpperCase()), message, KitchenSink.this.window);
+                            String message = (String) userData.get("message");
+                            Prompt.prompt(MessageType.valueOf(messageType.toUpperCase()), message,
+                                KitchenSink.this.window);
                         }
                     }
                 });
@@ -1084,7 +1127,6 @@ public class KitchenSink implements Application, Application.AboutHandler {
             return Vote.APPROVE;
         }
     }
-
 
     Window window = null;
     Rollup infoRollup;
@@ -1103,11 +1145,10 @@ public class KitchenSink implements Application, Application.AboutHandler {
     Rollup dragDropRollup;
     Rollup alertsRollup;
 
-
     @Override
     public void aboutRequested() {
-        String about = "Origin: " + ApplicationContext.getOrigin()
-            + "; JVM version: " + ApplicationContext.getJVMVersion();
+        String about = "Origin: " + ApplicationContext.getOrigin() + "; JVM version: "
+            + ApplicationContext.getJVMVersion();
 
         Prompt.prompt(about, this.window);
     }
@@ -1115,52 +1156,53 @@ public class KitchenSink implements Application, Application.AboutHandler {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        this.window = (Window)bxmlSerializer.readObject(KitchenSink.class, "kitchen_sink.bxml");
+        this.window = (Window) bxmlSerializer.readObject(KitchenSink.class, "kitchen_sink.bxml");
         bxmlSerializer.bind(this, KitchenSink.class);
 
-        this.infoRollup = (Rollup)bxmlSerializer.getNamespace().get("infoRollup");
+        this.infoRollup = (Rollup) bxmlSerializer.getNamespace().get("infoRollup");
         this.infoRollup.getRollupStateListeners().add(new InfoRollupStateHandler());
 
-        this.buttonsRollup = (Rollup)bxmlSerializer.getNamespace().get("buttonsRollup");
+        this.buttonsRollup = (Rollup) bxmlSerializer.getNamespace().get("buttonsRollup");
         this.buttonsRollup.getRollupStateListeners().add(new ButtonsRollupStateHandler());
 
-        this.listsRollup = (Rollup)bxmlSerializer.getNamespace().get("listsRollup");
+        this.listsRollup = (Rollup) bxmlSerializer.getNamespace().get("listsRollup");
         this.listsRollup.getRollupStateListeners().add(new ListsRollupStateHandler());
 
-        this.textRollup = (Rollup)bxmlSerializer.getNamespace().get("textRollup");
+        this.textRollup = (Rollup) bxmlSerializer.getNamespace().get("textRollup");
         this.textRollup.getRollupStateListeners().add(new TextRollupStateHandler());
 
-        this.calendarsRollup = (Rollup)bxmlSerializer.getNamespace().get("calendarsRollup");
+        this.calendarsRollup = (Rollup) bxmlSerializer.getNamespace().get("calendarsRollup");
         this.calendarsRollup.getRollupStateListeners().add(new CalendarsRollupStateHandler());
 
-        this.colorChoosersRollup = (Rollup)bxmlSerializer.getNamespace().get("colorChoosersRollup");
-        this.colorChoosersRollup.getRollupStateListeners().add(new ColorChoosersRollupStateHandler());
+        this.colorChoosersRollup = (Rollup) bxmlSerializer.getNamespace().get("colorChoosersRollup");
+        this.colorChoosersRollup.getRollupStateListeners().add(
+            new ColorChoosersRollupStateHandler());
 
-        this.navigationRollup = (Rollup)bxmlSerializer.getNamespace().get("navigationRollup");
+        this.navigationRollup = (Rollup) bxmlSerializer.getNamespace().get("navigationRollup");
         this.navigationRollup.getRollupStateListeners().add(new NavigationRollupStateHandler());
 
-        this.splittersRollup = (Rollup)bxmlSerializer.getNamespace().get("splittersRollup");
+        this.splittersRollup = (Rollup) bxmlSerializer.getNamespace().get("splittersRollup");
         this.splittersRollup.getRollupStateListeners().add(new SplittersRollupStateHandler());
 
-        this.menusRollup = (Rollup)bxmlSerializer.getNamespace().get("menusRollup");
+        this.menusRollup = (Rollup) bxmlSerializer.getNamespace().get("menusRollup");
         this.menusRollup.getRollupStateListeners().add(new MenusRollupStateHandler());
 
-        this.metersRollup = (Rollup)bxmlSerializer.getNamespace().get("metersRollup");
+        this.metersRollup = (Rollup) bxmlSerializer.getNamespace().get("metersRollup");
         this.metersRollup.getRollupStateListeners().add(new MetersRollupStateHandler());
 
-        this.spinnersRollup = (Rollup)bxmlSerializer.getNamespace().get("spinnersRollup");
+        this.spinnersRollup = (Rollup) bxmlSerializer.getNamespace().get("spinnersRollup");
         this.spinnersRollup.getRollupStateListeners().add(new SpinnersRollupStateHandler());
 
-        this.tablesRollup = (Rollup)bxmlSerializer.getNamespace().get("tablesRollup");
+        this.tablesRollup = (Rollup) bxmlSerializer.getNamespace().get("tablesRollup");
         this.tablesRollup.getRollupStateListeners().add(new TablesRollupStateHandler());
 
-        this.treesRollup = (Rollup)bxmlSerializer.getNamespace().get("treesRollup");
+        this.treesRollup = (Rollup) bxmlSerializer.getNamespace().get("treesRollup");
         this.treesRollup.getRollupStateListeners().add(new TreesRollupStateHandler());
 
-        this.dragDropRollup = (Rollup)bxmlSerializer.getNamespace().get("dragDropRollup");
+        this.dragDropRollup = (Rollup) bxmlSerializer.getNamespace().get("dragDropRollup");
         this.dragDropRollup.getRollupStateListeners().add(new DragDropRollupStateHandler());
 
-        this.alertsRollup = (Rollup)bxmlSerializer.getNamespace().get("alertsRollup");
+        this.alertsRollup = (Rollup) bxmlSerializer.getNamespace().get("alertsRollup");
         this.alertsRollup.getRollupStateListeners().add(new AlertsRollupStateHandler());
 
         this.window.open(display);

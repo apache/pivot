@@ -43,7 +43,7 @@ public class Windows extends Application.Adapter {
 
             Frame frame;
             try {
-                frame = (Frame)bxmlSerializer.readObject(Windows.class, "frame.bxml");
+                frame = (Frame) bxmlSerializer.readObject(Windows.class, "frame.bxml");
             } catch (SerializationException exception) {
                 throw new RuntimeException(exception);
             } catch (IOException exception) {
@@ -62,17 +62,16 @@ public class Windows extends Application.Adapter {
     @Override
     public boolean shutdown(boolean optional) {
         for (int i = display.getLength() - 1; i >= 0; i--) {
-            Window window = (Window)display.get(i);
+            Window window = (Window) display.get(i);
             window.close();
         }
 
         return false;
     }
 
-    public Window load(String fileName)
-        throws SerializationException, IOException {
+    public Window load(String fileName) throws SerializationException, IOException {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        return (Window)bxmlSerializer.readObject(Windows.class, fileName);
+        return (Window) bxmlSerializer.readObject(Windows.class, fileName);
     }
 
     public static void main(String[] args) {

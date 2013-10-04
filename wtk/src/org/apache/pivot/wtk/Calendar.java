@@ -36,21 +36,21 @@ public class Calendar extends Container {
     public interface SelectedDateBindMapping {
         /**
          * Converts a context value to a calendar date.
-         *
+         * 
          * @param value
          */
         public CalendarDate toDate(Object value);
 
         /**
          * Converts a calendar date to a context value.
-         *
+         * 
          * @param calendarDate
          */
         public Object valueOf(CalendarDate calendarDate);
     }
 
-    private static class CalendarListenerList extends WTKListenerList<CalendarListener>
-        implements CalendarListener {
+    private static class CalendarListenerList extends WTKListenerList<CalendarListener> implements
+        CalendarListener {
         @Override
         public void yearChanged(Calendar calendar, int previousYear) {
             for (CalendarListener listener : this) {
@@ -73,44 +73,45 @@ public class Calendar extends Container {
         }
 
         @Override
-        public void disabledDateFilterChanged(Calendar calendar, Filter<CalendarDate> previousDisabledDateFilter) {
+        public void disabledDateFilterChanged(Calendar calendar,
+            Filter<CalendarDate> previousDisabledDateFilter) {
             for (CalendarListener listener : this) {
                 listener.disabledDateFilterChanged(calendar, previousDisabledDateFilter);
             }
         }
     }
 
-    private static class CalendarSelectionListenerList extends WTKListenerList<CalendarSelectionListener>
-        implements CalendarSelectionListener {
+    private static class CalendarSelectionListenerList extends
+        WTKListenerList<CalendarSelectionListener> implements CalendarSelectionListener {
 
         @Override
-        public void selectedDateChanged(Calendar calendar,
-            CalendarDate previousSelectedDate) {
+        public void selectedDateChanged(Calendar calendar, CalendarDate previousSelectedDate) {
             for (CalendarSelectionListener listener : this) {
                 listener.selectedDateChanged(calendar, previousSelectedDate);
             }
         }
     }
 
-    private static class CalendarBindingListenerList extends WTKListenerList<CalendarBindingListener>
-        implements CalendarBindingListener {
+    private static class CalendarBindingListenerList extends
+        WTKListenerList<CalendarBindingListener> implements CalendarBindingListener {
         @Override
-        public void selectedDateKeyChanged(Calendar calendar,
-            String previousSelectedDateKey) {
+        public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey) {
             for (CalendarBindingListener listener : this) {
                 listener.selectedDateKeyChanged(calendar, previousSelectedDateKey);
             }
         }
 
         @Override
-        public void selectedDateBindTypeChanged(Calendar calendar, BindType previousSelectedDateBindType) {
+        public void selectedDateBindTypeChanged(Calendar calendar,
+            BindType previousSelectedDateBindType) {
             for (CalendarBindingListener listener : this) {
                 listener.selectedDateBindTypeChanged(calendar, previousSelectedDateBindType);
             }
         }
 
         @Override
-        public void selectedDateBindMappingChanged(Calendar calendar, SelectedDateBindMapping previousSelectedDateBindMapping) {
+        public void selectedDateBindMappingChanged(Calendar calendar,
+            SelectedDateBindMapping previousSelectedDateBindMapping) {
             for (CalendarBindingListener listener : this) {
                 listener.selectedDateBindMappingChanged(calendar, previousSelectedDateBindMapping);
             }
@@ -129,8 +130,7 @@ public class Calendar extends Container {
     private SelectedDateBindMapping selectedDateBindMapping = null;
 
     private CalendarListenerList calendarListeners = new CalendarListenerList();
-    private CalendarSelectionListenerList calendarSelectionListeners =
-        new CalendarSelectionListenerList();
+    private CalendarSelectionListenerList calendarSelectionListeners = new CalendarSelectionListenerList();
     private CalendarBindingListenerList calendarBindingListeners = new CalendarBindingListenerList();
 
     public static final String LANGUAGE_KEY = "language";
@@ -200,9 +200,9 @@ public class Calendar extends Container {
 
     /**
      * Sets the currently selected date.
-     *
-     * @param selectedDate
-     * The selected date, or <tt>null</tt> to specify no selection
+     * 
+     * @param selectedDate The selected date, or <tt>null</tt> to specify no
+     * selection
      */
     public void setSelectedDate(CalendarDate selectedDate) {
         CalendarDate previousSelectedDate = this.selectedDate;
@@ -217,9 +217,9 @@ public class Calendar extends Container {
      * Sets the selected date to the date represented by the specified date
      * string. The date string must be in the <tt>ISO 8601</tt> "calendar date"
      * format, which is <tt>[YYYY]-[MM]-[DD]</tt>.
-     *
-     * @param selectedDate
-     * A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g. 2008-07-23)
+     * 
+     * @param selectedDate A string in the form of <tt>[YYYY]-[MM]-[DD]</tt>
+     * (e.g. 2008-07-23)
      */
     public final void setSelectedDate(String selectedDate) {
         if (selectedDate == null) {
@@ -238,7 +238,7 @@ public class Calendar extends Container {
 
     /**
      * Sets the locale used to present calendar data.
-     *
+     * 
      * @param locale
      */
     public void setLocale(Locale locale) {
@@ -255,26 +255,21 @@ public class Calendar extends Container {
 
     /**
      * Sets the locale used to present calendar data.
-     *
-     * @param locale
-     * An dictionary containing values for language, country, and variant.
-     * Country and variant are optional but the must adhere to the following
-     * rules:
-     *
-     * <ul>
-     * <li>If variant is specified, language and country are required;</li>
-     * <li>Otherwise, if country is specified, language is required;</li>
-     * <li>Otherwise, language is required.</li>
-     * </ul>
+     * 
+     * @param locale An dictionary containing values for language, country, and
+     * variant. Country and variant are optional but the must adhere to the
+     * following rules: <ul> <li>If variant is specified, language and country
+     * are required;</li> <li>Otherwise, if country is specified, language is
+     * required;</li> <li>Otherwise, language is required.</li> </ul>
      */
     public void setLocale(Dictionary<String, ?> locale) {
         if (locale == null) {
             throw new IllegalArgumentException("locale is null.");
         }
 
-        String language = (String)locale.get(LANGUAGE_KEY);
-        String country = (String)locale.get(COUNTRY_KEY);
-        String variant = (String)locale.get(VARIANT_KEY);
+        String language = (String) locale.get(LANGUAGE_KEY);
+        String country = (String) locale.get(COUNTRY_KEY);
+        String variant = (String) locale.get(VARIANT_KEY);
 
         if (variant != null) {
             setLocale(new Locale(language, country, variant));
@@ -287,10 +282,9 @@ public class Calendar extends Container {
 
     /**
      * Sets the locale used to present calendar data.
-     *
-     * @param locale
-     * A JSON map containing values for language, country, and variant.
-     *
+     * 
+     * @param locale A JSON map containing values for language, country, and
+     * variant.
      * @see #setLocale(Dictionary)
      */
     public void setLocale(String locale) {
@@ -363,21 +357,21 @@ public class Calendar extends Container {
 
         if (previousSelectedDateBindMapping != selectedDateBindMapping) {
             this.selectedDateBindMapping = selectedDateBindMapping;
-            calendarBindingListeners.selectedDateBindMappingChanged(this, previousSelectedDateBindMapping);
+            calendarBindingListeners.selectedDateBindMappingChanged(this,
+                previousSelectedDateBindMapping);
         }
     }
 
     @Override
     public void load(Object context) {
-        if (selectedDateKey != null
-            && JSON.containsKey(context, selectedDateKey)
+        if (selectedDateKey != null && JSON.containsKey(context, selectedDateKey)
             && selectedDateBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedDateKey);
 
             CalendarDate selectedDateLocal = null;
 
             if (value instanceof CalendarDate) {
-                selectedDateLocal = (CalendarDate)value;
+                selectedDateLocal = (CalendarDate) value;
             } else if (selectedDateBindMapping == null) {
                 if (value != null) {
                     selectedDateLocal = CalendarDate.decode(value.toString());
@@ -392,17 +386,16 @@ public class Calendar extends Container {
 
     @Override
     public void store(Object context) {
-        if (selectedDateKey != null
-            && selectedDateBindType != BindType.LOAD) {
-            JSON.put(context, selectedDateKey, (selectedDateBindMapping == null) ?
-                selectedDate : selectedDateBindMapping.valueOf(selectedDate));
+        if (selectedDateKey != null && selectedDateBindType != BindType.LOAD) {
+            JSON.put(context, selectedDateKey, (selectedDateBindMapping == null) ? selectedDate
+                : selectedDateBindMapping.valueOf(selectedDate));
         }
     }
 
     @Override
     public void clear() {
         if (selectedDateKey != null) {
-            setSelectedDate((CalendarDate)null);
+            setSelectedDate((CalendarDate) null);
         }
     }
 

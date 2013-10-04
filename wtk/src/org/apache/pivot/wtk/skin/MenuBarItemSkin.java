@@ -41,26 +41,24 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     private ComponentKeyListener menuPopupComponentKeyListener = new ComponentKeyListener.Adapter() {
         /**
          * {@link KeyCode#LEFT LEFT} or {@link KeyCode#TAB TAB} +
-         * {@link Keyboard.Modifier#SHIFT SHIFT} Activate the menu to the left of the
-         * current menu.<br>
-         * {@link KeyCode#RIGHT RIGHT} or {@link KeyCode#TAB TAB} Activate
-         * the menu to the right of the current menu.<br>
+         * {@link Keyboard.Modifier#SHIFT SHIFT} Activate the menu to the left
+         * of the current menu.<br> {@link KeyCode#RIGHT RIGHT} or
+         * {@link KeyCode#TAB TAB} Activate the menu to the right of the current
+         * menu.<br>
          */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
-            MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-            MenuBar menuBar = (MenuBar)menuBarItem.getParent();
+            MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
+            MenuBar menuBar = (MenuBar) menuBarItem.getParent();
 
             if (keyCode == Keyboard.KeyCode.LEFT
-                || (keyCode == Keyboard.KeyCode.TAB
-                    && Keyboard.isPressed(Keyboard.Modifier.SHIFT))) {
+                || (keyCode == Keyboard.KeyCode.TAB && Keyboard.isPressed(Keyboard.Modifier.SHIFT))) {
                 menuBar.activatePreviousItem();
                 consumed = true;
 
-            } else if (keyCode == Keyboard.KeyCode.RIGHT
-                || keyCode == Keyboard.KeyCode.TAB) {
+            } else if (keyCode == Keyboard.KeyCode.RIGHT || keyCode == Keyboard.KeyCode.TAB) {
                 menuBar.activateNextItem();
                 consumed = true;
             }
@@ -78,12 +76,12 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
 
         @Override
         public void windowClosed(Window window, Display display, Window owner) {
-            MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+            MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
             menuBarItem.setActive(false);
 
             // If the menu bar is no longer active, move the window to the
             // front to restore focus
-            MenuBar menuBar = (MenuBar)menuBarItem.getParent();
+            MenuBar menuBar = (MenuBar) menuBarItem.getParent();
             if (menuBar.getActiveItem() == null) {
                 Window menuBarWindow = menuBar.getWindow();
 
@@ -101,7 +99,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            Display display = (Display)container;
+            Display display = (Display) container;
             Component descendant = display.getDescendantAt(x, y);
 
             if (!menuPopup.isAncestor(descendant)
@@ -123,7 +121,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     public void install(Component component) {
         super.install(component);
 
-        MenuBar.Item menuBarItem = (MenuBar.Item)component;
+        MenuBar.Item menuBarItem = (MenuBar.Item) component;
         menuBarItem.getItemListeners().add(this);
 
         menuPopup.setMenu(menuBarItem.getMenu());
@@ -138,8 +136,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     public void mouseOver(Component component) {
         super.mouseOver(component);
 
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
-        MenuBar menuBar = (MenuBar)menuBarItem.getParent();
+        MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
+        MenuBar menuBar = (MenuBar) menuBarItem.getParent();
 
         if (menuBar.getActiveItem() != null) {
             menuBarItem.setActive(true);
@@ -150,7 +148,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
         closeMenuPopup = menuBarItem.isActive();
         menuBarItem.setActive(true);
 
@@ -172,7 +170,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
-        MenuBar.Item menuBarItem = (MenuBar.Item)getComponent();
+        MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
         menuBarItem.press();
 
         return consumed;
@@ -197,7 +195,8 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
             Display display = menuBarItem.getDisplay();
             Point menuBarItemLocation = menuBarItem.mapPointToAncestor(display, 0, getHeight());
 
-            // TODO Ensure that the popup remains within the bounds of the display
+            // TODO Ensure that the popup remains within the bounds of the
+            // display
 
             menuPopup.setLocation(menuBarItemLocation.x, menuBarItemLocation.y);
             menuPopup.open(menuBarItem.getWindow());

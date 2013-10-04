@@ -37,16 +37,14 @@ import org.apache.pivot.collections.immutable.ImmutableMap;
 @SuppressWarnings("restriction")
 public final class BrowserApplicationContext extends ApplicationContext {
     /**
-     * Applet used to host applications in a web browser.
-     * <p>
-     * This applet supports the following parameters:
-     * <ul>
-     * <li><tt>application_class_name</tt> - the class name of the application to launch.</li>
-     * <li><tt>startup_properties</tt> - startup properties to be passed to the application.
-     * Properties use HTTP query string syntax; e.g. "a=1&b=2".</li>
-     * <li><tt>system_properties</tt> - system properties to set at startup. Properties use HTTP
-     * query string syntax; e.g. "a=1&b=2" (trusted applets only).</li>
-     * </ul>
+     * Applet used to host applications in a web browser. <p> This applet
+     * supports the following parameters: <ul>
+     * <li><tt>application_class_name</tt> - the class name of the application
+     * to launch.</li> <li><tt>startup_properties</tt> - startup properties to
+     * be passed to the application. Properties use HTTP query string syntax;
+     * e.g. "a=1&b=2".</li> <li><tt>system_properties</tt> - system properties
+     * to set at startup. Properties use HTTP query string syntax; e.g.
+     * "a=1&b=2" (trusted applets only).</li> </ul>
      */
     public static final class HostApplet extends Applet {
         private static final long serialVersionUID = -7710026348576806673L;
@@ -119,7 +117,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     }
 
                     if (language != null) {
-                        Locale.setDefault((region == null) ? new Locale(language) : new Locale(language, region));
+                        Locale.setDefault((region == null) ? new Locale(language) : new Locale(
+                            language, region));
                     }
                 }
 
@@ -160,7 +159,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Disable focus traversal keys
                 setFocusTraversalKeysEnabled(false);
 
-                // Let pivot manage the focus inside the applet, where we have only one AWT component
+                // Let pivot manage the focus inside the applet, where we have
+                // only one AWT component
                 setFocusTraversalPolicyProvider(true);
                 setFocusCycleRoot(true);
                 setFocusTraversalPolicy(new java.awt.FocusTraversalPolicy() {
@@ -168,20 +168,26 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     public java.awt.Component getLastComponent(java.awt.Container aContainer) {
                         return null;
                     }
+
                     @Override
                     public java.awt.Component getFirstComponent(java.awt.Container aContainer) {
                         return null;
                     }
+
                     @Override
                     public java.awt.Component getDefaultComponent(java.awt.Container aContainer) {
                         return null;
                     }
+
                     @Override
-                    public java.awt.Component getComponentBefore(java.awt.Container aContainer, java.awt.Component aComponent) {
+                    public java.awt.Component getComponentBefore(java.awt.Container aContainer,
+                        java.awt.Component aComponent) {
                         return HostApplet.this.displayHost;
                     }
+
                     @Override
-                    public java.awt.Component getComponentAfter(java.awt.Container aContainer, java.awt.Component aComponent) {
+                    public java.awt.Component getComponentAfter(java.awt.Container aContainer,
+                        java.awt.Component aComponent) {
                         return HostApplet.this.displayHost;
                     }
                 });
@@ -203,7 +209,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 } else {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
-                        HostApplet.this.application = (Application)applicationClass.newInstance();
+                        HostApplet.this.application = (Application) applicationClass.newInstance();
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
                     }
@@ -223,8 +229,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
                     applications.add(HostApplet.this.application);
 
                     try {
-                        HostApplet.this.application.startup(HostApplet.this.displayHost.getDisplay(),
-                            new ImmutableMap<>(HostApplet.this.startupProperties));
+                        HostApplet.this.application.startup(
+                            HostApplet.this.displayHost.getDisplay(), new ImmutableMap<>(
+                                HostApplet.this.startupProperties));
                     } catch (Exception exception) {
                         handleUncaughtException(exception);
                     }
@@ -261,7 +268,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Remove the display from the display list
                 displays.remove(HostApplet.this.displayHost.getDisplay());
 
-                // Remove this applet from the host applets list and stop the timer
+                // Remove this applet from the host applets list and stop the
+                // timer
                 hostApplets.remove(HostApplet.this);
 
                 if (hostApplets.getLength() == 0) {
@@ -341,9 +349,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
     /**
      * Retrieves a named application.
-     *
-     * @param name
-     * The name of the applet hosting the application.
+     * 
+     * @param name The name of the applet hosting the application.
      */
     public static Application getApplication(String name) {
         if (name == null) {
@@ -363,7 +370,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
     /**
      * Evaluates a script in the page context and returns the result.
-     *
+     * 
      * @param script
      * @param application
      */

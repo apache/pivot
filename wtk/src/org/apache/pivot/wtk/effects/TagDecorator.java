@@ -25,7 +25,6 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Visual;
 
-
 /**
  * Decorator that allows a caller to attach a "tag" visual to a component.
  */
@@ -47,9 +46,8 @@ public class TagDecorator implements Decorator {
         this(tag, HorizontalAlignment.RIGHT, VerticalAlignment.TOP, 0, 0);
     }
 
-    public TagDecorator(Visual tag,
-        HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment,
-        int xOffset, int yOffset) {
+    public TagDecorator(Visual tag, HorizontalAlignment horizontalAlignment,
+        VerticalAlignment verticalAlignment, int xOffset, int yOffset) {
         if (horizontalAlignment == null) {
             throw new IllegalArgumentException("horizontalAlignment is null.");
         }

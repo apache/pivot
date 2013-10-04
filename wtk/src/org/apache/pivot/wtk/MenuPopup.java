@@ -25,8 +25,8 @@ import org.apache.pivot.util.Vote;
  */
 @DefaultProperty("menu")
 public class MenuPopup extends Window {
-    private static class MenuPopupListenerList extends WTKListenerList<MenuPopupListener>
-        implements MenuPopupListener {
+    private static class MenuPopupListenerList extends WTKListenerList<MenuPopupListener> implements
+        MenuPopupListener {
         @Override
         public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
             for (MenuPopupListener listener : this) {
@@ -156,7 +156,7 @@ public class MenuPopup extends Window {
                 if (isClosed()) {
                     menuPopupStateListeners.menuPopupClosed(this);
                 }
-            } else if (vote == Vote.DENY){
+            } else if (vote == Vote.DENY) {
                 closing = false;
                 menuPopupStateListeners.menuPopupCloseVetoed(this, vote);
             }

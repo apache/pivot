@@ -54,13 +54,13 @@ public final class Dimensions implements Serializable {
         }
 
         if (dimensions.containsKey(WIDTH_KEY)) {
-            width = (Integer)dimensions.get(WIDTH_KEY);
+            width = (Integer) dimensions.get(WIDTH_KEY);
         } else {
             width = 0;
         }
 
         if (dimensions.containsKey(HEIGHT_KEY)) {
-            height = (Integer)dimensions.get(HEIGHT_KEY);
+            height = (Integer) dimensions.get(HEIGHT_KEY);
         } else {
             height = 0;
         }
@@ -71,9 +71,8 @@ public final class Dimensions implements Serializable {
         boolean equals = false;
 
         if (object instanceof Dimensions) {
-            Dimensions dimensions = (Dimensions)object;
-            equals = (width == dimensions.width
-                && height == dimensions.height);
+            Dimensions dimensions = (Dimensions) object;
+            equals = (width == dimensions.width && height == dimensions.height);
         }
 
         return equals;

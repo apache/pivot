@@ -78,13 +78,13 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
     public void install(Component component) {
         super.install(component);
 
-        EventLogger eventLogger = (EventLogger)component;
+        EventLogger eventLogger = (EventLogger) component;
 
         eventLogger.getEventLoggerListeners().add(this);
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         try {
-            content = (Component)bxmlSerializer.readObject(EventLoggerSkin.class,
+            content = (Component) bxmlSerializer.readObject(EventLoggerSkin.class,
                 "event_logger_skin.bxml", true);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -94,8 +94,9 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
         eventLogger.add(content);
 
-        declaredEventsTreeView = (TreeView)bxmlSerializer.getNamespace().get("declaredEventsTreeView");
-        firedEventsTableView = (TableView)bxmlSerializer.getNamespace().get("firedEventsTableView");
+        declaredEventsTreeView = (TreeView) bxmlSerializer.getNamespace().get(
+            "declaredEventsTreeView");
+        firedEventsTableView = (TableView) bxmlSerializer.getNamespace().get("firedEventsTableView");
 
         // Propagate check state upwards or downwards as necessary
         declaredEventsTreeView.getTreeViewNodeStateListeners().add(new TreeViewNodeStateListener() {
@@ -114,18 +115,18 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
                         }
                     });
 
-                    EventLogger eventLoggerLocal = (EventLogger)getComponent();
+                    EventLogger eventLoggerLocal = (EventLogger) getComponent();
 
                     boolean checked = (checkState == TreeView.NodeCheckState.CHECKED);
 
                     List<?> treeData = treeView.getTreeData();
-                    TreeNode treeNode = (TreeNode)Sequence.Tree.get(treeData, path);
+                    TreeNode treeNode = (TreeNode) Sequence.Tree.get(treeData, path);
 
                     if (treeNode instanceof List<?>) {
                         if (previousCheckState == TreeView.NodeCheckState.CHECKED
                             || checkState == TreeView.NodeCheckState.CHECKED) {
                             // Propagate downward
-                            List<?> treeBranch = (List<?>)treeNode;
+                            List<?> treeBranch = (List<?>) treeNode;
 
                             Path childPath = new Path(path);
                             int lastIndex = childPath.getLength();
@@ -135,7 +136,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
                                 childPath.update(lastIndex, i);
                                 treeView.setNodeChecked(childPath, checked);
 
-                                EventNode eventNode = (EventNode)treeBranch.get(i);
+                                EventNode eventNode = (EventNode) treeBranch.get(i);
                                 Method event = eventNode.getEvent();
 
                                 if (checked) {
@@ -148,11 +149,11 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
                     } else {
                         Path parentPath = new Path(path, path.getLength() - 1);
 
-                        EventNode eventNode = (EventNode)treeNode;
+                        EventNode eventNode = (EventNode) treeNode;
                         Method event = eventNode.getEvent();
 
                         if (checked) {
-                            List<?> treeBranch = (List<?>)Sequence.Tree.get(treeData, parentPath);
+                            List<?> treeBranch = (List<?>) Sequence.Tree.get(treeData, parentPath);
 
                             Path childPath = new Path(path);
                             int lastIndex = parentPath.getLength();
@@ -219,10 +220,10 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
     @Override
     public void selectAllEvents(boolean select) {
         @SuppressWarnings("unchecked")
-        List<TreeNode> treeData = (List<TreeNode>)declaredEventsTreeView.getTreeData();
+        List<TreeNode> treeData = (List<TreeNode>) declaredEventsTreeView.getTreeData();
 
         ItemIterator<TreeNode> iter = Sequence.Tree.depthFirstIterator(treeData);
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             iter.next();
             declaredEventsTreeView.setNodeChecked(iter.getPath(), select);
         }
@@ -232,7 +233,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
     @Override
     public void sourceChanged(EventLogger eventLogger, Component previousSource) {
-        //Component source = eventLogger.getSource();
+        // Component source = eventLogger.getSource();
 
         HashMap<Class<?>, ArrayList<Method>> buckets = new HashMap<>();
 
@@ -286,14 +287,14 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
 
     private void setEventIncluded(Method event, boolean included) {
         @SuppressWarnings("unchecked")
-        List<TreeNode> treeData = (List<TreeNode>)declaredEventsTreeView.getTreeData();
+        List<TreeNode> treeData = (List<TreeNode>) declaredEventsTreeView.getTreeData();
 
         Sequence.Tree.ItemIterator<TreeNode> iter = Sequence.Tree.depthFirstIterator(treeData);
         while (iter.hasNext()) {
             TreeNode treeNode = iter.next();
 
             if (treeNode instanceof EventNode) {
-                EventNode eventNode = (EventNode)treeNode;
+                EventNode eventNode = (EventNode) treeNode;
 
                 if (eventNode.getEvent() == event) {
                     declaredEventsTreeView.setNodeChecked(iter.getPath(), included);
@@ -311,7 +312,7 @@ class EventLoggerSkin extends ContainerSkin implements EventLogger.Skin, EventLo
         row.put("arguments", Arrays.toString(arguments));
 
         @SuppressWarnings("unchecked")
-        List<Object> tableData = (List<Object>)firedEventsTableView.getTableData();
+        List<Object> tableData = (List<Object>) firedEventsTableView.getTableData();
         final int rowIndex = tableData.add(row);
 
         ApplicationContext.queueCallback(new Runnable() {

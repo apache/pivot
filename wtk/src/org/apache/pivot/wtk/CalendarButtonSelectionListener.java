@@ -24,10 +24,9 @@ import org.apache.pivot.util.CalendarDate;
 public interface CalendarButtonSelectionListener {
     /**
      * Called when a calendar button's selected date has changed.
-     *
+     * 
      * @param calendarButton
      * @param previousSelectedDate
      */
-    public void selectedDateChanged(CalendarButton calendarButton,
-        CalendarDate previousSelectedDate);
+    public void selectedDateChanged(CalendarButton calendarButton, CalendarDate previousSelectedDate);
 }

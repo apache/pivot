@@ -31,9 +31,12 @@ public class TestUtils {
             System.out.println("The current SecurityManager is: " + System.getSecurityManager());
 
             System.out.println("Your operating system is: " + System.getProperty("os.name", NA));
-            System.out.println("The JVM you are running is: " + System.getProperty("java.version", NA));
-            System.out.println("Your user home directory is: " + System.getProperty("user.home", NA));
-            System.out.println("Your JRE installation directory is: " + System.getProperty("java.home", NA));
+            System.out.println("The JVM you are running is: "
+                + System.getProperty("java.version", NA));
+            System.out.println("Your user home directory is: "
+                + System.getProperty("user.home", NA));
+            System.out.println("Your JRE installation directory is: "
+                + System.getProperty("java.home", NA));
         } catch (Exception e) {
             System.err.println("Caught exception: " + e.toString());
         }

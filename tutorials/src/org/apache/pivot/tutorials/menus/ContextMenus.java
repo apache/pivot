@@ -41,7 +41,7 @@ public class ContextMenus extends Window implements Bindable {
             whatIsThisMenuItem.setAction(new Action() {
                 @Override
                 public void perform(Component source) {
-                    String description = (String)descendant.getUserData().get("description");
+                    String description = (String) descendant.getUserData().get("description");
                     String message = "This is a " + description + ".";
 
                     Prompt.prompt(message, ContextMenus.this);

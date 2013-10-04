@@ -47,18 +47,18 @@ public class CardPanes extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        cardPane = (CardPane)namespace.get("cardPane");
-        previousButton = (LinkButton)namespace.get("previousButton");
-        nextButton = (LinkButton)namespace.get("nextButton");
-        sizeToSelectionCheckbox = (Checkbox)namespace.get("sizeToSelectionCheckbox");
+        cardPane = (CardPane) namespace.get("cardPane");
+        previousButton = (LinkButton) namespace.get("previousButton");
+        nextButton = (LinkButton) namespace.get("nextButton");
+        sizeToSelectionCheckbox = (Checkbox) namespace.get("sizeToSelectionCheckbox");
 
-        crossfadeRadioButton = (RadioButton)namespace.get("crossfadeRadioButton");
-        horizontalSlideRadioButton = (RadioButton)namespace.get("horizontalSlideRadioButton");
-        verticalSlideRadioButton = (RadioButton)namespace.get("verticalSlideRadioButton");
-        horizontalFlipRadioButton = (RadioButton)namespace.get("horizontalFlipRadioButton");
-        verticalFlipRadioButton = (RadioButton)namespace.get("verticalFlipRadioButton");
-        zoomRadioButton = (RadioButton)namespace.get("zoomRadioButton");
-        noneRadioButton = (RadioButton)namespace.get("noneRadioButton");
+        crossfadeRadioButton = (RadioButton) namespace.get("crossfadeRadioButton");
+        horizontalSlideRadioButton = (RadioButton) namespace.get("horizontalSlideRadioButton");
+        verticalSlideRadioButton = (RadioButton) namespace.get("verticalSlideRadioButton");
+        horizontalFlipRadioButton = (RadioButton) namespace.get("horizontalFlipRadioButton");
+        verticalFlipRadioButton = (RadioButton) namespace.get("verticalFlipRadioButton");
+        zoomRadioButton = (RadioButton) namespace.get("zoomRadioButton");
+        noneRadioButton = (RadioButton) namespace.get("noneRadioButton");
 
         cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
             @Override

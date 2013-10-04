@@ -43,10 +43,10 @@ public class WebQueries extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(WebQueries.class, "web_queries.bxml");
+        window = (Window) bxmlSerializer.readObject(WebQueries.class, "web_queries.bxml");
 
-        listView = (ListView)bxmlSerializer.getNamespace().get("listView");
-        loadingLabel = (Label)bxmlSerializer.getNamespace().get("loadingLabel");
+        listView = (ListView) bxmlSerializer.getNamespace().get("listView");
+        loadingLabel = (Label) bxmlSerializer.getNamespace().get("loadingLabel");
 
         // Execute the query:
         // http://pipes.yahoo.com/pipes/pipe.run?_id=43115761f2da5af5341ae2e56a93d646&_render=json
@@ -57,7 +57,7 @@ public class WebQueries extends Application.Adapter {
         getQuery.execute(new TaskAdapter<>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
-                List<?> items = (List<?>)JSON.get(task.getResult(), "value.items");
+                List<?> items = (List<?>) JSON.get(task.getResult(), "value.items");
                 if (items.getLength() > 0) {
                     listView.setListData(items);
                     loadingLabel.setVisible(false);

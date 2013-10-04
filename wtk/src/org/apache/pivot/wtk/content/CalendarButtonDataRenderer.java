@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.CalendarButton;
 import org.apache.pivot.wtk.HorizontalAlignment;
 
-
 /**
  * Default calendar button data renderer.
  */
@@ -36,14 +35,14 @@ public class CalendarButtonDataRenderer extends ButtonDataRenderer {
     @Override
     public void render(final Object data, final Button button, boolean highlight) {
         Object dataMutable = data;
-        CalendarButton calendarButton = (CalendarButton)button;
+        CalendarButton calendarButton = (CalendarButton) button;
         Locale locale = calendarButton.getLocale();
 
         if (dataMutable == null) {
             dataMutable = "";
         } else {
             if (dataMutable instanceof CalendarDate) {
-                CalendarDate date = (CalendarDate)dataMutable;
+                CalendarDate date = (CalendarDate) dataMutable;
 
                 DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
                 dataMutable = dateFormat.format(date.toCalendar().getTime());

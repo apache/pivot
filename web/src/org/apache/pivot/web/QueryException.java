@@ -42,9 +42,8 @@ public class QueryException extends TaskExecutionException {
 
     /**
      * Returns the HTTP status code corresponding to the exception.
-     *
-     * @return
-     * An HTTP status code reflecting the nature of the exception, or
+     * 
+     * @return An HTTP status code reflecting the nature of the exception, or
      * <tt>0</tt> if the HTTP status is not known.
      */
     public int getStatus() {

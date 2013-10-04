@@ -24,8 +24,8 @@ import org.apache.pivot.wtk.Component;
  */
 public class ComponentNode extends Node {
 
-    private static class ComponentNodeListenerList extends ListenerList<ComponentNodeListener> implements
-        ComponentNodeListener {
+    private static class ComponentNodeListenerList extends ListenerList<ComponentNodeListener>
+        implements ComponentNodeListener {
         @Override
         public void componentChanged(ComponentNode componentNode, Component previousComponent) {
             for (ComponentNodeListener listener : this) {

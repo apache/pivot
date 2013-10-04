@@ -94,8 +94,7 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     @Override
-    public Element readObject(InputStream inputStream)
-        throws IOException, SerializationException {
+    public Element readObject(InputStream inputStream) throws IOException, SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
         }
@@ -146,8 +145,7 @@ public class XMLSerializer implements Serializer<Element> {
                     case XMLStreamConstants.START_ELEMENT: {
                         // Create the element
                         String prefix = xmlStreamReader.getPrefix();
-                        if (prefix != null
-                            && prefix.length() == 0) {
+                        if (prefix != null && prefix.length() == 0) {
                             prefix = null;
                         }
 
@@ -170,16 +168,16 @@ public class XMLSerializer implements Serializer<Element> {
                         // Get the element's attributes
                         for (int i = 0, n = xmlStreamReader.getAttributeCount(); i < n; i++) {
                             String attributePrefix = xmlStreamReader.getAttributePrefix(i);
-                            if (attributePrefix != null
-                                && attributePrefix.length() == 0) {
+                            if (attributePrefix != null && attributePrefix.length() == 0) {
                                 attributePrefix = null;
                             }
 
                             String attributeLocalName = xmlStreamReader.getAttributeLocalName(i);
                             String attributeValue = xmlStreamReader.getAttributeValue(i);
 
-                            element.getAttributes().add(new Element.Attribute(attributePrefix,
-                                attributeLocalName, attributeValue));
+                            element.getAttributes().add(
+                                new Element.Attribute(attributePrefix, attributeLocalName,
+                                    attributeValue));
                         }
 
                         if (current == null) {
@@ -225,8 +223,8 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     @Override
-    public void writeObject(Element element, OutputStream outputStream)
-        throws IOException, SerializationException {
+    public void writeObject(Element element, OutputStream outputStream) throws IOException,
+        SerializationException {
         if (outputStream == null) {
             throw new IllegalArgumentException("outputStream is null.");
         }
@@ -310,9 +308,9 @@ public class XMLSerializer implements Serializer<Element> {
         // Write out the child nodes
         for (Node node : element) {
             if (node instanceof Element) {
-                writeElement((Element)node, xmlStreamWriter);
+                writeElement((Element) node, xmlStreamWriter);
             } else if (node instanceof TextNode) {
-                writeTextNode((TextNode)node, xmlStreamWriter);
+                writeTextNode((TextNode) node, xmlStreamWriter);
             } else {
                 throw new SerializationException("Unsupported node type: "
                     + node.getClass().getName());

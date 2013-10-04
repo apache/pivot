@@ -46,8 +46,8 @@ import org.apache.pivot.wtk.skin.ContainerSkin;
 /**
  * Spinner skin.
  */
-public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
-    SpinnerListener, SpinnerSelectionListener {
+public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, SpinnerListener,
+    SpinnerSelectionListener {
     /**
      * Encapsulates the code needed to perform timer-controlled spinning.
      */
@@ -59,20 +59,16 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
         /**
          * Starts spinning the specified spinner.
-         *
-         * @param spinnerArgument
-         * The spinner to spin
-         *
-         * @param directionArgument
-         * <tt>1</tt> to adjust the spinner's selected index larger;
-         * <tt>-1</tt> to adjust it smaller
-         *
-         * @exception IllegalStateException
-         * If automatic spinner of any spinner is already in progress.
-         * Only one spinner may be automatically spun at one time
+         * 
+         * @param spinnerArgument The spinner to spin
+         * @param directionArgument <tt>1</tt> to adjust the spinner's selected
+         * index larger; <tt>-1</tt> to adjust it smaller
+         * @exception IllegalStateException If automatic spinner of any spinner
+         * is already in progress. Only one spinner may be automatically spun at
+         * one time
          */
         public void start(Spinner spinnerArgument, int directionArgument) {
-            assert(directionArgument != 0) : "Direction must be positive or negative";
+            assert (directionArgument != 0) : "Direction must be positive or negative";
 
             if (scheduledSpinnerCallback != null) {
                 throw new IllegalStateException("Already running");
@@ -100,7 +96,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             if (count < 1) {
                 // empty spinner
                 stop();
-                return ;
+                return;
             }
 
             if (direction > 0) {
@@ -151,14 +147,15 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         public int getPreferredWidth(int height) {
             int preferredWidth = 0;
 
-            Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
+            Spinner spinner = (Spinner) TerraSpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
             if (sizeToContent) {
                 List<?> spinnerData = spinner.getSpinnerData();
                 for (Object item : spinnerData) {
                     itemRenderer.render(item, spinner);
-                    preferredWidth = Math.max(preferredWidth, itemRenderer.getPreferredWidth(height));
+                    preferredWidth = Math.max(preferredWidth,
+                        itemRenderer.getPreferredWidth(height));
                 }
             } else {
                 itemRenderer.render(spinner.getSelectedItem(), spinner);
@@ -172,7 +169,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         public int getPreferredHeight(int width) {
             int preferredHeight = 0;
 
-            Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
+            Spinner spinner = (Spinner) TerraSpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
             itemRenderer.render(spinner.getSelectedItem(), spinner);
@@ -183,7 +180,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
         @Override
         public int getBaseline(int width, int height) {
-            Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
+            Spinner spinner = (Spinner) TerraSpinnerSkin.this.getComponent();
 
             int baseline = -1;
 
@@ -198,7 +195,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         public Dimensions getPreferredSize() {
             Dimensions preferredSize;
 
-            Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
+            Spinner spinner = (Spinner) TerraSpinnerSkin.this.getComponent();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
             if (sizeToContent) {
@@ -218,8 +215,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
         @Override
         public void paint(Graphics2D graphics) {
-            SpinnerContent spinnerContentLocal = (SpinnerContent)getComponent();
-            Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
+            SpinnerContent spinnerContentLocal = (SpinnerContent) getComponent();
+            Spinner spinner = (Spinner) TerraSpinnerSkin.this.getComponent();
 
             int width = getWidth();
             int height = getHeight();
@@ -228,7 +225,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
             itemRenderer.render(spinner.getSelectedItem(), spinner);
 
-            Graphics2D contentGraphics = (Graphics2D)graphics.create();
+            Graphics2D contentGraphics = (Graphics2D) graphics.create();
             itemRenderer.setSize(width, height);
             itemRenderer.paint(contentGraphics);
             contentGraphics.dispose();
@@ -236,7 +233,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             // Paint the focus state
             if (spinnerContentLocal.isFocused()) {
                 BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+                    BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
 
                 graphics.setStroke(dashStroke);
                 graphics.setColor(borderColor);
@@ -244,8 +241,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
-                graphics.draw(new Rectangle2D.Double(1, 1.5, Math.max(width - 2.5, 0),
-                    Math.max(height - 3, 0)));
+                graphics.draw(new Rectangle2D.Double(1, 1.5, Math.max(width - 2.5, 0), Math.max(
+                    height - 3, 0)));
             }
         }
 
@@ -266,11 +263,10 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
          * {@link KeyCode#DOWN DOWN} Select the next spinner item.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode,
-            Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
-            Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
+            Spinner spinner = (Spinner) TerraSpinnerSkin.this.getComponent();
 
             boolean circular = spinner.isCircular();
             int count = spinner.getSpinnerData().getLength();
@@ -310,7 +306,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         public boolean keyTyped(Component component, char character) {
             boolean consumed = super.keyTyped(component, character);
 
-            Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
+            Spinner spinner = (Spinner) TerraSpinnerSkin.this.getComponent();
             List<?> spinnerData = spinner.getSpinnerData();
             Spinner.ItemRenderer itemRenderer = spinner.getItemRenderer();
 
@@ -319,8 +315,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             for (int i = spinner.getSelectedIndex() + 1, n = spinnerData.getLength(); i < n; i++) {
                 String string = itemRenderer.toString(spinnerData.get(i));
 
-                if (string != null
-                    && string.length() > 0) {
+                if (string != null && string.length() > 0) {
                     char first = Character.toUpperCase(string.charAt(0));
 
                     if (first == characterUpper) {
@@ -383,7 +378,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         @Override
         public void paint(Graphics2D graphics) {
             // Apply spinner styles to the button
-            SpinButton spinButton = (SpinButton)getComponent();
+            SpinButton spinButton = (SpinButton) getComponent();
 
             int width = getWidth();
             int height = getHeight();
@@ -394,9 +389,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             graphics.fillRect(0, 0, width, height);
 
             // Paint the image
-            SpinButtonImage buttonImage = (SpinButtonImage)spinButton.getButtonImage();
-            graphics.translate((width - BUTTON_IMAGE_SIZE) / 2,
-                (height - BUTTON_IMAGE_SIZE) / 2);
+            SpinButtonImage buttonImage = (SpinButtonImage) spinButton.getButtonImage();
+            graphics.translate((width - BUTTON_IMAGE_SIZE) / 2, (height - BUTTON_IMAGE_SIZE) / 2);
             buttonImage.paint(graphics);
         }
 
@@ -445,8 +439,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
             boolean consumed = super.mouseDown(component, button, x, y);
 
             if (button == Mouse.Button.LEFT) {
-                SpinButton spinButton = (SpinButton)getComponent();
-                Spinner spinner = (Spinner)TerraSpinnerSkin.this.getComponent();
+                SpinButton spinButton = (SpinButton) getComponent();
+                Spinner spinner = (Spinner) TerraSpinnerSkin.this.getComponent();
 
                 // Start the automatic spinner. It'll be stopped when we
                 // mouse up or mouse out
@@ -500,8 +494,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = {0, 2, 4};
-            int[] yPoints = {3, 1, 3};
+            int[] xPoints = { 0, 2, 4 };
+            int[] yPoints = { 3, 1, 3 };
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -512,8 +506,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = {0, 2, 4};
-            int[] yPoints = {1, 3, 1};
+            int[] xPoints = { 0, 2, 4 };
+            int[] yPoints = { 1, 3, 1 };
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -539,7 +533,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     public static final int BUTTON_IMAGE_SIZE = 5;
 
     public TerraSpinnerSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(4));
 
         font = theme.getFont();
@@ -559,8 +553,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
 
         super.setSize(width, height);
 
-        if (previousWidth != width
-            || previousHeight != height) {
+        if (previousWidth != width || previousHeight != height) {
             automaticSpinner.stop();
         }
     }
@@ -569,7 +562,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     public void install(Component component) {
         super.install(component);
 
-        Spinner spinner = (Spinner)component;
+        Spinner spinner = (Spinner) component;
         spinner.getSpinnerListeners().add(this);
         spinner.getSpinnerSelectionListeners().add(this);
 
@@ -610,19 +603,16 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         Dimensions upButtonPreferredSize = upButton.getPreferredSize();
         Dimensions downButtonPreferredSize = downButton.getPreferredSize();
 
-        int preferredHeight = Math.max(upButtonPreferredSize.height,
-            downButtonPreferredSize.height) * 2;
+        int preferredHeight = Math.max(upButtonPreferredSize.height, downButtonPreferredSize.height) * 2;
 
         if (width >= 0) {
             // Subtract the button and border width from width constraint
-            int buttonWidth = Math.max(upButtonPreferredSize.width,
-                downButtonPreferredSize.width);
+            int buttonWidth = Math.max(upButtonPreferredSize.width, downButtonPreferredSize.width);
 
             width = Math.max(width - buttonWidth - 2, 0);
         }
 
-        preferredHeight = Math.max(preferredHeight,
-            spinnerContent.getPreferredHeight(width)) + 1;
+        preferredHeight = Math.max(preferredHeight, spinnerContent.getPreferredHeight(width)) + 1;
 
         return preferredHeight;
     }
@@ -631,8 +621,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     public int getBaseline(int width, int height) {
         Dimensions upButtonPreferredSize = upButton.getPreferredSize();
         Dimensions downButtonPreferredSize = downButton.getPreferredSize();
-        int buttonWidth = Math.max(upButtonPreferredSize.width,
-            downButtonPreferredSize.width);
+        int buttonWidth = Math.max(upButtonPreferredSize.width, downButtonPreferredSize.width);
 
         int clientWidth = Math.max(width - buttonWidth - 2, 0);
         int clientHeight = Math.max(height - 2, 0);
@@ -676,14 +665,14 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
         int buttonWidth = upButton.getWidth();
         int buttonHeight = upButton.getHeight();
 
-        graphics.setPaint(new GradientPaint(buttonX + buttonWidth / 2, 0, buttonBevelColor,
-            buttonX + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
+        graphics.setPaint(new GradientPaint(buttonX + buttonWidth / 2, 0, buttonBevelColor, buttonX
+            + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
         graphics.fillRect(buttonX, 0, buttonWidth, height);
 
         graphics.setPaint(borderColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
-        GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, 0,
-            height, Orientation.VERTICAL);
+        GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, 0, height,
+            Orientation.VERTICAL);
         GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, buttonHeight + 1,
             buttonWidth + 1, Orientation.HORIZONTAL);
     }
@@ -859,8 +848,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin,
     }
 
     @Override
-    public void itemRendererChanged(Spinner spinner,
-        Spinner.ItemRenderer previousItemRenderer) {
+    public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
         invalidateContent();
     }
 

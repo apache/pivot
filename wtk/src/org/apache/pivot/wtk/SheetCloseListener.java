@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface SheetCloseListener {
     /**
      * Called when a sheet has closed.
-     *
+     * 
      * @param sheet
      */
     public void sheetClosed(Sheet sheet);

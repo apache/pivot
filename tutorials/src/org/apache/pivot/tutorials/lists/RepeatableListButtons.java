@@ -26,12 +26,12 @@ import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.Button.State;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.Button.State;
 import org.apache.pivot.wtk.content.ColorItem;
 
 public class RepeatableListButtons extends Window implements Bindable {
@@ -43,11 +43,11 @@ public class RepeatableListButtons extends Window implements Bindable {
     private Action applyColorAction = new Action() {
         @Override
         public void perform(Component source) {
-            ColorItem colorItem = (ColorItem)colorListButton.getButtonData();
+            ColorItem colorItem = (ColorItem) colorListButton.getButtonData();
             Color color = colorItem.getColor();
 
             for (Component component : checkboxBoxPane) {
-                Checkbox checkbox = (Checkbox)component;
+                Checkbox checkbox = (Checkbox) component;
                 if (checkbox.isSelected()) {
                     checkbox.getStyles().put("color", color);
                     checkbox.setSelected(false);
@@ -63,8 +63,8 @@ public class RepeatableListButtons extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        colorListButton = (ListButton)namespace.get("colorListButton");
-        checkboxBoxPane = (BoxPane)namespace.get("checkboxBoxPane");
+        colorListButton = (ListButton) namespace.get("colorListButton");
+        checkboxBoxPane = (BoxPane) namespace.get("checkboxBoxPane");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
             @Override
@@ -79,8 +79,8 @@ public class RepeatableListButtons extends Window implements Bindable {
             }
         };
 
-        ArrayList<String> numbers = new ArrayList<>("One", "Two", "Three", "Four", "Five",
-            "Six", "Seven", "Eight", "Nine", "Ten");
+        ArrayList<String> numbers = new ArrayList<>("One", "Two", "Three", "Four", "Five", "Six",
+            "Seven", "Eight", "Nine", "Ten");
 
         for (String number : numbers) {
             Checkbox checkbox = new Checkbox(number);

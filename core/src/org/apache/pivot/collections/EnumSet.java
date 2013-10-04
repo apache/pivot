@@ -23,7 +23,6 @@ import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Implementation of the {@link Set} interface that is backed by an array of
  * enum values.
@@ -38,8 +37,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         @Override
         public boolean hasNext() {
             if (next == null) {
-                while (i < elements.length
-                    && !members[i]) {
+                while (i < elements.length && !members[i]) {
                     i++;
                 }
 

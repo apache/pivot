@@ -26,10 +26,8 @@ import java.util.NoSuchElementException;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Implementation of the {@link List} interface that is backed by a linked
- * list.
- * <p>
- * NOTE This class is not thread-safe. For concurrent access, use a
+ * Implementation of the {@link List} interface that is backed by a linked list.
+ * <p> NOTE This class is not thread-safe. For concurrent access, use a
  * {@link org.apache.pivot.collections.concurrent.SynchronizedList}.
  */
 public class LinkedList<T> implements List<T>, Serializable {
@@ -137,7 +135,7 @@ public class LinkedList<T> implements List<T>, Serializable {
                 if (index == 0) {
                     // Insert at head
                     next = first;
-                    // previous = null;  // previous has already this value
+                    // previous = null; // previous has already this value
                 } else if (index < length) {
                     if (forward) {
                         // Insert after current
@@ -150,7 +148,7 @@ public class LinkedList<T> implements List<T>, Serializable {
                     }
                 } else {
                     // Insert at tail
-                    // next = null;  // next has already this value
+                    // next = null; // next has already this value
                     previous = last;
                 }
 
@@ -224,7 +222,8 @@ public class LinkedList<T> implements List<T>, Serializable {
             LinkedList.this.modificationCount++;
 
             if (listListeners != null) {
-                @SuppressWarnings("unchecked")  // or it will generate a warning during build with Java 7
+                @SuppressWarnings("unchecked")
+                // or it will generate a warning during build with Java 7
                 LinkedList<T> removed = new LinkedList<>(item);
 
                 listListeners.itemsRemoved(LinkedList.this, index, removed);
@@ -280,8 +279,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
             if (length > 0) {
                 next = first;
-                while (next != null
-                    && comparator.compare(item, next.item) > 0) {
+                while (next != null && comparator.compare(item, next.item) > 0) {
                     next = next.next;
                     index++;
                 }
@@ -370,10 +368,8 @@ public class LinkedList<T> implements List<T>, Serializable {
         if (comparator != null) {
             // Ensure that the new item is greater or equal to its
             // predecessor and less than or equal to its successor
-            if ((previous != null
-                && comparator.compare(item, previous.item) < 0)
-                || (next != null
-                && comparator.compare(item, next.item) > 0)) {
+            if ((previous != null && comparator.compare(item, previous.item) < 0)
+                || (next != null && comparator.compare(item, next.item) > 0)) {
                 throw new IllegalArgumentException("Illegal item modification.");
             }
         }
@@ -547,7 +543,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
         if (comparator != null) {
             // Copy the nodes into an array and sort
-            T[] array = (T[])new Object[length];
+            T[] array = (T[]) new Object[length];
 
             int i = 0;
             for (T item : this) {
@@ -613,8 +609,7 @@ public class LinkedList<T> implements List<T>, Serializable {
                 equals = true;
 
                 for (T element : this) {
-                    if (!(iterator.hasNext()
-                        && element.equals(iterator.next()))) {
+                    if (!(iterator.hasNext() && element.equals(iterator.next()))) {
                         equals = false;
                         break;
                     }
@@ -671,13 +666,15 @@ public class LinkedList<T> implements List<T>, Serializable {
             throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
         }
         if (count < 0 || start < 0) {
-            throw new IllegalArgumentException("count (" + count + ") < 0 or start (" + start + ") < 0");
+            throw new IllegalArgumentException("count (" + count + ") < 0 or start (" + start
+                + ") < 0");
         }
         if (index < start) {
             throw new IndexOutOfBoundsException("index " + index + " out of bounds.");
         }
         if (index + count > end) {
-            throw new IndexOutOfBoundsException("index + count " + index + "," + count + " out of range.");
+            throw new IndexOutOfBoundsException("index + count " + index + "," + count
+                + " out of range.");
         }
     }
 }

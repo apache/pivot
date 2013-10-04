@@ -20,14 +20,13 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 
-
 /**
- * Container that behaves like a deck of cards, only one of which may be
- * visible at a time.
+ * Container that behaves like a deck of cards, only one of which may be visible
+ * at a time.
  */
 public class CardPane extends Container {
-    private static class CardPaneListenerList extends WTKListenerList<CardPaneListener>
-        implements CardPaneListener {
+    private static class CardPaneListenerList extends WTKListenerList<CardPaneListener> implements
+        CardPaneListener {
         @Override
         public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
             Vote vote = Vote.APPROVE;
@@ -63,9 +62,8 @@ public class CardPane extends Container {
 
     /**
      * Returns the currently selected card index.
-     *
-     * @return
-     * The selected card index, or <tt>-1</tt> if no card is selected.
+     * 
+     * @return The selected card index, or <tt>-1</tt> if no card is selected.
      */
     public int getSelectedIndex() {
         return selectedIndex;
@@ -73,12 +71,12 @@ public class CardPane extends Container {
 
     /**
      * Sets the selected card index.
-     *
-     * @param selectedIndex
-     * The selected card index, or <tt>-1</tt> for no selection.
+     * 
+     * @param selectedIndex The selected card index, or <tt>-1</tt> for no
+     * selection.
      */
     public void setSelectedIndex(int selectedIndex) {
-        indexBoundsCheck("selectedIndex", selectedIndex, -1, getLength() -1);
+        indexBoundsCheck("selectedIndex", selectedIndex, -1, getLength() - 1);
 
         int previousSelectedIndex = this.selectedIndex;
 

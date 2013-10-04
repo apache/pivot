@@ -37,9 +37,12 @@ public class MenuBarTest extends Application.Adapter {
     private Frame frame1 = null;
     private Frame frame2 = null;
 
-    @BXML private TextInput textInput1 = null;
-    @BXML private TextInput textInput2 = null;
-    @BXML private TextInput textInput3 = null;
+    @BXML
+    private TextInput textInput1 = null;
+    @BXML
+    private TextInput textInput2 = null;
+    @BXML
+    private TextInput textInput3 = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
@@ -52,23 +55,22 @@ public class MenuBarTest extends Application.Adapter {
         frame1.setPreferredSize(320, 240);
         frame1.setTitle("Frame 1");
 
-        // put this before loading the related bxml, or an IllegalArgumentException will be thrown
+        // put this before loading the related bxml, or an
+        // IllegalArgumentException will be thrown
         Action.getNamedActions().put("about", new Action() {
             @Override
             public void perform(Component source) {
-                String msg = "Hello from Pivot-"
-                    + ApplicationContext.getPivotVersion().toString()
+                String msg = "Hello from Pivot-" + ApplicationContext.getPivotVersion().toString()
                     + ", running from Java "
                     // + ApplicationContext.getJVMVersion().toString()
-                    + System.getProperty("java.version")
-                ;
-                Alert.alert(msg, frame2.getRootOwner());  // frame2);
+                    + System.getProperty("java.version");
+                Alert.alert(msg, frame2.getRootOwner()); // frame2);
                 System.out.println("Help triggered");
             }
         });
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        frame2 = (Frame)bxmlSerializer.readObject(MenuBarTest.class, "menu_bar_test.bxml");
+        frame2 = (Frame) bxmlSerializer.readObject(MenuBarTest.class, "menu_bar_test.bxml");
         frame2.setTitle("Frame 2, from bxml");
         bxmlSerializer.bind(this, MenuBarTest.class);
 

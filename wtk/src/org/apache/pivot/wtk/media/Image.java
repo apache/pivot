@@ -35,15 +35,15 @@ import org.apache.pivot.wtk.Visual;
 import com.kitfox.svg.SVGDiagram;
 
 /**
- * Abstract base class for images. An image is either a bitmapped "picture"
- * or a vector "drawing".
+ * Abstract base class for images. An image is either a bitmapped "picture" or a
+ * vector "drawing".
  */
 public abstract class Image implements Visual {
     /**
      * Image listener list.
      */
-    protected static class ImageListenerList extends ListenerList<ImageListener>
-        implements ImageListener {
+    protected static class ImageListenerList extends ListenerList<ImageListener> implements
+        ImageListener {
         @Override
         public void sizeChanged(Image image, int previousWidth, int previousHeight) {
             for (ImageListener listener : this) {
@@ -93,9 +93,11 @@ public abstract class Image implements Visual {
                 InputStream inputStream = null;
 
                 try {
-                    // NOTE We don't open the stream until the callback executes because
+                    // NOTE We don't open the stream until the callback executes
+                    // because
                     // this is a potentially time-consuming operation
-                    inputStream = new MonitoredInputStream(new BufferedInputStream(location.openStream()));
+                    inputStream = new MonitoredInputStream(new BufferedInputStream(
+                        location.openStream()));
 
                     if (location.getFile().endsWith(SVGDiagramSerializer.SVG_EXTENSION)) {
                         SVGDiagramSerializer serializer = new SVGDiagramSerializer();
@@ -161,7 +163,7 @@ public abstract class Image implements Visual {
             throw new IllegalArgumentException("location is null.");
         }
 
-        Image image = (Image)ApplicationContext.getResourceCache().get(location);
+        Image image = (Image) ApplicationContext.getResourceCache().get(location);
         if (image == null) {
             try {
                 image = Image.load(location);

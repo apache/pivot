@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-
 /**
  * Label listener interface.
  */
@@ -37,10 +36,9 @@ public interface LabelListener {
         }
     }
 
-
-   /**
+    /**
      * Called when a label's text has changed.
-     *
+     * 
      * @param label
      * @param previousText
      */
@@ -48,7 +46,7 @@ public interface LabelListener {
 
     /**
      * Called when a label text maximum length has changed.
-     *
+     * 
      * @param label
      * @param previousMaximumLength
      */

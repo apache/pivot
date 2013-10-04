@@ -34,24 +34,18 @@ import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Exposes Java bean properties of an object via the {@link Map}
- * interface. A call to {@link Map#get(Object)} invokes the getter for
- * the corresponding property, and a call to
- * {@link Map#put(Object, Object)} invokes the property's setter.
- * <p>
- * Properties may provide multiple setters; the appropriate setter to invoke
- * is determined by the type of the value being set. If the value is
- * <tt>null</tt>, the return type of the getter method is used.
- *
- * <p> Getter methods must be named "getProperty" where "property" is
- * the property name.  If there is no "get" method, then an "isProperty"
- * method can also be used.  Setter methods (if present) must be named
- * "setProperty".
- *
- * <p> Getter and setter methods are checked before straight fields
- * named "property" in order to support proper data encapsulation.
- * And only <code>public</code> and non-<code>static</code> methods
- * and fields can be accessed.
+ * Exposes Java bean properties of an object via the {@link Map} interface. A
+ * call to {@link Map#get(Object)} invokes the getter for the corresponding
+ * property, and a call to {@link Map#put(Object, Object)} invokes the
+ * property's setter. <p> Properties may provide multiple setters; the
+ * appropriate setter to invoke is determined by the type of the value being
+ * set. If the value is <tt>null</tt>, the return type of the getter method is
+ * used. <p> Getter methods must be named "getProperty" where "property" is the
+ * property name. If there is no "get" method, then an "isProperty" method can
+ * also be used. Setter methods (if present) must be named "setProperty". <p>
+ * Getter and setter methods are checked before straight fields named "property"
+ * in order to support proper data encapsulation. And only <code>public</code>
+ * and non-<code>static</code> methods and fields can be accessed.
  */
 public class BeanAdapter implements Map<String, Object> {
     /**
@@ -93,8 +87,7 @@ public class BeanAdapter implements Map<String, Object> {
         private void nextProperty() {
             nextProperty = null;
 
-            while (i < methods.length
-                && nextProperty == null) {
+            while (i < methods.length && nextProperty == null) {
                 Method method = methods[i++];
 
                 if (method.getParameterTypes().length == 0
@@ -120,8 +113,7 @@ public class BeanAdapter implements Map<String, Object> {
                         }
                     }
 
-                    if (nextProperty != null
-                        && ignoreReadOnlyProperties
+                    if (nextProperty != null && ignoreReadOnlyProperties
                         && isReadOnly(nextProperty)) {
                         nextProperty = null;
                     }
@@ -129,18 +121,15 @@ public class BeanAdapter implements Map<String, Object> {
             }
 
             if (nextProperty == null) {
-                while (j < fields.length
-                    && nextProperty == null) {
+                while (j < fields.length && nextProperty == null) {
                     Field field = fields[j++];
 
                     int modifiers = field.getModifiers();
-                    if ((modifiers & Modifier.PUBLIC) != 0
-                        && (modifiers & Modifier.STATIC) == 0) {
+                    if ((modifiers & Modifier.PUBLIC) != 0 && (modifiers & Modifier.STATIC) == 0) {
                         nextProperty = field.getName();
                     }
 
-                    if (nextProperty != null
-                        && ignoreReadOnlyProperties
+                    if (nextProperty != null && ignoreReadOnlyProperties
                         && (modifiers & Modifier.FINAL) != 0) {
                         nextProperty = null;
                     }
@@ -165,29 +154,24 @@ public class BeanAdapter implements Map<String, Object> {
 
     private static final String ENUM_VALUE_OF_METHOD_NAME = "valueOf";
 
-    private static final String ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT =
-        "Unable to access property \"%s\" for type %s.";
-    private static final String ENUM_COERCION_EXECPTION_MESSAGE =
-        "Unable to coerce %s (\"%s\") to %s.\nValid enum constants - %s";
+    private static final String ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT = "Unable to access property \"%s\" for type %s.";
+    private static final String ENUM_COERCION_EXECPTION_MESSAGE = "Unable to coerce %s (\"%s\") to %s.\nValid enum constants - %s";
 
     /**
      * Creates a new bean dictionary.
-     *
-     * @param bean
-     * The bean object to wrap.
+     * 
+     * @param bean The bean object to wrap.
      */
     public BeanAdapter(Object bean) {
         this(bean, false);
     }
 
     /**
-     * Creates a new bean dictionary which can ignore readonly fields
-     * (that is, straight fields marked as <code>final</code> or bean
-     * properties where there is a "get" method but no corresponding
-     * "set" method).
-     *
-     * @param bean
-     * The bean object to wrap.
+     * Creates a new bean dictionary which can ignore readonly fields (that is,
+     * straight fields marked as <code>final</code> or bean properties where
+     * there is a "get" method but no corresponding "set" method).
+     * 
+     * @param bean The bean object to wrap.
      */
     public BeanAdapter(Object bean, boolean ignoreReadOnlyProperties) {
         if (bean == null) {
@@ -200,9 +184,8 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Returns the bean object this dictionary wraps.
-     *
-     * @return
-     * The bean object, or <tt>null</tt> if no bean has been set.
+     * 
+     * @return The bean object, or <tt>null</tt> if no bean has been set.
      */
     public Object getBean() {
         return bean;
@@ -210,13 +193,10 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Invokes the getter method for the given property.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * The value returned by the method, or <tt>null</tt> if no such method
-     * exists.
+     * 
+     * @param key The property name.
+     * @return The value returned by the method, or <tt>null</tt> if no such
+     * method exists.
      */
     @Override
     public Object get(String key) {
@@ -239,8 +219,9 @@ public class BeanAdapter implements Map<String, Object> {
                 try {
                     value = field.get(bean);
                 } catch (IllegalAccessException exception) {
-                    throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
-                        key, bean.getClass().getName()), exception);
+                    throw new RuntimeException(String.format(
+                        ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT, key, bean.getClass().getName()),
+                        exception);
                 }
             }
         } else {
@@ -250,8 +231,9 @@ public class BeanAdapter implements Map<String, Object> {
                 throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                     key, bean.getClass().getName()), exception);
             } catch (InvocationTargetException exception) {
-                throw new RuntimeException(String.format("Error getting property \"%s\" for type %s.",
-                    key, bean.getClass().getName()), exception.getCause());
+                throw new RuntimeException(String.format(
+                    "Error getting property \"%s\" for type %s.", key, bean.getClass().getName()),
+                    exception.getCause());
             }
         }
 
@@ -259,22 +241,17 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * Invokes the setter method for the given property. The method
-     * signature is determined by the type of the value. If the value is
-     * <tt>null</tt>, the return type of the getter method is used.
-     *
-     * @param key
-     * The property name.
-     *
-     * @param value
-     * The new property value.
-     *
-     * @return
-     * Returns <tt>null</tt>, since returning the previous value would require
-     * a call to the getter method, which may not be an efficient operation.
-     *
-     * @throws PropertyNotFoundException
-     * If the given property does not exist or is read-only.
+     * Invokes the setter method for the given property. The method signature is
+     * determined by the type of the value. If the value is <tt>null</tt>, the
+     * return type of the getter method is used.
+     * 
+     * @param key The property name.
+     * @param value The new property value.
+     * @return Returns <tt>null</tt>, since returning the previous value would
+     * require a call to the getter method, which may not be an efficient
+     * operation.
+     * @throws PropertyNotFoundException If the given property does not exist or
+     * is read-only.
      */
     @Override
     public Object put(final String key, final Object value) {
@@ -328,13 +305,14 @@ public class BeanAdapter implements Map<String, Object> {
             }
         } else {
             try {
-                setterMethod.invoke(bean, new Object[] {valueUpdated});
+                setterMethod.invoke(bean, new Object[] { valueUpdated });
             } catch (IllegalAccessException exception) {
                 throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                     key, bean.getClass().getName()), exception);
             } catch (InvocationTargetException exception) {
-                throw new RuntimeException(String.format("Error setting property \"%s\" for type %s to value \"%s\"",
-                    key, bean.getClass().getName(), "" + valueUpdated), exception.getCause());
+                throw new RuntimeException(String.format(
+                    "Error setting property \"%s\" for type %s to value \"%s\"", key,
+                    bean.getClass().getName(), "" + valueUpdated), exception.getCause());
             }
 
         }
@@ -346,16 +324,14 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * Invokes the setter methods for all the given properties that are
-     * present in the map. The method signatures are determined by the
-     * type of the values. If any value is <tt>null</tt>, the return
-     * type of the getter method is used.
-     *
-     * @param valueMap
-     * The map of keys and values to be set.
-     *
-     * @throws PropertyNotFoundException
-     * If any of the given properties do not exist or are read-only.
+     * Invokes the setter methods for all the given properties that are present
+     * in the map. The method signatures are determined by the type of the
+     * values. If any value is <tt>null</tt>, the return type of the getter
+     * method is used.
+     * 
+     * @param valueMap The map of keys and values to be set.
+     * @throws PropertyNotFoundException If any of the given properties do not
+     * exist or are read-only.
      */
     public void putAll(Map<String, ?> valueMap) {
         for (String key : valueMap) {
@@ -364,31 +340,26 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * Invokes the setter methods for all the given properties that are
-     * present in the map. The method signatures are determined by the
-     * type of the values. If any value is <tt>null</tt>, the return
-     * type of the getter method is used. There is an option to ignore
-     * (that is, not throw) exceptions during the process, but to
-     * return status if any exceptions were caught and ignored.
-     *
-     * @param valueMap
-     * The map of keys and values to be set.
-     *
-     * @param ignoreErrors
-     * If <code>true</code> then any {@link PropertyNotFoundException}
-     * thrown by the {@link #put put()} method will be caught and ignored.
-     *
-     * @return
-     * <code>true</code> if any exceptions were caught, <code>false</code>
-     * if not.
+     * Invokes the setter methods for all the given properties that are present
+     * in the map. The method signatures are determined by the type of the
+     * values. If any value is <tt>null</tt>, the return type of the getter
+     * method is used. There is an option to ignore (that is, not throw)
+     * exceptions during the process, but to return status if any exceptions
+     * were caught and ignored.
+     * 
+     * @param valueMap The map of keys and values to be set.
+     * @param ignoreErrors If <code>true</code> then any
+     * {@link PropertyNotFoundException} thrown by the {@link #put put()} method
+     * will be caught and ignored.
+     * @return <code>true</code> if any exceptions were caught,
+     * <code>false</code> if not.
      */
     public boolean putAll(Map<String, ?> valueMap, boolean ignoreErrors) {
         boolean anyErrors = false;
         for (String key : valueMap) {
             try {
                 put(key, valueMap.get(key));
-            }
-            catch (PropertyNotFoundException ex) {
+            } catch (PropertyNotFoundException ex) {
                 if (!ignoreErrors)
                     throw ex;
                 anyErrors = true;
@@ -398,8 +369,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * This method is not supported.
+     * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
     public Object remove(String key) {
@@ -407,8 +377,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * This method is not supported.
+     * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
     public synchronized void clear() {
@@ -418,12 +387,9 @@ public class BeanAdapter implements Map<String, Object> {
     /**
      * Verifies the existence of a property. The property must have a getter
      * method; write-only properties are not supported.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * <tt>true</tt> if the property exists; <tt>false</tt>, otherwise.
+     * 
+     * @param key The property name.
+     * @return <tt>true</tt> if the property exists; <tt>false</tt>, otherwise.
      */
     @Override
     public boolean containsKey(String key) {
@@ -445,8 +411,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * This method is not supported.
+     * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
     public boolean isEmpty() {
@@ -454,8 +419,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * This method is not supported.
+     * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
     public int getCount() {
@@ -468,8 +432,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * This method is not supported.
+     * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
     public void setComparator(Comparator<String> comparator) {
@@ -478,12 +441,10 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Tests the read-only state of a property.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * <tt>true</tt> if the property is read-only; <tt>false</tt>, otherwise.
+     * 
+     * @param key The property name.
+     * @return <tt>true</tt> if the property is read-only; <tt>false</tt>,
+     * otherwise.
      */
     public boolean isReadOnly(String key) {
         return isReadOnly(bean.getClass(), key);
@@ -491,12 +452,9 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Returns the type of a property.
-     *
-     * @param key
-     * The property name.
-     *
-     * @see
-     * #getType(Class, String)
+     * 
+     * @param key The property name.
+     * @see #getType(Class, String)
      */
     public Class<?> getType(String key) {
         return getType(bean.getClass(), key);
@@ -504,12 +462,9 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Returns the generic type of a property.
-     *
-     * @param key
-     * The property name.
-     *
-     * @see
-     * #getGenericType(Class, String)
+     * 
+     * @param key The property name.
+     * @see #getGenericType(Class, String)
      */
     public Type getGenericType(String key) {
         return getGenericType(bean.getClass(), key);
@@ -517,9 +472,8 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Returns an iterator over the bean's properties.
-     *
-     * @return
-     * A property iterator for this bean.
+     * 
+     * @return A property iterator for this bean.
      */
     @Override
     public Iterator<String> iterator() {
@@ -533,12 +487,9 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Returns the getter method for a property.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * The getter method, or <tt>null</tt> if the method does not exist.
+     * 
+     * @param key The property name.
+     * @return The getter method, or <tt>null</tt> if the method does not exist.
      */
     private Method getGetterMethod(String key) {
         return getGetterMethod(bean.getClass(), key);
@@ -546,12 +497,9 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Returns the setter method for a property.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * The getter method, or <tt>null</tt> if the method does not exist.
+     * 
+     * @param key The property name.
+     * @return The getter method, or <tt>null</tt> if the method does not exist.
      */
     private Method getSetterMethod(String key, Class<?> valueType) {
         return getSetterMethod(bean.getClass(), key, valueType);
@@ -560,12 +508,9 @@ public class BeanAdapter implements Map<String, Object> {
     /**
      * Returns the public, non-static field for a property. Note that fields
      * will only be consulted for bean properties after bean methods.
-     *
-     * @param fieldName
-     * The property name
-     *
-     * @return
-     * The field, or <tt>null</tt> if the field does not exist, or is
+     * 
+     * @param fieldName The property name
+     * @return The field, or <tt>null</tt> if the field does not exist, or is
      * non-public or static
      */
     private Field getField(String fieldName) {
@@ -580,15 +525,11 @@ public class BeanAdapter implements Map<String, Object> {
      * Tests the read-only state of a property. Note that if no such property
      * exists, this method will return <tt>true</tt> (it will <u>not</u> throw
      * an exception).
-     *
-     * @param beanClass
-     * The bean class.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * <tt>true</tt> if the property is read-only; <tt>false</tt>, otherwise.
+     * 
+     * @param beanClass The bean class.
+     * @param key The property name.
+     * @return <tt>true</tt> if the property is read-only; <tt>false</tt>,
+     * otherwise.
      */
     public static boolean isReadOnly(Class<?> beanClass, String key) {
         if (beanClass == null) {
@@ -621,16 +562,11 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Returns the type of a property.
-     *
-     * @param beanClass
-     * The bean class.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * The type of the property, or <tt>null</tt> if no such bean property
-     * exists.
+     * 
+     * @param beanClass The bean class.
+     * @param key The property name.
+     * @return The type of the property, or <tt>null</tt> if no such bean
+     * property exists.
      */
     public static Class<?> getType(Class<?> beanClass, String key) {
         if (beanClass == null) {
@@ -664,16 +600,11 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Returns the generic type of a property.
-     *
-     * @param beanClass
-     * The bean class.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * The generic type of the property, or <tt>null</tt> if no such
-     * bean property exists. If the type is a generic, an instance of
+     * 
+     * @param beanClass The bean class.
+     * @param key The property name.
+     * @return The generic type of the property, or <tt>null</tt> if no such bean
+     * property exists. If the type is a generic, an instance of
      * {@link java.lang.reflect.ParameterizedType} will be returned. Otherwise,
      * an instance of {@link java.lang.Class} will be returned.
      */
@@ -710,15 +641,10 @@ public class BeanAdapter implements Map<String, Object> {
     /**
      * Returns the public, non-static fields for a property. Note that fields
      * will only be consulted for bean properties after bean methods.
-     *
-     * @param beanClass
-     * The bean class.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * The field, or <tt>null</tt> if the field does not exist, or is
+     * 
+     * @param beanClass The bean class.
+     * @param key The property name.
+     * @return The field, or <tt>null</tt> if the field does not exist, or is
      * non-public or static.
      */
     public static Field getField(Class<?> beanClass, String key) {
@@ -742,8 +668,7 @@ public class BeanAdapter implements Map<String, Object> {
             int modifiers = field.getModifiers();
 
             // Exclude non-public and static fields
-            if ((modifiers & Modifier.PUBLIC) == 0
-                || (modifiers & Modifier.STATIC) > 0) {
+            if ((modifiers & Modifier.PUBLIC) == 0 || (modifiers & Modifier.STATIC) > 0) {
                 field = null;
             }
         } catch (NoSuchFieldException exception) {
@@ -755,15 +680,10 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Returns the getter method for a property.
-     *
-     * @param beanClass
-     * The bean class.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * The getter method, or <tt>null</tt> if the method does not exist.
+     * 
+     * @param beanClass The bean class.
+     * @param key The property name.
+     * @return The getter method, or <tt>null</tt> if the method does not exist.
      */
     public static Method getGetterMethod(final Class<?> beanClass, final String key) {
         if (beanClass == null) {
@@ -801,17 +721,13 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Returns the setter method for a property.
-     *
-     * @param beanClass
-     * The bean class.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * The getter method, or <tt>null</tt> if the method does not exist.
+     * 
+     * @param beanClass The bean class.
+     * @param key The property name.
+     * @return The getter method, or <tt>null</tt> if the method does not exist.
      */
-    public static Method getSetterMethod(final Class<?> beanClass, final String key, final Class<?> valueType) {
+    public static Method getSetterMethod(final Class<?> beanClass, final String key,
+        final Class<?> valueType) {
         if (beanClass == null) {
             throw new IllegalArgumentException("beanClass is null.");
         }
@@ -849,7 +765,7 @@ public class BeanAdapter implements Map<String, Object> {
                 // signature with the corresponding primitive type
                 try {
                     Field primitiveTypeField = valueType.getField("TYPE");
-                    Class<?> primitiveValueType = (Class<?>)primitiveTypeField.get(null);
+                    Class<?> primitiveValueType = (Class<?>) primitiveTypeField.get(null);
 
                     try {
                         setterMethod = beanClass.getMethod(methodName, primitiveValueType);
@@ -859,8 +775,9 @@ public class BeanAdapter implements Map<String, Object> {
                 } catch (NoSuchFieldException exception) {
                     // No-op
                 } catch (IllegalAccessException exception) {
-                    throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
-                            keyUpdated, beanClass.getName()), exception);
+                    throw new RuntimeException(String.format(
+                        ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT, keyUpdated, beanClass.getName()),
+                        exception);
                 }
             }
 
@@ -869,8 +786,7 @@ public class BeanAdapter implements Map<String, Object> {
                 Class<?>[] interfaces = valueType.getInterfaces();
 
                 int i = 0, n = interfaces.length;
-                while (setterMethod == null
-                    && i < n) {
+                while (setterMethod == null && i < n) {
                     Class<?> interfaceType = interfaces[i++];
                     setterMethod = getSetterMethod(beanClass, keyUpdated, interfaceType);
                 }
@@ -882,12 +798,10 @@ public class BeanAdapter implements Map<String, Object> {
 
     /**
      * Coerces a value to a given type.
-     *
+     * 
      * @param value
      * @param type
-     *
-     * @return
-     * The coerced value.
+     * @return The coerced value.
      */
     @SuppressWarnings("unchecked")
     public static <T> T coerce(Object value, Class<? extends T> type) {
@@ -935,73 +849,65 @@ public class BeanAdapter implements Map<String, Object> {
                 // Coerce the value to the requested type
                 if (type == String.class) {
                     coercedValue = value.toString();
-                } else if (type == Boolean.class
-                    || type == Boolean.TYPE) {
+                } else if (type == Boolean.class || type == Boolean.TYPE) {
                     coercedValue = Boolean.parseBoolean(value.toString());
-                } else if (type == Character.class
-                    || type == Character.TYPE) {
+                } else if (type == Character.class || type == Character.TYPE) {
                     coercedValue = value.toString().charAt(0);
-                } else if (type == Byte.class
-                    || type == Byte.TYPE) {
+                } else if (type == Byte.class || type == Byte.TYPE) {
                     if (value instanceof Number) {
-                        coercedValue = ((Number)value).byteValue();
+                        coercedValue = ((Number) value).byteValue();
                     } else {
                         coercedValue = Byte.parseByte(value.toString());
                     }
-                } else if (type == Short.class
-                    || type == Short.TYPE) {
+                } else if (type == Short.class || type == Short.TYPE) {
                     if (value instanceof Number) {
-                        coercedValue = ((Number)value).shortValue();
+                        coercedValue = ((Number) value).shortValue();
                     } else {
                         coercedValue = Short.parseShort(value.toString());
                     }
-                } else if (type == Integer.class
-                    || type == Integer.TYPE) {
+                } else if (type == Integer.class || type == Integer.TYPE) {
                     if (value instanceof Number) {
-                        coercedValue = ((Number)value).intValue();
+                        coercedValue = ((Number) value).intValue();
                     } else {
                         coercedValue = Integer.parseInt(value.toString());
                     }
-                } else if (type == Long.class
-                    || type == Long.TYPE) {
+                } else if (type == Long.class || type == Long.TYPE) {
                     if (value instanceof Number) {
-                        coercedValue = ((Number)value).longValue();
+                        coercedValue = ((Number) value).longValue();
                     } else {
                         coercedValue = Long.parseLong(value.toString());
                     }
-                } else if (type == Float.class
-                    || type == Float.TYPE) {
+                } else if (type == Float.class || type == Float.TYPE) {
                     if (value instanceof Number) {
-                        coercedValue = ((Number)value).floatValue();
+                        coercedValue = ((Number) value).floatValue();
                     } else {
                         coercedValue = Float.parseFloat(value.toString());
                     }
-                } else if (type == Double.class
-                    || type == Double.TYPE) {
+                } else if (type == Double.class || type == Double.TYPE) {
                     if (value instanceof Number) {
-                        coercedValue = ((Number)value).doubleValue();
+                        coercedValue = ((Number) value).doubleValue();
                     } else {
                         coercedValue = Double.parseDouble(value.toString());
                     }
                 } else if (type == BigInteger.class) {
                     if (value instanceof Number) {
-                        coercedValue = new BigInteger(((Number)value).toString());
+                        coercedValue = new BigInteger(((Number) value).toString());
                     } else {
                         coercedValue = new BigInteger(value.toString());
                     }
                 } else if (type == BigDecimal.class) {
                     if (value instanceof Number) {
-                        coercedValue = new BigDecimal(((Number)value).toString());
+                        coercedValue = new BigDecimal(((Number) value).toString());
                     } else {
                         coercedValue = new BigDecimal(value.toString());
                     }
                 } else {
-                    throw new IllegalArgumentException("Unable to coerce " + value.getClass().getName()
-                        + " to " + type + ".");
+                    throw new IllegalArgumentException("Unable to coerce "
+                        + value.getClass().getName() + " to " + type + ".");
                 }
             }
         }
 
-        return (T)coercedValue;
+        return (T) coercedValue;
     }
 }

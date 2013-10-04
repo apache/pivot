@@ -39,11 +39,11 @@ public class TableViewRowComparator implements Comparator<Object> {
 
     /**
      * Compares two rows in a table view. If the column values implement
-     * {@link Comparable}, the {@link Comparable#compareTo(Object)} method will be used
-     * to compare the values. Otherwise, the values will be compared as strings using
-     * {@link Object#toString()}. If either value is <tt>null</tt>, it will be
-     * considered as less than the other value. If both values are <tt>null</tt>, they
-     * will be considered equal.
+     * {@link Comparable}, the {@link Comparable#compareTo(Object)} method will
+     * be used to compare the values. Otherwise, the values will be compared as
+     * strings using {@link Object#toString()}. If either value is
+     * <tt>null</tt>, it will be considered as less than the other value. If
+     * both values are <tt>null</tt>, they will be considered equal.
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -55,14 +55,14 @@ public class TableViewRowComparator implements Comparator<Object> {
         if (sort.getLength() > 0) {
             Dictionary<String, ?> row1;
             if (o1 instanceof Dictionary<?, ?>) {
-                row1 = (Dictionary<String, ?>)o1;
+                row1 = (Dictionary<String, ?>) o1;
             } else {
                 row1 = new BeanAdapter(o1);
             }
 
             Dictionary<String, ?> row2;
             if (o2 instanceof Dictionary<?, ?>) {
-                row2 = (Dictionary<String, ?>)o2;
+                row2 = (Dictionary<String, ?>) o2;
             } else {
                 row2 = new BeanAdapter(o2);
             }
@@ -72,8 +72,7 @@ public class TableViewRowComparator implements Comparator<Object> {
             int n = sort.getLength();
             int i = 0;
 
-            while (i < n
-                && result == 0) {
+            while (i < n && result == 0) {
                 Dictionary.Pair<String, SortDirection> pair = sort.get(i);
 
                 String columnName = pair.key;
@@ -82,8 +81,7 @@ public class TableViewRowComparator implements Comparator<Object> {
                 Object value1 = row1.get(columnName);
                 Object value2 = row2.get(columnName);
 
-                if (value1 == null
-                    && value2 == null) {
+                if (value1 == null && value2 == null) {
                     result = 0;
                 } else if (value1 == null) {
                     result = -1;
@@ -91,7 +89,7 @@ public class TableViewRowComparator implements Comparator<Object> {
                     result = 1;
                 } else {
                     if (value1 instanceof Comparable<?>) {
-                        result = ((Comparable<Object>)value1).compareTo(value2);
+                        result = ((Comparable<Object>) value1).compareTo(value2);
                     } else {
                         String s1 = value1.toString();
                         String s2 = value2.toString();

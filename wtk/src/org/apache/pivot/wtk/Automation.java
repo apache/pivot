@@ -19,8 +19,8 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.collections.HashMap;
 
 /**
- * Supports UI automation by providing a means to obtain a reference to
- * a component via an automation ID.
+ * Supports UI automation by providing a means to obtain a reference to a
+ * component via an automation ID.
  */
 public final class Automation {
     private Automation() {
@@ -40,4 +40,3 @@ public final class Automation {
         components.remove(automationID);
     }
 }
-

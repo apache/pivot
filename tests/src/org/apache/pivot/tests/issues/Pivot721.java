@@ -38,21 +38,26 @@ public class Pivot721 extends Application.Adapter {
         ButtonDataRenderer filledButtonDataRenderer = new ButtonDataRenderer();
         filledButtonDataRenderer.setFillIcon(true);
         PushButton button3 = (PushButton) bxmlSerializer.getNamespace().get("button3");
-        // ((ButtonDataRenderer)button3.getDataRenderer()).setFillIcon(true);  // ok, but note that all buttons share a common renderer instance
-        button3.setDataRenderer(filledButtonDataRenderer);  // set/use the customized renderer instance
+        // ((ButtonDataRenderer)button3.getDataRenderer()).setFillIcon(true); //
+        // ok, but note that all buttons share a common renderer instance
+        button3.setDataRenderer(filledButtonDataRenderer); // set/use the
+                                                           // customized
+                                                           // renderer instance
         PushButton button4 = (PushButton) bxmlSerializer.getNamespace().get("button4");
-        button4.setDataRenderer(filledButtonDataRenderer);  // set/use the customized renderer instance
+        button4.setDataRenderer(filledButtonDataRenderer); // set/use the
+                                                           // customized
+                                                           // renderer instance
 
         window.open(display);
     }
 
     @Override
     public boolean shutdown(boolean optional) {
-       if (window != null) {
-           window.close();
-       }
+        if (window != null) {
+            window.close();
+        }
 
-       return false;
+        return false;
     }
 
     public static void main(String[] args) {

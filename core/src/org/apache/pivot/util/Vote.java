@@ -17,8 +17,8 @@
 package org.apache.pivot.util;
 
 /**
- * Enumeration representing a vote. Votes are often used to determine the
- * result of an event preview.
+ * Enumeration representing a vote. Votes are often used to determine the result
+ * of an event preview.
  */
 public enum Vote {
     /**
@@ -32,7 +32,8 @@ public enum Vote {
     DENY,
 
     /**
-     * Represents a deferred vote, implying that the vote will be approved later.
+     * Represents a deferred vote, implying that the vote will be approved
+     * later.
      */
     DEFER;
 
@@ -43,7 +44,7 @@ public enum Vote {
 
         Vote tally;
 
-        switch(vote) {
+        switch (vote) {
             case APPROVE: {
                 tally = this;
                 break;

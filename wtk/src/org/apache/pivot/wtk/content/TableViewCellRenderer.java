@@ -29,8 +29,7 @@ import org.apache.pivot.wtk.VerticalAlignment;
 /**
  * Default table cell renderer. Renders cell contents as a string.
  */
-public class TableViewCellRenderer extends Label
-    implements TableView.CellRenderer {
+public class TableViewCellRenderer extends Label implements TableView.CellRenderer {
     public TableViewCellRenderer() {
         getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         getStyles().put("padding", new Insets(2));
@@ -46,14 +45,12 @@ public class TableViewCellRenderer extends Label
     }
 
     @Override
-    public void render(Object row, int rowIndex, int columnIndex,
-        TableView tableView, String columnName,
-        boolean selected, boolean highlighted, boolean disabled) {
+    public void render(Object row, int rowIndex, int columnIndex, TableView tableView,
+        String columnName, boolean selected, boolean highlighted, boolean disabled) {
         renderStyles(tableView, selected, disabled);
 
         String text = null;
-        if (row != null
-            && columnName != null) {
+        if (row != null && columnName != null) {
             text = toString(row, columnName);
         }
 
@@ -64,22 +61,22 @@ public class TableViewCellRenderer extends Label
         Component.StyleDictionary tableViewStyles = tableView.getStyles();
         Component.StyleDictionary styles = getStyles();
 
-        Font font = (Font)tableViewStyles.get("font");
+        Font font = (Font) tableViewStyles.get("font");
         styles.put("font", font);
 
         Color color;
         if (tableView.isEnabled() && !rowDisabled) {
             if (rowSelected) {
                 if (tableView.isFocused()) {
-                    color = (Color)tableViewStyles.get("selectionColor");
+                    color = (Color) tableViewStyles.get("selectionColor");
                 } else {
-                    color = (Color)tableViewStyles.get("inactiveSelectionColor");
+                    color = (Color) tableViewStyles.get("inactiveSelectionColor");
                 }
             } else {
-                color = (Color)tableViewStyles.get("color");
+                color = (Color) tableViewStyles.get("color");
             }
         } else {
-            color = (Color)tableViewStyles.get("disabledColor");
+            color = (Color) tableViewStyles.get("disabledColor");
         }
 
         styles.put("color", color);

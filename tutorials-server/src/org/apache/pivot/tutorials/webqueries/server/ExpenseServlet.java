@@ -30,8 +30,8 @@ import org.apache.pivot.serialization.CSVSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.web.Query;
-import org.apache.pivot.web.QueryException;
 import org.apache.pivot.web.Query.Method;
+import org.apache.pivot.web.QueryException;
 import org.apache.pivot.web.server.QueryServlet;
 
 public class ExpenseServlet extends QueryServlet {
@@ -52,7 +52,7 @@ public class ExpenseServlet extends QueryServlet {
         InputStream inputStream = ExpenseServlet.class.getResourceAsStream("expenses.csv");
 
         try {
-            expenses = (List<Expense>)expenseSerializer.readObject(inputStream);
+            expenses = (List<Expense>) expenseSerializer.readObject(inputStream);
         } catch (IOException exception) {
             throw new ServletException(exception);
         } catch (SerializationException exception) {
@@ -96,7 +96,7 @@ public class ExpenseServlet extends QueryServlet {
             throw new QueryException(Query.Status.BAD_REQUEST);
         }
 
-        Expense expense = (Expense)value;
+        Expense expense = (Expense) value;
 
         // Add the expense to the list/map
         int id;
@@ -120,8 +120,7 @@ public class ExpenseServlet extends QueryServlet {
 
     @Override
     protected boolean doPut(Path path, Object value) throws QueryException {
-        if (path.getLength() == 0
-            || value == null) {
+        if (path.getLength() == 0 || value == null) {
             throw new QueryException(Query.Status.BAD_REQUEST);
         }
 
@@ -129,7 +128,7 @@ public class ExpenseServlet extends QueryServlet {
         int id = Integer.parseInt(path.get(0));
 
         // Create the new expense and bind the data to it
-        Expense expense = (Expense)value;
+        Expense expense = (Expense) value;
         expense.setID(id);
 
         // Update the list/map

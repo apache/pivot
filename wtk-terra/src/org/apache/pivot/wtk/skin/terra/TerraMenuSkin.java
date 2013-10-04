@@ -52,7 +52,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     private boolean showKeyboardShortcuts;
 
     public TerraMenuSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         Color backgroundColor = theme.getColor(4);
         backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
             backgroundColor.getBlue(), 228);
@@ -76,7 +76,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     public void install(Component component) {
         super.install(component);
 
-        Menu menu = (Menu)component;
+        Menu menu = (Menu) component;
         menu.getMenuListeners().add(this);
 
         for (Menu.Section section : menu.getSections()) {
@@ -95,7 +95,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        Menu menu = (Menu)getComponent();
+        Menu menu = (Menu) getComponent();
         Menu.SectionSequence sections = menu.getSections();
 
         for (int i = 0, n = sections.getLength(); i < n; i++) {
@@ -103,8 +103,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
 
             for (Menu.Item item : section) {
                 if (item.isVisible()) {
-                    preferredWidth = Math.max(item.getPreferredWidth(-1),
-                        preferredWidth);
+                    preferredWidth = Math.max(item.getPreferredWidth(-1), preferredWidth);
                 }
             }
         }
@@ -116,7 +115,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        Menu menu = (Menu)getComponent();
+        Menu menu = (Menu) getComponent();
         Menu.SectionSequence sections = menu.getSections();
 
         for (int i = 0, n = sections.getLength(); i < n; i++) {
@@ -141,7 +140,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        Menu menu = (Menu)getComponent();
+        Menu menu = (Menu) getComponent();
         Menu.SectionSequence sections = menu.getSections();
 
         for (int i = 0, n = sections.getLength(); i < n; i++) {
@@ -149,8 +148,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
 
             for (Menu.Item item : section) {
                 if (item.isVisible()) {
-                    preferredWidth = Math.max(item.getPreferredWidth(),
-                        preferredWidth);
+                    preferredWidth = Math.max(item.getPreferredWidth(), preferredWidth);
                     preferredHeight += item.getPreferredHeight();
                 }
             }
@@ -165,7 +163,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
 
     @Override
     public void layout() {
-        Menu menu = (Menu)getComponent();
+        Menu menu = (Menu) getComponent();
         Menu.SectionSequence sections = menu.getSections();
 
         int width = getWidth();
@@ -191,7 +189,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
-        Menu menu = (Menu)getComponent();
+        Menu menu = (Menu) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -393,15 +391,14 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
      * {@link KeyCode#DOWN DOWN} Select the next enabled menu item.<br>
      * {@link KeyCode#LEFT LEFT} Close the current sub-menu.<br>
      * {@link KeyCode#RIGHT RIGHT} Open the sub-menu of the current menu
-     * item.<br>
-     * {@link KeyCode#ENTER ENTER} 'presses' the active menu item if it
-     * does not have a sub-menu.
+     * item.<br> {@link KeyCode#ENTER ENTER} 'presses' the active menu item if
+     * it does not have a sub-menu.
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
-        Menu menu = (Menu)component;
+        Menu menu = (Menu) component;
 
         if (keyCode == Keyboard.KeyCode.UP) {
             Menu.SectionSequence sections = menu.getSections();
@@ -500,8 +497,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
             Menu.Item activeItem = menu.getActiveItem();
 
             // Press if the item has a sub-menu
-            if (activeItem != null
-                && activeItem.getMenu() != null) {
+            if (activeItem != null && activeItem.getMenu() != null) {
                 activeItem.press();
                 consumed = true;
             }
@@ -509,8 +505,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
             Menu.Item activeItem = menu.getActiveItem();
 
             // Press if the item does not have a sub-menu
-            if (activeItem != null
-                && activeItem.getMenu() == null) {
+            if (activeItem != null && activeItem.getMenu() == null) {
                 activeItem.press();
                 consumed = true;
             }
@@ -522,21 +517,20 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     /**
-     * {@link KeyCode#SPACE SPACE} 'presses' the active menu item if it does
-     * not have a sub-menu.
+     * {@link KeyCode#SPACE SPACE} 'presses' the active menu item if it does not
+     * have a sub-menu.
      */
     @Override
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
 
-        Menu menu = (Menu)component;
+        Menu menu = (Menu) component;
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
             Menu.Item activeItem = menu.getActiveItem();
 
             // Press if the item does not have a sub-menu
-            if (activeItem != null
-                && activeItem.getMenu() == null) {
+            if (activeItem != null && activeItem.getMenu() == null) {
                 activeItem.press();
                 consumed = true;
             }
@@ -553,7 +547,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     public boolean keyTyped(Component component, char character) {
         boolean consumed = super.keyTyped(component, character);
 
-        Menu menu = (Menu)component;
+        Menu menu = (Menu) component;
         Menu.SectionSequence sections = menu.getSections();
         int sectionCount = sections.getLength();
 
@@ -582,8 +576,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
                     Button.DataRenderer itemDataRenderer = item.getDataRenderer();
                     String string = itemDataRenderer.toString(item.getButtonData());
 
-                    if (string != null
-                        && string.length() > 0) {
+                    if (string != null && string.length() > 0) {
                         char first = Character.toUpperCase(string.charAt(0));
 
                         if (first == characterUpper) {

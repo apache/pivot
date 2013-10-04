@@ -50,9 +50,9 @@ import org.apache.pivot.wtk.Tooltip;
 /**
  * Abstract base class for component skins.
  */
-public abstract class ComponentSkin implements Skin, ComponentListener,
-    ComponentStateListener, ComponentMouseListener, ComponentMouseButtonListener,
-    ComponentMouseWheelListener, ComponentKeyListener, ComponentTooltipListener {
+public abstract class ComponentSkin implements Skin, ComponentListener, ComponentStateListener,
+    ComponentMouseListener, ComponentMouseButtonListener, ComponentMouseWheelListener,
+    ComponentKeyListener, ComponentTooltipListener {
     private Component component = null;
 
     private int width = 0;
@@ -91,7 +91,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     @Override
     public void install(Component componentArgument) {
-        assert(this.component == null) : "Skin is already installed on a component.";
+        assert (this.component == null) : "Skin is already installed on a component.";
 
         componentArgument.getComponentListeners().add(this);
         componentArgument.getComponentStateListeners().add(this);
@@ -137,8 +137,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     @Override
-    public void preferredSizeChanged(Component componentArgument,
-        int previousPreferredWidth, int previousPreferredHeight) {
+    public void preferredSizeChanged(Component componentArgument, int previousPreferredWidth,
+        int previousPreferredHeight) {
         // No-op
     }
 
@@ -238,14 +238,15 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     @Override
-    public boolean mouseClick(Component componentArgument, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(Component componentArgument, Mouse.Button button, int x, int y,
+        int count) {
         return false;
     }
 
     // Component mouse wheel events
     @Override
-    public boolean mouseWheel(Component componentArgument, Mouse.ScrollType scrollType, int scrollAmount,
-        int wheelRotation, int x, int y) {
+    public boolean mouseWheel(Component componentArgument, Mouse.ScrollType scrollType,
+        int scrollAmount, int wheelRotation, int x, int y) {
         return false;
     }
 
@@ -256,25 +257,23 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     /**
-     * {@link KeyCode#TAB TAB} Transfers focus forwards<br>
-     * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Transfers focus
-     * backwards
+     * {@link KeyCode#TAB TAB} Transfers focus forwards<br> {@link KeyCode#TAB
+     * TAB} + {@link Modifier#SHIFT SHIFT} Transfers focus backwards
      */
     @Override
-    public boolean keyPressed(Component componentArgument, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component componentArgument, int keyCode,
+        Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        if (keyCode == Keyboard.KeyCode.TAB
-            && getComponent().isFocused()) {
-            FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
+        if (keyCode == Keyboard.KeyCode.TAB && getComponent().isFocused()) {
+            FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
+                : FocusTraversalDirection.FORWARD;
 
             // Transfer focus to the next component
             Component focusedComponent = component.transferFocus(direction);
 
             // Ensure that the focused component is visible
-            if (component != focusedComponent
-                && focusedComponent != null) {
+            if (component != focusedComponent && focusedComponent != null) {
                 focusedComponent.scrollAreaToVisible(0, 0, focusedComponent.getWidth(),
                     focusedComponent.getHeight());
             }
@@ -286,7 +285,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
     }
 
     @Override
-    public boolean keyReleased(Component componentArgument, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component componentArgument, int keyCode,
+        Keyboard.KeyLocation keyLocation) {
         return false;
     }
 
@@ -373,7 +373,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
         }
     }
 
-    protected void repaintComponent(int x, int y, int widthArgument, int heightArgument, boolean immediate) {
+    protected void repaintComponent(int x, int y, int widthArgument, int heightArgument,
+        boolean immediate) {
         if (component != null) {
             component.repaint(x, y, widthArgument, heightArgument, immediate);
         }
@@ -381,9 +382,10 @@ public abstract class ComponentSkin implements Skin, ComponentListener,
 
     /**
      * Interpret a string as a font specification
-     * @param value Either a JSON dictionary
-     * {@link Theme#deriveFont describing a font relative to the current theme}, or
-     * one of the {@link Font#decode(String) standard Java font specifications}.
+     * 
+     * @param value Either a JSON dictionary {@link Theme#deriveFont describing
+     * a font relative to the current theme}, or one of the
+     * {@link Font#decode(String) standard Java font specifications}.
      */
     public static Font decodeFont(String value) {
         Font font;

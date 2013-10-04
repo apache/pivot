@@ -38,25 +38,22 @@ import org.apache.pivot.wtk.skin.SeparatorSkin;
 import org.apache.pivot.wtk.skin.StackPaneSkin;
 import org.apache.pivot.wtk.skin.TablePaneFillerSkin;
 import org.apache.pivot.wtk.skin.TablePaneSkin;
-import org.apache.pivot.wtk.skin.TextPaneSkin;
 import org.apache.pivot.wtk.skin.TextAreaSkin;
+import org.apache.pivot.wtk.skin.TextPaneSkin;
 import org.apache.pivot.wtk.skin.WindowSkin;
 
 /**
- * Base class for Pivot themes. A theme defines a complete "look and feel"
- * for a Pivot application.
- * <p>
- * Note that concrete Theme implementations should be declared as final. If
- * multiple third-party libraries attempted to extend a theme, it would cause a
- * conflict, as only one could be used in any given application.
- * <p>
- * IMPORTANT All skin mappings must be added to the map, even non-static inner
- * classes. Otherwise, the component's base class will attempt to install its
- * own skin, which will result in the addition of duplicate listeners.
+ * Base class for Pivot themes. A theme defines a complete "look and feel" for a
+ * Pivot application. <p> Note that concrete Theme implementations should be
+ * declared as final. If multiple third-party libraries attempted to extend a
+ * theme, it would cause a conflict, as only one could be used in any given
+ * application. <p> IMPORTANT All skin mappings must be added to the map, even
+ * non-static inner classes. Otherwise, the component's base class will attempt
+ * to install its own skin, which will result in the addition of duplicate
+ * listeners.
  */
 public abstract class Theme {
-    protected HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap =
-        new HashMap<>();
+    protected HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap = new HashMap<>();
 
     private static Theme theme = null;
 
@@ -71,7 +68,7 @@ public abstract class Theme {
     public static final String PROVIDER_NAME = "org.apache.pivot.wtk.Theme";
 
     static {
-        theme = (Theme)Service.getProvider(PROVIDER_NAME);
+        theme = (Theme) Service.getProvider(PROVIDER_NAME);
 
         if (theme == null) {
             throw new ThemeNotFoundException();
@@ -107,17 +104,15 @@ public abstract class Theme {
     }
 
     public abstract Font getFont();
+
     public abstract void setFont(Font font);
 
     /**
      * Returns the skin class responsible for skinning the specified component
      * class.
-     *
-     * @param componentClass
-     * The component class.
-     *
-     * @return
-     * The skin class, or <tt>null</tt> if no skin mapping exists for the
+     * 
+     * @param componentClass The component class.
+     * @return The skin class, or <tt>null</tt> if no skin mapping exists for the
      * component class.
      */
     public Class<? extends Skin> get(Class<? extends Component> componentClass) {
@@ -131,12 +126,9 @@ public abstract class Theme {
     /**
      * Sets the skin class responsible for skinning the specified component
      * class.
-     *
-     * @param componentClass
-     * The component class.
-     *
-     * @param skinClass
-     * The skin class.
+     * 
+     * @param componentClass The component class.
+     * @param skinClass The skin class.
      */
     public void set(Class<? extends Component> componentClass, Class<? extends Skin> skinClass) {
         if (componentClass == null) {
@@ -153,9 +145,8 @@ public abstract class Theme {
     /**
      * Gets the current theme, as determined by the {@linkplain #PROVIDER_NAME
      * theme provider}.
-     *
-     * @throws IllegalStateException
-     * If a theme has not been installed.
+     * 
+     * @throws IllegalStateException If a theme has not been installed.
      */
     public static Theme getTheme() {
         if (theme == null) {
@@ -167,21 +158,20 @@ public abstract class Theme {
 
     /**
      * Produce a font by describing it relative to the current theme's font
-     * @param dictionary A dictionary with any of the following keys:
-     * <ul>
-     * <li>{@value #NAME_KEY} - the family name of the font</li>
-     * <li>{@value #SIZE_KEY} - the font size as an integer, or a string "x%" for a relative size</li>
-     * <li>{@value #BOLD_KEY} - true/false</li>
-     * <li>{@value #ITALIC_KEY} - true/false</li>
-     * </ul>
-     * Omitted values are taken from the theme's font.
+     * 
+     * @param dictionary A dictionary with any of the following keys: <ul> <li>
+     * {@value #NAME_KEY} - the family name of the font</li> <li>
+     * {@value #SIZE_KEY} - the font size as an integer, or a string "x%" for a
+     * relative size</li> <li>{@value #BOLD_KEY} - true/false</li> <li>
+     * {@value #ITALIC_KEY} - true/false</li> </ul> Omitted values are taken
+     * from the theme's font.
      */
     public static Font deriveFont(Dictionary<String, ?> dictionary) {
         Font font = theme.getFont();
 
         String name = font.getName();
         if (dictionary.containsKey(NAME_KEY)) {
-            name = (String)dictionary.get(NAME_KEY);
+            name = (String) dictionary.get(NAME_KEY);
         }
 
         int size = font.getSize();
@@ -189,7 +179,7 @@ public abstract class Theme {
             Object value = dictionary.get(SIZE_KEY);
 
             if (value instanceof String) {
-                String string = (String)value;
+                String string = (String) value;
 
                 if (string.endsWith("%")) {
                     float percentage = Float.parseFloat(string.substring(0, string.length() - 1)) / 100f;
@@ -198,13 +188,13 @@ public abstract class Theme {
                     throw new IllegalArgumentException(value + " is not a valid font size.");
                 }
             } else {
-                size = (Integer)value;
+                size = (Integer) value;
             }
         }
 
         int style = font.getStyle();
         if (dictionary.containsKey(BOLD_KEY)) {
-            boolean bold = (Boolean)dictionary.get(BOLD_KEY);
+            boolean bold = (Boolean) dictionary.get(BOLD_KEY);
 
             if (bold) {
                 style |= Font.BOLD;
@@ -214,7 +204,7 @@ public abstract class Theme {
         }
 
         if (dictionary.containsKey(ITALIC_KEY)) {
-            boolean italic = (Boolean)dictionary.get(ITALIC_KEY);
+            boolean italic = (Boolean) dictionary.get(ITALIC_KEY);
 
             if (italic) {
                 style |= Font.ITALIC;

@@ -58,13 +58,13 @@ public final class Limits implements Serializable {
         }
 
         if (limits.containsKey(MINIMUM_KEY)) {
-            minimum = (Integer)limits.get(MINIMUM_KEY);
+            minimum = (Integer) limits.get(MINIMUM_KEY);
         } else {
             minimum = Integer.MIN_VALUE;
         }
 
         if (limits.containsKey(MAXIMUM_KEY)) {
-            maximum = (Integer)limits.get(MAXIMUM_KEY);
+            maximum = (Integer) limits.get(MAXIMUM_KEY);
         } else {
             maximum = Integer.MAX_VALUE;
         }
@@ -75,14 +75,11 @@ public final class Limits implements Serializable {
     }
 
     /**
-     * Limits the specified value to the minimum and maximum values of
-     * this object.
-     *
-     * @param value
-     * The value to limit.
-     *
-     * @return
-     * The bounded value.
+     * Limits the specified value to the minimum and maximum values of this
+     * object.
+     * 
+     * @param value The value to limit.
+     * @return The bounded value.
      */
     public int constrain(int value) {
         if (value < minimum) {
@@ -99,9 +96,8 @@ public final class Limits implements Serializable {
         boolean equals = false;
 
         if (object instanceof Limits) {
-            Limits limits = (Limits)object;
-            equals = (minimum == limits.minimum
-                && maximum == limits.maximum);
+            Limits limits = (Limits) object;
+            equals = (minimum == limits.minimum && maximum == limits.maximum);
         }
 
         return equals;

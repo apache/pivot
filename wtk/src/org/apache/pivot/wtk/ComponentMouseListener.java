@@ -17,8 +17,8 @@
 package org.apache.pivot.wtk;
 
 /**
- * Component mouse listener interface. Component mouse events are "bubbling"
- * and are fired as the event propagates up the component hierarchy.
+ * Component mouse listener interface. Component mouse events are "bubbling" and
+ * are fired as the event propagates up the component hierarchy.
  */
 public interface ComponentMouseListener {
     /**
@@ -43,29 +43,26 @@ public interface ComponentMouseListener {
 
     /**
      * Called when the mouse is moved over a component.
-     *
+     * 
      * @param component
      * @param x
      * @param y
-     *
-     * @return
-     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
     public boolean mouseMove(Component component, int x, int y);
 
     /**
      * Called when the mouse enters a component.
-     *
+     * 
      * @param component
      */
     public void mouseOver(Component component);
 
     /**
      * Called when the mouse exits a component.
-     *
+     * 
      * @param component
      */
     public void mouseOut(Component component);
 }
-

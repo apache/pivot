@@ -19,8 +19,8 @@ package org.apache.pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Font;
 
-import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
-
 
 /**
  * Default menu bar item data renderer.
@@ -63,16 +62,16 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         String text = null;
 
         if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData)data;
+            ButtonData buttonData = (ButtonData) data;
             icon = buttonData.getIcon();
         } else if (data instanceof Image) {
-            icon = (Image)data;
+            icon = (Image) data;
         }
         text = toString(data);
 
         // Update the image view
-        MenuBar.Item menuBarItem = (MenuBar.Item)button;
-        MenuBar menuBar = (MenuBar)menuBarItem.getParent();
+        MenuBar.Item menuBarItem = (MenuBar.Item) button;
+        MenuBar menuBar = (MenuBar) menuBarItem.getParent();
 
         if (icon == null) {
             imageView.setVisible(false);
@@ -90,18 +89,18 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         } else {
             label.setVisible(true);
 
-            Font font = (Font)menuBar.getStyles().get("font");
+            Font font = (Font) menuBar.getStyles().get("font");
             label.getStyles().put("font", font);
 
             Color color;
             if (button.isEnabled()) {
                 if (highlighted) {
-                    color = (Color)menuBar.getStyles().get("activeColor");
+                    color = (Color) menuBar.getStyles().get("activeColor");
                 } else {
-                    color = (Color)menuBar.getStyles().get("color");
+                    color = (Color) menuBar.getStyles().get("color");
                 }
             } else {
-                color = (Color)menuBar.getStyles().get("disabledColor");
+                color = (Color) menuBar.getStyles().get("disabledColor");
             }
 
             label.getStyles().put("color", color);
@@ -113,7 +112,7 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         String string = null;
 
         if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData)data;
+            ButtonData buttonData = (ButtonData) data;
             string = buttonData.getText();
         } else if (!(data instanceof Image)) {
             if (data != null) {

@@ -125,7 +125,8 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
             }
 
             @Override
-            public void selectedPathsChanged(TreeView treeViewArgument, Sequence<Path> previousSelectedPaths) {
+            public void selectedPathsChanged(TreeView treeViewArgument,
+                Sequence<Path> previousSelectedPaths) {
                 // if the selection becomes empty, remove the decorator
                 if (treeViewArgument.getSelectedNode() == null && previousSelectedComponent != null
                     && previousSelectedComponent.getDecorators().indexOf(focusDecorator) > -1) {
@@ -166,19 +167,24 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
                     load(file);
                 } catch (RuntimeException exception) {
                     exception.printStackTrace();
-                    BXMLExplorer.displayLoadException(exception, BXMLExplorerDocument.this.getWindow());
+                    BXMLExplorer.displayLoadException(exception,
+                        BXMLExplorerDocument.this.getWindow());
                 } catch (IOException exception) {
                     exception.printStackTrace();
-                    BXMLExplorer.displayLoadException(exception, BXMLExplorerDocument.this.getWindow());
+                    BXMLExplorer.displayLoadException(exception,
+                        BXMLExplorerDocument.this.getWindow());
                 } catch (SerializationException exception) {
                     exception.printStackTrace();
-                    BXMLExplorer.displayLoadException(exception, BXMLExplorerDocument.this.getWindow());
+                    BXMLExplorer.displayLoadException(exception,
+                        BXMLExplorerDocument.this.getWindow());
                 } catch (ParserConfigurationException exception) {
                     exception.printStackTrace();
-                    BXMLExplorer.displayLoadException(exception, BXMLExplorerDocument.this.getWindow());
+                    BXMLExplorer.displayLoadException(exception,
+                        BXMLExplorerDocument.this.getWindow());
                 } catch (SAXException exception) {
                     exception.printStackTrace();
-                    BXMLExplorer.displayLoadException(exception, BXMLExplorerDocument.this.getWindow());
+                    BXMLExplorer.displayLoadException(exception,
+                        BXMLExplorerDocument.this.getWindow());
                 }
             }
         });
@@ -201,7 +207,8 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
         return file;
     }
 
-    public void load(File f) throws IOException, SerializationException, ParserConfigurationException, SAXException {
+    public void load(File f) throws IOException, SerializationException,
+        ParserConfigurationException, SAXException {
         BXMLSerializer serializer = new BXMLSerializer();
         serializer.setLocation(f.toURI().toURL());
         final FileInputStream in = new FileInputStream(f);
@@ -245,7 +252,8 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
 
     @SuppressWarnings("unchecked")
     private TreeNode analyseObjectTree(Object container) {
-        // We don't want the RowSequence object to show up in the tree, it doesn't look neat
+        // We don't want the RowSequence object to show up in the tree, it
+        // doesn't look neat
         if (container instanceof TablePane) {
             TreeBranch branch = new TreeBranch(nameForObject(container));
             TablePane table = (TablePane) container;

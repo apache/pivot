@@ -39,10 +39,8 @@ public class HelloJava implements Application {
         label.setText("Hello World!");
         label.getStyles().put("font", new Font("Arial", Font.BOLD, 24));
         label.getStyles().put("color", Color.RED);
-        label.getStyles().put("horizontalAlignment",
-            HorizontalAlignment.CENTER);
-        label.getStyles().put("verticalAlignment",
-            VerticalAlignment.CENTER);
+        label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
+        label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
         this.window.setContent(label);
         this.window.setTitle("Hello World!");

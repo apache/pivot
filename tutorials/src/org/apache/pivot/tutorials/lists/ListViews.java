@@ -35,8 +35,8 @@ public class ListViews extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        selectionLabel = (Label)namespace.get("selectionLabel");
-        listView = (ListView)namespace.get("listView");
+        selectionLabel = (Label) namespace.get("selectionLabel");
+        listView = (ListView) namespace.get("listView");
 
         listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
             @Override
@@ -50,7 +50,8 @@ public class ListViews extends Window implements Bindable {
             }
 
             @Override
-            public void selectedRangesChanged(ListView listViewArgument, Sequence<Span> previousSelectedRanges) {
+            public void selectedRangesChanged(ListView listViewArgument,
+                Sequence<Span> previousSelectedRanges) {
                 if (previousSelectedRanges != null
                     && previousSelectedRanges != listViewArgument.getSelectedRanges()) {
                     updateSelection(listViewArgument);
@@ -70,18 +71,18 @@ public class ListViews extends Window implements Bindable {
                 for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
                     Span selectedRange = selectedRanges.get(i);
 
-                    for (int j = selectedRange.start;
-                        j <= selectedRange.end;
-                        j++) {
+                    for (int j = selectedRange.start; j <= selectedRange.end; j++) {
                         if (selectionText.length() > 0) {
                             selectionText += ", ";
                         }
 
                         Object item = listViewArgument.getListData().get(j);
                         String text;
-                        if (item instanceof ListItem) {  // item is a listItem (for example because it has an image)
+                        if (item instanceof ListItem) { // item is a listItem
+                                                        // (for example because
+                                                        // it has an image)
                             text = ((ListItem) item).getText();
-                        } else {  // item is a standard item for listData
+                        } else { // item is a standard item for listData
                             text = item.toString();
                         }
                         selectionText += text;

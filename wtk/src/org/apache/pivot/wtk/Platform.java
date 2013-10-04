@@ -78,8 +78,7 @@ public class Platform {
         Object fmHint = null;
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        java.util.Map<?, ?> fontDesktopHints =
-            (java.util.Map<?, ?>)toolkit.getDesktopProperty("awt.font.desktophints");
+        java.util.Map<?, ?> fontDesktopHints = (java.util.Map<?, ?>) toolkit.getDesktopProperty("awt.font.desktophints");
         if (fontDesktopHints != null) {
             aaHint = fontDesktopHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
             fmHint = fontDesktopHints.get(RenderingHints.KEY_FRACTIONALMETRICS);
@@ -101,7 +100,7 @@ public class Platform {
      */
     public static int getMultiClickInterval() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Integer multiClickInterval = (Integer)toolkit.getDesktopProperty("awt.multiClickInterval");
+        Integer multiClickInterval = (Integer) toolkit.getDesktopProperty("awt.multiClickInterval");
 
         if (multiClickInterval == null) {
             multiClickInterval = DEFAULT_MULTI_CLICK_INTERVAL;
@@ -115,7 +114,7 @@ public class Platform {
      */
     public static int getCursorBlinkRate() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Integer cursorBlinkRate = (Integer)toolkit.getDesktopProperty("awt.cursorBlinkRate");
+        Integer cursorBlinkRate = (Integer) toolkit.getDesktopProperty("awt.cursorBlinkRate");
 
         if (cursorBlinkRate == null) {
             cursorBlinkRate = DEFAULT_CURSOR_BLINK_RATE;

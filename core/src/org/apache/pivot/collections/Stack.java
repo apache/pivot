@@ -21,15 +21,15 @@ import java.util.Comparator;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Interface representing a last-in, first-out (LIFO) stack when unsorted, and
- * a priority stack when sorted.
+ * Interface representing a last-in, first-out (LIFO) stack when unsorted, and a
+ * priority stack when sorted.
  */
 public interface Stack<T> extends Collection<T> {
     /**
      * Stack listener list.
      */
-    public static class StackListenerList<T> extends ListenerList<StackListener<T>>
-        implements StackListener<T> {
+    public static class StackListenerList<T> extends ListenerList<StackListener<T>> implements
+        StackListener<T> {
         @Override
         public void itemPushed(Stack<T> stack, T item) {
             for (StackListener<T> listener : this) {
@@ -63,17 +63,15 @@ public interface Stack<T> extends Collection<T> {
      * "Pushes" an item onto the stack. If the stack is unsorted, the item is
      * added at the top of the stack (<tt>getLength()</tt>). Otherwise, it is
      * inserted at the appropriate index.
-     *
-     * @param item
-     * The item to push onto the stack.
+     * 
+     * @param item The item to push onto the stack.
      */
     public void push(T item);
 
     /**
      * Removes the top item from the stack and returns it.
-     *
-     * @throws IllegalStateException
-     * If the stack contains no items.
+     * 
+     * @throws IllegalStateException If the stack contains no items.
      */
     public T pop();
 
@@ -87,9 +85,8 @@ public interface Stack<T> extends Collection<T> {
 
     /**
      * Tests the emptiness of the stack.
-     *
-     * @return
-     * <tt>true</tt> if the stack contains no items; <tt>false</tt>,
+     * 
+     * @return <tt>true</tt> if the stack contains no items; <tt>false</tt>,
      * otherwise.
      */
     @Override

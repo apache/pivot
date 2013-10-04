@@ -28,7 +28,6 @@ import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.LinkButtonSkin;
 
-
 /**
  * Terra link button skin.
  */
@@ -38,7 +37,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     private Color disabledColor;
 
     public TerraLinkButtonSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         font = theme.getFont();
         color = theme.getColor(12);
         disabledColor = theme.getColor(7);
@@ -46,7 +45,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        LinkButton linkButton = (LinkButton)getComponent();
+        LinkButton linkButton = (LinkButton) getComponent();
 
         Button.DataRenderer dataRenderer = linkButton.getDataRenderer();
         dataRenderer.render(linkButton.getButtonData(), linkButton, false);
@@ -56,7 +55,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        LinkButton linkButton = (LinkButton)getComponent();
+        LinkButton linkButton = (LinkButton) getComponent();
 
         Button.DataRenderer dataRenderer = linkButton.getDataRenderer();
         dataRenderer.render(linkButton.getButtonData(), linkButton, false);
@@ -66,7 +65,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        LinkButton linkButton = (LinkButton)getComponent();
+        LinkButton linkButton = (LinkButton) getComponent();
 
         Button.DataRenderer dataRenderer = linkButton.getDataRenderer();
         dataRenderer.render(linkButton.getButtonData(), linkButton, false);
@@ -76,7 +75,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
 
     @Override
     public int getBaseline(int width, int height) {
-        LinkButton linkButton = (LinkButton)getComponent();
+        LinkButton linkButton = (LinkButton) getComponent();
 
         Button.DataRenderer dataRenderer = linkButton.getDataRenderer();
         dataRenderer.render(linkButton.getButtonData(), linkButton, false);
@@ -86,7 +85,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
 
     @Override
     public void paint(Graphics2D graphics) {
-        LinkButton linkButton = (LinkButton)getComponent();
+        LinkButton linkButton = (LinkButton) getComponent();
         int width = getWidth();
         int height = getHeight();
 
@@ -148,7 +147,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -174,7 +173,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 }

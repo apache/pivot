@@ -53,11 +53,9 @@ public class PutQuery extends Query<Boolean> {
     }
 
     /**
-     * Sets the value that will be PUT to the server when the query is
-     * executed.
-     *
-     * @param value
-     * The value to PUT to the server.
+     * Sets the value that will be PUT to the server when the query is executed.
+     * 
+     * @param value The value to PUT to the server.
      */
     public void setValue(Object value) {
         this.value = value;
@@ -65,10 +63,9 @@ public class PutQuery extends Query<Boolean> {
 
     /**
      * Synchronously executes the PUT operation.
-     *
-     * @return
-     * <tt>true</tt> if the operation resulted in the creation of a server
-     * resource; <tt>false</tt>, otherwise.
+     * 
+     * @return <tt>true</tt> if the operation resulted in the creation of a
+     * server resource; <tt>false</tt>, otherwise.
      */
     @Override
     public Boolean execute() throws QueryException {

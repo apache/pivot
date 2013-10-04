@@ -52,53 +52,41 @@ public interface TableViewRowListener {
 
     /**
      * Called when a row has been inserted into the table view.
-     *
-     * @param tableView
-     * The source of the event.
-     *
-     * @param index
-     * The index of the row that was inserted.
+     * 
+     * @param tableView The source of the event.
+     * @param index The index of the row that was inserted.
      */
     public void rowInserted(TableView tableView, int index);
 
     /**
      * Called when rows have been removed from the table view.
-     *
-     * @param tableView
-     * The source of the event.
-     *
-     * @param index
-     * The first index affected by the event.
-     *
-     * @param count
-     * The number of rows that were removed, or <tt>-1</tt> if all rows
-     * were removed.
+     * 
+     * @param tableView The source of the event.
+     * @param index The first index affected by the event.
+     * @param count The number of rows that were removed, or <tt>-1</tt> if all
+     * rows were removed.
      */
     public void rowsRemoved(TableView tableView, int index, int count);
 
     /**
      * Called when an row in the table view has been updated.
-     *
-     * @param tableView
-     * The source of the event.
-     *
-     * @param index
-     * The first index affected by the event.
+     * 
+     * @param tableView The source of the event.
+     * @param index The first index affected by the event.
      */
     public void rowUpdated(TableView tableView, int index);
 
     /**
      * Called when the rows in a table view have been cleared.
-     *
+     * 
      * @param tableView
      */
     public void rowsCleared(TableView tableView);
 
     /**
      * Called when the rows in a table have been sorted.
-     *
-     * @param tableView
-     * The source of the event.
+     * 
+     * @param tableView The source of the event.
      */
     public void rowsSorted(TableView tableView);
 }

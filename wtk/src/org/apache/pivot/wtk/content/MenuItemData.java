@@ -34,9 +34,8 @@ public class MenuItemData extends ButtonData {
 
     /**
      * Constructor.
-     *
-     * @param icon
-     * The icon to display in the menu item.
+     * 
+     * @param icon The icon to display in the menu item.
      */
     public MenuItemData(Image icon) {
         this(icon, null, null);
@@ -44,9 +43,8 @@ public class MenuItemData extends ButtonData {
 
     /**
      * Constructor.
-     *
-     * @param text
-     * The text to display in the menu item.
+     * 
+     * @param text The text to display in the menu item.
      */
     public MenuItemData(String text) {
         this(null, text, null);
@@ -54,12 +52,9 @@ public class MenuItemData extends ButtonData {
 
     /**
      * Constructor.
-     *
-     * @param icon
-     * The icon to display in the menu item.
-     *
-     * @param text
-     * The text to display in the menu item.
+     * 
+     * @param icon The icon to display in the menu item.
+     * @param text The text to display in the menu item.
      */
     public MenuItemData(Image icon, String text) {
         this(icon, text, null);
@@ -67,15 +62,11 @@ public class MenuItemData extends ButtonData {
 
     /**
      * Constructor.
-     *
-     * @param icon
-     * The icon to display in the menu item.
-     *
-     * @param text
-     * The text to display in the menu item.
-     *
-     * @param keyboardShortcut
-     * The keyboard shortcut associated with this menu item.
+     * 
+     * @param icon The icon to display in the menu item.
+     * @param text The text to display in the menu item.
+     * @param keyboardShortcut The keyboard shortcut associated with this menu
+     * item.
      */
     public MenuItemData(Image icon, String text, Keyboard.KeyStroke keyboardShortcut) {
         super(icon, text);

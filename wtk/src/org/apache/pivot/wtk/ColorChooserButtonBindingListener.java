@@ -45,7 +45,7 @@ public interface ColorChooserButtonBindingListener {
 
     /**
      * Called when a color chooser button's selected color key has changed.
-     *
+     * 
      * @param colorChooserButton
      * @param previousSelectedColorKey
      */
@@ -55,7 +55,7 @@ public interface ColorChooserButtonBindingListener {
     /**
      * Called when a color chooser button's selected color bind type has
      * changed.
-     *
+     * 
      * @param colorChooserButton
      * @param previousSelectedColorBindType
      */
@@ -65,7 +65,7 @@ public interface ColorChooserButtonBindingListener {
     /**
      * Called when a color chooser button's selected color bind mapping has
      * changed.
-     *
+     * 
      * @param colorChooserButton
      * @param previousSelectedColorBindMapping
      */

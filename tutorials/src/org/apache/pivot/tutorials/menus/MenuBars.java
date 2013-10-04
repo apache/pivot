@@ -34,12 +34,14 @@ import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputSelectionListener;
 import org.apache.pivot.wtk.TextInputContentListener;
+import org.apache.pivot.wtk.TextInputSelectionListener;
 
 public class MenuBars extends Frame implements Bindable {
-    @BXML private FileBrowserSheet fileBrowserSheet;
-    @BXML private TabPane tabPane = null;
+    @BXML
+    private FileBrowserSheet fileBrowserSheet;
+    @BXML
+    private TabPane tabPane = null;
 
     private MenuHandler menuHandler = new MenuHandler.Adapter() {
         TextInputContentListener textInputTextListener = new TextInputContentListener.Adapter() {
@@ -60,7 +62,7 @@ public class MenuBars extends Frame implements Bindable {
         @Override
         public void configureMenuBar(Component component, MenuBar menuBar) {
             if (component instanceof TextInput) {
-                TextInput textInput = (TextInput)component;
+                TextInput textInput = (TextInput) component;
 
                 updateActionState(textInput);
                 Action.getNamedActions().get("paste").setEnabled(true);
@@ -77,7 +79,7 @@ public class MenuBars extends Frame implements Bindable {
         @Override
         public void cleanupMenuBar(Component component, MenuBar menuBar) {
             if (component instanceof TextInput) {
-                TextInput textInput = (TextInput)component;
+                TextInput textInput = (TextInput) component;
                 textInput.getTextInputContentListeners().remove(textInputTextListener);
                 textInput.getTextInputSelectionListeners().remove(textInputSelectionListener);
             }
@@ -98,7 +100,8 @@ public class MenuBars extends Frame implements Bindable {
 
                 Component tab;
                 try {
-                    tab = new Border((Component)bxmlSerializer.readObject(MenuBars.class, "document.bxml"));
+                    tab = new Border((Component) bxmlSerializer.readObject(MenuBars.class,
+                        "document.bxml"));
                 } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 } catch (SerializationException exception) {
@@ -121,7 +124,7 @@ public class MenuBars extends Frame implements Bindable {
         Action.getNamedActions().put("cut", new Action(false) {
             @Override
             public void perform(Component source) {
-                TextInput textInput = (TextInput)MenuBars.this.getFocusDescendant();
+                TextInput textInput = (TextInput) MenuBars.this.getFocusDescendant();
                 textInput.cut();
             }
         });
@@ -129,7 +132,7 @@ public class MenuBars extends Frame implements Bindable {
         Action.getNamedActions().put("copy", new Action(false) {
             @Override
             public void perform(Component source) {
-                TextInput textInput = (TextInput)MenuBars.this.getFocusDescendant();
+                TextInput textInput = (TextInput) MenuBars.this.getFocusDescendant();
                 textInput.copy();
             }
         });
@@ -137,7 +140,7 @@ public class MenuBars extends Frame implements Bindable {
         Action.getNamedActions().put("paste", new Action(false) {
             @Override
             public void perform(Component source) {
-                TextInput textInput = (TextInput)MenuBars.this.getFocusDescendant();
+                TextInput textInput = (TextInput) MenuBars.this.getFocusDescendant();
                 textInput.paste();
             }
         });

@@ -27,8 +27,8 @@ import org.apache.pivot.wtk.content.CalendarDateSpinnerData;
 public class DateBindMapping implements Spinner.ItemBindMapping {
     @Override
     public int indexOf(List<?> spinnerData, Object value) {
-        CalendarDateSpinnerData calendarDateSpinnerData = (CalendarDateSpinnerData)spinnerData;
-        return calendarDateSpinnerData.indexOf(CalendarDate.decode((String)value));
+        CalendarDateSpinnerData calendarDateSpinnerData = (CalendarDateSpinnerData) spinnerData;
+        return calendarDateSpinnerData.indexOf(CalendarDate.decode((String) value));
     }
 
     @Override

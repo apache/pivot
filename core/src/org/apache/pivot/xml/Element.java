@@ -57,10 +57,9 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns the element to which this attribute belongs.
-         *
-         * @return
-         * This attribute's element, or <tt>null</tt> if the attribute does not
-         * belong to an element.
+         * 
+         * @return This attribute's element, or <tt>null</tt> if the attribute
+         * does not belong to an element.
          */
         public Element getElement() {
             return element;
@@ -68,10 +67,9 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns the attribute's namespace prefix.
-         *
-         * @return
-         * The attribute's namespace prefix, or <tt>null</tt> if the attribute belongs to the
-         * default namespace.
+         * 
+         * @return The attribute's namespace prefix, or <tt>null</tt> if the
+         * attribute belongs to the default namespace.
          */
         public String getNamespacePrefix() {
             return namespacePrefix;
@@ -107,7 +105,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Sets the attribute's value.
-         *
+         * 
          * @param value
          */
         public void setValue(String value) {
@@ -132,15 +130,14 @@ public class Element extends Node implements List<Node> {
             if (this == o) {
                 equals = true;
             } else if (o instanceof Attribute) {
-                Attribute attribute = (Attribute)o;
+                Attribute attribute = (Attribute) o;
                 if (namespacePrefix == null) {
                     equals = (attribute.namespacePrefix == null);
                 } else {
                     equals = (namespacePrefix.equals(attribute.namespacePrefix));
                 }
 
-                equals &= (localName.equals(attribute.localName)
-                    && value.equals(attribute.value));
+                equals &= (localName.equals(attribute.localName) && value.equals(attribute.value));
             }
 
             return equals;
@@ -179,7 +176,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Adds an attribute to the sequence.
-         *
+         * 
          * @param attribute
          */
         @Override
@@ -192,7 +189,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Inserts an attribute into the sequence at a specific location.
-         *
+         * 
          * @param attribute
          * @param index
          */
@@ -208,7 +205,8 @@ public class Element extends Node implements List<Node> {
 
             String attributeName = attribute.getName();
             if (attributeMap.containsKey(attributeName)) {
-                throw new IllegalArgumentException("Attribute \"" + attributeName + "\" already exists.");
+                throw new IllegalArgumentException("Attribute \"" + attributeName
+                    + "\" already exists.");
             }
 
             attributes.insert(attribute, index);
@@ -219,9 +217,8 @@ public class Element extends Node implements List<Node> {
         }
 
         /**
-         * @throws UnsupportedOperationException
-         * This method is not supported. Use {@link Attribute#setValue(String)}
-         * instead.
+         * @throws UnsupportedOperationException This method is not supported.
+         * Use {@link Attribute#setValue(String)} instead.
          */
         @Override
         public Attribute update(int index, Attribute item) {
@@ -230,7 +227,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Removes an attribute from the sequence.
-         *
+         * 
          * @param attribute
          */
         @Override
@@ -245,7 +242,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Removes a range of attributes from the sequence.
-         *
+         * 
          * @param index
          * @param count
          */
@@ -253,7 +250,7 @@ public class Element extends Node implements List<Node> {
         public Sequence<Attribute> remove(int index, int count) {
             Sequence<Attribute> removed = attributes.remove(index, count);
             if (count > 0) {
-                for (int i = 0, n = removed.getLength(); i < n; i++ ) {
+                for (int i = 0, n = removed.getLength(); i < n; i++) {
                     Attribute attribute = removed.get(i);
                     String attributeName = attribute.getName();
                     attributeMap.remove(attributeName);
@@ -268,7 +265,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns the attribute at a given index.
-         *
+         * 
          * @param index
          */
         @Override
@@ -278,11 +275,9 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Determines the index of an attribute.
-         *
+         * 
          * @param attribute
-         *
-         * @return
-         * The index of the attribute, if found; otherwise, <tt>-1</tt>.
+         * @return The index of the attribute, if found; otherwise, <tt>-1</tt>.
          */
         @Override
         public int indexOf(Attribute attribute) {
@@ -315,12 +310,10 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns the URI of a namespace declared by this element.
-         *
-         * @param prefix
-         * The namespace prefix.
-         *
-         * @return
-         * The declared namespace, or <tt>null</tt> if no such namespace exists.
+         * 
+         * @param prefix The namespace prefix.
+         * @return The declared namespace, or <tt>null</tt> if no such namespace
+         * exists.
          */
         @Override
         public String get(String prefix) {
@@ -329,15 +322,10 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Sets the URI of a namespace declared by this element.
-         *
-         * @param prefix
-         * The namespace prefix.
-         *
-         * @param uri
-         * The namespace URI.
-         *
-         * @return
-         * The URI previously associated with the given prefix.
+         * 
+         * @param prefix The namespace prefix.
+         * @param uri The namespace URI.
+         * @return The URI previously associated with the given prefix.
          */
         @Override
         public String put(String prefix, String uri) {
@@ -359,12 +347,9 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Removes a namespace from this element's declared namespaces.
-         *
-         * @param prefix
-         * The namespace prefix.
-         *
-         * @return
-         * The URI previously associated with the given prefix.
+         * 
+         * @param prefix The namespace prefix.
+         * @return The URI previously associated with the given prefix.
          */
         @Override
         public String remove(String prefix) {
@@ -380,12 +365,10 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Tests for the existence of a namespace declared by this element.
-         *
+         * 
          * @param prefix
-         *
-         * @return
-         * <tt>true</tt> if this element declares a namespace with the given prefix;
-         * <tt>false</tt>, otherwise.
+         * @return <tt>true</tt> if this element declares a namespace with the
+         * given prefix; <tt>false</tt>, otherwise.
          */
         @Override
         public boolean containsKey(String prefix) {
@@ -401,8 +384,8 @@ public class Element extends Node implements List<Node> {
         }
     }
 
-    private static class ElementListenerList extends ListenerList<ElementListener>
-        implements ElementListener {
+    private static class ElementListenerList extends ListenerList<ElementListener> implements
+        ElementListener {
         @Override
         public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
             for (ElementListener listener : this) {
@@ -454,7 +437,6 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-
      * Dictionary representing the attributes declared by this element.
      */
     public class ElementDictionary implements Dictionary<String, String> {
@@ -463,11 +445,10 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns an attribute value.
-         *
+         * 
          * @param attributeName
-         *
-         * @return
-         * The value associated with the given attribute, or <tt>null</tt>
+         * @return The value associated with the given attribute, or
+         * <tt>null</tt>
          */
         @Override
         public String get(String attributeName) {
@@ -477,13 +458,11 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Sets an attribute value.
-         *
+         * 
          * @param attributeName
          * @param value
-         *
-         * @return
-         * The value previously associated with the given attribute, or <tt>null</tt>
-         * if the attribute did not previously exist.
+         * @return The value previously associated with the given attribute, or
+         * <tt>null</tt> if the attribute did not previously exist.
          */
         @Override
         public String put(String attributeName, String value) {
@@ -504,7 +483,8 @@ public class Element extends Node implements List<Node> {
                     localNameElementDictionary = attributeName.substring(i + 1);
                 }
 
-                attributeSequence.add(new Attribute(namespacePrefixElementDictionary, localNameElementDictionary, value));
+                attributeSequence.add(new Attribute(namespacePrefixElementDictionary,
+                    localNameElementDictionary, value));
             } else {
                 previousValue = attribute.getValue();
                 attribute.setValue(value);
@@ -515,11 +495,9 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Removes an attribute.
-         *
+         * 
          * @param attributeName
-         *
-         * @return
-         * The value previously associated with the given attribute.
+         * @return The value previously associated with the given attribute.
          */
         @Override
         public String remove(String attributeName) {
@@ -533,12 +511,10 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Tests for the existence of an attribute.
-         *
+         * 
          * @param attributeName
-         *
-         * @return
-         * <tt>true</tt> if this element defines the given attribute; <tt>false<tt>,
-         * otherwise.
+         * @return <tt>true</tt> if this element defines the given attribute;
+         * <tt>false<tt>, otherwise.
          */
         @Override
         public boolean containsKey(String attributeName) {
@@ -546,7 +522,6 @@ public class Element extends Node implements List<Node> {
         }
 
     }
-
 
     private String namespacePrefix;
     private String localName;
@@ -578,10 +553,9 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Returns the element's namespace prefix.
-     *
-     * @return
-     * The element's namespace prefix, or <tt>null</tt> if the element belongs to the
-     * default namespace.
+     * 
+     * @return The element's namespace prefix, or <tt>null</tt> if the element
+     * belongs to the default namespace.
      */
     public String getNamespacePrefix() {
         return namespacePrefix;
@@ -610,10 +584,9 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Returns the element's default namespace URI.
-     *
-     * @return
-     * The default namespace URI declared by this element, or <tt>null</tt> if
-     * this element does not declare a default namespace.
+     * 
+     * @return The default namespace URI declared by this element, or
+     * <tt>null</tt> if this element does not declare a default namespace.
      */
     public String getDefaultNamespaceURI() {
         return defaultNamespaceURI;
@@ -621,10 +594,10 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Sets the element's default namespace URI.
-     *
-     * @param defaultNamespaceURI
-     * The default namespace URI declared by this element, or <tt>null</tt> if
-     * this element does not declare a default namespace.
+     * 
+     * @param defaultNamespaceURI The default namespace URI declared by this
+     * element, or <tt>null</tt> if this element does not declare a default
+     * namespace.
      */
     public void setDefaultNamespaceURI(String defaultNamespaceURI) {
         String previousDefaultNamespaceURI = this.defaultNamespaceURI;
@@ -643,16 +616,13 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-     * Determines the namespace URI corresponding to the given prefix by traversing
-     * the element's ancestry.
-     *
-     * @param prefix
-     * The namespace prefix to look up, or <tt>null</tt> to determine the default
-     * namespace for this element.
-     *
-     * @return
-     * The namespace URI corresponding to the given prefix, or <tt>null</tt> if a
-     * URI could not be found.
+     * Determines the namespace URI corresponding to the given prefix by
+     * traversing the element's ancestry.
+     * 
+     * @param prefix The namespace prefix to look up, or <tt>null</tt> to
+     * determine the default namespace for this element.
+     * @return The namespace URI corresponding to the given prefix, or
+     * <tt>null</tt> if a URI could not be found.
      */
     public String getNamespaceURI(String prefix) {
         String namespaceURI;
@@ -691,11 +661,9 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Adds a node to this element.
-     *
+     * 
      * @param node
-     *
-     * @return
-     * The index at which the node was added.
+     * @return The index at which the node was added.
      */
     @Override
     public int add(Node node) {
@@ -711,7 +679,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Inserts a node at a specific location within this element.
-     *
+     * 
      * @param node
      * @param index
      */
@@ -727,8 +695,7 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * This method is not supported.
+     * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
     public Node update(int index, Node node) {
@@ -737,7 +704,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Removes a node from this element.
-     *
+     * 
      * @param node
      */
     @Override
@@ -752,18 +719,16 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Removes a range of nodes from this element.
-     *
+     * 
      * @param index
      * @param count
-     *
-     * @return
-     * The removed nodes.
+     * @return The removed nodes.
      */
     @Override
     public Sequence<Node> remove(int index, int count) {
         Sequence<Node> removed = nodes.remove(index, count);
         if (count > 0) {
-            for (int i = 0, n = removed.getLength(); i < n; i++ ) {
+            for (int i = 0, n = removed.getLength(); i < n; i++) {
                 Node node = removed.get(i);
                 node.setParent(null);
             }
@@ -792,7 +757,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Returns the node at the given index.
-     *
+     * 
      * @param index
      */
     @Override
@@ -802,10 +767,9 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Determines the index of the given node within this element.
-     *
-     * @return
-     * The index of the node, or <tt>-1</tt> if the node does not exist in
-     * this element.
+     * 
+     * @return The index of the node, or <tt>-1</tt> if the node does not exist
+     * in this element.
      */
     @Override
     public int indexOf(Node node) {
@@ -821,8 +785,7 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-     * @return
-     * <tt>null</tt>; elements cannot be sorted.
+     * @return <tt>null</tt>; elements cannot be sorted.
      */
     @Override
     public Comparator<Node> getComparator() {
@@ -830,8 +793,7 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * Elements cannot be sorted.
+     * @throws UnsupportedOperationException Elements cannot be sorted.
      */
     @Override
     public void setComparator(Comparator<Node> comparator) {
@@ -848,9 +810,8 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Determines if this element defines any attributes.
-     *
-     * @return
-     * <tt>true</tt> if this element does not define any attributes;
+     * 
+     * @return <tt>true</tt> if this element does not define any attributes;
      * <tt>false</tt>, otherwise.
      */
     @Override
@@ -861,13 +822,10 @@ public class Element extends Node implements List<Node> {
     /**
      * Returns the sub-elements of of this element whose tag names match the
      * given name.
-     *
-     * @param name
-     * The tag name to match.
-     *
-     * @return
-     * A list containing the matching elements. The list will be empty if no
-     * elements matched the given tag name.
+     * 
+     * @param name The tag name to match.
+     * @return A list containing the matching elements. The list will be empty if
+     * no elements matched the given tag name.
      */
     public List<Element> getElements(String name) {
         ArrayList<Element> elements = new ArrayList<>();
@@ -876,7 +834,7 @@ public class Element extends Node implements List<Node> {
             Node node = get(i);
 
             if (node instanceof Element) {
-                Element element = (Element)node;
+                Element element = (Element) node;
 
                 if (element.getName().equals(name)) {
                     elements.add(element);
@@ -891,10 +849,9 @@ public class Element extends Node implements List<Node> {
      * Returns the text content of this element. An element is defined to
      * contain text when it contains a single child that is an instance of
      * {@link TextNode}.
-     *
-     * @return
-     * The text content of the element, or {@code null} if this element does
-     * not contain text.
+     * 
+     * @return The text content of the element, or {@code null} if this element
+     * does not contain text.
      */
     public String getText() {
         String text = null;
@@ -903,7 +860,7 @@ public class Element extends Node implements List<Node> {
             Node node = get(0);
 
             if (node instanceof TextNode) {
-                TextNode textNode = (TextNode)node;
+                TextNode textNode = (TextNode) node;
                 text = textNode.getText();
             }
         }
@@ -942,10 +899,7 @@ public class Element extends Node implements List<Node> {
             for (int i = 1, n = namespacePrefix.length(); i < n; i++) {
                 c = namespacePrefix.charAt(i);
 
-                if (!Character.isLetterOrDigit(c)
-                    && c != '-'
-                    && c != '_'
-                    && c != '.') {
+                if (!Character.isLetterOrDigit(c) && c != '-' && c != '_' && c != '.') {
                     throw new IllegalArgumentException("'" + c + "' is not a valid character"
                         + " for a namespace prefix.");
                 }
@@ -962,8 +916,7 @@ public class Element extends Node implements List<Node> {
         }
 
         char c = localName.charAt(0);
-        if (!Character.isLetter(c)
-            && c != '_') {
+        if (!Character.isLetter(c) && c != '_') {
             throw new IllegalArgumentException("'" + c + "' is not a valid start"
                 + " character for a local name.");
         }
@@ -971,10 +924,7 @@ public class Element extends Node implements List<Node> {
         for (int i = 1, n = localName.length(); i < n; i++) {
             c = localName.charAt(i);
 
-            if (!Character.isLetterOrDigit(c)
-                && c != '-'
-                && c != '_'
-                && c != '.') {
+            if (!Character.isLetterOrDigit(c) && c != '-' && c != '_' && c != '.') {
                 throw new IllegalArgumentException("'" + c + "' is not a valid character"
                     + " for a local name.");
             }

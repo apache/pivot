@@ -49,17 +49,17 @@ public class EventLogger extends Container {
 
         /**
          * Select/Deselect all Events to log.
-         * @param select
-         * if true, all events will be selected for the log,
+         * 
+         * @param select if true, all events will be selected for the log,
          * otherwise all events will be deselected
          */
         public void selectAllEvents(boolean select);
     }
 
     /**
-     * A read-only group of events that an event logger is capable of firing.
-     * To make an event logger actually fire declared events, callers add them
-     * to the event logger's include event group.
+     * A read-only group of events that an event logger is capable of firing. To
+     * make an event logger actually fire declared events, callers add them to
+     * the event logger's include event group.
      */
     public final class DeclaredEventGroup implements Group<Method>, Iterable<Method> {
         private DeclaredEventGroup() {
@@ -221,9 +221,8 @@ public class EventLogger extends Container {
 
     /**
      * Gets this event logger's source component.
-     *
-     * @return
-     * The source component, or <tt>null</tt> if no source has been set.
+     * 
+     * @return The source component, or <tt>null</tt> if no source has been set.
      */
     public Component getSource() {
         return source;
@@ -231,9 +230,8 @@ public class EventLogger extends Container {
 
     /**
      * Sets this event logger's source component.
-     *
-     * @param source
-     * The source component, or <tt>null</tt> to clear the source.
+     * 
+     * @param source The source component, or <tt>null</tt> to clear the source.
      */
     public void setSource(Component source) {
         Component previousSource = this.source;
@@ -259,9 +257,8 @@ public class EventLogger extends Container {
     /**
      * Gets the declared event group, a read-only group that includes the
      * complete list of events that this event logger's source declares.
-     *
-     * @return
-     * the declared events group.
+     * 
+     * @return the declared events group.
      */
     public DeclaredEventGroup getDeclaredEvents() {
         return declaredEventGroup;
@@ -269,13 +266,12 @@ public class EventLogger extends Container {
 
     /**
      * Gets the include events group, which callers can use to include or
-     * exclude declared events from those that get fired by this logger.
-     * This group is guaranteed to be a subset of the declared event group
-     * (attempts to add events to this group that are not included in the
-     * declared event group will fail).
-     *
-     * @return
-     * The include events group.
+     * exclude declared events from those that get fired by this logger. This
+     * group is guaranteed to be a subset of the declared event group (attempts
+     * to add events to this group that are not included in the declared event
+     * group will fail).
+     * 
+     * @return The include events group.
      */
     public IncludeEventGroup getIncludeEvents() {
         return includeEventGroup;
@@ -285,18 +281,19 @@ public class EventLogger extends Container {
      * Clears the event log.
      */
     public void clearLog() {
-        EventLogger.Skin eventLoggerSkin = (EventLogger.Skin)getSkin();
+        EventLogger.Skin eventLoggerSkin = (EventLogger.Skin) getSkin();
         eventLoggerSkin.clearLog();
     }
 
     /**
      * Select/Deselect all Events to log.
-     * @param select
-     * if true, all events will be selected for the log,
-     * otherwise all events will be deselected
+     * 
+     * @param select if true, all events will be selected for the log, otherwise
+     * all events will be deselected
      */
     public void selectAllEvents(boolean select) {
-        // Include or exclude each possible method from the group of monitored events
+        // Include or exclude each possible method from the group of monitored
+        // events
         IncludeEventGroup includeEventsLocal = getIncludeEvents();
         for (Method event : declaredEvents) {
             if (select) {
@@ -306,7 +303,7 @@ public class EventLogger extends Container {
             }
         }
         // Update the skin (Checkboxes)
-        EventLogger.Skin eventLoggerSkin = (EventLogger.Skin)getSkin();
+        EventLogger.Skin eventLoggerSkin = (EventLogger.Skin) getSkin();
         eventLoggerSkin.selectAllEvents(select);
     }
 
@@ -321,11 +318,11 @@ public class EventLogger extends Container {
 
             if (ListenerList.class.isAssignableFrom(method.getReturnType())
                 && (method.getModifiers() & Modifier.STATIC) == 0) {
-                ParameterizedType genericType = (ParameterizedType)method.getGenericReturnType();
+                ParameterizedType genericType = (ParameterizedType) method.getGenericReturnType();
                 Type[] typeArguments = genericType.getActualTypeArguments();
 
                 if (typeArguments.length == 1) {
-                    Class<?> listenerInterface = (Class<?>)typeArguments[0];
+                    Class<?> listenerInterface = (Class<?>) typeArguments[0];
 
                     if (!listenerInterface.isInterface()) {
                         throw new RuntimeException(listenerInterface.getName()
@@ -351,8 +348,9 @@ public class EventLogger extends Container {
                     // Get the listener for this interface
                     Object listener = eventListenerProxies.get(listenerInterface);
                     if (listener == null) {
-                        listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-                            new Class<?>[]{listenerInterface}, loggerInvocationHandler);
+                        listener = Proxy.newProxyInstance(
+                            Thread.currentThread().getContextClassLoader(),
+                            new Class<?>[] { listenerInterface }, loggerInvocationHandler);
                         eventListenerProxies.put(listenerInterface, listener);
                     }
 
@@ -388,11 +386,11 @@ public class EventLogger extends Container {
 
             if (ListenerList.class.isAssignableFrom(method.getReturnType())
                 && (method.getModifiers() & Modifier.STATIC) == 0) {
-                ParameterizedType genericType = (ParameterizedType)method.getGenericReturnType();
+                ParameterizedType genericType = (ParameterizedType) method.getGenericReturnType();
                 Type[] typeArguments = genericType.getActualTypeArguments();
 
                 if (typeArguments.length == 1) {
-                    Class<?> listenerInterface = (Class<?>)typeArguments[0];
+                    Class<?> listenerInterface = (Class<?>) typeArguments[0];
 
                     // Get the listener list
                     Object listenerList;

@@ -44,7 +44,8 @@ public class GrayscaleDecorator implements Decorator {
         int width = component.getWidth();
         int height = component.getHeight();
 
-        /* To convert to gray, we create a BufferedImage in the grayscale color
+        /*
+         * To convert to gray, we create a BufferedImage in the grayscale color
          * space into which the decorated component draws, and we output the
          * resulting image. The naive way to create the buffer is new
          * BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY); but that

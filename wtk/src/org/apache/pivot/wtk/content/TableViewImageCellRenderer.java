@@ -60,9 +60,8 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
     }
 
     @Override
-    public void render(Object row, int rowIndex, int columnIndex,
-        TableView tableView, String columnName,
-        boolean selected, boolean highlighted, boolean disabled) {
+    public void render(Object row, int rowIndex, int columnIndex, TableView tableView,
+        String columnName, boolean selected, boolean highlighted, boolean disabled) {
         if (row != null) {
             Image image = null;
 
@@ -70,9 +69,8 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
             if (columnName != null) {
                 Object cellData = JSON.get(row, columnName);
 
-                if (cellData == null
-                    || cellData instanceof Image) {
-                    image = (Image)cellData;
+                if (cellData == null || cellData instanceof Image) {
+                    image = (Image) cellData;
                 } else {
                     System.err.println("Data for \"" + columnName + "\" is not an instance of "
                         + Image.class.getName());

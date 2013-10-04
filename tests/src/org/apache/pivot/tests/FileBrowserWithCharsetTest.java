@@ -42,8 +42,7 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.terra.TerraFileBrowserSheetSkin;
 
-public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Application
-{
+public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Application {
     private ArrayList<String> choices = new ArrayList<>();
     private ListButton lb = new ListButton();
 
@@ -53,7 +52,7 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
 
     public FileBrowserWithCharsetTest(Mode mode) {
         super(mode);
-        TerraFileBrowserSheetSkin skin = (TerraFileBrowserSheetSkin)getSkin();
+        TerraFileBrowserSheetSkin skin = (TerraFileBrowserSheetSkin) getSkin();
         BoxPane box = new BoxPane();
         box.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         box.add(new Label("Character set:"));
@@ -71,22 +70,21 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
     }
 
     public String getCharsetName() {
-        return (String)lb.getSelectedItem();
+        return (String) lb.getSelectedItem();
     }
-
 
     private Frame frame = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception
-    {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BoxPane windowContent = new BoxPane();
         PushButton button = new PushButton("Open Sheet");
         button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button buttonArgument) {
                 final Window window = FileBrowserWithCharsetTest.getActiveWindow();
-                final FileBrowserSheet fileBrowserSheet = new FileBrowserWithCharsetTest(FileBrowserSheet.Mode.OPEN);
+                final FileBrowserSheet fileBrowserSheet = new FileBrowserWithCharsetTest(
+                    FileBrowserSheet.Mode.OPEN);
 
                 fileBrowserSheet.open(window, new SheetCloseListener() {
                     @Override
@@ -130,7 +128,6 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
         // empty block
     }
 
-
     @Override
     public void suspend() {
         // empty block
@@ -141,4 +138,3 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
     }
 
 }
-

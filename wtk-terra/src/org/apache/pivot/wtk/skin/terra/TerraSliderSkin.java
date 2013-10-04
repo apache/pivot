@@ -26,12 +26,12 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.skin.SliderSkin;
 
@@ -79,8 +79,8 @@ public class TerraSliderSkin extends SliderSkin {
             int width = getWidth();
             int height = getHeight();
 
-            graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor,
-                width / 2f, height, buttonBackgroundColor));
+            graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor, width / 2f,
+                height, buttonBackgroundColor));
             graphics.fillRect(0, 0, width, height);
 
             float alpha = (highlighted || dragOffset != null) ? 0.25f : 0.0f;
@@ -111,7 +111,7 @@ public class TerraSliderSkin extends SliderSkin {
             boolean consumed = super.mouseMove(component, x, y);
 
             if (Mouse.getCapturer() == component) {
-                Slider slider = (Slider)TerraSliderSkin.this.getComponent();
+                Slider slider = (Slider) TerraSliderSkin.this.getComponent();
                 if (slider.getOrientation() == Orientation.HORIZONTAL) {
                     int sliderWidth = slider.getWidth();
                     int thumbWidthLocal = thumb.getWidth();
@@ -129,12 +129,13 @@ public class TerraSliderSkin extends SliderSkin {
                         sliderX = maxX;
                     }
 
-                    float ratio = (float)(sliderX - dragOffset.x) / (sliderWidth - thumbWidthLocal);
+                    float ratio = (float) (sliderX - dragOffset.x)
+                        / (sliderWidth - thumbWidthLocal);
 
                     int start = slider.getStart();
                     int end = slider.getEnd();
 
-                    int value = (int)(start + (end - start) * ratio);
+                    int value = (int) (start + (end - start) * ratio);
                     slider.setValue(value);
                 } else {
                     int sliderHeight = slider.getHeight();
@@ -153,12 +154,13 @@ public class TerraSliderSkin extends SliderSkin {
                         sliderY = maxY;
                     }
 
-                    float ratio = (float)(sliderY - dragOffset.y) / (sliderHeight - thumbHeightLocal);
+                    float ratio = (float) (sliderY - dragOffset.y)
+                        / (sliderHeight - thumbHeightLocal);
 
                     int start = slider.getStart();
                     int end = slider.getEnd();
 
-                    int value = (int)(start + (end - start) * ratio);
+                    int value = (int) (start + (end - start) * ratio);
                     slider.setValue(value);
                 }
             }
@@ -213,16 +215,15 @@ public class TerraSliderSkin extends SliderSkin {
         }
 
         /**
-         * {@link KeyCode#LEFT LEFT} or {@link KeyCode#DOWN DOWN} Decrement
-         * the slider's value.<br>
-         * {@link KeyCode#RIGHT RIGHT} or {@link KeyCode#UP UP} Increment
-         * the slider's value.
+         * {@link KeyCode#LEFT LEFT} or {@link KeyCode#DOWN DOWN} Decrement the
+         * slider's value.<br> {@link KeyCode#RIGHT RIGHT} or {@link KeyCode#UP
+         * UP} Increment the slider's value.
          */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
-            Slider slider = (Slider)TerraSliderSkin.this.getComponent();
+            Slider slider = (Slider) TerraSliderSkin.this.getComponent();
 
             int start = slider.getStart();
             int end = slider.getEnd();
@@ -231,12 +232,10 @@ public class TerraSliderSkin extends SliderSkin {
             int value = slider.getValue();
             int increment = length / 10;
 
-            if (keyCode == Keyboard.KeyCode.LEFT
-                || keyCode == Keyboard.KeyCode.DOWN) {
+            if (keyCode == Keyboard.KeyCode.LEFT || keyCode == Keyboard.KeyCode.DOWN) {
                 slider.setValue(Math.max(start, value - increment));
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.RIGHT
-                || keyCode == Keyboard.KeyCode.UP) {
+            } else if (keyCode == Keyboard.KeyCode.RIGHT || keyCode == Keyboard.KeyCode.UP) {
                 slider.setValue(Math.min(end, value + increment));
                 consumed = true;
             }
@@ -264,7 +263,7 @@ public class TerraSliderSkin extends SliderSkin {
     public static final int MINIMUM_THUMB_HEIGHT = 4;
 
     public TerraSliderSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         trackColor = theme.getColor(6);
         trackWidth = 2;
@@ -283,13 +282,13 @@ public class TerraSliderSkin extends SliderSkin {
     public void install(Component component) {
         super.install(component);
 
-        Slider slider = (Slider)component;
+        Slider slider = (Slider) component;
         slider.add(thumb);
     }
 
     @Override
     public int getPreferredWidth(int height) {
-        Slider slider = (Slider)getComponent();
+        Slider slider = (Slider) getComponent();
 
         int preferredWidth;
         if (slider.getOrientation() == Orientation.HORIZONTAL) {
@@ -303,7 +302,7 @@ public class TerraSliderSkin extends SliderSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        Slider slider = (Slider)getComponent();
+        Slider slider = (Slider) getComponent();
 
         int preferredHeight;
         if (slider.getOrientation() == Orientation.HORIZONTAL) {
@@ -322,7 +321,7 @@ public class TerraSliderSkin extends SliderSkin {
 
     @Override
     public void layout() {
-        Slider slider = (Slider)getComponent();
+        Slider slider = (Slider) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -331,15 +330,15 @@ public class TerraSliderSkin extends SliderSkin {
         int end = slider.getEnd();
         int value = slider.getValue();
 
-        float ratio = (float)(value - start) / (end - start);
+        float ratio = (float) (value - start) / (end - start);
 
         if (slider.getOrientation() == Orientation.HORIZONTAL) {
             thumb.setSize(thumbWidth, thumbHeight);
-            thumb.setLocation((int)((width - thumbWidth) * ratio), (height - thumbHeight) / 2);
+            thumb.setLocation((int) ((width - thumbWidth) * ratio), (height - thumbHeight) / 2);
         } else {
             thumb.setSize(thumbHeight, thumbWidth);
 
-            thumb.setLocation((width - thumbHeight) / 2, (int)((height - thumbWidth) * ratio));
+            thumb.setLocation((width - thumbHeight) / 2, (int) ((height - thumbWidth) * ratio));
         }
     }
 
@@ -350,7 +349,7 @@ public class TerraSliderSkin extends SliderSkin {
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
-        Slider slider = (Slider)getComponent();
+        Slider slider = (Slider) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -365,7 +364,7 @@ public class TerraSliderSkin extends SliderSkin {
                 int end = slider.getEnd();
                 int value = start;
                 while (value <= end) {
-                    float ratio = (float)(value - start) / (end - start);
+                    float ratio = (float) (value - start) / (end - start);
                     int x = (int) (width * ratio);
                     graphics.drawLine(x, height / 3, x, height * 2 / 3);
                     value += tickSpacing;
@@ -378,7 +377,7 @@ public class TerraSliderSkin extends SliderSkin {
                 int end = slider.getEnd();
                 int value = start;
                 while (value <= end) {
-                    float ratio = (float)(value - start) / (end - start);
+                    float ratio = (float) (value - start) / (end - start);
                     int y = (int) (height * ratio);
                     graphics.drawLine(width / 3, y, width * 2 / 3, y);
                     value += tickSpacing;

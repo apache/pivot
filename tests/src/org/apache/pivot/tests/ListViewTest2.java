@@ -29,17 +29,18 @@ public class ListViewTest2 extends Application.Adapter {
     private Window menu = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
         System.out.println("Left   Click on List elements to Select a Row");
 
-        window = new Window((Component)bxmlSerializer.readObject(getClass().getResource("listview_test2.bxml")));
-        menu = (Window)bxmlSerializer.readObject(TableViewTest2.class, "context_menus.bxml");
+        window = new Window((Component) bxmlSerializer.readObject(getClass().getResource(
+            "listview_test2.bxml")));
+        menu = (Window) bxmlSerializer.readObject(TableViewTest2.class, "context_menus.bxml");
 
         window.setMenuHandler(new ContextMenusSampleMenuHandlerAdapter());
-        System.out.println("Right  Click on Window (and List elements) to display Contextual Menu: " + menu);
+        System.out.println("Right  Click on Window (and List elements) to display Contextual Menu: "
+            + menu);
 
         window.setTitle("ListView Test2");
         window.setMaximized(true);

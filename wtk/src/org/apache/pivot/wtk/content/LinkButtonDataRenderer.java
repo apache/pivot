@@ -63,10 +63,10 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         String text = null;
 
         if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData)data;
+            ButtonData buttonData = (ButtonData) data;
             icon = buttonData.getIcon();
         } else if (data instanceof Image) {
-            icon = (Image)data;
+            icon = (Image) data;
         }
         text = toString(data);
 
@@ -88,21 +88,20 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         } else {
             label.setVisible(true);
 
-            Font font = (Font)button.getStyles().get("font");
+            Font font = (Font) button.getStyles().get("font");
             label.getStyles().put("font", font);
 
             Color color;
             if (button.isEnabled()) {
-                color = (Color)button.getStyles().get("color");
+                color = (Color) button.getStyles().get("color");
             } else {
-                color = (Color)button.getStyles().get("disabledColor");
+                color = (Color) button.getStyles().get("disabledColor");
             }
 
             label.getStyles().put("color", color);
         }
 
-        label.getStyles().put("textDecoration", highlighted ?
-            TextDecoration.UNDERLINE : null);
+        label.getStyles().put("textDecoration", highlighted ? TextDecoration.UNDERLINE : null);
     }
 
     @Override
@@ -110,7 +109,7 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         String string = null;
 
         if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData)data;
+            ButtonData buttonData = (ButtonData) data;
             string = buttonData.getText();
         } else if (!(data instanceof Image)) {
             if (data != null) {

@@ -50,7 +50,7 @@ public interface TreeViewSelectionListener {
 
     /**
      * Called when a selected path has been added to a tree view.
-     *
+     * 
      * @param treeView
      * @param path
      */
@@ -58,7 +58,7 @@ public interface TreeViewSelectionListener {
 
     /**
      * Called when a selected path has been removed from a tree view.
-     *
+     * 
      * @param treeView
      * @param path
      */
@@ -66,7 +66,7 @@ public interface TreeViewSelectionListener {
 
     /**
      * Called when a tree view's selection state has been reset.
-     *
+     * 
      * @param treeView
      * @param previousSelectedPaths
      */
@@ -74,7 +74,7 @@ public interface TreeViewSelectionListener {
 
     /**
      * Called when a tree view's selected node has changed.
-     *
+     * 
      * @param treeView
      * @param previousSelectedNode
      */

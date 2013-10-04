@@ -28,7 +28,8 @@ public class DeploymentExample implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(DeploymentExample.class, "deployment_example_window.bxml");
+        window = (Window) bxmlSerializer.readObject(DeploymentExample.class,
+            "deployment_example_window.bxml");
         window.open(display);
     }
 

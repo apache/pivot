@@ -20,12 +20,12 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 
 /**
- * Window class whose primary purpose is to facilitate interaction between
- * an application and a user.
+ * Window class whose primary purpose is to facilitate interaction between an
+ * application and a user.
  */
 public class Dialog extends Frame {
-    private static class DialogListenerList extends WTKListenerList<DialogListener>
-        implements DialogListener {
+    private static class DialogListenerList extends WTKListenerList<DialogListener> implements
+        DialogListener {
         @Override
         public void modalChanged(Dialog dialog) {
             for (DialogListener listener : this) {
@@ -120,12 +120,10 @@ public class Dialog extends Frame {
 
     /**
      * Opens the dialog.
-     *
-     * @param display
-     * The display on which the dialog will be opened.
-     *
-     * @param owner
-     * The window's owner. The dialog will be modal over this window.
+     * 
+     * @param display The display on which the dialog will be opened.
+     * @param owner The window's owner. The dialog will be modal over this
+     * window.
      */
     @Override
     public final void open(Display display, Window owner) {
@@ -134,12 +132,10 @@ public class Dialog extends Frame {
 
     /**
      * Opens the dialog.
-     *
-     * @param display
-     * The display on which the dialog will be opened.
-     *
-     * @param dialogCloseListenerArgument
-     * A listener that will be called when the dialog is closed.
+     * 
+     * @param display The display on which the dialog will be opened.
+     * @param dialogCloseListenerArgument A listener that will be called when the
+     * dialog is closed.
      */
     public final void open(Display display, DialogCloseListener dialogCloseListenerArgument) {
         open(display, null, dialogCloseListenerArgument);
@@ -147,12 +143,11 @@ public class Dialog extends Frame {
 
     /**
      * Opens the dialog.
-     *
-     * @param owner
-     * The window's owner. The dialog will be modal over this window.
-     *
-     * @param dialogCloseListenerArgument
-     * A listener that will be called when the dialog is closed.
+     * 
+     * @param owner The window's owner. The dialog will be modal over this
+     * window.
+     * @param dialogCloseListenerArgument A listener that will be called when the
+     * dialog is closed.
      */
     public final void open(Window owner, DialogCloseListener dialogCloseListenerArgument) {
         if (owner == null) {
@@ -164,16 +159,12 @@ public class Dialog extends Frame {
 
     /**
      * Opens the dialog.
-     *
-     * @param display
-     * The display on which the dialog will be opened.
-     *
-     * @param owner
-     * The window's owner, or <tt>null</tt> if the window has no owner. Required if the dialog
-     * is modal.
-     *
-     * @param dialogCloseListenerArgument
-     * A listener that will be called when the dialog is closed.
+     * 
+     * @param display The display on which the dialog will be opened.
+     * @param owner The window's owner, or <tt>null</tt> if the window has no
+     * owner. Required if the dialog is modal.
+     * @param dialogCloseListenerArgument A listener that will be called when the
+     * dialog is closed.
      */
     public void open(Display display, Window owner, DialogCloseListener dialogCloseListenerArgument) {
         if (modal && owner == null) {
@@ -213,8 +204,7 @@ public class Dialog extends Frame {
                     this.result = resultArgument;
 
                     // Move the owner to the front
-                    if (owner != null
-                        && owner.isOpen()) {
+                    if (owner != null && owner.isOpen()) {
                         owner.moveToFront();
                     }
 

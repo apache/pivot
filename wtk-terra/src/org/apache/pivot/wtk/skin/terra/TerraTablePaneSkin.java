@@ -30,22 +30,22 @@ public class TerraTablePaneSkin extends TablePaneSkin {
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
     public final void setHorizontalGridColor(int horizontalGridColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setHorizontalGridColor(theme.getColor(horizontalGridColor));
     }
 
     public final void setVerticalGridColor(int verticalGridColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setVerticalGridColor(theme.getColor(verticalGridColor));
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 }

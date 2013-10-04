@@ -22,10 +22,10 @@ import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.RadioButton;
@@ -48,17 +48,18 @@ public class TabPanes extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        confirmCloseTabPrompt = (Prompt)namespace.get("confirmCloseTabPrompt");
-        tabPane = (TabPane)namespace.get("tabPane");
-        closeableCheckbox = (Checkbox)namespace.get("closeableCheckbox");
-        collapsibleCheckbox = (Checkbox)namespace.get("collapsibleCheckbox");
-        horizontalRadioButton = (RadioButton)namespace.get("horizontalRadioButton");
-        verticalRadioButton = (RadioButton)namespace.get("verticalRadioButton");
-        cornerBoxPane = (BoxPane)namespace.get("cornerBoxPane");
+        confirmCloseTabPrompt = (Prompt) namespace.get("confirmCloseTabPrompt");
+        tabPane = (TabPane) namespace.get("tabPane");
+        closeableCheckbox = (Checkbox) namespace.get("closeableCheckbox");
+        collapsibleCheckbox = (Checkbox) namespace.get("collapsibleCheckbox");
+        horizontalRadioButton = (RadioButton) namespace.get("horizontalRadioButton");
+        verticalRadioButton = (RadioButton) namespace.get("verticalRadioButton");
+        cornerBoxPane = (BoxPane) namespace.get("cornerBoxPane");
 
         tabPane.getTabPaneListeners().add(new TabPaneListener.Adapter() {
             @Override
-            public Vote previewRemoveTabs(final TabPane tabPaneArgument, final int index, final int count) {
+            public Vote previewRemoveTabs(final TabPane tabPaneArgument, final int index,
+                final int count) {
                 Vote vote;
                 if (confirmCloseTab) {
                     confirmCloseTabPrompt.open(TabPanes.this, new SheetCloseListener() {

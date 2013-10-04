@@ -35,11 +35,10 @@ public class BXMLExplorer extends Application.Adapter {
 
     private BXMLExplorerWindow window = null;
 
-
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (BXMLExplorerWindow)bxmlSerializer.readObject(BXMLExplorer.class,
+        window = (BXMLExplorerWindow) bxmlSerializer.readObject(BXMLExplorer.class,
             "bxml_explorer_window.bxml", true);
         window.open(display);
     }
@@ -58,8 +57,7 @@ public class BXMLExplorer extends Application.Adapter {
 
         TextArea body = null;
         String bodyText = exception.getMessage();
-        if (bodyText != null
-            && bodyText.length() > 0) {
+        if (bodyText != null && bodyText.length() > 0) {
             body = new TextArea();
             body.setText(bodyText);
             body.setEditable(false);
@@ -72,4 +70,3 @@ public class BXMLExplorer extends Application.Adapter {
         DesktopApplicationContext.main(BXMLExplorer.class, args);
     }
 }
-

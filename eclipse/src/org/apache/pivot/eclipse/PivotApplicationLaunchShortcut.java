@@ -43,7 +43,7 @@ public class PivotApplicationLaunchShortcut implements ILaunchShortcut {
     @Override
     public void launch(ISelection selection, String mode) {
         if (selection instanceof IStructuredSelection) {
-            IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+            IStructuredSelection structuredSelection = (IStructuredSelection) selection;
             Object[] elements = structuredSelection.toArray();
 
             if (elements.length == 1) {
@@ -55,7 +55,7 @@ public class PivotApplicationLaunchShortcut implements ILaunchShortcut {
     @Override
     public void launch(IEditorPart editor, String mode) {
         IEditorInput editorInput = editor.getEditorInput();
-        IJavaElement javaElement = (IJavaElement)editorInput.getAdapter(IJavaElement.class);
+        IJavaElement javaElement = (IJavaElement) editorInput.getAdapter(IJavaElement.class);
 
         if (javaElement != null) {
             launch(javaElement, mode);
@@ -64,8 +64,7 @@ public class PivotApplicationLaunchShortcut implements ILaunchShortcut {
 
     private void launch(Object element, String mode) {
         if (element instanceof IAdaptable) {
-            ICompilationUnit compilationUnit =
-                (ICompilationUnit)((IAdaptable)element).getAdapter(ICompilationUnit.class);
+            ICompilationUnit compilationUnit = (ICompilationUnit) ((IAdaptable) element).getAdapter(ICompilationUnit.class);
 
             if (compilationUnit != null) {
                 IType type = compilationUnit.findPrimaryType();
@@ -84,23 +83,25 @@ public class PivotApplicationLaunchShortcut implements ILaunchShortcut {
 
     private ILaunchConfiguration getExistingLaunchConfiguration(IType type) {
         ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-        ILaunchConfigurationType launchConfigurationType =
-            launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+        ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
 
         ILaunchConfiguration existingLaunchConfiguration = null;
         try {
             String applicationProjectName = type.getJavaProject().getElementName();
             String applicationTypeName = type.getFullyQualifiedName();
 
-            ILaunchConfiguration[] launchConfigurations =
-                DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(launchConfigurationType);
+            ILaunchConfiguration[] launchConfigurations = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(
+                launchConfigurationType);
 
             for (int i = 0; i < launchConfigurations.length; i++) {
                 ILaunchConfiguration launchConfiguration = launchConfigurations[i];
 
-                String mainTypeName = launchConfiguration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "");
-                String projectName = launchConfiguration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
-                String programArguments = launchConfiguration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, "");
+                String mainTypeName = launchConfiguration.getAttribute(
+                    IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "");
+                String projectName = launchConfiguration.getAttribute(
+                    IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
+                String programArguments = launchConfiguration.getAttribute(
+                    IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, "");
 
                 if (mainTypeName.equals(PivotPlugin.MAIN_TYPE_NAME)
                     && projectName.equals(applicationProjectName)
@@ -110,8 +111,7 @@ public class PivotApplicationLaunchShortcut implements ILaunchShortcut {
                 }
             }
         } catch (CoreException exception) {
-            MessageDialog.openError(PivotPlugin.getActiveWorkbenchShell(),
-                exception.getMessage(),
+            MessageDialog.openError(PivotPlugin.getActiveWorkbenchShell(), exception.getMessage(),
                 exception.getStatus().getMessage());
         }
 
@@ -126,23 +126,22 @@ public class PivotApplicationLaunchShortcut implements ILaunchShortcut {
             String applicationTypeName = type.getFullyQualifiedName();
 
             ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-            ILaunchConfigurationType configurationType =
-                launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+            ILaunchConfigurationType configurationType = launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
             String name = launchManager.generateUniqueLaunchConfigurationNameFrom(type.getElementName());
 
-            ILaunchConfigurationWorkingCopy workingLaunchConfiguration = configurationType.newInstance(null, name);
-            workingLaunchConfiguration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
-                PivotPlugin.MAIN_TYPE_NAME);
-            workingLaunchConfiguration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
-                applicationProjectName);
-            workingLaunchConfiguration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS,
-                applicationTypeName);
-            workingLaunchConfiguration.setMappedResources(new IResource[] {type.getUnderlyingResource()});
+            ILaunchConfigurationWorkingCopy workingLaunchConfiguration = configurationType.newInstance(
+                null, name);
+            workingLaunchConfiguration.setAttribute(
+                IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, PivotPlugin.MAIN_TYPE_NAME);
+            workingLaunchConfiguration.setAttribute(
+                IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, applicationProjectName);
+            workingLaunchConfiguration.setAttribute(
+                IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, applicationTypeName);
+            workingLaunchConfiguration.setMappedResources(new IResource[] { type.getUnderlyingResource() });
 
             launchConfiguration = workingLaunchConfiguration.doSave();
         } catch (CoreException exception) {
-            MessageDialog.openError(PivotPlugin.getActiveWorkbenchShell(),
-                exception.getMessage(),
+            MessageDialog.openError(PivotPlugin.getActiveWorkbenchShell(), exception.getMessage(),
                 exception.getStatus().getMessage());
         }
 

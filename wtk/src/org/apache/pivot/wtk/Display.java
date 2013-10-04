@@ -37,8 +37,7 @@ public final class Display extends Container {
 
     public java.awt.Window getHostWindow() {
         java.awt.Container parent = displayHost.getParent();
-        while (parent != null
-            && !(parent instanceof java.awt.Window)) {
+        while (parent != null && !(parent instanceof java.awt.Window)) {
             parent = parent.getParent();
         }
 
@@ -46,7 +45,7 @@ public final class Display extends Container {
             throw new IllegalArgumentException("Window does not have a native host.");
         }
 
-        return (java.awt.Window)parent;
+        return (java.awt.Window) parent;
     }
 
     @Override
@@ -77,7 +76,7 @@ public final class Display extends Container {
     @Override
     public void repaint(int x, int y, int width, int height, boolean immediate) {
         if (immediate) {
-            Graphics2D graphics = (Graphics2D)displayHost.getGraphics();
+            Graphics2D graphics = (Graphics2D) displayHost.getGraphics();
 
             // If the display host has been made non-displayable (as will
             // happen when the native peer closes), graphics will be null
@@ -86,8 +85,8 @@ public final class Display extends Container {
                 if (scale == 1) {
                     graphics.clipRect(x, y, width, height);
                 } else {
-                    graphics.clipRect((int)Math.floor(x * scale), (int)Math.floor(y * scale),
-                        (int)Math.ceil(width * scale) + 1, (int)Math.ceil(height * scale) + 1);
+                    graphics.clipRect((int) Math.floor(x * scale), (int) Math.floor(y * scale),
+                        (int) Math.ceil(width * scale) + 1, (int) Math.ceil(height * scale) + 1);
                 }
 
                 displayHost.paint(graphics);
@@ -101,8 +100,8 @@ public final class Display extends Container {
     @Override
     public void insert(Component component, int index) {
         if (!(component instanceof Window)) {
-            throw new IllegalArgumentException("component must be an instance "
-               + "of " + Window.class);
+            throw new IllegalArgumentException("component must be an instance " + "of "
+                + Window.class);
         }
 
         super.insert(component, index);

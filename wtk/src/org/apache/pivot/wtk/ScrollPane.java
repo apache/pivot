@@ -20,45 +20,48 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Container that provides a scrollable view of a component, with optional
- * fixed row and column headers.
- * <p> The single component to be scrolled will typically be a {@link Container}
- * and should be specified by the {@link #setView setView()} method (the "view" property).
- * So, even then though this class is a {@link Container}, you should not add
- * components to it via the {@link #add add()} method.
+ * Container that provides a scrollable view of a component, with optional fixed
+ * row and column headers. <p> The single component to be scrolled will
+ * typically be a {@link Container} and should be specified by the
+ * {@link #setView setView()} method (the "view" property). So, even then though
+ * this class is a {@link Container}, you should not add components to it via
+ * the {@link #add add()} method.
  */
 public class ScrollPane extends Viewport {
     /**
      * Enumeration defining when to show a scroll bar, and if not showing,
-     * whether to constrain the pane's content to the size of the ScrollPane,
-     * or to let the content be shown at its unconstrained size.
+     * whether to constrain the pane's content to the size of the ScrollPane, or
+     * to let the content be shown at its unconstrained size.
      */
     public enum ScrollBarPolicy {
         /**
-         * Show the scroll bar if the pane's content exceeds the size of the pane
-         * in the relevant dimension.
-         * Does not have any effect on the layout of the content.
-         * This is the default setting.
+         * Show the scroll bar if the pane's content exceeds the size of the
+         * pane in the relevant dimension. Does not have any effect on the
+         * layout of the content. This is the default setting.
          */
         AUTO,
         /**
-         * Never show the scroll bar, and don't affect the layout of the pane's content.
+         * Never show the scroll bar, and don't affect the layout of the pane's
+         * content.
          */
         NEVER,
         /**
-         * Always show the scroll bar, and don't affect the layout of the pane's content.
+         * Always show the scroll bar, and don't affect the layout of the pane's
+         * content.
          */
         ALWAYS,
         /**
-         * Do not show the scroll bar, and cause the pane's content to be laid out
-         * to exactly fill the available space in the relevant dimension of the pane.
+         * Do not show the scroll bar, and cause the pane's content to be laid
+         * out to exactly fill the available space in the relevant dimension of
+         * the pane.
          */
         FILL,
         /**
-         * Show the scroll bar if the pane's content exceeds the size of the pane
-         * in the relevant dimension; if it does not, act like <code>FILL</code>,
-         * omitting the scroll bar and causing the pane's content to fill the
-         * available space in the relevant dimension of the pane.
+         * Show the scroll bar if the pane's content exceeds the size of the
+         * pane in the relevant dimension; if it does not, act like
+         * <code>FILL</code>, omitting the scroll bar and causing the pane's
+         * content to fill the available space in the relevant dimension of the
+         * pane.
          */
         FILL_TO_CAPACITY
     }
@@ -79,8 +82,7 @@ public class ScrollPane extends Viewport {
         public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
             ScrollBarPolicy previousVerticalScrollBarPolicy) {
             for (ScrollPaneListener listener : this) {
-                listener.verticalScrollBarPolicyChanged(scrollPane,
-                    previousVerticalScrollBarPolicy);
+                listener.verticalScrollBarPolicyChanged(scrollPane, previousVerticalScrollBarPolicy);
             }
         }
 
@@ -92,8 +94,7 @@ public class ScrollPane extends Viewport {
         }
 
         @Override
-        public void columnHeaderChanged(ScrollPane scrollPane,
-            Component previousColumnHeader) {
+        public void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader) {
             for (ScrollPaneListener listener : this) {
                 listener.columnHeaderChanged(scrollPane, previousColumnHeader);
             }
@@ -109,19 +110,16 @@ public class ScrollPane extends Viewport {
 
     /**
      * Component class representing the components that will get placed in the
-     * corners of a <tt>ScrollPane</tt>. Skins will instantiate these
-     * components as needed when unfilled corners are introduced by a row
-     * header or column header.
+     * corners of a <tt>ScrollPane</tt>. Skins will instantiate these components
+     * as needed when unfilled corners are introduced by a row header or column
+     * header.
      */
     public static class Corner extends Component {
         /**
          * Enumeration defining placement values for scroll pane corners.
          */
         public enum Placement {
-            TOP_LEFT,
-            BOTTOM_LEFT,
-            BOTTOM_RIGHT,
-            TOP_RIGHT;
+            TOP_LEFT, BOTTOM_LEFT, BOTTOM_RIGHT, TOP_RIGHT;
         }
 
         private Placement placement;
@@ -318,9 +316,7 @@ public class ScrollPane extends Viewport {
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
-            if (component == rowHeader
-                || component == columnHeader
-                || component == corner) {
+            if (component == rowHeader || component == columnHeader || component == corner) {
                 throw new UnsupportedOperationException();
             }
         }

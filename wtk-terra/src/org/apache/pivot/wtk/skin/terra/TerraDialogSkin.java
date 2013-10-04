@@ -27,15 +27,14 @@ import org.apache.pivot.wtk.DialogStateListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Dialog skin.
  */
-public class TerraDialogSkin extends TerraFrameSkin
-    implements DialogListener, DialogStateListener {
+public class TerraDialogSkin extends TerraFrameSkin implements DialogListener, DialogStateListener {
     private static final float GOLDEN_SECTION = 0.382f;
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
@@ -48,7 +47,7 @@ public class TerraDialogSkin extends TerraFrameSkin
         public boolean mouseDown(Container display, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
-            Dialog dialog = (Dialog)getComponent();
+            Dialog dialog = (Dialog) getComponent();
             if (isMouseOverOwner(display, x, y)) {
                 Window rootOwner = dialog.getRootOwner();
                 rootOwner.moveToFront();
@@ -72,15 +71,15 @@ public class TerraDialogSkin extends TerraFrameSkin
         }
 
         @Override
-        public boolean mouseWheel(Container display, Mouse.ScrollType scrollType,
-            int scrollAmount, int wheelRotation, int x, int y) {
+        public boolean mouseWheel(Container display, Mouse.ScrollType scrollType, int scrollAmount,
+            int wheelRotation, int x, int y) {
             return isMouseOverOwner(display, x, y);
         }
 
         private boolean isMouseOverOwner(Container display, int x, int y) {
             boolean mouseOverOwner = false;
 
-            Dialog dialog = (Dialog)getComponent();
+            Dialog dialog = (Dialog) getComponent();
             if (dialog.isModal()) {
                 Component descendant = display.getDescendantAt(x, y);
 
@@ -98,7 +97,7 @@ public class TerraDialogSkin extends TerraFrameSkin
     public void install(Component component) {
         super.install(component);
 
-        Dialog dialog = (Dialog)component;
+        Dialog dialog = (Dialog) component;
         dialog.getDialogStateListeners().add(this);
 
         setShowMaximizeButton(false);
@@ -107,7 +106,7 @@ public class TerraDialogSkin extends TerraFrameSkin
 
     @Override
     public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-        Dialog dialog = (Dialog)container;
+        Dialog dialog = (Dialog) container;
         if (!dialog.isTopMost()) {
             Window rootOwner = dialog.getRootOwner();
             rootOwner.moveToFront();
@@ -124,7 +123,7 @@ public class TerraDialogSkin extends TerraFrameSkin
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        Dialog dialog = (Dialog)getComponent();
+        Dialog dialog = (Dialog) getComponent();
 
         if (keyCode == Keyboard.KeyCode.ENTER) {
             dialog.close(true);

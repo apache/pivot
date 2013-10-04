@@ -54,8 +54,7 @@ import org.apache.pivot.wtk.skin.ExpanderSkin;
 /**
  * Terra expander skin.
  */
-public class TerraExpanderSkin extends ExpanderSkin
-    implements ButtonPressListener {
+public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListener {
     /**
      * Expand/collapse transition.
      */
@@ -82,7 +81,7 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         @Override
         public void start(TransitionListener transitionListener) {
-            Expander expander = (Expander)getComponent();
+            Expander expander = (Expander) getComponent();
             Component content = expander.getContent();
             content.getDecorators().add(clipDecorator);
 
@@ -93,7 +92,7 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         @Override
         public void stop() {
-            Expander expander = (Expander)getComponent();
+            Expander expander = (Expander) getComponent();
             Component content = expander.getContent();
             content.getDecorators().remove(clipDecorator);
 
@@ -149,7 +148,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     protected class CollapseImage extends ButtonImage {
         @Override
         public void paint(Graphics2D graphics) {
-            Expander expander = (Expander)TerraExpanderSkin.this.getComponent();
+            Expander expander = (Expander) TerraExpanderSkin.this.getComponent();
 
             graphics.setStroke(new BasicStroke(0));
             if (expander.isEnabled()) {
@@ -160,8 +159,8 @@ public class TerraExpanderSkin extends ExpanderSkin
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            int[] xPoints = {3, 6, 9};
-            int[] yPoints = {9, 3, 9};
+            int[] xPoints = { 3, 6, 9 };
+            int[] yPoints = { 9, 3, 9 };
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -170,7 +169,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     protected class ExpandImage extends ButtonImage {
         @Override
         public void paint(Graphics2D graphics) {
-            Expander expander = (Expander)TerraExpanderSkin.this.getComponent();
+            Expander expander = (Expander) TerraExpanderSkin.this.getComponent();
 
             graphics.setStroke(new BasicStroke(0));
             if (expander.isEnabled()) {
@@ -181,8 +180,8 @@ public class TerraExpanderSkin extends ExpanderSkin
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            int[] xPoints = {3, 6, 9};
-            int[] yPoints = {3, 9, 3};
+            int[] xPoints = { 3, 6, 9 };
+            int[] yPoints = { 3, 9, 3 };
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -219,7 +218,7 @@ public class TerraExpanderSkin extends ExpanderSkin
             boolean consumed = false;
 
             if (count == 2) {
-                Expander expander = (Expander)getComponent();
+                Expander expander = (Expander) getComponent();
 
                 if (expander.isCollapsible()) {
                     expander.setExpanded(!expander.isExpanded());
@@ -235,7 +234,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     private static final int DEFAULT_EXPAND_RATE = 30;
 
     public TerraExpanderSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(4));
 
         titleBarBackgroundColor = theme.getColor(10);
@@ -283,7 +282,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     public void install(Component component) {
         super.install(component);
 
-        Expander expander = (Expander)component;
+        Expander expander = (Expander) component;
         expander.add(titleBarTablePane);
 
         Image buttonData = expander.isExpanded() ? collapseImage : expandImage;
@@ -299,7 +298,7 @@ public class TerraExpanderSkin extends ExpanderSkin
 
     @Override
     public int getPreferredWidth(int height) {
-        Expander expander = (Expander)getComponent();
+        Expander expander = (Expander) getComponent();
         Component content = expander.getContent();
 
         int preferredWidth = titleBarTablePane.getPreferredWidth(-1);
@@ -330,14 +329,12 @@ public class TerraExpanderSkin extends ExpanderSkin
 
     @Override
     public int getPreferredHeight(int width) {
-        Expander expander = (Expander)getComponent();
+        Expander expander = (Expander) getComponent();
         Component content = expander.getContent();
 
         int preferredHeight = titleBarTablePane.getPreferredHeight(-1);
 
-        if (content != null
-            && (expander.isExpanded()
-                || expandTransition != null)) {
+        if (content != null && (expander.isExpanded() || expandTransition != null)) {
             // Title bar border is only drawn when content is non-null and
             // expander is expanded or expanding
             preferredHeight += 1;
@@ -348,12 +345,10 @@ public class TerraExpanderSkin extends ExpanderSkin
             }
 
             if (expandTransition == null) {
-                preferredHeight += (padding.top + padding.bottom
-                    + content.getPreferredHeight(contentWidth));
+                preferredHeight += (padding.top + padding.bottom + content.getPreferredHeight(contentWidth));
             } else {
                 float scale = expandTransition.getScale();
-                preferredHeight += (int)(scale * (padding.top + padding.bottom
-                    + content.getPreferredHeight(contentWidth)));
+                preferredHeight += (int) (scale * (padding.top + padding.bottom + content.getPreferredHeight(contentWidth)));
             }
         }
 
@@ -364,7 +359,7 @@ public class TerraExpanderSkin extends ExpanderSkin
 
     @Override
     public Dimensions getPreferredSize() {
-        Expander expander = (Expander)getComponent();
+        Expander expander = (Expander) getComponent();
         Component content = expander.getContent();
 
         Dimensions titleBarSize = titleBarTablePane.getPreferredSize();
@@ -378,8 +373,7 @@ public class TerraExpanderSkin extends ExpanderSkin
             preferredWidth = Math.max(contentSize.width + (padding.left + padding.right),
                 preferredWidth);
 
-            if (expander.isExpanded()
-                || expandTransition != null) {
+            if (expander.isExpanded() || expandTransition != null) {
                 // Title bar border is only drawn when expander is expanded
                 // or expanding
                 preferredHeight += 1;
@@ -388,8 +382,7 @@ public class TerraExpanderSkin extends ExpanderSkin
                     preferredHeight += (padding.top + padding.bottom + contentSize.height);
                 } else {
                     float scale = expandTransition.getScale();
-                    preferredHeight += (int)(scale * (padding.top + padding.bottom
-                        + contentSize.height));
+                    preferredHeight += (int) (scale * (padding.top + padding.bottom + contentSize.height));
                 }
             }
         }
@@ -402,7 +395,7 @@ public class TerraExpanderSkin extends ExpanderSkin
 
     @Override
     public int getBaseline(int width, int height) {
-        Expander expander = (Expander)getComponent();
+        Expander expander = (Expander) getComponent();
         Component content = expander.getContent();
 
         int baseline = -1;
@@ -424,7 +417,7 @@ public class TerraExpanderSkin extends ExpanderSkin
 
     @Override
     public void layout() {
-        Expander expander = (Expander)getComponent();
+        Expander expander = (Expander) getComponent();
         Component content = expander.getContent();
 
         int width = getWidth();
@@ -436,7 +429,8 @@ public class TerraExpanderSkin extends ExpanderSkin
 
         if (content != null) {
             int contentWidth = Math.max(width - (2 + padding.left + padding.right), 0);
-            int contentHeight = Math.max(height - (3 + padding.top + padding.bottom + titleBarHeight), 0);
+            int contentHeight = Math.max(height
+                - (3 + padding.top + padding.bottom + titleBarHeight), 0);
 
             clipDecorator.setSize(contentWidth, contentHeight);
             content.setSize(contentWidth, content.getPreferredHeight(contentWidth));
@@ -462,8 +456,9 @@ public class TerraExpanderSkin extends ExpanderSkin
         graphics.setPaint(titleBarBorderColor);
         GraphicsUtilities.drawLine(graphics, 0, 1 + titleBarHeight, width, Orientation.HORIZONTAL);
 
-        graphics.setPaint(new GradientPaint(titleBarX + titleBarWidth / 2, titleBarY, titleBarBevelColor,
-            titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight, titleBarBackgroundColor));
+        graphics.setPaint(new GradientPaint(titleBarX + titleBarWidth / 2, titleBarY,
+            titleBarBevelColor, titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight,
+            titleBarBackgroundColor));
         graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
 
         graphics.setPaint(borderColor);
@@ -471,7 +466,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     }
 
     public Font getTitleBarFont() {
-        return (Font)titleLabel.getStyles().get("font");
+        return (Font) titleLabel.getStyles().get("font");
     }
 
     public void setTitleBarFont(Font titleBarFont) {
@@ -495,7 +490,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     }
 
     public Color getTitleBarColor() {
-        return (Color)titleLabel.getStyles().get("color");
+        return (Color) titleLabel.getStyles().get("color");
     }
 
     public void setTitleBarColor(Color titleBarColor) {
@@ -640,13 +635,12 @@ public class TerraExpanderSkin extends ExpanderSkin
 
     /**
      * Listener for expander button events.
-     *
-     * @param button
-     *     The source of the button event.
+     * 
+     * @param button The source of the button event.
      */
     @Override
     public void buttonPressed(Button button) {
-        Expander expander = (Expander)getComponent();
+        Expander expander = (Expander) getComponent();
 
         if (expander.isCollapsible()) {
             expander.setExpanded(!expander.isExpanded());
@@ -694,9 +688,7 @@ public class TerraExpanderSkin extends ExpanderSkin
     public Vote previewExpandedChange(final Expander expander) {
         Vote vote;
 
-        if (expander.isShowing()
-            && expandTransition == null
-            && expander.getContent() != null) {
+        if (expander.isShowing() && expandTransition == null && expander.getContent() != null) {
             final boolean expanded = expander.isExpanded();
             shadeButton.setButtonData(expanded ? collapseImage : expandImage);
             expandTransition = new ExpandTransition(expanded);
@@ -710,8 +702,7 @@ public class TerraExpanderSkin extends ExpanderSkin
             });
         }
 
-        if (expandTransition == null
-            || !expandTransition.isRunning()) {
+        if (expandTransition == null || !expandTransition.isRunning()) {
             vote = Vote.APPROVE;
         } else {
             vote = Vote.DEFER;
@@ -725,8 +716,7 @@ public class TerraExpanderSkin extends ExpanderSkin
      */
     @Override
     public void expandedChangeVetoed(Expander expander, Vote reason) {
-        if (reason == Vote.DENY
-            && expandTransition != null) {
+        if (reason == Vote.DENY && expandTransition != null) {
             // NOTE We stop, rather than end, the transition so the completion
             // event isn't fired; if the event fires, the listener will set
             // the expanded state

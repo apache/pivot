@@ -31,8 +31,7 @@ public class PanoramaTest extends Application.Adapter {
     private Frame frame2 = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         frame1 = new Frame();
         frame1.setTitle("Panorama Test 1");
 
@@ -46,7 +45,8 @@ public class PanoramaTest extends Application.Adapter {
         frame1.open(display);
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        frame2 = new Frame((Component)bxmlSerializer.readObject(getClass().getResource("panorama_test.bxml")));
+        frame2 = new Frame((Component) bxmlSerializer.readObject(getClass().getResource(
+            "panorama_test.bxml")));
         frame2.setTitle("Panorama Test 2");
         frame2.setPreferredSize(480, 360);
         frame2.open(display);

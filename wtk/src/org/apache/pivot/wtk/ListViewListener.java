@@ -33,7 +33,8 @@ public interface ListViewListener {
         }
 
         @Override
-        public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
+        public void itemRendererChanged(ListView listView,
+            ListView.ItemRenderer previousItemRenderer) {
             // empty block
         }
 
@@ -67,7 +68,7 @@ public interface ListViewListener {
 
     /**
      * Called when a list view's list data has changed.
-     *
+     * 
      * @param listView
      * @param previousListData
      */
@@ -75,7 +76,7 @@ public interface ListViewListener {
 
     /**
      * Called when a list view's item renderer has changed.
-     *
+     * 
      * @param listView
      * @param previousItemRenderer
      */
@@ -83,7 +84,7 @@ public interface ListViewListener {
 
     /**
      * Called when a list view's item editor has changed.
-     *
+     * 
      * @param listView
      * @param previousItemEditor
      */
@@ -91,7 +92,7 @@ public interface ListViewListener {
 
     /**
      * Called when a list view's select mode has changed.
-     *
+     * 
      * @param listView
      * @param previousSelectMode
      */
@@ -99,14 +100,14 @@ public interface ListViewListener {
 
     /**
      * Called when a list view's checkmarks enabled flag has changed.
-     *
+     * 
      * @param listView
      */
     public void checkmarksEnabledChanged(ListView listView);
 
     /**
      * Called when a list view's disabled item filter has changed.
-     *
+     * 
      * @param listView
      * @param previousDisabledItemFilter
      */
@@ -114,7 +115,7 @@ public interface ListViewListener {
 
     /**
      * Called when a list view's disabled checkmark filter has changed.
-     *
+     * 
      * @param listView
      * @param previousDisabledCheckmarkFilter
      */

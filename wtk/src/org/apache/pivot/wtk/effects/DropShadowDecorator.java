@@ -55,9 +55,8 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Returns the color used to draw the shadow.
-     *
-     * @return
-     * The color used to draw the shadow.
+     * 
+     * @return The color used to draw the shadow.
      */
     public Color getShadowColor() {
         return shadowColor;
@@ -65,9 +64,8 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the color used to draw the shadow.
-     *
-     * @param shadowColor
-     * The color used to draw the shadow.
+     * 
+     * @param shadowColor The color used to draw the shadow.
      */
     public void setShadowColor(Color shadowColor) {
         this.shadowColor = shadowColor;
@@ -75,10 +73,10 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the color used to draw the shadow.
-     *
-     * @param shadowColor
-     * The color used to draw the shadow, which can be any of the
-     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     * 
+     * @param shadowColor The color used to draw the shadow, which can be any of
+     * the {@linkplain GraphicsUtilities#decodeColor color values recognized by
+     * Pivot}.
      */
     public final void setShadowColor(String shadowColor) {
         if (shadowColor == null) {
@@ -90,9 +88,8 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Returns the opacity used to draw the shadow.
-     *
-     * @return
-     * The color used to draw the shadow.
+     * 
+     * @return The color used to draw the shadow.
      */
     public float getShadowOpacity() {
         return shadowOpacity;
@@ -100,9 +97,8 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the opacity used to draw the shadow.
-     *
-     * @param shadowOpacity
-     * The opacity used to draw the shadow.
+     * 
+     * @param shadowOpacity The opacity used to draw the shadow.
      */
     public void setShadowOpacity(float shadowOpacity) {
         this.shadowOpacity = shadowOpacity;
@@ -110,9 +106,8 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Returns the blur radius used to draw the shadow.
-     *
-     * @return
-     * The blur radius used to draw the shadow.
+     * 
+     * @return The blur radius used to draw the shadow.
      */
     public int getBlurRadius() {
         return blurRadius;
@@ -120,9 +115,8 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the blur radius used to draw the shadow.
-     *
-     * @param blurRadius
-     * The blur radius used to draw the shadow.
+     * 
+     * @param blurRadius The blur radius used to draw the shadow.
      */
     public void setBlurRadius(int blurRadius) {
         this.blurRadius = blurRadius;
@@ -130,9 +124,8 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Returns the amount that the drop shadow will be offset along the x axis.
-     *
-     * @return
-     * The x offset used to draw the shadow
+     * 
+     * @return The x offset used to draw the shadow
      */
     public int getXOffset() {
         return xOffset;
@@ -140,9 +133,8 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the amount that the drop shadow will be offset along the x axis.
-     *
-     * @param xOffset
-     * The x offset used to draw the shadow
+     * 
+     * @param xOffset The x offset used to draw the shadow
      */
     public void setXOffset(int xOffset) {
         this.xOffset = xOffset;
@@ -150,9 +142,8 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Returns the amount that the drop shadow will be offset along the y axis.
-     *
-     * @return
-     * The y offset used to draw the shadow
+     * 
+     * @return The y offset used to draw the shadow
      */
     public int getYOffset() {
         return yOffset;
@@ -160,9 +151,8 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the amount that the drop shadow will be offset along the y axis.
-     *
-     * @param yOffset
-     * The y offset used to draw the shadow
+     * 
+     * @param yOffset The y offset used to draw the shadow
      */
     public void setYOffset(int yOffset) {
         this.yOffset = yOffset;
@@ -173,13 +163,12 @@ public class DropShadowDecorator implements Decorator {
         int width = component.getWidth();
         int height = component.getHeight();
 
-        if (width > 0
-            && height > 0) {
-            if (shadowImage == null
-                || shadowImage.getWidth() != width + 2 * blurRadius
+        if (width > 0 && height > 0) {
+            if (shadowImage == null || shadowImage.getWidth() != width + 2 * blurRadius
                 || shadowImage.getHeight() != height + 2 * blurRadius) {
                 // Recreate the shadow
-                BufferedImage rectangleImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                BufferedImage rectangleImage = new BufferedImage(width, height,
+                    BufferedImage.TYPE_INT_ARGB);
                 Graphics2D rectangleImageGraphics = rectangleImage.createGraphics();
                 rectangleImageGraphics.setColor(Color.BLACK);
                 rectangleImageGraphics.fillRect(0, 0, width, height);
@@ -187,9 +176,11 @@ public class DropShadowDecorator implements Decorator {
                 shadowImage = createShadow(rectangleImage);
             }
 
-            // Avoid drawing shadow if it will be covered by the component itself:
+            // Avoid drawing shadow if it will be covered by the component
+            // itself:
             Bounds paintBounds = new Bounds(0, 0, width, height);
-            if (!component.isOpaque() || !paintBounds.contains(new Bounds(graphics.getClipBounds())))
+            if (!component.isOpaque()
+                || !paintBounds.contains(new Bounds(graphics.getClipBounds())))
                 graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
         } else {
             shadowImage = null;
@@ -205,9 +196,8 @@ public class DropShadowDecorator implements Decorator {
 
     @Override
     public Bounds getBounds(Component component) {
-        return new Bounds(xOffset - blurRadius, yOffset - blurRadius,
-            component.getWidth() + blurRadius * 2,
-            component.getHeight() + blurRadius * 2);
+        return new Bounds(xOffset - blurRadius, yOffset - blurRadius, component.getWidth()
+            + blurRadius * 2, component.getHeight() + blurRadius * 2);
     }
 
     @Override
@@ -218,17 +208,11 @@ public class DropShadowDecorator implements Decorator {
     /**
      * Generates the shadow for a given picture and the current properties of
      * the decorator. The generated image dimensions are computed as follows:
-     *
-     * <pre>
-     * width = imageWidth + 2 * blurRadius
-     * height = imageHeight + 2 * blurRadius
-     * </pre>
-     *
-     * @param src
-     * The image from which the shadow will be cast.
-     *
-     * @return
-     * An image containing the generated shadow.
+     * <pre> width = imageWidth + 2 * blurRadius height = imageHeight + 2 *
+     * blurRadius </pre>
+     * 
+     * @param src The image from which the shadow will be cast.
+     * @return An image containing the generated shadow.
      */
     private BufferedImage createShadow(BufferedImage src) {
         int shadowSize = blurRadius * 2;
@@ -251,8 +235,8 @@ public class DropShadowDecorator implements Decorator {
         int aSum;
 
         Graphics2D srcGraphics = src.createGraphics();
-        BufferedImage dst = srcGraphics.getDeviceConfiguration()
-                .createCompatibleImage(dstWidth, dstHeight, Transparency.TRANSLUCENT);
+        BufferedImage dst = srcGraphics.getDeviceConfiguration().createCompatibleImage(dstWidth,
+            dstHeight, Transparency.TRANSLUCENT);
         srcGraphics.dispose();
 
         int[] dstBuffer = new int[dstWidth * dstHeight];

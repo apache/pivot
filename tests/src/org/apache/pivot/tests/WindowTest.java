@@ -50,8 +50,8 @@ public class WindowTest extends Application.Adapter {
         window1.getComponentListeners().add(new ComponentListener.Adapter() {
             @Override
             public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-                window1.align(window1.getDisplay().getBounds(),
-                    HorizontalAlignment.CENTER, VerticalAlignment.CENTER);
+                window1.align(window1.getDisplay().getBounds(), HorizontalAlignment.CENTER,
+                    VerticalAlignment.CENTER);
                 window1.getComponentListeners().remove(this);
             }
         });
@@ -108,7 +108,7 @@ public class WindowTest extends Application.Adapter {
         window1bi.setPreferredSize(180, 60);
         window1bi.setLocation(270, 160);
         window1bi.setContent(new Label("This window is not enabled"));
-        window1bi.setEnabled(false);  // to test even a not enabled window ...
+        window1bi.setEnabled(false); // to test even a not enabled window ...
         window1bi.open(window1b);
 
         Frame window1bii = new Frame();
@@ -128,7 +128,7 @@ public class WindowTest extends Application.Adapter {
         palette2.setPreferredSize(160, 60);
         palette2.setLocation(600, 200);
         palette2.setContent(new Label("This palette is not enabled"));
-        palette2.setEnabled(false);  // to test even a not enabled palette ...
+        palette2.setEnabled(false); // to test even a not enabled palette ...
         palette2.open(window1bii);
 
         dialogOwner.setTitle("Dialog Owner");

@@ -48,8 +48,7 @@ public class Expenses extends Application.Adapter {
         URL origin = ApplicationContext.getOrigin();
         if (origin == null) {
             System.out.println("Warning: Origin null, so for this application to run you have to set the following properties: \n"
-                + SECURE_KEY + ", " + HOSTNAME_KEY + ", " + PORT_KEY + "\n"
-            );
+                + SECURE_KEY + ", " + HOSTNAME_KEY + ", " + PORT_KEY + "\n");
             System.exit(1);
             return; // make Eclipse's null checker happy
         }
@@ -73,7 +72,7 @@ public class Expenses extends Application.Adapter {
         }
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        expensesWindow = (ExpensesWindow)bxmlSerializer.readObject(ExpensesWindow.class,
+        expensesWindow = (ExpensesWindow) bxmlSerializer.readObject(ExpensesWindow.class,
             "expenses_window.bxml", true);
         expensesWindow.setExpensesApplication(this);
         expensesWindow.open(display);

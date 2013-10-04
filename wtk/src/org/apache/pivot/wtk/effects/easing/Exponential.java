@@ -22,14 +22,14 @@ package org.apache.pivot.wtk.effects.easing;
 public class Exponential implements Easing {
     @Override
     public float easeIn(float time, float begin, float change, float duration) {
-        return (time == 0) ? begin
-            : change * (float)Math.pow(2, 10 * (time / duration - 1f)) + begin;
+        return (time == 0) ? begin : change * (float) Math.pow(2, 10 * (time / duration - 1f))
+            + begin;
     }
 
     @Override
     public float easeOut(float time, float begin, float change, float duration) {
-        return (time == duration) ? begin + change
-            : change * ((float)-Math.pow(2, -10 * time / duration) + 1f) + begin;
+        return (time == duration) ? begin + change : change
+            * ((float) -Math.pow(2, -10 * time / duration) + 1f) + begin;
     }
 
     @Override
@@ -43,9 +43,9 @@ public class Exponential implements Easing {
         }
 
         if ((time /= duration / 2f) < 1) {
-            return change / 2f * (float)Math.pow(2, 10 * (time - 1)) + begin;
+            return change / 2f * (float) Math.pow(2, 10 * (time - 1)) + begin;
         }
 
-        return change / 2f * ((float)-Math.pow(2, -10 * (time - 1)) + 2) + begin;
+        return change / 2f * ((float) -Math.pow(2, -10 * (time - 1)) + 2) + begin;
     }
 }

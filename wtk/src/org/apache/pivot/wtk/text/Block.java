@@ -20,16 +20,16 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.HorizontalAlignment;
 
 /**
- * Abstract base class for block elements.
- * <p>
- * TODO Add margin, and line spacing properties.
+ * Abstract base class for block elements. <p> TODO Add margin, and line spacing
+ * properties.
  */
 public abstract class Block extends Element {
 
     private static class BlockListenerList extends ListenerList<BlockListener> implements
         BlockListener {
         @Override
-        public void horizontalAlignmentChanged(Block block, HorizontalAlignment previousHorizontalAlignment) {
+        public void horizontalAlignmentChanged(Block block,
+            HorizontalAlignment previousHorizontalAlignment) {
             for (BlockListener listener : this) {
                 listener.horizontalAlignmentChanged(block, previousHorizontalAlignment);
             }

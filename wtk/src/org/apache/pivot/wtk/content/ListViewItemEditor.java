@@ -41,8 +41,8 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
     private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
+            Display display = (Display) container;
+            Window window = (Window) display.getComponentAt(x, y);
 
             if (window != ListViewItemEditor.this) {
                 endEdit(true);
@@ -54,8 +54,8 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
         @Override
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
+            Display display = (Display) container;
+            Window window = (Window) display.getComponentAt(x, y);
 
             return (window != ListViewItemEditor.this);
         }
@@ -84,7 +84,7 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
 
         // Get the data being edited
         List<?> listData = listViewArgument.getListData();
-        ListItem listItem = (ListItem)listData.get(itemIndexArgument);
+        ListItem listItem = (ListItem) listData.get(itemIndexArgument);
 
         String text = listItem.getText();
         textInput.setText(text != null ? text : "");
@@ -93,30 +93,31 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
         // Get the item bounds
         Bounds itemBounds = listViewArgument.getItemBounds(itemIndexArgument);
         int itemIndent = listViewArgument.getItemIndent();
-        itemBounds = new Bounds(itemBounds.x + itemIndent, itemBounds.y,
-            itemBounds.width - itemIndent, itemBounds.height);
+        itemBounds = new Bounds(itemBounds.x + itemIndent, itemBounds.y, itemBounds.width
+            - itemIndent, itemBounds.height);
 
         // Render the item data
-        ListViewItemRenderer itemRenderer = (ListViewItemRenderer)listViewArgument.getItemRenderer();
-        itemRenderer.render(listItem, itemIndexArgument, listViewArgument, false, false, false, false);
+        ListViewItemRenderer itemRenderer = (ListViewItemRenderer) listViewArgument.getItemRenderer();
+        itemRenderer.render(listItem, itemIndexArgument, listViewArgument, false, false, false,
+            false);
         itemRenderer.setSize(itemBounds.width, itemBounds.height);
 
         // Calculate the text bounds
         Bounds textBounds = itemRenderer.getTextBounds();
 
         // Calculate the bounds of what is being edited
-        Insets padding = (Insets)textInput.getStyles().get("padding");
+        Insets padding = (Insets) textInput.getStyles().get("padding");
         Bounds editBounds = new Bounds(itemBounds.x + textBounds.x - (padding.left + 1),
-            itemBounds.y, itemBounds.width - textBounds.x + (padding.left + 1),
-            itemBounds.height);
+            itemBounds.y, itemBounds.width - textBounds.x + (padding.left + 1), itemBounds.height);
 
         // Scroll to make the item as visible as possible
-        listViewArgument.scrollAreaToVisible(editBounds.x, editBounds.y,
-            textBounds.width + padding.left + 1, editBounds.height);
+        listViewArgument.scrollAreaToVisible(editBounds.x, editBounds.y, textBounds.width
+            + padding.left + 1, editBounds.height);
 
         // Constrain the bounds by what is visible through viewport ancestors
         editBounds = listViewArgument.getVisibleArea(editBounds);
-        Point location = listViewArgument.mapPointToAncestor(listViewArgument.getDisplay(), editBounds.x, editBounds.y);
+        Point location = listViewArgument.mapPointToAncestor(listViewArgument.getDisplay(),
+            editBounds.x, editBounds.y);
 
         textInput.setPreferredWidth(editBounds.width);
         setLocation(location.x, location.y + (editBounds.height - getPreferredHeight(-1)) / 2);
@@ -132,8 +133,8 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
             String text = textInput.getText();
 
             @SuppressWarnings("unchecked")
-            List<Object> listData = (List<Object>)listView.getListData();
-            ListItem listItem = (ListItem)listData.get(itemIndex);
+            List<Object> listData = (List<Object>) listView.getListData();
+            ListItem listItem = (ListItem) listData.get(itemIndex);
 
             listItem.setText(text);
 

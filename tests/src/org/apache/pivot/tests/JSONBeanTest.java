@@ -47,4 +47,3 @@ public class JSONBeanTest {
         System.out.println(JSONSerializer.toString(a));
     }
 }
-

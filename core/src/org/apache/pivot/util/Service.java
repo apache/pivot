@@ -27,16 +27,14 @@ import java.io.InputStreamReader;
 public class Service {
     /**
      * Attempts to load a service provider.
-     *
-     * @param providerName
-     * The name of the provider to load. The method first looks for a system
-     * property with this name. The value of the property is expected to be the
-     * name of a class that implements the expected provider interface.
-     * <p>
-     * If the system property does not exist, the method then attempts to load
-     * a resource with this name from the META-INF/services directory. The
-     * resource is expected to be a text file containing a single line that is
-     * the name of the provider class.
+     * 
+     * @param providerName The name of the provider to load. The method first
+     * looks for a system property with this name. The value of the property is
+     * expected to be the name of a class that implements the expected provider
+     * interface. <p> If the system property does not exist, the method then
+     * attempts to load a resource with this name from the META-INF/services
+     * directory. The resource is expected to be a text file containing a single
+     * line that is the name of the provider class.
      */
     @SuppressWarnings("resource")
     public static Object getProvider(String providerName) {
@@ -45,7 +43,7 @@ public class Service {
         // First look for a system property
         try {
             providerClassName = System.getProperty(providerName);
-        } catch(SecurityException exception) {
+        } catch (SecurityException exception) {
             // No-op
         }
 
@@ -60,11 +58,10 @@ public class Service {
                 try {
                     BufferedReader reader = null;
                     try {
-                        reader = new BufferedReader(new InputStreamReader(serviceInputStream, "UTF-8"));
+                        reader = new BufferedReader(new InputStreamReader(serviceInputStream,
+                            "UTF-8"));
                         String line = reader.readLine();
-                        while (line != null
-                            && (line.length() == 0
-                                || line.startsWith("#"))) {
+                        while (line != null && (line.length() == 0 || line.startsWith("#"))) {
                             line = reader.readLine();
                         }
 
@@ -74,7 +71,7 @@ public class Service {
                             reader.close();
                         }
                     }
-                } catch(IOException exception) {
+                } catch (IOException exception) {
                     // No-op
                 }
             }
@@ -86,7 +83,7 @@ public class Service {
         if (providerClassName != null) {
             try {
                 providerClass = Class.forName(providerClassName);
-            } catch(ClassNotFoundException exception) {
+            } catch (ClassNotFoundException exception) {
                 // The specified class could not be found
             }
         }
@@ -95,9 +92,9 @@ public class Service {
         if (providerClass != null) {
             try {
                 provider = providerClass.newInstance();
-            } catch(InstantiationException exception) {
+            } catch (InstantiationException exception) {
                 // No-op
-            } catch(IllegalAccessException exception) {
+            } catch (IllegalAccessException exception) {
                 // No-op
             }
         }

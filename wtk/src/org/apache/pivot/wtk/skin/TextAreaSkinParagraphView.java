@@ -97,12 +97,12 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
 
     public int getWidth() {
         validate();
-        return (int)Math.ceil(width);
+        return (int) Math.ceil(width);
     }
 
     public int getHeight() {
         validate();
-        return (int)Math.ceil(height);
+        return (int) Math.ceil(height);
     }
 
     public int getBreakWidth() {
@@ -118,7 +118,7 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
     }
 
     public void paint(Graphics2D graphics) {
-        TextArea textArea = (TextArea)textAreaSkin.getComponent();
+        TextArea textArea = (TextArea) textAreaSkin.getComponent();
 
         int selectionStart = textArea.getSelectionStart();
         int selectionLength = textArea.getSelectionLength();
@@ -128,26 +128,26 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
         Span characterRange = new Span(paragraphOffset, paragraphOffset
             + paragraph.getCharacters().length() - 1);
 
-        if (selectionLength > 0
-            && characterRange.intersects(selectionRange)) {
+        if (selectionLength > 0 && characterRange.intersects(selectionRange)) {
             boolean focused = textArea.isFocused();
             boolean editable = textArea.isEditable();
 
             // Determine the selected and unselected areas
             Area selection = textAreaSkin.getSelection();
-            Area selectedArea = selection.createTransformedArea(AffineTransform.getTranslateInstance(-x, -y));
+            Area selectedArea = selection.createTransformedArea(AffineTransform.getTranslateInstance(
+                -x, -y));
             Area unselectedArea = new Area();
             unselectedArea.add(new Area(new Rectangle2D.Float(0, 0, width, height)));
             unselectedArea.subtract(new Area(selectedArea));
 
             // Paint the unselected text
-            Graphics2D unselectedGraphics = (Graphics2D)graphics.create();
+            Graphics2D unselectedGraphics = (Graphics2D) graphics.create();
             unselectedGraphics.clip(unselectedArea);
             paint(unselectedGraphics, focused, editable, false);
             unselectedGraphics.dispose();
 
             // Paint the selected text
-            Graphics2D selectedGraphics = (Graphics2D)graphics.create();
+            Graphics2D selectedGraphics = (Graphics2D) graphics.create();
             selectedGraphics.clip(selectedArea);
             paint(selectedGraphics, focused, editable, true);
             selectedGraphics.dispose();
@@ -170,11 +170,11 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
             Row row = rows.get(i);
 
             Rectangle2D textBounds = row.glyphVector.getLogicalBounds();
-            float rowWidth = (float)textBounds.getWidth();
+            float rowWidth = (float) textBounds.getWidth();
             if (clipBounds.intersects(new Rectangle2D.Float(0, rowY, rowWidth, rowHeight))) {
                 if (selected) {
-                    graphics.setPaint(focused && editable ?
-                        textAreaSkin.getSelectionColor() : textAreaSkin.getInactiveSelectionColor());
+                    graphics.setPaint(focused && editable ? textAreaSkin.getSelectionColor()
+                        : textAreaSkin.getInactiveSelectionColor());
                 } else {
                     graphics.setPaint(textAreaSkin.getColor());
                 }
@@ -191,7 +191,8 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
     }
 
     public void validate() {
-        // TODO Validate from known invalid offset rather than 0, so we don't need to
+        // TODO Validate from known invalid offset rather than 0, so we don't
+        // need to
         // recalculate all glyph vectors
         if (!valid) {
             rows = new ArrayList<>();
@@ -211,8 +212,10 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
             int lastWhitespaceIndex = -1;
 
             // NOTE We use a character iterator here only because it is the most
-            // efficient way to measure the character bounds (as of Java 6, the version
-            // of Font#getStringBounds() that takes a String performs a string copy,
+            // efficient way to measure the character bounds (as of Java 6, the
+            // version
+            // of Font#getStringBounds() that takes a String performs a string
+            // copy,
             // whereas the version that takes a character iterator does not)
             CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(characters);
             while (i < n) {
@@ -221,8 +224,7 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
                     lastWhitespaceIndex = i;
                 }
 
-                Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1,
-                    fontRenderContext);
+                Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
                 rowWidth += characterBounds.getWidth();
 
                 if (rowWidth > breakWidth) {
@@ -234,8 +236,8 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
                             i--;
                         }
                     } else {
-                        appendLine(characters, start, lastWhitespaceIndex + 1,
-                            font, fontRenderContext);
+                        appendLine(characters, start, lastWhitespaceIndex + 1, font,
+                            fontRenderContext);
                         i = lastWhitespaceIndex;
                     }
 
@@ -256,15 +258,15 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
         valid = true;
     }
 
-    private void appendLine(CharSequence characters, int start, int end,
-        Font font, FontRenderContext fontRenderContext) {
-        CharSequenceCharacterIterator line = new CharSequenceCharacterIterator(characters,
-            start, end, start);
+    private void appendLine(CharSequence characters, int start, int end, Font font,
+        FontRenderContext fontRenderContext) {
+        CharSequenceCharacterIterator line = new CharSequenceCharacterIterator(characters, start,
+            end, start);
         GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
         rows.add(new Row(glyphVector, start));
 
         Rectangle2D textBounds = glyphVector.getLogicalBounds();
-        width = Math.max(width, (float)textBounds.getWidth());
+        width = Math.max(width, (float) textBounds.getWidth());
         height += textBounds.getHeight();
     }
 
@@ -274,11 +276,10 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float rowHeight = lm.getAscent() + lm.getDescent();
 
-        int i = (int)Math.floor(yArgument / rowHeight);
+        int i = (int) Math.floor(yArgument / rowHeight);
 
         int n = rows.getLength();
-        return (i < 0
-            || i >= n) ? -1 : getRowInsertionPoint(i, xArgument);
+        return (i < 0 || i >= n) ? -1 : getRowInsertionPoint(i, xArgument);
     }
 
     public int getNextInsertionPoint(int xArgument, int from, TextArea.ScrollDirection direction) {
@@ -298,15 +299,14 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
             i--;
         }
 
-        return (i < 0
-            || i >= n) ? -1 : getRowInsertionPoint(i, xArgument);
+        return (i < 0 || i >= n) ? -1 : getRowInsertionPoint(i, xArgument);
     }
 
     private int getRowInsertionPoint(int rowIndex, float xArgument) {
         Row row = rows.get(rowIndex);
 
         Rectangle2D glyphVectorBounds = row.glyphVector.getLogicalBounds();
-        float rowWidth = (float)glyphVectorBounds.getWidth();
+        float rowWidth = (float) glyphVectorBounds.getWidth();
 
         int index;
         if (xArgument < 0) {
@@ -328,7 +328,8 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
                 Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
                 if (glyphBounds2D.contains(xArgument, glyphBounds2D.getY())) {
-                    // Determine the bias; if the user clicks on the right half of the
+                    // Determine the bias; if the user clicks on the right half
+                    // of the
                     // character; select the next character
                     if (xArgument - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2
                         && index < n - 1) {
@@ -383,7 +384,7 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
             Row row = rows.get(rowIndex);
 
             Rectangle2D glyphVectorBounds = row.glyphVector.getLogicalBounds();
-            xLocal = (int)Math.floor(glyphVectorBounds.getWidth());
+            xLocal = (int) Math.floor(glyphVectorBounds.getWidth());
             widthLocal = PARAGRAPH_TERMINATOR_WIDTH;
         } else {
             // This is a visible character
@@ -392,8 +393,8 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
 
             Shape glyphBounds = row.glyphVector.getGlyphLogicalBounds(index - row.offset);
             Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
-            xLocal = (int)Math.floor(glyphBounds2D.getX());
-            widthLocal = (int)Math.ceil(glyphBounds2D.getWidth());
+            xLocal = (int) Math.floor(glyphBounds2D.getX());
+            widthLocal = (int) Math.ceil(glyphBounds2D.getWidth());
         }
 
         Font font = textAreaSkin.getFont();
@@ -401,8 +402,8 @@ class TextAreaSkinParagraphView implements TextArea.ParagraphListener {
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float rowHeight = lm.getAscent() + lm.getDescent();
 
-        characterBounds = new Bounds(xLocal, (int)Math.floor(rowIndex * rowHeight), widthLocal,
-            (int)Math.ceil(rowHeight));
+        characterBounds = new Bounds(xLocal, (int) Math.floor(rowIndex * rowHeight), widthLocal,
+            (int) Math.ceil(rowHeight));
 
         return characterBounds;
     }

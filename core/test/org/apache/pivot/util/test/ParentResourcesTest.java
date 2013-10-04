@@ -76,7 +76,7 @@ public class ParentResourcesTest {
     @Test
     public void testList() {
 
-        List<?> list = (List<?>)main.get("aList");
+        List<?> list = (List<?>) main.get("aList");
         assertNotNull("aList not null", list);
         assertEquals("6 items", 6, list.getLength());
 
@@ -106,8 +106,7 @@ public class ParentResourcesTest {
         main = new Resources(parent, getClass().getName(), Locale.ENGLISH, Charset.defaultCharset());
         testString();
 
-        main = new Resources(parent, getClass().getName(), Locale.ENGLISH,
-            Charset.defaultCharset());
+        main = new Resources(parent, getClass().getName(), Locale.ENGLISH, Charset.defaultCharset());
         testString();
 
     }

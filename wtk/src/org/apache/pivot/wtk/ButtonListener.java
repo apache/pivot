@@ -57,7 +57,7 @@ public interface ButtonListener {
 
     /**
      * Called when a button's data has changed.
-     *
+     * 
      * @param button
      * @param previousButtonData
      */
@@ -65,7 +65,7 @@ public interface ButtonListener {
 
     /**
      * Called when a button's data renderer has changed.
-     *
+     * 
      * @param button
      * @param previousDataRenderer
      */
@@ -73,7 +73,7 @@ public interface ButtonListener {
 
     /**
      * Called when a button's action has changed.
-     *
+     * 
      * @param button
      * @param previousAction
      */
@@ -81,21 +81,21 @@ public interface ButtonListener {
 
     /**
      * Called when a button's toggle button flag has changed.
-     *
+     * 
      * @param button
      */
     public void toggleButtonChanged(Button button);
 
     /**
      * Called when a button's tri-state flag has changed.
-     *
+     * 
      * @param button
      */
     public void triStateChanged(Button button);
 
     /**
      * Called when a button's button group has changed.
-     *
+     * 
      * @param button
      * @param previousButtonGroup
      */

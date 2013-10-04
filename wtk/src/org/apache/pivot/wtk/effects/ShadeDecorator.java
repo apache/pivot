@@ -26,8 +26,8 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.GraphicsUtilities;
 
 /**
- * Decorator that applies a "shade" to a component. The shade is a rectangle
- * of the same size as the component that is painted over the component using a
+ * Decorator that applies a "shade" to a component. The shade is a rectangle of
+ * the same size as the component that is painted over the component using a
  * given color and opacity value.
  */
 public class ShadeDecorator implements Decorator {
@@ -38,8 +38,8 @@ public class ShadeDecorator implements Decorator {
     private Graphics2D graphics;
 
     /**
-     * Creates a new <tt>ShadeDecorator</tt> with the default opacity and
-     * shade color.
+     * Creates a new <tt>ShadeDecorator</tt> with the default opacity and shade
+     * color.
      */
     public ShadeDecorator() {
         this(0.33f, Color.BLACK);
@@ -48,16 +48,12 @@ public class ShadeDecorator implements Decorator {
     /**
      * Creates a new <tt>ShadeDecorator</tt> with the specified opacity and
      * shade color.
-     *
-     * @param opacity
-     * The opacity of the shade, between 0 and 1, exclusive.
-     *
-     * @param color
-     * The color of the shade.
+     * 
+     * @param opacity The opacity of the shade, between 0 and 1, exclusive.
+     * @param color The color of the shade.
      */
     public ShadeDecorator(float opacity, Color color) {
-        if (opacity <= 0
-            || opacity >= 1) {
+        if (opacity <= 0 || opacity >= 1) {
             throw new IllegalArgumentException("opacity must be between 0 and 1, exclusive.");
         }
 
@@ -78,6 +74,7 @@ public class ShadeDecorator implements Decorator {
 
     /**
      * Sets the opacity of the decorator.
+     * 
      * @param opacity A number between 0 (transparent) and 1 (opaque)
      */
     public void setOpacity(float opacity) {
@@ -86,6 +83,7 @@ public class ShadeDecorator implements Decorator {
 
     /**
      * Sets the opacity of the decorator.
+     * 
      * @param opacity A number between 0 (transparent) and 1 (opaque)
      */
     public void setOpacity(Number opacity) {
@@ -116,7 +114,9 @@ public class ShadeDecorator implements Decorator {
 
     /**
      * Sets the color of the decorator
-     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     * 
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
+     * values recognized by Pivot}.
      */
     public final void setColor(String color) {
         if (color == null) {

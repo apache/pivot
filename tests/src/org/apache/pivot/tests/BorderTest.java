@@ -24,15 +24,14 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 
-
 public class BorderTest extends Application.Adapter {
     private Frame frame = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        frame = new Frame((Component)bxmlSerializer.readObject(getClass().getResource("border_test.bxml")));
+        frame = new Frame((Component) bxmlSerializer.readObject(getClass().getResource(
+            "border_test.bxml")));
         frame.setTitle("Border Test");
         frame.setPreferredSize(480, 360);
         frame.open(display);

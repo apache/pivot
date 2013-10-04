@@ -29,7 +29,7 @@ class TextPaneSkinBulletedListView extends TextPaneSkinListView implements Bulle
     protected void attach() {
         super.attach();
 
-        BulletedList bulletedList = (BulletedList)getNode();
+        BulletedList bulletedList = (BulletedList) getNode();
         bulletedList.getBulletedListListeners().add(this);
     }
 
@@ -37,16 +37,16 @@ class TextPaneSkinBulletedListView extends TextPaneSkinListView implements Bulle
     protected void detach() {
         super.detach();
 
-        BulletedList bulletedList = (BulletedList)getNode();
+        BulletedList bulletedList = (BulletedList) getNode();
         bulletedList.getBulletedListListeners().remove(this);
     }
 
     @Override
     protected void childLayout(int breakWidth) {
-        BulletedList bulletedList = (BulletedList)getNode();
+        BulletedList bulletedList = (BulletedList) getNode();
 
         for (TextPaneSkinNodeView nodeView : this) {
-            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
+            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView) nodeView;
 
             switch (bulletedList.getStyle()) {
                 case CIRCLE:
@@ -62,7 +62,7 @@ class TextPaneSkinBulletedListView extends TextPaneSkinListView implements Bulle
 
         this.maxIndexTextWidth = 0;
         for (TextPaneSkinNodeView nodeView : this) {
-            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView)nodeView;
+            TextPaneSkinListItemView listItemView = (TextPaneSkinListItemView) nodeView;
             this.maxIndexTextWidth = Math.max(this.maxIndexTextWidth,
                 listItemView.getIndexTextWidth());
         }

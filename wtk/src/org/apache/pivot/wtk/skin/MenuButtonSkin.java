@@ -22,6 +22,7 @@ import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuButton;
 import org.apache.pivot.wtk.MenuButtonListener;
@@ -30,13 +31,12 @@ import org.apache.pivot.wtk.MenuPopupStateListener;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
 
 /**
  * Abstract base class for menu button skins.
  */
-public abstract class MenuButtonSkin extends ButtonSkin
-    implements MenuButton.Skin, MenuButtonListener {
+public abstract class MenuButtonSkin extends ButtonSkin implements MenuButton.Skin,
+    MenuButtonListener {
     protected boolean pressed = false;
     protected MenuPopup menuPopup = new MenuPopup();
 
@@ -54,9 +54,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
             display.getContainerMouseListeners().remove(displayMouseListener);
 
             Window componentWindow = getComponent().getWindow();
-            if (componentWindow != null
-                && componentWindow.isOpen()
-                && !componentWindow.isClosing()) {
+            if (componentWindow != null && componentWindow.isOpen() && !componentWindow.isClosing()) {
                 componentWindow.moveToFront();
             }
 
@@ -86,7 +84,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            Display display = (Display)container;
+            Display display = (Display) container;
             Component descendant = display.getDescendantAt(x, y);
 
             if (!menuPopup.isAncestor(descendant)
@@ -102,7 +100,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
     public void install(Component component) {
         super.install(component);
 
-        MenuButton menuButton = (MenuButton)getComponent();
+        MenuButton menuButton = (MenuButton) getComponent();
         menuButton.getMenuButtonListeners().add(this);
 
         menuPopup.setMenu(menuButton.getMenu());
@@ -170,7 +168,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
     /**
      * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
      * state.
-     *
+     * 
      * @see #keyReleased(Component, int,
      * org.apache.pivot.wtk.Keyboard.KeyLocation)
      */
@@ -203,7 +201,7 @@ public abstract class MenuButtonSkin extends ButtonSkin
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        MenuButton menuButton = (MenuButton)getComponent();
+        MenuButton menuButton = (MenuButton) getComponent();
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = false;

@@ -51,7 +51,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
     private WindowStateListener colorChooserPopupStateListener = new WindowStateListener.Adapter() {
         @Override
         public void windowOpened(Window window) {
-            ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+            ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
             colorChooser.setSelectedColor(colorChooserButton.getSelectedColor());
 
             // Size and position the popup
@@ -71,8 +71,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
             int popupHeight = window.getPreferredHeight();
             int maximumHeight = displaySize.height - window.getY();
-            if (popupHeight > maximumHeight
-                && buttonLocation.y > maximumHeight) {
+            if (popupHeight > maximumHeight && buttonLocation.y > maximumHeight) {
                 window.setY(buttonLocation.y - window.getPreferredHeight() + 1);
             }
 
@@ -147,7 +146,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraColorChooserButtonSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -180,33 +179,33 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+        ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
         Button.DataRenderer dataRenderer = colorChooserButton.getDataRenderer();
 
         dataRenderer.render(colorChooserButton.getButtonData(), colorChooserButton, false);
 
-        int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH
-            + padding.left + padding.right + 2;
+        int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH + padding.left
+            + padding.right + 2;
 
         return preferredWidth;
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+        ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
         Button.DataRenderer dataRenderer = colorChooserButton.getDataRenderer();
 
         dataRenderer.render(colorChooserButton.getButtonData(), colorChooserButton, false);
 
-        int preferredHeight = dataRenderer.getPreferredHeight(-1)
-            + padding.top + padding.bottom + 2;
+        int preferredHeight = dataRenderer.getPreferredHeight(-1) + padding.top + padding.bottom
+            + 2;
 
         return preferredHeight;
     }
 
     @Override
     public Dimensions getPreferredSize() {
-        ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+        ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
 
         Button.DataRenderer dataRenderer = colorChooserButton.getDataRenderer();
         dataRenderer.render(colorChooserButton.getButtonData(), colorChooserButton, false);
@@ -220,7 +219,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
     @Override
     public int getBaseline(int width, int height) {
-        ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+        ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
 
         Button.DataRenderer dataRenderer = colorChooserButton.getDataRenderer();
         dataRenderer.render(colorChooserButton.getButtonData(), colorChooserButton, false);
@@ -244,7 +243,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
     @Override
     public void paint(Graphics2D graphics) {
-        ColorChooserButton colorChooserButton = (ColorChooserButton)getComponent();
+        ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -255,8 +254,8 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
         if (colorChooserButton.isEnabled()) {
             backgroundColorLocal = this.backgroundColor;
-            bevelColorLocal = (pressed || (colorChooserPopup.isOpen() && !colorChooserPopup.isClosing())) ?
-                pressedBevelColor : this.bevelColor;
+            bevelColorLocal = (pressed || (colorChooserPopup.isOpen() && !colorChooserPopup.isClosing())) ? pressedBevelColor
+                : this.bevelColor;
             borderColorLocal = this.borderColor;
         } else {
             backgroundColorLocal = disabledBackgroundColor;
@@ -268,23 +267,24 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal,
-            width / 2f, height / 2f, backgroundColorLocal));
-        graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
-            CORNER_RADIUS, CORNER_RADIUS));
+        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
+            height / 2f, backgroundColorLocal));
+        graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1, CORNER_RADIUS,
+            CORNER_RADIUS));
 
         // Paint the content
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_OFF);
 
-        Bounds contentBounds = new Bounds(0, 0,
-            Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(height - 1, 0));
+        Bounds contentBounds = new Bounds(0, 0, Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(
+            height - 1, 0));
         Button.DataRenderer dataRenderer = colorChooserButton.getDataRenderer();
         dataRenderer.render(colorChooserButton.getButtonData(), colorChooserButton, false);
-        dataRenderer.setSize(Math.max(contentBounds.width - (padding.left + padding.right + 2) + 1, 0),
+        dataRenderer.setSize(
+            Math.max(contentBounds.width - (padding.left + padding.right + 2) + 1, 0),
             Math.max(contentBounds.height - (padding.top + padding.bottom + 2) + 1, 0));
 
-        Graphics2D contentGraphics = (Graphics2D)graphics.create();
+        Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(padding.left + 1, padding.top + 1);
         contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
         dataRenderer.paint(contentGraphics);
@@ -304,21 +304,21 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         // Paint the focus state
         if (colorChooserButton.isFocused()) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
             graphics.setStroke(dashStroke);
             graphics.setColor(this.borderColor);
-            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0),
-                Math.max(height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
+            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0), Math.max(
+                height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
         }
 
         // Paint the focus state
         if (colorChooserButton.isFocused()) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
             graphics.setStroke(dashStroke);
             graphics.setColor(this.borderColor);
-            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0),
-                Math.max(height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
+            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0), Math.max(
+                height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
         }
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -331,12 +331,12 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         triggerIconShape.lineTo(6, 0);
         triggerIconShape.closePath();
 
-        Graphics2D triggerGraphics = (Graphics2D)graphics.create();
+        Graphics2D triggerGraphics = (Graphics2D) graphics.create();
         triggerGraphics.setStroke(new BasicStroke(0));
         triggerGraphics.setPaint(color);
 
-        Bounds triggerBounds = new Bounds(Math.max(width - (padding.right + TRIGGER_WIDTH), 0),
-            0, TRIGGER_WIDTH, Math.max(height - (padding.top - padding.bottom), 0));
+        Bounds triggerBounds = new Bounds(Math.max(width - (padding.right + TRIGGER_WIDTH), 0), 0,
+            TRIGGER_WIDTH, Math.max(height - (padding.top - padding.bottom), 0));
         int tx = triggerBounds.x + (triggerBounds.width - triggerIconShape.getBounds().width) / 2;
         int ty = triggerBounds.y + (triggerBounds.height - triggerIconShape.getBounds().height) / 2;
         triggerGraphics.translate(tx, ty);

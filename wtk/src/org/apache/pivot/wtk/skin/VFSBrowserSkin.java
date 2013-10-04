@@ -19,18 +19,17 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.VFSBrowser;
 import org.apache.pivot.wtk.VFSBrowserListener;
-import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Abstract base class for Commons VFS browser skins.
  */
-public abstract class VFSBrowserSkin extends ContainerSkin
-    implements VFSBrowser.Skin, VFSBrowserListener {
+public abstract class VFSBrowserSkin extends ContainerSkin implements VFSBrowser.Skin,
+    VFSBrowserListener {
     @Override
     public void install(Component component) {
         super.install(component);
 
-        VFSBrowser fileBrowser = (VFSBrowser)component;
+        VFSBrowser fileBrowser = (VFSBrowser) component;
         fileBrowser.getFileBrowserListeners().add(this);
     }
 }

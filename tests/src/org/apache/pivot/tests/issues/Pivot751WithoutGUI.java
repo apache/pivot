@@ -30,15 +30,16 @@ public class Pivot751WithoutGUI extends Application.Adapter {
             @Override
             public void selectedIndexChanged(TabPane tabPaneArgument, int previousSelectedIndex) {
                 System.out.println(String.format("tabs     : %-16d actual selectedIndex    : %d",
-                        tabPaneArgument.getTabs().getLength(), tabPaneArgument.getSelectedIndex()));
+                    tabPaneArgument.getTabs().getLength(), tabPaneArgument.getSelectedIndex()));
                 System.out.println(String.format("indirect : %-16s 'previousSelectedIndex' : %d",
-                        (previousSelectedIndex == tabPaneArgument.getSelectedIndex()), previousSelectedIndex));
+                    (previousSelectedIndex == tabPaneArgument.getSelectedIndex()),
+                    previousSelectedIndex));
             }
         });
 
         System.out.println("Empty TabPane sequence");
         System.out.println(String.format("tabs     : %-16d actual selectedIndex    : %d",
-                tabPane.getTabs().getLength(), tabPane.getSelectedIndex()));
+            tabPane.getTabs().getLength(), tabPane.getSelectedIndex()));
 
         System.out.println("\nAdding first Label to the sequence");
         tabPane.getTabs().add(new Label("1"));

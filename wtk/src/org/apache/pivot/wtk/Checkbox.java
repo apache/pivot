@@ -49,11 +49,9 @@ public class Checkbox extends Button {
 
         if (state == State.SELECTED) {
             setState(State.UNSELECTED);
-        }
-        else if (state == State.UNSELECTED) {
+        } else if (state == State.UNSELECTED) {
             setState(isTriState() ? State.MIXED : State.SELECTED);
-        }
-        else {
+        } else {
             setState(State.SELECTED);
         }
 

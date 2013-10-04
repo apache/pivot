@@ -44,6 +44,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     private static class RowSegment {
         public TextPaneSkinNodeView nodeView;
         public int offset;
+
         public RowSegment(TextPaneSkinNodeView nodeView, int offset) {
             this.nodeView = nodeView;
             this.offset = offset;
@@ -67,20 +68,18 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     protected void childLayout(int breakWidth) {
         // Break the views into multiple rows
 
-        Paragraph paragraph = (Paragraph)getNode();
+        Paragraph paragraph = (Paragraph) getNode();
         rows = new ArrayList<>();
         int offset = 0;
 
         ParagraphChildLayouter layouter = new ParagraphChildLayouter();
         Row row = new Row();
         for (TextPaneSkinNodeView nodeView : this) {
-            nodeView.layout(Math.max(breakWidth - (row.width
-                    + PARAGRAPH_TERMINATOR_WIDTH), 0));
+            nodeView.layout(Math.max(breakWidth - (row.width + PARAGRAPH_TERMINATOR_WIDTH), 0));
 
             int nodeViewWidth = nodeView.getWidth();
 
-            if (row.width + nodeViewWidth > breakWidth
-                && row.width > 0) {
+            if (row.width + nodeViewWidth > breakWidth && row.width > 0) {
                 // The view is too big to fit in the remaining space,
                 // and it is not the only view in this row
                 rows.add(row);
@@ -128,7 +127,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         // Recalculate terminator bounds
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         LineMetrics lm = getTextPaneSkin().getFont().getLineMetrics("", 0, 0, fontRenderContext);
-        int terminatorHeight = (int)Math.ceil(lm.getHeight());
+        int terminatorHeight = (int) Math.ceil(lm.getHeight());
 
         int terminatorY;
         if (getCharacterCount() == 1) {
@@ -138,8 +137,8 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             terminatorY = layouter.rowY - terminatorHeight;
         }
 
-        terminatorBounds = new Bounds(layouter.x, terminatorY,
-            PARAGRAPH_TERMINATOR_WIDTH, terminatorHeight);
+        terminatorBounds = new Bounds(layouter.x, terminatorY, PARAGRAPH_TERMINATOR_WIDTH,
+            terminatorHeight);
 
         // Ensure that the paragraph is visible even when empty
         layouter.paragraphWidth += terminatorBounds.width;
@@ -152,20 +151,18 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     public Dimensions getPreferredSize(int breakWidth) {
         // Break the views into multiple rows
 
-        Paragraph paragraph = (Paragraph)getNode();
+        Paragraph paragraph = (Paragraph) getNode();
         ArrayList<Row> rowsLocal = new ArrayList<>();
         int offset = 0;
 
         ParagraphChildLayouter layouter = new ParagraphChildLayouter();
         Row row = new Row();
         for (TextPaneSkinNodeView nodeView : this) {
-            nodeView.layout(Math.max(breakWidth - (row.width
-                    + PARAGRAPH_TERMINATOR_WIDTH), 0));
+            nodeView.layout(Math.max(breakWidth - (row.width + PARAGRAPH_TERMINATOR_WIDTH), 0));
 
             int nodeViewWidth = nodeView.getWidth();
 
-            if (row.width + nodeViewWidth > breakWidth
-                && row.width > 0) {
+            if (row.width + nodeViewWidth > breakWidth && row.width > 0) {
                 // The view is too big to fit in the remaining space,
                 // and it is not the only view in this row
                 rowsLocal.add(row);
@@ -213,7 +210,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         // Recalculate terminator bounds
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         LineMetrics lm = getTextPaneSkin().getFont().getLineMetrics("", 0, 0, fontRenderContext);
-        int terminatorHeight = (int)Math.ceil(lm.getHeight());
+        int terminatorHeight = (int) Math.ceil(lm.getHeight());
 
         int terminatorY;
         if (getCharacterCount() == 1) {
@@ -234,7 +231,8 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     }
 
     private static TextPaneSkinNodeView getNext(TextPaneSkinNodeView child) {
-        // Using instanceof checks because there is no nice place in the hierarchy
+        // Using instanceof checks because there is no nice place in the
+        // hierarchy
         // to put an abstract method
         if (child instanceof TextPaneSkinSpanView) {
             return ((TextPaneSkinSpanView) child).getNext();
@@ -246,9 +244,9 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     }
 
     /**
-     * The layout process and the line breaking process are interleaved,
-     * because tab stops mean that we need to calculate X and width for each
-     * segment before moving on to the next segment.
+     * The layout process and the line breaking process are interleaved, because
+     * tab stops mean that we need to calculate X and width for each segment
+     * before moving on to the next segment.
      */
     private static class ParagraphChildLayouter {
         // Add the row views to this view, lay out, and calculate height
@@ -290,7 +288,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             rowY += row.height;
         }
 
-         public void end(Paragraph paragraph, ArrayList<Row> rows) {
+        public void end(Paragraph paragraph, ArrayList<Row> rows) {
             // calculate paragraph width
             for (Row row : rows) {
                 paragraphWidth = Math.max(paragraphWidth, row.width);
@@ -322,14 +320,16 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         for (int i = 0, n = rows.getLength(); i < n; i++) {
             Row row = rows.get(i);
             for (RowSegment segment : row.rowSegments) {
-                segment.nodeView.setSkinLocation(skinX + segment.nodeView.getX(), skinY + segment.nodeView.getY());
+                segment.nodeView.setSkinLocation(skinX + segment.nodeView.getX(), skinY
+                    + segment.nodeView.getY());
             }
         }
     }
 
     @Override
     public void paint(Graphics2D graphics) {
-        // The default paint() method paints the document children, but because of row-splitting,
+        // The default paint() method paints the document children, but because
+        // of row-splitting,
         // the children we want to paint are not the same.
 
         // Determine the paint bounds
@@ -356,14 +356,14 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             for (int i = 0; i < n; i++) {
                 Row row = rows.get(i);
 
-                if (y >= row.y
-                    && y < row.y + row.height) {
+                if (y >= row.y && y < row.y + row.height) {
                     if (x < row.x) {
                         RowSegment firstNodeSegment = row.rowSegments.get(0);
                         offset = firstNodeSegment.offset;
                     } else if (x > row.x + row.width - 1) {
                         RowSegment lastNodeSegment = row.rowSegments.get(row.rowSegments.getLength() - 1);
-                        offset = lastNodeSegment.offset + lastNodeSegment.nodeView.getCharacterCount();
+                        offset = lastNodeSegment.offset
+                            + lastNodeSegment.nodeView.getCharacterCount();
 
                         if (offset < getCharacterCount() - 1) {
                             offset--;
@@ -373,7 +373,8 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                             Bounds nodeViewBounds = segment.nodeView.getBounds();
 
                             if (nodeViewBounds.contains(x, y)) {
-                                offset = segment.nodeView.getInsertionPoint(x - segment.nodeView.getX(), y - segment.nodeView.getY())
+                                offset = segment.nodeView.getInsertionPoint(
+                                    x - segment.nodeView.getX(), y - segment.nodeView.getY())
                                     + segment.offset;
                                 break;
                             }
@@ -397,8 +398,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
         int offset = -1;
 
         int n = rows.getLength();
-        if (n == 0
-            && from == -1) {
+        if (n == 0 && from == -1) {
             // There are no rows; select the terminator character
             offset = 0;
         } else {
@@ -416,7 +416,8 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                         RowSegment firstNodeSegment = row.rowSegments.get(0);
                         RowSegment lastNodeSegment = row.rowSegments.get(row.rowSegments.getLength() - 1);
                         if (from >= firstNodeSegment.offset
-                            && from < lastNodeSegment.offset + lastNodeSegment.nodeView.getCharacterCount()) {
+                            && from < lastNodeSegment.offset
+                                + lastNodeSegment.nodeView.getCharacterCount()) {
                             break;
                         }
 
@@ -432,23 +433,23 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                 i--;
             }
 
-            if (i >= 0
-                && i < n) {
-                // Find the node view that contains x and get the insertion point from it
+            if (i >= 0 && i < n) {
+                // Find the node view that contains x and get the insertion
+                // point from it
                 Row row = rows.get(i);
 
                 for (RowSegment segment : row.rowSegments) {
                     Bounds bounds = segment.nodeView.getBounds();
-                    if (x >= bounds.x
-                        && x < bounds.x + bounds.width) {
-                        offset = segment.nodeView.getNextInsertionPoint(x - segment.nodeView.getX(), -1, direction)
-                            + segment.offset;
+                    if (x >= bounds.x && x < bounds.x + bounds.width) {
+                        offset = segment.nodeView.getNextInsertionPoint(
+                            x - segment.nodeView.getX(), -1, direction) + segment.offset;
                         break;
                     }
                 }
 
                 if (offset == -1) {
-                    // No node view contained the x position; move to the end of the row
+                    // No node view contained the x position; move to the end of
+                    // the row
                     RowSegment lastNodeSegment = row.rowSegments.get(row.rowSegments.getLength() - 1);
                     offset = lastNodeSegment.offset + lastNodeSegment.nodeView.getCharacterCount();
 
@@ -475,7 +476,8 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                 RowSegment lastNodeSegment = row.rowSegments.get(row.rowSegments.getLength() - 1);
 
                 if (offset >= firstNodeSegment.offset
-                    && offset < lastNodeSegment.offset + firstNodeSegment.nodeView.getCharacterCount()) {
+                    && offset < lastNodeSegment.offset
+                        + firstNodeSegment.nodeView.getCharacterCount()) {
                     rowIndex = i;
                     break;
                 }
@@ -504,12 +506,13 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                         int nodeViewOffset = segment.offset;
                         int characterCount = segment.nodeView.getCharacterCount();
 
-                        if (offset >= nodeViewOffset
-                            && offset < nodeViewOffset + characterCount) {
-                            characterBounds = segment.nodeView.getCharacterBounds(offset - nodeViewOffset);
+                        if (offset >= nodeViewOffset && offset < nodeViewOffset + characterCount) {
+                            characterBounds = segment.nodeView.getCharacterBounds(offset
+                                - nodeViewOffset);
 
                             if (characterBounds != null) {
-                                characterBounds = characterBounds.translate(segment.nodeView.getX(), segment.nodeView.getY());
+                                characterBounds = characterBounds.translate(
+                                    segment.nodeView.getX(), segment.nodeView.getY());
                             }
 
                             break;

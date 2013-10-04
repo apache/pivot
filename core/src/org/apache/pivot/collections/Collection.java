@@ -30,34 +30,29 @@ public interface Collection<T> extends Iterable<T> {
 
     /**
      * Tests the emptiness of the collection.
-     *
-     * @return
-     * <tt>true</tt> if the collection contains no elements; <tt>false</tt>,
-     * otherwise.
+     * 
+     * @return <tt>true</tt> if the collection contains no elements;
+     * <tt>false</tt>, otherwise.
      */
     public boolean isEmpty();
 
     /**
      * Returns the collection's sort order.
-     *
-     * @return
-     * The comparator used to order elements in the collection, or <tt>null</tt>
-     * if the sort order is undefined.
-     *
+     * 
+     * @return The comparator used to order elements in the collection, or
+     * <tt>null</tt> if the sort order is undefined.
      * @see #setComparator(Comparator)
      */
     public Comparator<T> getComparator();
 
     /**
      * Sets the collection's sort order, re-ordering the collection's contents
-     * and ensuring that new entries preserve the sort order.
-     * <p>
-     * Calling this method more than once with the same comparator will re-sort
-     * the collection.
-     *
-     * @param comparator
-     * The comparator used to order elements in the collection, or null if the
-     * collection is unsorted.
+     * and ensuring that new entries preserve the sort order. <p> Calling this
+     * method more than once with the same comparator will re-sort the
+     * collection.
+     * 
+     * @param comparator The comparator used to order elements in the
+     * collection, or null if the collection is unsorted.
      */
     public void setComparator(Comparator<T> comparator);
 }

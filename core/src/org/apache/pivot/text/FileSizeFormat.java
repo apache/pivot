@@ -29,7 +29,7 @@ public class FileSizeFormat extends Format {
     private static final long serialVersionUID = 9126510513247641698L;
 
     public static final int KILOBYTE = 1024;
-    public static final String[] ABBREVIATIONS = {"K", "M", "G", "T", "P", "E", "Z", "Y"};
+    public static final String[] ABBREVIATIONS = { "K", "M", "G", "T", "P", "E", "Z", "Y" };
 
     private static final FileSizeFormat FILE_SIZE_FORMAT = new FileSizeFormat();
 
@@ -38,24 +38,17 @@ public class FileSizeFormat extends Format {
 
     /**
      * Formats a file size.
-     *
-     * @param object
-     * A <tt>Number</tt> containing the length of the file, in bytes. May be
-     * negative to indicate an unknown file size.
-     *
-     * @param stringBuffer
-     * The string buffer to which the formatted output will be appended.
-     *
-     * @param fieldPosition
-     * Not used.
-     *
-     * @return
-     * The original string buffer, with the formatted value appended.
+     * 
+     * @param object A <tt>Number</tt> containing the length of the file, in
+     * bytes. May be negative to indicate an unknown file size.
+     * @param stringBuffer The string buffer to which the formatted output will
+     * be appended.
+     * @param fieldPosition Not used.
+     * @return The original string buffer, with the formatted value appended.
      */
     @Override
-    public StringBuffer format(Object object, StringBuffer stringBuffer,
-        FieldPosition fieldPosition) {
-        Number number = (Number)object;
+    public StringBuffer format(Object object, StringBuffer stringBuffer, FieldPosition fieldPosition) {
+        Number number = (Number) object;
 
         long length = number.longValue();
 
@@ -69,8 +62,7 @@ public class FileSizeFormat extends Format {
             } while (size > KILOBYTE);
 
             NumberFormat numberFormat = NumberFormat.getNumberInstance();
-            if (i == 0
-                && size > 1) {
+            if (i == 0 && size > 1) {
                 numberFormat.setMaximumFractionDigits(0);
             } else {
                 numberFormat.setMaximumFractionDigits(1);
@@ -84,7 +76,7 @@ public class FileSizeFormat extends Format {
 
     /**
      * This method is not supported.
-     *
+     * 
      * @throws UnsupportedOperationException
      */
     @Override
@@ -94,9 +86,8 @@ public class FileSizeFormat extends Format {
 
     /**
      * Returns a shared file size format instance.
-     *
-     * @return
-     * A shared file format size instance.
+     * 
+     * @return A shared file format size instance.
      */
     public static FileSizeFormat getInstance() {
         return FILE_SIZE_FORMAT;

@@ -40,8 +40,8 @@ public class StockTracker extends Application.Adapter {
         Resources resources = new Resources(StockTrackerWindow.class.getName(), locale);
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (StockTrackerWindow)bxmlSerializer.readObject(getClass().getResource("stock_tracker_window.bxml"),
-            resources);
+        window = (StockTrackerWindow) bxmlSerializer.readObject(
+            getClass().getResource("stock_tracker_window.bxml"), resources);
         window.open(display);
     }
 

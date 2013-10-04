@@ -28,8 +28,7 @@ import org.apache.pivot.util.ListenerList;
  * Synchronized implementation of the {@link Queue} interface.
  */
 public class SynchronizedQueue<T> implements Queue<T> {
-    private static class SynchronizedQueueListenerList<T>
-        extends QueueListenerList<T> {
+    private static class SynchronizedQueueListenerList<T> extends QueueListenerList<T> {
         @Override
         public synchronized void add(QueueListener<T> listener) {
             super.add(listener);
@@ -80,7 +79,7 @@ public class SynchronizedQueue<T> implements Queue<T> {
 
             item = queue.dequeue();
             queueListeners.itemDequeued(this, item);
-        } catch(InterruptedException exception) {
+        } catch (InterruptedException exception) {
             // empty block
         }
 
@@ -123,8 +122,8 @@ public class SynchronizedQueue<T> implements Queue<T> {
     }
 
     /**
-     * NOTE Callers must manually synchronize on the SynchronizedQueue
-     * instance to ensure thread safety during iteration.
+     * NOTE Callers must manually synchronize on the SynchronizedQueue instance
+     * to ensure thread safety during iteration.
      */
     @Override
     public Iterator<T> iterator() {

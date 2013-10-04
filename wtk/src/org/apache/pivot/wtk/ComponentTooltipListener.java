@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface ComponentTooltipListener {
     /**
      * Called when a tooltip has been triggered over a component.
-     *
+     * 
      * @param component
      * @param x
      * @param y

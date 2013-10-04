@@ -33,7 +33,8 @@ public interface ListButtonListener {
         }
 
         @Override
-        public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
+        public void itemRendererChanged(ListButton listButton,
+            ListView.ItemRenderer previousItemRenderer) {
             // empty block
         }
 
@@ -43,7 +44,8 @@ public interface ListButtonListener {
         }
 
         @Override
-        public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
+        public void disabledItemFilterChanged(ListButton listButton,
+            Filter<?> previousDisabledItemFilter) {
             // empty block
         }
 
@@ -55,7 +57,7 @@ public interface ListButtonListener {
 
     /**
      * Called when a list button's list data has changed.
-     *
+     * 
      * @param listButton
      * @param previousListData
      */
@@ -63,30 +65,32 @@ public interface ListButtonListener {
 
     /**
      * Called when a list button's item renderer has changed.
-     *
+     * 
      * @param listButton
      * @param previousItemRenderer
      */
-    public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer);
+    public void itemRendererChanged(ListButton listButton,
+        ListView.ItemRenderer previousItemRenderer);
 
     /**
      * Called when a list button's repeatable flag has changed.
-     *
+     * 
      * @param listButton
      */
     public void repeatableChanged(ListButton listButton);
 
     /**
      * Called when a list button's disabled item filter has changed.
-     *
+     * 
      * @param listButton
      * @param previousDisabledItemFilter
      */
-    public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter);
+    public void disabledItemFilterChanged(ListButton listButton,
+        Filter<?> previousDisabledItemFilter);
 
     /**
      * Called when a list button's list size has changed.
-     *
+     * 
      * @param listButton
      * @param previousListSize
      */

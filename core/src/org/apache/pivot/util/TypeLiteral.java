@@ -21,17 +21,15 @@ import java.lang.reflect.Type;
 
 /**
  * Represents a generic type {@code T}. Java doesn't yet provide a way to
- * represent generic types, so this class does. Clients create a subclass
- * of this class, which enables retrieval the type information even at runtime.
- * <p>
+ * represent generic types, so this class does. Clients create a subclass of
+ * this class, which enables retrieval the type information even at runtime. <p>
  * For example, to get a reference to a generic type {@code List<String>}, you
- * create an empty anonymous inner class, like so:
- * <p>
+ * create an empty anonymous inner class, like so: <p>
  * {@code Type genericType = (new TypeLiteral<List<String>>() &#123;&#125;).getType();}
- * <p>
- * This class is a drastically reduced derivation from
- * <a href="http://code.google.com/p/google-guice/">Google Guice</a>'s
+ * <p> This class is a drastically reduced derivation from <a
+ * href="http://code.google.com/p/google-guice/">Google Guice</a>'s
  * {@code TypeLiteral} class, written by Bob Lee and Jesse Wilson.
+ * 
  * @param <T> note that in Tree the type parameter currently it's not used
  */
 public class TypeLiteral<T> {
@@ -39,11 +37,9 @@ public class TypeLiteral<T> {
 
     /**
      * Constructs a new type literal. Derives represented class from type
-     * parameter.
-     * <p>
-     * Clients create an empty anonymous subclass. Doing so embeds the type
-     * parameter in the anonymous class's type hierarchy so we can reconstitute it
-     * at runtime despite erasure.
+     * parameter. <p> Clients create an empty anonymous subclass. Doing so
+     * embeds the type parameter in the anonymous class's type hierarchy so we
+     * can reconstitute it at runtime despite erasure.
      */
     protected TypeLiteral() {
         Type genericSuperclass = getClass().getGenericSuperclass();
@@ -51,7 +47,7 @@ public class TypeLiteral<T> {
             throw new RuntimeException("Missing type parameter.");
         }
 
-        ParameterizedType parameterizedType = (ParameterizedType)genericSuperclass;
+        ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
         this.type = parameterizedType.getActualTypeArguments()[0];
     }
 

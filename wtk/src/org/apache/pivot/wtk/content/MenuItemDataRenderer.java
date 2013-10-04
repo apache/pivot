@@ -75,30 +75,30 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         Keyboard.KeyStroke keyboardShortcut = null;
 
         if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData)data;
+            ButtonData buttonData = (ButtonData) data;
             icon = buttonData.getIcon();
 
             if (buttonData instanceof MenuItemData) {
-                MenuItemData menuItemData = (MenuItemData)buttonData;
+                MenuItemData menuItemData = (MenuItemData) buttonData;
                 keyboardShortcut = menuItemData.getKeyboardShortcut();
             }
         } else if (data instanceof Image) {
-            icon = (Image)data;
+            icon = (Image) data;
         }
         text = toString(data);
 
         // If the button is selected, icon is a checkmark; otherwise,
         // attempt to retrieve icon from button data
         if (button.isSelected()) {
-            icon = (Image)button.getStyles().get("checkmarkImage");
+            icon = (Image) button.getStyles().get("checkmarkImage");
         }
 
         // Update the image view
-        Menu.Item menuItem = (Menu.Item)button;
-        Menu menu = (Menu)menuItem.getParent();
+        Menu.Item menuItem = (Menu.Item) button;
+        Menu menu = (Menu) menuItem.getParent();
 
-        int margin = (Integer)menu.getStyles().get("margin");
-        Insets padding = (Insets)getStyles().get("padding");
+        int margin = (Integer) menu.getStyles().get("margin");
+        Insets padding = (Insets) getStyles().get("padding");
 
         imageView.setImage(icon);
         imageView.setPreferredWidth(margin - padding.left * 2);
@@ -107,19 +107,19 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         // Update the labels
         textLabel.setText(text != null ? text : "");
 
-        Font font = (Font)menu.getStyles().get("font");
+        Font font = (Font) menu.getStyles().get("font");
         textLabel.getStyles().put("font", font);
         keyboardShortcutLabel.getStyles().put("font", font.deriveFont(Font.ITALIC));
 
         Color color;
         if (button.isEnabled()) {
             if (highlighted) {
-                color = (Color)menu.getStyles().get("activeColor");
+                color = (Color) menu.getStyles().get("activeColor");
             } else {
-                color = (Color)menu.getStyles().get("color");
+                color = (Color) menu.getStyles().get("color");
             }
         } else {
-            color = (Color)menu.getStyles().get("disabledColor");
+            color = (Color) menu.getStyles().get("disabledColor");
         }
 
         textLabel.getStyles().put("color", color);
@@ -127,13 +127,13 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
 
         boolean showKeyboardShortcuts = false;
         if (menu.getStyles().containsKey("showKeyboardShortcuts")) {
-            showKeyboardShortcuts = (Boolean)menu.getStyles().get("showKeyboardShortcuts");
+            showKeyboardShortcuts = (Boolean) menu.getStyles().get("showKeyboardShortcuts");
         }
 
         if (showKeyboardShortcuts) {
             keyboardShortcutLabel.setVisible(true);
-            keyboardShortcutLabel.setText(
-                keyboardShortcut != null ? keyboardShortcut.toString() : "");
+            keyboardShortcutLabel.setText(keyboardShortcut != null ? keyboardShortcut.toString()
+                : "");
         } else {
             keyboardShortcutLabel.setVisible(false);
         }
@@ -144,7 +144,7 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         String string = null;
 
         if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData)data;
+            ButtonData buttonData = (ButtonData) data;
             string = buttonData.getText();
         } else if (!(data instanceof Image)) {
             if (data != null) {

@@ -86,14 +86,15 @@ public class DataBindingTest extends Application.Adapter {
         }
     }
 
-    public static class TestBindMapping implements ListView.ItemBindMapping, Spinner.ItemBindMapping {
+    public static class TestBindMapping implements ListView.ItemBindMapping,
+        Spinner.ItemBindMapping {
         @Override
         public int indexOf(List<?> list, Object value) {
             int i = 0;
             int n = list.getLength();
             while (i < n) {
                 @SuppressWarnings("unchecked")
-                Map<String, ?> map = (Map<String, ?>)list.get(i);
+                Map<String, ?> map = (Map<String, ?>) list.get(i);
                 if (map.get("id").equals(value)) {
                     break;
                 }
@@ -111,7 +112,7 @@ public class DataBindingTest extends Application.Adapter {
         @Override
         public Object get(List<?> list, int index) {
             @SuppressWarnings("unchecked")
-            Map<String, ?> map = (Map<String, ?>)list.get(index);
+            Map<String, ?> map = (Map<String, ?>) list.get(index);
             return map.get("id");
         }
     }
@@ -121,7 +122,7 @@ public class DataBindingTest extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(DataBindingTest.class, "data_binding_test.bxml");
+        window = (Window) bxmlSerializer.readObject(DataBindingTest.class, "data_binding_test.bxml");
         window.open(display);
 
         HashMap<String, Object> context = new HashMap<>();

@@ -23,21 +23,15 @@ package org.apache.pivot.wtk;
 public interface FocusTraversalPolicy {
     /**
      * Returns the next focus destination according to this traversal policy.
-     *
-     * @param container
-     * The container to which the traversal policy applies.
-     *
-     * @param component
-     * The component from which focus is being transferred. If <tt>null</tt>,
-     * implementations should return the first component for a forward
-     * traversal and the last component for a backward traversal.
-     *
-     * @param direction
-     * The direction in which to transfer focus.
-     *
-     * @return
-     * The component to focus, or <tt>null</tt> if there are no more components
-     * in the given direction or next component cannot be determined.
+     * 
+     * @param container The container to which the traversal policy applies.
+     * @param component The component from which focus is being transferred. If
+     * <tt>null</tt>, implementations should return the first component for a
+     * forward traversal and the last component for a backward traversal.
+     * @param direction The direction in which to transfer focus.
+     * @return The component to focus, or <tt>null</tt> if there are no more
+     * components in the given direction or next component cannot be determined.
      */
-    Component getNextComponent(Container container, Component component, FocusTraversalDirection direction);
+    Component getNextComponent(Container container, Component component,
+        FocusTraversalDirection direction);
 }

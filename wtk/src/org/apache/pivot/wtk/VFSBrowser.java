@@ -33,9 +33,9 @@ import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * A file browser that uses the Apache Commons VFS (Virtual File System)
- * to be able to browse local and remote file systems, and browse inside
- * of .zip, .tar, etc. archives as well.
+ * A file browser that uses the Apache Commons VFS (Virtual File System) to be
+ * able to browse local and remote file systems, and browse inside of .zip,
+ * .tar, etc. archives as well.
  */
 public class VFSBrowser extends Container {
     /**
@@ -111,30 +111,22 @@ public class VFSBrowser extends Container {
     private FileBrowserListenerList fileBrowserListeners = new FileBrowserListenerList();
 
     /**
-     * Creates a new VFSBrowser
-     * <p>
-     * Note that this version set by default mode to open.
+     * Creates a new VFSBrowser <p> Note that this version set by default mode
+     * to open.
      */
-    public VFSBrowser()
-            throws FileSystemException
-    {
+    public VFSBrowser() throws FileSystemException {
         this(null, USER_HOME);
     }
 
     /**
-     * Creates a new VFSBrowser
-     * <p>
-     * Note that this version of the constructor must be used when a custom root folder (that
-     * may include a completely different URI scheme) has to be set.
-     *
-     * @param manager
-     * The virtual file system we're going to manage.
-     * @param rootFolder
-     * The root folder full name.
+     * Creates a new VFSBrowser <p> Note that this version of the constructor
+     * must be used when a custom root folder (that may include a completely
+     * different URI scheme) has to be set.
+     * 
+     * @param manager The virtual file system we're going to manage.
+     * @param rootFolder The root folder full name.
      */
-    public VFSBrowser(FileSystemManager manager, URI rootFolder)
-            throws FileSystemException
-    {
+    public VFSBrowser(FileSystemManager manager, URI rootFolder) throws FileSystemException {
         if (rootFolder == null) {
             throw new IllegalArgumentException();
         }
@@ -156,18 +148,13 @@ public class VFSBrowser extends Container {
     }
 
     /**
-     * Creates a new VFSBrowser
-     * <p>
-     * Note that this version of the constructor must be used when a custom root folder has to be set.
-     *
-     * @param manager
-     * The virtual file system we're going to manage.
-     * @param rootFolder
-     * The root folder full name.
+     * Creates a new VFSBrowser <p> Note that this version of the constructor
+     * must be used when a custom root folder has to be set.
+     * 
+     * @param manager The virtual file system we're going to manage.
+     * @param rootFolder The root folder full name.
      */
-    public VFSBrowser(FileSystemManager manager, String rootFolder)
-            throws FileSystemException
-    {
+    public VFSBrowser(FileSystemManager manager, String rootFolder) throws FileSystemException {
         if (rootFolder == null) {
             throw new IllegalArgumentException();
         }
@@ -190,9 +177,8 @@ public class VFSBrowser extends Container {
 
     /**
      * Returns the current file system manager.
-     *
-     * @return
-     * The current file system manager.
+     * 
+     * @return The current file system manager.
      */
     public FileSystemManager getManager() {
         return manager;
@@ -200,36 +186,30 @@ public class VFSBrowser extends Container {
 
     /**
      * Returns the current root directory.
-     *
-     * @return
-     * The current root directory.
+     * 
+     * @return The current root directory.
      */
     public FileObject getRootDirectory() {
         return rootDirectory;
     }
 
     /**
-     * Sets the root directory from a string.  Clears any
-     * existing file selection.
-     *
+     * Sets the root directory from a string. Clears any existing file
+     * selection.
+     * 
      * @param rootDirectory
      */
-    public void setRootDirectory(String rootDirectory)
-            throws FileSystemException
-    {
+    public void setRootDirectory(String rootDirectory) throws FileSystemException {
         setRootDirectory(manager.resolveFile(rootDirectory));
     }
 
     /**
      * Sets the root directory. Clears any existing file selection.
-     *
+     * 
      * @param rootDirectory
      */
-    public void setRootDirectory(FileObject rootDirectory)
-            throws FileSystemException
-    {
-        if (rootDirectory == null
-            || rootDirectory.getType() != FileType.FOLDER) {
+    public void setRootDirectory(FileObject rootDirectory) throws FileSystemException {
+        if (rootDirectory == null || rootDirectory.getType() != FileType.FOLDER) {
             throw new IllegalArgumentException();
         }
 
@@ -248,22 +228,18 @@ public class VFSBrowser extends Container {
 
     /**
      * Adds a file to the file selection.
-     *
+     * 
      * @param file
-     *
-     * @return
-     * <tt>true</tt> if the file was added; <tt>false</tt> if it was already
-     * selected.
+     * @return <tt>true</tt> if the file was added; <tt>false</tt> if it was
+     * already selected.
      */
-    public boolean addSelectedFile(FileObject file)
-            throws FileSystemException
-    {
+    public boolean addSelectedFile(FileObject file) throws FileSystemException {
         if (file == null) {
             throw new IllegalArgumentException();
         }
 
         // TODO: is this a good way to do this?
-        //if (file.isAbsolute()) {
+        // if (file.isAbsolute()) {
         if (baseFileName != null && baseFileName.isAncestor(file.getName())) {
             if (!file.getParent().equals(rootDirectory)) {
                 throw new IllegalArgumentException();
@@ -282,12 +258,10 @@ public class VFSBrowser extends Container {
 
     /**
      * Removes a file from the file selection.
-     *
+     * 
      * @param file
-     *
-     * @return
-     * <tt>true</tt> if the file was removed; <tt>false</tt> if it was not
-     * already selected.
+     * @return <tt>true</tt> if the file was removed; <tt>false</tt> if it was
+     * not already selected.
      */
     public boolean removeSelectedFile(FileObject file) {
         if (file == null) {
@@ -304,9 +278,8 @@ public class VFSBrowser extends Container {
 
     /**
      * When in single-select mode, returns the currently selected file.
-     *
-     * @return
-     * The currently selected file.
+     * 
+     * @return The currently selected file.
      */
     public FileObject getSelectedFile() {
         if (multiSelect) {
@@ -318,17 +291,15 @@ public class VFSBrowser extends Container {
 
     /**
      * Sets the selection to a single file.
-     *
+     * 
      * @param file
      */
-    public void setSelectedFile(FileObject file)
-            throws FileSystemException
-    {
+    public void setSelectedFile(FileObject file) throws FileSystemException {
         if (file == null) {
             clearSelection();
         } else {
             // TODO: adequate replacement for "isAbsolute"?
-            //if (file.isAbsolute()) {
+            // if (file.isAbsolute()) {
             if (baseFileName != null && baseFileName.isAncestor(file.getName())) {
                 setRootDirectory(file.getParent());
             }
@@ -339,11 +310,11 @@ public class VFSBrowser extends Container {
 
     /**
      * Returns the currently selected files.
-     *
-     * @return
-     * An immutable list containing the currently selected files. Note that the returned
-     * list is a wrapper around the actual selection, not a copy. Any changes made to the
-     * selection state will be reflected in the list, but events will not be fired.
+     * 
+     * @return An immutable list containing the currently selected files. Note
+     * that the returned list is a wrapper around the actual selection, not a
+     * copy. Any changes made to the selection state will be reflected in the
+     * list, but events will not be fired.
      */
     public ImmutableList<FileObject> getSelectedFiles() {
         return new ImmutableList<>(selectedFiles);
@@ -351,22 +322,17 @@ public class VFSBrowser extends Container {
 
     /**
      * Sets the selected files.
-     *
-     * @param selectedFiles
-     * The files to select.
-     *
-     * @return
-     * The files that were selected, with duplicates eliminated.
+     * 
+     * @param selectedFiles The files to select.
+     * @return The files that were selected, with duplicates eliminated.
      */
     public Sequence<FileObject> setSelectedFiles(Sequence<FileObject> selectedFiles)
-            throws FileSystemException
-    {
+        throws FileSystemException {
         if (selectedFiles == null) {
             throw new IllegalArgumentException("selectedFiles is null.");
         }
 
-        if (!multiSelect
-            && selectedFiles.getLength() > 1) {
+        if (!multiSelect && selectedFiles.getLength() > 1) {
             throw new IllegalArgumentException("Multi-select is not enabled.");
         }
 
@@ -382,15 +348,15 @@ public class VFSBrowser extends Container {
             }
 
             // TODO: is this correct?
-            //if (!file.isAbsolute()) {
+            // if (!file.isAbsolute()) {
             if (baseFileName == null || !baseFileName.isAncestor(file.getName())) {
                 file = manager.resolveFile(rootDirectory, file.getName().getBaseName());
             }
 
             // TODO: don't do this for now -- revisit later
-            //if (!file.getParent().equals(rootDirectory)) {
-            //    throw new IllegalArgumentException();
-            //}
+            // if (!file.getParent().equals(rootDirectory)) {
+            // throw new IllegalArgumentException();
+            // }
 
             fileList.add(file);
         }
@@ -406,9 +372,7 @@ public class VFSBrowser extends Container {
     /**
      * Clears the selection.
      */
-    public void clearSelection()
-            throws FileSystemException
-    {
+    public void clearSelection() throws FileSystemException {
         setSelectedFiles(new ArrayList<FileObject>());
     }
 
@@ -425,9 +389,9 @@ public class VFSBrowser extends Container {
 
     /**
      * Sets the file browser's multi-select state.
-     *
-     * @param multiSelect
-     * <tt>true</tt> if multi-select is enabled; <tt>false</tt>, otherwise.
+     * 
+     * @param multiSelect <tt>true</tt> if multi-select is enabled;
+     * <tt>false</tt>, otherwise.
      */
     public void setMultiSelect(boolean multiSelect) {
         if (this.multiSelect != multiSelect) {
@@ -442,9 +406,8 @@ public class VFSBrowser extends Container {
 
     /**
      * Returns the current file filter.
-     *
-     * @return
-     * The current file filter, or <tt>null</tt> if no filter is set.
+     * 
+     * @return The current file filter, or <tt>null</tt> if no filter is set.
      */
     public Filter<FileObject> getDisabledFileFilter() {
         return disabledFileFilter;
@@ -452,9 +415,9 @@ public class VFSBrowser extends Container {
 
     /**
      * Sets the file filter.
-     *
-     * @param disabledFileFilter
-     * The file filter to use, or <tt>null</tt> for no filter.
+     * 
+     * @param disabledFileFilter The file filter to use, or <tt>null</tt> for no
+     * filter.
      */
     public void setDisabledFileFilter(Filter<FileObject> disabledFileFilter) {
         Filter<FileObject> previousDisabledFileFilter = this.disabledFileFilter;
@@ -466,7 +429,7 @@ public class VFSBrowser extends Container {
     }
 
     public FileObject getFileAt(int x, int y) {
-        VFSBrowser.Skin fileBrowserSkin = (VFSBrowser.Skin)getSkin();
+        VFSBrowser.Skin fileBrowserSkin = (VFSBrowser.Skin) getSkin();
         return fileBrowserSkin.getFileAt(x, y);
     }
 

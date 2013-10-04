@@ -40,15 +40,15 @@ import org.apache.pivot.wtk.WindowStateListener;
 /**
  * Abstract base class for list button skins.
  */
-public abstract class ListButtonSkin extends ButtonSkin
-    implements ListButton.Skin, ListButtonListener, ListButtonSelectionListener {
+public abstract class ListButtonSkin extends ButtonSkin implements ListButton.Skin,
+    ListButtonListener, ListButtonSelectionListener {
     protected ListView listView;
     protected Window listViewPopup;
 
     private ComponentMouseButtonListener listViewPopupMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
         @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            ListButton listButton = (ListButton)getComponent();
+            ListButton listButton = (ListButton) getComponent();
 
             listViewPopup.close();
 
@@ -68,13 +68,13 @@ public abstract class ListButtonSkin extends ButtonSkin
          * {@link KeyCode#ESCAPE ESCAPE} Close the popup.<br>
          * {@link KeyCode#ENTER ENTER} Choose the selected list item.<br>
          * {@link KeyCode#TAB TAB} Choose the selected list item and transfer
-         * focus forwards.<br>
-         * {@link KeyCode#TAB TAB} + {@link Keyboard.Modifier#SHIFT SHIFT} Choose the
-         * selected list item and transfer focus backwards.
+         * focus forwards.<br> {@link KeyCode#TAB TAB} +
+         * {@link Keyboard.Modifier#SHIFT SHIFT} Choose the selected list item
+         * and transfer focus backwards.
          */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            ListButton listButton = (ListButton)getComponent();
+            ListButton listButton = (ListButton) getComponent();
 
             switch (keyCode) {
                 case Keyboard.KeyCode.ENTER: {
@@ -96,8 +96,8 @@ public abstract class ListButtonSkin extends ButtonSkin
                     int index = listView.getSelectedIndex();
                     listButton.setSelectedIndex(index);
 
-                    FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                        FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
+                    FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
+                        : FocusTraversalDirection.FORWARD;
                     listButton.transferFocus(direction);
 
                     break;
@@ -147,9 +147,7 @@ public abstract class ListButtonSkin extends ButtonSkin
             display.getContainerMouseListeners().remove(displayMouseListener);
 
             Window componentWindow = getComponent().getWindow();
-            if (componentWindow != null
-                && componentWindow.isOpen()
-                && !componentWindow.isClosing()) {
+            if (componentWindow != null && componentWindow.isOpen() && !componentWindow.isClosing()) {
                 componentWindow.moveToFront();
             }
         }
@@ -158,7 +156,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            Display display = (Display)container;
+            Display display = (Display) container;
             Component descendant = display.getDescendantAt(x, y);
 
             if (!listViewPopup.isAncestor(descendant)
@@ -174,8 +172,8 @@ public abstract class ListButtonSkin extends ButtonSkin
             int scrollAmount, int wheelRotation, int x, int y) {
             boolean consumed = false;
 
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
+            Display display = (Display) container;
+            Window window = (Window) display.getComponentAt(x, y);
 
             if (window != listViewPopup) {
                 consumed = true;
@@ -200,7 +198,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     public void install(Component component) {
         super.install(component);
 
-        ListButton listButton = (ListButton)component;
+        ListButton listButton = (ListButton) component;
         listButton.getListButtonListeners().add(this);
         listButton.getListButtonSelectionListeners().add(this);
 
@@ -263,7 +261,7 @@ public abstract class ListButtonSkin extends ButtonSkin
         pressed = true;
         repaintComponent();
 
-        ListButton listButton = (ListButton)component;
+        ListButton listButton = (ListButton) component;
 
         if (listViewPopup.isOpen()) {
             listViewPopup.close();
@@ -288,7 +286,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
-        ListButton listButton = (ListButton)getComponent();
+        ListButton listButton = (ListButton) getComponent();
         if (listButton.isRepeatable() && !getTriggerBounds().contains(x, y)) {
             listButton.press();
         }
@@ -298,10 +296,10 @@ public abstract class ListButtonSkin extends ButtonSkin
 
     /**
      * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
-     * state and opens the popup.<br>
-     * {@link KeyCode#UP UP} Selects the previous enabled list item.<br>
-     * {@link KeyCode#DOWN DOWN} Selects the next enabled list item.
-     *
+     * state and opens the popup.<br> {@link KeyCode#UP UP} Selects the previous
+     * enabled list item.<br> {@link KeyCode#DOWN DOWN} Selects the next enabled
+     * list item.
+     * 
      * @see #keyReleased(Component, int,
      * org.apache.pivot.wtk.Keyboard.KeyLocation)
      */
@@ -309,7 +307,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        ListButton listButton = (ListButton)getComponent();
+        ListButton listButton = (ListButton) getComponent();
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = true;
@@ -317,7 +315,7 @@ public abstract class ListButtonSkin extends ButtonSkin
 
             if (listViewPopup.isOpen()) {
                 listViewPopup.close();
-            } else if (!listButton.isRepeatable()){
+            } else if (!listButton.isRepeatable()) {
                 listViewPopup.open(component.getWindow());
             }
         } else if (keyCode == Keyboard.KeyCode.UP) {
@@ -325,8 +323,7 @@ public abstract class ListButtonSkin extends ButtonSkin
 
             do {
                 index--;
-            } while (index >= 0
-                && listButton.isItemDisabled(index));
+            } while (index >= 0 && listButton.isItemDisabled(index));
 
             if (index >= 0) {
                 listButton.setSelectedIndex(index);
@@ -343,8 +340,7 @@ public abstract class ListButtonSkin extends ButtonSkin
 
                 do {
                     index++;
-                } while (index < count
-                    && listView.isItemDisabled(index));
+                } while (index < count && listView.isItemDisabled(index));
 
                 if (index < count) {
                     listButton.setSelectedIndex(index);
@@ -365,7 +361,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        ListButton listButton = (ListButton)getComponent();
+        ListButton listButton = (ListButton) getComponent();
 
         if (keyCode == Keyboard.KeyCode.SPACE) {
             pressed = false;
@@ -389,7 +385,7 @@ public abstract class ListButtonSkin extends ButtonSkin
     public boolean keyTyped(Component component, char character) {
         boolean consumed = super.keyTyped(component, character);
 
-        ListButton listButton = (ListButton)getComponent();
+        ListButton listButton = (ListButton) getComponent();
 
         List<?> listData = listButton.getListData();
         ListView.ItemRenderer itemRenderer = listButton.getItemRenderer();
@@ -400,8 +396,7 @@ public abstract class ListButtonSkin extends ButtonSkin
             if (!listButton.isItemDisabled(i)) {
                 String string = itemRenderer.toString(listData.get(i));
 
-                if (string != null
-                    && string.length() > 0) {
+                if (string != null && string.length() > 0) {
                     char first = Character.toUpperCase(string.charAt(0));
 
                     if (first == characterUpper) {
@@ -425,7 +420,8 @@ public abstract class ListButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
+    public void itemRendererChanged(ListButton listButton,
+        ListView.ItemRenderer previousItemRenderer) {
         listView.setItemRenderer(listButton.getItemRenderer());
     }
 
@@ -435,7 +431,8 @@ public abstract class ListButtonSkin extends ButtonSkin
     }
 
     @Override
-    public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
+    public void disabledItemFilterChanged(ListButton listButton,
+        Filter<?> previousDisabledItemFilter) {
         listView.setDisabledItemFilter(listButton.getDisabledItemFilter());
     }
 
@@ -451,7 +448,8 @@ public abstract class ListButtonSkin extends ButtonSkin
 
         if (selectedIndex != previousSelectedIndex) {
             // This was not an indirect selection change
-            Object buttonData = (selectedIndex == -1) ? null : listButton.getListData().get(selectedIndex);
+            Object buttonData = (selectedIndex == -1) ? null : listButton.getListData().get(
+                selectedIndex);
             listButton.setButtonData(buttonData);
 
             listView.setSelectedIndex(selectedIndex);

@@ -37,10 +37,14 @@ import org.apache.pivot.wtk.Window;
  * Edit greeting sheet.
  */
 public class EditGreetingSheet extends Sheet implements Bindable {
-    @BXML private Form form = null;
-    @BXML private TextInput greetingTextInput = null;
-    @BXML private PushButton cancelButton = null;
-    @BXML private PushButton okButton = null;
+    @BXML
+    private Form form = null;
+    @BXML
+    private TextInput greetingTextInput = null;
+    @BXML
+    private PushButton cancelButton = null;
+    @BXML
+    private PushButton okButton = null;
 
     private Resources resources = null;
 
@@ -76,8 +80,8 @@ public class EditGreetingSheet extends Sheet implements Bindable {
 
         if (result) {
             if (greetingTextInput.getCharacterCount() == 0) {
-                Form.setFlag(greetingTextInput, new Form.Flag(MessageType.ERROR,
-                    (String)resources.get("greetingRequired")));
+                Form.setFlag(greetingTextInput,
+                    new Form.Flag(MessageType.ERROR, (String) resources.get("greetingRequired")));
             }
         }
 

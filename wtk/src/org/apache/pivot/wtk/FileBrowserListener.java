@@ -64,7 +64,7 @@ public interface FileBrowserListener {
 
     /**
      * Called when a file browser's root directory has changed.
-     *
+     * 
      * @param fileBrowser
      * @param previousRootDirectory
      */
@@ -72,7 +72,7 @@ public interface FileBrowserListener {
 
     /**
      * Called when a file has been added to a file browser's selection.
-     *
+     * 
      * @param fileBrowser
      * @param file
      */
@@ -80,7 +80,7 @@ public interface FileBrowserListener {
 
     /**
      * Called when a file has been removed from a file browser's selection.
-     *
+     * 
      * @param fileBrowser
      * @param file
      */
@@ -88,23 +88,22 @@ public interface FileBrowserListener {
 
     /**
      * Called when a file browser's selection state has been reset.
-     *
+     * 
      * @param fileBrowser
      * @param previousSelectedFiles
      */
-    public void selectedFilesChanged(FileBrowser fileBrowser,
-        Sequence<File> previousSelectedFiles);
+    public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles);
 
     /**
      * Called when a file browser's multi-select flag has changed.
-     *
+     * 
      * @param fileBrowser
      */
     public void multiSelectChanged(FileBrowser fileBrowser);
 
     /**
      * Called when a file browser's file filter has changed.
-     *
+     * 
      * @param fileBrowser
      * @param previousDisabledFileFilter
      */

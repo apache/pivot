@@ -20,8 +20,7 @@ package org.apache.pivot.wtk.content;
  * Default renderer for table view cells that contain tri-state data. Renders
  * cell contents as a tri-state checkbox.
  */
-public class TableViewTriStateCellRenderer extends TableViewCheckboxCellRenderer
-{
+public class TableViewTriStateCellRenderer extends TableViewCheckboxCellRenderer {
     public TableViewTriStateCellRenderer() {
         super();
         checkbox.setTriState(true);

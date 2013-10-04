@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.skin.PanelSkin;
  */
 public class TerraPanelSkin extends PanelSkin {
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 }

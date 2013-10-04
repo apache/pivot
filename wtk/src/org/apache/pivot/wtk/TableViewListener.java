@@ -48,14 +48,15 @@ public interface TableViewListener {
         }
 
         @Override
-        public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
+        public void disabledRowFilterChanged(TableView tableView,
+            Filter<?> previousDisabledRowFilter) {
             // empty block
         }
     }
 
     /**
      * Called when a table view's table data has changed.
-     *
+     * 
      * @param tableView
      * @param previousTableData
      */
@@ -63,7 +64,7 @@ public interface TableViewListener {
 
     /**
      * Called when a table view's column source has changed.
-     *
+     * 
      * @param tableView
      * @param previousColumnSource
      */
@@ -71,7 +72,7 @@ public interface TableViewListener {
 
     /**
      * Called when a table view's row editor has changed.
-     *
+     * 
      * @param tableView
      * @param previousRowEditor
      */
@@ -79,7 +80,7 @@ public interface TableViewListener {
 
     /**
      * Called when a table view's select mode has changed.
-     *
+     * 
      * @param tableView
      * @param previousSelectMode
      */
@@ -87,7 +88,7 @@ public interface TableViewListener {
 
     /**
      * Called when a table view's disabled row filter has changed.
-     *
+     * 
      * @param tableView
      * @param previousDisabledRowFilter
      */

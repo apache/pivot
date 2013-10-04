@@ -23,13 +23,11 @@ import org.apache.pivot.collections.Group;
 import org.apache.pivot.collections.HashSet;
 import org.apache.pivot.util.ImmutableIterator;
 
-
 /**
  * {@link Task} that runs a group of tasks in parallel and notifies listeners
  * when all tasks are complete.
  */
-public class TaskGroup extends Task<Void>
-    implements Group<Task<?>>, Iterable<Task<?>> {
+public class TaskGroup extends Task<Void> implements Group<Task<?>>, Iterable<Task<?>> {
     private HashSet<Task<?>> tasks = new HashSet<>();
     private int complete = 0;
 
@@ -64,7 +62,7 @@ public class TaskGroup extends Task<Void>
 
         complete = 0;
         for (Task<?> task : tasks) {
-            ((Task<Object>)task).execute(taskListener);
+            ((Task<Object>) task).execute(taskListener);
         }
 
         while (complete < getCount()) {

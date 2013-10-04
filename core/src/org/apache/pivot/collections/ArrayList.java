@@ -26,9 +26,7 @@ import java.util.NoSuchElementException;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Implementation of the {@link List} interface that is backed by an
- * array.
- * <p>
+ * Implementation of the {@link List} interface that is backed by an array. <p>
  * NOTE This class is not thread-safe. For concurrent access, use a
  * {@link org.apache.pivot.collections.concurrent.SynchronizedList}.
  */
@@ -121,12 +119,11 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
 
         private void indexBoundsCheck() {
-            if (index < 0 || index >+ ArrayList.this.length) {
+            if (index < 0 || index > +ArrayList.this.length) {
                 throw new IllegalStateException("index  " + index + " out of bounds");
             }
         }
     }
-
 
     private Object[] items;
     private int length = 0;
@@ -153,7 +150,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         items = new Object[capacity];
     }
 
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({ "unchecked" })
     public ArrayList(T... items) {
         this(items, 0, items.length);
     }
@@ -208,8 +205,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         if (comparator == null) {
             index = length;
             insert(item, index);
-        }
-        else {
+        } else {
             // Perform a binary search to find the insertion point
             index = binarySearch(this, item, comparator);
             if (index < 0) {
@@ -230,8 +226,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     private void insert(T item, int index, boolean validate) {
         verifyIndexBounds(index, 0, length);
 
-        if (comparator != null
-            && validate) {
+        if (comparator != null && validate) {
             int i = binarySearch(this, item, comparator);
             if (i < 0) {
                 i = -(i + 1);
@@ -260,19 +255,17 @@ public class ArrayList<T> implements List<T>, Serializable {
     public T update(int index, T item) {
         verifyIndexBounds(index, 0, length - 1);
 
-        T previousItem = (T)items[index];
+        T previousItem = (T) items[index];
 
         if (previousItem != item) {
             if (comparator != null) {
                 // Ensure that the new item is greater or equal to its
                 // predecessor and less than or equal to its successor
-                T predecessorItem = (index > 0 ? (T)items[index - 1] : null);
-                T successorItem = (index < length - 1 ? (T)items[index + 1] : null);
+                T predecessorItem = (index > 0 ? (T) items[index - 1] : null);
+                T successorItem = (index < length - 1 ? (T) items[index + 1] : null);
 
-                if ((predecessorItem != null
-                    && comparator.compare(item, predecessorItem) < 0)
-                    || (successorItem != null
-                    && comparator.compare(item, successorItem) > 0)) {
+                if ((predecessorItem != null && comparator.compare(item, predecessorItem) < 0)
+                    || (successorItem != null && comparator.compare(item, successorItem) > 0)) {
                     throw new IllegalArgumentException("Illegal item modification.");
                 }
             }
@@ -294,7 +287,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         int index = indexOf(item);
 
         if (index >= 0) {
-           remove(index, 1);
+            remove(index, 1);
         }
 
         return index;
@@ -305,7 +298,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     public Sequence<T> remove(int index, int count) {
         verifyIndexBounds(index, count, 0, length);
 
-        ArrayList<T> removed = new ArrayList<>((T[])items, index, count);
+        ArrayList<T> removed = new ArrayList<>((T[]) items, index, count);
 
         // Remove items
         if (count > 0) {
@@ -317,7 +310,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
             // Clear any orphaned references
             for (int i = length, n = length + count; i < n; i++) {
-                items[i] =  null;
+                items[i] = null;
             }
 
             if (listListeners != null) {
@@ -346,7 +339,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     public T get(int index) {
         verifyIndexBounds(index, 0, length - 1);
 
-        return (T)items[index];
+        return (T) items[index];
     }
 
     @Override
@@ -372,8 +365,7 @@ public class ArrayList<T> implements List<T>, Serializable {
             if (index == length) {
                 index = -1;
             }
-        }
-        else {
+        } else {
             // Perform a binary search to find the index
             index = binarySearch(this, item, comparator);
             if (index < 0) {
@@ -466,15 +458,14 @@ public class ArrayList<T> implements List<T>, Serializable {
         if (this == o) {
             equals = true;
         } else if (o instanceof List) {
-            List<T> list = (List<T>)o;
+            List<T> list = (List<T>) o;
 
             if (length == list.getLength()) {
                 Iterator<T> iterator = list.iterator();
                 equals = true;
 
                 for (T element : this) {
-                    if (!(iterator.hasNext()
-                        && element.equals(iterator.next()))) {
+                    if (!(iterator.hasNext() && element.equals(iterator.next()))) {
                         equals = false;
                         break;
                     }
@@ -526,7 +517,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         verifyNotNull("arrayList", arrayList);
         verifyNotNull("comparator", comparator);
 
-        Arrays.sort((T[])arrayList.items, from, to, comparator);
+        Arrays.sort((T[]) arrayList.items, from, to, comparator);
 
         arrayList.modificationCount++;
     }
@@ -546,13 +537,13 @@ public class ArrayList<T> implements List<T>, Serializable {
         verifyNotNull("comparator", comparator);
         verifyNotNull("item", item);
 
-        int index = Arrays.binarySearch((T[])arrayList.items, 0, arrayList.length, item, comparator);
+        int index = Arrays.binarySearch((T[]) arrayList.items, 0, arrayList.length, item,
+            comparator);
 
         return index;
     }
 
-    public static <T extends Comparable<? super T>> int binarySearch(ArrayList<T> arrayList,
-        T item) {
+    public static <T extends Comparable<? super T>> int binarySearch(ArrayList<T> arrayList, T item) {
         return binarySearch(arrayList, item, new Comparator<T>() {
             @Override
             public int compare(T t1, T t2) {
@@ -578,7 +569,8 @@ public class ArrayList<T> implements List<T>, Serializable {
             throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
         }
         if (index < start || index > end) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + "," + end + "].");
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + ","
+                + end + "].");
         }
     }
 
@@ -587,14 +579,17 @@ public class ArrayList<T> implements List<T>, Serializable {
             throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
         }
         if (count < 0 || start < 0) {
-            throw new IllegalArgumentException("count (" + count + ") < 0 or start (" + start + ") < 0");
+            throw new IllegalArgumentException("count (" + count + ") < 0 or start (" + start
+                + ") < 0");
         }
         if (index < start) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + "," + end + "].");
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + ","
+                + end + "].");
         }
 
         if (index + count > end) {
-            throw new IndexOutOfBoundsException("index + count " + index + "," + count + " out of bounds [" + start + "," + end + "].");
+            throw new IndexOutOfBoundsException("index + count " + index + "," + count
+                + " out of bounds [" + start + "," + end + "].");
         }
     }
 }

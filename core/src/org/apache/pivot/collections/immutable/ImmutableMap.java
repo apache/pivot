@@ -65,7 +65,6 @@ public class ImmutableMap<K, V> implements Map<K, V> {
         return map.containsKey(key);
     }
 
-
     @Override
     public boolean isEmpty() {
         return map.isEmpty();

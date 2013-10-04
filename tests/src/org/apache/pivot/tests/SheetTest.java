@@ -46,9 +46,8 @@ public class SheetTest extends Application.Adapter {
     private Sheet sheet = null;
 
     @Override
-    public void startup(final Display display, Map<String, String> properties)
-        throws Exception {
-        Picture picture = (Picture)Image.load(getClass().getResource("IMG_0767_2.jpg"));
+    public void startup(final Display display, Map<String, String> properties) throws Exception {
+        Picture picture = (Picture) Image.load(getClass().getResource("IMG_0767_2.jpg"));
         picture.resample(120);
 
         BoxPane windowContent = new BoxPane();
@@ -75,10 +74,12 @@ public class SheetTest extends Application.Adapter {
 
         tablePane.getRows().get(0).add(sheetContent);
 
-        Label promptBody = new Label("Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
+        Label promptBody = new Label(
+            "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
         promptBody.getStyles().put("wrapText", true);
 
-        final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<>("OK"), promptBody);
+        final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<>("OK"),
+            promptBody);
         prompt.setTitle("Prompt");
         prompt.getStyles().put("resizable", true);
 
@@ -94,7 +95,8 @@ public class SheetTest extends Application.Adapter {
             }
         });
 
-        Label alertBody = new Label("Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
+        Label alertBody = new Label(
+            "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
         alertBody.getStyles().put("wrapText", true);
 
         final Alert alert = new Alert(MessageType.INFO, "Alert", new ArrayList<>("OK"), alertBody);
@@ -123,8 +125,8 @@ public class SheetTest extends Application.Adapter {
             public void buttonPressed(Button buttonArgument) {
                 prompt.open(frame);
 
-                Display displayLocal = DesktopApplicationContext.createDisplay(640, 480, 100, 100, true,
-                    true, false, buttonArgument.getDisplay().getHostWindow(), null);
+                Display displayLocal = DesktopApplicationContext.createDisplay(640, 480, 100, 100,
+                    true, true, false, buttonArgument.getDisplay().getHostWindow(), null);
 
                 Window window = new Window();
                 window.setTitle("New Secondary Window");

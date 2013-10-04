@@ -37,7 +37,7 @@ public class JSONSerializerTest {
         List<?> emptyList;
         try {
             emptyList = JSONSerializer.parseList("[\n]");
-        } catch(SerializationException exception) {
+        } catch (SerializationException exception) {
             throw new RuntimeException(exception);
         }
 
@@ -50,32 +50,32 @@ public class JSONSerializerTest {
         assertEquals(0.000005, JSONSerializer.parseDouble("5.0E-6"), 0);
     }
 
-    @Test(expected=SerializationException.class)
+    @Test(expected = SerializationException.class)
     public void testFloatNaN() throws SerializationException {
         JSONSerializer.toString(Float.NaN);
     }
 
-    @Test(expected=SerializationException.class)
+    @Test(expected = SerializationException.class)
     public void testFloatNegativeInfinity() throws SerializationException {
         JSONSerializer.toString(Float.NEGATIVE_INFINITY);
     }
 
-    @Test(expected=SerializationException.class)
+    @Test(expected = SerializationException.class)
     public void testFloatPositiveInfinity() throws SerializationException {
         JSONSerializer.toString(Float.POSITIVE_INFINITY);
     }
 
-    @Test(expected=SerializationException.class)
+    @Test(expected = SerializationException.class)
     public void testDoubleNaN() throws SerializationException {
         JSONSerializer.toString(Double.NaN);
     }
 
-    @Test(expected=SerializationException.class)
+    @Test(expected = SerializationException.class)
     public void testDoubleNegativeInfinity() throws SerializationException {
         JSONSerializer.toString(Double.NEGATIVE_INFINITY);
     }
 
-    @Test(expected=SerializationException.class)
+    @Test(expected = SerializationException.class)
     public void testDoublePositiveInfinityN() throws SerializationException {
         JSONSerializer.toString(Double.POSITIVE_INFINITY);
     }
@@ -85,7 +85,8 @@ public class JSONSerializerTest {
         JSONSerializer jsonSerializer = new JSONSerializer();
         JSONSerializerListener jsonSerializerListener = new JSONSerializerListener() {
             @Override
-            public void beginDictionary(JSONSerializer jsonSerializerArgument, Dictionary<String, ?> value) {
+            public void beginDictionary(JSONSerializer jsonSerializerArgument,
+                Dictionary<String, ?> value) {
                 System.out.println("Begin dictionary: " + value);
             }
 
@@ -146,11 +147,10 @@ public class JSONSerializerTest {
     }
 
     @Test
-    public void testJavaMap()
-    {
+    public void testJavaMap() {
         System.out.println("Test interaction with Standard java.util.Map");
 
-        java.util.HashMap<String, java.util.Map<String, String>> root  = new java.util.HashMap<>();
+        java.util.HashMap<String, java.util.Map<String, String>> root = new java.util.HashMap<>();
         java.util.HashMap<String, String> child = new java.util.HashMap<>();
 
         child.put("name", "John Doe");

@@ -36,10 +36,6 @@ import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Container;
-import org.apache.pivot.wtk.VFSBrowser;
-import org.apache.pivot.wtk.VFSBrowserListener;
-import org.apache.pivot.wtk.VFSBrowserSheet;
-import org.apache.pivot.wtk.VFSBrowserSheetListener;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
@@ -47,6 +43,10 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
+import org.apache.pivot.wtk.VFSBrowser;
+import org.apache.pivot.wtk.VFSBrowserListener;
+import org.apache.pivot.wtk.VFSBrowserSheet;
+import org.apache.pivot.wtk.VFSBrowserSheetListener;
 import org.apache.pivot.wtk.Window;
 
 /**
@@ -63,18 +63,22 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
 
         @Override
         public boolean include(FileObject file) {
-            return (file.getName().getType() != FileType.FOLDER
-                || (sourceFilter != null
-                    && sourceFilter.include(file)));
+            return (file.getName().getType() != FileType.FOLDER || (sourceFilter != null && sourceFilter.include(file)));
         }
     }
 
-    @BXML private TablePane tablePane = null;
-    @BXML private BoxPane saveAsBoxPane = null;
-    @BXML private TextInput saveAsTextInput = null;
-    @BXML private VFSBrowser fileBrowser = null;
-    @BXML private PushButton okButton = null;
-    @BXML private PushButton cancelButton = null;
+    @BXML
+    private TablePane tablePane = null;
+    @BXML
+    private BoxPane saveAsBoxPane = null;
+    @BXML
+    private TextInput saveAsTextInput = null;
+    @BXML
+    private VFSBrowser fileBrowser = null;
+    @BXML
+    private PushButton okButton = null;
+    @BXML
+    private PushButton cancelButton = null;
 
     private boolean updatingSelection = false;
     private int selectedDirectoryCount = 0;
@@ -87,7 +91,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
     public void install(Component component) {
         super.install(component);
 
-        final VFSBrowserSheet fileBrowserSheet = (VFSBrowserSheet)component;
+        final VFSBrowserSheet fileBrowserSheet = (VFSBrowserSheet) component;
         fileBrowserSheet.setMinimumWidth(360);
         fileBrowserSheet.setMinimumHeight(180);
 
@@ -96,7 +100,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
 
         Component content;
         try {
-            content = (Component)bxmlSerializer.readObject(TerraVFSBrowserSheetSkin.class,
+            content = (Component) bxmlSerializer.readObject(TerraVFSBrowserSheetSkin.class,
                 "terra_vfs_browser_sheet_skin.bxml", true);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -176,8 +180,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                 if (!fileBrowserArgument.isMultiSelect()) {
                     FileObject selectedFile = fileBrowserArgument.getSelectedFile();
 
-                    if (selectedFile != null
-                        && selectedFile.getName().getType() != FileType.FOLDER) {
+                    if (selectedFile != null && selectedFile.getName().getType() != FileType.FOLDER) {
                         saveAsTextInput.setText(selectedFile.getName().getPath());
                     }
                 }
@@ -186,37 +189,37 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
             }
         });
 
-        fileBrowser.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-            private FileObject file = null;
+        fileBrowser.getComponentMouseButtonListeners().add(
+            new ComponentMouseButtonListener.Adapter() {
+                private FileObject file = null;
 
-            @Override
-            public boolean mouseClick(Component componentArgument, Mouse.Button button, int x, int y, int count) {
-                boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
+                @Override
+                public boolean mouseClick(Component componentArgument, Mouse.Button button, int x,
+                    int y, int count) {
+                    boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
 
-                VFSBrowserSheet.Mode mode = fileBrowserSheet.getMode();
+                    VFSBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 
-                if (count == 1) {
-                    file = fileBrowser.getFileAt(x, y);
-                } else if (count == 2) {
-                    FileObject fileLocal = fileBrowser.getFileAt(x, y);
+                    if (count == 1) {
+                        file = fileBrowser.getFileAt(x, y);
+                    } else if (count == 2) {
+                        FileObject fileLocal = fileBrowser.getFileAt(x, y);
 
-                    if (fileLocal != null
-                        && this.file != null
-                        && fileLocal.equals(this.file)
-                        && fileBrowser.isFileSelected(fileLocal)) {
-                        if (mode == VFSBrowserSheet.Mode.OPEN
-                            || mode == VFSBrowserSheet.Mode.OPEN_MULTIPLE) {
-                            if (fileLocal.getName().getType() != FileType.FOLDER) {
-                                fileBrowserSheet.close(true);
-                                consumed = true;
+                        if (fileLocal != null && this.file != null && fileLocal.equals(this.file)
+                            && fileBrowser.isFileSelected(fileLocal)) {
+                            if (mode == VFSBrowserSheet.Mode.OPEN
+                                || mode == VFSBrowserSheet.Mode.OPEN_MULTIPLE) {
+                                if (fileLocal.getName().getType() != FileType.FOLDER) {
+                                    fileBrowserSheet.close(true);
+                                    consumed = true;
+                                }
                             }
                         }
                     }
-                }
 
-                return consumed;
-            }
-        });
+                    return consumed;
+                }
+            });
 
         okButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -241,7 +244,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
     }
 
     public boolean isHideDisabledFiles() {
-        return (Boolean)fileBrowser.getStyles().get("hideDisabledFiles");
+        return (Boolean) fileBrowser.getStyles().get("hideDisabledFiles");
     }
 
     public void setHideDisabledFiles(boolean hideDisabledFiles) {
@@ -279,14 +282,13 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
     public Vote previewSheetClose(final Sheet sheet, final boolean result) {
         Vote vote = null;
 
-        if (result
-            && !okButton.isEnabled()) {
+        if (result && !okButton.isEnabled()) {
             vote = Vote.DENY;
         } else {
             if (result) {
                 updatingSelection = true;
 
-                VFSBrowserSheet fileBrowserSheet = (VFSBrowserSheet)sheet;
+                VFSBrowserSheet fileBrowserSheet = (VFSBrowserSheet) sheet;
                 VFSBrowserSheet.Mode mode = fileBrowserSheet.getMode();
                 FileSystemManager manager = fileBrowserSheet.getManager();
                 FileName baseFileName = fileBrowserSheet.getBaseFileName();
@@ -307,27 +309,39 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                         String fileName = saveAsTextInput.getText();
                         // Contents of the entry field could be:
                         // 1. Just a new file name in the current root directory
-                        // 2. A relative or absolute path that is an existing directory
-                        //    to navigate to
-                        // 3. A relative or absolute path including the new file name
-                        //    in an existing directory
+                        // 2. A relative or absolute path that is an existing
+                        // directory
+                        // to navigate to
+                        // 3. A relative or absolute path including the new file
+                        // name
+                        // in an existing directory
                         // So, first make it an absolute path
-                        // TODO: all this logic needs changing (not sure how) with VFS
-                        // because you could type in a whole new URI and have to change
+                        // TODO: all this logic needs changing (not sure how)
+                        // with VFS
+                        // because you could type in a whole new URI and have to
+                        // change
                         // managers
                         try {
                             FileObject selectedFile = manager.resolveFile(fileName);
-                            //if (!selectedFile.isAbsolute() && !fileName.startsWith(File.separator)) {
-                            if (baseFileName == null || !baseFileName.isAncestor(selectedFile.getName())) {
-                                selectedFile = manager.resolveFile(fileBrowser.getRootDirectory(), fileName);
+                            // if (!selectedFile.isAbsolute() &&
+                            // !fileName.startsWith(File.separator)) {
+                            if (baseFileName == null
+                                || !baseFileName.isAncestor(selectedFile.getName())) {
+                                selectedFile = manager.resolveFile(fileBrowser.getRootDirectory(),
+                                    fileName);
                             } else {
                                 // TODO: is there really anything to do here?
-                                //selectedFile = selectedFile.getAbsoluteFile();
+                                // selectedFile =
+                                // selectedFile.getAbsoluteFile();
                             }
                             if (selectedFile.exists() && selectedFile.getType() == FileType.FOLDER) {
                                 try {
-                                    // TODO: what to do about canonical file representations?
-                                    FileObject root = /* selectedFile.getCanonicalFile(); */selectedFile;
+                                    // TODO: what to do about canonical file
+                                    // representations?
+                                    FileObject root = /*
+                                                       * selectedFile.
+                                                       * getCanonicalFile();
+                                                       */selectedFile;
                                     fileBrowserSheet.setRootDirectory(root);
                                     fileBrowser.setRootDirectory(root);
                                     saveAsTextInput.setText("");
@@ -338,20 +352,21 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                                 vote = Vote.DENY;
                             } else {
                                 FileObject root = selectedFile.getParent();
-                                if (root != null && root.exists() && root.getType() == FileType.FOLDER) {
+                                if (root != null && root.exists()
+                                    && root.getType() == FileType.FOLDER) {
                                     try {
                                         // TODO: canonical file again
-                                        //fileBrowserSheet.setRootDirectory(root.getCanonicalFile());
+                                        // fileBrowserSheet.setRootDirectory(root.getCanonicalFile());
                                         fileBrowserSheet.setRootDirectory(root);
                                         selectedFile = manager.resolveFile(selectedFile.getName().getURI());
-                                    }
-                                    catch (IOException ioe) {
+                                    } catch (IOException ioe) {
                                         Form.setFlag(saveAsBoxPane, new Form.Flag());
                                         selectedFile = null;
                                         vote = Vote.DENY;
                                     }
                                 } else {
-                                    // Could be an error message here ("Directory does not exist")
+                                    // Could be an error message here
+                                    // ("Directory does not exist")
                                     Form.setFlag(saveAsBoxPane, new Form.Flag());
                                     selectedFile = null;
                                     vote = Vote.DENY;
@@ -381,14 +396,12 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
     }
 
     @Override
-    public void managerChanged(VFSBrowserSheet fileBrowserSheet,
-        FileSystemManager previousManager) {
+    public void managerChanged(VFSBrowserSheet fileBrowserSheet, FileSystemManager previousManager) {
         // TODO: what to do here?
     }
 
     @Override
-    public void modeChanged(VFSBrowserSheet fileBrowserSheet,
-        VFSBrowserSheet.Mode previousMode) {
+    public void modeChanged(VFSBrowserSheet fileBrowserSheet, VFSBrowserSheet.Mode previousMode) {
         VFSBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 
         fileBrowser.getStyles().put("keyboardFolderTraversalEnabled",
@@ -449,8 +462,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                 throw new RuntimeException(fse);
             }
 
-            if (fileBrowser.getSelectedFiles().getLength() == 0
-                && selectedFiles.getLength() == 1) {
+            if (fileBrowser.getSelectedFiles().getLength() == 0 && selectedFiles.getLength() == 1) {
                 // The file does not currently exist; set the file name in the
                 // text input if the parent directory is the same as the root
                 // directory
@@ -475,7 +487,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
     }
 
     private void updateDisabledFileFilter() {
-        VFSBrowserSheet fileBrowserSheet = (VFSBrowserSheet)getComponent();
+        VFSBrowserSheet fileBrowserSheet = (VFSBrowserSheet) getComponent();
         Filter<FileObject> disabledFileFilter = fileBrowserSheet.getDisabledFileFilter();
 
         VFSBrowserSheet.Mode mode = fileBrowserSheet.getMode();
@@ -487,7 +499,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
     }
 
     private void updateOKButtonState() {
-        VFSBrowserSheet fileBrowserSheet = (VFSBrowserSheet)getComponent();
+        VFSBrowserSheet fileBrowserSheet = (VFSBrowserSheet) getComponent();
 
         VFSBrowserSheet.Mode mode = fileBrowserSheet.getMode();
         Sequence<FileObject> selectedFiles = fileBrowser.getSelectedFiles();
@@ -495,8 +507,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
         switch (mode) {
             case OPEN:
             case OPEN_MULTIPLE: {
-                okButton.setEnabled(selectedFiles.getLength() > 0
-                    && selectedDirectoryCount == 0);
+                okButton.setEnabled(selectedFiles.getLength() > 0 && selectedDirectoryCount == 0);
                 break;
             }
 

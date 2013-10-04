@@ -30,20 +30,23 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      */
     public interface ItemIterator<T> extends Iterator<T> {
         public boolean hasPrevious();
+
         public T previous();
 
         public void toStart();
+
         public void toEnd();
 
         public void insert(T item);
+
         public void update(T item);
     }
 
     /**
      * List listener list.
      */
-    public static class ListListenerList<T>
-        extends ListenerList<ListListener<T>> implements ListListener<T> {
+    public static class ListListenerList<T> extends ListenerList<ListListener<T>> implements
+        ListListener<T> {
         @Override
         public void itemInserted(List<T> list, int index) {
             for (ListListener<T> listener : this) {
@@ -84,29 +87,21 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      * Adds an item to the list. If the list is unsorted, the item is appended
      * to the end of the list. Otherwise, it is inserted at the appropriate
      * index.
-     *
+     * 
      * @see org.apache.pivot.collections.ListListener#itemInserted(List, int)
-     *
-     * @return
-     * The index at which the item was added.
+     * @return The index at which the item was added.
      */
     @Override
     public int add(T item);
 
     /**
      * Inserts an item into the list.
-     *
-     * @param item
-     * The item to be added to the list.
-     *
-     * @param index
-     * The index at which the item should be inserted. Must be a value between
-     * <tt>0</tt> and <tt>getLength()</tt>.
-     *
-     * @throws IllegalArgumentException
-     * If the list is sorted and the insertion point of the item does not match
-     * the given index.
-     *
+     * 
+     * @param item The item to be added to the list.
+     * @param index The index at which the item should be inserted. Must be a
+     * value between <tt>0</tt> and <tt>getLength()</tt>.
+     * @throws IllegalArgumentException If the list is sorted and the insertion
+     * point of the item does not match the given index.
      * @see ListListener#itemInserted(List, int)
      */
     @Override
@@ -114,17 +109,12 @@ public interface List<T> extends Sequence<T>, Collection<T> {
 
     /**
      * Updates the item at the given index.
-     *
-     * @param index
-     * The index of the item to update.
-     *
-     * @param item
-     * The item that will replace any existing value at the given index.
-     *
-     * @throws IllegalArgumentException
-     * If the list is sorted and the index of the updated item would be
-     * different than its current index.
-     *
+     * 
+     * @param index The index of the item to update.
+     * @param item The item that will replace any existing value at the given
+     * index.
+     * @throws IllegalArgumentException If the list is sorted and the index of
+     * the updated item would be different than its current index.
      * @see ListListener#itemUpdated(List, int, Object)
      */
     @Override
@@ -144,9 +134,8 @@ public interface List<T> extends Sequence<T>, Collection<T> {
 
     /**
      * Returns the length of the list.
-     *
-     * @return
-     * The number of items in the list, or -1 if the list's length is
+     * 
+     * @return The number of items in the list, or -1 if the list's length is
      * not known. In this case, the iterator must be used to retrieve the
      * contents of the list.
      */

@@ -42,7 +42,7 @@ public interface FormAttributeListener {
 
     /**
      * Called when a fields's label attribute has changed.
-     *
+     * 
      * @param form
      * @param field
      * @param previousLabel
@@ -51,7 +51,7 @@ public interface FormAttributeListener {
 
     /**
      * Called when a fields's required attribute has changed.
-     *
+     * 
      * @param form
      * @param field
      */
@@ -59,7 +59,7 @@ public interface FormAttributeListener {
 
     /**
      * Called when a field's flag attribute has changed.
-     *
+     * 
      * @param form
      * @param field
      * @param previousFlag

@@ -43,13 +43,15 @@ public class Pivot686 extends Application.Adapter {
         forceFocus = Boolean.parseBoolean(forceFocusParameter);
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this.getClass(), "pivot_686.bxml");
+        window = (Window) bxmlSerializer.readObject(this.getClass(), "pivot_686.bxml");
         initializeFields(bxmlSerializer);
         window.open(display);
 
         if (forceFocus == true) {
             System.out.println("force focus on textInput now");
-            textInput.requestFocus();  // force focus on TextInput, Ok when run as a Java Application, and even as Applet
+            textInput.requestFocus(); // force focus on TextInput, Ok when run
+                                      // as a Java Application, and even as
+                                      // Applet
         }
         System.out.println("textInput has focus: " + textInput.isFocused());
 
@@ -68,11 +70,11 @@ public class Pivot686 extends Application.Adapter {
     private void initializeFields(BXMLSerializer serializer) {
         System.out.println("initializeFields: start");
 
-        textInput = (TextInput)serializer.getNamespace().get("textInput");
-        textInput.requestFocus();  // note that this has no effect here
+        textInput = (TextInput) serializer.getNamespace().get("textInput");
+        textInput.requestFocus(); // note that this has no effect here
         System.out.println("textInput has focus: " + textInput.isFocused());
 
-        pushButton = (PushButton)serializer.getNamespace().get("pushButton");
+        pushButton = (PushButton) serializer.getNamespace().get("pushButton");
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {

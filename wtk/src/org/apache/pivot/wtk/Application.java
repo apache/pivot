@@ -20,10 +20,9 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Keyboard.KeyLocation;
 
 /**
- * Represents the entry point into a WTK application.
- * <p>
- * These methods are called by the application context. In general, they should
- * not be invoked directly by the application.
+ * Represents the entry point into a WTK application. <p> These methods are
+ * called by the application context. In general, they should not be invoked
+ * directly by the application.
  */
 public interface Application {
     /**
@@ -59,16 +58,16 @@ public interface Application {
      */
     public interface AboutHandler {
         /**
-         * Called to notify the application that it should present its
-         * "about" information.
+         * Called to notify the application that it should present its "about"
+         * information.
          */
         public void aboutRequested();
     }
 
     /**
-     * Optional interface that allows an application to handle unprocessed
-     * key events (keystrokes that are processed when no component has the
-     * input focus).
+     * Optional interface that allows an application to handle unprocessed key
+     * events (keystrokes that are processed when no component has the input
+     * focus).
      */
     public interface UnprocessedKeyHandler {
         /**
@@ -92,7 +91,9 @@ public interface Application {
         }
 
         public void keyTyped(char character);
+
         public void keyPressed(int keyCode, Keyboard.KeyLocation keyLocation);
+
         public void keyReleased(int keyCode, Keyboard.KeyLocation keyLocation);
     }
 
@@ -106,24 +107,18 @@ public interface Application {
 
     /**
      * Called when the application is starting up.
-     *
-     * @param display
-     * The display on which this application was started.
-     *
-     * @param properties
-     * Initialization properties passed to the application.
+     * 
+     * @param display The display on which this application was started.
+     * @param properties Initialization properties passed to the application.
      */
     public void startup(Display display, Map<String, String> properties) throws Exception;
 
     /**
      * Called when the application is being shut down.
-     *
-     * @param optional
-     * If <tt>true</tt>, the shutdown may be cancelled by returning a value of
-     * <tt>true</tt>.
-     *
-     * @return
-     * <tt>true</tt> to cancel shutdown, <tt>false</tt> to continue.
+     * 
+     * @param optional If <tt>true</tt>, the shutdown may be cancelled by
+     * returning a value of <tt>true</tt>.
+     * @return <tt>true</tt> to cancel shutdown, <tt>false</tt> to continue.
      */
     public boolean shutdown(boolean optional) throws Exception;
 

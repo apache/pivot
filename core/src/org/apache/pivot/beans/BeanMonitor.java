@@ -58,8 +58,8 @@ public class BeanMonitor {
         }
     }
 
-    private class PropertyChangeListenerList extends ListenerList<PropertyChangeListener>
-        implements PropertyChangeListener {
+    private class PropertyChangeListenerList extends ListenerList<PropertyChangeListener> implements
+        PropertyChangeListener {
         @Override
         public void add(PropertyChangeListener listener) {
             if (isEmpty()) {
@@ -112,11 +112,11 @@ public class BeanMonitor {
 
             if (ListenerList.class.isAssignableFrom(method.getReturnType())
                 && (method.getModifiers() & Modifier.STATIC) == 0) {
-                ParameterizedType genericType = (ParameterizedType)method.getGenericReturnType();
+                ParameterizedType genericType = (ParameterizedType) method.getGenericReturnType();
                 Type[] typeArguments = genericType.getActualTypeArguments();
 
                 if (typeArguments.length == 1) {
-                    Class<?> listenerInterface = (Class<?>)typeArguments[0];
+                    Class<?> listenerInterface = (Class<?>) typeArguments[0];
 
                     if (!listenerInterface.isInterface()) {
                         throw new RuntimeException(listenerInterface.getName()
@@ -151,12 +151,9 @@ public class BeanMonitor {
 
     /**
      * Tests whether a property fires change events.
-     *
-     * @param key
-     * The property name.
-     *
-     * @return
-     * <tt>true</tt> if the property fires change events; <tt>false</tt>
+     * 
+     * @param key The property name.
+     * @return <tt>true</tt> if the property fires change events; <tt>false</tt>
      * otherwise.
      */
     public boolean isNotifying(String key) {
@@ -176,11 +173,11 @@ public class BeanMonitor {
 
             if (ListenerList.class.isAssignableFrom(method.getReturnType())
                 && (method.getModifiers() & Modifier.STATIC) == 0) {
-                ParameterizedType genericType = (ParameterizedType)method.getGenericReturnType();
+                ParameterizedType genericType = (ParameterizedType) method.getGenericReturnType();
                 Type[] typeArguments = genericType.getActualTypeArguments();
 
                 if (typeArguments.length == 1) {
-                    Class<?> listenerInterface = (Class<?>)typeArguments[0];
+                    Class<?> listenerInterface = (Class<?>) typeArguments[0];
 
                     // Get the listener list
                     Object listenerList;
@@ -195,8 +192,9 @@ public class BeanMonitor {
                     // Get the listener for this interface
                     Object listener = beanListenerProxies.get(listenerInterface);
                     if (listener == null) {
-                        listener = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-                            new Class<?>[]{listenerInterface}, invocationHandler);
+                        listener = Proxy.newProxyInstance(
+                            Thread.currentThread().getContextClassLoader(),
+                            new Class<?>[] { listenerInterface }, invocationHandler);
                         beanListenerProxies.put(listenerInterface, listener);
                     }
 
@@ -205,13 +203,13 @@ public class BeanMonitor {
                     Method addMethod;
                     try {
                         addMethod = listenerListClass.getMethod("add",
-                            new Class<?>[] {Object.class});
+                            new Class<?>[] { Object.class });
                     } catch (NoSuchMethodException exception) {
                         throw new RuntimeException(exception);
                     }
 
                     try {
-                        addMethod.invoke(listenerList, new Object[] {listener});
+                        addMethod.invoke(listenerList, new Object[] { listener });
                     } catch (IllegalAccessException exception) {
                         throw new RuntimeException(exception);
                     } catch (InvocationTargetException exception) {
@@ -233,11 +231,11 @@ public class BeanMonitor {
 
             if (ListenerList.class.isAssignableFrom(method.getReturnType())
                 && (method.getModifiers() & Modifier.STATIC) == 0) {
-                ParameterizedType genericType = (ParameterizedType)method.getGenericReturnType();
+                ParameterizedType genericType = (ParameterizedType) method.getGenericReturnType();
                 Type[] typeArguments = genericType.getActualTypeArguments();
 
                 if (typeArguments.length == 1) {
-                    Class<?> listenerInterface = (Class<?>)typeArguments[0];
+                    Class<?> listenerInterface = (Class<?>) typeArguments[0];
 
                     // Get the listener list
                     Object listenerList;
@@ -260,13 +258,13 @@ public class BeanMonitor {
                     Method removeMethod;
                     try {
                         removeMethod = listenerListClass.getMethod("remove",
-                            new Class<?>[] {Object.class});
+                            new Class<?>[] { Object.class });
                     } catch (NoSuchMethodException exception) {
                         throw new RuntimeException(exception);
                     }
 
                     try {
-                        removeMethod.invoke(listenerList, new Object[] {listener});
+                        removeMethod.invoke(listenerList, new Object[] { listener });
                     } catch (IllegalAccessException exception) {
                         throw new RuntimeException(exception);
                     } catch (InvocationTargetException exception) {

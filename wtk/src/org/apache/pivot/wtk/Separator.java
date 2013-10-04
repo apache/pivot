@@ -22,8 +22,8 @@ import org.apache.pivot.util.ListenerList;
  * Component representing a horizontal divider.
  */
 public class Separator extends Component {
-    private static class SeparatorListenerList extends WTKListenerList<SeparatorListener>
-        implements SeparatorListener {
+    private static class SeparatorListenerList extends WTKListenerList<SeparatorListener> implements
+        SeparatorListener {
         @Override
         public void headingChanged(Separator separator, String previousHeading) {
             for (SeparatorListener listener : this) {
@@ -47,9 +47,8 @@ public class Separator extends Component {
 
     /**
      * Returns the separator's heading.
-     *
-     * @return
-     * The separator's heading, or <tt>null</tt> if no heading is set.
+     * 
+     * @return The separator's heading, or <tt>null</tt> if no heading is set.
      */
     public String getHeading() {
         return heading;
@@ -57,9 +56,8 @@ public class Separator extends Component {
 
     /**
      * Sets the separator's heading.
-     *
-     * @param heading
-     * The new heading, or <tt>null</tt> for no heading.
+     * 
+     * @param heading The new heading, or <tt>null</tt> for no heading.
      */
     public void setHeading(String heading) {
         String previousHeading = this.heading;

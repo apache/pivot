@@ -30,24 +30,22 @@ public class TagDecoratorTest extends Application.Adapter {
     private Frame frame = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         frame = new Frame();
         frame.setTitle("Tag Decorator Test");
         frame.setPreferredSize(480, 360);
 
         Image tag = Image.load(getClass().getResource("go-home.png"));
 
-        frame.getDecorators().add(new TagDecorator(tag,
-            HorizontalAlignment.RIGHT, VerticalAlignment.TOP,
-            10, -10));
+        frame.getDecorators().add(
+            new TagDecorator(tag, HorizontalAlignment.RIGHT, VerticalAlignment.TOP, 10, -10));
 
         frame.open(display);
     }
 
     @Override
     public boolean shutdown(boolean optional) {
-        if (frame!= null) {
+        if (frame != null) {
             frame.close();
         }
 

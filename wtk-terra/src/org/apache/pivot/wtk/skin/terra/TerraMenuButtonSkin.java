@@ -67,7 +67,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
         @Override
         public void windowOpened(Window window) {
-            MenuButton menuButton = (MenuButton)getComponent();
+            MenuButton menuButton = (MenuButton) getComponent();
 
             // Size and position the popup
             Display display = menuButton.getDisplay();
@@ -90,8 +90,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             window.setMaximumHeight(Integer.MAX_VALUE);
             int popupHeight = window.getPreferredHeight();
             int maximumHeight = displaySize.height - window.getY();
-            if (popupHeight > maximumHeight
-                && buttonLocation.y > maximumHeight) {
+            if (popupHeight > maximumHeight && buttonLocation.y > maximumHeight) {
                 window.setMaximumHeight(buttonLocation.y);
                 window.setY(buttonLocation.y - window.getPreferredHeight() + 1);
             } else {
@@ -110,7 +109,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     private static final int TRIGGER_WIDTH = 10;
 
     public TerraMenuButtonSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -140,12 +139,12 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         if (height == -1) {
             preferredWidth = getPreferredSize().width;
         } else {
-            MenuButton menuButton = (MenuButton)getComponent();
+            MenuButton menuButton = (MenuButton) getComponent();
             Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
             dataRenderer.render(menuButton.getButtonData(), menuButton, false);
 
-            preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH
-                + padding.left + padding.right + spacing + 2;
+            preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH + padding.left
+                + padding.right + spacing + 2;
 
             // Adjust for preferred aspect ratio
             if (!Float.isNaN(minumumAspectRatio)
@@ -164,13 +163,13 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         if (width == -1) {
             preferredHeight = getPreferredSize().height;
         } else {
-            MenuButton menuButton = (MenuButton)getComponent();
+            MenuButton menuButton = (MenuButton) getComponent();
 
             Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
             dataRenderer.render(menuButton.getButtonData(), menuButton, false);
 
-            preferredHeight = dataRenderer.getPreferredHeight(-1)
-                + padding.top + padding.bottom + 2;
+            preferredHeight = dataRenderer.getPreferredHeight(-1) + padding.top + padding.bottom
+                + 2;
 
             // Adjust for preferred aspect ratio
             if (!Float.isNaN(maximumAspectRatio)
@@ -184,7 +183,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        MenuButton menuButton = (MenuButton)getComponent();
+        MenuButton menuButton = (MenuButton) getComponent();
 
         Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
         dataRenderer.render(menuButton.getButtonData(), menuButton, false);
@@ -196,13 +195,11 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         // Adjust for preferred aspect ratio
         float aspectRatio = (float) preferredWidth / (float) preferredHeight;
 
-        if (!Float.isNaN(minumumAspectRatio)
-            && aspectRatio < minumumAspectRatio) {
+        if (!Float.isNaN(minumumAspectRatio) && aspectRatio < minumumAspectRatio) {
             preferredWidth = (int) (preferredHeight * minumumAspectRatio);
         }
 
-        if (!Float.isNaN(maximumAspectRatio)
-            && aspectRatio > maximumAspectRatio) {
+        if (!Float.isNaN(maximumAspectRatio) && aspectRatio > maximumAspectRatio) {
             preferredHeight = (int) (preferredWidth / maximumAspectRatio);
         }
 
@@ -235,7 +232,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     @Override
     public void paint(Graphics2D graphics) {
-        MenuButton menuButton = (MenuButton)getComponent();
+        MenuButton menuButton = (MenuButton) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -245,15 +242,12 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         Color bevelColorLocal = null;
         Color borderColorLocal = null;
 
-        if (!toolbar
-            || highlighted
-            || menuButton.isFocused()
-            || menuPopup.isOpen()) {
+        if (!toolbar || highlighted || menuButton.isFocused() || menuPopup.isOpen()) {
             if (menuButton.isEnabled()) {
                 colorLocal = this.color;
                 backgroundColorLocal = this.backgroundColor;
-                bevelColorLocal = (pressed || (menuPopup.isOpen() && !menuPopup.isClosing())) ?
-                    pressedBevelColor : this.bevelColor;
+                bevelColorLocal = (pressed || (menuPopup.isOpen() && !menuPopup.isClosing())) ? pressedBevelColor
+                    : this.bevelColor;
                 borderColorLocal = this.borderColor;
             } else {
                 colorLocal = disabledColor;
@@ -267,10 +261,9 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        if (backgroundColorLocal != null
-            && bevelColorLocal != null) {
-            graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal,
-                width / 2f, height / 2f, backgroundColorLocal));
+        if (backgroundColorLocal != null && bevelColorLocal != null) {
+            graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
+                height / 2f, backgroundColorLocal));
             graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
                 CORNER_RADIUS, CORNER_RADIUS));
         }
@@ -279,14 +272,14 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_OFF);
 
-        Bounds contentBounds = new Bounds(padding.left + 1, padding.top + 1,
-            Math.max(width - (padding.left + padding.right + spacing + TRIGGER_WIDTH + 2), 0),
-            Math.max(height - (padding.top + padding.bottom + 2), 0));
+        Bounds contentBounds = new Bounds(padding.left + 1, padding.top + 1, Math.max(width
+            - (padding.left + padding.right + spacing + TRIGGER_WIDTH + 2), 0), Math.max(height
+            - (padding.top + padding.bottom + 2), 0));
         Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
         dataRenderer.render(menuButton.getButtonData(), menuButton, highlighted);
         dataRenderer.setSize(contentBounds.width, contentBounds.height);
 
-        Graphics2D contentGraphics = (Graphics2D)graphics.create();
+        Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(contentBounds.x, contentBounds.y);
         contentGraphics.clipRect(0, 0, contentBounds.width, contentBounds.height);
         dataRenderer.paint(contentGraphics);
@@ -304,14 +297,13 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         // Paint the focus state
-        if (menuButton.isFocused()
-            && !toolbar) {
+        if (menuButton.isFocused() && !toolbar) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
             graphics.setStroke(dashStroke);
             graphics.setColor(this.borderColor);
-            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0),
-                Math.max(height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
+            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0), Math.max(
+                height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
         }
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -324,12 +316,12 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         triggerIconShape.lineTo(6, 0);
         triggerIconShape.closePath();
 
-        Graphics2D triggerGraphics = (Graphics2D)graphics.create();
+        Graphics2D triggerGraphics = (Graphics2D) graphics.create();
         triggerGraphics.setStroke(new BasicStroke(0));
         triggerGraphics.setPaint(colorLocal);
 
-        Bounds triggerBounds = new Bounds(Math.max(width - (padding.right + TRIGGER_WIDTH), 0),
-            0, TRIGGER_WIDTH, Math.max(height - (padding.top - padding.bottom), 0));
+        Bounds triggerBounds = new Bounds(Math.max(width - (padding.right + TRIGGER_WIDTH), 0), 0,
+            TRIGGER_WIDTH, Math.max(height - (padding.top - padding.bottom), 0));
         int tx = triggerBounds.x + (triggerBounds.width - triggerIconShape.getBounds().width) / 2;
         int ty = triggerBounds.y + (triggerBounds.height - triggerIconShape.getBounds().height) / 2;
         triggerGraphics.translate(tx, ty);
@@ -347,10 +339,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     @Override
     public boolean isOpaque() {
-        MenuButton menuButton = (MenuButton)getComponent();
-        return (!toolbar
-            || highlighted
-            || menuButton.isFocused());
+        MenuButton menuButton = (MenuButton) getComponent();
+        return (!toolbar || highlighted || menuButton.isFocused());
     }
 
     public Font getFont() {
@@ -404,7 +394,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -430,7 +420,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -458,7 +448,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -485,7 +475,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
@@ -512,7 +502,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -538,7 +528,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 
@@ -608,9 +598,9 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setMinimumAspectRatio(float minumumAspectRatio) {
-        if (!Float.isNaN(maximumAspectRatio)
-            && minumumAspectRatio > maximumAspectRatio) {
-            throw new IllegalArgumentException("minumumAspectRatio is greater than maximumAspectRatio.");
+        if (!Float.isNaN(maximumAspectRatio) && minumumAspectRatio > maximumAspectRatio) {
+            throw new IllegalArgumentException(
+                "minumumAspectRatio is greater than maximumAspectRatio.");
         }
 
         this.minumumAspectRatio = minumumAspectRatio;
@@ -630,9 +620,9 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setMaximumAspectRatio(float maximumAspectRatio) {
-        if (!Float.isNaN(minumumAspectRatio)
-            && maximumAspectRatio < minumumAspectRatio) {
-            throw new IllegalArgumentException("maximumAspectRatio is less than minimumAspectRatio.");
+        if (!Float.isNaN(minumumAspectRatio) && maximumAspectRatio < minumumAspectRatio) {
+            throw new IllegalArgumentException(
+                "maximumAspectRatio is less than minimumAspectRatio.");
         }
 
         this.maximumAspectRatio = maximumAspectRatio;
@@ -654,8 +644,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     public void setToolbar(boolean toolbar) {
         this.toolbar = toolbar;
 
-        if (toolbar &&
-            getComponent().isFocused()) {
+        if (toolbar && getComponent().isFocused()) {
             Component.clearFocus();
         }
 
@@ -682,8 +671,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     public void mouseOut(Component component) {
         super.mouseOut(component);
 
-        if (toolbar
-            && component.isFocused()) {
+        if (toolbar && component.isFocused()) {
             Component.clearFocus();
         }
     }

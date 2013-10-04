@@ -27,9 +27,8 @@ import java.util.Set;
 import org.apache.pivot.web.QueryDictionary;
 import org.junit.Test;
 
-
 public class QueryDictionaryTest {
-    @Test(expected=IndexOutOfBoundsException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testQueryDictionary() {
         QueryDictionary dict = new QueryDictionary(true);
 

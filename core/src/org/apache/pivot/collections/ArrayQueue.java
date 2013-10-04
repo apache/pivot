@@ -23,10 +23,8 @@ import java.util.Iterator;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
- * Implementation of the {@link Queue} interface that is backed by an
- * array.
+ * Implementation of the {@link Queue} interface that is backed by an array.
  */
 public class ArrayQueue<T> implements Queue<T>, Serializable {
     private static final long serialVersionUID = -3856732506886968324L;

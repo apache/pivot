@@ -135,8 +135,8 @@ public class Window extends Container {
 
             Action actionLocal = Action.getNamedActions().get(actionID);
             if (actionLocal == null) {
-                throw new IllegalArgumentException("An action with ID "
-                    + actionID + " does not exist.");
+                throw new IllegalArgumentException("An action with ID " + actionID
+                    + " does not exist.");
             }
 
             setAction(actionLocal);
@@ -188,7 +188,7 @@ public class Window extends Container {
             int index = indexOf(actionMapping);
 
             if (index >= 0) {
-               remove(index, 1);
+                remove(index, 1);
             }
 
             return index;
@@ -254,7 +254,7 @@ public class Window extends Container {
             int index = indexOf(image);
 
             if (index >= 0) {
-               remove(index, 1);
+                remove(index, 1);
             }
 
             return index;
@@ -288,8 +288,8 @@ public class Window extends Container {
         }
     }
 
-    private static class WindowListenerList extends WTKListenerList<WindowListener>
-        implements WindowListener {
+    private static class WindowListenerList extends WTKListenerList<WindowListener> implements
+        WindowListener {
         @Override
         public void titleChanged(Window window, String previousTitle) {
             for (WindowListener listener : this) {
@@ -378,7 +378,6 @@ public class Window extends Container {
             return vote;
         }
 
-
         @Override
         public void windowOpenVetoed(Window window, Vote reason) {
             for (WindowStateListener listener : this) {
@@ -394,8 +393,8 @@ public class Window extends Container {
         }
     }
 
-    private static class WindowActionMappingListenerList extends WTKListenerList<WindowActionMappingListener>
-        implements WindowActionMappingListener {
+    private static class WindowActionMappingListenerList extends
+        WTKListenerList<WindowActionMappingListener> implements WindowActionMappingListener {
         @Override
         public void actionMappingAdded(Window window) {
             for (WindowActionMappingListener listener : this) {
@@ -404,14 +403,16 @@ public class Window extends Container {
         }
 
         @Override
-        public void actionMappingsRemoved(Window window, int index, Sequence<Window.ActionMapping> removed) {
+        public void actionMappingsRemoved(Window window, int index,
+            Sequence<Window.ActionMapping> removed) {
             for (WindowActionMappingListener listener : this) {
                 listener.actionMappingsRemoved(window, index, removed);
             }
         }
 
         @Override
-        public void keyStrokeChanged(Window.ActionMapping actionMapping, Keyboard.KeyStroke previousKeyStroke) {
+        public void keyStrokeChanged(Window.ActionMapping actionMapping,
+            Keyboard.KeyStroke previousKeyStroke) {
             for (WindowActionMappingListener listener : this) {
                 listener.keyStrokeChanged(actionMapping, previousKeyStroke);
             }
@@ -425,8 +426,7 @@ public class Window extends Container {
         }
     }
 
-    private static class WindowClassListenerList
-        extends WTKListenerList<WindowClassListener>
+    private static class WindowClassListenerList extends WTKListenerList<WindowClassListener>
         implements WindowClassListener {
         @Override
         public void activeWindowChanged(Window previousActiveWindow) {
@@ -474,13 +474,12 @@ public class Window extends Container {
 
     @Override
     protected void setParent(Container parent) {
-        if (parent != null
-            && (!(parent instanceof Display))) {
-            throw new IllegalArgumentException("Window parent must be null or display, cannot be " + parent);
+        if (parent != null && (!(parent instanceof Display))) {
+            throw new IllegalArgumentException("Window parent must be null or display, cannot be "
+                + parent);
         }
 
-        if (parent == null
-            && isActive()) {
+        if (parent == null && isActive()) {
             clearActive();
         }
 
@@ -502,16 +501,13 @@ public class Window extends Container {
 
     @Override
     public void setVisible(boolean visible) {
-        if (visible
-            && owner != null
-            && !owner.isVisible()) {
+        if (visible && owner != null && !owner.isVisible()) {
             throw new IllegalStateException("Owner is not visible.");
         }
 
         super.setVisible(visible);
 
-        if (visible
-            && isActive()) {
+        if (visible && isActive()) {
             clearActive();
         }
 
@@ -524,8 +520,7 @@ public class Window extends Container {
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
 
-        if (!enabled
-            && isActive()) {
+        if (!enabled && isActive()) {
             clearActive();
         }
     }
@@ -549,12 +544,10 @@ public class Window extends Container {
     /**
      * Tests whether this window is an owning ancestor of a given window. A
      * window is not considered an owner of itself.
-     *
+     * 
      * @param window
-     *
-     * @return
-     * <tt>true</tt> if this window is an owning ancestor of the given window;
-     * <tt>false</tt>, otherwise.
+     * @return <tt>true</tt> if this window is an owning ancestor of the given
+     * window; <tt>false</tt>, otherwise.
      */
     public boolean isOwner(Window window) {
         if (window == null) {
@@ -563,8 +556,7 @@ public class Window extends Container {
 
         Window ownerLocal = window.getOwner();
 
-        while (ownerLocal != null
-            && ownerLocal != this) {
+        while (ownerLocal != null && ownerLocal != this) {
             ownerLocal = ownerLocal.getOwner();
         }
 
@@ -573,9 +565,8 @@ public class Window extends Container {
 
     /**
      * Returns this window's open state.
-     *
-     * @return
-     * <tt>true</tt> if the window is open; <tt>false</tt>, otherwise.
+     * 
+     * @return <tt>true</tt> if the window is open; <tt>false</tt>, otherwise.
      */
     public boolean isOpen() {
         return (getParent() != null);
@@ -583,9 +574,9 @@ public class Window extends Container {
 
     /**
      * Returns this window's opening state.
-     *
-     * @return
-     * <tt>true</tt> if the window is opening; <tt>false</tt>, otherwise.
+     * 
+     * @return <tt>true</tt> if the window is opening; <tt>false</tt>,
+     * otherwise.
      */
     public boolean isOpening() {
         return opening;
@@ -593,7 +584,7 @@ public class Window extends Container {
 
     /**
      * Opens the window.
-     *
+     * 
      * @param display
      */
     public final void open(Display display) {
@@ -602,9 +593,9 @@ public class Window extends Container {
 
     /**
      * Opens the window.
-     *
-     * @param ownerArgument
-     * The window's owner. The window is opened on the owner's display.
+     * 
+     * @param ownerArgument The window's owner. The window is opened on the
+     * owner's display.
      */
     public final void open(Window ownerArgument) {
         if (ownerArgument == null) {
@@ -615,15 +606,12 @@ public class Window extends Container {
     }
 
     /**
-     * Opens the window.
-     * <p>
-     * Note that this method is not a synchronous call, it schedules an event to open the window.
-     *
-     * @param display
-     * The display on which the window will be opened.
-     *
-     * @param ownerArgument
-     * The window's owner, or <tt>null</tt> if the window has no owner.
+     * Opens the window. <p> Note that this method is not a synchronous call, it
+     * schedules an event to open the window.
+     * 
+     * @param display The display on which the window will be opened.
+     * @param ownerArgument The window's owner, or <tt>null</tt> if the window
+     * has no owner.
      */
     public void open(Display display, Window ownerArgument) {
         if (display == null) {
@@ -683,9 +671,8 @@ public class Window extends Container {
 
     /**
      * Returns this window's closed state.
-     *
-     * @return
-     * <tt>true</tt> if the window is closed; <tt>false</tt>, otherwise.
+     * 
+     * @return <tt>true</tt> if the window is closed; <tt>false</tt>, otherwise.
      */
     public boolean isClosed() {
         return !isOpen();
@@ -693,17 +680,17 @@ public class Window extends Container {
 
     /**
      * Returns this window's closing state.
-     *
-     * @return
-     * <tt>true</tt> if the window is closing; <tt>false</tt>, otherwise.
+     * 
+     * @return <tt>true</tt> if the window is closing; <tt>false</tt>,
+     * otherwise.
      */
     public boolean isClosing() {
         return closing;
     }
 
     /**
-     * Closes the window and all of its owned windows. If any owned window fails to close,
-     * this window will also fail to close.
+     * Closes the window and all of its owned windows. If any owned window fails
+     * to close, this window will also fail to close.
      */
     public void close() {
         if (!isClosed()) {
@@ -715,12 +702,12 @@ public class Window extends Container {
             boolean cancel = false;
             for (Window ownedWindow : new ArrayList<>(this.ownedWindows)) {
                 ownedWindow.close();
-                cancel |= !(ownedWindow.isClosing()
-                    || ownedWindow.isClosed());
+                cancel |= !(ownedWindow.isClosing() || ownedWindow.isClosed());
             }
 
             // Close this window only if all owned windows are closing or closed
-            // (we allow the owner to close even if an owned window is only reports
+            // (we allow the owner to close even if an owned window is only
+            // reports
             // that it is closing, under the assumption that it will ultimately
             // close - not doing so would prevent close transitions from running
             // in parallel, forcing them to run in series)
@@ -734,7 +721,8 @@ public class Window extends Container {
                     Display display = getDisplay();
                     display.remove(this);
 
-                    // Clear the owner and remove from the owner's owned window list
+                    // Clear the owner and remove from the owner's owned window
+                    // list
                     Window ownerLocal = this.owner;
                     this.owner = null;
 
@@ -759,9 +747,8 @@ public class Window extends Container {
 
     /**
      * Returns the window's title.
-     *
-     * @return
-     * The pane's title, or <tt>null</tt> if no title is set.
+     * 
+     * @return The pane's title, or <tt>null</tt> if no title is set.
      */
     public String getTitle() {
         return title;
@@ -769,9 +756,8 @@ public class Window extends Container {
 
     /**
      * Sets the window's title.
-     *
-     * @param title
-     * The new title, or <tt>null</tt> for no title.
+     * 
+     * @param title The new title, or <tt>null</tt> for no title.
      */
     public void setTitle(String title) {
         String previousTitle = this.title;
@@ -790,14 +776,11 @@ public class Window extends Container {
     }
 
     /**
-     * Sets the window's icon by URL.
-     * <p>
-     * If the icon already exists in the application context resource cache,
-     * the cached value will be used. Otherwise, the icon will be loaded
-     * synchronously and added to the cache.
-     *
-     * @param iconURL
-     * The location of the icon to set.
+     * Sets the window's icon by URL. <p> If the icon already exists in the
+     * application context resource cache, the cached value will be used.
+     * Otherwise, the icon will be loaded synchronously and added to the cache.
+     * 
+     * @param iconURL The location of the icon to set.
      */
     public void setIcon(URL iconURL) {
         if (iconURL == null) {
@@ -813,10 +796,8 @@ public class Window extends Container {
     /**
      * Sets the window's icon by {@linkplain ClassLoader#getResource(String)
      * resource name}.
-     *
-     * @param iconName
-     * The resource name of the icon to set.
-     *
+     * 
+     * @param iconName The resource name of the icon to set.
      * @see #setIcon(URL)
      */
     public void setIcon(String iconName) {
@@ -862,15 +843,14 @@ public class Window extends Container {
      * Returns the bounds of the window's client area.
      */
     public Bounds getClientArea() {
-        Window.Skin windowSkin = (Window.Skin)getSkin();
+        Window.Skin windowSkin = (Window.Skin) getSkin();
         return windowSkin.getClientArea();
     }
 
     /**
      * Returns the window's active state.
-     *
-     * @return
-     * <tt>true</tt> if the window is active; <tt>false</tt>; otherwise.
+     * 
+     * @return <tt>true</tt> if the window is active; <tt>false</tt>; otherwise.
      */
     public boolean isActive() {
         return (activeWindow == this);
@@ -878,14 +858,12 @@ public class Window extends Container {
 
     /**
      * Requests that this window become the active window.
-     *
-     * @return
-     * <tt>true</tt> if the window became active; <tt>false</tt>, otherwise.
+     * 
+     * @return <tt>true</tt> if the window became active; <tt>false</tt>,
+     * otherwise.
      */
     public boolean requestActive() {
-        if (isOpen()
-            && isVisible()
-            && isEnabled()) {
+        if (isOpen() && isVisible() && isEnabled()) {
             setActiveWindow(this);
         }
 
@@ -894,7 +872,7 @@ public class Window extends Container {
 
     /**
      * Called to notify a window that its active state has changed.
-     *
+     * 
      * @param active
      * @param obverseWindow
      */
@@ -904,10 +882,9 @@ public class Window extends Container {
 
     /**
      * Returns the currently active window.
-     *
-     * @return
-     * The window that is currently active, or <tt>null</tt> if no window
-     * is active.
+     * 
+     * @return The window that is currently active, or <tt>null</tt> if no
+     * window is active.
      */
     public static Window getActiveWindow() {
         return activeWindow;
@@ -915,11 +892,10 @@ public class Window extends Container {
 
     /**
      * Sets the active window. The window must be activatable, open, and
-     * enabled. If the window is not currently visible, it will be made
-     * visible.
-     *
-     * @param activeWindow
-     * The window to activate, or <tt>null</tt> to clear the active window.
+     * enabled. If the window is not currently visible, it will be made visible.
+     * 
+     * @param activeWindow The window to activate, or <tt>null</tt> to clear the
+     * active window.
      */
     private static void setActiveWindow(Window activeWindow) {
         Window previousActiveWindow = Window.activeWindow;
@@ -951,8 +927,8 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the window descendant to which focus will be restored when this window
-     * is moved to the front.
+     * Returns the window descendant to which focus will be restored when this
+     * window is moved to the front.
      */
     public Component getFocusDescendant() {
         return focusDescendant;
@@ -1008,9 +984,9 @@ public class Window extends Container {
 
     /**
      * Moves the window to the top of the window stack. All owned windows are
-     * subsequently moved to the front, ensuring that this window's owned windows
-     * remain on top of it. If the window does not have any owned windows,
-     * focus is restored to it.
+     * subsequently moved to the front, ensuring that this window's owned
+     * windows remain on top of it. If the window does not have any owned
+     * windows, focus is restored to it.
      */
     public void moveToFront() {
         if (!isOpen()) {
@@ -1030,13 +1006,12 @@ public class Window extends Container {
 
         if (ownedWindowCount == 0) {
             // Restore focus
-            if (isShowing()
-                && isEnabled()
-                && focusDescendant != null) {
+            if (isShowing() && isEnabled() && focusDescendant != null) {
                 focusDescendant.requestFocus();
             }
         } else {
-            // Move all open owned windows to the front of this window, preserving the
+            // Move all open owned windows to the front of this window,
+            // preserving the
             // current z-order
             ArrayList<Integer> ownedWindowIndexes = new ArrayList<>(ownedWindowCount);
 
@@ -1050,7 +1025,7 @@ public class Window extends Container {
 
             ArrayList<Window> sortedOwnedWindows = new ArrayList<>(ownedWindows.getLength());
             for (Integer index : ownedWindowIndexes) {
-                sortedOwnedWindows.add((Window)display.get(index));
+                sortedOwnedWindows.add((Window) display.get(index));
             }
 
             for (Window ownedWindow : sortedOwnedWindows) {
@@ -1111,14 +1086,12 @@ public class Window extends Container {
         }
     }
 
-    public void align(Bounds bounds,
-        HorizontalAlignment horizontalAlignment,
+    public void align(Bounds bounds, HorizontalAlignment horizontalAlignment,
         VerticalAlignment verticalAlignment) {
         align(bounds, horizontalAlignment, 0, verticalAlignment, 0);
     }
 
-    public void align(Bounds bounds,
-        HorizontalAlignment horizontalAlignment, int horizontalOffset,
+    public void align(Bounds bounds, HorizontalAlignment horizontalAlignment, int horizontalOffset,
         VerticalAlignment verticalAlignment, int verticalOffset) {
 
         int x = 0;
@@ -1128,14 +1101,11 @@ public class Window extends Container {
 
         if (horizontalAlignment == HorizontalAlignment.LEFT) {
             x = bounds.x - size.width;
-        }
-        else if (horizontalAlignment == HorizontalAlignment.RIGHT) {
+        } else if (horizontalAlignment == HorizontalAlignment.RIGHT) {
             x = bounds.x + bounds.width - size.width;
-        }
-        else if (horizontalAlignment == HorizontalAlignment.CENTER) {
-            x = bounds.x + (int)Math.round((double)(bounds.width - size.width) / 2);
-        }
-        else {
+        } else if (horizontalAlignment == HorizontalAlignment.CENTER) {
+            x = bounds.x + (int) Math.round((double) (bounds.width - size.width) / 2);
+        } else {
             throw new IllegalArgumentException("Unsupported horizontal alignment.");
         }
 
@@ -1143,14 +1113,11 @@ public class Window extends Container {
 
         if (verticalAlignment == VerticalAlignment.TOP) {
             y = bounds.y - size.height;
-        }
-        else if (verticalAlignment == VerticalAlignment.BOTTOM) {
+        } else if (verticalAlignment == VerticalAlignment.BOTTOM) {
             y = bounds.y + bounds.height;
-        }
-        else if (verticalAlignment == VerticalAlignment.CENTER) {
-            y = bounds.y + (int)Math.round((double)(bounds.height - size.height) / 2);
-        }
-        else {
+        } else if (verticalAlignment == VerticalAlignment.CENTER) {
+            y = bounds.y + (int) Math.round((double) (bounds.height - size.height) / 2);
+        } else {
             throw new IllegalArgumentException("Unsupported vertical alignment.");
         }
 
@@ -1161,20 +1128,19 @@ public class Window extends Container {
 
     @Override
     public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
-        /* Use keyPressed rather than keyReleased other this sequence:
-         * Press Ctrl, Press C, Release Ctrl, Release C
-         * will not trigger the Ctrl-C action.
+        /*
+         * Use keyPressed rather than keyReleased other this sequence: Press
+         * Ctrl, Press C, Release Ctrl, Release C will not trigger the Ctrl-C
+         * action.
          */
         boolean consumed = super.keyPressed(keyCode, keyLocation);
 
         // Perform any action defined for this keystroke
         // in the active window's action dictionary
-        Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode,
-            Keyboard.getModifiers());
+        Keyboard.KeyStroke keyStroke = new Keyboard.KeyStroke(keyCode, Keyboard.getModifiers());
 
         Action action = actionMap.get(keyStroke);
-        if (action != null
-            && action.isEnabled()) {
+        if (action != null && action.isEnabled()) {
             action.perform(this);
         }
 

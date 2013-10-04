@@ -37,12 +37,10 @@ import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
-
 /**
  * Meter skin.
  */
-public class TerraMeterSkin extends ComponentSkin
-    implements MeterListener {
+public class TerraMeterSkin extends ComponentSkin implements MeterListener {
     private Color fillColor;
     private Color gridColor;
     private float gridFrequency;
@@ -54,7 +52,7 @@ public class TerraMeterSkin extends ComponentSkin
     private static final int DEFAULT_HEIGHT = 12;
 
     public TerraMeterSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         fillColor = theme.getColor(16);
         gridColor = theme.getColor(10);
         gridFrequency = 0.25f;
@@ -67,7 +65,7 @@ public class TerraMeterSkin extends ComponentSkin
     public void install(Component component) {
         super.install(component);
 
-        Meter meter = (Meter)component;
+        Meter meter = (Meter) component;
         meter.getMeterListeners().add(this);
     }
 
@@ -78,23 +76,23 @@ public class TerraMeterSkin extends ComponentSkin
 
     @Override
     public int getPreferredWidth(int height) {
-        Meter meter = (Meter)getComponent();
+        Meter meter = (Meter) getComponent();
 
         int preferredWidth;
 
         if (meter.getOrientation() == Orientation.HORIZONTAL) {
             String text = meter.getText();
 
-            if (text != null
-                && text.length() > 0) {
+            if (text != null && text.length() > 0) {
                 FontRenderContext fontRenderContext = Platform.getFontRenderContext();
                 Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
-                preferredWidth = (int)Math.ceil(stringBounds.getWidth()) + 2;
+                preferredWidth = (int) Math.ceil(stringBounds.getWidth()) + 2;
             } else {
                 preferredWidth = 0;
             }
 
-            // If the meter has no content, its preferred width is hard-coded by the
+            // If the meter has no content, its preferred width is hard-coded by
+            // the
             // class and is not affected by the height constraint
             preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
         } else {
@@ -106,7 +104,7 @@ public class TerraMeterSkin extends ComponentSkin
 
     @Override
     public int getPreferredHeight(int width) {
-        Meter meter = (Meter)getComponent();
+        Meter meter = (Meter) getComponent();
 
         int preferredHeight;
 
@@ -115,16 +113,16 @@ public class TerraMeterSkin extends ComponentSkin
         } else {
             String text = meter.getText();
 
-            if (text != null
-                && text.length() > 0) {
+            if (text != null && text.length() > 0) {
                 FontRenderContext fontRenderContext = Platform.getFontRenderContext();
                 LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-                preferredHeight = (int)Math.ceil(lm.getHeight()) + 2;
+                preferredHeight = (int) Math.ceil(lm.getHeight()) + 2;
             } else {
                 preferredHeight = 0;
             }
 
-            // If the meter has no content, its preferred height is hard-coded by the
+            // If the meter has no content, its preferred height is hard-coded
+            // by the
             // class and is not affected by the width constraint
             preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
         }
@@ -134,22 +132,22 @@ public class TerraMeterSkin extends ComponentSkin
 
     @Override
     public Dimensions getPreferredSize() {
-        Meter meter = (Meter)getComponent();
+        Meter meter = (Meter) getComponent();
         String text = meter.getText();
 
         int preferredWidth = 0;
         int preferredHeight = 0;
-        if (text != null
-            && text.length() > 0) {
+        if (text != null && text.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
-            preferredWidth = (int)Math.ceil(stringBounds.getWidth()) + 2;
+            preferredWidth = (int) Math.ceil(stringBounds.getWidth()) + 2;
 
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-            preferredHeight = (int)Math.ceil(lm.getHeight()) + 2;
+            preferredHeight = (int) Math.ceil(lm.getHeight()) + 2;
         }
 
-        // If meter has no content, its preferred size is hard coded by the class
+        // If meter has no content, its preferred size is hard coded by the
+        // class
         preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
         preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
 
@@ -167,13 +165,12 @@ public class TerraMeterSkin extends ComponentSkin
     public int getBaseline(int width, int height) {
         int baseline = -1;
 
-        Meter meter = (Meter)getComponent();
+        Meter meter = (Meter) getComponent();
 
         if (meter.getOrientation() == Orientation.HORIZONTAL) {
             String text = meter.getText();
 
-            if (text != null
-                && text.length() > 0) {
+            if (text != null && text.length() > 0) {
                 FontRenderContext fontRenderContext = Platform.getFontRenderContext();
                 LineMetrics lm = font.getLineMetrics("", fontRenderContext);
                 float ascent = lm.getAscent();
@@ -193,7 +190,7 @@ public class TerraMeterSkin extends ComponentSkin
 
     @Override
     public void paint(Graphics2D graphics) {
-        Meter meter = (Meter)getComponent();
+        Meter meter = (Meter) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -208,33 +205,32 @@ public class TerraMeterSkin extends ComponentSkin
     }
 
     private void drawMeter(Meter meter, Graphics2D graphics, int width, int height) {
-        int meterStop = (int)(meter.getPercentage() * width);
+        int meterStop = (int) (meter.getPercentage() * width);
 
         // Paint the interior fill
-        graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(fillColor),
-            0, height, TerraTheme.darken(fillColor)));
+        graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(fillColor), 0, height,
+            TerraTheme.darken(fillColor)));
         graphics.fillRect(0, 0, meterStop, height);
 
         // Paint the grid
         graphics.setPaint(gridColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
-        int nLines = (int)Math.ceil(1 / gridFrequency) - 1;
+        int nLines = (int) Math.ceil(1 / gridFrequency) - 1;
         float gridSeparation = width * gridFrequency;
         for (int i = 0; i < nLines; i++) {
-            int gridX = (int)((i + 1) * gridSeparation);
+            int gridX = (int) ((i + 1) * gridSeparation);
             GraphicsUtilities.drawLine(graphics, gridX, 0, height, Orientation.VERTICAL);
         }
 
         String text = meter.getText();
-        if (text != null
-            && text.length() > 0) {
+        if (text != null && text.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float ascent = lm.getAscent();
 
             Rectangle2D stringBounds = font.getStringBounds(text, fontRenderContext);
-            float textWidth = (float)stringBounds.getWidth();
-            float textHeight = (float)stringBounds.getHeight();
+            float textWidth = (float) stringBounds.getWidth();
+            float textHeight = (float) stringBounds.getHeight();
 
             float textX = (width - textWidth) / 2;
             float textY = (height - textHeight) / 2;
@@ -378,12 +374,9 @@ public class TerraMeterSkin extends ComponentSkin
 
     /**
      * Listener for meter percentage changes.
-     *
-     * @param meter
-     *     The source of the event.
-     *
-     * @param previousPercentage
-     *     The previous percentage value.
+     * 
+     * @param meter The source of the event.
+     * @param previousPercentage The previous percentage value.
      */
     @Override
     public void percentageChanged(Meter meter, double previousPercentage) {
@@ -392,12 +385,9 @@ public class TerraMeterSkin extends ComponentSkin
 
     /**
      * Listener for meter text changes.
-     *
-     * @param meter
-     *     The source of the event.
-     *
-     * @param previousText
-     *    The previous text value.
+     * 
+     * @param meter The source of the event.
+     * @param previousText The previous text value.
      */
     @Override
     public void textChanged(Meter meter, String previousText) {
@@ -406,9 +396,8 @@ public class TerraMeterSkin extends ComponentSkin
 
     /**
      * Listener for meter orientation changes.
-     *
-     * @param meter
-     *     The source of the event.
+     * 
+     * @param meter The source of the event.
      */
     @Override
     public void orientationChanged(Meter meter) {

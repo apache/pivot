@@ -36,10 +36,9 @@ public final class Clipboard {
 
         if (contentLocal == null) {
             try {
-                java.awt.datatransfer.Clipboard awtClipboard =
-                    Toolkit.getDefaultToolkit().getSystemClipboard();
+                java.awt.datatransfer.Clipboard awtClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 contentLocal = new RemoteManifest(awtClipboard.getContents(null));
-            } catch(SecurityException exception) {
+            } catch (SecurityException exception) {
                 // No-op
             }
         }
@@ -49,7 +48,7 @@ public final class Clipboard {
 
     /**
      * Places content on the clipboard.
-     *
+     * 
      * @param content
      */
     public static void setContent(LocalManifest content) {
@@ -58,7 +57,7 @@ public final class Clipboard {
 
     /**
      * Places content on the clipboard.
-     *
+     * 
      * @param content
      */
     public static void setContent(LocalManifest content,
@@ -68,8 +67,7 @@ public final class Clipboard {
         }
 
         try {
-            java.awt.datatransfer.Clipboard awtClipboard =
-                Toolkit.getDefaultToolkit().getSystemClipboard();
+            java.awt.datatransfer.Clipboard awtClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
             LocalManifestAdapter localManifestAdapter = new LocalManifestAdapter(content);
             awtClipboard.setContents(localManifestAdapter, new ClipboardOwner() {
@@ -84,7 +82,7 @@ public final class Clipboard {
                     }
                 }
             });
-        } catch(SecurityException exception) {
+        } catch (SecurityException exception) {
             // No-op
         }
 

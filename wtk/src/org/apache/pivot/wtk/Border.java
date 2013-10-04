@@ -25,8 +25,8 @@ import org.apache.pivot.util.ListenerList;
  */
 @DefaultProperty("content")
 public class Border extends Container {
-    private static class BorderListenerList extends WTKListenerList<BorderListener>
-        implements BorderListener {
+    private static class BorderListenerList extends WTKListenerList<BorderListener> implements
+        BorderListener {
         @Override
         public void titleChanged(Border border, String previousTitle) {
             for (BorderListener listener : this) {
@@ -58,9 +58,8 @@ public class Border extends Container {
 
     /**
      * Returns the border's title.
-     *
-     * @return
-     * The border's title, or <tt>null</tt> if no title is set.
+     * 
+     * @return The border's title, or <tt>null</tt> if no title is set.
      */
     public String getTitle() {
         return title;
@@ -68,9 +67,8 @@ public class Border extends Container {
 
     /**
      * Sets the border's title.
-     *
-     * @param title
-     * The new title, or <tt>null</tt> for no title.
+     * 
+     * @param title The new title, or <tt>null</tt> for no title.
      */
     public void setTitle(String title) {
         String previousTitle = this.title;
@@ -83,10 +81,9 @@ public class Border extends Container {
 
     /**
      * Returns the border's content component.
-     *
-     * @return
-     * The border's content component, or <tt>null</tt> if the border does
-     * not have a content component.
+     * 
+     * @return The border's content component, or <tt>null</tt> if the border
+     * does not have a content component.
      */
     public Component getContent() {
         return content;
@@ -94,9 +91,9 @@ public class Border extends Container {
 
     /**
      * Sets the border's content component.
-     *
-     * @param content
-     * The border's content component, or <tt>null</tt> for no content.
+     * 
+     * @param content The border's content component, or <tt>null</tt> for no
+     * content.
      */
     public void setContent(Component content) {
         Component previousContent = this.content;

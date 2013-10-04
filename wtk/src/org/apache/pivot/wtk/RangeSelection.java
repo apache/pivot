@@ -56,18 +56,16 @@ public class RangeSelection {
     /**
      * Adds a range to the selection, merging and removing intersecting ranges
      * as needed.
-     *
+     * 
      * @param start
      * @param end
-     *
-     * @return
-     * A sequence containing the ranges that were added.
+     * @return A sequence containing the ranges that were added.
      */
     public Sequence<Span> addRange(int start, int end) {
         ArrayList<Span> addedRanges = new ArrayList<>();
 
         Span range = normalize(start, end);
-        assert(range.start >= 0);
+        assert (range.start >= 0);
 
         int n = selectedRanges.getLength();
 
@@ -117,12 +115,13 @@ public class RangeSelection {
                     selectedRanges.insert(range, i);
                     addedRanges.add(range);
                 } else {
-                    // Create a new range representing the union of the intersecting ranges
+                    // Create a new range representing the union of the
+                    // intersecting ranges
                     Span lowerRange = selectedRanges.get(i);
                     Span upperRange = selectedRanges.get(j - 1);
 
-                    range = new Span(Math.min(range.start, lowerRange.start),
-                        Math.max(range.end, upperRange.end));
+                    range = new Span(Math.min(range.start, lowerRange.start), Math.max(range.end,
+                        upperRange.end));
 
                     // Add the gaps to the added list
                     if (range.start < lowerRange.start) {
@@ -155,18 +154,16 @@ public class RangeSelection {
     /**
      * Removes a range from the selection, truncating and removing intersecting
      * ranges as needed.
-     *
+     * 
      * @param start
      * @param end
-     *
-     * @return
-     * A sequence containing the ranges that were removed.
+     * @return A sequence containing the ranges that were removed.
      */
     public Sequence<Span> removeRange(int start, int end) {
         ArrayList<Span> removedRanges = new ArrayList<>();
 
         Span range = normalize(start, end);
-        assert(range.start >= 0);
+        assert (range.start >= 0);
 
         int n = selectedRanges.getLength();
 
@@ -180,8 +177,7 @@ public class RangeSelection {
             if (i < n) {
                 Span lowerRange = selectedRanges.get(i);
 
-                if (lowerRange.start < range.start
-                    && lowerRange.end > range.end) {
+                if (lowerRange.start < range.start && lowerRange.end > range.end) {
                     // Removing the range will split the intersecting selection
                     // into two ranges
                     selectedRanges.update(i, new Span(lowerRange.start, range.start - 1));
@@ -247,7 +243,7 @@ public class RangeSelection {
 
     /**
      * Returns the range at a given index.
-     *
+     * 
      * @param index
      */
     public Span get(int index) {
@@ -270,12 +266,10 @@ public class RangeSelection {
 
     /**
      * Determines the index of a range in the selection.
-     *
+     * 
      * @param range
-     *
-     * @return
-     * The index of the range, if it exists in the selection; <tt>-1</tt>,
-     * otherwise.
+     * @return The index of the range, if it exists in the selection;
+     * <tt>-1</tt>, otherwise.
      */
     public int indexOf(Span range) {
         assert (range != null);
@@ -292,11 +286,9 @@ public class RangeSelection {
 
     /**
      * Tests for the presence of an index in the selection.
-     *
+     * 
      * @param index
-     *
-     * @return
-     * <tt>true</tt> if the index is selected; <tt>false</tt>, otherwise.
+     * @return <tt>true</tt> if the index is selected; <tt>false</tt>, otherwise.
      */
     public boolean containsIndex(int index) {
         Span range = new Span(index);
@@ -308,16 +300,15 @@ public class RangeSelection {
     /**
      * Inserts an index into the span sequence (e.g. when items are inserted
      * into the model data).
-     *
+     * 
      * @param index
-     *
-     * @return
-     * The number of ranges that were updated.
+     * @return The number of ranges that were updated.
      */
     public int insertIndex(int index) {
         int updated = 0;
 
-        // Get the insertion point for the range corresponding to the given index
+        // Get the insertion point for the range corresponding to the given
+        // index
         Span range = new Span(index);
         int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
 
@@ -351,14 +342,12 @@ public class RangeSelection {
     }
 
     /**
-     * Removes a range of indexes from the span sequence (e.g. when items
-     * are removed from the model data).
-     *
+     * Removes a range of indexes from the span sequence (e.g. when items are
+     * removed from the model data).
+     * 
      * @param index
      * @param count
-     *
-     * @return
-     * The number of ranges that were updated.
+     * @return The number of ranges that were updated.
      */
     public int removeIndexes(int index, int count) {
         // Clear any selections in the given range
@@ -376,7 +365,8 @@ public class RangeSelection {
         int n = selectedRanges.getLength();
         while (i < n) {
             Span selectedRange = selectedRanges.get(i);
-            selectedRanges.update(i, new Span(selectedRange.start - count, selectedRange.end - count));
+            selectedRanges.update(i, new Span(selectedRange.start - count, selectedRange.end
+                - count));
             updated++;
             i++;
         }
@@ -386,12 +376,10 @@ public class RangeSelection {
 
     /**
      * Ensures that the start value is less than or equal to the end value.
-     *
+     * 
      * @param start
      * @param end
-     *
-     * @return
-     * A span containing the normalized range.
+     * @return A span containing the normalized range.
      */
     public static Span normalize(int start, int end) {
         return new Span(Math.min(start, end), Math.max(start, end));

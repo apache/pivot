@@ -21,28 +21,29 @@ import java.io.IOException;
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.wtk.media.Image;
 
-
 /**
  * Interface representing a "manifest". Manifests are collections of data used
- * in clipboard and drag/drop operations.
- * <p>
- * TODO In the future, we may want to make this an abstract base class and
- * add a SerializerDictionary that maps keys to Serializers. Local manifests
- * can use the dictionary to write data out to the native OS, and remote
- * manifests can do the opposite. We'll still need a means of mapping value
- * keys to native IDs (which we would need to do via MIME types if the system
- * is based on AWT's DnD mechanism).
+ * in clipboard and drag/drop operations. <p> TODO In the future, we may want to
+ * make this an abstract base class and add a SerializerDictionary that maps
+ * keys to Serializers. Local manifests can use the dictionary to write data out
+ * to the native OS, and remote manifests can do the opposite. We'll still need
+ * a means of mapping value keys to native IDs (which we would need to do via
+ * MIME types if the system is based on AWT's DnD mechanism).
  */
 public interface Manifest {
     public String getText() throws IOException;
+
     public boolean containsText();
 
     public Image getImage() throws IOException;
+
     public boolean containsImage();
 
     public FileList getFileList() throws IOException;
+
     public boolean containsFileList();
 
     public Object getValue(String key) throws IOException;
+
     public boolean containsValue(String key);
 }

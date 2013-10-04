@@ -17,11 +17,10 @@
 package org.apache.pivot.wtk.content;
 
 /**
- * Default renderer for table view cells that contain boolean data. Renders
- * cell contents as a checkbox.
+ * Default renderer for table view cells that contain boolean data. Renders cell
+ * contents as a checkbox.
  */
-public class TableViewBooleanCellRenderer extends TableViewCheckboxCellRenderer
-{
+public class TableViewBooleanCellRenderer extends TableViewCheckboxCellRenderer {
     public TableViewBooleanCellRenderer() {
         super();
     }

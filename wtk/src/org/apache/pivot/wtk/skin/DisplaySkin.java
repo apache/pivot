@@ -35,7 +35,8 @@ public class DisplaySkin extends ContainerSkin {
     @Override
     public void install(Component component) {
         if (!(component instanceof Display)) {
-            throw new IllegalArgumentException("DisplaySkin can only be installed on instances of Display.");
+            throw new IllegalArgumentException(
+                "DisplaySkin can only be installed on instances of Display.");
         }
 
         super.install(component);
@@ -43,11 +44,11 @@ public class DisplaySkin extends ContainerSkin {
 
     @Override
     public void layout() {
-        Display display = (Display)getComponent();
+        Display display = (Display) getComponent();
 
         // Set all components to their preferred sizes
         for (Component component : display) {
-            Window window = (Window)component;
+            Window window = (Window) component;
 
             if (window.isVisible()) {
                 if (window.isMaximized()) {
@@ -64,4 +65,3 @@ public class DisplaySkin extends ContainerSkin {
         }
     }
 }
-

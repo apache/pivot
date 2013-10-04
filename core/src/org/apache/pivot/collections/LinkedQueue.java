@@ -23,7 +23,6 @@ import java.util.Iterator;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Implementation of the {@link Queue} interface that is backed by a linked
  * list.

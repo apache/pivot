@@ -44,9 +44,9 @@ public class GetQuery extends Query<Object> {
 
     /**
      * Synchronously executes the GET operation.
-     *
-     * @return
-     * The result of the operation, deserialized using the query's serializer.
+     * 
+     * @return The result of the operation, deserialized using the query's
+     * serializer.
      */
     @Override
     public Object execute() throws QueryException {

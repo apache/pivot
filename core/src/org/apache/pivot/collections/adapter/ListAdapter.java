@@ -30,8 +30,8 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Implementation of the {@link List} interface that is backed by an
- * instance of {@link java.util.List}.
+ * Implementation of the {@link List} interface that is backed by an instance of
+ * {@link java.util.List}.
  */
 public class ListAdapter<T> implements List<T>, Serializable {
     private static final long serialVersionUID = 1649736907064653706L;
@@ -75,8 +75,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
 
     @Override
     public void insert(T item, int index) {
-        if (comparator != null
-            && Collections.binarySearch(list, item, comparator) != -(index + 1)) {
+        if (comparator != null && Collections.binarySearch(list, item, comparator) != -(index + 1)) {
             throw new IllegalArgumentException("Illegal insertion point.");
         }
 
@@ -120,10 +119,8 @@ public class ListAdapter<T> implements List<T>, Serializable {
                 }
             }
 
-            if ((predecessor != null
-                    && comparator.compare(item, predecessor) < 0)
-                || (successor != null
-                        && comparator.compare(item, successor) > 0)) {
+            if ((predecessor != null && comparator.compare(item, predecessor) < 0)
+                || (successor != null && comparator.compare(item, successor) > 0)) {
                 throw new IllegalArgumentException("Illegal item modification.");
             }
         }
@@ -172,9 +169,9 @@ public class ListAdapter<T> implements List<T>, Serializable {
         java.util.List<T> removedList = null;
         try {
             removedList = list.getClass().newInstance();
-        } catch(IllegalAccessException exception) {
+        } catch (IllegalAccessException exception) {
             throw new RuntimeException(exception);
-        } catch(InstantiationException exception) {
+        } catch (InstantiationException exception) {
             throw new RuntimeException(exception);
         }
 

@@ -23,10 +23,8 @@ import java.util.Iterator;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
- * Implementation of the {@link Stack} interface that is backed by an
- * array.
+ * Implementation of the {@link Stack} interface that is backed by an array.
  */
 public class ArrayStack<T> implements Stack<T>, Serializable {
     private static final long serialVersionUID = 3175064065273930731L;

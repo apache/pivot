@@ -38,11 +38,11 @@ public class FlowPanes extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        flowPane = (FlowPane)namespace.get("flowPane");
-        leftRadioButton = (RadioButton)namespace.get("leftRadioButton");
-        rightRadioButton = (RadioButton)namespace.get("rightRadioButton");
-        centerRadioButton = (RadioButton)namespace.get("centerRadioButton");
-        alignToBaselineCheckbox = (Checkbox)namespace.get("alignToBaselineCheckbox");
+        flowPane = (FlowPane) namespace.get("flowPane");
+        leftRadioButton = (RadioButton) namespace.get("leftRadioButton");
+        rightRadioButton = (RadioButton) namespace.get("rightRadioButton");
+        centerRadioButton = (RadioButton) namespace.get("centerRadioButton");
+        alignToBaselineCheckbox = (Checkbox) namespace.get("alignToBaselineCheckbox");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
             @Override

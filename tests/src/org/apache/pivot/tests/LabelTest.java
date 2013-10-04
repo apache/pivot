@@ -57,13 +57,13 @@ public class LabelTest extends Application.Adapter {
         label1.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         boxPane.add(label1);
 
-        Label label2 = new Label(line2);  // strikethrough
+        Label label2 = new Label(line2); // strikethrough
         label2.getStyles().put("wrapText", true);
         label2.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         label2.getStyles().put("textDecoration", TextDecoration.STRIKETHROUGH);
         boxPane.add(label2);
 
-        Label label3 = new Label(line2);  // disabled
+        Label label3 = new Label(line2); // disabled
         label3.getStyles().put("wrapText", true);
         label3.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         label3.setEnabled(false);

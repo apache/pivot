@@ -52,11 +52,10 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            Display display = (Display)container;
+            Display display = (Display) container;
             Component descendant = display.getDescendantAt(x, y);
 
-            if (!menuPopup.isAncestor(descendant)
-                && descendant != MenuItemSkin.this.getComponent()) {
+            if (!menuPopup.isAncestor(descendant) && descendant != MenuItemSkin.this.getComponent()) {
                 menuPopup.close();
             }
 
@@ -75,7 +74,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     public void install(Component component) {
         super.install(component);
 
-        Menu.Item menuItem = (Menu.Item)component;
+        Menu.Item menuItem = (Menu.Item) component;
         menuItem.getItemListeners().add(this);
 
         menuPopup.setMenu(menuItem.getMenu());
@@ -90,7 +89,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     public void mouseOver(Component component) {
         super.mouseOver(component);
 
-        final Menu.Item menuItem = (Menu.Item)getComponent();
+        final Menu.Item menuItem = (Menu.Item) getComponent();
         menuItem.setActive(true);
 
         if (buttonPressCallback != null) {
@@ -118,7 +117,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
         }
 
         if (!menuPopup.isOpen()) {
-            Menu.Item menuItem = (Menu.Item)getComponent();
+            Menu.Item menuItem = (Menu.Item) getComponent();
             menuItem.setActive(false);
         }
     }
@@ -139,7 +138,7 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
     public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        Menu.Item menuItem = (Menu.Item)getComponent();
+        Menu.Item menuItem = (Menu.Item) getComponent();
         if (menuItem.isActive()) {
             menuItem.press();
         }
@@ -156,11 +155,10 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
 
     @Override
     public void buttonPressed(Button button) {
-        Menu.Item menuItem = (Menu.Item)getComponent();
+        Menu.Item menuItem = (Menu.Item) getComponent();
         Menu menu = menuItem.getMenu();
 
-        if (menu != null
-            && !menuPopup.isOpen()) {
+        if (menu != null && !menuPopup.isOpen()) {
             // Size and position the popup
             Display display = menuItem.getDisplay();
             Dimensions displaySize = display.getSize();
@@ -177,7 +175,6 @@ public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListen
             if (location.x + popupWidth > displaySize.width) {
                 menuPopup.setX(location.x - width - popupWidth);
             }
-
 
             menuPopup.open(menuItem.getWindow());
             menuPopup.requestFocus();

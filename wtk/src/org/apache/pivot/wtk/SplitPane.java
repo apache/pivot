@@ -21,25 +21,23 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * A <tt>SplitPane</tt> is a container component that splits its size up into
- * two regions, each of which is capable of holding one component.  A split
- * pane may be setup to support either horizontal or veritcal splits.  The area
- * in between the two regions is known as the <i>splitter</i> and typically
- * allows the user to adjust the partitioning between the two regions.
- * <p>
- * Since <tt>SplitPane</tt>s only support a single splitter, multiple
- * <tt>SplitPane</tt>s may be nested to support more complex layouts.  In
- * that case, one split pane will "own" the other.  The implication of this
- * is noticed when a split pane directly contains a child split pane of the same
- * orientation.  The parent pane's separator will be able to travel past that
- * of it's child, but the child's separator will be unable to pass the parent's.
+ * two regions, each of which is capable of holding one component. A split pane
+ * may be setup to support either horizontal or veritcal splits. The area in
+ * between the two regions is known as the <i>splitter</i> and typically allows
+ * the user to adjust the partitioning between the two regions. <p> Since
+ * <tt>SplitPane</tt>s only support a single splitter, multiple
+ * <tt>SplitPane</tt>s may be nested to support more complex layouts. In that
+ * case, one split pane will "own" the other. The implication of this is noticed
+ * when a split pane directly contains a child split pane of the same
+ * orientation. The parent pane's separator will be able to travel past that of
+ * it's child, but the child's separator will be unable to pass the parent's.
  */
 public class SplitPane extends Container {
     /**
      * Enumeration defining split pane regions.
      */
     public enum Region {
-        TOP_LEFT,
-        BOTTOM_RIGHT
+        TOP_LEFT, BOTTOM_RIGHT
     }
 
     /**
@@ -57,8 +55,8 @@ public class SplitPane extends Container {
         PRIMARY_REGION
     }
 
-    private static class SplitPaneListenerList extends WTKListenerList<SplitPaneListener>
-        implements SplitPaneListener {
+    private static class SplitPaneListenerList extends WTKListenerList<SplitPaneListener> implements
+        SplitPaneListener {
         @Override
         public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
             for (SplitPaneListener listener : this) {
@@ -261,8 +259,7 @@ public class SplitPane extends Container {
     }
 
     public void setSplitRatio(float splitRatio) {
-        if (splitRatio < 0
-            || splitRatio > 1) {
+        if (splitRatio < 0 || splitRatio > 1) {
             throw new IllegalArgumentException("splitRatio must be between 0 and 1.");
         }
 
@@ -306,8 +303,7 @@ public class SplitPane extends Container {
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
-            if (component == topLeft
-                || component == bottomRight) {
+            if (component == topLeft || component == bottomRight) {
                 throw new UnsupportedOperationException();
             }
         }

@@ -18,8 +18,6 @@ package org.apache.pivot.wtk;
 
 /**
  * Border listener interface.
- *
- *
  */
 public interface BorderListener {
     /**
@@ -39,7 +37,7 @@ public interface BorderListener {
 
     /**
      * Called when a border's title has changed.
-     *
+     * 
      * @param border
      * @param previousTitle
      */
@@ -47,7 +45,7 @@ public interface BorderListener {
 
     /**
      * Called when a border's content component has changed.
-     *
+     * 
      * @param border
      * @param previousContent
      */

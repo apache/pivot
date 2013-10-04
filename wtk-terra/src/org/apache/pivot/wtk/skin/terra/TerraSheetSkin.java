@@ -34,15 +34,15 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Mouse.Button;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetStateListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Mouse.Button;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -70,7 +70,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         @Override
         public void start(TransitionListener transitionListener) {
-            Sheet sheet = (Sheet)getComponent();
+            Sheet sheet = (Sheet) getComponent();
             sheet.getDecorators().add(translationDecorator);
 
             dx = 0;
@@ -81,7 +81,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         @Override
         public void stop() {
-            Sheet sheet = (Sheet)getComponent();
+            Sheet sheet = (Sheet) getComponent();
             sheet.getDecorators().remove(translationDecorator);
 
             super.stop();
@@ -89,7 +89,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         @Override
         public void update() {
-            Sheet sheet = (Sheet)getComponent();
+            Sheet sheet = (Sheet) getComponent();
 
             float scale;
             if (isReversed()) {
@@ -101,22 +101,22 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             Display display = sheet.getDisplay();
             if (display != null) {
                 Bounds decoratedBounds = sheet.getDecoratedBounds();
-                display.repaint(decoratedBounds.x, decoratedBounds.y,
-                    decoratedBounds.width + dx, decoratedBounds.height + dy);
+                display.repaint(decoratedBounds.x, decoratedBounds.y, decoratedBounds.width + dx,
+                    decoratedBounds.height + dy);
 
                 Dimensions size = sheet.getPreferredSize();
                 switch (slideSource) {
                     case NORTH:
-                        dy = -(int)(size.height * scale);
+                        dy = -(int) (size.height * scale);
                         break;
                     case EAST:
-                        dx = (int)(size.width * scale);
+                        dx = (int) (size.width * scale);
                         break;
                     case SOUTH:
-                        dy = (int)(size.height * scale);
+                        dy = (int) (size.height * scale);
                         break;
                     case WEST:
-                        dx = -(int)(size.width * scale);
+                        dx = -(int) (size.width * scale);
                         break;
                     default:
                         throw new IllegalStateException(
@@ -126,8 +126,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                 translationDecorator.setX(dx);
                 translationDecorator.setY(dy);
 
-                display.repaint(decoratedBounds.x, decoratedBounds.y,
-                    decoratedBounds.width + dx, decoratedBounds.height + dy);
+                display.repaint(decoratedBounds.x, decoratedBounds.y, decoratedBounds.width + dx,
+                    decoratedBounds.height + dy);
             }
         }
     }
@@ -155,9 +155,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(new Color(borderColor.getRed(),
-                borderColor.getGreen(), borderColor.getBlue(),
-                ALPHA));
+            graphics.setPaint(new Color(borderColor.getRed(), borderColor.getGreen(),
+                borderColor.getBlue(), ALPHA));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);
@@ -206,7 +205,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         public boolean mouseDown(Container display, Mouse.Button button, int x, int y) {
             boolean consumed = false;
 
-            Sheet sheet = (Sheet)getComponent();
+            Sheet sheet = (Sheet) getComponent();
             if (isMouseOverOwnerClientArea(display, x, y)) {
                 Window rootOwner = sheet.getRootOwner();
                 rootOwner.moveToFront();
@@ -224,15 +223,15 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         }
 
         @Override
-        public boolean mouseWheel(Container display, Mouse.ScrollType scrollType,
-            int scrollAmount, int wheelRotation, int x, int y) {
+        public boolean mouseWheel(Container display, Mouse.ScrollType scrollType, int scrollAmount,
+            int wheelRotation, int x, int y) {
             return isMouseOverOwnerClientArea(display, x, y);
         }
 
         private boolean isMouseOverOwnerClientArea(Container display, int x, int y) {
             boolean mouseOverOwnerClientArea = false;
 
-            Sheet sheet = (Sheet)getComponent();
+            Sheet sheet = (Sheet) getComponent();
             Component descendant = display.getDescendantAt(x, y);
 
             if (descendant != display) {
@@ -256,7 +255,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private static final int DEFAULT_STATE_TRANSITION_RATE = 30;
 
     public TerraSheetSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         Color backgroundColor = theme.getColor(11);
         backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
@@ -275,7 +274,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public void install(Component component) {
         super.install(component);
 
-        Sheet sheet = (Sheet)component;
+        Sheet sheet = (Sheet) component;
         sheet.getSheetStateListeners().add(this);
 
         // Attach the drop-shadow decorator
@@ -289,7 +288,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        Sheet sheet = (Sheet)getComponent();
+        Sheet sheet = (Sheet) getComponent();
         Component content = sheet.getContent();
 
         if (content != null) {
@@ -309,7 +308,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        Sheet sheet = (Sheet)getComponent();
+        Sheet sheet = (Sheet) getComponent();
         Component content = sheet.getContent();
 
         if (content != null) {
@@ -330,7 +329,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        Sheet sheet = (Sheet)getComponent();
+        Sheet sheet = (Sheet) getComponent();
         Component content = sheet.getContent();
 
         if (content != null) {
@@ -352,16 +351,14 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         int width = getWidth();
         int height = getHeight();
 
-        Sheet sheet = (Sheet)getComponent();
+        Sheet sheet = (Sheet) getComponent();
 
         // Size/position resize handle
         resizeHandle.setSize(resizeHandle.getPreferredSize());
         resizeHandle.setLocation(width - resizeHandle.getWidth() - 2,
             height - resizeHandle.getHeight() - 2);
-        resizeHandle.setVisible(resizable
-            && !sheet.isMaximized()
-            && (sheet.isPreferredWidthSet()
-                || sheet.isPreferredHeightSet()));
+        resizeHandle.setVisible(resizable && !sheet.isMaximized()
+            && (sheet.isPreferredWidthSet() || sheet.isPreferredHeightSet()));
 
         Component content = sheet.getContent();
         if (content != null) {
@@ -399,7 +396,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         boolean consumed = super.mouseMove(component, x, y);
 
         if (Mouse.getCapturer() == component) {
-            Sheet sheet = (Sheet)getComponent();
+            Sheet sheet = (Sheet) getComponent();
             Display display = sheet.getDisplay();
 
             Point location = sheet.mapPointToAncestor(display, x, y);
@@ -439,8 +436,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
                 boolean preferredWidthSet = component.isPreferredWidthSet();
                 boolean preferredHeightSet = component.isPreferredHeightSet();
 
-                if (preferredWidthSet
-                    && preferredHeightSet) {
+                if (preferredWidthSet && preferredHeightSet) {
                     cursor = Cursor.RESIZE_SOUTH_EAST;
                 } else if (preferredWidthSet) {
                     cursor = Cursor.RESIZE_EAST;
@@ -459,7 +455,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     @Override
     public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-        Sheet sheet = (Sheet)container;
+        Sheet sheet = (Sheet) container;
         if (!sheet.isTopMost()) {
             Window owner = sheet.getOwner();
             owner.moveToFront();
@@ -499,7 +495,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        Sheet sheet = (Sheet)getComponent();
+        Sheet sheet = (Sheet) getComponent();
 
         if (keyCode == Keyboard.KeyCode.ENTER) {
             sheet.close(true);
@@ -662,9 +658,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         // Don't start the transition if the sheet is being closed as a result
         // of the owner closing
         Window owner = sheet.getOwner();
-        if (!(owner.isClosing()
-            || owner.isClosed()
-            || doingFinalClose)) {
+        if (!(owner.isClosing() || owner.isClosed() || doingFinalClose)) {
             if (openTransition == null) {
                 // Setup for the close transition
                 // Don't start it until we know that everyone
@@ -686,14 +680,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     @Override
     public void sheetCloseVetoed(final Sheet sheet, Vote reason) {
-        if (reason == Vote.DENY
-            && openTransition != null) {
+        if (reason == Vote.DENY && openTransition != null) {
             openTransition.stop();
             openTransition = null;
-        } else
-        if (reason == Vote.DEFER
-            && openTransition != null
-            && !openTransition.isRunning()) {
+        } else if (reason == Vote.DEFER && openTransition != null && !openTransition.isRunning()) {
             openTransition.start(new TransitionListener() {
                 @Override
                 public void transitionCompleted(Transition transition) {
@@ -712,7 +702,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     public void alignToOwner() {
-        Sheet sheet = (Sheet)getComponent();
+        Sheet sheet = (Sheet) getComponent();
 
         Window owner = sheet.getOwner();
         if (owner != null) {

@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuItemSelectionListener;
 import org.apache.pivot.wtk.MenuPopup;
@@ -37,7 +38,6 @@ import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -51,7 +51,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     private class RepositionCallback implements Runnable {
         @Override
         public void run() {
-            MenuPopup menuPopup = (MenuPopup)getComponent();
+            MenuPopup menuPopup = (MenuPopup) getComponent();
             Display display = menuPopup.getDisplay();
 
             Point location = menuPopup.getLocation();
@@ -64,7 +64,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
             int y = location.y;
             if (y + size.height > display.getHeight()) {
-                y-= size.height;
+                y -= size.height;
             }
 
             menuPopup.setLocation(x, y);
@@ -83,18 +83,17 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            MenuPopup menuPopup = (MenuPopup)getComponent();
+            MenuPopup menuPopup = (MenuPopup) getComponent();
 
             if (menuPopup.isContextMenu()) {
-                Display display = (Display)container;
+                Display display = (Display) container;
                 Component descendant = display.getDescendantAt(x, y);
 
                 if (descendant != display) {
                     Window window = descendant.getWindow();
 
                     if (!menuPopup.isAncestor(descendant)
-                        && (window == null
-                            || !menuPopup.isOwner(window))) {
+                        && (window == null || !menuPopup.isOwner(window))) {
                         menuPopup.close();
                     }
                 }
@@ -108,13 +107,11 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
             int scrollAmount, int wheelRotation, int x, int y) {
             boolean consumed = false;
 
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
+            Display display = (Display) container;
+            Window window = (Window) display.getComponentAt(x, y);
 
-            MenuPopup menuPopup = (MenuPopup)getComponent();
-            if (window != menuPopup
-                && (window == null
-                    || !menuPopup.isOwner(window))) {
+            MenuPopup menuPopup = (MenuPopup) getComponent();
+            if (window != menuPopup && (window == null || !menuPopup.isOwner(window))) {
                 consumed = true;
             }
 
@@ -125,7 +122,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     private MenuItemSelectionListener menuItemSelectionListener = new MenuItemSelectionListener() {
         @Override
         public void itemSelected(Menu.Item item) {
-            MenuPopup menuPopup = (MenuPopup)getComponent();
+            MenuPopup menuPopup = (MenuPopup) getComponent();
             menuPopup.close();
         }
     };
@@ -134,8 +131,8 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraMenuPopupSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
-        setBackgroundColor((Color)null);
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        setBackgroundColor((Color) null);
 
         panorama = new Panorama();
         panorama.getStyles().put("buttonBackgroundColor", Color.WHITE);
@@ -151,7 +148,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     public void install(Component component) {
         super.install(component);
 
-        MenuPopup menuPopup = (MenuPopup)component;
+        MenuPopup menuPopup = (MenuPopup) component;
         menuPopup.getMenuPopupListeners().add(this);
         menuPopup.getMenuPopupStateListeners().add(this);
 
@@ -169,7 +166,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     }
 
     public Color getBorderColor() {
-        return (Color)border.getStyles().get("color");
+        return (Color) border.getStyles().get("color");
     }
 
     public void setBorderColor(Color borderColor) {
@@ -208,7 +205,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         if (keyCode == Keyboard.KeyCode.ESCAPE) {
-            MenuPopup menuPopup = (MenuPopup)getComponent();
+            MenuPopup menuPopup = (MenuPopup) getComponent();
             menuPopup.close();
         }
 
@@ -222,7 +219,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
 
-        MenuPopup menuPopup = (MenuPopup)window;
+        MenuPopup menuPopup = (MenuPopup) window;
         Menu menu = menuPopup.getMenu();
         if (menu != null) {
             Menu.Item activeItem = menu.getActiveItem();
@@ -246,8 +243,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
         display.getContainerMouseListeners().remove(displayMouseListener);
 
-        if (owner != null
-            && owner.isOpen()) {
+        if (owner != null && owner.isOpen()) {
             owner.moveToFront();
         }
     }
@@ -268,13 +264,11 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
     @Override
     public Vote previewMenuPopupClose(final MenuPopup menuPopup, boolean immediate) {
-        if (!immediate
-            && closeTransition == null) {
+        if (!immediate && closeTransition == null) {
             border.setEnabled(false);
 
-            closeTransition = new FadeWindowTransition(menuPopup,
-                closeTransitionDuration, closeTransitionRate,
-                dropShadowDecorator);
+            closeTransition = new FadeWindowTransition(menuPopup, closeTransitionDuration,
+                closeTransitionRate, dropShadowDecorator);
 
             closeTransition.start(new TransitionListener() {
                 @Override
@@ -284,14 +278,12 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
             });
         }
 
-        return (closeTransition != null
-            && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+        return (closeTransition != null && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
     }
 
     @Override
     public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
-        if (reason == Vote.DENY
-            && closeTransition != null) {
+        if (reason == Vote.DENY && closeTransition != null) {
             closeTransition.stop();
 
             border.setEnabled(true);

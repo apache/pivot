@@ -17,9 +17,9 @@
 package org.apache.pivot.wtk;
 
 /**
- * Defines event listener methods that pertain to rollups. Developers
- * register for such events by adding themselves to a rollup's list of "rollup
- * listeners" (see {@link Rollup#getRollupListeners()}).
+ * Defines event listener methods that pertain to rollups. Developers register
+ * for such events by adding themselves to a rollup's list of "rollup listeners"
+ * (see {@link Rollup#getRollupListeners()}).
  */
 public interface RollupListener {
     /**
@@ -44,7 +44,7 @@ public interface RollupListener {
 
     /**
      * Called when a rollup's heading component changed.
-     *
+     * 
      * @param rollup
      * @param previousHeading
      */
@@ -52,7 +52,7 @@ public interface RollupListener {
 
     /**
      * Called when a rollup's content component changed.
-     *
+     * 
      * @param rollup
      * @param previousContent
      */
@@ -60,7 +60,7 @@ public interface RollupListener {
 
     /**
      * Called when a rollup's collapsible flag has changed.
-     *
+     * 
      * @param rollup
      */
     public void collapsibleChanged(Rollup rollup);

@@ -58,6 +58,6 @@ public class MenuButtons extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        componentBoxPane = (BoxPane)namespace.get("componentBoxPane");
+        componentBoxPane = (BoxPane) namespace.get("componentBoxPane");
     }
 }

@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface TableViewHeaderPressListener {
     /**
      * Called when a table view header has been pressed.
-     *
+     * 
      * @param tableViewHeader
      * @param index
      */

@@ -30,7 +30,8 @@ public class BaselineTest extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = new Window((Component)bxmlSerializer.readObject(getClass().getResource("baseline_test.bxml")));
+        window = new Window((Component) bxmlSerializer.readObject(getClass().getResource(
+            "baseline_test.bxml")));
         window.setTitle("Baseline Test");
         window.setMaximized(true);
         window.open(display);

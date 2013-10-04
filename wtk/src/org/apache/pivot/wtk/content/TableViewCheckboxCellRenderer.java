@@ -16,19 +16,18 @@
  */
 package org.apache.pivot.wtk.content;
 
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.VerticalAlignment;
 
 /**
- * Default renderer for table view cells that contain boolean data. Renders
- * cell contents as a checkbox.
+ * Default renderer for table view cells that contain boolean data. Renders cell
+ * contents as a checkbox.
  */
-public class TableViewCheckboxCellRenderer extends BoxPane
-    implements TableView.CellRenderer {
+public class TableViewCheckboxCellRenderer extends BoxPane implements TableView.CellRenderer {
     protected Checkbox checkbox = new Checkbox();
     private boolean checkboxDisabled = false;
 
@@ -50,9 +49,8 @@ public class TableViewCheckboxCellRenderer extends BoxPane
     }
 
     @Override
-    public void render(Object row, int rowIndex, int columnIndex,
-        TableView tableView, String columnName,
-        boolean selected, boolean highlighted, boolean disabled) {
+    public void render(Object row, int rowIndex, int columnIndex, TableView tableView,
+        String columnName, boolean selected, boolean highlighted, boolean disabled) {
         if (row != null) {
             // Get the row and cell data
             if (columnName != null) {

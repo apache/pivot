@@ -179,8 +179,8 @@ public abstract class ApplicationContext {
                         Point dropLocation = dropDescendant.mapPointFromAncestor(display,
                             location.x, location.y);
                         dropAction = dropTarget.dragMove(dropDescendant, dragManifest,
-                            getSupportedDropActions(event.getSourceActions()),
-                            dropLocation.x, dropLocation.y, userDropAction);
+                            getSupportedDropActions(event.getSourceActions()), dropLocation.x,
+                            dropLocation.y, userDropAction);
                     }
                 } else {
                     if (previousDropDescendant != null) {
@@ -191,8 +191,7 @@ public abstract class ApplicationContext {
                     if (dropDescendant != null) {
                         DropTarget dropTarget = dropDescendant.getDropTarget();
                         dropAction = dropTarget.dragEnter(dropDescendant, dragManifest,
-                            getSupportedDropActions(event.getSourceActions()),
-                            userDropAction);
+                            getSupportedDropActions(event.getSourceActions()), userDropAction);
                     }
                 }
 
@@ -216,13 +215,13 @@ public abstract class ApplicationContext {
 
                 if (dropDescendant != null) {
                     java.awt.Point location = event.getLocation();
-                    Point dropLocation = dropDescendant.mapPointFromAncestor(display,
-                        location.x, location.y);
+                    Point dropLocation = dropDescendant.mapPointFromAncestor(display, location.x,
+                        location.y);
 
                     DropTarget dropTarget = dropDescendant.getDropTarget();
                     dropAction = dropTarget.userDropActionChange(dropDescendant, dragManifest,
-                        getSupportedDropActions(event.getSourceActions()), dropLocation.x, dropLocation.y,
-                        userDropAction);
+                        getSupportedDropActions(event.getSourceActions()), dropLocation.x,
+                        dropLocation.y, userDropAction);
                 }
 
                 if (dropAction == null) {
@@ -242,11 +241,12 @@ public abstract class ApplicationContext {
                 DropAction dropAction = null;
 
                 if (dropDescendant != null) {
-                    Point dropLocation = dropDescendant.mapPointFromAncestor(display,
-                        location.x, location.y);
+                    Point dropLocation = dropDescendant.mapPointFromAncestor(display, location.x,
+                        location.y);
                     DropTarget dropTarget = dropDescendant.getDropTarget();
 
-                    // Simulate a user drop action change to get the current drop action
+                    // Simulate a user drop action change to get the current
+                    // drop action
                     int supportedDropActions = getSupportedDropActions(event.getSourceActions());
 
                     dropAction = dropTarget.userDropActionChange(dropDescendant, dragManifest,
@@ -255,8 +255,8 @@ public abstract class ApplicationContext {
                     if (dropAction != null) {
                         // Perform the drop
                         event.acceptDrop(getNativeDropAction(dropAction));
-                        dropTarget.drop(dropDescendant, dragManifest,
-                            supportedDropActions, dropLocation.x, dropLocation.y, userDropAction);
+                        dropTarget.drop(dropDescendant, dragManifest, supportedDropActions,
+                            dropLocation.x, dropLocation.y, userDropAction);
                     }
                 }
 
@@ -281,12 +281,9 @@ public abstract class ApplicationContext {
         };
 
         public DisplayHost() {
-            enableEvents(AWTEvent.COMPONENT_EVENT_MASK
-                | AWTEvent.FOCUS_EVENT_MASK
-                | AWTEvent.MOUSE_EVENT_MASK
-                | AWTEvent.MOUSE_MOTION_EVENT_MASK
-                | AWTEvent.MOUSE_WHEEL_EVENT_MASK
-                | AWTEvent.KEY_EVENT_MASK);
+            enableEvents(AWTEvent.COMPONENT_EVENT_MASK | AWTEvent.FOCUS_EVENT_MASK
+                | AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK
+                | AWTEvent.MOUSE_WHEEL_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
 
             try {
                 System.setProperty("sun.awt.noerasebackground", "true");
@@ -332,8 +329,8 @@ public abstract class ApplicationContext {
                                 focusedComponentLocal.getDecorators().add(focusDecorator);
                             }
 
-                            System.out.println("focusedComponentChanged():\n  from = " + previousFocusedComponent
-                                + "\n  to = " + focusedComponentLocal);
+                            System.out.println("focusedComponentChanged():\n  from = "
+                                + previousFocusedComponent + "\n  to = " + focusedComponentLocal);
                         }
                     };
 
@@ -345,7 +342,8 @@ public abstract class ApplicationContext {
 
             // Add native drop support
             @SuppressWarnings("unused")
-            java.awt.dnd.DropTarget dropTarget = new java.awt.dnd.DropTarget(this, dropTargetListener);
+            java.awt.dnd.DropTarget dropTarget = new java.awt.dnd.DropTarget(this,
+                dropTargetListener);
 
             setFocusTraversalKeysEnabled(false);
         }
@@ -365,8 +363,8 @@ public abstract class ApplicationContext {
         public void setScale(double scale) {
             if (scale != this.scale) {
                 this.scale = scale;
-                display.setSize(Math.max((int)Math.ceil(getWidth() / scale), 0),
-                    Math.max((int)Math.ceil(getHeight() / scale), 0));
+                display.setSize(Math.max((int) Math.ceil(getWidth() / scale), 0),
+                    Math.max((int) Math.ceil(getHeight() / scale), 0));
                 display.repaint();
             }
         }
@@ -406,16 +404,15 @@ public abstract class ApplicationContext {
         }
 
         /**
-         * Under some conditions, e.g. running under Linux in an applet, volatile buffering
-         * can reduce performance.
+         * Under some conditions, e.g. running under Linux in an applet,
+         * volatile buffering can reduce performance.
          */
         public void setVolatileImagePaintEnabled(boolean enabled) {
             volatileImagePaintEnabled = enabled;
             if (enabled) {
                 bufferedImage = null;
                 bufferedImageGC = null;
-            }
-            else {
+            } else {
                 volatileImage = null;
                 volatileImageGC = null;
             }
@@ -428,7 +425,6 @@ public abstract class ApplicationContext {
                 bufferedImageGC = null;
             }
         }
-
 
         @Override
         public void repaint(int x, int y, int width, int height) {
@@ -451,13 +447,14 @@ public abstract class ApplicationContext {
                 yMutable = 0;
             }
 
-            if (widthMutable > 0
-                && heightMutable > 0) {
+            if (widthMutable > 0 && heightMutable > 0) {
                 if (scale == 1) {
                     super.repaint(xMutable, yMutable, widthMutable, heightMutable);
                 } else {
-                    super.repaint((int)Math.floor(xMutable * scale), (int)Math.floor(yMutable * scale),
-                        (int)Math.ceil(widthMutable * scale) + 1, (int)Math.ceil(heightMutable * scale) + 1);
+                    super.repaint((int) Math.floor(xMutable * scale),
+                        (int) Math.floor(yMutable * scale),
+                        (int) Math.ceil(widthMutable * scale) + 1,
+                        (int) Math.ceil(heightMutable * scale) + 1);
                 }
             }
         }
@@ -474,18 +471,17 @@ public abstract class ApplicationContext {
             }
 
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
-            if (clipBounds != null
-                && !clipBounds.isEmpty()) {
+            if (clipBounds != null && !clipBounds.isEmpty()) {
                 try {
                     boolean bPaintSuccess = false;
                     if (volatileImagePaintEnabled) {
-                        bPaintSuccess = paintVolatileBuffered((Graphics2D)graphics);
+                        bPaintSuccess = paintVolatileBuffered((Graphics2D) graphics);
                     }
                     if (!bPaintSuccess && bufferedImagePaintEnabled) {
-                        bPaintSuccess = paintBuffered((Graphics2D)graphics);
+                        bPaintSuccess = paintBuffered((Graphics2D) graphics);
                     }
                     if (!bPaintSuccess) {
-                        paintDisplay((Graphics2D)graphics);
+                        paintDisplay((Graphics2D) graphics);
                     }
 
                     if (debugPaint) {
@@ -514,11 +510,11 @@ public abstract class ApplicationContext {
             graphics.clipRect(0, 0, getWidth(), getHeight());
 
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
-            if (clipBounds != null
-                    && !clipBounds.isEmpty()) {
+            if (clipBounds != null && !clipBounds.isEmpty()) {
                 try {
-                    // When printing, there is no point in using offscreen buffers.
-                    paintDisplay((Graphics2D)graphics);
+                    // When printing, there is no point in using offscreen
+                    // buffers.
+                    paintDisplay((Graphics2D) graphics);
                 } catch (RuntimeException exception) {
                     System.err.println("Exception thrown during print(): " + exception);
                     throw exception;
@@ -528,12 +524,9 @@ public abstract class ApplicationContext {
 
         /**
          * Attempts to paint the display using an offscreen buffer.
-         *
-         * @param graphics
-         * The source graphics context.
-         *
-         * @return
-         * <tt>true</tt> if the display was painted using the offscreen
+         * 
+         * @param graphics The source graphics context.
+         * @return <tt>true</tt> if the display was painted using the offscreen
          * buffer; <tt>false</tt>, otherwise.
          */
         private boolean paintBuffered(Graphics2D graphics) {
@@ -543,18 +536,17 @@ public abstract class ApplicationContext {
             GraphicsConfiguration gc = graphics.getDeviceConfiguration();
             java.awt.Rectangle clipBounds = graphics.getClipBounds();
 
-            if (bufferedImage == null
-                || bufferedImageGC != gc
+            if (bufferedImage == null || bufferedImageGC != gc
                 || bufferedImage.getWidth() < clipBounds.width
                 || bufferedImage.getHeight() < clipBounds.height) {
 
-                bufferedImage = gc.createCompatibleImage(clipBounds.width,
-                    clipBounds.height, Transparency.OPAQUE);
+                bufferedImage = gc.createCompatibleImage(clipBounds.width, clipBounds.height,
+                    Transparency.OPAQUE);
                 bufferedImageGC = gc;
             }
 
             if (bufferedImage != null) {
-                Graphics2D bufferedImageGraphics = (Graphics2D)bufferedImage.getGraphics();
+                Graphics2D bufferedImageGraphics = (Graphics2D) bufferedImage.getGraphics();
                 bufferedImageGraphics.setClip(0, 0, clipBounds.width, clipBounds.height);
                 bufferedImageGraphics.translate(-clipBounds.x, -clipBounds.y);
 
@@ -573,12 +565,9 @@ public abstract class ApplicationContext {
 
         /**
          * Attempts to paint the display using a volatile offscreen buffer.
-         *
-         * @param graphics
-         * The source graphics context.
-         *
-         * @return
-         * <tt>true</tt> if the display was painted using the offscreen
+         * 
+         * @param graphics The source graphics context.
+         * @return <tt>true</tt> if the display was painted using the offscreen
          * buffer; <tt>false</tt>, otherwise.
          */
         private boolean paintVolatileBuffered(Graphics2D graphics) {
@@ -605,17 +594,16 @@ public abstract class ApplicationContext {
                 || valid == java.awt.image.VolatileImage.IMAGE_RESTORED) {
                 java.awt.Rectangle clipBounds = graphics.getClipBounds();
                 Graphics2D volatileImageGraphics = volatileImage.createGraphics();
-                volatileImageGraphics.setClip(clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height);
+                volatileImageGraphics.setClip(clipBounds.x, clipBounds.y, clipBounds.width,
+                    clipBounds.height);
 
                 try {
                     paintDisplay(volatileImageGraphics);
                     // this drawImage method doesn't use width and height
                     int x2 = clipBounds.x + clipBounds.width;
                     int y2 = clipBounds.y + clipBounds.height;
-                    graphics.drawImage(volatileImage,
-                        clipBounds.x, clipBounds.y, x2, y2,
-                        clipBounds.x, clipBounds.y, x2, y2,
-                        this);
+                    graphics.drawImage(volatileImage, clipBounds.x, clipBounds.y, x2, y2,
+                        clipBounds.x, clipBounds.y, x2, y2, this);
                 } finally {
                     volatileImageGraphics.dispose();
                 }
@@ -631,7 +619,7 @@ public abstract class ApplicationContext {
 
         /**
          * Paints the display including any decorators.
-         *
+         * 
          * @param graphics
          */
         private void paintDisplay(Graphics2D graphics) {
@@ -688,30 +676,29 @@ public abstract class ApplicationContext {
         private Component getDropDescendant(int x, int y) {
             Component dropDescendantLocal = display.getDescendantAt(x, y);
 
-            while (dropDescendantLocal != null
-                && dropDescendantLocal.getDropTarget() == null) {
+            while (dropDescendantLocal != null && dropDescendantLocal.getDropTarget() == null) {
                 dropDescendantLocal = dropDescendantLocal.getParent();
             }
 
-            if (dropDescendantLocal != null
-                && dropDescendantLocal.isBlocked()) {
+            if (dropDescendantLocal != null && dropDescendantLocal.isBlocked()) {
                 dropDescendantLocal = null;
             }
 
             return dropDescendantLocal;
         }
 
-        private void startNativeDrag(final DragSource dragSource, final Component dragDescendantArgument,
-            final MouseEvent mouseEvent) {
+        private void startNativeDrag(final DragSource dragSource,
+            final Component dragDescendantArgument, final MouseEvent mouseEvent) {
             java.awt.dnd.DragSource awtDragSource = java.awt.dnd.DragSource.getDefaultDragSource();
 
             final int supportedDropActions = dragSource.getSupportedDropActions();
 
-            DragGestureRecognizer dragGestureRecognizer =
-                new DragGestureRecognizer(java.awt.dnd.DragSource.getDefaultDragSource(), DisplayHost.this) {
-                    private static final long serialVersionUID = -3204487375572082596L;
+            DragGestureRecognizer dragGestureRecognizer = new DragGestureRecognizer(
+                java.awt.dnd.DragSource.getDefaultDragSource(), DisplayHost.this) {
+                private static final long serialVersionUID = -3204487375572082596L;
 
-                {   appendEvent(mouseEvent);
+                {
+                    appendEvent(mouseEvent);
                 }
 
                 @Override
@@ -747,8 +734,10 @@ public abstract class ApplicationContext {
             java.util.List<InputEvent> inputEvents = new java.util.ArrayList<>();
             inputEvents.add(mouseEvent);
 
-            // TODO If current user drop action is supported by drag source, use it
-            // as initial action - otherwise, select MOVE, COPY, LINK in that order
+            // TODO If current user drop action is supported by drag source, use
+            // it
+            // as initial action - otherwise, select MOVE, COPY, LINK in that
+            // order
             java.awt.Point location = new java.awt.Point(mouseEvent.getX(), mouseEvent.getY());
             DragGestureEvent trigger = new DragGestureEvent(dragGestureRecognizer,
                 DnDConstants.ACTION_MOVE, location, inputEvents);
@@ -756,39 +745,40 @@ public abstract class ApplicationContext {
             LocalManifest dragContent = dragSource.getContent();
             LocalManifestAdapter localManifestAdapter = new LocalManifestAdapter(dragContent);
 
-            awtDragSource.startDrag(trigger, java.awt.Cursor.getDefaultCursor(),
-                null, null, localManifestAdapter, new DragSourceListener() {
-                @Override
-                public void dragEnter(DragSourceDragEvent event) {
-                    DragSourceContext context = event.getDragSourceContext();
-                    context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
-                }
+            awtDragSource.startDrag(trigger, java.awt.Cursor.getDefaultCursor(), null, null,
+                localManifestAdapter, new DragSourceListener() {
+                    @Override
+                    public void dragEnter(DragSourceDragEvent event) {
+                        DragSourceContext context = event.getDragSourceContext();
+                        context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
+                    }
 
-                @Override
-                public void dragExit(DragSourceEvent event) {
-                    DragSourceContext context = event.getDragSourceContext();
-                    context.setCursor(java.awt.Cursor.getDefaultCursor());
-                }
+                    @Override
+                    public void dragExit(DragSourceEvent event) {
+                        DragSourceContext context = event.getDragSourceContext();
+                        context.setCursor(java.awt.Cursor.getDefaultCursor());
+                    }
 
-                @Override
-                public void dragOver(DragSourceDragEvent event) {
-                    DragSourceContext context = event.getDragSourceContext();
-                    context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
-                }
+                    @Override
+                    public void dragOver(DragSourceDragEvent event) {
+                        DragSourceContext context = event.getDragSourceContext();
+                        context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
+                    }
 
-                @Override
-                public void dropActionChanged(DragSourceDragEvent event) {
-                    DragSourceContext context = event.getDragSourceContext();
-                    context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
-                }
+                    @Override
+                    public void dropActionChanged(DragSourceDragEvent event) {
+                        DragSourceContext context = event.getDragSourceContext();
+                        context.setCursor(getDropCursor(getDropAction(event.getDropAction())));
+                    }
 
-                @Override
-                public void dragDropEnd(DragSourceDropEvent event) {
-                    DragSourceContext context = event.getDragSourceContext();
-                    context.setCursor(java.awt.Cursor.getDefaultCursor());
-                    dragSource.endDrag(dragDescendantArgument, getDropAction(event.getDropAction()));
-                }
-            });
+                    @Override
+                    public void dragDropEnd(DragSourceDropEvent event) {
+                        DragSourceContext context = event.getDragSourceContext();
+                        context.setCursor(java.awt.Cursor.getDefaultCursor());
+                        dragSource.endDrag(dragDescendantArgument,
+                            getDropAction(event.getDropAction()));
+                    }
+                });
         }
 
         @Override
@@ -811,8 +801,8 @@ public abstract class ApplicationContext {
                     if (scale == 1) {
                         display.setSize(Math.max(getWidth(), 0), Math.max(getHeight(), 0));
                     } else {
-                        display.setSize(Math.max((int)Math.ceil(getWidth() / scale), 0),
-                            Math.max((int)Math.ceil(getHeight() / scale), 0));
+                        display.setSize(Math.max((int) Math.ceil(getWidth() / scale), 0),
+                            Math.max((int) Math.ceil(getHeight() / scale), 0));
                     }
 
                     break;
@@ -828,10 +818,9 @@ public abstract class ApplicationContext {
         protected void processFocusEvent(FocusEvent event) {
             super.processFocusEvent(event);
 
-            switch(event.getID()) {
+            switch (event.getID()) {
                 case FocusEvent.FOCUS_GAINED: {
-                    if (focusedComponent != null
-                        && focusedComponent.isShowing()
+                    if (focusedComponent != null && focusedComponent.isShowing()
                         && !focusedComponent.isBlocked()) {
                         focusedComponent.requestFocus();
                     }
@@ -856,8 +845,8 @@ public abstract class ApplicationContext {
         protected void processMouseEvent(MouseEvent event) {
             super.processMouseEvent(event);
 
-            int x = (int)Math.round(event.getX() / scale);
-            int y = (int)Math.round(event.getY() / scale);
+            int x = (int) Math.round(event.getX() / scale);
+            int y = (int) Math.round(event.getY() / scale);
 
             // Set the mouse button state
             int mouseButtons = 0x00;
@@ -902,10 +891,9 @@ public abstract class ApplicationContext {
 
             // Process the event
             int eventID = event.getID();
-            if (eventID == MouseEvent.MOUSE_ENTERED
-                || eventID == MouseEvent.MOUSE_EXITED) {
+            if (eventID == MouseEvent.MOUSE_ENTERED || eventID == MouseEvent.MOUSE_EXITED) {
                 try {
-                    switch(eventID) {
+                    switch (eventID) {
                         case MouseEvent.MOUSE_ENTERED: {
                             display.mouseOver();
                             break;
@@ -947,8 +935,7 @@ public abstract class ApplicationContext {
 
                             if (button == Mouse.Button.LEFT) {
                                 dragLocation = new Point(x, y);
-                            } else if (menuPopup == null
-                                && button == Mouse.Button.RIGHT
+                            } else if (menuPopup == null && button == Mouse.Button.RIGHT
                                 && !consumed) {
                                 // Instantiate a context menu
                                 Menu menu = new Menu();
@@ -961,17 +948,16 @@ public abstract class ApplicationContext {
                                 do {
                                     MenuHandler menuHandler = component.getMenuHandler();
                                     if (menuHandler != null) {
-                                        if (menuHandler.configureContextMenu(component,
-                                            menu, componentX, componentY)) {
+                                        if (menuHandler.configureContextMenu(component, menu,
+                                            componentX, componentY)) {
                                             // Stop propagation
                                             break;
                                         }
                                     }
 
                                     if (component instanceof Container) {
-                                        Container container = (Container)component;
-                                        component = container.getComponentAt(componentX,
-                                            componentY);
+                                        Container container = (Container) component;
+                                        component = container.getComponentAt(componentX, componentY);
 
                                         if (component != null) {
                                             componentX -= component.getX();
@@ -982,28 +968,32 @@ public abstract class ApplicationContext {
                                     }
                                 } while (component != null && component.isEnabled());
 
-                                // Show the context menu if it contains any sections
+                                // Show the context menu if it contains any
+                                // sections
                                 if (menu.getSections().getLength() > 0) {
                                     menuPopup = new MenuPopup(menu);
 
-                                    menuPopup.getWindowStateListeners().add(new WindowStateListener.Adapter() {
-                                        @Override
-                                        public void windowClosed(Window window, Display displayArgument, Window owner) {
-                                            menuPopup.getMenu().getSections().clear();
-                                            menuPopup = null;
-                                            window.getWindowStateListeners().remove(this);
-                                        }
-                                    });
+                                    menuPopup.getWindowStateListeners().add(
+                                        new WindowStateListener.Adapter() {
+                                            @Override
+                                            public void windowClosed(Window window,
+                                                Display displayArgument, Window owner) {
+                                                menuPopup.getMenu().getSections().clear();
+                                                menuPopup = null;
+                                                window.getWindowStateListeners().remove(this);
+                                            }
+                                        });
 
                                     Window window = null;
                                     if (mouseOwner == display) {
-                                        window = (Window)display.getComponentAt(x, y);
+                                        window = (Window) display.getComponentAt(x, y);
                                     } else {
                                         window = mouseOwner.getWindow();
                                     }
 
                                     Display displayLocal = window.getDisplay();
-                                    Point location = mouseOwner.mapPointToAncestor(displayLocal, x, y);
+                                    Point location = mouseOwner.mapPointToAncestor(displayLocal, x,
+                                        y);
                                     menuPopup.open(window, location);
                                 }
                             }
@@ -1068,8 +1058,8 @@ public abstract class ApplicationContext {
         protected void processMouseMotionEvent(MouseEvent event) {
             super.processMouseMotionEvent(event);
 
-            int x = (int)Math.round(event.getX() / scale);
-            int y = (int)Math.round(event.getY() / scale);
+            int x = (int) Math.round(event.getX() / scale);
+            int y = (int) Math.round(event.getY() / scale);
 
             // Process the event
             try {
@@ -1081,7 +1071,8 @@ public abstract class ApplicationContext {
                             Component mouseCapturer = Mouse.getCapturer();
 
                             if (mouseCapturer == null) {
-                                // The mouse is not captured, so propagate the event to the display
+                                // The mouse is not captured, so propagate the
+                                // event to the display
                                 if (!display.isMouseOver()) {
                                     display.mouseOver();
                                 }
@@ -1091,9 +1082,10 @@ public abstract class ApplicationContext {
                                 int dragThreshold = Platform.getDragThreshold();
 
                                 if (dragLocation != null
-                                    && (Math.abs(x - dragLocation.x) > dragThreshold
-                                        || Math.abs(y - dragLocation.y) > dragThreshold)) {
-                                    // The user has dragged the mouse past the drag threshold; try
+                                    && (Math.abs(x - dragLocation.x) > dragThreshold || Math.abs(y
+                                        - dragLocation.y) > dragThreshold)) {
+                                    // The user has dragged the mouse past the
+                                    // drag threshold; try
                                     // to find a drag source
                                     dragDescendant = display.getDescendantAt(dragLocation.x,
                                         dragLocation.y);
@@ -1103,31 +1095,33 @@ public abstract class ApplicationContext {
                                         dragDescendant = dragDescendant.getParent();
                                     }
 
-                                    if (dragDescendant == null
-                                        || dragDescendant.isBlocked()) {
-                                        // There was nothing to drag, so clear the drag location
+                                    if (dragDescendant == null || dragDescendant.isBlocked()) {
+                                        // There was nothing to drag, so clear
+                                        // the drag location
                                         dragDescendant = null;
                                         dragLocation = null;
                                     } else {
                                         DragSource dragSource = dragDescendant.getDragSource();
-                                        dragLocation = dragDescendant.mapPointFromAncestor(display, x, y);
+                                        dragLocation = dragDescendant.mapPointFromAncestor(display,
+                                            x, y);
 
-                                        if (dragSource.beginDrag(dragDescendant,
-                                            dragLocation.x, dragLocation.y)) {
+                                        if (dragSource.beginDrag(dragDescendant, dragLocation.x,
+                                            dragLocation.y)) {
                                             // A drag has started
                                             if (dragSource.isNative()) {
-                                                startNativeDrag(dragSource, dragDescendant,
-                                                    event);
+                                                startNativeDrag(dragSource, dragDescendant, event);
 
-                                                // Clear the drag state since it is not used for
+                                                // Clear the drag state since it
+                                                // is not used for
                                                 // native drags
                                                 dragDescendant = null;
                                                 dragLocation = null;
                                             } else {
                                                 if (dragSource.getRepresentation() != null
                                                     && dragSource.getOffset() == null) {
-                                                    throw new IllegalStateException("Drag offset is required when a "
-                                                        + " respresentation is specified.");
+                                                    throw new IllegalStateException(
+                                                        "Drag offset is required when a "
+                                                            + " respresentation is specified.");
                                                 }
 
                                                 if (display.isMouseOver()) {
@@ -1137,7 +1131,8 @@ public abstract class ApplicationContext {
                                                 // Get the drag content
                                                 dragManifest = dragSource.getContent();
 
-                                                // Get the initial user drop action
+                                                // Get the initial user drop
+                                                // action
                                                 userDropAction = getUserDropAction(event);
 
                                                 // Repaint the drag visual
@@ -1164,7 +1159,8 @@ public abstract class ApplicationContext {
                             if (dragLocation != null) {
                                 DragSource dragSource = dragDescendant.getDragSource();
 
-                                // Get the previous and current drop descendant and call
+                                // Get the previous and current drop descendant
+                                // and call
                                 // move or exit/enter as appropriate
                                 Component previousDropDescendant = dropDescendant;
                                 dropDescendant = getDropDescendant(x, y);
@@ -1175,9 +1171,10 @@ public abstract class ApplicationContext {
                                     if (dropDescendant != null) {
                                         DropTarget dropTarget = dropDescendant.getDropTarget();
 
-                                        Point dropLocation = dropDescendant.mapPointFromAncestor(display, x, y);
-                                        dropAction = dropTarget.dragMove(dropDescendant, dragManifest,
-                                            dragSource.getSupportedDropActions(),
+                                        Point dropLocation = dropDescendant.mapPointFromAncestor(
+                                            display, x, y);
+                                        dropAction = dropTarget.dragMove(dropDescendant,
+                                            dragManifest, dragSource.getSupportedDropActions(),
                                             dropLocation.x, dropLocation.y, userDropAction);
                                     }
                                 } else {
@@ -1188,8 +1185,9 @@ public abstract class ApplicationContext {
 
                                     if (dropDescendant != null) {
                                         DropTarget dropTarget = dropDescendant.getDropTarget();
-                                        dropAction = dropTarget.dragEnter(dropDescendant, dragManifest,
-                                            dragSource.getSupportedDropActions(), userDropAction);
+                                        dropAction = dropTarget.dragEnter(dropDescendant,
+                                            dragManifest, dragSource.getSupportedDropActions(),
+                                            userDropAction);
                                     }
                                 }
 
@@ -1221,8 +1219,8 @@ public abstract class ApplicationContext {
             super.processMouseWheelEvent(event);
 
             // Get the event coordinates
-            int x = (int)Math.round(event.getX() / scale);
-            int y = (int)Math.round(event.getY() / scale);
+            int x = (int) Math.round(event.getX() / scale);
+            int y = (int) Math.round(event.getY() / scale);
 
             // Get the scroll type
             Mouse.ScrollType scrollType = null;
@@ -1268,8 +1266,8 @@ public abstract class ApplicationContext {
                             }
 
                             // Delegate the event to the owner
-                            boolean consumed = mouseOwner.mouseWheel(scrollType, event.getScrollAmount(),
-                                event.getWheelRotation(), x, y);
+                            boolean consumed = mouseOwner.mouseWheel(scrollType,
+                                event.getScrollAmount(), event.getWheelRotation(), x, y);
 
                             if (consumed) {
                                 event.consume();
@@ -1302,8 +1300,7 @@ public abstract class ApplicationContext {
 
             // Ignore Control when Alt-Graphics is pressed
             if ((modifiersEx & KeyEvent.CTRL_DOWN_MASK) > 0
-                && ((modifiersEx & KeyEvent.ALT_DOWN_MASK) == 0
-                    || awtKeyLocation == KeyEvent.KEY_LOCATION_RIGHT)) {
+                && ((modifiersEx & KeyEvent.ALT_DOWN_MASK) == 0 || awtKeyLocation == KeyEvent.KEY_LOCATION_RIGHT)) {
                 keyboardModifiers |= Keyboard.Modifier.CTRL.getMask();
             }
 
@@ -1371,14 +1368,14 @@ public abstract class ApplicationContext {
                             if (focusedComponentLocal == null) {
                                 for (Application application : applications) {
                                     if (application instanceof Application.UnprocessedKeyHandler) {
-                                        Application.UnprocessedKeyHandler unprocessedKeyHandler =
-                                            (Application.UnprocessedKeyHandler)application;
+                                        Application.UnprocessedKeyHandler unprocessedKeyHandler = (Application.UnprocessedKeyHandler) application;
                                         unprocessedKeyHandler.keyPressed(keyCode, keyLocation);
                                     }
                                 }
                             } else {
                                 if (!focusedComponentLocal.isBlocked()) {
-                                    consumed = focusedComponentLocal.keyPressed(keyCode, keyLocation);
+                                    consumed = focusedComponentLocal.keyPressed(keyCode,
+                                        keyLocation);
                                 }
                             }
                         } catch (Exception exception) {
@@ -1401,14 +1398,14 @@ public abstract class ApplicationContext {
                             if (focusedComponentLocal == null) {
                                 for (Application application : applications) {
                                     if (application instanceof Application.UnprocessedKeyHandler) {
-                                        Application.UnprocessedKeyHandler unprocessedKeyHandler =
-                                            (Application.UnprocessedKeyHandler)application;
+                                        Application.UnprocessedKeyHandler unprocessedKeyHandler = (Application.UnprocessedKeyHandler) application;
                                         unprocessedKeyHandler.keyReleased(keyCode, keyLocation);
                                     }
                                 }
                             } else {
                                 if (!focusedComponentLocal.isBlocked()) {
-                                    consumed = focusedComponentLocal.keyReleased(keyCode, keyLocation);
+                                    consumed = focusedComponentLocal.keyReleased(keyCode,
+                                        keyLocation);
                                 }
                             }
                         } catch (Exception exception) {
@@ -1431,8 +1428,7 @@ public abstract class ApplicationContext {
                             if (focusedComponentLocal == null) {
                                 for (Application application : applications) {
                                     if (application instanceof Application.UnprocessedKeyHandler) {
-                                        Application.UnprocessedKeyHandler unprocessedKeyHandler =
-                                            (Application.UnprocessedKeyHandler)application;
+                                        Application.UnprocessedKeyHandler unprocessedKeyHandler = (Application.UnprocessedKeyHandler) application;
                                         unprocessedKeyHandler.keyTyped(keyChar);
                                     }
                                 }
@@ -1472,11 +1468,11 @@ public abstract class ApplicationContext {
                             dropLocation = display.getMouseLocation();
                         }
 
-                        dropLocation = dropDescendant.mapPointFromAncestor(display,
-                            dropLocation.x, dropLocation.y);
+                        dropLocation = dropDescendant.mapPointFromAncestor(display, dropLocation.x,
+                            dropLocation.y);
                         dropTarget.userDropActionChange(dropDescendant, dragManifest,
-                            dragSource.getSupportedDropActions(),
-                            dropLocation.x, dropLocation.y, userDropAction);
+                            dragSource.getSupportedDropActions(), dropLocation.x, dropLocation.y,
+                            userDropAction);
                     }
                 }
             }
@@ -1484,14 +1480,13 @@ public abstract class ApplicationContext {
     }
 
     /**
-     * Resource cache dictionary implementation.
-     * <p>
-     * Note that this implementation does not have a way to limiting the number of elements
-     * to contain, so the cache continues to grow; to keep it small you have
-     * to manually remove old elements from it when they are no more necessary.
+     * Resource cache dictionary implementation. <p> Note that this
+     * implementation does not have a way to limiting the number of elements to
+     * contain, so the cache continues to grow; to keep it small you have to
+     * manually remove old elements from it when they are no more necessary.
      */
-    public static final class ResourceCacheDictionary
-        implements Dictionary<URL, Object>, Iterable<URL> {
+    public static final class ResourceCacheDictionary implements Dictionary<URL, Object>,
+        Iterable<URL> {
         private ResourceCacheDictionary() {
         }
 
@@ -1610,8 +1605,7 @@ public abstract class ApplicationContext {
 
                     for (Application application : applications) {
                         if (application instanceof Application.UncaughtExceptionHandler) {
-                            Application.UncaughtExceptionHandler uncaughtExceptionHandler =
-                                (Application.UncaughtExceptionHandler)application;
+                            Application.UncaughtExceptionHandler uncaughtExceptionHandler = (Application.UncaughtExceptionHandler) application;
                             uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
                         }
                     }
@@ -1658,9 +1652,9 @@ public abstract class ApplicationContext {
 
     /**
      * Returns this application's origin (the URL of it's originating server).
-     *
-     * @return
-     * The application's origin, or <tt>null</tt> if the origin cannot be determined.
+     * 
+     * @return The application's origin, or <tt>null</tt> if the origin cannot
+     * be determined.
      */
     public static URL getOrigin() {
         return origin;
@@ -1674,8 +1668,9 @@ public abstract class ApplicationContext {
     }
 
     /**
-     * Adds the styles from a named stylesheet to the named or typed style collections.
-     *
+     * Adds the styles from a named stylesheet to the named or typed style
+     * collections.
+     * 
      * @param resourceName
      */
     @SuppressWarnings("unchecked")
@@ -1684,7 +1679,8 @@ public abstract class ApplicationContext {
 
         URL stylesheetLocation = classLoader.getResource(resourceName.substring(1));
         if (stylesheetLocation == null) {
-            throw new RuntimeException("Unable to locate style sheet resource \"" + resourceName + "\".");
+            throw new RuntimeException("Unable to locate style sheet resource \"" + resourceName
+                + "\".");
         }
 
         try {
@@ -1692,10 +1688,10 @@ public abstract class ApplicationContext {
 
             try {
                 JSONSerializer serializer = new JSONSerializer();
-                Map<String, ?> stylesheet = (Map<String, ?>)serializer.readObject(inputStream);
+                Map<String, ?> stylesheet = (Map<String, ?>) serializer.readObject(inputStream);
 
                 for (String name : stylesheet) {
-                    Map<String, ?> styles = (Map<String, ?>)stylesheet.get(name);
+                    Map<String, ?> styles = (Map<String, ?>) stylesheet.get(name);
 
                     int i = name.lastIndexOf('.') + 1;
                     if (Character.isUpperCase(name.charAt(i))) {
@@ -1711,9 +1707,9 @@ public abstract class ApplicationContext {
                             // No-op
                         }
 
-                        if (type != null
-                            && Component.class.isAssignableFrom(type)) {
-                            Component.getTypedStyles().put((Class<? extends Component>)type, styles);
+                        if (type != null && Component.class.isAssignableFrom(type)) {
+                            Component.getTypedStyles().put((Class<? extends Component>) type,
+                                styles);
                         }
                     } else {
                         Component.getNamedStyles().put(name, styles);
@@ -1731,9 +1727,8 @@ public abstract class ApplicationContext {
 
     /**
      * Returns the current JVM version.
-     *
-     * @return
-     * The current JVM version, or <tt>null</tt> if the version can't be
+     * 
+     * @return The current JVM version, or <tt>null</tt> if the version can't be
      * determined.
      */
     public static Version getJVMVersion() {
@@ -1742,24 +1737,21 @@ public abstract class ApplicationContext {
 
     /**
      * Returns the current Pivot version.
-     *
-     * @return
-     * The current Pivot version (determined at build time), or <tt>null</tt>
-     * if the version can't be determined.
+     * 
+     * @return The current Pivot version (determined at build time), or
+     * <tt>null</tt> if the version can't be determined.
      */
     public static Version getPivotVersion() {
         return pivotVersion;
     }
 
     /**
-     * Schedules a task for one-time execution. The task will be executed on
-     * the UI thread.
-     *
-     * @param callback
-     * The task to execute.
-     *
-     * @param delay
-     * The length of time to wait before executing the task (in milliseconds).
+     * Schedules a task for one-time execution. The task will be executed on the
+     * UI thread.
+     * 
+     * @param callback The task to execute.
+     * @param delay The length of time to wait before executing the task (in
+     * milliseconds).
      */
     public static ScheduledCallback scheduleCallback(Runnable callback, long delay) {
         ScheduledCallback scheduledCallback = new ScheduledCallback(callback);
@@ -1782,12 +1774,10 @@ public abstract class ApplicationContext {
     /**
      * Schedules a task for repeated execution. The task will be executed on the
      * UI thread and will begin executing immediately.
-     *
-     * @param callback
-     * The task to execute.
-     *
-     * @param period
-     * The interval at which the task will be repeated (in milliseconds).
+     * 
+     * @param callback The task to execute.
+     * @param period The interval at which the task will be repeated (in
+     * milliseconds).
      */
     public static ScheduledCallback scheduleRecurringCallback(Runnable callback, long period) {
         return scheduleRecurringCallback(callback, 0, period);
@@ -1796,17 +1786,15 @@ public abstract class ApplicationContext {
     /**
      * Schedules a task for repeated execution. The task will be executed on the
      * UI thread.
-     *
-     * @param callback
-     * The task to execute.
-     *
-     * @param delay
-     * The length of time to wait before the first execution of the task (milliseconds).
-     *
-     * @param period
-     * The interval at which the task will be repeated (also in milliseconds).
+     * 
+     * @param callback The task to execute.
+     * @param delay The length of time to wait before the first execution of the
+     * task (milliseconds).
+     * @param period The interval at which the task will be repeated (also in
+     * milliseconds).
      */
-    public static ScheduledCallback scheduleRecurringCallback(Runnable callback, long delay, long period) {
+    public static ScheduledCallback scheduleRecurringCallback(Runnable callback, long delay,
+        long period) {
         ScheduledCallback scheduledCallback = new ScheduledCallback(callback);
 
         // TODO This is a workaround for a potential OS X bug; revisit
@@ -1827,9 +1815,8 @@ public abstract class ApplicationContext {
     /**
      * Queues a task to execute after all pending events have been processed and
      * returns without waiting for the task to complete.
-     *
-     * @param callback
-     * The task to execute.
+     * 
+     * @param callback The task to execute.
      */
     public static QueuedCallback queueCallback(Runnable callback) {
         return queueCallback(callback, false);
@@ -1838,12 +1825,9 @@ public abstract class ApplicationContext {
     /**
      * Queues a task to execute after all pending events have been processed and
      * optionally waits for the task to complete.
-     *
-     * @param callback
-     * The task to execute.
-     *
-     * @param wait
-     * If <tt>true</tt>, does not return until the task has executed.
+     * 
+     * @param callback The task to execute.
+     * @param wait If <tt>true</tt>, does not return until the task has executed.
      * Otherwise, returns immediately.
      */
     public static QueuedCallback queueCallback(Runnable callback, boolean wait) {
@@ -1894,10 +1878,9 @@ public abstract class ApplicationContext {
         if ((event.isControlDown() && event.isShiftDown())
             || (event.isAltDown() && event.isMetaDown())) {
             userDropAction = DropAction.LINK;
-        } else if (event.isControlDown()
-            || (event.isAltDown())) {
+        } else if (event.isControlDown() || (event.isAltDown())) {
             userDropAction = DropAction.COPY;
-        } else if (event.isShiftDown()){
+        } else if (event.isShiftDown()) {
             userDropAction = DropAction.MOVE;
         } else {
             userDropAction = null;
@@ -1955,7 +1938,7 @@ public abstract class ApplicationContext {
         int nativeDropAction = 0;
 
         if (dropAction != null) {
-            switch(dropAction) {
+            switch (dropAction) {
                 case COPY: {
                     nativeDropAction = DnDConstants.ACTION_COPY;
                     break;
@@ -2010,8 +1993,7 @@ public abstract class ApplicationContext {
         int n = 0;
         for (Application application : applications) {
             if (application instanceof Application.UncaughtExceptionHandler) {
-                Application.UncaughtExceptionHandler uncaughtExceptionHandler =
-                    (Application.UncaughtExceptionHandler)application;
+                Application.UncaughtExceptionHandler uncaughtExceptionHandler = (Application.UncaughtExceptionHandler) application;
                 uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
                 n++;
             }

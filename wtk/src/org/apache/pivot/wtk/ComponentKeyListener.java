@@ -35,45 +35,40 @@ public interface ComponentKeyListener {
         }
 
         @Override
-        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyReleased(Component component, int keyCode,
+            Keyboard.KeyLocation keyLocation) {
             return false;
         }
     }
 
     /**
      * Called when a key has been typed.
-     *
+     * 
      * @param component
      * @param character
-     *
-     * @return
-     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
     public boolean keyTyped(Component component, char character);
 
     /**
      * Called when a key has been pressed.
-     *
+     * 
      * @param component
      * @param keyCode
      * @param keyLocation
-     *
-     * @return
-     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation);
 
     /**
      * Called when a key has been released.
-     *
+     * 
      * @param component
      * @param keyCode
      * @param keyLocation
-     *
-     * @return
-     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
     public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation);

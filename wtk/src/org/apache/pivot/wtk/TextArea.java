@@ -96,8 +96,7 @@ public class TextArea extends Component {
 
             int count = text.length();
 
-            if (textArea != null
-                && textArea.characterCount + count > textArea.maximumLength) {
+            if (textArea != null && textArea.characterCount + count > textArea.maximumLength) {
                 throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
             }
 
@@ -131,8 +130,7 @@ public class TextArea extends Component {
         }
 
         public void removeText(int index, int count) {
-            if (index < 0
-                || index + count > characters.length()) {
+            if (index < 0 || index + count > characters.length()) {
                 throw new IndexOutOfBoundsException();
             }
 
@@ -191,29 +189,19 @@ public class TextArea extends Component {
 
         /**
          * Called when text has been inserted into a paragraph.
-         *
-         * @param paragraph
-         * The source of the event.
-         *
-         * @param index
-         * The index at which the text was inserted.
-         *
-         * @param count
-         * The number of characters that were inserted.
+         * 
+         * @param paragraph The source of the event.
+         * @param index The index at which the text was inserted.
+         * @param count The number of characters that were inserted.
          */
         public void textInserted(Paragraph paragraph, int index, int count);
 
         /**
          * Called when characters have been removed from a paragraph.
-         *
-         * @param paragraph
-         * The source of the event.
-         *
-         * @param index
-         * The index from which the text was removed.
-         *
-         * @param count
-         * The number of characters that were removed.
+         * 
+         * @param paragraph The source of the event.
+         * @param index The index from which the text was removed.
+         * @param count The number of characters that were removed.
          */
         public void textRemoved(Paragraph paragraph, int index, int count);
     }
@@ -222,18 +210,16 @@ public class TextArea extends Component {
      * Enum representing a scroll direction.
      */
     public enum ScrollDirection {
-        UP,
-        DOWN
+        UP, DOWN
     }
 
     /**
-     * Text area skin interface. Text area skins are required to implement
-     * this.
+     * Text area skin interface. Text area skins are required to implement this.
      */
     public interface Skin {
         /**
          * Returns the insertion point for a given location.
-         *
+         * 
          * @param x
          * @param y
          */
@@ -242,7 +228,7 @@ public class TextArea extends Component {
         /**
          * Returns the next insertion point given an x coordinate and a
          * character index.
-         *
+         * 
          * @param x
          * @param from
          * @param direction
@@ -251,15 +237,15 @@ public class TextArea extends Component {
 
         /**
          * Returns the row index of the character at a given index.
-         *
+         * 
          * @param index
          */
         public int getRowAt(int index);
 
         /**
-         * Returns the index of the first character in the row containing
-         * a given character index.
-         *
+         * Returns the index of the first character in the row containing a
+         * given character index.
+         * 
          * @param index
          */
         public int getRowOffset(int index);
@@ -267,7 +253,7 @@ public class TextArea extends Component {
         /**
          * Returns the number of characters in the row containing a given
          * character index.
-         *
+         * 
          * @param index
          */
         public int getRowLength(int index);
@@ -279,14 +265,14 @@ public class TextArea extends Component {
 
         /**
          * Returns the bounds of the character at a given index.
-         *
+         * 
          * @param index
          */
         public Bounds getCharacterBounds(int index);
 
         /**
-         * Returns the current setting of the "tabWidth" style
-         * (so "setText" uses the same value as Ctrl-Tab from user).
+         * Returns the current setting of the "tabWidth" style (so "setText"
+         * uses the same value as Ctrl-Tab from user).
          */
         public int getTabWidth();
     }
@@ -296,17 +282,17 @@ public class TextArea extends Component {
      */
     public interface TextBindMapping {
         /**
-         * Converts a value from the bind context to a text representation during a
-         * {@link Component#load(Object)} operation.
-         *
+         * Converts a value from the bind context to a text representation
+         * during a {@link Component#load(Object)} operation.
+         * 
          * @param value
          */
         public String toString(Object value);
 
         /**
-         * Converts a text string to a value to be stored in the bind context during a
-         * {@link Component#store(Object)} operation.
-         *
+         * Converts a text string to a value to be stored in the bind context
+         * during a {@link Component#store(Object)} operation.
+         * 
          * @param text
          */
         public Object valueOf(String text);
@@ -331,7 +317,8 @@ public class TextArea extends Component {
             }
 
             if (paragraph.textArea != null) {
-                throw new IllegalArgumentException("paragraph is already in use by another text area.");
+                throw new IllegalArgumentException(
+                    "paragraph is already in use by another text area.");
             }
 
             // Determine insertion count, including terminator character
@@ -377,8 +364,8 @@ public class TextArea extends Component {
 
             if (selectionStart != previousSelectionStart
                 || selectionLength != previousSelectionLength) {
-                textAreaSelectionListeners.selectionChanged(TextArea.this,
-                    selectionStart, selectionLength);
+                textAreaSelectionListeners.selectionChanged(TextArea.this, selectionStart,
+                    selectionLength);
             }
         }
 
@@ -388,7 +375,7 @@ public class TextArea extends Component {
         }
 
         @Override
-        public int remove(Paragraph paragraph){
+        public int remove(Paragraph paragraph) {
             int index = indexOf(paragraph);
             if (index != -1) {
                 remove(index, 1);
@@ -410,7 +397,8 @@ public class TextArea extends Component {
                     characterCountLocal += paragraph.characters.length() + 1;
                 }
 
-                // Don't include the implicit final terminator in the character count
+                // Don't include the implicit final terminator in the character
+                // count
                 if (getLength() == 0) {
                     characterCountLocal--;
                 }
@@ -422,8 +410,8 @@ public class TextArea extends Component {
                 // Update selection state
                 int previousSelectionStart = selectionStart;
                 int previousSelectionLength = selectionLength;
-                selectionStart = (index == paragraphs.getLength()) ?
-                    TextArea.this.characterCount : paragraphs.get(index).offset;
+                selectionStart = (index == paragraphs.getLength()) ? TextArea.this.characterCount
+                    : paragraphs.get(index).offset;
                 selectionLength = 0;
 
                 // Fire change events
@@ -432,8 +420,8 @@ public class TextArea extends Component {
 
                 if (selectionStart != previousSelectionStart
                     || selectionLength != previousSelectionLength) {
-                    textAreaSelectionListeners.selectionChanged(TextArea.this,
-                        selectionStart, selectionLength);
+                    textAreaSelectionListeners.selectionChanged(TextArea.this, selectionStart,
+                        selectionLength);
                 }
             }
 
@@ -495,8 +483,8 @@ public class TextArea extends Component {
         }
     }
 
-    private static class TextAreaListenerList extends WTKListenerList<TextAreaListener>
-        implements TextAreaListener {
+    private static class TextAreaListenerList extends WTKListenerList<TextAreaListener> implements
+        TextAreaListener {
         @Override
         public void maximumLengthChanged(TextArea textArea, int previousMaximumLength) {
             for (TextAreaListener listener : this) {
@@ -512,8 +500,8 @@ public class TextArea extends Component {
         }
     }
 
-    private static class TextAreaContentListenerList extends WTKListenerList<TextAreaContentListener>
-        implements TextAreaContentListener {
+    private static class TextAreaContentListenerList extends
+        WTKListenerList<TextAreaContentListener> implements TextAreaContentListener {
         @Override
         public void paragraphInserted(TextArea textArea, int index) {
             for (TextAreaContentListener listener : this) {
@@ -522,7 +510,8 @@ public class TextArea extends Component {
         }
 
         @Override
-        public void paragraphsRemoved(TextArea textArea, int index, Sequence<TextArea.Paragraph> removed) {
+        public void paragraphsRemoved(TextArea textArea, int index,
+            Sequence<TextArea.Paragraph> removed) {
             for (TextAreaContentListener listener : this) {
                 listener.paragraphsRemoved(textArea, index, removed);
             }
@@ -536,20 +525,19 @@ public class TextArea extends Component {
         }
     }
 
-    private static class TextAreaSelectionListenerList extends WTKListenerList<TextAreaSelectionListener>
-        implements TextAreaSelectionListener {
+    private static class TextAreaSelectionListenerList extends
+        WTKListenerList<TextAreaSelectionListener> implements TextAreaSelectionListener {
         @Override
         public void selectionChanged(TextArea textArea, int previousSelectionStart,
             int previousSelectionLength) {
             for (TextAreaSelectionListener listener : this) {
-                listener.selectionChanged(textArea, previousSelectionStart,
-                    previousSelectionLength);
+                listener.selectionChanged(textArea, previousSelectionStart, previousSelectionLength);
             }
         }
     }
 
-    private static class TextAreaBindingListenerList extends WTKListenerList<TextAreaBindingListener>
-        implements TextAreaBindingListener {
+    private static class TextAreaBindingListenerList extends
+        WTKListenerList<TextAreaBindingListener> implements TextAreaBindingListener {
         @Override
         public void textKeyChanged(TextArea textArea, String previousTextKey) {
             for (TextAreaBindingListener listener : this) {
@@ -565,7 +553,8 @@ public class TextArea extends Component {
         }
 
         @Override
-        public void textBindMappingChanged(TextArea textArea, TextBindMapping previousTextBindMapping) {
+        public void textBindMappingChanged(TextArea textArea,
+            TextBindMapping previousTextBindMapping) {
             for (TextAreaBindingListener listener : this) {
                 listener.textBindMappingChanged(textArea, previousTextBindMapping);
             }
@@ -620,9 +609,8 @@ public class TextArea extends Component {
 
     /**
      * Returns the text content of the text area.
-     *
-     * @return
-     * A string containing a copy of the text area's text content.
+     * 
+     * @return A string containing a copy of the text area's text content.
      */
     public String getText() {
         return getText(0, getCharacterCount());
@@ -630,20 +618,17 @@ public class TextArea extends Component {
 
     /**
      * Returns a portion of the text content of the text area.
-     *
+     * 
      * @param beginIndex
      * @param endIndex
-     *
-     * @return
-     * A string containing a copy of the text area's text content.
+     * @return A string containing a copy of the text area's text content.
      */
     public String getText(int beginIndex, int endIndex) {
         if (beginIndex > endIndex) {
             throw new IllegalArgumentException();
         }
 
-        if (beginIndex < 0
-            || endIndex > characterCount) {
+        if (beginIndex < 0 || endIndex > characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -663,8 +648,7 @@ public class TextArea extends Component {
         // and moving to next paragraph as needed
         int i = 0;
         while (i < count) {
-            if (characterOffset == paragraph.characters.length()
-                && i < characterCount) {
+            if (characterOffset == paragraph.characters.length() && i < characterCount) {
                 textBuilder.append('\n');
                 paragraph = paragraphs.get(++paragraphIndex);
                 characterOffset = 0;
@@ -680,7 +664,7 @@ public class TextArea extends Component {
 
     /**
      * Sets the text content of the text area.
-     *
+     * 
      * @param text
      */
     public void setText(String text) {
@@ -728,7 +712,7 @@ public class TextArea extends Component {
 
         Paragraph paragraph = new Paragraph();
         int tabPosition = 0;
-        int tabWidth = ((TextArea.Skin)getSkin()).getTabWidth();
+        int tabWidth = ((TextArea.Skin) getSkin()).getTabWidth();
 
         int c = textReader.read();
         while (c != -1) {
@@ -744,13 +728,14 @@ public class TextArea extends Component {
                 int spaces = tabWidth - (tabPosition % tabWidth);
                 for (int i = 0; i < spaces; i++) {
                     if (++characterCountLocal > maximumLength) {
-                        throw new IllegalArgumentException("Text length is greater than maximum length.");
+                        throw new IllegalArgumentException(
+                            "Text length is greater than maximum length.");
                     }
                     paragraph.append(' ');
                 }
                 tabPosition += spaces;
             } else {
-                paragraph.append((char)c);
+                paragraph.append((char) c);
                 tabPosition++;
             }
 
@@ -788,7 +773,7 @@ public class TextArea extends Component {
 
             int characterOffset = index - paragraph.offset;
             int tabPosition = characterOffset;
-            int tabWidth = ((TextArea.Skin)getSkin()).getTabWidth();
+            int tabWidth = ((TextArea.Skin) getSkin()).getTabWidth();
 
             StringBuilder textBuilder = new StringBuilder();
 
@@ -799,7 +784,8 @@ public class TextArea extends Component {
                     // Split paragraph at current offset
                     int count = paragraph.characters.length();
 
-                    CharSequence trailingCharacters = paragraph.characters.subSequence(characterOffset, count);
+                    CharSequence trailingCharacters = paragraph.characters.subSequence(
+                        characterOffset, count);
                     paragraph.removeText(characterOffset, count - characterOffset);
                     paragraph.insertText(textBuilder, characterOffset);
 
@@ -837,8 +823,7 @@ public class TextArea extends Component {
     }
 
     private void removeText(int index, int count, boolean addToEditHistory) {
-        if (index < 0
-            || index + count > characterCount) {
+        if (index < 0 || index + count > characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -863,11 +848,14 @@ public class TextArea extends Component {
                 // The removal affects only a single paragraph
                 beginParagraph.removeText(index - beginParagraph.offset, count);
             } else {
-                // The removal spans paragraphs; remove any intervening paragraphs and
+                // The removal spans paragraphs; remove any intervening
+                // paragraphs and
                 // merge the leading and trailing segments
-                String leadingText = beginParagraph.characters.substring(0, index - beginParagraph.offset);
+                String leadingText = beginParagraph.characters.substring(0, index
+                    - beginParagraph.offset);
                 endParagraph.removeText(0, (index + count) - endParagraph.offset);
-                paragraphSequence.remove(beginParagraphIndex, endParagraphIndex - beginParagraphIndex);
+                paragraphSequence.remove(beginParagraphIndex, endParagraphIndex
+                    - beginParagraphIndex);
                 endParagraph.insertText(leadingText, 0);
             }
         }
@@ -891,7 +879,7 @@ public class TextArea extends Component {
 
     /**
      * Returns the index of the paragraph containing a given character index.
-     *
+     * 
      * @param index
      */
     public int getParagraphAt(int index) {
@@ -909,7 +897,7 @@ public class TextArea extends Component {
 
     /**
      * Returns the character at a given index.
-     *
+     * 
      * @param index
      */
     public char getCharacterAt(int index) {
@@ -920,8 +908,8 @@ public class TextArea extends Component {
 
         int characterOffset = index - paragraph.offset;
 
-        return (characterOffset == paragraph.characters.length()) ?
-            '\n' : paragraph.characters.charAt(characterOffset);
+        return (characterOffset == paragraph.characters.length()) ? '\n'
+            : paragraph.characters.charAt(characterOffset);
     }
 
     /**
@@ -933,8 +921,8 @@ public class TextArea extends Component {
     }
 
     /**
-     * Places any selected text on the clipboard and deletes it from
-     * the text input.
+     * Places any selected text on the clipboard and deletes it from the text
+     * input.
      */
     public void cut() {
         copy();
@@ -961,13 +949,12 @@ public class TextArea extends Component {
     public void paste() {
         Manifest clipboardContent = Clipboard.getContent();
 
-        if (clipboardContent != null
-            && clipboardContent.containsText()) {
+        if (clipboardContent != null && clipboardContent.containsText()) {
             // Paste the string representation of the content
             String text = null;
             try {
                 text = clipboardContent.getText();
-            } catch(IOException exception) {
+            } catch (IOException exception) {
                 // No-op
             }
 
@@ -1000,9 +987,8 @@ public class TextArea extends Component {
 
     /**
      * Returns the starting index of the selection.
-     *
-     * @return
-     * The starting index of the selection.
+     * 
+     * @return The starting index of the selection.
      */
     public int getSelectionStart() {
         return selectionStart;
@@ -1010,9 +996,8 @@ public class TextArea extends Component {
 
     /**
      * Returns the length of the selection.
-     *
-     * @return
-     * The length of the selection; may be <tt>0</tt>.
+     * 
+     * @return The length of the selection; may be <tt>0</tt>.
      */
     public int getSelectionLength() {
         return selectionLength;
@@ -1020,41 +1005,35 @@ public class TextArea extends Component {
 
     /**
      * Returns a span representing the current selection.
-     *
-     * @return
-     * A span containing the current selection. Both start and end points are
-     * inclusive. Returns <tt>null</tt> if the selection is empty.
+     * 
+     * @return A span containing the current selection. Both start and end
+     * points are inclusive. Returns <tt>null</tt> if the selection is empty.
      */
     public Span getSelection() {
-        return (selectionLength == 0) ? null : new Span(selectionStart,
-            selectionStart + selectionLength - 1);
+        return (selectionLength == 0) ? null : new Span(selectionStart, selectionStart
+            + selectionLength - 1);
     }
 
     /**
      * Sets the selection. The sum of the selection start and length must be
      * less than the length of the text area's content.
-     *
-     * @param selectionStart
-     * The starting index of the selection.
-     *
-     * @param selectionLength
-     * The length of the selection.
+     * 
+     * @param selectionStart The starting index of the selection.
+     * @param selectionLength The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
         if (selectionLength < 0) {
             throw new IllegalArgumentException("selectionLength is negative.");
         }
 
-        if (selectionStart < 0
-            || selectionStart + selectionLength > characterCount) {
+        if (selectionStart < 0 || selectionStart + selectionLength > characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
         int previousSelectionStart = this.selectionStart;
         int previousSelectionLength = this.selectionLength;
 
-        if (previousSelectionStart != selectionStart
-            || previousSelectionLength != selectionLength) {
+        if (previousSelectionStart != selectionStart || previousSelectionLength != selectionLength) {
             this.selectionStart = selectionStart;
             this.selectionLength = selectionLength;
 
@@ -1065,9 +1044,8 @@ public class TextArea extends Component {
 
     /**
      * Sets the selection.
-     *
+     * 
      * @param selection
-     *
      * @see #setSelection(int, int)
      */
     public final void setSelection(Span selection) {
@@ -1075,7 +1053,7 @@ public class TextArea extends Component {
             throw new IllegalArgumentException("selection is null.");
         }
 
-        setSelection(Math.min(selection.start, selection.end), (int)selection.getLength());
+        setSelection(Math.min(selection.start, selection.end), (int) selection.getLength());
     }
 
     /**
@@ -1094,9 +1072,8 @@ public class TextArea extends Component {
 
     /**
      * Returns the selected text.
-     *
-     * @return
-     * A string containing a copy of the selected text.
+     * 
+     * @return A string containing a copy of the selected text.
      */
     public String getSelectedText() {
         return getText(selectionStart, selectionStart + selectionLength);
@@ -1104,9 +1081,8 @@ public class TextArea extends Component {
 
     /**
      * Returns the maximum length of the text area's text content.
-     *
-     * @return
-     * The maximum length of the text area's text content.
+     * 
+     * @return The maximum length of the text area's text content.
      */
     public int getMaximumLength() {
         return maximumLength;
@@ -1114,9 +1090,8 @@ public class TextArea extends Component {
 
     /**
      * Sets the maximum length of the text area's text content.
-     *
-     * @param maximumLength
-     * The maximum length of the text area's text content.
+     * 
+     * @param maximumLength The maximum length of the text area's text content.
      */
     public void setMaximumLength(int maximumLength) {
         if (maximumLength < 0) {
@@ -1147,7 +1122,7 @@ public class TextArea extends Component {
 
     /**
      * Sets the text area's editable flag.
-     *
+     * 
      * @param editable
      */
     public void setEditable(boolean editable) {
@@ -1166,9 +1141,8 @@ public class TextArea extends Component {
 
     /**
      * Returns the text area's text key.
-     *
-     * @return
-     * The text key, or <tt>null</tt> if no text key is set.
+     * 
+     * @return The text key, or <tt>null</tt> if no text key is set.
      */
     public String getTextKey() {
         return textKey;
@@ -1176,9 +1150,8 @@ public class TextArea extends Component {
 
     /**
      * Sets the text area's text key.
-     *
-     * @param textKey
-     * The text key, or <tt>null</tt> to clear the binding.
+     * 
+     * @param textKey The text key, or <tt>null</tt> to clear the binding.
      */
     public void setTextKey(String textKey) {
         String previousTextKey = this.textKey;
@@ -1221,9 +1194,7 @@ public class TextArea extends Component {
 
     @Override
     public void load(Object context) {
-        if (textKey != null
-            && JSON.containsKey(context, textKey)
-            && textBindType != BindType.STORE) {
+        if (textKey != null && JSON.containsKey(context, textKey) && textBindType != BindType.STORE) {
             Object value = JSON.get(context, textKey);
 
             if (textBindMapping == null) {
@@ -1232,17 +1203,16 @@ public class TextArea extends Component {
                 value = textBindMapping.toString(value);
             }
 
-            setText((String)value);
+            setText((String) value);
         }
     }
 
     @Override
     public void store(Object context) {
-        if (textKey != null
-            && textBindType != BindType.LOAD) {
+        if (textKey != null && textBindType != BindType.LOAD) {
             String text = getText();
-            JSON.put(context, textKey, (textBindMapping == null) ?
-                text : textBindMapping.valueOf(text));
+            JSON.put(context, textKey,
+                (textBindMapping == null) ? text : textBindMapping.valueOf(text));
         }
     }
 
@@ -1258,57 +1228,57 @@ public class TextArea extends Component {
     }
 
     /**
-     * Sets whether tab characters (<code>\t</code>) are expanded to
-     * an appropriate number of spaces during {@link #setText} and
+     * Sets whether tab characters (<code>\t</code>) are expanded to an
+     * appropriate number of spaces during {@link #setText} and
      * {@link #insertText} operations.
-     * @param expandTabs <code>true</code> to replace tab characters
-     *                   with space characters (depending on the
-     *                   setting of the {@link TextArea.Skin#getTabWidth}
-     *                   value) or <code>false</code> to leave tabs alone.
-     *                   Note: this only affects tabs encountered during
-     *                   program operations; tabs entered via the keyboard
-     *                   by the user are always expanded, regardless of
-     *                   this setting.
+     * 
+     * @param expandTabs <code>true</code> to replace tab characters with space
+     * characters (depending on the setting of the
+     * {@link TextArea.Skin#getTabWidth} value) or <code>false</code> to leave
+     * tabs alone. Note: this only affects tabs encountered during program
+     * operations; tabs entered via the keyboard by the user are always
+     * expanded, regardless of this setting.
      */
     public void setExpandTabs(boolean expandTabs) {
         this.expandTabs = expandTabs;
     }
 
     public int getInsertionPoint(int x, int y) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea.Skin textAreaSkin = (TextArea.Skin) getSkin();
         return textAreaSkin.getInsertionPoint(x, y);
     }
 
     public int getNextInsertionPoint(int x, int from, ScrollDirection direction) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea.Skin textAreaSkin = (TextArea.Skin) getSkin();
         return textAreaSkin.getNextInsertionPoint(x, from, direction);
     }
 
     public int getRowAt(int index) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea.Skin textAreaSkin = (TextArea.Skin) getSkin();
         return textAreaSkin.getRowAt(index);
     }
 
     public int getRowOffset(int index) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea.Skin textAreaSkin = (TextArea.Skin) getSkin();
         return textAreaSkin.getRowOffset(index);
     }
 
     public int getRowLength(int index) {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea.Skin textAreaSkin = (TextArea.Skin) getSkin();
         return textAreaSkin.getRowLength(index);
     }
 
     public int getRowCount() {
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea.Skin textAreaSkin = (TextArea.Skin) getSkin();
         return textAreaSkin.getRowCount();
     }
 
     public Bounds getCharacterBounds(int index) {
         // We need to validate in case we get called from user-code after
-        // a user-code initiated modification, but before another layout has run.
+        // a user-code initiated modification, but before another layout has
+        // run.
         validate();
-        TextArea.Skin textAreaSkin = (TextArea.Skin)getSkin();
+        TextArea.Skin textAreaSkin = (TextArea.Skin) getSkin();
         return textAreaSkin.getCharacterBounds(index);
     }
 

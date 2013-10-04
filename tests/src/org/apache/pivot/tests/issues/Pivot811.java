@@ -41,7 +41,8 @@ public class Pivot811 extends Application.Adapter {
     private Display display = null;
 
     @Override
-    public void startup(final Display displayArgument, Map<String, String> properties) throws Exception {
+    public void startup(final Display displayArgument, Map<String, String> properties)
+        throws Exception {
         this.display = displayArgument;
 
         Frame listFrame = new Frame();
@@ -61,7 +62,8 @@ public class Pivot811 extends Application.Adapter {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(ScrollBarPolicy.FILL);
         scrollPane.setVerticalScrollBarPolicy(ScrollBarPolicy.FILL_TO_CAPACITY);
-        scrollPane.setRepaintAllViewport(true);  // workaround for pivot-738, needed only in in some cases
+        scrollPane.setRepaintAllViewport(true); // workaround for pivot-738,
+                                                // needed only in in some cases
         boxPane.add(scrollPane);
 
         final ListView listView = new ListView();
@@ -81,7 +83,8 @@ public class Pivot811 extends Application.Adapter {
 
         listView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
             @Override
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
+                int count) {
                 System.out.println("mouseClick : " + count);
 
                 if (count == 2) {
@@ -102,18 +105,21 @@ public class Pivot811 extends Application.Adapter {
                     String selectedItem = listView.getSelectedItem().toString();
                     Label label = new Label("Selected Item is \"" + selectedItem + "\"");
                     boxPaneLocal.add(label);
-                    boxPaneLocal.add(new Label(""));  // spacer
+                    boxPaneLocal.add(new Label("")); // spacer
 
                     boxPaneLocal.add(new Label("Click inside the text input to focus it"));
                     TextInput textInput = new TextInput();
                     textInput.setText("Focusable component");
-                    boxPaneLocal.add(textInput);  // workaround for pivot-811: add a focusable element inside the frame
+                    boxPaneLocal.add(textInput); // workaround for pivot-811:
+                                                 // add a focusable element
+                                                 // inside the frame
 
                     detailFrame.open(displayArgument);
 
-                    // workaround for pivot-811: force the focus on the first focusable element inside the frame
+                    // workaround for pivot-811: force the focus on the first
+                    // focusable element inside the frame
                     detailFrame.requestFocus();
-                    // textInput.requestFocus();  // or use this ...
+                    // textInput.requestFocus(); // or use this ...
                 }
 
                 return true;
@@ -137,8 +143,10 @@ public class Pivot811 extends Application.Adapter {
 
     public static void main(String[] args) {
         // turn on debug drawing, to better see painting problems
-        System.setProperty("org.apache.pivot.wtk.debugfocus", "true");  // debug focus
-        // System.setProperty("org.apache.pivot.wtk.debugpaint", "true");  // debug paint
+        System.setProperty("org.apache.pivot.wtk.debugfocus", "true"); // debug
+                                                                       // focus
+        // System.setProperty("org.apache.pivot.wtk.debugpaint", "true"); //
+        // debug paint
 
         DesktopApplicationContext.main(new String[] { Pivot811.class.getName() });
     }

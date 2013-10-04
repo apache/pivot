@@ -22,9 +22,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.apache.pivot.collections.List;
-import org.apache.pivot.collections.ListListener;
-import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -171,8 +168,7 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object o) {
-        return (o instanceof EnumList<?>
-            && ((EnumList<E>)o).enumClass == enumClass);
+        return (o instanceof EnumList<?> && ((EnumList<E>) o).enumClass == enumClass);
     }
 
     @Override

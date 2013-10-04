@@ -59,28 +59,28 @@ public interface WindowStateListener {
 
     /**
      * Called when a window has opened.
-     *
+     * 
      * @param window
      */
     public void windowOpened(Window window);
 
     /**
      * Called to preview a window close event.
-     *
+     * 
      * @param window
      */
     public Vote previewWindowClose(Window window);
 
     /**
      * Called to preview a window open event.
-     *
+     * 
      * @param window
      */
     public Vote previewWindowOpen(Window window);
 
     /**
      * Called when a window close event has been vetoed.
-     *
+     * 
      * @param window
      * @param reason
      */
@@ -88,7 +88,7 @@ public interface WindowStateListener {
 
     /**
      * Called when a window open event has been vetoed.
-     *
+     * 
      * @param window
      * @param reason
      */
@@ -96,7 +96,7 @@ public interface WindowStateListener {
 
     /**
      * Called when a window has closed.
-     *
+     * 
      * @param window
      * @param display
      * @param owner

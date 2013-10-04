@@ -68,9 +68,9 @@ public interface VFSBrowserListener {
     }
 
     /**
-     * Called when a file browser's FileSystemManager has changed,
-     * (such as when a nested VirtualFileSystem is opened).
-     *
+     * Called when a file browser's FileSystemManager has changed, (such as when
+     * a nested VirtualFileSystem is opened).
+     * 
      * @param fileBrowser
      * @param previousManager
      */
@@ -78,7 +78,7 @@ public interface VFSBrowserListener {
 
     /**
      * Called when a file browser's root directory has changed.
-     *
+     * 
      * @param fileBrowser
      * @param previousRootDirectory
      */
@@ -86,7 +86,7 @@ public interface VFSBrowserListener {
 
     /**
      * Called when a file has been added to a file browser's selection.
-     *
+     * 
      * @param fileBrowser
      * @param file
      */
@@ -94,7 +94,7 @@ public interface VFSBrowserListener {
 
     /**
      * Called when a file has been removed from a file browser's selection.
-     *
+     * 
      * @param fileBrowser
      * @param file
      */
@@ -102,7 +102,7 @@ public interface VFSBrowserListener {
 
     /**
      * Called when a file browser's selection state has been reset.
-     *
+     * 
      * @param fileBrowser
      * @param previousSelectedFiles
      */
@@ -111,14 +111,14 @@ public interface VFSBrowserListener {
 
     /**
      * Called when a file browser's multi-select flag has changed.
-     *
+     * 
      * @param fileBrowser
      */
     public void multiSelectChanged(VFSBrowser fileBrowser);
 
     /**
      * Called when a file browser's file filter has changed.
-     *
+     * 
      * @param fileBrowser
      * @param previousDisabledFileFilter
      */

@@ -38,8 +38,10 @@ import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Window;
 
 public class FileBrowsing extends Window implements Bindable {
-    @BXML private ButtonGroup fileBrowserSheetModeGroup = null;
-    @BXML private PushButton openSheetButton = null;
+    @BXML
+    private ButtonGroup fileBrowserSheetModeGroup = null;
+    @BXML
+    private PushButton openSheetButton = null;
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
@@ -48,12 +50,13 @@ public class FileBrowsing extends Window implements Bindable {
             public void buttonPressed(Button button) {
                 Button selection = fileBrowserSheetModeGroup.getSelection();
 
-                String mode = (String)selection.getUserData().get("mode");
+                String mode = (String) selection.getUserData().get("mode");
                 FileBrowserSheet.Mode fileBrowserSheetMode = FileBrowserSheet.Mode.valueOf(mode.toUpperCase());
                 final FileBrowserSheet fileBrowserSheet = new FileBrowserSheet();
 
                 if (fileBrowserSheetMode == FileBrowserSheet.Mode.SAVE_AS) {
-                    fileBrowserSheet.setSelectedFile(new File(fileBrowserSheet.getRootDirectory(), "New File"));
+                    fileBrowserSheet.setSelectedFile(new File(fileBrowserSheet.getRootDirectory(),
+                        "New File"));
                 }
 
                 fileBrowserSheet.setMode(fileBrowserSheetMode);
@@ -68,9 +71,11 @@ public class FileBrowsing extends Window implements Bindable {
                             listView.setSelectMode(ListView.SelectMode.NONE);
                             listView.getStyles().put("backgroundColor", null);
 
-                            Alert.alert(MessageType.INFO, "You selected:", listView, FileBrowsing.this);
+                            Alert.alert(MessageType.INFO, "You selected:", listView,
+                                FileBrowsing.this);
                         } else {
-                            Alert.alert(MessageType.INFO, "You didn't select anything.", FileBrowsing.this);
+                            Alert.alert(MessageType.INFO, "You didn't select anything.",
+                                FileBrowsing.this);
                         }
                     }
                 });

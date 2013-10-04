@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface ComponentClassListener {
     /**
      * Called when the focused component changes.
-     *
+     * 
      * @param previousFocusedComponent
      */
     public void focusedComponentChanged(Component previousFocusedComponent);

@@ -35,14 +35,16 @@ import org.apache.pivot.wtk.Window;
 public class CalendarTest extends Application.Adapter {
     private Window window = null;
 
-    @BXML private Calendar calendar = null;
-    @BXML private CalendarButton calendarButton = null;
+    @BXML
+    private Calendar calendar = null;
+    @BXML
+    private CalendarButton calendarButton = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
-        window = (Window)bxmlSerializer.readObject(CalendarTest.class, "calendar_test.bxml");
+        window = (Window) bxmlSerializer.readObject(CalendarTest.class, "calendar_test.bxml");
         bxmlSerializer.bind(this, CalendarTest.class);
 
         Filter<CalendarDate> todayFilter = new Filter<CalendarDate>() {

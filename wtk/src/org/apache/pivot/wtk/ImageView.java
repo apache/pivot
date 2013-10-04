@@ -41,9 +41,7 @@ public class ImageView extends Component {
          * Defines the supported load type mappings.
          */
         public enum Type {
-            IMAGE,
-            URL,
-            NAME
+            IMAGE, URL, NAME
         }
 
         /**
@@ -54,15 +52,15 @@ public class ImageView extends Component {
         /**
          * Converts a value from the bind context to an image representation
          * during a {@link Component#load(Object)} operation.
-         *
+         * 
          * @param value
          */
         public Image toImage(Object value);
 
         /**
-         * Converts a value from the bind context to an image location during
-         * a {@link Component#load(Object)} operation.
-         *
+         * Converts a value from the bind context to an image location during a
+         * {@link Component#load(Object)} operation.
+         * 
          * @param value
          */
         public URL toImageURL(Object value);
@@ -70,7 +68,7 @@ public class ImageView extends Component {
         /**
          * Converts a value from the bind context to an image resource name
          * during a {@link Component#load(Object)} operation.
-         *
+         * 
          * @param value
          */
         public String toImageName(Object value);
@@ -78,14 +76,14 @@ public class ImageView extends Component {
         /**
          * Converts a text string to a value to be stored in the bind context
          * during a {@link Component#store(Object)} operation.
-         *
+         * 
          * @param image
          */
         public Object valueOf(Image image);
     }
 
-    private static class ImageViewListenerList extends WTKListenerList<ImageViewListener>
-        implements ImageViewListener {
+    private static class ImageViewListenerList extends WTKListenerList<ImageViewListener> implements
+        ImageViewListener {
         @Override
         public void imageChanged(ImageView imageView, Image previousImage) {
             for (ImageViewListener listener : this) {
@@ -101,8 +99,8 @@ public class ImageView extends Component {
         }
     }
 
-    private static class ImageViewBindingListenerList extends WTKListenerList<ImageViewBindingListener>
-        implements ImageViewBindingListener {
+    private static class ImageViewBindingListenerList extends
+        WTKListenerList<ImageViewBindingListener> implements ImageViewBindingListener {
         @Override
         public void imageKeyChanged(ImageView imageView, String previousImageKey) {
             for (ImageViewBindingListener listener : this) {
@@ -111,8 +109,7 @@ public class ImageView extends Component {
         }
 
         @Override
-        public void imageBindTypeChanged(ImageView imageView,
-            BindType previousImageBindType) {
+        public void imageBindTypeChanged(ImageView imageView, BindType previousImageBindType) {
             for (ImageViewBindingListener listener : this) {
                 listener.imageBindTypeChanged(imageView, previousImageBindType);
             }
@@ -136,10 +133,10 @@ public class ImageView extends Component {
     private ImageViewListenerList imageViewListeners = new ImageViewListenerList();
     private ImageViewBindingListenerList imageViewBindingListeners = new ImageViewBindingListenerList();
 
-    // Maintains a mapping of image URL to image views that should be notified when
+    // Maintains a mapping of image URL to image views that should be notified
+    // when
     // an asynchronously loaded image is available
-    private static HashMap<java.net.URI, ArrayList<ImageView>> loadMap =
-        new HashMap<>();
+    private static HashMap<java.net.URI, ArrayList<ImageView>> loadMap = new HashMap<>();
 
     /**
      * Creates an empty image view.
@@ -150,9 +147,8 @@ public class ImageView extends Component {
 
     /**
      * Creates an image view with the given image.
-     *
-     * @param image
-     * The initial image to set, or <tt>null</tt> for no image.
+     * 
+     * @param image The initial image to set, or <tt>null</tt> for no image.
      */
     public ImageView(Image image) {
         setImage(image);
@@ -162,9 +158,8 @@ public class ImageView extends Component {
 
     /**
      * Returns the image view's current image.
-     *
-     * @return
-     * The current image, or <tt>null</tt> if no image is set.
+     * 
+     * @return The current image, or <tt>null</tt> if no image is set.
      */
     public Image getImage() {
         return image;
@@ -172,9 +167,8 @@ public class ImageView extends Component {
 
     /**
      * Sets the image view's current image.
-     *
-     * @param image
-     * The image to set, or <tt>null</tt> for no image.
+     * 
+     * @param image The image to set, or <tt>null</tt> for no image.
      */
     public void setImage(Image image) {
         Image previousImage = this.image;
@@ -186,24 +180,23 @@ public class ImageView extends Component {
     }
 
     /**
-     * Sets the image view's current image by URL.
-     * <p>
-     * If the icon already exists in the application context resource cache,
-     * the cached value will be used. Otherwise, the icon will be loaded
-     * synchronously and added to the cache.
-     *
-     * @param imageURL
-     * The location of the image to set.
+     * Sets the image view's current image by URL. <p> If the icon already
+     * exists in the application context resource cache, the cached value will
+     * be used. Otherwise, the icon will be loaded synchronously and added to
+     * the cache.
+     * 
+     * @param imageURL The location of the image to set.
      */
     public final void setImage(final URL imageURL) {
         if (imageURL == null) {
             throw new IllegalArgumentException("imageURL is null.");
         }
 
-        Image imageLocal = (Image)ApplicationContext.getResourceCache().get(imageURL);
+        Image imageLocal = (Image) ApplicationContext.getResourceCache().get(imageURL);
 
         if (imageLocal == null) {
-            // Convert to URI because using a URL as a key causes performance problems
+            // Convert to URI because using a URL as a key causes performance
+            // problems
             final java.net.URI imageURI;
             try {
                 imageURI = imageURL.toURI();
@@ -213,7 +206,8 @@ public class ImageView extends Component {
 
             if (asynchronous) {
                 if (loadMap.containsKey(imageURI)) {
-                    // Add this to the list of image views that are interested in
+                    // Add this to the list of image views that are interested
+                    // in
                     // the image at this URL
                     loadMap.get(imageURI).add(this);
                 } else {
@@ -222,7 +216,8 @@ public class ImageView extends Component {
                         public void taskExecuted(Task<Image> task) {
                             Image imageLoadedLocal = task.getResult();
 
-                            // Update the contents of all image views that requested this
+                            // Update the contents of all image views that
+                            // requested this
                             // image
                             for (ImageView imageView : loadMap.get(imageURI)) {
                                 imageView.setImage(imageLoadedLocal);
@@ -251,12 +246,10 @@ public class ImageView extends Component {
     }
 
     /**
-     * Sets the image view's image by {@linkplain ClassLoader#getResource(String)
-     * resource name}.
-     *
-     * @param imageName
-     * The resource name of the image to set.
-     *
+     * Sets the image view's image by
+     * {@linkplain ClassLoader#getResource(String) resource name}.
+     * 
+     * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
      */
     public final void setImage(String imageName) {
@@ -274,10 +267,9 @@ public class ImageView extends Component {
 
     /**
      * Returns the image view's asynchronous flag.
-     *
-     * @return
-     * <tt>true</tt> if images specified via URL will be loaded in the background;
-     * <tt>false</tt> if they will be loaded synchronously.
+     * 
+     * @return <tt>true</tt> if images specified via URL will be loaded in the
+     * background; <tt>false</tt> if they will be loaded synchronously.
      */
     public boolean isAsynchronous() {
         return asynchronous;
@@ -285,10 +277,10 @@ public class ImageView extends Component {
 
     /**
      * Sets the image view's asynchronous flag.
-     *
-     * @param asynchronous
-     * <tt>true</tt> if images specified via URL will be loaded in the background;
-     * <tt>false</tt> if they will be loaded synchronously.
+     * 
+     * @param asynchronous <tt>true</tt> if images specified via URL will be
+     * loaded in the background; <tt>false</tt> if they will be loaded
+     * synchronously.
      */
     public void setAsynchronous(boolean asynchronous) {
         if (this.asynchronous != asynchronous) {
@@ -299,9 +291,8 @@ public class ImageView extends Component {
 
     /**
      * Returns the image view's image key.
-     *
-     * @return
-     * The image key, or <tt>null</tt> if no key is set.
+     * 
+     * @return The image key, or <tt>null</tt> if no key is set.
      */
     public String getImageKey() {
         return imageKey;
@@ -309,9 +300,8 @@ public class ImageView extends Component {
 
     /**
      * Sets the image view's image key.
-     *
-     * @param imageKey
-     * The image key, or <tt>null</tt> to clear the binding.
+     * 
+     * @param imageKey The image key, or <tt>null</tt> to clear the binding.
      */
     public void setImageKey(String imageKey) {
         String previousImageKey = this.imageKey;
@@ -354,8 +344,7 @@ public class ImageView extends Component {
 
     @Override
     public void load(Object context) {
-        if (imageKey != null
-            && JSON.containsKey(context, imageKey)
+        if (imageKey != null && JSON.containsKey(context, imageKey)
             && imageBindType != BindType.STORE) {
             Object value = JSON.get(context, imageKey);
 
@@ -382,33 +371,31 @@ public class ImageView extends Component {
                 }
             }
 
-            if (value == null
-                || value instanceof Image) {
-                setImage((Image)value);
+            if (value == null || value instanceof Image) {
+                setImage((Image) value);
             } else if (value instanceof URL) {
-                setImage((URL)value);
+                setImage((URL) value);
             } else if (value instanceof String) {
-                setImage((String)value);
+                setImage((String) value);
             } else {
-                throw new IllegalArgumentException(getClass().getName() + " can't bind to "
-                    + value + ".");
+                throw new IllegalArgumentException(getClass().getName() + " can't bind to " + value
+                    + ".");
             }
         }
     }
 
     @Override
     public void store(Object context) {
-        if (imageKey != null
-            && imageBindType != BindType.LOAD) {
-            JSON.put(context, imageKey, (imageBindMapping == null) ?
-                image : imageBindMapping.valueOf(image));
+        if (imageKey != null && imageBindType != BindType.LOAD) {
+            JSON.put(context, imageKey,
+                (imageBindMapping == null) ? image : imageBindMapping.valueOf(image));
         }
     }
 
     @Override
     public void clear() {
         if (imageKey != null) {
-            setImage((Image)null);
+            setImage((Image) null);
         }
     }
 

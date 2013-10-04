@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface SliderValueListener {
     /**
      * Called when a slider's value has changed.
-     *
+     * 
      * @param slider
      * @param previousValue
      */

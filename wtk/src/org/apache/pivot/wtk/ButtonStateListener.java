@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface ButtonStateListener {
     /**
      * Called when a button's state has changed.
-     *
+     * 
      * @param button
      * @param previousState
      */

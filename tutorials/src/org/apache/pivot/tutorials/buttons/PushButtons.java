@@ -33,7 +33,7 @@ public class PushButtons extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        pushButton = (PushButton)namespace.get("pushButton");
+        pushButton = (PushButton) namespace.get("pushButton");
 
         pushButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

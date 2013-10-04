@@ -58,7 +58,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     private static final int CORNER_RADIUS = 4;
 
     public TerraPushButtonSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -96,8 +96,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
                 contentHeight = Math.max(contentHeight - paddingHeight(), 0);
             }
 
-            preferredWidth = dataRenderer.getPreferredWidth(contentHeight)
-                + paddingWidth();
+            preferredWidth = dataRenderer.getPreferredWidth(contentHeight) + paddingWidth();
 
             // Adjust for preferred aspect ratio
             if (!Float.isNaN(minimumAspectRatio)
@@ -127,8 +126,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
                 contentWidth = Math.max(contentWidth - paddingWidth(), 0);
             }
 
-            preferredHeight = dataRenderer.getPreferredHeight(contentWidth)
-                + paddingHeight();
+            preferredHeight = dataRenderer.getPreferredHeight(contentWidth) + paddingHeight();
 
             // Adjust for preferred aspect ratio
             if (!Float.isNaN(maximumAspectRatio)
@@ -154,13 +152,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         // Adjust for preferred aspect ratio
         float aspectRatio = (float) preferredWidth / (float) preferredHeight;
 
-        if (!Float.isNaN(minimumAspectRatio)
-            && aspectRatio < minimumAspectRatio) {
+        if (!Float.isNaN(minimumAspectRatio) && aspectRatio < minimumAspectRatio) {
             preferredWidth = (int) (preferredHeight * minimumAspectRatio);
         }
 
-        if (!Float.isNaN(maximumAspectRatio)
-            && aspectRatio > maximumAspectRatio) {
+        if (!Float.isNaN(maximumAspectRatio) && aspectRatio > maximumAspectRatio) {
             preferredHeight = (int) (preferredWidth / maximumAspectRatio);
         }
 
@@ -196,13 +192,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         Color bevelColorLocal = null;
         Color borderColorLocal = null;
 
-        if (!toolbar
-            || highlighted
-            || pushButton.isFocused()) {
+        if (!toolbar || highlighted || pushButton.isFocused()) {
             if (pushButton.isEnabled()) {
                 backgroundColorLocal = this.backgroundColor;
-                bevelColorLocal = (pressed
-                    || pushButton.isSelected()) ? pressedBevelColor : this.bevelColor;
+                bevelColorLocal = (pressed || pushButton.isSelected()) ? pressedBevelColor
+                    : this.bevelColor;
                 borderColorLocal = this.borderColor;
             } else {
                 backgroundColorLocal = disabledBackgroundColor;
@@ -215,10 +209,9 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        if (backgroundColorLocal != null
-            && bevelColorLocal != null) {
-            graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal,
-                width / 2f, height / 2f, backgroundColorLocal));
+        if (backgroundColorLocal != null && bevelColorLocal != null) {
+            graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
+                height / 2f, backgroundColorLocal));
             graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
                 CORNER_RADIUS, CORNER_RADIUS));
         }
@@ -229,10 +222,8 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
         dataRenderer.render(pushButton.getButtonData(), pushButton, highlighted);
-        dataRenderer.setSize(
-            Math.max(width - paddingWidth(), 0),
-            Math.max(getHeight() - paddingHeight(), 0)
-        );
+        dataRenderer.setSize(Math.max(width - paddingWidth(), 0),
+            Math.max(getHeight() - paddingHeight(), 0));
 
         Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(padding.left + 1, padding.top + 1);
@@ -252,14 +243,13 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         // Paint the focus state
-        if (pushButton.isFocused()
-            && !toolbar) {
+        if (pushButton.isFocused() && !toolbar) {
             BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
+                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
             graphics.setStroke(dashStroke);
             graphics.setColor(this.borderColor);
-            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0),
-                Math.max(height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
+            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0), Math.max(
+                height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
         }
     }
 
@@ -270,10 +260,8 @@ public class TerraPushButtonSkin extends PushButtonSkin {
 
     @Override
     public boolean isOpaque() {
-        PushButton pushButton = (PushButton)getComponent();
-        return (!toolbar
-            || highlighted
-            || pushButton.isFocused());
+        PushButton pushButton = (PushButton) getComponent();
+        return (!toolbar || highlighted || pushButton.isFocused());
     }
 
     public Font getFont() {
@@ -327,7 +315,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -353,7 +341,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -381,7 +369,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -408,7 +396,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
@@ -434,7 +422,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -460,7 +448,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 
@@ -518,9 +506,9 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public void setMinimumAspectRatio(float minimumAspectRatio) {
-        if (!Float.isNaN(maximumAspectRatio)
-            && minimumAspectRatio > maximumAspectRatio) {
-            throw new IllegalArgumentException("minimumAspectRatio is greater than maximumAspectRatio.");
+        if (!Float.isNaN(maximumAspectRatio) && minimumAspectRatio > maximumAspectRatio) {
+            throw new IllegalArgumentException(
+                "minimumAspectRatio is greater than maximumAspectRatio.");
         }
 
         this.minimumAspectRatio = minimumAspectRatio;
@@ -540,9 +528,9 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public void setMaximumAspectRatio(float maximumAspectRatio) {
-        if (!Float.isNaN(minimumAspectRatio)
-            && maximumAspectRatio < minimumAspectRatio) {
-            throw new IllegalArgumentException("maximumAspectRatio is less than minimumAspectRatio.");
+        if (!Float.isNaN(minimumAspectRatio) && maximumAspectRatio < minimumAspectRatio) {
+            throw new IllegalArgumentException(
+                "maximumAspectRatio is less than minimumAspectRatio.");
         }
 
         this.maximumAspectRatio = maximumAspectRatio;
@@ -564,8 +552,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     public void setToolbar(boolean toolbar) {
         this.toolbar = toolbar;
 
-        if (toolbar &&
-            getComponent().isFocused()) {
+        if (toolbar && getComponent().isFocused()) {
             Component.clearFocus();
         }
 
@@ -576,8 +563,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     public void mouseOut(Component component) {
         super.mouseOut(component);
 
-        if (toolbar
-            && component.isFocused()) {
+        if (toolbar && component.isFocused()) {
             Component.clearFocus();
         }
     }

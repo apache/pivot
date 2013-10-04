@@ -44,7 +44,8 @@ public class TablePanes extends Window implements Bindable {
         private int y = -1;
 
         @Override
-        public boolean configureContextMenu(Component component, Menu menu, int xArgument, int yArgument) {
+        public boolean configureContextMenu(Component component, Menu menu, int xArgument,
+            int yArgument) {
             this.x = xArgument;
             this.y = yArgument;
 
@@ -103,7 +104,7 @@ public class TablePanes extends Window implements Bindable {
                 bxmlSerializer.getNamespace().put("component", component);
 
                 try {
-                    sheet = (Sheet)bxmlSerializer.readObject(TablePanes.class,
+                    sheet = (Sheet) bxmlSerializer.readObject(TablePanes.class,
                         "table_panes_configure_cell.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
@@ -127,7 +128,7 @@ public class TablePanes extends Window implements Bindable {
                 bxmlSerializer.getNamespace().put("row", row);
 
                 try {
-                    sheet = (Sheet)bxmlSerializer.readObject(TablePanes.class,
+                    sheet = (Sheet) bxmlSerializer.readObject(TablePanes.class,
                         "table_panes_configure_row.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
@@ -162,7 +163,7 @@ public class TablePanes extends Window implements Bindable {
                 bxmlSerializer.getNamespace().put("row", row);
 
                 try {
-                    sheet = (Sheet)bxmlSerializer.readObject(TablePanes.class,
+                    sheet = (Sheet) bxmlSerializer.readObject(TablePanes.class,
                         "table_panes_configure_row.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
@@ -209,7 +210,7 @@ public class TablePanes extends Window implements Bindable {
                 bxmlSerializer.getNamespace().put("column", column);
 
                 try {
-                    sheet = (Sheet)bxmlSerializer.readObject(TablePanes.class,
+                    sheet = (Sheet) bxmlSerializer.readObject(TablePanes.class,
                         "table_panes_configure_column.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
@@ -245,7 +246,7 @@ public class TablePanes extends Window implements Bindable {
                 bxmlSerializer.getNamespace().put("column", column);
 
                 try {
-                    sheet = (Sheet)bxmlSerializer.readObject(TablePanes.class,
+                    sheet = (Sheet) bxmlSerializer.readObject(TablePanes.class,
                         "table_panes_configure_column.bxml");
                 } catch (SerializationException exception) {
                     throw new RuntimeException(exception);
@@ -289,10 +290,10 @@ public class TablePanes extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        tablePane = (TablePane)namespace.get("tablePane");
-        cellSection = (Menu.Section)namespace.get("cellSection");
-        rowSection = (Menu.Section)namespace.get("rowSection");
-        columnSection = (Menu.Section)namespace.get("columnSection");
+        tablePane = (TablePane) namespace.get("tablePane");
+        cellSection = (Menu.Section) namespace.get("cellSection");
+        rowSection = (Menu.Section) namespace.get("rowSection");
+        columnSection = (Menu.Section) namespace.get("columnSection");
 
         tablePane.setMenuHandler(contextMenuHandler);
     }

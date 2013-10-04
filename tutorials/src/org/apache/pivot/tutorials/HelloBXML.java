@@ -27,10 +27,9 @@ public class HelloBXML implements Application {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        this.window = (Window)bxmlSerializer.readObject(HelloBXML.class, "hello.bxml");
+        this.window = (Window) bxmlSerializer.readObject(HelloBXML.class, "hello.bxml");
         this.window.open(display);
     }
 

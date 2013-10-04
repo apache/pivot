@@ -17,8 +17,8 @@
 package org.apache.pivot.util;
 
 /**
- * Implements the "base64" binary encoding scheme as defined by
- * <a href="http://tools.ietf.org/html/rfc2045">RFC 2045</a>.
+ * Implements the "base64" binary encoding scheme as defined by <a
+ * href="http://tools.ietf.org/html/rfc2045">RFC 2045</a>.
  */
 public final class Base64 {
     private static final char[] lookup = new char[64];
@@ -28,15 +28,15 @@ public final class Base64 {
         // Populate the lookup array
 
         for (int i = 0; i < 26; i++) {
-            lookup[i] = (char)('A' + i);
+            lookup[i] = (char) ('A' + i);
         }
 
         for (int i = 26, j = 0; i < 52; i++, j++) {
-            lookup[i] = (char)('a' + j);
+            lookup[i] = (char) ('a' + j);
         }
 
         for (int i = 52, j = 0; i < 62; i++, j++) {
-            lookup[i] = (char)('0' + j);
+            lookup[i] = (char) ('0' + j);
         }
 
         lookup[62] = '+';
@@ -49,15 +49,15 @@ public final class Base64 {
         }
 
         for (int i = 'Z'; i >= 'A'; i--) {
-            reverseLookup[i] = (byte)(i - 'A');
+            reverseLookup[i] = (byte) (i - 'A');
         }
 
         for (int i = 'z'; i >= 'a'; i--) {
-            reverseLookup[i] = (byte)(i - 'a' + 26);
+            reverseLookup[i] = (byte) (i - 'a' + 26);
         }
 
         for (int i = '9'; i >= '0'; i--) {
-            reverseLookup[i] = (byte)(i - '0' + 52);
+            reverseLookup[i] = (byte) (i - '0' + 52);
         }
 
         reverseLookup['+'] = 62;
@@ -73,14 +73,13 @@ public final class Base64 {
 
     /**
      * Encodes the specified data into a base64 string.
-     *
-     * @param bytes
-     * The unencoded raw data.
+     * 
+     * @param bytes The unencoded raw data.
      */
     public static String encode(byte[] bytes) {
         StringBuilder buf = new StringBuilder(4 * (bytes.length / 3 + 1));
 
-        for (int i = 0, n = bytes.length; i < n; ) {
+        for (int i = 0, n = bytes.length; i < n;) {
             byte byte0 = bytes[i++];
             byte byte1 = (i++ < n) ? bytes[i - 1] : 0;
             byte byte2 = (i++ < n) ? bytes[i - 1] : 0;
@@ -102,9 +101,8 @@ public final class Base64 {
 
     /**
      * Decodes the specified base64 string back into its raw data.
-     *
-     * @param encoded
-     * The base64 encoded string.
+     * 
+     * @param encoded The base64 encoded string.
      */
     public static byte[] decode(String encoded) {
         int padding = 0;
@@ -123,7 +121,7 @@ public final class Base64 {
             word += reverseLookup[encoded.charAt(i + 3)];
 
             for (int j = 0; j < 3 && index + j < length; j++) {
-                bytes[index + j] = (byte)(word >> (8 * (2 - j)));
+                bytes[index + j] = (byte) (word >> (8 * (2 - j)));
             }
 
             index += 3;

@@ -34,7 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.pivot.collections.HashSet;
 
-
 /**
  * HTTP proxy that allows an unsigned applet to issue web queries to services
  * outside of its origin server.
@@ -86,8 +85,7 @@ public class ProxyServlet extends HttpServlet {
     }
 
     @Override
-    public void init(ServletConfig config)
-        throws ServletException {
+    public void init(ServletConfig config) throws ServletException {
         super.init();
 
         hostname = config.getInitParameter(HOSTNAME_PARAM);
@@ -129,14 +127,14 @@ public class ProxyServlet extends HttpServlet {
         URL url = null;
         try {
             url = new URL(request.getScheme(), hostname, port, pathLocal);
-        } catch(MalformedURLException exception) {
+        } catch (MalformedURLException exception) {
             throw new ServletException("Unable to construct URL.", exception);
         }
 
         String method = request.getMethod();
 
         // Open a connection to the URL
-        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(method);
         connection.setAllowUserInteraction(false);
         connection.setInstanceFollowRedirects(false);
@@ -182,7 +180,7 @@ public class ProxyServlet extends HttpServlet {
                 outputStream = connection.getOutputStream();
                 outputStream = new BufferedOutputStream(outputStream, BUFFER_SIZE);
                 for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
-                    outputStream.write((byte)data);
+                    outputStream.write((byte) data);
                 }
             } finally {
                 if (outputStream != null) {
@@ -195,8 +193,7 @@ public class ProxyServlet extends HttpServlet {
         int status = connection.getResponseCode();
         int statusPrefix = status / 100;
 
-        if (statusPrefix == 1
-            || statusPrefix == 3) {
+        if (statusPrefix == 1 || statusPrefix == 3) {
             throw new ServletException("Unexpected server response: " + status);
         }
 
@@ -205,9 +202,7 @@ public class ProxyServlet extends HttpServlet {
         // Write response headers
         // NOTE Header indexes start at 1, not 0
         int i = 1;
-        for (String key = connection.getHeaderFieldKey(i);
-            key != null;
-            key = connection.getHeaderFieldKey(++i)) {
+        for (String key = connection.getHeaderFieldKey(i); key != null; key = connection.getHeaderFieldKey(++i)) {
             if (!ignoreResponseHeaders.contains(key)) {
                 String value = connection.getHeaderField(i);
 
@@ -227,7 +222,7 @@ public class ProxyServlet extends HttpServlet {
                 try {
                     // Response returned on input stream
                     inputStream = connection.getInputStream();
-                } catch(Exception exception) {
+                } catch (Exception exception) {
                     // Response returned on error stream
                     inputStream = connection.getErrorStream();
                 }
@@ -237,7 +232,7 @@ public class ProxyServlet extends HttpServlet {
 
                     OutputStream outputStream = response.getOutputStream();
                     for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
-                        outputStream.write((byte)data);
+                        outputStream.write((byte) data);
                     }
                 }
 

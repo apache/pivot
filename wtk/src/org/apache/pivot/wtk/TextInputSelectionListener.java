@@ -22,17 +22,13 @@ package org.apache.pivot.wtk;
 public interface TextInputSelectionListener {
     /**
      * Called when a text input's selection state has changed.
-     *
-     * @param textInput
-     * The source of the event.
-     *
-     * @param previousSelectionStart
-     * If the selection changed directly, the previous selection start index.
-     * Otherwise, the current selection start index.
-     *
-     * @param previousSelectionLength
-     * If the selection changed directly, the previous selection length.
-     * Otherwise, the current selection length.
+     * 
+     * @param textInput The source of the event.
+     * @param previousSelectionStart If the selection changed directly, the
+     * previous selection start index. Otherwise, the current selection start
+     * index.
+     * @param previousSelectionLength If the selection changed directly, the
+     * previous selection length. Otherwise, the current selection length.
      */
     public void selectionChanged(TextInput textInput, int previousSelectionStart,
         int previousSelectionLength);

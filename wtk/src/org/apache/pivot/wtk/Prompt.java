@@ -118,8 +118,8 @@ public class Prompt extends Sheet {
         }
     }
 
-    private static class PromptListenerList extends WTKListenerList<PromptListener>
-        implements PromptListener {
+    private static class PromptListenerList extends WTKListenerList<PromptListener> implements
+        PromptListener {
         @Override
         public void messageTypeChanged(Prompt prompt, MessageType previousMessageType) {
             for (PromptListener listener : this) {
@@ -178,7 +178,7 @@ public class Prompt extends Sheet {
     static {
         try {
             resources = new Resources(Prompt.class.getName());
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
     }
@@ -312,8 +312,8 @@ public class Prompt extends Sheet {
         prompt(messageType, message, body, owner, null);
     }
 
-    public static void prompt(MessageType messageType, String message, Component body, Window owner,
-        SheetCloseListener sheetCloseListener) {
+    public static void prompt(MessageType messageType, String message, Component body,
+        Window owner, SheetCloseListener sheetCloseListener) {
         Prompt prompt = new Prompt(messageType, message, null, body);
         prompt.open(owner, sheetCloseListener);
     }

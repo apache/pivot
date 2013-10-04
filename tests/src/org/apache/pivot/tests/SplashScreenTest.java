@@ -39,35 +39,25 @@ import org.apache.pivot.wtk.Window;
 
 /**
  * Test Application for demonstrating the <code>--preserveSplashScreen</code>
- * Pivot startup property.<br/>
- *
- * This desktop application simulates some task processing while a SplashScreen
- * is displayed, before forcing the Pivot host window to become visible which in
- * turn hides the SplashScreen.<br/>The progress of the simulated tasks is shown
- * using a Pivot Meter that paints onto the SplashScreen as the tasks
- * 'complete'. <br/><br/>
- *
- * If <code>--preserveSplashScreen</code> is set to <code>true</code> and there
- * is a SplashScreen, DesktopApplicationContext will not make the Pivot host
- * window visible until
- * {@link DesktopApplicationContext#replaceSplashScreen(Display)
- * replaceSplashScreen(Display)} is called.<br/><br/>
- *
- * If <code>--preserveSplashScreen</code> is set to <code>false</code>, is not
+ * Pivot startup property.<br/> This desktop application simulates some task
+ * processing while a SplashScreen is displayed, before forcing the Pivot host
+ * window to become visible which in turn hides the SplashScreen.<br/>The
+ * progress of the simulated tasks is shown using a Pivot Meter that paints onto
+ * the SplashScreen as the tasks 'complete'. <br/><br/> If
+ * <code>--preserveSplashScreen</code> is set to <code>true</code> and there is
+ * a SplashScreen, DesktopApplicationContext will not make the Pivot host window
+ * visible until {@link DesktopApplicationContext#replaceSplashScreen(Display)
+ * replaceSplashScreen(Display)} is called.<br/><br/> If
+ * <code>--preserveSplashScreen</code> is set to <code>false</code>, is not
  * supplied, or there is no SplashScreen, DesktopApplicationContext make the
  * Pivot host window visible as normal. Any calls to
  * {@link DesktopApplicationContext#replaceSplashScreen(Display)
- * replaceSplashScreen(Display)} will have no effect.<br/><br/>
- *
- * <b>Example usage</b> (all one line)
- * <pre>
- * java -classpath bin;
- *      -splash:bin/org/apache/pivot/tests/splash.png
- *      org.apache.pivot.tests.SplashScreenTest
- *      --preserveSplashScreen=true
- *      --fullScreen=false
- * </pre>
- *
+ * replaceSplashScreen(Display)} will have no effect.<br/><br/> <b>Example
+ * usage</b> (all one line) <pre> java -classpath bin;
+ * -splash:bin/org/apache/pivot/tests/splash.png
+ * org.apache.pivot.tests.SplashScreenTest --preserveSplashScreen=true
+ * --fullScreen=false </pre>
+ * 
  * @see SplashScreen
  * @see DesktopApplicationContext#replaceSplashScreen(Display)
  * @see DesktopApplicationContext#PRESERVE_SPLASH_SCREEN_ARGUMENT
@@ -84,8 +74,7 @@ public class SplashScreenTest extends Application.Adapter {
             if (splashScreen != null) {
                 configureMeter(256, 16);
                 configureGraphics();
-            }
-            else {
+            } else {
                 System.err.println("Splash Screen not found");
             }
         }
@@ -94,7 +83,7 @@ public class SplashScreenTest extends Application.Adapter {
         // 0.0 and and 1.0 (representing 0% and 100% respectively)
         private void increment(final double increment) {
             if (splashScreen == null) {
-                return ;
+                return;
             }
 
             double percentage = meter.getPercentage() + increment;
@@ -127,7 +116,6 @@ public class SplashScreenTest extends Application.Adapter {
         }
     }
 
-
     @Override
     public void startup(final Display display, Map<String, String> properties) throws Exception {
 
@@ -135,8 +123,7 @@ public class SplashScreenTest extends Application.Adapter {
         System.out.println("To show the Splash Screen, remember to run as a Standard Java Application, and with the arguments: "
             + "-splash:/org/apache/pivot/tests/splash.png "
             + "--preserveSplashScreen=true "
-            + ", or no splash screen will be shown"
-        );
+            + ", or no splash screen will be shown");
 
         // Create a Task that will load a BXML file and simulate some other
         // processing while updating a progress meter on the SplashScreen
@@ -172,8 +159,8 @@ public class SplashScreenTest extends Application.Adapter {
                         public void run() {
                             Window window = null;
                             try {
-                                window = (Window) new BXMLSerializer().readObject(
-                                        this.getClass().getResource("splash.bxml"));
+                                window = (Window) new BXMLSerializer().readObject(this.getClass().getResource(
+                                    "splash.bxml"));
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
@@ -212,7 +199,6 @@ public class SplashScreenTest extends Application.Adapter {
         // Run the Task asynchronously
         prepareApplicationTask.execute(new TaskAdapter<>(taskListener));
     }
-
 
     @Override
     public boolean shutdown(boolean optional) throws Exception {

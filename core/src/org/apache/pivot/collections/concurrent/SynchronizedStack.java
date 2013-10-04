@@ -28,8 +28,7 @@ import org.apache.pivot.util.ListenerList;
  * Synchronized implementation of the {@link Stack} interface.
  */
 public class SynchronizedStack<T> implements Stack<T> {
-    private static class SynchronizedStackListenerList<T>
-        extends StackListenerList<T> {
+    private static class SynchronizedStackListenerList<T> extends StackListenerList<T> {
         @Override
         public synchronized void add(StackListener<T> listener) {
             super.add(listener);
@@ -80,8 +79,7 @@ public class SynchronizedStack<T> implements Stack<T> {
 
             item = stack.pop();
             stackListeners.itemPopped(this, item);
-        }
-        catch(InterruptedException exception) {
+        } catch (InterruptedException exception) {
             // empty block
         }
 
@@ -124,8 +122,8 @@ public class SynchronizedStack<T> implements Stack<T> {
     }
 
     /**
-     * NOTE Callers must manually synchronize on the SynchronizedStack
-     * instance to ensure thread safety during iteration.
+     * NOTE Callers must manually synchronize on the SynchronizedStack instance
+     * to ensure thread safety during iteration.
      */
     @Override
     public Iterator<T> iterator() {

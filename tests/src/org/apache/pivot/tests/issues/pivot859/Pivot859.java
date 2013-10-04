@@ -50,7 +50,6 @@ public class Pivot859 extends Application.Adapter {
     private String appletName = null;
     private String defaultURL = null;
 
-
     @Override
     public void startup(final Display display, Map<String, String> properties) throws Exception {
         System.out.println("startup(...)");
@@ -73,9 +72,8 @@ public class Pivot859 extends Application.Adapter {
     }
 
     /**
-     * Set the Applet name.
-     * <p>
-     * Called by JavaScript from the Browser.
+     * Set the Applet name. <p> Called by JavaScript from the Browser.
+     * 
      * @param name the name
      */
     public void setAppletName(String name) {
@@ -84,22 +82,20 @@ public class Pivot859 extends Application.Adapter {
     }
 
     /**
-     * Get the Applet name.
-     * <p>
-     * Called by JavaScript from the Browser.
+     * Get the Applet name. <p> Called by JavaScript from the Browser.
+     * 
      * @return the name
      */
     public String getAppletName() {
         return appletName;
     }
 
-
     private void initializeProperties(Map<String, String> properties) {
         defaultURL = properties.get("default_url");
-        if (defaultURL == null){
+        if (defaultURL == null) {
             defaultURL = "";
         }
-        if (defaultURL.length() > 0){
+        if (defaultURL.length() > 0) {
             System.out.println("got default URL from startup properties, to \"" + defaultURL + "\"");
         }
     }
@@ -107,12 +103,12 @@ public class Pivot859 extends Application.Adapter {
     private void initializeFields(BXMLSerializer serializer) {
         System.out.println("initializeFields: start");
 
-        urlInput = (TextInput)serializer.getNamespace().get("textInput");
-        if (defaultURL.length() > 0){
+        urlInput = (TextInput) serializer.getNamespace().get("textInput");
+        if (defaultURL.length() > 0) {
             urlInput.setText(defaultURL);
         }
 
-        goButton = (PushButton)serializer.getNamespace().get("goButton");
+        goButton = (PushButton) serializer.getNamespace().get("goButton");
         goButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
@@ -121,8 +117,8 @@ public class Pivot859 extends Application.Adapter {
             }
         });
 
-        contentArea = (TextArea)serializer.getNamespace().get("textArea");
-        clearButton = (PushButton)serializer.getNamespace().get("clearButton");
+        contentArea = (TextArea) serializer.getNamespace().get("textArea");
+        clearButton = (PushButton) serializer.getNamespace().get("clearButton");
         clearButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
@@ -130,13 +126,13 @@ public class Pivot859 extends Application.Adapter {
             }
         });
 
-        statusLabel = (Label)serializer.getNamespace().get("textStatus");
+        statusLabel = (Label) serializer.getNamespace().get("textStatus");
 
         System.out.println("initializeFields: end");
     }
 
     private String getAppletNameForLog() {
-        return ( (getAppletName() != null) ? getAppletName() + ": " : "" );
+        return ((getAppletName() != null) ? getAppletName() + ": " : "");
     }
 
     private void updateStatus(String status) {
@@ -164,13 +160,14 @@ public class Pivot859 extends Application.Adapter {
     }
 
     /**
-     * Retrieve content from the given URL (in applet GUI), but in a synchronous way.
+     * Retrieve content from the given URL (in applet GUI), but in a synchronous
+     * way.
      */
     private void retrieveURLContentSync() {
         URL url = buildURL();
         if (url == null) {
             updateStatus("Unable to retrieve content from a bad URL");
-            return ;
+            return;
         }
 
         try {
@@ -181,7 +178,7 @@ public class Pivot859 extends Application.Adapter {
             @SuppressWarnings("resource")
             InputStream inputStream = url.openStream();
             String result = serializer.readObject(inputStream);
-            if (result == null){
+            if (result == null) {
                 result = "";
             }
             long end = System.currentTimeMillis();
@@ -193,8 +190,8 @@ public class Pivot859 extends Application.Adapter {
         }
     }
 
-// TODO: retrieve content in the usual asynchronous way, but maybe in another method ...
-
+    // TODO: retrieve content in the usual asynchronous way, but maybe in
+    // another method ...
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(Pivot859.class, args);

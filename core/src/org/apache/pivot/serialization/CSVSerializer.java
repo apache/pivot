@@ -42,8 +42,8 @@ import org.apache.pivot.io.EchoWriter;
 import org.apache.pivot.util.ListenerList;
 
 /**
- * Implementation of the {@link Serializer} interface that reads data from
- * and writes data to a comma-separated value (CSV) file.
+ * Implementation of the {@link Serializer} interface that reads data from and
+ * writes data to a comma-separated value (CSV) file.
  */
 public class CSVSerializer implements Serializer<List<?>> {
     private static class CSVSerializerListenerList extends ListenerList<CSVSerializerListener>
@@ -138,7 +138,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Sets the keys that will be read or written by this serializer.
-     *
+     * 
      * @param keys
      */
     public void setKeys(Sequence<String> keys) {
@@ -151,7 +151,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Sets the keys that will be read or written by this serializer.
-     *
+     * 
      * @param keys
      */
     public void setKeys(String... keys) {
@@ -171,10 +171,10 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Sets the serializer's write keys flag.
-     *
-     * @param writeKeys
-     * If <tt>true</tt>, the first line of the output will contain the keys.
-     * Otherwise, the first line will contain the first line of data.
+     * 
+     * @param writeKeys If <tt>true</tt>, the first line of the output will
+     * contain the keys. Otherwise, the first line will contain the first line
+     * of data.
      */
     public void setWriteKeys(boolean writeKeys) {
         this.writeKeys = writeKeys;
@@ -188,9 +188,9 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     /**
-     * Sets the serializer's verbosity flag. When verbosity is enabled, all data read or
-     * written will be echoed to the console.
-     *
+     * Sets the serializer's verbosity flag. When verbosity is enabled, all data
+     * read or written will be echoed to the console.
+     * 
      * @param verbose
      */
     public void setVerbose(boolean verbose) {
@@ -199,16 +199,13 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Reads values from a comma-separated value stream.
-     *
-     * @param inputStream
-     * The input stream from which data will be read.
-     *
+     * 
+     * @param inputStream The input stream from which data will be read.
      * @see #readObject(Reader)
      */
     @SuppressWarnings("resource")
     @Override
-    public List<?> readObject(InputStream inputStream)
-        throws IOException, SerializationException {
+    public List<?> readObject(InputStream inputStream) throws IOException, SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
         }
@@ -223,20 +220,15 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Reads values from a comma-separated value stream.
-     *
-     * @param reader
-     * The reader from which data will be read.
-     *
-     * @return
-     * A list containing the data read from the CSV file. The list items are
-     * instances of Dictionary<String, Object> populated by mapping columns in
-     * the CSV file to keys in the key sequence.
-     * <p>
-     * If no keys have been specified when this method is called, they are assumed
-     * to be defined in the first line of the file.
+     * 
+     * @param reader The reader from which data will be read.
+     * @return A list containing the data read from the CSV file. The list items
+     * are instances of Dictionary<String, Object> populated by mapping columns
+     * in the CSV file to keys in the key sequence. <p> If no keys have been
+     * specified when this method is called, they are assumed to be defined in
+     * the first line of the file.
      */
-    public List<?> readObject(Reader reader)
-        throws IOException, SerializationException {
+    public List<?> readObject(Reader reader) throws IOException, SerializationException {
         if (reader == null) {
             throw new IllegalArgumentException("reader is null.");
         }
@@ -281,8 +273,7 @@ public class CSVSerializer implements Serializer<List<?>> {
                     items.add(item);
 
                     // Move to next line
-                    while (c != -1
-                        && (c == '\r' || c == '\n')) {
+                    while (c != -1 && (c == '\r' || c == '\n')) {
                         c = lineNumberReader.read();
                     }
 
@@ -306,8 +297,7 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     @SuppressWarnings("unchecked")
-    private Object readItem(Reader reader)
-        throws IOException, SerializationException {
+    private Object readItem(Reader reader) throws IOException, SerializationException {
         Object item = null;
 
         if (c != -1) {
@@ -316,22 +306,22 @@ public class CSVSerializer implements Serializer<List<?>> {
 
             try {
                 if (itemType instanceof ParameterizedType) {
-                    ParameterizedType parameterizedItemType = (ParameterizedType)itemType;
-                    Class<?> rawItemType = (Class<?>)parameterizedItemType.getRawType();
+                    ParameterizedType parameterizedItemType = (ParameterizedType) itemType;
+                    Class<?> rawItemType = (Class<?>) parameterizedItemType.getRawType();
                     item = rawItemType.newInstance();
                 } else {
-                    Class<?> classItemType = (Class<?>)itemType;
+                    Class<?> classItemType = (Class<?>) itemType;
                     item = classItemType.newInstance();
                 }
 
                 if (item instanceof Dictionary<?, ?>) {
-                    itemDictionary = (Dictionary<String, Object>)item;
+                    itemDictionary = (Dictionary<String, Object>) item;
                 } else {
                     itemDictionary = new BeanAdapter(item);
                 }
-            } catch(IllegalAccessException exception) {
+            } catch (IllegalAccessException exception) {
                 throw new SerializationException(exception);
-            } catch(InstantiationException exception) {
+            } catch (InstantiationException exception) {
                 throw new SerializationException(exception);
             }
 
@@ -340,8 +330,8 @@ public class CSVSerializer implements Serializer<List<?>> {
                 String key = keys.get(i);
                 String value = readValue(reader);
                 if (value == null) {
-                    throw new SerializationException("Error reading value for "
-                        + key + " from input stream.");
+                    throw new SerializationException("Error reading value for " + key
+                        + " from input stream.");
                 }
 
                 if (c == '\r' || c == '\n') {
@@ -369,14 +359,12 @@ public class CSVSerializer implements Serializer<List<?>> {
         return item;
     }
 
-    private String readValue(Reader reader)
-        throws IOException, SerializationException {
+    private String readValue(Reader reader) throws IOException, SerializationException {
         String value = null;
 
         // Read the next value from this line, returning null if there are
         // no more values on the line
-        if (c != -1
-            && (c != '\r' && c != '\n')) {
+        if (c != -1 && (c != '\r' && c != '\n')) {
             // Read the value
             StringBuilder valueBuilder = new StringBuilder();
 
@@ -387,8 +375,7 @@ public class CSVSerializer implements Serializer<List<?>> {
                 c = reader.read();
             }
 
-            while (c != -1
-                && (quoted || (c != ',' && c != '\r' && c != '\n'))) {
+            while (c != -1 && (quoted || (c != ',' && c != '\r' && c != '\n'))) {
                 if (c == '"') {
                     if (!quoted) {
                         throw new SerializationException("Dangling quote.");
@@ -396,17 +383,15 @@ public class CSVSerializer implements Serializer<List<?>> {
 
                     c = reader.read();
 
-                    if (c != '"'
-                        && (c != ',' && c != '\r' && c != '\n' && c != -1)) {
+                    if (c != '"' && (c != ',' && c != '\r' && c != '\n' && c != -1)) {
                         throw new SerializationException("Prematurely terminated quote.");
                     }
 
                     quoted &= (c == '"');
                 }
 
-                if (c != -1
-                    && (quoted || (c != ',' && c != '\r' && c != '\n'))) {
-                    valueBuilder.append((char)c);
+                if (c != -1 && (quoted || (c != ',' && c != '\r' && c != '\n'))) {
+                    valueBuilder.append((char) c);
                     c = reader.read();
                 }
             }
@@ -417,7 +402,8 @@ public class CSVSerializer implements Serializer<List<?>> {
 
             value = valueBuilder.toString();
 
-            // Move to the next character after ',' (don't automatically advance to
+            // Move to the next character after ',' (don't automatically advance
+            // to
             // the next line)
             if (c == ',') {
                 c = reader.read();
@@ -434,18 +420,15 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Writes values to a comma-separated value stream.
-     *
+     * 
      * @param items
-     *
-     * @param outputStream
-     * The output stream to which data will be written.
-     *
+     * @param outputStream The output stream to which data will be written.
      * @see #writeObject(List, Writer)
      */
     @SuppressWarnings("resource")
     @Override
-    public void writeObject(List<?> items, OutputStream outputStream)
-        throws IOException, SerializationException {
+    public void writeObject(List<?> items, OutputStream outputStream) throws IOException,
+        SerializationException {
         if (items == null) {
             throw new IllegalArgumentException("items is null.");
         }
@@ -454,7 +437,8 @@ public class CSVSerializer implements Serializer<List<?>> {
             throw new IllegalArgumentException("outputStream is null.");
         }
 
-        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset), BUFFER_SIZE);
+        Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
+            BUFFER_SIZE);
         if (verbose) {
             writer = new EchoWriter(writer);
         }
@@ -464,15 +448,11 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Writes values to a comma-separated value stream.
-     *
-     * @param items
-     * A list containing the data to write to the CSV
-     * file. List items must be instances of Dictionary<String, Object>. The
-     * dictionary values will be written out in the order specified by the
-     * key sequence.
-     *
-     * @param writer
-     * The writer to which data will be written.
+     * 
+     * @param items A list containing the data to write to the CSV file. List
+     * items must be instances of Dictionary<String, Object>. The dictionary
+     * values will be written out in the order specified by the key sequence.
+     * @param writer The writer to which data will be written.
      */
     @SuppressWarnings("unchecked")
     public void writeObject(List<?> items, Writer writer) throws IOException {
@@ -500,7 +480,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         for (Object item : items) {
             Dictionary<String, Object> itemDictionary;
             if (item instanceof Dictionary<?, ?>) {
-                itemDictionary = (Dictionary<String, Object>)item;
+                itemDictionary = (Dictionary<String, Object>) item;
             } else {
                 itemDictionary = new BeanAdapter(item);
             }
@@ -517,10 +497,8 @@ public class CSVSerializer implements Serializer<List<?>> {
                 if (value != null) {
                     String string = value.toString();
 
-                    if (string.indexOf(',') >= 0
-                        || string.indexOf('"') >= 0
-                        || string.indexOf('\r') >= 0
-                        || string.indexOf('\n') >= 0) {
+                    if (string.indexOf(',') >= 0 || string.indexOf('"') >= 0
+                        || string.indexOf('\r') >= 0 || string.indexOf('\n') >= 0) {
                         writer.append('"');
 
                         if (string.indexOf('"') == -1) {

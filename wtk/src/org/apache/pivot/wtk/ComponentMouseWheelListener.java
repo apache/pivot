@@ -22,18 +22,16 @@ package org.apache.pivot.wtk;
 public interface ComponentMouseWheelListener {
     /**
      * Called when the mouse wheel is scrolled over a component.
-     *
+     * 
      * @param component
      * @param scrollType
      * @param scrollAmount
      * @param wheelRotation
      * @param x
      * @param y
-     *
-     * @return
-     * <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
+     * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
-        int scrollAmount, int wheelRotation, int x, int y);
+    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
+        int wheelRotation, int x, int y);
 }

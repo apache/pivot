@@ -25,8 +25,8 @@ import org.apache.pivot.wtk.Container;
  * component (its "source").
  */
 public abstract class ComponentInspector extends Container {
-    private static class ComponentInspectorListenerList
-        extends ListenerList<ComponentInspectorListener> implements ComponentInspectorListener {
+    private static class ComponentInspectorListenerList extends
+        ListenerList<ComponentInspectorListener> implements ComponentInspectorListener {
         @Override
         public void sourceChanged(ComponentInspector componentInspector, Component previousSource) {
             for (ComponentInspectorListener listener : this) {
@@ -37,8 +37,7 @@ public abstract class ComponentInspector extends Container {
 
     private Component source = null;
 
-    private ComponentInspectorListenerList componentInspectorListeners =
-        new ComponentInspectorListenerList();
+    private ComponentInspectorListenerList componentInspectorListeners = new ComponentInspectorListenerList();
 
     public Component getSource() {
         return source;

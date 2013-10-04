@@ -39,7 +39,7 @@ public interface TableViewHeaderListener {
 
     /**
      * Called when a table view header's table view has changed.
-     *
+     * 
      * @param tableViewHeader
      * @param previousTableView
      */
@@ -47,7 +47,7 @@ public interface TableViewHeaderListener {
 
     /**
      * Called when a table view header's sort mode has changed.
-     *
+     * 
      * @param tableViewHeader
      * @param previousSortMode
      */

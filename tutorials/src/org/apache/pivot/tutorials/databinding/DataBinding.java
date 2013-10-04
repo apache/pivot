@@ -38,18 +38,17 @@ public class DataBinding extends Window implements Bindable {
     private PushButton clearButton = null;
     private Label sourceLabel = null;
 
-    private static final Contact CONTACT = new Contact("101", "Joe User",
-        new Address("123 Main St.", "Cambridge", "MA", "02142"),
-        "(617) 555-1234", "joe_user@foo.com",
+    private static final Contact CONTACT = new Contact("101", "Joe User", new Address(
+        "123 Main St.", "Cambridge", "MA", "02142"), "(617) 555-1234", "joe_user@foo.com",
         new IMAccount("juser1234", "AIM"));
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        form = (Form)namespace.get("form");
-        loadJavaButton = (PushButton)namespace.get("loadJavaButton");
-        loadJSONButton = (PushButton)namespace.get("loadJSONButton");
-        clearButton = (PushButton)namespace.get("clearButton");
-        sourceLabel = (Label)namespace.get("sourceLabel");
+        form = (Form) namespace.get("form");
+        loadJavaButton = (PushButton) namespace.get("loadJavaButton");
+        loadJSONButton = (PushButton) namespace.get("loadJSONButton");
+        clearButton = (PushButton) namespace.get("clearButton");
+        sourceLabel = (Label) namespace.get("sourceLabel");
 
         loadJavaButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -69,7 +68,7 @@ public class DataBinding extends Window implements Bindable {
                 try {
                     form.load(serializer.readObject(inputStream));
                     sourceLabel.setText("JSON");
-                } catch(Exception exception) {
+                } catch (Exception exception) {
                     System.err.println(exception);
                 }
 

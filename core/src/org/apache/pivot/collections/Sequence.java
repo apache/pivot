@@ -28,6 +28,7 @@ public interface Sequence<T> {
     /**
      * Collection of static utility methods providing path access to nested
      * sequence data.
+     * 
      * @param <T> note that in Tree the type parameter currently it's not used
      */
     public static class Tree<T> {
@@ -173,12 +174,10 @@ public interface Sequence<T> {
             /**
              * Gets the path within the nested sequence to the item most
              * recently returned by a call to <tt>next()</tt>.
-             *
-             * @return
-             * The path (from the root sequence) to the current item.
-             *
-             * @throws IllegalStateException
-             * If <tt>next()</tt> has not yet been called on this iterator.
+             * 
+             * @return The path (from the root sequence) to the current item.
+             * @throws IllegalStateException If <tt>next()</tt> has not yet been
+             * called on this iterator.
              */
             public Path getPath();
         }
@@ -216,7 +215,7 @@ public interface Sequence<T> {
                 T item = sequence.get(index);
 
                 if (item instanceof Sequence<?>) {
-                    stack.push((Sequence<T>)item);
+                    stack.push((Sequence<T>) item);
                     nextPath.add(0);
                 } else {
                     nextPath.update(n - 1, index + 1);
@@ -238,8 +237,7 @@ public interface Sequence<T> {
                 int n = nextPath.getLength();
                 int index = nextPath.get(n - 1);
 
-                while (sequence != null
-                    && index >= sequence.getLength()) {
+                while (sequence != null && index >= sequence.getLength()) {
                     stack.pop();
                     sequence = stack.peek();
 
@@ -269,60 +267,42 @@ public interface Sequence<T> {
 
         /**
          * Adds an item to a nested sequence.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param item
-         * The item to be added to the sequence.
-         *
-         * @param path
-         * The path of the sequence to which the item should be added.
-         *
-         * @return
-         * The index at which the item was inserted, relative to the parent
-         * sequence.
+         * 
+         * @param sequence The root sequence.
+         * @param item The item to be added to the sequence.
+         * @param path The path of the sequence to which the item should be
+         * added.
+         * @return The index at which the item was inserted, relative to the
+         * parent sequence.
          */
         @SuppressWarnings("unchecked")
         public static <T> int add(Sequence<T> sequence, T item, Path path) {
-            return ((Sequence<T>)get(sequence, path)).add(item);
+            return ((Sequence<T>) get(sequence, path)).add(item);
         }
 
         /**
          * Inserts an item into a nested sequence.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param item
-         * The item to be inserted into the sequence.
-         *
-         * @param path
-         * The path of the sequence into which the item should be inserted.
-         *
-         * @param index
-         * The index at which the item should be inserted within the parent
-         * sequence.
+         * 
+         * @param sequence The root sequence.
+         * @param item The item to be inserted into the sequence.
+         * @param path The path of the sequence into which the item should be
+         * inserted.
+         * @param index The index at which the item should be inserted within the
+         * parent sequence.
          */
         @SuppressWarnings("unchecked")
         public static <T> void insert(Sequence<T> sequence, T item, Path path, int index) {
-            ((Sequence<T>)get(sequence, path)).insert(item, index);
+            ((Sequence<T>) get(sequence, path)).insert(item, index);
         }
 
         /**
          * Updates an item in a nested sequence.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param path
-         * The path of the item to update.
-         *
-         * @param item
-         * The item that will replace any existing value at the given path.
-         *
-         * @return
-         * The item that was previously stored at the given path.
+         * 
+         * @param sequence The root sequence.
+         * @param path The path of the item to update.
+         * @param item The item that will replace any existing value at the given
+         * path.
+         * @return The item that was previously stored at the given path.
          */
         @SuppressWarnings("unchecked")
         public static <T> T update(final Sequence<T> sequence, final Path path, final T item) {
@@ -337,7 +317,7 @@ public interface Sequence<T> {
             int i = 0, n = path.getLength() - 1;
             Sequence<T> sequenceUpdated = sequence;
             while (i < n) {
-                sequenceUpdated = (Sequence<T>)sequenceUpdated.get(path.get(i++));
+                sequenceUpdated = (Sequence<T>) sequenceUpdated.get(path.get(i++));
             }
 
             return sequenceUpdated.update(path.get(i), item);
@@ -345,15 +325,10 @@ public interface Sequence<T> {
 
         /**
          * Removes the first occurrence of an item from a nested sequence.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param item
-         * The item to remove.
-         *
-         * @return
-         * The path of the item that was removed.
+         * 
+         * @param sequence The root sequence.
+         * @param item The item to remove.
+         * @return The path of the item that was removed.
          */
         public static <T> Path remove(Sequence<T> sequence, T item) {
             Path path = pathOf(sequence, item);
@@ -368,12 +343,9 @@ public interface Sequence<T> {
 
         /**
          * Removes an item from a nested sequence.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param path
-         * The path of the item to remove.
+         * 
+         * @param sequence The root sequence.
+         * @param path The path of the item to remove.
          */
         @SuppressWarnings("unchecked")
         public static <T> Sequence<T> remove(final Sequence<T> sequence, final Path path, int count) {
@@ -388,7 +360,7 @@ public interface Sequence<T> {
             int i = 0, n = path.getLength() - 1;
             Sequence<T> sequenceUpdated = sequence;
             while (i < n) {
-                sequenceUpdated = (Sequence<T>)sequenceUpdated.get(path.get(i++));
+                sequenceUpdated = (Sequence<T>) sequenceUpdated.get(path.get(i++));
             }
 
             return sequenceUpdated.remove(path.get(i), count);
@@ -396,15 +368,11 @@ public interface Sequence<T> {
 
         /**
          * Retrieves an item from a nested sequence.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param path
-         * The path of the item to retrieve.
-         *
-         * @return
-         * The item at the given path, or <tt>null</tt> if the path is empty.
+         * 
+         * @param sequence The root sequence.
+         * @param path The path of the item to retrieve.
+         * @return The item at the given path, or <tt>null</tt> if the path is
+         * empty.
          */
         @SuppressWarnings("unchecked")
         public static <T> T get(final Sequence<T> sequence, final Path path) {
@@ -423,7 +391,7 @@ public interface Sequence<T> {
                 int i = 0, n = path.getLength() - 1;
                 Sequence<T> sequenceUpdated = sequence;
                 while (i < n) {
-                    sequenceUpdated = (Sequence<T>)sequenceUpdated.get(path.get(i++));
+                    sequenceUpdated = (Sequence<T>) sequenceUpdated.get(path.get(i++));
                 }
 
                 item = sequenceUpdated.get(path.get(i));
@@ -434,15 +402,10 @@ public interface Sequence<T> {
 
         /**
          * Returns the path to an item in a nested sequence.
-         *
-         * @param sequence
-         * The root sequence.
-         *
-         * @param item
-         * The item to locate.
-         *
-         * @return
-         * The path of first occurrence of the item if it exists in the
+         * 
+         * @param sequence The root sequence.
+         * @param item The item to locate.
+         * @return The path of first occurrence of the item if it exists in the
          * sequence; <tt>null</tt>, otherwise.
          */
         @SuppressWarnings("unchecked")
@@ -465,7 +428,7 @@ public interface Sequence<T> {
                     path.add(i);
                 } else {
                     if (t instanceof Sequence<?>) {
-                        path = pathOf((Sequence<T>)t, item);
+                        path = pathOf((Sequence<T>) t, item);
 
                         if (path != null) {
                             path.insert(i, 0);
@@ -486,14 +449,11 @@ public interface Sequence<T> {
         }
 
         /**
-         * Determines whether the path represented by the second argument is
-         * a descendant of the path represented by the first argument.
-         *
-         * @param ancestorPath
-         * The ancestor path to test.
-         *
-         * @param descendantPath
-         * The descendant path to test.
+         * Determines whether the path represented by the second argument is a
+         * descendant of the path represented by the first argument.
+         * 
+         * @param ancestorPath The ancestor path to test.
+         * @param descendantPath The descendant path to test.
          */
         public static boolean isDescendant(Path ancestorPath, Path descendantPath) {
             int ancestorLength = ancestorPath.getLength();
@@ -519,95 +479,71 @@ public interface Sequence<T> {
 
     /**
      * Adds an item to the sequence.
-     *
-     * @param item
-     * The item to be added to the sequence.
-     *
-     * @return
-     * The index at which the item was added, or <tt>-1</tt> if the item
+     * 
+     * @param item The item to be added to the sequence.
+     * @return The index at which the item was added, or <tt>-1</tt> if the item
      * was not added to the sequence.
      */
     public int add(T item);
 
     /**
      * Inserts an item into the sequence at a specific index.
-     *
-     * @param item
-     * The item to be added to the sequence.
-     *
-     * @param index
-     * The index at which the item should be inserted. Must be a value between
-     * <tt>0</tt> and <tt>getLength()</tt>.
+     * 
+     * @param item The item to be added to the sequence.
+     * @param index The index at which the item should be inserted. Must be a
+     * value between <tt>0</tt> and <tt>getLength()</tt>.
      */
     public void insert(T item, int index);
 
     /**
      * Updates the item at the given index.
-     *
-     * @param index
-     * The index of the item to update.
-     *
-     * @param item
-     * The item that will replace any existing value at the given index.
-     *
-     * @return
-     * The item that was previously stored at the given index.
+     * 
+     * @param index The index of the item to update.
+     * @param item The item that will replace any existing value at the given
+     * index.
+     * @return The item that was previously stored at the given index.
      */
     public T update(int index, T item);
 
     /**
      * Removes the first occurrence of the given item from the sequence.
-     *
-     * @param item
-     * The item to remove.
-     *
-     * @return
-     * The index of the item that was removed, or <tt>-1</tt> if the item
+     * 
+     * @param item The item to remove.
+     * @return The index of the item that was removed, or <tt>-1</tt> if the item
      * could not be found.
-     *
      * @see #remove(int, int)
      */
     public int remove(T item);
 
     /**
      * Removes one or more items from the sequence.
-     *
-     * @param index
-     * The starting index to remove.
-     *
-     * @param count
-     * The number of items to remove, beginning with <tt>index</tt>.
-     *
-     * @return
-     * A sequence containing the items that were removed.
+     * 
+     * @param index The starting index to remove.
+     * @param count The number of items to remove, beginning with <tt>index</tt>.
+     * @return A sequence containing the items that were removed.
      */
     public Sequence<T> remove(int index, int count);
 
     /**
      * Retrieves the item at the given index.
-     *
-     * @param index
-     * The index of the item to retrieve.
+     * 
+     * @param index The index of the item to retrieve.
      */
     public T get(int index);
 
     /**
      * Returns the index of an item in the sequence.
-     *
-     * @param item
-     * The item to locate.
-     *
-     * @return
-     * The index of first occurrence of the item if it exists in the sequence;
-     * <tt>-1</tt>, otherwise.
+     * 
+     * @param item The item to locate.
+     * @return The index of first occurrence of the item if it exists in the
+     * sequence; <tt>-1</tt>, otherwise.
      */
     public int indexOf(T item);
 
     /**
      * Returns the length of the sequence.
-     *
-     * @return
-     * The number of items in the sequence.
+     * 
+     * @return The number of items in the sequence.
      */
     public int getLength();
 }

@@ -29,8 +29,8 @@ import org.apache.pivot.util.Vote;
  */
 @DefaultProperty("content")
 public class Rollup extends Container {
-    private static class RollupListenerList extends WTKListenerList<RollupListener>
-        implements RollupListener {
+    private static class RollupListenerList extends WTKListenerList<RollupListener> implements
+        RollupListener {
         @Override
         public void headingChanged(Rollup rollup, Component previousHeading) {
             for (RollupListener listener : this) {
@@ -117,7 +117,7 @@ public class Rollup extends Container {
     }
 
     public void setHeading(Component heading) {
-       Component previousHeading = this.heading;
+        Component previousHeading = this.heading;
 
         if (heading != previousHeading) {
             // Remove any previous heading component
@@ -143,7 +143,7 @@ public class Rollup extends Container {
     }
 
     public void setContent(Component content) {
-       Component previousContent = this.content;
+        Component previousContent = this.content;
 
         if (content != previousContent) {
             // Remove any previous content component
@@ -196,8 +196,7 @@ public class Rollup extends Container {
     public Sequence<Component> remove(int index, int count) {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
-            if (component == heading
-                || component == content) {
+            if (component == heading || component == content) {
                 throw new UnsupportedOperationException();
             }
         }

@@ -42,7 +42,7 @@ public interface ButtonGroupListener {
 
     /**
      * Called when a button has been added to a button group.
-     *
+     * 
      * @param buttonGroup
      * @param button
      */
@@ -50,7 +50,7 @@ public interface ButtonGroupListener {
 
     /**
      * Called when a button has been removed from a button group.
-     *
+     * 
      * @param buttonGroup
      * @param button
      */
@@ -58,7 +58,7 @@ public interface ButtonGroupListener {
 
     /**
      * Called when a button group's selection has changed.
-     *
+     * 
      * @param buttonGroup
      * @param previousSelection
      */

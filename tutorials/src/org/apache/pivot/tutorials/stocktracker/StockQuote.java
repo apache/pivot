@@ -56,7 +56,7 @@ public class StockQuote {
     public void setValue(String value) {
         try {
             setValue(Float.parseFloat(value));
-        } catch(NumberFormatException exception) {
+        } catch (NumberFormatException exception) {
             setValue(Float.NaN);
         }
     }
@@ -72,7 +72,7 @@ public class StockQuote {
     public void setOpeningValue(String openingValue) {
         try {
             setOpeningValue(Float.parseFloat(openingValue));
-        } catch(NumberFormatException exception) {
+        } catch (NumberFormatException exception) {
             setOpeningValue(Float.NaN);
         }
     }
@@ -88,7 +88,7 @@ public class StockQuote {
     public void setHighValue(String highValue) {
         try {
             setHighValue(Float.parseFloat(highValue));
-        } catch(NumberFormatException exception) {
+        } catch (NumberFormatException exception) {
             setHighValue(Float.NaN);
         }
     }
@@ -104,7 +104,7 @@ public class StockQuote {
     public void setLowValue(String lowValue) {
         try {
             setLowValue(Float.parseFloat(lowValue));
-        } catch(NumberFormatException exception) {
+        } catch (NumberFormatException exception) {
             setLowValue(Float.NaN);
         }
     }
@@ -120,7 +120,7 @@ public class StockQuote {
     public void setChange(String change) {
         try {
             setChange(Float.parseFloat(change));
-        } catch(NumberFormatException exception) {
+        } catch (NumberFormatException exception) {
             setChange(Float.NaN);
         }
     }
@@ -136,7 +136,7 @@ public class StockQuote {
     public void setVolume(String volume) {
         try {
             setVolume(Float.parseFloat(volume));
-        } catch(NumberFormatException exception) {
+        } catch (NumberFormatException exception) {
             setVolume(Float.NaN);
         }
     }

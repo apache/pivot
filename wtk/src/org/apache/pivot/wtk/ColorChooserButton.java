@@ -23,16 +23,16 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.ListButtonColorItemRenderer;
 
 /**
- * A component that allows a user to select a color. The color chooser
- * is hidden until the user pushes the button.
+ * A component that allows a user to select a color. The color chooser is hidden
+ * until the user pushes the button.
  */
 public class ColorChooserButton extends Button {
     /**
      * ColorChooser button selection listener list.
      */
-    private static class ColorChooserButtonSelectionListenerList
-        extends WTKListenerList<ColorChooserButtonSelectionListener>
-        implements ColorChooserButtonSelectionListener {
+    private static class ColorChooserButtonSelectionListenerList extends
+        WTKListenerList<ColorChooserButtonSelectionListener> implements
+        ColorChooserButtonSelectionListener {
 
         @Override
         public void selectedColorChanged(ColorChooserButton colorChooserButton,
@@ -46,9 +46,9 @@ public class ColorChooserButton extends Button {
     /**
      * Color chooser button binding listener list.
      */
-    private static class ColorChooserButtonBindingListenerList
-        extends WTKListenerList<ColorChooserButtonBindingListener>
-        implements ColorChooserButtonBindingListener {
+    private static class ColorChooserButtonBindingListenerList extends
+        WTKListenerList<ColorChooserButtonBindingListener> implements
+        ColorChooserButtonBindingListener {
         @Override
         public void selectedColorKeyChanged(ColorChooserButton colorChooserButton,
             String previousSelectedColorKey) {
@@ -77,9 +77,9 @@ public class ColorChooserButton extends Button {
     }
 
     /**
-     * ColorChooserButton skin interface. ColorChooserButton skins must implement
-     * this interface to facilitate additional communication between the
-     * component and the skin.
+     * ColorChooserButton skin interface. ColorChooserButton skins must
+     * implement this interface to facilitate additional communication between
+     * the component and the skin.
      */
     public interface Skin {
         public Window getColorChooserPopup();
@@ -91,13 +91,10 @@ public class ColorChooserButton extends Button {
     private BindType selectedColorBindType = BindType.BOTH;
     private ColorChooser.SelectedColorBindMapping selectedColorBindMapping = null;
 
-    private ColorChooserButtonSelectionListenerList colorChooserButtonSelectionListeners =
-        new ColorChooserButtonSelectionListenerList();
-    private ColorChooserButtonBindingListenerList colorChooserButtonBindingListeners =
-        new ColorChooserButtonBindingListenerList();
+    private ColorChooserButtonSelectionListenerList colorChooserButtonSelectionListeners = new ColorChooserButtonSelectionListenerList();
+    private ColorChooserButtonBindingListenerList colorChooserButtonBindingListeners = new ColorChooserButtonBindingListenerList();
 
-    private static final Button.DataRenderer DEFAULT_DATA_RENDERER =
-        new ListButtonColorItemRenderer();
+    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ListButtonColorItemRenderer();
 
     public ColorChooserButton() {
         this(null);
@@ -128,8 +125,8 @@ public class ColorChooserButton extends Button {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * This method is not supported by ColorChooserButton.
+     * @throws UnsupportedOperationException This method is not supported by
+     * ColorChooserButton.
      */
     @Override
     public void setToggleButton(boolean toggleButton) {
@@ -138,9 +135,9 @@ public class ColorChooserButton extends Button {
 
     /**
      * Returns the currently selected color.
-     *
-     * @return
-     * The currently selected color, or <tt>null</tt> if nothing is selected.
+     * 
+     * @return The currently selected color, or <tt>null</tt> if nothing is
+     * selected.
      */
     public Color getSelectedColor() {
         return selectedColor;
@@ -148,27 +145,24 @@ public class ColorChooserButton extends Button {
 
     /**
      * Sets the selected color.
-     *
-     * @param selectedColor
-     * The color to select, or <tt>null</tt> to clear the selection.
+     * 
+     * @param selectedColor The color to select, or <tt>null</tt> to clear the
+     * selection.
      */
     public void setSelectedColor(Color selectedColor) {
         Color previousSelectedColor = this.selectedColor;
 
         if (previousSelectedColor != selectedColor
-            && (previousSelectedColor == null
-                || !previousSelectedColor.equals(selectedColor))) {
+            && (previousSelectedColor == null || !previousSelectedColor.equals(selectedColor))) {
             this.selectedColor = selectedColor;
-            colorChooserButtonSelectionListeners.selectedColorChanged(this,
-                previousSelectedColor);
+            colorChooserButtonSelectionListeners.selectedColorChanged(this, previousSelectedColor);
         }
     }
 
     /**
      * Sets the selected color.
-     *
-     * @param selectedColor
-     * A string representing a color.
+     * 
+     * @param selectedColor A string representing a color.
      */
     public final void setSelectedColor(String selectedColor) {
         if (selectedColor == null) {
@@ -221,8 +215,7 @@ public class ColorChooserButton extends Button {
     }
 
     public void setSelectedColorBindMapping(ColorChooser.SelectedColorBindMapping bindMapping) {
-        ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping =
-            this.selectedColorBindMapping;
+        ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping = this.selectedColorBindMapping;
 
         if (previousSelectedColorBindMapping != bindMapping) {
             this.selectedColorBindMapping = bindMapping;
@@ -237,15 +230,14 @@ public class ColorChooserButton extends Button {
      */
     @Override
     public void load(Object context) {
-        if (selectedColorKey != null
-            && JSON.containsKey(context, selectedColorKey)
+        if (selectedColorKey != null && JSON.containsKey(context, selectedColorKey)
             && selectedColorBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedColorKey);
 
             Color selectedColorLocal = null;
 
             if (value instanceof Color) {
-                selectedColorLocal = (Color)value;
+                selectedColorLocal = (Color) value;
             } else if (selectedColorBindMapping == null) {
                 if (value != null) {
                     selectedColorLocal = Color.decode(value.toString());
@@ -259,15 +251,14 @@ public class ColorChooserButton extends Button {
     }
 
     /**
-     * Stores the selected color into the specified bind context using this color
-     * picker button's bind key, if one is set.
+     * Stores the selected color into the specified bind context using this
+     * color picker button's bind key, if one is set.
      */
     @Override
     public void store(Object context) {
-        if (selectedColorKey != null
-            && selectedColorBindType != BindType.LOAD) {
-            JSON.put(context, selectedColorKey, (selectedColorBindMapping == null) ?
-                selectedColor : selectedColorBindMapping.valueOf(selectedColor));
+        if (selectedColorKey != null && selectedColorBindType != BindType.LOAD) {
+            JSON.put(context, selectedColorKey, (selectedColorBindMapping == null) ? selectedColor
+                : selectedColorBindMapping.valueOf(selectedColor));
         }
     }
 
@@ -277,7 +268,7 @@ public class ColorChooserButton extends Button {
     @Override
     public void clear() {
         if (selectedColorKey != null) {
-            setSelectedColor((Color)null);
+            setSelectedColor((Color) null);
         }
     }
 

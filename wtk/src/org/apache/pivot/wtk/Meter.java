@@ -22,8 +22,8 @@ import org.apache.pivot.util.ListenerList;
  * Component that displays progress information.
  */
 public class Meter extends Component {
-    private static class MeterListenerList extends WTKListenerList<MeterListener>
-    implements MeterListener {
+    private static class MeterListenerList extends WTKListenerList<MeterListener> implements
+        MeterListener {
         @Override
         public void orientationChanged(Meter meter) {
             for (MeterListener listener : this) {
@@ -66,8 +66,7 @@ public class Meter extends Component {
 
     public void setPercentage(double percentage) {
         if (percentage < 0.0 || percentage > 1.0) {
-            throw new IllegalArgumentException
-                ("Percentage must be a number between 0 and 1");
+            throw new IllegalArgumentException("Percentage must be a number between 0 and 1");
         }
 
         double previousPercentage = this.percentage;

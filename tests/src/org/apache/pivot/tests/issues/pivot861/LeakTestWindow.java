@@ -35,16 +35,12 @@ import org.apache.pivot.wtk.Window;
 
 /**
  * Simple test window which continuously presses a button which opens a dialog
- * box and then closes it immediately.
- *
- * Watch the heap usage in a profiler and compare:
- * - when TestDialog has an icon (specified in ok_dialog.bxml)
- * - when TestDialog has no icon
- * and see that heap usage will grow to almost the maximum when an icon is used
- * in TestDialog.
- *
- * The icon contains an ImageListenerList which will retain a
- * reference to every dialog created, thus preventing them being garbage collected.
+ * box and then closes it immediately. Watch the heap usage in a profiler and
+ * compare: - when TestDialog has an icon (specified in ok_dialog.bxml) - when
+ * TestDialog has no icon and see that heap usage will grow to almost the
+ * maximum when an icon is used in TestDialog. The icon contains an
+ * ImageListenerList which will retain a reference to every dialog created, thus
+ * preventing them being garbage collected.
  */
 public class LeakTestWindow extends Window implements Bindable {
 
@@ -90,11 +86,11 @@ public class LeakTestWindow extends Window implements Bindable {
         ApplicationContext.scheduleCallback(new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while (true) {
                     button.press();
                 }
             }
-        }, 1000  // add a little delay (instead of 0) to show the TestDialog
+        }, 1000 // add a little delay (instead of 0) to show the TestDialog
         );
     }
 

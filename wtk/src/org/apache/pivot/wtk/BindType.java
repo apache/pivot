@@ -33,8 +33,8 @@ public enum BindType {
     STORE,
 
     /**
-     * The binding will be process for both {@link Component#load(Object)}
-     * and {@link Component#store(Object)} operations.
+     * The binding will be process for both {@link Component#load(Object)} and
+     * {@link Component#store(Object)} operations.
      */
     BOTH
 }

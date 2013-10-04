@@ -35,8 +35,8 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 
 /**
- * Component that displays a sequence of items, optionally allowing a user
- * to select or check one or more items.
+ * Component that displays a sequence of items, optionally allowing a user to
+ * select or check one or more items.
  */
 @DefaultProperty("listData")
 public class ListView extends Component {
@@ -61,50 +61,35 @@ public class ListView extends Component {
     }
 
     /**
-     * {@link Renderer} interface to customize the appearance of items in a ListView.
+     * {@link Renderer} interface to customize the appearance of items in a
+     * ListView.
      */
     public interface ItemRenderer extends Renderer {
         /**
          * Prepares the renderer for layout or paint.
-         *
-         * @param item
-         * The item to render, or <tt>null</tt> if called to calculate preferred
-         * height for skins that assume a fixed renderer height.
-         *
-         * @param index
-         * The index of the item being rendered, or <tt>-1</tt> if <tt>item</tt>
-         * is <tt>null</tt>.
-         *
-         * @param listView
-         * The host component.
-         *
-         * @param selected
-         * If <tt>true</tt>, the item is selected.
-         * the item.
-         *
-         * @param checked
-         * If <tt>true</tt>, the item is checked.
-         *
-         * @param highlighted
-         * If <tt>true</tt>, the item is highlighted.
-         *
-         * @param disabled
-         * If <tt>true</tt>, the item is disabled.
+         * 
+         * @param item The item to render, or <tt>null</tt> if called to
+         * calculate preferred height for skins that assume a fixed renderer
+         * height.
+         * @param index The index of the item being rendered, or <tt>-1</tt> if
+         * <tt>item</tt> is <tt>null</tt>.
+         * @param listView The host component.
+         * @param selected If <tt>true</tt>, the item is selected. the item.
+         * @param checked If <tt>true</tt>, the item is checked.
+         * @param highlighted If <tt>true</tt>, the item is highlighted.
+         * @param disabled If <tt>true</tt>, the item is disabled.
          */
         public void render(Object item, int index, ListView listView, boolean selected,
             boolean checked, boolean highlighted, boolean disabled);
 
         /**
          * Converts a list item to a string representation.
-         *
+         * 
          * @param item
-         *
-         * @return
-         * The item's string representation, or <tt>null</tt> if the item does not
-         * have a string representation.
-         * <p>
-         * Note that this method may be called often during keyboard navigation, so
-         * implementations should avoid unnecessary string allocations.
+         * @return The item's string representation, or <tt>null</tt> if the item
+         * does not have a string representation. <p> Note that this method may
+         * be called often during keyboard navigation, so implementations should
+         * avoid unnecessary string allocations.
          */
         public String toString(Object item);
     }
@@ -115,7 +100,7 @@ public class ListView extends Component {
     public interface ItemEditor {
         /**
          * Called to begin editing a list item.
-         *
+         * 
          * @param listView
          * @param itemIndex
          */
@@ -123,9 +108,9 @@ public class ListView extends Component {
 
         /**
          * Terminates an edit operation.
-         *
-         * @param result
-         * <tt>true</tt> to perform the edit; <tt>false</tt> to cancel it.
+         * 
+         * @param result <tt>true</tt> to perform the edit; <tt>false</tt> to
+         * cancel it.
          */
         public void endEdit(boolean result);
 
@@ -136,12 +121,13 @@ public class ListView extends Component {
     }
 
     /**
-     * List view skin interface. List view skins are required to implement
-     * this.
+     * List view skin interface. List view skins are required to implement this.
      */
     public interface Skin {
         public int getItemAt(int y);
+
         public Bounds getItemBounds(int index);
+
         public int getItemIndent();
     }
 
@@ -152,7 +138,7 @@ public class ListView extends Component {
         /**
          * Converts a context value to list data during a
          * {@link Component#load(Object)} operation.
-         *
+         * 
          * @param value
          */
         public List<?> toListData(Object value);
@@ -160,47 +146,40 @@ public class ListView extends Component {
         /**
          * Converts list data to a context value during a
          * {@link Component#store(Object)} operation.
-         *
+         * 
          * @param listData
          */
         public Object valueOf(List<?> listData);
     }
 
     /**
-     * Translates between item position and bind context data during data binding.
+     * Translates between item position and bind context data during data
+     * binding.
      */
     public interface ItemBindMapping {
         /**
          * Returns the index of the item in the source list during a
          * {@link Component#load(Object)} operation.
-         *
-         * @param listData
-         * The source list data.
-         *
-         * @param value
-         * The value to locate.
-         *
-         * @return
-         * The index of first occurrence of the value if it exists in the list;
-         * <tt>-1</tt>, otherwise.
+         * 
+         * @param listData The source list data.
+         * @param value The value to locate.
+         * @return The index of first occurrence of the value if it exists in the
+         * list; <tt>-1</tt>, otherwise.
          */
         public int indexOf(List<?> listData, Object value);
 
         /**
          * Retrieves the value at the given index during a
          * {@link Component#store(Object)} operation.
-         *
-         * @param listData
-         * The source list data.
-         *
-         * @param index
-         * The index of the value to retrieve.
+         * 
+         * @param listData The source list data.
+         * @param index The index of the value to retrieve.
          */
         public Object get(List<?> listData, int index);
     }
 
-    private static class ListViewListenerList extends WTKListenerList<ListViewListener>
-        implements ListViewListener {
+    private static class ListViewListenerList extends WTKListenerList<ListViewListener> implements
+        ListViewListener {
         @Override
         public void listDataChanged(ListView listView, List<?> previousListData) {
             for (ListViewListener listener : this) {
@@ -217,16 +196,14 @@ public class ListView extends Component {
         }
 
         @Override
-        public void itemEditorChanged(ListView listView,
-            ListView.ItemEditor previousItemEditor) {
+        public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
             for (ListViewListener listener : this) {
                 listener.itemEditorChanged(listView, previousItemEditor);
             }
         }
 
         @Override
-        public void selectModeChanged(ListView listView,
-            ListView.SelectMode previousSelectMode) {
+        public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
             for (ListViewListener listener : this) {
                 listener.selectModeChanged(listView, previousSelectMode);
             }
@@ -294,8 +271,8 @@ public class ListView extends Component {
         }
     }
 
-    private static class ListViewItemStateListenerList extends WTKListenerList<ListViewItemStateListener>
-        implements ListViewItemStateListener {
+    private static class ListViewItemStateListenerList extends
+        WTKListenerList<ListViewItemStateListener> implements ListViewItemStateListener {
         @Override
         public void itemCheckedChanged(ListView listView, int index) {
             for (ListViewItemStateListener listener : this) {
@@ -304,8 +281,8 @@ public class ListView extends Component {
         }
     }
 
-    private static class ListViewSelectionListenerList extends WTKListenerList<ListViewSelectionListener>
-        implements ListViewSelectionListener {
+    private static class ListViewSelectionListenerList extends
+        WTKListenerList<ListViewSelectionListener> implements ListViewSelectionListener {
         @Override
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
             for (ListViewSelectionListener listener : this) {
@@ -335,8 +312,8 @@ public class ListView extends Component {
         }
     }
 
-    private static class ListViewBindingListenerList extends WTKListenerList<ListViewBindingListener>
-        implements ListViewBindingListener {
+    private static class ListViewBindingListenerList extends
+        WTKListenerList<ListViewBindingListener> implements ListViewBindingListener {
         @Override
         public void listDataKeyChanged(ListView listView, String previousListDataKey) {
             for (ListViewBindingListener listener : this) {
@@ -367,7 +344,8 @@ public class ListView extends Component {
         }
 
         @Override
-        public void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType) {
+        public void selectedItemBindTypeChanged(ListView listView,
+            BindType previousSelectedItemBindType) {
             for (ListViewBindingListener listener : this) {
                 listener.selectedItemBindTypeChanged(listView, previousSelectedItemBindType);
             }
@@ -389,7 +367,8 @@ public class ListView extends Component {
         }
 
         @Override
-        public void selectedItemsBindTypeChanged(ListView listView, BindType previousSelectedItemsBindType) {
+        public void selectedItemsBindTypeChanged(ListView listView,
+            BindType previousSelectedItemsBindType) {
             for (ListViewBindingListener listener : this) {
                 listener.selectedItemsBindTypeChanged(listView, previousSelectedItemsBindType);
             }
@@ -411,7 +390,8 @@ public class ListView extends Component {
         }
 
         @Override
-        public void checkedItemsBindTypeChanged(ListView listView, BindType previousCheckedItemsBindType) {
+        public void checkedItemsBindTypeChanged(ListView listView,
+            BindType previousCheckedItemsBindType) {
             for (ListViewBindingListener listener : this) {
                 listener.checkedItemsBindTypeChanged(listView, previousCheckedItemsBindType);
             }
@@ -487,8 +467,7 @@ public class ListView extends Component {
             int count = items.getLength();
 
             int previousSelectedIndex;
-            if (selectMode == SelectMode.SINGLE
-                && rangeSelection.getLength() > 0) {
+            if (selectMode == SelectMode.SINGLE && rangeSelection.getLength() > 0) {
                 previousSelectedIndex = rangeSelection.get(0).start;
             } else {
                 previousSelectedIndex = -1;
@@ -524,8 +503,7 @@ public class ListView extends Component {
             if (updated > 0) {
                 listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
 
-                if (selectMode == SelectMode.SINGLE
-                    && getSelectedIndex() != previousSelectedIndex) {
+                if (selectMode == SelectMode.SINGLE && getSelectedIndex() != previousSelectedIndex) {
                     listViewSelectionListeners.selectedItemChanged(ListView.this, null);
                 }
             }
@@ -563,7 +541,8 @@ public class ListView extends Component {
                 listViewItemListeners.itemsSorted(ListView.this);
 
                 if (cleared > 0) {
-                    listViewSelectionListeners.selectedRangesChanged(ListView.this, getSelectedRanges());
+                    listViewSelectionListeners.selectedRangesChanged(ListView.this,
+                        getSelectedRanges());
 
                     if (selectMode == SelectMode.SINGLE) {
                         listViewSelectionListeners.selectedItemChanged(ListView.this, null);
@@ -589,15 +568,12 @@ public class ListView extends Component {
     }
 
     /**
-     * Creates a list view populated with the given list data.
-     * <p>
-     * Note that the default renderer uses (as last option) the toString method on list elements,
-     * so override it to return whatever you want to display in the ListView,
-     * or implement your own custom renderer.
-     *
-     * @param listData
-     * The data to set.
-     *
+     * Creates a list view populated with the given list data. <p> Note that the
+     * default renderer uses (as last option) the toString method on list
+     * elements, so override it to return whatever you want to display in the
+     * ListView, or implement your own custom renderer.
+     * 
+     * @param listData The data to set.
      * @see ListViewItemRenderer
      */
     public ListView(List<?> listData) {
@@ -609,9 +585,8 @@ public class ListView extends Component {
 
     /**
      * Returns the list data.
-     *
-     * @return
-     * The data currently presented by the list view.
+     * 
+     * @return The data currently presented by the list view.
      */
     public List<?> getListData() {
         return this.listData;
@@ -619,9 +594,8 @@ public class ListView extends Component {
 
     /**
      * Sets the list data.
-     *
-     * @param listData
-     * The data to be presented by the list view.
+     * 
+     * @param listData The data to be presented by the list view.
      */
     @SuppressWarnings("unchecked")
     public void setListData(List<?> listData) {
@@ -639,12 +613,12 @@ public class ListView extends Component {
                 rangeSelection.clear();
                 checkedIndexes.clear();
 
-                ((List<Object>)previousListData).getListListeners().remove(listDataListener);
+                ((List<Object>) previousListData).getListListeners().remove(listDataListener);
             } else {
                 cleared = 0;
             }
 
-            ((List<Object>)listData).getListListeners().add(listDataListener);
+            ((List<Object>) listData).getListListeners().add(listDataListener);
 
             // Update the list data and fire change event
             this.listData = listData;
@@ -662,10 +636,9 @@ public class ListView extends Component {
 
     /**
      * Sets the list data.
-     *
-     * @param listData
-     * A JSON string (must begin with <tt>[</tt> and end with <tt>]</tt>)
-     * denoting the data to be presented by the list view.
+     * 
+     * @param listData A JSON string (must begin with <tt>[</tt> and end with
+     * <tt>]</tt>) denoting the data to be presented by the list view.
      */
     public final void setListData(String listData) {
         if (listData == null) {
@@ -681,10 +654,9 @@ public class ListView extends Component {
 
     /**
      * Sets the list data.
-     *
-     * @param listData
-     * A URL referring to a JSON file containing the data to be presented by
-     * the list view.
+     * 
+     * @param listData A URL referring to a JSON file containing the data to be
+     * presented by the list view.
      */
     public void setListData(URL listData) {
         if (listData == null) {
@@ -694,7 +666,7 @@ public class ListView extends Component {
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         try {
-            setListData((List<?>)jsonSerializer.readObject(listData.openStream()));
+            setListData((List<?>) jsonSerializer.readObject(listData.openStream()));
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
         } catch (IOException exception) {
@@ -721,9 +693,8 @@ public class ListView extends Component {
 
     /**
      * Sets the item renderer to be used for items in this list.
-     *
-     * @param itemRenderer
-     * The item renderer for the list.
+     * 
+     * @param itemRenderer The item renderer for the list.
      */
     public void setItemRenderer(ItemRenderer itemRenderer) {
         if (itemRenderer == null) {
@@ -740,9 +711,8 @@ public class ListView extends Component {
 
     /**
      * Returns the editor used to edit items in this list.
-     *
-     * @return
-     * The item editor, or <tt>null</tt> if no editor is installed.
+     * 
+     * @return The item editor, or <tt>null</tt> if no editor is installed.
      */
     public ItemEditor getItemEditor() {
         return itemEditor;
@@ -750,9 +720,8 @@ public class ListView extends Component {
 
     /**
      * Sets the editor used to edit items in this list.
-     *
-     * @param itemEditor
-     * The item editor for the list.
+     * 
+     * @param itemEditor The item editor for the list.
      */
     public void setItemEditor(ItemEditor itemEditor) {
         ItemEditor previousItemEditor = this.itemEditor;
@@ -765,9 +734,8 @@ public class ListView extends Component {
 
     /**
      * Returns the currently selected index, even when in multi-select mode.
-     *
-     * @return
-     * The currently selected index.
+     * 
+     * @return The currently selected index.
      */
     public int getSelectedIndex() {
         return getFirstSelectedIndex();
@@ -775,9 +743,8 @@ public class ListView extends Component {
 
     /**
      * Sets the selection to a single index.
-     *
-     * @param index
-     * The index to select, or <tt>-1</tt> to clear the selection.
+     * 
+     * @param index The index to select, or <tt>-1</tt> to clear the selection.
      */
     public void setSelectedIndex(int index) {
         if (index == -1) {
@@ -792,7 +759,7 @@ public class ListView extends Component {
 
     /**
      * Sets the selection to a single range.
-     *
+     * 
      * @param start
      * @param end
      */
@@ -805,11 +772,11 @@ public class ListView extends Component {
 
     /**
      * Returns the currently selected ranges.
-     *
-     * @return
-     * An immutable list containing the currently selected ranges. Note that the returned
-     * list is a wrapper around the actual selection, not a copy. Any changes made to the
-     * selection state will be reflected in the list, but events will not be fired.
+     * 
+     * @return An immutable list containing the currently selected ranges. Note
+     * that the returned list is a wrapper around the actual selection, not a
+     * copy. Any changes made to the selection state will be reflected in the
+     * list, but events will not be fired.
      */
     public ImmutableList<Span> getSelectedRanges() {
         return rangeSelection.getSelectedRanges();
@@ -819,20 +786,18 @@ public class ListView extends Component {
      * Sets the selection to the given range sequence. Any overlapping or
      * connecting ranges will be consolidated, and the resulting selection will
      * be sorted in ascending order.
-     *
+     * 
      * @param selectedRanges
-     *
-     * @return
-     * The ranges that were actually set.
+     * @return The ranges that were actually set.
      */
     public Sequence<Span> setSelectedRanges(Sequence<Span> selectedRanges) {
         if (selectedRanges == null) {
             throw new IllegalArgumentException("selectedRanges is null.");
         }
 
-        // When we're in mode NONE, the only thing we can do is to clear the selection
-        if (selectMode == SelectMode.NONE
-            && selectedRanges.getLength() > 0) {
+        // When we're in mode NONE, the only thing we can do is to clear the
+        // selection
+        if (selectMode == SelectMode.NONE && selectedRanges.getLength() > 0) {
             throw new IllegalArgumentException("Selection is not enabled.");
         }
 
@@ -869,13 +834,10 @@ public class ListView extends Component {
 
     /**
      * Sets the selection to the given range sequence.
-     *
-     * @param selectedRanges
-     * A JSON-formatted string containing the ranges to select.
-     *
-     * @return
-     * The ranges that were actually set.
-     *
+     * 
+     * @param selectedRanges A JSON-formatted string containing the ranges to
+     * select.
+     * @return The ranges that were actually set.
      * @see #setSelectedRanges(Sequence)
      */
     public final Sequence<Span> setSelectedRanges(String selectedRanges) {
@@ -893,13 +855,12 @@ public class ListView extends Component {
     }
 
     @SuppressWarnings("unchecked")
-    private static Sequence<Span> parseSelectedRanges(String json)
-        throws SerializationException {
+    private static Sequence<Span> parseSelectedRanges(String json) throws SerializationException {
         ArrayList<Span> selectedRanges = new ArrayList<>();
 
         List<?> list = JSONSerializer.parseList(json);
         for (Object item : list) {
-            Map<String, ?> map = (Map<String, ?>)item;
+            Map<String, ?> map = (Map<String, ?>) item;
             selectedRanges.add(new Span(map));
         }
 
@@ -908,9 +869,8 @@ public class ListView extends Component {
 
     /**
      * Returns the first selected index.
-     *
-     * @return
-     * The first selected index, or <tt>-1</tt> if nothing is selected.
+     * 
+     * @return The first selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getFirstSelectedIndex() {
         return (rangeSelection.getLength() > 0) ? rangeSelection.get(0).start : -1;
@@ -918,24 +878,20 @@ public class ListView extends Component {
 
     /**
      * Returns the last selected index.
-     *
-     * @return
-     * The last selected index, or <tt>-1</tt> if nothing is selected.
+     * 
+     * @return The last selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getLastSelectedIndex() {
-        return (rangeSelection.getLength() > 0) ?
-            rangeSelection.get(rangeSelection.getLength() - 1).end : -1;
+        return (rangeSelection.getLength() > 0) ? rangeSelection.get(rangeSelection.getLength() - 1).end
+            : -1;
     }
 
     /**
      * Adds a single index to the selection.
-     *
-     * @param index
-     * The index to add.
-     *
-     * @return
-     * <tt>true</tt> if the index was added to the selection; <tt>false</tt>,
-     * otherwise.
+     * 
+     * @param index The index to add.
+     * @return <tt>true</tt> if the index was added to the selection;
+     * <tt>false</tt>, otherwise.
      */
     public boolean addSelectedIndex(int index) {
         Sequence<Span> addedRanges = addSelectedRange(index, index);
@@ -944,15 +900,10 @@ public class ListView extends Component {
 
     /**
      * Adds a range of indexes to the selection.
-     *
-     * @param start
-     * The first index in the range.
-     *
-     * @param end
-     * The last index in the range.
-     *
-     * @return
-     * The ranges that were added to the selection.
+     * 
+     * @param start The first index in the range.
+     * @param end The last index in the range.
+     * @return The ranges that were added to the selection.
      */
     public Sequence<Span> addSelectedRange(int start, int end) {
         if (selectMode != SelectMode.MULTI) {
@@ -980,12 +931,9 @@ public class ListView extends Component {
 
     /**
      * Adds a range of indexes to the selection.
-     *
-     * @param range
-     * The range to add.
-     *
-     * @return
-     * The ranges that were added to the selection.
+     * 
+     * @param range The range to add.
+     * @return The ranges that were added to the selection.
      */
     public Sequence<Span> addSelectedRange(Span range) {
         if (range == null) {
@@ -997,12 +945,9 @@ public class ListView extends Component {
 
     /**
      * Removes a single index from the selection.
-     *
-     * @param index
-     * The index to remove.
-     *
-     * @return
-     * <tt>true</tt> if the index was removed from the selection;
+     * 
+     * @param index The index to remove.
+     * @return <tt>true</tt> if the index was removed from the selection;
      * <tt>false</tt>, otherwise.
      */
     public boolean removeSelectedIndex(int index) {
@@ -1012,15 +957,10 @@ public class ListView extends Component {
 
     /**
      * Removes a range of indexes from the selection.
-     *
-     * @param start
-     * The start of the range to remove.
-     *
-     * @param end
-     * The end of the range to remove.
-     *
-     * @return
-     * The ranges that were removed from the selection.
+     * 
+     * @param start The start of the range to remove.
+     * @param end The end of the range to remove.
+     * @return The ranges that were removed from the selection.
      */
     public Sequence<Span> removeSelectedRange(int start, int end) {
         if (selectMode != SelectMode.MULTI) {
@@ -1036,7 +976,8 @@ public class ListView extends Component {
         int n = removedRanges.getLength();
         for (int i = 0; i < n; i++) {
             Span removedRange = removedRanges.get(i);
-            listViewSelectionListeners.selectedRangeRemoved(this, removedRange.start, removedRange.end);
+            listViewSelectionListeners.selectedRangeRemoved(this, removedRange.start,
+                removedRange.end);
         }
 
         if (n > 0) {
@@ -1048,12 +989,9 @@ public class ListView extends Component {
 
     /**
      * Removes a range of indexes from the selection.
-     *
-     * @param range
-     * The range to remove.
-     *
-     * @return
-     * The ranges that were removed from the selection.
+     * 
+     * @param range The range to remove.
+     * @return The ranges that were removed from the selection.
      */
     public Sequence<Span> removeSelectedRange(Span range) {
         if (range == null) {
@@ -1081,12 +1019,9 @@ public class ListView extends Component {
 
     /**
      * Returns the selection state of a given index.
-     *
-     * @param index
-     * The index whose selection state is to be tested.
-     *
-     * @return <tt>true</tt> if the index is selected; <tt>false</tt>,
-     * otherwise.
+     * 
+     * @param index The index whose selection state is to be tested.
+     * @return <tt>true</tt> if the index is selected; <tt>false</tt>, otherwise.
      */
     public boolean isItemSelected(int index) {
         indexBoundsCheck("index", index, 0, listData.getLength() - 1);
@@ -1107,7 +1042,7 @@ public class ListView extends Component {
 
     @SuppressWarnings("unchecked")
     public void setSelectedItem(Object item) {
-        setSelectedIndex((item == null) ? -1 : ((List<Object>)listData).indexOf(item));
+        setSelectedIndex((item == null) ? -1 : ((List<Object>) listData).indexOf(item));
     }
 
     public Sequence<?> getSelectedItems() {
@@ -1139,7 +1074,7 @@ public class ListView extends Component {
                 throw new IllegalArgumentException("item is null");
             }
 
-            int index = ((List<Object>)listData).indexOf(item);
+            int index = ((List<Object>) listData).indexOf(item);
             if (index == -1) {
                 throw new IllegalArgumentException("\"" + item + "\" is not a valid selection.");
             }
@@ -1160,9 +1095,8 @@ public class ListView extends Component {
     /**
      * Sets the selection mode. Clears the selection if the mode has changed
      * (but does not fire a selection change event).
-     *
-     * @param selectMode
-     * The new selection mode.
+     * 
+     * @param selectMode The new selection mode.
      */
     public void setSelectMode(SelectMode selectMode) {
         if (selectMode == null) {
@@ -1187,13 +1121,13 @@ public class ListView extends Component {
      * Returns the current check mode.
      */
     public boolean getCheckmarksEnabled() {
-      return checkmarksEnabled;
+        return checkmarksEnabled;
     }
 
     /**
-     * Enables or disabled checkmarks. Clears the check state if the check
-     * mode has changed (but does not fire any check state change events).
-     *
+     * Enables or disabled checkmarks. Clears the check state if the check mode
+     * has changed (but does not fire any check state change events).
+     * 
      * @param checkmarksEnabled
      */
     public void setCheckmarksEnabled(boolean checkmarksEnabled) {
@@ -1211,7 +1145,7 @@ public class ListView extends Component {
 
     /**
      * Returns an item's checked state.
-     *
+     * 
      * @param index
      */
     public boolean isItemChecked(int index) {
@@ -1220,7 +1154,7 @@ public class ListView extends Component {
 
     /**
      * Sets an item's checked state.
-     *
+     * 
      * @param index
      * @param checked
      */
@@ -1231,12 +1165,11 @@ public class ListView extends Component {
 
         int i = ArrayList.binarySearch(checkedIndexes, index);
 
-        if ((i < 0 && checked)
-            || (i >= 0 && !checked)) {
+        if ((i < 0 && checked) || (i >= 0 && !checked)) {
             if (checked) {
-               checkedIndexes.insert(index, -(i + 1));
+                checkedIndexes.insert(index, -(i + 1));
             } else {
-               checkedIndexes.remove(i, 1);
+                checkedIndexes.remove(i, 1);
             }
 
             listViewItemStateListeners.itemCheckedChanged(this, index);
@@ -1264,12 +1197,10 @@ public class ListView extends Component {
 
     /**
      * Tells whether or not an item's checkmark is disabled.
-     *
-     * @param index
-     * The index of the item whose disabled checkmark state is to be tested.
-     *
-     * @return
-     * <tt>true</tt> if the item's checkmark is disabled; <tt>false</tt>
+     * 
+     * @param index The index of the item whose disabled checkmark state is to
+     * be tested.
+     * @return <tt>true</tt> if the item's checkmark is disabled; <tt>false</tt>
      * otherwise.
      */
     @SuppressWarnings("unchecked")
@@ -1278,7 +1209,7 @@ public class ListView extends Component {
 
         if (disabledCheckmarkFilter != null) {
             Object item = listData.get(index);
-            disabled = ((Filter<Object>)disabledCheckmarkFilter).include(item);
+            disabled = ((Filter<Object>) disabledCheckmarkFilter).include(item);
         }
 
         return disabled;
@@ -1289,38 +1220,33 @@ public class ListView extends Component {
      * are interactive and which are not. Note that this filter only affects
      * user interaction; items may still be checked programatically despite
      * their inclusion in this filter. If this filter is set to <tt>null</tt>,
-     * all checkboxes will be interactive.
-     * <p>
-     * <b>Note:</b> this filter is only relavent if
-     * {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is set to true.
-     *
-     * @return
-     * The disabled checkmark filter, or <tt>null</tt> if no disabled checkmark
-     * filter is set
+     * all checkboxes will be interactive. <p> <b>Note:</b> this filter is only
+     * relavent if {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is
+     * set to true.
+     * 
+     * @return The disabled checkmark filter, or <tt>null</tt> if no disabled
+     * checkmark filter is set
      */
     public Filter<?> getDisabledCheckmarkFilter() {
         return disabledCheckmarkFilter;
     }
 
     /**
-     * Sets the disabled checkmark filter, which determines which checkboxes
-     * are interactive and which are not. Note that this filter only affects
-     * user interaction; items may still be checked programatically despite
-     * their inclusion in this filter. If this filter is set to <tt>null</tt>,
-     * all checkboxes will be interactive.
-     * <p>
-     * <b>Note:</b> this filter is only relavent if
-     * {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is set to true.
-     * enabled.
-     *
-     * @param disabledCheckmarkFilter
-     * The disabled checkmark filter, or <tt>null</tt> for no disabled
-     * checkmark filter
+     * Sets the disabled checkmark filter, which determines which checkboxes are
+     * interactive and which are not. Note that this filter only affects user
+     * interaction; items may still be checked programatically despite their
+     * inclusion in this filter. If this filter is set to <tt>null</tt>, all
+     * checkboxes will be interactive. <p> <b>Note:</b> this filter is only
+     * relavent if {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is
+     * set to true. enabled.
+     * 
+     * @param disabledCheckmarkFilter The disabled checkmark filter, or
+     * <tt>null</tt> for no disabled checkmark filter
      */
     public void setDisabledCheckmarkFilter(Filter<?> disabledCheckmarkFilter) {
         Filter<?> previousDisabledCheckmarkFilter = this.disabledCheckmarkFilter;
 
-        if (previousDisabledCheckmarkFilter !=disabledCheckmarkFilter ) {
+        if (previousDisabledCheckmarkFilter != disabledCheckmarkFilter) {
             this.disabledCheckmarkFilter = disabledCheckmarkFilter;
             listViewListeners.disabledCheckmarkFilterChanged(this, previousDisabledCheckmarkFilter);
         }
@@ -1328,13 +1254,9 @@ public class ListView extends Component {
 
     /**
      * Returns an item's disabled state.
-     *
-     * @param index
-     * The index of the item whose disabled state is to be tested.
-     *
-     * @return
-     * <tt>true</tt> if the item is disabled; <tt>false</tt>,
-     * otherwise.
+     * 
+     * @param index The index of the item whose disabled state is to be tested.
+     * @return <tt>true</tt> if the item is disabled; <tt>false</tt>, otherwise.
      */
     @SuppressWarnings("unchecked")
     public boolean isItemDisabled(int index) {
@@ -1342,7 +1264,7 @@ public class ListView extends Component {
 
         if (disabledItemFilter != null) {
             Object item = listData.get(index);
-            disabled = ((Filter<Object>)disabledItemFilter).include(item);
+            disabled = ((Filter<Object>) disabledItemFilter).include(item);
         }
 
         return disabled;
@@ -1350,10 +1272,9 @@ public class ListView extends Component {
 
     /**
      * Returns the disabled item filter.
-     *
-     * @return
-     * The disabled item filter, or <tt>null</tt> if no disabled item filter is
-     * set.
+     * 
+     * @return The disabled item filter, or <tt>null</tt> if no disabled item
+     * filter is set.
      */
     public Filter<?> getDisabledItemFilter() {
         return disabledItemFilter;
@@ -1361,9 +1282,9 @@ public class ListView extends Component {
 
     /**
      * Sets the disabled item filter.
-     *
-     * @param disabledItemFilter
-     * The disabled item filter, or <tt>null</tt> for no disabled item filter.
+     * 
+     * @param disabledItemFilter The disabled item filter, or <tt>null</tt> for
+     * no disabled item filter.
      */
     public void setDisabledItemFilter(Filter<?> disabledItemFilter) {
         Filter<?> previousDisabledItemFilter = this.disabledItemFilter;
@@ -1376,9 +1297,8 @@ public class ListView extends Component {
 
     /**
      * Returns name of the key that is used in context binding.
-     *
-     * @return
-     * The key.
+     * 
+     * @return The key.
      */
     public String getListDataKey() {
         return listDataKey;
@@ -1386,9 +1306,8 @@ public class ListView extends Component {
 
     /**
      * Set the name of the key that is used in context binding.
-     *
-     * @param listDataKey
-     * The key to set.
+     * 
+     * @param listDataKey The key to set.
      */
     public void setListDataKey(String listDataKey) {
         String previousListDataKey = this.listDataKey;
@@ -1466,7 +1385,8 @@ public class ListView extends Component {
 
         if (previousSelectedItemBindMapping != selectedItemBindMapping) {
             this.selectedItemBindMapping = selectedItemBindMapping;
-            listViewBindingListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
+            listViewBindingListeners.selectedItemBindMappingChanged(this,
+                previousSelectedItemBindMapping);
         }
     }
 
@@ -1495,7 +1415,8 @@ public class ListView extends Component {
         BindType previousSelectedItemsBindType = this.selectedItemsBindType;
         if (previousSelectedItemsBindType != selectedItemsBindType) {
             this.selectedItemsBindType = selectedItemsBindType;
-            listViewBindingListeners.selectedItemsBindTypeChanged(this, previousSelectedItemsBindType);
+            listViewBindingListeners.selectedItemsBindTypeChanged(this,
+                previousSelectedItemsBindType);
         }
     }
 
@@ -1508,7 +1429,8 @@ public class ListView extends Component {
 
         if (previousSelectedItemsBindMapping != selectedItemsBindMapping) {
             this.selectedItemsBindMapping = selectedItemsBindMapping;
-            listViewBindingListeners.selectedItemsBindMappingChanged(this, previousSelectedItemsBindMapping);
+            listViewBindingListeners.selectedItemsBindMappingChanged(this,
+                previousSelectedItemsBindMapping);
         }
     }
 
@@ -1550,7 +1472,8 @@ public class ListView extends Component {
 
         if (previousCheckedItemsBindMapping != checkedItemsBindMapping) {
             this.checkedItemsBindMapping = checkedItemsBindMapping;
-            listViewBindingListeners.checkedItemsBindMappingChanged(this, previousCheckedItemsBindMapping);
+            listViewBindingListeners.checkedItemsBindMappingChanged(this,
+                previousCheckedItemsBindMapping);
         }
     }
 
@@ -1558,14 +1481,13 @@ public class ListView extends Component {
     @SuppressWarnings("unchecked")
     public void load(Object context) {
         // Bind to list data
-        if (listDataKey != null
-            && listDataBindType != BindType.STORE
+        if (listDataKey != null && listDataBindType != BindType.STORE
             && JSON.containsKey(context, listDataKey)) {
             Object value = JSON.get(context, listDataKey);
 
             List<?> listDataLocal;
             if (listDataBindMapping == null) {
-                listDataLocal = (List<?>)value;
+                listDataLocal = (List<?>) value;
             } else {
                 listDataLocal = listDataBindMapping.toListData(value);
             }
@@ -1576,14 +1498,13 @@ public class ListView extends Component {
         switch (selectMode) {
             case SINGLE: {
                 // Bind using selected item key
-                if (selectedItemKey != null
-                    && selectedItemBindType != BindType.STORE
+                if (selectedItemKey != null && selectedItemBindType != BindType.STORE
                     && JSON.containsKey(context, selectedItemKey)) {
                     Object item = JSON.get(context, selectedItemKey);
 
                     int index;
                     if (selectedItemBindMapping == null) {
-                        index = ((List<Object>)listData).indexOf(item);
+                        index = ((List<Object>) listData).indexOf(item);
                     } else {
                         index = selectedItemBindMapping.indexOf(listData, item);
                     }
@@ -1596,10 +1517,9 @@ public class ListView extends Component {
 
             case MULTI: {
                 // Bind using selected items key
-                if (selectedItemsKey != null
-                    && selectedItemsBindType != BindType.STORE
+                if (selectedItemsKey != null && selectedItemsBindType != BindType.STORE
                     && JSON.containsKey(context, selectedItemsKey)) {
-                    Sequence<Object> items = (Sequence<Object>)JSON.get(context, selectedItemsKey);
+                    Sequence<Object> items = (Sequence<Object>) JSON.get(context, selectedItemsKey);
 
                     clearSelection();
 
@@ -1608,7 +1528,7 @@ public class ListView extends Component {
 
                         int index;
                         if (selectedItemsBindMapping == null) {
-                            index = ((List<Object>)listData).indexOf(item);
+                            index = ((List<Object>) listData).indexOf(item);
                         } else {
                             index = selectedItemsBindMapping.indexOf(listData, item);
                         }
@@ -1632,10 +1552,9 @@ public class ListView extends Component {
         }
 
         if (checkmarksEnabled) {
-            if (checkedItemsKey != null
-                && JSON.containsKey(context, checkedItemsKey)
+            if (checkedItemsKey != null && JSON.containsKey(context, checkedItemsKey)
                 && checkedItemsBindType != BindType.STORE) {
-                Sequence<Object> items = (Sequence<Object>)JSON.get(context, checkedItemsKey);
+                Sequence<Object> items = (Sequence<Object>) JSON.get(context, checkedItemsKey);
 
                 clearCheckmarks();
 
@@ -1644,7 +1563,7 @@ public class ListView extends Component {
 
                     int index;
                     if (checkedItemsBindMapping == null) {
-                        index = ((List<Object>)listData).indexOf(item);
+                        index = ((List<Object>) listData).indexOf(item);
                     } else {
                         index = checkedItemsBindMapping.indexOf(listData, item);
                     }
@@ -1660,8 +1579,7 @@ public class ListView extends Component {
     @Override
     public void store(Object context) {
         // Bind to list data
-        if (listDataKey != null
-            && listDataBindType != BindType.LOAD) {
+        if (listDataKey != null && listDataBindType != BindType.LOAD) {
             Object value;
             if (listDataBindMapping == null) {
                 value = listData;
@@ -1675,8 +1593,7 @@ public class ListView extends Component {
         switch (selectMode) {
             case SINGLE: {
                 // Bind using selected item key
-                if (selectedItemKey != null
-                    && selectedItemBindType != BindType.LOAD) {
+                if (selectedItemKey != null && selectedItemBindType != BindType.LOAD) {
                     Object item;
 
                     int selectedIndex = getSelectedIndex();
@@ -1698,8 +1615,7 @@ public class ListView extends Component {
 
             case MULTI: {
                 // Bind using selected items key
-                if (selectedItemsKey != null
-                    && selectedItemsBindType != BindType.LOAD) {
+                if (selectedItemsKey != null && selectedItemsBindType != BindType.LOAD) {
                     ArrayList<Object> items = new ArrayList<>();
 
                     Sequence<Span> selectedRanges = getSelectedRanges();
@@ -1734,8 +1650,7 @@ public class ListView extends Component {
         }
 
         if (checkmarksEnabled) {
-            if (checkedItemsKey != null
-                && JSON.containsKey(context, checkedItemsKey)
+            if (checkedItemsKey != null && JSON.containsKey(context, checkedItemsKey)
                 && checkedItemsBindType != BindType.LOAD) {
                 ArrayList<Object> items = new ArrayList<>();
 
@@ -1763,8 +1678,7 @@ public class ListView extends Component {
             setListData(new ArrayList<>());
         }
 
-        if (selectedItemKey != null
-            || selectedItemsKey != null) {
+        if (selectedItemKey != null || selectedItemsKey != null) {
             setSelectedItem(null);
         }
 
@@ -1775,41 +1689,34 @@ public class ListView extends Component {
 
     /**
      * Returns the index of the item at a given location.
-     *
-     * @param y
-     * The y-coordinate of the item to identify.
-     *
-     * @return
-     * The item index, or <tt>-1</tt> if there is no item at the given
+     * 
+     * @param y The y-coordinate of the item to identify.
+     * @return The item index, or <tt>-1</tt> if there is no item at the given
      * y-coordinate.
      */
     public int getItemAt(int y) {
-        ListView.Skin listViewSkin = (ListView.Skin)getSkin();
+        ListView.Skin listViewSkin = (ListView.Skin) getSkin();
         return listViewSkin.getItemAt(y);
     }
 
     /**
      * Returns the bounding area of a given item.
-     *
-     * @param index
-     * The item index.
-     *
-     * @return
-     * The bounding area of the item.
+     * 
+     * @param index The item index.
+     * @return The bounding area of the item.
      */
     public Bounds getItemBounds(int index) {
-        ListView.Skin listViewSkin = (ListView.Skin)getSkin();
+        ListView.Skin listViewSkin = (ListView.Skin) getSkin();
         return listViewSkin.getItemBounds(index);
     }
 
     /**
      * Returns the item indent.
-     *
-     * @return
-     * The horizontal space preceding items in the list.
+     * 
+     * @return The horizontal space preceding items in the list.
      */
     public int getItemIndent() {
-        ListView.Skin listViewSkin = (ListView.Skin)getSkin();
+        ListView.Skin listViewSkin = (ListView.Skin) getSkin();
         return listViewSkin.getItemIndent();
     }
 

@@ -20,9 +20,7 @@ package org.apache.pivot.wtk;
  * Enumeration defining supported drop actions.
  */
 public enum DropAction {
-    COPY,
-    MOVE,
-    LINK;
+    COPY, MOVE, LINK;
 
     public int getMask() {
         return 1 << ordinal();

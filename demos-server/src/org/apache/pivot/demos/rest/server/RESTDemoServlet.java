@@ -27,8 +27,8 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.web.Query;
-import org.apache.pivot.web.QueryException;
 import org.apache.pivot.web.Query.Method;
+import org.apache.pivot.web.QueryException;
 import org.apache.pivot.web.server.QueryServlet;
 
 public class RESTDemoServlet extends QueryServlet {
@@ -64,8 +64,7 @@ public class RESTDemoServlet extends QueryServlet {
     @SuppressWarnings("resource")
     @Override
     protected URL doPost(Path path, Object value) throws QueryException {
-        if (path.getLength() > 0
-            || value == null) {
+        if (path.getLength() > 0 || value == null) {
             throw new QueryException(Query.Status.BAD_REQUEST);
         }
 
@@ -97,8 +96,7 @@ public class RESTDemoServlet extends QueryServlet {
     @SuppressWarnings("resource")
     @Override
     protected boolean doPut(Path path, Object value) throws QueryException {
-        if (path.getLength() != 1
-            || value == null) {
+        if (path.getLength() != 1 || value == null) {
             throw new QueryException(Query.Status.BAD_REQUEST);
         }
 

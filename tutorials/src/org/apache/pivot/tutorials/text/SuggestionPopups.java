@@ -94,7 +94,7 @@ public class SuggestionPopups extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        stateTextInput = (TextInput)namespace.get("stateTextInput");
+        stateTextInput = (TextInput) namespace.get("stateTextInput");
         stateTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
             public void textInserted(TextInput textInput, int index, int count) {

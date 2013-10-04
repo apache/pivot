@@ -31,8 +31,8 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 
 /**
- * Implementation of the {@link Serializer} interface that reads and
- * writes {@link java.io.File} objects.
+ * Implementation of the {@link Serializer} interface that reads and writes
+ * {@link java.io.File} objects.
  */
 public class FileSerializer implements Serializer<File> {
     private File tempFileDirectory;
@@ -42,23 +42,22 @@ public class FileSerializer implements Serializer<File> {
     private static final MimetypesFileTypeMap MIME_TYPES_FILE_MAP = new MimetypesFileTypeMap();
 
     /**
-     * Creates a new file serializer that will store temporary files in the default
-     * temporary file directory.
+     * Creates a new file serializer that will store temporary files in the
+     * default temporary file directory.
      */
     public FileSerializer() {
         this(null);
     }
 
     /**
-     * Creates a new file serializer that will store temporary files in a specific
-     * directory.
-     *
-     * @param tempFileDirectory
-     * The directory in which to store temporary folders.
+     * Creates a new file serializer that will store temporary files in a
+     * specific directory.
+     * 
+     * @param tempFileDirectory The directory in which to store temporary
+     * folders.
      */
     public FileSerializer(File tempFileDirectory) {
-        if (tempFileDirectory != null
-            && !tempFileDirectory.isDirectory()) {
+        if (tempFileDirectory != null && !tempFileDirectory.isDirectory()) {
             throw new IllegalArgumentException();
         }
 
@@ -66,8 +65,8 @@ public class FileSerializer implements Serializer<File> {
     }
 
     /**
-     * Reads a file from an input stream. The returned file is a temporary file and must be
-     * deleted by the caller.
+     * Reads a file from an input stream. The returned file is a temporary file
+     * and must be deleted by the caller.
      */
     @Override
     public File readObject(InputStream inputStream) throws IOException, SerializationException {
@@ -77,7 +76,7 @@ public class FileSerializer implements Serializer<File> {
         try {
             outputStream = new BufferedOutputStream(new FileOutputStream(file), BUFFER_SIZE);
             for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
-                outputStream.write((byte)data);
+                outputStream.write((byte) data);
             }
         } finally {
             if (outputStream != null) {
@@ -99,7 +98,7 @@ public class FileSerializer implements Serializer<File> {
         try {
             inputStream = new BufferedInputStream(new FileInputStream(file), BUFFER_SIZE);
             for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
-                outputStream.write((byte)data);
+                outputStream.write((byte) data);
             }
         } finally {
             if (inputStream != null) {

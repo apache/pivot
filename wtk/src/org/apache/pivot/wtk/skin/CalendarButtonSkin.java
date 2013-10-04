@@ -42,8 +42,8 @@ import org.apache.pivot.wtk.WindowStateListener;
 /**
  * Abstract base class for calendar button skins.
  */
-public abstract class CalendarButtonSkin extends ButtonSkin
-    implements CalendarButton.Skin, CalendarButtonListener, CalendarButtonSelectionListener {
+public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarButton.Skin,
+    CalendarButtonListener, CalendarButtonSelectionListener {
     protected Calendar calendar;
     protected Window calendarPopup;
 
@@ -52,7 +52,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     private ComponentMouseButtonListener calendarPopupMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
         @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            CalendarButton calendarButton = (CalendarButton)getComponent();
+            CalendarButton calendarButton = (CalendarButton) getComponent();
 
             calendarPopup.close();
 
@@ -68,13 +68,13 @@ public abstract class CalendarButtonSkin extends ButtonSkin
          * {@link KeyCode#ESCAPE ESCAPE} Close the popup.<br>
          * {@link KeyCode#ENTER ENTER} Choose the selected date.<br>
          * {@link KeyCode#TAB TAB} Choose the selected date and transfer focus
-         * forwards.<br>
-         * {@link KeyCode#TAB TAB} + {@link Keyboard.Modifier#SHIFT SHIFT} Choose the
-         * selected date and transfer focus backwards.
+         * forwards.<br> {@link KeyCode#TAB TAB} +
+         * {@link Keyboard.Modifier#SHIFT SHIFT} Choose the selected date and
+         * transfer focus backwards.
          */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            CalendarButton calendarButton = (CalendarButton)getComponent();
+            CalendarButton calendarButton = (CalendarButton) getComponent();
 
             switch (keyCode) {
                 case Keyboard.KeyCode.ESCAPE: {
@@ -87,8 +87,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin
                     calendarPopup.close();
 
                     if (keyCode == Keyboard.KeyCode.TAB) {
-                        FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                            FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
+                        FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
+                            : FocusTraversalDirection.FORWARD;
                         calendarButton.transferFocus(direction);
                     }
 
@@ -137,9 +137,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             display.getContainerMouseListeners().remove(displayMouseListener);
 
             Window componentWindow = getComponent().getWindow();
-            if (componentWindow != null
-                && componentWindow.isOpen()
-                && !componentWindow.isClosing()) {
+            if (componentWindow != null && componentWindow.isOpen() && !componentWindow.isClosing()) {
                 componentWindow.moveToFront();
             }
         }
@@ -148,7 +146,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            Display display = (Display)container;
+            Display display = (Display) container;
             Component descendant = display.getDescendantAt(x, y);
 
             if (!calendarPopup.isAncestor(descendant)
@@ -164,8 +162,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin
             int scrollAmount, int wheelRotation, int x, int y) {
             boolean consumed = false;
 
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
+            Display display = (Display) container;
+            Window window = (Window) display.getComponentAt(x, y);
 
             if (window != calendarPopup) {
                 consumed = true;
@@ -180,13 +178,13 @@ public abstract class CalendarButtonSkin extends ButtonSkin
         calendar.getCalendarListeners().add(new CalendarListener.Adapter() {
             @Override
             public void yearChanged(Calendar calendarArgument, int previousYear) {
-                CalendarButton calendarButton = (CalendarButton)getComponent();
+                CalendarButton calendarButton = (CalendarButton) getComponent();
                 calendarButton.setYear(calendarArgument.getYear());
             }
 
             @Override
             public void monthChanged(Calendar calendarArgument, int previousMonth) {
-                CalendarButton calendarButton = (CalendarButton)getComponent();
+                CalendarButton calendarButton = (CalendarButton) getComponent();
                 calendarButton.setMonth(calendarArgument.getMonth());
             }
         });
@@ -201,7 +199,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     public void install(Component component) {
         super.install(component);
 
-        CalendarButton calendarButton = (CalendarButton)component;
+        CalendarButton calendarButton = (CalendarButton) component;
         calendarButton.getCalendarButtonListeners().add(this);
         calendarButton.getCalendarButtonSelectionListeners().add(this);
 
@@ -283,7 +281,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
     /**
      * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
      * state.
-     *
+     * 
      * @see #keyReleased(Component, int,
      * org.apache.pivot.wtk.Keyboard.KeyLocation)
      */
@@ -350,8 +348,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin
 
     // Calendar button selection events
     @Override
-    public void selectedDateChanged(CalendarButton calendarButton,
-        CalendarDate previousSelectedDate) {
+    public void selectedDateChanged(CalendarButton calendarButton, CalendarDate previousSelectedDate) {
         // Set the selected date as the button data
         CalendarDate date = calendarButton.getSelectedDate();
         calendarButton.setButtonData(date);

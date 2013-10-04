@@ -22,7 +22,8 @@ import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.Element;
 
 /**
- * Some of the classes in the text hierarchy are very similar in layout ie. they lay their children out vertically. This class groups that functionality.
+ * Some of the classes in the text hierarchy are very similar in layout ie. they
+ * lay their children out vertically. This class groups that functionality.
  */
 abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
 
@@ -32,16 +33,25 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
 
     @Override
     protected void childLayout(int breakWidth) {
-        // TODO At some point, we may want to optimize this method by deferring layout of
-        // non-visible views. If so, we should not recycle views but rather recreate them
-        // (as is done in ParagraphView). This way, we avoid thread contention over the
-        // existing views (e.g. trying to paint one while modifying its size/location, etc.).
-        // Any invalid node views are simply replaced (in the queued callback, when the
-        // thread has finished processing the new ones). This allows the definition of
-        // validate() to remain as-is. Of course, if we redefine NodeView to implement
+        // TODO At some point, we may want to optimize this method by deferring
+        // layout of
+        // non-visible views. If so, we should not recycle views but rather
+        // recreate them
+        // (as is done in ParagraphView). This way, we avoid thread contention
+        // over the
+        // existing views (e.g. trying to paint one while modifying its
+        // size/location, etc.).
+        // Any invalid node views are simply replaced (in the queued callback,
+        // when the
+        // thread has finished processing the new ones). This allows the
+        // definition of
+        // validate() to remain as-is. Of course, if we redefine NodeView to
+        // implement
         // ConstrainedVisual, this may no longer be an issue.
-        // Note that, if anything happens to invalidate the existence of the new views before
-        // they are added to the document view, we need to make sure they are disposed (i.e.
+        // Note that, if anything happens to invalidate the existence of the new
+        // views before
+        // they are added to the document view, we need to make sure they are
+        // disposed (i.e.
         // detached).
 
         int width = 0;
@@ -90,8 +100,7 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
             TextPaneSkinNodeView nodeView = get(i);
             Bounds nodeViewBounds = nodeView.getBounds();
 
-            if (y >= nodeViewBounds.y
-                && y < nodeViewBounds.y + nodeViewBounds.height) {
+            if (y >= nodeViewBounds.y && y < nodeViewBounds.y + nodeViewBounds.height) {
                 offset = nodeView.getInsertionPoint(x - nodeView.getX(), y - nodeView.getY())
                     + nodeView.getOffset();
                 break;
@@ -124,8 +133,7 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
                     int nodeViewOffset = nodeView.getOffset();
                     int characterCount = nodeView.getCharacterCount();
 
-                    if (from >= nodeViewOffset
-                        && from < nodeViewOffset + characterCount) {
+                    if (from >= nodeViewOffset && from < nodeViewOffset + characterCount) {
                         break;
                     }
 
@@ -146,7 +154,8 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
                         }
 
                         if (nodeView != null) {
-                            offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1, direction);
+                            offset = nodeView.getNextInsertionPoint(x - nodeView.getX(), -1,
+                                direction);
                         }
                     }
 
@@ -168,8 +177,7 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
             int nodeViewOffset = nodeView.getOffset();
             int characterCount = nodeView.getCharacterCount();
 
-            if (offset >= nodeViewOffset
-                && offset < nodeViewOffset + characterCount) {
+            if (offset >= nodeViewOffset && offset < nodeViewOffset + characterCount) {
                 rowIndex += nodeView.getRowAt(offset - nodeView.getOffset());
                 break;
             }

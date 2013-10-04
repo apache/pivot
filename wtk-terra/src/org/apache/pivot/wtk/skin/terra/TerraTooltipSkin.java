@@ -45,21 +45,21 @@ public class TerraTooltipSkin extends WindowSkin {
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
         public boolean mouseMove(Container container, int x, int y) {
-            Tooltip tooltip = (Tooltip)getComponent();
+            Tooltip tooltip = (Tooltip) getComponent();
             tooltip.close();
             return false;
         }
 
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            Tooltip tooltip = (Tooltip)getComponent();
+            Tooltip tooltip = (Tooltip) getComponent();
             tooltip.close();
             return false;
         }
 
         @Override
         public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
-            Tooltip tooltip = (Tooltip)getComponent();
+            Tooltip tooltip = (Tooltip) getComponent();
             tooltip.close();
             return false;
         }
@@ -68,7 +68,7 @@ public class TerraTooltipSkin extends WindowSkin {
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
             fade = false;
-            Tooltip tooltip = (Tooltip)getComponent();
+            Tooltip tooltip = (Tooltip) getComponent();
             tooltip.close();
             return false;
         }
@@ -81,7 +81,7 @@ public class TerraTooltipSkin extends WindowSkin {
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             fade = false;
-            Tooltip tooltip = (Tooltip)getComponent();
+            Tooltip tooltip = (Tooltip) getComponent();
             tooltip.close();
             return false;
         }
@@ -102,7 +102,7 @@ public class TerraTooltipSkin extends WindowSkin {
 
     public TerraTooltipSkin() {
         // Get theme icons/colors
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         setBackgroundColor(theme.getColor(19));
 
@@ -114,7 +114,7 @@ public class TerraTooltipSkin extends WindowSkin {
     public void install(Component component) {
         super.install(component);
 
-        Tooltip tooltip = (Tooltip)component;
+        Tooltip tooltip = (Tooltip) component;
 
         dropShadowDecorator = new DropShadowDecorator(5, 2, 2);
         tooltip.getDecorators().add(dropShadowDecorator);
@@ -124,7 +124,7 @@ public class TerraTooltipSkin extends WindowSkin {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        Tooltip tooltip = (Tooltip)getComponent();
+        Tooltip tooltip = (Tooltip) getComponent();
         Component content = tooltip.getContent();
 
         if (height != -1) {
@@ -144,7 +144,7 @@ public class TerraTooltipSkin extends WindowSkin {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        Tooltip tooltip = (Tooltip)getComponent();
+        Tooltip tooltip = (Tooltip) getComponent();
         Component content = tooltip.getContent();
 
         if (width != -1) {
@@ -165,7 +165,7 @@ public class TerraTooltipSkin extends WindowSkin {
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        Tooltip tooltip = (Tooltip)getComponent();
+        Tooltip tooltip = (Tooltip) getComponent();
         Component content = tooltip.getContent();
 
         if (content != null) {
@@ -182,7 +182,7 @@ public class TerraTooltipSkin extends WindowSkin {
 
     @Override
     public void layout() {
-        Tooltip tooltip = (Tooltip)getComponent();
+        Tooltip tooltip = (Tooltip) getComponent();
         Component content = tooltip.getContent();
 
         if (content != null) {
@@ -236,9 +236,8 @@ public class TerraTooltipSkin extends WindowSkin {
 
         if (fade) {
             if (closeTransition == null) {
-                closeTransition = new FadeWindowTransition(window,
-                    closeTransitionDuration, closeTransitionRate,
-                    dropShadowDecorator);
+                closeTransition = new FadeWindowTransition(window, closeTransitionDuration,
+                    closeTransitionRate, dropShadowDecorator);
 
                 closeTransition.start(new TransitionListener() {
                     @Override
@@ -260,8 +259,7 @@ public class TerraTooltipSkin extends WindowSkin {
     public void windowCloseVetoed(Window window, Vote reason) {
         super.windowCloseVetoed(window, reason);
 
-        if (reason == Vote.DENY
-            && closeTransition != null) {
+        if (reason == Vote.DENY && closeTransition != null) {
             closeTransition.stop();
         }
     }

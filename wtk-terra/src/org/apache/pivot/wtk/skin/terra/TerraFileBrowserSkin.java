@@ -130,7 +130,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         /**
          * Obtains the icon to display for a given file.
-         *
+         * 
          * @param file
          */
         public static Image getIcon(File file) {
@@ -156,7 +156,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         @Override
         public void render(Object data, Button button, boolean highlight) {
             if (data != null) {
-                File file = (File)data;
+                File file = (File) data;
 
                 // Update the image view
                 imageView.setImage(getIcon(file));
@@ -174,7 +174,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         @Override
         public String toString(Object item) {
-            File file = (File)item;
+            File file = (File) item;
             String text = file.getName();
             if (text.length() == 0) {
                 text = System.getProperty("file.separator");
@@ -216,7 +216,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             label.getStyles().put("color", color);
 
             if (item != null) {
-                File file = (File)item;
+                File file = (File) item;
 
                 // Update the image view
                 imageView.setImage(getIcon(file));
@@ -235,7 +235,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         @Override
         public String toString(Object item) {
-            File file = (File)item;
+            File file = (File) item;
             String text = file.getName();
             if (text.length() == 0) {
                 text = System.getProperty("file.separator");
@@ -248,8 +248,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * Table view file renderer.
      */
-    public static class TableViewFileRenderer extends FileRenderer
-        implements TableView.CellRenderer {
+    public static class TableViewFileRenderer extends FileRenderer implements
+        TableView.CellRenderer {
         public static final String NAME_KEY = "name";
         public static final String SIZE_KEY = "size";
         public static final String LAST_MODIFIED_KEY = "lastModified";
@@ -260,11 +260,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         @Override
-        public void render(Object row, int rowIndex, int columnIndex,
-            TableView tableView, String columnName,
-            boolean selected, boolean highlighted, boolean disabled) {
+        public void render(Object row, int rowIndex, int columnIndex, TableView tableView,
+            String columnName, boolean selected, boolean highlighted, boolean disabled) {
             if (row != null) {
-                File file = (File)row;
+                File file = (File) row;
 
                 String text = null;
                 Image icon = null;
@@ -283,8 +282,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     text = DATE_FORMAT.format(lastModifiedDate);
                     getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
                 } else {
-                    System.err.println("Unexpected column name in " + getClass().getName()
-                        + ": " + columnName);
+                    System.err.println("Unexpected column name in " + getClass().getName() + ": "
+                        + columnName);
                     text = "";
                 }
 
@@ -292,22 +291,22 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 imageView.setImage(icon);
             }
 
-            Font font = (Font)tableView.getStyles().get("font");
+            Font font = (Font) tableView.getStyles().get("font");
             label.getStyles().put("font", font);
 
             Color color;
             if (tableView.isEnabled() && !disabled) {
                 if (selected) {
                     if (tableView.isFocused()) {
-                        color = (Color)tableView.getStyles().get("selectionColor");
+                        color = (Color) tableView.getStyles().get("selectionColor");
                     } else {
-                        color = (Color)tableView.getStyles().get("inactiveSelectionColor");
+                        color = (Color) tableView.getStyles().get("inactiveSelectionColor");
                     }
                 } else {
-                    color = (Color)tableView.getStyles().get("color");
+                    color = (Color) tableView.getStyles().get("color");
                 }
             } else {
-                color = (Color)tableView.getStyles().get("disabledColor");
+                color = (Color) tableView.getStyles().get("disabledColor");
             }
 
             label.getStyles().put("color", color);
@@ -317,7 +316,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         public String toString(Object row, String columnName) {
             String string;
 
-            File file = (File)row;
+            File file = (File) row;
             if (columnName.equals(NAME_KEY)) {
                 string = file.getName();
             } else if (columnName.equals(SIZE_KEY)) {
@@ -328,8 +327,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 Date lastModifiedDate = new Date(lastModified);
                 string = DATE_FORMAT.format(lastModifiedDate);
             } else {
-                System.err.println("Unexpected column name in " + getClass().getName()
-                    + ": " + columnName);
+                System.err.println("Unexpected column name in " + getClass().getName() + ": "
+                    + columnName);
                 string = null;
             }
 
@@ -380,8 +379,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * List button drive renderer.
      */
-    public static class ListButtonDriveRenderer extends DriveRenderer
-        implements Button.DataRenderer {
+    public static class ListButtonDriveRenderer extends DriveRenderer implements
+        Button.DataRenderer {
         public ListButtonDriveRenderer() {
             getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
         }
@@ -389,7 +388,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         @Override
         public void render(Object data, Button button, boolean highlight) {
             if (data != null) {
-                File file = (File)data;
+                File file = (File) data;
 
                 // Update the image view
                 imageView.setImage(DRIVE_IMAGE);
@@ -409,8 +408,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * List view drive renderer.
      */
-    public static class ListViewDriveRenderer extends DriveRenderer
-        implements ListView.ItemRenderer {
+    public static class ListViewDriveRenderer extends DriveRenderer implements
+        ListView.ItemRenderer {
         public ListViewDriveRenderer() {
             getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
             getStyles().put("padding", new Insets(2, 3, 2, 3));
@@ -439,7 +438,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             label.getStyles().put("color", color);
 
             if (item != null) {
-                File file = (File)item;
+                File file = (File) item;
 
                 // Update the image view
                 imageView.setImage(DRIVE_IMAGE);
@@ -466,6 +465,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     public static class FileNameAscendingComparator extends FileComparator {
         private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(File f1, File f2) {
             boolean file1IsDirectory = f1.isDirectory();
@@ -486,6 +486,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     public static class FileNameDescendingComparator extends FileComparator {
         private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(File f1, File f2) {
             boolean file1IsDirectory = f1.isDirectory();
@@ -506,6 +507,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     public static class FileSizeAscendingComparator extends FileComparator {
         private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(File f1, File f2) {
             return Long.signum(f1.length() - f2.length());
@@ -514,6 +516,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     public static class FileSizeDescendingComparator extends FileComparator {
         private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(File f1, File f2) {
             return Long.signum(f2.length() - f1.length());
@@ -522,6 +525,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     public static class FileDateAscendingComparator extends FileComparator {
         private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(File f1, File f2) {
             return Long.signum(f1.lastModified() - f2.lastModified());
@@ -530,6 +534,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     public static class FileDateDescendingComparator extends FileComparator {
         private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(File f1, File f2) {
             return Long.signum(f2.lastModified() - f1.lastModified());
@@ -541,21 +546,15 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
      */
     public static FileComparator getFileComparator(String columnName, SortDirection sortDirection) {
         if (columnName.equals("name")) {
-            return sortDirection == SortDirection.ASCENDING ?
-                    new FileNameAscendingComparator() :
-                    new FileNameDescendingComparator();
-        }
-        else if (columnName.equals("size")) {
-            return sortDirection == SortDirection.ASCENDING ?
-                    new FileSizeAscendingComparator() :
-                    new FileSizeDescendingComparator();
-        }
-        else if (columnName.equals("lastModified")) {
-            return sortDirection == SortDirection.ASCENDING ?
-                    new FileDateAscendingComparator() :
-                    new FileDateDescendingComparator();
-        }
-        else {
+            return sortDirection == SortDirection.ASCENDING ? new FileNameAscendingComparator()
+                : new FileNameDescendingComparator();
+        } else if (columnName.equals("size")) {
+            return sortDirection == SortDirection.ASCENDING ? new FileSizeAscendingComparator()
+                : new FileSizeDescendingComparator();
+        } else if (columnName.equals("lastModified")) {
+            return sortDirection == SortDirection.ASCENDING ? new FileDateAscendingComparator()
+                : new FileDateDescendingComparator();
+        } else {
             throw new IllegalArgumentException();
         }
     }
@@ -609,12 +608,10 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         @Override
         public boolean accept(File file) {
             boolean include = HIDDEN_FILE_FILTER.accept(file);
-            if (include
-                && includeFileFilter != null) {
+            if (include && includeFileFilter != null) {
                 include = includeFileFilter.include(file);
             }
-            if (include
-                && excludeFileFilter != null) {
+            if (include && excludeFileFilter != null) {
                 include = !excludeFileFilter.include(file);
             }
             return include;
@@ -626,9 +623,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         private Filter<File> excludeFileFilter;
         private FileComparator fileComparator;
 
-        public RefreshFileListTask(Filter<File> includeFileFilter,
-                Filter<File> excludeFileFilter,
-                FileComparator fileComparator) {
+        public RefreshFileListTask(Filter<File> includeFileFilter, Filter<File> excludeFileFilter,
+            FileComparator fileComparator) {
             this.includeFileFilter = includeFileFilter;
             this.excludeFileFilter = excludeFileFilter;
             this.fileComparator = fileComparator;
@@ -636,13 +632,14 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         @Override
         public ArrayList<File> execute() {
-            FileBrowser fileBrowser = (FileBrowser)getComponent();
+            FileBrowser fileBrowser = (FileBrowser) getComponent();
             File rootDirectory = fileBrowser.getRootDirectory();
             if (abort) {
                 throw new AbortException();
             }
 
-            File[] files = rootDirectory.listFiles(new FullFileFilter(includeFileFilter, excludeFileFilter));
+            File[] files = rootDirectory.listFiles(new FullFileFilter(includeFileFilter,
+                excludeFileFilter));
             if (abort) {
                 throw new AbortException();
             }
@@ -655,18 +652,28 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     private Component content = null;
 
-    @BXML private ListButton driveListButton = null;
-    @BXML private ListButton pathListButton = null;
-    @BXML private PushButton goUpButton = null;
-    @BXML private PushButton newFolderButton = null;
-    @BXML private PushButton goHomeButton = null;
-    @BXML private TextInput searchTextInput = null;
+    @BXML
+    private ListButton driveListButton = null;
+    @BXML
+    private ListButton pathListButton = null;
+    @BXML
+    private PushButton goUpButton = null;
+    @BXML
+    private PushButton newFolderButton = null;
+    @BXML
+    private PushButton goHomeButton = null;
+    @BXML
+    private TextInput searchTextInput = null;
 
-    @BXML private ScrollPane fileScrollPane = null;
-    @BXML private TableView fileTableView = null;
+    @BXML
+    private ScrollPane fileScrollPane = null;
+    @BXML
+    private TableView fileTableView = null;
 
-    @BXML private ActivityIndicator indicator = null;
-    @BXML private GridPane activityGrid = null;
+    @BXML
+    private ActivityIndicator indicator = null;
+    @BXML
+    private GridPane activityGrid = null;
 
     private boolean keyboardFolderTraversalEnabled = true;
     private boolean hideDisabledFiles = false;
@@ -683,19 +690,18 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     };
 
-    private static final DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(
-        DateFormat.SHORT, DateFormat.SHORT);
-
+    private static final DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+        DateFormat.SHORT);
 
     @Override
     public void install(Component component) {
         super.install(component);
 
-        final FileBrowser fileBrowser = (FileBrowser)component;
+        final FileBrowser fileBrowser = (FileBrowser) component;
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         try {
-            content = (Component)bxmlSerializer.readObject(TerraFileBrowserSkin.class,
+            content = (Component) bxmlSerializer.readObject(TerraFileBrowserSkin.class,
                 "terra_file_browser_skin.bxml", true);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -707,31 +713,33 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         bxmlSerializer.bind(this, TerraFileBrowserSkin.class);
 
-        driveListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener.Adapter() {
-            @Override
-            public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
-                if (previousSelectedItem != null) {
-                    File drive = (File)listButton.getSelectedItem();
-                    if(drive != null && drive.canRead()) {
-                        fileBrowser.setRootDirectory(drive);
-                    } else {
-                        refreshRoots = true;
-                        listButton.setSelectedItem(previousSelectedItem);
+        driveListButton.getListButtonSelectionListeners().add(
+            new ListButtonSelectionListener.Adapter() {
+                @Override
+                public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+                    if (previousSelectedItem != null) {
+                        File drive = (File) listButton.getSelectedItem();
+                        if (drive != null && drive.canRead()) {
+                            fileBrowser.setRootDirectory(drive);
+                        } else {
+                            refreshRoots = true;
+                            listButton.setSelectedItem(previousSelectedItem);
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        pathListButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener.Adapter() {
-            @Override
-            public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
-                File ancestorDirectory = (File)listButton.getSelectedItem();
+        pathListButton.getListButtonSelectionListeners().add(
+            new ListButtonSelectionListener.Adapter() {
+                @Override
+                public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+                    File ancestorDirectory = (File) listButton.getSelectedItem();
 
-                if (ancestorDirectory != null) {
-                    fileBrowser.setRootDirectory(ancestorDirectory);
+                    if (ancestorDirectory != null) {
+                        fileBrowser.setRootDirectory(ancestorDirectory);
+                    }
                 }
-            }
-        });
+            });
 
         goUpButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -758,12 +766,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         /**
          * {@link KeyCode#DOWN DOWN} Transfer focus to the file list and select
-         * the first item.<br>
-         * {@link KeyCode#ESCAPE ESCAPE} Clear the search field.
+         * the first item.<br> {@link KeyCode#ESCAPE ESCAPE} Clear the search
+         * field.
          */
         searchTextInput.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
-            public boolean keyPressed(Component componentArgument, int keyCode, Keyboard.KeyLocation keyLocation) {
+            public boolean keyPressed(Component componentArgument, int keyCode,
+                Keyboard.KeyLocation keyLocation) {
                 boolean consumed = super.keyPressed(componentArgument, keyCode, keyLocation);
 
                 if (keyCode == Keyboard.KeyCode.ESCAPE) {
@@ -795,7 +804,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                     for (int i = rangeStart; i <= rangeEnd; i++) {
                         @SuppressWarnings("unchecked")
-                        List<File> files = (List<File>)fileTableView.getTableData();
+                        List<File> files = (List<File>) fileTableView.getTableData();
                         File file = files.get(i);
                         fileBrowser.addSelectedFile(file);
                     }
@@ -811,7 +820,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                     for (int i = rangeStart; i <= rangeEnd; i++) {
                         @SuppressWarnings("unchecked")
-                        List<File> files = (List<File>)fileTableView.getTableData();
+                        List<File> files = (List<File>) fileTableView.getTableData();
                         File file = files.get(i);
                         fileBrowser.removeSelectedFile(file);
                     }
@@ -821,12 +830,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
 
             @Override
-            public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+            public void selectedRangesChanged(TableView tableView,
+                Sequence<Span> previousSelectedRanges) {
                 if (!updatingSelection && previousSelectedRanges != null) {
                     updatingSelection = true;
 
                     @SuppressWarnings("unchecked")
-                    Sequence<File> files = (Sequence<File>)tableView.getSelectedRows();
+                    Sequence<File> files = (Sequence<File>) tableView.getSelectedRows();
                     for (int i = 0, n = files.getLength(); i < n; i++) {
                         File file = files.get(i);
                         files.update(i, file);
@@ -852,38 +862,39 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 if (!sort.isEmpty()) {
                     Dictionary.Pair<String, SortDirection> pair = fileTableView.getSort().get(0);
                     @SuppressWarnings("unchecked")
-                    List<File> files = (List<File>)fileTableView.getTableData();
+                    List<File> files = (List<File>) fileTableView.getTableData();
                     files.setComparator(getFileComparator(pair.key, pair.value));
                 }
             }
         });
 
-        fileTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-            private int index = -1;
+        fileTableView.getComponentMouseButtonListeners().add(
+            new ComponentMouseButtonListener.Adapter() {
+                private int index = -1;
 
-            @Override
-            public boolean mouseClick(Component componentArgument, Mouse.Button button, int x, int y, int count) {
-                boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
+                @Override
+                public boolean mouseClick(Component componentArgument, Mouse.Button button, int x,
+                    int y, int count) {
+                    boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
 
-                if (count == 1) {
-                    index = fileTableView.getRowAt(y);
-                } else if (count == 2) {
-                    int indexLocal = fileTableView.getRowAt(y);
-                    if (indexLocal != -1
-                        && indexLocal == this.index
-                        && fileTableView.isRowSelected(indexLocal)) {
-                        File file = (File)fileTableView.getTableData().get(indexLocal);
+                    if (count == 1) {
+                        index = fileTableView.getRowAt(y);
+                    } else if (count == 2) {
+                        int indexLocal = fileTableView.getRowAt(y);
+                        if (indexLocal != -1 && indexLocal == this.index
+                            && fileTableView.isRowSelected(indexLocal)) {
+                            File file = (File) fileTableView.getTableData().get(indexLocal);
 
-                        if (file.isDirectory()) {
-                            fileBrowser.setRootDirectory(file);
-                            consumed = true;
+                            if (file.isDirectory()) {
+                                fileBrowser.setRootDirectory(file);
+                                consumed = true;
+                            }
                         }
                     }
-                }
 
-                return consumed;
-            }
-        });
+                    return consumed;
+                }
+            });
 
         fileBrowser.setFocusTraversalPolicy(new IndexFocusTraversalPolicy() {
             @Override
@@ -934,14 +945,14 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     public File getFileAt(int x, int y) {
         File file = null;
 
-        FileBrowser fileBrowser = (FileBrowser)getComponent();
+        FileBrowser fileBrowser = (FileBrowser) getComponent();
         Component component = fileBrowser.getDescendantAt(x, y);
         if (component == fileTableView) {
             Point location = fileTableView.mapPointFromAncestor(fileBrowser, x, y);
 
             int index = fileTableView.getRowAt(location.y);
             if (index != -1) {
-                file = (File)fileTableView.getTableData().get(index);
+                file = (File) fileTableView.getTableData().get(index);
             }
         }
 
@@ -969,17 +980,16 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
      * {@link KeyCode#ENTER ENTER} Change into the selected directory if
      * {@link #keyboardFolderTraversalEnabled} is true.<br>
      * {@link KeyCode#DELETE DELETE} or {@link KeyCode#BACKSPACE BACKSPACE}
-     * Change into the parent of the current directory.<br>
-     * {@link KeyCode#F5 F5} Refresh the file list.
+     * Change into the parent of the current directory.<br> {@link KeyCode#F5
+     * F5} Refresh the file list.
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
-        FileBrowser fileBrowser = (FileBrowser)getComponent();
+        FileBrowser fileBrowser = (FileBrowser) getComponent();
 
-        if (keyCode == Keyboard.KeyCode.ENTER
-            && keyboardFolderTraversalEnabled) {
+        if (keyCode == Keyboard.KeyCode.ENTER && keyboardFolderTraversalEnabled) {
             Sequence<File> selectedFiles = fileBrowser.getSelectedFiles();
 
             if (selectedFiles.getLength() == 1) {
@@ -989,8 +999,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     consumed = true;
                 }
             }
-        } else if (keyCode == Keyboard.KeyCode.DELETE
-            || keyCode == Keyboard.KeyCode.BACKSPACE) {
+        } else if (keyCode == Keyboard.KeyCode.DELETE || keyCode == Keyboard.KeyCode.BACKSPACE) {
             File rootDirectory = fileBrowser.getRootDirectory();
             File parentDirectory = rootDirectory.getParentFile();
             if (parentDirectory != null) {
@@ -1008,7 +1017,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * CommandModifier + {@link KeyCode#F F} Transfers focus to the search
      * TextInput.
-     *
+     * 
      * @see Platform#getCommandModifier()
      */
     @Override
@@ -1016,8 +1025,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
 
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-        if (keyCode == Keyboard.KeyCode.F
-            && Keyboard.isPressed(commandModifier)) {
+        if (keyCode == Keyboard.KeyCode.F && Keyboard.isPressed(commandModifier)) {
             searchTextInput.requestFocus();
             consumed = true;
         }
@@ -1039,7 +1047,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         @SuppressWarnings("unchecked")
         ArrayList<File> drives = (ArrayList<File>) driveListButton.getListData();
-        if(refreshRoots) {
+        if (refreshRoots) {
             File[] roots = File.listRoots();
             drives = new ArrayList<>();
             for (int i = 0; i < roots.length; i++) {
@@ -1083,7 +1091,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     public void selectedFileAdded(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
             @SuppressWarnings("unchecked")
-            List<File> files = (List<File>)fileTableView.getTableData();
+            List<File> files = (List<File>) fileTableView.getTableData();
             int index = files.indexOf(file);
             if (index != -1) {
                 updatingSelection = true;
@@ -1097,7 +1105,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
         if (!updatingSelection) {
             @SuppressWarnings("unchecked")
-            List<File> files = (List<File>)fileTableView.getTableData();
+            List<File> files = (List<File>) fileTableView.getTableData();
             int index = files.indexOf(file);
             if (index != -1) {
                 updatingSelection = true;
@@ -1121,7 +1129,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 File selectedFile = selectedFiles.get(i);
 
                 @SuppressWarnings("unchecked")
-                List<File> files = (List<File>)fileTableView.getTableData();
+                List<File> files = (List<File>) fileTableView.getTableData();
                 int index = files.indexOf(selectedFile);
                 if (index != -1) {
                     selectedRanges.add(new Span(index, index));
@@ -1136,12 +1144,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     @Override
     public void multiSelectChanged(FileBrowser fileBrowser) {
-        fileTableView.setSelectMode(fileBrowser.isMultiSelect() ? TableView.SelectMode.MULTI :
-            TableView.SelectMode.SINGLE);
+        fileTableView.setSelectMode(fileBrowser.isMultiSelect() ? TableView.SelectMode.MULTI
+            : TableView.SelectMode.SINGLE);
     }
 
     @Override
-    public void disabledFileFilterChanged(FileBrowser fileBrowser, Filter<File> previousDisabledFileFilter) {
+    public void disabledFileFilterChanged(FileBrowser fileBrowser,
+        Filter<File> previousDisabledFileFilter) {
         fileTableView.setDisabledRowFilter(fileBrowser.getDisabledFileFilter());
         refreshFileList();
     }
@@ -1163,7 +1172,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         fileTableView.setTableData(new ArrayList<File>());
 
         String text = searchTextInput.getText().trim();
-        Filter<File> disabledFileFilter = hideDisabledFiles ? ((FileBrowser) getComponent()).getDisabledFileFilter() : null;
+        Filter<File> disabledFileFilter = hideDisabledFiles ? ((FileBrowser) getComponent()).getDisabledFileFilter()
+            : null;
         Filter<File> includeFileFilter = text.length() != 0 ? new IncludeFileFilter(text) : null;
 
         TableView.SortDictionary sort = fileTableView.getSort();
@@ -1176,7 +1186,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             fileComparator = getFileComparator(pair.key, pair.value);
         }
 
-        refreshFileListTask = new RefreshFileListTask(includeFileFilter, disabledFileFilter, fileComparator);
+        refreshFileListTask = new RefreshFileListTask(includeFileFilter, disabledFileFilter,
+            fileComparator);
         refreshFileListTask.execute(new TaskAdapter<>(new TaskListener<ArrayList<File>>() {
             @Override
             public void taskExecuted(Task<ArrayList<File>> task) {

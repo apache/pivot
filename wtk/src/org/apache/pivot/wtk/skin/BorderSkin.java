@@ -40,10 +40,8 @@ import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Theme;
 
 /**
- * Border skin.
- * <p>
- * TODO Add styles to support different border styles (e.g. inset, outset) or
- * create subclasses for these border types.
+ * Border skin. <p> TODO Add styles to support different border styles (e.g.
+ * inset, outset) or create subclasses for these border types.
  */
 public class BorderSkin extends ContainerSkin implements BorderListener {
     private Font font;
@@ -69,7 +67,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     public void install(Component component) {
         super.install(component);
 
-        Border border = (Border)component;
+        Border border = (Border) component;
         border.getBorderListeners().add(this);
     }
 
@@ -77,26 +75,25 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        Border border = (Border)getComponent();
+        Border border = (Border) getComponent();
         int topThickness = thickness;
 
         String title = border.getTitle();
-        if (title != null
-            && title.length() > 0) {
+        if (title != null && title.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             Rectangle2D headingBounds = font.getStringBounds(title, fontRenderContext);
-            preferredWidth = (int)Math.ceil(headingBounds.getWidth());
+            preferredWidth = (int) Math.ceil(headingBounds.getWidth());
 
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
+            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
         }
 
         Component content = border.getContent();
         if (content != null) {
             int heightUpdated = height;
             if (heightUpdated != -1) {
-                heightUpdated = Math.max(heightUpdated - (topThickness + thickness) -
-                    padding.top - padding.bottom, 0);
+                heightUpdated = Math.max(heightUpdated - (topThickness + thickness) - padding.top
+                    - padding.bottom, 0);
             }
 
             preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(heightUpdated));
@@ -111,23 +108,22 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        Border border = (Border)getComponent();
+        Border border = (Border) getComponent();
         int topThickness = thickness;
 
         String title = border.getTitle();
-        if (title != null
-            && title.length() > 0) {
+        if (title != null && title.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
+            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
         }
 
         Component content = border.getContent();
         if (content != null) {
             int widthUpdated = width;
             if (widthUpdated != -1) {
-                widthUpdated = Math.max(widthUpdated - (thickness * 2)
-                    - padding.left - padding.right, 0);
+                widthUpdated = Math.max(widthUpdated - (thickness * 2) - padding.left
+                    - padding.right, 0);
             }
 
             preferredHeight = content.getPreferredHeight(widthUpdated);
@@ -143,18 +139,17 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        Border border = (Border)getComponent();
+        Border border = (Border) getComponent();
         int topThickness = thickness;
 
         String title = border.getTitle();
-        if (title != null
-            && title.length() > 0) {
+        if (title != null && title.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             Rectangle2D headingBounds = font.getStringBounds(title, fontRenderContext);
-            preferredWidth = (int)Math.ceil(headingBounds.getWidth());
+            preferredWidth = (int) Math.ceil(headingBounds.getWidth());
 
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
+            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
         }
 
         Component content = border.getContent();
@@ -174,24 +169,22 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     public int getBaseline(int width, int height) {
         int baseline = -1;
 
-        Border border = (Border)getComponent();
+        Border border = (Border) getComponent();
         int topThickness = thickness;
 
         // Delegate baseline calculation to the content component
         Component content = border.getContent();
         if (content != null) {
             String title = border.getTitle();
-            if (title != null
-                && title.length() > 0) {
+            if (title != null && title.length() > 0) {
                 FontRenderContext fontRenderContext = Platform.getFontRenderContext();
                 LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-                topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
+                topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
             }
 
-            int clientWidth = Math.max(width - (thickness * 2)
-                - (padding.left + padding.right), 0);
-            int clientHeight = Math.max(height - (topThickness + thickness) -
-                (padding.top + padding.bottom), 0);
+            int clientWidth = Math.max(width - (thickness * 2) - (padding.left + padding.right), 0);
+            int clientHeight = Math.max(height - (topThickness + thickness)
+                - (padding.top + padding.bottom), 0);
 
             baseline = content.getBaseline(clientWidth, clientHeight);
         }
@@ -209,26 +202,23 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         int width = getWidth();
         int height = getHeight();
 
-        Border border = (Border)getComponent();
+        Border border = (Border) getComponent();
         int topThickness = thickness;
 
         String title = border.getTitle();
-        if (title != null
-            && title.length() > 0) {
+        if (title != null && title.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
+            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
         }
 
         Component content = border.getContent();
         if (content != null) {
-            content.setLocation(padding.left + thickness,
-                padding.top + topThickness);
+            content.setLocation(padding.left + thickness, padding.top + topThickness);
 
-            int contentWidth = Math.max(width - (padding.left + padding.right
-                + (thickness * 2)), 0);
-            int contentHeight = Math.max(height - (padding.top + padding.bottom
-                + (topThickness + thickness)), 0);
+            int contentWidth = Math.max(width - (padding.left + padding.right + (thickness * 2)), 0);
+            int contentHeight = Math.max(height
+                - (padding.top + padding.bottom + (topThickness + thickness)), 0);
 
             content.setSize(contentWidth, contentHeight);
         }
@@ -236,17 +226,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     @Override
     public void paint(Graphics2D graphics) {
-        Border border = (Border)getComponent();
+        Border border = (Border) getComponent();
         int topThickness = thickness;
         float titleAscent = 0;
 
         String title = border.getTitle();
-        if (title != null
-            && title.length() > 0) {
+        if (title != null && title.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
             titleAscent = lm.getAscent();
-            topThickness = Math.max((int)Math.ceil(lm.getHeight()), topThickness);
+            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
         }
 
         // TODO Java2D doesn't support variable corner radii; we'll need to
@@ -259,7 +248,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         int strokeX = thickness / 2;
         int strokeY = topThickness / 2;
         int strokeWidth = Math.max(width - thickness, 0);
-        int strokeHeight = Math.max(height - (int)Math.ceil((topThickness + thickness) * 0.5), 0);
+        int strokeHeight = Math.max(height - (int) Math.ceil((topThickness + thickness) * 0.5), 0);
 
         // Draw the background
         Paint backgroundPaint = getBackgroundPaint();
@@ -270,7 +259,8 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
-                graphics.fillRoundRect(strokeX, strokeY, strokeWidth, strokeHeight, cornerRadius, cornerRadius);
+                graphics.fillRoundRect(strokeX, strokeY, strokeWidth, strokeHeight, cornerRadius,
+                    cornerRadius);
 
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -290,13 +280,13 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
             // Note that we add one pixel to the string bounds for spacing
             Rectangle2D titleBounds = font.getStringBounds(title, fontRenderContext);
             titleBounds = new Rectangle2D.Double(padding.left + thickness,
-                (topThickness - titleBounds.getHeight()) / 2,
-                    titleBounds.getWidth() + 1, titleBounds.getHeight());
+                (topThickness - titleBounds.getHeight()) / 2, titleBounds.getWidth() + 1,
+                titleBounds.getHeight());
 
             graphics.setFont(font);
             graphics.setPaint(titleColor);
-            graphics.drawString(title, (int)titleBounds.getX(),
-                (int)(titleBounds.getY() + titleAscent));
+            graphics.drawString(title, (int) titleBounds.getX(),
+                (int) (titleBounds.getY() + titleAscent));
 
             Area titleClip = new Area(graphics.getClip());
             titleClip.subtract(new Area(titleBounds));
@@ -319,7 +309,8 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
                     RenderingHints.VALUE_ANTIALIAS_OFF);
             } else {
                 int y = (topThickness - thickness) / 2;
-                GraphicsUtilities.drawRect(graphics, 0, y, width, Math.max(height - y, 0), thickness);
+                GraphicsUtilities.drawRect(graphics, 0, y, width, Math.max(height - y, 0),
+                    thickness);
             }
         }
     }
@@ -345,6 +336,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     /**
      * Sets the font used in rendering the title
+     * 
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
@@ -357,6 +349,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     /**
      * Sets the font used in rendering the title
+     * 
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
@@ -388,7 +381,9 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     /**
      * Sets the color of the border
-     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     * 
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
+     * values recognized by Pivot}.
      */
     public final void setColor(String color) {
         if (color == null) {
@@ -450,14 +445,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Returns the amount of space between the edge of the Border and its content.
+     * Returns the amount of space between the edge of the Border and its
+     * content.
      */
     public Insets getPadding() {
         return padding;
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the Border and its content.
+     * Sets the amount of space to leave between the edge of the Border and its
+     * content.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -469,9 +466,11 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the Border and its content.
-     *
-     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     * Sets the amount of space to leave between the edge of the Border and its
+     * content.
+     * 
+     * @param padding A dictionary with keys in the set {left, top, bottom,
+     * right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
@@ -482,16 +481,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the Border and its content,
-     * uniformly on all four edges.
+     * Sets the amount of space to leave between the edge of the Border and its
+     * content, uniformly on all four edges.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the Border and its content,
-     * uniformly on all four edges.
+     * Sets the amount of space to leave between the edge of the Border and its
+     * content, uniformly on all four edges.
      */
     public void setPadding(Number padding) {
         if (padding == null) {
@@ -502,10 +501,11 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the Border and its content.
-     *
-     * @param padding A string containing an integer or a JSON dictionary with keys
-     * left, top, bottom, and/or right.
+     * Sets the amount of space to leave between the edge of the Border and its
+     * content.
+     * 
+     * @param padding A string containing an integer or a JSON dictionary with
+     * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
         if (padding == null) {
@@ -516,7 +516,8 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Returns a {@link CornerRadii}, describing the radius of each of the Border's corners.
+     * Returns a {@link CornerRadii}, describing the radius of each of the
+     * Border's corners.
      */
     public CornerRadii getCornerRadii() {
         return cornerRadii;
@@ -536,6 +537,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     /**
      * Sets the radii of the Border's corners
+     * 
      * @param cornerRadii A Dictionary
      * {@link CornerRadii#CornerRadii(Dictionary) specifying the four corners}
      */
@@ -567,6 +569,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     /**
      * Sets the radii of the Border's corners
+     * 
      * @param cornerRadii A single integer value, or a JSON dictionary
      * {@link CornerRadii#CornerRadii(Dictionary) specifying the four corners}
      */

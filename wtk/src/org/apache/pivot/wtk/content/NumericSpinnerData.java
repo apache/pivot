@@ -26,13 +26,10 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
  * Spinner data model that presents a bounded list of integers. This is a
- * lightweight class that spoofs the actual list data (no data is stored in
- * the list).
- * <p>
- * The iterator returned by this class's <tt>iterator</tt> method is
+ * lightweight class that spoofs the actual list data (no data is stored in the
+ * list). <p> The iterator returned by this class's <tt>iterator</tt> method is
  * <i>fail-fast</i>: if the bounds of the enclosing spinner data change during
  * iteration, a <tt>ConcurrentModificationException</tt> will be thrown.
  */
@@ -82,8 +79,8 @@ public class NumericSpinnerData implements List<Integer> {
 
     /**
      * Creates a new <tt>NumericSpinnerData</tt> instance bounded from
-     * <tt>Short.MIN_VALUE</tt> to <tt>Short.MAX_VALUE</tt> and an increment
-     * of one.
+     * <tt>Short.MIN_VALUE</tt> to <tt>Short.MAX_VALUE</tt> and an increment of
+     * one.
      */
     public NumericSpinnerData() {
         this(Short.MIN_VALUE, Short.MAX_VALUE, 1);
@@ -106,7 +103,7 @@ public class NumericSpinnerData implements List<Integer> {
             throw new IllegalArgumentException("Lower bound must be less than upper bound.");
         }
 
-        long length = (((long)upperBound - (long)lowerBound) / increment) + 1;
+        long length = (((long) upperBound - (long) lowerBound) / increment) + 1;
 
         if (length > Integer.MAX_VALUE) {
             throw new IllegalArgumentException("Bounded range is too large.");

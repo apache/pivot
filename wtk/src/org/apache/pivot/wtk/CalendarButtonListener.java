@@ -53,7 +53,7 @@ public interface CalendarButtonListener {
 
     /**
      * Called when a calendar button's year value has changed.
-     *
+     * 
      * @param calendarButton
      * @param previousYear
      */
@@ -61,7 +61,7 @@ public interface CalendarButtonListener {
 
     /**
      * Called when a calendar button's month value has changed.
-     *
+     * 
      * @param calendarButton
      * @param previousMonth
      */
@@ -69,7 +69,7 @@ public interface CalendarButtonListener {
 
     /**
      * Called when a calendar button's locale has changed.
-     *
+     * 
      * @param calendarButton
      * @param previousLocale
      */
@@ -77,7 +77,7 @@ public interface CalendarButtonListener {
 
     /**
      * Called when a calendar button's disabled date filter has changed.
-     *
+     * 
      * @param calendarButton
      * @param previousDisabledDateFilter
      */

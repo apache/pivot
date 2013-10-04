@@ -31,8 +31,8 @@ public class BorderDecorator implements Decorator {
     public Graphics2D prepare(Component component, Graphics2D graphics) {
         graphics.setColor(Color.RED);
         graphics.setStroke(new BasicStroke(1));
-        graphics.draw(new Rectangle2D.Double(-1, -1,
-            component.getWidth() + 1, component.getHeight() + 1));
+        graphics.draw(new Rectangle2D.Double(-1, -1, component.getWidth() + 1,
+            component.getHeight() + 1));
         return graphics;
     }
 

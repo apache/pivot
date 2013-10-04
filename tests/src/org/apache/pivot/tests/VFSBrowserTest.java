@@ -36,25 +36,23 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.VFSBrowserSheet;
 
-public class VFSBrowserTest implements Application
-{
+public class VFSBrowserTest implements Application {
 
     public VFSBrowserTest() {
     }
 
-
     private Frame frame = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception
-    {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BoxPane windowContent = new BoxPane();
         PushButton button = new PushButton("Open Sheet");
         button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button buttonArgument) {
                 try {
-                    final VFSBrowserSheet vfsBrowserSheet = new VFSBrowserSheet(VFSBrowserSheet.Mode.OPEN);
+                    final VFSBrowserSheet vfsBrowserSheet = new VFSBrowserSheet(
+                        VFSBrowserSheet.Mode.OPEN);
 
                     vfsBrowserSheet.open(frame, new SheetCloseListener() {
                         @Override
@@ -73,9 +71,9 @@ public class VFSBrowserTest implements Application
                             }
                         }
                     });
-                }
-                catch (FileSystemException fse) {
-                    Alert.alert(MessageType.ERROR, String.format("File System Exception: %1$s", fse.getMessage()), frame);
+                } catch (FileSystemException fse) {
+                    Alert.alert(MessageType.ERROR,
+                        String.format("File System Exception: %1$s", fse.getMessage()), frame);
                 }
             }
         });
@@ -101,7 +99,6 @@ public class VFSBrowserTest implements Application
         // empty block
     }
 
-
     @Override
     public void suspend() {
         // empty block
@@ -112,4 +109,3 @@ public class VFSBrowserTest implements Application
     }
 
 }
-

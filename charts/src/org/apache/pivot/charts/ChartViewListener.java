@@ -24,7 +24,7 @@ import org.apache.pivot.collections.List;
 public interface ChartViewListener {
     /**
      * Fired when a chart view's data changes.
-     *
+     * 
      * @param chartView
      * @param previousChartData
      */
@@ -32,7 +32,7 @@ public interface ChartViewListener {
 
     /**
      * Fired when a chart view's series name key changes.
-     *
+     * 
      * @param chartView
      * @param previousSeriesNameKey
      */
@@ -40,7 +40,7 @@ public interface ChartViewListener {
 
     /**
      * Fired when a chart view's title changes.
-     *
+     * 
      * @param chartView
      * @param previousTitle
      */
@@ -48,7 +48,7 @@ public interface ChartViewListener {
 
     /**
      * Fired when a chart view's horizontal axis label changes.
-     *
+     * 
      * @param chartView
      * @param previousHorizontalAxisLabel
      */
@@ -56,7 +56,7 @@ public interface ChartViewListener {
 
     /**
      * Fired when a chart view's vertical axis label changes.
-     *
+     * 
      * @param chartView
      * @param previousVerticalAxisLabel
      */
@@ -64,7 +64,7 @@ public interface ChartViewListener {
 
     /**
      * Fired when a chart view's "show legend" flag changes.
-     *
+     * 
      * @param chartView
      */
     public void showLegendChanged(ChartView chartView);

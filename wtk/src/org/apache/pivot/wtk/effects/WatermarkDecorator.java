@@ -58,9 +58,8 @@ public class WatermarkDecorator implements Decorator {
     /**
      * Creates a new <tt>WatermarkDecorator</tt> with the specified string as
      * its text and no image.
-     *
-     * @param text
-     * The text to paint over the decorated component
+     * 
+     * @param text The text to paint over the decorated component
      */
     public WatermarkDecorator(String text) {
         this(text, null);
@@ -69,9 +68,8 @@ public class WatermarkDecorator implements Decorator {
     /**
      * Creates a new <tt>WatermarkDecorator</tt> with no text and the specified
      * image.
-     *
-     * @param image
-     * The image to paint over the decorated component
+     * 
+     * @param image The image to paint over the decorated component
      */
     public WatermarkDecorator(Image image) {
         this(null, image);
@@ -80,12 +78,9 @@ public class WatermarkDecorator implements Decorator {
     /**
      * Creates a new <tt>WatermarkDecorator</tt> with the specified text and
      * image.
-     *
-     * @param text
-     * The text to paint over the decorated component
-     *
-     * @param image
-     * The image to paint over the decorated component
+     * 
+     * @param text The text to paint over the decorated component
+     * @param image The image to paint over the decorated component
      */
     public WatermarkDecorator(String text, Image image) {
         boxPane.add(imageView);
@@ -94,7 +89,7 @@ public class WatermarkDecorator implements Decorator {
         boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         imageView.getStyles().put("opacity", opacity);
 
-        Font font = (Font)label.getStyles().get("font");
+        Font font = (Font) label.getStyles().get("font");
         label.getStyles().put("font", font.deriveFont(Font.BOLD, 60));
 
         label.setText(text != null ? text : "");
@@ -105,9 +100,8 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Gets the text that will be painted over this decorator's component.
-     *
-     * @return
-     * This decorator's text
+     * 
+     * @return This decorator's text
      */
     public String getText() {
         return label.getText();
@@ -115,9 +109,8 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the text that will be painted over this decorator's component.
-     *
-     * @param text
-     * This decorator's text
+     * 
+     * @param text This decorator's text
      */
     public void setText(String text) {
         label.setText(text != null ? text : "");
@@ -126,19 +119,17 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Gets the font that will be used when painting this decorator's text.
-     *
-     * @return
-     * This decorator's font
+     * 
+     * @return This decorator's font
      */
     public Font getFont() {
-        return (Font)label.getStyles().get("font");
+        return (Font) label.getStyles().get("font");
     }
 
     /**
      * Sets the font that will be used when painting this decorator's text.
-     *
-     * @param font
-     * This decorator's font
+     * 
+     * @param font This decorator's font
      */
     public void setFont(Font font) {
         if (font == null) {
@@ -151,9 +142,8 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the font that will be used when painting this decorator's text.
-     *
-     * @param font
-     * This decorator's font
+     * 
+     * @param font This decorator's font
      */
     public final void setFont(String font) {
         if (font == null) {
@@ -173,9 +163,8 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Gets the image that will be painted over this decorator's component.
-     *
-     * @return
-     * This decorator's image
+     * 
+     * @return This decorator's image
      */
     public Image getImage() {
         return imageView.getImage();
@@ -183,9 +172,8 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the image that will be painted over this decorator's component.
-     *
-     * @param image
-     * This decorator's image
+     * 
+     * @param image This decorator's image
      */
     public void setImage(Image image) {
         imageView.setImage(image);
@@ -194,14 +182,11 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the image that will be painted over this decorator's component by
-     * URL.
-     * <p>
-     * If the icon already exists in the application context resource cache,
-     * the cached value will be used. Otherwise, the icon will be loaded
+     * URL. <p> If the icon already exists in the application context resource
+     * cache, the cached value will be used. Otherwise, the icon will be loaded
      * synchronously and added to the cache.
-     *
-     * @param imageURL
-     * The location of the image to set.
+     * 
+     * @param imageURL The location of the image to set.
      */
     public void setImage(URL imageURL) {
         if (imageURL == null) {
@@ -213,10 +198,8 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the image that will be painted over this decorator's component.
-     *
-     * @param imageName
-     * The resource name of the image to set.
-     *
+     * 
+     * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
      */
     public void setImage(String imageName) {
@@ -234,9 +217,8 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Gets the opacity of the watermark.
-     *
-     * @return
-     * This decorator's opacity
+     * 
+     * @return This decorator's opacity
      */
     public float getOpacity() {
         return opacity;
@@ -244,9 +226,8 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the opacity of the watermark.
-     *
-     * @param opacity
-     * This decorator's opacity
+     * 
+     * @param opacity This decorator's opacity
      */
     public void setOpacity(float opacity) {
         this.opacity = opacity;
@@ -255,9 +236,8 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Gets the angle at the watermark will be painted, in radians.
-     *
-     * @return
-     * This decorator's watermark angle
+     * 
+     * @return This decorator's watermark angle
      */
     public double getTheta() {
         return theta;
@@ -266,13 +246,11 @@ public class WatermarkDecorator implements Decorator {
     /**
      * Sets the angle at the watermark will be painted, in radians. This value
      * must lie between <tt>0</tt> and <tt>PI / 2</tt> (inclusive).
-     *
-     * @param theta
-     * This decorator's watermark angle
+     * 
+     * @param theta This decorator's watermark angle
      */
     public void setTheta(double theta) {
-        if (theta < 0
-            || theta > Math.PI / 2) {
+        if (theta < 0 || theta > Math.PI / 2) {
             throw new IllegalArgumentException("Theta must be between 0 nd PI / 2.");
         }
 
@@ -303,23 +281,22 @@ public class WatermarkDecorator implements Decorator {
         double sinTheta = Math.sin(theta);
         double cosTheta = Math.cos(theta);
 
-        Graphics2D watermarkGraphics = (Graphics2D)graphics.create();
+        Graphics2D watermarkGraphics = (Graphics2D) graphics.create();
         watermarkGraphics.clipRect(0, 0, component.getWidth(), component.getHeight());
-        watermarkGraphics.setComposite(AlphaComposite.getInstance
-            (AlphaComposite.SRC_OVER, opacity));
+        watermarkGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
         watermarkGraphics.rotate(theta);
 
         // Calculate the separation in between each repetition of the watermark
-        int dX = (int)(1.5 * boxPane.getWidth());
+        int dX = (int) (1.5 * boxPane.getWidth());
         int dY = 2 * boxPane.getHeight();
 
         // Prepare the origin of our graphics context
         int x = 0;
-        int y = (int)(-width * sinTheta);
+        int y = (int) (-width * sinTheta);
         watermarkGraphics.translate(x, y);
 
-        for (int yStop = (int)(height * cosTheta), p = 0; y < yStop; y += dY, p = 1 - p) {
-            for (int xStop = (int)(height * sinTheta + width * cosTheta); x < xStop; x += dX) {
+        for (int yStop = (int) (height * cosTheta), p = 0; y < yStop; y += dY, p = 1 - p) {
+            for (int xStop = (int) (height * sinTheta + width * cosTheta); x < xStop; x += dX) {
                 boxPane.paint(watermarkGraphics);
                 watermarkGraphics.translate(dX, 0);
             }
@@ -329,7 +306,7 @@ public class WatermarkDecorator implements Decorator {
             x = 0;
 
             // Shift the x back and forth to add randomness feel to pattern
-            watermarkGraphics.translate((int)((0.5f - p) * boxPane.getWidth()), 0);
+            watermarkGraphics.translate((int) ((0.5f - p) * boxPane.getWidth()), 0);
         }
 
         watermarkGraphics.dispose();

@@ -25,13 +25,13 @@ import org.apache.pivot.wtk.RollupStateListener;
 /**
  * Abstract base class for rollup skins.
  */
-public abstract class RollupSkin extends ContainerSkin
-    implements RollupListener, RollupStateListener {
+public abstract class RollupSkin extends ContainerSkin implements RollupListener,
+    RollupStateListener {
     @Override
     public void install(Component component) {
         super.install(component);
 
-        Rollup rollup = (Rollup)component;
+        Rollup rollup = (Rollup) component;
         rollup.getRollupListeners().add(this);
         rollup.getRollupStateListeners().add(this);
     }

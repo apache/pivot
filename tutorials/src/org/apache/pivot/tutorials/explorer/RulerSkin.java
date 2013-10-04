@@ -28,7 +28,7 @@ class RulerSkin extends ComponentSkin implements RulerListener {
     public void install(Component component) {
         super.install(component);
 
-        Ruler ruler = (Ruler)component;
+        Ruler ruler = (Ruler) component;
         ruler.getRulerListeners().add(this);
     }
 
@@ -39,7 +39,7 @@ class RulerSkin extends ComponentSkin implements RulerListener {
 
     @Override
     public int getPreferredHeight(int width) {
-        Ruler ruler = (Ruler)getComponent();
+        Ruler ruler = (Ruler) getComponent();
         Orientation orientation = ruler.getOrientation();
 
         return (orientation == Orientation.HORIZONTAL) ? 20 : 0;
@@ -47,7 +47,7 @@ class RulerSkin extends ComponentSkin implements RulerListener {
 
     @Override
     public int getPreferredWidth(int height) {
-        Ruler ruler = (Ruler)getComponent();
+        Ruler ruler = (Ruler) getComponent();
         Orientation orientation = ruler.getOrientation();
 
         return (orientation == Orientation.VERTICAL) ? 20 : 0;
@@ -58,7 +58,7 @@ class RulerSkin extends ComponentSkin implements RulerListener {
         int width = getWidth();
         int height = getHeight();
 
-        Ruler ruler = (Ruler)getComponent();
+        Ruler ruler = (Ruler) getComponent();
 
         graphics.setColor(new Color(0xFF, 0xFF, 0xE0));
         graphics.fillRect(0, 0, width, height);

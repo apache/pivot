@@ -29,41 +29,33 @@ public abstract class Button extends Component {
      * Enumeration representing a button's selection state.
      */
     public enum State {
-        SELECTED,
-        UNSELECTED,
-        MIXED
+        SELECTED, UNSELECTED, MIXED
     }
 
     /**
-     * {@link Renderer} interface to customize the appearance of data in a Button.
+     * {@link Renderer} interface to customize the appearance of data in a
+     * Button.
      */
     public interface DataRenderer extends Renderer {
         /**
          * Prepares the renderer for layout or paint.
-         *
-         * @param data
-         * The data to render, or <tt>null</tt> if called to calculate preferred
-         * height for skins that assume a fixed renderer height.
-         *
-         * @param button
-         * The host component.
-         *
-         * @param highlighted
-         * If <tt>true</tt>, the item is highlighted.
+         * 
+         * @param data The data to render, or <tt>null</tt> if called to
+         * calculate preferred height for skins that assume a fixed renderer
+         * height.
+         * @param button The host component.
+         * @param highlighted If <tt>true</tt>, the item is highlighted.
          */
         public void render(Object data, Button button, boolean highlighted);
 
         /**
          * Converts button data to a string representation.
-         *
+         * 
          * @param data
-         *
-         * @return
-         * The data's string representation, or <tt>null</tt> if the data does not
-         * have a string representation.
-         * <p>
-         * Note that this method may be called often during keyboard navigation, so
-         * implementations should avoid unnecessary string allocations.
+         * @return The data's string representation, or <tt>null</tt> if the data
+         * does not have a string representation. <p> Note that this method may
+         * be called often during keyboard navigation, so implementations should
+         * avoid unnecessary string allocations.
          */
         public String toString(Object data);
     }
@@ -75,7 +67,7 @@ public abstract class Button extends Component {
         /**
          * Converts a context value to a selection state during a
          * {@link Component#load(Object)} operation.
-         *
+         * 
          * @param value
          */
         public boolean isSelected(Object value);
@@ -83,7 +75,7 @@ public abstract class Button extends Component {
         /**
          * Converts a selection state to a context value during a
          * {@link Component#store(Object)} operation.
-         *
+         * 
          * @param selected
          */
         public Object valueOf(boolean selected);
@@ -96,7 +88,7 @@ public abstract class Button extends Component {
         /**
          * Converts a context value to a button state during a
          * {@link Component#load(Object)} operation.
-         *
+         * 
          * @param value
          */
         public State toState(Object value);
@@ -104,20 +96,21 @@ public abstract class Button extends Component {
         /**
          * Converts a button state to a context value during a
          * {@link Component#store(Object)} operation.
-         *
+         * 
          * @param state
          */
         public Object valueOf(State state);
     }
 
     /**
-     * Translates between button buttonData and context data during data binding.
+     * Translates between button buttonData and context data during data
+     * binding.
      */
     public interface ButtonDataBindMapping {
         /**
          * Converts a context value to button data during a
          * {@link Component#load(Object)} operation.
-         *
+         * 
          * @param value
          */
         public Object toButtonData(Object value);
@@ -125,14 +118,14 @@ public abstract class Button extends Component {
         /**
          * Converts button data to a context value during a
          * {@link Component#store(Object)} operation.
-         *
+         * 
          * @param buttonData
          */
         public Object valueOf(Object buttonData);
     }
 
-    private static class ButtonListenerList extends WTKListenerList<ButtonListener>
-        implements ButtonListener {
+    private static class ButtonListenerList extends WTKListenerList<ButtonListener> implements
+        ButtonListener {
         @Override
         public void buttonDataChanged(Button button, Object previousButtonData) {
             for (ButtonListener listener : this) {
@@ -213,7 +206,8 @@ public abstract class Button extends Component {
         }
 
         @Override
-        public void buttonDataBindMappingChanged(Button button, Button.ButtonDataBindMapping previousButtonDataBindMapping) {
+        public void buttonDataBindMappingChanged(Button button,
+            Button.ButtonDataBindMapping previousButtonDataBindMapping) {
             for (ButtonBindingListener listener : this) {
                 listener.buttonDataBindMappingChanged(button, previousButtonDataBindMapping);
             }
@@ -234,7 +228,8 @@ public abstract class Button extends Component {
         }
 
         @Override
-        public void selectedBindMappingChanged(Button button, Button.SelectedBindMapping previousSelectedBindMapping) {
+        public void selectedBindMappingChanged(Button button,
+            Button.SelectedBindMapping previousSelectedBindMapping) {
             for (ButtonBindingListener listener : this) {
                 listener.selectedBindMappingChanged(button, previousSelectedBindMapping);
             }
@@ -255,7 +250,8 @@ public abstract class Button extends Component {
         }
 
         @Override
-        public void stateBindMappingChanged(Button button, Button.StateBindMapping previousStateBindMapping) {
+        public void stateBindMappingChanged(Button button,
+            Button.StateBindMapping previousStateBindMapping) {
             for (ButtonBindingListener listener : this) {
                 listener.stateBindMappingChanged(button, previousStateBindMapping);
             }
@@ -337,9 +333,8 @@ public abstract class Button extends Component {
 
     /**
      * Returns the action associated with this button.
-     *
-     * @return
-     * The button's action, or <tt>null</tt> if no action is defined.
+     * 
+     * @return The button's action, or <tt>null</tt> if no action is defined.
      */
     public Action getAction() {
         return action;
@@ -347,10 +342,9 @@ public abstract class Button extends Component {
 
     /**
      * Sets this button's action.
-     *
-     * @param action
-     * The action to be triggered when this button is pressed, or <tt>null</tt>
-     * for no action.
+     * 
+     * @param action The action to be triggered when this button is pressed, or
+     * <tt>null</tt> for no action.
      */
     public void setAction(Action action) {
         Action previousAction = this.action;
@@ -373,12 +367,11 @@ public abstract class Button extends Component {
 
     /**
      * Sets this button's action.
-     *
-     * @param actionID
-     * The ID of the action to be triggered when this button is pressed.
-     *
-     * @throws IllegalArgumentException
-     * If an action with the given ID does not exist.
+     * 
+     * @param actionID The ID of the action to be triggered when this button is
+     * pressed.
+     * @throws IllegalArgumentException If an action with the given ID does not
+     * exist.
      */
     public void setAction(String actionID) {
         if (actionID == null) {
@@ -387,8 +380,7 @@ public abstract class Button extends Component {
 
         Action actionLocal = Action.getNamedActions().get(actionID);
         if (actionLocal == null) {
-            throw new IllegalArgumentException("An action with ID "
-                + actionID + " does not exist.");
+            throw new IllegalArgumentException("An action with ID " + actionID + " does not exist.");
         }
 
         setAction(actionLocal);
@@ -396,8 +388,7 @@ public abstract class Button extends Component {
 
     @Override
     public void setEnabled(boolean enabled) {
-        if (action != null
-            && enabled != action.isEnabled()) {
+        if (action != null && enabled != action.isEnabled()) {
             throw new IllegalArgumentException("Button and action enabled"
                 + " states are not consistent.");
         }
@@ -425,7 +416,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets the button's selected state.
-     *
+     * 
      * @param selected
      */
     public void setSelected(boolean selected) {
@@ -441,7 +432,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets the button's selection state.
-     *
+     * 
      * @param state
      */
     public void setState(State state) {
@@ -453,8 +444,7 @@ public abstract class Button extends Component {
             throw new IllegalStateException("Button is not in toggle mode.");
         }
 
-        if (state == State.MIXED
-            && !triState) {
+        if (state == State.MIXED && !triState) {
             throw new IllegalArgumentException("Button is not tri-state.");
         }
 
@@ -487,7 +477,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets the button's toggle state.
-     *
+     * 
      * @param toggleButton
      */
     public void setToggleButton(boolean toggleButton) {
@@ -515,7 +505,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets the button's tri-state state.
-     *
+     * 
      * @param triState
      */
     public void setTriState(boolean triState) {
@@ -523,8 +513,7 @@ public abstract class Button extends Component {
             throw new IllegalStateException("Button is not in toggle mode.");
         }
 
-        if (triState
-            && buttonGroup != null) {
+        if (triState && buttonGroup != null) {
             throw new IllegalStateException("Toggle button is a member of a group.");
         }
 
@@ -536,10 +525,9 @@ public abstract class Button extends Component {
 
     /**
      * Returns the button's button group.
-     *
-     * @return
-     * The group to which the button belongs, or <tt>null</tt> if the button
-     * does not belong to a group.
+     * 
+     * @return The group to which the button belongs, or <tt>null</tt> if the
+     * button does not belong to a group.
      */
     public ButtonGroup getButtonGroup() {
         return buttonGroup;
@@ -547,18 +535,16 @@ public abstract class Button extends Component {
 
     /**
      * Sets the button's button group.
-     *
-     * @param buttonGroup
-     * The group to which the button will belong, or <tt>null</tt> if the button
-     * will not belong to a group.
+     * 
+     * @param buttonGroup The group to which the button will belong, or
+     * <tt>null</tt> if the button will not belong to a group.
      */
     public void setButtonGroup(ButtonGroup buttonGroup) {
         if (!toggleButton) {
             throw new IllegalStateException("Button is not in toggle mode.");
         }
 
-        if (buttonGroup != null
-            && triState) {
+        if (buttonGroup != null && triState) {
             throw new IllegalStateException("Toggle button is tri-state.");
         }
 
@@ -712,14 +698,13 @@ public abstract class Button extends Component {
         if (toggleButton) {
             if (triState) {
                 // Bind using state key
-                if (stateKey != null
-                    && stateBindType != BindType.STORE
+                if (stateKey != null && stateBindType != BindType.STORE
                     && JSON.containsKey(context, stateKey)) {
                     Object value = JSON.get(context, stateKey);
 
                     State stateLocal = State.UNSELECTED;
                     if (value instanceof State) {
-                        stateLocal = (State)value;
+                        stateLocal = (State) value;
                     } else if (stateBindMapping == null) {
                         if (value != null) {
                             stateLocal = State.valueOf(value.toString().toUpperCase(Locale.ENGLISH));
@@ -732,14 +717,13 @@ public abstract class Button extends Component {
                 }
             } else {
                 // Bind using selected key
-                if (selectedKey != null
-                    && selectedBindType != BindType.STORE
+                if (selectedKey != null && selectedBindType != BindType.STORE
                     && JSON.containsKey(context, selectedKey)) {
                     Object value = JSON.get(context, selectedKey);
 
                     boolean selected = false;
                     if (value instanceof Boolean) {
-                        selected = (Boolean)value;
+                        selected = (Boolean) value;
                     } else if (selectedBindMapping == null) {
                         if (value != null) {
                             selected = Boolean.valueOf(value.toString());
@@ -753,12 +737,11 @@ public abstract class Button extends Component {
             }
         }
 
-        if (buttonDataKey != null
-            && JSON.containsKey(context, buttonDataKey)
+        if (buttonDataKey != null && JSON.containsKey(context, buttonDataKey)
             && buttonDataBindType != BindType.STORE) {
             Object value = JSON.get(context, buttonDataKey);
-            setButtonData((buttonDataBindMapping == null) ?
-                value : buttonDataBindMapping.toButtonData(value));
+            setButtonData((buttonDataBindMapping == null) ? value
+                : buttonDataBindMapping.toButtonData(value));
         }
     }
 
@@ -767,25 +750,22 @@ public abstract class Button extends Component {
         if (toggleButton) {
             if (triState) {
                 // Bind using state key
-                if (stateKey != null
-                    && stateBindType != BindType.LOAD) {
-                    JSON.put(context, stateKey, (stateBindMapping == null) ?
-                        state : stateBindMapping.valueOf(state));
+                if (stateKey != null && stateBindType != BindType.LOAD) {
+                    JSON.put(context, stateKey, (stateBindMapping == null) ? state
+                        : stateBindMapping.valueOf(state));
                 }
             } else {
                 // Bind using selected key
-                if (selectedKey != null
-                    && selectedBindType != BindType.LOAD) {
-                    JSON.put(context, selectedKey, (selectedBindMapping == null) ?
-                        isSelected() : selectedBindMapping.valueOf(isSelected()));
+                if (selectedKey != null && selectedBindType != BindType.LOAD) {
+                    JSON.put(context, selectedKey, (selectedBindMapping == null) ? isSelected()
+                        : selectedBindMapping.valueOf(isSelected()));
                 }
             }
         }
 
-        if (buttonDataKey != null
-            && buttonDataBindType != BindType.LOAD) {
-            JSON.put(context, buttonDataKey, (buttonDataBindMapping == null) ?
-                buttonData : buttonDataBindMapping.valueOf(buttonData));
+        if (buttonDataKey != null && buttonDataBindType != BindType.LOAD) {
+            JSON.put(context, buttonDataKey, (buttonDataBindMapping == null) ? buttonData
+                : buttonDataBindMapping.valueOf(buttonData));
         }
     }
 
@@ -795,8 +775,7 @@ public abstract class Button extends Component {
             setButtonData(null);
         }
 
-        if (selectedKey != null
-            || stateKey != null) {
+        if (selectedKey != null || stateKey != null) {
             setSelected(false);
         }
     }

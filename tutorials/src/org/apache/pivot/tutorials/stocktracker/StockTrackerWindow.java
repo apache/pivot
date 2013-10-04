@@ -66,13 +66,20 @@ import org.apache.pivot.wtk.content.TableViewRowComparator;
  * Main Stock Tracker window.
  */
 public class StockTrackerWindow extends Window implements Bindable {
-    @BXML private TableView stocksTableView = null;
-    @BXML private TextInput symbolTextInput = null;
-    @BXML private Button addSymbolButton = null;
-    @BXML private Button removeSymbolsButton = null;
-    @BXML private BoxPane detailPane = null;
-    @BXML private Label lastUpdateLabel = null;
-    @BXML private Button yahooFinanceButton = null;
+    @BXML
+    private TableView stocksTableView = null;
+    @BXML
+    private TextInput symbolTextInput = null;
+    @BXML
+    private Button addSymbolButton = null;
+    @BXML
+    private Button removeSymbolsButton = null;
+    @BXML
+    private BoxPane detailPane = null;
+    @BXML
+    private Label lastUpdateLabel = null;
+    @BXML
+    private Button yahooFinanceButton = null;
 
     private ArrayList<String> symbols;
     private GetQuery getQuery = null;
@@ -86,7 +93,7 @@ public class StockTrackerWindow extends Window implements Bindable {
                 symbols.add(symbol);
 
                 @SuppressWarnings("unchecked")
-                List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
+                List<StockQuote> tableData = (List<StockQuote>) stocksTableView.getTableData();
                 StockQuote stockQuote = new StockQuote();
                 stockQuote.setSymbol(symbol);
                 int index = tableData.add(stockQuote);
@@ -106,7 +113,8 @@ public class StockTrackerWindow extends Window implements Bindable {
             int selectedIndex = stocksTableView.getFirstSelectedIndex();
             ArrayList<Span> spanList = new ArrayList<>(stocksTableView.getSelectedRanges());
 
-            // remove spans in reverse order to prevent IndexOutOfBoundsException
+            // remove spans in reverse order to prevent
+            // IndexOutOfBoundsException
             ItemIterator<Span> it = spanList.iterator();
             it.toEnd();
             while (it.hasPrevious()) {
@@ -182,30 +190,32 @@ public class StockTrackerWindow extends Window implements Bindable {
             }
         });
 
-        stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener.Adapter() {
-            @Override
-            public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
-                int firstSelectedIndex = stocksTableView.getFirstSelectedIndex();
-                removeSymbolsAction.setEnabled(firstSelectedIndex != -1);
+        stocksTableView.getTableViewSelectionListeners().add(
+            new TableViewSelectionListener.Adapter() {
+                @Override
+                public void selectedRangesChanged(TableView tableView,
+                    Sequence<Span> previousSelectedRanges) {
+                    int firstSelectedIndex = stocksTableView.getFirstSelectedIndex();
+                    removeSymbolsAction.setEnabled(firstSelectedIndex != -1);
 
-                refreshDetail();
-            }
-        });
+                    refreshDetail();
+                }
+            });
 
         stocksTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
             @Override
             public void sortChanged(TableView tableView) {
                 @SuppressWarnings("unchecked")
-                List<Object> tableData = (List<Object>)tableView.getTableData();
+                List<Object> tableData = (List<Object>) tableView.getTableData();
                 tableData.setComparator(new TableViewRowComparator(tableView));
             }
         });
 
         stocksTableView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
-            public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-                if (keyCode == Keyboard.KeyCode.DELETE
-                    || keyCode == Keyboard.KeyCode.BACKSPACE) {
+            public boolean keyPressed(Component component, int keyCode,
+                Keyboard.KeyLocation keyLocation) {
+                if (keyCode == Keyboard.KeyCode.DELETE || keyCode == Keyboard.KeyCode.BACKSPACE) {
                     removeSymbolsAction.perform(component);
                 } else if (keyCode == Keyboard.KeyCode.A
                     && Keyboard.isPressed(Platform.getCommandModifier())) {
@@ -226,7 +236,8 @@ public class StockTrackerWindow extends Window implements Bindable {
 
         symbolTextInput.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
-            public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            public boolean keyPressed(Component component, int keyCode,
+                Keyboard.KeyLocation keyLocation) {
                 if (keyCode == Keyboard.KeyCode.ENTER) {
                     if (addSymbolAction.isEnabled()) {
                         addSymbolAction.perform(component);
@@ -250,13 +261,13 @@ public class StockTrackerWindow extends Window implements Bindable {
 
                 try {
                     desktop.browse(new URL(YAHOO_FINANCE_HOME).toURI());
-                } catch(MalformedURLException exception) {
+                } catch (MalformedURLException exception) {
                     throw new RuntimeException(exception);
-                } catch(URISyntaxException exception) {
+                } catch (URISyntaxException exception) {
                     throw new RuntimeException(exception);
-                } catch(IOException exception) {
-                    System.out.println("Unable to open "
-                        + YAHOO_FINANCE_HOME + " in default browser.");
+                } catch (IOException exception) {
+                    System.out.println("Unable to open " + YAHOO_FINANCE_HOME
+                        + " in default browser.");
                 }
             }
         });
@@ -315,14 +326,8 @@ public class StockTrackerWindow extends Window implements Bindable {
             getQuery.getParameters().put("f", "snl1ohgc1v");
 
             CSVSerializer quoteSerializer = new CSVSerializer(StockQuote.class);
-            quoteSerializer.setKeys("symbol",
-                "companyName",
-                "value",
-                "openingValue",
-                "highValue",
-                "lowValue",
-                "change",
-                "volume");
+            quoteSerializer.setKeys("symbol", "companyName", "value", "openingValue", "highValue",
+                "lowValue", "change", "volume");
 
             getQuery.setSerializer(quoteSerializer);
 
@@ -331,13 +336,13 @@ public class StockTrackerWindow extends Window implements Bindable {
                 public void taskExecuted(Task<Object> task) {
                     if (task == getQuery) {
                         @SuppressWarnings("unchecked")
-                        List<Object> quotes = (List<Object>)task.getResult();
+                        List<Object> quotes = (List<Object>) task.getResult();
 
                         // Preserve any existing sort and selection
                         Sequence<?> selectedStocks = stocksTableView.getSelectedRows();
 
                         @SuppressWarnings("unchecked")
-                        List<Object> tableData = (List<Object>)stocksTableView.getTableData();
+                        List<Object> tableData = (List<Object>) stocksTableView.getTableData();
                         Comparator<Object> comparator = tableData.getComparator();
                         quotes.setComparator(comparator);
 
@@ -397,7 +402,7 @@ public class StockTrackerWindow extends Window implements Bindable {
 
             if (firstSelectedIndex == lastSelectedIndex) {
                 @SuppressWarnings("unchecked")
-                List<StockQuote> tableData = (List<StockQuote>)stocksTableView.getTableData();
+                List<StockQuote> tableData = (List<StockQuote>) stocksTableView.getTableData();
                 stockQuote = tableData.get(firstSelectedIndex);
             } else {
                 stockQuote = new StockQuote();

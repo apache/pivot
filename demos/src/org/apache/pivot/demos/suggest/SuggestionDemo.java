@@ -50,8 +50,8 @@ public class SuggestionDemo extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        textInput = (TextInput)namespace.get("textInput");
-        activityIndicator = (ActivityIndicator)namespace.get("activityIndicator");
+        textInput = (TextInput) namespace.get("textInput");
+        activityIndicator = (ActivityIndicator) namespace.get("activityIndicator");
 
         textInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
             @Override
@@ -77,8 +77,7 @@ public class SuggestionDemo extends Window implements Bindable {
     }
 
     private void getSuggestions() {
-        if (suggestionQuery != null
-            && suggestionQuery.isPending()) {
+        if (suggestionQuery != null && suggestionQuery.isPending()) {
             suggestionQuery.abort();
         }
 
@@ -91,7 +90,8 @@ public class SuggestionDemo extends Window implements Bindable {
         }
 
         // Create query
-        suggestionQuery = new GetQuery("search.yahooapis.com", "/WebSearchService/V1/relatedSuggestion");
+        suggestionQuery = new GetQuery("search.yahooapis.com",
+            "/WebSearchService/V1/relatedSuggestion");
         suggestionQuery.getParameters().put("appid", getClass().getName());
         suggestionQuery.getParameters().put("query", text);
         suggestionQuery.getParameters().put("output", "json");
@@ -104,17 +104,17 @@ public class SuggestionDemo extends Window implements Bindable {
 
                     Object result = JSON.get(task.getResult(), "ResultSet.Result");
                     if (result instanceof List<?>) {
-                        suggestions = (List<?>)result;
+                        suggestions = (List<?>) result;
                     }
 
-                    if (suggestions == null
-                        || suggestions.getLength() == 0) {
+                    if (suggestions == null || suggestions.getLength() == 0) {
                         suggestionPopup.close();
                     } else {
                         suggestionPopup.setSuggestionData(suggestions);
                         suggestionPopup.open(textInput, new SuggestionPopupCloseListener() {
                             @Override
-                            public void suggestionPopupClosed(SuggestionPopup suggestionPopupArgument) {
+                            public void suggestionPopupClosed(
+                                SuggestionPopup suggestionPopupArgument) {
                                 if (suggestionPopupArgument.getResult()) {
                                     String textLocal;
                                     try {
@@ -123,7 +123,8 @@ public class SuggestionDemo extends Window implements Bindable {
                                         throw new RuntimeException(exception);
                                     }
 
-                                    String location = "http://search.yahoo.com/search?p=" + textLocal;
+                                    String location = "http://search.yahoo.com/search?p="
+                                        + textLocal;
 
                                     try {
                                         Desktop.getDesktop().browse(new URI(location));

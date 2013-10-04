@@ -24,13 +24,12 @@ import org.apache.pivot.wtk.ExpanderListener;
 /**
  * Abstract base class for expander skins.
  */
-public abstract class ExpanderSkin extends ContainerSkin
-    implements ExpanderListener {
+public abstract class ExpanderSkin extends ContainerSkin implements ExpanderListener {
     @Override
     public void install(Component component) {
         super.install(component);
 
-        Expander expander = (Expander)component;
+        Expander expander = (Expander) component;
         expander.getExpanderListeners().add(this);
     }
 

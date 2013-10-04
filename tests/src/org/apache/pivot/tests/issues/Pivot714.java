@@ -49,21 +49,21 @@ public class Pivot714 extends Application.Adapter {
         this.owner = ownerArgument;
         final BXMLSerializer bxmlSerializer = new BXMLSerializer();
         try {
-            result = (Dialog)bxmlSerializer.readObject(Pivot714.class.getResource("pivot_714.bxml"));
+            result = (Dialog) bxmlSerializer.readObject(Pivot714.class.getResource("pivot_714.bxml"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SerializationException e) {
             e.printStackTrace();
         }
 
-        final ListButton motif = (ListButton)bxmlSerializer.getNamespace().get("motif");
+        final ListButton motif = (ListButton) bxmlSerializer.getNamespace().get("motif");
 
         ArrayList<String> al = new ArrayList<>();
         al.add("One");
         al.add("Two");
         motif.setListData(al);
 
-        CalendarButton cbDate = (CalendarButton)bxmlSerializer.getNamespace().get("date");
+        CalendarButton cbDate = (CalendarButton) bxmlSerializer.getNamespace().get("date");
         dcl = (new DialogCloseListener() {
             @Override
             public void dialogClosed(Dialog dialog, boolean modal) {
@@ -72,7 +72,8 @@ public class Pivot714 extends Application.Adapter {
         });
         cbDate.getCalendarButtonSelectionListeners().add(new CalendarButtonSelectionListener() {
             @Override
-            public void selectedDateChanged(CalendarButton calendarButton, CalendarDate previousSelectedDate) {
+            public void selectedDateChanged(CalendarButton calendarButton,
+                CalendarDate previousSelectedDate) {
                 // empty block
             }
         });
@@ -93,17 +94,17 @@ public class Pivot714 extends Application.Adapter {
         result.open(owner, dcl);
     }
 
-   @Override
+    @Override
     public boolean shutdown(boolean optional) {
-       if (result != null) {
-           result.close();
-       }
+        if (result != null) {
+            result.close();
+        }
 
-       if (frame != null) {
+        if (frame != null) {
             frame.close();
-       }
+        }
 
-       return false;
+        return false;
     }
 
     public static void main(String[] args) {

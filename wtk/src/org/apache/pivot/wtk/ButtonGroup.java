@@ -110,8 +110,7 @@ public class ButtonGroup implements Group<Button>, Iterable<Button> {
     }
 
     public void setSelection(Button selection) {
-        if (selection != null
-            && selection.getButtonGroup() != this) {
+        if (selection != null && selection.getButtonGroup() != this) {
             throw new IllegalArgumentException();
         }
 

@@ -22,17 +22,15 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot838 extends Application.Adapter
-{
+public class Pivot838 extends Application.Adapter {
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception
-    {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         // TODO: empty currently ...
 
         Window window = new Window();
         window.open(display);
-      }
+    }
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(Pivot838.class, args);

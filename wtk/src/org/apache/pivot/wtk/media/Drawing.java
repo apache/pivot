@@ -19,8 +19,6 @@ package org.apache.pivot.wtk.media;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-import org.apache.pivot.wtk.media.Image;
-
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGElementException;
 import com.kitfox.svg.SVGException;
@@ -47,12 +45,12 @@ public class Drawing extends Image {
 
     @Override
     public int getWidth() {
-        return (int)Math.ceil(diagram.getWidth());
+        return (int) Math.ceil(diagram.getWidth());
     }
 
     @Override
     public int getHeight() {
-        return (int)Math.ceil(diagram.getHeight());
+        return (int) Math.ceil(diagram.getHeight());
     }
 
     public void setSize(int width, int height) {
@@ -79,7 +77,8 @@ public class Drawing extends Image {
     @Override
     public void paint(Graphics2D graphics) {
         try {
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
             diagram.render(graphics);
         } catch (SVGException exception) {
             throw new RuntimeException(exception);

@@ -25,7 +25,6 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ActivityIndicatorSkin;
 
-
 /**
  * Activity indicator skin.
  */
@@ -38,7 +37,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     private ApplicationContext.ScheduledCallback updateCallback = null;
 
     public TerraActivityIndicatorSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(2));
         backgroundColor = null;
     }
@@ -55,7 +54,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
 
     @Override
     public void paint(Graphics2D graphics) {
-        ActivityIndicator activityIndicator = (ActivityIndicator)getComponent();
+        ActivityIndicator activityIndicator = (ActivityIndicator) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -108,7 +107,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
         colors = new Color[12];
         for (int i = 0; i < 12; i++) {
             float alpha = 255f * i / 12;
-            colors[i] = new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)alpha);
+            colors[i] = new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) alpha);
         }
     }
 
@@ -121,7 +120,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -143,7 +142,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 

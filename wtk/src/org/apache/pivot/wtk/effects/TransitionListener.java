@@ -22,7 +22,7 @@ package org.apache.pivot.wtk.effects;
 public interface TransitionListener {
     /**
      * Called when a transition has completed.
-     *
+     * 
      * @param transition
      */
     public void transitionCompleted(Transition transition);

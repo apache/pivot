@@ -16,6 +16,10 @@
  */
 package org.apache.pivot.demos.rest;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -31,10 +35,6 @@ import org.apache.pivot.web.QueryException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-
 public class RESTDemoTest {
     private static String hostname = null;
     private static int port = -1;
@@ -44,7 +44,8 @@ public class RESTDemoTest {
     public static void oneTimeSetUp() {
         hostname = System.getProperty("org.apache.pivot.demos.rest.hostname", "localhost");
         port = Integer.parseInt(System.getProperty("org.apache.pivot.demos.rest.port", "-1"));
-        secure = Boolean.parseBoolean(System.getProperty("org.apache.pivot.demos.rest.secure", "false"));
+        secure = Boolean.parseBoolean(System.getProperty("org.apache.pivot.demos.rest.secure",
+            "false"));
     }
 
     @Test
@@ -84,7 +85,7 @@ public class RESTDemoTest {
         assertEquals(deleteQuery.getStatus(), Query.Status.NO_CONTENT);
     }
 
-    @Test(expected=QueryException.class)
+    @Test(expected = QueryException.class)
     public void testException() throws QueryException {
         GetQuery getQuery = new GetQuery(hostname, port, "/pivot-demos/rest_demo/foo", secure);
         getQuery.execute();

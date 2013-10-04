@@ -22,16 +22,16 @@ package org.apache.pivot.wtk.effects.easing;
 public class Sine implements Easing {
     @Override
     public float easeIn(float time, float begin, float change, float duration) {
-        return -change * (float)Math.cos(time / duration * (Math.PI/2)) + change + begin;
+        return -change * (float) Math.cos(time / duration * (Math.PI / 2)) + change + begin;
     }
 
     @Override
     public float easeOut(float time, float begin, float change, float duration) {
-        return change * (float)Math.sin(time / duration * (Math.PI/2)) + begin;
+        return change * (float) Math.sin(time / duration * (Math.PI / 2)) + begin;
     }
 
     @Override
     public float easeInOut(float time, float begin, float change, float duration) {
-        return -change / 2f * (float)(Math.cos(Math.PI * time / duration) - 1) + begin;
+        return -change / 2f * (float) (Math.cos(Math.PI * time / duration) - 1) + begin;
     }
 }

@@ -38,29 +38,19 @@ import org.apache.pivot.util.ListenerList;
 
 /**
  * Abstract base class for web queries. A web query is an asynchronous operation
- * that executes one of the following HTTP methods:
- *
- * <ul>
- * <li>GET</li>
- * <li>POST</li>
- * <li>PUT</li>
- * <li>DELETE</li>
- * </ul>
- *
- * @param <V>
- * The type of the value retrieved or sent via the query. For GET operations,
- * it is {@link Object}; for POST operations, the type is {@link URL}. For PUT
- * and DELETE, it is {@link Void}.
+ * that executes one of the following HTTP methods: <ul> <li>GET</li>
+ * <li>POST</li> <li>PUT</li> <li>DELETE</li> </ul>
+ * 
+ * @param <V> The type of the value retrieved or sent via the query. For GET
+ * operations, it is {@link Object}; for POST operations, the type is
+ * {@link URL}. For PUT and DELETE, it is {@link Void}.
  */
 public abstract class Query<V> extends IOTask<V> {
     /**
      * Supported HTTP methods.
      */
     public enum Method {
-        GET,
-        POST,
-        PUT,
-        DELETE;
+        GET, POST, PUT, DELETE;
     }
 
     /**
@@ -93,8 +83,8 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Query listener list.
      */
-    private static class QueryListenerList<V> extends ListenerList<QueryListener<V>>
-        implements QueryListener<V> {
+    private static class QueryListenerList<V> extends ListenerList<QueryListener<V>> implements
+        QueryListener<V> {
         @Override
         public synchronized void add(QueryListener<V> listener) {
             super.add(listener);
@@ -157,7 +147,8 @@ public abstract class Query<V> extends IOTask<V> {
 
     static {
         try {
-            // See http://java.sun.com/javase/6/docs/technotes/guides/net/proxies.html
+            // See
+            // http://java.sun.com/javase/6/docs/technotes/guides/net/proxies.html
             // For more info on this system property
             System.setProperty("java.net.useSystemProxies", "true");
         } catch (SecurityException exception) {
@@ -167,7 +158,7 @@ public abstract class Query<V> extends IOTask<V> {
 
     /**
      * Creates a new web query.
-     *
+     * 
      * @param hostname
      * @param port
      * @param path
@@ -178,8 +169,7 @@ public abstract class Query<V> extends IOTask<V> {
         super(executorService);
 
         try {
-            locationContext = new URL(secure ? HTTPS_PROTOCOL : HTTP_PROTOCOL,
-                hostname, port, path);
+            locationContext = new URL(secure ? HTTPS_PROTOCOL : HTTP_PROTOCOL, hostname, port, path);
         } catch (MalformedURLException exception) {
             throw new IllegalArgumentException("Unable to construct context URL.", exception);
         }
@@ -214,10 +204,9 @@ public abstract class Query<V> extends IOTask<V> {
 
     /**
      * Gets the proxy associated with this query.
-     *
-     * @return
-     * This query's proxy, or <tt>null</tt> if the query is using the default
-     * JVM proxy settings
+     * 
+     * @return This query's proxy, or <tt>null</tt> if the query is using the
+     * default JVM proxy settings
      */
     public Proxy getProxy() {
         return proxy;
@@ -225,10 +214,9 @@ public abstract class Query<V> extends IOTask<V> {
 
     /**
      * Sets the proxy associated with this query.
-     *
-     * @param proxy
-     * This query's proxy, or <tt>null</tt> to use the default JVM proxy
-     * settings
+     * 
+     * @param proxy This query's proxy, or <tt>null</tt> to use the default JVM
+     * proxy settings
      */
     public void setProxy(Proxy proxy) {
         this.proxy = proxy;
@@ -244,12 +232,10 @@ public abstract class Query<V> extends IOTask<V> {
                         queryStringBuilder.append("&");
                     }
 
-                    queryStringBuilder.append(URLEncoder.encode(key, URL_ENCODING)
-                        + "=" + URLEncoder.encode(parameters.get(key, index),
-                            URL_ENCODING));
+                    queryStringBuilder.append(URLEncoder.encode(key, URL_ENCODING) + "="
+                        + URLEncoder.encode(parameters.get(key, index), URL_ENCODING));
                 } catch (UnsupportedEncodingException exception) {
-                    throw new IllegalStateException("Unable to construct query string.",
-                        exception);
+                    throw new IllegalStateException("Unable to construct query string.", exception);
                 }
             }
         }
@@ -277,16 +263,16 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     /**
-     * Returns the web query's request header dictionary. Request headers
-     * are passed via HTTP headers when the query is executed.
+     * Returns the web query's request header dictionary. Request headers are
+     * passed via HTTP headers when the query is executed.
      */
     public QueryDictionary getRequestHeaders() {
         return requestHeaders;
     }
 
     /**
-     * Returns the web query's response header dictionary. Response headers
-     * are returned via HTTP headers when the query is executed.
+     * Returns the web query's response header dictionary. Response headers are
+     * returned via HTTP headers when the query is executed.
      */
     public QueryDictionary getResponseHeaders() {
         return responseHeaders;
@@ -294,7 +280,7 @@ public abstract class Query<V> extends IOTask<V> {
 
     /**
      * Returns the status of the most recent execution.
-     *
+     * 
      * @return An HTTP code representing the most recent execution status.
      */
     public int getStatus() {
@@ -312,9 +298,8 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Sets the serializer used to stream the value passed to or from the web
      * query.
-     *
-     * @param serializer
-     * The serializer (must be non-null).
+     * 
+     * @param serializer The serializer (must be non-null).
      */
     public void setSerializer(Serializer<?> serializer) {
         if (serializer == null) {
@@ -327,9 +312,8 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Gets the number of bytes that have been sent in the body of this query's
      * HTTP request. This will only be non-zero for POST and PUT requests, as
-     * GET and DELETE requests send no content to the server.
-     * <p>
-     * For POST and PUT requests, this number will increment in between the
+     * GET and DELETE requests send no content to the server. <p> For POST and
+     * PUT requests, this number will increment in between the
      * {@link QueryListener#connected(Query) connected} and
      * {@link QueryListener#requestSent(Query) requestSent} phases of the
      * <tt>QueryListener</tt> lifecycle methods. Interested listeners can poll
@@ -343,10 +327,8 @@ public abstract class Query<V> extends IOTask<V> {
      * Gets the number of bytes that have been received from the server in the
      * body of the server's HTTP response. This will generally only be non-zero
      * for GET requests, as POST, PUT, and DELETE requests generally don't
-     * solicit response content from the server.
-     * <p>
-     * This number will increment in between the
-     * {@link QueryListener#requestSent(Query) requestSent} and
+     * solicit response content from the server. <p> This number will increment
+     * in between the {@link QueryListener#requestSent(Query) requestSent} and
      * {@link QueryListener#responseReceived(Query) responseReceived} phases of
      * the <tt>QueryListener</tt> lifecycle methods. Interested listeners can
      * poll for this value during that phase.
@@ -360,9 +342,8 @@ public abstract class Query<V> extends IOTask<V> {
      * in the body of the server's HTTP response. This value reflects the
      * <tt>Content-Length</tt> HTTP response header and is thus merely an
      * expectation. The actual total number of bytes that will be received is
-     * not known for certain until the full response has been received.
-     * <p>
-     * If the server did not specify a <tt>Content-Length</tt> HTTP response
+     * not known for certain until the full response has been received. <p> If
+     * the server did not specify a <tt>Content-Length</tt> HTTP response
      * header, a value of <tt>-1</tt> will be returned to indicate that this
      * value is unknown.
      */
@@ -376,7 +357,7 @@ public abstract class Query<V> extends IOTask<V> {
         URL location = getLocation();
         HttpURLConnection connection = null;
 
-        Serializer<Object> serializerLocal = (Serializer<Object>)this.serializer;
+        Serializer<Object> serializerLocal = (Serializer<Object>) this.serializer;
 
         bytesSent = 0;
         bytesReceived = 0;
@@ -401,8 +382,7 @@ public abstract class Query<V> extends IOTask<V> {
             connection.setInstanceFollowRedirects(false);
             connection.setUseCaches(false);
 
-            if (connection instanceof HttpsURLConnection
-                && hostnameVerifier != null) {
+            if (connection instanceof HttpsURLConnection && hostnameVerifier != null) {
                 HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
                 httpsConnection.setHostnameVerifier(hostnameVerifier);
             }
@@ -455,8 +435,7 @@ public abstract class Query<V> extends IOTask<V> {
 
             // NOTE Header indexes start at 1, not 0
             int i = 1;
-            for (String key = connection.getHeaderFieldKey(i); key != null;
-                key = connection.getHeaderFieldKey(++i)) {
+            for (String key = connection.getHeaderFieldKey(i); key != null; key = connection.getHeaderFieldKey(++i)) {
                 responseHeaders.add(key, connection.getHeaderField(i));
             }
 
@@ -467,8 +446,7 @@ public abstract class Query<V> extends IOTask<V> {
             }
 
             // Read the response body
-            if (method == Method.GET
-                && status == Query.Status.OK) {
+            if (method == Method.GET && status == Query.Status.OK) {
                 InputStream inputStream = null;
                 try {
                     inputStream = connection.getInputStream();

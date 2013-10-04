@@ -26,7 +26,6 @@ import javax.imageio.ImageIO;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 
-
 /**
  * Implementation of the {@link Serializer} interface that reads and writes
  * instances of {@link java.awt.image.BufferedImage}.
@@ -36,11 +35,8 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
      * Supported image formats.
      */
     public enum Format {
-        PNG("png", "image/png"),
-        JPEG("jpeg", "image/jpeg"),
-        BMP("bmp", "image/bmp"),
-        WBMP("wbmp", "image/vnd.wap.wbmp"),
-        GIF("gif", "image/gif");
+        PNG("png", "image/png"), JPEG("jpeg", "image/jpeg"), BMP("bmp", "image/bmp"), WBMP("wbmp",
+            "image/vnd.wap.wbmp"), GIF("gif", "image/gif");
 
         private String name;
         private String mimeType;
@@ -89,9 +85,8 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
 
     /**
      * Reads a serialized image from an input stream.
-     *
-     * @return
-     * A <tt>BufferedImage</tt> object
+     * 
+     * @return A <tt>BufferedImage</tt> object
      */
     @Override
     public BufferedImage readObject(InputStream inputStream) throws IOException,
@@ -103,7 +98,6 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
         BufferedImage bufferedImage = ImageIO.read(inputStream);
         return bufferedImage;
     }
-
 
     /**
      * Writes a buffered image to an output stream.

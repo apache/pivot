@@ -40,10 +40,7 @@ public final class GraphicsUtilities {
      * Enumeration representing a paint type.
      */
     public enum PaintType {
-        SOLID_COLOR,
-        GRADIENT,
-        LINEAR_GRADIENT,
-        RADIAL_GRADIENT
+        SOLID_COLOR, GRADIENT, LINEAR_GRADIENT, RADIAL_GRADIENT
     }
 
     public static final String PAINT_TYPE_KEY = "paintType";
@@ -96,29 +93,20 @@ public final class GraphicsUtilities {
      * Draws a rectangle with a thickness of 1 pixel at the specified
      * coordinates whose <u>outer border</u> is the specified width and height.
      * In other words, the distance from the left edge of the leftmost pixel to
-     * the left edge of the rightmost pixel is <tt>width - 1</tt>.
-     * <p>
-     * This method provides more reliable pixel rounding behavior than
+     * the left edge of the rightmost pixel is <tt>width - 1</tt>. <p> This
+     * method provides more reliable pixel rounding behavior than
      * <tt>java.awt.Graphics#drawRect</tt> when scaling is applied because this
-     * method does not stroke the shape but instead explicitly fills the
-     * desired pixels with the graphics context's paint. For this reason, and
-     * because Pivot supports scaling the display host, it is recommended that
-     * skins use this method over <tt>java.awt.Graphics#drawRect</tt>.
-     *
-     * @param graphics
-     * The graphics context that will be used to perform the operation.
-     *
-     * @param x
-     * The x-coordinate of the upper-left corner of the rectangle.
-     *
-     * @param y
-     * The y-coordinate of the upper-left corner of the rectangle.
-     *
-     * @param width
-     * The <i>outer width</i> of the rectangle.
-     *
-     * @param height
-     * The <i>outer height</i> of the rectangle.
+     * method does not stroke the shape but instead explicitly fills the desired
+     * pixels with the graphics context's paint. For this reason, and because
+     * Pivot supports scaling the display host, it is recommended that skins use
+     * this method over <tt>java.awt.Graphics#drawRect</tt>.
+     * 
+     * @param graphics The graphics context that will be used to perform the
+     * operation.
+     * @param x The x-coordinate of the upper-left corner of the rectangle.
+     * @param y The y-coordinate of the upper-left corner of the rectangle.
+     * @param width The <i>outer width</i> of the rectangle.
+     * @param height The <i>outer height</i> of the rectangle.
      */
     public static final void drawRect(final Graphics2D graphics, final int x, final int y,
         final int width, final int height) {
@@ -129,47 +117,38 @@ public final class GraphicsUtilities {
      * Draws a rectangle with the specified thickness at the specified
      * coordinates whose <u>outer border</u> is the specified width and height.
      * In other words, the distance from the left edge of the leftmost pixel to
-     * the left edge of the rightmost pixel is <tt>width - thickness</tt>.
-     * <p>
+     * the left edge of the rightmost pixel is <tt>width - thickness</tt>. <p>
      * This method provides more reliable pixel rounding behavior than
      * <tt>java.awt.Graphics#drawRect</tt> when scaling is applied because this
-     * method does not stroke the shape but instead explicitly fills the
-     * desired pixels with the graphics context's paint. For this reason, and
-     * because Pivot supports scaling the display host, it is recommended that
-     * skins use this method over <tt>java.awt.Graphics#drawRect</tt>.
-     *
-     * @param graphics
-     * The graphics context that will be used to perform the operation.
-     *
-     * @param x
-     * The x-coordinate of the upper-left corner of the rectangle.
-     *
-     * @param y
-     * The y-coordinate of the upper-left corner of the rectangle.
-     *
-     * @param width
-     * The <i>outer width</i> of the rectangle.
-     *
-     * @param height
-     * The <i>outer height</i> of the rectangle.
-     *
-     * @param thickness
-     * The thickness of each edge.
+     * method does not stroke the shape but instead explicitly fills the desired
+     * pixels with the graphics context's paint. For this reason, and because
+     * Pivot supports scaling the display host, it is recommended that skins use
+     * this method over <tt>java.awt.Graphics#drawRect</tt>.
+     * 
+     * @param graphics The graphics context that will be used to perform the
+     * operation.
+     * @param x The x-coordinate of the upper-left corner of the rectangle.
+     * @param y The y-coordinate of the upper-left corner of the rectangle.
+     * @param width The <i>outer width</i> of the rectangle.
+     * @param height The <i>outer height</i> of the rectangle.
+     * @param thickness The thickness of each edge.
      */
     public static final void drawRect(final Graphics2D graphics, final int x, final int y,
         final int width, final int height, final int thickness) {
         Graphics2D rectGraphics = graphics;
 
         if ((graphics.getTransform().getType() & AffineTransform.TYPE_MASK_SCALE) != 0) {
-            rectGraphics = (Graphics2D)graphics.create();
+            rectGraphics = (Graphics2D) graphics.create();
             rectGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         }
 
         if (width > 0 && height > 0 && thickness > 0) {
             drawLine(rectGraphics, x, y, width, Orientation.HORIZONTAL, thickness);
-            drawLine(rectGraphics, x + width - thickness, y, height, Orientation.VERTICAL, thickness);
-            drawLine(rectGraphics, x, y + height - thickness, width, Orientation.HORIZONTAL, thickness);
+            drawLine(rectGraphics, x + width - thickness, y, height, Orientation.VERTICAL,
+                thickness);
+            drawLine(rectGraphics, x, y + height - thickness, width, Orientation.HORIZONTAL,
+                thickness);
             drawLine(rectGraphics, x, y, height, Orientation.VERTICAL, thickness);
         }
 
@@ -180,18 +159,17 @@ public final class GraphicsUtilities {
 
     /**
      * Interprets a string as a color value.
-     * @param value One of the following forms:
-     * <ul>
-     * <li>0xdddddddd - 8 hexadecimal digits, specifying 8 bits each of
-     * red, green, and blue, followed by 8 bits of alpha.</li>
-     * <li>#dddddd - 6 hexadecimal digits, specifying 8 bits each of
-     * red, green, and blue.
-     * <li>Any of the names of the static colors in the Java {@link Color} class.
-      * </ul>
+     * 
+     * @param value One of the following forms: <ul> <li>0xdddddddd - 8
+     * hexadecimal digits, specifying 8 bits each of red, green, and blue,
+     * followed by 8 bits of alpha.</li> <li>#dddddd - 6 hexadecimal digits,
+     * specifying 8 bits each of red, green, and blue. <li>Any of the names of
+     * the static colors in the Java {@link Color} class. </ul>
      * @return A {@link Color} on successful decoding
-     * @throws NumberFormatException if the value in the first two cases contains
-     * illegal hexadecimal digits.
-     * @throws IllegalArgumentException if the value is not in one of the formats listed above.
+     * @throws NumberFormatException if the value in the first two cases
+     * contains illegal hexadecimal digits.
+     * @throws IllegalArgumentException if the value is not in one of the
+     * formats listed above.
      */
     public static Color decodeColor(final String value) throws NumberFormatException {
         if (value == null) {
@@ -225,9 +203,10 @@ public final class GraphicsUtilities {
             color = getColor(rgb, alpha);
         } else {
             try {
-                color = (Color)Color.class.getDeclaredField(valueLowercase).get(null);
+                color = (Color) Color.class.getDeclaredField(valueLowercase).get(null);
             } catch (Exception exception) {
-                throw new IllegalArgumentException("\"" + valueLowercase + "\" is not a valid color constant.");
+                throw new IllegalArgumentException("\"" + valueLowercase
+                    + "\" is not a valid color constant.");
             }
         }
 
@@ -244,9 +223,11 @@ public final class GraphicsUtilities {
 
     /**
      * Interpret a string as a {@link Paint} value
-     * @param value Either
-     * (a) One of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}
-     * or (b) A {@linkplain GraphicsUtilities#decodePaint(Dictionary) JSON dictionary describing a Paint value}.
+     * 
+     * @param value Either (a) One of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by
+     * Pivot} or (b) A {@linkplain GraphicsUtilities#decodePaint(Dictionary)
+     * JSON dictionary describing a Paint value}.
      */
     public static Paint decodePaint(String value) {
         if (value == null) {
@@ -254,9 +235,7 @@ public final class GraphicsUtilities {
         }
 
         Paint paint;
-        if (value.startsWith("#")
-            || value.startsWith("0x")
-            || value.startsWith("0X")) {
+        if (value.startsWith("#") || value.startsWith("0x") || value.startsWith("0X")) {
             paint = decodeColor(value);
         } else {
             try {
@@ -271,21 +250,23 @@ public final class GraphicsUtilities {
 
     /**
      * Interpret a dictionary as a {@link Paint} value
-     * @param dictionary A dictionary containing a key {@value #PAINT_TYPE_KEY} and further elements
-     * according to its value:
-     * <ul>
-     * <li><b>solid_color</b> - key {@value #COLOR_KEY} with value being any of the
-     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}</li>
-     * <li><b>gradient</b> - keys {@value #START_X_KEY}, {@value #START_Y_KEY}, {@value #END_X_KEY},
-     * {@value #END_Y_KEY} (values are coordinates),
-     * {@value #START_COLOR_KEY}, {@value #END_COLOR_KEY} (values are {@linkplain GraphicsUtilities#decodeColor colors})</li>
-     * <li><b>linear_gradient</b> - keys {@value #START_X_KEY}, {@value #START_Y_KEY}, {@value #END_X_KEY},
-     * {@value #END_Y_KEY} (coordinates), {@value #STOPS_KEY} (a list of dictionaries
-     * with keys {@value #OFFSET_KEY} (a number in [0,1]) and {@value #COLOR_KEY})</li>
-     * <li><b>radial_gradient</b> - keys {@value #CENTER_X_KEY}, {@value #CENTER_Y_KEY} (coordinates),
-     * {@value #RADIUS_KEY} (a number), {@value #STOPS_KEY} (a list of dictionaries
-     * with keys {@value #OFFSET_KEY} and {@value #COLOR_KEY})</li>
-     * </ul>
+     * 
+     * @param dictionary A dictionary containing a key {@value #PAINT_TYPE_KEY}
+     * and further elements according to its value: <ul> <li><b>solid_color</b>
+     * - key {@value #COLOR_KEY} with value being any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by
+     * Pivot}</li> <li><b>gradient</b> - keys {@value #START_X_KEY},
+     * {@value #START_Y_KEY}, {@value #END_X_KEY}, {@value #END_Y_KEY} (values
+     * are coordinates), {@value #START_COLOR_KEY}, {@value #END_COLOR_KEY}
+     * (values are {@linkplain GraphicsUtilities#decodeColor colors})</li>
+     * <li><b>linear_gradient</b> - keys {@value #START_X_KEY},
+     * {@value #START_Y_KEY}, {@value #END_X_KEY}, {@value #END_Y_KEY}
+     * (coordinates), {@value #STOPS_KEY} (a list of dictionaries with keys
+     * {@value #OFFSET_KEY} (a number in [0,1]) and {@value #COLOR_KEY})</li>
+     * <li><b>radial_gradient</b> - keys {@value #CENTER_X_KEY},
+     * {@value #CENTER_Y_KEY} (coordinates), {@value #RADIUS_KEY} (a number),
+     * {@value #STOPS_KEY} (a list of dictionaries with keys
+     * {@value #OFFSET_KEY} and {@value #COLOR_KEY})</li> </ul>
      */
     public static Paint decodePaint(Dictionary<String, ?> dictionary) {
         String paintType = JSON.get(dictionary, PAINT_TYPE_KEY);
@@ -294,7 +275,7 @@ public final class GraphicsUtilities {
         }
 
         Paint paint;
-        switch(PaintType.valueOf(paintType.toUpperCase(Locale.ENGLISH))) {
+        switch (PaintType.valueOf(paintType.toUpperCase(Locale.ENGLISH))) {
             case SOLID_COLOR: {
                 String color = JSON.get(dictionary, COLOR_KEY);
                 paint = decodeColor(color);
@@ -306,8 +287,8 @@ public final class GraphicsUtilities {
                 float startY = JSON.getFloat(dictionary, START_Y_KEY);
                 float endX = JSON.getFloat(dictionary, END_X_KEY);
                 float endY = JSON.getFloat(dictionary, END_Y_KEY);
-                Color startColor = decodeColor((String)JSON.get(dictionary, START_COLOR_KEY));
-                Color endColor = decodeColor((String)JSON.get(dictionary, END_COLOR_KEY));
+                Color startColor = decodeColor((String) JSON.get(dictionary, START_COLOR_KEY));
+                Color endColor = decodeColor((String) JSON.get(dictionary, END_COLOR_KEY));
                 paint = new GradientPaint(startX, startY, startColor, endX, endY, endColor);
                 break;
             }
@@ -319,8 +300,8 @@ public final class GraphicsUtilities {
                 float endY = JSON.getFloat(dictionary, END_Y_KEY);
 
                 @SuppressWarnings("unchecked")
-                List<Dictionary<String, ?>> stops =
-                    (List<Dictionary<String, ?>>)JSON.get(dictionary, STOPS_KEY);
+                List<Dictionary<String, ?>> stops = (List<Dictionary<String, ?>>) JSON.get(
+                    dictionary, STOPS_KEY);
 
                 int n = stops.getLength();
                 float[] fractions = new float[n];
@@ -331,7 +312,7 @@ public final class GraphicsUtilities {
                     float offset = JSON.getFloat(stop, OFFSET_KEY);
                     fractions[i] = offset;
 
-                    Color color = decodeColor((String)JSON.get(stop, COLOR_KEY));
+                    Color color = decodeColor((String) JSON.get(stop, COLOR_KEY));
                     colors[i] = color;
                 }
 
@@ -345,8 +326,8 @@ public final class GraphicsUtilities {
                 float radius = JSON.getFloat(dictionary, RADIUS_KEY);
 
                 @SuppressWarnings("unchecked")
-                List<Dictionary<String, ?>> stops =
-                    (List<Dictionary<String, ?>>)JSON.get(dictionary, STOPS_KEY);
+                List<Dictionary<String, ?>> stops = (List<Dictionary<String, ?>>) JSON.get(
+                    dictionary, STOPS_KEY);
 
                 int n = stops.getLength();
                 float[] fractions = new float[n];
@@ -357,7 +338,7 @@ public final class GraphicsUtilities {
                     float offset = JSON.getFloat(stop, OFFSET_KEY);
                     fractions[i] = offset;
 
-                    Color color = decodeColor((String)JSON.get(stop, COLOR_KEY));
+                    Color color = decodeColor((String) JSON.get(stop, COLOR_KEY));
                     colors[i] = color;
                 }
 

@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.skin.ScrollPaneSkin;
  */
 public class TerraScrollPaneSkin extends ScrollPaneSkin {
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 }

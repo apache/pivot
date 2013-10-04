@@ -56,7 +56,7 @@ public interface FileBrowserSheetListener {
 
     /**
      * Called when a file browser sheet's mode has changed.
-     *
+     * 
      * @param fileBrowserSheet
      * @param previousMode
      */
@@ -64,16 +64,15 @@ public interface FileBrowserSheetListener {
 
     /**
      * Called when a file browser sheet's root directory has changed.
-     *
+     * 
      * @param fileBrowserSheet
      * @param previousRootDirectory
      */
-    public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
-        File previousRootDirectory);
+    public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet, File previousRootDirectory);
 
     /**
      * Called when a file browser sheet's selection state has been reset.
-     *
+     * 
      * @param fileBrowserSheet
      * @param previousSelectedFiles
      */
@@ -82,7 +81,7 @@ public interface FileBrowserSheetListener {
 
     /**
      * Called when a file browser sheet's disabled file filter has changed.
-     *
+     * 
      * @param fileBrowserSheet
      * @param previousDisabledFileFilter
      */

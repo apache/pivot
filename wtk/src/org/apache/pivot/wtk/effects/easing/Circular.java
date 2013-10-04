@@ -22,20 +22,20 @@ package org.apache.pivot.wtk.effects.easing;
 public class Circular implements Easing {
     @Override
     public float easeIn(float time, float begin, float change, float duration) {
-        return -change * ((float)Math.sqrt(1f - (time /= duration) * time) - 1f) + begin;
+        return -change * ((float) Math.sqrt(1f - (time /= duration) * time) - 1f) + begin;
     }
 
     @Override
     public float easeOut(float time, float begin, float change, float duration) {
-        return change * (float)Math.sqrt(1f - (time = time / duration - 1f) * time) + begin;
+        return change * (float) Math.sqrt(1f - (time = time / duration - 1f) * time) + begin;
     }
 
     @Override
     public float easeInOut(float time, float begin, float change, float duration) {
         if ((time /= duration / 2f) < 1f) {
-            return -change / 2f * ((float)Math.sqrt(1f - time * time) - 1f) + begin;
+            return -change / 2f * ((float) Math.sqrt(1f - time * time) - 1f) + begin;
         }
 
-        return change / 2f * ((float)Math.sqrt(1f - (time -= 2f) * time) + 1f) + begin;
+        return change / 2f * ((float) Math.sqrt(1f - (time -= 2f) * time) + 1f) + begin;
     }
 }

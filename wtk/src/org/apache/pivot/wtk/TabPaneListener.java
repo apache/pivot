@@ -53,7 +53,8 @@ public interface TabPaneListener {
         }
 
         @Override
-        public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer) {
+        public void tabDataRendererChanged(TabPane tabPane,
+            Button.DataRenderer previousTabDataRenderer) {
             // empty block
         }
 
@@ -70,7 +71,7 @@ public interface TabPaneListener {
 
     /**
      * Called when a tab has been inserted into a tab pane's tab sequence.
-     *
+     * 
      * @param tabPane
      * @param index
      */
@@ -78,7 +79,7 @@ public interface TabPaneListener {
 
     /**
      * Called to preview a tab removal.
-     *
+     * 
      * @param tabPane
      * @param index
      * @param count
@@ -87,7 +88,7 @@ public interface TabPaneListener {
 
     /**
      * Called when a tab removal has been vetoed.
-     *
+     * 
      * @param tabPane
      * @param reason
      */
@@ -95,7 +96,7 @@ public interface TabPaneListener {
 
     /**
      * Called when a tab has been removed from a tab pane's tab sequence.
-     *
+     * 
      * @param tabPane
      * @param index
      * @param tabs
@@ -104,7 +105,7 @@ public interface TabPaneListener {
 
     /**
      * Called when a tab pane's corner component has changed.
-     *
+     * 
      * @param tabPane
      * @param previousCorner
      */
@@ -112,7 +113,7 @@ public interface TabPaneListener {
 
     /**
      * Called when a tab pane's tab data renderer has changed.
-     *
+     * 
      * @param tabPane
      * @param previousTabDataRenderer
      */
@@ -120,14 +121,14 @@ public interface TabPaneListener {
 
     /**
      * Called when a tab pane's closeable property has changed.
-     *
+     * 
      * @param tabPane
      */
     public void closeableChanged(TabPane tabPane);
 
     /**
      * Called when a tab pane's collapsible property has changed.
-     *
+     * 
      * @param tabPane
      */
     public void collapsibleChanged(TabPane tabPane);

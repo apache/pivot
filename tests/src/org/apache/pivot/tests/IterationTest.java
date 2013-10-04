@@ -29,6 +29,7 @@ public class IterationTest {
 
         long t1 = System.currentTimeMillis();
 
-        System.out.println(Math.log10(COUNT) + " " + (t1 - t0) + "; " + Math.log10(COUNT) / Math.log10(2));
+        System.out.println(Math.log10(COUNT) + " " + (t1 - t0) + "; " + Math.log10(COUNT)
+            / Math.log10(2));
     }
 }

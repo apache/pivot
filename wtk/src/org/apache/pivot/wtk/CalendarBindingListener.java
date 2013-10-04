@@ -30,19 +30,21 @@ public interface CalendarBindingListener {
         }
 
         @Override
-        public void selectedDateBindTypeChanged(Calendar calendar, BindType previousSelectedDateBindType) {
+        public void selectedDateBindTypeChanged(Calendar calendar,
+            BindType previousSelectedDateBindType) {
             // empty block
         }
 
         @Override
-        public void selectedDateBindMappingChanged(Calendar calendar, Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
+        public void selectedDateBindMappingChanged(Calendar calendar,
+            Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
             // empty block
         }
     }
 
     /**
      * Called when a calendar's selected date key has changed.
-     *
+     * 
      * @param calendar
      * @param previousSelectedDateKey
      */
@@ -50,7 +52,7 @@ public interface CalendarBindingListener {
 
     /**
      * Called when a calendar's selected date bind type has changed.
-     *
+     * 
      * @param calendar
      * @param previousSelectedDateBindType
      */
@@ -58,7 +60,7 @@ public interface CalendarBindingListener {
 
     /**
      * Called when a calendar's selected date bind mapping has changed.
-     *
+     * 
      * @param calendar
      * @param previousSelectedDateBindMapping
      */

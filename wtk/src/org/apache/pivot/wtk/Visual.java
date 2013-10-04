@@ -19,8 +19,8 @@ package org.apache.pivot.wtk;
 import java.awt.Graphics2D;
 
 /**
- * Interface representing a "visual". A visual is an object that can be drawn
- * to the screen or other output device.
+ * Interface representing a "visual". A visual is an object that can be drawn to
+ * the screen or other output device.
  */
 public interface Visual {
     /**
@@ -35,18 +35,16 @@ public interface Visual {
 
     /**
      * Returns the visual's baseline.
-     *
-     * @return
-     * The baseline relative to the origin of the visual, or <tt>-1</tt> if
-     * this visual does not have a baseline.
+     * 
+     * @return The baseline relative to the origin of the visual, or <tt>-1</tt>
+     * if this visual does not have a baseline.
      */
     public int getBaseline();
 
     /**
      * Paints the visual.
-     *
-     * @param graphics
-     * The graphics context in which to paint the visual.
+     * 
+     * @param graphics The graphics context in which to paint the visual.
      */
     public void paint(Graphics2D graphics);
 }

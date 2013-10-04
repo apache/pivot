@@ -23,7 +23,6 @@ import java.awt.geom.AffineTransform;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 
-
 /**
  * Decorator that applies an opacity to a component.
  */
@@ -43,9 +42,9 @@ public class FadeDecorator implements Decorator {
     }
 
     public void setOpacity(float opacity) {
-        if (opacity < 0f
-            || opacity > 1f) {
-            throw new IllegalArgumentException("opacity must be a value between 0 and 1, inclusive.");
+        if (opacity < 0f || opacity > 1f) {
+            throw new IllegalArgumentException(
+                "opacity must be a value between 0 and 1, inclusive.");
         }
 
         this.opacity = opacity;

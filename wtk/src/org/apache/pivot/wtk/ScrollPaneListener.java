@@ -42,8 +42,7 @@ public interface ScrollPaneListener {
         }
 
         @Override
-        public void columnHeaderChanged(ScrollPane scrollPane,
-            Component previousColumnHeader) {
+        public void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader) {
             // empty block
         }
 
@@ -55,7 +54,7 @@ public interface ScrollPaneListener {
 
     /**
      * Called when the scroll pane's horizontal scroll bar policy changed.
-     *
+     * 
      * @param scrollPane
      * @param previousPolicy
      */
@@ -64,7 +63,7 @@ public interface ScrollPaneListener {
 
     /**
      * Called when the scroll pane's vertical scroll bar policy changed.
-     *
+     * 
      * @param scrollPane
      * @param previousPolicy
      */
@@ -73,7 +72,7 @@ public interface ScrollPaneListener {
 
     /**
      * Called when the scroll pane's row header changed.
-     *
+     * 
      * @param scrollPane
      * @param previousRowHeader
      */
@@ -81,16 +80,15 @@ public interface ScrollPaneListener {
 
     /**
      * Called when the scroll pane's column header changed.
-     *
+     * 
      * @param scrollPane
      * @param previousColumnHeader
      */
-    public void columnHeaderChanged(ScrollPane scrollPane,
-        Component previousColumnHeader);
+    public void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader);
 
     /**
      * Called when the scroll pane's corner component changed.
-     *
+     * 
      * @param scrollPane
      * @param previousCorner
      */

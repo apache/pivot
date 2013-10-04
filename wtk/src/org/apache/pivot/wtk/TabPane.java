@@ -151,12 +151,11 @@ public class TabPane extends Container {
     }
 
     private enum Attribute {
-        TAB_DATA,
-        TOOLTIP_TEXT;
+        TAB_DATA, TOOLTIP_TEXT;
     }
 
-    private static class TabPaneListenerList extends WTKListenerList<TabPaneListener>
-        implements TabPaneListener {
+    private static class TabPaneListenerList extends WTKListenerList<TabPaneListener> implements
+        TabPaneListener {
         @Override
         public void tabInserted(TabPane tabPane, int index) {
             for (TabPaneListener listener : this) {
@@ -197,7 +196,8 @@ public class TabPane extends Container {
         }
 
         @Override
-        public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer) {
+        public void tabDataRendererChanged(TabPane tabPane,
+            Button.DataRenderer previousTabDataRenderer) {
             for (TabPaneListener listener : this) {
                 listener.tabDataRendererChanged(tabPane, previousTabDataRenderer);
             }
@@ -218,8 +218,8 @@ public class TabPane extends Container {
         }
     }
 
-    private static class TabPaneSelectionListenerList extends WTKListenerList<TabPaneSelectionListener>
-        implements TabPaneSelectionListener {
+    private static class TabPaneSelectionListenerList extends
+        WTKListenerList<TabPaneSelectionListener> implements TabPaneSelectionListener {
         @Override
         public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
             Vote vote = Vote.APPROVE;
@@ -246,8 +246,8 @@ public class TabPane extends Container {
         }
     }
 
-    private static class TabPaneAttributeListenerList extends WTKListenerList<TabPaneAttributeListener>
-        implements TabPaneAttributeListener {
+    private static class TabPaneAttributeListenerList extends
+        WTKListenerList<TabPaneAttributeListener> implements TabPaneAttributeListener {
         @Override
         public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
             for (TabPaneAttributeListener listener : this) {
@@ -256,7 +256,8 @@ public class TabPane extends Container {
         }
 
         @Override
-        public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
+        public void tooltipTextChanged(TabPane tabPane, Component component,
+            String previousTooltipText) {
             for (TabPaneAttributeListener listener : this) {
                 listener.tooltipTextChanged(tabPane, component, previousTooltipText);
             }
@@ -379,7 +380,6 @@ public class TabPane extends Container {
     /**
      * @return <tt>true</tt> if the TabPane is collapsible and no tab is
      * selected; <tt>false</tt>, otherwise.
-     *
      * @see #isCollapsible()
      * @see #getSelectedIndex()
      */
@@ -389,11 +389,10 @@ public class TabPane extends Container {
 
     /**
      * Collapse or expand the TabPane (if it is collapsible).
-     *
+     * 
      * @param collapsed <tt>true</tt> to collapse, <tt>false</tt> to expand and
      * select the first tab. Use {@link #setSelectedIndex(int)} to expand and
      * select a specific Tab.
-     *
      * @see #isCollapsible()
      * @see #setSelectedIndex(int)
      */
@@ -420,8 +419,7 @@ public class TabPane extends Container {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
 
-            if (component == corner
-                || tabs.indexOf(component) >= 0) {
+            if (component == corner || tabs.indexOf(component) >= 0) {
                 throw new UnsupportedOperationException();
             }
         }
@@ -453,7 +451,7 @@ public class TabPane extends Container {
             Container parent = component.getParent();
 
             if (parent instanceof TabPane) {
-                TabPane tabPane = (TabPane)parent;
+                TabPane tabPane = (TabPane) parent;
                 tabPane.tabPaneAttributeListeners.tabDataChanged(tabPane, component,
                     previousTabData);
             }
@@ -461,20 +459,21 @@ public class TabPane extends Container {
     }
 
     public static String getTooltipText(Component component) {
-        return (String)component.getAttribute(Attribute.TOOLTIP_TEXT);
+        return (String) component.getAttribute(Attribute.TOOLTIP_TEXT);
     }
 
     public static void setTooltipText(Component component, String tooltipText) {
-        String previousTooltipText = (String)component.setAttribute(Attribute.TOOLTIP_TEXT, tooltipText);
+        String previousTooltipText = (String) component.setAttribute(Attribute.TOOLTIP_TEXT,
+            tooltipText);
 
         if (previousTooltipText != tooltipText) {
             Container parent = component.getParent();
 
             if (parent instanceof TabPane) {
-                TabPane tabPane = (TabPane)parent;
-                tabPane.tabPaneAttributeListeners.tooltipTextChanged(tabPane, component, previousTooltipText);
+                TabPane tabPane = (TabPane) parent;
+                tabPane.tabPaneAttributeListeners.tooltipTextChanged(tabPane, component,
+                    previousTooltipText);
             }
         }
     }
 }
-

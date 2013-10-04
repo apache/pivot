@@ -49,15 +49,12 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
- * Table view skin.
- * <p>
- * TODO Add disableMouseSelection style to support the case where selection
- * should be enabled but the caller wants to implement the management of it;
- * e.g. changing a message's flag state in an email client.
+ * Table view skin. <p> TODO Add disableMouseSelection style to support the case
+ * where selection should be enabled but the caller wants to implement the
+ * management of it; e.g. changing a message's flag state in an email client.
  */
-public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
-    TableViewListener, TableViewColumnListener, TableViewRowListener,
-    TableViewSelectionListener {
+public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin, TableViewListener,
+    TableViewColumnListener, TableViewRowListener, TableViewSelectionListener {
     private Font font;
     private Color color;
     private Color disabledColor;
@@ -91,7 +88,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private boolean validateSelection = false;
 
     public TerraTableViewSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -120,7 +117,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public void install(Component component) {
         super.install(component);
 
-        TableView tableView = (TableView)component;
+        TableView tableView = (TableView) component;
         tableView.getTableViewListeners().add(this);
         tableView.getTableViewColumnListeners().add(this);
         tableView.getTableViewRowListeners().add(this);
@@ -129,7 +126,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public int getPreferredWidth(int height) {
-        return getPreferredWidth((TableView)getComponent(), includeTrailingVerticalGridLine);
+        return getPreferredWidth((TableView) getComponent(), includeTrailingVerticalGridLine);
     }
 
     public static int getPreferredWidth(TableView tableView, boolean includeTrailingVerticalGridLine) {
@@ -159,14 +156,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     }
                 }
 
-                preferredWidth += Math.min(Math.max(columnWidth, column.getMinimumWidth()), column.getMaximumWidth());
-            }
-            else {
+                preferredWidth += Math.min(Math.max(columnWidth, column.getMinimumWidth()),
+                    column.getMaximumWidth());
+            } else {
                 preferredWidth += column.getMinimumWidth();
             }
         }
 
-        // Include space for vertical gridlines; even if we are not painting them,
+        // Include space for vertical gridlines; even if we are not painting
+        // them,
         // the header does
         preferredWidth += (n - 1);
 
@@ -181,7 +179,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
 
         int n = tableView.getTableData().getLength();
 
@@ -213,9 +211,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public int getBaseline(int width, int height) {
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
         @SuppressWarnings("unchecked")
-        List<Object> tableData = (List<Object>)tableView.getTableData();
+        List<Object> tableData = (List<Object>) tableView.getTableData();
 
         int baseline = -1;
 
@@ -230,7 +228,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 TableView.Column column = columns.get(i);
                 TableView.CellRenderer cellRenderer = column.getCellRenderer();
                 cellRenderer.render(rowData, 0, i, tableView, column.getName(), false, false, false);
-                baseline = Math.max(baseline, cellRenderer.getBaseline(columnWidthsLocal.get(i), rowHeight));
+                baseline = Math.max(baseline,
+                    cellRenderer.getBaseline(columnWidthsLocal.get(i), rowHeight));
             }
 
         } else {
@@ -240,7 +239,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 TableView.Column column = columns.get(i);
                 TableView.CellRenderer cellRenderer = column.getCellRenderer();
                 cellRenderer.render(null, -1, i, tableView, column.getName(), false, false, false);
-                baseline = Math.max(baseline, cellRenderer.getBaseline(columnWidthsLocal.get(i), rowHeight));
+                baseline = Math.max(baseline,
+                    cellRenderer.getBaseline(columnWidthsLocal.get(i), rowHeight));
             }
         }
 
@@ -249,14 +249,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public void layout() {
-        columnWidths = getColumnWidths((TableView)getComponent(), getWidth());
+        columnWidths = getColumnWidths((TableView) getComponent(), getWidth());
 
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
         TableView.ColumnSequence columns = tableView.getColumns();
 
         if (variableRowHeight) {
             @SuppressWarnings("unchecked")
-            List<Object> tableData = (List<Object>)tableView.getTableData();
+            List<Object> tableData = (List<Object>) tableView.getTableData();
 
             int n = tableData.getLength();
             rowBoundaries = new ArrayList<>(n);
@@ -266,8 +266,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 Object rowData = tableData.get(i);
 
                 int rowHeight = 0;
-                for (int columnIndex = 0, columnCount = columns.getLength();
-                    columnIndex < columnCount; columnIndex++) {
+                for (int columnIndex = 0, columnCount = columns.getLength(); columnIndex < columnCount; columnIndex++) {
                     TableView.Column column = columns.get(columnIndex);
 
                     TableView.CellRenderer cellRenderer = column.getCellRenderer();
@@ -330,9 +329,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public void paint(Graphics2D graphics) {
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
         @SuppressWarnings("unchecked")
-        List<Object> tableData = (List<Object>)tableView.getTableData();
+        List<Object> tableData = (List<Object>) tableView.getTableData();
         TableView.ColumnSequence columns = tableView.getColumns();
 
         int width = getWidth();
@@ -362,10 +361,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     rowEnd = getRowAt(clipBottom);
                 }
             } else {
-                rowStart = Math.max(rowStart, (int)Math.floor(clipBounds.y
-                    / (double)(fixedRowHeight + 1)));
-                rowEnd = Math.min(rowEnd, (int)Math.ceil((clipBounds.y
-                    + clipBounds.height) / (double)(fixedRowHeight + 1)) - 1);
+                rowStart = Math.max(rowStart,
+                    (int) Math.floor(clipBounds.y / (double) (fixedRowHeight + 1)));
+                rowEnd = Math.min(
+                    rowEnd,
+                    (int) Math.ceil((clipBounds.y + clipBounds.height)
+                        / (double) (fixedRowHeight + 1)) - 1);
             }
         }
 
@@ -388,8 +389,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
             columnX = 0;
 
-            for (int columnIndex = 0, columnCount = columns.getLength();
-                columnIndex < columnCount; columnIndex++) {
+            for (int columnIndex = 0, columnCount = columns.getLength(); columnIndex < columnCount; columnIndex++) {
                 TableView.Column column = columns.get(columnIndex);
                 int columnWidth = columnWidths.get(columnIndex);
 
@@ -406,8 +406,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         // Paint the row content
         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
             Object rowData = tableData.get(rowIndex);
-            boolean rowHighlighted = (rowIndex == highlightIndex
-                && tableView.getSelectMode() != TableView.SelectMode.NONE);
+            boolean rowHighlighted = (rowIndex == highlightIndex && tableView.getSelectMode() != TableView.SelectMode.NONE);
             boolean rowSelected = tableView.isRowSelected(rowIndex);
             boolean rowDisabled = tableView.isRowDisabled(rowIndex);
             int rowY = getRowY(rowIndex);
@@ -416,8 +415,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             // Paint selection state
             Color rowBackgroundColor = null;
             if (rowSelected) {
-                rowBackgroundColor = (tableView.isFocused())
-                    ? this.selectionBackgroundColor : inactiveSelectionBackgroundColor;
+                rowBackgroundColor = (tableView.isFocused()) ? this.selectionBackgroundColor
+                    : inactiveSelectionBackgroundColor;
             } else {
                 if (rowHighlighted && showHighlight && !rowDisabled) {
                     rowBackgroundColor = highlightBackgroundColor;
@@ -432,15 +431,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             // Paint the cells
             columnX = 0;
 
-            for (int columnIndex = 0, columnCount = columns.getLength();
-                columnIndex < columnCount; columnIndex++) {
+            for (int columnIndex = 0, columnCount = columns.getLength(); columnIndex < columnCount; columnIndex++) {
                 TableView.Column column = columns.get(columnIndex);
 
                 TableView.CellRenderer cellRenderer = column.getCellRenderer();
 
                 int columnWidth = columnWidths.get(columnIndex);
 
-                Graphics2D rendererGraphics = (Graphics2D)graphics.create(columnX, rowY,
+                Graphics2D rendererGraphics = (Graphics2D) graphics.create(columnX, rowY,
                     columnWidth, rowHeight);
 
                 cellRenderer.render(rowData, rowIndex, columnIndex, tableView, column.getName(),
@@ -460,12 +458,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         if (showVerticalGridLines) {
             columnX = 0;
 
-            for (int columnIndex = 0, columnCount = columns.getLength();
-                columnIndex < columnCount; columnIndex++) {
+            for (int columnIndex = 0, columnCount = columns.getLength(); columnIndex < columnCount; columnIndex++) {
                 columnX += columnWidths.get(columnIndex);
 
-                if (columnIndex < columnCount - 1
-                    || includeTrailingVerticalGridLine) {
+                if (columnIndex < columnCount - 1 || includeTrailingVerticalGridLine) {
                     GraphicsUtilities.drawLine(graphics, columnX, 0, height, Orientation.VERTICAL);
                 }
 
@@ -482,8 +478,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
                 int gridY = getRowY(rowIndex + 1) - 1;
 
-                if (rowIndex < rowCount - 1
-                    || includeTrailingHorizontalGridLine) {
+                if (rowIndex < rowCount - 1 || includeTrailingHorizontalGridLine) {
                     GraphicsUtilities.drawLine(graphics, 0, gridY, width, Orientation.HORIZONTAL);
                 }
             }
@@ -493,8 +488,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 columnX = 0;
 
-                for (int columnIndex = 0, columnCount = columns.getLength();
-                    columnIndex < columnCount; columnIndex++) {
+                for (int columnIndex = 0, columnCount = columns.getLength(); columnIndex < columnCount; columnIndex++) {
                     TableView.Column column = columns.get(columnIndex);
                     int columnWidth = columnWidths.get(columnIndex);
 
@@ -504,8 +498,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
                             int gridY = getRowY(rowIndex + 1) - 1;
 
-                            if (rowIndex < rowCount - 1
-                                || includeTrailingHorizontalGridLine) {
+                            if (rowIndex < rowCount - 1 || includeTrailingHorizontalGridLine) {
                                 GraphicsUtilities.drawLine(graphics, columnX, gridY, columnWidth,
                                     Orientation.HORIZONTAL);
                             }
@@ -548,9 +541,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     protected int getVariableRowHeight(int rowIndex, ArrayList<Integer> columnWidthsArgument) {
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
         @SuppressWarnings("unchecked")
-        List<Object> tableData = (List<Object>)tableView.getTableData();
+        List<Object> tableData = (List<Object>) tableView.getTableData();
 
         TableView.ColumnSequence columns = tableView.getColumns();
         Object rowData = tableData.get(rowIndex);
@@ -559,9 +552,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         for (int i = 0, n = columns.getLength(); i < n; i++) {
             TableView.Column column = columns.get(i);
             TableView.CellRenderer cellRenderer = column.getCellRenderer();
-            cellRenderer.render(rowData, rowIndex, i, tableView, column.getName(), false, false, false);
+            cellRenderer.render(rowData, rowIndex, i, tableView, column.getName(), false, false,
+                false);
 
-            rowHeight = Math.max(rowHeight, cellRenderer.getPreferredHeight(columnWidthsArgument.get(i)));
+            rowHeight = Math.max(rowHeight,
+                cellRenderer.getPreferredHeight(columnWidthsArgument.get(i)));
         }
 
         return rowHeight;
@@ -574,7 +569,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("y is negative");
         }
 
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
 
         int rowIndex;
         if (variableRowHeight) {
@@ -591,7 +586,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         @SuppressWarnings("unchecked")
-        List<Object> tableData = (List<Object>)tableView.getTableData();
+        List<Object> tableData = (List<Object>) tableView.getTableData();
         if (rowIndex >= tableData.getLength()) {
             rowIndex = -1;
         }
@@ -605,15 +600,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             throw new IllegalArgumentException("x is negative");
         }
 
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
 
         int columnIndex = -1;
 
         int i = 0;
         int n = tableView.getColumns().getLength();
         int columnX = 0;
-        while (i < n
-            && x > columnX) {
+        while (i < n && x > columnX) {
             columnX += (columnWidths.get(i) + 1);
             i++;
         }
@@ -642,12 +636,11 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public Bounds getCellBounds(int rowIndex, int columnIndex) {
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
         @SuppressWarnings("unchecked")
-        List<Object> tableData = (List<Object>)tableView.getTableData();
+        List<Object> tableData = (List<Object>) tableView.getTableData();
 
-        if (rowIndex < 0
-            || rowIndex >= tableData.getLength()) {
+        if (rowIndex < 0 || rowIndex >= tableData.getLength()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -658,7 +651,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         int rowHeight = getRowHeight(rowIndex);
 
-        return new Bounds(cellX, rowIndex * (rowHeight + 1), columnWidths.get(columnIndex), rowHeight);
+        return new Bounds(cellX, rowIndex * (rowHeight + 1), columnWidths.get(columnIndex),
+            rowHeight);
     }
 
     public static ArrayList<Integer> getColumnWidths(TableView tableView, int width) {
@@ -694,7 +688,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     }
                 }
 
-                columnWidth = Math.min(Math.max(columnWidth, column.getMinimumWidth()), column.getMaximumWidth());
+                columnWidth = Math.min(Math.max(columnWidth, column.getMinimumWidth()),
+                    column.getMaximumWidth());
                 columnWidths.add(columnWidth);
                 fixedWidth += columnWidth;
             }
@@ -707,10 +702,12 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             TableView.Column column = columns.get(i);
 
             if (column.isRelative()) {
-                int columnWidth = (int)Math.round((double)(column.getWidth()
-                    * variableWidth) / (double)relativeWidth);
-                columnWidths.update(i, Math.min(Math.max(columnWidth, column.getMinimumWidth()),
-                    column.getMaximumWidth()));
+                int columnWidth = (int) Math.round((double) (column.getWidth() * variableWidth)
+                    / (double) relativeWidth);
+                columnWidths.update(
+                    i,
+                    Math.min(Math.max(columnWidth, column.getMinimumWidth()),
+                        column.getMaximumWidth()));
             }
         }
 
@@ -719,14 +716,13 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public boolean isFocusable() {
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
         return (tableView.getSelectMode() != TableView.SelectMode.NONE);
     }
 
     @Override
     public boolean isOpaque() {
-        return (backgroundColor != null
-            && backgroundColor.getTransparency() == Transparency.OPAQUE);
+        return (backgroundColor != null && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     public Font getFont() {
@@ -780,7 +776,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -806,7 +802,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -828,7 +824,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -854,7 +850,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setSelectionColor(int selectionColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setSelectionColor(theme.getColor(selectionColor));
     }
 
@@ -880,7 +876,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
     }
 
@@ -906,7 +902,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setInactiveSelectionColor(theme.getColor(inactiveSelectionColor));
     }
 
@@ -932,7 +928,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setInactiveSelectionBackgroundColor(theme.getColor(inactiveSelectionBackgroundColor));
     }
 
@@ -958,7 +954,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 
@@ -980,7 +976,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setAlternateRowBackgroundColor(int alternateRowBackgroundColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setAlternateRowBackgroundColor(theme.getColor(alternateRowBackgroundColor));
     }
 
@@ -1002,7 +998,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setColumnSelectionColor(int columnSelectionColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColumnSelectionColor(theme.getColor(columnSelectionColor));
     }
 
@@ -1019,7 +1015,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         repaintComponent();
     }
 
-    public final void setColumnSelectionHorizontalGridColor(String columnSelectionHorizontalGridColor) {
+    public final void setColumnSelectionHorizontalGridColor(
+        String columnSelectionHorizontalGridColor) {
         if (columnSelectionHorizontalGridColor == null) {
             throw new IllegalArgumentException("columnSelectionHorizontalGridColor is null.");
         }
@@ -1028,7 +1025,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setColumnSelectionHorizontalGridColor(int columnSelectionHorizontalGridColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setColumnSelectionHorizontalGridColor(theme.getColor(columnSelectionHorizontalGridColor));
     }
 
@@ -1054,7 +1051,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setHorizontalGridColor(int horizontalGridColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setHorizontalGridColor(theme.getColor(horizontalGridColor));
     }
 
@@ -1080,7 +1077,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setVerticalGridColor(int verticalGridColor) {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setVerticalGridColor(theme.getColor(verticalGridColor));
     }
 
@@ -1152,14 +1149,13 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public boolean mouseMove(Component component, int x, int y) {
         boolean consumed = super.mouseMove(component, x, y);
 
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
 
         int previousHighlightIndex = this.highlightIndex;
         highlightIndex = getRowAt(y);
 
         if (previousHighlightIndex != highlightIndex
-            && tableView.getSelectMode() != TableView.SelectMode.NONE
-            && showHighlight) {
+            && tableView.getSelectMode() != TableView.SelectMode.NONE && showHighlight) {
             if (previousHighlightIndex != -1) {
                 repaintComponent(getRowBounds(previousHighlightIndex));
             }
@@ -1176,10 +1172,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public void mouseOut(Component component) {
         super.mouseOut(component);
 
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
 
-        if (highlightIndex != -1
-            && tableView.getSelectMode() != TableView.SelectMode.NONE
+        if (highlightIndex != -1 && tableView.getSelectMode() != TableView.SelectMode.NONE
             && showHighlight) {
             repaintComponent(getRowBounds(highlightIndex));
         }
@@ -1192,11 +1187,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
         int rowIndex = getRowAt(y);
 
-        if (rowIndex >= 0
-            && !tableView.isRowDisabled(rowIndex)) {
+        if (rowIndex >= 0 && !tableView.isRowDisabled(rowIndex)) {
             TableView.SelectMode selectMode = tableView.getSelectMode();
 
             if (button == Mouse.Button.LEFT) {
@@ -1210,13 +1204,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         // Select the range
                         int startIndex = tableView.getFirstSelectedIndex();
                         int endIndex = tableView.getLastSelectedIndex();
-                        // if there is nothing currently selected, selected the indicated row
+                        // if there is nothing currently selected, selected the
+                        // indicated row
                         if (startIndex == -1) {
                             tableView.addSelectedIndex(rowIndex);
                         } else {
                             // otherwise select the range of rows
-                            Span selectedRange = (rowIndex > startIndex) ?
-                                new Span(startIndex, rowIndex) : new Span(rowIndex, endIndex);
+                            Span selectedRange = (rowIndex > startIndex) ? new Span(startIndex,
+                                rowIndex) : new Span(rowIndex, endIndex);
 
                             ArrayList<Span> selectedRanges = new ArrayList<>();
                             selectedRanges.add(selectedRange);
@@ -1254,8 +1249,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         tableView.requestFocus();
 
         if (editOnMouseDown) {
-            if (selectIndex != -1
-                && button == Mouse.Button.LEFT) {
+            if (selectIndex != -1 && button == Mouse.Button.LEFT) {
                 TableView.RowEditor rowEditor = tableView.getRowEditor();
 
                 if (rowEditor != null) {
@@ -1275,7 +1269,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
 
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
         if (selectIndex != -1
             && tableView.getFirstSelectedIndex() != tableView.getLastSelectedIndex()) {
             tableView.setSelectedIndex(selectIndex);
@@ -1290,10 +1284,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         if (!editOnMouseDown) {
-            TableView tableView = (TableView)getComponent();
-            if (selectIndex != -1
-                && count == 2
-                && button == Mouse.Button.LEFT) {
+            TableView tableView = (TableView) getComponent();
+            if (selectIndex != -1 && count == 2 && button == Mouse.Button.LEFT) {
                 TableView.RowEditor rowEditor = tableView.getRowEditor();
 
                 if (rowEditor != null) {
@@ -1314,15 +1306,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @Override
     public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
 
         if (highlightIndex != -1) {
             Bounds rowBounds = getRowBounds(highlightIndex);
 
             highlightIndex = -1;
 
-            if (tableView.getSelectMode() != TableView.SelectMode.NONE
-                && showHighlight) {
+            if (tableView.getSelectMode() != TableView.SelectMode.NONE && showHighlight) {
                 repaintComponent(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height, true);
             }
         }
@@ -1332,21 +1323,19 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     /**
      * {@link KeyCode#UP UP} Selects the previous enabled row when select mode
-     * is not {@link SelectMode#NONE}<br>
-     * {@link KeyCode#DOWN DOWN} Selects the next enabled row when select mode
-     * is not {@link SelectMode#NONE}<p>
+     * is not {@link SelectMode#NONE}<br> {@link KeyCode#DOWN DOWN} Selects the
+     * next enabled row when select mode is not {@link SelectMode#NONE}<p>
      * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the
-     * selection size by including the previous enabled row when select mode
-     * is {@link SelectMode#MULTI}<br>
-     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases the
-     * selection size by including the next enabled row when select mode is
-     * {@link SelectMode#MULTI}
+     * selection size by including the previous enabled row when select mode is
+     * {@link SelectMode#MULTI}<br> {@link Modifier#SHIFT SHIFT} +
+     * {@link KeyCode#DOWN DOWN} Increases the selection size by including the
+     * next enabled row when select mode is {@link SelectMode#MULTI}
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
-        TableView tableView = (TableView)getComponent();
+        TableView tableView = (TableView) getComponent();
         TableView.SelectMode selectMode = tableView.getSelectMode();
 
         switch (keyCode) {
@@ -1356,8 +1345,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                     do {
                         index--;
-                    } while (index >= 0
-                        && tableView.isRowDisabled(index));
+                    } while (index >= 0 && tableView.isRowDisabled(index));
 
                     if (index >= 0) {
                         if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
@@ -1381,8 +1369,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                     do {
                         index++;
-                    } while (index < count
-                        && tableView.isRowDisabled(index));
+                    } while (index < count && tableView.isRowDisabled(index));
 
                     if (index < count) {
                         if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
@@ -1405,10 +1392,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         // Clear the highlight
-        if (highlightIndex != -1
-            && tableView.getSelectMode() != TableView.SelectMode.NONE
-            && showHighlight
-            && consumed) {
+        if (highlightIndex != -1 && tableView.getSelectMode() != TableView.SelectMode.NONE
+            && showHighlight && consumed) {
             repaintComponent(getRowBounds(highlightIndex));
         }
 
@@ -1510,7 +1495,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative)  {
+    public void columnWidthChanged(TableView.Column column, int previousWidth,
+        boolean previousRelative) {
         if (column.getWidth() == -1) {
             defaultWidthColumnCount++;
         } else {
@@ -1521,7 +1507,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth, int previousMaximumWidth) {
+    public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth,
+        int previousMaximumWidth) {
         invalidateComponent();
     }
 
@@ -1531,7 +1518,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public void columnCellRendererChanged(TableView.Column column, TableView.CellRenderer previousCellRenderer) {
+    public void columnCellRendererChanged(TableView.Column column,
+        TableView.CellRenderer previousCellRenderer) {
         invalidateComponent();
     }
 
@@ -1548,8 +1536,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public void rowUpdated(TableView tableView, int index) {
-        if (variableRowHeight
-            || defaultWidthColumnCount > 0) {
+        if (variableRowHeight || defaultWidthColumnCount > 0) {
             invalidateComponent();
         } else {
             repaintComponent(getRowBounds(index));
@@ -1629,7 +1616,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     Bounds visibleSelectionBounds = tableView.getVisibleArea(selectionBounds);
                     if (visibleSelectionBounds != null
                         && visibleSelectionBounds.height < selectionBounds.height) {
-                        // TODO Repainting the entire component is a workaround for PIVOT-490
+                        // TODO Repainting the entire component is a workaround
+                        // for PIVOT-490
                         repaintComponent();
 
                         tableView.scrollAreaToVisible(selectionBounds);

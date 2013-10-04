@@ -40,14 +40,13 @@ public class Scripting extends Application.Adapter {
     private List<?> listData;
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         bxmlSerializer.getNamespace().put("bar", "12345");
 
-        window = (Window)bxmlSerializer.readObject(Scripting.class, "scripting.bxml");
-        foo = (String)bxmlSerializer.getNamespace().get("foo");
-        listData = (List<?>)bxmlSerializer.getNamespace().get("listData");
+        window = (Window) bxmlSerializer.readObject(Scripting.class, "scripting.bxml");
+        foo = (String) bxmlSerializer.getNamespace().get("foo");
+        listData = (List<?>) bxmlSerializer.getNamespace().get("listData");
 
         System.out.println("foo = " + foo);
         System.out.println("listData.getLength() = " + listData.getLength());

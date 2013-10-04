@@ -25,51 +25,35 @@ import org.apache.pivot.collections.adapter.MapAdapter;
 
 /**
  * Contains utility methods for working with JSON or JSON-like data structures.
- *
  * <p> Special treatment is afforded to {@link java.util.Map java.util.Map} and
- * {@link org.apache.pivot.collections.Map org.apache.pivot.collections.Map} objects at any level
- * of the hierarchy.  Otherwise a {@link BeanAdapter} is used to
- * fetch the value from the object.
- *
- * <p> If, however, the object at a given level is a
- * {@link org.apache.pivot.collections.Sequence} then the key
- * is assumed to be an integer index into the sequence.
- *
- * <p> Also, special consideration is given to an object that
- * implements the {@link Dictionary} interface.
- *
+ * {@link org.apache.pivot.collections.Map org.apache.pivot.collections.Map}
+ * objects at any level of the hierarchy. Otherwise a {@link BeanAdapter} is
+ * used to fetch the value from the object. <p> If, however, the object at a
+ * given level is a {@link org.apache.pivot.collections.Sequence} then the key
+ * is assumed to be an integer index into the sequence. <p> Also, special
+ * consideration is given to an object that implements the {@link Dictionary}
+ * interface.
  */
 public class JSON {
     /**
      * Returns the value at a given path.
-     *
-     * @param root
-     * The root object.
-     *
-     * @param path
-     * The path to the value as a JavaScript path.
-     *
-     * @return
-     * The value at the given path.
-     *
+     * 
+     * @param root The root object.
+     * @param path The path to the value as a JavaScript path.
+     * @return The value at the given path.
      * @see #get(Object, Sequence)
      */
     @SuppressWarnings("unchecked")
     public static <T> T get(Object root, String path) {
-        return (T)get(root, parse(path));
+        return (T) get(root, parse(path));
     }
 
     /**
      * Returns the value at a given path.
-     *
-     * @param root
-     * The root object.
-     *
-     * @param keys
-     * The path to the value as a sequence of keys.
-     *
-     * @return
-     * The value at the given path.
+     * 
+     * @param root The root object.
+     * @param keys The path to the value as a sequence of keys.
+     * @return The value at the given path.
      */
     @SuppressWarnings("unchecked")
     public static <T> T get(Object root, Sequence<String> keys) {
@@ -86,22 +70,24 @@ public class JSON {
 
             String key = keys.get(i);
 
-            Map<String, T> adapter = (Map<String, T>) (value instanceof java.util.Map ? new MapAdapter<>((java.util.Map<String, T>) value) :
-                    (value instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) value): new BeanAdapter(value)));
+            Map<String, T> adapter = (Map<String, T>) (value instanceof java.util.Map ? new MapAdapter<>(
+                (java.util.Map<String, T>) value)
+                : (value instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) value)
+                    : new BeanAdapter(value)));
             if (adapter.containsKey(key)) {
                 value = adapter.get(key);
             } else if (value instanceof Sequence<?>) {
-                Sequence<Object> sequence = (Sequence<Object>)value;
+                Sequence<Object> sequence = (Sequence<Object>) value;
                 value = sequence.get(Integer.parseInt(key));
             } else if (value instanceof Dictionary<?, ?>) {
-                Dictionary<String, Object> dictionary = (Dictionary<String, Object>)value;
+                Dictionary<String, Object> dictionary = (Dictionary<String, Object>) value;
                 value = dictionary.get(key);
             } else {
                 throw new IllegalArgumentException("Property \"" + key + "\" not found.");
             }
         }
 
-        return (T)value;
+        return (T) value;
     }
 
     public static byte getByte(Object root, String path) {
@@ -136,13 +122,11 @@ public class JSON {
 
     /**
      * Sets the value at the given path.
-     *
+     * 
      * @param root
      * @param path
      * @param value
-     *
-     * @return
-     * The value previously associated with the path.
+     * @return The value previously associated with the path.
      */
     @SuppressWarnings("unchecked")
     public static <T> T put(Object root, String path, T value) {
@@ -161,33 +145,33 @@ public class JSON {
             throw new IllegalArgumentException("Invalid path.");
         }
 
-        Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<>((java.util.Map<String, T>) parent) :
-                (parent instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) parent): new BeanAdapter(parent)));
+        Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<>(
+            (java.util.Map<String, T>) parent)
+            : (parent instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) parent)
+                : new BeanAdapter(parent)));
 
         Object previousValue;
         if (adapter.containsKey(key)) {
             previousValue = adapter.put(key, value);
         } else if (parent instanceof Sequence<?>) {
-            Sequence<Object> sequence = (Sequence<Object>)parent;
+            Sequence<Object> sequence = (Sequence<Object>) parent;
             previousValue = sequence.update(Integer.parseInt(key), value);
         } else if (parent instanceof Dictionary<?, ?>) {
-            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
+            Dictionary<String, Object> dictionary = (Dictionary<String, Object>) parent;
             previousValue = dictionary.put(key, value);
         } else {
             throw new IllegalArgumentException("Property \"" + key + "\" not found.");
         }
 
-        return (T)previousValue;
+        return (T) previousValue;
     }
 
     /**
      * Removes the value at the given path.
-     *
+     * 
      * @param root
      * @param path
-     *
-     * @return
-     * The value that was removed.
+     * @return The value that was removed.
      */
     @SuppressWarnings("unchecked")
     public static <T> T remove(Object root, String path) {
@@ -208,26 +192,24 @@ public class JSON {
 
         Object previousValue;
         if (parent instanceof Sequence<?>) {
-            Sequence<Object> sequence = (Sequence<Object>)parent;
+            Sequence<Object> sequence = (Sequence<Object>) parent;
             previousValue = sequence.remove(Integer.parseInt(key), 1).get(0);
         } else if (parent instanceof Dictionary<?, ?>) {
-            Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
+            Dictionary<String, Object> dictionary = (Dictionary<String, Object>) parent;
             previousValue = dictionary.remove(key);
         } else {
             throw new IllegalArgumentException("Property \"" + key + "\" not found.");
         }
 
-        return (T)previousValue;
+        return (T) previousValue;
     }
 
     /**
      * Tests the existence of a path in a given object.
-     *
+     * 
      * @param root
      * @param path
-     *
-     * @return
-     * <tt>true</tt> if the path exists; <tt>false</tt>, otherwise.
+     * @return <tt>true</tt> if the path exists; <tt>false</tt>, otherwise.
      */
     @SuppressWarnings("unchecked")
     public static <T> boolean containsKey(Object root, String path) {
@@ -247,16 +229,18 @@ public class JSON {
         if (parent == null) {
             containsKey = false;
         } else {
-            Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<>((java.util.Map<String, T>) parent) :
-                    (parent instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) parent): new BeanAdapter(parent)));
+            Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<>(
+                (java.util.Map<String, T>) parent)
+                : (parent instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) parent)
+                    : new BeanAdapter(parent)));
             containsKey = adapter.containsKey(key);
 
             if (!containsKey) {
                 if (parent instanceof Sequence<?>) {
-                    Sequence<Object> sequence = (Sequence<Object>)parent;
+                    Sequence<Object> sequence = (Sequence<Object>) parent;
                     containsKey = (sequence.getLength() > Integer.parseInt(key));
                 } else if (parent instanceof Dictionary<?, ?>) {
-                    Dictionary<String, Object> dictionary = (Dictionary<String, Object>)parent;
+                    Dictionary<String, Object> dictionary = (Dictionary<String, Object>) parent;
                     containsKey = dictionary.containsKey(key);
                 } else {
                     throw new IllegalArgumentException("Property \"" + key + "\" not found.");
@@ -269,7 +253,7 @@ public class JSON {
 
     /**
      * Parses a JSON path into a sequence of string keys.
-     *
+     * 
      * @param path
      */
     public static Sequence<String> parse(String path) {
@@ -288,22 +272,18 @@ public class JSON {
             StringBuilder identifierBuilder = new StringBuilder();
 
             boolean bracketed = (c == '[');
-            if (bracketed
-                && i < n) {
+            if (bracketed && i < n) {
                 c = path.charAt(i++);
 
                 char quote = Character.UNASSIGNED;
 
-                boolean quoted = (c == '"'
-                    || c == '\'');
-                if (quoted
-                    && i < n) {
+                boolean quoted = (c == '"' || c == '\'');
+                if (quoted && i < n) {
                     quote = c;
                     c = path.charAt(i++);
                 }
 
-                while (i <= n
-                    && bracketed) {
+                while (i <= n && bracketed) {
                     bracketed = quoted || (c != ']');
 
                     if (bracketed) {
@@ -344,9 +324,7 @@ public class JSON {
                     }
                 }
             } else {
-                while(i <= n
-                    && c != '.'
-                    && c != '[') {
+                while (i <= n && c != '.' && c != '[') {
                     if (!Character.isJavaIdentifierPart(c)) {
                         throw new IllegalArgumentException("Illegal identifier character.");
                     }
@@ -365,8 +343,7 @@ public class JSON {
                 }
             }
 
-            if (c == '.'
-                && i == n) {
+            if (c == '.' && i == n) {
                 throw new IllegalArgumentException("Path cannot end with a '.' character.");
             }
 

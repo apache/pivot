@@ -30,11 +30,11 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
 public class JavaWindow extends Window implements Bindable {
-    @BXML private PushButton sayHelloButton = null;
+    @BXML
+    private PushButton sayHelloButton = null;
 
     @Override
-    public void initialize(Map<String, Object> namespace, URL location,
-        Resources resources) {
+    public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         sayHelloButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {

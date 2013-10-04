@@ -43,76 +43,60 @@ public interface Dictionary<K, V> {
         @Override
         @SuppressWarnings("unchecked")
         public boolean equals(Object object) {
-           boolean equals = false;
+            boolean equals = false;
 
-           if (object instanceof Pair<?, ?>) {
-              Pair<K, V> pair = (Pair<K, V>)object;
-              equals = (key.equals(pair.key)
-                  && ((value == null && pair.value == null)
-                      || (value != null && value.equals(pair.value))));
-           }
+            if (object instanceof Pair<?, ?>) {
+                Pair<K, V> pair = (Pair<K, V>) object;
+                equals = (key.equals(pair.key) && ((value == null && pair.value == null) || (value != null && value.equals(pair.value))));
+            }
 
-           return equals;
+            return equals;
         }
 
         @Override
         public int hashCode() {
-           return key.hashCode();
+            return key.hashCode();
         }
 
         @Override
         public String toString() {
-           return "{" + key + ": " + value + "}";
+            return "{" + key + ": " + value + "}";
         }
     }
 
     /**
      * Retrieves the value for the given key.
-     *
-     * @param key
-     * The key whose value is to be returned.
-     *
-     * @return
-     * The value corresponding to <tt>key</tt>, or null if the key does not
-     * exist. Will also return null if the key refers to a null value.
-     * Use <tt>containsKey()</tt> to distinguish between these two cases.
+     * 
+     * @param key The key whose value is to be returned.
+     * @return The value corresponding to <tt>key</tt>, or null if the key does
+     * not exist. Will also return null if the key refers to a null value. Use
+     * <tt>containsKey()</tt> to distinguish between these two cases.
      */
     public V get(K key);
 
     /**
      * Sets the value of the given key, creating a new entry or replacing the
      * existing value.
-     *
-     * @param key
-     * The key whose value is to be set.
-     *
-     * @param value
-     * The value to be associated with the given key.
-     *
-     * @return
-     * The value previously associated with the key.
+     * 
+     * @param key The key whose value is to be set.
+     * @param value The value to be associated with the given key.
+     * @return The value previously associated with the key.
      */
     public V put(K key, V value);
 
     /**
      * Removes a key/value pair from the map.
-     *
-     * @param key
-     * The key whose mapping is to be removed.
-     *
-     * @return
-     * The value that was removed.
+     * 
+     * @param key The key whose mapping is to be removed.
+     * @return The value that was removed.
      */
     public V remove(K key);
 
     /**
      * Tests the existence of a key in the dictionary.
-     *
-     * @param key
-     * The key whose presence in the dictionary is to be tested.
-     *
-     * @return
-     * <tt>true</tt> if the key exists in the dictionary; <tt>false</tt>,
+     * 
+     * @param key The key whose presence in the dictionary is to be tested.
+     * @return <tt>true</tt> if the key exists in the dictionary; <tt>false</tt>,
      * otherwise.
      */
     public boolean containsKey(K key);

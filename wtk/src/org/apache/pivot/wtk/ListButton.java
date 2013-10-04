@@ -50,7 +50,8 @@ public class ListButton extends Button {
         }
 
         @Override
-        public void itemRendererChanged(ListButton listButton, ListView.ItemRenderer previousItemRenderer) {
+        public void itemRendererChanged(ListButton listButton,
+            ListView.ItemRenderer previousItemRenderer) {
             for (ListButtonListener listener : this) {
                 listener.itemRendererChanged(listButton, previousItemRenderer);
             }
@@ -64,7 +65,8 @@ public class ListButton extends Button {
         }
 
         @Override
-        public void disabledItemFilterChanged(ListButton listButton, Filter<?> previousDisabledItemFilter) {
+        public void disabledItemFilterChanged(ListButton listButton,
+            Filter<?> previousDisabledItemFilter) {
             for (ListButtonListener listener : this) {
                 listener.disabledItemFilterChanged(listButton, previousDisabledItemFilter);
             }
@@ -116,8 +118,8 @@ public class ListButton extends Button {
         }
     }
 
-    private static class ListButtonSelectionListenerList extends WTKListenerList<ListButtonSelectionListener>
-        implements ListButtonSelectionListener {
+    private static class ListButtonSelectionListenerList extends
+        WTKListenerList<ListButtonSelectionListener> implements ListButtonSelectionListener {
         @Override
         public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
             for (ListButtonSelectionListener listener : this) {
@@ -133,8 +135,8 @@ public class ListButton extends Button {
         }
     }
 
-    private static class ListButtonBindingListenerList extends WTKListenerList<ListButtonBindingListener>
-        implements ListButtonBindingListener {
+    private static class ListButtonBindingListenerList extends
+        WTKListenerList<ListButtonBindingListener> implements ListButtonBindingListener {
         @Override
         public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
             for (ListButtonBindingListener listener : this) {
@@ -165,14 +167,16 @@ public class ListButton extends Button {
         }
 
         @Override
-        public void selectedItemBindTypeChanged(ListButton listButton, BindType previousSelectedItemBindType) {
+        public void selectedItemBindTypeChanged(ListButton listButton,
+            BindType previousSelectedItemBindType) {
             for (ListButtonBindingListener listener : this) {
                 listener.selectedItemBindTypeChanged(listButton, previousSelectedItemBindType);
             }
         }
 
         @Override
-        public void selectedItemBindMappingChanged(ListButton listButton, ListView.ItemBindMapping previousSelectedItemBindMapping) {
+        public void selectedItemBindMappingChanged(ListButton listButton,
+            ListView.ItemBindMapping previousSelectedItemBindMapping) {
             for (ListButtonBindingListener listener : this) {
                 listener.selectedItemBindMappingChanged(listButton, previousSelectedItemBindMapping);
             }
@@ -180,9 +184,9 @@ public class ListButton extends Button {
     }
 
     /**
-     * ListButton skin interface. ListButton skins must implement
-     * this interface to facilitate additional communication between the
-     * component and the skin.
+     * ListButton skin interface. ListButton skins must implement this interface
+     * to facilitate additional communication between the component and the
+     * skin.
      */
     public interface Skin {
         public Window getListViewPopup();
@@ -270,8 +274,10 @@ public class ListButton extends Button {
                 listButtonItemListeners.itemsSorted(ListButton.this);
 
                 if (previousSelectedIndex != selectedIndex) {
-                    listButtonSelectionListeners.selectedIndexChanged(ListButton.this, selectedIndex);
-                    listButtonSelectionListeners.selectedItemChanged(ListButton.this, getSelectedItem());
+                    listButtonSelectionListeners.selectedIndexChanged(ListButton.this,
+                        selectedIndex);
+                    listButtonSelectionListeners.selectedItemChanged(ListButton.this,
+                        getSelectedItem());
                 }
             }
         }
@@ -294,7 +300,7 @@ public class ListButton extends Button {
 
     /**
      * Creates a list button with the given button data and an empty list.
-     *
+     * 
      * @param buttonData
      */
     public ListButton(Object buttonData) {
@@ -303,6 +309,7 @@ public class ListButton extends Button {
 
     /**
      * Creates a list button with no button data and the given list data.
+     * 
      * @param listData
      */
     public ListButton(List<?> listData) {
@@ -310,18 +317,13 @@ public class ListButton extends Button {
     }
 
     /**
-     * Creates a list button with the given button and list data.
-     * <p>
-     * Note that the default renderer uses (as last option) the toString method on list elements,
-     * so override it to return whatever you want to display in the ListView,
-     * or implement your own custom renderer.
-     *
-     * @param buttonData
-     * The button data.
-     *
-     * @param listData
-     * The data to set.
-     *
+     * Creates a list button with the given button and list data. <p> Note that
+     * the default renderer uses (as last option) the toString method on list
+     * elements, so override it to return whatever you want to display in the
+     * ListView, or implement your own custom renderer.
+     * 
+     * @param buttonData The button data.
+     * @param listData The data to set.
      * @see ListButtonDataRenderer
      * @see ListViewItemRenderer
      */
@@ -353,8 +355,8 @@ public class ListButton extends Button {
     }
 
     /**
-     * @throws UnsupportedOperationException
-     * This method is not supported by ListButton.
+     * @throws UnsupportedOperationException This method is not supported by
+     * ListButton.
      */
     @Override
     public void setToggleButton(boolean toggleButton) {
@@ -363,9 +365,8 @@ public class ListButton extends Button {
 
     /**
      * Returns the list data associated with this list button.
-     *
-     * @return
-     * The list data.
+     * 
+     * @return The list data.
      */
     public List<?> getListData() {
         return listData;
@@ -373,9 +374,8 @@ public class ListButton extends Button {
 
     /**
      * Sets the list button's list data.
-     *
-     * @param listData
-     * The list data to be presented by the list button.
+     * 
+     * @param listData The list data to be presented by the list button.
      */
     @SuppressWarnings("unchecked")
     public void setListData(List<?> listData) {
@@ -392,10 +392,10 @@ public class ListButton extends Button {
                 // Clear any existing selection
                 selectedIndex = -1;
 
-                ((List<Object>)previousListData).getListListeners().remove(listDataListener);
+                ((List<Object>) previousListData).getListListeners().remove(listDataListener);
             }
 
-            ((List<Object>)listData).getListListeners().add(listDataListener);
+            ((List<Object>) listData).getListListeners().add(listDataListener);
 
             // Update the list data and fire change event
             this.listData = listData;
@@ -410,9 +410,9 @@ public class ListButton extends Button {
 
     /**
      * Sets the list button's list data.
-     *
-     * @param listData
-     * The list data to be presented by the list button as a JSON array.
+     * 
+     * @param listData The list data to be presented by the list button as a
+     * JSON array.
      */
     public final void setListData(String listData) {
         if (listData == null) {
@@ -428,10 +428,9 @@ public class ListButton extends Button {
 
     /**
      * Sets the list button's list data.
-     *
-     * @param listData
-     * A URL referring to a JSON file containing the data to be presented by
-     * the list button.
+     * 
+     * @param listData A URL referring to a JSON file containing the data to be
+     * presented by the list button.
      */
     public void setListData(URL listData) {
         if (listData == null) {
@@ -441,7 +440,7 @@ public class ListButton extends Button {
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         try {
-            setListData((List<?>)jsonSerializer.readObject(listData.openStream()));
+            setListData((List<?>) jsonSerializer.readObject(listData.openStream()));
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
         } catch (IOException exception) {
@@ -451,22 +450,19 @@ public class ListButton extends Button {
 
     /**
      * Returns the renderer used to display items in the list.
-     *
-     * @return
-     * The item renderer instance.
+     * 
+     * @return The item renderer instance.
      */
     public ListView.ItemRenderer getItemRenderer() {
         return itemRenderer;
     }
 
     /**
-     * Sets the renderer used to display items in the list.
-     * <p>
-     * Use {@link #setDataRenderer(org.apache.pivot.wtk.Button.DataRenderer)} to define
-     * the renderer used to draw the button data.
-     *
-     * @param itemRenderer
-     * The item renderer instance.
+     * Sets the renderer used to display items in the list. <p> Use
+     * {@link #setDataRenderer(org.apache.pivot.wtk.Button.DataRenderer)} to
+     * define the renderer used to draw the button data.
+     * 
+     * @param itemRenderer The item renderer instance.
      */
     public void setItemRenderer(ListView.ItemRenderer itemRenderer) {
         ListView.ItemRenderer previousItemRenderer = this.itemRenderer;
@@ -486,7 +482,7 @@ public class ListButton extends Button {
 
     /**
      * Sets the list button's repeatable flag.
-     *
+     * 
      * @param repeatable
      */
     public void setRepeatable(boolean repeatable) {
@@ -495,11 +491,11 @@ public class ListButton extends Button {
             listButtonListeners.repeatableChanged(this);
         }
     }
+
     /**
      * Returns the current selection.
-     *
-     * @return
-     * The index of the currently selected list item, or <tt>-1</tt> if
+     * 
+     * @return The index of the currently selected list item, or <tt>-1</tt> if
      * nothing is selected.
      */
     public int getSelectedIndex() {
@@ -508,10 +504,9 @@ public class ListButton extends Button {
 
     /**
      * Sets the selection.
-     *
-     * @param selectedIndex
-     * The index of the list item to select, or <tt>-1</tt> to clear the
-     * selection.
+     * 
+     * @param selectedIndex The index of the list item to select, or <tt>-1</tt>
+     * to clear the selection.
      */
     public void setSelectedIndex(int selectedIndex) {
         indexBoundsCheck("selectedIndex", selectedIndex, -1, listData.getLength() - 1);
@@ -521,8 +516,8 @@ public class ListButton extends Button {
         if (previousSelectedIndex != selectedIndex) {
             this.selectedIndex = selectedIndex;
             listButtonSelectionListeners.selectedIndexChanged(this, previousSelectedIndex);
-            listButtonSelectionListeners.selectedItemChanged(this, (previousSelectedIndex == -1) ?
-                null : listData.get(previousSelectedIndex));
+            listButtonSelectionListeners.selectedItemChanged(this,
+                (previousSelectedIndex == -1) ? null : listData.get(previousSelectedIndex));
         }
     }
 
@@ -539,18 +534,14 @@ public class ListButton extends Button {
 
     @SuppressWarnings("unchecked")
     public void setSelectedItem(Object item) {
-        setSelectedIndex((item == null) ? -1 : ((List<Object>)listData).indexOf(item));
+        setSelectedIndex((item == null) ? -1 : ((List<Object>) listData).indexOf(item));
     }
 
     /**
      * Returns an item's disabled state.
-     *
-     * @param index
-     * The index of the item whose disabled state is to be tested.
-     *
-     * @return
-     * <tt>true</tt> if the item is disabled; <tt>false</tt>,
-     * otherwise.
+     * 
+     * @param index The index of the item whose disabled state is to be tested.
+     * @return <tt>true</tt> if the item is disabled; <tt>false</tt>, otherwise.
      */
     @SuppressWarnings("unchecked")
     public boolean isItemDisabled(int index) {
@@ -558,7 +549,7 @@ public class ListButton extends Button {
 
         if (disabledItemFilter != null) {
             Object item = listData.get(index);
-            disabled = ((Filter<Object>)disabledItemFilter).include(item);
+            disabled = ((Filter<Object>) disabledItemFilter).include(item);
         }
 
         return disabled;
@@ -566,10 +557,9 @@ public class ListButton extends Button {
 
     /**
      * Returns the disabled item filter.
-     *
-     * @return
-     * The disabled item filter, or <tt>null</tt> if no disabled item filter is
-     * set.
+     * 
+     * @return The disabled item filter, or <tt>null</tt> if no disabled item
+     * filter is set.
      */
     public Filter<?> getDisabledItemFilter() {
         return disabledItemFilter;
@@ -577,9 +567,9 @@ public class ListButton extends Button {
 
     /**
      * Sets the disabled item filter.
-     *
-     * @param disabledItemFilter
-     * The disabled item filter, or <tt>null</tt> for no disabled item filter.
+     * 
+     * @param disabledItemFilter The disabled item filter, or <tt>null</tt> for
+     * no disabled item filter.
      */
     public void setDisabledItemFilter(Filter<?> disabledItemFilter) {
         Filter<?> previousDisabledItemFilter = this.disabledItemFilter;
@@ -598,9 +588,9 @@ public class ListButton extends Button {
     }
 
     /**
-     * Sets the list size. If the number of items in the list exceeds this value,
-     * the list will scroll.
-     *
+     * Sets the list size. If the number of items in the list exceeds this
+     * value, the list will scroll.
+     * 
      * @param listSize
      */
     public void setListSize(int listSize) {
@@ -617,9 +607,8 @@ public class ListButton extends Button {
 
     /**
      * Returns name of the key that is used in context binding.
-     *
-     * @return
-     * The key.
+     * 
+     * @return The key.
      */
     public String getListDataKey() {
         return listDataKey;
@@ -627,9 +616,8 @@ public class ListButton extends Button {
 
     /**
      * Set the name of the key that is used in context binding.
-     *
-     * @param listDataKey
-     * The key to set.
+     * 
+     * @param listDataKey The key to set.
      */
     public void setListDataKey(String listDataKey) {
         String previousListDataKey = this.listDataKey;
@@ -694,7 +682,8 @@ public class ListButton extends Button {
         BindType previousSelectedItemBindType = this.selectedItemBindType;
         if (previousSelectedItemBindType != selectedItemBindType) {
             this.selectedItemBindType = selectedItemBindType;
-            listButtonBindingListeners.selectedItemBindTypeChanged(this, previousSelectedItemBindType);
+            listButtonBindingListeners.selectedItemBindTypeChanged(this,
+                previousSelectedItemBindType);
         }
     }
 
@@ -707,7 +696,8 @@ public class ListButton extends Button {
 
         if (previousSelectedItemBindMapping != selectedItemBindMapping) {
             this.selectedItemBindMapping = selectedItemBindMapping;
-            listButtonBindingListeners.selectedItemBindMappingChanged(this, previousSelectedItemBindMapping);
+            listButtonBindingListeners.selectedItemBindMappingChanged(this,
+                previousSelectedItemBindMapping);
         }
     }
 
@@ -715,14 +705,13 @@ public class ListButton extends Button {
     @SuppressWarnings("unchecked")
     public void load(Object context) {
         // Bind to list data
-        if (listDataKey != null
-            && listDataBindType != BindType.STORE
+        if (listDataKey != null && listDataBindType != BindType.STORE
             && JSON.containsKey(context, listDataKey)) {
             Object value = JSON.get(context, listDataKey);
 
             List<?> listDataLocal;
             if (listDataBindMapping == null) {
-                listDataLocal = (List<?>)value;
+                listDataLocal = (List<?>) value;
             } else {
                 listDataLocal = listDataBindMapping.toListData(value);
             }
@@ -731,14 +720,13 @@ public class ListButton extends Button {
         }
 
         // Bind to selected item
-        if (selectedItemKey != null
-            && selectedItemBindType != BindType.STORE
+        if (selectedItemKey != null && selectedItemBindType != BindType.STORE
             && JSON.containsKey(context, selectedItemKey)) {
             Object item = JSON.get(context, selectedItemKey);
 
             int index;
             if (selectedItemBindMapping == null) {
-                index = ((List<Object>)listData).indexOf(item);
+                index = ((List<Object>) listData).indexOf(item);
             } else {
                 index = selectedItemBindMapping.indexOf(listData, item);
             }
@@ -750,8 +738,7 @@ public class ListButton extends Button {
     @Override
     public void store(Object context) {
         // Bind to list data
-        if (listDataKey != null
-            && listDataBindType != BindType.LOAD) {
+        if (listDataKey != null && listDataBindType != BindType.LOAD) {
             Object value;
             if (listDataBindMapping == null) {
                 value = listData;
@@ -763,8 +750,7 @@ public class ListButton extends Button {
         }
 
         // Bind to selected item
-        if (selectedItemKey != null
-            && selectedItemBindType != BindType.LOAD) {
+        if (selectedItemKey != null && selectedItemBindType != BindType.LOAD) {
             Object item;
 
             int selectedIndexLocal = getSelectedIndex();

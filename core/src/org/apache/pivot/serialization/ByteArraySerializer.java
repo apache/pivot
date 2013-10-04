@@ -26,7 +26,7 @@ import java.io.OutputStream;
 /**
  * Implementation of the {@link Serializer} interface that reads and writes a
  * byte array.
- *
+ * 
  * @see Serializer
  */
 public class ByteArraySerializer implements Serializer<byte[]> {
@@ -38,8 +38,7 @@ public class ByteArraySerializer implements Serializer<byte[]> {
      * Reads a byte array from an input stream.
      */
     @Override
-    public byte[] readObject(InputStream inputStream) throws IOException,
-        SerializationException {
+    public byte[] readObject(InputStream inputStream) throws IOException, SerializationException {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null.");
         }

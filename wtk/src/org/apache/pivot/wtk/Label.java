@@ -30,7 +30,7 @@ public class Label extends Component {
         /**
          * Converts a value from the bind context to a text representation
          * during a {@link Component#load(Object)} operation.
-         *
+         * 
          * @param value
          */
         public String toString(Object value);
@@ -38,14 +38,14 @@ public class Label extends Component {
         /**
          * Converts a text string to a value to be stored in the bind context
          * during a {@link Component#store(Object)} operation.
-         *
+         * 
          * @param text
          */
         public Object valueOf(String text);
     }
 
-    private static class LabelListenerList extends WTKListenerList<LabelListener>
-        implements LabelListener {
+    private static class LabelListenerList extends WTKListenerList<LabelListener> implements
+        LabelListener {
         @Override
         public void textChanged(Label label, String previousText) {
             for (LabelListener listener : this) {
@@ -79,7 +79,8 @@ public class Label extends Component {
         }
 
         @Override
-        public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
+        public void textBindMappingChanged(Label label,
+            Label.TextBindMapping previousTextBindMapping) {
             for (LabelBindingListener listener : this) {
                 listener.textBindMappingChanged(label, previousTextBindMapping);
             }
@@ -108,9 +109,8 @@ public class Label extends Component {
 
     /**
      * Returns the label's text.
-     *
-     * @return
-     * The text.
+     * 
+     * @return The text.
      */
     public String getText() {
         return text;
@@ -118,9 +118,8 @@ public class Label extends Component {
 
     /**
      * Set the text of the Label.
-     *
-     * @param text
-     * The text to set, must be not null.
+     * 
+     * @param text The text to set, must be not null.
      */
     public void setText(String text) {
         if (text == null) {
@@ -131,7 +130,7 @@ public class Label extends Component {
             throw new IllegalArgumentException("Text length is greater than maximum length.");
         }
 
-       String previousText = this.text;
+        String previousText = this.text;
         if (previousText != text) {
             this.text = text;
             labelListeners.textChanged(this, previousText);
@@ -139,13 +138,11 @@ public class Label extends Component {
     }
 
     /**
-     * Utility method to set text to the given value,
-     * or to an empty string if null (to avoid the setText throw an IllegalArgumentException).
-     * This is useful to be called by code.
-     *
-     * @param text
-     * The text to set
-     *
+     * Utility method to set text to the given value, or to an empty string if
+     * null (to avoid the setText throw an IllegalArgumentException). This is
+     * useful to be called by code.
+     * 
+     * @param text The text to set
      * @see #setText
      */
     public void setTextOrEmpty(String text) {
@@ -154,9 +151,8 @@ public class Label extends Component {
 
     /**
      * Returns the label's text key.
-     *
-     * @return
-     * The text key, or <tt>null</tt> if no text key is set.
+     * 
+     * @return The text key, or <tt>null</tt> if no text key is set.
      */
     public String getTextKey() {
         return textKey;
@@ -164,9 +160,8 @@ public class Label extends Component {
 
     /**
      * Returns the maximum length of the label text.
-     *
-     * @return
-     * The maximum length of the label text.
+     * 
+     * @return The maximum length of the label text.
      */
     public int getMaximumLength() {
         return maximumLength;
@@ -174,9 +169,8 @@ public class Label extends Component {
 
     /**
      * Sets the maximum length of the label text.
-     *
-     * @param maximumLength
-     * The maximum length of the label text.
+     * 
+     * @param maximumLength The maximum length of the label text.
      */
     public void setMaximumLength(int maximumLength) {
         if (maximumLength < 0) {
@@ -187,7 +181,8 @@ public class Label extends Component {
         if (previousMaximumLength != maximumLength) {
             this.maximumLength = maximumLength;
 
-            // Truncate the text, if necessary (do not allow listeners to vote on this change)
+            // Truncate the text, if necessary (do not allow listeners to vote
+            // on this change)
             if (text.length() > maximumLength) {
                 setText(text.substring(0, maximumLength));
             }
@@ -198,9 +193,8 @@ public class Label extends Component {
 
     /**
      * Sets the label's text key.
-     *
-     * @param textKey
-     * The text key, or <tt>null</tt> to clear the binding.
+     * 
+     * @param textKey The text key, or <tt>null</tt> to clear the binding.
      */
     public void setTextKey(String textKey) {
         String previousTextKey = this.textKey;
@@ -243,9 +237,7 @@ public class Label extends Component {
 
     @Override
     public void load(Object context) {
-        if (textKey != null
-            && JSON.containsKey(context, textKey)
-            && textBindType != BindType.STORE) {
+        if (textKey != null && JSON.containsKey(context, textKey) && textBindType != BindType.STORE) {
             Object value = JSON.get(context, textKey);
 
             if (textBindMapping == null) {
@@ -254,17 +246,16 @@ public class Label extends Component {
                 value = textBindMapping.toString(value);
             }
 
-            setText(value != null ? (String)value : "");
+            setText(value != null ? (String) value : "");
         }
     }
 
     @Override
     public void store(Object context) {
-        if (textKey != null
-            && textBindType != BindType.LOAD) {
+        if (textKey != null && textBindType != BindType.LOAD) {
             String textLocal = getText();
-            JSON.put(context, textKey, (textBindMapping == null) ?
-                textLocal : textBindMapping.valueOf(textLocal));
+            JSON.put(context, textKey,
+                (textBindMapping == null) ? textLocal : textBindMapping.valueOf(textLocal));
         }
     }
 

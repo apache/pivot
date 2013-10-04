@@ -55,11 +55,9 @@ public class PushButton extends Button {
             if (getButtonGroup() == null) {
                 if (state == State.SELECTED) {
                     setState(State.UNSELECTED);
-                }
-                else if (state == State.UNSELECTED) {
+                } else if (state == State.UNSELECTED) {
                     setState(isTriState() ? State.MIXED : State.SELECTED);
-                }
-                else {
+                } else {
                     setState(State.SELECTED);
                 }
             } else {

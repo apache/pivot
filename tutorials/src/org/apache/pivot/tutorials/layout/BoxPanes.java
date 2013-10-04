@@ -21,10 +21,10 @@ import java.net.URL;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.RadioButton;
@@ -45,16 +45,16 @@ public class BoxPanes extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        boxPane = (BoxPane)namespace.get("boxPane");
-        horizontalOrientationButton = (RadioButton)namespace.get("horizontalOrientationButton");
-        verticalOrientationButton = (RadioButton)namespace.get("verticalOrientationButton");
-        horizontalAlignmentRightButton = (RadioButton)namespace.get("horizontalAlignmentRightButton");
-        horizontalAlignmentLeftButton = (RadioButton)namespace.get("horizontalAlignmentLeftButton");
-        horizontalAlignmentCenterButton = (RadioButton)namespace.get("horizontalAlignmentCenterButton");
-        verticalAlignmentTopButton = (RadioButton)namespace.get("verticalAlignmentTopButton");
-        verticalAlignmentBottomButton = (RadioButton)namespace.get("verticalAlignmentBottomButton");
-        verticalAlignmentCenterButton = (RadioButton)namespace.get("verticalAlignmentCenterButton");
-        fillCheckbox = (Checkbox)namespace.get("fillCheckbox");
+        boxPane = (BoxPane) namespace.get("boxPane");
+        horizontalOrientationButton = (RadioButton) namespace.get("horizontalOrientationButton");
+        verticalOrientationButton = (RadioButton) namespace.get("verticalOrientationButton");
+        horizontalAlignmentRightButton = (RadioButton) namespace.get("horizontalAlignmentRightButton");
+        horizontalAlignmentLeftButton = (RadioButton) namespace.get("horizontalAlignmentLeftButton");
+        horizontalAlignmentCenterButton = (RadioButton) namespace.get("horizontalAlignmentCenterButton");
+        verticalAlignmentTopButton = (RadioButton) namespace.get("verticalAlignmentTopButton");
+        verticalAlignmentBottomButton = (RadioButton) namespace.get("verticalAlignmentBottomButton");
+        verticalAlignmentCenterButton = (RadioButton) namespace.get("verticalAlignmentCenterButton");
+        fillCheckbox = (Checkbox) namespace.get("fillCheckbox");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
             @Override

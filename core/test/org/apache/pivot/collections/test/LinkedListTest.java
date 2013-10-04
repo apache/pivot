@@ -16,7 +16,10 @@
  */
 package org.apache.pivot.collections.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
@@ -143,7 +146,7 @@ public class LinkedListTest {
         assertEquals(linkedList, new LinkedList<>("A", "d", "N", "P", "z"));
     }
 
-    @Test(expected=ConcurrentModificationException.class)
+    @Test(expected = ConcurrentModificationException.class)
     public void simpleConcurrentModificationTest() {
         LinkedList<String> linkedList = new LinkedList<>("a", "b", "c", "d", "e");
         List.ItemIterator<String> iterator = linkedList.iterator();
@@ -151,7 +154,7 @@ public class LinkedListTest {
         iterator.next();
     }
 
-    @Test(expected=ConcurrentModificationException.class)
+    @Test(expected = ConcurrentModificationException.class)
     public void advancedConcurrentModificationTest() {
         LinkedList<String> linkedList = new LinkedList<>("a", "b", "c", "d", "e");
 

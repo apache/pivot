@@ -21,12 +21,10 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Abstract base class for listener lists.
- * <p>
- * NOTE This class is not inherently thread safe. Subclasses that require
- * thread-safe access should synchronize method access appropriately. Callers
- * must manually synchronize on the listener list instance to ensure thread
- * safety during iteration.
+ * Abstract base class for listener lists. <p> NOTE This class is not inherently
+ * thread safe. Subclasses that require thread-safe access should synchronize
+ * method access appropriately. Callers must manually synchronize on the
+ * listener list instance to ensure thread safety during iteration.
  */
 public abstract class ListenerList<T> implements Iterable<T> {
 
@@ -63,14 +61,14 @@ public abstract class ListenerList<T> implements Iterable<T> {
     // The current array of items (some of which are null)
     // All non-null objects are at the beginning of the array
     // and the array is reorganized on "remove"
-    @SuppressWarnings({"unchecked"})
-    private T[] list = (T[])new Object[DEFAULT_SIZE];
+    @SuppressWarnings({ "unchecked" })
+    private T[] list = (T[]) new Object[DEFAULT_SIZE];
     // The current length of the active list
     private int last = 0;
 
     /**
      * Adds a listener to the list, if it has not previously been added.
-     *
+     * 
      * @param listener
      */
     public void add(T listener) {
@@ -89,7 +87,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
 
     /**
      * Removes a listener from the list, if it has previously been added.
-     *
+     * 
      * @param listener
      */
     public void remove(T listener) {
@@ -123,11 +121,9 @@ public abstract class ListenerList<T> implements Iterable<T> {
 
     /**
      * Tests the existence of a listener in the list.
-     *
+     * 
      * @param listener
-     *
-     * @return
-     * <tt>true</tt> if the listener exists in the list; <tt>false</tt>,
+     * @return <tt>true</tt> if the listener exists in the list; <tt>false</tt>,
      * otherwise.
      */
     public boolean contains(T listener) {
@@ -136,9 +132,8 @@ public abstract class ListenerList<T> implements Iterable<T> {
 
     /**
      * Tests the emptiness of the list.
-     *
-     * @return
-     * <tt>true</tt> if the list contains no listeners; <tt>false</tt>,
+     * 
+     * @return <tt>true</tt> if the list contains no listeners; <tt>false</tt>,
      * otherwise.
      */
     public boolean isEmpty() {
@@ -147,9 +142,8 @@ public abstract class ListenerList<T> implements Iterable<T> {
 
     /**
      * Get the number of elements in the list.
-     *
-     * @return
-     * the number of elements.
+     * 
+     * @return the number of elements.
      */
     public int getLength() {
         return last;

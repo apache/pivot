@@ -21,12 +21,9 @@ import static org.junit.Assert.assertEquals;
 import org.apache.pivot.collections.EnumList;
 import org.junit.Test;
 
-
 public class EnumListTest {
     public enum TestEnum {
-        A,
-        B,
-        C
+        A, B, C
     }
 
     @Test

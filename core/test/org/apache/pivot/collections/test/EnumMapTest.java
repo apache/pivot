@@ -22,12 +22,9 @@ import static org.junit.Assert.assertTrue;
 import org.apache.pivot.collections.EnumMap;
 import org.junit.Test;
 
-
 public class EnumMapTest {
     public enum TestEnum {
-        A,
-        B,
-        C
+        A, B, C
     }
 
     @Test

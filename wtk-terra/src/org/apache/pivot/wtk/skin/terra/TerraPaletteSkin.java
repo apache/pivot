@@ -107,9 +107,8 @@ public class TerraPaletteSkin extends WindowSkin {
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(new Color(contentBorderColor.getRed(),
-                contentBorderColor.getGreen(), contentBorderColor.getBlue(),
-                ALPHA));
+            graphics.setPaint(new Color(contentBorderColor.getRed(), contentBorderColor.getGreen(),
+                contentBorderColor.getBlue(), ALPHA));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);
@@ -139,13 +138,12 @@ public class TerraPaletteSkin extends WindowSkin {
     private WindowClassListener windowClassListener = new WindowClassListener() {
         @Override
         public void activeWindowChanged(Window previousActiveWindow) {
-            Palette palette = (Palette)getComponent();
+            Palette palette = (Palette) getComponent();
             Window owner = palette.getOwner();
 
             Window activeWindow = Window.getActiveWindow();
             palette.setVisible(activeWindow != null
-                && (owner == activeWindow
-                    || owner.isOwner(activeWindow)));
+                && (owner == activeWindow || owner.isOwner(activeWindow)));
             invalidateComponent();
         }
     };
@@ -161,7 +159,7 @@ public class TerraPaletteSkin extends WindowSkin {
     private Color contentBevelColor;
 
     public TerraPaletteSkin() {
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(10));
 
         titleBarColor = theme.getColor(4);
@@ -192,7 +190,8 @@ public class TerraPaletteSkin extends WindowSkin {
         titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 3));
 
         Font titleFont = theme.getFont();
-        titleFont = titleFont.deriveFont(Font.BOLD, Math.round(titleFont.getSize2D() * titleFontScale));
+        titleFont = titleFont.deriveFont(Font.BOLD,
+            Math.round(titleFont.getSize2D() * titleFontScale));
         titleLabel.getStyles().put("font", titleFont);
         titleLabel.getStyles().put("color", titleBarColor);
 
@@ -201,19 +200,20 @@ public class TerraPaletteSkin extends WindowSkin {
         buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         buttonBoxPane.add(closeButton);
 
-        closeButton.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-            @Override
-            public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-                // Consume the event so we don't process it as a click on
-                // the title bar and try to move the window
-                return true;
-            }
-        });
+        closeButton.getComponentMouseButtonListeners().add(
+            new ComponentMouseButtonListener.Adapter() {
+                @Override
+                public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+                    // Consume the event so we don't process it as a click on
+                    // the title bar and try to move the window
+                    return true;
+                }
+            });
 
         closeButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                Palette palette = (Palette)getComponent();
+                Palette palette = (Palette) getComponent();
                 palette.close();
             }
         });
@@ -223,7 +223,7 @@ public class TerraPaletteSkin extends WindowSkin {
     public void install(Component component) {
         super.install(component);
 
-        Palette palette = (Palette)component;
+        Palette palette = (Palette) component;
         palette.add(titleBarTablePane);
 
         // Attach the drop-shadow decorator
@@ -239,7 +239,7 @@ public class TerraPaletteSkin extends WindowSkin {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        Palette palette = (Palette)getComponent();
+        Palette palette = (Palette) getComponent();
         Component content = palette.getContent();
 
         Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
@@ -247,12 +247,11 @@ public class TerraPaletteSkin extends WindowSkin {
 
         if (content != null) {
             if (height != -1) {
-                height = Math.max(height - preferredTitleBarSize.height - 4 -
-                    padding.top - padding.bottom, 0);
+                height = Math.max(height - preferredTitleBarSize.height - 4 - padding.top
+                    - padding.bottom, 0);
             }
 
-            preferredWidth = Math.max(preferredWidth,
-                content.getPreferredWidth(height));
+            preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(height));
         }
 
         preferredWidth += (padding.left + padding.right) + 2;
@@ -264,7 +263,7 @@ public class TerraPaletteSkin extends WindowSkin {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        Palette palette = (Palette)getComponent();
+        Palette palette = (Palette) getComponent();
         Component content = palette.getContent();
 
         if (width != -1) {
@@ -291,7 +290,7 @@ public class TerraPaletteSkin extends WindowSkin {
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        Palette palette = (Palette)getComponent();
+        Palette palette = (Palette) getComponent();
         Component content = palette.getContent();
 
         Dimensions preferredTitleBarSize = titleBarTablePane.getPreferredSize();
@@ -314,7 +313,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
     @Override
     public void layout() {
-        Palette palette = (Palette)getComponent();
+        Palette palette = (Palette) getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -332,19 +331,17 @@ public class TerraPaletteSkin extends WindowSkin {
         resizeHandle.setSize(resizeHandle.getPreferredSize());
         resizeHandle.setLocation(clientWidth - resizeHandle.getWidth(),
             clientHeight - resizeHandle.getHeight());
-        resizeHandle.setVisible(palette.isPreferredWidthSet()
-            || palette.isPreferredHeightSet());
+        resizeHandle.setVisible(palette.isPreferredWidthSet() || palette.isPreferredHeightSet());
 
         // Size/position content
         Component content = palette.getContent();
 
         if (content != null) {
-            content.setLocation(padding.left + 1,
-                titleBarTablePane.getHeight() + padding.top + 3);
+            content.setLocation(padding.left + 1, titleBarTablePane.getHeight() + padding.top + 3);
 
             int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
-            int contentHeight = Math.max(height - (titleBarTablePane.getHeight()
-                + padding.top + padding.bottom + 4), 0);
+            int contentHeight = Math.max(height
+                - (titleBarTablePane.getHeight() + padding.top + padding.bottom + 4), 0);
 
             content.setSize(contentWidth, contentHeight);
         }
@@ -361,25 +358,27 @@ public class TerraPaletteSkin extends WindowSkin {
 
         graphics.setStroke(new BasicStroke());
 
-        Palette palette = (Palette)getComponent();
+        Palette palette = (Palette) getComponent();
         boolean active = palette.getOwner().isActive();
         boolean enabled = palette.isEnabled();
 
-        Color currentTitleBarBackgroundColor = (active && enabled) ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor;
-        Color currentTitleBarBorderColor = (active && enabled) ? titleBarBorderColor : inactiveTitleBarBorderColor;
+        Color currentTitleBarBackgroundColor = (active && enabled) ? titleBarBackgroundColor
+            : inactiveTitleBarBackgroundColor;
+        Color currentTitleBarBorderColor = (active && enabled) ? titleBarBorderColor
+            : inactiveTitleBarBorderColor;
         Color titleBarBevelColor = TerraTheme.brighten(currentTitleBarBackgroundColor);
 
         // Draw the title area
-        graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColor,
-            width / 2f, titleBarHeight + 1, currentTitleBarBackgroundColor));
+        graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColor, width / 2f,
+            titleBarHeight + 1, currentTitleBarBackgroundColor));
         graphics.fillRect(0, 0, width, titleBarHeight + 1);
 
         // Draw the border
         graphics.setPaint(currentTitleBarBorderColor);
         GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 1);
         // Draw the content area
-        Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2,
-            width, height - (titleBarHeight + 2));
+        Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2, width, height
+            - (titleBarHeight + 2));
         graphics.setPaint(contentBorderColor);
         GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
             contentAreaRectangle.width, contentAreaRectangle.height);
@@ -447,7 +446,10 @@ public class TerraPaletteSkin extends WindowSkin {
 
     /**
      * Sets the font used in rendering the titlebar text
-     * @param font A {@link org.apache.pivot.wtk.skin.ComponentSkin#decodeFont(String) font specification}
+     * 
+     * @param font A
+     * {@link org.apache.pivot.wtk.skin.ComponentSkin#decodeFont(String) font
+     * specification}
      */
     public final void setTitleFont(String font) {
         if (font == null) {
@@ -459,6 +461,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
     /**
      * Sets the font used in rendering the titlebar text
+     * 
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setTitleFont(Dictionary<String, ?> font) {
@@ -476,7 +479,7 @@ public class TerraPaletteSkin extends WindowSkin {
     public final void setTitleFontScale(float scale) {
         this.titleFontScale = scale;
 
-        TerraTheme theme = (TerraTheme)Theme.getTheme();
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
         Font titleFont = theme.getFont();
         titleFont = titleFont.deriveFont(Font.BOLD, Math.round(titleFont.getSize2D() * scale));
         titleLabel.getStyles().put("font", titleFont);
@@ -488,7 +491,7 @@ public class TerraPaletteSkin extends WindowSkin {
         boolean consumed = super.mouseMove(component, x, y);
 
         if (Mouse.getCapturer() == component) {
-            Palette palette = (Palette)getComponent();
+            Palette palette = (Palette) getComponent();
             Display display = palette.getDisplay();
 
             Point location = palette.mapPointToAncestor(display, x, y);
@@ -525,14 +528,11 @@ public class TerraPaletteSkin extends WindowSkin {
             }
         } else {
             Cursor cursor = null;
-            if (resizeHandle.isVisible()
-                && x > resizeHandle.getX()
-                && y > resizeHandle.getY()) {
+            if (resizeHandle.isVisible() && x > resizeHandle.getX() && y > resizeHandle.getY()) {
                 boolean preferredWidthSet = component.isPreferredWidthSet();
                 boolean preferredHeightSet = component.isPreferredHeightSet();
 
-                if (preferredWidthSet
-                    && preferredHeightSet) {
+                if (preferredWidthSet && preferredHeightSet) {
                     cursor = Cursor.RESIZE_SOUTH_EAST;
                 } else if (preferredWidthSet) {
                     cursor = Cursor.RESIZE_EAST;
@@ -551,11 +551,10 @@ public class TerraPaletteSkin extends WindowSkin {
     public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
-        Window window = (Window)getComponent();
+        Window window = (Window) getComponent();
         boolean maximized = window.isMaximized();
 
-        if (button == Mouse.Button.LEFT
-            && !maximized) {
+        if (button == Mouse.Button.LEFT && !maximized) {
             Bounds titleBarBounds = titleBarTablePane.getBounds();
 
             if (titleBarBounds.contains(x, y)) {

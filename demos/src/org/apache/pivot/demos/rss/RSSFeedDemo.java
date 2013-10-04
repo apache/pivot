@@ -47,38 +47,39 @@ public class RSSFeedDemo extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        feedListView = (ListView)namespace.get("feedListView");
-        cardPane = (CardPane)namespace.get("cardPane");
-        statusLabel = (Label)namespace.get("statusLabel");
+        feedListView = (ListView) namespace.get("feedListView");
+        cardPane = (CardPane) namespace.get("cardPane");
+        statusLabel = (Label) namespace.get("statusLabel");
 
-        feedListView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
-            private int index = -1;
+        feedListView.getComponentMouseButtonListeners().add(
+            new ComponentMouseButtonListener.Adapter() {
+                private int index = -1;
 
-            @Override
-            public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-                if (count == 1) {
-                    index = feedListView.getItemAt(y);
-                } else if (count == 2
-                    && feedListView.getItemAt(y) == index) {
-                    Element itemElement = (Element)feedListView.getListData().get(index);
+                @Override
+                public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
+                    int count) {
+                    if (count == 1) {
+                        index = feedListView.getItemAt(y);
+                    } else if (count == 2 && feedListView.getItemAt(y) == index) {
+                        Element itemElement = (Element) feedListView.getListData().get(index);
 
-                    String link = XML.getText(itemElement, "link");
-                    Desktop desktop = Desktop.getDesktop();
+                        String link = XML.getText(itemElement, "link");
+                        Desktop desktop = Desktop.getDesktop();
 
-                    try {
-                        desktop.browse(new URL(link).toURI());
-                    } catch(MalformedURLException exception) {
-                        throw new RuntimeException(exception);
-                    } catch(URISyntaxException exception) {
-                        throw new RuntimeException(exception);
-                    } catch(IOException exception) {
-                        System.out.println("Unable to open " + link + " in default browser.");
+                        try {
+                            desktop.browse(new URL(link).toURI());
+                        } catch (MalformedURLException exception) {
+                            throw new RuntimeException(exception);
+                        } catch (URISyntaxException exception) {
+                            throw new RuntimeException(exception);
+                        } catch (IOException exception) {
+                            System.out.println("Unable to open " + link + " in default browser.");
+                        }
                     }
-                }
 
-                return false;
-            }
-        });
+                    return false;
+                }
+            });
 
         GetQuery getQuery = new GetQuery("feeds.dzone.com", "/javalobby/frontpage");
         getQuery.setSerializer(new XMLSerializer());
@@ -87,7 +88,7 @@ public class RSSFeedDemo extends Window implements Bindable {
         getQuery.execute(new TaskAdapter<>(new TaskListener<Object>() {
             @Override
             public void taskExecuted(Task<Object> task) {
-                Element root = (Element)task.getResult();
+                Element root = (Element) task.getResult();
                 feedListView.setListData(XML.getElements(root, "channel", "item"));
                 cardPane.setSelectedIndex(1);
             }

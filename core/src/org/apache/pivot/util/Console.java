@@ -19,7 +19,7 @@ package org.apache.pivot.util;
 /**
  * Utility class for a simple log to the console, for example from scripts.
  */
-public class Console  {
+public class Console {
 
     private Console() {
     }

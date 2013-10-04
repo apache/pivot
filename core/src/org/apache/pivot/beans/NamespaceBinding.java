@@ -33,7 +33,7 @@ public class NamespaceBinding {
     public interface BindMapping {
         /**
          * Transforms a source value during a bind operation.
-         *
+         * 
          * @param value
          */
         public Object evaluate(Object value);
@@ -59,8 +59,7 @@ public class NamespaceBinding {
     private MapListener<String, Object> sourceMapListener = new MapListener.Adapter<String, Object>() {
         @Override
         public void valueUpdated(Map<String, Object> map, String key, Object previousValue) {
-            if (key.equals(sourceKey)
-                && !updating) {
+            if (key.equals(sourceKey) && !updating) {
                 updating = true;
                 targetDictionary.put(targetKey, getTransformedSourceValue());
                 updating = false;
@@ -71,8 +70,7 @@ public class NamespaceBinding {
     private PropertyChangeListener sourcePropertyChangeListener = new PropertyChangeListener() {
         @Override
         public void propertyChanged(Object bean, String propertyName) {
-            if (propertyName.equals(sourceKey)
-                && !updating) {
+            if (propertyName.equals(sourceKey) && !updating) {
                 updating = true;
                 targetDictionary.put(targetKey, getTransformedSourceValue());
                 updating = false;
@@ -110,7 +108,7 @@ public class NamespaceBinding {
         source = JSON.get(namespace, sourceKeys);
 
         if (source instanceof Map<?, ?>) {
-            sourceMap = (Map<String, Object>)source;
+            sourceMap = (Map<String, Object>) source;
             sourceMonitor = null;
         } else {
             sourceMap = new BeanAdapter(source);
@@ -122,8 +120,7 @@ public class NamespaceBinding {
                 + "\" does not exist.");
         }
 
-        if (sourceMonitor != null
-            && !sourceMonitor.isNotifying(sourceKey)) {
+        if (sourceMonitor != null && !sourceMonitor.isNotifying(sourceKey)) {
             throw new IllegalArgumentException("\"" + sourceKey + "\" is not a notifying property.");
         }
 
@@ -135,7 +132,7 @@ public class NamespaceBinding {
         target = JSON.get(namespace, targetKeys);
 
         if (target instanceof Dictionary<?, ?>) {
-            targetDictionary = (Dictionary<String, Object>)target;
+            targetDictionary = (Dictionary<String, Object>) target;
         } else {
             targetDictionary = new BeanAdapter(target);
         }
@@ -203,10 +200,9 @@ public class NamespaceBinding {
 
     /**
      * Returns the bind mapping.
-     *
-     * @return
-     * The bind mapping to use during binding, or <tt>null</tt> if no bind
-     * mapping is specified.
+     * 
+     * @return The bind mapping to use during binding, or <tt>null</tt> if no
+     * bind mapping is specified.
      */
     public BindMapping getBindMapping() {
         return bindMapping;
@@ -247,12 +243,11 @@ public class NamespaceBinding {
         boolean equals = false;
 
         if (o instanceof NamespaceBinding) {
-            NamespaceBinding namespaceBinding = (NamespaceBinding)o;
+            NamespaceBinding namespaceBinding = (NamespaceBinding) o;
 
             equals = (source == namespaceBinding.source
                 && sourceKey.equals(namespaceBinding.sourceKey)
-                && target == namespaceBinding.target
-                && targetKey.equals(namespaceBinding.targetKey));
+                && target == namespaceBinding.target && targetKey.equals(namespaceBinding.targetKey));
         }
 
         return equals;

@@ -20,18 +20,5 @@ package org.apache.pivot.wtk;
  * Enumeration defining the supported mouse cursor types.
  */
 public enum Cursor {
-    DEFAULT,
-    HAND,
-    TEXT,
-    WAIT,
-    CROSSHAIR,
-    MOVE,
-    RESIZE_NORTH,
-    RESIZE_SOUTH,
-    RESIZE_EAST,
-    RESIZE_WEST,
-    RESIZE_NORTH_EAST,
-    RESIZE_NORTH_WEST,
-    RESIZE_SOUTH_EAST,
-    RESIZE_SOUTH_WEST
+    DEFAULT, HAND, TEXT, WAIT, CROSSHAIR, MOVE, RESIZE_NORTH, RESIZE_SOUTH, RESIZE_EAST, RESIZE_WEST, RESIZE_NORTH_EAST, RESIZE_NORTH_WEST, RESIZE_SOUTH_EAST, RESIZE_SOUTH_WEST
 }

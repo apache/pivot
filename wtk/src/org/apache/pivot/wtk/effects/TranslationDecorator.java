@@ -23,7 +23,6 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Point;
 
-
 /**
  * Decorator that translates the paint origin of its component.
  */
@@ -91,8 +90,7 @@ public class TranslationDecorator implements Decorator {
         if (clip) {
             Bounds decoratedBounds = component.getDecoratedBounds();
             graphics.clipRect(decoratedBounds.x - component.getX(),
-                decoratedBounds.y - component.getY(),
-                decoratedBounds.width, decoratedBounds.height);
+                decoratedBounds.y - component.getY(), decoratedBounds.width, decoratedBounds.height);
         }
 
         graphics.translate(x, y);

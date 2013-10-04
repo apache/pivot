@@ -29,8 +29,7 @@ import org.apache.pivot.util.ListenerList;
  * Synchronized implementation of the {@link List} interface.
  */
 public class SynchronizedList<T> implements List<T> {
-    private static class SynchronizedListListenerList<T>
-        extends ListListenerList<T> {
+    private static class SynchronizedListListenerList<T> extends ListListenerList<T> {
         @Override
         public synchronized void add(ListListener<T> listener) {
             super.add(listener);
@@ -103,7 +102,7 @@ public class SynchronizedList<T> implements List<T> {
     }
 
     @Override
-    public synchronized int remove (T item) {
+    public synchronized int remove(T item) {
         int index = indexOf(item);
         if (index != -1) {
             remove(index, 1);
@@ -163,8 +162,8 @@ public class SynchronizedList<T> implements List<T> {
     }
 
     /**
-     * NOTE Callers must manually synchronize on the SynchronizedList
-     * instance to ensure thread safety during iteration.
+     * NOTE Callers must manually synchronize on the SynchronizedList instance
+     * to ensure thread safety during iteration.
      */
     @Override
     public Iterator<T> iterator() {

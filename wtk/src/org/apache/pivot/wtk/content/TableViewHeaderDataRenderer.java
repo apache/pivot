@@ -33,8 +33,7 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Default table view header data renderer.
  */
-public class TableViewHeaderDataRenderer extends BoxPane
-    implements TableView.HeaderDataRenderer {
+public class TableViewHeaderDataRenderer extends BoxPane implements TableView.HeaderDataRenderer {
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();
 
@@ -63,10 +62,10 @@ public class TableViewHeaderDataRenderer extends BoxPane
         String text = null;
 
         if (data instanceof TableViewHeaderData) {
-            TableViewHeaderData tableViewHeaderData = (TableViewHeaderData)data;
+            TableViewHeaderData tableViewHeaderData = (TableViewHeaderData) data;
             icon = tableViewHeaderData.getIcon();
         } else if (data instanceof Image) {
-            icon = (Image)data;
+            icon = (Image) data;
         }
         text = toString(data);
 
@@ -114,7 +113,7 @@ public class TableViewHeaderDataRenderer extends BoxPane
         String string = null;
 
         if (data instanceof TableViewHeaderData) {
-            TableViewHeaderData tableViewHeaderData = (TableViewHeaderData)data;
+            TableViewHeaderData tableViewHeaderData = (TableViewHeaderData) data;
             string = tableViewHeaderData.getText();
         } else if (!(data instanceof Image)) {
             if (data != null) {

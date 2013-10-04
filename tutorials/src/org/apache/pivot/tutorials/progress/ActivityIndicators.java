@@ -35,10 +35,10 @@ public class ActivityIndicators extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        activityIndicator1 = (ActivityIndicator)namespace.get("activityIndicator1");
-        activityIndicator2 = (ActivityIndicator)namespace.get("activityIndicator2");
-        activityIndicator3 = (ActivityIndicator)namespace.get("activityIndicator3");
-        activityButton = (PushButton)namespace.get("activityButton");
+        activityIndicator1 = (ActivityIndicator) namespace.get("activityIndicator1");
+        activityIndicator2 = (ActivityIndicator) namespace.get("activityIndicator2");
+        activityIndicator3 = (ActivityIndicator) namespace.get("activityIndicator3");
+        activityButton = (PushButton) namespace.get("activityButton");
 
         activityButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

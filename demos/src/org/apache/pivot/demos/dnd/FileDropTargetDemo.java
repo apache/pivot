@@ -44,8 +44,10 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.Window;
 
 public class FileDropTargetDemo extends Window implements Bindable {
-    @BXML private TableView fileTableView;
-    @BXML private PushButton uploadButton;
+    @BXML
+    private TableView fileTableView;
+    @BXML
+    private PushButton uploadButton;
 
     private FileList fileList = null;
 
@@ -64,8 +66,7 @@ public class FileDropTargetDemo extends Window implements Bindable {
             public void itemsRemoved(List<File> list, int index, Sequence<File> files) {
                 uploadButton.setEnabled(list.getLength() > 0);
 
-                if (fileTableView.isFocused()
-                    && index < list.getLength()) {
+                if (fileTableView.isFocused() && index < list.getLength()) {
                     fileTableView.setSelectedIndex(index);
                 }
             }
@@ -73,9 +74,9 @@ public class FileDropTargetDemo extends Window implements Bindable {
 
         fileTableView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
-            public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-                if (keyCode == Keyboard.KeyCode.DELETE
-                    || keyCode == Keyboard.KeyCode.BACKSPACE) {
+            public boolean keyPressed(Component component, int keyCode,
+                Keyboard.KeyLocation keyLocation) {
+                if (keyCode == Keyboard.KeyCode.DELETE || keyCode == Keyboard.KeyCode.BACKSPACE) {
                     Sequence<Span> selectedRanges = fileTableView.getSelectedRanges();
 
                     for (int i = selectedRanges.getLength() - 1; i >= 0; i--) {
@@ -128,7 +129,7 @@ public class FileDropTargetDemo extends Window implements Bindable {
 
                 if (dragContent.containsFileList()) {
                     try {
-                        FileList tableData = (FileList)fileTableView.getTableData();
+                        FileList tableData = (FileList) fileTableView.getTableData();
                         FileList fileListLocal = dragContent.getFileList();
                         for (File file : fileListLocal) {
                             if (file.isDirectory()) {
@@ -139,7 +140,7 @@ public class FileDropTargetDemo extends Window implements Bindable {
                         }
 
                         dropAction = DropAction.COPY;
-                    } catch(IOException exception) {
+                    } catch (IOException exception) {
                         System.err.println(exception);
                     }
                 }

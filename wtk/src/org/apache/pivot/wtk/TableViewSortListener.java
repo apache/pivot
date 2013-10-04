@@ -36,8 +36,7 @@ public interface TableViewSortListener {
         }
 
         @Override
-        public void sortRemoved(TableView tableView, String columnName,
-            SortDirection sortDirection) {
+        public void sortRemoved(TableView tableView, String columnName, SortDirection sortDirection) {
             // empty block
         }
 
@@ -49,7 +48,7 @@ public interface TableViewSortListener {
 
     /**
      * Called when a sort has been added to a table view.
-     *
+     * 
      * @param tableView
      * @param columnName
      */
@@ -57,7 +56,7 @@ public interface TableViewSortListener {
 
     /**
      * Called when a sort has been updated in a table view.
-     *
+     * 
      * @param tableView
      * @param columnName
      * @param previousSortDirection
@@ -67,17 +66,16 @@ public interface TableViewSortListener {
 
     /**
      * Called when a sort has been removed from a table view.
-     *
+     * 
      * @param tableView
      * @param columnName
      * @param sortDirection
      */
-    public void sortRemoved(TableView tableView, String columnName,
-        SortDirection sortDirection);
+    public void sortRemoved(TableView tableView, String columnName, SortDirection sortDirection);
 
     /**
      * Called when a table view's sort has changed.
-     *
+     * 
      * @param tableView
      */
     public void sortChanged(TableView tableView);

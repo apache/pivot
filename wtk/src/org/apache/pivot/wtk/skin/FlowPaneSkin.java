@@ -44,7 +44,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public int getPreferredWidth(int height) {
-        FlowPane flowPane = (FlowPane)getComponent();
+        FlowPane flowPane = (FlowPane) getComponent();
 
         int preferredWidth = 0;
 
@@ -73,7 +73,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public int getPreferredHeight(int width) {
-        FlowPane flowPane = (FlowPane)getComponent();
+        FlowPane flowPane = (FlowPane) getComponent();
 
         int preferredHeight;
 
@@ -83,7 +83,8 @@ public class FlowPaneSkin extends ContainerSkin {
                 Dimensions preferredSize = getPreferredSize();
                 preferredHeight = preferredSize.height;
             } else {
-                // Preferred height is the maximum preferred height of all components
+                // Preferred height is the maximum preferred height of all
+                // components
                 preferredHeight = 0;
 
                 for (int i = 0, n = flowPane.getLength(); i < n; i++) {
@@ -112,9 +113,9 @@ public class FlowPaneSkin extends ContainerSkin {
                 if (component.isVisible()) {
                     Dimensions size = component.getPreferredSize();
 
-                    if (rowWidth + size.width > contentWidth
-                        && rowWidth > 0) {
-                        // The component is too big to fit in the remaining space,
+                    if (rowWidth + size.width > contentWidth && rowWidth > 0) {
+                        // The component is too big to fit in the remaining
+                        // space,
                         // and it is not the only component in this row; wrap
                         preferredHeight += rowAscent + rowDescent;
 
@@ -157,7 +158,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        FlowPane flowPane = (FlowPane)getComponent();
+        FlowPane flowPane = (FlowPane) getComponent();
 
         int preferredWidth = 0;
 
@@ -192,20 +193,20 @@ public class FlowPaneSkin extends ContainerSkin {
         // Include padding
         preferredWidth += padding.left + padding.right;
 
-        return new Dimensions(preferredWidth, ascent + descent
-            + padding.top + padding.bottom);
+        return new Dimensions(preferredWidth, ascent + descent + padding.top + padding.bottom);
     }
 
     @Override
     public int getBaseline(int width, int height) {
-        FlowPane flowPane = (FlowPane)getComponent();
+        FlowPane flowPane = (FlowPane) getComponent();
 
         int baseline = -1;
 
         if (alignToBaseline) {
             int contentWidth = Math.max(width - (padding.left + padding.right), 0);
 
-            // Break the components into multiple rows, and calculate the baseline of the
+            // Break the components into multiple rows, and calculate the
+            // baseline of the
             // first row
             int rowWidth = 0;
             for (int i = 0, n = flowPane.getLength(); i < n; i++) {
@@ -214,9 +215,9 @@ public class FlowPaneSkin extends ContainerSkin {
                 if (component.isVisible()) {
                     Dimensions size = component.getPreferredSize();
 
-                    if (rowWidth + size.width > contentWidth
-                        && rowWidth > 0) {
-                        // The component is too big to fit in the remaining space,
+                    if (rowWidth + size.width > contentWidth && rowWidth > 0) {
+                        // The component is too big to fit in the remaining
+                        // space,
                         // and it is not the only component in this row; wrap
                         break;
                     }
@@ -235,7 +236,7 @@ public class FlowPaneSkin extends ContainerSkin {
 
     @Override
     public void layout() {
-        FlowPane flowPane = (FlowPane)getComponent();
+        FlowPane flowPane = (FlowPane) getComponent();
         int width = getWidth();
         int contentWidth = Math.max(width - (padding.left + padding.right), 0);
 
@@ -252,8 +253,7 @@ public class FlowPaneSkin extends ContainerSkin {
                 Dimensions componentSize = component.getPreferredSize();
                 component.setSize(componentSize);
 
-                if (rowWidth + componentSize.width > contentWidth
-                    && rowWidth > 0) {
+                if (rowWidth + componentSize.width > contentWidth && rowWidth > 0) {
                     // The component is too big to fit in the remaining space,
                     // and it is not the only component in this row
                     rows.add(row);
@@ -285,8 +285,8 @@ public class FlowPaneSkin extends ContainerSkin {
             for (Component component : row) {
                 rowWidth += component.getWidth();
                 rowHeight = Math.max(rowHeight, component.getHeight());
-                baseline = Math.max(baseline, component.getBaseline(component.getWidth(),
-                    component.getHeight()));
+                baseline = Math.max(baseline,
+                    component.getBaseline(component.getWidth(), component.getHeight()));
             }
 
             rowWidth += horizontalSpacing * (row.getLength() - 1);
@@ -314,9 +314,7 @@ public class FlowPaneSkin extends ContainerSkin {
                 int y;
                 int componentBaseline = component.getBaseline(component.getWidth(),
                     component.getHeight());
-                if (alignToBaseline
-                    && baseline != -1
-                    && componentBaseline != -1) {
+                if (alignToBaseline && baseline != -1 && componentBaseline != -1) {
                     // Align to baseline
                     y = baseline - componentBaseline;
                 } else {
@@ -346,14 +344,16 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     /**
-     * Returns the amount of space between the edge of the FlowPane and its components.
+     * Returns the amount of space between the edge of the FlowPane and its
+     * components.
      */
     public Insets getPadding() {
         return padding;
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the FlowPane and its components.
+     * Sets the amount of space to leave between the edge of the FlowPane and
+     * its components.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -365,9 +365,11 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the FlowPane and its components.
-     *
-     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     * Sets the amount of space to leave between the edge of the FlowPane and
+     * its components.
+     * 
+     * @param padding A dictionary with keys in the set {left, top, bottom,
+     * right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
@@ -378,16 +380,16 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the FlowPane and its components,
-     * uniformly on all four edges.
+     * Sets the amount of space to leave between the edge of the FlowPane and
+     * its components, uniformly on all four edges.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the FlowPane and its components,
-     * uniformly on all four edges.
+     * Sets the amount of space to leave between the edge of the FlowPane and
+     * its components, uniformly on all four edges.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {
@@ -398,10 +400,11 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the FlowPane and its components.
-     *
-     * @param padding A string containing an integer or a JSON dictionary with keys
-     * left, top, bottom, and/or right.
+     * Sets the amount of space to leave between the edge of the FlowPane and
+     * its components.
+     * 
+     * @param padding A string containing an integer or a JSON dictionary with
+     * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
         if (padding == null) {

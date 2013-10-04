@@ -35,9 +35,9 @@ public class FillPanes extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        fillPane = (FillPane)namespace.get("fillPane");
-        horizontalOrientationButton = (RadioButton)namespace.get("horizontalOrientationButton");
-        verticalOrientationButton = (RadioButton)namespace.get("verticalOrientationButton");
+        fillPane = (FillPane) namespace.get("fillPane");
+        horizontalOrientationButton = (RadioButton) namespace.get("horizontalOrientationButton");
+        verticalOrientationButton = (RadioButton) namespace.get("verticalOrientationButton");
 
         ButtonStateListener buttonStateListener = new ButtonStateListener() {
             @Override

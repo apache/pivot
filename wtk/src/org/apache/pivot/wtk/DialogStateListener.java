@@ -44,7 +44,7 @@ public interface DialogStateListener extends DialogCloseListener {
 
     /**
      * Called to preview a dialog close event.
-     *
+     * 
      * @param dialog
      * @param result
      */
@@ -52,7 +52,7 @@ public interface DialogStateListener extends DialogCloseListener {
 
     /**
      * Called when a dialog close event has been vetoed.
-     *
+     * 
      * @param dialog
      * @param reason
      */

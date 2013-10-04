@@ -34,8 +34,10 @@ import org.apache.pivot.wtk.Window;
  * Main window.
  */
 public class SheetExampleWindow extends Window implements Bindable {
-    @BXML EditGreetingSheet editGreetingSheet = null;
-    @BXML private PushButton editGreetingButton = null;
+    @BXML
+    EditGreetingSheet editGreetingSheet = null;
+    @BXML
+    private PushButton editGreetingButton = null;
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {

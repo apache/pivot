@@ -20,6 +20,5 @@ package org.apache.pivot.wtk;
  * Enumeration representing text decoration styles.
  */
 public enum TextDecoration {
-    UNDERLINE,
-    STRIKETHROUGH
+    UNDERLINE, STRIKETHROUGH
 }

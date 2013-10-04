@@ -55,15 +55,15 @@ public class DragDropTest extends Application.Adapter {
 
             @Override
             public boolean beginDrag(Component component, int x, int y) {
-                ImageView imageView = (ImageView)component;
+                ImageView imageView = (ImageView) component;
                 image = imageView.getImage();
 
                 if (image != null) {
-                    imageView.setImage((Image)null);
+                    imageView.setImage((Image) null);
                     content = new LocalManifest();
                     content.putImage(image);
-                    offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2,
-                        y - (imageView.getHeight() - image.getHeight()) / 2);
+                    offset = new Point(x - (imageView.getWidth() - image.getWidth()) / 2, y
+                        - (imageView.getHeight() - image.getHeight()) / 2);
                 }
 
                 return (image != null);
@@ -72,7 +72,7 @@ public class DragDropTest extends Application.Adapter {
             @Override
             public void endDrag(Component component, DropAction dropAction) {
                 if (dropAction == null) {
-                    ImageView imageView = (ImageView)component;
+                    ImageView imageView = (ImageView) component;
                     imageView.setImage(image);
                 }
 
@@ -113,9 +113,8 @@ public class DragDropTest extends Application.Adapter {
                 int supportedDropActions, DropAction userDropAction) {
                 DropAction dropAction = null;
 
-                ImageView imageView = (ImageView)component;
-                if (imageView.getImage() == null
-                    && dragContent.containsImage()
+                ImageView imageView = (ImageView) component;
+                if (imageView.getImage() == null && dragContent.containsImage()
                     && DropAction.MOVE.isSelected(supportedDropActions)) {
                     dropAction = DropAction.MOVE;
                     component.getStyles().put("backgroundColor", IMAGE_VIEW_DROP_HIGHLIGHT_COLOR);
@@ -147,11 +146,11 @@ public class DragDropTest extends Application.Adapter {
                 DropAction dropAction = null;
 
                 if (dragContent.containsImage()) {
-                    ImageView imageView = (ImageView)component;
+                    ImageView imageView = (ImageView) component;
                     try {
                         imageView.setImage(dragContent.getImage());
                         dropAction = DropAction.MOVE;
-                    } catch(IOException exception) {
+                    } catch (IOException exception) {
                         System.err.println(exception);
                     }
                 }

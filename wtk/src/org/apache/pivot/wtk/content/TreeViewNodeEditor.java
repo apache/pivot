@@ -43,8 +43,8 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
     private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
+            Display display = (Display) container;
+            Window window = (Window) display.getComponentAt(x, y);
 
             if (window != TreeViewNodeEditor.this) {
                 endEdit(true);
@@ -56,8 +56,8 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
         @Override
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
-            Display display = (Display)container;
-            Window window = (Window)display.getComponentAt(x, y);
+            Display display = (Display) container;
+            Window window = (Window) display.getComponentAt(x, y);
 
             return (window != TreeViewNodeEditor.this);
         }
@@ -86,7 +86,7 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
 
         // Get the data being edited
         List<?> treeData = treeViewArgument.getTreeData();
-        TreeNode treeNode = (TreeNode)Sequence.Tree.get(treeData, pathArgument);
+        TreeNode treeNode = (TreeNode) Sequence.Tree.get(treeData, pathArgument);
 
         String text = treeNode.getText();
         textInput.setText(text != null ? text : "");
@@ -95,31 +95,31 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
         // Get the node bounds
         Bounds nodeBounds = treeViewArgument.getNodeBounds(pathArgument);
         int nodeIndent = treeViewArgument.getNodeIndent(pathArgument.getLength());
-        nodeBounds = new Bounds(nodeBounds.x + nodeIndent, nodeBounds.y,
-            nodeBounds.width - nodeIndent, nodeBounds.height);
+        nodeBounds = new Bounds(nodeBounds.x + nodeIndent, nodeBounds.y, nodeBounds.width
+            - nodeIndent, nodeBounds.height);
 
         // Render the node data
-        TreeViewNodeRenderer nodeRenderer = (TreeViewNodeRenderer)treeViewArgument.getNodeRenderer();
-        nodeRenderer.render(treeNode, pathArgument, treeViewArgument.getRowIndex(pathArgument), treeViewArgument, false, false,
-            TreeView.NodeCheckState.UNCHECKED, false, false);
+        TreeViewNodeRenderer nodeRenderer = (TreeViewNodeRenderer) treeViewArgument.getNodeRenderer();
+        nodeRenderer.render(treeNode, pathArgument, treeViewArgument.getRowIndex(pathArgument),
+            treeViewArgument, false, false, TreeView.NodeCheckState.UNCHECKED, false, false);
         nodeRenderer.setSize(nodeBounds.width, nodeBounds.height);
 
         // Get the text bounds
         Bounds textBounds = nodeRenderer.getTextBounds();
 
         // Calculate the bounds of what is being edited
-        Insets padding = (Insets)textInput.getStyles().get("padding");
+        Insets padding = (Insets) textInput.getStyles().get("padding");
         Bounds editBounds = new Bounds(nodeBounds.x + textBounds.x - (padding.left + 1),
-            nodeBounds.y, nodeBounds.width - textBounds.x + (padding.left + 1),
-            nodeBounds.height);
+            nodeBounds.y, nodeBounds.width - textBounds.x + (padding.left + 1), nodeBounds.height);
 
         // Scroll to make the node as visible as possible
-        treeViewArgument.scrollAreaToVisible(editBounds.x, editBounds.y,
-            textBounds.width + padding.left + 1, editBounds.height);
+        treeViewArgument.scrollAreaToVisible(editBounds.x, editBounds.y, textBounds.width
+            + padding.left + 1, editBounds.height);
 
         // Constrain the bounds by what is visible through viewport ancestors
         editBounds = treeViewArgument.getVisibleArea(editBounds);
-        Point location = treeViewArgument.mapPointToAncestor(treeViewArgument.getDisplay(), editBounds.x, editBounds.y);
+        Point location = treeViewArgument.mapPointToAncestor(treeViewArgument.getDisplay(),
+            editBounds.x, editBounds.y);
 
         textInput.setPreferredWidth(editBounds.width);
         setLocation(location.x, location.y + (editBounds.height - getPreferredHeight(-1)) / 2);
@@ -136,7 +136,7 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
             String text = textInput.getText();
 
             List<?> treeData = treeView.getTreeData();
-            TreeNode treeNode = (TreeNode)Sequence.Tree.get(treeData, path);
+            TreeNode treeNode = (TreeNode) Sequence.Tree.get(treeData, path);
             treeNode.setText(text);
 
             // Get a reference to node's parent
@@ -144,10 +144,10 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
             List<TreeNode> parentData;
 
             if (n == 1) {
-                parentData = (List<TreeNode>)treeData;
+                parentData = (List<TreeNode>) treeData;
             } else {
                 Path parentPath = new Path(path, n - 1);
-                parentData = (List<TreeNode>)Sequence.Tree.get(treeData, parentPath);
+                parentData = (List<TreeNode>) Sequence.Tree.get(treeData, parentPath);
             }
 
             if (parentData.getComparator() == null) {

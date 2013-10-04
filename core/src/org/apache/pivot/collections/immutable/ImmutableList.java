@@ -63,7 +63,8 @@ public final class ImmutableList<T> implements List<T> {
 
     @Override
     public Sequence<T> remove(int index, int count) {
-        throw new UnsupportedOperationException();    }
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public void clear() {

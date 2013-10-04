@@ -36,22 +36,23 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Window skin.
  */
-public class WindowSkin extends ContainerSkin implements Window.Skin,
-    WindowListener, WindowStateListener {
+public class WindowSkin extends ContainerSkin implements Window.Skin, WindowListener,
+    WindowStateListener {
     /**
      * Focus traversal policy that always returns the window's content. This
      * ensures that focus does not traverse out of the window.
      */
     public static class WindowFocusTraversalPolicy implements FocusTraversalPolicy {
         @Override
-        public Component getNextComponent(Container container, Component component, FocusTraversalDirection direction) {
+        public Component getNextComponent(Container container, Component component,
+            FocusTraversalDirection direction) {
             assert (container instanceof Window) : "container is not a Window";
 
             if (direction == null) {
                 throw new IllegalArgumentException("direction is null.");
             }
 
-            Window window = (Window)container;
+            Window window = (Window) container;
 
             return window.getContent();
         }
@@ -65,7 +66,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
     public void install(Component component) {
         super.install(component);
 
-        Window window = (Window)component;
+        Window window = (Window) component;
         window.getWindowListeners().add(this);
         window.getWindowStateListeners().add(this);
 
@@ -74,7 +75,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
 
     @Override
     public int getPreferredWidth(int height) {
-        Window window = (Window)getComponent();
+        Window window = (Window) getComponent();
         Component content = window.getContent();
 
         return (content != null) ? content.getPreferredWidth(height) : 0;
@@ -82,7 +83,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
 
     @Override
     public int getPreferredHeight(int width) {
-        Window window = (Window)getComponent();
+        Window window = (Window) getComponent();
         Component content = window.getContent();
 
         return (content != null) ? content.getPreferredHeight(width) : 0;
@@ -90,7 +91,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
 
     @Override
     public Dimensions getPreferredSize() {
-        Window window = (Window)getComponent();
+        Window window = (Window) getComponent();
         Component content = window.getContent();
 
         return (content != null) ? content.getPreferredSize() : new Dimensions(0, 0);
@@ -98,7 +99,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
 
     @Override
     public void layout() {
-        Window window = (Window)getComponent();
+        Window window = (Window) getComponent();
         Component content = window.getContent();
 
         if (content != null) {
@@ -115,7 +116,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin,
     public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
         boolean consumed = super.mouseDown(container, button, x, y);
 
-        Window window = (Window)container;
+        Window window = (Window) container;
         window.moveToFront();
 
         return consumed;

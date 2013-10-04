@@ -66,18 +66,16 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
 
     @Override
     public void render(Object node, Path path, int rowIndex, TreeView treeView, boolean expanded,
-        boolean selected, TreeView.NodeCheckState checkState,
-        boolean highlighted, boolean disabled) {
+        boolean selected, TreeView.NodeCheckState checkState, boolean highlighted, boolean disabled) {
         if (node != null) {
             Image icon = null;
             String text = null;
 
             if (node instanceof TreeNode) {
-                TreeNode treeNode = (TreeNode)node;
+                TreeNode treeNode = (TreeNode) node;
 
-                if (expanded
-                    && treeNode instanceof TreeBranch) {
-                    TreeBranch treeBranch = (TreeBranch)treeNode;
+                if (expanded && treeNode instanceof TreeBranch) {
+                    TreeBranch treeBranch = (TreeBranch) treeNode;
                     icon = treeBranch.getExpandedIcon();
 
                     if (icon == null) {
@@ -87,14 +85,13 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
                     icon = treeNode.getIcon();
                 }
             } else if (node instanceof Image) {
-                icon = (Image)node;
+                icon = (Image) node;
             }
             text = toString(node);
 
             // Update the image view
             imageView.setImage(icon);
-            imageView.getStyles().put("opacity",
-                (treeView.isEnabled() && !disabled) ? 1.0f : 0.5f);
+            imageView.getStyles().put("opacity", (treeView.isEnabled() && !disabled) ? 1.0f : 0.5f);
 
             // Update the label
             label.setText(text != null ? text : "");
@@ -104,22 +101,22 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
             } else {
                 label.setVisible(true);
 
-                Font font = (Font)treeView.getStyles().get("font");
+                Font font = (Font) treeView.getStyles().get("font");
                 label.getStyles().put("font", font);
 
                 Color color;
                 if (treeView.isEnabled() && !disabled) {
                     if (selected) {
                         if (treeView.isFocused()) {
-                            color = (Color)treeView.getStyles().get("selectionColor");
+                            color = (Color) treeView.getStyles().get("selectionColor");
                         } else {
-                            color = (Color)treeView.getStyles().get("inactiveSelectionColor");
+                            color = (Color) treeView.getStyles().get("inactiveSelectionColor");
                         }
                     } else {
-                        color = (Color)treeView.getStyles().get("color");
+                        color = (Color) treeView.getStyles().get("color");
                     }
                 } else {
-                    color = (Color)treeView.getStyles().get("disabledColor");
+                    color = (Color) treeView.getStyles().get("disabledColor");
                 }
 
                 label.getStyles().put("color", color);
@@ -132,7 +129,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
         String string = null;
 
         if (node instanceof TreeNode) {
-            TreeNode treeNode = (TreeNode)node;
+            TreeNode treeNode = (TreeNode) node;
             string = treeNode.getText();
         } else if (!(node instanceof Image)) {
             if (node != null) {
@@ -176,7 +173,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
     }
 
     public boolean getFillIcon() {
-        return (Boolean)imageView.getStyles().get("fill");
+        return (Boolean) imageView.getStyles().get("fill");
     }
 
     public void setFillIcon(boolean fillIcon) {
@@ -185,10 +182,9 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
 
     /**
      * Gets the bounds of the text that is rendered by this renderer.
-     *
-     * @return
-     * The bounds of the rendered text, or <tt>null</tt> if this renderer did
-     * not render any text.
+     * 
+     * @return The bounds of the rendered text, or <tt>null</tt> if this
+     * renderer did not render any text.
      */
     public Bounds getTextBounds() {
         return (label.isVisible() ? label.getBounds() : null);

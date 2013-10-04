@@ -22,8 +22,8 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 
 /**
- * Test application to show the memory leak (the subject for this bug).
- * For more info, look at LeakTestWindow.
+ * Test application to show the memory leak (the subject for this bug). For more
+ * info, look at LeakTestWindow.
  */
 public class Pivot861 extends Application.Adapter {
 
@@ -33,8 +33,7 @@ public class Pivot861 extends Application.Adapter {
         System.out.println("\n"
             + "Attention: now the application will go in an infinite loop, to be able to see the memory leak.\n"
             + "Note that probably you'll have to kill the application from outside (kill the Java process).\n"
-            + "\n"
-        );
+            + "\n");
 
         // add some sleep to let users see the warning messages in console ...
         Thread.sleep(2000);

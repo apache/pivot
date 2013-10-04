@@ -25,7 +25,6 @@ import org.apache.pivot.collections.LinkedQueue;
 import org.apache.pivot.collections.Queue;
 import org.junit.Test;
 
-
 public class QueueTest {
     @Test
     public void queueTest() {

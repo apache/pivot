@@ -101,7 +101,7 @@ public interface ComponentListener {
     /**
      * Called when a component's parent has changed (when the component is
      * either added to or removed from a container).
-     *
+     * 
      * @param component
      * @param previousParent
      */
@@ -109,7 +109,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's size has changed.
-     *
+     * 
      * @param component
      * @param previousWidth
      * @param previousHeight
@@ -118,7 +118,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's preferred size has changed.
-     *
+     * 
      * @param component
      * @param previousPreferredWidth
      * @param previousPreferredHeight
@@ -128,7 +128,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's preferred width limits have changed.
-     *
+     * 
      * @param component
      * @param previousMinimumWidth
      * @param previousMaximumWidth
@@ -138,7 +138,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's preferred height limits have changed.
-     *
+     * 
      * @param component
      * @param previousMinimumHeight
      * @param previousMaximumHeight
@@ -148,7 +148,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's location has changed.
-     *
+     * 
      * @param component
      * @param previousX
      * @param previousY
@@ -157,14 +157,14 @@ public interface ComponentListener {
 
     /**
      * Called when a component's visible flag has changed.
-     *
+     * 
      * @param component
      */
     public void visibleChanged(Component component);
 
     /**
      * Called when a component's cursor has changed.
-     *
+     * 
      * @param component
      * @param previousCursor
      */
@@ -172,7 +172,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's tooltip text has changed.
-     *
+     * 
      * @param component
      * @param previousTooltipText
      */
@@ -180,7 +180,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's tooltip delay has changed.
-     *
+     * 
      * @param component
      * @param previousTooltipDelay
      */
@@ -188,7 +188,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's drag source has changed.
-     *
+     * 
      * @param component
      * @param previousDragSource
      */
@@ -196,7 +196,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's drop target has changed.
-     *
+     * 
      * @param component
      * @param previousDropTarget
      */
@@ -204,7 +204,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's context menu handler has changed.
-     *
+     * 
      * @param component
      * @param previousMenuHandler
      */
@@ -212,6 +212,7 @@ public interface ComponentListener {
 
     /**
      * Called when a component's name has changed.
+     * 
      * @param component
      * @param previousName
      */

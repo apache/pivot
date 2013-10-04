@@ -63,9 +63,8 @@ public class EnumBeanTest {
             (value == null) ? "[null]" : value.getClass().getName()));
 
         value = ba.get("orientationField");
-        System.out.println(String.format("%-40s %-20s %s",
-            "BeanAdapter.get(\"orientationField\")", value, (value == null) ? "[null]"
-                : value.getClass().getName()));
+        System.out.println(String.format("%-40s %-20s %s", "BeanAdapter.get(\"orientationField\")",
+            value, (value == null) ? "[null]" : value.getClass().getName()));
     }
 
     private static void dumpSetter(EnumBean enumBean, BeanAdapter ba) {
@@ -75,7 +74,6 @@ public class EnumBeanTest {
 
         value = ba.get("orientation");
         System.out.println(String.format("%-40s %-20s %s", "BeanAdapter.get(\"orientation\")",
-            value,
-            (value == null) ? "[null]" : value.getClass().getName()));
+            value, (value == null) ? "[null]" : value.getClass().getName()));
     }
 }

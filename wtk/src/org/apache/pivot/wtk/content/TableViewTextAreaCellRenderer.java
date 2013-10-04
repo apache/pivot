@@ -26,8 +26,8 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TextArea;
 
 /**
- * Renders cell contents as a string using a text area (which supports line feeds,
- * which the default label-based table view cell renderer does not).
+ * Renders cell contents as a string using a text area (which supports line
+ * feeds, which the default label-based table view cell renderer does not).
  */
 public class TableViewTextAreaCellRenderer extends TextArea implements TableView.CellRenderer {
     public TableViewTextAreaCellRenderer() {
@@ -44,14 +44,12 @@ public class TableViewTextAreaCellRenderer extends TextArea implements TableView
     }
 
     @Override
-    public void render(Object row, int rowIndex, int columnIndex,
-        TableView tableView, String columnName,
-        boolean selected, boolean highlighted, boolean disabled) {
+    public void render(Object row, int rowIndex, int columnIndex, TableView tableView,
+        String columnName, boolean selected, boolean highlighted, boolean disabled) {
         renderStyles(tableView, selected, disabled);
 
         String text = null;
-        if (row != null
-            && columnName != null) {
+        if (row != null && columnName != null) {
             text = toString(row, columnName);
         }
 
@@ -62,22 +60,22 @@ public class TableViewTextAreaCellRenderer extends TextArea implements TableView
         Component.StyleDictionary tableViewStyles = tableView.getStyles();
         Component.StyleDictionary styles = getStyles();
 
-        Font font = (Font)tableViewStyles.get("font");
+        Font font = (Font) tableViewStyles.get("font");
         styles.put("font", font);
 
         Color color;
         if (tableView.isEnabled() && !rowDisabled) {
             if (rowSelected) {
                 if (tableView.isFocused()) {
-                    color = (Color)tableViewStyles.get("selectionColor");
+                    color = (Color) tableViewStyles.get("selectionColor");
                 } else {
-                    color = (Color)tableViewStyles.get("inactiveSelectionColor");
+                    color = (Color) tableViewStyles.get("inactiveSelectionColor");
                 }
             } else {
-                color = (Color)tableViewStyles.get("color");
+                color = (Color) tableViewStyles.get("color");
             }
         } else {
-            color = (Color)tableViewStyles.get("disabledColor");
+            color = (Color) tableViewStyles.get("disabledColor");
         }
 
         styles.put("color", color);

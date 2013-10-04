@@ -30,8 +30,8 @@ import java.nio.charset.Charset;
 import org.apache.pivot.serialization.Serializer;
 
 /**
- * Implementation of the {@link Serializer} interface that reads and writes
- * a plain text document.
+ * Implementation of the {@link Serializer} interface that reads and writes a
+ * plain text document.
  */
 public class PlainTextSerializer implements Serializer<Document> {
     private Charset charset = null;
@@ -95,7 +95,7 @@ public class PlainTextSerializer implements Serializer<Document> {
         BufferedWriter bufferedWriter = new BufferedWriter(writer, BUFFER_SIZE);
 
         if (object instanceof Element) {
-            Element element = (Element)object;
+            Element element = (Element) object;
 
             for (Node node : element) {
                 writeValue(node, writer);
@@ -108,7 +108,7 @@ public class PlainTextSerializer implements Serializer<Document> {
             String text;
 
             if (object instanceof TextNode) {
-                TextNode textNode = (TextNode)object;
+                TextNode textNode = (TextNode) object;
                 text = textNode.getText();
             } else {
                 text = object.toString();

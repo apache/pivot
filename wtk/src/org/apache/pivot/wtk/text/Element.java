@@ -30,16 +30,12 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Theme;
 
 /**
- * Abstract base class for elements.
- * <p>
- * TODO Add style properties.
- * <p>
- * TODO Add style class property.
+ * Abstract base class for elements. <p> TODO Add style properties. <p> TODO Add
+ * style class property.
  */
-public abstract class Element extends Node
-    implements Sequence<Node>, Iterable<Node> {
-    private static class ElementListenerList extends ListenerList<ElementListener>
-        implements ElementListener {
+public abstract class Element extends Node implements Sequence<Node>, Iterable<Node> {
+    private static class ElementListenerList extends ListenerList<ElementListener> implements
+        ElementListener {
         @Override
         public void nodeInserted(Element element, int index) {
             for (ElementListener listener : this) {
@@ -48,8 +44,7 @@ public abstract class Element extends Node
         }
 
         @Override
-        public void nodesRemoved(Element element, int index,
-            Sequence<Node> nodes) {
+        public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
             for (ElementListener listener : this) {
                 listener.nodesRemoved(element, index, nodes);
             }
@@ -61,24 +56,28 @@ public abstract class Element extends Node
                 listener.fontChanged(element, previousFont);
             }
         }
+
         @Override
         public void backgroundColorChanged(Element element, Color previousBackgroundColor) {
             for (ElementListener listener : this) {
                 listener.backgroundColorChanged(element, previousBackgroundColor);
             }
         }
+
         @Override
         public void foregroundColorChanged(Element element, Color previousForegroundColor) {
             for (ElementListener listener : this) {
                 listener.foregroundColorChanged(element, previousForegroundColor);
             }
         }
+
         @Override
         public void underlineChanged(Element element) {
             for (ElementListener listener : this) {
                 listener.underlineChanged(element);
             }
         }
+
         @Override
         public void strikethroughChanged(Element element) {
             for (ElementListener listener : this) {
@@ -119,16 +118,16 @@ public abstract class Element extends Node
             throw new IllegalArgumentException("range is not an element.");
         }
 
-        if (offset < 0
-            || offset > characterCount) {
+        if (offset < 0 || offset > characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
-        Element element = (Element)range;
+        Element element = (Element) range;
         int n = element.getLength();
 
         if (n > 0) {
-            // Clear the range content, since the child nodes will become children
+            // Clear the range content, since the child nodes will become
+            // children
             // of this element
             Sequence<Node> nodesLocal = element.remove(0, n);
 
@@ -170,8 +169,7 @@ public abstract class Element extends Node
             throw new IllegalArgumentException("characterCount is negative.");
         }
 
-        if (offset < 0
-            || offset + characterCountArgument > this.characterCount) {
+        if (offset < 0 || offset + characterCountArgument > this.characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -179,7 +177,7 @@ public abstract class Element extends Node
         Node range = duplicate(false);
 
         if (characterCountArgument > 0) {
-            Element element = (Element)range;
+            Element element = (Element) range;
 
             int start = getNodeAt(offset);
             int end = getNodeAt(offset + characterCountArgument - 1);
@@ -191,8 +189,7 @@ public abstract class Element extends Node
                 int nodeCharacterCount = node.getCharacterCount();
 
                 Node segment;
-                if (offset == nodeOffset
-                    && characterCountArgument == nodeCharacterCount) {
+                if (offset == nodeOffset && characterCountArgument == nodeCharacterCount) {
                     // Remove the entire node
                     segment = node;
                     remove(start, 1);
@@ -231,8 +228,7 @@ public abstract class Element extends Node
                 Sequence<Node> removed = remove(start, count);
 
                 // Add the removed segments and nodes to the range
-                if (leadingSegment != null
-                    && leadingSegment.getCharacterCount() > 0) {
+                if (leadingSegment != null && leadingSegment.getCharacterCount() > 0) {
                     element.add(leadingSegment);
                 }
 
@@ -240,8 +236,7 @@ public abstract class Element extends Node
                     element.add(removed.get(i));
                 }
 
-                if (trailingSegment != null
-                    && trailingSegment.getCharacterCount() > 0) {
+                if (trailingSegment != null && trailingSegment.getCharacterCount() > 0) {
                     element.add(trailingSegment);
                 }
             }
@@ -260,8 +255,9 @@ public abstract class Element extends Node
             throw new IndexOutOfBoundsException("offset < 0, offset=" + offset);
         }
         if (offset + characterCountArgument > this.characterCount) {
-            throw new IndexOutOfBoundsException("offset+characterCount>this.characterCount offset=" + offset
-                + " characterCount=" + characterCountArgument + " this.characterCount=" + this.characterCount);
+            throw new IndexOutOfBoundsException("offset+characterCount>this.characterCount offset="
+                + offset + " characterCount=" + characterCountArgument + " this.characterCount="
+                + this.characterCount);
         }
 
         // Create a copy of this element
@@ -304,8 +300,7 @@ public abstract class Element extends Node
                 }
 
                 // Add the leading segment to the range
-                if (leadingSegment != null
-                    && leadingSegment.getCharacterCount() > 0) {
+                if (leadingSegment != null && leadingSegment.getCharacterCount() > 0) {
                     range.add(leadingSegment);
                     start++;
                 }
@@ -316,8 +311,7 @@ public abstract class Element extends Node
                 }
 
                 // Add the trailing segment to the range
-                if (trailingSegment != null
-                    && trailingSegment.getCharacterCount() > 0) {
+                if (trailingSegment != null && trailingSegment.getCharacterCount() > 0) {
                     range.add(trailingSegment);
                 }
             }
@@ -350,8 +344,7 @@ public abstract class Element extends Node
 
     @Override
     public void insert(Node node, int index) {
-        if (index < 0
-            || index > nodes.getLength()) {
+        if (index < 0 || index > nodes.getLength()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -414,8 +407,7 @@ public abstract class Element extends Node
 
     @Override
     public Sequence<Node> remove(int index, int count) {
-        if (index < 0
-            || index + count > nodes.getLength()) {
+        if (index < 0 || index + count > nodes.getLength()) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -463,8 +455,7 @@ public abstract class Element extends Node
 
     @Override
     public Node get(int index) {
-        if (index < 0
-            || index > nodes.getLength() - 1) {
+        if (index < 0 || index > nodes.getLength() - 1) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -487,16 +478,14 @@ public abstract class Element extends Node
 
     /**
      * Determines the index of the child node at a given offset.
-     *
+     * 
      * @param offset
-     *
-     * @return
-     * The index of the child node at the given offset.
+     * @return The index of the child node at the given offset.
      */
     public int getNodeAt(int offset) {
-        if (offset < 0
-            || offset >= characterCount) {
-            throw new IndexOutOfBoundsException("offset " + offset + " out of range [0," + characterCount + "]");
+        if (offset < 0 || offset >= characterCount) {
+            throw new IndexOutOfBoundsException("offset " + offset + " out of range [0,"
+                + characterCount + "]");
         }
 
         int i = nodes.getLength() - 1;
@@ -511,11 +500,9 @@ public abstract class Element extends Node
 
     /**
      * Determines the path of the descendant node at a given offset.
-     *
+     * 
      * @param offset
-     *
-     * @return
-     * The path to the descendant node at the given offset.
+     * @return The path to the descendant node at the given offset.
      */
     public Sequence<Integer> getPathAt(int offset) {
         Sequence<Integer> path;
@@ -524,7 +511,7 @@ public abstract class Element extends Node
         Node node = get(index);
 
         if (node instanceof Element) {
-            Element element = (Element)node;
+            Element element = (Element) node;
             path = element.getPathAt(offset - element.getOffset());
         } else {
             path = new ArrayList<>();
@@ -537,17 +524,15 @@ public abstract class Element extends Node
 
     /**
      * Determines the descendant node at a given offset.
-     *
+     * 
      * @param offset
-     *
-     * @return
-     * The descendant node at the given offset.
+     * @return The descendant node at the given offset.
      */
     public Node getDescendantAt(int offset) {
         Node descendant = nodes.get(getNodeAt(offset));
 
         if (descendant instanceof Element) {
-            Element element = (Element)descendant;
+            Element element = (Element) descendant;
             descendant = element.getDescendantAt(offset - element.getOffset());
         }
 
@@ -594,8 +579,7 @@ public abstract class Element extends Node
     public void dumpOffsets() {
         for (int i = 0, n = getLength(); i < n; i++) {
             Node node = get(i);
-            System.out.println("[" + i + "] " + node.getOffset()
-                + ":" + node.getCharacterCount());
+            System.out.println("[" + i + "] " + node.getOffset() + ":" + node.getCharacterCount());
         }
 
         System.out.println();
@@ -643,9 +627,9 @@ public abstract class Element extends Node
 
     /**
      * Sets the currently foreground color.
-     *
-     * @param foregroundColor
-     * The foreground color, or <tt>null</tt> to specify no selection
+     * 
+     * @param foregroundColor The foreground color, or <tt>null</tt> to specify
+     * no selection
      */
     public void setForegroundColor(Color foregroundColor) {
         Color previousForegroundColor = this.foregroundColor;
@@ -658,9 +642,8 @@ public abstract class Element extends Node
 
     /**
      * Sets the currently foreground color.
-     *
-     * @param foregroundColor
-     * The foreground color
+     * 
+     * @param foregroundColor The foreground color
      */
     public void setForegroundColor(String foregroundColor) {
         if (foregroundColor == null) {
@@ -680,9 +663,9 @@ public abstract class Element extends Node
 
     /**
      * Sets the currently background color.
-     *
-     * @param backgroundColor
-     * The background color, or <tt>null</tt> to specify no selection
+     * 
+     * @param backgroundColor The background color, or <tt>null</tt> to specify
+     * no selection
      */
     public void setBackgroundColor(Color backgroundColor) {
         Color previousBackgroundColor = this.backgroundColor;
@@ -695,9 +678,8 @@ public abstract class Element extends Node
 
     /**
      * Sets the currently background color.
-     *
-     * @param backgroundColor
-     * The background color
+     * 
+     * @param backgroundColor The background color
      */
     public void setBackgroundColor(String backgroundColor) {
         if (backgroundColor == null) {

@@ -22,11 +22,10 @@ import java.util.Comparator;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.pivot.collections.adapter.ListAdapter;
 
-
 /**
  * Collection representing a list of files. Each entry in the list is unique;
- * i.e. a single file can't be added to the list more than once.
- * TODO: compute new serailVersionUIDs
+ * i.e. a single file can't be added to the list more than once. TODO: compute
+ * new serailVersionUIDs
  */
 public class FileObjectList extends ListAdapter<FileObject> {
     private static final long serialVersionUID = -6741822480264805279L;

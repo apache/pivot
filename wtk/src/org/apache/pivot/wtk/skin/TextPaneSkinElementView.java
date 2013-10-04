@@ -35,8 +35,8 @@ import org.apache.pivot.wtk.text.Node;
 /**
  * Abstract base class for element views.
  */
-abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
-    implements Sequence<TextPaneSkinNodeView>, Iterable<TextPaneSkinNodeView>, ElementListener {
+abstract class TextPaneSkinElementView extends TextPaneSkinNodeView implements
+    Sequence<TextPaneSkinNodeView>, Iterable<TextPaneSkinNodeView>, ElementListener {
     private ArrayList<TextPaneSkinNodeView> nodeViews = new ArrayList<>();
     private int skinX = 0;
     private int skinY = 0;
@@ -49,7 +49,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
     protected void attach() {
         super.attach();
 
-        Element element = (Element)getNode();
+        Element element = (Element) getNode();
         element.getElementListeners().add(this);
 
         // Attach child node views
@@ -60,7 +60,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
 
     @Override
     protected void detach() {
-        Element element = (Element)getNode();
+        Element element = (Element) getNode();
         element.getElementListeners().remove(this);
 
         // Detach child node views
@@ -168,28 +168,32 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
         }
     }
 
-    protected final void paintChild(Graphics2D graphics, Bounds paintBounds, TextPaneSkinNodeView nodeView) {
+    protected final void paintChild(Graphics2D graphics, Bounds paintBounds,
+        TextPaneSkinNodeView nodeView) {
         Bounds nodeViewBounds = nodeView.getBounds();
 
         // Only paint node views that intersect the current clip rectangle
         if (nodeViewBounds.intersects(paintBounds)) {
             // Create a copy of the current graphics context and
             // translate to the node view's coordinate system
-            Graphics2D nodeViewGraphics = (Graphics2D)graphics.create();
+            Graphics2D nodeViewGraphics = (Graphics2D) graphics.create();
 
             Color styledBackgroundColor = getStyledBackgroundColor();
             if (styledBackgroundColor != null) {
                 // don't paint over the selection background
                 Area selection = getTextPaneSkin().getSelection();
                 if (selection != null) {
-                    Area fillArea = new Area(new Rectangle(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height));
-                    selection = selection.createTransformedArea(AffineTransform.getTranslateInstance(-skinX, -skinY));
+                    Area fillArea = new Area(new Rectangle(nodeViewBounds.x, nodeViewBounds.y,
+                        nodeViewBounds.width, nodeViewBounds.height));
+                    selection = selection.createTransformedArea(AffineTransform.getTranslateInstance(
+                        -skinX, -skinY));
                     fillArea.subtract(selection);
                     nodeViewGraphics.setColor(styledBackgroundColor);
                     nodeViewGraphics.fill(fillArea);
                 } else {
                     nodeViewGraphics.setColor(styledBackgroundColor);
-                    nodeViewGraphics.fillRect(nodeViewBounds.x, nodeViewBounds.y, nodeViewBounds.width, nodeViewBounds.height);
+                    nodeViewGraphics.fillRect(nodeViewBounds.x, nodeViewBounds.y,
+                        nodeViewBounds.width, nodeViewBounds.height);
                 }
             }
             nodeViewGraphics.translate(nodeViewBounds.x, nodeViewBounds.y);
@@ -231,8 +235,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
             int nodeViewOffset = nodeView.getOffset();
             int characterCount = nodeView.getCharacterCount();
 
-            if (offset >= nodeViewOffset
-                && offset < nodeViewOffset + characterCount) {
+            if (offset >= nodeViewOffset && offset < nodeViewOffset + characterCount) {
                 characterBounds = nodeView.getCharacterBounds(offset - nodeViewOffset);
 
                 if (characterBounds != null) {
@@ -264,8 +267,10 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
 
     @Override
     public void fontChanged(Element element, Font previousFont) {
-        // because children may depend on parents for their style information, we need to invalidate the whole tree
-        // TODO, we don't need to invalidate the whole tree, just the sub-tree from here down
+        // because children may depend on parents for their style information,
+        // we need to invalidate the whole tree
+        // TODO, we don't need to invalidate the whole tree, just the sub-tree
+        // from here down
         getTextPaneSkin().invalidateNodeViewTree();
     }
 
@@ -276,22 +281,28 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView
 
     @Override
     public void foregroundColorChanged(Element element, Color previousForegroundColor) {
-        // Because children may depend on parents for their style information, we need to invalidate the whole tree.
-        // TODO we don't need to invalidate the whole tree, just the sub-tree from here down.
+        // Because children may depend on parents for their style information,
+        // we need to invalidate the whole tree.
+        // TODO we don't need to invalidate the whole tree, just the sub-tree
+        // from here down.
         getTextPaneSkin().invalidateNodeViewTree();
     }
 
     @Override
     public void underlineChanged(Element element) {
-        // Because children may depend on parents for their style information, we need to invalidate the whole tree.
-        // TODO we don't need to invalidate the whole tree, just the sub-tree from here down.
+        // Because children may depend on parents for their style information,
+        // we need to invalidate the whole tree.
+        // TODO we don't need to invalidate the whole tree, just the sub-tree
+        // from here down.
         getTextPaneSkin().invalidateNodeViewTree();
     }
 
     @Override
     public void strikethroughChanged(Element element) {
-        // Because children may depend on parents for their style information, we need to invalidate the whole tree.
-        // TODO we don't need to invalidate the whole tree, just the sub-tree from here down.
+        // Because children may depend on parents for their style information,
+        // we need to invalidate the whole tree.
+        // TODO we don't need to invalidate the whole tree, just the sub-tree
+        // from here down.
         getTextPaneSkin().invalidateNodeViewTree();
     }
 

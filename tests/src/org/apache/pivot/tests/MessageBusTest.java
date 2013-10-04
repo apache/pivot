@@ -21,23 +21,22 @@ import org.apache.pivot.util.MessageBusListener;
 
 public class MessageBusTest {
     public enum TestMessage {
-        HELLO,
-        GOODBYE
+        HELLO, GOODBYE
     }
 
     public static void main(String[] args) {
-        MessageBusListener<TestMessage> testMessageListener =
-            new MessageBusListener<TestMessage>() {
-                @Override
-                public void messageSent(TestMessage message) {
-                    System.out.println(message);
-                }
-            };
+        MessageBusListener<TestMessage> testMessageListener = new MessageBusListener<TestMessage>() {
+            @Override
+            public void messageSent(TestMessage message) {
+                System.out.println(message);
+            }
+        };
 
-        MessageBus.subscribe(TestMessage.class, testMessageListener);  // subscribe
-        MessageBus.sendMessage(TestMessage.HELLO);  // a message will be printed
+        MessageBus.subscribe(TestMessage.class, testMessageListener); // subscribe
+        MessageBus.sendMessage(TestMessage.HELLO); // a message will be printed
 
-        MessageBus.unsubscribe(TestMessage.class, testMessageListener);  // unsubscribe
-        MessageBus.sendMessage(TestMessage.GOODBYE);  // the message will not be printed
+        MessageBus.unsubscribe(TestMessage.class, testMessageListener); // unsubscribe
+        MessageBus.sendMessage(TestMessage.GOODBYE); // the message will not be
+                                                     // printed
     }
 }

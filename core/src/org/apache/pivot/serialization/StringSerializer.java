@@ -25,8 +25,8 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 /**
- * Implementation of the {@link Serializer} interface that reads data from
- * and writes data to Java Strings.
+ * Implementation of the {@link Serializer} interface that reads data from and
+ * writes data to Java Strings.
  */
 public class StringSerializer implements Serializer<String> {
     private final Charset charset;
@@ -54,12 +54,10 @@ public class StringSerializer implements Serializer<String> {
 
     /**
      * Reads plain text data from an input stream.
-     *
-     * @param inputStream
-     * The input stream from which data will be read.
-     *
-     * @return
-     * An instance of {@link String} containing the text read from the input stream.
+     * 
+     * @param inputStream The input stream from which data will be read.
+     * @return An instance of {@link String} containing the text read from the
+     * input stream.
      */
     @Override
     public String readObject(InputStream inputStream) throws IOException, SerializationException {
@@ -91,16 +89,13 @@ public class StringSerializer implements Serializer<String> {
 
     /**
      * Writes plain text data to an output stream.
-     *
-     * @param text
-     * The text to be written to the output stream.
-     *
-     * @param outputStream
-     * The output stream to which data will be written.
+     * 
+     * @param text The text to be written to the output stream.
+     * @param outputStream The output stream to which data will be written.
      */
     @Override
-    public void writeObject(String text, OutputStream outputStream)
-        throws IOException, SerializationException {
+    public void writeObject(String text, OutputStream outputStream) throws IOException,
+        SerializationException {
         if (text == null) {
             throw new IllegalArgumentException("text is null.");
         }

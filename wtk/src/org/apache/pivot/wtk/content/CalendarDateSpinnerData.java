@@ -29,20 +29,18 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.ListenerList;
 
-
 /**
- * Spinner data model that presents a bounded list of calendar dates.
- * <p>
- * This is a lightweight class that spoofs the actual list data by using an
- * internal calendar instance from which <tt>CalendarDate</tt> instances are
- * created on demand.
+ * Spinner data model that presents a bounded list of calendar dates. <p> This
+ * is a lightweight class that spoofs the actual list data by using an internal
+ * calendar instance from which <tt>CalendarDate</tt> instances are created on
+ * demand.
  */
 public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
      * Iterator that simply wraps calls to the list. Since the internal list
      * data is spoofed, each accessor runs in constant time, so there's no
-     * performance hit in making the iterator delegate its implementation to
-     * the list.
+     * performance hit in making the iterator delegate its implementation to the
+     * list.
      */
     private class DataIterator implements Iterator<CalendarDate> {
         private int index = 0;
@@ -73,8 +71,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     // Calculated during construction
     private transient int length;
 
-    private ListListenerList<CalendarDate> listListeners =
-        new ListListenerList<>();
+    private ListListenerList<CalendarDate> listListeners = new ListListenerList<>();
 
     /**
      * Creates a new <tt>CalendarDateSpinnerData</tt> bounded from
@@ -87,12 +84,9 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
      * Creates a new <tt>CalendarDateSpinnerData</tt> bounded by the specified
      * calendar dates (inclusive).
-     *
-     * @param lowerBound
-     * The earliest date to include in this spinner data.
-     *
-     * @param upperBound
-     * The latest date to include in this spinner data.
+     * 
+     * @param lowerBound The earliest date to include in this spinner data.
+     * @param upperBound The latest date to include in this spinner data.
      */
     public CalendarDateSpinnerData(CalendarDate lowerBound, CalendarDate upperBound) {
         if (lowerBound == null) {
@@ -107,8 +101,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
             throw new IllegalArgumentException("lowerBound is after upperBound.");
         }
 
-        calendar = new GregorianCalendar(lowerBound.year, lowerBound.month,
-            lowerBound.day + 1);
+        calendar = new GregorianCalendar(lowerBound.year, lowerBound.month, lowerBound.day + 1);
         calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
         calendarIndex = 0;
 
@@ -119,9 +112,8 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
         upperBoundCalendar.setTimeZone(TimeZone.getTimeZone("GMT"));
         long lowerBoundMilliseconds = calendar.getTimeInMillis();
         long upperBoundMilliseconds = upperBoundCalendar.getTimeInMillis();
-        long indexDiff = (upperBoundMilliseconds - lowerBoundMilliseconds) /
-            (1000l * 60 * 60 * 24);
-        length = (int)indexDiff + 1;
+        long indexDiff = (upperBoundMilliseconds - lowerBoundMilliseconds) / (1000l * 60 * 60 * 24);
+        length = (int) indexDiff + 1;
     }
 
     /**
@@ -166,9 +158,8 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
 
     /**
      * Gets the calendar date at the specified index.
-     *
-     * @param index
-     * The index of the calendar date to retrieve.
+     * 
+     * @param index The index of the calendar date to retrieve.
      */
     @Override
     public CalendarDate get(int index) {
@@ -197,7 +188,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
         long itemMilliseconds = tmpCalendar.getTimeInMillis();
 
         long indexDiff = (itemMilliseconds - currentMilliseconds) / (1000l * 60 * 60 * 24);
-        int index = calendarIndex + (int)indexDiff;
+        int index = calendarIndex + (int) indexDiff;
 
         return (index < 0 || index >= length) ? -1 : index;
     }
@@ -217,9 +208,8 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
 
     /**
      * Gets the number of entries in this list.
-     *
-     * @return
-     * The number of calendar dates in this list.
+     * 
+     * @return The number of calendar dates in this list.
      */
     @Override
     public int getLength() {

@@ -35,22 +35,25 @@ public class ListButtons extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        listButton = (ListButton)namespace.get("listButton");
-        imageView = (ImageView)namespace.get("imageView");
+        listButton = (ListButton) namespace.get("listButton");
+        imageView = (ImageView) namespace.get("imageView");
 
         listButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener.Adapter() {
             @Override
-            public void selectedItemChanged(ListButton listButtonArgument, Object previousSelectedItem) {
+            public void selectedItemChanged(ListButton listButtonArgument,
+                Object previousSelectedItem) {
                 Object selectedItem = listButtonArgument.getSelectedItem();
 
                 if (selectedItem != null) {
                     // Get the image URL for the selected item
                     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                    URL imageURL = classLoader.getResource("org/apache/pivot/tutorials/" + selectedItem);
+                    URL imageURL = classLoader.getResource("org/apache/pivot/tutorials/"
+                        + selectedItem);
 
-                    // If the image has not been added to the resource cache yet,
+                    // If the image has not been added to the resource cache
+                    // yet,
                     // add it
-                    Image image = (Image)ApplicationContext.getResourceCache().get(imageURL);
+                    Image image = (Image) ApplicationContext.getResourceCache().get(imageURL);
 
                     if (image == null) {
                         try {

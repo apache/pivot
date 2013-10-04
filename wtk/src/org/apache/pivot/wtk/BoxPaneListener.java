@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface BoxPaneListener {
     /**
      * Called when a box pane's orientation has changed.
-     *
+     * 
      * @param boxPane
      */
     public void orientationChanged(BoxPane boxPane);

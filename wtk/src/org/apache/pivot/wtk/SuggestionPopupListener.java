@@ -46,15 +46,16 @@ public interface SuggestionPopupListener {
 
     /**
      * Called when a suggestion popup's suggestions have changed.
-     *
+     * 
      * @param suggestionPopup
      * @param previousSuggestionData
      */
-    public void suggestionDataChanged(SuggestionPopup suggestionPopup, List<?> previousSuggestionData);
+    public void suggestionDataChanged(SuggestionPopup suggestionPopup,
+        List<?> previousSuggestionData);
 
     /**
      * Called when a suggestion popup's item renderer has changed.
-     *
+     * 
      * @param suggestionPopup
      * @param previousSuggestionRenderer
      */
@@ -63,7 +64,7 @@ public interface SuggestionPopupListener {
 
     /**
      * Called when a suggestion popup's list size has changed.
-     *
+     * 
      * @param suggestionPopup
      * @param previousListSize
      */

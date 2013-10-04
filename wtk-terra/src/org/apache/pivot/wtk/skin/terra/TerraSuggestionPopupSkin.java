@@ -32,6 +32,8 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Mouse;
@@ -44,8 +46,6 @@ import org.apache.pivot.wtk.SuggestionPopupStateListener;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.Keyboard.KeyCode;
-import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.effects.Transition;
 import org.apache.pivot.wtk.effects.TransitionListener;
@@ -54,8 +54,8 @@ import org.apache.pivot.wtk.skin.WindowSkin;
 /**
  * Terra suggestion popup skin.
  */
-public class TerraSuggestionPopupSkin extends WindowSkin
-    implements SuggestionPopupListener, SuggestionPopupSelectionListener, SuggestionPopupStateListener {
+public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPopupListener,
+    SuggestionPopupSelectionListener, SuggestionPopupStateListener {
     private Panorama listViewPanorama;
     private Border listViewBorder;
 
@@ -71,14 +71,13 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+            SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
             TextInput textInput = suggestionPopup.getTextInput();
 
-            Display display = (Display)container;
+            Display display = (Display) container;
             Component descendant = display.getDescendantAt(x, y);
 
-            if (!suggestionPopup.isAncestor(descendant)
-                && descendant != textInput) {
+            if (!suggestionPopup.isAncestor(descendant) && descendant != textInput) {
                 returnFocusToTextInput = false;
                 suggestionPopup.close(false);
             }
@@ -96,10 +95,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     private ComponentStateListener textInputStateListener = new ComponentStateListener.Adapter() {
         @Override
         public void focusedChanged(Component component, Component obverseComponent) {
-            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+            SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
 
-            if (!component.isFocused()
-                && !suggestionPopup.containsFocus()) {
+            if (!component.isFocused() && !suggestionPopup.containsFocus()) {
                 returnFocusToTextInput = false;
                 suggestionPopup.close();
             }
@@ -114,15 +112,13 @@ public class TerraSuggestionPopupSkin extends WindowSkin
          * false.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode,
-            Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
             boolean consumed = false;
 
-            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+            SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
 
             if (keyCode == Keyboard.KeyCode.DOWN) {
-                if (listView.getSelectedIndex() == -1
-                    && listView.getListData().getLength() > 0) {
+                if (listView.getSelectedIndex() == -1 && listView.getListData().getLength() > 0) {
                     listView.setSelectedIndex(0);
                 }
 
@@ -142,7 +138,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         public void selectedItemChanged(ListView listViewArgument, Object previousSelectedItem) {
             int index = listViewArgument.getSelectedIndex();
 
-            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+            SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
             suggestionPopup.setSelectedIndex(index);
         }
     };
@@ -152,12 +148,12 @@ public class TerraSuggestionPopupSkin extends WindowSkin
          * {@link KeyCode#TAB TAB} Close the suggestion popup with a 'result' of
          * true, and transfer focus forwards from the TextInput.<br>
          * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Close the
-         * suggestion popup with a 'result' of true, and transfer focus backwards
-         * from the TextInput.<br>
+         * suggestion popup with a 'result' of true, and transfer focus
+         * backwards from the TextInput.<br>
          */
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+            SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
             TextInput textInput = suggestionPopup.getTextInput();
 
             switch (keyCode) {
@@ -165,8 +161,8 @@ public class TerraSuggestionPopupSkin extends WindowSkin
                     returnFocusToTextInput = false;
                     suggestionPopup.close(true);
 
-                    FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ?
-                        FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
+                    FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
+                        : FocusTraversalDirection.FORWARD;
                     textInput.transferFocus(direction);
 
                     break;
@@ -184,7 +180,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     private static final int DEFAULT_CLOSE_TRANSITION_DURATION = 150;
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
-    public TerraSuggestionPopupSkin () {
+    public TerraSuggestionPopupSkin() {
         listView.getStyles().put("variableItemHeight", true);
         listView.getListViewSelectionListeners().add(listViewSelectionListener);
         listView.getComponentKeyListeners().add(listViewKeyListener);
@@ -201,7 +197,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     public void install(Component component) {
         super.install(component);
 
-        SuggestionPopup suggestionPopup = (SuggestionPopup)component;
+        SuggestionPopup suggestionPopup = (SuggestionPopup) component;
         suggestionPopup.getSuggestionPopupListeners().add(this);
         suggestionPopup.getSuggestionPopupSelectionListeners().add(this);
         suggestionPopup.getSuggestionPopupStateListeners().add(this);
@@ -217,7 +213,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     public Font getFont() {
-        return (Font)listView.getStyles().get("font");
+        return (Font) listView.getStyles().get("font");
     }
 
     public void setFont(Font font) {
@@ -241,7 +237,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     public Color getColor() {
-        return (Color)listView.getStyles().get("color");
+        return (Color) listView.getStyles().get("color");
     }
 
     public void setColor(Color color) {
@@ -257,7 +253,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     public Color getBorderColor() {
-        return (Color)listViewBorder.getStyles().get("color");
+        return (Color) listViewBorder.getStyles().get("color");
     }
 
     public void setBorderColor(Color borderColor) {
@@ -290,7 +286,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-        SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+        SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
         suggestionPopup.close(true);
 
         return true;
@@ -298,13 +294,12 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
     /**
      * {@link KeyCode#ENTER ENTER} Close the suggestion popup with a 'result' of
-     * true.<br>
-     * {@link KeyCode#ESCAPE ESCAPE} Close the suggestion popup with a 'result'
-     * of false.
+     * true.<br> {@link KeyCode#ESCAPE ESCAPE} Close the suggestion popup with a
+     * 'result' of false.
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        SuggestionPopup suggestionPopup = (SuggestionPopup)getComponent();
+        SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
 
         switch (keyCode) {
             case Keyboard.KeyCode.ENTER: {
@@ -330,7 +325,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
         super.windowOpened(window);
 
         // Adjust for list size
-        SuggestionPopup suggestionPopup = (SuggestionPopup)window;
+        SuggestionPopup suggestionPopup = (SuggestionPopup) window;
 
         int listSize = suggestionPopup.getListSize();
         if (listSize == -1) {
@@ -368,8 +363,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin
 
     @Override
     public void windowCloseVetoed(Window window, Vote reason) {
-        if (reason == Vote.DENY
-            && closeTransition != null) {
+        if (reason == Vote.DENY && closeTransition != null) {
             closeTransition.stop();
 
             listViewBorder.setEnabled(true);
@@ -406,7 +400,8 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     @Override
-    public void selectedSuggestionChanged(SuggestionPopup suggestionPopup, Object previousSelectedSuggestion) {
+    public void selectedSuggestionChanged(SuggestionPopup suggestionPopup,
+        Object previousSelectedSuggestion) {
         TextInput textInput = suggestionPopup.getTextInput();
 
         Object suggestion = suggestionPopup.getSelectedSuggestion();
@@ -417,13 +412,13 @@ public class TerraSuggestionPopupSkin extends WindowSkin
     }
 
     @Override
-    public Vote previewSuggestionPopupClose(final SuggestionPopup suggestionPopup, final boolean result) {
+    public Vote previewSuggestionPopupClose(final SuggestionPopup suggestionPopup,
+        final boolean result) {
         if (closeTransition == null) {
             listViewBorder.setEnabled(false);
 
-            closeTransition = new FadeWindowTransition(suggestionPopup,
-                closeTransitionDuration, closeTransitionRate,
-                dropShadowDecorator);
+            closeTransition = new FadeWindowTransition(suggestionPopup, closeTransitionDuration,
+                closeTransitionRate, dropShadowDecorator);
 
             closeTransition.start(new TransitionListener() {
                 @Override
@@ -433,14 +428,12 @@ public class TerraSuggestionPopupSkin extends WindowSkin
             });
         }
 
-        return (closeTransition != null
-            && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
+        return (closeTransition != null && closeTransition.isRunning()) ? Vote.DEFER : Vote.APPROVE;
     }
 
     @Override
     public void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason) {
-        if (reason == Vote.DENY
-            && closeTransition != null) {
+        if (reason == Vote.DENY && closeTransition != null) {
             closeTransition.stop();
 
             listViewBorder.setEnabled(true);

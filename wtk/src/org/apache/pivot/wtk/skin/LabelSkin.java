@@ -77,13 +77,13 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     public void install(Component component) {
         super.install(component);
 
-        Label label = (Label)getComponent();
+        Label label = (Label) getComponent();
         label.getLabelListeners().add(this);
     }
 
     @Override
     public int getPreferredWidth(int height) {
-        Label label = (Label)getComponent();
+        Label label = (Label) getComponent();
         String text = label.getText();
 
         int preferredWidth = 0;
@@ -98,7 +98,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
             for (String line : str) {
                 Rectangle2D stringBounds = font.getStringBounds(line, fontRenderContext);
-                int w = (int)Math.ceil(stringBounds.getWidth());
+                int w = (int) Math.ceil(stringBounds.getWidth());
 
                 if (w > preferredWidth) {
                     preferredWidth = w;
@@ -113,7 +113,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     @Override
     public int getPreferredHeight(int width) {
-        Label label = (Label)getComponent();
+        Label label = (Label) getComponent();
         String text = label.getText();
 
         float preferredHeight;
@@ -126,9 +126,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
             preferredHeight = lineHeight;
 
             int n = text.length();
-            if (n > 0
-                && wrapText
-                && widthUpdated != -1) {
+            if (n > 0 && wrapText && widthUpdated != -1) {
                 // Adjust width for padding
                 widthUpdated -= (padding.left + padding.right);
 
@@ -152,8 +150,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                             fontRenderContext);
                         lineWidth += characterBounds.getWidth();
 
-                        if (lineWidth > widthUpdated
-                            && lastWhitespaceIndex != -1) {
+                        if (lineWidth > widthUpdated && lastWhitespaceIndex != -1) {
                             i = lastWhitespaceIndex;
 
                             lineWidth = 0;
@@ -172,18 +169,18 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
         preferredHeight += (padding.top + padding.bottom);
 
-        return (int)Math.ceil(preferredHeight);
+        return (int) Math.ceil(preferredHeight);
     }
 
     @Override
     public Dimensions getPreferredSize() {
-        Label label = (Label)getComponent();
+        Label label = (Label) getComponent();
         String text = label.getText();
 
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
-        int lineHeight = (int)Math.ceil(lm.getHeight());
+        int lineHeight = (int) Math.ceil(lm.getHeight());
 
         int preferredHeight = 0;
         int preferredWidth = 0;
@@ -198,7 +195,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
             for (String line : str) {
                 Rectangle2D stringBounds = font.getStringBounds(line, fontRenderContext);
-                int w = (int)Math.ceil(stringBounds.getWidth());
+                int w = (int) Math.ceil(stringBounds.getWidth());
 
                 if (w > preferredWidth) {
                     preferredWidth = w;
@@ -223,9 +220,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
         float textHeightLocal;
         if (wrapText) {
-            textHeightLocal = Math.max(getPreferredHeight(width) - (padding.top + padding.bottom), 0);
+            textHeightLocal = Math.max(getPreferredHeight(width) - (padding.top + padding.bottom),
+                0);
         } else {
-            textHeightLocal = (int)Math.ceil(lm.getHeight());
+            textHeightLocal = (int) Math.ceil(lm.getHeight());
         }
 
         int baseline = -1;
@@ -255,7 +253,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     @Override
     public void layout() {
-        Label label = (Label)getComponent();
+        Label label = (Label) getComponent();
         String text = label.getText();
 
         glyphVectors = new ArrayList<>();
@@ -275,10 +273,14 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     float lineWidth = 0;
                     int lastWhitespaceIndex = -1;
 
-                    // NOTE We use a character iterator here only because it is the most
-                    // efficient way to measure the character bounds (as of Java 6, the version
-                    // of Font#getStringBounds() that takes a String performs a string copy,
-                    // whereas the version that takes a character iterator does not)
+                    // NOTE We use a character iterator here only because it is
+                    // the most
+                    // efficient way to measure the character bounds (as of Java
+                    // 6, the version
+                    // of Font#getStringBounds() that takes a String performs a
+                    // string copy,
+                    // whereas the version that takes a character iterator does
+                    // not)
                     StringCharacterIterator ci = new StringCharacterIterator(text);
                     while (i < n) {
                         char c = text.charAt(i);
@@ -293,11 +295,11 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                                 lastWhitespaceIndex = i;
                             }
 
-                            Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1, fontRenderContext);
+                            Rectangle2D characterBounds = font.getStringBounds(ci, i, i + 1,
+                                fontRenderContext);
                             lineWidth += characterBounds.getWidth();
 
-                            if (lineWidth > width
-                                && lastWhitespaceIndex != -1) {
+                            if (lineWidth > width && lastWhitespaceIndex != -1) {
                                 appendLine(text, start, lastWhitespaceIndex, fontRenderContext);
 
                                 i = lastWhitespaceIndex;
@@ -329,7 +331,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     @Override
     public void paint(Graphics2D graphics) {
-        Label label = (Label)this.getComponent();
+        Label label = (Label) this.getComponent();
 
         int width = getWidth();
         int height = getHeight();
@@ -381,7 +383,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                 GlyphVector glyphVector = glyphVectors.get(i);
 
                 Rectangle2D textBounds = glyphVector.getLogicalBounds();
-                float lineWidth = (float)textBounds.getWidth();
+                float lineWidth = (float) textBounds.getWidth();
 
                 float x = 0;
                 switch (horizontalAlignment) {
@@ -408,8 +410,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     if (text != null && text.length() > 0) {
                         graphics.drawString(text, x, y + ascent);
                     }
-                }
-                else {
+                } else {
                     graphics.drawGlyphVector(glyphVector, x, y + ascent);
                 }
 
@@ -443,8 +444,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * @return
-     * <tt>false</tt>; labels are not focusable.
+     * @return <tt>false</tt>; labels are not focusable.
      */
     @Override
     public boolean isFocusable() {
@@ -453,8 +453,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     @Override
     public boolean isOpaque() {
-        return (backgroundColor != null
-            && backgroundColor.getTransparency() == Transparency.OPAQUE);
+        return (backgroundColor != null && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     /**
@@ -478,6 +477,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the font used in rendering the Label's text
+     * 
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
@@ -490,6 +490,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the font used in rendering the Label's text
+     * 
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
@@ -521,7 +522,9 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the foreground color of the text of the label.
-     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     * 
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
+     * values recognized by Pivot}.
      */
     public final void setColor(String color) {
         if (color == null) {
@@ -552,7 +555,9 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the foreground color of the text of the label when disabled.
-     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     * 
+     * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
+     * values recognized by Pivot}.
      */
     public final void setDisabledColor(String color) {
         if (color == null) {
@@ -579,7 +584,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the background color of the label.
-     * @param backgroundColor Any of the {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
+     * 
+     * @param backgroundColor Any of the
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by
+     * Pivot}.
      */
     public final void setBackgroundColor(String backgroundColor) {
         if (backgroundColor == null) {
@@ -625,14 +633,16 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Returns the amount of space to leave between the edge of the Label and its text.
+     * Returns the amount of space to leave between the edge of the Label and
+     * its text.
      */
     public Insets getPadding() {
         return padding;
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the Label and its text.
+     * Sets the amount of space to leave between the edge of the Label and its
+     * text.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -644,8 +654,11 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the Label and its text.
-     * @param padding A dictionary with keys in the set {left, top, bottom, right}.
+     * Sets the amount of space to leave between the edge of the Label and its
+     * text.
+     * 
+     * @param padding A dictionary with keys in the set {left, top, bottom,
+     * right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
@@ -656,16 +669,16 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the Label and its text,
-     * uniformly on all four edges.
+     * Sets the amount of space to leave between the edge of the Label and its
+     * text, uniformly on all four edges.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the Label and its text,
-     * uniformly on all four edges.
+     * Sets the amount of space to leave between the edge of the Label and its
+     * text, uniformly on all four edges.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {
@@ -676,10 +689,11 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Sets the amount of space to leave between the edge of the Label and its text.
-     *
-     * @param padding A string containing an integer or a JSON dictionary with keys
-     * left, top, bottom, and/or right.
+     * Sets the amount of space to leave between the edge of the Label and its
+     * text.
+     * 
+     * @param padding A string containing an integer or a JSON dictionary with
+     * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
         if (padding == null) {
@@ -690,18 +704,19 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Returns true if the text of the label will be wrapped to fit the Label's width.
+     * Returns true if the text of the label will be wrapped to fit the Label's
+     * width.
      */
     public boolean getWrapText() {
         return wrapText;
     }
 
     /**
-     * Sets whether the text of the label will be wrapped to fit the Label's width.
-     * Note that for wrapping to occur, the Label must specify a preferred width or
-     * be placed in a container that constrains its width.
-     * Also note that newline characters (if wrapping is set true) will cause a hard
-     * line break.
+     * Sets whether the text of the label will be wrapped to fit the Label's
+     * width. Note that for wrapping to occur, the Label must specify a
+     * preferred width or be placed in a container that constrains its width.
+     * Also note that newline characters (if wrapping is set true) will cause a
+     * hard line break.
      */
     public void setWrapText(boolean wrapText) {
         this.wrapText = wrapText;

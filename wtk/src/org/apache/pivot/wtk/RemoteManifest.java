@@ -31,7 +31,6 @@ import org.apache.pivot.io.FileList;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
 
-
 /**
  * Manifest class that acts as a proxy to remote clipboard or drag/drop data.
  */
@@ -47,7 +46,7 @@ public class RemoteManifest implements Manifest {
     private static final String FILE_URI_SCHEME = "file";
 
     RemoteManifest(Transferable transferable) {
-        assert(transferable != null);
+        assert (transferable != null);
         this.transferable = transferable;
 
         DataFlavor[] transferDataFlavors = transferable.getTransferDataFlavors();
@@ -73,7 +72,7 @@ public class RemoteManifest implements Manifest {
     public String getText() throws IOException {
         String text = null;
         try {
-            text = (String)transferable.getTransferData(textDataFlavor);
+            text = (String) transferable.getTransferData(textDataFlavor);
         } catch (UnsupportedFlavorException exception) {
             // No-op
         }
@@ -90,7 +89,7 @@ public class RemoteManifest implements Manifest {
     public Image getImage() throws IOException {
         Image image = null;
         try {
-            image = new Picture((BufferedImage)transferable.getTransferData(imageDataFlavor));
+            image = new Picture((BufferedImage) transferable.getTransferData(imageDataFlavor));
         } catch (UnsupportedFlavorException exception) {
             // No-op
         }
@@ -110,12 +109,12 @@ public class RemoteManifest implements Manifest {
 
         try {
             if (fileListDataFlavor != null) {
-                fileList = new FileList((java.util.List<File>)
-                    transferable.getTransferData(fileListDataFlavor));
+                fileList = new FileList(
+                    (java.util.List<File>) transferable.getTransferData(fileListDataFlavor));
             } else if (uriListDataFlavor != null) {
                 fileList = new FileList();
 
-                String uriList = (String)transferable.getTransferData(uriListDataFlavor);
+                String uriList = (String) transferable.getTransferData(uriListDataFlavor);
                 LineNumberReader reader = new LineNumberReader(new StringReader(uriList));
 
                 try {
@@ -124,8 +123,7 @@ public class RemoteManifest implements Manifest {
                         URI uri = new URI(line);
                         String scheme = uri.getScheme();
 
-                        if (scheme != null
-                            && scheme.equalsIgnoreCase(FILE_URI_SCHEME)) {
+                        if (scheme != null && scheme.equalsIgnoreCase(FILE_URI_SCHEME)) {
                             File file = new File(uri);
                             fileList.add(file);
                         }
@@ -145,8 +143,7 @@ public class RemoteManifest implements Manifest {
 
     @Override
     public boolean containsFileList() {
-        return (fileListDataFlavor != null
-            || uriListDataFlavor != null);
+        return (fileListDataFlavor != null || uriListDataFlavor != null);
     }
 
     @Override

@@ -23,13 +23,11 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 
-
 /**
  * {@link Task} that runs a sequence of tasks in series and notifies listeners
  * when all tasks are complete.
  */
-public class TaskSequence extends Task<Void>
-    implements Sequence<Task<?>>, Iterable<Task<?>> {
+public class TaskSequence extends Task<Void> implements Sequence<Task<?>>, Iterable<Task<?>> {
     private ArrayList<Task<?>> tasks = new ArrayList<>();
 
     public TaskSequence() {
@@ -64,7 +62,7 @@ public class TaskSequence extends Task<Void>
                 throw new AbortException();
             }
 
-            ((Task<Object>)task).execute(taskListener);
+            ((Task<Object>) task).execute(taskListener);
 
             try {
                 wait();

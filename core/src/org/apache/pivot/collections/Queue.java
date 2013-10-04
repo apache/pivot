@@ -28,8 +28,8 @@ public interface Queue<T> extends Collection<T> {
     /**
      * Queue listener list.
      */
-    public static class QueueListenerList<T> extends ListenerList<QueueListener<T>>
-        implements QueueListener<T> {
+    public static class QueueListenerList<T> extends ListenerList<QueueListener<T>> implements
+        QueueListener<T> {
         @Override
         public void itemEnqueued(Queue<T> queue, T item) {
             for (QueueListener<T> listener : this) {
@@ -60,36 +60,33 @@ public interface Queue<T> extends Collection<T> {
     }
 
     /**
-     * Enqueues an item. If the queue is unsorted, the item is added at the
-     * tail of the queue (index <tt>0</tt>). Otherwise, it is inserted at the
+     * Enqueues an item. If the queue is unsorted, the item is added at the tail
+     * of the queue (index <tt>0</tt>). Otherwise, it is inserted at the
      * appropriate index.
-     *
-     * @param item
-     * The item to add to the queue.
+     * 
+     * @param item The item to add to the queue.
      */
     public void enqueue(T item);
 
     /**
      * Removes the item from the head of the queue and returns it. Calling this
-     * method should have the same effect as:
-     *
-     * <code>remove(getLength() - 1, 1);</code>
+     * method should have the same effect as: <code>remove(getLength() - 1,
+     * 1);</code>
      */
     public T dequeue();
 
     /**
      * Returns the item at the head of the queue without removing it from the
      * queue. Returns null if the queue contains no items. Will also return null
-     * if the head item in the queue is null. <tt>isEmpty()</tt> can be used
-     * to distinguish between these two cases.
+     * if the head item in the queue is null. <tt>isEmpty()</tt> can be used to
+     * distinguish between these two cases.
      */
     public T peek();
 
     /**
      * Tests the emptiness of the queue.
-     *
-     * @return
-     * <tt>true</tt> if the queue contains no items; <tt>false</tt>,
+     * 
+     * @return <tt>true</tt> if the queue contains no items; <tt>false</tt>,
      * otherwise.
      */
     @Override

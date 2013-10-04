@@ -16,7 +16,10 @@
  */
 package org.apache.pivot.collections.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
@@ -107,7 +110,7 @@ public class ArrayListTest {
         ArrayList<Object> list = new ArrayList<Object>("a", "b", "c");
 
         Sequence<?> sequence = list;
-        list = new ArrayList<>((Sequence<Object>)sequence);
+        list = new ArrayList<>((Sequence<Object>) sequence);
 
         assertEquals(list.getLength(), 3);
         assertEquals(list.get(0), "a");

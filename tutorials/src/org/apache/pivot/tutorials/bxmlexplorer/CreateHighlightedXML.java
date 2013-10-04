@@ -134,7 +134,6 @@ public class CreateHighlightedXML {
         return buf.toString();
     }
 
-
     public static final class TestApplication extends Application.Adapter {
         private Window window = null;
 

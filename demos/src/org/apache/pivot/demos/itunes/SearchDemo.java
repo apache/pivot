@@ -30,9 +30,9 @@ import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.web.GetQuery;
 import org.apache.pivot.wtk.ActivityIndicator;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
@@ -45,14 +45,22 @@ import org.apache.pivot.wtk.media.Image;
 public class SearchDemo implements Application {
     private Window window = null;
 
-    @BXML private TextInput termTextInput;
-    @BXML private PushButton searchButton;
-    @BXML private Label statusLabel;
-    @BXML private TableView resultsTableView;
-    @BXML private BoxPane activityIndicatorBoxPane;
-    @BXML private ActivityIndicator activityIndicator;
-    @BXML private ImageView artworkImageView;
-    @BXML private PushButton previewButton;
+    @BXML
+    private TextInput termTextInput;
+    @BXML
+    private PushButton searchButton;
+    @BXML
+    private Label statusLabel;
+    @BXML
+    private TableView resultsTableView;
+    @BXML
+    private BoxPane activityIndicatorBoxPane;
+    @BXML
+    private ActivityIndicator activityIndicator;
+    @BXML
+    private ImageView artworkImageView;
+    @BXML
+    private PushButton previewButton;
 
     private GetQuery getQuery = null;
 
@@ -75,7 +83,7 @@ public class SearchDemo implements Application {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         bxmlSerializer.getNamespace().put(APPLICATION_KEY, this);
 
-        window = (Window)bxmlSerializer.readObject(SearchDemo.class, "search_demo.bxml");
+        window = (Window) bxmlSerializer.readObject(SearchDemo.class, "search_demo.bxml");
         bxmlSerializer.bind(this, SearchDemo.class);
 
         searchButton.setButtonData(searchImage);
@@ -105,19 +113,14 @@ public class SearchDemo implements Application {
 
     /**
      * Executes a search.
-     *
-     * @param term
-     * The search term.
-     *
-     * @throws IllegalArgumentException
-     * If <tt>term</tt> is <tt>null</tt> or empty.
-     *
-     * @throws IllegalStateException
-     * If a query is already executing.
+     * 
+     * @param term The search term.
+     * @throws IllegalArgumentException If <tt>term</tt> is <tt>null</tt> or
+     * empty.
+     * @throws IllegalStateException If a query is already executing.
      */
     public void executeQuery(String term) {
-        if (term == null
-            || term.length() == 0) {
+        if (term == null || term.length() == 0) {
             throw new IllegalArgumentException();
         }
 
@@ -144,13 +147,13 @@ public class SearchDemo implements Application {
             public void taskExecuted(Task<Object> task) {
                 if (task == getQuery) {
                     @SuppressWarnings("unchecked")
-                    Map<String, Object> result = (Map<String, Object>)task.getResult();
+                    Map<String, Object> result = (Map<String, Object>) task.getResult();
                     @SuppressWarnings("unchecked")
-                    List<Object> results = (List<Object>)result.get("results");
+                    List<Object> results = (List<Object>) result.get("results");
 
                     // Preserve any existing sort
                     @SuppressWarnings("unchecked")
-                    List<Object> tableData = (List<Object>)resultsTableView.getTableData();
+                    List<Object> tableData = (List<Object>) resultsTableView.getTableData();
                     Comparator<Object> comparator = tableData.getComparator();
                     results.setComparator(comparator);
 
@@ -186,9 +189,8 @@ public class SearchDemo implements Application {
 
     /**
      * Aborts an executing query.
-     *
-     * @throws IllegalStateException
-     * If a query is not currently executing.
+     * 
+     * @throws IllegalStateException If a query is not currently executing.
      */
     public void abortQuery() {
         if (getQuery == null) {
@@ -203,9 +205,8 @@ public class SearchDemo implements Application {
 
     /**
      * Tests whether a query is currently executing.
-     *
-     * @return
-     * <tt>true</tt> if a query is currently executing; <tt>false</tt>,
+     * 
+     * @return <tt>true</tt> if a query is currently executing; <tt>false</tt>,
      * otherwise.
      */
     public boolean isQueryExecuting() {
@@ -227,19 +228,19 @@ public class SearchDemo implements Application {
      */
     public void updateArtwork() {
         @SuppressWarnings("unchecked")
-        Map<String, Object> result = (Map<String, Object>)resultsTableView.getSelectedRow();
+        Map<String, Object> result = (Map<String, Object>) resultsTableView.getSelectedRow();
 
         URL artworkURL = null;
         if (result != null) {
             try {
-                artworkURL = new URL((String)result.get("artworkUrl100"));
+                artworkURL = new URL((String) result.get("artworkUrl100"));
             } catch (MalformedURLException exception) {
                 // ignore exception
             }
         }
 
         if (artworkURL == null) {
-            artworkImageView.setImage((Image)null);
+            artworkImageView.setImage((Image) null);
         } else {
             Image.load(artworkURL, new TaskAdapter<>(new TaskListener<Image>() {
                 @Override
@@ -249,7 +250,7 @@ public class SearchDemo implements Application {
 
                 @Override
                 public void executeFailed(Task<Image> task) {
-                    artworkImageView.setImage((Image)null);
+                    artworkImageView.setImage((Image) null);
                 }
             }));
         }

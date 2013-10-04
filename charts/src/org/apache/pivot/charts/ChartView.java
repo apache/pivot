@@ -62,7 +62,7 @@ public abstract class ChartView extends Component {
             return key;
         }
 
-        public void setKey(String key)  {
+        public void setKey(String key) {
             if (key == null) {
                 throw new IllegalArgumentException("key is null.");
             }
@@ -115,9 +115,8 @@ public abstract class ChartView extends Component {
 
         /**
          * Returns the element's series index.
-         *
-         * @return
-         * The element's series index.
+         * 
+         * @return The element's series index.
          */
         public int getSeriesIndex() {
             return seriesIndex;
@@ -128,9 +127,8 @@ public abstract class ChartView extends Component {
          * the element index represents the index of the category in the
          * category sequence. Otherwise, it represents the index of the item
          * within the series.
-         *
-         * @return
-         * The element index.
+         * 
+         * @return The element index.
          */
         public int getElementIndex() {
             return elementIndex;
@@ -138,8 +136,7 @@ public abstract class ChartView extends Component {
 
         @Override
         public String toString() {
-            String string = getClass().getName()
-                + seriesIndex + ", " + elementIndex;
+            String string = getClass().getName() + seriesIndex + ", " + elementIndex;
             return string;
         }
     }
@@ -170,7 +167,8 @@ public abstract class ChartView extends Component {
             }
 
             if (category.getChartView() != null) {
-                throw new IllegalArgumentException("category is already in use by another chart view.");
+                throw new IllegalArgumentException(
+                    "category is already in use by another chart view.");
             }
 
             categories.insert(category, index);
@@ -251,8 +249,7 @@ public abstract class ChartView extends Component {
         }
 
         @Override
-        public void comparatorChanged(List<Object> list,
-            Comparator<Object> previousComparator) {
+        public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
                 chartViewSeriesListeners.seriesSorted(ChartView.this);
             }
@@ -262,8 +259,8 @@ public abstract class ChartView extends Component {
     /**
      * Chart view listener list.
      */
-    private static class ChartViewListenerList extends ListenerList<ChartViewListener>
-        implements ChartViewListener {
+    private static class ChartViewListenerList extends ListenerList<ChartViewListener> implements
+        ChartViewListener {
         @Override
         public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
             for (ChartViewListener listener : this) {
@@ -310,8 +307,8 @@ public abstract class ChartView extends Component {
     /**
      * Chart view category listener list.
      */
-    private static class ChartViewCategoryListenerList extends ListenerList<ChartViewCategoryListener>
-        implements ChartViewCategoryListener {
+    private static class ChartViewCategoryListenerList extends
+        ListenerList<ChartViewCategoryListener> implements ChartViewCategoryListener {
         @Override
         public void categoryInserted(ChartView chartView, int index) {
             for (ChartViewCategoryListener listener : this) {
@@ -320,7 +317,8 @@ public abstract class ChartView extends Component {
         }
 
         @Override
-        public void categoriesRemoved(ChartView chartView, int index, Sequence<ChartView.Category> categories) {
+        public void categoriesRemoved(ChartView chartView, int index,
+            Sequence<ChartView.Category> categories) {
             for (ChartViewCategoryListener listener : this) {
                 listener.categoriesRemoved(chartView, index, categories);
             }
@@ -405,7 +403,7 @@ public abstract class ChartView extends Component {
     private static Provider provider = null;
 
     static {
-        provider = (Provider)Service.getProvider(PROVIDER_NAME);
+        provider = (Provider) Service.getProvider(PROVIDER_NAME);
 
         if (provider == null) {
             throw new ProviderNotFoundException();
@@ -426,14 +424,13 @@ public abstract class ChartView extends Component {
     @Override
     @SuppressWarnings("unchecked")
     protected void installSkin(Class<? extends Component> componentClass) {
-        Class<? extends org.apache.pivot.wtk.Skin> skinClass =
-            provider.getSkinClass((Class<? extends ChartView>)componentClass);
+        Class<? extends org.apache.pivot.wtk.Skin> skinClass = provider.getSkinClass((Class<? extends ChartView>) componentClass);
 
         try {
             setSkin(skinClass.newInstance());
-        } catch(InstantiationException exception) {
+        } catch (InstantiationException exception) {
             throw new IllegalArgumentException(exception);
-        } catch(IllegalAccessException exception) {
+        } catch (IllegalAccessException exception) {
             throw new IllegalArgumentException(exception);
         }
     }
@@ -456,10 +453,10 @@ public abstract class ChartView extends Component {
 
         if (previousChartData != chartData) {
             if (previousChartData != null) {
-                ((List<Object>)previousChartData).getListListeners().remove(chartDataHandler);
+                ((List<Object>) previousChartData).getListListeners().remove(chartDataHandler);
             }
 
-            ((List<Object>)chartData).getListListeners().add(chartDataHandler);
+            ((List<Object>) chartData).getListListeners().add(chartDataHandler);
 
             this.chartData = chartData;
             chartViewListeners.chartDataChanged(this, previousChartData);
@@ -534,7 +531,7 @@ public abstract class ChartView extends Component {
     }
 
     public Element getElementAt(int x, int y) {
-        return ((Skin)getSkin()).getElementAt(x, y);
+        return ((Skin) getSkin()).getElementAt(x, y);
     }
 
     public ListenerList<ChartViewListener> getChartViewListeners() {
@@ -549,4 +546,3 @@ public abstract class ChartView extends Component {
         return chartViewSeriesListeners;
     }
 }
-

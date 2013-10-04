@@ -37,11 +37,11 @@ public class PropertyBinding extends Window implements Bindable {
         // Bind list button selection to label text with bind mapping
         NamespaceBinding namespaceBinding2 = new NamespaceBinding(namespace,
             "listButton.selectedItem", "listButtonLabel2.text", new NamespaceBinding.BindMapping() {
-            @Override
-            public Object evaluate(Object value) {
-                return value.toString().toUpperCase();
-            }
-        });
+                @Override
+                public Object evaluate(Object value) {
+                    return value.toString().toUpperCase();
+                }
+            });
 
         namespaceBinding2.bind();
     }

@@ -26,9 +26,7 @@ public final class Mouse {
      * Enumeration representing mouse buttons.
      */
     public enum Button {
-        LEFT,
-        RIGHT,
-        MIDDLE;
+        LEFT, RIGHT, MIDDLE;
 
         public int getMask() {
             return 1 << ordinal();
@@ -39,8 +37,7 @@ public final class Mouse {
      * Enumeration defining supported scroll types.
      */
     public enum ScrollType {
-        UNIT,
-        BLOCK
+        UNIT, BLOCK
     }
 
     private static int buttons = 0;
@@ -60,11 +57,9 @@ public final class Mouse {
 
     /**
      * Tests the pressed state of a button.
-     *
+     * 
      * @param button
-     *
-     * @return
-     * <tt>true</tt> if the button is pressed; <tt>false</tt>, otherwise.
+     * @return <tt>true</tt> if the button is pressed; <tt>false</tt>, otherwise.
      */
     public static boolean isPressed(Button button) {
         return (buttons & button.getMask()) > 0;
@@ -80,10 +75,9 @@ public final class Mouse {
     /**
      * "Captures" the mouse, causing all mouse input to be delegated to the
      * given component rather than propagating down the component hierarchy.
-     *
-     * @param capturerArgument
-     * The component that wants to capture the mouse. The mouse pointer must
-     * currently be over the component.
+     * 
+     * @param capturerArgument The component that wants to capture the mouse.
+     * The mouse pointer must currently be over the component.
      */
     public static void capture(Component capturerArgument) {
         if (capturerArgument == null) {
@@ -118,8 +112,7 @@ public final class Mouse {
             descendant = display.getDescendantAt(location.x, location.y);
         }
 
-        while (descendant != null
-            && descendant != capturer) {
+        while (descendant != null && descendant != capturer) {
             descendant = descendant.getParent();
         }
 
@@ -139,10 +132,9 @@ public final class Mouse {
 
     /**
      * Returns the mouse capturer.
-     *
-     * @return
-     * The component that has captured the mouse, or <tt>null</tt> if the mouse
-     * is not currently captured.
+     * 
+     * @return The component that has captured the mouse, or <tt>null</tt> if
+     * the mouse is not currently captured.
      */
     public static Component getCapturer() {
         return capturer;
@@ -150,9 +142,8 @@ public final class Mouse {
 
     /**
      * Returns the current cursor.
-     *
-     * @throws IllegalStateException
-     * If the mouse is not currently captured.
+     * 
+     * @throws IllegalStateException If the mouse is not currently captured.
      */
     public static Cursor getCursor() {
         if (capturer == null) {
@@ -246,11 +237,9 @@ public final class Mouse {
 
     /**
      * Sets the cursor to an explicit value.
-     *
+     * 
      * @param cursor
-     *
-     * @throws IllegalStateException
-     * If the mouse is not currently captured.
+     * @throws IllegalStateException If the mouse is not currently captured.
      */
     public static void setCursor(Cursor cursor) {
         if (cursor == null) {
@@ -268,7 +257,7 @@ public final class Mouse {
 
     /**
      * Sets the cursor based on a given component.
-     *
+     * 
      * @param component
      */
     public static void setCursor(final Component component) {
@@ -285,8 +274,7 @@ public final class Mouse {
 
         if (componentOrParent.isEnabled()) {
             cursor = componentOrParent.getCursor();
-            while (cursor == null
-                && componentOrParent != null
+            while (cursor == null && componentOrParent != null
                 && !(componentOrParent instanceof Display)) {
                 componentOrParent = componentOrParent.getParent();
                 if (componentOrParent != null) {
@@ -298,8 +286,8 @@ public final class Mouse {
         if (componentOrParent != null) {
             Display display = componentOrParent.getDisplay();
             ApplicationContext.DisplayHost displayHost = display.getDisplayHost();
-            displayHost.setCursor((cursor == null) ? java.awt.Cursor.getDefaultCursor() :
-                getCursor(cursor));
+            displayHost.setCursor((cursor == null) ? java.awt.Cursor.getDefaultCursor()
+                : getCursor(cursor));
         }
     }
 

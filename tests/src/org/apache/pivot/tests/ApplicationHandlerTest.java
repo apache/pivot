@@ -24,14 +24,14 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Window;
 
-public class ApplicationHandlerTest extends Application.Adapter
-    implements Application.UnprocessedKeyHandler {
+public class ApplicationHandlerTest extends Application.Adapter implements
+    Application.UnprocessedKeyHandler {
     private Window window = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(ApplicationHandlerTest.class,
+        window = (Window) bxmlSerializer.readObject(ApplicationHandlerTest.class,
             "application_handler_test.bxml");
         window.open(display);
     }

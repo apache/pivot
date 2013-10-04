@@ -77,7 +77,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
 
                 // Paint the hue spectrum
                 for (int y = 0; y < height; y++) {
-                    Color color = Color.getHSBColor(1f - (y / (float)height), 1f, 1f);
+                    Color color = Color.getHSBColor(1f - (y / (float) height), 1f, 1f);
                     hueSpectrumImageGraphics.setColor(color);
                     hueSpectrumImageGraphics.fillRect(0, y, width, 1);
                 }
@@ -90,7 +90,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
             // Mark the selected hue
             float hue = hueChooser.getHue();
             graphics.setColor(Color.BLACK);
-            graphics.fillRect(0, Math.min((int)(height * (1f - hue)), height - 1), width, 1);
+            graphics.fillRect(0, Math.min((int) (height * (1f - hue)), height - 1), width, 1);
         }
 
         @Override
@@ -102,8 +102,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         public boolean mouseMove(Component component, int x, int y) {
             boolean consumed = super.mouseMove(component, x, y);
 
-            if (capture
-                && Mouse.getCapturer() != component) {
+            if (capture && Mouse.getCapturer() != component) {
                 Mouse.capture(component);
             }
 
@@ -152,11 +151,11 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         }
 
         private void setSelectedColor(int y) {
-            ColorChooser colorChooser = (ColorChooser)TerraColorChooserSkin.this.getComponent();
+            ColorChooser colorChooser = (ColorChooser) TerraColorChooserSkin.this.getComponent();
 
             int height = getHeight();
 
-            float hue = 1f - (Math.min(Math.max(y, 0), height - 1) / (float)height);
+            float hue = 1f - (Math.min(Math.max(y, 0), height - 1) / (float) height);
             float saturation = saturationValueChooser.getSaturation();
             float value = saturationValueChooser.getValue();
 
@@ -228,8 +227,8 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
                 // Paint the saturation/value spectrum
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
-                        Color color = Color.getHSBColor(hue, 1f - (y / (float)height),
-                            x / (float)width);
+                        Color color = Color.getHSBColor(hue, 1f - (y / (float) height), x
+                            / (float) width);
                         saturationValueImageGraphics.setColor(color);
                         saturationValueImageGraphics.fillRect(x, y, 1, 1);
                     }
@@ -246,8 +245,9 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
                 float value = saturationValueChooser.getValue();
                 graphics.setColor(Color.WHITE);
                 graphics.setXORMode(Color.getHSBColor(hue, 0f, 0f));
-                graphics.fillRect(0, Math.min((int)(height * (1f - saturation)), height - 1), width, 1);
-                graphics.fillRect(Math.min((int)(width * value), width - 1), 0, 1, height);
+                graphics.fillRect(0, Math.min((int) (height * (1f - saturation)), height - 1),
+                    width, 1);
+                graphics.fillRect(Math.min((int) (width * value), width - 1), 0, 1, height);
             }
         }
 
@@ -260,8 +260,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         public boolean mouseMove(Component component, int x, int y) {
             boolean consumed = super.mouseMove(component, x, y);
 
-            if (capture
-                && Mouse.getCapturer() != component) {
+            if (capture && Mouse.getCapturer() != component) {
                 Mouse.capture(component);
             }
 
@@ -310,14 +309,14 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
         }
 
         private void setSelectedColor(int x, int y) {
-            ColorChooser colorChooser = (ColorChooser)TerraColorChooserSkin.this.getComponent();
+            ColorChooser colorChooser = (ColorChooser) TerraColorChooserSkin.this.getComponent();
 
             int width = getWidth();
             int height = getHeight();
 
             float hue = hueChooser.getHue();
-            float saturation = 1f - (Math.min(Math.max(y, 0), height - 1) / (float)height);
-            float value = Math.min(Math.max(x, 0), width - 1) / (float)width;
+            float saturation = 1f - (Math.min(Math.max(y, 0), height - 1) / (float) height);
+            float value = Math.min(Math.max(x, 0), width - 1) / (float) width;
 
             saturationValueChooser.setSaturation(saturation);
             saturationValueChooser.setValue(value);
@@ -356,7 +355,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
     public void install(Component component) {
         super.install(component);
 
-        ColorChooser colorChooser = (ColorChooser)component;
+        ColorChooser colorChooser = (ColorChooser) component;
         colorChooser.add(tablePane);
 
         selectedColorChanged(colorChooser, null);
@@ -387,7 +386,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
     }
 
     public int getSpacing() {
-        return (Integer)tablePane.getStyles().get("horizontalSpacing");
+        return (Integer) tablePane.getStyles().get("horizontalSpacing");
     }
 
     public void setSpacing(int spacing) {
@@ -418,8 +417,8 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
             float value = 0f;
 
             if (color != null) {
-                float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(),
-                    color.getBlue(), null);
+                float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(),
+                    null);
                 hue = hsb[0];
                 saturation = hsb[1];
                 value = hsb[2];

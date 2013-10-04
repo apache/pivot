@@ -135,8 +135,7 @@ class LocalManifestAdapter implements Transferable {
     }
 
     @Override
-    public Object getTransferData(DataFlavor dataFlavor)
-        throws UnsupportedFlavorException {
+    public Object getTransferData(DataFlavor dataFlavor) throws UnsupportedFlavorException {
         Object transferData = null;
 
         int index = transferDataFlavors.indexOf(dataFlavor);
@@ -147,7 +146,7 @@ class LocalManifestAdapter implements Transferable {
         if (dataFlavor.equals(DataFlavor.stringFlavor)) {
             transferData = localManifest.getText();
         } else if (dataFlavor.equals(DataFlavor.imageFlavor)) {
-            Picture picture = (Picture)localManifest.getImage();
+            Picture picture = (Picture) localManifest.getImage();
             transferData = picture.getBufferedImage();
         } else if (dataFlavor.equals(DataFlavor.javaFileListFlavor)) {
             FileList fileList = localManifest.getFileList();

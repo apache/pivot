@@ -104,7 +104,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     @Override
     public Comparator<E> getComparator() {
         if (this.set instanceof java.util.SortedSet<?>) {
-            return (Comparator<E>)((java.util.SortedSet<?>)this.set).comparator();
+            return (Comparator<E>) ((java.util.SortedSet<?>) this.set).comparator();
         }
         return null;
     }
@@ -119,7 +119,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
                 Constructor<?> constructor = this.set.getClass().getConstructor(Comparator.class);
                 if (constructor != null) {
                     @SuppressWarnings("unchecked")
-                    java.util.SortedSet<E> setLocal = (java.util.SortedSet<E>)constructor.newInstance(comparator);
+                    java.util.SortedSet<E> setLocal = (java.util.SortedSet<E>) constructor.newInstance(comparator);
                     setLocal.addAll(this.set);
                     this.set = setLocal;
                 }

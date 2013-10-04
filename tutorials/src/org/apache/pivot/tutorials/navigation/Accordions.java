@@ -33,12 +33,13 @@ public class Accordions extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        accordion = (Accordion)namespace.get("accordion");
+        accordion = (Accordion) namespace.get("accordion");
         accordion.getAccordionSelectionListeners().add(new AccordionSelectionListener() {
             private int selectedIndex = -1;
 
             @Override
-            public Vote previewSelectedIndexChange(Accordion accordionArgument, int selectedIndexArgument) {
+            public Vote previewSelectedIndexChange(Accordion accordionArgument,
+                int selectedIndexArgument) {
                 this.selectedIndex = selectedIndexArgument;
 
                 // Enable the next panel or disable the previous panel so the
@@ -58,8 +59,7 @@ public class Accordions extends Window implements Bindable {
 
             @Override
             public void selectedIndexChangeVetoed(Accordion accordionArgument, Vote reason) {
-                if (reason == Vote.DENY
-                    && selectedIndex != -1) {
+                if (reason == Vote.DENY && selectedIndex != -1) {
                     Component panel = accordionArgument.getPanels().get(selectedIndex);
                     panel.setEnabled(!panel.isEnabled());
                 }

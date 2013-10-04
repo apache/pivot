@@ -50,17 +50,22 @@ import org.apache.pivot.xml.TextNode;
 import org.apache.pivot.xml.XMLSerializer;
 
 /**
- * Utility application that allows the user to browse an XML DOM using
- * a tree view component.
+ * Utility application that allows the user to browse an XML DOM using a tree
+ * view component.
  */
 public class XMLViewer extends Application.Adapter {
     private Window window = null;
 
-    @BXML private TreeView treeView = null;
-    @BXML private CardPane propertiesCardPane = null;
-    @BXML private TableView namespacesTableView = null;
-    @BXML private TableView attributesTableView = null;
-    @BXML private TextArea textArea = null;
+    @BXML
+    private TreeView treeView = null;
+    @BXML
+    private CardPane propertiesCardPane = null;
+    @BXML
+    private TableView namespacesTableView = null;
+    @BXML
+    private TableView attributesTableView = null;
+    @BXML
+    private TextArea textArea = null;
 
     private OverlayDecorator promptDecorator = new OverlayDecorator();
 
@@ -68,12 +73,11 @@ public class XMLViewer extends Application.Adapter {
     public static final String WINDOW_TITLE = "XML Viewer";
 
     @Override
-    public void startup(Display display, Map<String, String> properties)
-        throws Exception {
+    public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         bxmlSerializer.getNamespace().put(APPLICATION_KEY, this);
 
-        window = (Window)bxmlSerializer.readObject(XMLViewer.class, "xml_viewer.bxml");
+        window = (Window) bxmlSerializer.readObject(XMLViewer.class, "xml_viewer.bxml");
         bxmlSerializer.bind(this);
 
         Label prompt = new Label("Drag or paste XML here");
@@ -108,8 +112,7 @@ public class XMLViewer extends Application.Adapter {
     public void paste() {
         Manifest clipboardContent = Clipboard.getContent();
 
-        if (clipboardContent != null
-            && clipboardContent.containsText()) {
+        if (clipboardContent != null && clipboardContent.containsText()) {
             String xml = null;
             XMLSerializer xmlSerializer = new XMLSerializer();
             try {
@@ -153,7 +156,7 @@ public class XMLViewer extends Application.Adapter {
             } else {
                 Prompt.prompt("Multiple files not supported.", window);
             }
-        } catch(IOException exception) {
+        } catch (IOException exception) {
             Prompt.prompt(exception.getMessage(), window);
         }
 
@@ -161,20 +164,19 @@ public class XMLViewer extends Application.Adapter {
     }
 
     public void updateProperties() {
-        Node node = (Node)treeView.getSelectedNode();
+        Node node = (Node) treeView.getSelectedNode();
 
         if (node == null) {
             // no selection, but it's ok
         } else if (node instanceof TextNode) {
-            TextNode textNode = (TextNode)node;
+            TextNode textNode = (TextNode) node;
             textArea.setText(textNode.getText());
             propertiesCardPane.setSelectedIndex(1);
         } else if (node instanceof Element) {
-            Element element = (Element)node;
+            Element element = (Element) node;
 
             // Populate the namespaces table
-            ArrayList<HashMap<String, String>> namespacesTableData =
-                new ArrayList<>();
+            ArrayList<HashMap<String, String>> namespacesTableData = new ArrayList<>();
 
             String defaultNamespaceURI = element.getDefaultNamespaceURI();
             if (defaultNamespaceURI != null) {
@@ -195,8 +197,7 @@ public class XMLViewer extends Application.Adapter {
             namespacesTableView.setTableData(namespacesTableData);
 
             // Populate the attributes table
-            ArrayList<HashMap<String, String>> attributesTableData =
-                new ArrayList<>();
+            ArrayList<HashMap<String, String>> attributesTableData = new ArrayList<>();
 
             for (Element.Attribute attribute : element.getAttributes()) {
                 HashMap<String, String> row = new HashMap<>();

@@ -32,7 +32,7 @@ public class ListViewSelectionTest extends Application.Adapter {
 
     public ListViewSelectionTest() {
         @SuppressWarnings("unchecked")
-        List<Object> listData = (List<Object>)listView.getListData();
+        List<Object> listData = (List<Object>) listView.getListData();
 
         listData.add("0");
         listData.add("1");
@@ -119,7 +119,8 @@ public class ListViewSelectionTest extends Application.Adapter {
 
         listView.getListViewSelectionListeners().add(new ListViewSelectionListener.Adapter() {
             @Override
-            public void selectedRangesChanged(ListView listViewArgument, Sequence<Span> previousSelectedRanges) {
+            public void selectedRangesChanged(ListView listViewArgument,
+                Sequence<Span> previousSelectedRanges) {
                 System.out.println("Selection changed");
             }
         });
@@ -144,7 +145,8 @@ public class ListViewSelectionTest extends Application.Adapter {
 
     public static void main(String[] args) {
         // Note that when run as Application, no List elements will be displayed
-        // on the screen, but only some messages will be displayed to the text console
+        // on the screen, but only some messages will be displayed to the text
+        // console
         DesktopApplicationContext.main(ListViewSelectionTest.class, args);
     }
 
