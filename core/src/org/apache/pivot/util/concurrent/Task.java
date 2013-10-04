@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Abstract base class for "tasks". A task is an asynchronous operation that may
  * optionally return a value.
- * 
+ *
  * @param <V> The type of the value returned by the operation. May be
  * {@link Void} to indicate that the task does not return a value.
  */
@@ -126,7 +126,7 @@ public abstract class Task<V> {
 
     /**
      * Synchronously executes the task.
-     * 
+     *
      * @return The result of the task's execution.
      * @throws TaskExecutionException If an error occurs while executing the
      * task.
@@ -138,7 +138,7 @@ public abstract class Task<V> {
      * completion via the listener argument. Note that the listener will be
      * notified on the task's worker thread, not on the thread that executed the
      * task.
-     * 
+     *
      * @param taskListenerArgument The listener to be notified when the task
      * completes.
      */
@@ -151,7 +151,7 @@ public abstract class Task<V> {
      * completion via the listener argument. Note that the listener will be
      * notified on the task's worker thread, not on the thread that executed the
      * task.
-     * 
+     *
      * @param taskListenerArgument The listener to be notified when the task
      * completes.
      * @param executorServiceArgument The service to submit the task to,
@@ -191,7 +191,7 @@ public abstract class Task<V> {
 
     /**
      * Returns the result of executing the task.
-     * 
+     *
      * @return The task result, or <tt>null</tt> if the task is still executing
      * or has failed. The result itself may also be <tt>null</tt>; callers
      * should call {@link #isPending()} and {@link #getFault()} to distinguish
@@ -203,7 +203,7 @@ public abstract class Task<V> {
 
     /**
      * Returns the fault that occurred while executing the task.
-     * 
+     *
      * @return The task fault, or <tt>null</tt> if the task is still executing
      * or has succeeded. Callers should call {@link #isPending()} to distinguish
      * between these cases.
@@ -214,7 +214,7 @@ public abstract class Task<V> {
 
     /**
      * Returns the pending state of the task.
-     * 
+     *
      * @return <tt>true</tt> if the task is awaiting execution or currently
      * executing; <tt>false</tt>, otherwise.
      */
@@ -224,7 +224,7 @@ public abstract class Task<V> {
 
     /**
      * Returns the timeout value for this task.
-     * 
+     *
      * @see #setTimeout(long)
      */
     public synchronized long getTimeout() {
@@ -234,7 +234,7 @@ public abstract class Task<V> {
     /**
      * Sets the timeout value for this task. It is the responsibility of the
      * implementing class to respect this value.
-     * 
+     *
      * @param timeout The time by which the task must complete execution. If the
      * timeout is exceeded, a {@link TimeoutException} will be thrown.
      */

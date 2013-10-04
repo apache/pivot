@@ -38,7 +38,7 @@ public interface TablePaneAttributeListener {
 
     /**
      * Called when a component's row span attribute has changed.
-     * 
+     *
      * @param tablePane
      * @param component
      * @param previousRowSpan
@@ -47,7 +47,7 @@ public interface TablePaneAttributeListener {
 
     /**
      * Called when a component's column span attribute has changed.
-     * 
+     *
      * @param tablePane
      * @param component
      * @param previousColumnSpan

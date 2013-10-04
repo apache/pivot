@@ -39,7 +39,7 @@ public abstract class Button extends Component {
     public interface DataRenderer extends Renderer {
         /**
          * Prepares the renderer for layout or paint.
-         * 
+         *
          * @param data The data to render, or <tt>null</tt> if called to
          * calculate preferred height for skins that assume a fixed renderer
          * height.
@@ -50,7 +50,7 @@ public abstract class Button extends Component {
 
         /**
          * Converts button data to a string representation.
-         * 
+         *
          * @param data
          * @return The data's string representation, or <tt>null</tt> if the data
          * does not have a string representation. <p> Note that this method may
@@ -67,7 +67,7 @@ public abstract class Button extends Component {
         /**
          * Converts a context value to a selection state during a
          * {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public boolean isSelected(Object value);
@@ -75,7 +75,7 @@ public abstract class Button extends Component {
         /**
          * Converts a selection state to a context value during a
          * {@link Component#store(Object)} operation.
-         * 
+         *
          * @param selected
          */
         public Object valueOf(boolean selected);
@@ -88,7 +88,7 @@ public abstract class Button extends Component {
         /**
          * Converts a context value to a button state during a
          * {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public State toState(Object value);
@@ -96,7 +96,7 @@ public abstract class Button extends Component {
         /**
          * Converts a button state to a context value during a
          * {@link Component#store(Object)} operation.
-         * 
+         *
          * @param state
          */
         public Object valueOf(State state);
@@ -110,7 +110,7 @@ public abstract class Button extends Component {
         /**
          * Converts a context value to button data during a
          * {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public Object toButtonData(Object value);
@@ -118,7 +118,7 @@ public abstract class Button extends Component {
         /**
          * Converts button data to a context value during a
          * {@link Component#store(Object)} operation.
-         * 
+         *
          * @param buttonData
          */
         public Object valueOf(Object buttonData);
@@ -333,7 +333,7 @@ public abstract class Button extends Component {
 
     /**
      * Returns the action associated with this button.
-     * 
+     *
      * @return The button's action, or <tt>null</tt> if no action is defined.
      */
     public Action getAction() {
@@ -342,7 +342,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets this button's action.
-     * 
+     *
      * @param action The action to be triggered when this button is pressed, or
      * <tt>null</tt> for no action.
      */
@@ -367,7 +367,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets this button's action.
-     * 
+     *
      * @param actionID The ID of the action to be triggered when this button is
      * pressed.
      * @throws IllegalArgumentException If an action with the given ID does not
@@ -416,7 +416,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets the button's selected state.
-     * 
+     *
      * @param selected
      */
     public void setSelected(boolean selected) {
@@ -432,7 +432,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets the button's selection state.
-     * 
+     *
      * @param state
      */
     public void setState(State state) {
@@ -477,7 +477,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets the button's toggle state.
-     * 
+     *
      * @param toggleButton
      */
     public void setToggleButton(boolean toggleButton) {
@@ -505,7 +505,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets the button's tri-state state.
-     * 
+     *
      * @param triState
      */
     public void setTriState(boolean triState) {
@@ -525,7 +525,7 @@ public abstract class Button extends Component {
 
     /**
      * Returns the button's button group.
-     * 
+     *
      * @return The group to which the button belongs, or <tt>null</tt> if the
      * button does not belong to a group.
      */
@@ -535,7 +535,7 @@ public abstract class Button extends Component {
 
     /**
      * Sets the button's button group.
-     * 
+     *
      * @param buttonGroup The group to which the button will belong, or
      * <tt>null</tt> if the button will not belong to a group.
      */

@@ -130,7 +130,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
         /**
          * Obtains the icon to display for a given file.
-         * 
+         *
          * @param file
          */
         public static Image getIcon(File file) {
@@ -1017,7 +1017,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * CommandModifier + {@link KeyCode#F F} Transfers focus to the search
      * TextInput.
-     * 
+     *
      * @see Platform#getCommandModifier()
      */
     @Override

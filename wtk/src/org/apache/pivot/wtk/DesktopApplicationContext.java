@@ -65,14 +65,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         /**
          * Called when the host window for secondary display has been opened.
-         * 
+         *
          * @param display
          */
         public void hostWindowOpened(Display display);
 
         /**
          * Called when the host window for secondary display has been closed.
-         * 
+         *
          * @param display
          */
         public void hostWindowClosed(Display display);
@@ -403,7 +403,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Terminates the application context.
-     * 
+     *
      * @param optional If <tt>true</tt>, shutdown is optional and may be
      * cancelled. If <tt>false</tt>, shutdown cannot be cancelled.
      */
@@ -454,7 +454,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Primary application entry point.
-     * 
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -715,7 +715,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Sets the full-screen mode flag.
-     * 
+     *
      * @param fullScreen
      */
     public static void setFullScreen(boolean fullScreen) {
@@ -771,7 +771,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * its UI and the SplashScreen is ready to be dismissed, but can be safely
      * called regardless of whether there is now, or used to be, a visible
      * SplashScreen.
-     * 
+     *
      * @param display Display to make visible
      * @see java.awt.SplashScreen
      */
@@ -786,7 +786,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Sizes the window's native host frame to match its preferred size.
-     * 
+     *
      * @param window
      */
     public static void sizeHostToFit(Window window) {
@@ -807,7 +807,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Creates a new secondary display.
-     * 
+     *
      * @param width
      * @param height
      * @param x
@@ -846,7 +846,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * into applications. For example: <code> public class MyApp implements
      * Application { public static void main(String[] args) throws Exception {
      * DesktopApplicationContext.main(MyApp.class, args); } } </code>
-     * 
+     *
      * @param applicationClass
      * @param applicationArgs
      */

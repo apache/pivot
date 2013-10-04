@@ -63,7 +63,7 @@ public class TaskAdapter<T> implements TaskListener<T> {
     /**
      * Creates a new <tt>TaskAdapter</tt> that wraps the specified task
      * listener.
-     * 
+     *
      * @param taskListener The task listener that will be notified on the UI
      * thread
      */

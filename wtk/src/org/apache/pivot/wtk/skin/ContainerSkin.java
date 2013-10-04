@@ -183,7 +183,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
 
     /**
      * Sets the object used to paint the background of the container.
-     * 
+     *
      * @param backgroundPaint The {@link Paint} object
      */
     public void setBackgroundPaint(Paint backgroundPaint) {
@@ -193,7 +193,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
 
     /**
      * Sets the object used to paint the background of the container.
-     * 
+     *
      * @param backgroundPaint A string recognized by Pivot as a
      * {@linkplain GraphicsUtilities#decodePaint(String) Color or Paint value}.
      */
@@ -207,7 +207,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
 
     /**
      * Sets the object used to paint the background of the container.
-     * 
+     *
      * @param backgroundPaint A dictionary containing a
      * {@linkplain GraphicsUtilities#decodePaint(Dictionary) Paint description}.
      */
@@ -236,7 +236,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
 
     /**
      * Sets the background of the container to a solid color.
-     * 
+     *
      * @param backgroundColor Any of the
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.

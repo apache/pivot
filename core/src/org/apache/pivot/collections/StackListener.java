@@ -49,7 +49,7 @@ public interface StackListener<T> {
 
     /**
      * Called when an item has been pushed onto a stack.
-     * 
+     *
      * @param stack
      * @param item
      */
@@ -57,7 +57,7 @@ public interface StackListener<T> {
 
     /**
      * Called when an item has been popped off of a stack.
-     * 
+     *
      * @param stack
      * @param item
      */
@@ -65,14 +65,14 @@ public interface StackListener<T> {
 
     /**
      * Called when a stack has been cleared.
-     * 
+     *
      * @param stack
      */
     public void stackCleared(Stack<T> stack);
 
     /**
      * Called when a stack's comparator has changed.
-     * 
+     *
      * @param stack
      * @param previousComparator
      */

@@ -367,7 +367,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the FillPane and
      * its components.
-     * 
+     *
      * @param padding A dictionary with keys in the set {left, top, bottom,
      * right}.
      */
@@ -402,7 +402,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the FillPane and
      * its components.
-     * 
+     *
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */

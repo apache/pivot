@@ -55,7 +55,7 @@ public class LabelAntialiasTest extends Application.Adapter {
 
     /**
      * Write to console some details of Desktop Hints, for Font Rendering.
-     * 
+     *
      * @see org.apache.pivot.wtk.Platform#initializeFontRenderContext
      */
     private void showFontDesktopHints() {

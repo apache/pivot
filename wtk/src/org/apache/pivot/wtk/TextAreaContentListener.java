@@ -46,7 +46,7 @@ public interface TextAreaContentListener {
     /**
      * Called when a paragraph has been inserted into a text area's paragraph
      * sequence.
-     * 
+     *
      * @param textArea The source of the event.
      * @param index The index at which the paragraph was inserted.
      */
@@ -55,7 +55,7 @@ public interface TextAreaContentListener {
     /**
      * Called when paragraphs have been removed from a text area's paragraph
      * sequence.
-     * 
+     *
      * @param textArea The source of the event.
      * @param index The starting index from which the paragraphs were removed.
      * @param removed The paragraphs that were removed.
@@ -64,7 +64,7 @@ public interface TextAreaContentListener {
 
     /**
      * Called when a text area's text has changed.
-     * 
+     *
      * @param textArea The source of the event.
      */
     public void textChanged(TextArea textArea);

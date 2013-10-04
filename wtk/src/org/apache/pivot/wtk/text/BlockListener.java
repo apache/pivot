@@ -33,7 +33,7 @@ public interface BlockListener {
 
     /**
      * Called when the horizontal alignment has changed.
-     * 
+     *
      * @param block
      * @param previousHorizontalAlignment
      */

@@ -561,7 +561,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the BoxPane and its
      * components.
-     * 
+     *
      * @param padding A dictionary with keys in the set {left, top, bottom,
      * right}.
      */
@@ -596,7 +596,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the BoxPane and its
      * components.
-     * 
+     *
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */
@@ -648,7 +648,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
 
     /**
      * Sets whether the BoxPane's components fill to the edges of the pane.
-     * 
+     *
      * @param fill If <b>true</b>, the components are given all the available
      * space in the dimension orthogonal to the pane's orientation (e.g.,
      * vertically in a BoxPane with orientation=horizontal). It has no effect on

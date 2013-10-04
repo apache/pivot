@@ -45,7 +45,7 @@ package org.apache.pivot.wtk;
 public interface Skin extends ConstrainedVisual {
     /**
      * Associates a skin with a component.
-     * 
+     *
      * @param component The component to which the skin is being attached.
      */
     public void install(Component component);
@@ -63,7 +63,7 @@ public interface Skin extends ConstrainedVisual {
 
     /**
      * Returns the skin's focusable state.
-     * 
+     *
      * @return <tt>true</tt> if this skin is focusable; </tt>false</tt>,
      * otherwise.
      */
@@ -71,7 +71,7 @@ public interface Skin extends ConstrainedVisual {
 
     /**
      * Tells whether or not this skin is fully opaque when painted.
-     * 
+     *
      * @return <tt>true</tt> if this skin is opaque; </tt>false</tt> if any part
      * of it is transparent or translucent.
      */

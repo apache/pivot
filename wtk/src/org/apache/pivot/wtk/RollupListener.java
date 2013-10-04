@@ -44,7 +44,7 @@ public interface RollupListener {
 
     /**
      * Called when a rollup's heading component changed.
-     * 
+     *
      * @param rollup
      * @param previousHeading
      */
@@ -52,7 +52,7 @@ public interface RollupListener {
 
     /**
      * Called when a rollup's content component changed.
-     * 
+     *
      * @param rollup
      * @param previousContent
      */
@@ -60,7 +60,7 @@ public interface RollupListener {
 
     /**
      * Called when a rollup's collapsible flag has changed.
-     * 
+     *
      * @param rollup
      */
     public void collapsibleChanged(Rollup rollup);

@@ -189,7 +189,7 @@ public class TextArea extends Component {
 
         /**
          * Called when text has been inserted into a paragraph.
-         * 
+         *
          * @param paragraph The source of the event.
          * @param index The index at which the text was inserted.
          * @param count The number of characters that were inserted.
@@ -198,7 +198,7 @@ public class TextArea extends Component {
 
         /**
          * Called when characters have been removed from a paragraph.
-         * 
+         *
          * @param paragraph The source of the event.
          * @param index The index from which the text was removed.
          * @param count The number of characters that were removed.
@@ -219,7 +219,7 @@ public class TextArea extends Component {
     public interface Skin {
         /**
          * Returns the insertion point for a given location.
-         * 
+         *
          * @param x
          * @param y
          */
@@ -228,7 +228,7 @@ public class TextArea extends Component {
         /**
          * Returns the next insertion point given an x coordinate and a
          * character index.
-         * 
+         *
          * @param x
          * @param from
          * @param direction
@@ -237,7 +237,7 @@ public class TextArea extends Component {
 
         /**
          * Returns the row index of the character at a given index.
-         * 
+         *
          * @param index
          */
         public int getRowAt(int index);
@@ -245,7 +245,7 @@ public class TextArea extends Component {
         /**
          * Returns the index of the first character in the row containing a
          * given character index.
-         * 
+         *
          * @param index
          */
         public int getRowOffset(int index);
@@ -253,7 +253,7 @@ public class TextArea extends Component {
         /**
          * Returns the number of characters in the row containing a given
          * character index.
-         * 
+         *
          * @param index
          */
         public int getRowLength(int index);
@@ -265,7 +265,7 @@ public class TextArea extends Component {
 
         /**
          * Returns the bounds of the character at a given index.
-         * 
+         *
          * @param index
          */
         public Bounds getCharacterBounds(int index);
@@ -284,7 +284,7 @@ public class TextArea extends Component {
         /**
          * Converts a value from the bind context to a text representation
          * during a {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public String toString(Object value);
@@ -292,7 +292,7 @@ public class TextArea extends Component {
         /**
          * Converts a text string to a value to be stored in the bind context
          * during a {@link Component#store(Object)} operation.
-         * 
+         *
          * @param text
          */
         public Object valueOf(String text);
@@ -609,7 +609,7 @@ public class TextArea extends Component {
 
     /**
      * Returns the text content of the text area.
-     * 
+     *
      * @return A string containing a copy of the text area's text content.
      */
     public String getText() {
@@ -618,7 +618,7 @@ public class TextArea extends Component {
 
     /**
      * Returns a portion of the text content of the text area.
-     * 
+     *
      * @param beginIndex
      * @param endIndex
      * @return A string containing a copy of the text area's text content.
@@ -664,7 +664,7 @@ public class TextArea extends Component {
 
     /**
      * Sets the text content of the text area.
-     * 
+     *
      * @param text
      */
     public void setText(String text) {
@@ -879,7 +879,7 @@ public class TextArea extends Component {
 
     /**
      * Returns the index of the paragraph containing a given character index.
-     * 
+     *
      * @param index
      */
     public int getParagraphAt(int index) {
@@ -897,7 +897,7 @@ public class TextArea extends Component {
 
     /**
      * Returns the character at a given index.
-     * 
+     *
      * @param index
      */
     public char getCharacterAt(int index) {
@@ -987,7 +987,7 @@ public class TextArea extends Component {
 
     /**
      * Returns the starting index of the selection.
-     * 
+     *
      * @return The starting index of the selection.
      */
     public int getSelectionStart() {
@@ -996,7 +996,7 @@ public class TextArea extends Component {
 
     /**
      * Returns the length of the selection.
-     * 
+     *
      * @return The length of the selection; may be <tt>0</tt>.
      */
     public int getSelectionLength() {
@@ -1005,7 +1005,7 @@ public class TextArea extends Component {
 
     /**
      * Returns a span representing the current selection.
-     * 
+     *
      * @return A span containing the current selection. Both start and end
      * points are inclusive. Returns <tt>null</tt> if the selection is empty.
      */
@@ -1017,7 +1017,7 @@ public class TextArea extends Component {
     /**
      * Sets the selection. The sum of the selection start and length must be
      * less than the length of the text area's content.
-     * 
+     *
      * @param selectionStart The starting index of the selection.
      * @param selectionLength The length of the selection.
      */
@@ -1044,7 +1044,7 @@ public class TextArea extends Component {
 
     /**
      * Sets the selection.
-     * 
+     *
      * @param selection
      * @see #setSelection(int, int)
      */
@@ -1072,7 +1072,7 @@ public class TextArea extends Component {
 
     /**
      * Returns the selected text.
-     * 
+     *
      * @return A string containing a copy of the selected text.
      */
     public String getSelectedText() {
@@ -1081,7 +1081,7 @@ public class TextArea extends Component {
 
     /**
      * Returns the maximum length of the text area's text content.
-     * 
+     *
      * @return The maximum length of the text area's text content.
      */
     public int getMaximumLength() {
@@ -1090,7 +1090,7 @@ public class TextArea extends Component {
 
     /**
      * Sets the maximum length of the text area's text content.
-     * 
+     *
      * @param maximumLength The maximum length of the text area's text content.
      */
     public void setMaximumLength(int maximumLength) {
@@ -1122,7 +1122,7 @@ public class TextArea extends Component {
 
     /**
      * Sets the text area's editable flag.
-     * 
+     *
      * @param editable
      */
     public void setEditable(boolean editable) {
@@ -1141,7 +1141,7 @@ public class TextArea extends Component {
 
     /**
      * Returns the text area's text key.
-     * 
+     *
      * @return The text key, or <tt>null</tt> if no text key is set.
      */
     public String getTextKey() {
@@ -1150,7 +1150,7 @@ public class TextArea extends Component {
 
     /**
      * Sets the text area's text key.
-     * 
+     *
      * @param textKey The text key, or <tt>null</tt> to clear the binding.
      */
     public void setTextKey(String textKey) {
@@ -1231,7 +1231,7 @@ public class TextArea extends Component {
      * Sets whether tab characters (<code>\t</code>) are expanded to an
      * appropriate number of spaces during {@link #setText} and
      * {@link #insertText} operations.
-     * 
+     *
      * @param expandTabs <code>true</code> to replace tab characters with space
      * characters (depending on the setting of the
      * {@link TextArea.Skin#getTabWidth} value) or <code>false</code> to leave

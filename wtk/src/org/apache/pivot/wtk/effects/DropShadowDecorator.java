@@ -55,7 +55,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Returns the color used to draw the shadow.
-     * 
+     *
      * @return The color used to draw the shadow.
      */
     public Color getShadowColor() {
@@ -64,7 +64,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the color used to draw the shadow.
-     * 
+     *
      * @param shadowColor The color used to draw the shadow.
      */
     public void setShadowColor(Color shadowColor) {
@@ -73,7 +73,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the color used to draw the shadow.
-     * 
+     *
      * @param shadowColor The color used to draw the shadow, which can be any of
      * the {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.
@@ -88,7 +88,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Returns the opacity used to draw the shadow.
-     * 
+     *
      * @return The color used to draw the shadow.
      */
     public float getShadowOpacity() {
@@ -97,7 +97,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the opacity used to draw the shadow.
-     * 
+     *
      * @param shadowOpacity The opacity used to draw the shadow.
      */
     public void setShadowOpacity(float shadowOpacity) {
@@ -106,7 +106,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Returns the blur radius used to draw the shadow.
-     * 
+     *
      * @return The blur radius used to draw the shadow.
      */
     public int getBlurRadius() {
@@ -115,7 +115,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the blur radius used to draw the shadow.
-     * 
+     *
      * @param blurRadius The blur radius used to draw the shadow.
      */
     public void setBlurRadius(int blurRadius) {
@@ -124,7 +124,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Returns the amount that the drop shadow will be offset along the x axis.
-     * 
+     *
      * @return The x offset used to draw the shadow
      */
     public int getXOffset() {
@@ -133,7 +133,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the amount that the drop shadow will be offset along the x axis.
-     * 
+     *
      * @param xOffset The x offset used to draw the shadow
      */
     public void setXOffset(int xOffset) {
@@ -142,7 +142,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Returns the amount that the drop shadow will be offset along the y axis.
-     * 
+     *
      * @return The y offset used to draw the shadow
      */
     public int getYOffset() {
@@ -151,7 +151,7 @@ public class DropShadowDecorator implements Decorator {
 
     /**
      * Sets the amount that the drop shadow will be offset along the y axis.
-     * 
+     *
      * @param yOffset The y offset used to draw the shadow
      */
     public void setYOffset(int yOffset) {
@@ -210,7 +210,7 @@ public class DropShadowDecorator implements Decorator {
      * the decorator. The generated image dimensions are computed as follows:
      * <pre> width = imageWidth + 2 * blurRadius height = imageHeight + 2 *
      * blurRadius </pre>
-     * 
+     *
      * @param src The image from which the shadow will be cast.
      * @return An image containing the generated shadow.
      */

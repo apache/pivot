@@ -37,7 +37,7 @@ import org.apache.pivot.collections.adapter.MapAdapter;
 public class JSON {
     /**
      * Returns the value at a given path.
-     * 
+     *
      * @param root The root object.
      * @param path The path to the value as a JavaScript path.
      * @return The value at the given path.
@@ -50,7 +50,7 @@ public class JSON {
 
     /**
      * Returns the value at a given path.
-     * 
+     *
      * @param root The root object.
      * @param keys The path to the value as a sequence of keys.
      * @return The value at the given path.
@@ -122,7 +122,7 @@ public class JSON {
 
     /**
      * Sets the value at the given path.
-     * 
+     *
      * @param root
      * @param path
      * @param value
@@ -168,7 +168,7 @@ public class JSON {
 
     /**
      * Removes the value at the given path.
-     * 
+     *
      * @param root
      * @param path
      * @return The value that was removed.
@@ -206,7 +206,7 @@ public class JSON {
 
     /**
      * Tests the existence of a path in a given object.
-     * 
+     *
      * @param root
      * @param path
      * @return <tt>true</tt> if the path exists; <tt>false</tt>, otherwise.
@@ -253,7 +253,7 @@ public class JSON {
 
     /**
      * Parses a JSON path into a sequence of string keys.
-     * 
+     *
      * @param path
      */
     public static Sequence<String> parse(String path) {

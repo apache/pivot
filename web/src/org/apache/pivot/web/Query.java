@@ -40,7 +40,7 @@ import org.apache.pivot.util.ListenerList;
  * Abstract base class for web queries. A web query is an asynchronous operation
  * that executes one of the following HTTP methods: <ul> <li>GET</li>
  * <li>POST</li> <li>PUT</li> <li>DELETE</li> </ul>
- * 
+ *
  * @param <V> The type of the value retrieved or sent via the query. For GET
  * operations, it is {@link Object}; for POST operations, the type is
  * {@link URL}. For PUT and DELETE, it is {@link Void}.
@@ -158,7 +158,7 @@ public abstract class Query<V> extends IOTask<V> {
 
     /**
      * Creates a new web query.
-     * 
+     *
      * @param hostname
      * @param port
      * @param path
@@ -204,7 +204,7 @@ public abstract class Query<V> extends IOTask<V> {
 
     /**
      * Gets the proxy associated with this query.
-     * 
+     *
      * @return This query's proxy, or <tt>null</tt> if the query is using the
      * default JVM proxy settings
      */
@@ -214,7 +214,7 @@ public abstract class Query<V> extends IOTask<V> {
 
     /**
      * Sets the proxy associated with this query.
-     * 
+     *
      * @param proxy This query's proxy, or <tt>null</tt> to use the default JVM
      * proxy settings
      */
@@ -280,7 +280,7 @@ public abstract class Query<V> extends IOTask<V> {
 
     /**
      * Returns the status of the most recent execution.
-     * 
+     *
      * @return An HTTP code representing the most recent execution status.
      */
     public int getStatus() {
@@ -298,7 +298,7 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Sets the serializer used to stream the value passed to or from the web
      * query.
-     * 
+     *
      * @param serializer The serializer (must be non-null).
      */
     public void setSerializer(Serializer<?> serializer) {

@@ -389,7 +389,7 @@ public class TabPane extends Container {
 
     /**
      * Collapse or expand the TabPane (if it is collapsible).
-     * 
+     *
      * @param collapsed <tt>true</tt> to collapse, <tt>false</tt> to expand and
      * select the first tab. Use {@link #setSelectedIndex(int)} to expand and
      * select a specific Tab.

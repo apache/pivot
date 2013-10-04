@@ -60,7 +60,7 @@ public abstract class Transition {
 
     /**
      * Creates a new non-repeating transition with the given duration, rate.
-     * 
+     *
      * @param duration Transition duration, in milliseconds.
      * @param rate Transition rate, in frames per second.
      */
@@ -70,7 +70,7 @@ public abstract class Transition {
 
     /**
      * Creates a new transition with the given duration, rate, and repeat.
-     * 
+     *
      * @param duration Transition duration, in milliseconds.
      * @param rate Transition rate, in frames per second.
      * @param repeating <tt>true</tt> if the transition should repeat;
@@ -82,7 +82,7 @@ public abstract class Transition {
 
     /**
      * Creates a new transition with the given duration, rate, and repeat.
-     * 
+     *
      * @param duration Transition duration, in milliseconds.
      * @param rate Transition rate, in frames per second.
      * @param repeating <tt>true</tt> if the transition should repeat;
@@ -103,7 +103,7 @@ public abstract class Transition {
 
     /**
      * Returns the transition duration.
-     * 
+     *
      * @return The duration of the transition, in milliseconds.
      * @see #setDuration(int)
      */
@@ -114,7 +114,7 @@ public abstract class Transition {
     /**
      * Sets the transition duration, the length of time the transition is
      * scheduled to run.
-     * 
+     *
      * @param duration The duration of the transition, in milliseconds.
      */
     public void setDuration(int duration) {
@@ -131,7 +131,7 @@ public abstract class Transition {
 
     /**
      * Returns the transition rate.
-     * 
+     *
      * @return The rate of the transition, in frames per second.
      * @see #setRate(int)
      */
@@ -142,7 +142,7 @@ public abstract class Transition {
     /**
      * Sets the transition rate, the number of times the transition will be
      * updated within the span of one second.
-     * 
+     *
      * @param rate The transition rate, in frames per second.
      */
     public void setRate(int rate) {
@@ -160,7 +160,7 @@ public abstract class Transition {
     /**
      * Returns the transition interval, the number of milliseconds between
      * updates.
-     * 
+     *
      * @return The transition interval, in milliseconds.
      */
     public int getInterval() {
@@ -169,7 +169,7 @@ public abstract class Transition {
 
     /**
      * Returns the time at which the transition was started.
-     * 
+     *
      * @return The transition's start time.
      */
     public long getStartTime() {
@@ -178,7 +178,7 @@ public abstract class Transition {
 
     /**
      * Returns the last time the transition was updated.
-     * 
+     *
      * @return The most recent update time.
      */
     public long getCurrentTime() {
@@ -187,7 +187,7 @@ public abstract class Transition {
 
     /**
      * Returns the elapsed time since the transition started.
-     * 
+     *
      * @return Returns the amount of time that has passed since the transition
      * was started. If the transition is reversed, this value reflects the
      * amount of time remaining.
@@ -207,7 +207,7 @@ public abstract class Transition {
 
     /**
      * Returns the percentage of the transition that has completed.
-     * 
+     *
      * @return A value between 0 and 1, inclusive, representing the transition's
      * percent complete. If the transition is reversed, this value reflects the
      * percent remaining.
@@ -224,7 +224,7 @@ public abstract class Transition {
 
     /**
      * Tells whether or not the transition is currently running.
-     * 
+     *
      * @return <tt>true</tt> if the transition is currently running;
      * <tt>false</tt> if it is not
      */
@@ -234,7 +234,7 @@ public abstract class Transition {
 
     /**
      * Starts the transition with no listener.
-     * 
+     *
      * @see #start(TransitionListener)
      */
     public final void start() {
@@ -246,7 +246,7 @@ public abstract class Transition {
      * state and starts a timer that will repeatedly call {@link #update()} at
      * the current rate. The specified <tt>TransitionListener</tt> will be
      * notified when the transition completes.
-     * 
+     *
      * @param transitionListenerArgument The listener to get notified when the
      * transition completes, or <tt>null</tt> if no notification is necessary
      */
@@ -303,7 +303,7 @@ public abstract class Transition {
 
     /**
      * Tests whether the transition is reversed.
-     * 
+     *
      * @return <tt>true</tt> if the transition is reversed; <tt>false</tt>,
      * otherwise.
      */
@@ -313,7 +313,7 @@ public abstract class Transition {
 
     /**
      * Sets the transition's reversed flag.
-     * 
+     *
      * @param reversed
      */
     public void setReversed(boolean reversed) {

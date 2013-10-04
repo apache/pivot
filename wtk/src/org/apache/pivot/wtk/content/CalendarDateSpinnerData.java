@@ -84,7 +84,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
     /**
      * Creates a new <tt>CalendarDateSpinnerData</tt> bounded by the specified
      * calendar dates (inclusive).
-     * 
+     *
      * @param lowerBound The earliest date to include in this spinner data.
      * @param upperBound The latest date to include in this spinner data.
      */
@@ -158,7 +158,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
 
     /**
      * Gets the calendar date at the specified index.
-     * 
+     *
      * @param index The index of the calendar date to retrieve.
      */
     @Override
@@ -208,7 +208,7 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
 
     /**
      * Gets the number of entries in this list.
-     * 
+     *
      * @return The number of calendar dates in this list.
      */
     @Override

@@ -43,7 +43,7 @@ public interface MenuHandler {
     /**
      * Called when a component to which this handler is attached gains the
      * focus.
-     * 
+     *
      * @param component
      * @param menuBar
      */
@@ -52,7 +52,7 @@ public interface MenuHandler {
     /**
      * Called when a component to which this handler is attached loses the
      * focus.
-     * 
+     *
      * @param component
      * @param menuBar
      */
@@ -61,7 +61,7 @@ public interface MenuHandler {
     /**
      * Called when the user right-clicks on a component to which this handler is
      * attached.
-     * 
+     *
      * @param component
      * @param menu
      * @param x

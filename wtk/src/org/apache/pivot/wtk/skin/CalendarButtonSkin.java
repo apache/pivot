@@ -281,7 +281,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
     /**
      * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
      * state.
-     * 
+     *
      * @see #keyReleased(Component, int,
      * org.apache.pivot.wtk.Keyboard.KeyLocation)
      */

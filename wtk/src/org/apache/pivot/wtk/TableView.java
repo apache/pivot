@@ -80,7 +80,7 @@ public class TableView extends Component {
 
         /**
          * Creates a new column with no header data and a fixed default width.
-         * 
+         *
          * @param name The column name.
          */
         public Column(String name) {
@@ -89,7 +89,7 @@ public class TableView extends Component {
 
         /**
          * Creates a new column with a fixed default width.
-         * 
+         *
          * @param name The column name.
          * @param headerData The column header data.
          */
@@ -99,7 +99,7 @@ public class TableView extends Component {
 
         /**
          * Creates a new column with a fixed width.
-         * 
+         *
          * @param name The column name.
          * @param headerData The column header data.
          * @param width The width of the column.
@@ -110,7 +110,7 @@ public class TableView extends Component {
 
         /**
          * Creates a new column.
-         * 
+         *
          * @param name The column name.
          * @param headerData The column header data.
          * @param width The width of the column.
@@ -125,7 +125,7 @@ public class TableView extends Component {
 
         /**
          * Returns the table view with which this column is associated.
-         * 
+         *
          * @return The column's table view, or <tt>null</tt> if the column does
          * not currently belong to a table.
          */
@@ -135,7 +135,7 @@ public class TableView extends Component {
 
         /**
          * Returns the column name.
-         * 
+         *
          * @return The column name.
          */
         public String getName() {
@@ -144,7 +144,7 @@ public class TableView extends Component {
 
         /**
          * Sets the column name.
-         * 
+         *
          * @param name The column name.
          */
         public void setName(String name) {
@@ -161,7 +161,7 @@ public class TableView extends Component {
 
         /**
          * Returns the column header data.
-         * 
+         *
          * @return The column header data, or <tt>null</tt> if the column has no
          * header data.
          */
@@ -171,7 +171,7 @@ public class TableView extends Component {
 
         /**
          * Sets the column header data.
-         * 
+         *
          * @param headerData The column header data, or <tt>null</tt> for no
          * header data.
          */
@@ -197,7 +197,7 @@ public class TableView extends Component {
 
         /**
          * Sets the column header data renderer.
-         * 
+         *
          * @param headerDataRenderer
          */
         public void setHeaderDataRenderer(HeaderDataRenderer headerDataRenderer) {
@@ -218,7 +218,7 @@ public class TableView extends Component {
 
         /**
          * Returns the column width.
-         * 
+         *
          * @return The width of the column.
          */
         public int getWidth() {
@@ -227,7 +227,7 @@ public class TableView extends Component {
 
         /**
          * Returns the relative flag.
-         * 
+         *
          * @return <tt>true</tt> if the column width is relative, <tt>false</tt>
          * if it is fixed.
          */
@@ -237,7 +237,7 @@ public class TableView extends Component {
 
         /**
          * Set the column width.
-         * 
+         *
          * @param width The absolute width of the column.
          */
         public void setWidth(int width) {
@@ -246,7 +246,7 @@ public class TableView extends Component {
 
         /**
          * Set the column width.
-         * 
+         *
          * @param width The encoded width of the row. If the string ends with
          * the '*' character, it is treated as a relative value. Otherwise, it
          * is considered an absolute value.
@@ -265,7 +265,7 @@ public class TableView extends Component {
 
         /**
          * Sets the column width.
-         * 
+         *
          * @param width The width of the column.
          * @param relative <tt>true</tt> if the column width is relative,
          * <tt>false</tt> if it is fixed.
@@ -298,7 +298,7 @@ public class TableView extends Component {
 
         /**
          * Sets the minimum and maximum widths the column can size to.
-         * 
+         *
          * @param minimumWidth Column width cannot be smaller than this size.
          * @param maximumWidth Column width cannot be greater than this size.
          */
@@ -328,7 +328,7 @@ public class TableView extends Component {
 
         /**
          * Sets the minimum and maximum widths to which the column can size.
-         * 
+         *
          * @param widthLimits The new width limits.
          */
         public void setWidthLimits(Limits widthLimits) {
@@ -337,7 +337,7 @@ public class TableView extends Component {
 
         /**
          * Gets the minimum width the column is allowed to be.
-         * 
+         *
          * @return Minimum column width.
          */
         public int getMinimumWidth() {
@@ -346,7 +346,7 @@ public class TableView extends Component {
 
         /**
          * Sets the minimum width the column is allowed to be.
-         * 
+         *
          * @param minimumWidth Minimum column width.
          */
         public void setMinimumWidth(int minimumWidth) {
@@ -355,7 +355,7 @@ public class TableView extends Component {
 
         /**
          * Get the maximum width the column is allowed to be.
-         * 
+         *
          * @return Maximum column width.
          */
         public int getMaximumWidth() {
@@ -364,7 +364,7 @@ public class TableView extends Component {
 
         /**
          * Set the maximum width the column is allowed to be.
-         * 
+         *
          * @param maximumWidth Maximum column width.
          */
         public void setMaximumWidth(int maximumWidth) {
@@ -373,7 +373,7 @@ public class TableView extends Component {
 
         /**
          * Returns the column's filter.
-         * 
+         *
          * @return The column's filter, or <tt>null</tt> if the column does not
          * have a filter.
          */
@@ -383,7 +383,7 @@ public class TableView extends Component {
 
         /**
          * Sets the column's filter.
-         * 
+         *
          * @param filter The column's filter, or <tt>null</tt> for no filter.
          */
         public void setFilter(Object filter) {
@@ -400,7 +400,7 @@ public class TableView extends Component {
 
         /**
          * Returns the column's cell renderer.
-         * 
+         *
          * @return The cell renderer that is used to draw the contents of this
          * column.
          */
@@ -410,7 +410,7 @@ public class TableView extends Component {
 
         /**
          * Sets the column's cell renderer.
-         * 
+         *
          * @param cellRenderer The cell renderer that is used to draw the
          * contents of this column.
          */
@@ -459,7 +459,7 @@ public class TableView extends Component {
     public interface CellRenderer extends Renderer {
         /**
          * Prepares the renderer for layout or paint.
-         * 
+         *
          * @param row The row to render, or <tt>null</tt> if called to calculate
          * preferred height for skins that assume a fixed renderer height.
          * @param rowIndex The index of the row being rendered, or <tt>-1</tt> if
@@ -476,7 +476,7 @@ public class TableView extends Component {
 
         /**
          * Converts table view cell data to a string representation.
-         * 
+         *
          * @param row
          * @param columnName
          * @return The cell data's string representation, or <tt>null</tt> if the
@@ -494,7 +494,7 @@ public class TableView extends Component {
     public interface HeaderDataRenderer extends Renderer {
         /**
          * Prepares the renderer for layout or paint.
-         * 
+         *
          * @param data The data to render, or <tt>null</tt> if called to
          * calculate preferred height for skins that assume a fixed renderer
          * height.
@@ -508,7 +508,7 @@ public class TableView extends Component {
 
         /**
          * Converts table view header data to a string representation.
-         * 
+         *
          * @param item
          * @return The data's string representation, or <tt>null</tt> if the data
          * does not have a string representation. <p> Note that this method may
@@ -524,7 +524,7 @@ public class TableView extends Component {
     public interface RowEditor {
         /**
          * Called to begin editing a table row.
-         * 
+         *
          * @param tableView
          * @param rowIndex
          * @param columnIndex
@@ -533,7 +533,7 @@ public class TableView extends Component {
 
         /**
          * Terminates an edit operation.
-         * 
+         *
          * @param result <tt>true</tt> to perform the edit; <tt>false</tt> to
          * cancel it.
          */
@@ -566,14 +566,14 @@ public class TableView extends Component {
     public interface TableDataBindMapping {
         /**
          * Converts a context value to table data.
-         * 
+         *
          * @param value
          */
         public List<?> toTableData(Object value);
 
         /**
          * Converts table data to a context value.
-         * 
+         *
          * @param tableData
          */
         public Object valueOf(List<?> tableData);
@@ -585,7 +585,7 @@ public class TableView extends Component {
     public interface SelectedRowBindMapping {
         /**
          * Returns the index of the row in the source list.
-         * 
+         *
          * @param tableData The source table data.
          * @param value The value to locate.
          * @return The index of first occurrence of the value if it exists in the
@@ -595,7 +595,7 @@ public class TableView extends Component {
 
         /**
          * Retrieves the value at the given index.
-         * 
+         *
          * @param tableData The source table data.
          * @param index The index of the value to retrieve.
          */
@@ -1166,7 +1166,7 @@ public class TableView extends Component {
 
     /**
      * Creates a new table view populated with the given table data.
-     * 
+     *
      * @param tableData
      */
     public TableView(List<?> tableData) {
@@ -1186,7 +1186,7 @@ public class TableView extends Component {
 
     /**
      * Returns the table column sequence.
-     * 
+     *
      * @return The table column sequence.
      */
     public ColumnSequence getColumns() {
@@ -1201,7 +1201,7 @@ public class TableView extends Component {
 
     /**
      * Returns the table data.
-     * 
+     *
      * @return The data currently presented by the table view.
      */
     public List<?> getTableData() {
@@ -1210,7 +1210,7 @@ public class TableView extends Component {
 
     /**
      * Sets the table data.
-     * 
+     *
      * @param tableData The data to be presented by the table view.
      */
     @SuppressWarnings("unchecked")
@@ -1251,7 +1251,7 @@ public class TableView extends Component {
 
     /**
      * Sets the table data.
-     * 
+     *
      * @param tableData A JSON string (must begin with <tt>[</tt> and end with
      * <tt>]</tt>) denoting the data to be presented by the table view.
      */
@@ -1269,7 +1269,7 @@ public class TableView extends Component {
 
     /**
      * Sets the table data.
-     * 
+     *
      * @param tableData A URL referring to a JSON file containing the data to be
      * presented by the table view.
      */
@@ -1304,7 +1304,7 @@ public class TableView extends Component {
 
     /**
      * Returns the editor used to edit rows in this table.
-     * 
+     *
      * @return The row editor, or <tt>null</tt> if no editor is installed.
      */
     public RowEditor getRowEditor() {
@@ -1313,7 +1313,7 @@ public class TableView extends Component {
 
     /**
      * Sets the editor used to edit rows in this table.
-     * 
+     *
      * @param rowEditor The row editor for the list.
      */
     public void setRowEditor(RowEditor rowEditor) {
@@ -1327,7 +1327,7 @@ public class TableView extends Component {
 
     /**
      * Returns the currently selected index, even when in multi-select mode.
-     * 
+     *
      * @return The currently selected index.
      */
     public int getSelectedIndex() {
@@ -1336,7 +1336,7 @@ public class TableView extends Component {
 
     /**
      * Sets the selection to a single index.
-     * 
+     *
      * @param index The index to select, or <tt>-1</tt> to clear the selection.
      */
     public void setSelectedIndex(int index) {
@@ -1352,7 +1352,7 @@ public class TableView extends Component {
 
     /**
      * Sets the selection to a single range.
-     * 
+     *
      * @param start
      * @param end
      */
@@ -1365,7 +1365,7 @@ public class TableView extends Component {
 
     /**
      * Returns the currently selected ranges.
-     * 
+     *
      * @return An immutable list containing the currently selected ranges. Note
      * that the returned list is a wrapper around the actual selection, not a
      * copy. Any changes made to the selection state will be reflected in the
@@ -1379,7 +1379,7 @@ public class TableView extends Component {
      * Sets the selection to the given range sequence. Any overlapping or
      * connecting ranges will be consolidated, and the resulting selection will
      * be sorted in ascending order.
-     * 
+     *
      * @param selectedRanges
      * @return The ranges that were actually set.
      */
@@ -1431,7 +1431,7 @@ public class TableView extends Component {
 
     /**
      * Sets the selection to the given range sequence.
-     * 
+     *
      * @param selectedRanges A JSON-formatted string containing the ranges to
      * select.
      * @return The ranges that were actually set.
@@ -1466,7 +1466,7 @@ public class TableView extends Component {
 
     /**
      * Returns the first selected index.
-     * 
+     *
      * @return The first selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getFirstSelectedIndex() {
@@ -1475,7 +1475,7 @@ public class TableView extends Component {
 
     /**
      * Returns the last selected index.
-     * 
+     *
      * @return The last selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getLastSelectedIndex() {
@@ -1485,7 +1485,7 @@ public class TableView extends Component {
 
     /**
      * Adds a single index to the selection.
-     * 
+     *
      * @param index The index to add.
      * @return <tt>true</tt> if the index was added to the selection;
      * <tt>false</tt>, otherwise.
@@ -1497,7 +1497,7 @@ public class TableView extends Component {
 
     /**
      * Adds a range of indexes to the selection.
-     * 
+     *
      * @param start The first index in the range.
      * @param end The last index in the range.
      * @return The ranges that were added to the selection.
@@ -1532,7 +1532,7 @@ public class TableView extends Component {
 
     /**
      * Adds a range of indexes to the selection.
-     * 
+     *
      * @param range The range to add.
      * @return The ranges that were added to the selection.
      */
@@ -1546,7 +1546,7 @@ public class TableView extends Component {
 
     /**
      * Removes a single index from the selection.
-     * 
+     *
      * @param index The index to remove.
      * @return <tt>true</tt> if the index was removed from the selection;
      * <tt>false</tt>, otherwise.
@@ -1558,7 +1558,7 @@ public class TableView extends Component {
 
     /**
      * Removes a range of indexes from the selection.
-     * 
+     *
      * @param start The start of the range to remove.
      * @param end The end of the range to remove.
      * @return The ranges that were removed from the selection.
@@ -1594,7 +1594,7 @@ public class TableView extends Component {
 
     /**
      * Removes a range of indexes from the selection.
-     * 
+     *
      * @param range The range to remove.
      * @return The ranges that were removed from the selection.
      */
@@ -1624,7 +1624,7 @@ public class TableView extends Component {
 
     /**
      * Returns the selection state of a given index.
-     * 
+     *
      * @param index The index whose selection state is to be tested.
      * @return <tt>true</tt> if the index is selected; <tt>false</tt>, otherwise.
      */
@@ -1699,7 +1699,7 @@ public class TableView extends Component {
 
     /**
      * Sets the selection mode. Clears the selection if the mode has changed.
-     * 
+     *
      * @param selectMode The new selection mode.
      */
     public void setSelectMode(SelectMode selectMode) {
@@ -1730,7 +1730,7 @@ public class TableView extends Component {
 
     /**
      * Sets the table view's sort.
-     * 
+     *
      * @param columnName
      * @param sortDirection
      */
@@ -1746,7 +1746,7 @@ public class TableView extends Component {
 
     /**
      * Sets the table view's sort.
-     * 
+     *
      * @param sort A sequence of key/value pairs representing the sort. Keys
      * represent column names and values represent sort direction.
      */
@@ -1775,7 +1775,7 @@ public class TableView extends Component {
 
     /**
      * Sets the table view's sort.
-     * 
+     *
      * @param sort A JSON list containing JSON objects representing the sort.
      * @see #setSort(Sequence)
      */
@@ -1824,7 +1824,7 @@ public class TableView extends Component {
 
     /**
      * Returns the disabled state of a given row.
-     * 
+     *
      * @param index The index of the row whose disabled state is to be tested.
      * @return <tt>true</tt> if the row is disabled; <tt>false</tt>, otherwise.
      */
@@ -1842,7 +1842,7 @@ public class TableView extends Component {
 
     /**
      * Returns the disabled row filter.
-     * 
+     *
      * @return The disabled row filter, or <tt>null</tt> if no disabled row
      * filter is set.
      */
@@ -1852,7 +1852,7 @@ public class TableView extends Component {
 
     /**
      * Sets the disabled row filter.
-     * 
+     *
      * @param disabledRowFilter The disabled row filter, or <tt>null</tt> for no
      * disabled row filter.
      */
@@ -2158,7 +2158,7 @@ public class TableView extends Component {
 
     /**
      * Returns the index of the row at a given location.
-     * 
+     *
      * @param y The y-coordinate of the row to identify.
      * @return The row index, or <tt>-1</tt> if there is no row at the given
      * y-coordinate.
@@ -2170,7 +2170,7 @@ public class TableView extends Component {
 
     /**
      * Returns the index of the column at a given location.
-     * 
+     *
      * @param x The x-coordinate of the column to identify.
      * @return The column index, or <tt>-1</tt> if there is no column at the
      * given x-coordinate.
@@ -2182,7 +2182,7 @@ public class TableView extends Component {
 
     /**
      * Returns the bounding area of a given row.
-     * 
+     *
      * @param rowIndex The row index.
      * @return The bounding area of the row.
      */
@@ -2193,7 +2193,7 @@ public class TableView extends Component {
 
     /**
      * Returns the bounding area of a given column.
-     * 
+     *
      * @param columnIndex The column index.
      * @return The bounding area of the column.
      */
@@ -2204,7 +2204,7 @@ public class TableView extends Component {
 
     /**
      * Returns the bounding area of a given cell.
-     * 
+     *
      * @param rowIndex The row index of the cell.
      * @param columnIndex The column index of the cell.
      * @return The bounding area of the cell.

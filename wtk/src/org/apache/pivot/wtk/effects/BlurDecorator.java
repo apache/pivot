@@ -50,7 +50,7 @@ public class BlurDecorator implements Decorator {
 
     /**
      * Creates a <tt>BlurDecorator</tt> with the default blur magnitude.
-     * 
+     *
      * @see #BlurDecorator(int)
      */
     public BlurDecorator() {
@@ -59,7 +59,7 @@ public class BlurDecorator implements Decorator {
 
     /**
      * Creates a <tt>BlurDecorator</tt> with the specified blur magnitude.
-     * 
+     *
      * @param blurMagnitude The intensity of the blur.
      */
     public BlurDecorator(int blurMagnitude) {

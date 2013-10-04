@@ -48,7 +48,7 @@ public final class Clipboard {
 
     /**
      * Places content on the clipboard.
-     * 
+     *
      * @param content
      */
     public static void setContent(LocalManifest content) {
@@ -57,7 +57,7 @@ public final class Clipboard {
 
     /**
      * Places content on the clipboard.
-     * 
+     *
      * @param content
      */
     public static void setContent(LocalManifest content,

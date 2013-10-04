@@ -75,7 +75,7 @@ public abstract class Node {
 
     /**
      * Returns the parent element of this node.
-     * 
+     *
      * @return The node's parent, or <tt>null</tt> if the node does not have a
      * parent.
      */
@@ -94,7 +94,7 @@ public abstract class Node {
 
     /**
      * Returns the node's offset within its parent.
-     * 
+     *
      * @return The integer offset of the node's first character within its
      * parent element.
      */
@@ -121,7 +121,7 @@ public abstract class Node {
     /**
      * Inserts a range into the node. Note that the contents of the range,
      * rather than the range itself, is added to the node.
-     * 
+     *
      * @param range
      * @param offsetArgument
      */
@@ -129,7 +129,7 @@ public abstract class Node {
 
     /**
      * Removes a range from the node.
-     * 
+     *
      * @param offsetArgument
      * @param characterCount
      * @return The removed range. This will be a copy of the node structure
@@ -139,7 +139,7 @@ public abstract class Node {
 
     /**
      * Replaces an existing range with a new range.
-     * 
+     *
      * @param offsetArgument
      * @param characterCount
      * @param range
@@ -155,7 +155,7 @@ public abstract class Node {
 
     /**
      * Returns a range from the node.
-     * 
+     *
      * @param offsetArgument
      * @param characterCount
      * @return A node containing a copy of the node structure spanning the given
@@ -165,7 +165,7 @@ public abstract class Node {
 
     /**
      * Returns the character at the given offset.
-     * 
+     *
      * @param offsetArgument
      */
     public abstract char getCharacterAt(int offsetArgument);
@@ -177,14 +177,14 @@ public abstract class Node {
 
     /**
      * Creates a copy of this node.
-     * 
+     *
      * @param recursive
      */
     public abstract Node duplicate(boolean recursive);
 
     /**
      * Called to notify a node that a range has been inserted.
-     * 
+     *
      * @param offsetArgument
      * @param characterCount
      */
@@ -198,7 +198,7 @@ public abstract class Node {
 
     /**
      * Called to notify a node that a range has been removed.
-     * 
+     *
      * @param offsetArgument
      * @param characterCount
      */
@@ -212,7 +212,7 @@ public abstract class Node {
 
     /**
      * Called to notify a node that some child nodes has been removed.
-     * 
+     *
      * @param removed
      * @param offsetArgument
      */
@@ -226,7 +226,7 @@ public abstract class Node {
 
     /**
      * Called to notify a node that a child node has been inserted.
-     * 
+     *
      * @param offsetArgument
      */
     protected void nodeInserted(int offsetArgument) {

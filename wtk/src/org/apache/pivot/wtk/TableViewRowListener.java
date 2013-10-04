@@ -52,7 +52,7 @@ public interface TableViewRowListener {
 
     /**
      * Called when a row has been inserted into the table view.
-     * 
+     *
      * @param tableView The source of the event.
      * @param index The index of the row that was inserted.
      */
@@ -60,7 +60,7 @@ public interface TableViewRowListener {
 
     /**
      * Called when rows have been removed from the table view.
-     * 
+     *
      * @param tableView The source of the event.
      * @param index The first index affected by the event.
      * @param count The number of rows that were removed, or <tt>-1</tt> if all
@@ -70,7 +70,7 @@ public interface TableViewRowListener {
 
     /**
      * Called when an row in the table view has been updated.
-     * 
+     *
      * @param tableView The source of the event.
      * @param index The first index affected by the event.
      */
@@ -78,14 +78,14 @@ public interface TableViewRowListener {
 
     /**
      * Called when the rows in a table view have been cleared.
-     * 
+     *
      * @param tableView
      */
     public void rowsCleared(TableView tableView);
 
     /**
      * Called when the rows in a table have been sorted.
-     * 
+     *
      * @param tableView The source of the event.
      */
     public void rowsSorted(TableView tableView);

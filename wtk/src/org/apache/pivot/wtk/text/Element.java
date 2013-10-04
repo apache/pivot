@@ -478,7 +478,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     /**
      * Determines the index of the child node at a given offset.
-     * 
+     *
      * @param offset
      * @return The index of the child node at the given offset.
      */
@@ -500,7 +500,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     /**
      * Determines the path of the descendant node at a given offset.
-     * 
+     *
      * @param offset
      * @return The path to the descendant node at the given offset.
      */
@@ -524,7 +524,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     /**
      * Determines the descendant node at a given offset.
-     * 
+     *
      * @param offset
      * @return The descendant node at the given offset.
      */
@@ -627,7 +627,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     /**
      * Sets the currently foreground color.
-     * 
+     *
      * @param foregroundColor The foreground color, or <tt>null</tt> to specify
      * no selection
      */
@@ -642,7 +642,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     /**
      * Sets the currently foreground color.
-     * 
+     *
      * @param foregroundColor The foreground color
      */
     public void setForegroundColor(String foregroundColor) {
@@ -663,7 +663,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     /**
      * Sets the currently background color.
-     * 
+     *
      * @param backgroundColor The background color, or <tt>null</tt> to specify
      * no selection
      */
@@ -678,7 +678,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     /**
      * Sets the currently background color.
-     * 
+     *
      * @param backgroundColor The background color
      */
     public void setBackgroundColor(String backgroundColor) {

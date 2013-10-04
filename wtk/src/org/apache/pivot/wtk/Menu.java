@@ -201,7 +201,7 @@ public class Menu extends Container {
     public interface ItemListener {
         /**
          * Called when an item's menu has changed.
-         * 
+         *
          * @param item
          * @param previousMenu
          */
@@ -209,7 +209,7 @@ public class Menu extends Container {
 
         /**
          * Called when an item's active state has changed.
-         * 
+         *
          * @param item
          */
         public void activeChanged(Item item);
@@ -356,7 +356,7 @@ public class Menu extends Container {
     public interface SectionListener {
         /**
          * Called when a menu item has been inserted.
-         * 
+         *
          * @param section
          * @param index
          */
@@ -364,7 +364,7 @@ public class Menu extends Container {
 
         /**
          * Called when menu items have been removed.
-         * 
+         *
          * @param section
          * @param index
          * @param removed
@@ -373,7 +373,7 @@ public class Menu extends Container {
 
         /**
          * Called when a section's name has changed.
-         * 
+         *
          * @param section
          * @param previousName
          */

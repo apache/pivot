@@ -59,7 +59,7 @@ public interface AlertListener {
 
     /**
      * Called when an alert's message type has changed.
-     * 
+     *
      * @param alert
      * @param previousMessageType
      */
@@ -67,7 +67,7 @@ public interface AlertListener {
 
     /**
      * Called when an alert's message has changed.
-     * 
+     *
      * @param alert
      * @param previousMessage
      */
@@ -75,7 +75,7 @@ public interface AlertListener {
 
     /**
      * Called when an alert's body has changed.
-     * 
+     *
      * @param alert
      * @param previousBody
      */
@@ -83,7 +83,7 @@ public interface AlertListener {
 
     /**
      * Called when an option has been inserted into an alert's option sequence.
-     * 
+     *
      * @param alert
      * @param index
      */
@@ -91,7 +91,7 @@ public interface AlertListener {
 
     /**
      * Called when options have been removed from an alert's option sequence.
-     * 
+     *
      * @param alert
      * @param index
      * @param removed
@@ -100,7 +100,7 @@ public interface AlertListener {
 
     /**
      * Called when an alert's selected option has changed.
-     * 
+     *
      * @param alert
      * @param previousSelectedOption
      */

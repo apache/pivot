@@ -336,7 +336,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     /**
      * Sets the font used in rendering the title
-     * 
+     *
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
@@ -349,7 +349,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     /**
      * Sets the font used in rendering the title
-     * 
+     *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
@@ -381,7 +381,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     /**
      * Sets the color of the border
-     * 
+     *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
@@ -468,7 +468,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     /**
      * Sets the amount of space to leave between the edge of the Border and its
      * content.
-     * 
+     *
      * @param padding A dictionary with keys in the set {left, top, bottom,
      * right}.
      */
@@ -503,7 +503,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     /**
      * Sets the amount of space to leave between the edge of the Border and its
      * content.
-     * 
+     *
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */
@@ -537,7 +537,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     /**
      * Sets the radii of the Border's corners
-     * 
+     *
      * @param cornerRadii A Dictionary
      * {@link CornerRadii#CornerRadii(Dictionary) specifying the four corners}
      */
@@ -569,7 +569,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
     /**
      * Sets the radii of the Border's corners
-     * 
+     *
      * @param cornerRadii A single integer value, or a JSON dictionary
      * {@link CornerRadii#CornerRadii(Dictionary) specifying the four corners}
      */

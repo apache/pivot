@@ -36,14 +36,14 @@ public class TextInput extends Component {
     public interface Skin {
         /**
          * Returns the insertion point for a given location.
-         * 
+         *
          * @param x
          */
         public int getInsertionPoint(int x);
 
         /**
          * Returns the bounds of the character at a given index.
-         * 
+         *
          * @param index
          */
         public Bounds getCharacterBounds(int index);
@@ -56,7 +56,7 @@ public class TextInput extends Component {
         /**
          * Converts a value from the bind context to a text representation
          * during a {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public String toString(Object value);
@@ -64,7 +64,7 @@ public class TextInput extends Component {
         /**
          * Converts a text string to a value to be stored in the bind context
          * during a {@link Component#store(Object)} operation.
-         * 
+         *
          * @param text
          */
         public Object valueOf(String text);
@@ -306,7 +306,7 @@ public class TextInput extends Component {
 
     /**
      * Returns the text content of the text input.
-     * 
+     *
      * @return A string containing a copy of the text input's text content.
      */
     public String getText() {
@@ -315,7 +315,7 @@ public class TextInput extends Component {
 
     /**
      * Returns a portion of the text content of the text input.
-     * 
+     *
      * @param beginIndex
      * @param endIndex
      * @return A string containing a copy of the text area's text content.
@@ -469,7 +469,7 @@ public class TextInput extends Component {
 
     /**
      * Returns the character at a given index.
-     * 
+     *
      * @param index
      */
     public char getCharacterAt(int index) {
@@ -550,7 +550,7 @@ public class TextInput extends Component {
 
     /**
      * Returns the starting index of the selection.
-     * 
+     *
      * @return The starting index of the selection.
      */
     public int getSelectionStart() {
@@ -559,7 +559,7 @@ public class TextInput extends Component {
 
     /**
      * Returns the length of the selection.
-     * 
+     *
      * @return The length of the selection; may be <tt>0</tt>.
      */
     public int getSelectionLength() {
@@ -568,7 +568,7 @@ public class TextInput extends Component {
 
     /**
      * Returns a span representing the current selection.
-     * 
+     *
      * @return A span containing the current selection. Both start and end
      * points are inclusive. Returns <tt>null</tt> if the selection length is
      * <tt>0</tt>.
@@ -581,7 +581,7 @@ public class TextInput extends Component {
     /**
      * Sets the selection. The sum of the selection start and length must be
      * less than the length of the text input's content.
-     * 
+     *
      * @param selectionStart The starting index of the selection.
      * @param selectionLength The length of the selection.
      */
@@ -608,7 +608,7 @@ public class TextInput extends Component {
 
     /**
      * Sets the selection.
-     * 
+     *
      * @param selection
      * @see #setSelection(int, int)
      */
@@ -636,7 +636,7 @@ public class TextInput extends Component {
 
     /**
      * Returns the currently selected text.
-     * 
+     *
      * @return A new string containing a copy of the text in the selected range.
      */
     public String getSelectedText() {
@@ -645,7 +645,7 @@ public class TextInput extends Component {
 
     /**
      * Returns the text size.
-     * 
+     *
      * @return The number of characters to display in the text input.
      */
     public int getTextSize() {
@@ -654,7 +654,7 @@ public class TextInput extends Component {
 
     /**
      * Sets the text size.
-     * 
+     *
      * @param textSize The number of characters to display in the text input.
      */
     public void setTextSize(int textSize) {
@@ -672,7 +672,7 @@ public class TextInput extends Component {
 
     /**
      * Returns the maximum length of the text input's text content.
-     * 
+     *
      * @return The maximum length of the text input's text content.
      */
     public int getMaximumLength() {
@@ -681,7 +681,7 @@ public class TextInput extends Component {
 
     /**
      * Sets the maximum length of the text input's text content.
-     * 
+     *
      * @param maximumLength The maximum length of the text input's text content.
      */
     public void setMaximumLength(int maximumLength) {
@@ -711,7 +711,7 @@ public class TextInput extends Component {
 
     /**
      * Returns the password flag.
-     * 
+     *
      * @return <tt>true</tt> if this is a password text input; <tt>false</tt>,
      * otherwise.
      */
@@ -722,7 +722,7 @@ public class TextInput extends Component {
     /**
      * Sets or clears the password flag. If the password flag is set, the text
      * input will visually mask its contents.
-     * 
+     *
      * @param password <tt>true</tt> if this is a password text input;
      * <tt>false</tt>, otherwise.
      */
@@ -742,7 +742,7 @@ public class TextInput extends Component {
 
     /**
      * Sets the text input's prompt.
-     * 
+     *
      * @param prompt The prompt text, or <tt>null</tt> for no prompt.
      */
     public void setPrompt(String prompt) {
@@ -756,7 +756,7 @@ public class TextInput extends Component {
 
     /**
      * Returns the text input's text key.
-     * 
+     *
      * @return The text key, or <tt>null</tt> if no text key is set.
      */
     public String getTextKey() {
@@ -765,7 +765,7 @@ public class TextInput extends Component {
 
     /**
      * Sets the text input's text key.
-     * 
+     *
      * @param textKey The text key, or <tt>null</tt> to clear the binding.
      */
     public void setTextKey(String textKey) {
@@ -857,7 +857,7 @@ public class TextInput extends Component {
 
     /**
      * Sets the validator associated with this text input.
-     * 
+     *
      * @param validator The validator to use, or <tt>null</tt> to use no
      * validator.
      */
@@ -892,7 +892,7 @@ public class TextInput extends Component {
     /**
      * Sets the text input's strict validation flag. When enabled, only valid
      * text will be accepted by the text input.
-     * 
+     *
      * @param strictValidation
      */
     public void setStrictValidation(boolean strictValidation) {
@@ -905,7 +905,7 @@ public class TextInput extends Component {
     /**
      * Reports whether this text input's text is currently valid as defined by
      * its validator.
-     * 
+     *
      * @return <tt>true</tt> if the text is valid or no validator is installed;
      * <tt>false</tt>, otherwise.
      */
@@ -922,7 +922,7 @@ public class TextInput extends Component {
 
     /**
      * Sets the text area's editable flag.
-     * 
+     *
      * @param editable
      */
     public void setEditable(boolean editable) {

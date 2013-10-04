@@ -54,7 +54,7 @@ public interface MapListener<K, V> {
 
     /**
      * Called when a key/value pair has been added to a map.
-     * 
+     *
      * @param map The source of the map event.
      * @param key The key that was added to the map.
      */
@@ -62,7 +62,7 @@ public interface MapListener<K, V> {
 
     /**
      * Called when a map value has been updated.
-     * 
+     *
      * @param map The source of the map event.
      * @param key The key whose value was updated.
      * @param previousValue The value that was previously associated with the
@@ -72,7 +72,7 @@ public interface MapListener<K, V> {
 
     /**
      * Called when a key/value pair has been removed from a map.
-     * 
+     *
      * @param map The source of the map event.
      * @param key The key that was removed.
      * @param value The value that was removed.
@@ -81,14 +81,14 @@ public interface MapListener<K, V> {
 
     /**
      * Called when map data has been reset.
-     * 
+     *
      * @param map The source of the map event.
      */
     public void mapCleared(Map<K, V> map);
 
     /**
      * Called when a map's comparator has changed.
-     * 
+     *
      * @param map The source of the event.
      * @param previousComparator The previous comparator value.
      */

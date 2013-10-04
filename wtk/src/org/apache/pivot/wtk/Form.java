@@ -259,7 +259,7 @@ public class Form extends Container {
 
         /**
          * Creates a new flag with the given message type and no message.
-         * 
+         *
          * @param messageType The type of the flag.
          */
         public Flag(MessageType messageType) {
@@ -268,7 +268,7 @@ public class Form extends Container {
 
         /**
          * Creates a new flag with the given type and message.
-         * 
+         *
          * @param messageType The type of the flag.
          * @param message The message text associated with the flag, or
          * <tt>null</tt> for no message.
@@ -284,7 +284,7 @@ public class Form extends Container {
 
         /**
          * Returns the flag's message type.
-         * 
+         *
          * @return The message type of the flag.
          */
         public MessageType getMessageType() {
@@ -293,7 +293,7 @@ public class Form extends Container {
 
         /**
          * Sets the flag's message type.
-         * 
+         *
          * @param messageType
          */
         public void setMessageType(MessageType messageType) {
@@ -306,7 +306,7 @@ public class Form extends Container {
 
         /**
          * Returns the flag message.
-         * 
+         *
          * @return The message text associated with the flag, or <tt>null</tt>
          * if there is no message.
          */
@@ -316,7 +316,7 @@ public class Form extends Container {
 
         /**
          * Sets the flag message.
-         * 
+         *
          * @param message The message text associated with the flag, or
          * <tt>null</tt> if there is no message.
          */
@@ -427,7 +427,7 @@ public class Form extends Container {
 
     /**
      * Returns the form's field sequence.
-     * 
+     *
      * @return The form's field sequence.
      */
     public SectionSequence getSections() {
@@ -447,7 +447,7 @@ public class Form extends Container {
 
     /**
      * Returns the number of fields that are flagged with a given message type.
-     * 
+     *
      * @param messageType The message type to count, or <tt>null</tt> to return
      * the count of all flagged fields regardless of message type.
      */
@@ -469,7 +469,7 @@ public class Form extends Container {
 
     /**
      * Ensures that the first field with the given flag type is visible.
-     * 
+     *
      * @param messageType The message type, or <tt>null</tt> to scroll the first
      * flag of any type to visible.
      */
@@ -510,7 +510,7 @@ public class Form extends Container {
 
     /**
      * Returns the form listener list.
-     * 
+     *
      * @return The form listener list.
      */
     public ListenerList<FormListener> getFormListeners() {
@@ -519,7 +519,7 @@ public class Form extends Container {
 
     /**
      * Returns the form attribute listener list.
-     * 
+     *
      * @return The form attribute listener list.
      */
     public ListenerList<FormAttributeListener> getFormAttributeListeners() {
@@ -529,7 +529,7 @@ public class Form extends Container {
     /**
      * Finds the {@link Form.Section} that the given component belongs to. Only
      * finds the section if the component is a direct child of the section.
-     * 
+     *
      * @see #getEnclosingSection getEnclosingSection(Component)
      */
     public static Section getSection(Component component) {
@@ -540,7 +540,7 @@ public class Form extends Container {
      * Finds the {@link Form.Section} that the given component belongs to. Will
      * search up the parent hierarchy in case the component is nested inside
      * other containers inside the form.
-     * 
+     *
      * @return The form section this component (or one of its parents) belongs
      * to or <code>null</code> if the component does not belong to a form.
      * @see #getSection getSection(Component)

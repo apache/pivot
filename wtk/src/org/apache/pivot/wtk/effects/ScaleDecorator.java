@@ -54,7 +54,7 @@ public class ScaleDecorator implements Decorator {
     /**
      * Creates a new <tt>ScaleDecorator</tt> with the specified <tt>scaleX</tt>
      * and <tt>scaleY</tt> values.
-     * 
+     *
      * @param scaleX The amount to scale the component's x-axis
      * @param scaleY The amount to scale the component's y-axis
      */
@@ -65,7 +65,7 @@ public class ScaleDecorator implements Decorator {
     /**
      * Gets the amount by which drawing operations will be scaled along the
      * x-axis.
-     * 
+     *
      * @return The amount to scale the component's x-axis
      */
     public float getScaleX() {
@@ -75,7 +75,7 @@ public class ScaleDecorator implements Decorator {
     /**
      * Sets the amount by which drawing operations will be scaled along the
      * x-axis.
-     * 
+     *
      * @param scaleX The amount to scale the component's x-axis
      */
     public void setScaleX(float scaleX) {
@@ -85,7 +85,7 @@ public class ScaleDecorator implements Decorator {
     /**
      * Sets the amount by which drawing operations will be scaled along the
      * x-axis.
-     * 
+     *
      * @param scaleX The amount to scale the component's x-axis
      */
     public void setScaleX(Number scaleX) {
@@ -99,7 +99,7 @@ public class ScaleDecorator implements Decorator {
     /**
      * Gets the amount by which drawing operations will be scaled along the
      * y-axis.
-     * 
+     *
      * @return The amount to scale the component's y-axis
      */
     public float getScaleY() {
@@ -109,7 +109,7 @@ public class ScaleDecorator implements Decorator {
     /**
      * Sets the amount by which drawing operations will be scaled along the
      * y-axis.
-     * 
+     *
      * @param scaleY The amount to scale the component's y-axis
      */
     public void setScaleY(float scaleY) {
@@ -119,7 +119,7 @@ public class ScaleDecorator implements Decorator {
     /**
      * Sets the amount by which drawing operations will be scaled along the
      * y-axis.
-     * 
+     *
      * @param scaleY The amount to scale the component's y-axis
      */
     public void setScaleY(Number scaleY) {
@@ -133,7 +133,7 @@ public class ScaleDecorator implements Decorator {
     /**
      * Sets the amount by which drawing operations will be scaled along the x
      * and y axes.
-     * 
+     *
      * @param scaleX The amount to scale the component's x-axis.
      * @param scaleY The amount to scale the component's y-axis.
      */
@@ -153,7 +153,7 @@ public class ScaleDecorator implements Decorator {
     /**
      * Sets the amount by which drawing operations will be scaled along both the
      * x and y axes.
-     * 
+     *
      * @param scale The amount to scale the component's x and y axes.
      */
     public void setScale(float scale) {
@@ -168,7 +168,7 @@ public class ScaleDecorator implements Decorator {
      * the component's bounding box. A center or justified alignment will paint
      * the scaled component centered with respect to the component's bounding
      * box.
-     * 
+     *
      * @return The horizontal alignment
      */
     public HorizontalAlignment getHorizontalAlignment() {
@@ -182,7 +182,7 @@ public class ScaleDecorator implements Decorator {
      * the component's bounding box. A center or justified alignment will paint
      * the scaled component centered with respect to the component's bounding
      * box.
-     * 
+     *
      * @param horizontalAlignment The horizontal alignment
      */
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
@@ -200,7 +200,7 @@ public class ScaleDecorator implements Decorator {
      * the component's bounding box. A center or justified alignment will paint
      * the scaled component centered with respect to the component's bounding
      * box.
-     * 
+     *
      * @return The vertical alignment
      */
     public VerticalAlignment getVerticalAlignment() {
@@ -214,7 +214,7 @@ public class ScaleDecorator implements Decorator {
      * the component's bounding box. A center or justified alignment will paint
      * the scaled component centered with respect to the component's bounding
      * box.
-     * 
+     *
      * @param verticalAlignment The vertical alignment
      */
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
@@ -229,7 +229,7 @@ public class ScaleDecorator implements Decorator {
      * Gets the x translation that will be applied with respect to the specified
      * component, given this decorator's <tt>scaleX</tt> and
      * <tt>horizontalAlignment</tt> properties.
-     * 
+     *
      * @param component The component being decorated
      * @return The amount to translate x-coordinate actions when decorating this
      * component
@@ -259,7 +259,7 @@ public class ScaleDecorator implements Decorator {
      * Gets the y translation that will be applied with respect to the specified
      * component, given this decorator's <tt>scaleY</tt> and
      * <tt>verticalAlignment</tt> properties.
-     * 
+     *
      * @param component The component being decorated
      * @return The amount to translate y-coordinate actions when decorating this
      * component

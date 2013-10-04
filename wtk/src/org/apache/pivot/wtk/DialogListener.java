@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface DialogListener {
     /**
      * Called when a dialog's modal flag has changed.
-     * 
+     *
      * @param dialog
      */
     public void modalChanged(Dialog dialog);

@@ -38,7 +38,7 @@ public interface TabPaneAttributeListener {
 
     /**
      * Called when a tab's tab data attribute has changed.
-     * 
+     *
      * @param tabPane
      * @param component
      * @param previousTabData
@@ -47,7 +47,7 @@ public interface TabPaneAttributeListener {
 
     /**
      * Called when a tab's tooltipText attribute has changed.
-     * 
+     *
      * @param tabPane
      * @param component
      */

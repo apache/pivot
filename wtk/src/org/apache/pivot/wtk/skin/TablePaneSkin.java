@@ -780,7 +780,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Sets the amount of space that will be reserved around the inside edges of
      * the table pane.
-     * 
+     *
      * @param padding A dictionary with keys in the set {left, top, bottom,
      * right}.
      */
@@ -807,7 +807,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Sets the amount of space that will be reserved around the inside edges of
      * the table pane.
-     * 
+     *
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */
@@ -919,7 +919,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
 
     /**
      * Sets the color used to paint the table pane's horizontal grid lines.
-     * 
+     *
      * @param horizontalGridColor Any of the
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.
@@ -956,7 +956,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
 
     /**
      * Sets the color used to paint the table pane's vertical grid lines.
-     * 
+     *
      * @param verticalGridColor Any of the
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.
@@ -990,7 +990,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
 
     /**
      * Sets the background color used to paint the highlighted rows and columns.
-     * 
+     *
      * @param highlightBackgroundColor Any of the
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.
@@ -1008,7 +1008,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * to occupy a cell if it is visible and either lives in the cell directly
      * or spans the cell. Conversely, vacant cells do not have visible
      * components within them or spanning them.
-     * 
+     *
      * @return A grid of booleans, where occupied cells are denoted by
      * <tt>true</tt>, and vacant cells are denoted by <tt>false</tt>
      */
@@ -1053,7 +1053,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * components that span multiple columns will not be considered in this
      * calculation (even if they live in the column directly). It is up to the
      * caller to factor such components into the column widths calculation.
-     * 
+     *
      * @param columnIndex The index of the column whose preferred width we're
      * calculating
      */
@@ -1085,7 +1085,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * if and only if one or more visible components occupies it. A component is
      * said to occupy a cell if it either lives in the cell directly or spans
      * the cell.
-     * 
+     *
      * @param columnIndex The index of the column within the table pane
      * @return <tt>true</tt> if the column is visible; <tt>false</tt> otherwise
      */
@@ -1114,7 +1114,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * not be considered in this calculation (even if they live in the column
      * directly). It is up to the caller to factor such components into the row
      * heights calculation.
-     * 
+     *
      * @param rowIndex The index of the row whose preferred height we're
      * calculating
      * @param columnWidthsArgument An array of column width values corresponding
@@ -1149,7 +1149,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * and only if one or more visible components occupies it. A component is
      * said to occupy a cell if it either lives in the cell directly or spans
      * the cell.
-     * 
+     *
      * @param rowIndex The index of the row within the table pane
      * @return <tt>true</tt> if the row is visible; <tt>false</tt> otherwise
      */
@@ -1171,7 +1171,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Gets the width of each table pane column given the specified table pane
      * width.
-     * 
+     *
      * @param width The width constraint of the table pane
      * @return An array containing the width of each column in the table pane
      * given the specified constraint
@@ -1331,7 +1331,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Gets the height of each row of a table pane given the specified
      * constraints.
-     * 
+     *
      * @param height The height constraint of the table pane
      * @param columnWidthsArgument The widths of the table pane's columns, which
      * will be used as width constraints to the row heights when necessary, or

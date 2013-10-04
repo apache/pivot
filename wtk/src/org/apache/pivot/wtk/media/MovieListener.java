@@ -62,7 +62,7 @@ public interface MovieListener {
 
     /**
      * Called when a movie's size has changed.
-     * 
+     *
      * @param movie
      * @param previousWidth
      * @param previousHeight
@@ -71,7 +71,7 @@ public interface MovieListener {
 
     /**
      * Called when a movie's baseline has changed.
-     * 
+     *
      * @param movie
      * @param previousBaseline
      */
@@ -79,7 +79,7 @@ public interface MovieListener {
 
     /**
      * Called when the movie's current frame changed.
-     * 
+     *
      * @param movie
      * @param previousFrame
      */
@@ -87,7 +87,7 @@ public interface MovieListener {
 
     /**
      * Called when the movie's looping property changed.
-     * 
+     *
      * @param movie
      */
     public void loopingChanged(Movie movie);
@@ -96,7 +96,7 @@ public interface MovieListener {
      * Called when the movie begins playing. The frame at which the movie is
      * starting can be obtained via <tt>getCurrentFrame()</tt> (it is not
      * guaranteed to be positioned before the first frame when it is started).
-     * 
+     *
      * @param movie
      */
     public void movieStarted(Movie movie);
@@ -105,14 +105,14 @@ public interface MovieListener {
      * Called when the movie stops playing. The frame at which the movie stopped
      * can be obtained via <tt>getCurrentFrame()</tt> (it is not guaranteed to
      * have completed the last frame when it is stopped).
-     * 
+     *
      * @param movie
      */
     public void movieStopped(Movie movie);
 
     /**
      * Called when a region within a movie needs to be repainted.
-     * 
+     *
      * @param movie
      * @param x
      * @param y

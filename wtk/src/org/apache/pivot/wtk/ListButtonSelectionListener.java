@@ -37,7 +37,7 @@ public interface ListButtonSelectionListener {
 
     /**
      * Called when a list button's selected index has changed.
-     * 
+     *
      * @param listButton The source of the event.
      * @param previousSelectedIndex If the selection changed directly, contains
      * the index that was previously selected. Otherwise, contains the current
@@ -47,7 +47,7 @@ public interface ListButtonSelectionListener {
 
     /**
      * Called when a list button's selected item has changed.
-     * 
+     *
      * @param listButton The source of the event.
      * @param previousSelectedItem The item that was previously selected, or
      * <tt>null</tt> if the previous selection cannot be determined.

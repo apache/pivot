@@ -110,7 +110,7 @@ public abstract class Theme {
     /**
      * Returns the skin class responsible for skinning the specified component
      * class.
-     * 
+     *
      * @param componentClass The component class.
      * @return The skin class, or <tt>null</tt> if no skin mapping exists for the
      * component class.
@@ -126,7 +126,7 @@ public abstract class Theme {
     /**
      * Sets the skin class responsible for skinning the specified component
      * class.
-     * 
+     *
      * @param componentClass The component class.
      * @param skinClass The skin class.
      */
@@ -145,7 +145,7 @@ public abstract class Theme {
     /**
      * Gets the current theme, as determined by the {@linkplain #PROVIDER_NAME
      * theme provider}.
-     * 
+     *
      * @throws IllegalStateException If a theme has not been installed.
      */
     public static Theme getTheme() {
@@ -158,7 +158,7 @@ public abstract class Theme {
 
     /**
      * Produce a font by describing it relative to the current theme's font
-     * 
+     *
      * @param dictionary A dictionary with any of the following keys: <ul> <li>
      * {@value #NAME_KEY} - the family name of the font</li> <li>
      * {@value #SIZE_KEY} - the font size as an integer, or a string "x%" for a

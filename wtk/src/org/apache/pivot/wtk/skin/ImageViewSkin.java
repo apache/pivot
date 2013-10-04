@@ -281,7 +281,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
     /**
      * Sets the color that is painted behind the image
-     * 
+     *
      * @param backgroundColor Any of the
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.
@@ -303,7 +303,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
     /**
      * Sets the opacity of the image.
-     * 
+     *
      * @param opacity A number between 0 (transparent) and 1 (opaque)
      */
     public void setOpacity(float opacity) {
@@ -317,7 +317,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
     /**
      * Sets the opacity of the image.
-     * 
+     *
      * @param opacity A number between 0 (transparent) and 1 (opaque)
      */
     public final void setOpacity(Number opacity) {

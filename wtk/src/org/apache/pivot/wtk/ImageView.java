@@ -52,7 +52,7 @@ public class ImageView extends Component {
         /**
          * Converts a value from the bind context to an image representation
          * during a {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public Image toImage(Object value);
@@ -60,7 +60,7 @@ public class ImageView extends Component {
         /**
          * Converts a value from the bind context to an image location during a
          * {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public URL toImageURL(Object value);
@@ -68,7 +68,7 @@ public class ImageView extends Component {
         /**
          * Converts a value from the bind context to an image resource name
          * during a {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public String toImageName(Object value);
@@ -76,7 +76,7 @@ public class ImageView extends Component {
         /**
          * Converts a text string to a value to be stored in the bind context
          * during a {@link Component#store(Object)} operation.
-         * 
+         *
          * @param image
          */
         public Object valueOf(Image image);
@@ -147,7 +147,7 @@ public class ImageView extends Component {
 
     /**
      * Creates an image view with the given image.
-     * 
+     *
      * @param image The initial image to set, or <tt>null</tt> for no image.
      */
     public ImageView(Image image) {
@@ -158,7 +158,7 @@ public class ImageView extends Component {
 
     /**
      * Returns the image view's current image.
-     * 
+     *
      * @return The current image, or <tt>null</tt> if no image is set.
      */
     public Image getImage() {
@@ -167,7 +167,7 @@ public class ImageView extends Component {
 
     /**
      * Sets the image view's current image.
-     * 
+     *
      * @param image The image to set, or <tt>null</tt> for no image.
      */
     public void setImage(Image image) {
@@ -184,7 +184,7 @@ public class ImageView extends Component {
      * exists in the application context resource cache, the cached value will
      * be used. Otherwise, the icon will be loaded synchronously and added to
      * the cache.
-     * 
+     *
      * @param imageURL The location of the image to set.
      */
     public final void setImage(final URL imageURL) {
@@ -248,7 +248,7 @@ public class ImageView extends Component {
     /**
      * Sets the image view's image by
      * {@linkplain ClassLoader#getResource(String) resource name}.
-     * 
+     *
      * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
      */
@@ -267,7 +267,7 @@ public class ImageView extends Component {
 
     /**
      * Returns the image view's asynchronous flag.
-     * 
+     *
      * @return <tt>true</tt> if images specified via URL will be loaded in the
      * background; <tt>false</tt> if they will be loaded synchronously.
      */
@@ -277,7 +277,7 @@ public class ImageView extends Component {
 
     /**
      * Sets the image view's asynchronous flag.
-     * 
+     *
      * @param asynchronous <tt>true</tt> if images specified via URL will be
      * loaded in the background; <tt>false</tt> if they will be loaded
      * synchronously.
@@ -291,7 +291,7 @@ public class ImageView extends Component {
 
     /**
      * Returns the image view's image key.
-     * 
+     *
      * @return The image key, or <tt>null</tt> if no key is set.
      */
     public String getImageKey() {
@@ -300,7 +300,7 @@ public class ImageView extends Component {
 
     /**
      * Sets the image view's image key.
-     * 
+     *
      * @param imageKey The image key, or <tt>null</tt> to clear the binding.
      */
     public void setImageKey(String imageKey) {

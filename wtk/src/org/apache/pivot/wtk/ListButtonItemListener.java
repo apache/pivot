@@ -52,7 +52,7 @@ public interface ListButtonItemListener {
 
     /**
      * Called when an item is inserted into a list button's list data.
-     * 
+     *
      * @param listButton
      * @param index
      */
@@ -60,7 +60,7 @@ public interface ListButtonItemListener {
 
     /**
      * Called when items are removed from a list button's list data.
-     * 
+     *
      * @param listButton
      * @param index
      * @param count
@@ -69,7 +69,7 @@ public interface ListButtonItemListener {
 
     /**
      * Called when an item is updated within a list button's list data.
-     * 
+     *
      * @param listButton
      * @param index
      */
@@ -77,14 +77,14 @@ public interface ListButtonItemListener {
 
     /**
      * Called when a list button's list data has been cleared.
-     * 
+     *
      * @param listButton
      */
     public void itemsCleared(ListButton listButton);
 
     /**
      * Called when a list button's list data is sorted.
-     * 
+     *
      * @param listButton
      */
     public void itemsSorted(ListButton listButton);

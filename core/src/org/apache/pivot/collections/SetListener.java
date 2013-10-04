@@ -49,7 +49,7 @@ public interface SetListener<E> {
 
     /**
      * Called when an element is added to a set.
-     * 
+     *
      * @param set The source of the set event.
      * @param element The element that was added to the set.
      */
@@ -57,7 +57,7 @@ public interface SetListener<E> {
 
     /**
      * Called when an element is removed from the set.
-     * 
+     *
      * @param set The source of the set event.
      * @param element The element that was removed from the set.
      */
@@ -65,14 +65,14 @@ public interface SetListener<E> {
 
     /**
      * Called when set data has been reset.
-     * 
+     *
      * @param set The source of the set event.
      */
     public void setCleared(Set<E> set);
 
     /**
      * Called when a set's comparator has changed.
-     * 
+     *
      * @param set The source of the event.
      * @param previousComparator The previous comparator value.
      */

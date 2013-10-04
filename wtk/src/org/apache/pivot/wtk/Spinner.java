@@ -42,7 +42,7 @@ public class Spinner extends Container {
     public interface ItemRenderer extends Renderer {
         /**
          * Prepares the renderer for layout or paint.
-         * 
+         *
          * @param item The item to render, or <tt>null</tt> if called to
          * calculate preferred height for skins that assume a fixed renderer
          * height.
@@ -52,7 +52,7 @@ public class Spinner extends Container {
 
         /**
          * Converts a spinner item to a string representation.
-         * 
+         *
          * @param item
          * @return The item's string representation, or <tt>null</tt> if the item
          * does not have a string representation. <p> Note that this method may
@@ -69,7 +69,7 @@ public class Spinner extends Container {
         /**
          * Converts a context value to spinner data during a
          * {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public List<?> toSpinnerData(Object value);
@@ -77,7 +77,7 @@ public class Spinner extends Container {
         /**
          * Converts spinner data to a context value during a
          * {@link Component#store(Object)} operation.
-         * 
+         *
          * @param spinnerData
          */
         public Object valueOf(List<?> spinnerData);
@@ -98,7 +98,7 @@ public class Spinner extends Container {
         /**
          * Returns the index of the item in the source list during a
          * {@link Component#load(Object)} operation.
-         * 
+         *
          * @param spinnerData The source spinner data.
          * @param value The value to locate.
          * @return The index of first occurrence of the value if it exists in the
@@ -109,7 +109,7 @@ public class Spinner extends Container {
         /**
          * Retrieves the item at the given index during a
          * {@link Component#store(Object)} operation.
-         * 
+         *
          * @param spinnerData The source spinner data.
          * @param index The index of the value to retrieve.
          */
@@ -357,7 +357,7 @@ public class Spinner extends Container {
      * the default renderer uses (as last option) the toString method on list
      * elements, so override it to return whatever you want to display as text,
      * or implement your own custom renderer.
-     * 
+     *
      * @param spinnerData The data to set.
      * @see SpinnerItemRenderer
      */
@@ -370,7 +370,7 @@ public class Spinner extends Container {
 
     /**
      * Returns the spinner data.
-     * 
+     *
      * @return The data currently presented by the spinner.
      */
     public List<?> getSpinnerData() {
@@ -379,7 +379,7 @@ public class Spinner extends Container {
 
     /**
      * Sets the spinner data. Clears any existing selection state.
-     * 
+     *
      * @param spinnerData The data to be presented by the spinner.
      */
     @SuppressWarnings("unchecked")
@@ -444,7 +444,7 @@ public class Spinner extends Container {
 
     /**
      * Sets the item renderer to be used for items in this list.
-     * 
+     *
      * @param itemRenderer The item renderer for the list.
      */
     public void setItemRenderer(ItemRenderer itemRenderer) {
@@ -477,7 +477,7 @@ public class Spinner extends Container {
 
     /**
      * Returns the currently selected index.
-     * 
+     *
      * @return The currently selected index.
      */
     public int getSelectedIndex() {
@@ -486,7 +486,7 @@ public class Spinner extends Container {
 
     /**
      * Sets the selection to the specified index.
-     * 
+     *
      * @param selectedIndex The index to select, or <tt>-1</tt> to clear the
      * selection.
      */
@@ -691,7 +691,7 @@ public class Spinner extends Container {
     /**
      * Gets the bounding area of the spinner content (the area in which the item
      * renderer will render the content).
-     * 
+     *
      * @return The bounding area of the spinner content.
      */
     public Bounds getContentBounds() {

@@ -77,7 +77,7 @@ public final class Limits implements Serializable {
     /**
      * Limits the specified value to the minimum and maximum values of this
      * object.
-     * 
+     *
      * @param value The value to limit.
      * @return The bounded value.
      */

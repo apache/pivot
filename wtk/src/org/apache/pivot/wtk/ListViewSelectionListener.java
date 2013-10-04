@@ -49,7 +49,7 @@ public interface ListViewSelectionListener {
 
     /**
      * Called when a range has been added to a list view's selection.
-     * 
+     *
      * @param listView The source of the event.
      * @param rangeStart The start index of the range that was added, inclusive.
      * @param rangeEnd The end index of the range that was added, inclusive.
@@ -58,7 +58,7 @@ public interface ListViewSelectionListener {
 
     /**
      * Called when a range has been removed from a list view's selection.
-     * 
+     *
      * @param listView The source of the event.
      * @param rangeStart The starting index of the range that was removed,
      * inclusive.
@@ -69,7 +69,7 @@ public interface ListViewSelectionListener {
 
     /**
      * Called when a list view's selection state has changed.
-     * 
+     *
      * @param listView The source of the event.
      * @param previousSelectedRanges If the selection changed directly, contains
      * the ranges that were previously selected. If the selection changed
@@ -80,7 +80,7 @@ public interface ListViewSelectionListener {
 
     /**
      * Called when a list view's selected item has changed.
-     * 
+     *
      * @param listView The source of the event.
      * @param previousSelectedItem The item that was previously selected.
      */

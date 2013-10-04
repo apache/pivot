@@ -37,7 +37,7 @@ public interface TextPaneCharacterListener {
 
     /**
      * Called when characters have been inserted into a text pane.
-     * 
+     *
      * @param textPane
      * @param index
      * @param count
@@ -46,7 +46,7 @@ public interface TextPaneCharacterListener {
 
     /**
      * Called when characters have been removed from a text pane.
-     * 
+     *
      * @param textPane
      * @param index
      * @param count

@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.media.Movie;
 public interface MovieViewListener {
     /**
      * Called when an movie view's movie has changed.
-     * 
+     *
      * @param movieView
      * @param previousMovie
      */

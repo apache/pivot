@@ -44,7 +44,7 @@ public interface SheetStateListener extends SheetCloseListener {
 
     /**
      * Called to preview a sheet close event.
-     * 
+     *
      * @param sheet
      * @param result
      */
@@ -52,7 +52,7 @@ public interface SheetStateListener extends SheetCloseListener {
 
     /**
      * Called when a sheet close event has been vetoed.
-     * 
+     *
      * @param sheet
      * @param reason
      */

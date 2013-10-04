@@ -48,7 +48,7 @@ public class ShadeDecorator implements Decorator {
     /**
      * Creates a new <tt>ShadeDecorator</tt> with the specified opacity and
      * shade color.
-     * 
+     *
      * @param opacity The opacity of the shade, between 0 and 1, exclusive.
      * @param color The color of the shade.
      */
@@ -74,7 +74,7 @@ public class ShadeDecorator implements Decorator {
 
     /**
      * Sets the opacity of the decorator.
-     * 
+     *
      * @param opacity A number between 0 (transparent) and 1 (opaque)
      */
     public void setOpacity(float opacity) {
@@ -83,7 +83,7 @@ public class ShadeDecorator implements Decorator {
 
     /**
      * Sets the opacity of the decorator.
-     * 
+     *
      * @param opacity A number between 0 (transparent) and 1 (opaque)
      */
     public void setOpacity(Number opacity) {
@@ -114,7 +114,7 @@ public class ShadeDecorator implements Decorator {
 
     /**
      * Sets the color of the decorator
-     * 
+     *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */

@@ -43,7 +43,7 @@ public interface ComponentMouseListener {
 
     /**
      * Called when the mouse is moved over a component.
-     * 
+     *
      * @param component
      * @param x
      * @param y
@@ -54,14 +54,14 @@ public interface ComponentMouseListener {
 
     /**
      * Called when the mouse enters a component.
-     * 
+     *
      * @param component
      */
     public void mouseOver(Component component);
 
     /**
      * Called when the mouse exits a component.
-     * 
+     *
      * @param component
      */
     public void mouseOut(Component component);

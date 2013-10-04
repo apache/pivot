@@ -54,7 +54,7 @@ public interface ListListener<T> {
 
     /**
      * Called when an item has been inserted into a list.
-     * 
+     *
      * @param list The source of the list event.
      * @param index The index at which the item was added.
      */
@@ -62,7 +62,7 @@ public interface ListListener<T> {
 
     /**
      * Called when items have been removed from a list.
-     * 
+     *
      * @param list The source of the list event.
      * @param index The starting index from which items have been removed.
      * @param items The items that were removed from the list.
@@ -71,7 +71,7 @@ public interface ListListener<T> {
 
     /**
      * Called when a list item has been updated.
-     * 
+     *
      * @param list The source of the list event.
      * @param index The index of the item that was updated.
      * @param previousItem The item that was previously stored at <tt>index</tt>.
@@ -80,14 +80,14 @@ public interface ListListener<T> {
 
     /**
      * Called when list data has been reset.
-     * 
+     *
      * @param list The source of the list event.
      */
     public void listCleared(List<T> list);
 
     /**
      * Called when a list's comparator has changed.
-     * 
+     *
      * @param list The source of the event.
      * @param previousComparator The previous comparator value.
      */

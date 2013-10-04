@@ -54,7 +54,7 @@ public interface TreeViewNodeListener {
 
     /**
      * Called when a node has been inserted into the tree view.
-     * 
+     *
      * @param treeView
      * @param path
      * @param index
@@ -63,7 +63,7 @@ public interface TreeViewNodeListener {
 
     /**
      * Called when nodes have been removed from the tree view.
-     * 
+     *
      * @param treeView
      * @param path
      * @param index
@@ -74,7 +74,7 @@ public interface TreeViewNodeListener {
 
     /**
      * Called when a node in the tree view has been updated.
-     * 
+     *
      * @param treeView
      * @param path
      * @param index
@@ -83,14 +83,14 @@ public interface TreeViewNodeListener {
 
     /**
      * Called when the nodes in a branch have been cleared.
-     * 
+     *
      * @param treeView
      */
     public void nodesCleared(TreeView treeView, Path path);
 
     /**
      * Called when the nodes in a branch have been sorted.
-     * 
+     *
      * @param treeView
      * @param path
      */

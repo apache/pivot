@@ -68,7 +68,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
 
     /**
      * Adds a listener to the list, if it has not previously been added.
-     * 
+     *
      * @param listener
      */
     public void add(T listener) {
@@ -87,7 +87,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
 
     /**
      * Removes a listener from the list, if it has previously been added.
-     * 
+     *
      * @param listener
      */
     public void remove(T listener) {
@@ -121,7 +121,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
 
     /**
      * Tests the existence of a listener in the list.
-     * 
+     *
      * @param listener
      * @return <tt>true</tt> if the listener exists in the list; <tt>false</tt>,
      * otherwise.
@@ -132,7 +132,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
 
     /**
      * Tests the emptiness of the list.
-     * 
+     *
      * @return <tt>true</tt> if the list contains no listeners; <tt>false</tt>,
      * otherwise.
      */
@@ -142,7 +142,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
 
     /**
      * Get the number of elements in the list.
-     * 
+     *
      * @return the number of elements.
      */
     public int getLength() {

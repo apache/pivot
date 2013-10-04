@@ -35,7 +35,7 @@ public interface Visual {
 
     /**
      * Returns the visual's baseline.
-     * 
+     *
      * @return The baseline relative to the origin of the visual, or <tt>-1</tt>
      * if this visual does not have a baseline.
      */
@@ -43,7 +43,7 @@ public interface Visual {
 
     /**
      * Paints the visual.
-     * 
+     *
      * @param graphics The graphics context in which to paint the visual.
      */
     public void paint(Graphics2D graphics);

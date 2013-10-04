@@ -65,7 +65,7 @@ public interface ElementListener {
 
     /**
      * Called when an element's default namespace URI has changed.
-     * 
+     *
      * @param element
      * @param previousDefaultNamespaceURI
      */
@@ -73,7 +73,7 @@ public interface ElementListener {
 
     /**
      * Called when a namespace has been added to an element.
-     * 
+     *
      * @param element
      * @param prefix
      */
@@ -81,7 +81,7 @@ public interface ElementListener {
 
     /**
      * Called when an element attribute has been updated.
-     * 
+     *
      * @param element
      * @param prefix
      * @param previousURI
@@ -90,7 +90,7 @@ public interface ElementListener {
 
     /**
      * Called when a namespace has been removed from an element.
-     * 
+     *
      * @param element
      * @param prefix
      * @param uri
@@ -99,7 +99,7 @@ public interface ElementListener {
 
     /**
      * Called when an attribute has been added to an element.
-     * 
+     *
      * @param element
      * @param index
      */
@@ -107,7 +107,7 @@ public interface ElementListener {
 
     /**
      * Called when attributes have been removed from an element.
-     * 
+     *
      * @param element
      * @param index
      * @param attributes
@@ -116,7 +116,7 @@ public interface ElementListener {
 
     /**
      * Called when an attribute's value has changed.
-     * 
+     *
      * @param attribute
      * @param previousValue
      */

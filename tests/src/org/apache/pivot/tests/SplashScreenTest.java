@@ -57,7 +57,7 @@ import org.apache.pivot.wtk.Window;
  * -splash:bin/org/apache/pivot/tests/splash.png
  * org.apache.pivot.tests.SplashScreenTest --preserveSplashScreen=true
  * --fullScreen=false </pre>
- * 
+ *
  * @see SplashScreen
  * @see DesktopApplicationContext#replaceSplashScreen(Display)
  * @see DesktopApplicationContext#PRESERVE_SPLASH_SCREEN_ARGUMENT

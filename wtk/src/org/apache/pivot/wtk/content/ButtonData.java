@@ -57,7 +57,7 @@ public class ButtonData {
      * Sets the button data's icon by URL. <p> If the icon already exists in the
      * application context resource cache, the cached value will be used.
      * Otherwise, the icon will be loaded synchronously and added to the cache.
-     * 
+     *
      * @param iconURL The location of the icon to set.
      */
     public void setIcon(URL iconURL) {
@@ -71,7 +71,7 @@ public class ButtonData {
     /**
      * Sets the button data's icon by
      * {@linkplain ClassLoader#getResource(String) resource name}.
-     * 
+     *
      * @param iconName The resource name of the icon to set.
      * @see #setIcon(URL)
      */

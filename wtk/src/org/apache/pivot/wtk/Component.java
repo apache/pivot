@@ -69,7 +69,7 @@ public abstract class Component implements ConstrainedVisual {
          * executed, regardless of whether the new value differs from the old
          * value or not.<br/><br/> This behaviour may change in the future so
          * should not be relied upon.
-         * 
+         *
          * @param key Style whose value will be overwritten
          * @param value Value to be stored
          * @return The previous value of the specified style (See note above)
@@ -697,7 +697,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's automation ID.
-     * 
+     *
      * @return The component's automation ID, or <tt>null</tt> if the component
      * does not have an automation ID.
      */
@@ -709,7 +709,7 @@ public abstract class Component implements ConstrainedVisual {
      * Sets the component's automation ID. This value can be used to obtain a
      * reference to the component via {@link Automation#get(String)} when the
      * component is attached to a component hierarchy.
-     * 
+     *
      * @param automationID The automation ID to use for the component, or
      * <tt>null</tt> to clear the automation ID.
      */
@@ -730,7 +730,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the currently installed skin.
-     * 
+     *
      * @return The currently installed skin.
      */
     protected Skin getSkin() {
@@ -739,7 +739,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the skin, replacing any previous skin.
-     * 
+     *
      * @param skin The new skin.
      */
     @SuppressWarnings("unchecked")
@@ -780,7 +780,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Installs the skin for the given component class, as defined by the
      * current theme.
-     * 
+     *
      * @param componentClass
      */
     @SuppressWarnings("unchecked")
@@ -908,7 +908,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * NOTE This method should only be called during layout. Callers should use
      * {@link #setPreferredSize(int, int)}.
-     * 
+     *
      * @param width
      * @param height
      */
@@ -958,7 +958,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's constrained preferred width.
-     * 
+     *
      * @param height The height value by which the preferred width should be
      * constrained, or <tt>-1</tt> for no constraint.
      * @return The constrained preferred width.
@@ -987,7 +987,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's preferred width.
-     * 
+     *
      * @param preferredWidth The preferred width value, or <tt>-1</tt> to use
      * the default value determined by the skin.
      */
@@ -998,7 +998,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Returns a flag indicating whether the preferred width was explicitly set
      * by the caller or is the default value determined by the skin.
-     * 
+     *
      * @return <tt>true</tt> if the preferred width was explicitly set;
      * <tt>false</tt>, otherwise.
      */
@@ -1015,7 +1015,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's constrained preferred height.
-     * 
+     *
      * @param width The width value by which the preferred height should be
      * constrained, or <tt>-1</tt> for no constraint.
      * @return The constrained preferred height.
@@ -1044,7 +1044,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's preferred height.
-     * 
+     *
      * @param preferredHeight The preferred height value, or <tt>-1</tt> to use
      * the default value determined by the skin.
      */
@@ -1055,7 +1055,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Returns a flag indicating whether the preferred height was explicitly set
      * by the caller or is the default value determined by the skin.
-     * 
+     *
      * @return <tt>true</tt> if the preferred height was explicitly set;
      * <tt>false</tt>, otherwise.
      */
@@ -1112,7 +1112,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's preferred size.
-     * 
+     *
      * @param preferredWidth The preferred width value, or <tt>-1</tt> to use
      * the default value determined by the skin.
      * @param preferredHeight The preferred height value, or <tt>-1</tt> to use
@@ -1146,7 +1146,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Returns a flag indicating whether the preferred size was explicitly set
      * by the caller or is the default value determined by the skin.
-     * 
+     *
      * @return <tt>true</tt> if the preferred size was explicitly set;
      * <tt>false</tt>, otherwise.
      */
@@ -1163,7 +1163,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the minimum width of this component.
-     * 
+     *
      * @param minimumWidth
      */
     public void setMinimumWidth(int minimumWidth) {
@@ -1179,7 +1179,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the maximum width of this component.
-     * 
+     *
      * @param maximumWidth
      */
     public void setMaximumWidth(int maximumWidth) {
@@ -1195,7 +1195,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the width limits for this component.
-     * 
+     *
      * @param minimumWidth
      * @param maximumWidth
      */
@@ -1223,7 +1223,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the width limits for this component.
-     * 
+     *
      * @param widthLimits
      */
     public final void setWidthLimits(Limits widthLimits) {
@@ -1243,7 +1243,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the minimum height of this component.
-     * 
+     *
      * @param minimumHeight
      */
     public void setMinimumHeight(int minimumHeight) {
@@ -1259,7 +1259,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the maximum height of this component.
-     * 
+     *
      * @param maximumHeight
      */
     public void setMaximumHeight(int maximumHeight) {
@@ -1275,7 +1275,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the height limits for this component.
-     * 
+     *
      * @param minimumHeight
      * @param maximumHeight
      */
@@ -1304,7 +1304,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the height limits for this component.
-     * 
+     *
      * @param heightLimits
      */
     public final void setHeightLimits(Limits heightLimits) {
@@ -1317,7 +1317,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's x-coordinate.
-     * 
+     *
      * @return The component's horizontal position relative to the origin of the
      * parent container.
      */
@@ -1327,7 +1327,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's x-coordinate.
-     * 
+     *
      * @param x The component's horizontal position relative to the origin of
      * the parent container.
      */
@@ -1337,7 +1337,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's y-coordinate.
-     * 
+     *
      * @return The component's vertical position relative to the origin of the
      * parent container.
      */
@@ -1347,7 +1347,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's y-coordinate.
-     * 
+     *
      * @param y The component's vertical position relative to the origin of the
      * parent container.
      */
@@ -1357,7 +1357,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's location.
-     * 
+     *
      * @return A point value containing the component's horizontal and vertical
      * position relative to the origin of the parent container.
      */
@@ -1370,7 +1370,7 @@ public abstract class Component implements ConstrainedVisual {
      * when performing layout. However, since some containers do not reposition
      * components during layout, it is valid for callers to invoke this method
      * directly when such containers.
-     * 
+     *
      * @param x The component's horizontal position relative to the origin of
      * the parent container.
      * @param y The component's vertical position relative to the origin of the
@@ -1401,7 +1401,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's location.
-     * 
+     *
      * @param location A point value containing the component's horizontal and
      * vertical position relative to the origin of the parent container.
      * @see #setLocation(int, int)
@@ -1416,7 +1416,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's baseline.
-     * 
+     *
      * @return The baseline relative to the origin of this component, or
      * <tt>-1</tt> if this component does not have a baseline.
      */
@@ -1431,7 +1431,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's baseline for a given width and height.
-     * 
+     *
      * @return The baseline relative to the origin of this component, or
      * <tt>-1</tt> if this component does not have a baseline.
      */
@@ -1442,7 +1442,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's bounding area.
-     * 
+     *
      * @return The component's bounding area. The <tt>x</tt> and <tt>y</tt>
      * values are relative to the parent container.
      */
@@ -1452,7 +1452,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's bounding area including decorators.
-     * 
+     *
      * @return The decorated bounding area. The <tt>x</tt> and <tt>y</tt> values
      * are relative to the parent container.
      */
@@ -1470,7 +1470,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Determines if the component contains a given location. This method
      * facilitates mouse interaction with non-rectangular components.
-     * 
+     *
      * @param xArgument
      * @param yArgument
      * @return <tt>true</tt> if the component's shape contains the given
@@ -1485,7 +1485,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's visibility.
-     * 
+     *
      * @return <tt>true</tt> if the component will be painted; <tt>false</tt>,
      * otherwise.
      */
@@ -1495,7 +1495,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's visibility.
-     * 
+     *
      * @param visible <tt>true</tt> if the component should be painted;
      * <tt>false</tt>, otherwise.
      */
@@ -1542,7 +1542,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's decorator sequence.
-     * 
+     *
      * @return The component's decorator sequence
      */
     public DecoratorSequence getDecorators() {
@@ -1552,7 +1552,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Maps a point in this component's coordinate system to the specified
      * ancestor's coordinate space.
-     * 
+     *
      * @param xArgument The x-coordinate in this component's coordinate space
      * @param yArgument The y-coordinate in this component's coordinate space
      * @return A point containing the translated coordinates, or <tt>null</tt> if
@@ -1587,7 +1587,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Maps a point in this component's coordinate system to the specified
      * ancestor's coordinate space.
-     * 
+     *
      * @param location The coordinates in this component's coordinate space
      * @return A point containing the translated coordinates, or <tt>null</tt> if
      * the component is not a descendant of the specified ancestor.
@@ -1603,7 +1603,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Maps a point in the specified ancestor's coordinate space to this
      * component's coordinate system.
-     * 
+     *
      * @param xArgument The x-coordinate in the ancestors's coordinate space.
      * @param yArgument The y-coordinate in the ancestor's coordinate space.
      * @return A point containing the translated coordinates, or <tt>null</tt> if
@@ -1645,7 +1645,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Determines if this component is showing. To be showing, the component and
      * all of its ancestors must be visible and attached to a display.
-     * 
+     *
      * @return <tt>true</tt> if this component is showing; <tt>false</tt>
      * otherwise.
      */
@@ -1663,7 +1663,7 @@ public abstract class Component implements ConstrainedVisual {
      * Determines the visible area of a component. The visible area is defined
      * as the intersection of the component's area with the visible area of its
      * ancestors, or, in the case of a Viewport, the viewport bounds.
-     * 
+     *
      * @return The visible area of the component in the component's coordinate
      * space, or <tt>null</tt> if the component is either not showing or not
      * part of the component hierarchy.
@@ -1676,7 +1676,7 @@ public abstract class Component implements ConstrainedVisual {
      * Determines the visible area of a component. The visible area is defined
      * as the intersection of the component's area with the visible area of its
      * ancestors, or, in the case of a Viewport, the viewport bounds.
-     * 
+     *
      * @param area
      * @return The visible area of the component in the component's coordinate
      * space, or <tt>null</tt> if the component is either not showing or not
@@ -1694,7 +1694,7 @@ public abstract class Component implements ConstrainedVisual {
      * Determines the visible area of a component. The visible area is defined
      * as the intersection of the component's area with the visible area of its
      * ancestors, or, in the case of a Viewport, the viewport bounds.
-     * 
+     *
      * @param xArgument
      * @param yArgument
      * @param width
@@ -1753,7 +1753,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Ensures that the given area of a component is visible within the
      * viewports of all applicable ancestors.
-     * 
+     *
      * @param area
      */
     public void scrollAreaToVisible(Bounds area) {
@@ -1767,7 +1767,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Ensures that the given area of a component is visible within the
      * viewports of all applicable ancestors.
-     * 
+     *
      * @param xArgument
      * @param yArgument
      * @param width
@@ -1915,7 +1915,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Flags the entire component as needing to be repainted.
-     * 
+     *
      * @param immediate
      */
     public final void repaint(boolean immediate) {
@@ -1924,7 +1924,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Flags an area as needing to be repainted.
-     * 
+     *
      * @param area
      */
     public final void repaint(Bounds area) {
@@ -1934,7 +1934,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Flags an area as needing to be repainted or repaints the rectangle
      * immediately.
-     * 
+     *
      * @param area
      * @param immediate
      */
@@ -1948,7 +1948,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Flags an area as needing to be repainted.
-     * 
+     *
      * @param xArgument
      * @param yArgument
      * @param width
@@ -1960,7 +1960,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Flags an area as needing to be repainted.
-     * 
+     *
      * @param xArgument
      * @param yArgument
      * @param width
@@ -2026,7 +2026,7 @@ public abstract class Component implements ConstrainedVisual {
      * Creates a graphics context for this component. This graphics context will
      * not be double buffered. In other words, drawing operations on it will
      * operate directly on the video RAM.
-     * 
+     *
      * @return A graphics context for this component, or <tt>null</tt> if this
      * component is not showing.
      * @see #isShowing()
@@ -2064,7 +2064,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's enabled state.
-     * 
+     *
      * @return <tt>true</tt> if the component is enabled; <tt>false</tt>,
      * otherwise.
      */
@@ -2075,7 +2075,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Sets the component's enabled state. Enabled components respond to user
      * input events; disabled components do not.
-     * 
+     *
      * @param enabled <tt>true</tt> if the component is enabled; <tt>false</tt>,
      * otherwise.
      */
@@ -2102,7 +2102,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Determines if this component is blocked. A component is blocked if the
      * component or any of its ancestors is disabled.
-     * 
+     *
      * @return <tt>true</tt> if the component is blocked; <tt>false</tt>,
      * otherwise.
      */
@@ -2121,7 +2121,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Determines if the mouse is positioned over this component.
-     * 
+     *
      * @return <tt>true</tt> if the mouse is currently located over this
      * component; <tt>false</tt>, otherwise.
      */
@@ -2131,7 +2131,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the current mouse location in the component's coordinate space.
-     * 
+     *
      * @return The current mouse location, or <tt>null</tt> if the mouse is not
      * currently positioned over this component.
      */
@@ -2142,7 +2142,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Returns the cursor that is displayed when the mouse pointer is over this
      * component.
-     * 
+     *
      * @return The cursor that is displayed over the component.
      */
     public Cursor getCursor() {
@@ -2152,7 +2152,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Sets the cursor that is displayed when the mouse pointer is over this
      * component.
-     * 
+     *
      * @param cursor The cursor to display over the component, or <tt>null</tt>
      * to inherit the cursor of the parent container.
      */
@@ -2172,7 +2172,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's tooltip text.
-     * 
+     *
      * @return The component's tooltip text, or <tt>null</tt> if no tooltip is
      * specified.
      */
@@ -2182,7 +2182,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's tooltip text.
-     * 
+     *
      * @param tooltipText The component's tooltip text, or <tt>null</tt> for no
      * tooltip.
      */
@@ -2197,7 +2197,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's tooltip delay.
-     * 
+     *
      * @return The tooltip delay, in milliseconds.
      */
     public int getTooltipDelay() {
@@ -2206,7 +2206,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's tooltip delay.
-     * 
+     *
      * @param tooltipDelay The tooltip delay, in milliseconds.
      */
     public void setTooltipDelay(int tooltipDelay) {
@@ -2220,7 +2220,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the tooltip's mode for wrapping its text.
-     * 
+     *
      * @return <tt>true</tt> if the tooltip text wrap mode is enabled;
      * </tt>false</tt> if not.
      */
@@ -2230,7 +2230,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the tooltip's text wrapping mode.
-     * 
+     *
      * @param tooltipWrapText The component's tooltip text wrap mode.
      */
     public void setTooltipWrapText(boolean tooltipWrapText) {
@@ -2245,7 +2245,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Tells whether or not this component is fully opaque when painted.
-     * 
+     *
      * @return <tt>true</tt> if this component is opaque; </tt>false</tt> if any
      * part of it is transparent or translucent.
      */
@@ -2257,7 +2257,7 @@ public abstract class Component implements ConstrainedVisual {
      * Returns this component's focusability. A focusable component is capable
      * of receiving the focus only when it is showing, unblocked, and its window
      * is not closing.
-     * 
+     *
      * @return <tt>true</tt> if the component is capable of receiving the focus;
      * <tt>false</tt>, otherwise.
      */
@@ -2290,7 +2290,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the component's focused state.
-     * 
+     *
      * @return <tt>true</tt> if the component has the input focus;
      * <tt>false</tt> otherwise.
      */
@@ -2300,7 +2300,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Called to notify a component that its focus state has changed.
-     * 
+     *
      * @param focused <tt>true</tt> if the component has received the input
      * focus; <tt>false</tt> if the component has lost the focus.
      * @param obverseComponent If <tt>focused</tt> is true, the component that
@@ -2318,7 +2318,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Requests that focus be given to this component.
-     * 
+     *
      * @return <tt>true</tt> if the component gained the focus; <tt>false</tt>
      * otherwise.
      */
@@ -2337,7 +2337,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Transfers focus to the next focusable component.
-     * 
+     *
      * @param direction The direction in which to transfer focus.
      */
     public Component transferFocus(FocusTraversalDirection direction) {
@@ -2353,7 +2353,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Returns the currently focused component.
-     * 
+     *
      * @return The component that currently has the focus, or <tt>null</tt> if
      * no component is focused.
      */
@@ -2363,7 +2363,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the focused component.
-     * 
+     *
      * @param focusedComponent The component to focus, or <tt>null</tt> to clear
      * the focus.
      */
@@ -2396,7 +2396,7 @@ public abstract class Component implements ConstrainedVisual {
      * Copies bound values from the bind context to the component. This
      * functionality must be provided by the subclass; the base implementation
      * is a no-op.
-     * 
+     *
      * @param context
      */
     public void load(Object context) {
@@ -2407,7 +2407,7 @@ public abstract class Component implements ConstrainedVisual {
      * Copies bound values from the component to the bind context. This
      * functionality must be provided by the subclass; the base implementation
      * is a no-op.
-     * 
+     *
      * @param context
      */
     public void store(Object context) {
@@ -2469,7 +2469,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Sets the component's name.
-     * 
+     *
      * @param name
      */
     public void setName(String name) {
@@ -2490,7 +2490,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Applies a set of styles.
-     * 
+     *
      * @param styles A map containing the styles to apply.
      */
     public void setStyles(Map<String, ?> styles) {
@@ -2505,7 +2505,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Applies a set of styles.
-     * 
+     *
      * @param styles The styles encoded as a JSON map.
      */
     public void setStyles(String styles) throws SerializationException {
@@ -2532,7 +2532,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Applies a set of named styles.
-     * 
+     *
      * @param styleName
      */
     public void setStyleName(String styleName) {
@@ -2551,7 +2551,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Applies a set of named styles.
-     * 
+     *
      * @param styleNames
      */
     public void setStyleNames(Sequence<String> styleNames) {
@@ -2566,7 +2566,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Applies a set of named styles.
-     * 
+     *
      * @param styleNames
      */
     public void setStyleNames(String styleNames) {
@@ -2593,7 +2593,7 @@ public abstract class Component implements ConstrainedVisual {
      * Gets the specified component attribute. While attributes can be used to
      * store arbitrary data, they are intended to be used by containers to store
      * layout-related metadata in their child components.
-     * 
+     *
      * @param key The attribute key
      * @return The attribute value, or <tt>null</tt> if no such attribute exists
      */
@@ -2612,7 +2612,7 @@ public abstract class Component implements ConstrainedVisual {
      * Sets the specified component attribute. While attributes can be used to
      * store arbitrary data, they are intended to be used by containers to store
      * layout-related metadata in their child components.
-     * 
+     *
      * @param key The attribute key
      * @param value The attribute value, or <tt>null</tt> to clear the attribute
      * @return The previous value of the attribute, or <tt>null</tt> if the
@@ -2847,7 +2847,7 @@ public abstract class Component implements ConstrainedVisual {
 
     /**
      * Provide a nice exception message for out of range values.
-     * 
+     *
      * @throws IndexOutOfBoundsException if index is out of range.
      */
     protected static final void indexBoundsCheck(String indexName, int index, int min, int max)

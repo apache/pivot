@@ -42,7 +42,7 @@ public interface ViewportListener {
 
     /**
      * Called when a viewport's scroll top has changed.
-     * 
+     *
      * @param scrollPane
      * @param previousScrollTop
      */
@@ -50,7 +50,7 @@ public interface ViewportListener {
 
     /**
      * Called when a viewport's scroll left has changed.
-     * 
+     *
      * @param scrollPane
      * @param previousScrollLeft
      */
@@ -58,7 +58,7 @@ public interface ViewportListener {
 
     /**
      * Called when a viewport's view component has changed.
-     * 
+     *
      * @param scrollPane
      * @param previousView
      */

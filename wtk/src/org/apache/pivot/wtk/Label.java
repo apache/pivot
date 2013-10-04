@@ -30,7 +30,7 @@ public class Label extends Component {
         /**
          * Converts a value from the bind context to a text representation
          * during a {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public String toString(Object value);
@@ -38,7 +38,7 @@ public class Label extends Component {
         /**
          * Converts a text string to a value to be stored in the bind context
          * during a {@link Component#store(Object)} operation.
-         * 
+         *
          * @param text
          */
         public Object valueOf(String text);
@@ -109,7 +109,7 @@ public class Label extends Component {
 
     /**
      * Returns the label's text.
-     * 
+     *
      * @return The text.
      */
     public String getText() {
@@ -118,7 +118,7 @@ public class Label extends Component {
 
     /**
      * Set the text of the Label.
-     * 
+     *
      * @param text The text to set, must be not null.
      */
     public void setText(String text) {
@@ -141,7 +141,7 @@ public class Label extends Component {
      * Utility method to set text to the given value, or to an empty string if
      * null (to avoid the setText throw an IllegalArgumentException). This is
      * useful to be called by code.
-     * 
+     *
      * @param text The text to set
      * @see #setText
      */
@@ -151,7 +151,7 @@ public class Label extends Component {
 
     /**
      * Returns the label's text key.
-     * 
+     *
      * @return The text key, or <tt>null</tt> if no text key is set.
      */
     public String getTextKey() {
@@ -160,7 +160,7 @@ public class Label extends Component {
 
     /**
      * Returns the maximum length of the label text.
-     * 
+     *
      * @return The maximum length of the label text.
      */
     public int getMaximumLength() {
@@ -169,7 +169,7 @@ public class Label extends Component {
 
     /**
      * Sets the maximum length of the label text.
-     * 
+     *
      * @param maximumLength The maximum length of the label text.
      */
     public void setMaximumLength(int maximumLength) {
@@ -193,7 +193,7 @@ public class Label extends Component {
 
     /**
      * Sets the label's text key.
-     * 
+     *
      * @param textKey The text key, or <tt>null</tt> to clear the binding.
      */
     public void setTextKey(String textKey) {

@@ -22,7 +22,7 @@ package org.apache.pivot.wtk.media;
 public interface ImageListener {
     /**
      * Called when an image's size has changed.
-     * 
+     *
      * @param image
      * @param previousWidth
      * @param previousHeight
@@ -31,7 +31,7 @@ public interface ImageListener {
 
     /**
      * Called when an image's baseline has changed.
-     * 
+     *
      * @param image
      * @param previousBaseline
      */
@@ -39,7 +39,7 @@ public interface ImageListener {
 
     /**
      * Called when a region within an image needs to be repainted.
-     * 
+     *
      * @param image
      * @param x
      * @param y

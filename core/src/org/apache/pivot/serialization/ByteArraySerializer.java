@@ -26,7 +26,7 @@ import java.io.OutputStream;
 /**
  * Implementation of the {@link Serializer} interface that reads and writes a
  * byte array.
- * 
+ *
  * @see Serializer
  */
 public class ByteArraySerializer implements Serializer<byte[]> {

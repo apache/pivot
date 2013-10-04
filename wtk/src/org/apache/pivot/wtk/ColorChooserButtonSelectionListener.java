@@ -24,7 +24,7 @@ import java.awt.Color;
 public interface ColorChooserButtonSelectionListener {
     /**
      * Called when a color chooser button's selected color has changed.
-     * 
+     *
      * @param colorChooserButton
      * @param previousSelectedColor
      */

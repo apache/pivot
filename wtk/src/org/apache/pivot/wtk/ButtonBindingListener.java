@@ -75,7 +75,7 @@ public interface ButtonBindingListener {
 
     /**
      * Called when a button's buttonData key has changed.
-     * 
+     *
      * @param button
      * @param previousButtonDataKey
      */
@@ -83,7 +83,7 @@ public interface ButtonBindingListener {
 
     /**
      * Called when a button's buttonData bind type has changed.
-     * 
+     *
      * @param button
      * @param previousButtonDataBindType
      */
@@ -91,7 +91,7 @@ public interface ButtonBindingListener {
 
     /**
      * Called when a button's buttonData bind mapping has changed.
-     * 
+     *
      * @param button
      * @param previousButtonDataBindMapping
      */
@@ -100,7 +100,7 @@ public interface ButtonBindingListener {
 
     /**
      * Called when a button's selected key has changed.
-     * 
+     *
      * @param button
      * @param previousSelectedKey
      */
@@ -108,7 +108,7 @@ public interface ButtonBindingListener {
 
     /**
      * Called when a button's selected bind type has changed.
-     * 
+     *
      * @param button
      * @param previousSelectedBindType
      */
@@ -116,7 +116,7 @@ public interface ButtonBindingListener {
 
     /**
      * Called when a button's selected bind mapping has changed.
-     * 
+     *
      * @param button
      * @param previousSelectedBindMapping
      */
@@ -125,7 +125,7 @@ public interface ButtonBindingListener {
 
     /**
      * Called when a button's state key has changed.
-     * 
+     *
      * @param button
      * @param previousStateKey
      */
@@ -133,7 +133,7 @@ public interface ButtonBindingListener {
 
     /**
      * Called when a button's state bind type has changed.
-     * 
+     *
      * @param button
      * @param previousStateBindType
      */
@@ -141,7 +141,7 @@ public interface ButtonBindingListener {
 
     /**
      * Called when a button's state bind mapping has changed.
-     * 
+     *
      * @param button
      * @param previousStateBindMapping
      */

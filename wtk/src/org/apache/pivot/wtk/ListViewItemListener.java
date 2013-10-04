@@ -52,7 +52,7 @@ public interface ListViewItemListener {
 
     /**
      * Called when an item has been inserted into the list view.
-     * 
+     *
      * @param listView The source of the event.
      * @param index The index of the item that was inserted.
      */
@@ -60,7 +60,7 @@ public interface ListViewItemListener {
 
     /**
      * Called when items have been removed from the list view.
-     * 
+     *
      * @param listView The source of the event.
      * @param index The first index affected by the event.
      * @param count The number of items that were removed, or <tt>-1</tt> if all
@@ -70,7 +70,7 @@ public interface ListViewItemListener {
 
     /**
      * Called when an item in the list view has been updated.
-     * 
+     *
      * @param listView The source of the event.
      * @param index The first index affected by the event.
      */
@@ -78,14 +78,14 @@ public interface ListViewItemListener {
 
     /**
      * Called when the items in a list view have been cleared.
-     * 
+     *
      * @param listView
      */
     public void itemsCleared(ListView listView);
 
     /**
      * Called when the items in a list view have been sorted.
-     * 
+     *
      * @param listView The source of the event.
      */
     public void itemsSorted(ListView listView);

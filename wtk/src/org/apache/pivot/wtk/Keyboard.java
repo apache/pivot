@@ -268,7 +268,7 @@ public final class Keyboard {
 
     /**
      * Tests the pressed state of a modifier.
-     * 
+     *
      * @param modifier
      * @return <tt>true</tt> if the modifier is pressed; <tt>false</tt>,
      * otherwise.
@@ -279,7 +279,7 @@ public final class Keyboard {
 
     /**
      * Returns the current drop action.
-     * 
+     *
      * @return The drop action corresponding to the currently pressed modifier
      * keys, or <tt>null</tt> if no modifiers are pressed.
      */

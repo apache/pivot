@@ -28,7 +28,7 @@ public interface Sequence<T> {
     /**
      * Collection of static utility methods providing path access to nested
      * sequence data.
-     * 
+     *
      * @param <T> note that in Tree the type parameter currently it's not used
      */
     public static class Tree<T> {
@@ -174,7 +174,7 @@ public interface Sequence<T> {
             /**
              * Gets the path within the nested sequence to the item most
              * recently returned by a call to <tt>next()</tt>.
-             * 
+             *
              * @return The path (from the root sequence) to the current item.
              * @throws IllegalStateException If <tt>next()</tt> has not yet been
              * called on this iterator.
@@ -267,7 +267,7 @@ public interface Sequence<T> {
 
         /**
          * Adds an item to a nested sequence.
-         * 
+         *
          * @param sequence The root sequence.
          * @param item The item to be added to the sequence.
          * @param path The path of the sequence to which the item should be
@@ -282,7 +282,7 @@ public interface Sequence<T> {
 
         /**
          * Inserts an item into a nested sequence.
-         * 
+         *
          * @param sequence The root sequence.
          * @param item The item to be inserted into the sequence.
          * @param path The path of the sequence into which the item should be
@@ -297,7 +297,7 @@ public interface Sequence<T> {
 
         /**
          * Updates an item in a nested sequence.
-         * 
+         *
          * @param sequence The root sequence.
          * @param path The path of the item to update.
          * @param item The item that will replace any existing value at the given
@@ -325,7 +325,7 @@ public interface Sequence<T> {
 
         /**
          * Removes the first occurrence of an item from a nested sequence.
-         * 
+         *
          * @param sequence The root sequence.
          * @param item The item to remove.
          * @return The path of the item that was removed.
@@ -343,7 +343,7 @@ public interface Sequence<T> {
 
         /**
          * Removes an item from a nested sequence.
-         * 
+         *
          * @param sequence The root sequence.
          * @param path The path of the item to remove.
          */
@@ -368,7 +368,7 @@ public interface Sequence<T> {
 
         /**
          * Retrieves an item from a nested sequence.
-         * 
+         *
          * @param sequence The root sequence.
          * @param path The path of the item to retrieve.
          * @return The item at the given path, or <tt>null</tt> if the path is
@@ -402,7 +402,7 @@ public interface Sequence<T> {
 
         /**
          * Returns the path to an item in a nested sequence.
-         * 
+         *
          * @param sequence The root sequence.
          * @param item The item to locate.
          * @return The path of first occurrence of the item if it exists in the
@@ -451,7 +451,7 @@ public interface Sequence<T> {
         /**
          * Determines whether the path represented by the second argument is a
          * descendant of the path represented by the first argument.
-         * 
+         *
          * @param ancestorPath The ancestor path to test.
          * @param descendantPath The descendant path to test.
          */
@@ -479,7 +479,7 @@ public interface Sequence<T> {
 
     /**
      * Adds an item to the sequence.
-     * 
+     *
      * @param item The item to be added to the sequence.
      * @return The index at which the item was added, or <tt>-1</tt> if the item
      * was not added to the sequence.
@@ -488,7 +488,7 @@ public interface Sequence<T> {
 
     /**
      * Inserts an item into the sequence at a specific index.
-     * 
+     *
      * @param item The item to be added to the sequence.
      * @param index The index at which the item should be inserted. Must be a
      * value between <tt>0</tt> and <tt>getLength()</tt>.
@@ -497,7 +497,7 @@ public interface Sequence<T> {
 
     /**
      * Updates the item at the given index.
-     * 
+     *
      * @param index The index of the item to update.
      * @param item The item that will replace any existing value at the given
      * index.
@@ -507,7 +507,7 @@ public interface Sequence<T> {
 
     /**
      * Removes the first occurrence of the given item from the sequence.
-     * 
+     *
      * @param item The item to remove.
      * @return The index of the item that was removed, or <tt>-1</tt> if the item
      * could not be found.
@@ -517,7 +517,7 @@ public interface Sequence<T> {
 
     /**
      * Removes one or more items from the sequence.
-     * 
+     *
      * @param index The starting index to remove.
      * @param count The number of items to remove, beginning with <tt>index</tt>.
      * @return A sequence containing the items that were removed.
@@ -526,14 +526,14 @@ public interface Sequence<T> {
 
     /**
      * Retrieves the item at the given index.
-     * 
+     *
      * @param index The index of the item to retrieve.
      */
     public T get(int index);
 
     /**
      * Returns the index of an item in the sequence.
-     * 
+     *
      * @param item The item to locate.
      * @return The index of first occurrence of the item if it exists in the
      * sequence; <tt>-1</tt>, otherwise.
@@ -542,7 +542,7 @@ public interface Sequence<T> {
 
     /**
      * Returns the length of the sequence.
-     * 
+     *
      * @return The number of items in the sequence.
      */
     public int getLength();

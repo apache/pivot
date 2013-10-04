@@ -45,7 +45,7 @@ public abstract class Node {
 
     /**
      * Sets the parent element of the node.
-     * 
+     *
      * @param parent
      */
     protected void setParent(Element parent) {

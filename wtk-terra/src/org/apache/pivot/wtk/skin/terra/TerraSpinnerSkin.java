@@ -59,7 +59,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
 
         /**
          * Starts spinning the specified spinner.
-         * 
+         *
          * @param spinnerArgument The spinner to spin
          * @param directionArgument <tt>1</tt> to adjust the spinner's selected
          * index larger; <tt>-1</tt> to adjust it smaller

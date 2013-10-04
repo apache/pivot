@@ -25,7 +25,7 @@ import org.apache.pivot.collections.List;
 public class XML {
     /**
      * Returns the element matching a given path.
-     * 
+     *
      * @param root The element from which to begin the search.
      * @param path A path of the form: <pre> tag[n]/tag[n]/... </pre> The
      * bracketed index values are optional and refer to the <i>n</i>th
@@ -103,7 +103,7 @@ public class XML {
     /**
      * Returns the sub-elements of a descendant of {@code root} whose tag names
      * match the given name.
-     * 
+     *
      * @param root The element from which to begin the search.
      * @param path The path to the descendant, relative to {@code root}.
      * @param name The tag name to match.
@@ -119,7 +119,7 @@ public class XML {
 
     /**
      * Returns the text content of a descendant of {@code root}.
-     * 
+     *
      * @param root The element from which to begin the search.
      * @param path The path to the descendant, relative to {@code root}.
      * @return The text of the descedant, or {@code null} if no such descendant

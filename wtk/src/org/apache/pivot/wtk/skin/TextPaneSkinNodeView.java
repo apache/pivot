@@ -126,7 +126,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     /**
      * Set location of the NodeView relative to the skin component. This is
      * needed by the ComponentViewNode to correctly position child Component's.
-     * 
+     *
      * @param skinX the X coordinate in the skin's frame of reference
      * @param skinY the Y coordinate in the skin's frame of reference
      */

@@ -67,7 +67,7 @@ public class TablePane extends Container {
 
         /**
          * Returns the table pane with which this row is associated.
-         * 
+         *
          * @return The row's table pane, or <tt>null</tt> if the row does not
          * currently belong to a table.
          */
@@ -77,7 +77,7 @@ public class TablePane extends Container {
 
         /**
          * Returns the row height.
-         * 
+         *
          * @return The height of the row.
          */
         public int getHeight() {
@@ -86,7 +86,7 @@ public class TablePane extends Container {
 
         /**
          * Returns the relative flag.
-         * 
+         *
          * @return <tt>true</tt> if the row height is relative, <tt>false</tt>
          * if it is fixed.
          */
@@ -96,7 +96,7 @@ public class TablePane extends Container {
 
         /**
          * Set the row height.
-         * 
+         *
          * @param height The absolute height of the row.
          */
         public void setHeight(int height) {
@@ -105,7 +105,7 @@ public class TablePane extends Container {
 
         /**
          * Set the row height.
-         * 
+         *
          * @param height The encoded height of the row. If the string ends with
          * the '*' character, it is treated as a relative value. Otherwise, it
          * is considered an absolute value.
@@ -124,7 +124,7 @@ public class TablePane extends Container {
 
         /**
          * Sets the row height.
-         * 
+         *
          * @param height The height of the row.
          * @param relative <tt>true</tt> if the row height is relative,
          * <tt>false</tt> if it is fixed.
@@ -146,7 +146,7 @@ public class TablePane extends Container {
 
         /**
          * Returns the highlighted flag.
-         * 
+         *
          * @return <tt>true</tt> if the row is highlighted, <tt>false</tt> if it
          * is not
          */
@@ -156,7 +156,7 @@ public class TablePane extends Container {
 
         /**
          * Sets the highlighted flag.
-         * 
+         *
          * @param highlighted <tt>true</tt> to set the row as highlighted,
          * <tt>false</tt> to set it as not highlighted
          */
@@ -298,7 +298,7 @@ public class TablePane extends Container {
 
         /**
          * Returns the table pane with which this column is associated.
-         * 
+         *
          * @return The column's table pane, or <tt>null</tt> if the column does
          * not currently belong to a table.
          */
@@ -308,7 +308,7 @@ public class TablePane extends Container {
 
         /**
          * Returns the column width.
-         * 
+         *
          * @return The width of the column.
          */
         public int getWidth() {
@@ -317,7 +317,7 @@ public class TablePane extends Container {
 
         /**
          * Returns the relative flag.
-         * 
+         *
          * @return <tt>true</tt> if the column width is relative, <tt>false</tt>
          * if it is fixed.
          */
@@ -327,7 +327,7 @@ public class TablePane extends Container {
 
         /**
          * Set the column width.
-         * 
+         *
          * @param width The absolute width of the column.
          */
         public void setWidth(int width) {
@@ -336,7 +336,7 @@ public class TablePane extends Container {
 
         /**
          * Set the column width.
-         * 
+         *
          * @param width The encoded width of the row. If the string ends with
          * the '*' character, it is treated as a relative value. Otherwise, it
          * is considered an absolute value.
@@ -355,7 +355,7 @@ public class TablePane extends Container {
 
         /**
          * Sets the column width.
-         * 
+         *
          * @param width The width of the column.
          * @param relative <tt>true</tt> if the column width is relative,
          * <tt>false</tt> if it is fixed.
@@ -377,7 +377,7 @@ public class TablePane extends Container {
 
         /**
          * Returns the highlighted flag.
-         * 
+         *
          * @return <tt>true</tt> if the column is highlighted, <tt>false</tt> if
          * it is not
          */
@@ -387,7 +387,7 @@ public class TablePane extends Container {
 
         /**
          * Sets the highlighted flag.
-         * 
+         *
          * @param highlighted <tt>true</tt> to set the column as highlighted,
          * <tt>false</tt> to set it as not highlighted
          */
@@ -731,7 +731,7 @@ public class TablePane extends Container {
 
     /**
      * Creates a new <tt>TablePane</tt> with the specified columns.
-     * 
+     *
      * @param columns The column sequence to use. A copy of this sequence will
      * be made
      */
@@ -758,7 +758,7 @@ public class TablePane extends Container {
 
     /**
      * Returns the table pane row sequence.
-     * 
+     *
      * @return The table pane row sequence
      */
     public RowSequence getRows() {
@@ -767,7 +767,7 @@ public class TablePane extends Container {
 
     /**
      * Returns the index of the row at a given location.
-     * 
+     *
      * @param y The y-coordinate of the row to identify.
      * @return The row index, or <tt>-1</tt> if there is no row at the given
      * y-coordinate.
@@ -779,7 +779,7 @@ public class TablePane extends Container {
 
     /**
      * Returns the bounds of a given row.
-     * 
+     *
      * @param row The row index.
      */
     public Bounds getRowBounds(int row) {
@@ -789,7 +789,7 @@ public class TablePane extends Container {
 
     /**
      * Returns the table pane column sequence.
-     * 
+     *
      * @return The table pane column sequence
      */
     public ColumnSequence getColumns() {
@@ -798,7 +798,7 @@ public class TablePane extends Container {
 
     /**
      * Returns the index of the column at a given location.
-     * 
+     *
      * @param x The x-coordinate of the column to identify.
      * @return The column index, or <tt>-1</tt> if there is no column at the
      * given x-coordinate.
@@ -810,7 +810,7 @@ public class TablePane extends Container {
 
     /**
      * Returns the bounds of a given column.
-     * 
+     *
      * @param column The column index.
      */
     public Bounds getColumnBounds(int column) {
@@ -820,7 +820,7 @@ public class TablePane extends Container {
 
     /**
      * Gets the component at the specified cell in this table pane.
-     * 
+     *
      * @param rowIndex The row index of the cell
      * @param columnIndex The column index of the cell
      * @return The component in the specified cell, or <tt>null</tt> if the cell
@@ -841,7 +841,7 @@ public class TablePane extends Container {
     /**
      * Overrides the base method to check whether or not a cell component is
      * being removed, and fires the appropriate event in that case.
-     * 
+     *
      * @param index The index at which components were removed
      * @param count The number of components removed
      * @return The sequence of components that were removed

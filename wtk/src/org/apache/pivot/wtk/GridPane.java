@@ -40,7 +40,7 @@ public class GridPane extends Container {
 
         /**
          * Returns the grid pane with which this row is associated.
-         * 
+         *
          * @return The row's grid pane, or <tt>null</tt> if the row does not
          * currently belong to a grid.
          */
@@ -326,7 +326,7 @@ public class GridPane extends Container {
 
     /**
      * Creates a new grid pane with the specified column count.
-     * 
+     *
      * @param columnCount
      */
     public GridPane(int columnCount) {
@@ -358,7 +358,7 @@ public class GridPane extends Container {
 
     /**
      * Sets the number of columns in the grid pane.
-     * 
+     *
      * @param columnCount
      */
     public void setColumnCount(int columnCount) {
@@ -372,7 +372,7 @@ public class GridPane extends Container {
 
     /**
      * Returns the grid pane row sequence.
-     * 
+     *
      * @return The grid pane row sequence
      */
     public RowSequence getRows() {
@@ -381,7 +381,7 @@ public class GridPane extends Container {
 
     /**
      * Returns the index of the row at a given location.
-     * 
+     *
      * @param y The y-coordinate of the row to identify.
      * @return The row index, or <tt>-1</tt> if there is no row at the given
      * y-coordinate.
@@ -393,7 +393,7 @@ public class GridPane extends Container {
 
     /**
      * Returns the bounds of a given row.
-     * 
+     *
      * @param row The row index.
      */
     public Bounds getRowBounds(int row) {
@@ -403,7 +403,7 @@ public class GridPane extends Container {
 
     /**
      * Returns the index of the column at a given location.
-     * 
+     *
      * @param x The x-coordinate of the column to identify.
      * @return The column index, or <tt>-1</tt> if there is no column at the
      * given x-coordinate.
@@ -415,7 +415,7 @@ public class GridPane extends Container {
 
     /**
      * Returns the bounds of a given column.
-     * 
+     *
      * @param column The column index.
      */
     public Bounds getColumnBounds(int column) {
@@ -425,7 +425,7 @@ public class GridPane extends Container {
 
     /**
      * Gets the component at the specified cell in this grid pane.
-     * 
+     *
      * @param rowIndex The row index of the cell
      * @param columnIndex The column index of the cell
      * @return The component in the specified cell, or <tt>null</tt> if the cell
@@ -446,7 +446,7 @@ public class GridPane extends Container {
     /**
      * Overrides the base method to check whether or not a cell component is
      * being removed, and fires the appropriate event in that case.
-     * 
+     *
      * @param index The index at which components were removed
      * @param count The number of components removed
      * @return The sequence of components that were removed

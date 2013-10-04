@@ -87,7 +87,7 @@ public interface List<T> extends Sequence<T>, Collection<T> {
      * Adds an item to the list. If the list is unsorted, the item is appended
      * to the end of the list. Otherwise, it is inserted at the appropriate
      * index.
-     * 
+     *
      * @see org.apache.pivot.collections.ListListener#itemInserted(List, int)
      * @return The index at which the item was added.
      */
@@ -96,7 +96,7 @@ public interface List<T> extends Sequence<T>, Collection<T> {
 
     /**
      * Inserts an item into the list.
-     * 
+     *
      * @param item The item to be added to the list.
      * @param index The index at which the item should be inserted. Must be a
      * value between <tt>0</tt> and <tt>getLength()</tt>.
@@ -109,7 +109,7 @@ public interface List<T> extends Sequence<T>, Collection<T> {
 
     /**
      * Updates the item at the given index.
-     * 
+     *
      * @param index The index of the item to update.
      * @param item The item that will replace any existing value at the given
      * index.
@@ -134,7 +134,7 @@ public interface List<T> extends Sequence<T>, Collection<T> {
 
     /**
      * Returns the length of the list.
-     * 
+     *
      * @return The number of items in the list, or -1 if the list's length is
      * not known. In this case, the iterator must be used to retrieve the
      * contents of the list.

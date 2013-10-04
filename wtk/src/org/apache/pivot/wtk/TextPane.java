@@ -54,7 +54,7 @@ public class TextPane extends Container {
     public interface Skin {
         /**
          * Returns the insertion point for a given location.
-         * 
+         *
          * @param x
          * @param y
          * @return The insertion point for the given location.
@@ -64,7 +64,7 @@ public class TextPane extends Container {
         /**
          * Returns the next insertion point given an x coordinate and a
          * character offset.
-         * 
+         *
          * @param x
          * @param from
          * @param direction
@@ -75,7 +75,7 @@ public class TextPane extends Container {
         /**
          * Returns the row index of the character at a given offset within the
          * document.
-         * 
+         *
          * @param offset
          * @return The row index of the character at the given offset.
          */
@@ -83,7 +83,7 @@ public class TextPane extends Container {
 
         /**
          * Returns the total number of rows in the document.
-         * 
+         *
          * @return The number of rows in the document.
          */
         public int getRowCount();
@@ -91,7 +91,7 @@ public class TextPane extends Container {
         /**
          * Returns the bounds of the character at a given offset within the
          * document.
-         * 
+         *
          * @param offset
          * @return The bounds of the character at the given offset.
          */
@@ -316,7 +316,7 @@ public class TextPane extends Container {
      * Sets the document that backs the text pane. Documents are not shareable
      * across multiple TextPanes; because a Document may contain Components, and
      * a Component may only be in one Container at a time.
-     * 
+     *
      * @param document
      */
     public void setDocument(Document document) {
@@ -509,7 +509,7 @@ public class TextPane extends Container {
 
     /**
      * Returns character count of the document.
-     * 
+     *
      * @return The document's character count, or <tt>0</tt> if the document is
      * <tt>null</tt>.
      */
@@ -700,7 +700,7 @@ public class TextPane extends Container {
     /**
      * Convenience method to get all the text from the current document into a
      * single string.
-     * 
+     *
      * @see #setText
      */
     public String getText() {
@@ -729,7 +729,7 @@ public class TextPane extends Container {
 
     /**
      * Returns the starting index of the selection.
-     * 
+     *
      * @return The starting index of the selection.
      */
     public int getSelectionStart() {
@@ -738,7 +738,7 @@ public class TextPane extends Container {
 
     /**
      * Returns the length of the selection.
-     * 
+     *
      * @return The length of the selection; may be <tt>0</tt>.
      */
     public int getSelectionLength() {
@@ -747,7 +747,7 @@ public class TextPane extends Container {
 
     /**
      * Returns a span representing the current selection.
-     * 
+     *
      * @return A span containing the current selection. Both start and end
      * points are inclusive. Returns <tt>null</tt> if the selection is empty.
      */
@@ -759,7 +759,7 @@ public class TextPane extends Container {
     /**
      * Sets the selection. The sum of the selection start and length must be
      * less than the length of the text input's content.
-     * 
+     *
      * @param selectionStart The starting index of the selection.
      * @param selectionLength The length of the selection.
      */
@@ -795,7 +795,7 @@ public class TextPane extends Container {
 
     /**
      * Sets the selection.
-     * 
+     *
      * @param selection
      * @see #setSelection(int, int)
      */
@@ -827,7 +827,7 @@ public class TextPane extends Container {
 
     /**
      * Returns the currently selected text.
-     * 
+     *
      * @return A new string containing a copy of the text in the selected range,
      * or <tt>null</tt> if nothing is selected.
      */
@@ -859,7 +859,7 @@ public class TextPane extends Container {
 
     /**
      * Sets the text pane's editable flag.
-     * 
+     *
      * @param editable
      */
     public void setEditable(boolean editable) {

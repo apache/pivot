@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface ConstrainedVisual extends Visual {
     /**
      * Sets the visual's render size.
-     * 
+     *
      * @param width
      * @param height
      */
@@ -31,7 +31,7 @@ public interface ConstrainedVisual extends Visual {
     /**
      * Returns the visual's preferred width given the provided height
      * constraint.
-     * 
+     *
      * @param height The height by which to constrain the preferred width, or
      * <tt>-1</tt> for no constraint.
      */
@@ -40,7 +40,7 @@ public interface ConstrainedVisual extends Visual {
     /**
      * Returns the visual's preferred height given the provided width
      * constraint.
-     * 
+     *
      * @param width The width by which to constrain the preferred height, or
      * <tt>-1</tt> for no constraint.
      */
@@ -53,7 +53,7 @@ public interface ConstrainedVisual extends Visual {
 
     /**
      * Returns the baseline for a given width and height.
-     * 
+     *
      * @param width
      * @param height
      * @return The baseline relative to the origin of this visual, or <tt>-1</tt>

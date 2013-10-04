@@ -48,7 +48,7 @@ public class MovieView extends Component {
 
     /**
      * Creates an movie view with the given movie.
-     * 
+     *
      * @param movie The initial movie to set, or <tt>null</tt> for no movie.
      */
     public MovieView(Movie movie) {
@@ -59,7 +59,7 @@ public class MovieView extends Component {
 
     /**
      * Returns the movie view's current movie.
-     * 
+     *
      * @return The current movie, or <tt>null</tt> if no movie is set.
      */
     public Movie getMovie() {
@@ -68,7 +68,7 @@ public class MovieView extends Component {
 
     /**
      * Sets the movie view's current movie.
-     * 
+     *
      * @param movie The movie to set, or <tt>null</tt> for no movie.
      */
     public void setMovie(Movie movie) {
@@ -82,7 +82,7 @@ public class MovieView extends Component {
 
     /**
      * Returns the movie view listener list.
-     * 
+     *
      * @return The movie view listener list.
      */
     public ListenerList<MovieViewListener> getMovieViewListeners() {

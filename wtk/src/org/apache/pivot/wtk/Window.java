@@ -544,7 +544,7 @@ public class Window extends Container {
     /**
      * Tests whether this window is an owning ancestor of a given window. A
      * window is not considered an owner of itself.
-     * 
+     *
      * @param window
      * @return <tt>true</tt> if this window is an owning ancestor of the given
      * window; <tt>false</tt>, otherwise.
@@ -565,7 +565,7 @@ public class Window extends Container {
 
     /**
      * Returns this window's open state.
-     * 
+     *
      * @return <tt>true</tt> if the window is open; <tt>false</tt>, otherwise.
      */
     public boolean isOpen() {
@@ -574,7 +574,7 @@ public class Window extends Container {
 
     /**
      * Returns this window's opening state.
-     * 
+     *
      * @return <tt>true</tt> if the window is opening; <tt>false</tt>,
      * otherwise.
      */
@@ -584,7 +584,7 @@ public class Window extends Container {
 
     /**
      * Opens the window.
-     * 
+     *
      * @param display
      */
     public final void open(Display display) {
@@ -593,7 +593,7 @@ public class Window extends Container {
 
     /**
      * Opens the window.
-     * 
+     *
      * @param ownerArgument The window's owner. The window is opened on the
      * owner's display.
      */
@@ -608,7 +608,7 @@ public class Window extends Container {
     /**
      * Opens the window. <p> Note that this method is not a synchronous call, it
      * schedules an event to open the window.
-     * 
+     *
      * @param display The display on which the window will be opened.
      * @param ownerArgument The window's owner, or <tt>null</tt> if the window
      * has no owner.
@@ -671,7 +671,7 @@ public class Window extends Container {
 
     /**
      * Returns this window's closed state.
-     * 
+     *
      * @return <tt>true</tt> if the window is closed; <tt>false</tt>, otherwise.
      */
     public boolean isClosed() {
@@ -680,7 +680,7 @@ public class Window extends Container {
 
     /**
      * Returns this window's closing state.
-     * 
+     *
      * @return <tt>true</tt> if the window is closing; <tt>false</tt>,
      * otherwise.
      */
@@ -747,7 +747,7 @@ public class Window extends Container {
 
     /**
      * Returns the window's title.
-     * 
+     *
      * @return The pane's title, or <tt>null</tt> if no title is set.
      */
     public String getTitle() {
@@ -756,7 +756,7 @@ public class Window extends Container {
 
     /**
      * Sets the window's title.
-     * 
+     *
      * @param title The new title, or <tt>null</tt> for no title.
      */
     public void setTitle(String title) {
@@ -779,7 +779,7 @@ public class Window extends Container {
      * Sets the window's icon by URL. <p> If the icon already exists in the
      * application context resource cache, the cached value will be used.
      * Otherwise, the icon will be loaded synchronously and added to the cache.
-     * 
+     *
      * @param iconURL The location of the icon to set.
      */
     public void setIcon(URL iconURL) {
@@ -796,7 +796,7 @@ public class Window extends Container {
     /**
      * Sets the window's icon by {@linkplain ClassLoader#getResource(String)
      * resource name}.
-     * 
+     *
      * @param iconName The resource name of the icon to set.
      * @see #setIcon(URL)
      */
@@ -849,7 +849,7 @@ public class Window extends Container {
 
     /**
      * Returns the window's active state.
-     * 
+     *
      * @return <tt>true</tt> if the window is active; <tt>false</tt>; otherwise.
      */
     public boolean isActive() {
@@ -858,7 +858,7 @@ public class Window extends Container {
 
     /**
      * Requests that this window become the active window.
-     * 
+     *
      * @return <tt>true</tt> if the window became active; <tt>false</tt>,
      * otherwise.
      */
@@ -872,7 +872,7 @@ public class Window extends Container {
 
     /**
      * Called to notify a window that its active state has changed.
-     * 
+     *
      * @param active
      * @param obverseWindow
      */
@@ -882,7 +882,7 @@ public class Window extends Container {
 
     /**
      * Returns the currently active window.
-     * 
+     *
      * @return The window that is currently active, or <tt>null</tt> if no
      * window is active.
      */
@@ -893,7 +893,7 @@ public class Window extends Container {
     /**
      * Sets the active window. The window must be activatable, open, and
      * enabled. If the window is not currently visible, it will be made visible.
-     * 
+     *
      * @param activeWindow The window to activate, or <tt>null</tt> to clear the
      * active window.
      */

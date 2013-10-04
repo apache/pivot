@@ -60,7 +60,7 @@ public interface ListButtonBindingListener {
 
     /**
      * Called when a list button's list data key has changed.
-     * 
+     *
      * @param listButton
      * @param previousListDataKey
      */
@@ -68,7 +68,7 @@ public interface ListButtonBindingListener {
 
     /**
      * Called when a list button's list data bind type has changed.
-     * 
+     *
      * @param listButton
      * @param previousListDataBindType
      */
@@ -76,7 +76,7 @@ public interface ListButtonBindingListener {
 
     /**
      * Called when a list button's list data bind mapping has changed.
-     * 
+     *
      * @param listButton
      * @param previousListDataBindMapping
      */
@@ -85,7 +85,7 @@ public interface ListButtonBindingListener {
 
     /**
      * Called when a list button's selected item key has changed.
-     * 
+     *
      * @param listButton
      * @param previousSelectedItemKey
      */
@@ -93,7 +93,7 @@ public interface ListButtonBindingListener {
 
     /**
      * Called when a list button's selected item bind type has changed.
-     * 
+     *
      * @param listButton
      * @param previousSelectedItemBindType
      */
@@ -102,7 +102,7 @@ public interface ListButtonBindingListener {
 
     /**
      * Called when a list button's selected item bind mapping has changed.
-     * 
+     *
      * @param listButton
      * @param previousSelectedItemBindMapping
      */

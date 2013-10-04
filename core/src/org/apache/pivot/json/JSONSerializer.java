@@ -184,7 +184,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Sets a flag indicating that map keys should always be quote-delimited.
-     * 
+     *
      * @param alwaysDelimitMapKeys <tt>true</tt> to bound map keys in double
      * quotes; <tt>false</tt> to only quote-delimit keys as necessary.
      */
@@ -202,7 +202,7 @@ public class JSONSerializer implements Serializer<Object> {
     /**
      * Sets the serializer's verbosity flag. When verbosity is enabled, all data
      * read or written will be echoed to the console.
-     * 
+     *
      * @param verbose
      */
     public void setVerbose(boolean verbose) {
@@ -211,7 +211,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Reads data from a JSON stream.
-     * 
+     *
      * @param inputStream The input stream from which data will be read.
      * @see #readObject(Reader)
      */
@@ -232,7 +232,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Reads data from a JSON stream.
-     * 
+     *
      * @param reader The reader from which data will be read.
      * @return One of the following types, depending on the content of the stream
      * and the value of {@link #getType()}: <ul>
@@ -814,7 +814,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Writes data to a JSON stream.
-     * 
+     *
      * @param object
      * @param outputStream The output stream to which data will be written.
      * @see #writeObject(Object, Writer)
@@ -838,7 +838,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Writes data to a JSON stream.
-     * 
+     *
      * @param object The object to serialize. Must be one of the following
      * types: <ul> <li>pivot.collections.Map</li>
      * <li>pivot.collections.List</li> <li>java.lang.String</li>
@@ -992,7 +992,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a Java object.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed object.
      */
@@ -1011,7 +1011,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a string.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed string.
      */
@@ -1021,7 +1021,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a number.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed number.
      */
@@ -1031,7 +1031,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a short.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed short.
      */
@@ -1041,7 +1041,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a integer.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed integer.
      */
@@ -1051,7 +1051,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a long.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed number.
      */
@@ -1061,7 +1061,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a float.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed float.
      */
@@ -1071,7 +1071,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a double.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed double.
      */
@@ -1081,7 +1081,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a boolean.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed boolean.
      */
@@ -1091,7 +1091,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a list.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed list.
      */
@@ -1101,7 +1101,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a JSON value to a map.
-     * 
+     *
      * @param json The JSON value.
      * @return The parsed map.
      */
@@ -1113,7 +1113,7 @@ public class JSONSerializer implements Serializer<Object> {
     /**
      * Converts a object to a JSON string representation. The map keys will
      * always be quote-delimited.
-     * 
+     *
      * @param value The object to convert.
      * @return The resulting JSON string.
      * @see #toString(Object, boolean)
@@ -1124,7 +1124,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Converts a object to a JSON string representation.
-     * 
+     *
      * @param value The object to convert.
      * @param alwaysDelimitMapKeys A flag indicating whether or not map keys will
      * always be quote-delimited.

@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface DropTarget {
     /**
      * Called when the mouse first enters a drop target during a drag operation.
-     * 
+     *
      * @param component
      * @param dragContent
      * @param supportedDropActions
@@ -35,7 +35,7 @@ public interface DropTarget {
 
     /**
      * Called when the mouse leaves a drop target during a drag operation.
-     * 
+     *
      * @param component
      */
     public void dragExit(Component component);
@@ -43,7 +43,7 @@ public interface DropTarget {
     /**
      * Called when the mouse is moved while positioned over a drop target during
      * a drag operation.
-     * 
+     *
      * @param component
      * @param dragContent
      * @param supportedDropActions
@@ -59,7 +59,7 @@ public interface DropTarget {
     /**
      * Called when the user drop action changes while the mouse is positioned
      * over a drop target during a drag operation.
-     * 
+     *
      * @param component
      * @param dragContent
      * @param supportedDropActions
@@ -74,7 +74,7 @@ public interface DropTarget {
 
     /**
      * Called to drop the drag content.
-     * 
+     *
      * @param component
      * @param dragContent
      * @param supportedDropActions

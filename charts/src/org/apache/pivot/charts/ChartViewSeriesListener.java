@@ -22,7 +22,7 @@ package org.apache.pivot.charts;
 public interface ChartViewSeriesListener {
     /**
      * Fired when a series is inserted into a chart view's data set.
-     * 
+     *
      * @param chartView
      * @param index
      */
@@ -30,7 +30,7 @@ public interface ChartViewSeriesListener {
 
     /**
      * Fired when a series is removed from a chart view's data set.
-     * 
+     *
      * @param chartView
      * @param index
      * @param count
@@ -39,14 +39,14 @@ public interface ChartViewSeriesListener {
 
     /**
      * Fired when a chart view's series data is cleared.
-     * 
+     *
      * @param chartView
      */
     public void seriesCleared(ChartView chartView);
 
     /**
      * Fired when a series is updated in a chart view's data set.
-     * 
+     *
      * @param chartView
      * @param index
      */
@@ -54,7 +54,7 @@ public interface ChartViewSeriesListener {
 
     /**
      * Fired when a chart view's series data is sorted.
-     * 
+     *
      * @param chartView
      */
     public void seriesSorted(ChartView chartView);

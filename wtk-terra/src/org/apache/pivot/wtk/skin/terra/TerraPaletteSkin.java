@@ -446,7 +446,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
     /**
      * Sets the font used in rendering the titlebar text
-     * 
+     *
      * @param font A
      * {@link org.apache.pivot.wtk.skin.ComponentSkin#decodeFont(String) font
      * specification}
@@ -461,7 +461,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
     /**
      * Sets the font used in rendering the titlebar text
-     * 
+     *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setTitleFont(Dictionary<String, ?> font) {

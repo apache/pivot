@@ -45,7 +45,7 @@ public interface CalendarButtonBindingListener {
 
     /**
      * Called when a calendar button's selected date key has changed.
-     * 
+     *
      * @param calendarButton
      * @param previousSelectedDateKey
      */
@@ -53,7 +53,7 @@ public interface CalendarButtonBindingListener {
 
     /**
      * Called when a calendar button's selected date bind type has changed.
-     * 
+     *
      * @param calendarButton
      * @param previousSelectedDateBindType
      */
@@ -62,7 +62,7 @@ public interface CalendarButtonBindingListener {
 
     /**
      * Called when a calendar button's selected date bind mapping has changed.
-     * 
+     *
      * @param calendarButton
      * @param previousSelectedDateBindMapping
      */

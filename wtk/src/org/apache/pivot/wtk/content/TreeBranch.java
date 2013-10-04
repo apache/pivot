@@ -72,7 +72,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
      * exists in the application context resource cache, the cached value will
      * be used. Otherwise, the icon will be loaded synchronously and added to
      * the cache.
-     * 
+     *
      * @param iconURL The location of the expanded icon to set.
      */
     public void setExpandedIcon(URL iconURL) {
@@ -86,7 +86,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     /**
      * Sets the tree branch's expanded icon by
      * {@linkplain ClassLoader#getResource(String) resource name}.
-     * 
+     *
      * @param expandedIconName The resource name of the expanded icon to set.
      * @see #setExpandedIcon(URL)
      */

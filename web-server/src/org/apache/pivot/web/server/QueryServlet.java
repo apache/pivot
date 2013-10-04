@@ -227,7 +227,7 @@ public abstract class QueryServlet extends HttpServlet {
      * Prepares a servlet for request execution. This method is called
      * immediately prior to the {@link #validate(Query.Method, Path)} method.
      * <p> The default implementation is a no-op.
-     * 
+     *
      * @throws ServletException
      */
     protected void prepare() throws ServletException {
@@ -238,7 +238,7 @@ public abstract class QueryServlet extends HttpServlet {
      * Disposes any resources allocated in {@link #prepare()}. This method is
      * guaranteed to be called even if the HTTP handler method throws. <p> The
      * default implementation is a no-op.
-     * 
+     *
      * @throws ServletException
      */
     protected void dispose() throws ServletException {
@@ -249,7 +249,7 @@ public abstract class QueryServlet extends HttpServlet {
      * Validates a servlet for request execution. This method is called
      * immediately prior to the HTTP handler method. <p> The default
      * implementation is a no-op.
-     * 
+     *
      * @param method
      * @param path
      * @throws QueryException
@@ -261,7 +261,7 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Handles an HTTP GET request. The default implementation throws an HTTP
      * 405 query exception.
-     * 
+     *
      * @param path
      * @return The result of the GET.
      * @throws QueryException
@@ -273,7 +273,7 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Handles an HTTP POST request. The default implementation throws an HTTP
      * 405 query exception.
-     * 
+     *
      * @param path
      * @param value
      * @return A URL containing the location of the created resource, or
@@ -287,7 +287,7 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Handles an HTTP GET request. The default implementation throws an HTTP
      * 405 query exception.
-     * 
+     *
      * @param path
      * @param value
      * @return <tt>true</tt> if the operation resulted in the creation of a
@@ -301,7 +301,7 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Handles an HTTP GET request. The default implementation throws an HTTP
      * 405 query exception.
-     * 
+     *
      * @param path
      * @throws QueryException
      */
@@ -312,7 +312,7 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Creates a serializer that will be used to serialize the current request
      * data.
-     * 
+     *
      * @param method
      * @param path
      * @throws QueryException

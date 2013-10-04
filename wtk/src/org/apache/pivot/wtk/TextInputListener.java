@@ -69,7 +69,7 @@ public interface TextInputListener {
 
     /**
      * Called when a text input's text size has changed.
-     * 
+     *
      * @param textInput
      * @param previousTextSize
      */
@@ -77,7 +77,7 @@ public interface TextInputListener {
 
     /**
      * Called when a text input's maximum length has changed.
-     * 
+     *
      * @param textInput
      * @param previousMaximumLength
      */
@@ -85,14 +85,14 @@ public interface TextInputListener {
 
     /**
      * Called when a text input's password flag has changed.
-     * 
+     *
      * @param textInput
      */
     public void passwordChanged(TextInput textInput);
 
     /**
      * Called when a text input's prompt has changed.
-     * 
+     *
      * @param textInput
      * @param previousPrompt
      */
@@ -100,7 +100,7 @@ public interface TextInputListener {
 
     /**
      * Called when the validator changes.
-     * 
+     *
      * @param textInput
      * @param previousValidator
      */
@@ -108,21 +108,21 @@ public interface TextInputListener {
 
     /**
      * Called when a text input's strict validation flag has changed.
-     * 
+     *
      * @param textInput
      */
     public void strictValidationChanged(TextInput textInput);
 
     /**
      * Called when the text changes validity.
-     * 
+     *
      * @param textInput
      */
     public void textValidChanged(TextInput textInput);
 
     /**
      * Called when the editable state has changed.
-     * 
+     *
      * @param textInput
      */
     public void editableChanged(TextInput textInput);

@@ -42,7 +42,7 @@ public interface ComponentMouseButtonListener {
 
     /**
      * Called when a mouse button is pressed over a component.
-     * 
+     *
      * @param component
      * @param button
      * @param x
@@ -54,7 +54,7 @@ public interface ComponentMouseButtonListener {
 
     /**
      * Called when a mouse button is released over a component.
-     * 
+     *
      * @param component
      * @param button
      * @param x
@@ -66,7 +66,7 @@ public interface ComponentMouseButtonListener {
 
     /**
      * Called when a mouse button is clicked over a component.
-     * 
+     *
      * @param component
      * @param button
      * @param x

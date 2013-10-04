@@ -62,7 +62,7 @@ public class CardPane extends Container {
 
     /**
      * Returns the currently selected card index.
-     * 
+     *
      * @return The selected card index, or <tt>-1</tt> if no card is selected.
      */
     public int getSelectedIndex() {
@@ -71,7 +71,7 @@ public class CardPane extends Container {
 
     /**
      * Sets the selected card index.
-     * 
+     *
      * @param selectedIndex The selected card index, or <tt>-1</tt> for no
      * selection.
      */

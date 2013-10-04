@@ -121,7 +121,7 @@ public class StackPaneSkin extends ContainerSkin {
     /**
      * Sets the amount of space to leave between the edge of the StackPane and
      * its components.
-     * 
+     *
      * @param padding A dictionary with keys in the set {left, top, bottom,
      * right}.
      */
@@ -156,7 +156,7 @@ public class StackPaneSkin extends ContainerSkin {
     /**
      * Sets the amount of space to leave between the edge of the StackPane and
      * its components.
-     * 
+     *
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */

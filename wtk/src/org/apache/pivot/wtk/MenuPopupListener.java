@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface MenuPopupListener {
     /**
      * Called when a menu popup's menu has changed.
-     * 
+     *
      * @param menuPopup
      * @param previousMenu
      */

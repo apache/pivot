@@ -34,7 +34,7 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
 
     /**
      * Reads data from a properties stream.
-     * 
+     *
      * @param inputStream The input stream from which data will be read.
      * @return An instance of {@link Map} containing the data read from the
      * properties file. Both keys and values are strings.
@@ -53,7 +53,7 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
 
     /**
      * Writes data to a properties stream.
-     * 
+     *
      * @param object An instance of {@link Map} containing the data to be
      * written to the properties file. Keys must be strings, and values will be
      * converted to strings.

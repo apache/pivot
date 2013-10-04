@@ -39,7 +39,7 @@ public interface AccordionAttributeListener {
 
     /**
      * Called when a panel's header data attribute has changed.
-     * 
+     *
      * @param accordion
      * @param component
      * @param previousHeaderData
@@ -49,7 +49,7 @@ public interface AccordionAttributeListener {
 
     /**
      * Called when a panel's tooltip text has changed.
-     * 
+     *
      * @param accordion
      * @param component
      * @param previousTooltipText

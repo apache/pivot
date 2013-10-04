@@ -54,7 +54,7 @@ public interface FormListener {
 
     /**
      * Called when a form section has been inserted.
-     * 
+     *
      * @param form
      * @param index
      */
@@ -62,7 +62,7 @@ public interface FormListener {
 
     /**
      * Called when form sections have been removed.
-     * 
+     *
      * @param form
      * @param index
      * @param removed
@@ -71,14 +71,14 @@ public interface FormListener {
 
     /**
      * Called when a form section's heading has changed.
-     * 
+     *
      * @param section
      */
     public void sectionHeadingChanged(Form.Section section);
 
     /**
      * Called when a form field has been inserted.
-     * 
+     *
      * @param section
      * @param index
      */
@@ -86,7 +86,7 @@ public interface FormListener {
 
     /**
      * Called when forms fields items have been removed.
-     * 
+     *
      * @param section
      * @param index
      * @param fields

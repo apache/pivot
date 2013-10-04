@@ -143,7 +143,7 @@ public abstract class Action {
 
     /**
      * Performs the action.
-     * 
+     *
      * @param source The component that initiated the action.
      */
     public abstract void perform(Component source);

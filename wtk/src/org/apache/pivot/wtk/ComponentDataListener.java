@@ -42,7 +42,7 @@ public interface ComponentDataListener {
 
     /**
      * Called when a value has been added to a component's user data dictionary.
-     * 
+     *
      * @param component
      * @param key
      */
@@ -51,7 +51,7 @@ public interface ComponentDataListener {
     /**
      * Called when a value has been updated in a component's user data
      * dictionary.
-     * 
+     *
      * @param component
      * @param key
      * @param previousValue
@@ -61,7 +61,7 @@ public interface ComponentDataListener {
     /**
      * Called when a value has been removed from a component's user data
      * dictionary.
-     * 
+     *
      * @param component
      * @param key
      * @param value

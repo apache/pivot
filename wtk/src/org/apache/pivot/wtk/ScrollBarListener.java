@@ -48,7 +48,7 @@ public interface ScrollBarListener {
 
     /**
      * Called when a scroll bar's orientation has changed.
-     * 
+     *
      * @param scrollBar
      * @param previousOrientation
      */
@@ -56,7 +56,7 @@ public interface ScrollBarListener {
 
     /**
      * Called when a scroll bar's scope has changed.
-     * 
+     *
      * @param scrollBar
      * @param previousStart
      * @param previousEnd
@@ -67,7 +67,7 @@ public interface ScrollBarListener {
 
     /**
      * Called when a scroll bar's unit increment has changed.
-     * 
+     *
      * @param scrollBar
      * @param previousUnitIncrement
      */
@@ -75,7 +75,7 @@ public interface ScrollBarListener {
 
     /**
      * Called when a scroll bar's block increment has changed.
-     * 
+     *
      * @param scrollBar
      * @param previousBlockIncrement
      */

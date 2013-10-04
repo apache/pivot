@@ -24,7 +24,7 @@ import org.apache.pivot.collections.Sequence;
 public interface ChartViewCategoryListener {
     /**
      * Fired when a category is inserted into a chart view.
-     * 
+     *
      * @param chartView
      * @param index
      */
@@ -32,7 +32,7 @@ public interface ChartViewCategoryListener {
 
     /**
      * Fired when a category is removed from a chart view.
-     * 
+     *
      * @param chartView
      * @param index
      * @param categories
@@ -42,7 +42,7 @@ public interface ChartViewCategoryListener {
 
     /**
      * Fired when a chart view's category key changes.
-     * 
+     *
      * @param chartView
      * @param index
      * @param previousKey
@@ -51,7 +51,7 @@ public interface ChartViewCategoryListener {
 
     /**
      * Fired when a chart view's category label changes.
-     * 
+     *
      * @param chartView
      * @param index
      * @param previousLabel

@@ -29,7 +29,7 @@ import java.lang.reflect.Type;
  * <p> This class is a drastically reduced derivation from <a
  * href="http://code.google.com/p/google-guice/">Google Guice</a>'s
  * {@code TypeLiteral} class, written by Bob Lee and Jesse Wilson.
- * 
+ *
  * @param <T> note that in Tree the type parameter currently it's not used
  */
 public class TypeLiteral<T> {

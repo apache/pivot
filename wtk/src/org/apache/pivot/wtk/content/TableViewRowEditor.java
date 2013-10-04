@@ -161,7 +161,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * so it is the caller's responsibility to set up the data binding keys in
      * each component they specify in this dictionary. The data binding key
      * should equal the column name that the cell editor serves.
-     * 
+     *
      * @return The cell editor dictionary.
      */
     public Dictionary<String, Component> getCellEditors() {
@@ -293,7 +293,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     /**
      * Returns the effect that is applied when the editor opens or closes.
-     * 
+     *
      * @return The edit effect, or <tt>null</tt> for no effect.
      */
     public CardPaneSkin.SelectionChangeEffect getEditEffect() {
@@ -303,7 +303,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     /**
      * Sets the effect that is applied when the editor opens or closes.
-     * 
+     *
      * @param editEffect The edit effect, or <tt>null</tt> for no effect.
      */
     public void setEditEffect(CardPaneSkin.SelectionChangeEffect editEffect) {
@@ -312,7 +312,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     /**
      * Returns the edit effect duration.
-     * 
+     *
      * @return The effect duration in milliseconds.
      */
     public int getEditEffectDuration() {
@@ -321,7 +321,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     /**
      * Sets the edit effect duration.
-     * 
+     *
      * @param effectDuration The effect duration in milliseconds.
      */
     public void setEditEffectDuration(int effectDuration) {
@@ -330,7 +330,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     /**
      * Returns the edit effect rate.
-     * 
+     *
      * @return The effect rate.
      */
     public int getEditEffectRate() {
@@ -339,7 +339,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     /**
      * Sets the edit effect rate.
-     * 
+     *
      * @param effectRate The effect rate.
      */
     public void setEditEffectRate(int effectRate) {

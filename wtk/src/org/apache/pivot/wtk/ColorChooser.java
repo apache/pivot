@@ -31,14 +31,14 @@ public class ColorChooser extends Container {
     public interface SelectedColorBindMapping {
         /**
          * Converts a context value to a color.
-         * 
+         *
          * @param value
          */
         public Color toColor(Object value);
 
         /**
          * Converts a color to a context value.
-         * 
+         *
          * @param color
          */
         public Object valueOf(Color color);
@@ -112,7 +112,7 @@ public class ColorChooser extends Container {
 
     /**
      * Sets the selected color.
-     * 
+     *
      * @param selectedColor The color to select, or <tt>null</tt> to clear the
      * selection.
      */
@@ -128,7 +128,7 @@ public class ColorChooser extends Container {
 
     /**
      * Sets the selected color.
-     * 
+     *
      * @param selectedColor The color to select, or <tt>null</tt> to clear the
      * selection.
      */

@@ -57,7 +57,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns the element to which this attribute belongs.
-         * 
+         *
          * @return This attribute's element, or <tt>null</tt> if the attribute
          * does not belong to an element.
          */
@@ -67,7 +67,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns the attribute's namespace prefix.
-         * 
+         *
          * @return The attribute's namespace prefix, or <tt>null</tt> if the
          * attribute belongs to the default namespace.
          */
@@ -105,7 +105,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Sets the attribute's value.
-         * 
+         *
          * @param value
          */
         public void setValue(String value) {
@@ -176,7 +176,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Adds an attribute to the sequence.
-         * 
+         *
          * @param attribute
          */
         @Override
@@ -189,7 +189,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Inserts an attribute into the sequence at a specific location.
-         * 
+         *
          * @param attribute
          * @param index
          */
@@ -227,7 +227,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Removes an attribute from the sequence.
-         * 
+         *
          * @param attribute
          */
         @Override
@@ -242,7 +242,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Removes a range of attributes from the sequence.
-         * 
+         *
          * @param index
          * @param count
          */
@@ -265,7 +265,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns the attribute at a given index.
-         * 
+         *
          * @param index
          */
         @Override
@@ -275,7 +275,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Determines the index of an attribute.
-         * 
+         *
          * @param attribute
          * @return The index of the attribute, if found; otherwise, <tt>-1</tt>.
          */
@@ -310,7 +310,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns the URI of a namespace declared by this element.
-         * 
+         *
          * @param prefix The namespace prefix.
          * @return The declared namespace, or <tt>null</tt> if no such namespace
          * exists.
@@ -322,7 +322,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Sets the URI of a namespace declared by this element.
-         * 
+         *
          * @param prefix The namespace prefix.
          * @param uri The namespace URI.
          * @return The URI previously associated with the given prefix.
@@ -347,7 +347,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Removes a namespace from this element's declared namespaces.
-         * 
+         *
          * @param prefix The namespace prefix.
          * @return The URI previously associated with the given prefix.
          */
@@ -365,7 +365,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Tests for the existence of a namespace declared by this element.
-         * 
+         *
          * @param prefix
          * @return <tt>true</tt> if this element declares a namespace with the
          * given prefix; <tt>false</tt>, otherwise.
@@ -445,7 +445,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns an attribute value.
-         * 
+         *
          * @param attributeName
          * @return The value associated with the given attribute, or
          * <tt>null</tt>
@@ -458,7 +458,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Sets an attribute value.
-         * 
+         *
          * @param attributeName
          * @param value
          * @return The value previously associated with the given attribute, or
@@ -495,7 +495,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Removes an attribute.
-         * 
+         *
          * @param attributeName
          * @return The value previously associated with the given attribute.
          */
@@ -511,7 +511,7 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Tests for the existence of an attribute.
-         * 
+         *
          * @param attributeName
          * @return <tt>true</tt> if this element defines the given attribute;
          * <tt>false<tt>, otherwise.
@@ -553,7 +553,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Returns the element's namespace prefix.
-     * 
+     *
      * @return The element's namespace prefix, or <tt>null</tt> if the element
      * belongs to the default namespace.
      */
@@ -584,7 +584,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Returns the element's default namespace URI.
-     * 
+     *
      * @return The default namespace URI declared by this element, or
      * <tt>null</tt> if this element does not declare a default namespace.
      */
@@ -594,7 +594,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Sets the element's default namespace URI.
-     * 
+     *
      * @param defaultNamespaceURI The default namespace URI declared by this
      * element, or <tt>null</tt> if this element does not declare a default
      * namespace.
@@ -618,7 +618,7 @@ public class Element extends Node implements List<Node> {
     /**
      * Determines the namespace URI corresponding to the given prefix by
      * traversing the element's ancestry.
-     * 
+     *
      * @param prefix The namespace prefix to look up, or <tt>null</tt> to
      * determine the default namespace for this element.
      * @return The namespace URI corresponding to the given prefix, or
@@ -661,7 +661,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Adds a node to this element.
-     * 
+     *
      * @param node
      * @return The index at which the node was added.
      */
@@ -679,7 +679,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Inserts a node at a specific location within this element.
-     * 
+     *
      * @param node
      * @param index
      */
@@ -704,7 +704,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Removes a node from this element.
-     * 
+     *
      * @param node
      */
     @Override
@@ -719,7 +719,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Removes a range of nodes from this element.
-     * 
+     *
      * @param index
      * @param count
      * @return The removed nodes.
@@ -757,7 +757,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Returns the node at the given index.
-     * 
+     *
      * @param index
      */
     @Override
@@ -767,7 +767,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Determines the index of the given node within this element.
-     * 
+     *
      * @return The index of the node, or <tt>-1</tt> if the node does not exist
      * in this element.
      */
@@ -810,7 +810,7 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Determines if this element defines any attributes.
-     * 
+     *
      * @return <tt>true</tt> if this element does not define any attributes;
      * <tt>false</tt>, otherwise.
      */
@@ -822,7 +822,7 @@ public class Element extends Node implements List<Node> {
     /**
      * Returns the sub-elements of of this element whose tag names match the
      * given name.
-     * 
+     *
      * @param name The tag name to match.
      * @return A list containing the matching elements. The list will be empty if
      * no elements matched the given tag name.
@@ -849,7 +849,7 @@ public class Element extends Node implements List<Node> {
      * Returns the text content of this element. An element is defined to
      * contain text when it contains a single child that is an instance of
      * {@link TextNode}.
-     * 
+     *
      * @return The text content of the element, or {@code null} if this element
      * does not contain text.
      */

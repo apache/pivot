@@ -80,7 +80,7 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
 
     /**
      * tell the autoTrim mode
-     * 
+     *
      * @return true if autoTrim is enabled, otherwise false (default)
      */
     public boolean isAutoTrim() {

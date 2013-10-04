@@ -138,7 +138,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Sets the keys that will be read or written by this serializer.
-     * 
+     *
      * @param keys
      */
     public void setKeys(Sequence<String> keys) {
@@ -151,7 +151,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Sets the keys that will be read or written by this serializer.
-     * 
+     *
      * @param keys
      */
     public void setKeys(String... keys) {
@@ -171,7 +171,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Sets the serializer's write keys flag.
-     * 
+     *
      * @param writeKeys If <tt>true</tt>, the first line of the output will
      * contain the keys. Otherwise, the first line will contain the first line
      * of data.
@@ -190,7 +190,7 @@ public class CSVSerializer implements Serializer<List<?>> {
     /**
      * Sets the serializer's verbosity flag. When verbosity is enabled, all data
      * read or written will be echoed to the console.
-     * 
+     *
      * @param verbose
      */
     public void setVerbose(boolean verbose) {
@@ -199,7 +199,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Reads values from a comma-separated value stream.
-     * 
+     *
      * @param inputStream The input stream from which data will be read.
      * @see #readObject(Reader)
      */
@@ -220,7 +220,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Reads values from a comma-separated value stream.
-     * 
+     *
      * @param reader The reader from which data will be read.
      * @return A list containing the data read from the CSV file. The list items
      * are instances of Dictionary<String, Object> populated by mapping columns
@@ -420,7 +420,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Writes values to a comma-separated value stream.
-     * 
+     *
      * @param items
      * @param outputStream The output stream to which data will be written.
      * @see #writeObject(List, Writer)
@@ -448,7 +448,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Writes values to a comma-separated value stream.
-     * 
+     *
      * @param items A list containing the data to write to the CSV file. List
      * items must be instances of Dictionary<String, Object>. The dictionary
      * values will be written out in the order specified by the key sequence.

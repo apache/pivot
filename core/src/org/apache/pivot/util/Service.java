@@ -27,7 +27,7 @@ import java.io.InputStreamReader;
 public class Service {
     /**
      * Attempts to load a service provider.
-     * 
+     *
      * @param providerName The name of the provider to load. The method first
      * looks for a system property with this name. The value of the property is
      * expected to be the name of a class that implements the expected provider

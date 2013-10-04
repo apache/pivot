@@ -59,7 +59,7 @@ public interface GridPaneListener {
 
     /**
      * Called when a grid pane's column count has changed.
-     * 
+     *
      * @param gridPane
      * @param previousColumnCount
      */
@@ -67,7 +67,7 @@ public interface GridPaneListener {
 
     /**
      * Called when a row has been inserted into a grid pane.
-     * 
+     *
      * @param gridPane
      * @param index
      */
@@ -75,7 +75,7 @@ public interface GridPaneListener {
 
     /**
      * Called when rows have been removed from a grid pane.
-     * 
+     *
      * @param gridPane
      * @param index
      * @param rows
@@ -84,7 +84,7 @@ public interface GridPaneListener {
 
     /**
      * Called when a cell has been inserted into a grid pane.
-     * 
+     *
      * @param row
      * @param column
      */
@@ -92,7 +92,7 @@ public interface GridPaneListener {
 
     /**
      * Called when cell's have been removed from a grid pane.
-     * 
+     *
      * @param row
      * @param column
      * @param removed
@@ -101,7 +101,7 @@ public interface GridPaneListener {
 
     /**
      * Called when a cell has been updated in a grid pane.
-     * 
+     *
      * @param row
      * @param column
      * @param previousComponent

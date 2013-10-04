@@ -511,7 +511,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the CardPane and
      * its content.
-     * 
+     *
      * @param padding A dictionary with keys in the set {left, top, bottom,
      * right}.
      */
@@ -546,7 +546,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the CardPane and
      * its content.
-     * 
+     *
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */
@@ -610,7 +610,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * from the last card to the first, and backward when they transition from
      * the first card to the last. <p> Note: to avoid ambiguity, the circular
      * style will be ignored if the card pane has fewer than three cards.
-     * 
+     *
      * @return <tt>true</tt> if directional transitions will be circular;
      * <tt>false</tt> otherwise
      */
@@ -629,7 +629,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * from the last card to the first, and backward when they transition from
      * the first card to the last. <p> Note: to avoid ambiguity, the circular
      * style will be ignored if the card pane has fewer than three cards.
-     * 
+     *
      * @param circular <tt>true</tt> if directional transitions should be
      * circular; <tt>false</tt> otherwise
      */

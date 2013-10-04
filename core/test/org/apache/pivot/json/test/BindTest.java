@@ -36,7 +36,7 @@ import org.junit.Test;
 public class BindTest {
     /**
      * Tests returning an untyped list.
-     * 
+     *
      * @throws IOException
      * @throws SerializationException
      */
@@ -50,7 +50,7 @@ public class BindTest {
     /**
      * Tests returning a typed list using
      * {@code org.apache.pivot.util.TypeLiteral}.
-     * 
+     *
      * @throws IOException
      * @throws SerializationException
      */
@@ -77,7 +77,7 @@ public class BindTest {
     /**
      * Tests returning a subclass of a generic
      * {@code org.apache.pivot.collections.List}.
-     * 
+     *
      * @throws IOException
      * @throws SerializationException
      */
@@ -100,7 +100,7 @@ public class BindTest {
     /**
      * Tests returning a class that implements
      * {@code org.apache.pivot.collections.Sequence}.
-     * 
+     *
      * @throws IOException
      * @throws SerializationException
      */
@@ -123,7 +123,7 @@ public class BindTest {
 
     /**
      * Tests returning an untyped map.
-     * 
+     *
      * @throws IOException
      * @throws SerializationException
      */
@@ -139,7 +139,7 @@ public class BindTest {
     /**
      * Tests returning a typed map using
      * {@code org.apache.pivot.util.TypeLiteral}.
-     * 
+     *
      * @throws IOException
      * @throws SerializationException
      */
@@ -161,7 +161,7 @@ public class BindTest {
     /**
      * Tests returning a subclass of a generic
      * {@code org.apache.pivot.collections.Map}.
-     * 
+     *
      * @throws IOException
      * @throws SerializationException
      */
@@ -179,7 +179,7 @@ public class BindTest {
     /**
      * Tests returning a class that implements
      * {@code org.apache.pivot.collections.Dictionary}.
-     * 
+     *
      * @throws IOException
      * @throws SerializationException
      */
@@ -197,7 +197,7 @@ public class BindTest {
 
     /**
      * Tests returning a Java bean value.
-     * 
+     *
      * @throws IOException
      * @throws SerializationException
      */

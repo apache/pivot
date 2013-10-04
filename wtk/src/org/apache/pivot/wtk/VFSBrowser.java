@@ -122,7 +122,7 @@ public class VFSBrowser extends Container {
      * Creates a new VFSBrowser <p> Note that this version of the constructor
      * must be used when a custom root folder (that may include a completely
      * different URI scheme) has to be set.
-     * 
+     *
      * @param manager The virtual file system we're going to manage.
      * @param rootFolder The root folder full name.
      */
@@ -150,7 +150,7 @@ public class VFSBrowser extends Container {
     /**
      * Creates a new VFSBrowser <p> Note that this version of the constructor
      * must be used when a custom root folder has to be set.
-     * 
+     *
      * @param manager The virtual file system we're going to manage.
      * @param rootFolder The root folder full name.
      */
@@ -177,7 +177,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Returns the current file system manager.
-     * 
+     *
      * @return The current file system manager.
      */
     public FileSystemManager getManager() {
@@ -186,7 +186,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Returns the current root directory.
-     * 
+     *
      * @return The current root directory.
      */
     public FileObject getRootDirectory() {
@@ -196,7 +196,7 @@ public class VFSBrowser extends Container {
     /**
      * Sets the root directory from a string. Clears any existing file
      * selection.
-     * 
+     *
      * @param rootDirectory
      */
     public void setRootDirectory(String rootDirectory) throws FileSystemException {
@@ -205,7 +205,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Sets the root directory. Clears any existing file selection.
-     * 
+     *
      * @param rootDirectory
      */
     public void setRootDirectory(FileObject rootDirectory) throws FileSystemException {
@@ -228,7 +228,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Adds a file to the file selection.
-     * 
+     *
      * @param file
      * @return <tt>true</tt> if the file was added; <tt>false</tt> if it was
      * already selected.
@@ -258,7 +258,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Removes a file from the file selection.
-     * 
+     *
      * @param file
      * @return <tt>true</tt> if the file was removed; <tt>false</tt> if it was
      * not already selected.
@@ -278,7 +278,7 @@ public class VFSBrowser extends Container {
 
     /**
      * When in single-select mode, returns the currently selected file.
-     * 
+     *
      * @return The currently selected file.
      */
     public FileObject getSelectedFile() {
@@ -291,7 +291,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Sets the selection to a single file.
-     * 
+     *
      * @param file
      */
     public void setSelectedFile(FileObject file) throws FileSystemException {
@@ -310,7 +310,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Returns the currently selected files.
-     * 
+     *
      * @return An immutable list containing the currently selected files. Note
      * that the returned list is a wrapper around the actual selection, not a
      * copy. Any changes made to the selection state will be reflected in the
@@ -322,7 +322,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Sets the selected files.
-     * 
+     *
      * @param selectedFiles The files to select.
      * @return The files that were selected, with duplicates eliminated.
      */
@@ -389,7 +389,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Sets the file browser's multi-select state.
-     * 
+     *
      * @param multiSelect <tt>true</tt> if multi-select is enabled;
      * <tt>false</tt>, otherwise.
      */
@@ -406,7 +406,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Returns the current file filter.
-     * 
+     *
      * @return The current file filter, or <tt>null</tt> if no filter is set.
      */
     public Filter<FileObject> getDisabledFileFilter() {
@@ -415,7 +415,7 @@ public class VFSBrowser extends Container {
 
     /**
      * Sets the file filter.
-     * 
+     *
      * @param disabledFileFilter The file filter to use, or <tt>null</tt> for no
      * filter.
      */

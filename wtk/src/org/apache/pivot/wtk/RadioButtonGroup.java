@@ -105,7 +105,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
             /*
              * Potentially transfer focus away from the buttons in this group.
-             * 
+             *
              * At this point we know that at least one button is focused, so we
              * just need to find the first or last (and possibly only) focusable
              * button depending on the focus transfer direction and then
@@ -281,7 +281,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Add a button to the group.
-     * 
+     *
      * @see Group#add(Object)
      * @see Sequence#add(Object)
      */
@@ -299,7 +299,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Return the button at the specified index.
-     * 
+     *
      * @see Sequence#get(int)
      */
     public Button get(int index) {
@@ -308,7 +308,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Return the number of buttons in the group.
-     * 
+     *
      * @see Sequence#getLength()
      */
     public int getLength() {
@@ -317,7 +317,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Return the index (order) of the button within the group.
-     * 
+     *
      * @return The index or -1 if the button does not belong to this
      * RadioButtonGroup
      * @see Sequence#indexOf(Object)
@@ -328,7 +328,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Insert a button at the specified index.
-     * 
+     *
      * @see Sequence#insert(Object, int)
      */
     public void insert(Button button, int index) {
@@ -343,7 +343,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Remove the button from the group.
-     * 
+     *
      * @see Group#remove(Object)
      * @see Sequence#remove(Object)
      */
@@ -362,7 +362,7 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Remove <code>count</code> buttons from the group starting at
      * <code>index</code>.
-     * 
+     *
      * @see Sequence#remove(int, int)
      */
     public Sequence<Button> remove(int index, int count) {
@@ -388,7 +388,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Select and <strong>focus</strong> the specified button.
-     * 
+     *
      * @see ButtonGroup#setSelection(Button)
      */
     @Override
@@ -426,7 +426,7 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Working forwards from the specified button, select the first focusable
      * button.
-     * 
+     *
      * @param button If null, the first available button will be selected,
      * unless the group contains a selected or focused button, in which case
      * that button will be used as the starting point for the search.
@@ -471,7 +471,7 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Working backwards from the specified button, select the first focusable
      * button.
-     * 
+     *
      * @param button If null, the last available button will be selected, unless
      * the group contains a selected or focused button, in which case that
      * button will be used as the starting point for the search.
@@ -518,7 +518,7 @@ public class RadioButtonGroup extends ButtonGroup {
      * Iterate forwards over the buttons in the group, looping back to the start
      * if the upper bound is reached and the <code>circular</code> parameter is
      * true.
-     * 
+     *
      * @param index Index to which the 'next' is relative
      * @param filter Alternative filter to use during the search.
      * @param circularArgument Loop when upper bound is reached
@@ -558,7 +558,7 @@ public class RadioButtonGroup extends ButtonGroup {
      * Iterate backwards over the buttons in the group, looping back to the end
      * if the lower bound is reached and the <code>circular</code> parameter is
      * true.
-     * 
+     *
      * @param index Index to which the 'previous' is relative
      * @param filter Alternative filter to use during the search.
      * @param circularArgument Loop when lower bound is reached

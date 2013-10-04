@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface ComponentStyleListener {
     /**
      * Called when a component style has been updated.
-     * 
+     *
      * @param component Component the style belongs to
      * @param styleKey The name of the style
      * @param previousValue The previous value for this style

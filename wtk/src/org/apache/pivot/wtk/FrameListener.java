@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface FrameListener {
     /**
      * Called when a frame's menu bar has changed.
-     * 
+     *
      * @param frame
      * @param previousMenuBar
      */

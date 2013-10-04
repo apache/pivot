@@ -219,7 +219,7 @@ public abstract class Container extends Component implements Sequence<Component>
 
     /**
      * Moves a component within the component sequence.
-     * 
+     *
      * @param from
      * @param to
      */
@@ -458,7 +458,7 @@ public abstract class Container extends Component implements Sequence<Component>
     /**
      * Tests if this container is an ancestor of a given component. A container
      * is considered to be its own ancestor.
-     * 
+     *
      * @param component The component to test.
      * @return <tt>true</tt> if this container is an ancestor of
      * <tt>component</tt>; <tt>false</tt> otherwise.
@@ -483,7 +483,7 @@ public abstract class Container extends Component implements Sequence<Component>
      * Requests that focus be given to this container. If this container is not
      * focusable, this requests that focus be set to the first focusable
      * descendant in this container.
-     * 
+     *
      * @return The component that got the focus, or <tt>null</tt> if the focus
      * request was denied
      */
@@ -518,7 +518,7 @@ public abstract class Container extends Component implements Sequence<Component>
 
     /**
      * Transfers focus to the next focusable component.
-     * 
+     *
      * @param component The component from which focus will be transferred.
      * @param direction The direction in which to transfer focus.
      */
@@ -562,7 +562,7 @@ public abstract class Container extends Component implements Sequence<Component>
 
     /**
      * Sets this container's focus traversal policy.
-     * 
+     *
      * @param focusTraversalPolicy The focus traversal policy to use with this
      * container.
      */
@@ -578,7 +578,7 @@ public abstract class Container extends Component implements Sequence<Component>
     /**
      * Tests whether this container is an ancestor of the currently focused
      * component.
-     * 
+     *
      * @return <tt>true</tt> if a component is focused and this container is an
      * ancestor of the component; <tt>false</tt>, otherwise.
      */
@@ -621,7 +621,7 @@ public abstract class Container extends Component implements Sequence<Component>
 
     /**
      * Propagates binding to subcomponents.
-     * 
+     *
      * @param context
      */
     @Override
@@ -633,7 +633,7 @@ public abstract class Container extends Component implements Sequence<Component>
 
     /**
      * Propagates binding to subcomponents.
-     * 
+     *
      * @param context
      */
     @Override

@@ -41,7 +41,7 @@ public interface ComponentStateListener {
      * <code>enabled</code> flag has already been set when this method is called
      * so the new state can be determined by calling the
      * {@link Component#isEnabled} method.
-     * 
+     *
      * @param component The component whose enabled state is changing.
      */
     public void enabledChanged(Component component);
@@ -52,7 +52,7 @@ public interface ComponentStateListener {
      * currently focused component has already been set when this method is
      * called, so that the new state of the component can be determined by
      * calling the {@link Component#isFocused} method.
-     * 
+     *
      * @param component The component that is either gaining focus or the one
      * that previously had focus and is now losing it.
      * @param obverseComponent If the component is gaining focus, this is the

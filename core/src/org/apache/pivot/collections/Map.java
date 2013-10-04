@@ -68,7 +68,7 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
     /**
      * Sets the value of the given key, creating a new entry or replacing the
      * existing value, and firing a corresponding event.
-     * 
+     *
      * @param key The key whose value is to be set.
      * @param value The value to be associated with the given key.
      * @see MapListener#valueAdded(Map, Object)
@@ -85,7 +85,7 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
 
     /**
      * Removes all entries in the map.
-     * 
+     *
      * @see MapListener#mapCleared(Map)
      */
     @Override

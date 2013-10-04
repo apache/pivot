@@ -1141,7 +1141,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
      * clipboard (if not a password TextInput).<br> CommandModifier +
      * {@link KeyCode#V V} Paste from clipboard.<br> CommandModifier +
      * {@link KeyCode#Z Z} Undo.
-     * 
+     *
      * @see Platform#getCommandModifier()
      */
     @Override

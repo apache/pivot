@@ -44,7 +44,7 @@ public interface SpinnerListener {
 
     /**
      * Called when a spinner's data has changed.
-     * 
+     *
      * @param spinner
      * @param previousSpinnerData
      */
@@ -52,7 +52,7 @@ public interface SpinnerListener {
 
     /**
      * Called when a spinner's item renderer has changed.
-     * 
+     *
      * @param spinner
      * @param previousItemRenderer
      */
@@ -60,7 +60,7 @@ public interface SpinnerListener {
 
     /**
      * Called when a spinner's circular property has changed.
-     * 
+     *
      * @param spinner
      */
     public void circularChanged(Spinner spinner);

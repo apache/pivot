@@ -38,7 +38,7 @@ public interface SuggestionPopupSelectionListener {
 
     /**
      * Called when a suggestion popup's selected index has changed.
-     * 
+     *
      * @param suggestionPopup
      * @param previousSelectedIndex
      */
@@ -46,7 +46,7 @@ public interface SuggestionPopupSelectionListener {
 
     /**
      * Called when a suggestion popup's selected suggestion has changed.
-     * 
+     *
      * @param suggestionPopup The source of the event.
      * @param previousSelectedSuggestion The item that was previously selected,
      * or <tt>null</tt> if the previous selection cannot be determined.

@@ -417,7 +417,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the font of the text
-     * 
+     *
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
@@ -430,7 +430,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the font of the text
-     * 
+     *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
@@ -462,7 +462,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the foreground color of the text
-     * 
+     *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
@@ -603,7 +603,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     /**
      * Sets the amount of space between the edge of the TextPane and its
      * Document
-     * 
+     *
      * @param margin A dictionary with keys in the set {left, top, bottom,
      * right}.
      */
@@ -638,7 +638,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     /**
      * Sets the amount of space between the edge of the TextPane and its
      * Document
-     * 
+     *
      * @param margin A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */

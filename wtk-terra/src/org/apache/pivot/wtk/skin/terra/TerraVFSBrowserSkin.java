@@ -137,7 +137,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
         /**
          * Obtains the icon to display for a given file.
-         * 
+         *
          * @param file
          */
         public static Image getIcon(FileObject file) {
@@ -1157,7 +1157,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     /**
      * CommandModifier + {@link KeyCode#F F} Transfers focus to the search
      * TextInput.
-     * 
+     *
      * @see Platform#getCommandModifier()
      */
     @Override

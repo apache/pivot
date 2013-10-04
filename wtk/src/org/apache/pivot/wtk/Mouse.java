@@ -57,7 +57,7 @@ public final class Mouse {
 
     /**
      * Tests the pressed state of a button.
-     * 
+     *
      * @param button
      * @return <tt>true</tt> if the button is pressed; <tt>false</tt>, otherwise.
      */
@@ -75,7 +75,7 @@ public final class Mouse {
     /**
      * "Captures" the mouse, causing all mouse input to be delegated to the
      * given component rather than propagating down the component hierarchy.
-     * 
+     *
      * @param capturerArgument The component that wants to capture the mouse.
      * The mouse pointer must currently be over the component.
      */
@@ -132,7 +132,7 @@ public final class Mouse {
 
     /**
      * Returns the mouse capturer.
-     * 
+     *
      * @return The component that has captured the mouse, or <tt>null</tt> if
      * the mouse is not currently captured.
      */
@@ -142,7 +142,7 @@ public final class Mouse {
 
     /**
      * Returns the current cursor.
-     * 
+     *
      * @throws IllegalStateException If the mouse is not currently captured.
      */
     public static Cursor getCursor() {
@@ -237,7 +237,7 @@ public final class Mouse {
 
     /**
      * Sets the cursor to an explicit value.
-     * 
+     *
      * @param cursor
      * @throws IllegalStateException If the mouse is not currently captured.
      */
@@ -257,7 +257,7 @@ public final class Mouse {
 
     /**
      * Sets the cursor based on a given component.
-     * 
+     *
      * @param component
      */
     public static void setCursor(final Component component) {

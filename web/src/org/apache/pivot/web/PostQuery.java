@@ -57,7 +57,7 @@ public class PostQuery extends Query<URL> {
     /**
      * Sets the value that will be POSTed to the server when the query is
      * executed.
-     * 
+     *
      * @param value The value to POST to the server.
      */
     public void setValue(Object value) {
@@ -66,7 +66,7 @@ public class PostQuery extends Query<URL> {
 
     /**
      * Synchronously executes the POST operation.
-     * 
+     *
      * @return A URL that uniquely identifies the location of the resource
      * created on the server by the operation, or <tt>null</tt> if the server
      * did not return a location.

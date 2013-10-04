@@ -73,7 +73,7 @@ public final class Base64 {
 
     /**
      * Encodes the specified data into a base64 string.
-     * 
+     *
      * @param bytes The unencoded raw data.
      */
     public static String encode(byte[] bytes) {
@@ -101,7 +101,7 @@ public final class Base64 {
 
     /**
      * Decodes the specified base64 string back into its raw data.
-     * 
+     *
      * @param encoded The base64 encoded string.
      */
     public static byte[] decode(String encoded) {

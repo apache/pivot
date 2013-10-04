@@ -58,7 +58,7 @@ public class WatermarkDecorator implements Decorator {
     /**
      * Creates a new <tt>WatermarkDecorator</tt> with the specified string as
      * its text and no image.
-     * 
+     *
      * @param text The text to paint over the decorated component
      */
     public WatermarkDecorator(String text) {
@@ -68,7 +68,7 @@ public class WatermarkDecorator implements Decorator {
     /**
      * Creates a new <tt>WatermarkDecorator</tt> with no text and the specified
      * image.
-     * 
+     *
      * @param image The image to paint over the decorated component
      */
     public WatermarkDecorator(Image image) {
@@ -78,7 +78,7 @@ public class WatermarkDecorator implements Decorator {
     /**
      * Creates a new <tt>WatermarkDecorator</tt> with the specified text and
      * image.
-     * 
+     *
      * @param text The text to paint over the decorated component
      * @param image The image to paint over the decorated component
      */
@@ -100,7 +100,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Gets the text that will be painted over this decorator's component.
-     * 
+     *
      * @return This decorator's text
      */
     public String getText() {
@@ -109,7 +109,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the text that will be painted over this decorator's component.
-     * 
+     *
      * @param text This decorator's text
      */
     public void setText(String text) {
@@ -119,7 +119,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Gets the font that will be used when painting this decorator's text.
-     * 
+     *
      * @return This decorator's font
      */
     public Font getFont() {
@@ -128,7 +128,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the font that will be used when painting this decorator's text.
-     * 
+     *
      * @param font This decorator's font
      */
     public void setFont(Font font) {
@@ -142,7 +142,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the font that will be used when painting this decorator's text.
-     * 
+     *
      * @param font This decorator's font
      */
     public final void setFont(String font) {
@@ -163,7 +163,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Gets the image that will be painted over this decorator's component.
-     * 
+     *
      * @return This decorator's image
      */
     public Image getImage() {
@@ -172,7 +172,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the image that will be painted over this decorator's component.
-     * 
+     *
      * @param image This decorator's image
      */
     public void setImage(Image image) {
@@ -185,7 +185,7 @@ public class WatermarkDecorator implements Decorator {
      * URL. <p> If the icon already exists in the application context resource
      * cache, the cached value will be used. Otherwise, the icon will be loaded
      * synchronously and added to the cache.
-     * 
+     *
      * @param imageURL The location of the image to set.
      */
     public void setImage(URL imageURL) {
@@ -198,7 +198,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the image that will be painted over this decorator's component.
-     * 
+     *
      * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
      */
@@ -217,7 +217,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Gets the opacity of the watermark.
-     * 
+     *
      * @return This decorator's opacity
      */
     public float getOpacity() {
@@ -226,7 +226,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Sets the opacity of the watermark.
-     * 
+     *
      * @param opacity This decorator's opacity
      */
     public void setOpacity(float opacity) {
@@ -236,7 +236,7 @@ public class WatermarkDecorator implements Decorator {
 
     /**
      * Gets the angle at the watermark will be painted, in radians.
-     * 
+     *
      * @return This decorator's watermark angle
      */
     public double getTheta() {
@@ -246,7 +246,7 @@ public class WatermarkDecorator implements Decorator {
     /**
      * Sets the angle at the watermark will be painted, in radians. This value
      * must lie between <tt>0</tt> and <tt>PI / 2</tt> (inclusive).
-     * 
+     *
      * @param theta This decorator's watermark angle
      */
     public void setTheta(double theta) {

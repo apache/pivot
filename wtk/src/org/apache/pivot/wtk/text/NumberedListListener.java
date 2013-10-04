@@ -30,7 +30,7 @@ public interface NumberedListListener {
 
     /**
      * Called when the list style has changed.
-     * 
+     *
      * @param numberedList
      * @param previousStyle
      */

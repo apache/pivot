@@ -635,7 +635,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
 
     /**
      * Listener for expander button events.
-     * 
+     *
      * @param button The source of the button event.
      */
     @Override

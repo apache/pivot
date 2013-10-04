@@ -194,7 +194,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
 
     /**
      * Sets the font used in rendering the Separator's heading
-     * 
+     *
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
@@ -207,7 +207,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
 
     /**
      * Sets the font used in rendering the Separator's heading
-     * 
+     *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
@@ -239,7 +239,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
 
     /**
      * Sets the color of the Separator's horizontal rule
-     * 
+     *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
@@ -272,7 +272,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
 
     /**
      * Sets the color of the text in the heading
-     * 
+     *
      * @param headingColor Any of the {@linkplain GraphicsUtilities#decodeColor
      * color values recognized by Pivot}.
      */
@@ -337,7 +337,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     /**
      * Sets the amount of space to leave around the Separator's heading, and
      * above and below the entire component.
-     * 
+     *
      * @param padding A dictionary with keys in the set {left, top, bottom,
      * right}.
      */
@@ -372,7 +372,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     /**
      * Sets the amount of space to leave around the Separator's heading, and
      * above and below the entire component.
-     * 
+     *
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */

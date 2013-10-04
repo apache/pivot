@@ -323,7 +323,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets a value from the theme's color palette.
-     * 
+     *
      * @param index
      */
     public Color getColor(int index) {
@@ -332,7 +332,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Sets a value in the theme's color palette.
-     * 
+     *
      * @param index
      * @param color
      */
@@ -346,7 +346,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets a base color from the theme's color palette.
-     * 
+     *
      * @param index
      */
     public Color getBaseColor(int index) {
@@ -355,7 +355,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Sets a base color in the theme's color palette.
-     * 
+     *
      * @param index
      * @param baseColor
      */
@@ -372,7 +372,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets the number of Palette Colors
-     * 
+     *
      * @return the number
      */
     // @Override // TODO: re-enable this override for PIVOT-689
@@ -382,7 +382,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets the total number of Colors
-     * 
+     *
      * @return the number
      */
     // @Override // TODO: re-enable this override for PIVOT-689
@@ -393,7 +393,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets the image that this theme uses to represent messages of the
      * specified type.
-     * 
+     *
      * @param messageType
      */
     public Image getMessageIcon(MessageType messageType) {
@@ -403,7 +403,7 @@ public final class TerraTheme extends Theme {
     /**
      * Sets the image that this theme uses to represent messages of the
      * specified type.
-     * 
+     *
      * @param messageType
      * @param messageIcon
      */
@@ -418,7 +418,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets the small image that this theme uses to represent messages of the
      * specified type.
-     * 
+     *
      * @param messageType
      */
     public Image getSmallMessageIcon(MessageType messageType) {
@@ -428,7 +428,7 @@ public final class TerraTheme extends Theme {
     /**
      * Sets the small image that this theme uses to represent messages of the
      * specified type.
-     * 
+     *
      * @param messageType
      * @param smallMessageIcon
      */

@@ -49,7 +49,7 @@ public class EventLogger extends Container {
 
         /**
          * Select/Deselect all Events to log.
-         * 
+         *
          * @param select if true, all events will be selected for the log,
          * otherwise all events will be deselected
          */
@@ -221,7 +221,7 @@ public class EventLogger extends Container {
 
     /**
      * Gets this event logger's source component.
-     * 
+     *
      * @return The source component, or <tt>null</tt> if no source has been set.
      */
     public Component getSource() {
@@ -230,7 +230,7 @@ public class EventLogger extends Container {
 
     /**
      * Sets this event logger's source component.
-     * 
+     *
      * @param source The source component, or <tt>null</tt> to clear the source.
      */
     public void setSource(Component source) {
@@ -257,7 +257,7 @@ public class EventLogger extends Container {
     /**
      * Gets the declared event group, a read-only group that includes the
      * complete list of events that this event logger's source declares.
-     * 
+     *
      * @return the declared events group.
      */
     public DeclaredEventGroup getDeclaredEvents() {
@@ -270,7 +270,7 @@ public class EventLogger extends Container {
      * group is guaranteed to be a subset of the declared event group (attempts
      * to add events to this group that are not included in the declared event
      * group will fail).
-     * 
+     *
      * @return The include events group.
      */
     public IncludeEventGroup getIncludeEvents() {
@@ -287,7 +287,7 @@ public class EventLogger extends Container {
 
     /**
      * Select/Deselect all Events to log.
-     * 
+     *
      * @param select if true, all events will be selected for the log, otherwise
      * all events will be deselected
      */

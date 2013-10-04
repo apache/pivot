@@ -146,7 +146,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws IllegalArgumentException If {@code key} is {@literal null}.
      */
     @Override
@@ -175,7 +175,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws IllegalArgumentException If {@code key} is {@literal null}.
      */
     @Override
@@ -239,7 +239,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws IllegalArgumentException If {@code key} is {@literal null}.
      */
     @Override
@@ -305,7 +305,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws IllegalArgumentException If {@code key} is {@literal null}.
      */
     @Override

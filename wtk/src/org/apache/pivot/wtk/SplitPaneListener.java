@@ -62,7 +62,7 @@ public interface SplitPaneListener {
 
     /**
      * Called when a split pane's top left component has changed.
-     * 
+     *
      * @param splitPane The source of the event.
      * @param previousTopLeft The previous component. The new component can be
      * found inside the splitPane.
@@ -71,7 +71,7 @@ public interface SplitPaneListener {
 
     /**
      * Called when a split pane's bottom right component has changed.
-     * 
+     *
      * @param splitPane The source of the event.
      * @param previousBottomRight The previous component. The new component can
      * be found inside the splitPane.
@@ -80,21 +80,21 @@ public interface SplitPaneListener {
 
     /**
      * Called when a split pane's orientation has changed.
-     * 
+     *
      * @param splitPane The source of the event.
      */
     public void orientationChanged(SplitPane splitPane);
 
     /**
      * Called when a split pane's primary region has changed.
-     * 
+     *
      * @param splitPane The source of the event.
      */
     public void primaryRegionChanged(SplitPane splitPane);
 
     /**
      * Called when a split pane's split location has changed.
-     * 
+     *
      * @param splitPane The source of the event.
      * @param previousSplitRatio The previous setting of the splitRatio.
      */
@@ -102,14 +102,14 @@ public interface SplitPaneListener {
 
     /**
      * Called when a split pane's locked flag has changed.
-     * 
+     *
      * @param splitPane The source of the event.
      */
     public void lockedChanged(SplitPane splitPane);
 
     /**
      * Called when a split pane's split location has changed.
-     * 
+     *
      * @param splitPane The source of the event.
      * @param previousResizeMode The previous setting of the resizeMode.
      */

@@ -23,13 +23,13 @@ import java.io.OutputStream;
 /**
  * Defines an interface for writing objects to and reading objects from a data
  * stream.
- * 
+ *
  * @param <T> The type of data being read and written.
  */
 public interface Serializer<T> {
     /**
      * Reads an object from an input stream.
-     * 
+     *
      * @param inputStream The data stream from which the object will be read.
      * @return The deserialized object.
      */
@@ -37,7 +37,7 @@ public interface Serializer<T> {
 
     /**
      * Writes an object to an output stream.
-     * 
+     *
      * @param object The object to serialize.
      * @param outputStream The data stream to which the object will be written.
      */
@@ -46,7 +46,7 @@ public interface Serializer<T> {
 
     /**
      * Returns the MIME type of the data read and written by this serializer.
-     * 
+     *
      * @param object If provided, allows the serializer to attach parameters to
      * the returned MIME type containing more detailed information about the
      * data. If <tt>null</tt>, the base MIME type is returned.

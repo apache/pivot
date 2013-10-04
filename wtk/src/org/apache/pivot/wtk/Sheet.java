@@ -68,7 +68,7 @@ public class Sheet extends Window {
 
     /**
      * Creates a new sheet with an initial content component.
-     * 
+     *
      * @param content The sheet's content component.
      */
     public Sheet(Component content) {

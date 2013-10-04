@@ -103,7 +103,7 @@ public class FileBrowser extends Container {
     /**
      * Creates a new FileBrowser <p> Note that this version of the constructor
      * must be used when a custom root folder has to be set.
-     * 
+     *
      * @param rootFolder The root folder full name.
      */
     public FileBrowser(String rootFolder) {
@@ -121,7 +121,7 @@ public class FileBrowser extends Container {
 
     /**
      * Returns the current root directory.
-     * 
+     *
      * @return The current root directory.
      */
     public File getRootDirectory() {
@@ -130,7 +130,7 @@ public class FileBrowser extends Container {
 
     /**
      * Sets the root directory. Clears any existing file selection.
-     * 
+     *
      * @param rootDirectory
      */
     public void setRootDirectory(File rootDirectory) {
@@ -153,7 +153,7 @@ public class FileBrowser extends Container {
 
     /**
      * Adds a file to the file selection.
-     * 
+     *
      * @param file
      * @return <tt>true</tt> if the file was added; <tt>false</tt> if it was
      * already selected.
@@ -182,7 +182,7 @@ public class FileBrowser extends Container {
 
     /**
      * Removes a file from the file selection.
-     * 
+     *
      * @param file
      * @return <tt>true</tt> if the file was removed; <tt>false</tt> if it was
      * not already selected.
@@ -202,7 +202,7 @@ public class FileBrowser extends Container {
 
     /**
      * When in single-select mode, returns the currently selected file.
-     * 
+     *
      * @return The currently selected file.
      */
     public File getSelectedFile() {
@@ -215,7 +215,7 @@ public class FileBrowser extends Container {
 
     /**
      * Sets the selection to a single file.
-     * 
+     *
      * @param file
      */
     public void setSelectedFile(File file) {
@@ -232,7 +232,7 @@ public class FileBrowser extends Container {
 
     /**
      * Returns the currently selected files.
-     * 
+     *
      * @return An immutable list containing the currently selected files. Note
      * that the returned list is a wrapper around the actual selection, not a
      * copy. Any changes made to the selection state will be reflected in the
@@ -244,7 +244,7 @@ public class FileBrowser extends Container {
 
     /**
      * Sets the selected files.
-     * 
+     *
      * @param selectedFiles The files to select.
      * @return The files that were selected, with duplicates eliminated.
      */
@@ -307,7 +307,7 @@ public class FileBrowser extends Container {
 
     /**
      * Sets the file browser's multi-select state.
-     * 
+     *
      * @param multiSelect <tt>true</tt> if multi-select is enabled;
      * <tt>false</tt>, otherwise.
      */
@@ -324,7 +324,7 @@ public class FileBrowser extends Container {
 
     /**
      * Returns the current file filter.
-     * 
+     *
      * @return The current file filter, or <tt>null</tt> if no filter is set.
      */
     public Filter<File> getDisabledFileFilter() {
@@ -333,7 +333,7 @@ public class FileBrowser extends Container {
 
     /**
      * Sets the file filter.
-     * 
+     *
      * @param disabledFileFilter The file filter to use, or <tt>null</tt> for no
      * filter.
      */

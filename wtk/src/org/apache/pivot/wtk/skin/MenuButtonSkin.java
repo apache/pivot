@@ -168,7 +168,7 @@ public abstract class MenuButtonSkin extends ButtonSkin implements MenuButton.Sk
     /**
      * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
      * state.
-     * 
+     *
      * @see #keyReleased(Component, int,
      * org.apache.pivot.wtk.Keyboard.KeyLocation)
      */

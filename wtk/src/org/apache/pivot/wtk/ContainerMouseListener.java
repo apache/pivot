@@ -49,7 +49,7 @@ public interface ContainerMouseListener {
 
     /**
      * Called when the mouse is moved over a container.
-     * 
+     *
      * @param container
      * @param x
      * @param y
@@ -60,7 +60,7 @@ public interface ContainerMouseListener {
 
     /**
      * Called when the mouse is pressed over a container.
-     * 
+     *
      * @param container
      * @param button
      * @param x
@@ -72,7 +72,7 @@ public interface ContainerMouseListener {
 
     /**
      * Called when the mouse is released over a container.
-     * 
+     *
      * @param container
      * @param button
      * @param x
@@ -84,7 +84,7 @@ public interface ContainerMouseListener {
 
     /**
      * Called when the mouse wheel is scrolled over a container.
-     * 
+     *
      * @param container
      * @param scrollType
      * @param scrollAmount

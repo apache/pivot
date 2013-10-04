@@ -182,7 +182,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
 
     /**
      * Gets the bounds of the text that is rendered by this renderer.
-     * 
+     *
      * @return The bounds of the rendered text, or <tt>null</tt> if this
      * renderer did not render any text.
      */

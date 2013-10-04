@@ -26,7 +26,7 @@ public class MessageBus {
 
     /**
      * Subscribes a listener to a message topic.
-     * 
+     *
      * @param topic
      * @param messageListener
      */
@@ -45,7 +45,7 @@ public class MessageBus {
 
     /**
      * Unsubscribe a listener from a message topic.
-     * 
+     *
      * @param topic
      * @param messageListener
      */
@@ -64,7 +64,7 @@ public class MessageBus {
 
     /**
      * Sends a message to subscribed topic listeners.
-     * 
+     *
      * @param message
      */
     @SuppressWarnings("unchecked")

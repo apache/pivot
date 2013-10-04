@@ -106,7 +106,7 @@ public class VFSBrowserSheet extends Sheet {
     /**
      * Creates a new VFSBrowserSheet <p> Note that this version set by default
      * the user home as root folder.
-     * 
+     *
      * @param mode The mode for opening the sheet.
      * @see Mode
      */
@@ -117,7 +117,7 @@ public class VFSBrowserSheet extends Sheet {
     /**
      * Creates a new VFSBrowserSheet <p> Note that this version of the
      * constructor must be used when a custom root folder has to be set.
-     * 
+     *
      * @param mode The mode for opening the sheet.
      * @see Mode
      * @param rootFolder The root folder full name.
@@ -129,7 +129,7 @@ public class VFSBrowserSheet extends Sheet {
     /**
      * Creates a new VFSBrowserSheet <p> Note that this version of the
      * constructor must be used when a custom root folder has to be set.
-     * 
+     *
      * @param manager The VFS FileSystemManager that we will be browsing. If
      * <tt>null</tt> the default (local) will be used.
      * @param mode The mode for opening the sheet.
@@ -253,7 +253,7 @@ public class VFSBrowserSheet extends Sheet {
 
     /**
      * When in single-select mode, returns the currently selected file.
-     * 
+     *
      * @return The currently selected file.
      */
     public FileObject getSelectedFile() {
@@ -266,7 +266,7 @@ public class VFSBrowserSheet extends Sheet {
 
     /**
      * Sets the selection to a single file.
-     * 
+     *
      * @param file
      */
     public void setSelectedFile(FileObject file) throws FileSystemException {
@@ -285,7 +285,7 @@ public class VFSBrowserSheet extends Sheet {
 
     /**
      * Returns the currently selected files.
-     * 
+     *
      * @return An immutable list containing the currently selected files. Note
      * that the returned list is a wrapper around the actual selection, not a
      * copy. Any changes made to the selection state will be reflected in the
@@ -297,7 +297,7 @@ public class VFSBrowserSheet extends Sheet {
 
     /**
      * Sets the selected files.
-     * 
+     *
      * @param selectedFiles The files to select.
      * @return The files that were selected, with duplicates eliminated.
      */

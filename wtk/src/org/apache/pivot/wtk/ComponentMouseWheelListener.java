@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface ComponentMouseWheelListener {
     /**
      * Called when the mouse wheel is scrolled over a component.
-     * 
+     *
      * @param component
      * @param scrollType
      * @param scrollAmount

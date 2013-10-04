@@ -44,7 +44,7 @@ public interface MenuListener {
 
     /**
      * Called when a menu section has been inserted.
-     * 
+     *
      * @param menu
      * @param index
      */
@@ -52,7 +52,7 @@ public interface MenuListener {
 
     /**
      * Called when menu sections have been removed.
-     * 
+     *
      * @param menu
      * @param index
      * @param removed
@@ -61,7 +61,7 @@ public interface MenuListener {
 
     /**
      * Called when a menu's active item has changed.
-     * 
+     *
      * @param menu
      * @param previousActiveItem
      */

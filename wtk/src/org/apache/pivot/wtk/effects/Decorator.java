@@ -49,7 +49,7 @@ public interface Decorator {
      * will paint. This method is called immediately prior to
      * {@link Component#paint(Graphics2D)}; decorators are called in descending
      * order.
-     * 
+     *
      * @param component
      * @param graphics
      * @return The graphics context that should be used by the component or prior
@@ -67,7 +67,7 @@ public interface Decorator {
 
     /**
      * Returns the bounding area of the decorator.
-     * 
+     *
      * @param component
      * @return The decorator's bounds, relative to the component's origin.
      */
@@ -76,7 +76,7 @@ public interface Decorator {
     /**
      * Returns the transformation the decorator applies to the component's
      * coordinate space.
-     * 
+     *
      * @return The decorator's transform.
      */
     public AffineTransform getTransform(Component component);

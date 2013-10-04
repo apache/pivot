@@ -265,7 +265,7 @@ public final class Time implements Comparable<Time>, Serializable {
      * Adds the specified milliseconds of days to this time and returns the
      * resulting time. The number of milliseconds may be negative, in which case
      * the result will be a time prior to this time.
-     * 
+     *
      * @param milliseconds The number of milliseconds to add to this time.
      * @return The resulting time.
      */
@@ -279,7 +279,7 @@ public final class Time implements Comparable<Time>, Serializable {
      * difference will be positive. If this time represents a time before the
      * specified time, the difference will be negative. If the two times
      * represent the same time, the difference will be zero.
-     * 
+     *
      * @param time The time to subtract from this time.
      * @return The number of milliseconds in between this time and <tt>time</tt>.
      */
@@ -294,7 +294,7 @@ public final class Time implements Comparable<Time>, Serializable {
     /**
      * Returns the number of milliseconds since midnight represented by this
      * time.
-     * 
+     *
      * @return The number of milliseconds since midnight represented by this
      * time.
      */
@@ -368,7 +368,7 @@ public final class Time implements Comparable<Time>, Serializable {
      * string must be in the full <tt>ISO 8601</tt> extended "time" format,
      * which is <tt>[hh]:[mm]:[ss]</tt>. An optional millisecond suffix of the
      * form <tt>.[nnn]</tt> is also supported.
-     * 
+     *
      * @param value A string in the form of <tt>[hh]:[mm]:[ss]</tt> or
      * <tt>[hh]:[mm]:[ss].[nnn]</tt> (e.g. 17:19:20 or 17:19:20.412).
      */

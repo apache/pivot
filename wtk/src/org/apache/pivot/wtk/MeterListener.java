@@ -42,7 +42,7 @@ public interface MeterListener {
 
     /**
      * Called when a meter's percentage value has changed.
-     * 
+     *
      * @param meter
      * @param previousPercentage
      */
@@ -50,7 +50,7 @@ public interface MeterListener {
 
     /**
      * Called when a meter's text has changed.
-     * 
+     *
      * @param meter
      * @param previousText
      */
@@ -58,7 +58,7 @@ public interface MeterListener {
 
     /**
      * Called when a sliders's orientation has changed.
-     * 
+     *
      * @param meter The source of the event.
      */
     public void orientationChanged(Meter meter);

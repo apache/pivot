@@ -299,7 +299,7 @@ public abstract class ListButtonSkin extends ButtonSkin implements ListButton.Sk
      * state and opens the popup.<br> {@link KeyCode#UP UP} Selects the previous
      * enabled list item.<br> {@link KeyCode#DOWN DOWN} Selects the next enabled
      * list item.
-     * 
+     *
      * @see #keyReleased(Component, int,
      * org.apache.pivot.wtk.Keyboard.KeyLocation)
      */

@@ -60,7 +60,7 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's spinner data key has changed.
-     * 
+     *
      * @param spinner
      * @param previousSpinnerDataKey
      */
@@ -68,7 +68,7 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's spinner data bind type has changed.
-     * 
+     *
      * @param spinner
      * @param previousSpinnerDataBindType
      */
@@ -76,7 +76,7 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's spinner data bind mapping has changed.
-     * 
+     *
      * @param spinner
      * @param previousSpinnerDataBindMapping
      */
@@ -85,7 +85,7 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's selected item key has changed.
-     * 
+     *
      * @param spinner
      * @param previousSelectedItemKey
      */
@@ -93,7 +93,7 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's selected item bind type has changed.
-     * 
+     *
      * @param spinner
      * @param previousSelectedItemBindType
      */
@@ -101,7 +101,7 @@ public interface SpinnerBindingListener {
 
     /**
      * Called when a spinner's selected item bind mapping has changed.
-     * 
+     *
      * @param spinner
      * @param previousSelectedItemBindMapping
      */

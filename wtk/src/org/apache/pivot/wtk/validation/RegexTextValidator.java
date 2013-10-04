@@ -18,7 +18,7 @@ import java.util.regex.PatternSyntaxException;
 
 /**
  * A validator for a regular expression.
- * 
+ *
  * @see Pattern
  */
 public class RegexTextValidator implements Validator {

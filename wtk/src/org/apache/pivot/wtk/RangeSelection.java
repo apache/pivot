@@ -56,7 +56,7 @@ public class RangeSelection {
     /**
      * Adds a range to the selection, merging and removing intersecting ranges
      * as needed.
-     * 
+     *
      * @param start
      * @param end
      * @return A sequence containing the ranges that were added.
@@ -154,7 +154,7 @@ public class RangeSelection {
     /**
      * Removes a range from the selection, truncating and removing intersecting
      * ranges as needed.
-     * 
+     *
      * @param start
      * @param end
      * @return A sequence containing the ranges that were removed.
@@ -243,7 +243,7 @@ public class RangeSelection {
 
     /**
      * Returns the range at a given index.
-     * 
+     *
      * @param index
      */
     public Span get(int index) {
@@ -266,7 +266,7 @@ public class RangeSelection {
 
     /**
      * Determines the index of a range in the selection.
-     * 
+     *
      * @param range
      * @return The index of the range, if it exists in the selection;
      * <tt>-1</tt>, otherwise.
@@ -286,7 +286,7 @@ public class RangeSelection {
 
     /**
      * Tests for the presence of an index in the selection.
-     * 
+     *
      * @param index
      * @return <tt>true</tt> if the index is selected; <tt>false</tt>, otherwise.
      */
@@ -300,7 +300,7 @@ public class RangeSelection {
     /**
      * Inserts an index into the span sequence (e.g. when items are inserted
      * into the model data).
-     * 
+     *
      * @param index
      * @return The number of ranges that were updated.
      */
@@ -344,7 +344,7 @@ public class RangeSelection {
     /**
      * Removes a range of indexes from the span sequence (e.g. when items are
      * removed from the model data).
-     * 
+     *
      * @param index
      * @param count
      * @return The number of ranges that were updated.
@@ -376,7 +376,7 @@ public class RangeSelection {
 
     /**
      * Ensures that the start value is less than or equal to the end value.
-     * 
+     *
      * @param start
      * @param end
      * @return A span containing the normalized range.

@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface SuggestionPopupCloseListener {
     /**
      * Called when a suggestion popup has closed.
-     * 
+     *
      * @param suggestionPopup
      */
     public void suggestionPopupClosed(SuggestionPopup suggestionPopup);

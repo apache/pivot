@@ -118,23 +118,23 @@ public class HashMapTest {
 
     /*
      * // TODO: re-enable this, to make it work even inside latest eclipse ...
-     * 
+     *
      * @Test public void comparatorTest() { Comparator<Character> comparator =
      * new Comparator<Character>() {
-     * 
+     *
      * @Override public int compare(Character c1, Character c2) { return
      * c1.compareTo(c2); } };
-     * 
+     *
      * HashMap<Character, Integer> map = new HashMap<Character,
      * Integer>(comparator); ArrayList<Character> keys = new
      * ArrayList<Character>('c', 'a', 'x', 'r', 'd', 'n', 'f');
-     * 
+     *
      * int n = keys.getLength();
-     * 
+     *
      * int i = 0; while (i < n) { map.put(keys.get(i), i++); }
-     * 
+     *
      * keys.setComparator(comparator);
-     * 
+     *
      * int j = 0; for (Character c : keys) { assertEquals(keys.get(j++), c); } }
      */
 

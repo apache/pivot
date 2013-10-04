@@ -24,7 +24,7 @@ import org.apache.pivot.util.CalendarDate;
 public interface CalendarSelectionListener {
     /**
      * Called when a calendar's selected date has changed.
-     * 
+     *
      * @param calendar
      * @param previousSelectedDate
      */

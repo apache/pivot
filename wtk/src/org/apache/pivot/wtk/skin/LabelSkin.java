@@ -477,7 +477,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the font used in rendering the Label's text
-     * 
+     *
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
@@ -490,7 +490,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the font used in rendering the Label's text
-     * 
+     *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
@@ -522,7 +522,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the foreground color of the text of the label.
-     * 
+     *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
@@ -555,7 +555,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the foreground color of the text of the label when disabled.
-     * 
+     *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
@@ -584,7 +584,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the background color of the label.
-     * 
+     *
      * @param backgroundColor Any of the
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.
@@ -656,7 +656,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     /**
      * Sets the amount of space to leave between the edge of the Label and its
      * text.
-     * 
+     *
      * @param padding A dictionary with keys in the set {left, top, bottom,
      * right}.
      */
@@ -691,7 +691,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     /**
      * Sets the amount of space to leave between the edge of the Label and its
      * text.
-     * 
+     *
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */

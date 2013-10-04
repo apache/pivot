@@ -43,7 +43,7 @@ public interface ComponentKeyListener {
 
     /**
      * Called when a key has been typed.
-     * 
+     *
      * @param component
      * @param character
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
@@ -53,7 +53,7 @@ public interface ComponentKeyListener {
 
     /**
      * Called when a key has been pressed.
-     * 
+     *
      * @param component
      * @param keyCode
      * @param keyLocation
@@ -64,7 +64,7 @@ public interface ComponentKeyListener {
 
     /**
      * Called when a key has been released.
-     * 
+     *
      * @param component
      * @param keyCode
      * @param keyLocation

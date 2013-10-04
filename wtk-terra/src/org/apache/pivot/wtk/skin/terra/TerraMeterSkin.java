@@ -374,7 +374,7 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
 
     /**
      * Listener for meter percentage changes.
-     * 
+     *
      * @param meter The source of the event.
      * @param previousPercentage The previous percentage value.
      */
@@ -385,7 +385,7 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
 
     /**
      * Listener for meter text changes.
-     * 
+     *
      * @param meter The source of the event.
      * @param previousText The previous text value.
      */
@@ -396,7 +396,7 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
 
     /**
      * Listener for meter orientation changes.
-     * 
+     *
      * @param meter The source of the event.
      */
     @Override

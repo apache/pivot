@@ -76,7 +76,7 @@ public class ImageNode extends Node {
      * exists in the application context resource cache, the cached value will
      * be used. Otherwise, the icon will be loaded synchronously and added to
      * the cache.
-     * 
+     *
      * @param imageURL The location of the image to set.
      */
     public void setImage(URL imageURL) {
@@ -90,7 +90,7 @@ public class ImageNode extends Node {
     /**
      * Sets the image node's icon by
      * {@linkplain ClassLoader#getResource(String) resource name}.
-     * 
+     *
      * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
      */

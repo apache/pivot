@@ -151,7 +151,7 @@ public abstract class Viewport extends Container {
      * viewport will propagate repaints to its parent or consume them. This flag
      * enables skins to optimize viewport scrolling by blitting the display to
      * reduce the required repaint area.
-     * 
+     *
      * @return <tt>true</tt> if this viewport will consume repaints that bubble
      * up through it; <tt>false</tt> if it will propagate them up like normal.
      */
@@ -164,7 +164,7 @@ public abstract class Viewport extends Container {
      * viewport will propagate repaints to its parent or consume them. This flag
      * enables skins to optimize viewport scrolling by blitting the display to
      * reduce the required repaint area.
-     * 
+     *
      * @param consumeRepaint <tt>true</tt> to consume repaints that bubble up
      * through this viewport; <tt>false</tt> to propagate them up like normal.
      */
@@ -218,7 +218,7 @@ public abstract class Viewport extends Container {
      * problems with the scrolled-in area not being painted properly by default,
      * consider setting this property <tt>true</tt> using the
      * {@link #setRepaintAllViewport setRepaintAllViewport} method.
-     * 
+     *
      * @return <tt>false</tt> if optimized, otherwise <tt>true</tt> (repaint
      * entire viewport)
      */
@@ -231,7 +231,7 @@ public abstract class Viewport extends Container {
      * for various painting issues on some platforms. So, if you experience
      * problems with the scrolled-in area not being painted properly by default,
      * consider setting this property <tt>true</tt> (default is <tt>false</tt>).
-     * 
+     *
      * @param repaintAllViewport <tt>false</tt> means optimized (repaint only
      * needed area, default), while <tt>true</tt> means repaint all
      */

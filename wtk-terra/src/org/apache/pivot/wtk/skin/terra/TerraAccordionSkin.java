@@ -785,7 +785,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
      * {@link KeyCode#UP UP} Select the next enabled panel.<br>
      * {@link Modifier#ALT ALT} + {@link KeyCode#DOWN DOWN} Select the previous
      * enabled panel.
-     * 
+     *
      * @see Platform#getCommandModifier()
      */
     @Override

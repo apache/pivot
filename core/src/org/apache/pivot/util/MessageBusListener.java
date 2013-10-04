@@ -23,7 +23,7 @@ public interface MessageBusListener<T> {
     /**
      * Called when a message has been sent via
      * {@link MessageBus#sendMessage(Object)}.
-     * 
+     *
      * @param message
      */
     public void messageSent(T message);

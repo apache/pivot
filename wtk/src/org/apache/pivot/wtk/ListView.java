@@ -67,7 +67,7 @@ public class ListView extends Component {
     public interface ItemRenderer extends Renderer {
         /**
          * Prepares the renderer for layout or paint.
-         * 
+         *
          * @param item The item to render, or <tt>null</tt> if called to
          * calculate preferred height for skins that assume a fixed renderer
          * height.
@@ -84,7 +84,7 @@ public class ListView extends Component {
 
         /**
          * Converts a list item to a string representation.
-         * 
+         *
          * @param item
          * @return The item's string representation, or <tt>null</tt> if the item
          * does not have a string representation. <p> Note that this method may
@@ -100,7 +100,7 @@ public class ListView extends Component {
     public interface ItemEditor {
         /**
          * Called to begin editing a list item.
-         * 
+         *
          * @param listView
          * @param itemIndex
          */
@@ -108,7 +108,7 @@ public class ListView extends Component {
 
         /**
          * Terminates an edit operation.
-         * 
+         *
          * @param result <tt>true</tt> to perform the edit; <tt>false</tt> to
          * cancel it.
          */
@@ -138,7 +138,7 @@ public class ListView extends Component {
         /**
          * Converts a context value to list data during a
          * {@link Component#load(Object)} operation.
-         * 
+         *
          * @param value
          */
         public List<?> toListData(Object value);
@@ -146,7 +146,7 @@ public class ListView extends Component {
         /**
          * Converts list data to a context value during a
          * {@link Component#store(Object)} operation.
-         * 
+         *
          * @param listData
          */
         public Object valueOf(List<?> listData);
@@ -160,7 +160,7 @@ public class ListView extends Component {
         /**
          * Returns the index of the item in the source list during a
          * {@link Component#load(Object)} operation.
-         * 
+         *
          * @param listData The source list data.
          * @param value The value to locate.
          * @return The index of first occurrence of the value if it exists in the
@@ -171,7 +171,7 @@ public class ListView extends Component {
         /**
          * Retrieves the value at the given index during a
          * {@link Component#store(Object)} operation.
-         * 
+         *
          * @param listData The source list data.
          * @param index The index of the value to retrieve.
          */
@@ -572,7 +572,7 @@ public class ListView extends Component {
      * default renderer uses (as last option) the toString method on list
      * elements, so override it to return whatever you want to display in the
      * ListView, or implement your own custom renderer.
-     * 
+     *
      * @param listData The data to set.
      * @see ListViewItemRenderer
      */
@@ -585,7 +585,7 @@ public class ListView extends Component {
 
     /**
      * Returns the list data.
-     * 
+     *
      * @return The data currently presented by the list view.
      */
     public List<?> getListData() {
@@ -594,7 +594,7 @@ public class ListView extends Component {
 
     /**
      * Sets the list data.
-     * 
+     *
      * @param listData The data to be presented by the list view.
      */
     @SuppressWarnings("unchecked")
@@ -636,7 +636,7 @@ public class ListView extends Component {
 
     /**
      * Sets the list data.
-     * 
+     *
      * @param listData A JSON string (must begin with <tt>[</tt> and end with
      * <tt>]</tt>) denoting the data to be presented by the list view.
      */
@@ -654,7 +654,7 @@ public class ListView extends Component {
 
     /**
      * Sets the list data.
-     * 
+     *
      * @param listData A URL referring to a JSON file containing the data to be
      * presented by the list view.
      */
@@ -693,7 +693,7 @@ public class ListView extends Component {
 
     /**
      * Sets the item renderer to be used for items in this list.
-     * 
+     *
      * @param itemRenderer The item renderer for the list.
      */
     public void setItemRenderer(ItemRenderer itemRenderer) {
@@ -711,7 +711,7 @@ public class ListView extends Component {
 
     /**
      * Returns the editor used to edit items in this list.
-     * 
+     *
      * @return The item editor, or <tt>null</tt> if no editor is installed.
      */
     public ItemEditor getItemEditor() {
@@ -720,7 +720,7 @@ public class ListView extends Component {
 
     /**
      * Sets the editor used to edit items in this list.
-     * 
+     *
      * @param itemEditor The item editor for the list.
      */
     public void setItemEditor(ItemEditor itemEditor) {
@@ -734,7 +734,7 @@ public class ListView extends Component {
 
     /**
      * Returns the currently selected index, even when in multi-select mode.
-     * 
+     *
      * @return The currently selected index.
      */
     public int getSelectedIndex() {
@@ -743,7 +743,7 @@ public class ListView extends Component {
 
     /**
      * Sets the selection to a single index.
-     * 
+     *
      * @param index The index to select, or <tt>-1</tt> to clear the selection.
      */
     public void setSelectedIndex(int index) {
@@ -759,7 +759,7 @@ public class ListView extends Component {
 
     /**
      * Sets the selection to a single range.
-     * 
+     *
      * @param start
      * @param end
      */
@@ -772,7 +772,7 @@ public class ListView extends Component {
 
     /**
      * Returns the currently selected ranges.
-     * 
+     *
      * @return An immutable list containing the currently selected ranges. Note
      * that the returned list is a wrapper around the actual selection, not a
      * copy. Any changes made to the selection state will be reflected in the
@@ -786,7 +786,7 @@ public class ListView extends Component {
      * Sets the selection to the given range sequence. Any overlapping or
      * connecting ranges will be consolidated, and the resulting selection will
      * be sorted in ascending order.
-     * 
+     *
      * @param selectedRanges
      * @return The ranges that were actually set.
      */
@@ -834,7 +834,7 @@ public class ListView extends Component {
 
     /**
      * Sets the selection to the given range sequence.
-     * 
+     *
      * @param selectedRanges A JSON-formatted string containing the ranges to
      * select.
      * @return The ranges that were actually set.
@@ -869,7 +869,7 @@ public class ListView extends Component {
 
     /**
      * Returns the first selected index.
-     * 
+     *
      * @return The first selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getFirstSelectedIndex() {
@@ -878,7 +878,7 @@ public class ListView extends Component {
 
     /**
      * Returns the last selected index.
-     * 
+     *
      * @return The last selected index, or <tt>-1</tt> if nothing is selected.
      */
     public int getLastSelectedIndex() {
@@ -888,7 +888,7 @@ public class ListView extends Component {
 
     /**
      * Adds a single index to the selection.
-     * 
+     *
      * @param index The index to add.
      * @return <tt>true</tt> if the index was added to the selection;
      * <tt>false</tt>, otherwise.
@@ -900,7 +900,7 @@ public class ListView extends Component {
 
     /**
      * Adds a range of indexes to the selection.
-     * 
+     *
      * @param start The first index in the range.
      * @param end The last index in the range.
      * @return The ranges that were added to the selection.
@@ -931,7 +931,7 @@ public class ListView extends Component {
 
     /**
      * Adds a range of indexes to the selection.
-     * 
+     *
      * @param range The range to add.
      * @return The ranges that were added to the selection.
      */
@@ -945,7 +945,7 @@ public class ListView extends Component {
 
     /**
      * Removes a single index from the selection.
-     * 
+     *
      * @param index The index to remove.
      * @return <tt>true</tt> if the index was removed from the selection;
      * <tt>false</tt>, otherwise.
@@ -957,7 +957,7 @@ public class ListView extends Component {
 
     /**
      * Removes a range of indexes from the selection.
-     * 
+     *
      * @param start The start of the range to remove.
      * @param end The end of the range to remove.
      * @return The ranges that were removed from the selection.
@@ -989,7 +989,7 @@ public class ListView extends Component {
 
     /**
      * Removes a range of indexes from the selection.
-     * 
+     *
      * @param range The range to remove.
      * @return The ranges that were removed from the selection.
      */
@@ -1019,7 +1019,7 @@ public class ListView extends Component {
 
     /**
      * Returns the selection state of a given index.
-     * 
+     *
      * @param index The index whose selection state is to be tested.
      * @return <tt>true</tt> if the index is selected; <tt>false</tt>, otherwise.
      */
@@ -1095,7 +1095,7 @@ public class ListView extends Component {
     /**
      * Sets the selection mode. Clears the selection if the mode has changed
      * (but does not fire a selection change event).
-     * 
+     *
      * @param selectMode The new selection mode.
      */
     public void setSelectMode(SelectMode selectMode) {
@@ -1127,7 +1127,7 @@ public class ListView extends Component {
     /**
      * Enables or disabled checkmarks. Clears the check state if the check mode
      * has changed (but does not fire any check state change events).
-     * 
+     *
      * @param checkmarksEnabled
      */
     public void setCheckmarksEnabled(boolean checkmarksEnabled) {
@@ -1145,7 +1145,7 @@ public class ListView extends Component {
 
     /**
      * Returns an item's checked state.
-     * 
+     *
      * @param index
      */
     public boolean isItemChecked(int index) {
@@ -1154,7 +1154,7 @@ public class ListView extends Component {
 
     /**
      * Sets an item's checked state.
-     * 
+     *
      * @param index
      * @param checked
      */
@@ -1197,7 +1197,7 @@ public class ListView extends Component {
 
     /**
      * Tells whether or not an item's checkmark is disabled.
-     * 
+     *
      * @param index The index of the item whose disabled checkmark state is to
      * be tested.
      * @return <tt>true</tt> if the item's checkmark is disabled; <tt>false</tt>
@@ -1223,7 +1223,7 @@ public class ListView extends Component {
      * all checkboxes will be interactive. <p> <b>Note:</b> this filter is only
      * relavent if {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is
      * set to true.
-     * 
+     *
      * @return The disabled checkmark filter, or <tt>null</tt> if no disabled
      * checkmark filter is set
      */
@@ -1239,7 +1239,7 @@ public class ListView extends Component {
      * checkboxes will be interactive. <p> <b>Note:</b> this filter is only
      * relavent if {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is
      * set to true. enabled.
-     * 
+     *
      * @param disabledCheckmarkFilter The disabled checkmark filter, or
      * <tt>null</tt> for no disabled checkmark filter
      */
@@ -1254,7 +1254,7 @@ public class ListView extends Component {
 
     /**
      * Returns an item's disabled state.
-     * 
+     *
      * @param index The index of the item whose disabled state is to be tested.
      * @return <tt>true</tt> if the item is disabled; <tt>false</tt>, otherwise.
      */
@@ -1272,7 +1272,7 @@ public class ListView extends Component {
 
     /**
      * Returns the disabled item filter.
-     * 
+     *
      * @return The disabled item filter, or <tt>null</tt> if no disabled item
      * filter is set.
      */
@@ -1282,7 +1282,7 @@ public class ListView extends Component {
 
     /**
      * Sets the disabled item filter.
-     * 
+     *
      * @param disabledItemFilter The disabled item filter, or <tt>null</tt> for
      * no disabled item filter.
      */
@@ -1297,7 +1297,7 @@ public class ListView extends Component {
 
     /**
      * Returns name of the key that is used in context binding.
-     * 
+     *
      * @return The key.
      */
     public String getListDataKey() {
@@ -1306,7 +1306,7 @@ public class ListView extends Component {
 
     /**
      * Set the name of the key that is used in context binding.
-     * 
+     *
      * @param listDataKey The key to set.
      */
     public void setListDataKey(String listDataKey) {
@@ -1689,7 +1689,7 @@ public class ListView extends Component {
 
     /**
      * Returns the index of the item at a given location.
-     * 
+     *
      * @param y The y-coordinate of the item to identify.
      * @return The item index, or <tt>-1</tt> if there is no item at the given
      * y-coordinate.
@@ -1701,7 +1701,7 @@ public class ListView extends Component {
 
     /**
      * Returns the bounding area of a given item.
-     * 
+     *
      * @param index The item index.
      * @return The bounding area of the item.
      */
@@ -1712,7 +1712,7 @@ public class ListView extends Component {
 
     /**
      * Returns the item indent.
-     * 
+     *
      * @return The horizontal space preceding items in the list.
      */
     public int getItemIndent() {

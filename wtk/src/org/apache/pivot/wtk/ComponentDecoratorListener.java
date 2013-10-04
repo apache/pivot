@@ -46,7 +46,7 @@ public interface ComponentDecoratorListener {
     /**
      * Called when a decorator has been inserted into a component's decorator
      * sequence.
-     * 
+     *
      * @param component
      * @param index
      */
@@ -55,7 +55,7 @@ public interface ComponentDecoratorListener {
     /**
      * Called when a decorator has been updated in a component's decorator
      * sequence.
-     * 
+     *
      * @param component
      * @param index
      * @param previousDecorator
@@ -65,7 +65,7 @@ public interface ComponentDecoratorListener {
     /**
      * Called when decorators have been removed from a component's decorator
      * sequence.
-     * 
+     *
      * @param component
      * @param index
      * @param decorators

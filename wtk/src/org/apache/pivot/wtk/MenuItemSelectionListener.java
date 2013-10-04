@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface MenuItemSelectionListener {
     /**
      * Called when a descendant item of this menu has been selected.
-     * 
+     *
      * @param menuItem
      */
     public void itemSelected(Menu.Item menuItem);

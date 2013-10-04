@@ -64,7 +64,7 @@ public interface TextInputContentListener {
 
     /**
      * Called to preview a text insertion.
-     * 
+     *
      * @param textInput The source of the event.
      * @param text The text that will be inserted.
      * @param index The index at which the text will be inserted.
@@ -73,7 +73,7 @@ public interface TextInputContentListener {
 
     /**
      * Called when a text insertion has been vetoed.
-     * 
+     *
      * @param textInput The source of the event.
      * @param reason The reason the event was vetoed.
      */
@@ -81,7 +81,7 @@ public interface TextInputContentListener {
 
     /**
      * Called when text has been inserted into a text input.
-     * 
+     *
      * @param textInput The source of the event.
      * @param index The index at which the text was inserted.
      * @param count The number of characters that were inserted.
@@ -90,7 +90,7 @@ public interface TextInputContentListener {
 
     /**
      * Called to preview a text removal.
-     * 
+     *
      * @param textInput The source of the event.
      * @param index The starting index from which the text will be removed.
      */
@@ -98,7 +98,7 @@ public interface TextInputContentListener {
 
     /**
      * Called when a text removal has been vetoed.
-     * 
+     *
      * @param textInput The source of the event.
      * @param reason The reason the event was vetoed.
      */
@@ -106,7 +106,7 @@ public interface TextInputContentListener {
 
     /**
      * Called when text has been removed from a text input.
-     * 
+     *
      * @param textInput The source of the event.
      * @param index The index from which the text was removed.
      * @param count The number of characters that were removed.
@@ -115,7 +115,7 @@ public interface TextInputContentListener {
 
     /**
      * Called when a text input's text has changed.
-     * 
+     *
      * @param textInput The source of the event.
      */
     public void textChanged(TextInput textInput);

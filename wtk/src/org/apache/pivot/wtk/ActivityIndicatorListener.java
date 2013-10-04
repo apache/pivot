@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface ActivityIndicatorListener {
     /**
      * Called when an activity indicator's active state has changed.
-     * 
+     *
      * @param activityIndicator
      */
     public void activeChanged(ActivityIndicator activityIndicator);

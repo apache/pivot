@@ -100,7 +100,7 @@ public final class CornerRadii implements Serializable {
     /**
      * Construct a {@link CornerRadii} object from a dictionary specifying
      * values for each of the four corners
-     * 
+     *
      * @param cornerRadii A dictionary with keys {@value #TOP_LEFT_KEY},
      * {@value #TOP_RIGHT_KEY}, {@value #BOTTOM_LEFT_KEY},
      * {@value #BOTTOM_RIGHT_KEY}, all with numeric values. Omitted values are

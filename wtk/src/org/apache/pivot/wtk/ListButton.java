@@ -300,7 +300,7 @@ public class ListButton extends Button {
 
     /**
      * Creates a list button with the given button data and an empty list.
-     * 
+     *
      * @param buttonData
      */
     public ListButton(Object buttonData) {
@@ -309,7 +309,7 @@ public class ListButton extends Button {
 
     /**
      * Creates a list button with no button data and the given list data.
-     * 
+     *
      * @param listData
      */
     public ListButton(List<?> listData) {
@@ -321,7 +321,7 @@ public class ListButton extends Button {
      * the default renderer uses (as last option) the toString method on list
      * elements, so override it to return whatever you want to display in the
      * ListView, or implement your own custom renderer.
-     * 
+     *
      * @param buttonData The button data.
      * @param listData The data to set.
      * @see ListButtonDataRenderer
@@ -365,7 +365,7 @@ public class ListButton extends Button {
 
     /**
      * Returns the list data associated with this list button.
-     * 
+     *
      * @return The list data.
      */
     public List<?> getListData() {
@@ -374,7 +374,7 @@ public class ListButton extends Button {
 
     /**
      * Sets the list button's list data.
-     * 
+     *
      * @param listData The list data to be presented by the list button.
      */
     @SuppressWarnings("unchecked")
@@ -410,7 +410,7 @@ public class ListButton extends Button {
 
     /**
      * Sets the list button's list data.
-     * 
+     *
      * @param listData The list data to be presented by the list button as a
      * JSON array.
      */
@@ -428,7 +428,7 @@ public class ListButton extends Button {
 
     /**
      * Sets the list button's list data.
-     * 
+     *
      * @param listData A URL referring to a JSON file containing the data to be
      * presented by the list button.
      */
@@ -450,7 +450,7 @@ public class ListButton extends Button {
 
     /**
      * Returns the renderer used to display items in the list.
-     * 
+     *
      * @return The item renderer instance.
      */
     public ListView.ItemRenderer getItemRenderer() {
@@ -461,7 +461,7 @@ public class ListButton extends Button {
      * Sets the renderer used to display items in the list. <p> Use
      * {@link #setDataRenderer(org.apache.pivot.wtk.Button.DataRenderer)} to
      * define the renderer used to draw the button data.
-     * 
+     *
      * @param itemRenderer The item renderer instance.
      */
     public void setItemRenderer(ListView.ItemRenderer itemRenderer) {
@@ -482,7 +482,7 @@ public class ListButton extends Button {
 
     /**
      * Sets the list button's repeatable flag.
-     * 
+     *
      * @param repeatable
      */
     public void setRepeatable(boolean repeatable) {
@@ -494,7 +494,7 @@ public class ListButton extends Button {
 
     /**
      * Returns the current selection.
-     * 
+     *
      * @return The index of the currently selected list item, or <tt>-1</tt> if
      * nothing is selected.
      */
@@ -504,7 +504,7 @@ public class ListButton extends Button {
 
     /**
      * Sets the selection.
-     * 
+     *
      * @param selectedIndex The index of the list item to select, or <tt>-1</tt>
      * to clear the selection.
      */
@@ -539,7 +539,7 @@ public class ListButton extends Button {
 
     /**
      * Returns an item's disabled state.
-     * 
+     *
      * @param index The index of the item whose disabled state is to be tested.
      * @return <tt>true</tt> if the item is disabled; <tt>false</tt>, otherwise.
      */
@@ -557,7 +557,7 @@ public class ListButton extends Button {
 
     /**
      * Returns the disabled item filter.
-     * 
+     *
      * @return The disabled item filter, or <tt>null</tt> if no disabled item
      * filter is set.
      */
@@ -567,7 +567,7 @@ public class ListButton extends Button {
 
     /**
      * Sets the disabled item filter.
-     * 
+     *
      * @param disabledItemFilter The disabled item filter, or <tt>null</tt> for
      * no disabled item filter.
      */
@@ -590,7 +590,7 @@ public class ListButton extends Button {
     /**
      * Sets the list size. If the number of items in the list exceeds this
      * value, the list will scroll.
-     * 
+     *
      * @param listSize
      */
     public void setListSize(int listSize) {
@@ -607,7 +607,7 @@ public class ListButton extends Button {
 
     /**
      * Returns name of the key that is used in context binding.
-     * 
+     *
      * @return The key.
      */
     public String getListDataKey() {
@@ -616,7 +616,7 @@ public class ListButton extends Button {
 
     /**
      * Set the name of the key that is used in context binding.
-     * 
+     *
      * @param listDataKey The key to set.
      */
     public void setListDataKey(String listDataKey) {

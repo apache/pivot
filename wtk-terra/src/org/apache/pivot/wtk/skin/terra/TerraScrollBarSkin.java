@@ -58,7 +58,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
         /**
          * Starts scrolling this skin's scroll bar, stopping the scroll when the
          * specified value has been reached.
-         * 
+         *
          * @param directionArgument <tt>1</tt> to adjust the scroll bar's value
          * larger; <tt>-1</tt> to adjust it smaller
          * @param incrementTypeArgument Determines whether we'll use the scroll
@@ -984,7 +984,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
      * Initiates automatic block scrolling. This only happens if the handle is
      * visible since whether the user clicked before or after the handle
      * determines the direction of the scrolling.
-     * 
+     *
      * @param component The scroll bar.
      * @param button The button that was pressed.
      * @param x The x-coordinate of the event in the scroll bar's coordinate
@@ -1043,7 +1043,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
     /**
      * Cancels automatic block scrolling.
-     * 
+     *
      * @param component The scroll bar.
      * @param button The button that was released.
      * @param x The x-coordinate of the event in the scroll bar's coordinate
@@ -1064,7 +1064,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
     /**
      * Updates the scroll bar's value.
-     * 
+     *
      * @param component The scroll bar.
      * @param scrollType Unit or block scrolling.
      * @param scrollAmount The amount of scrolling.
@@ -1114,7 +1114,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
      * <tt>handle</tt>. <p> To map from scroll bar values (<i>real values</i>)
      * to pixel values, you multiply by the value scale. To map from pixel
      * values back to real values, you divide by the value scale.
-     * 
+     *
      * @return <tt>&lt;number of legal pixel values&gt; / &lt;number of legal
      * real values&gt;</tt>
      */
@@ -1149,7 +1149,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
     /**
      * Propagates the scroll bar's enabled state to the scroll buttons.
-     * 
+     *
      * @param component The scroll bar.
      */
     @Override

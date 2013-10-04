@@ -38,7 +38,7 @@ public class FileSizeFormat extends Format {
 
     /**
      * Formats a file size.
-     * 
+     *
      * @param object A <tt>Number</tt> containing the length of the file, in
      * bytes. May be negative to indicate an unknown file size.
      * @param stringBuffer The string buffer to which the formatted output will
@@ -76,7 +76,7 @@ public class FileSizeFormat extends Format {
 
     /**
      * This method is not supported.
-     * 
+     *
      * @throws UnsupportedOperationException
      */
     @Override
@@ -86,7 +86,7 @@ public class FileSizeFormat extends Format {
 
     /**
      * Returns a shared file size format instance.
-     * 
+     *
      * @return A shared file format size instance.
      */
     public static FileSizeFormat getInstance() {

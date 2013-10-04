@@ -65,7 +65,7 @@ public interface ElementListener {
 
     /**
      * Called when a node has been inserted into an element.
-     * 
+     *
      * @param element
      * @param index
      */
@@ -73,7 +73,7 @@ public interface ElementListener {
 
     /**
      * Called when nodes have been removed from an element.
-     * 
+     *
      * @param element
      * @param index
      * @param nodes
@@ -82,7 +82,7 @@ public interface ElementListener {
 
     /**
      * Called when the font has changed.
-     * 
+     *
      * @param element
      * @param previousFont
      */
@@ -90,7 +90,7 @@ public interface ElementListener {
 
     /**
      * Called when the background color has changed.
-     * 
+     *
      * @param element
      * @param previousBackgroundColor
      */
@@ -98,7 +98,7 @@ public interface ElementListener {
 
     /**
      * Called when the foreground color has changed.
-     * 
+     *
      * @param element
      * @param previousForegroundColor
      */
@@ -106,14 +106,14 @@ public interface ElementListener {
 
     /**
      * Called when underline style has changed.
-     * 
+     *
      * @param element
      */
     public void underlineChanged(Element element);
 
     /**
      * Called when strikethrough style has changed.
-     * 
+     *
      * @param element
      */
     public void strikethroughChanged(Element element);

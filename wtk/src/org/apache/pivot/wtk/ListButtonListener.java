@@ -57,7 +57,7 @@ public interface ListButtonListener {
 
     /**
      * Called when a list button's list data has changed.
-     * 
+     *
      * @param listButton
      * @param previousListData
      */
@@ -65,7 +65,7 @@ public interface ListButtonListener {
 
     /**
      * Called when a list button's item renderer has changed.
-     * 
+     *
      * @param listButton
      * @param previousItemRenderer
      */
@@ -74,14 +74,14 @@ public interface ListButtonListener {
 
     /**
      * Called when a list button's repeatable flag has changed.
-     * 
+     *
      * @param listButton
      */
     public void repeatableChanged(ListButton listButton);
 
     /**
      * Called when a list button's disabled item filter has changed.
-     * 
+     *
      * @param listButton
      * @param previousDisabledItemFilter
      */
@@ -90,7 +90,7 @@ public interface ListButtonListener {
 
     /**
      * Called when a list button's list size has changed.
-     * 
+     *
      * @param listButton
      * @param previousListSize
      */

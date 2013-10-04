@@ -419,7 +419,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
      * {@link KeyCode#RIGHT RIGHT} Scroll right a single scroll unit.<br>
      * {@link KeyCode#PAGE_UP PAGE_UP} Scroll up a single scroll block.<br>
      * {@link KeyCode#PAGE_DOWN PAGE_DOWN} Scroll down a single scroll block.
-     * 
+     *
      * @see ScrollBar#getBlockIncrement()
      * @see ScrollBar#getUnitIncrement()
      */
@@ -483,7 +483,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
      * Gets the maximum legal <tt>scrollTop</tt> value this this skin imposes.
      * This is the largest value possible that still shows as much of the view
      * component as it can.
-     * 
+     *
      * @return The maximum scrollTop value
      */
     private int getMaxScrollTop() {
@@ -518,7 +518,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
      * Gets the maximum legal <tt>scrollLeft</tt> value this this skin imposes.
      * This is the largest value possible that still shows as much of the view
      * component as it can.
-     * 
+     *
      * @return The maximum scrollLeft value
      */
     private int getMaxScrollLeft() {
@@ -619,7 +619,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     /**
      * Layout helper method that assumes that the <tt>FILL_TO_CAPACITY</tt>
      * scroll policy doesn't exist.
-     * 
+     *
      * @param horizontalPolicy The assumed horizontal scroll policy; musn't be
      * <tt>FILL_TO_CAPACITY</tt>
      * @param verticalPolicy The assumed vertical scroll policy; musn't be

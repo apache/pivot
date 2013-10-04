@@ -29,7 +29,7 @@ public interface Bindable {
     /**
      * Called to initialize the class after it has been completely processed and
      * bound by the serializer.
-     * 
+     *
      * @param namespace The serializer's namespace. The bindable object can use
      * this to extract named values defined in the BXML file. Alternatively, the
      * {@link BXML} annotation can be used by trusted code to automatically map

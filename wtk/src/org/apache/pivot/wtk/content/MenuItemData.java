@@ -34,7 +34,7 @@ public class MenuItemData extends ButtonData {
 
     /**
      * Constructor.
-     * 
+     *
      * @param icon The icon to display in the menu item.
      */
     public MenuItemData(Image icon) {
@@ -43,7 +43,7 @@ public class MenuItemData extends ButtonData {
 
     /**
      * Constructor.
-     * 
+     *
      * @param text The text to display in the menu item.
      */
     public MenuItemData(String text) {
@@ -52,7 +52,7 @@ public class MenuItemData extends ButtonData {
 
     /**
      * Constructor.
-     * 
+     *
      * @param icon The icon to display in the menu item.
      * @param text The text to display in the menu item.
      */
@@ -62,7 +62,7 @@ public class MenuItemData extends ButtonData {
 
     /**
      * Constructor.
-     * 
+     *
      * @param icon The icon to display in the menu item.
      * @param text The text to display in the menu item.
      * @param keyboardShortcut The keyboard shortcut associated with this menu

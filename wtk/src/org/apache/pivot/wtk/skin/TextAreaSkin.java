@@ -526,7 +526,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
     /**
      * Sets the font of the text
-     * 
+     *
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
@@ -539,7 +539,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
     /**
      * Sets the font of the text
-     * 
+     *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
@@ -571,7 +571,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
     /**
      * Sets the foreground color of the text
-     * 
+     *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
@@ -726,7 +726,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
     /**
      * Sets the amount of space between the edge of the TextArea and its text
-     * 
+     *
      * @param margin A dictionary with keys in the set {left, top, bottom,
      * right}.
      */
@@ -758,7 +758,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
     /**
      * Sets the amount of space between the edge of the TextArea and its text
-     * 
+     *
      * @param margin A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */
@@ -790,7 +790,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     /**
      * Gets current value of style that determines the behavior of <tt>TAB</tt>
      * and <tt>Ctrl-TAB</tt> characters.
-     * 
+     *
      * @return <tt>true</tt> if <tt>TAB</tt> inserts an appropriate number of
      * spaces, while <tt>Ctrl-TAB</tt> shifts focus to next component.
      * <tt>false</tt> (default) means <tt>TAB</tt> shifts focus and
@@ -803,7 +803,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     /**
      * Sets current value of style that determines the behavior of <tt>TAB</tt>
      * and <tt>Ctrl-TAB</tt> characters.
-     * 
+     *
      * @param acceptsTab <tt>true</tt> if <tt>TAB</tt> inserts an appropriate
      * number of spaces, while <tt>Ctrl-TAB</tt> shifts focus to next component.
      * <tt>false</tt> (default) means <tt>TAB</tt> shifts focus and

@@ -113,7 +113,7 @@ public class SearchDemo implements Application {
 
     /**
      * Executes a search.
-     * 
+     *
      * @param term The search term.
      * @throws IllegalArgumentException If <tt>term</tt> is <tt>null</tt> or
      * empty.
@@ -189,7 +189,7 @@ public class SearchDemo implements Application {
 
     /**
      * Aborts an executing query.
-     * 
+     *
      * @throws IllegalStateException If a query is not currently executing.
      */
     public void abortQuery() {
@@ -205,7 +205,7 @@ public class SearchDemo implements Application {
 
     /**
      * Tests whether a query is currently executing.
-     * 
+     *
      * @return <tt>true</tt> if a query is currently executing; <tt>false</tt>,
      * otherwise.
      */

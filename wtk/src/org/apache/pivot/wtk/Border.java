@@ -58,7 +58,7 @@ public class Border extends Container {
 
     /**
      * Returns the border's title.
-     * 
+     *
      * @return The border's title, or <tt>null</tt> if no title is set.
      */
     public String getTitle() {
@@ -67,7 +67,7 @@ public class Border extends Container {
 
     /**
      * Sets the border's title.
-     * 
+     *
      * @param title The new title, or <tt>null</tt> for no title.
      */
     public void setTitle(String title) {
@@ -81,7 +81,7 @@ public class Border extends Container {
 
     /**
      * Returns the border's content component.
-     * 
+     *
      * @return The border's content component, or <tt>null</tt> if the border
      * does not have a content component.
      */
@@ -91,7 +91,7 @@ public class Border extends Container {
 
     /**
      * Sets the border's content component.
-     * 
+     *
      * @param content The border's content component, or <tt>null</tt> for no
      * content.
      */

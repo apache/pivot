@@ -94,7 +94,7 @@ public class TreeView extends Component {
     public interface NodeRenderer extends Renderer {
         /**
          * Prepares the renderer for layout or paint.
-         * 
+         *
          * @param node The node value to render, or <tt>null</tt> if called to
          * calculate preferred height for skins that assume a fixed renderer
          * height.
@@ -120,7 +120,7 @@ public class TreeView extends Component {
 
         /**
          * Converts a tree node to a string representation.
-         * 
+         *
          * @param node
          * @return The node's string representation, or <tt>null</tt> if the node
          * does not have a string representation. <p> Note that this method may
@@ -136,7 +136,7 @@ public class TreeView extends Component {
     public interface NodeEditor {
         /**
          * Called to begin editing a tree node.
-         * 
+         *
          * @param treeView
          * @param path
          */
@@ -144,7 +144,7 @@ public class TreeView extends Component {
 
         /**
          * Terminates an edit operation.
-         * 
+         *
          * @param result <tt>true</tt> to perform the edit; <tt>false</tt> to
          * cancel it.
          */
@@ -163,7 +163,7 @@ public class TreeView extends Component {
         /**
          * Gets the path to the node found at the specified y-coordinate
          * (relative to the tree view).
-         * 
+         *
          * @param y The y-coordinate in pixels.
          * @return The path to the node, or <tt>null</tt> if there is no node
          * being painted at the specified y-coordinate.
@@ -174,7 +174,7 @@ public class TreeView extends Component {
          * Gets the bounds of the node at the specified path relative to the
          * tree view. Note that all nodes are left aligned with the tree; to get
          * the pixel value of a node's indent, use {@link #getNodeIndent(int)}.
-         * 
+         *
          * @param path The path to the node.
          * @return The bounds, or <tt>null</tt> if the node is not currently
          * visible.
@@ -185,7 +185,7 @@ public class TreeView extends Component {
          * Gets the pixel indent of nodes at the specified depth. Depth is
          * measured in generations away from the tree view's "root" node, which
          * is represented by the {@link #getTreeData() tree data}.
-         * 
+         *
          * @param depth The depth, where the first child of the root has depth
          * 1, the child of that branch has depth 2, etc.
          * @return The indent in pixels to the node's content.
@@ -196,7 +196,7 @@ public class TreeView extends Component {
          * Gets the row index of the node, as seen in the current visible nodes
          * list. Note that as branches are expanded and collapsed, the row index
          * of any given node in the tree will change.
-         * 
+         *
          * @param path The path to the node.
          * @return The row index of the node, or <tt>-1</tt> if the node is not
          * currently visible.
@@ -645,7 +645,7 @@ public class TreeView extends Component {
          * [5, 0]]</tt>, <tt>basePath</tt> is <tt>[]</tt>, and <tt>index</tt> is
          * <tt>4</tt>, then <tt>paths</tt> will be updated to <tt>[[3, 0], [6,
          * 0]]</tt>. No events are fired.
-         * 
+         *
          * @param paths Sequence of paths guaranteed to be sorted by
          * "row order".
          * @param basePath The path to the parent of the inserted item.
@@ -697,7 +697,7 @@ public class TreeView extends Component {
          * <tt>basePath</tt> is <tt>[]</tt>, <tt>index</tt> is <tt>3</tt>, and
          * <tt>count</tt> is <tt>2</tt>, then <tt>paths</tt> will be updated to
          * <tt>[[4, 0]]</tt>. No events are fired.
-         * 
+         *
          * @param paths Sequence of paths guaranteed to be sorted by
          * "row order".
          * @param basePath The path to the parent of the removed items.
@@ -756,7 +756,7 @@ public class TreeView extends Component {
          * <tt>basePath</tt> is <tt>[3]</tt>, and <tt>index</tt> is <tt>0</tt>,
          * then <tt>paths</tt> will be updated to <tt>[[3], [3, 1], [5,
          * 0]]</tt>. No events are fired.
-         * 
+         *
          * @param paths Sequence of paths guaranteed to be sorted by
          * "row order".
          * @param basePath The path to the parent of the updated item.
@@ -791,7 +791,7 @@ public class TreeView extends Component {
          * <tt>[[3], [3, 0], [3, 1], [5, 0]]</tt> and <tt>basePath</tt> is
          * <tt>[3]</tt>, then <tt>paths</tt> will be updated to <tt>[[3], [5,
          * 0]]</tt>. No events are fired.
-         * 
+         *
          * @param paths Sequence of paths guaranteed to be sorted by
          * "row order".
          * @param basePath The path whose children were sorted.
@@ -864,7 +864,7 @@ public class TreeView extends Component {
 
     /**
      * Creates a new <tt>TreeView</tt> with the specified tree data.
-     * 
+     *
      * @param treeData Default data set to be used with the tree. This list
      * represents the root set of items displayed by the tree and will never
      * itself be painted. Sub-items that also implement the <tt>List</tt>
@@ -879,7 +879,7 @@ public class TreeView extends Component {
     /**
      * Sets the skin, replacing any previous skin. This ensures that the skin
      * being set implements the {@link TreeView.Skin} interface.
-     * 
+     *
      * @param skin The new skin.
      */
     @Override
@@ -899,7 +899,7 @@ public class TreeView extends Component {
      * other items are considered leaves. <p> For instance, a tree view that
      * displays a single root branch would be backed by list with one child
      * (also a list).
-     * 
+     *
      * @return The tree view's data model.
      */
     public List<?> getTreeData() {
@@ -916,7 +916,7 @@ public class TreeView extends Component {
      * corresponding events will <b>not</b> be fired, since these actions are
      * implied by the {@link TreeViewListener#treeDataChanged(TreeView,List)
      * treeDataChanged} event.
-     * 
+     *
      * @param treeData The data to be presented by the tree.
      */
     public void setTreeData(List<?> treeData) {
@@ -965,7 +965,7 @@ public class TreeView extends Component {
      * appearance of the node data. As such, note that there is an implied
      * coordination between the node renderer and the data model. The default
      * node renderer used is an instance of <tt>TreeViewNodeRenderer</tt>.
-     * 
+     *
      * @return The current node renderer.
      * @see TreeViewNodeRenderer
      */
@@ -976,7 +976,7 @@ public class TreeView extends Component {
     /**
      * Sets the tree view's node renderer, which is responsible for the
      * appearance of the node data.
-     * 
+     *
      * @param nodeRenderer The new node renderer.
      */
     public void setNodeRenderer(NodeRenderer nodeRenderer) {
@@ -994,7 +994,7 @@ public class TreeView extends Component {
 
     /**
      * Returns the editor used to edit nodes in this tree.
-     * 
+     *
      * @return The node editor, or <tt>null</tt> if no editor is installed.
      */
     public NodeEditor getNodeEditor() {
@@ -1003,7 +1003,7 @@ public class TreeView extends Component {
 
     /**
      * Sets the editor used to edit nodes in this tree.
-     * 
+     *
      * @param nodeEditor The node editor for the tree.
      */
     public void setNodeEditor(NodeEditor nodeEditor) {
@@ -1017,7 +1017,7 @@ public class TreeView extends Component {
 
     /**
      * Returns the current selection mode.
-     * 
+     *
      * @return The current selection mode.
      */
     public SelectMode getSelectMode() {
@@ -1030,7 +1030,7 @@ public class TreeView extends Component {
      * notified, as the clearing of the selection is implied by the
      * {@link TreeViewListener#selectModeChanged(TreeView,TreeView.SelectMode)
      * selectModeChanged} event.
-     * 
+     *
      * @param selectMode The new selection mode.
      * @see TreeViewListener
      * @see TreeViewSelectionListener
@@ -1056,7 +1056,7 @@ public class TreeView extends Component {
 
     /**
      * Returns the currently selected paths.
-     * 
+     *
      * @return An immutable list containing the currently selected paths. Note
      * that the returned list is a wrapper around the actual selection, not a
      * copy. Any changes made to the selection state will be reflected in the
@@ -1115,7 +1115,7 @@ public class TreeView extends Component {
     /**
      * Returns the first selected path, as it would appear in a fully expanded
      * tree.
-     * 
+     *
      * @return The first selected path, or <tt>null</tt> if nothing is selected.
      */
     public Path getFirstSelectedPath() {
@@ -1125,7 +1125,7 @@ public class TreeView extends Component {
     /**
      * Returns the last selected path, as it would appear in a fully expanded
      * tree.
-     * 
+     *
      * @return The last selected path, or <tt>null</tt> if nothing is selected.
      */
     public Path getLastSelectedPath() {
@@ -1135,7 +1135,7 @@ public class TreeView extends Component {
 
     /**
      * Returns the currently selected index, even when in multi-select mode.
-     * 
+     *
      * @return The selected path, or <tt>null</tt> if nothing is selected.
      */
     public Path getSelectedPath() {
@@ -1175,7 +1175,7 @@ public class TreeView extends Component {
 
     /**
      * Adds a path to the selection.
-     * 
+     *
      * @param path
      * @return <tt>true</tt> if the path was added to the selection;
      * <tt>false</tt>, otherwise.
@@ -1212,7 +1212,7 @@ public class TreeView extends Component {
 
     /**
      * Removes a path from the selection.
-     * 
+     *
      * @param path
      * @return <tt>true</tt> if the path was added to the selection;
      * <tt>false</tt>, otherwise.
@@ -1294,7 +1294,7 @@ public class TreeView extends Component {
 
     /**
      * Returns the disabled state of a given node.
-     * 
+     *
      * @param path The path to the node whose disabled state is to be tested
      * @return <tt>true</tt> if the node is disabled; <tt>false</tt>, otherwise
      */
@@ -1320,7 +1320,7 @@ public class TreeView extends Component {
      * that disabled nodes may still be expanded, selected, and checked
      * <i>programatically</i>. A disabled node may have enabled children. <p> If
      * the disabled node filter is set to <tt>null</tt>, all nodes are enabled.
-     * 
+     *
      * @return The disabled node filter, or <tt>null</tt> if no disabled node
      * filter is set
      */
@@ -1334,7 +1334,7 @@ public class TreeView extends Component {
      * that disabled nodes may still be expanded, selected, and checked
      * <i>programatically</i>. A disabled node may have enabled children. <p> If
      * the disabled node filter is set to <tt>null</tt>, all nodes are enabled.
-     * 
+     *
      * @param disabledNodeFilter The disabled node filter, or <tt>null</tt> for
      * no disabled node filter
      */
@@ -1360,7 +1360,7 @@ public class TreeView extends Component {
      * existing checkmarks is implied by the
      * {@link TreeViewListener#checkmarksEnabledChanged(TreeView)
      * checkmarksEnabledChanged} event.
-     * 
+     *
      * @param checkmarksEnabled <tt>true</tt> to enable checkmarks;
      * <tt>false</tt> to disable them.
      */
@@ -1382,7 +1382,7 @@ public class TreeView extends Component {
      * view. This state is a derived state meaning "the node is not checked, but
      * one or more of its descendants are." When this state is configured to not
      * be shown, such nodes will simply be reported as unchecked.
-     * 
+     *
      * @return <tt>true</tt> if the tree view will report so-called mixed nodes
      * as mixed; <tt>false</tt> if it will report them as unchecked.
      * @see NodeCheckState#MIXED
@@ -1402,7 +1402,7 @@ public class TreeView extends Component {
      * state is implied by the
      * {@link TreeViewListener#showMixedCheckmarkStateChanged(TreeView)
      * showMixedCheckmarkStateChanged} event.
-     * 
+     *
      * @param showMixedCheckmarkState <tt>true</tt> to show the derived mixed
      * state; <tt>false</tt> to report so-called "mixed" nodes as unchecked.
      * @see NodeCheckState#MIXED
@@ -1421,7 +1421,7 @@ public class TreeView extends Component {
      * Tells whether or not the node at the specified path is checked. If
      * checkmarks are not enabled, this is guaranteed to be <tt>false</tt>. So
      * called mixed nodes will always be reported as unchecked in this method.
-     * 
+     *
      * @param path The path to the node.
      * @return <tt>true</tt> if the node is explicitly checked; <tt>false</tt>
      * otherwise.
@@ -1442,7 +1442,7 @@ public class TreeView extends Component {
      * checked, but one or more of its descendants are") is only reported when
      * the tree view is configured as such. Otherwise, such nodes will be
      * reported as <tt>UNCHECKED</tt>.
-     * 
+     *
      * @param path The path to the node.
      * @return The checkmark state of the specified node.
      * @see #getCheckmarksEnabled()
@@ -1483,7 +1483,7 @@ public class TreeView extends Component {
      * is impossible to set the check state of a node to <tt>MIXED</tt>. This is
      * because the mixed check state is a derived state meaning "the node is not
      * checked, but one or more of its descendants are."
-     * 
+     *
      * @param path The path to the node.
      * @param checked <tt>true</tt> to check the node; <tt>false</tt> to uncheck
      * it.
@@ -1565,7 +1565,7 @@ public class TreeView extends Component {
      * return an empty sequence. <p> Note that if the tree view is configured to
      * show mixed checkmark states (see {@link #getShowMixedCheckmarkState()}),
      * this will still only return the nodes that are fully checked.
-     * 
+     *
      * @return The paths to the checked nodes in the tree, guaranteed to be
      * non-<tt>null</tt>.
      */
@@ -1581,7 +1581,7 @@ public class TreeView extends Component {
      * all checkboxes will be interactive. <p> <b>Note:</b> this filter is only
      * relavent if {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is
      * set to true.
-     * 
+     *
      * @return The disabled checkmark filter, or <tt>null</tt> if no disabled
      * checkmark filter is set
      */
@@ -1597,7 +1597,7 @@ public class TreeView extends Component {
      * checkboxes will be interactive. <p> <b>Note:</b> this filter is only
      * relavent if {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is
      * set to true. enabled.
-     * 
+     *
      * @param disabledCheckmarkFilter The disabled checkmark filter, or
      * <tt>null</tt> for no disabled checkmark filter
      */
@@ -1613,7 +1613,7 @@ public class TreeView extends Component {
     /**
      * Sets the expansion state of the specified branch. If the branch already
      * has the specified expansion state, nothing happens.
-     * 
+     *
      * @param path The path to the branch node.
      * @param expanded <tt>true</tt> to expand the branch; <tt>false</tt> to
      * collapse it.
@@ -1649,7 +1649,7 @@ public class TreeView extends Component {
 
     /**
      * Tells whether or not the specified branch is expanded.
-     * 
+     *
      * @param path The path to the branch node.
      * @return <tt>true</tt> if the branch is expanded; <tt>false</tt> otherwise.
      */
@@ -1664,7 +1664,7 @@ public class TreeView extends Component {
     /**
      * Expands the branch at the specified path. If the branch is already
      * expanded, nothing happens.
-     * 
+     *
      * @param path The path to the branch node.
      */
     public final void expandBranch(Path path) {
@@ -1694,7 +1694,7 @@ public class TreeView extends Component {
     /**
      * Collapses the branch at the specified path. If the branch is already
      * collapsed, nothing happens.
-     * 
+     *
      * @param path The path to the branch node.
      */
     public final void collapseBranch(Path path) {
@@ -1724,7 +1724,7 @@ public class TreeView extends Component {
     /**
      * Ensures that this tree view is listening for list events on every branch
      * node along the specified path.
-     * 
+     *
      * @param path A path leading to a nested branch node.
      * @throws IndexOutOfBoundsException If a path element is out of bounds.
      * @throws IllegalArgumentException If the path contains any leaf nodes.
@@ -1759,7 +1759,7 @@ public class TreeView extends Component {
     /**
      * Gets the path to the node found at the specified y-coordinate (relative
      * to the tree view).
-     * 
+     *
      * @param y The y-coordinate in pixels.
      * @return The path to the node, or <tt>null</tt> if there is no node being
      * painted at the specified y-coordinate.
@@ -1773,7 +1773,7 @@ public class TreeView extends Component {
      * Gets the bounds of the node at the specified path relative to the tree
      * view. Note that all nodes are left aligned with the tree; to get the
      * pixel value of a node's indent, use {@link #getNodeIndent(int)}.
-     * 
+     *
      * @param path The path to the node.
      * @return The bounds, or <tt>null</tt> if the node is not currently visible.
      */
@@ -1794,7 +1794,7 @@ public class TreeView extends Component {
      * Gets the pixel indent of nodes at the specified depth. Depth is measured
      * in generations away from the tree view's "root" node, which is
      * represented by the {@link #getTreeData() tree data}.
-     * 
+     *
      * @param depth The depth, where the first child of the root has depth 1,
      * the child of that branch has depth 2, etc.
      * @return The indent in pixels.
@@ -1808,7 +1808,7 @@ public class TreeView extends Component {
      * Gets the row index of the node, as seen in the current visible nodes
      * list. Note that as branches are expanded and collapsed, the row index of
      * any given node in the tree will change.
-     * 
+     *
      * @param path The path to the node.
      * @return The row index of the node, or <tt>-1</tt> if the node is not
      * currently visible.
@@ -1822,7 +1822,7 @@ public class TreeView extends Component {
      * Gets the <tt>TreeViewListener</tt>s. Developers interested in these
      * events can register for notification on these events by adding themselves
      * to the listener list.
-     * 
+     *
      * @return The tree view listeners.
      */
     public ListenerList<TreeViewListener> getTreeViewListeners() {
@@ -1833,7 +1833,7 @@ public class TreeView extends Component {
      * Gets the <tt>TreeViewBranchListener</tt>s. Developers interested in these
      * events can register for notification on these events by adding themselves
      * to the listener list.
-     * 
+     *
      * @return The tree view branch listeners.
      */
     public ListenerList<TreeViewBranchListener> getTreeViewBranchListeners() {
@@ -1844,7 +1844,7 @@ public class TreeView extends Component {
      * Gets the <tt>TreeViewNodeListener</tt>s. Developers interested in these
      * events can register for notification on these events by adding themselves
      * to the listener list.
-     * 
+     *
      * @return The tree view node listeners.
      */
     public ListenerList<TreeViewNodeListener> getTreeViewNodeListeners() {
@@ -1855,7 +1855,7 @@ public class TreeView extends Component {
      * Gets the <tt>TreeViewNodeStateListener</tt>s. Developers interested in
      * these events can register for notification on these events by adding
      * themselves to the listener list.
-     * 
+     *
      * @return The tree view node state listeners.
      */
     public ListenerList<TreeViewNodeStateListener> getTreeViewNodeStateListeners() {
@@ -1866,7 +1866,7 @@ public class TreeView extends Component {
      * Gets the <tt>TreeViewSelectionListener</tt>s. Developers interested in
      * these events can register for notification on these events by adding
      * themselves to the listener list.
-     * 
+     *
      * @return The tree view selection listeners.
      */
     public ListenerList<TreeViewSelectionListener> getTreeViewSelectionListeners() {

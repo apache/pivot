@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface SeparatorListener {
     /**
      * Called when a separator's heading has changed.
-     * 
+     *
      * @param separator
      * @param previousHeading
      */

@@ -59,7 +59,7 @@ public interface PromptListener {
 
     /**
      * Called when a prompt's message type has changed.
-     * 
+     *
      * @param prompt
      * @param previousMessageType
      */
@@ -67,7 +67,7 @@ public interface PromptListener {
 
     /**
      * Called when a prompt's message has changed.
-     * 
+     *
      * @param prompt
      * @param previousMessage
      */
@@ -75,7 +75,7 @@ public interface PromptListener {
 
     /**
      * Called when a prompt's body has changed.
-     * 
+     *
      * @param prompt
      * @param previousBody
      */
@@ -83,7 +83,7 @@ public interface PromptListener {
 
     /**
      * Called when an option has been inserted into a prompt's option sequence.
-     * 
+     *
      * @param prompt
      * @param index
      */
@@ -91,7 +91,7 @@ public interface PromptListener {
 
     /**
      * Called when options have been removed from a prompt's option sequence.
-     * 
+     *
      * @param prompt
      * @param index
      * @param removed
@@ -100,7 +100,7 @@ public interface PromptListener {
 
     /**
      * Called when a prompt's selected option has changed.
-     * 
+     *
      * @param prompt
      * @param previousSelectedOption
      */

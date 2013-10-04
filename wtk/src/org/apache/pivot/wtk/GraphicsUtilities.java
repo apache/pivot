@@ -100,7 +100,7 @@ public final class GraphicsUtilities {
      * pixels with the graphics context's paint. For this reason, and because
      * Pivot supports scaling the display host, it is recommended that skins use
      * this method over <tt>java.awt.Graphics#drawRect</tt>.
-     * 
+     *
      * @param graphics The graphics context that will be used to perform the
      * operation.
      * @param x The x-coordinate of the upper-left corner of the rectangle.
@@ -124,7 +124,7 @@ public final class GraphicsUtilities {
      * pixels with the graphics context's paint. For this reason, and because
      * Pivot supports scaling the display host, it is recommended that skins use
      * this method over <tt>java.awt.Graphics#drawRect</tt>.
-     * 
+     *
      * @param graphics The graphics context that will be used to perform the
      * operation.
      * @param x The x-coordinate of the upper-left corner of the rectangle.
@@ -159,7 +159,7 @@ public final class GraphicsUtilities {
 
     /**
      * Interprets a string as a color value.
-     * 
+     *
      * @param value One of the following forms: <ul> <li>0xdddddddd - 8
      * hexadecimal digits, specifying 8 bits each of red, green, and blue,
      * followed by 8 bits of alpha.</li> <li>#dddddd - 6 hexadecimal digits,
@@ -223,7 +223,7 @@ public final class GraphicsUtilities {
 
     /**
      * Interpret a string as a {@link Paint} value
-     * 
+     *
      * @param value Either (a) One of the
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot} or (b) A {@linkplain GraphicsUtilities#decodePaint(Dictionary)
@@ -250,7 +250,7 @@ public final class GraphicsUtilities {
 
     /**
      * Interpret a dictionary as a {@link Paint} value
-     * 
+     *
      * @param dictionary A dictionary containing a key {@value #PAINT_TYPE_KEY}
      * and further elements according to its value: <ul> <li><b>solid_color</b>
      * - key {@value #COLOR_KEY} with value being any of the

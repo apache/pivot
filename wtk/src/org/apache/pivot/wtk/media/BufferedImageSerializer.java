@@ -85,7 +85,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
 
     /**
      * Reads a serialized image from an input stream.
-     * 
+     *
      * @return A <tt>BufferedImage</tt> object
      */
     @Override

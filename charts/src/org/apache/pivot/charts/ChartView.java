@@ -115,7 +115,7 @@ public abstract class ChartView extends Component {
 
         /**
          * Returns the element's series index.
-         * 
+         *
          * @return The element's series index.
          */
         public int getSeriesIndex() {
@@ -127,7 +127,7 @@ public abstract class ChartView extends Component {
          * the element index represents the index of the category in the
          * category sequence. Otherwise, it represents the index of the item
          * within the series.
-         * 
+         *
          * @return The element index.
          */
         public int getElementIndex() {

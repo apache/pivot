@@ -70,7 +70,7 @@ public final class Span {
 
     /**
      * Returns the length of the span.
-     * 
+     *
      * @return The absolute value of (<tt>end</tt> minus <tt>start</tt>) + 1.
      */
     public long getLength() {
@@ -79,7 +79,7 @@ public final class Span {
 
     /**
      * Determines whether this span contains another span.
-     * 
+     *
      * @param span The span to test for containment.
      * @return <tt>true</tt> if this span contains <tt>span</tt>; <tt>false</tt>,
      * otherwise.
@@ -103,7 +103,7 @@ public final class Span {
 
     /**
      * Determines whether this span intersects with another span.
-     * 
+     *
      * @param span The span to test for intersection.
      * @return <tt>true</tt> if this span intersects with <tt>span</tt>;
      * <tt>false</tt>, otherwise.
@@ -127,7 +127,7 @@ public final class Span {
 
     /**
      * Calculates the intersection of this span and another span.
-     * 
+     *
      * @param span The span to intersect with this span.
      * @return A new Span instance representing the intersection of this span and
      * <tt>span</tt>, or null if the spans do not intersect.
@@ -148,7 +148,7 @@ public final class Span {
 
     /**
      * Calculates the union of this span and another span.
-     * 
+     *
      * @param span The span to union with this span.
      * @return A new Span instance representing the union of this span and
      * <tt>span</tt>.

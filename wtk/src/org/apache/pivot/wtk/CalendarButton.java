@@ -218,7 +218,7 @@ public class CalendarButton extends Button {
 
     /**
      * Returns the currently selected date.
-     * 
+     *
      * @return The currently selected date, or <tt>null</tt> if nothing is
      * selected.
      */
@@ -228,7 +228,7 @@ public class CalendarButton extends Button {
 
     /**
      * Sets the selected date.
-     * 
+     *
      * @param selectedDate The date to select, or <tt>null</tt> to clear the
      * selection.
      */
@@ -245,7 +245,7 @@ public class CalendarButton extends Button {
      * Sets the selected date to the date represented by the specified date
      * string. The date string must be in the <tt>ISO 8601</tt> "calendar date"
      * format, which is <tt>[YYYY]-[MM]-[DD]</tt>.
-     * 
+     *
      * @param selectedDate A string in the form of <tt>[YYYY]-[MM]-[DD]</tt>
      * (e.g. 2008-07-23)
      */
@@ -266,7 +266,7 @@ public class CalendarButton extends Button {
 
     /**
      * Sets the locale used to present calendar data.
-     * 
+     *
      * @param locale
      */
     public void setLocale(Locale locale) {
@@ -283,7 +283,7 @@ public class CalendarButton extends Button {
 
     /**
      * Sets the locale used to present calendar data.
-     * 
+     *
      * @param locale An dictionary containing values for language, country, and
      * variant. Country and variant are optional but the must adhere to the
      * following rules: <ul> <li>If variant is specified, language and country
@@ -310,7 +310,7 @@ public class CalendarButton extends Button {
 
     /**
      * Sets the locale used to present calendar data.
-     * 
+     *
      * @param locale A JSON map containing values for language, country, and
      * variant.
      * @see #setLocale(Dictionary)

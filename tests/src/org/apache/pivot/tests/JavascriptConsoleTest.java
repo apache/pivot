@@ -89,7 +89,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
     /**
      * Utility method to initialize secondary fields/elements during application
      * startup.
-     * 
+     *
      * @param serializer the BXMLSerializer instance to use
      */
     private void initializeFields(BXMLSerializer serializer) {
@@ -104,7 +104,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
     /**
      * Load resource files for the given classname, or if null a default will be
      * used.
-     * 
+     *
      * @param className the full class name (to use as a base name), for loading
      * resources
      */
@@ -131,7 +131,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
      * Load (and returns) a Window, given its file name <p> Note that if public
      * this method could be called even from JS in a bxml file (but a reference
      * to the current application has to be put in serializer namespace).
-     * 
+     *
      * @param fileName the file name for the bxml file to load
      * @return the Window instance
      * @throws SerializationException in case of error
@@ -144,7 +144,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
 
     /**
      * Load (and returns) a Window, given its file name and serializer to use
-     * 
+     *
      * @param fileName the file name for the bxml file to load
      * @param bxmlSerializer the serializer to use, or if null a new one will be
      * created
@@ -174,7 +174,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
      * (but a reference to the current application has to be put in serializer
      * namespace). <p> Note that all Exceptions are catched inside this method,
      * to not expose them to JS code.
-     * 
+     *
      * @param urlString the URL of the bxml file to load, as a String
      * @param bxmlSerializer the serializer to use, or if null a new one will be
      * created
@@ -211,7 +211,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
     /**
      * Return the value for the given label, from the resource file loaded at
      * application startup.
-     * 
+     *
      * @param name the label name
      * @return the value or the label, or empty string if not found
      */
@@ -239,7 +239,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
      * System.out . <p> Note that it has been set public, static, and accepting
      * Object (and not String as usual), even to make some tests on it from JS
      * code.
-     * 
+     *
      * @param msg the object (or message) to log
      */
     public static final void logObject(Object obj) {
@@ -252,7 +252,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
     /**
      * Application entry point, when run as a Standard (Desktop) Java
      * Application.
-     * 
+     *
      * @param args command line arguments
      */
     public static void main(String[] args) {

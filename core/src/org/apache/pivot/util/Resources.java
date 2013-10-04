@@ -69,7 +69,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     /**
      * Creates a new resource bundle.
-     * 
+     *
      * @param parent The parent resource defer to if a resource cannot be found
      * in this instance or null.
      * @param baseName The base name of this resource as a fully qualified class

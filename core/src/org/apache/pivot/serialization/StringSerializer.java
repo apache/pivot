@@ -54,7 +54,7 @@ public class StringSerializer implements Serializer<String> {
 
     /**
      * Reads plain text data from an input stream.
-     * 
+     *
      * @param inputStream The input stream from which data will be read.
      * @return An instance of {@link String} containing the text read from the
      * input stream.
@@ -89,7 +89,7 @@ public class StringSerializer implements Serializer<String> {
 
     /**
      * Writes plain text data to an output stream.
-     * 
+     *
      * @param text The text to be written to the output stream.
      * @param outputStream The output stream to which data will be written.
      */

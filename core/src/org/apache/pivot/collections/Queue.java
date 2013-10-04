@@ -63,7 +63,7 @@ public interface Queue<T> extends Collection<T> {
      * Enqueues an item. If the queue is unsorted, the item is added at the tail
      * of the queue (index <tt>0</tt>). Otherwise, it is inserted at the
      * appropriate index.
-     * 
+     *
      * @param item The item to add to the queue.
      */
     public void enqueue(T item);
@@ -85,7 +85,7 @@ public interface Queue<T> extends Collection<T> {
 
     /**
      * Tests the emptiness of the queue.
-     * 
+     *
      * @return <tt>true</tt> if the queue contains no items; <tt>false</tt>,
      * otherwise.
      */

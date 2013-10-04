@@ -73,7 +73,7 @@ public interface TreeViewListener {
 
     /**
      * Called when a tree view's data has changed.
-     * 
+     *
      * @param treeView
      * @param previousTreeData
      */
@@ -81,7 +81,7 @@ public interface TreeViewListener {
 
     /**
      * Called when a tree view's node renderer has changed.
-     * 
+     *
      * @param treeView
      * @param previousNodeRenderer
      */
@@ -89,7 +89,7 @@ public interface TreeViewListener {
 
     /**
      * Called when a tree view's node editor has changed.
-     * 
+     *
      * @param treeView
      * @param previousNodeEditor
      */
@@ -97,7 +97,7 @@ public interface TreeViewListener {
 
     /**
      * Called when a tree view's select mode has changed.
-     * 
+     *
      * @param treeView
      * @param previousSelectMode
      */
@@ -105,21 +105,21 @@ public interface TreeViewListener {
 
     /**
      * Called when a tree view's checkmarks enabled flag has changed.
-     * 
+     *
      * @param treeView
      */
     public void checkmarksEnabledChanged(TreeView treeView);
 
     /**
      * Called when a tree view's "show mixed checkmark state" flag has changed.
-     * 
+     *
      * @param treeView
      */
     public void showMixedCheckmarkStateChanged(TreeView treeView);
 
     /**
      * Called when a tree view's disabled node filter has changed.
-     * 
+     *
      * @param treeView
      * @param previousDisabledNodeFilter
      */
@@ -127,7 +127,7 @@ public interface TreeViewListener {
 
     /**
      * Called when a tree view's disabled checkmark filter has changed.
-     * 
+     *
      * @param treeView
      * @param previousDisabledCheckmarkFilter
      */

@@ -47,7 +47,7 @@ public class Separator extends Component {
 
     /**
      * Returns the separator's heading.
-     * 
+     *
      * @return The separator's heading, or <tt>null</tt> if no heading is set.
      */
     public String getHeading() {
@@ -56,7 +56,7 @@ public class Separator extends Component {
 
     /**
      * Sets the separator's heading.
-     * 
+     *
      * @param heading The new heading, or <tt>null</tt> for no heading.
      */
     public void setHeading(String heading) {

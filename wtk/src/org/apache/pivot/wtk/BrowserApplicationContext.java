@@ -349,7 +349,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
     /**
      * Retrieves a named application.
-     * 
+     *
      * @param name The name of the applet hosting the application.
      */
     public static Application getApplication(String name) {
@@ -370,7 +370,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
 
     /**
      * Evaluates a script in the page context and returns the result.
-     * 
+     *
      * @param script
      * @param application
      */

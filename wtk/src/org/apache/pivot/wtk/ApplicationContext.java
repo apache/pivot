@@ -524,7 +524,7 @@ public abstract class ApplicationContext {
 
         /**
          * Attempts to paint the display using an offscreen buffer.
-         * 
+         *
          * @param graphics The source graphics context.
          * @return <tt>true</tt> if the display was painted using the offscreen
          * buffer; <tt>false</tt>, otherwise.
@@ -565,7 +565,7 @@ public abstract class ApplicationContext {
 
         /**
          * Attempts to paint the display using a volatile offscreen buffer.
-         * 
+         *
          * @param graphics The source graphics context.
          * @return <tt>true</tt> if the display was painted using the offscreen
          * buffer; <tt>false</tt>, otherwise.
@@ -619,7 +619,7 @@ public abstract class ApplicationContext {
 
         /**
          * Paints the display including any decorators.
-         * 
+         *
          * @param graphics
          */
         private void paintDisplay(Graphics2D graphics) {
@@ -1652,7 +1652,7 @@ public abstract class ApplicationContext {
 
     /**
      * Returns this application's origin (the URL of it's originating server).
-     * 
+     *
      * @return The application's origin, or <tt>null</tt> if the origin cannot
      * be determined.
      */
@@ -1670,7 +1670,7 @@ public abstract class ApplicationContext {
     /**
      * Adds the styles from a named stylesheet to the named or typed style
      * collections.
-     * 
+     *
      * @param resourceName
      */
     @SuppressWarnings("unchecked")
@@ -1727,7 +1727,7 @@ public abstract class ApplicationContext {
 
     /**
      * Returns the current JVM version.
-     * 
+     *
      * @return The current JVM version, or <tt>null</tt> if the version can't be
      * determined.
      */
@@ -1737,7 +1737,7 @@ public abstract class ApplicationContext {
 
     /**
      * Returns the current Pivot version.
-     * 
+     *
      * @return The current Pivot version (determined at build time), or
      * <tt>null</tt> if the version can't be determined.
      */
@@ -1748,7 +1748,7 @@ public abstract class ApplicationContext {
     /**
      * Schedules a task for one-time execution. The task will be executed on the
      * UI thread.
-     * 
+     *
      * @param callback The task to execute.
      * @param delay The length of time to wait before executing the task (in
      * milliseconds).
@@ -1774,7 +1774,7 @@ public abstract class ApplicationContext {
     /**
      * Schedules a task for repeated execution. The task will be executed on the
      * UI thread and will begin executing immediately.
-     * 
+     *
      * @param callback The task to execute.
      * @param period The interval at which the task will be repeated (in
      * milliseconds).
@@ -1786,7 +1786,7 @@ public abstract class ApplicationContext {
     /**
      * Schedules a task for repeated execution. The task will be executed on the
      * UI thread.
-     * 
+     *
      * @param callback The task to execute.
      * @param delay The length of time to wait before the first execution of the
      * task (milliseconds).
@@ -1815,7 +1815,7 @@ public abstract class ApplicationContext {
     /**
      * Queues a task to execute after all pending events have been processed and
      * returns without waiting for the task to complete.
-     * 
+     *
      * @param callback The task to execute.
      */
     public static QueuedCallback queueCallback(Runnable callback) {
@@ -1825,7 +1825,7 @@ public abstract class ApplicationContext {
     /**
      * Queues a task to execute after all pending events have been processed and
      * optionally waits for the task to complete.
-     * 
+     *
      * @param callback The task to execute.
      * @param wait If <tt>true</tt>, does not return until the task has executed.
      * Otherwise, returns immediately.

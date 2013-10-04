@@ -43,7 +43,7 @@ public interface TextAreaBindingListener {
 
     /**
      * Called when a text area's text key has changed.
-     * 
+     *
      * @param textArea
      * @param previousTextKey
      */
@@ -51,7 +51,7 @@ public interface TextAreaBindingListener {
 
     /**
      * Called when a text area's text bind type has changed.
-     * 
+     *
      * @param textArea
      * @param previousTextBindType
      */
@@ -59,7 +59,7 @@ public interface TextAreaBindingListener {
 
     /**
      * Called when a text area's text bind mapping has changed.
-     * 
+     *
      * @param textArea
      * @param previousTextBindMapping
      */

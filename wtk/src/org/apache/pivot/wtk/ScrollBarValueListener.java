@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface ScrollBarValueListener {
     /**
      * Called when a scroll bar's value has changed.
-     * 
+     *
      * @param scrollBar
      * @param previousValue
      */

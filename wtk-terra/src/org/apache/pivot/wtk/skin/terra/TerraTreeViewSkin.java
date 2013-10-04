@@ -67,7 +67,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     protected interface NodeInfoVisitor {
         /**
          * Visits the specified node info.
-         * 
+         *
          * @param nodeInfo The object to visit
          */
         public void visit(NodeInfo nodeInfo);
@@ -93,7 +93,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
         /**
          * Creates a new visible node iterator that will iterate over a portion
          * of the visible nodes list (useful during painting).
-         * 
+         *
          * @param start The start index, inclusive
          * @param end The end index, inclusive
          */
@@ -149,7 +149,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
 
         /**
          * This operation is not supported by this iterator.
-         * 
+         *
          * @throws UnsupportedOperationException
          */
         @Override
@@ -162,7 +162,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
          * , as seen in the current visible nodes list. Note that as branches
          * are expanded and collapsed, the row index of any given node in the
          * tree will change.
-         * 
+         *
          * @return The row index of the current node, or <tt>-1</tt> if
          * <tt>next()</tt> has not yet been called.
          */
@@ -172,7 +172,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
 
         /**
          * Gets the path of the node last returned by a call to {@link #next()}.
-         * 
+         *
          * @return The path to the node, or <tt>null</tt> if <tt>next()</tt> has
          * not yet been called.
          */
@@ -1295,7 +1295,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     /**
      * Accepts the specified visitor on all node info objects that exist in this
      * skin's node info hierarchy.
-     * 
+     *
      * @param visitor The callback to execute on each node info object
      */
     protected final void accept(NodeInfoVisitor visitor) {
@@ -1376,7 +1376,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
      * Adds the specified child of the specified branch to the visible node
      * list. It is assumed that the child in question is not an expanded branch.
      * Invalidates the component only if necessary.
-     * 
+     *
      * @param parentBranchInfo The branch info of the parent node.
      * @param index The index of the child within its parent.
      */
@@ -1423,7 +1423,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
      * Removes the specified children of the specified branch from the visible
      * node list if necessary. If they are not already in the visible node list,
      * nothing happens. Invalidates the component only if necessary.
-     * 
+     *
      * @param parentBranchInfo The branch info of the parent node.
      * @param index The index of the first child node to remove from the visible
      * nodes sequence.
@@ -1492,7 +1492,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
 
     /**
      * Clears our <tt>NodeInfo</tt> hierarchy of the specified cached field.
-     * 
+     *
      * @param mask The bitmask specifying which field to clear.
      */
     private void clearFields(final byte mask) {

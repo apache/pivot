@@ -75,7 +75,7 @@ public interface JSONSerializerListener {
 
     /**
      * Called when the serializer has begun reading a dictionary value.
-     * 
+     *
      * @param jsonSerializer
      * @param value
      */
@@ -83,14 +83,14 @@ public interface JSONSerializerListener {
 
     /**
      * Called when the serializer has finished reading a dictionary value.
-     * 
+     *
      * @param jsonSerializer
      */
     public void endDictionary(JSONSerializer jsonSerializer);
 
     /**
      * Called when the serializer has read a dictionary key.
-     * 
+     *
      * @param jsonSerializer
      * @param key
      */
@@ -98,7 +98,7 @@ public interface JSONSerializerListener {
 
     /**
      * Called when the serializer has begun reading a sequence value.
-     * 
+     *
      * @param jsonSerializer
      * @param value
      */
@@ -106,14 +106,14 @@ public interface JSONSerializerListener {
 
     /**
      * Called when the serializer has finished reading a sequence value.
-     * 
+     *
      * @param jsonSerializer
      */
     public void endSequence(JSONSerializer jsonSerializer);
 
     /**
      * Called when the serializer has read a string value.
-     * 
+     *
      * @param jsonSerializer
      * @param value
      */
@@ -121,7 +121,7 @@ public interface JSONSerializerListener {
 
     /**
      * Called when the serializer has read a numeric value.
-     * 
+     *
      * @param jsonSerializer
      * @param value
      */
@@ -129,7 +129,7 @@ public interface JSONSerializerListener {
 
     /**
      * Called when the serializer has read a boolean value.
-     * 
+     *
      * @param jsonSerializer
      * @param value
      */
@@ -137,7 +137,7 @@ public interface JSONSerializerListener {
 
     /**
      * Called when the serializer has read a null value.
-     * 
+     *
      * @param jsonSerializer
      */
     public void readNull(JSONSerializer jsonSerializer);

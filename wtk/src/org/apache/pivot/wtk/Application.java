@@ -107,7 +107,7 @@ public interface Application {
 
     /**
      * Called when the application is starting up.
-     * 
+     *
      * @param display The display on which this application was started.
      * @param properties Initialization properties passed to the application.
      */
@@ -115,7 +115,7 @@ public interface Application {
 
     /**
      * Called when the application is being shut down.
-     * 
+     *
      * @param optional If <tt>true</tt>, the shutdown may be cancelled by
      * returning a value of <tt>true</tt>.
      * @return <tt>true</tt> to cancel shutdown, <tt>false</tt> to continue.

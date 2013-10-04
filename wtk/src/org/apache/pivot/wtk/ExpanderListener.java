@@ -59,7 +59,7 @@ public interface ExpanderListener {
 
     /**
      * Called when an expander's title has changed.
-     * 
+     *
      * @param expander
      * @param previousTitle
      */
@@ -67,21 +67,21 @@ public interface ExpanderListener {
 
     /**
      * Called when an expander's collapsible flag has changed.
-     * 
+     *
      * @param expander
      */
     public void collapsibleChanged(Expander expander);
 
     /**
      * Called to preview an expanded change event.
-     * 
+     *
      * @param expander
      */
     public Vote previewExpandedChange(Expander expander);
 
     /**
      * Called when an expanded change event has been vetoed.
-     * 
+     *
      * @param expander
      * @param reason
      */
@@ -89,14 +89,14 @@ public interface ExpanderListener {
 
     /**
      * Called when an expander's expanded state has changed.
-     * 
+     *
      * @param expander
      */
     public void expandedChanged(Expander expander);
 
     /**
      * Called when an expander's content component has changed.
-     * 
+     *
      * @param expander
      * @param previousContent
      */

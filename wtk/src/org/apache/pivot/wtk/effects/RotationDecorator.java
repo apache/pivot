@@ -37,7 +37,7 @@ public class RotationDecorator implements Decorator {
 
     /**
      * Creates a new rotation decorator with the specified theta value.
-     * 
+     *
      * @param theta The rotation angle, in radians.
      */
     public RotationDecorator(double theta) {

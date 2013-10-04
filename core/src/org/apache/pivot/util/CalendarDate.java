@@ -208,7 +208,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * Creates a new <tt>CalendarDate</tt> representing the day contained in the
      * specified Gregorian calendar (assuming the default locale and the default
      * timezone).
-     * 
+     *
      * @param calendar The calendar containing the year, month, and day fields.
      */
     public CalendarDate(GregorianCalendar calendar) {
@@ -219,7 +219,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
     /**
      * Creates a new <tt>CalendarDate</tt> representing the specified year,
      * month, and day of month.
-     * 
+     *
      * @param year The year field. (e.g. <tt>2008</tt>)
      * @param month The month field, 0-based. (e.g. <tt>2</tt> for March)
      * @param day The day of the month, 0-based. (e.g. <tt>14</tt> for the 15th)
@@ -256,7 +256,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * formally, it is defined that given calendar dates <tt>c1</tt> and
      * <tt>c2</tt>, the following will return <tt>true</tt>: <pre>
      * c1.add(c2.subtract(c1)).equals(c2); </pre>
-     * 
+     *
      * @param days The number of days to add to (or subtract from if negative)
      * this calendar date.
      * @return The resulting calendar date.
@@ -276,7 +276,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * difference will be zero. <p> More formally, it is defined that given
      * calendar dates <tt>c1</tt> and <tt>c2</tt>, the following will return
      * <tt>true</tt>: <pre> c1.add(c2.subtract(c1)).equals(c2); </pre>
-     * 
+     *
      * @param calendarDate The calendar date to subtract from this calendar
      * date.
      * @return The number of days in between this calendar date and
@@ -297,7 +297,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * <tt>GregorianCalendar</tt>, with the <tt>year</tt>, <tt>month</tt>, and
      * <tt>dayOfMonth</tt> fields set in the default time zone with the default
      * locale.
-     * 
+     *
      * @return This calendar date as a <tt>GregorianCalendar</tt>.
      */
     public GregorianCalendar toCalendar() {
@@ -309,7 +309,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * <tt>GregorianCalendar</tt>, with the <tt>year</tt>, <tt>month</tt>, and
      * <tt>dayOfMonth</tt> fields set in the default time zone with the default
      * locale.
-     * 
+     *
      * @param time The time of day.
      * @return This calendar date as a <tt>GregorianCalendar</tt>.
      */
@@ -323,7 +323,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
 
     /**
      * Compares this calendar date with another calendar date.
-     * 
+     *
      * @param calendarDate The calendar date against which to compare.
      * @return A negative number, zero, or a positive number if the specified
      * calendar date is less than, equal to, or greater than this calendar date,
@@ -348,7 +348,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * Indicates whether some other object is "equal to" this one. This is the
      * case if the object is a calendar date that represents the same day as
      * this one.
-     * 
+     *
      * @param o Reference to the object against which to compare.
      */
     @Override
@@ -398,7 +398,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * Creates a new date representing the specified date string. The date
      * string must be in the <tt>ISO 8601</tt> "calendar date" format, which is
      * <tt>[YYYY]-[MM]-[DD]</tt>.
-     * 
+     *
      * @param value A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g.
      * 2008-07-23).
      */

@@ -22,7 +22,7 @@ package org.apache.pivot.wtk.validation;
 public interface Validator {
     /**
      * Determines if a text value is valid based on the rules of the validator.
-     * 
+     *
      * @param text
      * @return <tt>true</tt> if the value is valid; <tt>false</tt>, otherwise.
      */

@@ -89,7 +89,7 @@ public class Expander extends Container {
 
     /**
      * Returns the expander's title.
-     * 
+     *
      * @return The pane's title, or <tt>null</tt> if no title is set.
      */
     public String getTitle() {
@@ -98,7 +98,7 @@ public class Expander extends Container {
 
     /**
      * Sets the expander's title.
-     * 
+     *
      * @param title The new title, or <tt>null</tt> for no title.
      */
     public void setTitle(String title) {
@@ -112,7 +112,7 @@ public class Expander extends Container {
 
     /**
      * Returns the expander's collapsible flag.
-     * 
+     *
      * @return The collapsible flag
      */
     public boolean isCollapsible() {
@@ -121,7 +121,7 @@ public class Expander extends Container {
 
     /**
      * Sets the expander's collapsible flag.
-     * 
+     *
      * @param collapsible The collapsible flag
      */
     public void setCollapsible(boolean collapsible) {

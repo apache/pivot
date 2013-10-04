@@ -48,7 +48,7 @@ public interface TableViewSortListener {
 
     /**
      * Called when a sort has been added to a table view.
-     * 
+     *
      * @param tableView
      * @param columnName
      */
@@ -56,7 +56,7 @@ public interface TableViewSortListener {
 
     /**
      * Called when a sort has been updated in a table view.
-     * 
+     *
      * @param tableView
      * @param columnName
      * @param previousSortDirection
@@ -66,7 +66,7 @@ public interface TableViewSortListener {
 
     /**
      * Called when a sort has been removed from a table view.
-     * 
+     *
      * @param tableView
      * @param columnName
      * @param sortDirection
@@ -75,7 +75,7 @@ public interface TableViewSortListener {
 
     /**
      * Called when a table view's sort has changed.
-     * 
+     *
      * @param tableView
      */
     public void sortChanged(TableView tableView);

@@ -18,20 +18,20 @@ package org.apache.pivot.util.concurrent;
 
 /**
  * Task listener interface.
- * 
+ *
  * @param <V> The return type of the task.
  */
 public interface TaskListener<V> {
     /**
      * Called when the task has completed successfully.
-     * 
+     *
      * @param task The source of the task event.
      */
     public void taskExecuted(Task<V> task);
 
     /**
      * Called when task execution has failed.
-     * 
+     *
      * @param task The source of the task event.
      */
     public void executeFailed(Task<V> task);

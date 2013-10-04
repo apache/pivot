@@ -73,7 +73,7 @@ public class Pivot859 extends Application.Adapter {
 
     /**
      * Set the Applet name. <p> Called by JavaScript from the Browser.
-     * 
+     *
      * @param name the name
      */
     public void setAppletName(String name) {
@@ -83,7 +83,7 @@ public class Pivot859 extends Application.Adapter {
 
     /**
      * Get the Applet name. <p> Called by JavaScript from the Browser.
-     * 
+     *
      * @return the name
      */
     public String getAppletName() {

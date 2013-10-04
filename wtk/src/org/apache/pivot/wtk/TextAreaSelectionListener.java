@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface TextAreaSelectionListener {
     /**
      * Called when a text area's selection state has changed.
-     * 
+     *
      * @param textArea
      * @param previousSelectionStart
      * @param previousSelectionLength

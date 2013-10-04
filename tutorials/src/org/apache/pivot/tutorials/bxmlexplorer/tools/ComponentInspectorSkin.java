@@ -102,7 +102,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     /**
      * Adds a new control component to the specified form section. The component
      * will control the specified property.
-     * 
+     *
      * @param dictionary The property dictionary
      * @param key The property key
      * @param type The type of the property
@@ -170,7 +170,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
     /**
      * Updates the control component associated with the specified property to
      * the appropriate state based on the property value.
-     * 
+     *
      * @param dictionary The property dictionary
      * @param key The property key
      * @param type The type of the property

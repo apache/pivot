@@ -22,7 +22,7 @@ package org.apache.pivot.wtk;
 public interface TextPaneSelectionListener {
     /**
      * Called when a text pane's selection state has changed.
-     * 
+     *
      * @param textPane
      * @param previousSelectionStart
      * @param previousSelectionLength

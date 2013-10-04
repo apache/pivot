@@ -269,7 +269,7 @@ public class SuggestionPopup extends Window {
 
     /**
      * Sets the list of suggestions presented by the popup.
-     * 
+     *
      * @param suggestionData
      */
     @SuppressWarnings("unchecked")
@@ -313,7 +313,7 @@ public class SuggestionPopup extends Window {
 
     /**
      * Sets the list view item renderer used to present suggestions.
-     * 
+     *
      * @param suggestionRenderer
      */
     public void setSuggestionRenderer(ListView.ItemRenderer suggestionRenderer) {
@@ -327,7 +327,7 @@ public class SuggestionPopup extends Window {
 
     /**
      * Returns the current selection.
-     * 
+     *
      * @return The index of the currently selected suggestion, or <tt>-1</tt> if
      * nothing is selected.
      */
@@ -337,7 +337,7 @@ public class SuggestionPopup extends Window {
 
     /**
      * Sets the selection.
-     * 
+     *
      * @param selectedIndex The index of the suggestion to select, or
      * <tt>-1</tt> to clear the selection.
      */
@@ -381,7 +381,7 @@ public class SuggestionPopup extends Window {
     /**
      * Sets the list size. If the number of items in the list exceeds this
      * value, the list will scroll.
-     * 
+     *
      * @param listSize
      */
     public void setListSize(int listSize) {
@@ -409,7 +409,7 @@ public class SuggestionPopup extends Window {
 
     /**
      * Opens the suggestion popup window.
-     * 
+     *
      * @param textInputArgument The text input for which suggestions will be
      * provided.
      */
@@ -419,7 +419,7 @@ public class SuggestionPopup extends Window {
 
     /**
      * Opens the suggestion popup window.
-     * 
+     *
      * @param textInputArgument The text input for which suggestions will be
      * provided.
      * @param suggestionPopupCloseListenerArgument A listener that will be called

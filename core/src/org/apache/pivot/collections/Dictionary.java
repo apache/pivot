@@ -66,7 +66,7 @@ public interface Dictionary<K, V> {
 
     /**
      * Retrieves the value for the given key.
-     * 
+     *
      * @param key The key whose value is to be returned.
      * @return The value corresponding to <tt>key</tt>, or null if the key does
      * not exist. Will also return null if the key refers to a null value. Use
@@ -77,7 +77,7 @@ public interface Dictionary<K, V> {
     /**
      * Sets the value of the given key, creating a new entry or replacing the
      * existing value.
-     * 
+     *
      * @param key The key whose value is to be set.
      * @param value The value to be associated with the given key.
      * @return The value previously associated with the key.
@@ -86,7 +86,7 @@ public interface Dictionary<K, V> {
 
     /**
      * Removes a key/value pair from the map.
-     * 
+     *
      * @param key The key whose mapping is to be removed.
      * @return The value that was removed.
      */
@@ -94,7 +94,7 @@ public interface Dictionary<K, V> {
 
     /**
      * Tests the existence of a key in the dictionary.
-     * 
+     *
      * @param key The key whose presence in the dictionary is to be tested.
      * @return <tt>true</tt> if the key exists in the dictionary; <tt>false</tt>,
      * otherwise.

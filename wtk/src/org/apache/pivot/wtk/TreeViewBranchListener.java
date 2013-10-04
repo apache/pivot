@@ -40,7 +40,7 @@ public interface TreeViewBranchListener {
     /**
      * Called when a tree node is expanded. This event can be used to perform
      * lazy loading of tree node data.
-     * 
+     *
      * @param treeView The source of the event.
      * @param path The path of the node that was shown.
      */
@@ -48,7 +48,7 @@ public interface TreeViewBranchListener {
 
     /**
      * Called when a tree node is collapsed.
-     * 
+     *
      * @param treeView The source of the event.
      * @param path The path of the node that was collapsed.
      */

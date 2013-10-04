@@ -33,7 +33,7 @@ public class NamespaceBinding {
     public interface BindMapping {
         /**
          * Transforms a source value during a bind operation.
-         * 
+         *
          * @param value
          */
         public Object evaluate(Object value);
@@ -200,7 +200,7 @@ public class NamespaceBinding {
 
     /**
      * Returns the bind mapping.
-     * 
+     *
      * @return The bind mapping to use during binding, or <tt>null</tt> if no
      * bind mapping is specified.
      */

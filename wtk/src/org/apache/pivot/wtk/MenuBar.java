@@ -167,7 +167,7 @@ public class MenuBar extends Container {
     public interface ItemListener {
         /**
          * Called when an item's menu has changed.
-         * 
+         *
          * @param item
          * @param previousMenu
          */
@@ -175,7 +175,7 @@ public class MenuBar extends Container {
 
         /**
          * Called when an item's active state has changed.
-         * 
+         *
          * @param item
          */
         public void activeChanged(Item item);

@@ -54,7 +54,7 @@ public interface FakeWindowListener {
 
     /**
      * Called when a window's title has changed.
-     * 
+     *
      * @param window
      * @param previousTitle
      */
@@ -62,7 +62,7 @@ public interface FakeWindowListener {
 
     /**
      * Called when a window's icon has changed.
-     * 
+     *
      * @param window
      * @param addedIcon
      */
@@ -70,7 +70,7 @@ public interface FakeWindowListener {
 
     /**
      * Called when a window's icon has changed.
-     * 
+     *
      * @param window
      * @param addedIcon
      */
@@ -78,7 +78,7 @@ public interface FakeWindowListener {
 
     /**
      * Called when a window's icon has changed.
-     * 
+     *
      * @param window
      * @param index
      * @param removed
@@ -87,7 +87,7 @@ public interface FakeWindowListener {
 
     /**
      * Called when a window's content component has changed.
-     * 
+     *
      * @param window
      * @param previousContent
      */

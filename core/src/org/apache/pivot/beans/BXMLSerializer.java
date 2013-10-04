@@ -399,7 +399,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * properties via a call to {@link #setLocation(URL)} or
      * {@link #setResources(Resources)}, respectively, before calling this
      * method.
-     * 
+     *
      * @return The deserialized object hierarchy.
      */
     @Override
@@ -536,7 +536,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     /**
      * Deserializes an object hierarchy from a BXML resource.
-     * 
+     *
      * @see #readObject(Class, String, boolean)
      */
     public final Object readObject(Class<?> baseType, String resourceName) throws IOException,
@@ -550,7 +550,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * {@link Class#getResource(String)} on the given base type, passing the
      * given resource name as an argument. If the resources is localized, the
      * base type is also used as the base name of the resource bundle.
-     * 
+     *
      * @param baseType The base type.
      * @param resourceName The name of the BXML resource.
      * @param localize If <tt>true</tt>, the deserialized resource will be
@@ -583,7 +583,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * use this version of the method to load BXML that uses resource resolution
      * must manually set this property via a call to
      * {@link #setResources(Resources)} before calling this method.
-     * 
+     *
      * @param locationArgument The location of the BXML resource.
      * @see #readObject(URL, Resources)
      */
@@ -593,7 +593,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     /**
      * Deserializes an object hierarchy from a BXML resource.
-     * 
+     *
      * @param locationArgument The location of the BXML resource.
      * @param resourcesArgument The resources that will be used to localize the
      * deserialized resource. #see readObject(InputStream)
@@ -1437,7 +1437,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     /**
      * Retrieves the root of the object hierarchy most recently processed by
      * this serializer.
-     * 
+     *
      * @return The root object, or <tt>null</tt> if this serializer has not yet
      * read an object from an input stream.
      */
@@ -1481,7 +1481,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     /**
      * Applies BXML binding annotations to an object.
-     * 
+     *
      * @param object
      * @see #bind(Object, Class)
      */
@@ -1497,7 +1497,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * Applies BXML binding annotations to an object. <p> NOTE This method uses
      * reflection to set internal member variables. As a result, it may only be
      * called from trusted code.
-     * 
+     *
      * @param object
      * @param type
      * @throws BindException If an error occurs during binding
@@ -1558,7 +1558,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * implementation simply calls {@code Class.newInstance()}. Subclasses may
      * override this method to provide an alternate instantiation mechanism,
      * such as dependency-injected construction.
-     * 
+     *
      * @param type The type of serializer being requested.
      */
     protected Serializer<?> newIncludeSerializer(Class<? extends Serializer<?>> type)
@@ -1571,7 +1571,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * base implementation simply calls {@code Class.newInstance()}. Subclasses
      * may override this method to provide an alternate instantiation mechanism,
      * such as dependency-injected construction.
-     * 
+     *
      * @param type The type of object being requested.
      */
     protected Object newTypedObject(Class<?> type) throws InstantiationException,
@@ -1607,7 +1607,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * Returns the file extension/MIME type map. This map associates file
      * extensions with MIME types, which are used to automatically determine an
      * appropriate serializer to use for an include based on file extension.
-     * 
+     *
      * @see #getMimeTypes()
      */
     public static Map<String, String> getFileExtensions() {

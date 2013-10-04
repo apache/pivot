@@ -52,7 +52,7 @@ public class FileSerializer implements Serializer<File> {
     /**
      * Creates a new file serializer that will store temporary files in a
      * specific directory.
-     * 
+     *
      * @param tempFileDirectory The directory in which to store temporary
      * folders.
      */
