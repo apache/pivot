@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class DeploymentExample implements Application {
+public class DeploymentExample extends Application.Adapter {
     private Window window = null;
 
     @Override
@@ -40,16 +40,6 @@ public class DeploymentExample implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-        // empty block
-    }
-
-    @Override
-    public void resume() {
-        // empty block
     }
 
 }

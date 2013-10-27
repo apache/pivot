@@ -42,7 +42,7 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Image;
 
-public class SearchDemo implements Application {
+public class SearchDemo extends Application.Adapter {
     private Window window = null;
 
     @BXML
@@ -101,19 +101,9 @@ public class SearchDemo implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-        // No-op
-    }
-
-    @Override
-    public void resume() {
-        // No-op
-    }
-
     /**
      * Executes a search.
-     *
+     * 
      * @param term The search term.
      * @throws IllegalArgumentException If <tt>term</tt> is <tt>null</tt> or
      * empty.
@@ -189,7 +179,7 @@ public class SearchDemo implements Application {
 
     /**
      * Aborts an executing query.
-     *
+     * 
      * @throws IllegalStateException If a query is not currently executing.
      */
     public void abortQuery() {
@@ -205,7 +195,7 @@ public class SearchDemo implements Application {
 
     /**
      * Tests whether a query is currently executing.
-     *
+     * 
      * @return <tt>true</tt> if a query is currently executing; <tt>false</tt>,
      * otherwise.
      */

@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.FadeDecorator;
 
-public class DecoratorDemo implements Application {
+public class DecoratorDemo extends Application.Adapter {
     private Window reflectionWindow = null;
     private Frame translucentFrame = null;
 
@@ -71,16 +71,6 @@ public class DecoratorDemo implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void suspend() {
-        // empty block
-    }
-
-    @Override
-    public void resume() {
-        // empty block
     }
 
     public static void main(String[] args) {

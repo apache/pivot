@@ -36,7 +36,7 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.VFSBrowserSheet;
 
-public class VFSBrowserTest implements Application {
+public class VFSBrowserTest extends Application.Adapter {
 
     public VFSBrowserTest() {
     }
@@ -92,16 +92,6 @@ public class VFSBrowserTest implements Application {
         }
 
         return false;
-    }
-
-    @Override
-    public void resume() {
-        // empty block
-    }
-
-    @Override
-    public void suspend() {
-        // empty block
     }
 
     public static void main(String[] args) {
