@@ -384,6 +384,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     public static final String FULL_SCREEN_ARGUMENT = "fullScreen";
     public static final String PRESERVE_SPLASH_SCREEN_ARGUMENT = "preserveSplashScreen";
     public static final String ORIGIN_ARGUMENT = "origin";
+    public static final String USE_APPLICATION_INSTANCE_ARGUMENT = "useApplicationInstance";
 
     private static final String INVALID_PROPERTY_FORMAT_MESSAGE = "\"%s\" is not a valid startup "
         + "property (expected format is \"--name=value\").";
@@ -455,7 +456,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     /**
      * Primary application entry point.
      *
-     * @param args
+     * @param args application arguments
      */
     public static void main(String[] args) {
         // Get the application class name
@@ -479,6 +480,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         boolean undecorated = false;
         boolean fullScreen = false;
         boolean preserveSplashScreen = false;
+        boolean useApplicationInstance = false;
 
         try {
             Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
@@ -539,6 +541,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                             preserveSplashScreen = Boolean.parseBoolean(value);
                         } else if (key.equals(ORIGIN_ARGUMENT)) {
                             origin = new URL(value);
+                        } else if (key.equals(USE_APPLICATION_INSTANCE_ARGUMENT)) {
+                            useApplicationInstance = Boolean.parseBoolean(value);
                         } else {
                             properties.put(key, value);
                         }
@@ -601,7 +605,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Load the application
         try {
             Class<?> applicationClass = Class.forName(applicationClassName);
-            application = (Application) applicationClass.newInstance();
+            if (useApplicationInstance == false) {
+                application = (Application) applicationClass.newInstance();
+            } else {
+                // application has already been set, before call this method
+            }
         } catch (ClassNotFoundException exception) {
             exception.printStackTrace();
         } catch (InstantiationException exception) {
@@ -847,14 +855,34 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * Application { public static void main(String[] args) throws Exception {
      * DesktopApplicationContext.main(MyApp.class, args); } } </code>
      *
-     * @param applicationClass
-     * @param applicationArgs
+     * @param applicationClass the class of Application entry point
+     * @param applicationArgs application arguments
      */
     public static final void main(Class<? extends Application> applicationClass,
         String[] applicationArgs) {
         String[] args = new String[applicationArgs.length + 1];
         System.arraycopy(applicationArgs, 0, args, 1, applicationArgs.length);
         args[0] = applicationClass.getName();
+        main(args);
+    }
+
+    /**
+     * Utility method to make it easier to define <tt>main()</tt> entry-points
+     * into applications.<br/> This is useful if application instance has
+     * already been created, for example from a scripting environment and I set
+     * some external properties in the application for later reuse, so I must
+     * use that instance.<br/> But it's important to NOT call usual methods of
+     * application lifecycle before passing it here, to avoid side effects.
+     *
+     * @param applicationInstance an instance of Application entry point
+     * @param applicationArgs application arguments
+     */
+    public static final void main(Application applicationInstance, String[] applicationArgs) {
+        String[] args = new String[applicationArgs.length + 2];
+        System.arraycopy(applicationArgs, 0, args, 1, applicationArgs.length);
+        args[0] = applicationInstance.getClass().getName();
+        args[applicationArgs.length + 1] = "--" + USE_APPLICATION_INSTANCE_ARGUMENT + "=" + "true";
+        application = applicationInstance;
         main(args);
     }
 
