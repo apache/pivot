@@ -375,7 +375,7 @@ public final class TerraTheme extends Theme {
      *
      * @return the number
      */
-    // @Override // TODO: re-enable this override for PIVOT-689
+    @Override
     public int getNumberOfPaletteColors() {
         return numberOfPaletteColors;
     }
@@ -385,7 +385,7 @@ public final class TerraTheme extends Theme {
      *
      * @return the number
      */
-    // @Override // TODO: re-enable this override for PIVOT-689
+    @Override
     public int getNumberOfColors() {
         return colors == null ? 0 : colors.getLength();
     }

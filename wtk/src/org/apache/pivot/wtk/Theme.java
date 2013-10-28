@@ -107,13 +107,17 @@ public abstract class Theme {
 
     public abstract void setFont(Font font);
 
+    public abstract int getNumberOfPaletteColors();
+
+    public abstract int getNumberOfColors();
+
     /**
      * Returns the skin class responsible for skinning the specified component
      * class.
      *
      * @param componentClass The component class.
-     * @return The skin class, or <tt>null</tt> if no skin mapping exists for the
-     * component class.
+     * @return The skin class, or <tt>null</tt> if no skin mapping exists for
+     * the component class.
      */
     public Class<? extends Skin> get(Class<? extends Component> componentClass) {
         if (componentClass == null) {
@@ -215,4 +219,5 @@ public abstract class Theme {
 
         return new Font(name, style, size);
     }
+
 }

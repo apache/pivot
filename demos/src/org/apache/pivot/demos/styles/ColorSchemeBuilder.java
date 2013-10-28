@@ -19,6 +19,7 @@ package org.apache.pivot.demos.styles;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 
 public class ColorSchemeBuilder extends Application.Adapter {
@@ -39,6 +40,10 @@ public class ColorSchemeBuilder extends Application.Adapter {
         }
 
         return false;
+    }
+
+    public static void main(String[] args) {
+        DesktopApplicationContext.main(ColorSchemeBuilder.class, args);
     }
 
 }

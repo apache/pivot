@@ -64,13 +64,17 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
     private Border sampleContentBorder = null;
 
     private ArrayList<ColorChooserButton> colorChooserButtons = new ArrayList<>();
-    private ArrayList<Color> themeOriginalColors = new ArrayList<>(8);
+    private ArrayList<Color> themeOriginalColors = null;
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+        TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
         createColorPalette();
 
-        for (int i = 0; i < 8; i++) {
+        int numberOfPaletteColors = getNumberOfPaletteColors();
+        themeOriginalColors = new ArrayList<>(numberOfPaletteColors);
+
+        for (int i = 0; i < numberOfPaletteColors; i++) {
             final ColorChooserButton colorChooserButton = new ColorChooserButton();
             colorChooserButtons.add(colorChooserButton);
             colorChooserButton.setSelectedColor(Color.BLACK);
@@ -122,9 +126,9 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                     blueSpinner.setSelectedItem(selectedColor.getBlue());
 
                     // Update the theme
-                    TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
+                    TerraTheme terraThemeLocal = (TerraTheme) Theme.getTheme();
                     int iLocal = colorChooserButtons.indexOf(colorChooserButtonArgument);
-                    terraTheme.setBaseColor(iLocal,
+                    terraThemeLocal.setBaseColor(iLocal,
                         colorChooserButtons.get(iLocal).getSelectedColor());
 
                     // Update the palette
@@ -158,7 +162,6 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             blueSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
 
             // Initialize the button color with the theme default
-            TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
             themeOriginalColors.add(terraTheme.getBaseColor(i));
             colorChooserButton.setSelectedColor(terraTheme.getBaseColor(i));
         }
@@ -181,12 +184,18 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         reloadContent();
     }
 
+    private int getNumberOfPaletteColors() {
+        TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
+        return terraTheme.getNumberOfPaletteColors();
+    }
+
     private void createColorPalette() {
         colorPaletteTablePane.getColumns().add(new TablePane.Column(1, true));
         colorPaletteTablePane.getColumns().add(new TablePane.Column(1, true));
         colorPaletteTablePane.getColumns().add(new TablePane.Column(1, true));
 
-        for (int i = 0; i < 8; i++) {
+        int numberOfPaletteColors = getNumberOfPaletteColors();
+        for (int i = 0; i < numberOfPaletteColors; i++) {
             TablePane.Row row = new TablePane.Row(1, true);
 
             int offset = i * 3;
@@ -239,8 +248,9 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
     }
 
     private void copyToClipboard() {
-        ArrayList<String> colors = new ArrayList<>(8);
-        for (int i = 0; i < 8; i++) {
+        int numberOfPaletteColors = getNumberOfPaletteColors();
+        ArrayList<String> colors = new ArrayList<>(numberOfPaletteColors);
+        for (int i = 0; i < numberOfPaletteColors; i++) {
             ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
             Color color = colorChooserButton.getSelectedColor();
             colors.add(String.format("#%02X%02X%02X", color.getRed(), color.getGreen(),
