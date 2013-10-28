@@ -269,8 +269,9 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
     }
 
     private void resetPalette() {
-        ArrayList<String> colors = new ArrayList<>(8);
-        for (int i = 0; i < 8; i++) {
+        int numberOfPaletteColors = getNumberOfPaletteColors();
+        ArrayList<String> colors = new ArrayList<>(numberOfPaletteColors);
+        for (int i = 0; i < numberOfPaletteColors; i++) {
             ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
 
             colorChooserButton.setSelectedColor(themeOriginalColors.get(i));
