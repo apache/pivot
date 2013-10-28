@@ -47,6 +47,7 @@ public interface ApplicationWithProperties extends Application {
      * about itself.
      */
     public interface AboutHandler extends Application.AboutHandler {
+        // empty block
     }
 
     /**
@@ -55,6 +56,7 @@ public interface ApplicationWithProperties extends Application {
      * focus).
      */
     public interface UnprocessedKeyHandler extends Application.UnprocessedKeyHandler {
+        // empty block
     }
 
     /**
@@ -62,6 +64,7 @@ public interface ApplicationWithProperties extends Application {
      * exceptions thrown during a user input event.
      */
     public interface UncaughtExceptionHandler extends Application.UncaughtExceptionHandler {
+        // empty block
     }
 
     /**
