@@ -112,7 +112,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
     }
 
-    private static class AttributeInvocationHandler implements InvocationHandler {
+    private class AttributeInvocationHandler implements InvocationHandler {
         private ScriptEngine scriptEngine;
         private String event;
         private String script;
@@ -138,8 +138,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
                     scriptEngine.eval(script);
                 } catch (ScriptException exception) {
-                    System.err.println(exception);
-                    System.err.println(script);
+                    reportException(exception, script);
                 }
             }
 
@@ -458,13 +457,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 throw new SerializationException(exception);
             }
         } catch (IOException exception) {
-            logException();
+            logException(exception);
             throw exception;
         } catch (SerializationException exception) {
-            logException();
+            logException(exception);
             throw exception;
         } catch (RuntimeException exception) {
-            logException();
+            logException(exception);
             throw exception;
         }
 
@@ -1291,7 +1290,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 try {
                     scriptEngine.eval(script);
                 } catch (ScriptException exception) {
-                    System.err.println(exception);
+                    reportException(exception, script);
                     break;
                 }
 
@@ -1362,7 +1361,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             scriptReader = new BufferedReader(new InputStreamReader(scriptLocation.openStream()));
                             scriptEngine.eval(scriptReader);
                         } catch(ScriptException exception) {
-                            exception.printStackTrace();
+                            reportException(exception);
                         } finally {
                             if (scriptReader != null) {
                                 scriptReader.close();
@@ -1388,8 +1387,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     try {
                         scriptEngine.eval(script);
                     } catch (ScriptException exception) {
-                        System.err.println(exception);
-                        System.err.println(script);
+                        reportException(exception, script);
                     }
                 }
 
@@ -1423,7 +1421,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         return xmlStreamReader.getLocation();
     }
 
-    private void logException() {
+    private void logException(Throwable exception) {
         Location streamReaderlocation = xmlStreamReader.getLocation();
         String message = "An error occurred at line number " + streamReaderlocation.getLineNumber();
 
@@ -1433,7 +1431,25 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         message += ":";
 
-        System.err.println(message);
+        reportException(new SerializationException(message, exception));
+    }
+
+    private void reportException(ScriptException exception, String script) {
+        reportException(new SerializationException("Failed to execute script:\n"+script, exception));
+    }
+
+    /**
+     * Hook used for standardized reporting of exceptions during this process.
+     * <p>Subclasses should override this method in order to do something besides
+     * print to <tt>System.err</tt>.
+     */
+    protected void reportException(Throwable exception) {
+        String message = exception.getLocalizedMessage();
+        if (message == null || message.isEmpty()) {
+            message = exception.getClass().getSimpleName();
+        }
+        System.err.println("Exception: " + message);
+        exception.printStackTrace(System.err);
     }
 
     @Override
