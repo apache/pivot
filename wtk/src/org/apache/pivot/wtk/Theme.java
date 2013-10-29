@@ -103,13 +103,40 @@ public abstract class Theme {
         return componentSkinMap.get(componentClass);
     }
 
+    /**
+     * Gets the theme's font.
+     */
     public abstract Font getFont();
 
+    /**
+     * Sets the theme's font.
+     *
+     * @param font the font
+     */
     public abstract void setFont(Font font);
 
+    /**
+     * Gets the number of Palette Colors
+     *
+     * @return the number
+     */
     public abstract int getNumberOfPaletteColors();
 
+    /**
+     * Gets the total number of Colors (including derived colors if any)
+     *
+     * @return the number
+     */
     public abstract int getNumberOfColors();
+
+    /**
+     * Tell if the theme is dark.<br/> Usually this means that (if true) any
+     * color will be transformed in the opposite way (brightening instead of
+     * darkening, and darkening instead of brightening).
+     *
+     * @return true if dark, false otherwise
+     */
+    public abstract boolean isThemeDark();
 
     /**
      * Returns the skin class responsible for skinning the specified component
