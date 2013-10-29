@@ -188,7 +188,7 @@ public final class TerraTheme extends Theme {
         // Load the color scheme
         String location = null;
         try {
-            String locationKey = getClass().getPackage().getName() + "." + LOCATION_PROPERTY;
+            String locationKey = packageName + "." + LOCATION_PROPERTY;
             location = System.getProperty(locationKey);
         } catch (SecurityException exception) {
             // No-op
@@ -258,9 +258,15 @@ public final class TerraTheme extends Theme {
                 int numberOfColors = numberOfPaletteColors * 3;
                 colors = new ArrayList<>(numberOfColors);
 
-                colorMultiplier = ((Double) properties.get("colorMultiplier")).floatValue();
+                Double mult = (Double) properties.get("colorMultiplier");
+                if (mult != null) {
+                    colorMultiplier = mult.floatValue();
+                }
 
-                themeIsDark = ((Boolean) properties.get("themeIsDark")).booleanValue();
+                Boolean dark = (Boolean) properties.get("themeIsDark");
+                if (dark != null) {
+                    themeIsDark = dark.booleanValue();
+                }
 
                 for (String colorCode : colorCodes) {
                     Color baseColor = Color.decode(colorCode);
