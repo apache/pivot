@@ -99,7 +99,7 @@ public final class TerraTheme extends Theme {
     private HashMap<MessageType, Image> smallMessageIcons = null;
 
     private static float colorMultiplier = 0.1f;
-    private static boolean themeDark = false;
+    private static boolean themeIsDark = false;
 
     public static final String LOCATION_PROPERTY = "location";
     public static final String COMMAND_BUTTON_STYLE = "commandButton";
@@ -239,7 +239,7 @@ public final class TerraTheme extends Theme {
 
     private void load(URL location) {
         if (location == null) {
-            throw new IllegalArgumentException("location URL is null");
+            throw new IllegalArgumentException("Location URL is null");
         }
 
         try {
@@ -260,7 +260,7 @@ public final class TerraTheme extends Theme {
 
                 colorMultiplier = ((Double) properties.get("colorMultiplier")).floatValue();
 
-                themeDark = ((Boolean) properties.get("themeIsDark")).booleanValue();
+                themeIsDark = ((Boolean) properties.get("themeIsDark")).booleanValue();
 
                 for (String colorCode : colorCodes) {
                     Color baseColor = Color.decode(colorCode);
@@ -321,7 +321,7 @@ public final class TerraTheme extends Theme {
     @Override
     public void setFont(Font font) {
         if (font == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Font is null.");
         }
 
         this.font = font;
@@ -344,7 +344,7 @@ public final class TerraTheme extends Theme {
      */
     public void setColor(int index, Color color) {
         if (color == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Color is null.");
         }
 
         colors.update(index, color);
@@ -367,7 +367,7 @@ public final class TerraTheme extends Theme {
      */
     public void setBaseColor(int index, Color baseColor) {
         if (baseColor == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Base color is null.");
         }
 
         int offset = index * 3;
@@ -405,7 +405,7 @@ public final class TerraTheme extends Theme {
      */
     @Override
     public boolean isThemeDark() {
-        return themeDark;
+        return themeIsDark;
     }
 
     /**
@@ -427,7 +427,7 @@ public final class TerraTheme extends Theme {
      */
     public void setMessageIcon(MessageType messageType, Image messageIcon) {
         if (messageType == null || messageIcon == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Argument is null.");
         }
 
         messageIcons.put(messageType, messageIcon);
@@ -452,7 +452,7 @@ public final class TerraTheme extends Theme {
      */
     public void setSmallMessageIcon(MessageType messageType, Image smallMessageIcon) {
         if (messageType == null || smallMessageIcon == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Argument is null.");
         }
 
         smallMessageIcons.put(messageType, smallMessageIcon);
@@ -461,10 +461,10 @@ public final class TerraTheme extends Theme {
     /**
      * Returns a brighter version of the specified color. Specifically, it
      * increases the brightness (in the HSB color model) by the
-     * <tt>colorMultiplier</tt> factor and <tt>themeDark</tt> flag already set.
+     * <tt>colorMultiplier</tt> factor and <tt>themeIsDark</tt> flag already set.
      */
     public static Color brighten(Color color) {
-        if (themeDark == false) {
+        if (!themeIsDark) {
             return ColorUtilities.adjustBrightness(color, colorMultiplier);
         }
         return ColorUtilities.adjustBrightness(color, (colorMultiplier * -1.0f));
@@ -476,7 +476,7 @@ public final class TerraTheme extends Theme {
      * <tt>colorMultiplier</tt> factor and <tt>themeDark</tt> flag already set.
      */
     public static Color darken(Color color) {
-        if (themeDark == false) {
+        if (!themeIsDark) {
             return ColorUtilities.adjustBrightness(color, (colorMultiplier * -1.0f));
         }
         return ColorUtilities.adjustBrightness(color, colorMultiplier);
