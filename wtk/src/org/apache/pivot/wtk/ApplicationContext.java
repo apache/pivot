@@ -1121,7 +1121,7 @@ public abstract class ApplicationContext {
                                                     && dragSource.getOffset() == null) {
                                                     throw new IllegalStateException(
                                                         "Drag offset is required when a "
-                                                            + " respresentation is specified.");
+                                                            + " representation is specified.");
                                                 }
 
                                                 if (display.isMouseOver()) {
@@ -1827,8 +1827,8 @@ public abstract class ApplicationContext {
      * optionally waits for the task to complete.
      *
      * @param callback The task to execute.
-     * @param wait If <tt>true</tt>, does not return until the task has executed.
-     * Otherwise, returns immediately.
+     * @param wait If <tt>true</tt>, does not return until the task has
+     * executed. Otherwise, returns immediately.
      */
     public static QueuedCallback queueCallback(Runnable callback, boolean wait) {
         QueuedCallback queuedCallback = new QueuedCallback(callback);
