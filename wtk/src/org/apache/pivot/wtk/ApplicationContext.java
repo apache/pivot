@@ -2006,7 +2006,7 @@ public abstract class ApplicationContext {
         return cursor;
     }
 
-    protected static void handleUncaughtException(Exception exception) {
+    public static void handleUncaughtException(Exception exception) {
         int n = 0;
         for (Application application : applications) {
             if (application instanceof Application.UncaughtExceptionHandler) {
