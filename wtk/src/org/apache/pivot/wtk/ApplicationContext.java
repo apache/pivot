@@ -1127,7 +1127,7 @@ public abstract class ApplicationContext {
                                                 if (dragSource.getRepresentation() != null
                                                     && dragSource.getOffset() == null) {
                                                     throw new IllegalStateException("Drag offset is required when a "
-                                                        + " respresentation is specified.");
+                                                        + " representation is specified.");
                                                 }
 
                                                 if (display.isMouseOver()) {
