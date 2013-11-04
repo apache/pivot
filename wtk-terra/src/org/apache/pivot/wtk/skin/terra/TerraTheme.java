@@ -321,7 +321,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Sets the theme's font.
-     *
+     * 
      * @param font the font
      */
     @Override
@@ -334,21 +334,33 @@ public final class TerraTheme extends Theme {
     }
 
     /**
-     * Gets a value from the theme's color palette.
-     *
-     * @param index
+     * Gets a value from the theme's complete color palette (including derived
+     * colors, if any).
+     * 
+     * @param index the index of the color, starting from 0
      */
+    @Override
     public Color getColor(int index) {
+        if (index < 0 || index > getNumberOfColors()) {
+            throw new IllegalArgumentException("Wrong Color index.");
+        }
+
         return colors.get(index);
     }
 
     /**
-     * Sets a value in the theme's color palette.
-     *
-     * @param index
-     * @param color
+     * Sets a value in the theme's complete color palette (including derived
+     * colors, if any).
+     * 
+     * @param index the index of the color, starting from 0
+     * @param color the color to set
      */
+    @Override
     public void setColor(int index, Color color) {
+        if (index < 0 || index > getNumberOfColors()) {
+            throw new IllegalArgumentException("Wrong Color index.");
+        }
+
         if (color == null) {
             throw new IllegalArgumentException("Color is null.");
         }
@@ -357,21 +369,31 @@ public final class TerraTheme extends Theme {
     }
 
     /**
-     * Gets a base color from the theme's color palette.
-     *
-     * @param index
+     * Gets a color from the theme's base color palette.
+     * 
+     * @param index the index of the color, starting from 0
      */
+    @Override
     public Color getBaseColor(int index) {
+        if (index < 0 || index > numberOfPaletteColors) {
+            throw new IllegalArgumentException("Wrong Color index.");
+        }
+
         return colors.get(index * 3 + 1);
     }
 
     /**
-     * Sets a base color in the theme's color palette.
-     *
-     * @param index
-     * @param baseColor
+     * Sets a color in the theme's base color palette.
+     * 
+     * @param index the index of the color, starting from 0
+     * @param baseColor the color to set
      */
+    @Override
     public void setBaseColor(int index, Color baseColor) {
+        if (index < 0 || index > numberOfPaletteColors) {
+            throw new IllegalArgumentException("Wrong Color index.");
+        }
+
         if (baseColor == null) {
             throw new IllegalArgumentException("Base color is null.");
         }
@@ -383,9 +405,9 @@ public final class TerraTheme extends Theme {
     }
 
     /**
-     * Gets the number of Palette Colors
-     *
-     * @return the number
+     * Gets the number of Palette Colors.
+     * 
+     * @return the number of colors in the base palette
      */
     @Override
     public int getNumberOfPaletteColors() {
@@ -393,8 +415,8 @@ public final class TerraTheme extends Theme {
     }
 
     /**
-     * Gets the total number of Colors (including derived colors if any)
-     *
+     * Gets the total number of Colors (including derived colors, if any).
+     * 
      * @return the number
      */
     @Override
@@ -406,7 +428,7 @@ public final class TerraTheme extends Theme {
      * Tell if the theme is dark.<br/> Usually this means that (if true) any
      * color will be transformed in the opposite way (brightening instead of
      * darkening, and darkening instead of brightening).
-     *
+     * 
      * @return true if dark, false otherwise
      */
     @Override
@@ -417,7 +439,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets the image that this theme uses to represent messages of the
      * specified type.
-     *
+     * 
      * @param messageType
      */
     public Image getMessageIcon(MessageType messageType) {
@@ -427,7 +449,7 @@ public final class TerraTheme extends Theme {
     /**
      * Sets the image that this theme uses to represent messages of the
      * specified type.
-     *
+     * 
      * @param messageType
      * @param messageIcon
      */
@@ -442,7 +464,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets the small image that this theme uses to represent messages of the
      * specified type.
-     *
+     * 
      * @param messageType
      */
     public Image getSmallMessageIcon(MessageType messageType) {
@@ -452,7 +474,7 @@ public final class TerraTheme extends Theme {
     /**
      * Sets the small image that this theme uses to represent messages of the
      * specified type.
-     *
+     * 
      * @param messageType
      * @param smallMessageIcon
      */
@@ -467,7 +489,8 @@ public final class TerraTheme extends Theme {
     /**
      * Returns a brighter version of the specified color. Specifically, it
      * increases the brightness (in the HSB color model) by the
-     * <tt>colorMultiplier</tt> factor and <tt>themeIsDark</tt> flag already set.
+     * <tt>colorMultiplier</tt> factor and <tt>themeIsDark</tt> flag already
+     * set.
      */
     public static Color brighten(Color color) {
         if (!themeIsDark) {

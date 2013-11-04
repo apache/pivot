@@ -49,7 +49,6 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.NumericSpinnerData;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
-import org.apache.pivot.wtk.skin.terra.TerraTheme;
 
 public class ColorSchemeBuilderWindow extends Window implements Bindable {
     @BXML
@@ -68,7 +67,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         createColorPalette();
 
         int numberOfPaletteColors = getNumberOfPaletteColors();
@@ -126,9 +125,9 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                     blueSpinner.setSelectedItem(selectedColor.getBlue());
 
                     // Update the theme
-                    TerraTheme terraThemeLocal = (TerraTheme) Theme.getTheme();
+                    Theme themeLocal = Theme.getTheme();
                     int iLocal = colorChooserButtons.indexOf(colorChooserButtonArgument);
-                    terraThemeLocal.setBaseColor(iLocal,
+                    themeLocal.setBaseColor(iLocal,
                         colorChooserButtons.get(iLocal).getSelectedColor());
 
                     // Update the palette
@@ -162,8 +161,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             blueSpinner.getSpinnerSelectionListeners().add(spinnerSelectionListener);
 
             // Initialize the button color with the theme default
-            themeOriginalColors.add(terraTheme.getBaseColor(i));
-            colorChooserButton.setSelectedColor(terraTheme.getBaseColor(i));
+            themeOriginalColors.add(theme.getBaseColor(i));
+            colorChooserButton.setSelectedColor(theme.getBaseColor(i));
         }
 
         copyToClipboardButton.getButtonPressListeners().add(new ButtonPressListener() {
@@ -185,8 +184,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
     }
 
     private int getNumberOfPaletteColors() {
-        TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
-        return terraTheme.getNumberOfPaletteColors();
+        Theme theme = Theme.getTheme();
+        return theme.getNumberOfPaletteColors();
     }
 
     private void createColorPalette() {
@@ -214,12 +213,12 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         Border border = new Border();
         border.getStyles().put("backgroundColor", index);
 
-        TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
 
         Label label = new Label();
         label.setText(Integer.toString(index));
         label.getStyles().put("font", "{size:'80%'}");
-        label.getStyles().put("backgroundColor", terraTheme.getColor(4));
+        label.getStyles().put("backgroundColor", theme.getColor(4));
         label.getStyles().put("padding", 1);
 
         BoxPane boxPane = new BoxPane();
