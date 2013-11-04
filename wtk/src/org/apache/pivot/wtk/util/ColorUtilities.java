@@ -33,6 +33,10 @@ public final class ColorUtilities {
      * Returns a brighter version of the specified color. Specifically, it
      * increases the brightness (in the HSB color model) by the given
      * <tt>adjustment</tt> factor (usually in the range ]0 .. 1[).
+     * 
+     * @param color the color
+     * @param adjustment the adjustment factor
+     * @return the color brightened
      */
     public static Color brighten(final Color color, final float adjustment) {
         return adjustBrightness(color, adjustment);
@@ -42,16 +46,81 @@ public final class ColorUtilities {
      * Returns a darker version of the specified color. Specifically, it
      * decreases the brightness (in the HSB color model) by the given
      * <tt>adjustment</tt> factor (usually in the range ]0 .. 1[).
+     * 
+     * @param color the color
+     * @param adjustment the adjustment factor
+     * @return the color darkened
      */
     public static Color darken(final Color color, final float adjustment) {
         return adjustBrightness(color, (adjustment * -1.0f));
     }
 
+    /**
+     * Change the brightness of the given color, and returns the changes color.
+     * 
+     * @param color the color
+     * @param adjustment the adjustment factor (usually in the range ]0 .. 1[)
+     * @return the new color
+     */
     public static Color adjustBrightness(final Color color, final float adjustment) {
         float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
         hsb[2] = Math.min(Math.max(hsb[2] + adjustment, 0f), 1f);
         int rgb = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
         return new Color((color.getAlpha() << 24) | (rgb & 0xffffff), true);
+    }
+
+    /**
+     * Returns a numeric version of the difference of all color RGB components.
+     * 
+     * @param color1 the first color
+     * @param color2 the second color
+     * @return the value of the difference
+     */
+    public static int colorDifferenceRGBTotal(final Color color1, final Color color2) {
+        return Math.abs(color1.getRed() - color2.getRed())
+            + Math.abs(color1.getGreen() - color2.getGreen())
+            + Math.abs(color1.getBlue() - color2.getBlue());
+    }
+
+    /**
+     * Returns a numeric version of the difference of all color RGB components.
+     * 
+     * @param color1 the first color
+     * @param color2 the second color
+     * @return an array of three elements, containing a value of the difference
+     * for any channel (red, green, blue), with values in the usual RGB range
+     */
+    public static int[] colorDifferenceRGB(final Color color1, final Color color2) {
+        int[] difference = new int[3];
+
+        difference[0] = Math.abs(color1.getRed() - color2.getRed());
+        difference[1] = Math.abs(color1.getGreen() - color2.getGreen());
+        difference[2] = Math.abs(color1.getBlue() - color2.getBlue());
+
+        return difference;
+    }
+
+    /**
+     * Returns a numeric version of the difference of all color in HSV
+     * components.
+     * 
+     * @param color1 the first color
+     * @param color2 the second color
+     * @return an array of three elements, containing a value of the difference
+     * for any channel (hue, saturation, brightness), with values in the usual
+     * HSV range
+     */
+    public static float[] colorDifferenceHSV(final Color color1, final Color color2) {
+        float[] difference = new float[3];
+
+        float[] hsb1 = Color.RGBtoHSB(color1.getRed(), color1.getGreen(), color1.getBlue(), null);
+        float[] hsb2 = Color.RGBtoHSB(color2.getRed(), color2.getGreen(), color2.getBlue(), null);
+
+        difference[0] = Math.abs(hsb1[0] - hsb2[0]);
+        difference[1] = Math.abs(hsb1[1] - hsb2[1]);
+        difference[2] = Math.abs(hsb1[2] - hsb2[2]);
+
+        return difference;
     }
 
 }
