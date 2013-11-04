@@ -32,21 +32,20 @@ import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.skin.terra.TerraTheme;
 
 public class ColorPaletteTest extends Application.Adapter {
     private Window window = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        TerraTheme terraTheme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
 
         TablePane tablePane = new TablePane();
         tablePane.getColumns().add(new TablePane.Column(1, true));
         tablePane.getColumns().add(new TablePane.Column(1, true));
         tablePane.getColumns().add(new TablePane.Column(1, true));
 
-        int numberOfPaletteColors = terraTheme.getNumberOfPaletteColors();
+        int numberOfPaletteColors = theme.getNumberOfPaletteColors();
         // ArrayList<String> colors = new ArrayList<>(numberOfPaletteColors);
         for (int i = 0; i < numberOfPaletteColors; i++) {
             TablePane.Row row = new TablePane.Row(1, true);
