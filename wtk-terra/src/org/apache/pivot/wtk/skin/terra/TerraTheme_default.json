@@ -18,6 +18,8 @@
 
     colorMultiplier: 0.1,
 
+    themeIsDark: false,
+
     colors: [
         "#000000",
         "#ffffff",
