@@ -112,9 +112,16 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
 
         bxmlSerializer.bind(this, TerraVFSBrowserSheetSkin.class);
 
-        // set the same rootDirectory to fileBrowser
+        // set the same rootDirectory as the component
         try {
             fileBrowser.setRootDirectory(fileBrowserSheet.getRootDirectory());
+        } catch (FileSystemException fse) {
+            throw new RuntimeException(fse);
+        }
+
+        // set the same homeDirectory as the component
+        try {
+            fileBrowser.setHomeDirectory(fileBrowserSheet.getHomeDirectory());
         } catch (FileSystemException fse) {
             throw new RuntimeException(fse);
         }
@@ -143,6 +150,19 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
 
                 selectedDirectoryCount = 0;
                 updateOKButtonState();
+            }
+
+            @Override
+            public void homeDirectoryChanged(VFSBrowser fileBrowserArgument,
+                FileObject previousHomeDirectory) {
+                updatingSelection = true;
+
+                try {
+                    fileBrowserSheet.setHomeDirectory(fileBrowserArgument.getHomeDirectory());
+                } catch (FileSystemException fse) {
+                    throw new RuntimeException(fse);
+                }
+                updatingSelection = false;
             }
 
             @Override
@@ -239,6 +259,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
         fileBrowserSheet.getFileBrowserSheetListeners().add(this);
 
         modeChanged(fileBrowserSheet, null);
+        homeDirectoryChanged(fileBrowserSheet, null);
         rootDirectoryChanged(fileBrowserSheet, null);
         selectedFilesChanged(fileBrowserSheet, null);
     }
@@ -445,6 +466,18 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
         if (!updatingSelection) {
             try {
                 fileBrowser.setRootDirectory(fileBrowserSheet.getRootDirectory());
+            } catch (FileSystemException fse) {
+                throw new RuntimeException(fse);
+            }
+        }
+    }
+
+    @Override
+    public void homeDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
+        FileObject previousHomeDirectory) {
+        if (!updatingSelection) {
+            try {
+                fileBrowser.setHomeDirectory(fileBrowserSheet.getHomeDirectory());
             } catch (FileSystemException fse) {
                 throw new RuntimeException(fse);
             }

@@ -64,6 +64,13 @@ public class VFSBrowser extends Container {
         }
 
         @Override
+        public void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory) {
+            for (VFSBrowserListener listener : this) {
+                listener.homeDirectoryChanged(fileBrowser, previousHomeDirectory);
+            }
+        }
+
+        @Override
         public void selectedFileAdded(VFSBrowser fileBrowser, FileObject file) {
             for (VFSBrowserListener listener : this) {
                 listener.selectedFileAdded(fileBrowser, file);
@@ -104,6 +111,7 @@ public class VFSBrowser extends Container {
     private FileSystemManager manager;
     private FileName baseFileName;
     private FileObject rootDirectory;
+    private FileObject homeDirectory;
     private FileObjectList selectedFiles = new FileObjectList();
     private boolean multiSelect = false;
     private Filter<FileObject> disabledFileFilter = null;
@@ -111,11 +119,11 @@ public class VFSBrowser extends Container {
     private FileBrowserListenerList fileBrowserListeners = new FileBrowserListenerList();
 
     /**
-     * Creates a new VFSBrowser <p> Note that this version set by default mode
-     * to open.
+     * Creates a new VFSBrowser <p> Note that this version sets, by default,
+     * the mode to open.
      */
     public VFSBrowser() throws FileSystemException {
-        this(null, USER_HOME);
+        this(null, USER_HOME, null);
     }
 
     /**
@@ -125,26 +133,12 @@ public class VFSBrowser extends Container {
      *
      * @param manager The virtual file system we're going to manage.
      * @param rootFolder The root folder full name.
+     * @param homeFolder The default home folder full name.
      */
-    public VFSBrowser(FileSystemManager manager, URI rootFolder) throws FileSystemException {
-        if (rootFolder == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (manager == null) {
-            this.manager = VFS.getManager();
-        } else {
-            this.manager = manager;
-        }
-        FileObject baseFile = this.manager.getBaseFile();
-        if (baseFile != null) {
-            baseFileName = baseFile.getName();
-        }
-        rootDirectory = this.manager.resolveFile(rootFolder);
-        if (rootDirectory.getType() != FileType.FOLDER) {
-            throw new IllegalArgumentException();
-        }
-        installSkin(VFSBrowser.class);
+    public VFSBrowser(FileSystemManager manager, URI rootFolder, URI homeFolder) throws FileSystemException {
+        this(manager,
+            rootFolder == null ? null : rootFolder.toString(),
+            homeFolder == null ? null : homeFolder.toString());
     }
 
     /**
@@ -153,25 +147,20 @@ public class VFSBrowser extends Container {
      *
      * @param manager The virtual file system we're going to manage.
      * @param rootFolder The root folder full name.
+     * @param homeFolder The home folder full name.
      */
-    public VFSBrowser(FileSystemManager manager, String rootFolder) throws FileSystemException {
+    public VFSBrowser(FileSystemManager manager, String rootFolder, String homeFolder) throws FileSystemException {
         if (rootFolder == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Root folder is null.");
         }
 
-        if (manager == null) {
-            this.manager = VFS.getManager();
-        } else {
-            this.manager = manager;
-        }
-        FileObject baseFile = this.manager.getBaseFile();
-        if (baseFile != null) {
-            baseFileName = baseFile.getName();
-        }
-        rootDirectory = this.manager.resolveFile(rootFolder);
-        if (rootDirectory.getType() != FileType.FOLDER) {
-            throw new IllegalArgumentException();
-        }
+        // Note: these methods all could trigger events, but since we're
+        // in the constructor and the skin isn't set yet, there will not
+        // be any listeners registered yet
+        setManager(manager);
+        setRootDirectory(rootFolder);
+        setHomeDirectory(homeFolder == null ? USER_HOME.toString() : homeFolder);
+
         installSkin(VFSBrowser.class);
     }
 
@@ -182,6 +171,24 @@ public class VFSBrowser extends Container {
      */
     public FileSystemManager getManager() {
         return manager;
+    }
+
+    public void setManager(FileSystemManager manager) throws FileSystemException {
+        FileSystemManager previousManager = this.manager;
+
+        if (manager == null) {
+            this.manager = VFS.getManager();
+        } else {
+            this.manager = manager;
+        }
+        FileObject baseFile = this.manager.getBaseFile();
+        if (baseFile != null) {
+            baseFileName = baseFile.getName();
+        }
+
+        if (previousManager != null && previousManager != this.manager) {
+            fileBrowserListeners.managerChanged(this, previousManager);
+        }
     }
 
     /**
@@ -209,8 +216,17 @@ public class VFSBrowser extends Container {
      * @param rootDirectory
      */
     public void setRootDirectory(FileObject rootDirectory) throws FileSystemException {
-        if (rootDirectory == null || rootDirectory.getType() != FileType.FOLDER) {
-            throw new IllegalArgumentException();
+        if (rootDirectory == null) {
+            throw new IllegalArgumentException("Root directory is null.");
+        }
+
+        // Give some grace to set the root folder to an actual file and
+        // have it work (by using the parent folder instead)
+        if (rootDirectory.getType() != FileType.FOLDER) {
+            rootDirectory = rootDirectory.getParent();
+            if (rootDirectory == null || rootDirectory.getType() != FileType.FOLDER) {
+                throw new IllegalArgumentException("Root file is not a directory.");
+            }
         }
 
         if (rootDirectory.exists()) {
@@ -223,6 +239,53 @@ public class VFSBrowser extends Container {
             }
         } else {
             setRootDirectory(rootDirectory.getParent());
+        }
+    }
+
+    /**
+     * Returns the current home directory.
+     */
+    public FileObject getHomeDirectory() {
+        return homeDirectory;
+    }
+
+    /**
+     * Sets the home directory from a string.
+     *
+     * @param homeDirectory
+     */
+    public void setHomeDirectory(String homeDirectory) throws FileSystemException {
+        setHomeDirectory(manager.resolveFile(homeDirectory));
+    }
+
+    /**
+     * Sets the home directory.
+     *
+     * @param homeDirectory
+     */
+    public void setHomeDirectory(FileObject homeDirectory) throws FileSystemException {
+        if (homeDirectory == null) {
+            throw new IllegalArgumentException("Home directory is null.");
+        }
+
+        // Give some grace to set the home folder to an actual file and
+        // have it work (by using the parent folder instead)
+        if (homeDirectory.getType() != FileType.FOLDER) {
+            homeDirectory = homeDirectory.getParent();
+            if (homeDirectory == null || homeDirectory.getType() != FileType.FOLDER) {
+                throw new IllegalArgumentException("Home file is not a directory.");
+            }
+        }
+
+        if (homeDirectory.exists()) {
+            FileObject previousHomeDirectory = this.homeDirectory;
+
+            if (!homeDirectory.equals(previousHomeDirectory)) {
+                this.homeDirectory = homeDirectory;
+                fileBrowserListeners.homeDirectoryChanged(this, previousHomeDirectory);
+            }
+        } else {
+            setHomeDirectory(homeDirectory.getParent());
         }
     }
 

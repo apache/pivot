@@ -70,6 +70,14 @@ public class VFSBrowserSheet extends Sheet {
         }
 
         @Override
+        public void homeDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
+            FileObject previousHomeDirectory) {
+            for (VFSBrowserSheetListener listener : this) {
+                listener.homeDirectoryChanged(fileBrowserSheet, previousHomeDirectory);
+            }
+        }
+
+        @Override
         public void selectedFilesChanged(VFSBrowserSheet fileBrowserSheet,
             Sequence<FileObject> previousSelectedFiles) {
             for (VFSBrowserSheetListener listener : this) {
@@ -90,6 +98,7 @@ public class VFSBrowserSheet extends Sheet {
     private FileSystemManager manager;
     private FileName baseFileName;
     private FileObject rootDirectory;
+    private FileObject homeDirectory;
     private FileObjectList selectedFiles = new FileObjectList();
     private Filter<FileObject> disabledFileFilter = null;
 
@@ -138,6 +147,31 @@ public class VFSBrowserSheet extends Sheet {
      */
     public VFSBrowserSheet(FileSystemManager manager, Mode mode, String rootFolder)
         throws FileSystemException {
+        this(manager, mode, rootFolder, null);
+    }
+
+    /**
+     * Creates a new VFSBrowserSheet
+     * <p>
+     * Note that this version of the constructor must be used when a custom home folder has to be set.
+     *
+     * @param manager
+     * The VFS FileSystemManager that we will be browsing.  If <tt>null</tt> the default (local) will
+     * be used.
+     *
+     * @param mode
+     * The mode for opening the sheet.
+     * @see Mode
+     *
+     * @param rootFolder
+     * The root folder full name.
+     *
+     * @param homeFolder
+     * The default for the "home" folder (full name).
+     */
+    public VFSBrowserSheet(FileSystemManager manager, Mode mode, String rootFolder, String homeFolder)
+            throws FileSystemException
+    {
         if (mode == null) {
             throw new IllegalArgumentException("Mode is null.");
         }
@@ -146,11 +180,14 @@ public class VFSBrowserSheet extends Sheet {
             throw new IllegalArgumentException("Root folder is null.");
         }
 
-        setManager(manager);
-
         this.mode = mode;
 
-        setRootFolder(rootFolder);
+        // Note: these three methods all could trigger events, but since we're
+        // in the constructor and the skin isn't set yet, there will not be any
+        // listeners registered yet
+        setManager(manager);
+        setRootDirectory(rootFolder);
+        setHomeDirectory(homeFolder == null ? USER_HOME : homeFolder);
 
         installSkin(VFSBrowserSheet.class);
     }
@@ -202,31 +239,13 @@ public class VFSBrowserSheet extends Sheet {
         return rootDirectory;
     }
 
-    // set the root folder but without firing events
-    public void setRootFolder(String rootFolder) throws FileSystemException {
-        if (rootFolder == null) {
-            throw new IllegalArgumentException("Root folder is null.");
-        }
-
-        // Give some grace to set the root folder to an actual file and
-        // have it work (by using the parent folder instead)
-        rootDirectory = manager.resolveFile(rootFolder);
-        if (rootDirectory.getType() != FileType.FOLDER) {
-            rootDirectory = rootDirectory.getParent();
-            if (rootDirectory == null || rootDirectory.getType() != FileType.FOLDER) {
-                throw new IllegalArgumentException("Root file is not a directory.");
-            }
-        }
-
-    }
-
     public void setRootDirectory(String rootDirectory) throws FileSystemException {
         setRootDirectory(manager.resolveFile(rootDirectory));
     }
 
     public void setRootDirectory(FileObject rootDirectory) throws FileSystemException {
         if (rootDirectory == null) {
-            throw new IllegalArgumentException("Root file is null.");
+            throw new IllegalArgumentException("Root directory is null.");
         }
 
         // Give some grace to set the root folder to an actual file and
@@ -248,6 +267,44 @@ public class VFSBrowserSheet extends Sheet {
             }
         } else {
             setRootDirectory(rootDirectory.getParent());
+        }
+    }
+
+    public FileObject getHomeDirectory() {
+        return homeDirectory;
+    }
+
+    public void setHomeDirectory(String homeDirectory)
+            throws FileSystemException
+    {
+        setHomeDirectory(manager.resolveFile(homeDirectory));
+    }
+
+    public void setHomeDirectory(FileObject homeDirectory)
+            throws FileSystemException
+    {
+        if (homeDirectory == null) {
+            throw new IllegalArgumentException("Home file is null.");
+        }
+
+        // Give some grace to set the home folder to an actual file and
+        // have it work (by using the parent folder instead)
+        if (homeDirectory.getType() != FileType.FOLDER) {
+            homeDirectory = homeDirectory.getParent();
+            if (homeDirectory == null || homeDirectory.getType() != FileType.FOLDER) {
+                throw new IllegalArgumentException("Root file is not a directory.");
+            }
+        }
+
+        if (homeDirectory.exists()) {
+            FileObject previousHomeDirectory = this.homeDirectory;
+
+            if (!homeDirectory.equals(previousHomeDirectory)) {
+                this.homeDirectory = homeDirectory;
+                fileBrowserSheetListeners.homeDirectoryChanged(this, previousHomeDirectory);
+            }
+        } else {
+            setHomeDirectory(homeDirectory.getParent());
         }
     }
 

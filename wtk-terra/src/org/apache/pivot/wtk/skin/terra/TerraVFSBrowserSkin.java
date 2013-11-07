@@ -90,8 +90,6 @@ import org.apache.pivot.wtk.skin.VFSBrowserSkin;
  */
 public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
-    public static final String HOME_DIRECTORY = System.getProperty("user.home");
-
     /**
      * Abstract renderer for displaying file system contents.
      */
@@ -135,19 +133,23 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             validate();
         }
 
+        private static VFSBrowser getBrowser(Component component) {
+            Component parent = component;
+            while (!(parent instanceof VFSBrowser)) {
+                parent = parent.getParent();
+            }
+            return (VFSBrowser)parent;
+        }
+
         /**
          * Obtains the icon to display for a given file.
          *
          * @param file
          */
-        public static Image getIcon(FileObject file) {
+        public static Image getIcon(FileObject file, Component component) {
             Image icon;
             if (file.getName().getType() == FileType.FOLDER) {
-                // TODO: should this check be the full URI? What about remote
-                // file systems?
-                // seems like it should be the original home directory, and not
-                // the local file system home
-                icon = file.getName().getPath().equals(HOME_DIRECTORY) ? HOME_FOLDER_IMAGE
+                icon = file.equals(getBrowser(component).getHomeDirectory()) ? HOME_FOLDER_IMAGE
                     : FOLDER_IMAGE;
             } else {
                 icon = FILE_IMAGE;
@@ -171,13 +173,13 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                 FileObject file = (FileObject) data;
 
                 // Update the image view
-                imageView.setImage(getIcon(file));
+                imageView.setImage(getIcon(file, button));
                 imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
 
                 // Update the label
                 String text = file.getName().getBaseName();
                 if (text.length() == 0) {
-                    text = System.getProperty("file.separator");
+                    text = FileName.ROOT_PATH;
                 }
 
                 label.setText(text);
@@ -189,7 +191,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             FileObject file = (FileObject) item;
             String text = file.getName().getBaseName();
             if (text.length() == 0) {
-                text = System.getProperty("file.separator");
+                text = FileName.ROOT_PATH;
             }
 
             return text;
@@ -231,12 +233,11 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                 FileObject file = (FileObject) item;
 
                 // Update the image view
-                imageView.setImage(getIcon(file));
+                imageView.setImage(getIcon(file, listView));
                 imageView.getStyles().put("opacity",
                     (listView.isEnabled() && !disabled) ? 1.0f : 0.5f);
 
                 // Update the label
-                // TODO: should this be the full path or the base name?
                 String text = file.getName().getBaseName();
                 if (text.length() == 0) {
                     text = FileName.ROOT_PATH;
@@ -286,7 +287,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                     FileType type = file.getType();
                     if (columnName.equals(NAME_KEY)) {
                         text = file.getName().getBaseName();
-                        icon = getIcon(file);
+                        icon = getIcon(file, tableView);
                         getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
                     } else if (columnName.equals(SIZE_KEY)) {
                         if (type == FileType.FOLDER || type == FileType.IMAGINARY) {
@@ -784,6 +785,8 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
     private RefreshFileListTask refreshFileListTask = null;
 
+    private FileObject homeDirectory = null;
+
     private static final FileFilter HIDDEN_FILE_FILTER = new FileFilter() {
         @Override
         public boolean accept(FileSelectInfo fileInfo) {
@@ -814,6 +817,8 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         fileBrowser.add(content);
 
         bxmlSerializer.bind(this, TerraVFSBrowserSkin.class);
+
+        homeDirectory = fileBrowser.getHomeDirectory();
 
         driveListButton.getListButtonSelectionListeners().add(
             new ListButtonSelectionListener.Adapter() {
@@ -875,9 +880,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             @Override
             public void buttonPressed(Button button) {
                 try {
-                    // TODO: should this be the remote file system's home and
-                    // not the local home?
-                    fileBrowser.setRootDirectory(HOME_DIRECTORY);
+                    fileBrowser.setRootDirectory(fileBrowser.getHomeDirectory());
                 } catch (FileSystemException fse) {
                     throw new RuntimeException(fse);
                 }
@@ -1232,7 +1235,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
         goUpButton.setEnabled(pathListButton.isEnabled());
 
-        goHomeButton.setEnabled(!rootDirectory.getName().getPath().equals(HOME_DIRECTORY));
+        goHomeButton.setEnabled(!rootDirectory.equals(homeDirectory));
 
         fileScrollPane.setScrollTop(0);
         fileScrollPane.setScrollLeft(0);
@@ -1240,6 +1243,14 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         searchTextInput.setText("");
 
         fileTableView.requestFocus();
+    }
+
+    @Override
+    public void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory) {
+        this.homeDirectory = fileBrowser.getHomeDirectory();
+        goHomeButton.setEnabled(!fileBrowser.getRootDirectory().equals(homeDirectory));
+        // Refresh the list in order to redo the icons correctly
+        refreshFileList();
     }
 
     @Override

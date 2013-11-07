@@ -47,6 +47,12 @@ public interface VFSBrowserSheetListener {
         }
 
         @Override
+        public void homeDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
+            FileObject previousHomeDirectory) {
+            // empty block
+        }
+
+        @Override
         public void selectedFilesChanged(VFSBrowserSheet fileBrowserSheet,
             Sequence<FileObject> previousSelectedFiles) {
             // empty block
@@ -84,6 +90,16 @@ public interface VFSBrowserSheetListener {
      */
     public void rootDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
         FileObject previousRootDirectory);
+
+    /**
+     * Called when a file browser sheet's home directory has changed.
+     * <p> Usually this would only be when you browse to another file system.
+     *
+     * @param fileBrowserSheet
+     * @param previousHomeDirectory
+     */
+    public void homeDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
+        FileObject previousHomeDirectory);
 
     /**
      * Called when a file browser sheet's selection state has been reset.

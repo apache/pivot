@@ -40,6 +40,11 @@ public interface VFSBrowserListener {
         }
 
         @Override
+        public void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory) {
+            // empty block
+        }
+
+        @Override
         public void selectedFileAdded(VFSBrowser fileBrowser, FileObject file) {
             // empty block
         }
@@ -83,6 +88,14 @@ public interface VFSBrowserListener {
      * @param previousRootDirectory
      */
     public void rootDirectoryChanged(VFSBrowser fileBrowser, FileObject previousRootDirectory);
+
+    /**
+     * Called when a file browser's home directory has changed.
+     *
+     * @param fileBrowser
+     * @param previousHomeDirectory
+     */
+    public void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory);
 
     /**
      * Called when a file has been added to a file browser's selection.
