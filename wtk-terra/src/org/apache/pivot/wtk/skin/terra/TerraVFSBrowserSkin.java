@@ -96,6 +96,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     public static abstract class FileRenderer extends BoxPane {
         protected ImageView imageView = new ImageView();
         protected Label label = new Label();
+        protected VFSBrowser fileBrowser = null;
 
         public static final int ICON_WIDTH = 16;
         public static final int ICON_HEIGHT = 16;
@@ -133,12 +134,8 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             validate();
         }
 
-        private static VFSBrowser getBrowser(Component component) {
-            Component parent = component;
-            while (!(parent instanceof VFSBrowser)) {
-                parent = parent.getParent();
-            }
-            return (VFSBrowser)parent;
+        protected void setFileBrowser(VFSBrowser fileBrowser) {
+            this.fileBrowser = fileBrowser;
         }
 
         /**
@@ -146,10 +143,10 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
          *
          * @param file
          */
-        public static Image getIcon(FileObject file, Component component) {
+        public Image getIcon(FileObject file) {
             Image icon;
             if (file.getName().getType() == FileType.FOLDER) {
-                icon = file.equals(getBrowser(component).getHomeDirectory()) ? HOME_FOLDER_IMAGE
+                icon = file.equals(fileBrowser.getHomeDirectory()) ? HOME_FOLDER_IMAGE
                     : FOLDER_IMAGE;
             } else {
                 icon = FILE_IMAGE;
@@ -173,7 +170,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                 FileObject file = (FileObject) data;
 
                 // Update the image view
-                imageView.setImage(getIcon(file, button));
+                imageView.setImage(getIcon(file));
                 imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
 
                 // Update the label
@@ -233,7 +230,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                 FileObject file = (FileObject) item;
 
                 // Update the image view
-                imageView.setImage(getIcon(file, listView));
+                imageView.setImage(getIcon(file));
                 imageView.getStyles().put("opacity",
                     (listView.isEnabled() && !disabled) ? 1.0f : 0.5f);
 
@@ -287,7 +284,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                     FileType type = file.getType();
                     if (columnName.equals(NAME_KEY)) {
                         text = file.getName().getBaseName();
-                        icon = getIcon(file, tableView);
+                        icon = getIcon(file);
                         getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
                     } else if (columnName.equals(SIZE_KEY)) {
                         if (type == FileType.FOLDER || type == FileType.IMAGINARY) {
@@ -391,7 +388,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
         static {
             try {
-                DRIVE_IMAGE = Image.load(FileRenderer.class.getResource("drive.png"));
+                DRIVE_IMAGE = Image.load(DriveRenderer.class.getResource("drive.png"));
             } catch (TaskExecutionException exception) {
                 throw new RuntimeException(exception);
             }
@@ -817,6 +814,13 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         fileBrowser.add(content);
 
         bxmlSerializer.bind(this, TerraVFSBrowserSkin.class);
+
+        // Notify all the renderers of which component they are dealing with
+        ((FileRenderer)pathListButton.getDataRenderer()).setFileBrowser(fileBrowser);
+        ((FileRenderer)pathListButton.getItemRenderer()).setFileBrowser(fileBrowser);
+        for (TableView.Column col : fileTableView.getColumns()) {
+            ((FileRenderer)col.getCellRenderer()).setFileBrowser(fileBrowser);
+        }
 
         homeDirectory = fileBrowser.getHomeDirectory();
 
