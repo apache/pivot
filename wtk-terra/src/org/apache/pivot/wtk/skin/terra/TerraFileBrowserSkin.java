@@ -47,8 +47,10 @@ import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
+import org.apache.pivot.wtk.ComponentTooltipListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.GridPane;
@@ -72,8 +74,10 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.TaskAdapter;
+import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
+import org.apache.pivot.wtk.Tooltip;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.FileBrowserSkin;
@@ -901,6 +905,58 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         });
 
         fileTableView.setSort(TableViewFileRenderer.NAME_KEY, SortDirection.ASCENDING);
+        fileTableView.getComponentTooltipListeners().add(new ComponentTooltipListener() {
+
+            @Override
+            public void tooltipTriggered(Component component, int x, int y) {
+
+                // Check that we are on the first column.
+                if (fileTableView.getColumnAt(x) != 0) {
+                    return;
+                }
+
+                // Gets the underlying file
+                File file = (File) fileTableView.getTableData().get(fileTableView.getRowAt(y));
+
+                // Construct and show the tooltip.
+                final Tooltip tooltip = new Tooltip();
+
+                String text = null;
+
+                if (file != null){
+                    text = text = file.getName();
+                }
+
+                if (text == null || text.isEmpty()) {
+                    return;
+                }
+
+                TextArea toolTipTextArea = new TextArea();
+
+                toolTipTextArea.setText(text);
+                toolTipTextArea.getStyles().put("wrapText", true);
+
+                tooltip.setContent(toolTipTextArea);
+
+                Point location = component.getDisplay().getMouseLocation();
+                x = location.x;
+                y = location.y;
+
+                // Ensure that the tooltip stays on screen
+                Display display = component.getDisplay();
+                int tooltipHeight = tooltip.getPreferredHeight();
+                if (y + tooltipHeight > display.getHeight()) {
+                    y -= tooltipHeight;
+                }
+
+                int tooltipXOffset = 16;
+                int padding = 15;
+
+                toolTipTextArea.setMaximumWidth(display.getWidth() - ( x + tooltipXOffset + padding) );
+                tooltip.setLocation(x + tooltipXOffset, y);
+                tooltip.open(component.getWindow());
+            }
+        });
 
         rootDirectoryChanged(fileBrowser, null);
         selectedFilesChanged(fileBrowser, null);
