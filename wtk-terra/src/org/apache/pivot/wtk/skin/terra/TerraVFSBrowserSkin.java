@@ -53,8 +53,10 @@ import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
+import org.apache.pivot.wtk.ComponentTooltipListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.GridPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
@@ -78,8 +80,10 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.TaskAdapter;
+import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
+import org.apache.pivot.wtk.Tooltip;
 import org.apache.pivot.wtk.VFSBrowser;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
@@ -1053,7 +1057,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
         fileTableView.setSort(TableViewFileRenderer.NAME_KEY, SortDirection.ASCENDING);
         fileTableView.getComponentTooltipListeners().add(new ComponentTooltipListener() {
- 
+
             @Override
             public void tooltipTriggered(Component component, int x, int y) {
 
@@ -1098,7 +1102,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
                 int tooltipXOffset = 16;
                 int padding = 15;
-                
+
                 toolTipTextArea.setMaximumWidth(display.getWidth() - ( x + tooltipXOffset + padding) );
                 tooltip.setLocation(x + tooltipXOffset, y);
                 tooltip.open(component.getWindow());
