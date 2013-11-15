@@ -1052,6 +1052,59 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         });
 
         fileTableView.setSort(TableViewFileRenderer.NAME_KEY, SortDirection.ASCENDING);
+        fileTableView.getComponentTooltipListeners().add(new ComponentTooltipListener() {
+ 
+            @Override
+            public void tooltipTriggered(Component component, int x, int y) {
+
+                // Check that we are on the first column.
+                if (fileTableView.getColumnAt(x) != 0) {
+                    return;
+                }
+
+                // Gets the underlying file
+                FileObject file = (FileObject) fileTableView.getTableData().get(fileTableView.getRowAt(y));
+
+                // Construct and show the tooltip.
+                final Tooltip tooltip = new Tooltip();
+
+                String text = null;
+
+                if (file != null){
+                    text = file.getName().getBaseName();
+                }
+
+                if (text == null || text.isEmpty()) {
+                    return;
+                }
+
+                TextArea toolTipTextArea = new TextArea();
+
+                toolTipTextArea.setText(text);
+                toolTipTextArea.getStyles().put("wrapText", true);
+
+                tooltip.setContent(toolTipTextArea);
+
+                Point location = component.getDisplay().getMouseLocation();
+                x = location.x;
+                y = location.y;
+
+                // Ensure that the tooltip stays on screen
+                Display display = component.getDisplay();
+                int tooltipHeight = tooltip.getPreferredHeight();
+                if (y + tooltipHeight > display.getHeight()) {
+                    y -= tooltipHeight;
+                }
+
+                int tooltipXOffset = 16;
+                int padding = 15;
+                
+                toolTipTextArea.setMaximumWidth(display.getWidth() - ( x + tooltipXOffset + padding) );
+                tooltip.setLocation(x + tooltipXOffset, y);
+                tooltip.open(component.getWindow());
+            }
+        });
+
         rootDirectoryChanged(fileBrowser, null);
         selectedFilesChanged(fileBrowser, null);
     }
