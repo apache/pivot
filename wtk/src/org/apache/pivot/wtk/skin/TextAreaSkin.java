@@ -1126,7 +1126,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 int start;
                 int selectionStart = textArea.getSelectionStart();
                 int selectionLength = textArea.getSelectionLength();
-                if (ctrlPressed) {
+                if (commandPressed) {
                     // Move the caret to the beginning of the text
                     start = 0;
                 } else {
@@ -1155,7 +1155,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                 int selectionLength = textArea.getSelectionLength();
                 int index = selectionStart + selectionLength;
 
-                if (ctrlPressed) {
+                if (commandPressed) {
                     // Move the caret to end of the text
                     end = textArea.getCharacterCount();
                 } else {
