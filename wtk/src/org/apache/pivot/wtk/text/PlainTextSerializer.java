@@ -39,6 +39,9 @@ public class PlainTextSerializer implements Serializer<Document> {
     public static final String MIME_TYPE = "text/plain";
     public static final int BUFFER_SIZE = 2048;
 
+    private boolean expandTabs = false;
+    private int tabWidth = 4;
+
     public PlainTextSerializer() {
         this(Charset.defaultCharset());
     }
@@ -55,6 +58,35 @@ public class PlainTextSerializer implements Serializer<Document> {
         this.charset = charset;
     }
 
+    public int getTabWidth() {
+        return tabWidth;
+    }
+
+    public void setTabWidth(int tabWidth) {
+        if (tabWidth < 0) {
+            throw new IllegalArgumentException("tabWidth is negative.");
+        }
+
+        this.tabWidth = tabWidth;
+    }
+
+    public boolean getExpandTabs() {
+        return expandTabs;
+    }
+
+    /**
+     * Sets whether tab characters (<code>\t</code>) are expanded to an
+     * appropriate number of spaces while reading the text.
+     *
+     * @param expandTabs <code>true</code> to replace tab characters with space
+     * characters (depending on the setting of the {@link #getTabWidth} value)
+     * or <code>false</code> to leave tabs alone.
+     */
+    public void setExpandTabs(boolean expandTabs) {
+        this.expandTabs = expandTabs;
+    }
+
+
     @Override
     public Document readObject(InputStream inputStream) throws IOException {
         Reader reader = new InputStreamReader(inputStream, charset);
@@ -70,6 +102,18 @@ public class PlainTextSerializer implements Serializer<Document> {
 
         String line = bufferedReader.readLine();
         while (line != null) {
+            if (expandTabs) {
+                int ix = 0;
+                StringBuilder buf = new StringBuilder(line);
+                while ((ix = buf.indexOf("\t", ix)) >= 0) {
+                    buf.deleteCharAt(ix);
+                    int spaces = tabWidth - (ix % tabWidth);
+                    for (int j = 0; j < spaces; j++) {
+                        buf.insert(ix++, ' ');
+                    }
+                }
+                line = buf.toString();
+            }
             document.add(new Paragraph(line));
             line = bufferedReader.readLine();
         }

@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin;
 
 import java.util.Iterator;
 
+import org.apache.pivot.wtk.text.List;
 import org.apache.pivot.wtk.text.TextNode;
 
 class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
@@ -25,8 +26,8 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
     private TextNode indexTextNode;
     private TextPaneSkinTextNodeView indexTextNodeView;
 
-    public TextPaneSkinListItemView(org.apache.pivot.wtk.text.List.Item listItem) {
-        super(listItem);
+    public TextPaneSkinListItemView(TextPaneSkin textPaneSkin, List.Item listItem) {
+        super(textPaneSkin, listItem);
 
         this.indexTextNode = new TextNode("");
     }
@@ -36,7 +37,7 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
         super.attach();
 
         // add an extra TextNodeView to render the index text
-        indexTextNodeView = new TextPaneSkinTextNodeView(indexTextNode);
+        indexTextNodeView = new TextPaneSkinTextNodeView(getTextPaneSkin(), indexTextNode);
         indexTextNodeView.setLocation(0, 0);
         insert(indexTextNodeView, 0);
     }

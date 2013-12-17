@@ -25,8 +25,8 @@ import org.apache.pivot.wtk.text.TextSpan;
  */
 class TextPaneSkinSpanView extends TextPaneSkinElementView {
 
-    public TextPaneSkinSpanView(TextSpan span) {
-        super(span);
+    public TextPaneSkinSpanView(TextPaneSkin textPaneSkin, TextSpan span) {
+        super(textPaneSkin, span);
     }
 
     @Override

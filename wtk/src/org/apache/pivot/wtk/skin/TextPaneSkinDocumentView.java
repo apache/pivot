@@ -23,11 +23,8 @@ import org.apache.pivot.wtk.text.Document;
  */
 class TextPaneSkinDocumentView extends TextPaneSkinVerticalElementView {
 
-    protected final TextPaneSkin textPaneSkin;
-
     public TextPaneSkinDocumentView(TextPaneSkin textPaneSkin, Document document) {
-        super(document);
-        this.textPaneSkin = textPaneSkin;
+        super(textPaneSkin, document);
     }
 
     @Override
@@ -43,8 +40,4 @@ class TextPaneSkinDocumentView extends TextPaneSkinVerticalElementView {
         textPaneSkin.invalidateComponent();
     }
 
-    @Override
-    public TextPaneSkin getTextPaneSkin() {
-        return textPaneSkin;
-    }
 }

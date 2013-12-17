@@ -27,8 +27,8 @@ import org.apache.pivot.wtk.text.Element;
  */
 abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
 
-    public TextPaneSkinVerticalElementView(Element element) {
-        super(element);
+    public TextPaneSkinVerticalElementView(TextPaneSkin textPaneSkin, Element element) {
+        super(textPaneSkin, element);
     }
 
     @Override

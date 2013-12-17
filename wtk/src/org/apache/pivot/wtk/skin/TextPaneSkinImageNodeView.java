@@ -28,8 +28,8 @@ import org.apache.pivot.wtk.text.ImageNodeListener;
 
 class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNodeListener,
     ImageListener {
-    public TextPaneSkinImageNodeView(ImageNode imageNode) {
-        super(imageNode);
+    public TextPaneSkinImageNodeView(TextPaneSkin textPaneSkin, ImageNode imageNode) {
+        super(textPaneSkin, imageNode);
     }
 
     @Override

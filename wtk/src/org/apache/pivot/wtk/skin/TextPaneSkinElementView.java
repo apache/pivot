@@ -41,8 +41,8 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView implements
     private int skinX = 0;
     private int skinY = 0;
 
-    public TextPaneSkinElementView(Element element) {
-        super(element);
+    public TextPaneSkinElementView(TextPaneSkin textPaneSkin, Element element) {
+        super(textPaneSkin, element);
     }
 
     @Override
@@ -54,7 +54,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView implements
 
         // Attach child node views
         for (Node node : element) {
-            add(getTextPaneSkin().createNodeView(node));
+            add(createNodeView(getTextPaneSkin(), node));
         }
     }
 
@@ -235,7 +235,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView implements
             int nodeViewOffset = nodeView.getOffset();
             int characterCount = nodeView.getCharacterCount();
 
-            if (offset >= nodeViewOffset && offset < nodeViewOffset + characterCount) {
+            if (offset >= nodeViewOffset && offset <= nodeViewOffset + characterCount) {
                 characterBounds = nodeView.getCharacterBounds(offset - nodeViewOffset);
 
                 if (characterBounds != null) {
@@ -255,7 +255,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView implements
 
     @Override
     public void nodeInserted(Element element, int index) {
-        insert(getTextPaneSkin().createNodeView(element.get(index)), index);
+        insert(createNodeView(getTextPaneSkin(), element.get(index)), index);
         invalidateUpTree();
     }
 

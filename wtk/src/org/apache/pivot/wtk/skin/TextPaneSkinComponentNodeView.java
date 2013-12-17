@@ -35,8 +35,8 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
         }
     };
 
-    public TextPaneSkinComponentNodeView(ComponentNode componentNode) {
-        super(componentNode);
+    public TextPaneSkinComponentNodeView(TextPaneSkin textPaneSkin, ComponentNode componentNode) {
+        super(textPaneSkin, componentNode);
     }
 
     @Override

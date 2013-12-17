@@ -22,8 +22,8 @@ import org.apache.pivot.wtk.text.BlockListener;
 
 abstract class TextPaneSkinBlockView extends TextPaneSkinElementView implements BlockListener {
 
-    public TextPaneSkinBlockView(Block block) {
-        super(block);
+    public TextPaneSkinBlockView(TextPaneSkin textPaneSkin, Block block) {
+        super(textPaneSkin, block);
     }
 
     @Override

@@ -47,12 +47,12 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     private GlyphVector glyphVector = null;
     private TextPaneSkinTextNodeView next = null;
 
-    public TextPaneSkinTextNodeView(TextNode textNode) {
-        this(textNode, 0);
+    public TextPaneSkinTextNodeView(TextPaneSkin textPaneSkin, TextNode textNode) {
+        this(textPaneSkin, textNode, 0);
     }
 
-    public TextPaneSkinTextNodeView(TextNode textNode, int start) {
-        super(textNode);
+    public TextPaneSkinTextNodeView(TextPaneSkin textPaneSkin, TextNode textNode, int start) {
+        super(textPaneSkin, textNode);
         this.start = start;
     }
 
@@ -134,7 +134,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
         if (end < ci.getEndIndex()) {
             length = end - start;
-            next = new TextPaneSkinTextNodeView(textNode, end);
+            next = new TextPaneSkinTextNodeView(getTextPaneSkin(), textNode, end);
             next.setParent(getParent());
         } else {
             length = ci.getEndIndex() - start;
@@ -473,11 +473,18 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
     @Override
     public Bounds getCharacterBounds(int offset) {
-        Shape glyphBounds = glyphVector.getGlyphLogicalBounds(offset);
+        // If the offest == length, then use the right hand edge of the previous
+        // offset instead -- this is for positioning the caret at the end of the text
+        Shape glyphBounds = glyphVector.getGlyphLogicalBounds(offset == length ? offset - 1 : offset);
         Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
 
-        return new Bounds((int) Math.floor(glyphBounds2D.getX()), 0,
-            (int) Math.ceil(glyphBounds2D.getWidth()), getHeight());
+        if (offset == length) {
+            return new Bounds((int) Math.ceil(glyphBounds2D.getX() + glyphBounds2D.getWidth()), 0,
+                1, getHeight());
+        } else {
+            return new Bounds((int) Math.floor(glyphBounds2D.getX()), 0,
+                (int) Math.ceil(glyphBounds2D.getWidth()), getHeight());
+        }
     }
 
     @Override

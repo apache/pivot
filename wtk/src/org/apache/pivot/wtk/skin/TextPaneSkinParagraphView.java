@@ -54,8 +54,8 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     private ArrayList<Row> rows = null;
     private Bounds terminatorBounds = new Bounds(0, 0, 0, 0);
 
-    public TextPaneSkinParagraphView(Paragraph paragraph) {
-        super(paragraph);
+    public TextPaneSkinParagraphView(TextPaneSkin textPaneSkin, Paragraph paragraph) {
+        super(textPaneSkin, paragraph);
     }
 
     @Override

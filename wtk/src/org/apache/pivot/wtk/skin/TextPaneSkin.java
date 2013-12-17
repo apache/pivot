@@ -39,16 +39,9 @@ import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.TextPaneListener;
 import org.apache.pivot.wtk.TextPaneSelectionListener;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.text.BulletedList;
-import org.apache.pivot.wtk.text.ComponentNode;
 import org.apache.pivot.wtk.text.Document;
-import org.apache.pivot.wtk.text.ImageNode;
-import org.apache.pivot.wtk.text.List;
 import org.apache.pivot.wtk.text.Node;
-import org.apache.pivot.wtk.text.NumberedList;
 import org.apache.pivot.wtk.text.Paragraph;
-import org.apache.pivot.wtk.text.TextNode;
-import org.apache.pivot.wtk.text.TextSpan;
 
 /**
  * Text pane skin.
@@ -145,6 +138,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     private Insets margin = new Insets(4);
 
     private boolean wrapText = true;
+    private int tabWidth = 4;
+    private boolean acceptsTab = false;
 
     private static final int SCROLL_RATE = 30;
 
@@ -171,7 +166,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
         Document document = textPane.getDocument();
         if (document != null) {
-            documentView = (TextPaneSkinDocumentView) createNodeView(document);
+            documentView = (TextPaneSkinDocumentView) TextPaneSkinNodeView.createNodeView(this, document);
             documentView.attach();
             updateSelection();
         }
@@ -384,6 +379,45 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         }
 
         return characterBounds;
+    }
+
+    /**
+     * Gets current value of style that determines the behavior of <tt>TAB</tt>
+     * and <tt>Ctrl-TAB</tt> characters.
+     *
+     * @return <tt>true</tt> if <tt>TAB</tt> inserts an appropriate number of
+     * spaces, while <tt>Ctrl-TAB</tt> shifts focus to next component.
+     * <tt>false</tt> (default) means <tt>TAB</tt> shifts focus and
+     * <tt>Ctrl-TAB</tt> inserts spaces.
+     */
+    public boolean getAcceptsTab() {
+        return acceptsTab;
+    }
+
+    /**
+     * Sets current value of style that determines the behavior of <tt>TAB</tt>
+     * and <tt>Ctrl-TAB</tt> characters.
+     *
+     * @param acceptsTab <tt>true</tt> if <tt>TAB</tt> inserts an appropriate
+     * number of spaces, while <tt>Ctrl-TAB</tt> shifts focus to next component.
+     * <tt>false</tt> (default) means <tt>TAB</tt> shifts focus and
+     * <tt>Ctrl-TAB</tt> inserts spaces.
+     */
+    public void setAcceptsTab(boolean acceptsTab) {
+        this.acceptsTab = acceptsTab;
+    }
+
+    @Override
+    public int getTabWidth() {
+        return tabWidth;
+    }
+
+    public void setTabWidth(int tabWidth) {
+        if (tabWidth < 0) {
+            throw new IllegalArgumentException("tabWidth is negative.");
+        }
+
+        this.tabWidth = tabWidth;
     }
 
     private void scrollCharacterToVisible(int offset) {
@@ -797,6 +831,35 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         return consumed;
     }
 
+    private int getRowOffset(Document document, int index) {
+        if (document != null) {
+            Node node = document.getDescendantAt(index);
+            while (node != null && !(node instanceof Paragraph)) {
+                node = node.getParent();
+            }
+            // TODO: doesn't take into account the line wrapping within a paragraph
+            if (node != null) {
+                return node.getDocumentOffset();
+            }
+        }
+        return 0;
+    }
+
+    private int getRowLength(Document document, int index) {
+        if (document != null) {
+            Node node = document.getDescendantAt(index);
+            while (node != null && !(node instanceof Paragraph)) {
+                node = node.getParent();
+            }
+            // TODO: doesn't take into account the line wrapping within a paragraph
+            // Assuming the node is a Paragraph, the count includes the trailing \n, so discount it
+            if (node != null) {
+                return node.getCharacterCount() - 1;
+            }
+        }
+        return 0;
+    }
+
     @Override
     public boolean keyPressed(final Component component, int keyCode,
         Keyboard.KeyLocation keyLocation) {
@@ -805,25 +868,88 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         final TextPane textPane = (TextPane) getComponent();
         Document document = textPane.getDocument();
 
+        int selectionStart = textPane.getSelectionStart();
+        int selectionLength = textPane.getSelectionLength();
+
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+        boolean commandPressed = Keyboard.isPressed(commandModifier);
+        boolean wordNavPressed = Keyboard.isPressed(Platform.getWordNavigationModifier());
+        boolean shiftPressed = Keyboard.isPressed(Keyboard.Modifier.SHIFT);
+        boolean ctrlPressed = Keyboard.isPressed(Keyboard.Modifier.CTRL);
+        boolean metaPressed = Keyboard.isPressed(Keyboard.Modifier.META);
+        boolean isEditable = textPane.isEditable();
+
         if (document != null) {
-            if (keyCode == Keyboard.KeyCode.ENTER && textPane.isEditable()) {
+            if (keyCode == Keyboard.KeyCode.ENTER && isEditable) {
                 textPane.insertParagraph();
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.DELETE && textPane.isEditable()) {
+            } else if (keyCode == Keyboard.KeyCode.DELETE && isEditable) {
                 textPane.delete(false);
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.BACKSPACE && textPane.isEditable()) {
+            } else if (keyCode == Keyboard.KeyCode.BACKSPACE && isEditable) {
                 textPane.delete(true);
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.LEFT) {
-                int selectionStart = textPane.getSelectionStart();
-                int selectionLength = textPane.getSelectionLength();
+            } else if (keyCode == Keyboard.KeyCode.HOME
+                   || (keyCode == Keyboard.KeyCode.LEFT && metaPressed)) {
+                int start;
+                if (commandPressed) {
+                    // Move the caret to the beginning of the text
+                    start = 0;
+                } else {
+                    // Move the caret to the beginning of the line
+                    start = getRowOffset(document, selectionStart);
+                }
 
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                if (shiftPressed) {
+                    selectionLength += selectionStart - start;
+                } else {
+                    selectionLength = 0;
+                }
+
+                if (selectionStart >= 0) {
+                    textPane.setSelection(start, selectionLength);
+                    scrollCharacterToVisible(start);
+
+                    consumed = true;
+                }
+            } else if (keyCode == Keyboard.KeyCode.END
+                   || (keyCode == Keyboard.KeyCode.RIGHT && metaPressed)) {
+                int end;
+                int index = selectionStart + selectionLength;
+
+                if (commandPressed) {
+                    // Move the caret to end of the text
+                    end = textPane.getCharacterCount() - 1;
+                } else {
+                    // Move the caret to the end of the line
+                    int rowOffset = getRowOffset(document, index);
+                    int rowLength = getRowLength(document, index);
+                    end = rowOffset + rowLength;
+                }
+
+                if (shiftPressed) {
+                    selectionLength += end - index;
+                } else {
+                    selectionStart = end;
+                    if (selectionStart < textPane.getCharacterCount()
+                        && document.getCharacterAt(selectionStart) == '\n') {
+                        selectionStart--;
+                    }
+
+                    selectionLength = 0;
+                }
+
+                if (selectionStart + selectionLength <= textPane.getCharacterCount()) {
+                    textPane.setSelection(selectionStart, selectionLength);
+                    scrollCharacterToVisible(selectionStart + selectionLength);
+
+                    consumed = true;
+                }
+            } else if (keyCode == Keyboard.KeyCode.LEFT) {
+                if (shiftPressed) {
                     // Add the previous character to the selection
                     if (selectionStart > 0) {
                         selectionStart--;
@@ -862,10 +988,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-                int selectionStart = textPane.getSelectionStart();
-                int selectionLength = textPane.getSelectionLength();
-
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                if (shiftPressed) {
                     // Add the next character to the selection
                     if (selectionStart + selectionLength < document.getCharacterCount()) {
                         selectionLength++;
@@ -911,8 +1034,6 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.UP) {
-                int selectionStart = textPane.getSelectionStart();
-
                 int offset = getNextInsertionPoint(caretX, selectionStart,
                     TextPane.ScrollDirection.UP);
 
@@ -920,10 +1041,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     offset = 0;
                 }
 
-                int selectionLength;
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    int selectionEnd = selectionStart + textPane.getSelectionLength() - 1;
-                    selectionLength = selectionEnd - offset + 1;
+                if (shiftPressed) {
+                    selectionLength = selectionStart + selectionLength - offset;
                 } else {
                     selectionLength = 0;
                 }
@@ -933,10 +1052,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.DOWN) {
-                int selectionStart = textPane.getSelectionStart();
-                int selectionLength = textPane.getSelectionLength();
 
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                if (shiftPressed) {
                     int from;
                     int x;
                     if (selectionLength == 0) {
@@ -993,59 +1110,47 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 }
 
                 consumed = true;
-            } else if (Keyboard.isPressed(commandModifier) && keyCode == Keyboard.KeyCode.TAB
-                && textPane.isEditable()) {
-                textPane.insert("\t");
+            } else if (keyCode == Keyboard.KeyCode.TAB
+                && (acceptsTab != Keyboard.isPressed(Keyboard.Modifier.CTRL))
+                && isEditable) {
+                if (textPane.getExpandTabs()) {
+                    int linePos = selectionStart - getRowOffset(document, selectionStart);
+                    StringBuilder tabBuilder = new StringBuilder(tabWidth);
+                    for (int i = 0; i < tabWidth - (linePos % tabWidth); i++) {
+                        tabBuilder.append(" ");
+                    }
+                    textPane.insert(tabBuilder.toString());
+                } else {
+                    textPane.insert("\t");
+                }
                 showCaret(true);
 
                 consumed = true;
-            } else if (Keyboard.isPressed(commandModifier)) {
+            } else if (keyCode == Keyboard.KeyCode.INSERT) {
+                if (shiftPressed && isEditable) {
+                    textPane.paste();
+                    consumed = true;
+                }
+            } else if (commandPressed) {
                 if (keyCode == Keyboard.KeyCode.A) {
                     textPane.setSelection(0, document.getCharacterCount());
                     consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.X && textPane.isEditable()) {
+                } else if (keyCode == Keyboard.KeyCode.X && isEditable) {
                     textPane.cut();
                     consumed = true;
                 } else if (keyCode == Keyboard.KeyCode.C) {
                     textPane.copy();
                     consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.V && textPane.isEditable()) {
+                } else if (keyCode == Keyboard.KeyCode.V && isEditable) {
                     textPane.paste();
                     consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.Z && textPane.isEditable()) {
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                } else if (keyCode == Keyboard.KeyCode.Z && isEditable) {
+                    if (shiftPressed) {
                         textPane.redo();
                     } else {
                         textPane.undo();
                     }
 
-                    consumed = true;
-                }
-            } else if (keyCode == Keyboard.KeyCode.HOME) {
-                // Move the caret to the beginning of the text
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    textPane.setSelection(0, textPane.getSelectionStart());
-                } else {
-                    textPane.setSelection(0, 0);
-                }
-                scrollCharacterToVisible(0);
-
-                consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.END) {
-                // Move the caret to the end of the text
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                    int selectionStart = textPane.getSelectionStart();
-                    textPane.setSelection(selectionStart, textPane.getCharacterCount()
-                        - selectionStart);
-                } else {
-                    textPane.setSelection(textPane.getCharacterCount() - 1, 0);
-                }
-                scrollCharacterToVisible(textPane.getCharacterCount() - 1);
-
-                consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.INSERT) {
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT) && textPane.isEditable()) {
-                    textPane.paste();
                     consumed = true;
                 }
             } else {
@@ -1089,7 +1194,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
         Document document = textPane.getDocument();
         if (document != null) {
-            documentView = (TextPaneSkinDocumentView) createNodeView(document);
+            documentView = (TextPaneSkinDocumentView) TextPaneSkinNodeView.createNodeView(this, document);
             documentView.attach();
         }
 
@@ -1130,35 +1235,6 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 textPane.repaint(bounds.x, bounds.y, bounds.width, bounds.height);
             }
         }
-    }
-
-    TextPaneSkinNodeView createNodeView(Node node) {
-        TextPaneSkinNodeView nodeView = null;
-
-        if (node instanceof Document) {
-            nodeView = new TextPaneSkinDocumentView(this, (Document) node);
-        } else if (node instanceof Paragraph) {
-            nodeView = new TextPaneSkinParagraphView((Paragraph) node);
-        } else if (node instanceof TextNode) {
-            nodeView = new TextPaneSkinTextNodeView((TextNode) node);
-        } else if (node instanceof ImageNode) {
-            nodeView = new TextPaneSkinImageNodeView((ImageNode) node);
-        } else if (node instanceof ComponentNode) {
-            nodeView = new TextPaneSkinComponentNodeView((ComponentNode) node);
-        } else if (node instanceof TextSpan) {
-            nodeView = new TextPaneSkinSpanView((TextSpan) node);
-        } else if (node instanceof NumberedList) {
-            nodeView = new TextPaneSkinNumberedListView((NumberedList) node);
-        } else if (node instanceof BulletedList) {
-            nodeView = new TextPaneSkinBulletedListView((BulletedList) node);
-        } else if (node instanceof List.Item) {
-            nodeView = new TextPaneSkinListItemView((List.Item) node);
-        } else {
-            throw new IllegalArgumentException("Unsupported node type: "
-                + node.getClass().getName());
-        }
-
-        return nodeView;
     }
 
     private void updateSelection() {

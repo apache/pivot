@@ -21,8 +21,8 @@ import org.apache.pivot.wtk.text.BulletedListListener;
 
 class TextPaneSkinBulletedListView extends TextPaneSkinListView implements BulletedListListener {
 
-    public TextPaneSkinBulletedListView(BulletedList bulletedList) {
-        super(bulletedList);
+    public TextPaneSkinBulletedListView(TextPaneSkin textPaneSkin, BulletedList bulletedList) {
+        super(textPaneSkin, bulletedList);
     }
 
     @Override

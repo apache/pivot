@@ -17,8 +17,12 @@
 package org.apache.pivot.wtk;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URL;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.LinkedList;
@@ -96,6 +100,12 @@ public class TextPane extends Container {
          * @return The bounds of the character at the given offset.
          */
         public Bounds getCharacterBounds(int offset);
+
+        /**
+         * Returns the current setting of the "tabWidth" style (so "setText"
+         * uses the same value as Ctrl-Tab from user).
+         */
+        public int getTabWidth();
     }
 
     private interface Edit {
@@ -198,6 +208,8 @@ public class TextPane extends Container {
 
     private int selectionStart = 0;
     private int selectionLength = 0;
+
+    private boolean expandTabs = false;
 
     private boolean editable = true;
     private boolean undoingHistory = false;
@@ -643,6 +655,8 @@ public class TextPane extends Container {
                 try {
                     PlainTextSerializer serializer = new PlainTextSerializer();
                     StringReader reader = new StringReader(text);
+                    serializer.setExpandTabs(this.expandTabs);
+                    serializer.setTabWidth(((TextPane.Skin) getSkin()).getTabWidth());
                     documentLocal = serializer.readObject(reader);
                     n = documentLocal.getCharacterCount();
 
@@ -716,14 +730,78 @@ public class TextPane extends Container {
     /**
      * Convenience method to create a text-only document consisting of one
      * paragraph per line of the given text.
+     *
+     * @param text
      */
     public void setText(String text) {
+        if (text == null) {
+            throw new IllegalArgumentException();
+        }
+
+        try {
+            setText(new StringReader(text));
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    public void setText(URL textURL) throws IOException {
+        if (textURL == null) {
+            throw new IllegalArgumentException();
+        }
+
+        InputStream inputStream = null;
+        try {
+            inputStream = textURL.openStream();
+            setText(new InputStreamReader(inputStream));
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+    }
+
+    public void setText(Reader textReader) throws IOException {
+        if (textReader == null) {
+            throw new IllegalArgumentException();
+        }
+
+        int tabPosition = 0;
+        int tabWidth = ((TextPane.Skin) getSkin()).getTabWidth();
+
         Document doc = new Document();
-        String[] lines = text.split("\r?\n");
-        for (int i = 0; i < lines.length; i++) {
-            Paragraph paragraph = new Paragraph(lines[i]);
+        StringBuilder text = new StringBuilder();
+
+        int c = textReader.read();
+        while (c != -1) {
+            if (c == '\n') {
+                Paragraph paragraph = new Paragraph(text.toString());
+                doc.add(paragraph);
+                text.setLength(0);
+                tabPosition = 0;
+            } else if (c == '\t') {
+                if (expandTabs) {
+                    int spaces = tabWidth - (tabPosition % tabWidth);
+                    for (int i = 0; i < spaces; i++) {
+                        text.append(' ');
+                    }
+                    tabPosition += spaces;
+                } else {
+                    text.append('\t');
+                }
+            } else {
+                text.append((char) c);
+                tabPosition++;
+            }
+
+            c = textReader.read();
+        }
+
+        if (text.length() != 0) {
+            Paragraph paragraph = new Paragraph(text.toString());
             doc.add(paragraph);
         }
+
         setDocument(doc);
     }
 
@@ -874,6 +952,27 @@ public class TextPane extends Container {
 
             textPaneListeners.editableChanged(this);
         }
+    }
+
+    public boolean getExpandTabs() {
+        return expandTabs;
+    }
+
+    /**
+     * Sets whether tab characters (<code>\t</code>) are expanded to an
+     * appropriate number of spaces during {@link #setText} and
+     * {@link #paste} operations.  Note: doing this for keyboard input
+     * is handled in the skin.
+     *
+     * @param expandTabs <code>true</code> to replace tab characters with space
+     * characters (depending on the setting of the
+     * {@link TextPane.Skin#getTabWidth} value) or <code>false</code> to leave
+     * tabs alone. Note: this only affects tabs encountered during program
+     * operations; tabs entered via the keyboard by the user are always
+     * expanded, regardless of this setting.
+     */
+    public void setExpandTabs(boolean expandTabs) {
+        this.expandTabs = expandTabs;
     }
 
     public int getInsertionPoint(int x, int y) {

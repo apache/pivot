@@ -18,19 +18,33 @@ package org.apache.pivot.wtk.skin;
 
 import java.awt.Graphics2D;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.TextPane;
+import org.apache.pivot.wtk.text.BulletedList;
+import org.apache.pivot.wtk.text.ComponentNode;
+import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.Element;
+import org.apache.pivot.wtk.text.ImageNode;
+import org.apache.pivot.wtk.text.List;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.NodeListener;
+import org.apache.pivot.wtk.text.NumberedList;
+import org.apache.pivot.wtk.text.Paragraph;
+import org.apache.pivot.wtk.text.TextNode;
+import org.apache.pivot.wtk.text.TextSpan;
 
 /**
  * Abstract base class for node views.
  */
 abstract class TextPaneSkinNodeView implements NodeListener {
+    protected final TextPaneSkin textPaneSkin;
     private Node node = null;
     private TextPaneSkinElementView parent = null;
 
@@ -42,7 +56,8 @@ abstract class TextPaneSkinNodeView implements NodeListener {
 
     private boolean valid = false;
 
-    public TextPaneSkinNodeView(Node node) {
+    public TextPaneSkinNodeView(TextPaneSkin textPaneSkin, Node node) {
+        this.textPaneSkin = textPaneSkin;
         this.node = node;
     }
 
@@ -59,7 +74,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     }
 
     protected TextPaneSkin getTextPaneSkin() {
-        return getParent().getTextPaneSkin();
+        return textPaneSkin;
     }
 
     protected void attach() {
@@ -230,6 +245,43 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     @Override
     public void nodeInserted(Node nodeArgument, int offset) {
         // No-op
+    }
+
+    private static HashMap<Class<? extends Node>, Class<? extends TextPaneSkinNodeView>>
+            nodeViewSkinMap = new HashMap<>();
+    static {
+        nodeViewSkinMap.put(Document.class, TextPaneSkinDocumentView.class);
+        nodeViewSkinMap.put(Paragraph.class, TextPaneSkinParagraphView.class);
+        nodeViewSkinMap.put(TextNode.class, TextPaneSkinTextNodeView.class);
+        nodeViewSkinMap.put(ImageNode.class, TextPaneSkinImageNodeView.class);
+        nodeViewSkinMap.put(ComponentNode.class, TextPaneSkinComponentNodeView.class);
+        nodeViewSkinMap.put(TextSpan.class, TextPaneSkinSpanView.class);
+        nodeViewSkinMap.put(NumberedList.class, TextPaneSkinNumberedListView.class);
+        nodeViewSkinMap.put(BulletedList.class, TextPaneSkinBulletedListView.class);
+        nodeViewSkinMap.put(List.Item.class, TextPaneSkinListItemView.class);
+    }
+
+    public static TextPaneSkinNodeView createNodeView(TextPaneSkin textPaneSkin, Node node) {
+        TextPaneSkinNodeView nodeView = null;
+
+        Class<? extends Node> nodeClass = node.getClass();
+        Class<? extends TextPaneSkinNodeView> skinClass = nodeViewSkinMap.get(nodeClass);
+        if (skinClass != null) {
+            try {
+                Constructor<?> constructor = skinClass.getConstructor(TextPaneSkin.class, nodeClass);
+                nodeView = (TextPaneSkinNodeView)constructor.newInstance(textPaneSkin, node);
+            } catch (NoSuchMethodException | InstantiationException
+                     | IllegalAccessException | InvocationTargetException ex) {
+                throw new RuntimeException("Error instantiating node view for "
+                    + nodeClass.getName(), ex);
+            }
+        }
+        if (nodeView == null) {
+            throw new IllegalArgumentException("Unsupported node type: "
+                + nodeClass.getName());
+        }
+
+        return nodeView;
     }
 
 }
