@@ -684,6 +684,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
     private boolean updatingSelection = false;
     private boolean refreshRoots = true;
+    private boolean selectingDriveFromRootDirectory = false;
 
     private RefreshFileListTask refreshFileListTask = null;
 
@@ -724,7 +725,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     if (previousSelectedItem != null) {
                         File drive = (File) listButton.getSelectedItem();
                         if (drive != null && drive.canRead()) {
-                            fileBrowser.setRootDirectory(drive);
+                            if (!selectingDriveFromRootDirectory) {
+                                fileBrowser.setRootDirectory(drive);
+                            }
                         } else {
                             refreshRoots = true;
                             listButton.setSelectedItem(previousSelectedItem);
@@ -1125,7 +1128,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             drive = path.get(path.getLength() - 1);
         }
 
+        selectingDriveFromRootDirectory = true;
         driveListButton.setSelectedItem(drive);
+        selectingDriveFromRootDirectory = false;
 
         pathListButton.setListData(path);
         pathListButton.setButtonData(rootDirectory);
