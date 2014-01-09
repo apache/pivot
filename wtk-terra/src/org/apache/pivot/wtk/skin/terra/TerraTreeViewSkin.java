@@ -33,6 +33,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Checkbox;
@@ -2122,6 +2123,19 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
         removeVisibleNodes(branchInfo, 0, -1);
 
         repaintNode(branchInfo);
+    }
+
+    @Override
+    public Vote previewBranchExpandedChange(TreeView treeView, Path path) {
+        // We currently have no reason to refuse to open / close the branch
+        // although other listeners might have a reason
+        return Vote.APPROVE;
+    }
+
+    @Override
+    public void branchExpandedChangeVetoed(TreeView treeView, Path path, Vote reason) {
+        // Nothing really to do -- our visual state doesn't change until/unless the
+        // expand/collapse really happens
     }
 
     // TreeViewNodeListener methods

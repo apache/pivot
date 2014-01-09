@@ -29,6 +29,7 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
 
 /**
@@ -285,6 +286,24 @@ public class TreeView extends Component {
         public void branchCollapsed(TreeView treeView, Path path) {
             for (TreeViewBranchListener listener : this) {
                 listener.branchCollapsed(treeView, path);
+            }
+        }
+
+        @Override
+        public Vote previewBranchExpandedChange(TreeView treeView, Path path) {
+            Vote vote = Vote.APPROVE;
+
+            for (TreeViewBranchListener listener : this) {
+                vote = vote.tally(listener.previewBranchExpandedChange(treeView, path));
+            }
+
+            return vote;
+        }
+
+        @Override
+        public void branchExpandedChangeVetoed(TreeView treeView, Path path, Vote reason) {
+            for (TreeViewBranchListener listener : this) {
+                listener.branchExpandedChangeVetoed(treeView, path, reason);
             }
         }
     }
@@ -1613,6 +1632,8 @@ public class TreeView extends Component {
     /**
      * Sets the expansion state of the specified branch. If the branch already
      * has the specified expansion state, nothing happens.
+     * <p> The listeners are polled first to give them a chance to veto the operation
+     * for any reason. If the vote passes, then the state is changed.
      *
      * @param path The path to the branch node.
      * @param expanded <tt>true</tt> to expand the branch; <tt>false</tt> to
@@ -1627,23 +1648,29 @@ public class TreeView extends Component {
             throw new IllegalArgumentException("path is empty.");
         }
 
-        int index = expandedPaths.indexOf(path);
+        // Give listeners a chance to veto the operation
+        Vote vote = treeViewBranchListeners.previewBranchExpandedChange(this, path);
+        if (vote != Vote.APPROVE) {
+            treeViewBranchListeners.branchExpandedChangeVetoed(this, path, vote);
+        } else {
+            int index = expandedPaths.indexOf(path);
 
-        if (expanded && index < 0) {
-            // Monitor the branch
-            monitorBranch(path);
+            if (expanded && index < 0) {
+                // Monitor the branch
+                monitorBranch(path);
 
-            // Update the expanded paths
-            expandedPaths.add(new ImmutablePath(path));
+                // Update the expanded paths
+                expandedPaths.add(new ImmutablePath(path));
 
-            // Notify listeners
-            treeViewBranchListeners.branchExpanded(this, path);
-        } else if (!expanded && index >= 0) {
-            // Update the expanded paths
-            expandedPaths.remove(index, 1);
+                // Notify listeners
+                treeViewBranchListeners.branchExpanded(this, path);
+            } else if (!expanded && index >= 0) {
+                // Update the expanded paths
+                expandedPaths.remove(index, 1);
 
-            // Notify listeners
-            treeViewBranchListeners.branchCollapsed(this, path);
+                // Notify listeners
+                treeViewBranchListeners.branchCollapsed(this, path);
+            }
         }
     }
 
