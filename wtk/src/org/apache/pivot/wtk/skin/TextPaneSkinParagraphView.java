@@ -496,7 +496,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     public Bounds getCharacterBounds(int offset) {
         Bounds characterBounds = null;
 
-        if (offset == getCharacterCount() - 1) {
+        if (offset >= getCharacterCount() - 1) {
             characterBounds = terminatorBounds;
         } else {
             if (rows != null) {
