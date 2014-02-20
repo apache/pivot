@@ -16,14 +16,17 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
+import java.awt.Color;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.AlertListener;
+import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
@@ -37,8 +40,11 @@ import org.apache.pivot.wtk.Window;
 public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
     private ImageView typeImageView = null;
     private Label messageLabel = null;
+    private Border messageBorder = null;
     private BoxPane messageBoxPane = null;
     private BoxPane optionButtonBoxPane = null;
+    private Color borderBackgroundColor = null;
+    private Color borderColor = null;
 
     private ButtonPressListener optionButtonPressListener = new ButtonPressListener() {
         @Override
@@ -56,6 +62,8 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
     public TerraAlertSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(9));
+        setBorderBackgroundColor(theme.getColor(10));
+        setBorderColor(theme.getColor(7));
     }
 
     @Override
@@ -83,8 +91,14 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
 
         typeImageView = (ImageView) bxmlSerializer.getNamespace().get("typeImageView");
         messageLabel = (Label) bxmlSerializer.getNamespace().get("messageLabel");
+        messageBorder = (Border) bxmlSerializer.getNamespace().get("messageBorder");
         messageBoxPane = (BoxPane) bxmlSerializer.getNamespace().get("messageBoxPane");
         optionButtonBoxPane = (BoxPane) bxmlSerializer.getNamespace().get("optionButtonBoxPane");
+
+        // Explicitly set the message border color and background color, this can't be done properly in the constructor
+        // as messageBorder is null at that point.
+        setBorderBackgroundColor(borderBackgroundColor);
+        setBorderColor(borderColor);
 
         for (Object option : alert.getOptions()) {
             PushButton optionButton = new PushButton(option);
@@ -161,5 +175,63 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
         if (alert.isOpen() && index >= 0) {
             optionButtonBoxPane.get(index).requestFocus();
         }
+    }
+
+    public void setBorderBackgroundColor(Color borderBackgroundColor) {
+        if (borderBackgroundColor == null) {
+            throw new IllegalArgumentException("borderBackgroundColor is null.");
+        }
+
+        this.borderBackgroundColor = borderBackgroundColor;
+
+        if (messageBorder != null){
+            messageBorder.getStyles().put("backgroundColor", borderBackgroundColor);
+        }
+    }
+
+    public final void setBorderBackgroundColor(String borderBackgroundColor) {
+        if (borderBackgroundColor == null) {
+            throw new IllegalArgumentException("borderBackgroundColor is null.");
+        }
+
+        setBorderBackgroundColor(GraphicsUtilities.decodeColor(borderBackgroundColor));
+    }
+
+    public final void setBorderBackgroundColor(int borderBackgroundColor) {
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        setBorderBackgroundColor(theme.getColor(borderBackgroundColor));
+    }
+
+    public Color getBorderBackgroundColor() {
+        return borderBackgroundColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("messageBorderColor is null.");
+        }
+
+        this.borderColor = borderColor;
+
+        if (messageBorder != null){
+            messageBorder.getStyles().put("color", borderColor);
+        }
+    }
+
+    public final void setBorderColor(String borderColor) {
+        if (borderColor == null) {
+            throw new IllegalArgumentException("borderColor is null.");
+        }
+
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+    }
+
+    public final void setBorderColor(int borderColor) {
+        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        setBorderColor(theme.getColor(borderColor));
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
     }
 }
