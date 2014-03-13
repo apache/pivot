@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   saveAs: "Speichern als:",
+{   hostName: "Hostname:",
+    saveAs: "Speichern als:",
     ok: "OK",
     cancel: "Abbruch"
 }

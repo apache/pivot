@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   saveAs: "Zapisz jako:",
+{   hostName: "Nazwę hosta:", /* Check translation? */
+    saveAs: "Zapisz jako:",
     ok: "OK",
     cancel: "Anuluj"
 }

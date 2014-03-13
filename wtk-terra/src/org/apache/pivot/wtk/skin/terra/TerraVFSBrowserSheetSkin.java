@@ -17,9 +17,12 @@
 package org.apache.pivot.wtk.skin.terra;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystem;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.FileType;
@@ -37,6 +40,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Form;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
@@ -70,6 +74,10 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
     @BXML
     private TablePane tablePane = null;
     @BXML
+    private BoxPane hostNameBoxPane = null;
+    @BXML
+    private Label hostNameLabel = null;
+    @BXML
     private BoxPane saveAsBoxPane = null;
     @BXML
     private TextInput saveAsTextInput = null;
@@ -80,8 +88,36 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
     @BXML
     private PushButton cancelButton = null;
 
+    private FileSystem fileSystem = null;
     private boolean updatingSelection = false;
     private int selectedDirectoryCount = 0;
+    private static final Pattern HOST_PATTERN = Pattern.compile("[a-zA-Z]+://([a-zA-Z0-9\\-_\\.]+)(\\\\[a-zA-Z0-9\\-\\.]+)?:\\d+/.*");
+
+
+    private void setHostLabel(FileObject rootDir) {
+        try {
+            if (rootDir != null) {
+                hostNameBoxPane.setVisible(true);
+                FileSystem localFileSystem = rootDir.getFileSystem();
+                if (!localFileSystem.equals(fileSystem)) {
+                    fileSystem = localFileSystem;
+                    FileObject root = fileSystem.getRoot();
+                    String rootURL = root.getURL().toString();
+                    // Parse out the host name with some special considerations
+                    Matcher m = HOST_PATTERN.matcher(rootURL);
+                    if (m.matches())
+                        hostNameLabel.setText(m.group(1));
+                    else
+                        hostNameLabel.setText(rootURL);
+                }
+            } else {
+                hostNameBoxPane.setVisible(false);
+            }
+        }
+        catch (FileSystemException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
     public TerraVFSBrowserSheetSkin() {
         setResizable(true);
@@ -114,7 +150,9 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
 
         // set the same rootDirectory as the component
         try {
-            fileBrowser.setRootDirectory(fileBrowserSheet.getRootDirectory());
+            FileObject rootDirectory = fileBrowserSheet.getRootDirectory();
+            fileBrowser.setRootDirectory(rootDirectory);
+            setHostLabel(rootDirectory);
         } catch (FileSystemException fse) {
             throw new RuntimeException(fse);
         }
@@ -141,7 +179,9 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                 updatingSelection = true;
 
                 try {
-                    fileBrowserSheet.setRootDirectory(fileBrowserArgument.getRootDirectory());
+                    FileObject rootDirectory = fileBrowserArgument.getRootDirectory();
+                    fileBrowserSheet.setRootDirectory(rootDirectory);
+                    setHostLabel(rootDirectory);
                 } catch (FileSystemException fse) {
                     throw new RuntimeException(fse);
                 }
@@ -365,6 +405,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                                                        */selectedFile;
                                     fileBrowserSheet.setRootDirectory(root);
                                     fileBrowser.setRootDirectory(root);
+                                    setHostLabel(root);
                                     saveAsTextInput.setText("");
                                 } catch (IOException ioe) {
                                     Form.setFlag(saveAsBoxPane, new Form.Flag());
@@ -379,6 +420,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                                         // TODO: canonical file again
                                         // fileBrowserSheet.setRootDirectory(root.getCanonicalFile());
                                         fileBrowserSheet.setRootDirectory(root);
+                                        setHostLabel(root);
                                         selectedFile = manager.resolveFile(selectedFile.getName().getURI());
                                     } catch (IOException ioe) {
                                         Form.setFlag(saveAsBoxPane, new Form.Flag());
@@ -465,7 +507,9 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
         FileObject previousRootDirectory) {
         if (!updatingSelection) {
             try {
-                fileBrowser.setRootDirectory(fileBrowserSheet.getRootDirectory());
+                FileObject rootDirectory = fileBrowserSheet.getRootDirectory();
+                fileBrowser.setRootDirectory(rootDirectory);
+                setHostLabel(rootDirectory);
             } catch (FileSystemException fse) {
                 throw new RuntimeException(fse);
             }

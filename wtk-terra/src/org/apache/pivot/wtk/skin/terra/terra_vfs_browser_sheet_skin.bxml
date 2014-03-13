@@ -27,6 +27,14 @@ limitations under the License.
         <TablePane.Row height="-1">
             <Form>
                 <Form.Section>
+                    <BoxPane bxml:id="hostNameBoxPane" orientation="vertical" styles="{fill:true}">
+                        <BoxPane styles="{verticalAlignment:'center'}">
+                            <Label text="%hostName"/>
+                            <Label bxml:id="hostNameLabel" styles="{font:{bold:true}}"/>
+                        </BoxPane>
+                    </BoxPane>
+                </Form.Section>
+                <Form.Section>
                     <BoxPane bxml:id="saveAsBoxPane" orientation="vertical" styles="{fill:true}">
                         <BoxPane styles="{verticalAlignment:'center'}">
                             <Label text="%saveAs"/>

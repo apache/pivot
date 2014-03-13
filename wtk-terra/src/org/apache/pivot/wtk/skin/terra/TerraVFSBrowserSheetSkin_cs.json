@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   saveAs: "Uložit jako:",
+{   hostName: "Název hostitele:", /* Check translation? */
+    saveAs: "Uložit jako:",
     ok: "OK",
     cancel: "Zrušit"
 }

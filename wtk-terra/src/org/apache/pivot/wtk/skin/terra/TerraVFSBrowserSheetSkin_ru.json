@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   saveAs: "Сохранить как:",
+{   hostName: "Имя хоста:", /* Check translation? */
+    saveAs: "Сохранить как:",
     ok: "OK",
     cancel: "Отмена"
 }
