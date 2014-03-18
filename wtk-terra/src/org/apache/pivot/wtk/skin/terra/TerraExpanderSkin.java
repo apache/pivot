@@ -199,6 +199,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
 
     private Color titleBarBackgroundColor;
     private Color titleBarBorderColor;
+    private Color titleBarColor;
     private Color shadeButtonColor;
     private Color disabledShadeButtonColor;
     private Color borderColor;
@@ -239,6 +240,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
 
         titleBarBackgroundColor = theme.getColor(10);
         titleBarBorderColor = theme.getColor(7);
+        titleBarColor = theme.getColor(12);
         shadeButtonColor = theme.getColor(12);
         disabledShadeButtonColor = theme.getColor(7);
         borderColor = theme.getColor(7);
@@ -268,7 +270,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
         titleRow.add(titleBoxPane);
         titleRow.add(buttonBoxPane);
 
-        titleLabel.getStyles().put("color", shadeButtonColor);
+        titleLabel.getStyles().put("color", titleBarColor);
 
         Font titleFont = theme.getFont().deriveFont(Font.BOLD);
         titleLabel.getStyles().put("font", titleFont);
@@ -490,10 +492,11 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public Color getTitleBarColor() {
-        return (Color) titleLabel.getStyles().get("color");
+        return this.titleBarColor;
     }
 
     public void setTitleBarColor(Color titleBarColor) {
+        this.titleBarColor = titleBarColor;
         titleLabel.getStyles().put("color", titleBarColor);
     }
 
@@ -655,9 +658,9 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     @Override
     public void enabledChanged(Component component) {
         if (component.isEnabled()) {
-            setTitleBarColor(shadeButtonColor);
+            titleLabel.getStyles().put("color", titleBarColor);
         } else {
-            setTitleBarColor(disabledShadeButtonColor);
+            titleLabel.getStyles().put("color", disabledShadeButtonColor);
         }
     }
 
