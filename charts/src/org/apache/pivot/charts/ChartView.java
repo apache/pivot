@@ -19,6 +19,7 @@ package org.apache.pivot.charts;
 import java.util.Comparator;
 
 import org.apache.pivot.beans.DefaultProperty;
+import org.apache.pivot.charts.content.ValueMarker;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
@@ -256,6 +257,32 @@ public abstract class ChartView extends Component {
         }
     }
 
+    private class ValueMarkersHandler implements ListListener<ValueMarker> {
+        @Override
+        public void itemInserted(List<ValueMarker> list, int index) {
+            chartViewListeners.chartDataChanged(ChartView.this, getChartData());
+        }
+
+        @Override
+        public void itemsRemoved(List<ValueMarker> list, int index, Sequence<ValueMarker> items) {
+            chartViewListeners.chartDataChanged(ChartView.this, getChartData());
+        }
+
+        @Override
+        public void itemUpdated(List<ValueMarker> list, int index, ValueMarker previousItem) {
+            chartViewListeners.chartDataChanged(ChartView.this, getChartData());
+        }
+
+        @Override
+        public void listCleared(List<ValueMarker> list) {
+            chartViewListeners.chartDataChanged(ChartView.this, getChartData());
+        }
+
+        @Override
+        public void comparatorChanged(List<ValueMarker> list, Comparator<ValueMarker> previousComparator) {
+        }
+    }
+
     /**
      * Chart view listener list.
      */
@@ -380,7 +407,7 @@ public abstract class ChartView extends Component {
         }
     }
 
-    private List<?> chartData;
+    protected List<?> chartData;
     private String seriesNameKey;
 
     private String title = null;
@@ -388,7 +415,7 @@ public abstract class ChartView extends Component {
     private String verticalAxisLabel = null;
     private boolean showLegend;
 
-    private ArrayList<Category> categories = new ArrayList<>();
+    private List<Category> categories = new ArrayList<>();
     private CategorySequence categorySequence = new CategorySequence();
 
     private ListHandler chartDataHandler = new ListHandler();
@@ -396,6 +423,8 @@ public abstract class ChartView extends Component {
     private ChartViewListenerList chartViewListeners = new ChartViewListenerList();
     private ChartViewCategoryListenerList chartViewCategoryListeners = new ChartViewCategoryListenerList();
     private ChartViewSeriesListenerList chartViewSeriesListeners = new ChartViewSeriesListenerList();
+
+    private List<ValueMarker> valueMarkers;
 
     public static final String DEFAULT_SERIES_NAME_KEY = "name";
     public static final String PROVIDER_NAME = Provider.class.getName();
@@ -419,6 +448,7 @@ public abstract class ChartView extends Component {
         setTitle(title);
         setChartData(chartData);
         setShowLegend(showLegend);
+        setValueMarkers(new ArrayList<ValueMarker>());
     }
 
     @Override
@@ -545,4 +575,17 @@ public abstract class ChartView extends Component {
     public ListenerList<ChartViewSeriesListener> getChartViewSeriesListeners() {
         return chartViewSeriesListeners;
     }
+
+    public List<ValueMarker> getValueMarkers() {
+        return valueMarkers;
+    }
+
+    public void setValueMarkers(List<ValueMarker> valueMarkers) {
+        this.valueMarkers = valueMarkers;
+        if (valueMarkers != null) {
+            valueMarkers.getListListeners().add(new ValueMarkersHandler());
+        }
+    }
+
 }
+
