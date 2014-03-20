@@ -1598,6 +1598,10 @@ public abstract class ApplicationContext {
                 }
             };
         }
+
+        public synchronized int getCount() {
+            return resourceCache.getCount();
+        }
     }
 
     /**

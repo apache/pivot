@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.skin.terra;
 
 import java.awt.Color;
+
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Alert;
@@ -26,6 +27,7 @@ import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
@@ -177,6 +179,12 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
         }
     }
 
+    @Override
+    public void dialogClosed(Dialog dialog, boolean modal) {
+        super.dialogClosed(dialog, modal);
+        typeImageView.clearImage();
+    }
+
     public void setBorderBackgroundColor(Color borderBackgroundColor) {
         if (borderBackgroundColor == null) {
             throw new IllegalArgumentException("borderBackgroundColor is null.");
@@ -234,4 +242,5 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
     public Color getBorderColor() {
         return borderColor;
     }
+
 }

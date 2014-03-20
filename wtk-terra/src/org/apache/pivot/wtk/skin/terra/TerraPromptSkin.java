@@ -28,6 +28,7 @@ import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PromptListener;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 
@@ -162,4 +163,11 @@ public class TerraPromptSkin extends TerraSheetSkin implements PromptListener {
             optionButtonBoxPane.get(index).requestFocus();
         }
     }
+
+    @Override
+    public void sheetClosed(Sheet sheet) {
+        super.sheetClosed(sheet);
+        typeImageView.clearImage();
+    }
+
 }
