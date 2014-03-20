@@ -408,7 +408,7 @@ public class ImageView extends Component {
     @Override
     public void clear() {
         if (imageKey != null) {
-            setImage((Image)null);
+            clearImage();
         }
     }
 
@@ -425,4 +425,12 @@ public class ImageView extends Component {
     public ListenerList<ImageViewBindingListener> getImageViewBindingListeners() {
         return imageViewBindingListeners;
     }
+
+    /**
+     * Force a reset of the image (and its listeners).
+     */
+    public void clearImage() {
+        setImage((Image) null);
+    }
+
 }

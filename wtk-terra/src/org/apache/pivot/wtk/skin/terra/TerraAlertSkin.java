@@ -20,10 +20,11 @@ import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.AlertListener;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Dialog;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
@@ -164,4 +165,11 @@ public class TerraAlertSkin extends TerraDialogSkin
             optionButtonBoxPane.get(index).requestFocus();
         }
     }
+
+    @Override
+    public void dialogClosed(Dialog dialog, boolean modal) {
+        super.dialogClosed(dialog, modal);
+        typeImageView.clearImage();
+    }
+
 }

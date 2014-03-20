@@ -18,16 +18,17 @@ package org.apache.pivot.wtk.skin.terra;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PromptListener;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 
@@ -164,4 +165,11 @@ public class TerraPromptSkin extends TerraSheetSkin
             optionButtonBoxPane.get(index).requestFocus();
         }
     }
+
+    @Override
+    public void sheetClosed(Sheet sheet) {
+        super.sheetClosed(sheet);
+        typeImageView.clearImage();
+    }
+
 }
