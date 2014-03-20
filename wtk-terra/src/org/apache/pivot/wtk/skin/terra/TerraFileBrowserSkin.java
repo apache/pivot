@@ -922,7 +922,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         fileTableView.getComponentTooltipListeners().add(new ComponentTooltipListener() {
 
             @Override
-            public void tooltipTriggered(Component component, int x, int y) {
+            public void tooltipTriggered(Component comp, int x, int y) {
 
                 // Check that we are on the first column.
                 if (fileTableView.getColumnAt(x) != 0) {
@@ -952,12 +952,12 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                 tooltip.setContent(toolTipTextArea);
 
-                Point location = component.getDisplay().getMouseLocation();
+                Point location = comp.getDisplay().getMouseLocation();
                 x = location.x;
                 y = location.y;
 
                 // Ensure that the tooltip stays on screen
-                Display display = component.getDisplay();
+                Display display = comp.getDisplay();
                 int tooltipHeight = tooltip.getPreferredHeight();
                 if (y + tooltipHeight > display.getHeight()) {
                     y -= tooltipHeight;
@@ -968,7 +968,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                 toolTipTextArea.setMaximumWidth(display.getWidth() - ( x + tooltipXOffset + padding) );
                 tooltip.setLocation(x + tooltipXOffset, y);
-                tooltip.open(component.getWindow());
+                tooltip.open(comp.getWindow());
             }
         });
 

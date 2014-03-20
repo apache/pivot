@@ -266,14 +266,15 @@ public abstract class ApplicationContext {
                     if (dropLocation != null) {
                         dropAction = dropTarget.userDropActionChange(dropDescendant, dragManifest,
                             supportedDropActions, dropLocation.x, dropLocation.y, userDropAction);
+
+					    if (dropAction != null) {
+                            // Perform the drop
+                            event.acceptDrop(getNativeDropAction(dropAction));
+                            dropTarget.drop(dropDescendant, dragManifest, supportedDropActions,
+                                dropLocation.x, dropLocation.y, userDropAction);
+                        }
                     }
 
-                    if (dropAction != null) {
-                        // Perform the drop
-                        event.acceptDrop(getNativeDropAction(dropAction));
-                        dropTarget.drop(dropDescendant, dragManifest, supportedDropActions,
-                            dropLocation.x, dropLocation.y, userDropAction);
-                    }
                 }
 
                 if (dropAction == null) {

@@ -28,6 +28,19 @@ public final class Clipboard {
     private static LocalManifest content = null;
     private static ClipboardContentListener clipboardContentListener = null;
 
+    private static final ClipboardOwner clipboardOwner = new ClipboardOwner() {
+        @Override
+        public void lostOwnership(java.awt.datatransfer.Clipboard clipboard,
+            Transferable contents) {
+            LocalManifest previousContent = Clipboard.content;
+            Clipboard.content = null;
+
+            if (Clipboard.clipboardContentListener != null) {
+                Clipboard.clipboardContentListener.contentChanged(previousContent);
+            }
+        }
+    };
+
     /**
      * Retrieves the contents of the clipboard.
      */
@@ -70,18 +83,7 @@ public final class Clipboard {
             java.awt.datatransfer.Clipboard awtClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
             LocalManifestAdapter localManifestAdapter = new LocalManifestAdapter(content);
-            awtClipboard.setContents(localManifestAdapter, new ClipboardOwner() {
-                @Override
-                public void lostOwnership(java.awt.datatransfer.Clipboard clipboard,
-                    Transferable contents) {
-                    LocalManifest previousContent = Clipboard.content;
-                    Clipboard.content = null;
-
-                    if (Clipboard.clipboardContentListener != null) {
-                        Clipboard.clipboardContentListener.contentChanged(previousContent);
-                    }
-                }
-            });
+            awtClipboard.setContents(localManifestAdapter, clipboardOwner);
         } catch (SecurityException exception) {
             // No-op
         }
