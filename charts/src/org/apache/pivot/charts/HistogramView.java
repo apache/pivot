@@ -53,6 +53,7 @@ public class HistogramView extends ChartView {
             return frequency;
         }
 
+        @Override
         public String toString() {
             return "bin #"+getElementIndex()+","+binStart+" - "+binEnd+", frequency "+frequency;
         }

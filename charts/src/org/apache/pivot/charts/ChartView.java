@@ -280,6 +280,7 @@ public abstract class ChartView extends Component {
 
         @Override
         public void comparatorChanged(List<ValueMarker> list, Comparator<ValueMarker> previousComparator) {
+            // No-op
         }
     }
 

@@ -49,7 +49,7 @@ public class SingleValueChartView extends ChartView {
             }
         }
 
-        private EnumMap<Range, ValueRange> ranges = new EnumMap<Range, ValueRange>(Range.class);
+        private EnumMap<Range, ValueRange> ranges = new EnumMap<>(Range.class);
 
         public Number getLowerBound() {
             return lowerBound;
