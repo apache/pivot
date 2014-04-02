@@ -2668,8 +2668,10 @@ public abstract class Component implements ConstrainedVisual {
                 @Override
                 public void run() {
                     Point mouseLocationLocal = getMouseLocation();
-                    componentTooltipListeners.tooltipTriggered(Component.this,
-                        mouseLocationLocal.x, mouseLocationLocal.y);
+                    if (mouseLocationLocal != null) {
+                        componentTooltipListeners.tooltipTriggered(Component.this,
+                            mouseLocationLocal.x, mouseLocationLocal.y);
+                    }
                 }
             }, tooltipDelay);
 
