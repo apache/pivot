@@ -155,6 +155,20 @@ public abstract class ListenerList<T> implements Iterable<T> {
         return last;
     }
 
+    /**
+     * Get the indexed element in the list.
+     *
+     * @return
+     * the element at position <tt>index</tt>
+     * or throw an <tt>IndexOutOfBoundsException</tt>
+     */
+    public T get(int index) {
+        if (index < 0 || index >= last) {
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds [0," + last + "].");
+        }
+        return list[index];
+    }
+
     @Override
     public Iterator<T> iterator() {
         return new NodeIterator();
