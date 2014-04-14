@@ -13,12 +13,13 @@
  */
 package org.apache.pivot.wtk.validation;
 
+import java.math.BigInteger;
 import java.util.Locale;
 
 /**
- * A validator for an int value limited to a range. <p> Beware that usual math
- * rules for native primitive types (and related approximations) are applied
- * here.
+ * A validator for an <tt>int</tt> value limited to a range.
+ * <p> {@link BigInteger} math is used here so that proper checks against
+ * the limits of the type can be done.
  *
  * @see ComparableRangeValidator
  */
@@ -68,14 +69,13 @@ public class IntRangeValidator extends IntValidator {
         boolean valid = false;
 
         if (super.isValid(text)) {
-            final int i = textToObject(text);
-            valid = (i >= minValue && i <= maxValue);
+            BigInteger min = BigInteger.valueOf((long)minValue);
+            BigInteger max = BigInteger.valueOf((long)maxValue);
+            BigInteger value = new BigInteger(text);
+            valid = value.compareTo(min) >= 0 && value.compareTo(max) <= 0;
         }
 
         return valid;
     }
 
-    private final Integer textToObject(String text) {
-        return parseNumber(text).intValue();
-    }
 }

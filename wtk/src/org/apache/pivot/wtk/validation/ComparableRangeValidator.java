@@ -63,7 +63,7 @@ public class ComparableRangeValidator<T extends Comparable<T>> extends Comparabl
 
     public void setMaximum(T maxValue) {
         if (minValue == null) {
-            throw new IllegalArgumentException("minValue must be not null");
+            throw new IllegalArgumentException("maxValue must be not null");
         }
         this.maxValue = maxValue;
     }
