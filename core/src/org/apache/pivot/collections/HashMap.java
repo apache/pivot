@@ -138,6 +138,14 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
         }
     }
 
+    public HashMap(java.util.Map<K, V> map) {
+        this(Math.max((int) (map.size() / DEFAULT_LOAD_FACTOR) + 1, DEFAULT_CAPACITY));
+
+        for (K key : map.keySet()) {
+            put(key, map.get(key));
+        }
+    }
+
     public HashMap(Comparator<K> comparator) {
         this();
 

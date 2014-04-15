@@ -198,6 +198,13 @@ public class ArrayList<T> implements List<T>, Serializable {
         comparator = arrayList.comparator;
     }
 
+    public ArrayList(java.util.Collection<T> c) {
+        verifyNotNull("c", c);
+
+        items = c.toArray();
+        length = c.size();
+    }
+
     @Override
     public int add(T item) {
         int index = -1;
