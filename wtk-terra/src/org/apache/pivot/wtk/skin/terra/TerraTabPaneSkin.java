@@ -30,7 +30,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonGroup;
 import org.apache.pivot.wtk.ButtonGroupListener;
@@ -59,12 +58,12 @@ import org.apache.pivot.wtk.effects.TransitionListener;
 import org.apache.pivot.wtk.effects.easing.Easing;
 import org.apache.pivot.wtk.effects.easing.Quadratic;
 import org.apache.pivot.wtk.skin.ButtonSkin;
-import org.apache.pivot.wtk.skin.ContainerSkin;
+import org.apache.pivot.wtk.skin.TabPaneSkin;
 
 /**
  * Tab pane skin.
  */
-public class TerraTabPaneSkin extends ContainerSkin
+public class TerraTabPaneSkin extends TabPaneSkin
     implements TabPaneListener, TabPaneSelectionListener, TabPaneAttributeListener {
     /**
      * Tab button component.
@@ -530,7 +529,7 @@ public class TerraTabPaneSkin extends ContainerSkin
     }
 
     private Panorama tabButtonPanorama = new Panorama();
-    private BoxPane tabButtonBoxPane = new BoxPane();
+    // private BoxPane tabButtonBoxPane = new BoxPane();
     private ButtonGroup tabButtonGroup = new ButtonGroup();
 
     private Color activeTabColor;

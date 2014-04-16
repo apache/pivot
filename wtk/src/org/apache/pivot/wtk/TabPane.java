@@ -25,6 +25,7 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
+import org.apache.pivot.wtk.skin.TabPaneSkin;
 
 /**
  * Container that provides access to a set of components via selectable tabs,
@@ -148,6 +149,16 @@ public class TabPane extends Container {
         public Iterator<Component> iterator() {
             return new ImmutableIterator<Component>(tabs.iterator());
         }
+    }
+
+    /**
+     * Tab pane skin interface. Tab pane skins must implement
+     * this interface to facilitate additional communication between the
+     * component and the skin.
+     */
+    public interface Skin {
+        boolean isVisible(int index);
+        void setVisible(int index, boolean value);
     }
 
     private enum Attribute {
@@ -412,6 +423,21 @@ public class TabPane extends Container {
         if (this.collapsible != collapsible) {
             this.collapsible = collapsible;
             tabPaneListeners.collapsibleChanged(this);
+        }
+    }
+
+    public boolean isTabVisible(int index) {
+        TabPane.Skin tabPaneSkin = (TabPane.Skin)getSkin();
+        if (tabPaneSkin instanceof TabPaneSkin) {
+            return ((TabPaneSkin)tabPaneSkin).isVisible(index);
+        }
+        return true;
+    }
+
+    public void setTabVisible(int index, boolean value) {
+        TabPane.Skin tabPaneSkin = (TabPane.Skin)getSkin();
+        if (tabPaneSkin instanceof TabPaneSkin) {
+            ((TabPaneSkin)tabPaneSkin).setVisible(index, value);
         }
     }
 
