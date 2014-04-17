@@ -17,6 +17,7 @@
 package org.apache.pivot.collections.adapter;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -47,6 +48,11 @@ public class ListAdapter<T> implements List<T>, Serializable {
         }
 
         this.list = list;
+    }
+
+    @SuppressWarnings( "unchecked" )
+    public ListAdapter(T... a) {
+        this.list = Arrays.asList(a);
     }
 
     public java.util.List<T> getList() {
