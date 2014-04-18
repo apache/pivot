@@ -41,7 +41,7 @@ public class ComparableRangeValidator<T extends Comparable<T>> extends Comparabl
         setMinimum(minValue);
         setMaximum(maxValue);
 
-        if (maxValue.compareTo(minValue)< 0) {
+        if (maxValue.compareTo(minValue) < 0) {
             throw new IllegalArgumentException("maxValue must be higher or equals than minValue");
         }
     }
@@ -62,8 +62,8 @@ public class ComparableRangeValidator<T extends Comparable<T>> extends Comparabl
     }
 
     public void setMaximum(T maxValue) {
-        if (minValue == null) {
-            throw new IllegalArgumentException("minValue must be not null");
+        if (maxValue == null) {
+            throw new IllegalArgumentException("maxValue must be not null");
         }
         this.maxValue = maxValue;
     }
@@ -85,7 +85,7 @@ public class ComparableRangeValidator<T extends Comparable<T>> extends Comparabl
 
     @Override
     public String toString() {
-        return ( this.getClass().getSimpleName() + "(" + minValue + "," + maxValue + ")" );
+        return (this.getClass().getSimpleName() + "(" + minValue + "," + maxValue + ")");
     }
 
 }
