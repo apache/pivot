@@ -173,6 +173,12 @@ limitations under the License.
         </p>
 
         <p>
+            Note that (for offline testing purposes) <tt>pivot-tutorials-<i>[version]</i>.jar</tt>
+			is not provided directly in binary distribution, but it's inside generated war files
+			(under the lib folder). Otherwise, you can build it from sources.
+        </p>
+
+       <p>
             The application class name is specified as the first argument to the
             <tt>DesktopApplicationContext</tt> loader application.
         </p>
