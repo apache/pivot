@@ -63,16 +63,16 @@ public class SheetTest extends Application.Adapter {
 
         final TablePane tablePane = new TablePane();
         tablePane.setPreferredSize(320, 240);
-        tablePane.getColumns().add(new TablePane.Column(1, true));
-        tablePane.getRows().add(new TablePane.Row(1, true));
-        tablePane.getRows().add(new TablePane.Row(-1));
+        new TablePane.Column(tablePane, 1, true);
+        TablePane.Row row0 = new TablePane.Row(tablePane, 1, true);
+        TablePane.Row row1 = new TablePane.Row(tablePane, -1);
 
         final Label sheetContent = new Label("Sheet Content");
         sheetContent.getStyles().put("wrapText", true);
         sheetContent.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         sheetContent.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
-        tablePane.getRows().get(0).add(sheetContent);
+        row0.add(sheetContent);
 
         Label promptBody = new Label(
             "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
@@ -103,7 +103,7 @@ public class SheetTest extends Application.Adapter {
         alert.setTitle("Alert");
 
         BoxPane boxPane = new BoxPane();
-        tablePane.getRows().get(1).add(boxPane);
+        row1.add(boxPane);
 
         boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
 

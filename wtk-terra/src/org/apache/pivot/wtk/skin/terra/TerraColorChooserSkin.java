@@ -341,11 +341,10 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
 
     public TerraColorChooserSkin() {
         tablePane.getStyles().put("horizontalSpacing", 6);
-        tablePane.getColumns().add(new TablePane.Column(31, true));
-        tablePane.getColumns().add(new TablePane.Column(4, true));
+        new TablePane.Column(tablePane, 31, true);
+        new TablePane.Column(tablePane, 4, true);
 
-        TablePane.Row row = new TablePane.Row(1, true);
-        tablePane.getRows().add(row);
+        TablePane.Row row = new TablePane.Row(tablePane, 1, true);
 
         row.add(saturationValueChooser);
         row.add(hueChooser);

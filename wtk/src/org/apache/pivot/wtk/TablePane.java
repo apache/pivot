@@ -48,21 +48,40 @@ public class TablePane extends Container {
         private TablePane tablePane = null;
 
         public Row() {
-            this(-1, false, false);
+            this(null, -1, false, false);
         }
 
         public Row(int height) {
-            this(height, false, false);
+            this(null, height, false, false);
         }
 
         public Row(int height, boolean relative) {
-            this(height, relative, false);
+            this(null, height, relative, false);
         }
 
         public Row(int height, boolean relative, boolean highlighted) {
+            this(null, height, relative, highlighted);
+        }
+
+        public Row(TablePane tablePane) {
+            this(tablePane, -1, false, false);
+        }
+
+        public Row(TablePane tablePane, int height) {
+            this(tablePane, height, false, false);
+        }
+
+        public Row(TablePane tablePane, int height, boolean relative) {
+            this(tablePane, height, relative, false);
+        }
+
+        public Row(TablePane tablePane, int height, boolean relative, boolean highlighted) {
             this.height = height;
             this.relative = relative;
             this.highlighted = highlighted;
+            if (tablePane != null) {
+                tablePane.getRows().add(this);
+            }
         }
 
         /**
@@ -279,21 +298,40 @@ public class TablePane extends Container {
         private boolean highlighted;
 
         public Column() {
-            this(-1, false, false);
+            this(null, -1, false, false);
         }
 
         public Column(int width) {
-            this(width, false, false);
+            this(null, width, false, false);
         }
 
         public Column(int width, boolean relative) {
-            this(width, relative, false);
+            this(null, width, relative, false);
         }
 
         public Column(int width, boolean relative, boolean highlighted) {
+            this(null, width, relative, highlighted);
+        }
+
+        public Column(TablePane tablePane) {
+            this(tablePane, -1, false, false);
+        }
+
+        public Column(TablePane tablePane, int width) {
+            this(tablePane, width, false, false);
+        }
+
+        public Column(TablePane tablePane, int width, boolean relative) {
+            this(tablePane, width, relative, false);
+        }
+
+        public Column(TablePane tablePane, int width, boolean relative, boolean highlighted) {
             this.width = width;
             this.relative = relative;
             this.highlighted = highlighted;
+            if (tablePane != null) {
+                tablePane.getColumns().add(this);
+            }
         }
 
         /**

@@ -251,14 +251,13 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
 
         // Create the title bar components
         titleBarTablePane = new TablePane();
-        titleBarTablePane.getColumns().add(new TablePane.Column(1, true));
-        titleBarTablePane.getColumns().add(new TablePane.Column(-1));
+        new TablePane.Column(titleBarTablePane, 1, true);
+        new TablePane.Column(titleBarTablePane, -1);
 
         titleBarTablePane.getStyles().put("padding", new Insets(3));
         titleBarTablePane.getStyles().put("horizontalSpacing", 3);
 
-        TablePane.Row titleRow = new TablePane.Row(-1);
-        titleBarTablePane.getRows().add(titleRow);
+        TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 
         titleBoxPane = new BoxPane(Orientation.HORIZONTAL);
         titleBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);

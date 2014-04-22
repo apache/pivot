@@ -41,8 +41,8 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
     public MenuItemDataRenderer() {
         getStyles().put("padding", new Insets(2));
 
-        getColumns().add(new TablePane.Column(1, true));
-        getColumns().add(new TablePane.Column());
+        new TablePane.Column(this, 1, true);
+        new TablePane.Column(this);
 
         BoxPane boxPane = new BoxPane();
         boxPane.add(imageView);
@@ -50,11 +50,9 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
         boxPane.getStyles().put("padding", new Insets(0, 0, 0, 6));
 
-        TablePane.Row row = new TablePane.Row();
+        TablePane.Row row = new TablePane.Row(this);
         row.add(boxPane);
         row.add(keyboardShortcutLabel);
-
-        getRows().add(row);
 
         imageView.getStyles().put("backgroundColor", null);
     }

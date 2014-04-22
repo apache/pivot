@@ -36,14 +36,12 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
     public LinkButtonDataRenderer() {
         getStyles().put("horizontalSpacing", 4);
 
-        getColumns().add(new TablePane.Column());
-        getColumns().add(new TablePane.Column(1, true));
+        new TablePane.Column(this);
+        new TablePane.Column(this, 1, true);
 
-        TablePane.Row row = new TablePane.Row();
+        TablePane.Row row = new TablePane.Row(this);
         row.add(imageView);
         row.add(label);
-
-        getRows().add(row);
 
         label.getStyles().put("wrapText", true);
     }

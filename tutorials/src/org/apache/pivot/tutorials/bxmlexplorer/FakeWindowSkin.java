@@ -191,11 +191,10 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
 
         // The title bar table pane contains two nested box panes: one for
         // the title contents and the other for the buttons
-        titleBarTablePane.getColumns().add(new TablePane.Column(1, true));
-        titleBarTablePane.getColumns().add(new TablePane.Column(-1));
+        new TablePane.Column(titleBarTablePane, 1, true);
+        new TablePane.Column(titleBarTablePane, -1);
 
-        TablePane.Row titleRow = new TablePane.Row(-1);
-        titleBarTablePane.getRows().add(titleRow);
+        TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 
         titleRow.add(titleBoxPane);
         titleRow.add(buttonBoxPane);

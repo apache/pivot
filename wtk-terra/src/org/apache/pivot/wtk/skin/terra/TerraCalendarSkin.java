@@ -411,7 +411,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         // Create the table pane
         calendarTablePane = new TablePane();
         for (int i = 0; i < 7; i++) {
-            calendarTablePane.getColumns().add(new TablePane.Column(1, true));
+            new TablePane.Column(calendarTablePane, 1, true);
         }
 
         // Month spinner
@@ -458,22 +458,20 @@ public class TerraCalendarSkin extends CalendarSkin {
         monthYearTablePane.getStyles().put("padding", 3);
         monthYearTablePane.getStyles().put("horizontalSpacing", 4);
 
-        monthYearTablePane.getColumns().add(new TablePane.Column(1, true));
-        monthYearTablePane.getColumns().add(new TablePane.Column(-1));
+        new TablePane.Column(monthYearTablePane, 1, true);
+        new TablePane.Column(monthYearTablePane, -1);
 
-        TablePane.Row monthYearRow = new TablePane.Row(-1);
-        monthYearTablePane.getRows().add(monthYearRow);
+        TablePane.Row monthYearRow = new TablePane.Row(monthYearTablePane, -1);
         monthYearRow.add(monthSpinner);
         monthYearRow.add(yearSpinner);
 
-        TablePane.Row calendarRow = new TablePane.Row();
+        TablePane.Row calendarRow = new TablePane.Row(calendarTablePane);
         calendarRow.add(monthYearTablePane);
-        calendarTablePane.getRows().add(calendarRow);
 
         TablePane.setColumnSpan(monthYearTablePane, 7);
 
         // Add the day labels
-        calendarRow = new TablePane.Row();
+        calendarRow = new TablePane.Row(calendarTablePane);
 
         Font labelFont = theme.getFont();
         labelFont = labelFont.deriveFont(Font.BOLD);
@@ -485,8 +483,6 @@ public class TerraCalendarSkin extends CalendarSkin {
             label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
             calendarRow.add(label);
         }
-
-        calendarTablePane.getRows().add(calendarRow);
 
         // Add the buttons
         dateButtonGroup = new ButtonGroup();
@@ -513,7 +509,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         });
 
         for (int j = 0; j < 6; j++) {
-            calendarRow = new TablePane.Row(1, true);
+            calendarRow = new TablePane.Row(calendarTablePane, 1, true);
 
             for (int i = 0; i < 7; i++) {
                 DateButton dateButton = new DateButton();
@@ -522,8 +518,6 @@ public class TerraCalendarSkin extends CalendarSkin {
 
                 calendarRow.add(dateButton);
             }
-
-            calendarTablePane.getRows().add(calendarRow);
         }
 
         Resources resources;

@@ -75,7 +75,7 @@ public class TableView extends Component {
          * Creates an empty column.
          */
         public Column() {
-            this(null, null, DEFAULT_WIDTH, false);
+            this(null, null, null, DEFAULT_WIDTH, false);
         }
 
         /**
@@ -84,7 +84,7 @@ public class TableView extends Component {
          * @param name The column name.
          */
         public Column(String name) {
-            this(name, null, DEFAULT_WIDTH, false);
+            this(null, name, null, DEFAULT_WIDTH, false);
         }
 
         /**
@@ -94,7 +94,7 @@ public class TableView extends Component {
          * @param headerData The column header data.
          */
         public Column(String name, Object headerData) {
-            this(name, headerData, DEFAULT_WIDTH, false);
+            this(null, name, headerData, DEFAULT_WIDTH, false);
         }
 
         /**
@@ -105,7 +105,7 @@ public class TableView extends Component {
          * @param width The width of the column.
          */
         public Column(String name, Object headerData, int width) {
-            this(name, headerData, width, false);
+            this(null, name, headerData, width, false);
         }
 
         /**
@@ -118,9 +118,32 @@ public class TableView extends Component {
          * otherwise, specifies a fixed column width.
          */
         public Column(String name, Object headerData, int width, boolean relative) {
+            this(null, name, headerData, width, relative);
+        }
+
+        public Column(TableView tableView) {
+            this(tableView, null, null, DEFAULT_WIDTH, false);
+        }
+
+        public Column(TableView tableView, String name) {
+            this(tableView, name, null, DEFAULT_WIDTH, false);
+        }
+
+        public Column(TableView tableView, String name, Object headerData) {
+            this(tableView, name, headerData, DEFAULT_WIDTH, false);
+        }
+
+        public Column(TableView tableView, String name, Object headerData, int width) {
+            this(tableView, name, headerData, width, false);
+        }
+
+        public Column(TableView tableView, String name, Object headerData, int width, boolean relative) {
             setName(name);
             setHeaderData(headerData);
             setWidth(width, relative);
+            if (tableView != null) {
+                tableView.getColumns().add(this);
+            }
         }
 
         /**

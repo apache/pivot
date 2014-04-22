@@ -108,11 +108,9 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             colorBoxPane.add(greenSpinner);
             colorBoxPane.add(blueSpinner);
 
-            TablePane.Row row = new TablePane.Row();
+            TablePane.Row row = new TablePane.Row(colorChooserTablePane);
             row.add(colorChooserButton);
             row.add(colorBoxPane);
-
-            colorChooserTablePane.getRows().add(row);
 
             // Add listeners
             ColorChooserButtonSelectionListener colorChooserButtonSelectionListener = new ColorChooserButtonSelectionListener() {
@@ -189,20 +187,18 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
     }
 
     private void createColorPalette() {
-        colorPaletteTablePane.getColumns().add(new TablePane.Column(1, true));
-        colorPaletteTablePane.getColumns().add(new TablePane.Column(1, true));
-        colorPaletteTablePane.getColumns().add(new TablePane.Column(1, true));
+        new TablePane.Column(colorPaletteTablePane, 1, true);
+        new TablePane.Column(colorPaletteTablePane, 1, true);
+        new TablePane.Column(colorPaletteTablePane, 1, true);
 
         int numberOfPaletteColors = getNumberOfPaletteColors();
         for (int i = 0; i < numberOfPaletteColors; i++) {
-            TablePane.Row row = new TablePane.Row(1, true);
+            TablePane.Row row = new TablePane.Row(colorPaletteTablePane, 1, true);
 
             int offset = i * 3;
             row.add(createColorPaletteCell(offset));
             row.add(createColorPaletteCell(offset + 1));
             row.add(createColorPaletteCell(offset + 2));
-
-            colorPaletteTablePane.getRows().add(row);
         }
 
         colorPaletteTablePane.getStyles().put("horizontalSpacing", 4);

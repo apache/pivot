@@ -41,20 +41,18 @@ public class ColorPaletteTest extends Application.Adapter {
         Theme theme = Theme.getTheme();
 
         TablePane tablePane = new TablePane();
-        tablePane.getColumns().add(new TablePane.Column(1, true));
-        tablePane.getColumns().add(new TablePane.Column(1, true));
-        tablePane.getColumns().add(new TablePane.Column(1, true));
+        new TablePane.Column(tablePane, 1, true);
+        new TablePane.Column(tablePane, 1, true);
+        new TablePane.Column(tablePane, 1, true);
 
         int numberOfPaletteColors = theme.getNumberOfPaletteColors();
         // ArrayList<String> colors = new ArrayList<>(numberOfPaletteColors);
         for (int i = 0; i < numberOfPaletteColors; i++) {
-            TablePane.Row row = new TablePane.Row(1, true);
+            TablePane.Row row = new TablePane.Row(tablePane, 1, true);
 
             row.add(createCell(i * 3));
             row.add(createCell(i * 3 + 1));
             row.add(createCell(i * 3 + 2));
-
-            tablePane.getRows().add(row);
         }
 
         tablePane.getStyles().put("horizontalSpacing", 4);
