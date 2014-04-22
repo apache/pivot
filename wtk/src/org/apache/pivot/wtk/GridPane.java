@@ -38,6 +38,9 @@ public class GridPane extends Container {
 
         private GridPane gridPane = null;
 
+        public Row() {
+        }
+
         public Row(GridPane gridPane) {
             if (gridPane != null) {
                 gridPane.getRows().add(this);
