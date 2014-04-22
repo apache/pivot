@@ -1401,17 +1401,16 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         if (indicator == null) {
             indicator = new ActivityIndicator();
             activityGrid = new GridPane(5);
-            GridPane.Filler filler = new GridPane.Filler();
             GridPane.Row row1 = new GridPane.Row(activityGrid);
             GridPane.Row row2 = new GridPane.Row(activityGrid);
             GridPane.Row row3 = new GridPane.Row(activityGrid);
             for (int i = 0; i < 5; i++) {
-                row1.add(filler);
+                row1.add(new GridPane.Filler());
                 if (i == 2)
                     row2.add(indicator);
                 else
-                    row2.add(filler);
-                row3.add(filler);
+                    row2.add(new GridPane.Filler());
+                row3.add(new GridPane.Filler());
             }
         }
         fileStackPane.add(activityGrid);
