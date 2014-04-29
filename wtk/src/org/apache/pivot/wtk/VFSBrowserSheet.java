@@ -192,6 +192,48 @@ public class VFSBrowserSheet extends Sheet {
         installSkin(VFSBrowserSheet.class);
     }
 
+    /**
+     * Creates a new VFSBrowserSheet
+     * <p>
+     * Note that this version of the constructor must be used when a custom home folder has to be set.
+     *
+     * @param manager
+     * The VFS FileSystemManager that we will be browsing.  If <tt>null</tt> the default (local) will
+     * be used.
+     *
+     * @param mode
+     * The mode for opening the sheet.
+     * @see Mode
+     *
+     * @param rootFolder
+     * The root folder object.
+     *
+     * @param homeFolder
+     * The default for the "home" folder object.
+     */
+    public VFSBrowserSheet(FileSystemManager manager, Mode mode, FileObject rootFolder, FileObject homeFolder)
+            throws FileSystemException
+    {
+        if (mode == null) {
+            throw new IllegalArgumentException("Mode is null.");
+        }
+
+        if (rootFolder == null) {
+            throw new IllegalArgumentException("Root folder is null.");
+        }
+
+        this.mode = mode;
+
+        // Note: these three methods all could trigger events, but since we're
+        // in the constructor and the skin isn't set yet, there will not be any
+        // listeners registered yet
+        setManager(manager);
+        setRootDirectory(rootFolder);
+        setHomeDirectory(homeFolder == null ? rootFolder : homeFolder);
+
+        installSkin(VFSBrowserSheet.class);
+    }
+
     public FileSystemManager getManager() {
         return manager;
     }

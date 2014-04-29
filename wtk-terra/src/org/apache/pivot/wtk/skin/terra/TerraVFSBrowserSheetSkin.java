@@ -608,4 +608,14 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
         Sequence<TablePane.Row> rows = tablePane.getRows();
         rows.insert(row, rows.getLength() - 1);
     }
+
+    public void addLabelComponent(Component component) {
+        hostNameBoxPane.setVisible(true);
+        hostNameBoxPane.add(component);
+    }
+
+    public VFSBrowser getBrowser() {
+        return this.fileBrowser;
+    }
+
 }

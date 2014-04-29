@@ -43,6 +43,7 @@ public class VFSBrowser extends Container {
      */
     public interface Skin extends org.apache.pivot.wtk.Skin {
         public FileObject getFileAt(int x, int y);
+        public void addActionComponent(Component component);
     }
 
     private static final URI USER_HOME = new File(System.getProperty("user.home")).toURI();
@@ -494,6 +495,11 @@ public class VFSBrowser extends Container {
     public FileObject getFileAt(int x, int y) {
         VFSBrowser.Skin fileBrowserSkin = (VFSBrowser.Skin) getSkin();
         return fileBrowserSkin.getFileAt(x, y);
+    }
+
+    public void addActionComponent(Component component) {
+        VFSBrowser.Skin fileBrowserSkin = (VFSBrowser.Skin) getSkin();
+        fileBrowserSkin.addActionComponent(component);
     }
 
     public ListenerList<VFSBrowserListener> getFileBrowserListeners() {

@@ -756,6 +756,8 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     private Component content = null;
 
     @BXML
+    private BoxPane pushButtonPane = null;
+    @BXML
     private ListButton driveListButton = null;
     @BXML
     private ListButton pathListButton = null;
@@ -1159,6 +1161,11 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         return file;
     }
 
+    @Override
+    public void addActionComponent(Component component) {
+        pushButtonPane.add(component);
+    }
+
     public boolean isKeyboardFolderTraversalEnabled() {
         return keyboardFolderTraversalEnabled;
     }
@@ -1463,4 +1470,5 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             }
         }));
     }
+
 }
