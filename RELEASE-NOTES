@@ -20,8 +20,29 @@ Release Notes for Pivot 2.0.4:
 ** New Feature
 
 ** Improvement
+    * [PIVOT-873] - Provide a style for TableView that allows one click to start row editing
+    * [PIVOT-910] - Multiline Label (and Tooltip)
+    * [PIVOT-916] - Replace DesktopApplicationContext.displayException calls with ApplicationContext.handleUncaughtException
+    * [PIVOT-924] - Standard handling of exceptions in BXMLSerializer
+    * [PIVOT-930] - Tooltip to show file name in file browser
+    * [PIVOT-941] - Allow random access to ListenerList elements with a "get" method
+    * [PIVOT-942] - Hide TabPage folder
+    * [PIVOT-944] - Improve Validators on int and long
 
 ** Bug
+    * [PIVOT-905] - Repaint problems when scrolling TextArea horizontally
+    * [PIVOT-911] - Unable to Build sources with Ant 1.9.x
+    * [PIVOT-912] - Using latest 1.7 JDK to build there is an error related to JSObject.getWindow
+    * [PIVOT-922] - Some renderers were not calling their "toString" methods in the "render" methods
+    * [PIVOT-923] - ScrollBar not displayed correctly if start is greater than 0
+    * [PIVOT-925] - Expander Title Color (titleBarColor) not functional
+    * [PIVOT-927] - Unexpected NPE
+    * [PIVOT-928] - Menu popups should always be repositioned so that they aren't rendered outside of the visible window area.
+    * [PIVOT-929] - The Clipboard content is cleared by queued callback
+    * [PIVOT-932] - FileBrowser 'setRootDirectory' method bug with > 1 drive
+    * [PIVOT-934] - Prompt image causing memory leak
+    * [PIVOT-938] - Method getMouseLocation returns null
+    * [PIVOT-945] - Need to make load/store work correctly for all containers
 
 ** Task
 
