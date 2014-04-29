@@ -22,11 +22,11 @@ import org.apache.pivot.wtk.TabPane;
 
 /**
  * Tab pane skin.
- * 
+ *
  * Note that this class is abstract but only because in layout method there are many things
  * already defined that uses the original skin implementation (TerraTabPaneSkin).
  */
-public abstract class TabPaneSkin extends ContainerSkin 
+public abstract class TabPaneSkin extends ContainerSkin
     implements TabPane.Skin {
 
     protected BoxPane tabButtonBoxPane = new BoxPane();
