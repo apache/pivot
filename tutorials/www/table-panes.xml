@@ -31,6 +31,27 @@ limitations under the License.
         </p>
 
         <p>
+            Note that a special syntax can be used to specify the width of a TablePane.Column or the height of a TablePane.Row:
+        </p>
+
+        <ul>
+            <li>
+                "-1" - default size, the column will be as wide as the widest component in that column,
+				or a row would be as tall as the tallest component in that row.
+            </li>
+            <li>
+                "a number > -1" - absolute size,
+				that number will be the width in pixels for a column, or the height in pixels for a row.
+            </li>
+            <li>
+                "n*" - relative size,
+				calculate the remaining space available in the column or in the row
+				(using all relative columns/row cells),
+				then split it in tot parts and finally reallocate the multiply that value by n.
+            </li>
+        </ul>
+
+        <p>
             Table panes support a number of styles that allow a caller to customize the arrangement
             of child components:
         </p>
