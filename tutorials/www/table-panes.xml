@@ -47,9 +47,15 @@ limitations under the License.
                 "n*" - relative size,
 				calculate the remaining space available in the column or in the row
 				(using all relative columns/row cells),
-				then split it in tot parts and finally reallocate the multiply that value by n.
+				then add up the total of the relative values, divide the space by that number and reallocate
+				the space for each column or row by multiplying the final value by each relative number.<br/>
+				For example if the total space is 300 pixels and the column widths are "1*", "2*" and "3*":<br/>
+				total relative value = 1 + 2 + 3 = 6<br/>
+				base value = 300 / 6 = 50<br/>
+				column widths = 1 * 50 = 50, 2 * 50 = 100, 3 * 50 = 150 (total 50 + 100 + 150 = 300)
             </li>
         </ul>
+		<br/>
 
         <p>
             Table panes support a number of styles that allow a caller to customize the arrangement
