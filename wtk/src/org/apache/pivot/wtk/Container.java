@@ -783,6 +783,7 @@ public abstract class Container extends Component
     @Override
     protected boolean mouseUp(Mouse.Button button, int x, int y) {
         boolean consumed = false;
+        mouseClickConsumed = false;
 
         if (isEnabled()) {
             // Notify container listeners
