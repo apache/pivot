@@ -37,25 +37,25 @@ limitations under the License.
         <ul>
             <li>
                 "-1" - default size, the column will be as wide as the widest component in that column,
-				or a row would be as tall as the tallest component in that row.
+                or a row would be as tall as the tallest component in that row.
             </li>
             <li>
                 "a number > -1" - absolute size,
-				that number will be the width in pixels for a column, or the height in pixels for a row.
+                that number will be the width in pixels for a column, or the height in pixels for a row.
             </li>
             <li>
                 "n*" - relative size,
-				calculate the remaining space available in the column or in the row
-				(using all relative columns/row cells),
-				then add up the total of the relative values, divide the space by that number and reallocate
-				the space for each column or row by multiplying the final value by each relative number.<br/>
-				For example if the total space is 300 pixels and the column widths are "1*", "2*" and "3*":<br/>
-				total relative value = 1 + 2 + 3 = 6<br/>
-				base value = 300 / 6 = 50<br/>
-				column widths = 1 * 50 = 50, 2 * 50 = 100, 3 * 50 = 150 (total 50 + 100 + 150 = 300)
+                calculate the remaining space available in the column or in the row
+                (using all relative columns/row cells),
+                then add up the total of the relative values, divide the space by that number and reallocate
+                the space for each column or row by multiplying the final value by each relative number.<br/>
+                For example if the total space is 300 pixels and the column widths are "1*", "2*" and "3*":<br/>
+                total relative value = 1 + 2 + 3 = 6<br/>
+                base value = 300 / 6 = 50<br/>
+                column widths = 1 * 50 = 50, 2 * 50 = 100, 3 * 50 = 150 (total 50 + 100 + 150 = 300)
             </li>
         </ul>
-		<br/>
+        <br/>
 
         <p>
             Table panes support a number of styles that allow a caller to customize the arrangement
