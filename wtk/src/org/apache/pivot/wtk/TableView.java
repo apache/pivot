@@ -2204,15 +2204,15 @@ public class TableView extends Component {
                     && selectedRowBindType != BindType.LOAD) {
                     Object row;
 
-                    int selectedIndex = getSelectedIndex();
-                    if (selectedIndex == -1) {
-                        row = null;
-                    } else {
-                        if (selectedRowBindMapping == null) {
-                            row = tableData.get(selectedIndex);
+                    int selectedIndexLocal = getSelectedIndex();
+                    if (selectedRowBindMapping == null) {
+                        if (selectedIndexLocal == -1) {
+                            row = null;
                         } else {
-                            row = selectedRowBindMapping.get(tableData, selectedIndex);
+                            row = tableData.get(selectedIndexLocal);
                         }
+                    } else {
+                        row = selectedRowBindMapping.get(tableData, selectedIndexLocal);
                     }
 
                     JSON.put(context, selectedRowKey, row);

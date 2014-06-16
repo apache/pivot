@@ -1679,15 +1679,15 @@ public class ListView extends Component {
                     && selectedItemBindType != BindType.LOAD) {
                     Object item;
 
-                    int selectedIndex = getSelectedIndex();
-                    if (selectedIndex == -1) {
-                        item = null;
-                    } else {
-                        if (selectedItemBindMapping == null) {
-                            item = listData.get(selectedIndex);
+                    int selectedIndexLocal = getSelectedIndex();
+                    if (selectedItemBindMapping == null) {
+                        if (selectedIndexLocal == -1) {
+                            item = null;
                         } else {
-                            item = selectedItemBindMapping.get(listData, selectedIndex);
+                            item = listData.get(selectedIndexLocal);
                         }
+                    } else {
+                        item = selectedItemBindMapping.get(listData, selectedIndexLocal);
                     }
 
                     JSON.put(context, selectedItemKey, item);

@@ -678,14 +678,15 @@ public class Spinner extends Container {
         if (selectedItemKey != null
             && selectedItemBindType != BindType.LOAD) {
             Object item;
-            if (selectedIndex == -1) {
-                item = null;
-            } else {
-                if (selectedItemBindMapping == null) {
-                    item = spinnerData.get(selectedIndex);
+
+            if (selectedItemBindMapping == null) {
+                if (selectedIndex == -1) {
+                    item = null;
                 } else {
-                    item = selectedItemBindMapping.get(spinnerData, selectedIndex);
+                    item = spinnerData.get(selectedIndex);
                 }
+            } else {
+                item = selectedItemBindMapping.get(spinnerData, selectedIndex);
             }
 
             JSON.put(context, selectedItemKey, item);

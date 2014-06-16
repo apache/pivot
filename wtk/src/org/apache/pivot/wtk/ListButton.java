@@ -768,14 +768,14 @@ public class ListButton extends Button {
             Object item;
 
             int selectedIndexLocal = getSelectedIndex();
-            if (selectedIndexLocal == -1) {
-                item = null;
-            } else {
-                if (selectedItemBindMapping == null) {
-                    item = listData.get(selectedIndexLocal);
+            if (selectedItemBindMapping == null) {
+                if (selectedIndexLocal == -1) {
+                    item = null;
                 } else {
-                    item = selectedItemBindMapping.get(listData, selectedIndexLocal);
+                    item = listData.get(selectedIndexLocal);
                 }
+            } else {
+                item = selectedItemBindMapping.get(listData, selectedIndexLocal);
             }
 
             JSON.put(context, selectedItemKey, item);
