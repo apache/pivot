@@ -29,6 +29,9 @@ limitations under the License.
             <TablePane.Row height="1*">
                 <Form>
                     <Form.Section>
+                        <BoxPane bxml:id="titleBoxPane" Form.label="Title">
+                            <ListButton bxml:id="titleListButton" listData="['', 'Mr.', 'Mrs.']"/>
+                        </BoxPane>
                         <BoxPane bxml:id="nameBoxPane" Form.label="Name">
                             <TextInput bxml:id="lastNameTextInput" prompt="Last"/>
                             <TextInput bxml:id="firstNameTextInput" prompt="First"/>
