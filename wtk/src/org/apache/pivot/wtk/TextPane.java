@@ -412,6 +412,14 @@ public class TextPane extends Container {
     }
 
     public void insert(String text) {
+        if (selectionLength > 0) {
+            delete(false);
+        }
+
+        insertText(text, selectionStart);
+    }
+
+    public void insertText(String text, int index) {
         if (text == null) {
             throw new IllegalArgumentException("text is null.");
         }
@@ -420,18 +428,14 @@ public class TextPane extends Container {
             throw new IllegalStateException();
         }
 
-        if (selectionLength > 0) {
-            delete(false);
-        }
-
         if (document.getCharacterCount() == 0) {
             // the document is currently empty
             Paragraph paragraph = new Paragraph();
             paragraph.add(text);
             document.insert(paragraph, 0);
         } else {
-            Node descendant = document.getDescendantAt(selectionStart);
-            int offset = selectionStart - descendant.getDocumentOffset();
+            Node descendant = document.getDescendantAt(index);
+            int offset = index - descendant.getDocumentOffset();
 
             if (descendant instanceof TextNode) {
                 // The caret is positioned within an existing text node
@@ -446,7 +450,7 @@ public class TextPane extends Container {
                 if (node instanceof TextNode) {
                     // Insert the text into the existing node
                     TextNode textNode = (TextNode) node;
-                    textNode.insertText(text, selectionStart - textNode.getDocumentOffset());
+                    textNode.insertText(text, index - textNode.getDocumentOffset());
                 } else if (node instanceof Element) {
                     // Append a new text node
                     Element element = (Element) node;
@@ -459,13 +463,13 @@ public class TextPane extends Container {
                 // The caret is positioned on a non-text character node; insert
                 // the text into the descendant's parent
                 Element parent = descendant.getParent();
-                int index = parent.indexOf(descendant);
-                parent.insert(new TextNode(text), index);
+                int elemIndex = parent.indexOf(descendant);
+                parent.insert(new TextNode(text), elemIndex);
             }
         }
 
         // Set the selection start to the character following the insertion
-        setSelection(selectionStart + text.length(), 0);
+        setSelection(index + text.length(), 0);
     }
 
     public void insertImage(Image image) {
@@ -530,27 +534,27 @@ public class TextPane extends Container {
     }
 
     public void delete(boolean backspace) {
-        if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException();
-        }
-
-        int offset = selectionStart;
-
-        int characterCount;
         if (selectionLength > 0) {
-            characterCount = selectionLength;
+            removeText(selectionStart, selectionLength);
         } else {
             if (backspace) {
-                offset--;
+                removeText(selectionStart - 1, 1);
+            } else {
+                removeText(selectionStart, 1);
             }
+        }
+    }
 
-            characterCount = 1;
+    public void removeText(int offset, int characterCount) {
+        if (document == null || document.getCharacterCount() == 0) {
+            throw new IllegalStateException();
         }
 
         if (offset >= 0 && offset < document.getCharacterCount()) {
             Node descendant = document.getDescendantAt(offset);
 
-            if (selectionLength == 0 && descendant instanceof Paragraph) {
+            // Used to be: if (selectionLength == 0 && ...
+            if (characterCount == 0 && descendant instanceof Paragraph) {
                 // We are deleting a paragraph terminator
                 Paragraph paragraph = (Paragraph) descendant;
 
