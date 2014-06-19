@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
@@ -33,6 +34,7 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 
 public class Forms extends Window implements Bindable {
+    private ListButton titleListButton = null;
     private BoxPane nameBoxPane = null;
     private TextInput lastNameTextInput = null;
     private TextInput firstNameTextInput = null;
@@ -41,6 +43,7 @@ public class Forms extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
+        titleListButton = (ListButton)namespace.get("titleListButton");
         nameBoxPane = (BoxPane) namespace.get("nameBoxPane");
         lastNameTextInput = (TextInput) namespace.get("lastNameTextInput");
         firstNameTextInput = (TextInput) namespace.get("firstNameTextInput");
@@ -50,6 +53,9 @@ public class Forms extends Window implements Bindable {
         submitButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
+                String titleOfPerson = (String) titleListButton.getButtonData();
+                System.out.println("The title of the person is: \"" + titleOfPerson + "\"");
+
                 String lastName = lastNameTextInput.getText();
                 String firstName = firstNameTextInput.getText();
 
@@ -69,4 +75,5 @@ public class Forms extends Window implements Bindable {
             }
         });
     }
+
 }

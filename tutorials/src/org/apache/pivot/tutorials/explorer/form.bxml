@@ -19,6 +19,9 @@ limitations under the License.
 <Form xmlns:bxml="http://pivot.apache.org/bxml"
     xmlns="org.apache.pivot.wtk">
     <Form.Section heading="Personal Information">
+        <BoxPane bxml:id="titleBoxPane" Form.label="Title">
+            <ListButton bxml:id="titleListButton" listData="['', 'Mr.', 'Mrs.']"/>
+        </BoxPane>
         <BoxPane bxml:id="nameBoxPane" Form.label="Name">
             <TextInput bxml:id="lastNameTextInput" prompt="Last"/>
             <TextInput bxml:id="firstNameTextInput" prompt="First"/>
