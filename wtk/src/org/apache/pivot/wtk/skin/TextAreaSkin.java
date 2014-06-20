@@ -1084,6 +1084,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     int count = Math.max(textArea.getSelectionLength(), 1);
                     textArea.removeText(index, count);
 
+                    anchor = -1;
                     consumed = true;
                 }
             } else if (keyCode == Keyboard.KeyCode.BACKSPACE
@@ -1099,6 +1100,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     textArea.removeText(index, count);
                     consumed = true;
                 }
+                anchor = -1;
             } else if (keyCode == Keyboard.KeyCode.TAB
                 && (acceptsTab != ctrlPressed)
                 && isEditable) {
