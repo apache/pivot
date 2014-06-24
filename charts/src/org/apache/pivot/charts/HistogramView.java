@@ -34,7 +34,7 @@ public class HistogramView extends ChartView {
             this.binEnd = binEnd;
             this.binStart = binStart;
             this.binValue = binValue;
-            this.frequency = frequency;			
+            this.frequency = frequency;
         }
 
         public double getBinStart() {
@@ -57,7 +57,7 @@ public class HistogramView extends ChartView {
         public String toString() {
             return "bin #"+getElementIndex()+","+binStart+" - "+binEnd+", frequency "+frequency;
         }
-	
+
     }
 
 }

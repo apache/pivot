@@ -111,21 +111,21 @@ public abstract class Theme {
 
     /**
      * Sets the theme's font.
-     * 
+     *
      * @param font the font
      */
     public abstract void setFont(Font font);
 
     /**
      * Gets a color from the theme's base color palette.
-     * 
+     *
      * @param index the index of the color, starting from 0
      */
     public abstract Color getBaseColor(int index);
 
     /**
      * Sets a color in the theme's base color palette.
-     * 
+     *
      * @param index the index of the color, starting from 0
      * @param baseColor the color to set
      */
@@ -134,7 +134,7 @@ public abstract class Theme {
     /**
      * Gets a value from the theme's complete color palette (including derived
      * colors, if any).
-     * 
+     *
      * @param index the index of the color, starting from 0
      */
     public abstract Color getColor(int index);
@@ -142,7 +142,7 @@ public abstract class Theme {
     /**
      * Sets a value in the theme's complete color palette (including derived
      * colors, if any).
-     * 
+     *
      * @param index the index of the color, starting from 0
      * @param color the color to set
      */
@@ -150,14 +150,14 @@ public abstract class Theme {
 
     /**
      * Gets the number of Palette Colors.
-     * 
+     *
      * @return the number
      */
     public abstract int getNumberOfPaletteColors();
 
     /**
      * Gets the total number of Colors (including derived colors, if any).
-     * 
+     *
      * @return the number
      */
     public abstract int getNumberOfColors();
@@ -166,7 +166,7 @@ public abstract class Theme {
      * Tell if the theme is dark.<br/> Usually this means that (if true) any
      * color will be transformed in the opposite way (brightening instead of
      * darkening, and darkening instead of brightening).
-     * 
+     *
      * @return true if dark, false otherwise
      */
     public abstract boolean isThemeDark();
@@ -174,7 +174,7 @@ public abstract class Theme {
     /**
      * Returns the skin class responsible for skinning the specified component
      * class.
-     * 
+     *
      * @param componentClass The component class.
      * @return The skin class, or <tt>null</tt> if no skin mapping exists for
      * the component class.
@@ -190,7 +190,7 @@ public abstract class Theme {
     /**
      * Sets the skin class responsible for skinning the specified component
      * class.
-     * 
+     *
      * @param componentClass The component class.
      * @param skinClass The skin class.
      */
@@ -209,7 +209,7 @@ public abstract class Theme {
     /**
      * Gets the current theme, as determined by the {@linkplain #PROVIDER_NAME
      * theme provider}.
-     * 
+     *
      * @throws IllegalStateException If a theme has not been installed.
      */
     public static Theme getTheme() {
@@ -222,7 +222,7 @@ public abstract class Theme {
 
     /**
      * Produce a font by describing it relative to the current theme's font
-     * 
+     *
      * @param dictionary A dictionary with any of the following keys: <ul> <li>
      * {@value #NAME_KEY} - the family name of the font</li> <li>
      * {@value #SIZE_KEY} - the font size as an integer, or a string "x%" for a

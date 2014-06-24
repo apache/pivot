@@ -112,5 +112,5 @@ public class SingleValueChartView extends ChartView {
                 ((List<Object>)chartData).insert(value, 0);
             }
         }
- 
+
 }

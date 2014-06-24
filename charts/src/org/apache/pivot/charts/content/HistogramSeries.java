@@ -30,9 +30,9 @@ public class HistogramSeries<T> extends ValueSeries<T> {
 
     public void setBinCount(int binCount) {
         this.binCount = binCount;
-        // Fire itemUpdated to notify series change 
+        // Fire itemUpdated to notify series change
         for (ListListener<T> listener : getListListeners()) {
-            listener.itemUpdated(this, Integer.MIN_VALUE, null);			
+            listener.itemUpdated(this, Integer.MIN_VALUE, null);
         }
     }
 

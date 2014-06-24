@@ -33,7 +33,7 @@ public final class ColorUtilities {
      * Returns a brighter version of the specified color. Specifically, it
      * increases the brightness (in the HSB color model) by the given
      * <tt>adjustment</tt> factor (usually in the range ]0 .. 1[).
-     * 
+     *
      * @param color the color
      * @param adjustment the adjustment factor
      * @return the color brightened
@@ -46,7 +46,7 @@ public final class ColorUtilities {
      * Returns a darker version of the specified color. Specifically, it
      * decreases the brightness (in the HSB color model) by the given
      * <tt>adjustment</tt> factor (usually in the range ]0 .. 1[).
-     * 
+     *
      * @param color the color
      * @param adjustment the adjustment factor
      * @return the color darkened
@@ -57,7 +57,7 @@ public final class ColorUtilities {
 
     /**
      * Change the brightness of the given color, and returns the changes color.
-     * 
+     *
      * @param color the color
      * @param adjustment the adjustment factor (usually in the range ]0 .. 1[)
      * @return the new color
@@ -71,7 +71,7 @@ public final class ColorUtilities {
 
     /**
      * Returns a numeric version of the difference of all color RGB components.
-     * 
+     *
      * @param color1 the first color
      * @param color2 the second color
      * @return the value of the difference
@@ -84,7 +84,7 @@ public final class ColorUtilities {
 
     /**
      * Returns a numeric version of the difference of all color RGB components.
-     * 
+     *
      * @param color1 the first color
      * @param color2 the second color
      * @return an array of three elements, containing a value of the difference
@@ -103,7 +103,7 @@ public final class ColorUtilities {
     /**
      * Returns a numeric version of the difference of all color in HSV
      * components.
-     * 
+     *
      * @param color1 the first color
      * @param color2 the second color
      * @return an array of three elements, containing a value of the difference

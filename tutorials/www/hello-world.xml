@@ -174,8 +174,8 @@ limitations under the License.
 
         <p>
             Note that (for offline testing purposes) <tt>pivot-tutorials-<i>[version]</i>.jar</tt>
-			is not provided directly in binary distribution, but it's inside generated war files
-			(under the lib folder). Otherwise, you can build it from sources.
+            is not provided directly in binary distribution, but it's inside generated war files
+            (under the lib folder). Otherwise, you can build it from sources.
         </p>
 
        <p>

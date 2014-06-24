@@ -321,7 +321,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Sets the theme's font.
-     * 
+     *
      * @param font the font
      */
     @Override
@@ -336,7 +336,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets a value from the theme's complete color palette (including derived
      * colors, if any).
-     * 
+     *
      * @param index the index of the color, starting from 0
      */
     @Override
@@ -351,7 +351,7 @@ public final class TerraTheme extends Theme {
     /**
      * Sets a value in the theme's complete color palette (including derived
      * colors, if any).
-     * 
+     *
      * @param index the index of the color, starting from 0
      * @param color the color to set
      */
@@ -370,7 +370,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets a color from the theme's base color palette.
-     * 
+     *
      * @param index the index of the color, starting from 0
      */
     @Override
@@ -384,7 +384,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Sets a color in the theme's base color palette.
-     * 
+     *
      * @param index the index of the color, starting from 0
      * @param baseColor the color to set
      */
@@ -406,7 +406,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets the number of Palette Colors.
-     * 
+     *
      * @return the number of colors in the base palette
      */
     @Override
@@ -416,7 +416,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets the total number of Colors (including derived colors, if any).
-     * 
+     *
      * @return the number
      */
     @Override
@@ -428,7 +428,7 @@ public final class TerraTheme extends Theme {
      * Tell if the theme is dark.<br/> Usually this means that (if true) any
      * color will be transformed in the opposite way (brightening instead of
      * darkening, and darkening instead of brightening).
-     * 
+     *
      * @return true if dark, false otherwise
      */
     @Override
@@ -439,7 +439,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets the image that this theme uses to represent messages of the
      * specified type.
-     * 
+     *
      * @param messageType
      */
     public Image getMessageIcon(MessageType messageType) {
@@ -449,7 +449,7 @@ public final class TerraTheme extends Theme {
     /**
      * Sets the image that this theme uses to represent messages of the
      * specified type.
-     * 
+     *
      * @param messageType
      * @param messageIcon
      */
@@ -464,7 +464,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets the small image that this theme uses to represent messages of the
      * specified type.
-     * 
+     *
      * @param messageType
      */
     public Image getSmallMessageIcon(MessageType messageType) {
@@ -474,7 +474,7 @@ public final class TerraTheme extends Theme {
     /**
      * Sets the small image that this theme uses to represent messages of the
      * specified type.
-     * 
+     *
      * @param messageType
      * @param smallMessageIcon
      */

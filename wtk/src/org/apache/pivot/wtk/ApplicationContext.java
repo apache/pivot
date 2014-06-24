@@ -267,7 +267,7 @@ public abstract class ApplicationContext {
                         dropAction = dropTarget.userDropActionChange(dropDescendant, dragManifest,
                             supportedDropActions, dropLocation.x, dropLocation.y, userDropAction);
 
-					    if (dropAction != null) {
+                        if (dropAction != null) {
                             // Perform the drop
                             event.acceptDrop(getNativeDropAction(dropAction));
                             dropTarget.drop(dropDescendant, dragManifest, supportedDropActions,
