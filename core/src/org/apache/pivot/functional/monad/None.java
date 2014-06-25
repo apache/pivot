@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.functional.monad;
 
+import java.util.NoSuchElementException;
+
 /**
  * Container for an immutable no-value, derived from Option.
  */
@@ -46,7 +48,7 @@ public final class None<T> extends Option<T> {
 
     @Override
     public T getValue() {
-        throw new IllegalStateException("None does not contain a value");
+        throw new NoSuchElementException("None does not contain a value");
     }
 
     @Override

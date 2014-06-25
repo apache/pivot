@@ -96,6 +96,4 @@ public abstract class Option<T> extends Monad<T> {
         return true;
     }
 
-// TODO: check if implement map, flatten, etc ...
-
 }

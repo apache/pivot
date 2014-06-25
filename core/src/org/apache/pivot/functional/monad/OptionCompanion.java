@@ -58,29 +58,32 @@ public final class OptionCompanion<T> {
         if (val != null) {
             return new Some<>(val);
         }
-        // return new None<>();
+
         return None.getInstance();
     }
 
     /**
      * Utility method to return the value contained in the given Option.
      * @param o the Option
-     * @return the value (if any)
+     * @return the value if any, or null
      */
     public T toValue(final Option<T> o) {
         if (o == null) {
             throw new IllegalArgumentException("option is null.");
         }
 
+        if (!o.hasValue()) {
+            return null;
+        }
+
         return o.getValue();
-        // TODO: make generic (even to handle hasValue, etc) ...
     }
 
     /**
      * Utility method to return the value contained in the given Option,
      * or an alternate value if not present.
      * @param o the Option
-     * @param alternativeValue the alternative value
+     * @param alternativeValue the alternative value (null could be used here)
      * @return value if set, otherwise alternativeValue
      */
     public T toValueOrElse(final Option<T> o, final T alternativeValue) {
@@ -101,8 +104,11 @@ public final class OptionCompanion<T> {
             throw new IllegalArgumentException("option is null.");
         }
 
+        if (o instanceof None) {
+            return false;
+        }
+
         return o.getValue() instanceof Option;
-        // TODO: make generic (even to handle hasValue, etc) ...
     }
 
 /*

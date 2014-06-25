@@ -31,4 +31,7 @@ public abstract class Monad<T> {
         return "Monad()";
     }
 
+// TODO: check if add other abstract (generic, typical of Monads: apply, unit, map, flatten, etc) 
+//       methods here, and see what implement in Option  ...
+
 }
