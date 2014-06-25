@@ -19,8 +19,8 @@ package org.apache.pivot.functional.monad;
 /**
  * Container for an immutable no-value, derived from Option.
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public final class None<T> extends Option<T> {
-    @SuppressWarnings("rawtypes")
     private static final None INSTANCE = new None<>();
 
     /**

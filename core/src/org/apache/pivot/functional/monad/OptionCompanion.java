@@ -19,8 +19,8 @@ package org.apache.pivot.functional.monad;
 /**
  * Utility class for additional Option methods.
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public final class OptionCompanion<T> {
-    @SuppressWarnings("rawtypes")
     private static final OptionCompanion INSTANCE = new OptionCompanion<>();
 
     /**

@@ -17,54 +17,18 @@
 package org.apache.pivot.functional.monad;
 
 /**
- * Definition of a generic Monad, to hold an invariant value.
+ * Definition of a generic Monad.
  */
 public abstract class Monad<T> {
-    final T value;
 
-    /**
-     * Monad constructor
-     *
-     * @param val the value to set in the Monad
-     */
-    Monad(final T val) {
-        value = val;
+    /** Default constructor */
+    protected Monad() {
+        // no-op
     }
 
     @Override
     public String toString() {
-        return "Monad(" + ((value != null) ? value.toString() : "null") + ")";
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((value == null) ? 0 : value.hashCode());
-        return result;
-    }
-
-    @SuppressWarnings("rawtypes")
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof Monad)) {
-            return false;
-        }
-        Monad other = (Monad) obj;
-        if (value == null) {
-            if (other.value != null) {
-                return false;
-            }
-        } else if (!value.equals(other.value)) {
-            return false;
-        }
-        return true;
+        return "Monad()";
     }
 
 }

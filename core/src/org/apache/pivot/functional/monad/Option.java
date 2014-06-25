@@ -20,13 +20,13 @@ package org.apache.pivot.functional.monad;
  * Definition of a generic Option container, to hold an invariant value (derived from Monad).
  */
 public abstract class Option<T> extends Monad<T> {
+    final T value;
 
     /**
-     * Default constructor, do not use.
+     * Default constructor, do not use because it set null as invariant value to hold.
      */
     Option() {
-        super(null);
-        // throw new IllegalArgumentException("Option must have a value in the constructor");
+        this(null);
     }
 
     /**
@@ -35,7 +35,7 @@ public abstract class Option<T> extends Monad<T> {
      * @param val the value to set in the Option
      */
     Option(final T val) {
-        super(val);
+        this.value = val;
     }
 
     /**
@@ -60,6 +60,42 @@ public abstract class Option<T> extends Monad<T> {
         return (hasValue() == true) ? getValue() : alternativeValue;
     }
 
-// TODO: check if implement map, mapFlatten, etc ...
+    @Override
+    public String toString() {
+        return "Monad(" + ((value != null) ? value.toString() : "null") + ")";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((value == null) ? 0 : value.hashCode());
+        return result;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Option)) {
+            return false;
+        }
+        Option other = (Option) obj;
+        if (value == null) {
+            if (other.value != null) {
+                return false;
+            }
+        } else if (!value.equals(other.value)) {
+            return false;
+        }
+        return true;
+    }
+
+// TODO: check if implement map, flatten, etc ...
 
 }
