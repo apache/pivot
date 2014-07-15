@@ -18,8 +18,10 @@ package org.apache.pivot.wtk;
 
 import java.awt.AWTEvent;
 import java.awt.Graphics;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.SplashScreen;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
@@ -454,6 +456,20 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     /**
+     * Calculate the entire virtual desktop bounding rectangle
+     */
+    private static Rectangle getVirtualDesktopBounds() {
+        Rectangle virtualBounds = new Rectangle();
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        for (GraphicsDevice gd : ge.getScreenDevices()) {
+            for (GraphicsConfiguration gc : gd.getConfigurations()) {
+                virtualBounds = virtualBounds.union(gc.getBounds());
+            }
+        }
+        return virtualBounds;
+    }
+
+    /**
      * Primary application entry point.
      *
      * @param args application arguments
@@ -492,17 +508,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
             height = preferences.getInt(HEIGHT_ARGUMENT, height);
             maximized = preferences.getBoolean(MAXIMIZED_ARGUMENT, maximized);
 
-            // Update positioning if window is offscreen
-            GraphicsDevice[] screenDevices = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-            if (screenDevices.length == 1) {
-                if (x < 0) {
-                    x = 0;
-                }
-
-                if (y < 0) {
-                    y = 0;
-                }
-            }
         } catch (SecurityException exception) {
             System.err.println("Unable to retrieve startup preferences: " + exception);
         }
@@ -573,11 +578,31 @@ public final class DesktopApplicationContext extends ApplicationContext {
         windowedHostFrame.setSize(width, height);
         windowedHostFrame.setResizable(resizable);
 
+        Rectangle screenSize = getVirtualDesktopBounds();
         if (center) {
-            java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-            windowedHostFrame.setLocation((screenSize.width - width) / 2,
-                (screenSize.height - height) / 2);
+            // Center on the virtual desktop (which could span multiple physical displays)
+            windowedHostFrame.setLocation(
+                ((screenSize.width - width) / 2) + screenSize.x,
+                ((screenSize.height - height) / 2) + screenSize.y);
         } else {
+            // Ensure that if the position was from a display configuration that is no longer
+            // supported (like we last closed the app when there were two monitors and there
+            // is now only one) that we don't end up completely offscreen.
+            // This computation will always place the upper left corner of the app window somewhere
+            // on the virtual screen (noting that the virtual x,y location could be negative when
+            // secondary displays are left / above the primary one).
+            if (x >= screenSize.width) {
+                x = Math.max(screenSize.width - width, screenSize.x);
+            }
+            if (x < screenSize.x) {
+                x = screenSize.x;
+            }
+            if (y >= screenSize.height) {
+                y = Math.max(screenSize.height - height, screenSize.y);
+            }
+            if (y < screenSize.y) {
+                y = screenSize.y;
+            }
             windowedHostFrame.setLocation(x, y);
         }
 
