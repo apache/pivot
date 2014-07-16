@@ -1122,7 +1122,7 @@ public class TerraScrollBarSkin extends ContainerSkin
                 consumed = true;
             }
         } else {
-            newValue = Math.max(newValue, 0);
+            newValue = Math.max(newValue, scrollBar.getStart());
 
             if (previousValue > 0) {
                 consumed = true;
