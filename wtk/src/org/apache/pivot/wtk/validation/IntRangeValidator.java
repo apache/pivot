@@ -69,8 +69,8 @@ public class IntRangeValidator extends IntValidator {
         boolean valid = false;
 
         if (super.isValid(text)) {
-            BigInteger min = BigInteger.valueOf((long)minValue);
-            BigInteger max = BigInteger.valueOf((long)maxValue);
+            BigInteger min = BigInteger.valueOf(minValue);
+            BigInteger max = BigInteger.valueOf(maxValue);
             BigInteger value = new BigInteger(text);
             valid = value.compareTo(min) >= 0 && value.compareTo(max) <= 0;
         }

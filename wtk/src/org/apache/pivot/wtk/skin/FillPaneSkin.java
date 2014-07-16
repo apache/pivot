@@ -270,17 +270,20 @@ public class FillPaneSkin extends ContainerSkin
 
         int width = getWidth();
         int height = getHeight();
-        if (width <= 0)
+        if (width <= 0) {
             width = getPreferredWidth(-1);
-        if (height <= 0)
+        }
+        if (height <= 0) {
             height = getPreferredHeight(-1);
+        }
         Orientation orientation = fillPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
             // Determine the starting x-coordinate
             int x = padding.left;
             int totalWidth = width - (padding.left + padding.right);
-            if (n > 1)
+            if (n > 1) {
                 totalWidth -= spacing * (n - 1);
+            }
             int dividedWidth = n == 0 ? 0 : totalWidth / n;
             int leftoverWidth = totalWidth - (dividedWidth * n);
 
@@ -290,8 +293,9 @@ public class FillPaneSkin extends ContainerSkin
 
                 if (component.isVisible()) {
                     int componentWidth = dividedWidth;
-                    if (j == n - 1)
+                    if (j == n - 1) {
                         componentWidth += leftoverWidth;
+                    }
 
                     int componentHeight = Math.max(height - (padding.top
                         + padding.bottom), 0);
@@ -311,8 +315,9 @@ public class FillPaneSkin extends ContainerSkin
             // Determine the starting y-coordinate
             int y = padding.top;
             int totalHeight = height - (padding.top + padding.bottom);
-            if (n > 1)
+            if (n > 1) {
                 totalHeight -= spacing * (n - 1);
+            }
             int dividedHeight = n == 0 ? 0 : totalHeight / n;
             int leftoverHeight = totalHeight - (dividedHeight * n);
 
@@ -322,8 +327,9 @@ public class FillPaneSkin extends ContainerSkin
 
                 if (component.isVisible()) {
                     int componentHeight = dividedHeight;
-                    if (j == n - 1)
+                    if (j == n - 1) {
                         componentHeight += leftoverHeight;
+                    }
 
                     int componentWidth = Math.max(width - (padding.left
                         + padding.right), 0);

@@ -20,7 +20,6 @@ import org.apache.pivot.wtk.Calendar;
 import org.apache.pivot.wtk.CalendarListener;
 import org.apache.pivot.wtk.CalendarSelectionListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Abstract base class for calendar skins.

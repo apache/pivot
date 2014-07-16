@@ -22,6 +22,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
@@ -355,7 +356,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+            GeneralPath arrow = new GeneralPath(Path2D.WIND_EVEN_ODD);
 
             if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
                 arrow.moveTo(width + 0.5f, 0);
@@ -385,7 +386,7 @@ public class TerraScrollBarSkin extends ContainerSkin
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+            GeneralPath arrow = new GeneralPath(Path2D.WIND_EVEN_ODD);
 
             if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
                 arrow.moveTo(0, 0);

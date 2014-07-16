@@ -22,9 +22,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.apache.pivot.collections.List;
-import org.apache.pivot.collections.ListListener;
-import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 
 /**

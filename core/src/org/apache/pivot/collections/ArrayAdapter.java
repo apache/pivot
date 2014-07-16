@@ -18,8 +18,6 @@ package org.apache.pivot.collections;
 
 import java.io.Serializable;
 
-import org.apache.pivot.collections.Sequence;
-
 /**
  * Implementation of the {@link Sequence} interface that wraps an array.
  */

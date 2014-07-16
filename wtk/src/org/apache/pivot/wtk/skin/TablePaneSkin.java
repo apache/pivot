@@ -1533,7 +1533,9 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin,
                             rowHeightsLocal[i]--;
                             remainingHeight++;
                             progress = true;
-                            if (remainingHeight >= 0) break;
+                            if (remainingHeight >= 0) {
+                                break;
+                            }
                         }
                     }
                 }

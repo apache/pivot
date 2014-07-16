@@ -19,8 +19,6 @@ package org.apache.pivot.wtk.media;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-import org.apache.pivot.wtk.media.Image;
-
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGElementException;
 import com.kitfox.svg.SVGException;

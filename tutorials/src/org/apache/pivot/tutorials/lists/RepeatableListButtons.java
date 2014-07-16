@@ -26,12 +26,12 @@ import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.Button.State;
 import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.Window;
-import org.apache.pivot.wtk.Button.State;
 import org.apache.pivot.wtk.content.ColorItem;
 
 public class RepeatableListButtons extends Window implements Bindable {

@@ -16,6 +16,10 @@
  */
 package org.apache.pivot.demos.rest;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -30,10 +34,6 @@ import org.apache.pivot.web.Query;
 import org.apache.pivot.web.QueryException;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 
 public class RESTDemoTest {
     private static String hostname = null;

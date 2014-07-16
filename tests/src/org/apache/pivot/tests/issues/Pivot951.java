@@ -45,7 +45,7 @@ public class Pivot951 extends Application.Adapter {
                 return true;
             }
         });
-        
+
         window.setContent(brd);
         window.setTitle("Pivot951: Cannot click twice");
         window.setMaximized(true);

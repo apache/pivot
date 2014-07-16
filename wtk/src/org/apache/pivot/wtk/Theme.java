@@ -38,8 +38,8 @@ import org.apache.pivot.wtk.skin.SeparatorSkin;
 import org.apache.pivot.wtk.skin.StackPaneSkin;
 import org.apache.pivot.wtk.skin.TablePaneFillerSkin;
 import org.apache.pivot.wtk.skin.TablePaneSkin;
-import org.apache.pivot.wtk.skin.TextPaneSkin;
 import org.apache.pivot.wtk.skin.TextAreaSkin;
+import org.apache.pivot.wtk.skin.TextPaneSkin;
 import org.apache.pivot.wtk.skin.WindowSkin;
 
 /**

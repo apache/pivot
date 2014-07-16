@@ -19,8 +19,8 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Keyboard;
-import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Mouse;
 
 /**
  * Abstract base class for checkbox skins.

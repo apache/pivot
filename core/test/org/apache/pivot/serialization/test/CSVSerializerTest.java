@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.serialization.test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -24,13 +26,10 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
-import org.apache.pivot.serialization.CSVSerializerListener;
 import org.apache.pivot.serialization.CSVSerializer;
+import org.apache.pivot.serialization.CSVSerializerListener;
 import org.apache.pivot.serialization.SerializationException;
-
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class CSVSerializerTest {
     @Test

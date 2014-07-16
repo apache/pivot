@@ -34,8 +34,8 @@ import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TextInput;
-import org.apache.pivot.wtk.TextInputSelectionListener;
 import org.apache.pivot.wtk.TextInputContentListener;
+import org.apache.pivot.wtk.TextInputSelectionListener;
 
 public class MenuBars extends Frame implements Bindable {
     @BXML private FileBrowserSheet fileBrowserSheet;

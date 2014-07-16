@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.skin;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.FileBrowser;
 import org.apache.pivot.wtk.FileBrowserListener;
-import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Abstract base class for file browser skins.

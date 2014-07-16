@@ -27,8 +27,8 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.web.Query;
-import org.apache.pivot.web.QueryException;
 import org.apache.pivot.web.Query.Method;
+import org.apache.pivot.web.QueryException;
 import org.apache.pivot.web.server.QueryServlet;
 
 public class RESTDemoServlet extends QueryServlet {
@@ -132,8 +132,9 @@ public class RESTDemoServlet extends QueryServlet {
         }
 
         boolean deleted = file.delete();
-        if (!deleted)
+        if (!deleted) {
             throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override

@@ -40,10 +40,10 @@ import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewColumnListener;
 import org.apache.pivot.wtk.TableViewHeader;
+import org.apache.pivot.wtk.TableViewHeader.SortMode;
 import org.apache.pivot.wtk.TableViewHeaderListener;
 import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.TableViewHeader.SortMode;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 

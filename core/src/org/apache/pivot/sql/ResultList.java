@@ -23,8 +23,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.ArrayAdapter;
+import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;

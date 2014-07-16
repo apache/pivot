@@ -16,15 +16,15 @@
  */
 package org.apache.pivot.serialization.test;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import org.apache.pivot.serialization.BinarySerializer;
 import org.apache.pivot.serialization.Serializer;
 import org.junit.Test;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.fail;
 
 public class BinarySerializerTest {
     @Test

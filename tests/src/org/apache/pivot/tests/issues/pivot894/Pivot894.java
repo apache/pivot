@@ -27,6 +27,7 @@ import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
@@ -62,7 +63,7 @@ public class Pivot894 extends Application.Adapter {
         final Window window = new Window(cardPane);
         window.open(display);
 
-        DesktopApplicationContext.scheduleRecurringCallback(new Runnable() {
+        ApplicationContext.scheduleRecurringCallback(new Runnable() {
             @Override
             public void run() {
                 Thread.currentThread().setName("switcher-thread");

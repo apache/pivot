@@ -21,7 +21,6 @@ import java.awt.Color;
 import org.apache.pivot.wtk.ColorChooser;
 import org.apache.pivot.wtk.ColorChooserSelectionListener;
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.skin.ContainerSkin;
 
 /**
  * Abstract base class for color chooser skins.

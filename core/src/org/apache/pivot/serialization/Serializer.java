@@ -16,9 +16,9 @@
  */
 package org.apache.pivot.serialization;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
 
 /**
  * Defines an interface for writing objects to and reading objects from a data

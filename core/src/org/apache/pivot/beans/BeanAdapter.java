@@ -389,8 +389,9 @@ public class BeanAdapter implements Map<String, Object> {
                 put(key, valueMap.get(key));
             }
             catch (PropertyNotFoundException ex) {
-                if (!ignoreErrors)
+                if (!ignoreErrors) {
                     throw ex;
+                }
                 anyErrors = true;
             }
         }
