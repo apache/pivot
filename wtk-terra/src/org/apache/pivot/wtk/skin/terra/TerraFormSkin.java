@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -65,7 +66,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
 
         @Override
         public void update() {
-            GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+            GeneralPath arrow = new GeneralPath(Path2D.WIND_EVEN_ODD);
             arrow.moveTo(POPUP_FIELD_INDICATOR_OFFSET, 0);
             arrow.lineTo(POPUP_FIELD_INDICATOR_OFFSET + POPUP_FIELD_INDICATOR_WIDTH / 2,
                 -POPUP_FIELD_INDICATOR_HEIGHT);
@@ -173,7 +174,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
                                 flagMessageLabel.paint(graphics);
 
                                 // Draw the arrow
-                                GeneralPath arrow = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                                GeneralPath arrow = new GeneralPath(Path2D.WIND_EVEN_ODD);
                                 arrow.moveTo(0, 0);
                                 arrow.lineTo(-INLINE_FIELD_INDICATOR_WIDTH,
                                     (float) flagMessageLabel.getHeight() / 2);

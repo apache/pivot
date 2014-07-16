@@ -133,8 +133,9 @@ public class RESTDemoServlet extends QueryServlet {
         }
 
         boolean deleted = file.delete();
-        if (!deleted)
+        if (!deleted) {
             throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override

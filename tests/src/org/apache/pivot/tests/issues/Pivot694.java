@@ -197,8 +197,9 @@ public class Pivot694 extends Application.Adapter {
     }
 
     protected static final void clearComponent(Component component) {
-        if (component == null)
+        if (component == null) {
             throw new IllegalArgumentException();
+        }
 
         component.clear();
         component.repaint();

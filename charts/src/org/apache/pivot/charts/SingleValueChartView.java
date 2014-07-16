@@ -17,6 +17,7 @@
 package org.apache.pivot.charts;
 
 import java.util.EnumMap;
+
 import org.apache.pivot.collections.List;
 
 /**

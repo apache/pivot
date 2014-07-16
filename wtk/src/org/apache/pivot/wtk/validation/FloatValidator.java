@@ -33,8 +33,9 @@ public class FloatValidator extends DecimalValidator {
 
     @Override
     public boolean isValid(String text) {
-        if (!super.isValid(text))
+        if (!super.isValid(text)) {
             return false;
+        }
 
         /*
          * DecimalFormat will parse the number as a double. Make sure the

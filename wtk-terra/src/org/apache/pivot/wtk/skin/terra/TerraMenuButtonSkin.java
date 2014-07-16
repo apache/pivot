@@ -23,6 +23,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
@@ -310,7 +311,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             RenderingHints.VALUE_ANTIALIAS_OFF);
 
         // Paint the trigger
-        GeneralPath triggerIconShape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+        GeneralPath triggerIconShape = new GeneralPath(Path2D.WIND_EVEN_ODD);
         triggerIconShape.moveTo(0, 0);
         triggerIconShape.lineTo(3, 3);
         triggerIconShape.lineTo(6, 0);

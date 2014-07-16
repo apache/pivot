@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 import java.util.Locale;
@@ -91,23 +92,23 @@ public final class Keyboard {
             int awtModifiers = 0x00;
 
             if (((modifiersLocal & Modifier.META.getMask()) > 0)) {
-                awtModifiers |= KeyEvent.META_DOWN_MASK;
+                awtModifiers |= InputEvent.META_DOWN_MASK;
             }
 
             if (((modifiersLocal & Modifier.CTRL.getMask()) > 0)) {
-                awtModifiers |= KeyEvent.CTRL_DOWN_MASK;
+                awtModifiers |= InputEvent.CTRL_DOWN_MASK;
             }
 
             if (((modifiersLocal & Modifier.ALT.getMask()) > 0)) {
-                awtModifiers |= KeyEvent.ALT_DOWN_MASK;
+                awtModifiers |= InputEvent.ALT_DOWN_MASK;
             }
 
             if (((modifiersLocal & Modifier.SHIFT.getMask()) > 0)) {
-                awtModifiers |= KeyEvent.SHIFT_DOWN_MASK;
+                awtModifiers |= InputEvent.SHIFT_DOWN_MASK;
             }
 
             if (awtModifiers != 0x00) {
-                return KeyEvent.getModifiersExText(awtModifiers)
+                return InputEvent.getModifiersExText(awtModifiers)
                     + Platform.getKeyStrokeModifierSeparator() + KeyEvent.getKeyText(keyCode);
             }
 

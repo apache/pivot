@@ -60,8 +60,9 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
         choices.add("US-ASCII");
         choices.add(defaultCS.name());
         choices.add("ISO-8859-1");
-        if (!"UTF-8".equals(defaultCS.name()))
+        if (!"UTF-8".equals(defaultCS.name())) {
             choices.add("UTF-8");
+        }
 
         lb.setListData(choices);
         lb.setSelectedIndex(1);
@@ -82,7 +83,7 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
         button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button buttonArgument) {
-                final Window window = FileBrowserWithCharsetTest.getActiveWindow();
+                final Window window = Window.getActiveWindow();
                 final FileBrowserSheet fileBrowserSheet = new FileBrowserWithCharsetTest(
                     FileBrowserSheet.Mode.OPEN);
 

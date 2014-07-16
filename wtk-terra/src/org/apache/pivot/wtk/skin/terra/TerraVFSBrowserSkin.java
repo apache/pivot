@@ -1413,10 +1413,11 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             GridPane.Row row3 = new GridPane.Row(activityGrid);
             for (int i = 0; i < 5; i++) {
                 row1.add(new GridPane.Filler());
-                if (i == 2)
+                if (i == 2) {
                     row2.add(indicator);
-                else
+                } else {
                     row2.add(new GridPane.Filler());
+                }
                 row3.add(new GridPane.Filler());
             }
         }

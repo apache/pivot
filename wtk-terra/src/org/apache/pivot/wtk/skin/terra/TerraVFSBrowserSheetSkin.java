@@ -17,8 +17,8 @@
 package org.apache.pivot.wtk.skin.terra;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
@@ -105,10 +105,11 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                     String rootURL = root.getURL().toString();
                     // Parse out the host name with some special considerations
                     Matcher m = HOST_PATTERN.matcher(rootURL);
-                    if (m.matches())
+                    if (m.matches()) {
                         hostNameLabel.setText(m.group(1));
-                    else
+                    } else {
                         hostNameLabel.setText(rootURL);
+                    }
                 }
             } else {
                 hostNameBoxPane.setVisible(false);

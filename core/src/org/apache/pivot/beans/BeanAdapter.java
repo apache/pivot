@@ -360,8 +360,9 @@ public class BeanAdapter implements Map<String, Object> {
             try {
                 put(key, valueMap.get(key));
             } catch (PropertyNotFoundException ex) {
-                if (!ignoreErrors)
+                if (!ignoreErrors) {
                     throw ex;
+                }
                 anyErrors = true;
             }
         }

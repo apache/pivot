@@ -180,8 +180,9 @@ public class DropShadowDecorator implements Decorator {
             // itself:
             Bounds paintBounds = new Bounds(0, 0, width, height);
             if (!component.isOpaque()
-                || !paintBounds.contains(new Bounds(graphics.getClipBounds())))
+                || !paintBounds.contains(new Bounds(graphics.getClipBounds()))) {
                 graphics.drawImage(shadowImage, xOffset - blurRadius, yOffset - blurRadius, null);
+            }
         } else {
             shadowImage = null;
         }

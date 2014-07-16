@@ -869,15 +869,15 @@ public abstract class ApplicationContext {
             int mouseButtons = 0x00;
 
             int modifiersEx = event.getModifiersEx();
-            if ((modifiersEx & MouseEvent.BUTTON1_DOWN_MASK) > 0) {
+            if ((modifiersEx & InputEvent.BUTTON1_DOWN_MASK) > 0) {
                 mouseButtons |= Mouse.Button.LEFT.getMask();
             }
 
-            if ((modifiersEx & MouseEvent.BUTTON2_DOWN_MASK) > 0) {
+            if ((modifiersEx & InputEvent.BUTTON2_DOWN_MASK) > 0) {
                 mouseButtons |= Mouse.Button.MIDDLE.getMask();
             }
 
-            if ((modifiersEx & MouseEvent.BUTTON3_DOWN_MASK) > 0) {
+            if ((modifiersEx & InputEvent.BUTTON3_DOWN_MASK) > 0) {
                 mouseButtons |= Mouse.Button.RIGHT.getMask();
             }
 
@@ -1338,21 +1338,21 @@ public abstract class ApplicationContext {
 
             // Set the keyboard modifier state
             int keyboardModifiers = 0;
-            if ((modifiersEx & KeyEvent.SHIFT_DOWN_MASK) > 0) {
+            if ((modifiersEx & InputEvent.SHIFT_DOWN_MASK) > 0) {
                 keyboardModifiers |= Keyboard.Modifier.SHIFT.getMask();
             }
 
             // Ignore Control when Alt-Graphics is pressed
-            if ((modifiersEx & KeyEvent.CTRL_DOWN_MASK) > 0
-                && ((modifiersEx & KeyEvent.ALT_DOWN_MASK) == 0 || awtKeyLocation == KeyEvent.KEY_LOCATION_RIGHT)) {
+            if ((modifiersEx & InputEvent.CTRL_DOWN_MASK) > 0
+                && ((modifiersEx & InputEvent.ALT_DOWN_MASK) == 0 || awtKeyLocation == KeyEvent.KEY_LOCATION_RIGHT)) {
                 keyboardModifiers |= Keyboard.Modifier.CTRL.getMask();
             }
 
-            if ((modifiersEx & KeyEvent.ALT_DOWN_MASK) > 0) {
+            if ((modifiersEx & InputEvent.ALT_DOWN_MASK) > 0) {
                 keyboardModifiers |= Keyboard.Modifier.ALT.getMask();
             }
 
-            if ((modifiersEx & KeyEvent.META_DOWN_MASK) > 0) {
+            if ((modifiersEx & InputEvent.META_DOWN_MASK) > 0) {
                 keyboardModifiers |= Keyboard.Modifier.META.getMask();
             }
 

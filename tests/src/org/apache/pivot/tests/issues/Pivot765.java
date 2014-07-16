@@ -57,11 +57,12 @@ public class Pivot765 extends Application.Adapter {
 
             @Override
             public void windowOpened(Window windowArgument) {
-                if (!menuPopulated)
+                if (!menuPopulated) {
                     Alert.alert(
                         "Window was opened before the menu was populated."
                             + "Either previewWindowOpen threw an exception, or it wasn't called before the Window was opened.",
                         windowArgument);
+                }
             }
 
             @Override
