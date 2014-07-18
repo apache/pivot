@@ -966,10 +966,16 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         int rowLength = textArea.getRowLength(start);
         if (start - rowStart >= rowLength) {
             start = rowStart + rowLength - 1;
+            if (start < 0) {
+                return;
+            }
             char ch = textArea.getCharacterAt(start);
             if (ch == '\r' || ch == '\n') {
                 start--;
             }
+        }
+        if (start < 0) {
+            return;
         }
         char ch = textArea.getCharacterAt(start);
         int selectionStart = start;
