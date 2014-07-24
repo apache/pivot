@@ -106,7 +106,7 @@ public class TerraTooltipSkin extends WindowSkin {
 
         setBackgroundColor(theme.getColor(19));
 
-        borderColor = Color.BLACK;
+        borderColor = theme.getColor(7);
         padding = new Insets(2);
     }
 
