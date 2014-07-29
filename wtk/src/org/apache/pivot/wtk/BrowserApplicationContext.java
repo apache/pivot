@@ -199,7 +199,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 // Load the application
                 String applicationClassName = getParameter(APPLICATION_CLASS_NAME_PARAMETER);
                 if (applicationClassName == null) {
-                    System.err.println(APPLICATION_CLASS_NAME_PARAMETER + " paramter is required.");
+                    System.err.println(APPLICATION_CLASS_NAME_PARAMETER + " parameter is required.");
                 } else {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
