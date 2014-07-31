@@ -33,13 +33,18 @@ public class FadeWindowTransition extends FadeTransition {
         super(component, duration, rate);
 
         this.dropShadowDecorator = dropShadowDecorator;
-        initialShadowOpacity = dropShadowDecorator.getShadowOpacity();
+        if (dropShadowDecorator != null) {
+            initialShadowOpacity = dropShadowDecorator.getShadowOpacity();
+        }
     }
 
     @Override
     protected void update() {
         super.update();
-        dropShadowDecorator.setShadowOpacity(initialShadowOpacity * (1.0f - getPercentComplete()));
+
+        if (dropShadowDecorator != null) {
+            dropShadowDecorator.setShadowOpacity(initialShadowOpacity * (1.0f - getPercentComplete()));
+        }
 
         Component component = getComponent();
         Container parent = component.getParent();

@@ -294,7 +294,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         }
 
         // Draw the border
-        if (thickness > 0) {
+        if (thickness > 0 && !themeIsFlat()) {
             graphics.setPaint(color);
 
             if (cornerRadius > 0) {

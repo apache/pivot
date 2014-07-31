@@ -100,6 +100,7 @@ public final class TerraTheme extends Theme {
 
     private static float colorMultiplier = 0.1f;
     private static boolean themeIsDark = false;
+    private static boolean themeIsFlat = false;
 
     public static final String LOCATION_PROPERTY = "location";
     public static final String COMMAND_BUTTON_STYLE = "commandButton";
@@ -268,6 +269,11 @@ public final class TerraTheme extends Theme {
                     themeIsDark = dark.booleanValue();
                 }
 
+                Boolean flat = (Boolean) properties.get("themeIsFlat");
+                if (flat != null) {
+                    themeIsFlat = flat.booleanValue();
+                }
+
                 for (String colorCode : colorCodes) {
                     Color baseColor = Color.decode(colorCode);
                     colors.add(darken(baseColor));
@@ -429,11 +435,22 @@ public final class TerraTheme extends Theme {
      * color will be transformed in the opposite way (brightening instead of
      * darkening, and darkening instead of brightening).
      *
-     * @return true if dark, false otherwise
+     * @return true if dark, false otherwise (default)
      */
     @Override
     public boolean isThemeDark() {
         return themeIsDark;
+    }
+
+    /**
+     * Tell if the theme is flat.<br/> Usually this means that (if true) any
+     * border/shadow will not be drawn.
+     *
+     * @return true if flat, false otherwise (default)
+     */
+    @Override
+    public boolean isThemeFlat() {
+        return themeIsFlat;
     }
 
     /**

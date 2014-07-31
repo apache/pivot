@@ -193,13 +193,19 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
             int height = getHeight();
 
             // Paint the background
-            graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor, width / 2f,
-                height, buttonBackgroundColor));
+            if (!themeIsFlat()) {
+                graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor, width / 2f,
+                    height, buttonBackgroundColor));
+            } else {
+                graphics.setPaint(buttonBackgroundColor);
+            }
             graphics.fillRect(0, 0, width, height);
 
             // Paint the border
-            graphics.setPaint(borderColor);
-            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+            if (!themeIsFlat()) {
+                graphics.setPaint(borderColor);
+                GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+            }
 
             // Paint the content
             Button.DataRenderer dataRenderer = panelHeader.getDataRenderer();
@@ -545,8 +551,10 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         int width = getWidth();
         int height = getHeight();
 
-        graphics.setPaint(borderColor);
-        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+        if (!themeIsFlat()) {
+            graphics.setPaint(borderColor);
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+        }
     }
 
     public Color getBorderColor() {

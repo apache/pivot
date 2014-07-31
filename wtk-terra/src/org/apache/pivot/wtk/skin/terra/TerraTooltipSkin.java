@@ -200,8 +200,10 @@ public class TerraTooltipSkin extends WindowSkin {
         int width = getWidth();
         int height = getHeight();
 
-        graphics.setColor(borderColor);
-        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+        if (!themeIsFlat()) {
+            graphics.setColor(borderColor);
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+        }
     }
 
     public int getCloseTransitionDuration() {

@@ -20,6 +20,8 @@
 
     themeIsDark: false,
 
+    themeIsFlat: false,
+
     colors: [
         "#000000",
         "#ffffff",

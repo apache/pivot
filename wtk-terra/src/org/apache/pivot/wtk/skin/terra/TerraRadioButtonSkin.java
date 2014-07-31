@@ -196,10 +196,14 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
             BUTTON_DIAMETER - 3);
 
         if (enabled) {
-            buttonPaint = new RadialGradientPaint((float) buttonBackgroundCircle.getCenterX(),
-                (float) buttonBackgroundCircle.getCenterY(),
-                (float) buttonBackgroundCircle.getWidth() * 2 / 3, new float[] { 0f, 1f },
-                new Color[] { TerraTheme.darken(buttonColor), buttonColor });
+            if (!themeIsFlat()) {
+                buttonPaint = new RadialGradientPaint((float) buttonBackgroundCircle.getCenterX(),
+                    (float) buttonBackgroundCircle.getCenterY(),
+                    (float) buttonBackgroundCircle.getWidth() * 2 / 3, new float[] { 0f, 1f },
+                    new Color[] { TerraTheme.darken(buttonColor), buttonColor });
+            } else {
+                buttonPaint = currentTheme().getColor(10);
+            }
 
             buttonBorderColorLocal = this.buttonBorderColor;
             buttonSelectionColorLocal = this.buttonSelectionColor;
@@ -213,8 +217,10 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
             RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Paint the border
-        graphics.setColor(buttonBorderColorLocal);
-        graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
+        if (!themeIsFlat()) {
+            graphics.setColor(buttonBorderColorLocal);
+            graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
+        }
 
         // Paint the background
         graphics.setPaint(buttonPaint);

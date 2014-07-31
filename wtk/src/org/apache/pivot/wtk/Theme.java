@@ -172,6 +172,14 @@ public abstract class Theme {
     public abstract boolean isThemeDark();
 
     /**
+     * Tell if the theme is flat.<br/> Usually this means that (if true) any
+     * border/shadow will not be drawn.
+     *
+     * @return true if flat, false otherwise
+     */
+    public abstract boolean isThemeFlat();
+
+    /**
      * Returns the skin class responsible for skinning the specified component
      * class.
      *
@@ -252,13 +260,13 @@ public abstract class Theme {
                     throw new IllegalArgumentException(value + " is not a valid font size.");
                 }
             } else {
-                size = (Integer) value;
+                size = ((Integer) value).intValue();
             }
         }
 
         int style = font.getStyle();
         if (dictionary.containsKey(BOLD_KEY)) {
-            boolean bold = (Boolean) dictionary.get(BOLD_KEY);
+            boolean bold = ((Boolean) dictionary.get(BOLD_KEY)).booleanValue();
 
             if (bold) {
                 style |= Font.BOLD;
@@ -268,7 +276,7 @@ public abstract class Theme {
         }
 
         if (dictionary.containsKey(ITALIC_KEY)) {
-            boolean italic = (Boolean) dictionary.get(ITALIC_KEY);
+            boolean italic = ((Boolean) dictionary.get(ITALIC_KEY)).booleanValue();
 
             if (italic) {
                 style |= Font.ITALIC;

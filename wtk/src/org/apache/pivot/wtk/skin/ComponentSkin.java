@@ -297,7 +297,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
         if (tooltipText != null) {
             Label tooltipLabel = new Label(tooltipText);
             boolean tooltipWrapText = component.getTooltipWrapText();
-            tooltipLabel.getStyles().put("wrapText", tooltipWrapText);
+            tooltipLabel.getStyles().put("wrapText", new Boolean(tooltipWrapText));
             Tooltip tooltip = new Tooltip(tooltipLabel);
 
             Display display = component.getDisplay();
@@ -400,5 +400,26 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
         }
 
         return font;
+    }
+
+    /**
+     * Returns the current Theme.
+     * 
+     * @return the theme
+     */
+    protected Theme currentTheme() {
+        return Theme.getTheme();
+    }
+
+    /**
+     * Returns if the current Theme is flat.
+     * 
+     * Note that flat themes usually have no bevel, gradients, shadow effects,
+     * and in some cases even no borders.
+     * 
+     * @return true if it is flat, false otherwise (default)
+     */
+    protected boolean themeIsFlat() {
+        return currentTheme().isThemeFlat();
     }
 }

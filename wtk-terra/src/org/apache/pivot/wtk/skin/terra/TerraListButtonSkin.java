@@ -208,18 +208,20 @@ public class TerraListButtonSkin extends ListButtonSkin {
         listViewPanorama = new Panorama(listView);
         listViewPanorama.getStyles().put("buttonBackgroundColor",
             listView.getStyles().get("backgroundColor"));
-        listViewPanorama.getStyles().put("alwaysShowScrollButtons", true);
+        listViewPanorama.getStyles().put("alwaysShowScrollButtons", new Boolean(true));
 
         listViewBorder = new Border(listViewPanorama);
-        listViewBorder.getStyles().put("padding", 0);
+        listViewBorder.getStyles().put("padding", new Integer(0));
         listViewBorder.getStyles().put("color", borderColor);
 
         // Set the popup content
         listViewPopup.setContent(listViewBorder);
 
         // Attach the drop-shadow decorator
-        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
-        listViewPopup.getDecorators().add(dropShadowDecorator);
+        if (!themeIsFlat()) {
+            dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+            listViewPopup.getDecorators().add(dropShadowDecorator);
+        }
     }
 
     @Override
@@ -336,8 +338,12 @@ public class TerraListButtonSkin extends ListButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
-            height / 2f, backgroundColorLocal));
+        if (!themeIsFlat()) {
+            graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
+                height / 2f, backgroundColorLocal));
+        } else {
+            graphics.setPaint(backgroundColorLocal);
+        }
         graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1, CORNER_RADIUS,
             CORNER_RADIUS));
 
@@ -363,12 +369,14 @@ public class TerraListButtonSkin extends ListButtonSkin {
             RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Paint the border
-        graphics.setPaint(borderColorLocal);
-        graphics.setStroke(new BasicStroke(1));
-        graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1, CORNER_RADIUS,
-            CORNER_RADIUS));
-        graphics.draw(new Line2D.Double(contentBounds.x + contentBounds.width, 0.5, contentBounds.x
-            + contentBounds.width, contentBounds.height));
+        if (!themeIsFlat()) {
+            graphics.setPaint(borderColorLocal);
+            graphics.setStroke(new BasicStroke(1));
+            graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1, CORNER_RADIUS,
+                CORNER_RADIUS));
+            graphics.draw(new Line2D.Double(contentBounds.x + contentBounds.width, 0.5, contentBounds.x
+                + contentBounds.width, contentBounds.height));
+        }
 
         // Paint the focus state
         if (listButton.isFocused()) {

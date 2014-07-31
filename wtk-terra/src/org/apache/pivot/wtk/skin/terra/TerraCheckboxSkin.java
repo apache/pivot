@@ -195,8 +195,13 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         Color buttonSelectionColorLocal;
 
         if (enabled) {
-            buttonPaint = new GradientPaint(CHECKBOX_SIZE / 2, 0, TerraTheme.darken(buttonColor),
-                CHECKBOX_SIZE / 2, CHECKBOX_SIZE, buttonColor);
+            if (!themeIsFlat()) {
+                buttonPaint = new GradientPaint(CHECKBOX_SIZE / 2, 0, TerraTheme.darken(buttonColor),
+                    CHECKBOX_SIZE / 2, CHECKBOX_SIZE, buttonColor);
+            } else {
+                buttonPaint = currentTheme().getColor(10);
+            }
+
             buttonBorderColorLocal = this.buttonBorderColor;
             buttonSelectionColorLocal = this.buttonSelectionColor;
         } else {
@@ -210,8 +215,10 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         graphics.fillRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
 
         // Paint the border
-        graphics.setPaint(buttonBorderColorLocal);
-        GraphicsUtilities.drawRect(graphics, 0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
+        if (!themeIsFlat()) {
+            graphics.setPaint(buttonBorderColorLocal);
+            GraphicsUtilities.drawRect(graphics, 0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
+        }
 
         // Paint the checkmark
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

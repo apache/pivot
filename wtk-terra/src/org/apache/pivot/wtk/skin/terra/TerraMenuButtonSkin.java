@@ -263,8 +263,12 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (backgroundColorLocal != null && bevelColorLocal != null) {
-            graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
-                height / 2f, backgroundColorLocal));
+            if (!themeIsFlat()) {
+                graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
+                    height / 2f, backgroundColorLocal));
+            } else {
+                graphics.setPaint(backgroundColorLocal);
+            }
             graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
                 CORNER_RADIUS, CORNER_RADIUS));
         }
@@ -290,7 +294,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
             RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Paint the border
-        if (borderColorLocal != null) {
+        if (borderColorLocal != null && !themeIsFlat()) {
             graphics.setPaint(borderColorLocal);
             graphics.setStroke(new BasicStroke(1));
             graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
@@ -653,19 +657,19 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public int getCloseTransitionDuration() {
-        return (Integer) menuPopup.getStyles().get("closeTransitionDuration");
+        return ((Integer) menuPopup.getStyles().get("closeTransitionDuration")).intValue();
     }
 
     public void setCloseTransitionDuration(int closeTransitionDuration) {
-        menuPopup.getStyles().put("closeTransitionDuration", closeTransitionDuration);
+        menuPopup.getStyles().put("closeTransitionDuration", new Integer(closeTransitionDuration));
     }
 
     public int getCloseTransitionRate() {
-        return (Integer) menuPopup.getStyles().get("closeTransitionRate");
+        return ((Integer) menuPopup.getStyles().get("closeTransitionRate")).intValue();
     }
 
     public void setCloseTransitionRate(int closeTransitionRate) {
-        menuPopup.getStyles().put("closeTransitionRate", closeTransitionRate);
+        menuPopup.getStyles().put("closeTransitionRate", new Integer(closeTransitionRate));
     }
 
     @Override

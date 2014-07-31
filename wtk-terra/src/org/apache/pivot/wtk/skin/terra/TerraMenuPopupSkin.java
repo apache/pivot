@@ -141,7 +141,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
         border.getStyles().put("color", theme.getColor(7));
         border.getStyles().put("backgroundColor", null);
-        border.getStyles().put("padding", 0);
+        border.getStyles().put("padding", new Integer(0));
     }
 
     @Override
@@ -161,8 +161,10 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         menuPopup.setContent(border);
 
         // Attach the drop-shadow decorator
-        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
-        menuPopup.getDecorators().add(dropShadowDecorator);
+        if (!themeIsFlat()) {
+            dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+            menuPopup.getDecorators().add(dropShadowDecorator);
+        }
     }
 
     public Color getBorderColor() {
