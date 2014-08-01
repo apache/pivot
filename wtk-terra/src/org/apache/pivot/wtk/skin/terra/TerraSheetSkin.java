@@ -278,8 +278,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         sheet.getSheetStateListeners().add(this);
 
         // Attach the drop-shadow decorator
-        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
-        sheet.getDecorators().add(dropShadowDecorator);
+        if (!themeIsFlat()) {
+            dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+            sheet.getDecorators().add(dropShadowDecorator);
+        }
 
         sheet.add(resizeHandle);
     }
@@ -377,11 +379,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         int width = getWidth();
         int height = getHeight();
 
-        graphics.setPaint(borderColor);
-        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
-
-        graphics.setPaint(bevelColor);
-        GraphicsUtilities.drawLine(graphics, 1, height - 2, width - 2, Orientation.HORIZONTAL);
+        if (!themeIsFlat()) {
+            graphics.setPaint(borderColor);
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+            
+            graphics.setPaint(bevelColor);
+            GraphicsUtilities.drawLine(graphics, 1, height - 2, width - 2, Orientation.HORIZONTAL);
+        }
     }
 
     @Override
@@ -622,7 +626,9 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         display.getContainerMouseListeners().add(displayMouseListener);
         display.reenterMouse();
 
-        dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
+        if (dropShadowDecorator != null) {
+            dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
+        }
 
         alignToOwner();
 

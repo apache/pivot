@@ -226,19 +226,25 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
             Color gradientStartColor = pressed ? backgroundColor : brightBackgroundColor;
             Color gradientEndColor = pressed ? brightBackgroundColor : backgroundColor;
 
-            if (orientation == Orientation.HORIZONTAL) {
-                graphics.setPaint(new GradientPaint(0, 1, gradientStartColor, 0, height - 2,
-                    gradientEndColor));
+            if (!themeIsFlat()) {
+                if (orientation == Orientation.HORIZONTAL) {
+                    graphics.setPaint(new GradientPaint(0, 1, gradientStartColor, 0, height - 2,
+                        gradientEndColor));
+                } else {
+                    graphics.setPaint(new GradientPaint(1, 0, gradientStartColor, width - 2, 0,
+                        gradientEndColor));
+                }
+
+                graphics.fillRect(1, 1, width - 2, height - 2);
+
+                // Paint the border
+                graphics.setPaint(borderColor);
+                GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
             } else {
-                graphics.setPaint(new GradientPaint(1, 0, gradientStartColor, width - 2, 0,
-                    gradientEndColor));
+                graphics.setPaint(gradientEndColor);
+
+                graphics.fillRect(0, 0, width, height);
             }
-
-            graphics.fillRect(1, 1, width - 2, height - 2);
-
-            // Paint the border
-            graphics.setPaint(borderColor);
-            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
             // Determine the button image size
             ScrollButtonImage buttonImage = scrollButton.getButtonImage();
@@ -452,20 +458,26 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
             Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
             Color darkBackgroundColor = TerraTheme.darken(backgroundColor);
 
-            if (orientation == Orientation.HORIZONTAL) {
-                graphics.setPaint(new GradientPaint(0, 1, brightBackgroundColor, 0, height - 2,
-                    backgroundColor));
+            if (!themeIsFlat()) {
+                if (orientation == Orientation.HORIZONTAL) {
+                    graphics.setPaint(new GradientPaint(0, 1, brightBackgroundColor, 0, height - 2,
+                        backgroundColor));
+                } else {
+                    graphics.setPaint(new GradientPaint(1, 0, brightBackgroundColor, width - 2, 0,
+                        backgroundColor));
+                }
+
+                graphics.fillRect(1, 1, width - 2, height - 2);
+
+                // Paint the border
+                graphics.setPaint(borderColor);
+                graphics.setStroke(new BasicStroke());
+                GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
             } else {
-                graphics.setPaint(new GradientPaint(1, 0, brightBackgroundColor, width - 2, 0,
-                    backgroundColor));
+                graphics.setPaint(backgroundColor);
+
+                graphics.fillRect(0, 0, width, height);
             }
-
-            graphics.fillRect(1, 1, width - 2, height - 2);
-
-            // Paint the border
-            graphics.setPaint(borderColor);
-            graphics.setStroke(new BasicStroke());
-            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
 
             // Paint the hash marks
             if (orientation == Orientation.HORIZONTAL) {
@@ -766,30 +778,32 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
-        ScrollBar scrollBar = (ScrollBar) getComponent();
-
-        int width = getWidth();
-        int height = getHeight();
-
-        graphics.setPaint(borderColor);
-
-        // Paint the scroll bar border lines
-        if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-            int scrollUpButtonWidth = scrollUpButton.getWidth();
-            int scrollDownButtonWidth = scrollDownButton.getWidth();
-
-            GraphicsUtilities.drawLine(graphics, scrollUpButtonWidth, 0, width
-                - scrollDownButtonWidth - scrollUpButtonWidth, Orientation.HORIZONTAL);
-            GraphicsUtilities.drawLine(graphics, scrollUpButtonWidth, height - 1, width
-                - scrollDownButtonWidth - scrollUpButtonWidth, Orientation.HORIZONTAL);
-        } else {
-            int scrollUpButtonHeight = scrollUpButton.getHeight();
-            int scrollDownButtonHeight = scrollDownButton.getHeight();
-
-            GraphicsUtilities.drawLine(graphics, 0, scrollUpButtonHeight, height
-                - scrollDownButtonHeight - scrollUpButtonHeight, Orientation.VERTICAL);
-            GraphicsUtilities.drawLine(graphics, width - 1, scrollUpButtonHeight, height
-                - scrollDownButtonHeight - scrollUpButtonHeight, Orientation.VERTICAL);
+        if (!themeIsFlat()) {
+            ScrollBar scrollBar = (ScrollBar) getComponent();
+            
+            int width = getWidth();
+            int height = getHeight();
+            
+            graphics.setPaint(borderColor);
+            
+            // Paint the scroll bar border lines
+            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
+                int scrollUpButtonWidth = scrollUpButton.getWidth();
+                int scrollDownButtonWidth = scrollDownButton.getWidth();
+                
+                GraphicsUtilities.drawLine(graphics, scrollUpButtonWidth, 0, width
+                    - scrollDownButtonWidth - scrollUpButtonWidth, Orientation.HORIZONTAL);
+                GraphicsUtilities.drawLine(graphics, scrollUpButtonWidth, height - 1, width
+                    - scrollDownButtonWidth - scrollUpButtonWidth, Orientation.HORIZONTAL);
+            } else {
+                int scrollUpButtonHeight = scrollUpButton.getHeight();
+                int scrollDownButtonHeight = scrollDownButton.getHeight();
+                
+                GraphicsUtilities.drawLine(graphics, 0, scrollUpButtonHeight, height
+                    - scrollDownButtonHeight - scrollUpButtonHeight, Orientation.VERTICAL);
+                GraphicsUtilities.drawLine(graphics, width - 1, scrollUpButtonHeight, height
+                    - scrollDownButtonHeight - scrollUpButtonHeight, Orientation.VERTICAL);
+            }
         }
     }
 

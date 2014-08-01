@@ -234,7 +234,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
                 headerDataRenderer.render(column.getHeaderData(), i, tableViewHeader,
                     column.getName(), false);
                 baseline = Math.max(baseline,
-                    headerDataRenderer.getBaseline(headerWidthsLocal.get(i), rowHeight));
+                    headerDataRenderer.getBaseline(headerWidthsLocal.get(i).intValue(), rowHeight));
             }
         }
 
@@ -275,14 +275,20 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
         }
 
         // Paint the background
-        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f, height,
-            backgroundColorLocal));
+        if (!themeIsFlat()) {
+            graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f, height,
+                backgroundColorLocal));
+        } else {
+            graphics.setPaint(backgroundColorLocal);
+        }
         graphics.fillRect(0, 0, width, height);
 
         // Paint the border
-        graphics.setPaint(borderColorLocal);
-        graphics.setStroke(new BasicStroke(1));
-        graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5, height - 0.5));
+        if (!themeIsFlat()) {
+            graphics.setPaint(borderColorLocal);
+            graphics.setStroke(new BasicStroke(1));
+            graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5, height - 0.5));
+        }
 
         // Paint the content
         TableView tableView = tableViewHeader.getTableView();
@@ -293,7 +299,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
             int headerX = 0;
             for (int columnIndex = 0, columnCount = columns.getLength(); columnIndex < columnCount; columnIndex++) {
                 TableView.Column column = columns.get(columnIndex);
-                int headerWidth = headerWidths.get(columnIndex);
+                int headerWidth = headerWidths.get(columnIndex).intValue();
 
                 // Paint the pressed bevel
                 if (columnIndex == pressedHeaderIndex) {
@@ -353,8 +359,10 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
                 headerX += headerWidth;
 
                 if (columnIndex < columnCount - 1 || includeTrailingVerticalGridLine) {
-                    graphics.setPaint(borderColorLocal);
-                    graphics.draw(new Line2D.Double(headerX + 0.5, 0.5, headerX + 0.5, height - 0.5));
+                    if (!themeIsFlat()) {
+                        graphics.setPaint(borderColorLocal);
+                        graphics.draw(new Line2D.Double(headerX + 0.5, 0.5, headerX + 0.5, height - 0.5));
+                    }
                 }
 
                 headerX++;
@@ -378,7 +386,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
             int n = tableView.getColumns().getLength();
             int headerX = 0;
             while (i < n && x > headerX) {
-                headerX += (headerWidths.get(i) + 1);
+                headerX += (headerWidths.get(i).intValue() + 1);
                 i++;
             }
 
@@ -404,10 +412,10 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
 
             int cellX = 0;
             for (int i = 0; i < headerIndex; i++) {
-                cellX += (headerWidths.get(i) + 1);
+                cellX += (headerWidths.get(i).intValue() + 1);
             }
 
-            headerBounds = new Bounds(cellX, 0, headerWidths.get(headerIndex), getHeight() - 1);
+            headerBounds = new Bounds(cellX, 0, headerWidths.get(headerIndex).intValue(), getHeight() - 1);
         }
 
         return headerBounds;

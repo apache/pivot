@@ -181,14 +181,14 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraSuggestionPopupSkin() {
-        listView.getStyles().put("variableItemHeight", true);
+        listView.getStyles().put("variableItemHeight", new Boolean(true));
         listView.getListViewSelectionListeners().add(listViewSelectionListener);
         listView.getComponentKeyListeners().add(listViewKeyListener);
 
         listViewPanorama = new Panorama(listView);
         listViewPanorama.getStyles().put("buttonBackgroundColor",
             listView.getStyles().get("backgroundColor"));
-        listViewPanorama.getStyles().put("alwaysShowScrollButtons", true);
+        listViewPanorama.getStyles().put("alwaysShowScrollButtons", new Boolean(true));
 
         listViewBorder = new Border(listViewPanorama);
     }
@@ -207,9 +207,11 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         listView.setListData(suggestionPopup.getSuggestionData());
         listView.setItemRenderer(suggestionPopup.getSuggestionRenderer());
 
-        // Attach the drop-shadow decorator
-        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
-        suggestionPopup.getDecorators().add(dropShadowDecorator);
+        if (!themeIsFlat()) {
+            // Attach the drop-shadow decorator
+            dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+            suggestionPopup.getDecorators().add(dropShadowDecorator);
+        }
     }
 
     public Font getFont() {
@@ -346,7 +348,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         Display display = window.getDisplay();
         display.getContainerMouseListeners().add(displayMouseListener);
 
-        dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
+        if (dropShadowDecorator != null) {
+            dropShadowDecorator.setShadowOpacity(DropShadowDecorator.DEFAULT_SHADOW_OPACITY);
+        }
 
         returnFocusToTextInput = true;
 

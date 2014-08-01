@@ -158,6 +158,7 @@ public class TerraPaletteSkin extends WindowSkin {
     // Derived colors
     private Color contentBevelColor;
 
+    @SuppressWarnings("unused")
     public TerraPaletteSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(10));
@@ -173,8 +174,8 @@ public class TerraPaletteSkin extends WindowSkin {
 
         // The title bar table pane contains two nested box panes: one for
         // the title contents and the other for the buttons
-        new TablePane.Column(titleBarTablePane, 1, true);
-        new TablePane.Column(titleBarTablePane, -1);
+        new TablePane.Column(titleBarTablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(titleBarTablePane, -1);  // note: this is useful, even if not used directly
 
         TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 
@@ -225,9 +226,11 @@ public class TerraPaletteSkin extends WindowSkin {
         Palette palette = (Palette) component;
         palette.add(titleBarTablePane);
 
-        // Attach the drop-shadow decorator
-        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
-        palette.getDecorators().add(dropShadowDecorator);
+        if (!themeIsFlat()) {
+            // Attach the drop-shadow decorator
+            dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+            palette.getDecorators().add(dropShadowDecorator);
+        }
 
         palette.add(resizeHandle);
 
@@ -367,24 +370,31 @@ public class TerraPaletteSkin extends WindowSkin {
             : inactiveTitleBarBorderColor;
         Color titleBarBevelColor = TerraTheme.brighten(currentTitleBarBackgroundColor);
 
-        // Draw the title area
-        graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColor, width / 2f,
-            titleBarHeight + 1, currentTitleBarBackgroundColor));
-        graphics.fillRect(0, 0, width, titleBarHeight + 1);
+        if (!themeIsFlat()) {
+            // Draw the title area
+            graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColor, width / 2f,
+                titleBarHeight + 1, currentTitleBarBackgroundColor));
+            graphics.fillRect(0, 0, width, titleBarHeight + 1);
+            
+            // Draw the border
+            graphics.setPaint(currentTitleBarBorderColor);
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 1);
 
-        // Draw the border
-        graphics.setPaint(currentTitleBarBorderColor);
-        GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 1);
-        // Draw the content area
-        Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2, width, height
-            - (titleBarHeight + 2));
-        graphics.setPaint(contentBorderColor);
-        GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
-            contentAreaRectangle.width, contentAreaRectangle.height);
-
-        graphics.setPaint(contentBevelColor);
-        GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
-            contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);
+            // Draw the content area
+            Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2, width, height
+                - (titleBarHeight + 2));
+            graphics.setPaint(contentBorderColor);
+            GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
+                contentAreaRectangle.width, contentAreaRectangle.height);
+            
+            graphics.setPaint(contentBevelColor);
+            GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
+                contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);
+        } else {
+            // Draw the title area
+            graphics.setPaint(currentTitleBarBackgroundColor);
+            graphics.fillRect(0, 0, width, titleBarHeight + 1);
+        }
     }
 
     @Override

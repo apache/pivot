@@ -234,6 +234,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     private static final int DEFAULT_EXPAND_DURATION = 250;
     private static final int DEFAULT_EXPAND_RATE = 30;
 
+    @SuppressWarnings("unused")
     public TerraExpanderSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(4));
@@ -251,11 +252,11 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
 
         // Create the title bar components
         titleBarTablePane = new TablePane();
-        new TablePane.Column(titleBarTablePane, 1, true);
-        new TablePane.Column(titleBarTablePane, -1);
+        new TablePane.Column(titleBarTablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(titleBarTablePane, -1);  // note: this is useful, even if not used directly
 
         titleBarTablePane.getStyles().put("padding", new Insets(3));
-        titleBarTablePane.getStyles().put("horizontalSpacing", 3);
+        titleBarTablePane.getStyles().put("horizontalSpacing", new Integer(3));
 
         TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 
@@ -454,16 +455,21 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
         int titleBarWidth = titleBarTablePane.getWidth();
         int titleBarHeight = titleBarTablePane.getHeight();
 
-        graphics.setPaint(titleBarBorderColor);
-        GraphicsUtilities.drawLine(graphics, 0, 1 + titleBarHeight, width, Orientation.HORIZONTAL);
+        if (!themeIsFlat()) {
+            graphics.setPaint(titleBarBorderColor);
+            GraphicsUtilities.drawLine(graphics, 0, 1 + titleBarHeight, width, Orientation.HORIZONTAL);
 
-        graphics.setPaint(new GradientPaint(titleBarX + titleBarWidth / 2, titleBarY,
-            titleBarBevelColor, titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight,
-            titleBarBackgroundColor));
-        graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
+            graphics.setPaint(new GradientPaint(titleBarX + titleBarWidth / 2, titleBarY,
+                titleBarBevelColor, titleBarX + titleBarWidth / 2, titleBarY + titleBarHeight,
+                titleBarBackgroundColor));
+            graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
 
-        graphics.setPaint(borderColor);
-        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+            graphics.setPaint(borderColor);
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+        } else {
+            graphics.setPaint(titleBarBackgroundColor);
+            graphics.fillRect(titleBarX, titleBarY, titleBarWidth, titleBarHeight);
+        }
     }
 
     public Font getTitleBarFont() {

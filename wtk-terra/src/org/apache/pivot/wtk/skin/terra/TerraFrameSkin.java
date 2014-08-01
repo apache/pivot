@@ -238,6 +238,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     private static final float INACTIVE_ICON_OPACITY = 0.5f;
 
+    @SuppressWarnings("unused")
     public TerraFrameSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(10));
@@ -259,8 +260,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         // The title bar table pane contains two nested box panes: one for
         // the title contents and the other for the buttons
-        new TablePane.Column(titleBarTablePane, 1, true);
-        new TablePane.Column(titleBarTablePane, -1);
+        new TablePane.Column(titleBarTablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(titleBarTablePane, -1);  // note: this is useful, even if not used directly
 
         TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 
@@ -279,7 +280,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         titleLabel.getStyles().put("font", titleFont);
 
         iconImageView.setPreferredSize(16, 16);
-        iconImageView.getStyles().put("fill", true);
+        iconImageView.getStyles().put("fill", new Boolean(true));
         iconImageView.getStyles().put("backgroundColor", null);
 
         // Initialize the button box pane
@@ -293,9 +294,11 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         Frame frame = (Frame) getComponent();
 
-        // Attach the drop-shadow decorator
-        dropShadowDecorator = new DropShadowDecorator();
-        frame.getDecorators().add(dropShadowDecorator);
+        if (!themeIsFlat()) {
+            // Attach the drop-shadow decorator
+            dropShadowDecorator = new DropShadowDecorator();
+            frame.getDecorators().add(dropShadowDecorator);
+        }
 
         frame.add(titleBarTablePane);
 
@@ -369,11 +372,9 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         Component content = frame.getContent();
         if (content != null) {
             if (height != -1) {
-                // Subtract padding, top/bottom content borders, and content
-                // bevel
+                // Subtract padding, top/bottom content borders, and content bevel
                 // from height constraint
                 height -= (padding.top + padding.bottom) + (showContentBevel ? 1 : 0) + 2;
-
                 height = Math.max(height, 0);
             }
 
@@ -404,10 +405,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         Component content = frame.getContent();
         if (content != null) {
             if (width != -1) {
-                // Subtract padding and left/right content borders from
-                // constraint
+                // Subtract padding and left/right content borders from constraint
                 width -= (padding.left + padding.right) + 2;
-
                 width = Math.max(width, 0);
             }
 
@@ -556,26 +555,32 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             Color titleBarBevelColorLocal = frame.isActive() ? this.titleBarBevelColor
                 : inactiveTitleBarBevelColor;
 
-            graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColorLocal, width / 2f,
-                titleBarHeight + 1, titleBarBackgroundColorLocal));
-            graphics.fillRect(0, 0, width, titleBarHeight + 1);
-
-            // Draw the border
-            graphics.setPaint(titleBarBorderColorLocal);
-            GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 2);
-
-            // Draw the content area
-            Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2, width, height
-                - (titleBarHeight + 2));
-            graphics.setPaint(contentBorderColor);
-            GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
-                contentAreaRectangle.width, contentAreaRectangle.height);
-
-            if (showContentBevel) {
-                graphics.setPaint(contentBevelColor);
-                GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
-                    contentAreaRectangle.y + 1, contentAreaRectangle.width - 2,
-                    Orientation.HORIZONTAL);
+            if (!themeIsFlat()) {
+                graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColorLocal, width / 2f,
+                    titleBarHeight + 1, titleBarBackgroundColorLocal));
+                graphics.fillRect(0, 0, width, titleBarHeight + 1);
+                
+                // Draw the border
+                graphics.setPaint(titleBarBorderColorLocal);
+                GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 2);
+                
+                // Draw the content area
+                Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2, width, height
+                    - (titleBarHeight + 2));
+                graphics.setPaint(contentBorderColor);
+                GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
+                    contentAreaRectangle.width, contentAreaRectangle.height);
+                
+                if (showContentBevel) {
+                    graphics.setPaint(contentBevelColor);
+                    GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
+                        contentAreaRectangle.y + 1, contentAreaRectangle.width - 2,
+                        Orientation.HORIZONTAL);
+                }
+            } else {
+                graphics.setPaint(titleBarBackgroundColorLocal);
+                graphics.fillRect(0, 0, width, titleBarHeight + 1);
+                
             }
         }
     }
@@ -858,7 +863,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         boolean active = window.isActive();
 
         titleLabel.getStyles().put("color", active ? titleBarColor : inactiveTitleBarColor);
-        iconImageView.getStyles().put("opacity", active ? 1.0f : INACTIVE_ICON_OPACITY);
+        iconImageView.getStyles().put("opacity", active ? new Float(1.0f) : new Float(INACTIVE_ICON_OPACITY));
 
         updateButtonStyles(minimizeButton, active);
         updateButtonStyles(maximizeButton, active);
