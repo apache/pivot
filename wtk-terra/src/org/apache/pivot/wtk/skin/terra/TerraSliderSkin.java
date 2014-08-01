@@ -79,16 +79,23 @@ public class TerraSliderSkin extends SliderSkin {
             int width = getWidth();
             int height = getHeight();
 
-            graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor, width / 2f,
-                height, buttonBackgroundColor));
+            if (!themeIsFlat()) {
+                graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor, width / 2f,
+                    height, buttonBackgroundColor));
+                
+            } else {
+                graphics.setPaint(buttonBackgroundColor);
+            }
             graphics.fillRect(0, 0, width, height);
 
             float alpha = (highlighted || dragOffset != null) ? 0.25f : 0.0f;
             graphics.setPaint(new Color(0, 0, 0, alpha));
             graphics.fillRect(0, 0, width, height);
 
-            graphics.setPaint(buttonBorderColor);
-            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+            if (!themeIsFlat()) {
+                graphics.setPaint(buttonBorderColor);
+                GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+            }
         }
 
         @Override

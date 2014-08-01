@@ -336,9 +336,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         graphics.setColor(backgroundColorLocal);
         graphics.fillRect(0, 0, width, height);
 
-        // Paint the bevel
-        graphics.setColor(bevelColorLocal);
-        GraphicsUtilities.drawLine(graphics, 0, 0, width, Orientation.HORIZONTAL);
+        if (!themeIsFlat()) {
+            // Paint the bevel
+            graphics.setColor(bevelColorLocal);
+            GraphicsUtilities.drawLine(graphics, 0, 0, width, Orientation.HORIZONTAL);
+        }
 
         // Paint the content
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
@@ -430,9 +432,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             graphics.fill(caret);
         }
 
-        // Paint the border
-        graphics.setColor(borderColorLocal);
-        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+        if (!themeIsFlat()) {
+            // Paint the border
+            graphics.setColor(borderColorLocal);
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+        }
     }
 
     @Override

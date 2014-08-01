@@ -624,12 +624,17 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
         Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
 
         GradientPaint backgroundPaint;
-        if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-            backgroundPaint = new GradientPaint(0, 1, backgroundColor, 0, DEFAULT_THICKNESS - 2,
-                brightBackgroundColor);
+        if (!themeIsFlat()) {
+            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
+                backgroundPaint = new GradientPaint(0, 1, backgroundColor, 0, DEFAULT_THICKNESS - 2,
+                    brightBackgroundColor);
+            } else {
+                backgroundPaint = new GradientPaint(1, 0, backgroundColor, DEFAULT_THICKNESS - 2, 0,
+                    brightBackgroundColor);
+            }
         } else {
-            backgroundPaint = new GradientPaint(1, 0, backgroundColor, DEFAULT_THICKNESS - 2, 0,
-                brightBackgroundColor);
+            backgroundPaint = new GradientPaint(0, 0, backgroundColor, 0, DEFAULT_THICKNESS - 2,
+                backgroundColor);  // gradient but with the same colors
         }
 
         setBackgroundPaint(backgroundPaint);

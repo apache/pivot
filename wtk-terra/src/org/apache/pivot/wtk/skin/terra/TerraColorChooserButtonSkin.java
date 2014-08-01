@@ -168,7 +168,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         // Create the border
         colorChooserBorder = new Border(colorChooser);
         colorChooserBorder.getStyles().put("color", borderColor);
-        colorChooserBorder.getStyles().put("padding", 2);
+        colorChooserBorder.getStyles().put("padding", new Integer(2));
 
         // Set the popup content
         colorChooserPopup.setContent(colorChooserBorder);
@@ -268,8 +268,12 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
-            height / 2f, backgroundColorLocal));
+        if (!themeIsFlat()) {
+            graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
+                height / 2f, backgroundColorLocal));
+        } else {
+            graphics.setPaint(backgroundColorLocal);
+        }
         graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1, CORNER_RADIUS,
             CORNER_RADIUS));
 
@@ -294,22 +298,14 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Paint the border
-        if (borderColorLocal != null) {
-            graphics.setPaint(borderColorLocal);
-            graphics.setStroke(new BasicStroke(1));
-            graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
-                CORNER_RADIUS, CORNER_RADIUS));
-        }
-
-        // Paint the focus state
-        if (colorChooserButton.isFocused()) {
-            BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
-            graphics.setStroke(dashStroke);
-            graphics.setColor(this.borderColor);
-            graphics.draw(new RoundRectangle2D.Double(2.5, 2.5, Math.max(width - 5, 0), Math.max(
-                height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
+        if (!themeIsFlat()) {
+            // Paint the border
+            if (borderColorLocal != null) {
+                graphics.setPaint(borderColorLocal);
+                graphics.setStroke(new BasicStroke(1));
+                graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
+                    CORNER_RADIUS, CORNER_RADIUS));
+            }
         }
 
         // Paint the focus state

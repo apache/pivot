@@ -167,7 +167,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
         // Create the border
         calendarBorder = new Border(calendar);
-        calendarBorder.getStyles().put("padding", 0);
+        calendarBorder.getStyles().put("padding", new Integer(0));
         calendarBorder.getStyles().put("color", borderColor);
 
         // Set the popup content
@@ -268,8 +268,12 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
-            height / 2f, backgroundColorLocal));
+        if (!themeIsFlat()) {
+            graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
+                height / 2f, backgroundColorLocal));
+        } else {
+            graphics.setPaint(backgroundColorLocal);
+        }
         graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1, CORNER_RADIUS,
             CORNER_RADIUS));
 
@@ -294,12 +298,14 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Paint the border
-        if (borderColorLocal != null) {
-            graphics.setPaint(borderColorLocal);
-            graphics.setStroke(new BasicStroke(1));
-            graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
-                CORNER_RADIUS, CORNER_RADIUS));
+        if (!themeIsFlat()) {
+            // Paint the border
+            if (borderColorLocal != null) {
+                graphics.setPaint(borderColorLocal);
+                graphics.setStroke(new BasicStroke(1));
+                graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
+                    CORNER_RADIUS, CORNER_RADIUS));
+            }
         }
 
         // Paint the focus state

@@ -148,8 +148,12 @@ public class TerraCalendarSkin extends CalendarSkin {
 
             // Paint the background
             if (dateButton.isSelected()) {
-                graphics.setPaint(new GradientPaint(width / 2f, 0, selectionBevelColor, width / 2f,
-                    height, selectionBackgroundColor));
+                if (!themeIsFlat()) {
+                    graphics.setPaint(new GradientPaint(width / 2f, 0, selectionBevelColor, width / 2f,
+                        height, selectionBackgroundColor));
+                } else {
+                    graphics.setPaint(selectionBackgroundColor);
+                }
 
                 graphics.fillRect(0, 0, width, height);
             } else {
@@ -349,7 +353,7 @@ public class TerraCalendarSkin extends CalendarSkin {
 
             // Since we're only rendering the month, the year and day do not
             // matter here
-            CalendarDate date = new CalendarDate(2000, (Integer) item, 0);
+            CalendarDate date = new CalendarDate(2000, ((Integer) item).intValue(), 0);
 
             SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", calendar.getLocale());
             Object itemFromFormat = monthFormat.format(date.toCalendar().getTime());
@@ -362,7 +366,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         @Override
         public void render(Object data, Button button, boolean highlighted) {
             CalendarDate date = (CalendarDate) data;
-            super.render(date.day + 1, button, highlighted);
+            super.render(new Integer(date.day + 1), button, highlighted);
 
             if (button.isSelected()) {
                 label.getStyles().put("color", button.getStyles().get("selectionColor"));
@@ -395,6 +399,7 @@ public class TerraCalendarSkin extends CalendarSkin {
 
     private Color selectionBevelColor;
 
+    @SuppressWarnings("unused")
     public TerraCalendarSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
         font = theme.getFont();
@@ -411,7 +416,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         // Create the table pane
         calendarTablePane = new TablePane();
         for (int i = 0; i < 7; i++) {
-            new TablePane.Column(calendarTablePane, 1, true);
+            new TablePane.Column(calendarTablePane, 1, true);  // note: this is useful, even if not used directly
         }
 
         // Month spinner
@@ -419,13 +424,13 @@ public class TerraCalendarSkin extends CalendarSkin {
         monthSpinner.setSpinnerData(new NumericSpinnerData(0, 11));
         monthSpinner.setItemRenderer(new MonthSpinnerItemRenderer());
         monthSpinner.setCircular(true);
-        monthSpinner.getStyles().put("sizeToContent", true);
+        monthSpinner.getStyles().put("sizeToContent", new Boolean(true));
 
         monthSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener.Adapter() {
             @Override
             public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
                 Calendar calendar = (Calendar) getComponent();
-                calendar.setMonth((Integer) spinner.getSelectedItem());
+                calendar.setMonth(((Integer) spinner.getSelectedItem()).intValue());
             }
         });
 
@@ -437,7 +442,7 @@ public class TerraCalendarSkin extends CalendarSkin {
             @Override
             public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
                 Calendar calendar = (Calendar) getComponent();
-                calendar.setYear((Integer) spinner.getSelectedItem());
+                calendar.setYear(((Integer) spinner.getSelectedItem()).intValue());
             }
         });
 
@@ -455,11 +460,11 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         // Add the month/year table pane
         TablePane monthYearTablePane = new TablePane();
-        monthYearTablePane.getStyles().put("padding", 3);
-        monthYearTablePane.getStyles().put("horizontalSpacing", 4);
+        monthYearTablePane.getStyles().put("padding", new Integer(3));
+        monthYearTablePane.getStyles().put("horizontalSpacing", new Integer(4));
 
-        new TablePane.Column(monthYearTablePane, 1, true);
-        new TablePane.Column(monthYearTablePane, -1);
+        new TablePane.Column(monthYearTablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(monthYearTablePane, -1);  // note: this is useful, even if not used directly
 
         TablePane.Row monthYearRow = new TablePane.Row(monthYearTablePane, -1);
         monthYearRow.add(monthSpinner);

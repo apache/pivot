@@ -665,16 +665,21 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
         int buttonWidth = upButton.getWidth();
         int buttonHeight = upButton.getHeight();
 
-        graphics.setPaint(new GradientPaint(buttonX + buttonWidth / 2, 0, buttonBevelColor, buttonX
-            + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
-        graphics.fillRect(buttonX, 0, buttonWidth, height);
+        if (!themeIsFlat()) {
+            graphics.setPaint(new GradientPaint(buttonX + buttonWidth / 2, 0, buttonBevelColor, buttonX
+                + buttonWidth / 2, buttonHeight, buttonBackgroundColor));
+            graphics.fillRect(buttonX, 0, buttonWidth, height);
 
-        graphics.setPaint(borderColor);
-        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
-        GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, 0, height,
-            Orientation.VERTICAL);
-        GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, buttonHeight + 1,
-            buttonWidth + 1, Orientation.HORIZONTAL);
+            graphics.setPaint(borderColor);
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+            GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, 0, height,
+                Orientation.VERTICAL);
+            GraphicsUtilities.drawLine(graphics, width - buttonWidth - 2, buttonHeight + 1,
+                buttonWidth + 1, Orientation.HORIZONTAL);
+        } else {
+            graphics.setPaint(buttonBackgroundColor);
+            graphics.fillRect(buttonX, 0, buttonWidth, height);
+        }
     }
 
     @Override

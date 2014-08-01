@@ -238,63 +238,21 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-            switch (tabOrientation) {
-                case HORIZONTAL: {
-                    graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor,
-                        width / 2f, height / 2f, backgroundColor));
-                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1
-                        + buttonCornerRadius, buttonCornerRadius, buttonCornerRadius));
-                    break;
-                }
-
-                case VERTICAL: {
-                    graphics.setPaint(new GradientPaint(0, height / 2f, buttonBevelColor,
-                        width / 2f, height / 2f, backgroundColor));
-                    graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1
-                        + buttonCornerRadius, height - 1, buttonCornerRadius, buttonCornerRadius));
-                    break;
-                }
-
-                default: {
-                    break;
-                }
-            }
-
-            // Draw the border
-            graphics.setPaint((tabButton.isSelected() || active) ? borderColor
-                : inactiveBorderColor);
-            graphics.setStroke(new BasicStroke(1));
-
-            switch (tabOrientation) {
-                case HORIZONTAL: {
-                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height
-                        + buttonCornerRadius - 1, buttonCornerRadius, buttonCornerRadius));
-                    break;
-                }
-
-                case VERTICAL: {
-                    graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width + buttonCornerRadius
-                        - 1, height - 1, buttonCornerRadius, buttonCornerRadius));
-                    break;
-                }
-
-                default: {
-                    break;
-                }
-            }
-
-            if (!(tabButton.isSelected() || active)) {
-                graphics.setPaint(borderColor);
-                // Draw divider
+            if (!themeIsFlat()) {
                 switch (tabOrientation) {
                     case HORIZONTAL: {
-                        graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5,
-                            height - 0.5));
+                        graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor,
+                            width / 2f, height / 2f, backgroundColor));
+                        graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1
+                            + buttonCornerRadius, buttonCornerRadius, buttonCornerRadius));
                         break;
                     }
 
                     case VERTICAL: {
-                        graphics.draw(new Line2D.Double(width - 0.5, 0.5, width - 0.5, height - 0.5));
+                        graphics.setPaint(new GradientPaint(0, height / 2f, buttonBevelColor,
+                            width / 2f, height / 2f, backgroundColor));
+                        graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1
+                            + buttonCornerRadius, height - 1, buttonCornerRadius, buttonCornerRadius));
                         break;
                     }
 
@@ -302,6 +260,71 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                         break;
                     }
                 }
+
+                // Draw the border
+                graphics.setPaint((tabButton.isSelected() || active) ? borderColor
+                    : inactiveBorderColor);
+                graphics.setStroke(new BasicStroke(1));
+
+                switch (tabOrientation) {
+                    case HORIZONTAL: {
+                        graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height
+                            + buttonCornerRadius - 1, buttonCornerRadius, buttonCornerRadius));
+                        break;
+                    }
+
+                    case VERTICAL: {
+                        graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width + buttonCornerRadius
+                            - 1, height - 1, buttonCornerRadius, buttonCornerRadius));
+                        break;
+                    }
+
+                    default: {
+                        break;
+                    }
+                }
+
+                if (!(tabButton.isSelected() || active)) {
+                    graphics.setPaint(borderColor);
+                    // Draw divider
+                    switch (tabOrientation) {
+                        case HORIZONTAL: {
+                            graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5,
+                                height - 0.5));
+                            break;
+                        }
+
+                        case VERTICAL: {
+                            graphics.draw(new Line2D.Double(width - 0.5, 0.5, width - 0.5, height - 0.5));
+                            break;
+                        }
+
+                        default: {
+                            break;
+                        }
+                    }
+                }
+            } else {
+                switch (tabOrientation) {
+                    case HORIZONTAL: {
+                        graphics.setPaint(backgroundColor);
+                        graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1
+                            + buttonCornerRadius, buttonCornerRadius, buttonCornerRadius));
+                        break;
+                    }
+
+                    case VERTICAL: {
+                        graphics.setPaint(backgroundColor);
+                        graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1
+                            + buttonCornerRadius, height - 1, buttonCornerRadius, buttonCornerRadius));
+                        break;
+                    }
+
+                    default: {
+                        break;
+                    }
+                }
+
             }
 
             // Paint the content
@@ -522,7 +545,6 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     private Panorama tabButtonPanorama = new Panorama();
-    // private BoxPane tabButtonBoxPane = new BoxPane();
     private ButtonGroup tabButtonGroup = new ButtonGroup();
 
     private Color activeTabColor;
@@ -579,10 +601,10 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         activeButtonBevelColor = TerraTheme.brighten(activeTabColor);
         inactiveButtonBevelColor = TerraTheme.brighten(inactiveTabColor);
 
-        tabButtonBoxPane.getStyles().put("fill", true);
+        tabButtonBoxPane.getStyles().put("fill", new Boolean(true));
 
         tabButtonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
-        tabButtonPanorama.getStyles().put("buttonPadding", 6);
+        tabButtonPanorama.getStyles().put("buttonPadding", new Integer(6));
         tabButtonPanorama.setView(tabButtonBoxPane);
 
         tabButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
@@ -1079,48 +1101,50 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
             graphics.fillRect(contentBounds.x, contentBounds.y, contentBounds.width,
                 contentBounds.height);
 
-            // Draw the border
-            double top = contentBounds.y + 0.5;
-            double left = contentBounds.x + 0.5;
-            double bottom = top + contentBounds.height - 1;
-            double right = left + contentBounds.width - 1;
-
-            graphics.setPaint(borderColor);
-
-            // Draw the right and bottom borders
-            graphics.draw(new Line2D.Double(right, top, right, bottom));
-            graphics.draw(new Line2D.Double(left, bottom, right, bottom));
-
-            // Draw the left and top borders
-            switch (tabOrientation) {
-                case HORIZONTAL: {
-                    graphics.draw(new Line2D.Double(left, top, left, bottom));
-
-                    Point selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane,
-                        0, 0);
-                    graphics.draw(new Line2D.Double(left, top, selectedTabButtonLocation.x + 0.5,
-                        top));
-                    graphics.draw(new Line2D.Double(selectedTabButtonLocation.x
-                        + activeTabButton.getWidth() - 0.5, top, right, top));
-
-                    break;
-                }
-
-                case VERTICAL: {
-                    graphics.draw(new Line2D.Double(left, top, right, top));
-
-                    Point selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane,
-                        0, 0);
-                    graphics.draw(new Line2D.Double(left, top, left,
-                        selectedTabButtonLocation.y + 0.5));
-                    graphics.draw(new Line2D.Double(left, selectedTabButtonLocation.y
-                        + activeTabButton.getHeight() - 0.5, left, bottom));
-
-                    break;
-                }
-
-                default: {
-                    break;
+            if (!themeIsFlat()) {
+                // Draw the border
+                double top = contentBounds.y + 0.5;
+                double left = contentBounds.x + 0.5;
+                double bottom = top + contentBounds.height - 1;
+                double right = left + contentBounds.width - 1;
+                
+                graphics.setPaint(borderColor);
+                
+                // Draw the right and bottom borders
+                graphics.draw(new Line2D.Double(right, top, right, bottom));
+                graphics.draw(new Line2D.Double(left, bottom, right, bottom));
+                
+                // Draw the left and top borders
+                switch (tabOrientation) {
+                    case HORIZONTAL: {
+                        graphics.draw(new Line2D.Double(left, top, left, bottom));
+                        
+                        Point selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane,
+                            0, 0);
+                        graphics.draw(new Line2D.Double(left, top, selectedTabButtonLocation.x + 0.5,
+                            top));
+                        graphics.draw(new Line2D.Double(selectedTabButtonLocation.x
+                            + activeTabButton.getWidth() - 0.5, top, right, top));
+                        
+                        break;
+                    }
+                    
+                    case VERTICAL: {
+                        graphics.draw(new Line2D.Double(left, top, right, top));
+                        
+                        Point selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane,
+                            0, 0);
+                        graphics.draw(new Line2D.Double(left, top, left,
+                            selectedTabButtonLocation.y + 0.5));
+                        graphics.draw(new Line2D.Double(left, selectedTabButtonLocation.y
+                            + activeTabButton.getHeight() - 0.5, left, bottom));
+                        
+                        break;
+                    }
+                    
+                    default: {
+                        break;
+                    }
                 }
             }
         }
@@ -1374,11 +1398,11 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public int getButtonSpacing() {
-        return (Integer) tabButtonBoxPane.getStyles().get("spacing");
+        return ((Integer) tabButtonBoxPane.getStyles().get("spacing")).intValue();
     }
 
     public void setButtonSpacing(int buttonSpacing) {
-        tabButtonBoxPane.getStyles().put("spacing", buttonSpacing);
+        tabButtonBoxPane.getStyles().put("spacing", new Integer(buttonSpacing));
     }
 
     public final void setButtonCornerRadius(int buttonCornerRadius) {
