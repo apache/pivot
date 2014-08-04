@@ -153,7 +153,7 @@ public abstract class QueryServlet extends HttpServlet {
      * the request was received.
      */
     public int getPort() {
-        return port.get();
+        return port.get().intValue();
     }
 
     /**
@@ -171,10 +171,10 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     /**
-     * Tells whether the request has been ecrypted over HTTPS.
+     * Tells whether the request has been encrypted over HTTPS.
      */
     public boolean isSecure() {
-        return secure.get();
+        return secure.get().booleanValue();
     }
 
     /**
@@ -327,10 +327,10 @@ public abstract class QueryServlet extends HttpServlet {
             try {
                 URL url = new URL(request.getRequestURL().toString());
                 hostname.set(url.getHost());
-                port.set(request.getLocalPort());
+                port.set(new Integer(request.getLocalPort()));
                 contextPath.set(request.getContextPath());
                 servletPath.set(request.getServletPath());
-                secure.set(url.getProtocol().equalsIgnoreCase(HTTPS_PROTOCOL));
+                secure.set(new Boolean(url.getProtocol().equalsIgnoreCase(HTTPS_PROTOCOL)));
             } catch (MalformedURLException exception) {
                 throw new ServletException(exception);
             }
