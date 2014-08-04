@@ -63,7 +63,11 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
 
     public TerraAlertSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setBackgroundColor(theme.getColor(9));
+
+        Color backgroundColor = theme.getColor(9);
+        setBackgroundColor(new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
+            backgroundColor.getBlue(), ALPHA));
+
         setBorderBackgroundColor(theme.getColor(10));
         setBorderColor(theme.getColor(7));
     }

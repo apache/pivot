@@ -158,10 +158,14 @@ public class TerraPaletteSkin extends WindowSkin {
     // Derived colors
     private Color contentBevelColor;
 
+    protected static final int ALPHA = 235;
+
     @SuppressWarnings("unused")
     public TerraPaletteSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setBackgroundColor(theme.getColor(10));
+        Color backgroundColor = theme.getColor(10);
+        setBackgroundColor(new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
+            backgroundColor.getBlue(), ALPHA));
 
         titleBarColor = theme.getColor(4);
         titleBarBackgroundColor = theme.getColor(14);

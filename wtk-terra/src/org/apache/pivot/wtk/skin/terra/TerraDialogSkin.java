@@ -15,6 +15,7 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
+import java.awt.Color;
 import java.awt.Toolkit;
 
 import org.apache.pivot.util.Vote;
@@ -92,6 +93,14 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogListener, D
             return mouseOverOwner;
         }
     };
+
+    public TerraDialogSkin() {
+        super();
+
+        Color backgroundColor = getBackgroundColor();
+        setBackgroundColor(new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
+            backgroundColor.getBlue(), ALPHA));
+    }
 
     @Override
     public void install(Component component) {
