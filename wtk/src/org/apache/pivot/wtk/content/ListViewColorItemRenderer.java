@@ -27,6 +27,8 @@ import org.apache.pivot.wtk.media.Image;
  * List view renderer for displaying color swatches.
  */
 public class ListViewColorItemRenderer extends ListViewItemRenderer {
+    private static final int ALPHA = 153;
+
     /**
      * Internal image class for rendering color swatches.
      */
@@ -92,7 +94,7 @@ public class ListViewColorItemRenderer extends ListViewItemRenderer {
             String name = colorItem.getName();
 
             colorBadge.setColor(listView.isEnabled() ? color : new Color(color.getRed(),
-                color.getGreen(), color.getBlue(), 0x99));
+                color.getGreen(), color.getBlue(), ALPHA));
             listItem.setText(name);
         }
 

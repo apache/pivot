@@ -52,6 +52,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
 
     private static final int BUTTON_DIAMETER = 14;
     private static final int BUTTON_SELECTION_DIAMETER = 6;
+    private static final int ALPHA = 68;
 
     public TerraRadioButtonSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
@@ -167,7 +168,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         if (radioButton.isFocused()) {
             if (buttonData == null) {
                 Color focusColor = new Color(buttonSelectionColor.getRed(),
-                    buttonSelectionColor.getGreen(), buttonSelectionColor.getBlue(), 0x44);
+                    buttonSelectionColor.getGreen(), buttonSelectionColor.getBlue(), ALPHA);
                 graphics.setColor(focusColor);
                 graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
             } else {

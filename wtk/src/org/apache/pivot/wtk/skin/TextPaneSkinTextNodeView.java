@@ -481,10 +481,10 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         if (offset == length) {
             return new Bounds((int) Math.ceil(glyphBounds2D.getX() + glyphBounds2D.getWidth()), 0,
                 1, getHeight());
-        } else {
-            return new Bounds((int) Math.floor(glyphBounds2D.getX()), 0,
-                (int) Math.ceil(glyphBounds2D.getWidth()), getHeight());
         }
+
+        return new Bounds((int) Math.floor(glyphBounds2D.getX()), 0,
+            (int) Math.ceil(glyphBounds2D.getWidth()), getHeight());
     }
 
     @Override

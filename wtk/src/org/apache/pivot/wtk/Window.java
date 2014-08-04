@@ -1018,7 +1018,7 @@ public class Window extends Container {
 
             for (Window ownedWindow : ownedWindows) {
                 if (ownedWindow.isOpen()) {
-                    ownedWindowIndexes.add(display.indexOf(ownedWindow));
+                    ownedWindowIndexes.add(new Integer(display.indexOf(ownedWindow)));
                 }
             }
 
@@ -1026,7 +1026,7 @@ public class Window extends Container {
 
             ArrayList<Window> sortedOwnedWindows = new ArrayList<>(ownedWindows.getLength());
             for (Integer index : ownedWindowIndexes) {
-                sortedOwnedWindows.add((Window) display.get(index));
+                sortedOwnedWindows.add((Window) display.get(index.intValue()));
             }
 
             for (Window ownedWindow : sortedOwnedWindows) {

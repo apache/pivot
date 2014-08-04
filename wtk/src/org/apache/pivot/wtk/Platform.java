@@ -103,10 +103,10 @@ public class Platform {
         Integer multiClickInterval = (Integer) toolkit.getDesktopProperty("awt.multiClickInterval");
 
         if (multiClickInterval == null) {
-            multiClickInterval = DEFAULT_MULTI_CLICK_INTERVAL;
+            multiClickInterval = new Integer(DEFAULT_MULTI_CLICK_INTERVAL);
         }
 
-        return multiClickInterval;
+        return multiClickInterval.intValue();
     }
 
     /**
@@ -117,10 +117,10 @@ public class Platform {
         Integer cursorBlinkRate = (Integer) toolkit.getDesktopProperty("awt.cursorBlinkRate");
 
         if (cursorBlinkRate == null) {
-            cursorBlinkRate = DEFAULT_CURSOR_BLINK_RATE;
+            cursorBlinkRate = new Integer(DEFAULT_CURSOR_BLINK_RATE);
         }
 
-        return cursorBlinkRate;
+        return cursorBlinkRate.intValue();
     }
 
     /**

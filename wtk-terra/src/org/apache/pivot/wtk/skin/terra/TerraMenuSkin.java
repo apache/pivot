@@ -51,11 +51,13 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     private int sectionSpacing;
     private boolean showKeyboardShortcuts;
 
+    private static final int ALPHA = 228;
+
     public TerraMenuSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
         Color backgroundColor = theme.getColor(4);
         backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
-            backgroundColor.getBlue(), 228);
+            backgroundColor.getBlue(), ALPHA);
         setBackgroundColor(backgroundColor);
 
         font = theme.getFont();
@@ -65,7 +67,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         activeBackgroundColor = theme.getColor(14);
         marginColor = theme.getColor(11);
         marginColor = new Color(marginColor.getRed(), marginColor.getGreen(),
-            marginColor.getBlue(), 228);
+            marginColor.getBlue(), ALPHA);
         margin = 20;
         separatorColor = theme.getColor(7);
         sectionSpacing = 7;

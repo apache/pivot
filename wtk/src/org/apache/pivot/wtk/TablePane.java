@@ -916,12 +916,12 @@ public class TablePane extends Container {
 
     public static int getRowSpan(Component component) {
         Integer value = (Integer) component.getAttribute(Attribute.ROW_SPAN);
-        return (value == null) ? 1 : value;
+        return (value == null) ? 1 : value.intValue();
     }
 
     public static void setRowSpan(Component component, int rowSpan) {
-        Integer previousValue = (Integer) component.setAttribute(Attribute.ROW_SPAN, rowSpan);
-        int previousRowSpan = (previousValue == null) ? 1 : previousValue;
+        Integer previousValue = (Integer) component.setAttribute(Attribute.ROW_SPAN, new Integer(rowSpan));
+        int previousRowSpan = (previousValue == null) ? 1 : previousValue.intValue();
 
         if (previousRowSpan != rowSpan) {
             Container parent = component.getParent();
@@ -936,12 +936,12 @@ public class TablePane extends Container {
 
     public static int getColumnSpan(Component component) {
         Integer value = (Integer) component.getAttribute(Attribute.COLUMN_SPAN);
-        return (value == null) ? 1 : value;
+        return (value == null) ? 1 : value.intValue();
     }
 
     public static void setColumnSpan(Component component, int columnSpan) {
-        Integer previousValue = (Integer) component.setAttribute(Attribute.COLUMN_SPAN, columnSpan);
-        int previousColumnSpan = (previousValue == null) ? 1 : previousValue;
+        Integer previousValue = (Integer) component.setAttribute(Attribute.COLUMN_SPAN, new Integer(columnSpan));
+        int previousColumnSpan = (previousValue == null) ? 1 : previousValue.intValue();
 
         if (previousColumnSpan != columnSpan) {
             Container parent = component.getParent();

@@ -136,7 +136,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
      * Resize button image.
      */
     protected class ResizeImage extends Image {
-        public static final int ALPHA = 64;
+        private static final int ALPHA_IMAGE = 64;
 
         @Override
         public int getWidth() {
@@ -150,13 +150,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         @Override
         public void paint(Graphics2D graphics) {
-            graphics.setPaint(new Color(0, 0, 0, ALPHA));
+            graphics.setPaint(new Color(0, 0, 0, ALPHA_IMAGE));
             graphics.fillRect(3, 0, 2, 1);
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
             graphics.setPaint(new Color(borderColor.getRed(), borderColor.getGreen(),
-                borderColor.getBlue(), ALPHA));
+                borderColor.getBlue(), ALPHA_IMAGE));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);
@@ -253,13 +253,14 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     private static final int DEFAULT_STATE_TRANSITION_DURATION = 300;
     private static final int DEFAULT_STATE_TRANSITION_RATE = 30;
+    private static final int ALPHA = 235;
 
     public TerraSheetSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         Color backgroundColor = theme.getColor(11);
         backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
-            backgroundColor.getBlue(), 235);
+            backgroundColor.getBlue(), ALPHA);
         setBackgroundColor(backgroundColor);
 
         borderColor = theme.getColor(7);

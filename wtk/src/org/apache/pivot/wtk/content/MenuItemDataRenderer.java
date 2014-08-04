@@ -38,11 +38,12 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
     protected Label textLabel = new Label();
     protected Label keyboardShortcutLabel = new Label();
 
+    @SuppressWarnings("unused")
     public MenuItemDataRenderer() {
         getStyles().put("padding", new Insets(2));
 
-        new TablePane.Column(this, 1, true);
-        new TablePane.Column(this);
+        new TablePane.Column(this, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(this);  // note: this is useful, even if not used directly
 
         BoxPane boxPane = new BoxPane();
         boxPane.add(imageView);
@@ -95,12 +96,12 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         Menu.Item menuItem = (Menu.Item) button;
         Menu menu = (Menu) menuItem.getParent();
 
-        int margin = (Integer) menu.getStyles().get("margin");
+        int margin = ((Integer) menu.getStyles().get("margin")).intValue();
         Insets padding = (Insets) getStyles().get("padding");
 
         imageView.setImage(icon);
         imageView.setPreferredWidth(margin - padding.left * 2);
-        imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
+        imageView.getStyles().put("opacity", button.isEnabled() ? new Float(1.0f) : new Float(0.5f));
 
         // Update the labels
         textLabel.setText(text != null ? text : "");
@@ -125,7 +126,7 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
 
         boolean showKeyboardShortcuts = false;
         if (menu.getStyles().containsKey("showKeyboardShortcuts")) {
-            showKeyboardShortcuts = (Boolean) menu.getStyles().get("showKeyboardShortcuts");
+            showKeyboardShortcuts = ((Boolean) menu.getStyles().get("showKeyboardShortcuts")).booleanValue();
         }
 
         if (showKeyboardShortcuts) {

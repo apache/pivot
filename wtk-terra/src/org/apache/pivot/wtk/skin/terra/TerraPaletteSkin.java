@@ -88,7 +88,7 @@ public class TerraPaletteSkin extends WindowSkin {
      * Resize button image.
      */
     protected class ResizeImage extends Image {
-        public static final int ALPHA = 64;
+        private static final int ALPHA_IMAGE = 64;
 
         @Override
         public int getWidth() {
@@ -102,13 +102,13 @@ public class TerraPaletteSkin extends WindowSkin {
 
         @Override
         public void paint(Graphics2D graphics) {
-            graphics.setPaint(new Color(0, 0, 0, ALPHA));
+            graphics.setPaint(new Color(0, 0, 0, ALPHA_IMAGE));
             graphics.fillRect(3, 0, 2, 1);
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
             graphics.setPaint(new Color(contentBorderColor.getRed(), contentBorderColor.getGreen(),
-                contentBorderColor.getBlue(), ALPHA));
+                contentBorderColor.getBlue(), ALPHA_IMAGE));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);

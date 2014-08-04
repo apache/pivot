@@ -52,6 +52,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
     private static final int CHECKBOX_SIZE = 14;
     private static final int CHECKMARK_SIZE = 10;
+    private static final int ALPHA = 68;
 
     public TerraCheckboxSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
@@ -169,7 +170,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         if (checkbox.isFocused()) {
             if (buttonData == null) {
                 Color focusColor = new Color(buttonSelectionColor.getRed(),
-                    buttonSelectionColor.getGreen(), buttonSelectionColor.getBlue(), 0x44);
+                    buttonSelectionColor.getGreen(), buttonSelectionColor.getBlue(), ALPHA);
                 graphics.setColor(focusColor);
                 graphics.fillRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
             } else {

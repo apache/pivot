@@ -33,17 +33,18 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
     protected ImageView imageView = new ImageView();
     protected Label label = new Label();
 
+    @SuppressWarnings("unused")
     public LinkButtonDataRenderer() {
-        getStyles().put("horizontalSpacing", 4);
+        getStyles().put("horizontalSpacing", new Integer(4));
 
-        new TablePane.Column(this);
-        new TablePane.Column(this, 1, true);
+        new TablePane.Column(this);  // note: this is useful, even if not used directly
+        new TablePane.Column(this, 1, true);  // note: this is useful, even if not used directly
 
         TablePane.Row row = new TablePane.Row(this);
         row.add(imageView);
         row.add(label);
 
-        label.getStyles().put("wrapText", true);
+        label.getStyles().put("wrapText", new Boolean(true));
     }
 
     @Override
@@ -75,7 +76,7 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
             imageView.setVisible(true);
             imageView.setImage(icon);
 
-            imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
+            imageView.getStyles().put("opacity", button.isEnabled() ? new Float(1.0f) : new Float(0.5f));
         }
 
         // Update the label

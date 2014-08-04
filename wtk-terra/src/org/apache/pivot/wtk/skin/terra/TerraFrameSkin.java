@@ -170,7 +170,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
      * Resize button image.
      */
     protected class ResizeImage extends Image {
-        public static final int ALPHA = 64;
+        private static final int ALPHA_IMAGE = 64;
 
         @Override
         public int getWidth() {
@@ -184,13 +184,13 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         @Override
         public void paint(Graphics2D graphics) {
-            graphics.setPaint(new Color(0, 0, 0, ALPHA));
+            graphics.setPaint(new Color(0, 0, 0, ALPHA_IMAGE));
             graphics.fillRect(3, 0, 2, 1);
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
             graphics.setPaint(new Color(contentBorderColor.getRed(), contentBorderColor.getGreen(),
-                contentBorderColor.getBlue(), ALPHA));
+                contentBorderColor.getBlue(), ALPHA_IMAGE));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);
@@ -237,6 +237,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     private Color contentBevelColor;
 
     private static final float INACTIVE_ICON_OPACITY = 0.5f;
+    protected static final int ALPHA = 235;
 
     @SuppressWarnings("unused")
     public TerraFrameSkin() {
