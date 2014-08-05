@@ -41,24 +41,30 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
  * Meter skin.
  */
 public class TerraMeterSkin extends ComponentSkin implements MeterListener {
+    private Color backgroundColor;
     private Color fillColor;
     private Color gridColor;
     private float gridFrequency;
     private Font font;
     private Color textColor;
     private Color textFillColor;
+    private Color darkFillColor;
 
     private static final int DEFAULT_WIDTH = 100;
     private static final int DEFAULT_HEIGHT = 12;
 
     public TerraMeterSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
+        backgroundColor = theme.getColor(10);
         fillColor = theme.getColor(16);
         gridColor = theme.getColor(10);
         gridFrequency = 0.25f;
         font = theme.getFont().deriveFont(Font.BOLD);
         textColor = theme.getColor(1);
         textFillColor = theme.getColor(4);
+
+        // Set the derived colors
+        darkFillColor = TerraTheme.darken(fillColor);
     }
 
     @Override
@@ -208,18 +214,27 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
         int meterStop = (int) (meter.getPercentage() * width);
 
         // Paint the interior fill
-        graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(fillColor), 0, height,
-            TerraTheme.darken(fillColor)));
-        graphics.fillRect(0, 0, meterStop, height);
+        if (!themeIsFlat()) {
+            graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(fillColor), 0, height,
+                darkFillColor));
+            graphics.fillRect(0, 0, meterStop, height);
 
-        // Paint the grid
-        graphics.setPaint(gridColor);
-        GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
-        int nLines = (int) Math.ceil(1 / gridFrequency) - 1;
-        float gridSeparation = width * gridFrequency;
-        for (int i = 0; i < nLines; i++) {
-            int gridX = (int) ((i + 1) * gridSeparation);
-            GraphicsUtilities.drawLine(graphics, gridX, 0, height, Orientation.VERTICAL);
+            // Paint the grid
+            graphics.setPaint(gridColor);
+            GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
+            int nLines = (int) Math.ceil(1 / gridFrequency) - 1;
+            float gridSeparation = width * gridFrequency;
+            for (int i = 0; i < nLines; i++) {
+                int gridX = (int) ((i + 1) * gridSeparation);
+                GraphicsUtilities.drawLine(graphics, gridX, 0, height, Orientation.VERTICAL);
+            }
+        } else {
+            // Paint the background
+            graphics.setColor(backgroundColor);
+            graphics.fillRect(0, 0, width, height);
+
+            graphics.setPaint(darkFillColor);
+            graphics.fillRect(0, 0, meterStop, height);
         }
 
         String text = meter.getText();
