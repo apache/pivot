@@ -560,18 +560,18 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
                 graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColorLocal, width / 2f,
                     titleBarHeight + 1, titleBarBackgroundColorLocal));
                 graphics.fillRect(0, 0, width, titleBarHeight + 1);
-                
+
                 // Draw the border
                 graphics.setPaint(titleBarBorderColorLocal);
                 GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 2);
-                
+
                 // Draw the content area
                 Bounds contentAreaRectangle = new Bounds(0, titleBarHeight + 2, width, height
                     - (titleBarHeight + 2));
                 graphics.setPaint(contentBorderColor);
                 GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
                     contentAreaRectangle.width, contentAreaRectangle.height);
-                
+
                 if (showContentBevel) {
                     graphics.setPaint(contentBevelColor);
                     GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
@@ -581,7 +581,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             } else {
                 graphics.setPaint(titleBarBackgroundColorLocal);
                 graphics.fillRect(0, 0, width, titleBarHeight + 1);
-                
+
             }
         }
     }

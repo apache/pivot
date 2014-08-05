@@ -77,25 +77,25 @@ public final class Bounds implements Serializable {
         }
 
         if (bounds.containsKey(X_KEY)) {
-            x = (Integer) bounds.get(X_KEY);
+            x = ((Integer) bounds.get(X_KEY)).intValue();
         } else {
             x = 0;
         }
 
         if (bounds.containsKey(Y_KEY)) {
-            y = (Integer) bounds.get(Y_KEY);
+            y = ((Integer) bounds.get(Y_KEY)).intValue();
         } else {
             y = 0;
         }
 
         if (bounds.containsKey(WIDTH_KEY)) {
-            width = (Integer) bounds.get(WIDTH_KEY);
+            width = ((Integer) bounds.get(WIDTH_KEY)).intValue();
         } else {
             width = 0;
         }
 
         if (bounds.containsKey(HEIGHT_KEY)) {
-            height = (Integer) bounds.get(HEIGHT_KEY);
+            height = ((Integer) bounds.get(HEIGHT_KEY)).intValue();
         } else {
             height = 0;
         }

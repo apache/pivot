@@ -54,13 +54,13 @@ public final class Dimensions implements Serializable {
         }
 
         if (dimensions.containsKey(WIDTH_KEY)) {
-            width = (Integer) dimensions.get(WIDTH_KEY);
+            width = ((Integer) dimensions.get(WIDTH_KEY)).intValue();
         } else {
             width = 0;
         }
 
         if (dimensions.containsKey(HEIGHT_KEY)) {
-            height = (Integer) dimensions.get(HEIGHT_KEY);
+            height = ((Integer) dimensions.get(HEIGHT_KEY)).intValue();
         } else {
             height = 0;
         }

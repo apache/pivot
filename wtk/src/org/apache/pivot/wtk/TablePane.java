@@ -920,7 +920,7 @@ public class TablePane extends Container {
     }
 
     public static void setRowSpan(Component component, int rowSpan) {
-        Integer previousValue = (Integer) component.setAttribute(Attribute.ROW_SPAN, new Integer(rowSpan));
+        Integer previousValue = (Integer) component.setAttribute(Attribute.ROW_SPAN, Integer.valueOf(rowSpan));
         int previousRowSpan = (previousValue == null) ? 1 : previousValue.intValue();
 
         if (previousRowSpan != rowSpan) {
@@ -940,7 +940,7 @@ public class TablePane extends Container {
     }
 
     public static void setColumnSpan(Component component, int columnSpan) {
-        Integer previousValue = (Integer) component.setAttribute(Attribute.COLUMN_SPAN, new Integer(columnSpan));
+        Integer previousValue = (Integer) component.setAttribute(Attribute.COLUMN_SPAN, Integer.valueOf(columnSpan));
         int previousColumnSpan = (previousValue == null) ? 1 : previousValue.intValue();
 
         if (previousColumnSpan != columnSpan) {

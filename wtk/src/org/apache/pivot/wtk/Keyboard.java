@@ -141,7 +141,7 @@ public final class Keyboard {
                     // Keycode
                     try {
                         Field keyCodeField = KeyCode.class.getField(keys[i].toUpperCase(Locale.ENGLISH));
-                        keyCode = (Integer) keyCodeField.get(null);
+                        keyCode = ((Integer) keyCodeField.get(null)).intValue();
                     } catch (Exception exception) {
                         throw new IllegalArgumentException(exception);
                     }

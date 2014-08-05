@@ -82,7 +82,7 @@ public class TerraSliderSkin extends SliderSkin {
             if (!themeIsFlat()) {
                 graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor, width / 2f,
                     height, buttonBackgroundColor));
-                
+
             } else {
                 graphics.setPaint(buttonBackgroundColor);
             }

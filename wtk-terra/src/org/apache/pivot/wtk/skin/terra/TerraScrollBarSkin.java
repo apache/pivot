@@ -785,17 +785,17 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
         if (!themeIsFlat()) {
             ScrollBar scrollBar = (ScrollBar) getComponent();
-            
+
             int width = getWidth();
             int height = getHeight();
-            
+
             graphics.setPaint(borderColor);
-            
+
             // Paint the scroll bar border lines
             if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
                 int scrollUpButtonWidth = scrollUpButton.getWidth();
                 int scrollDownButtonWidth = scrollDownButton.getWidth();
-                
+
                 GraphicsUtilities.drawLine(graphics, scrollUpButtonWidth, 0, width
                     - scrollDownButtonWidth - scrollUpButtonWidth, Orientation.HORIZONTAL);
                 GraphicsUtilities.drawLine(graphics, scrollUpButtonWidth, height - 1, width
@@ -803,7 +803,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
             } else {
                 int scrollUpButtonHeight = scrollUpButton.getHeight();
                 int scrollDownButtonHeight = scrollDownButton.getHeight();
-                
+
                 GraphicsUtilities.drawLine(graphics, 0, scrollUpButtonHeight, height
                     - scrollDownButtonHeight - scrollUpButtonHeight, Orientation.VERTICAL);
                 GraphicsUtilities.drawLine(graphics, width - 1, scrollUpButtonHeight, height

@@ -35,7 +35,7 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
 
     @SuppressWarnings("unused")
     public LinkButtonDataRenderer() {
-        getStyles().put("horizontalSpacing", new Integer(4));
+        getStyles().put("horizontalSpacing", Integer.valueOf(4));
 
         new TablePane.Column(this);  // note: this is useful, even if not used directly
         new TablePane.Column(this, 1, true);  // note: this is useful, even if not used directly
@@ -44,7 +44,7 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         row.add(imageView);
         row.add(label);
 
-        label.getStyles().put("wrapText", new Boolean(true));
+        label.getStyles().put("wrapText", Boolean.valueOf(true));
     }
 
     @Override

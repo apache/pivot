@@ -256,7 +256,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
         new TablePane.Column(titleBarTablePane, -1);  // note: this is useful, even if not used directly
 
         titleBarTablePane.getStyles().put("padding", new Insets(3));
-        titleBarTablePane.getStyles().put("horizontalSpacing", new Integer(3));
+        titleBarTablePane.getStyles().put("horizontalSpacing", Integer.valueOf(3));
 
         TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 

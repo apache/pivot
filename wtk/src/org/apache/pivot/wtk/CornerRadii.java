@@ -112,7 +112,7 @@ public final class CornerRadii implements Serializable {
         }
 
         if (cornerRadii.containsKey(TOP_LEFT_KEY)) {
-            topLeft = (Integer) cornerRadii.get(TOP_LEFT_KEY);
+            topLeft = ((Integer) cornerRadii.get(TOP_LEFT_KEY)).intValue();
 
             if (topLeft < 0) {
                 throw new IllegalArgumentException("\"topLeft\" is negative.");
@@ -122,7 +122,7 @@ public final class CornerRadii implements Serializable {
         }
 
         if (cornerRadii.containsKey(TOP_RIGHT_KEY)) {
-            topRight = (Integer) cornerRadii.get(TOP_RIGHT_KEY);
+            topRight = ((Integer) cornerRadii.get(TOP_RIGHT_KEY)).intValue();
 
             if (topRight < 0) {
                 throw new IllegalArgumentException("\"topRight\" is negative.");
@@ -132,7 +132,7 @@ public final class CornerRadii implements Serializable {
         }
 
         if (cornerRadii.containsKey(BOTTOM_LEFT_KEY)) {
-            bottomLeft = (Integer) cornerRadii.get(BOTTOM_LEFT_KEY);
+            bottomLeft = ((Integer) cornerRadii.get(BOTTOM_LEFT_KEY)).intValue();
 
             if (bottomLeft < 0) {
                 throw new IllegalArgumentException("\"bottomLeft\" is negative.");
@@ -142,7 +142,7 @@ public final class CornerRadii implements Serializable {
         }
 
         if (cornerRadii.containsKey(BOTTOM_RIGHT_KEY)) {
-            bottomRight = (Integer) cornerRadii.get(BOTTOM_RIGHT_KEY);
+            bottomRight = ((Integer) cornerRadii.get(BOTTOM_RIGHT_KEY)).intValue();
 
             if (bottomRight < 0) {
                 throw new IllegalArgumentException("\"bottomRight\" is negative.");

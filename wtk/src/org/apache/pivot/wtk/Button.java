@@ -723,10 +723,10 @@ public abstract class Button extends Component {
 
                     boolean selected = false;
                     if (value instanceof Boolean) {
-                        selected = (Boolean) value;
+                        selected = ((Boolean) value).booleanValue();
                     } else if (selectedBindMapping == null) {
                         if (value != null) {
-                            selected = Boolean.valueOf(value.toString());
+                            selected = Boolean.valueOf(value.toString()).booleanValue();
                         }
                     } else {
                         selected = selectedBindMapping.isSelected(value);
@@ -757,8 +757,8 @@ public abstract class Button extends Component {
             } else {
                 // Bind using selected key
                 if (selectedKey != null && selectedBindType != BindType.LOAD) {
-                    JSON.put(context, selectedKey, (selectedBindMapping == null) ? isSelected()
-                        : selectedBindMapping.valueOf(isSelected()));
+                    JSON.put(context, selectedKey, (selectedBindMapping == null) ?
+                        new Boolean(isSelected()) : selectedBindMapping.valueOf(isSelected()));
                 }
             }
         }

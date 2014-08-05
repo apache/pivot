@@ -1018,7 +1018,7 @@ public class Window extends Container {
 
             for (Window ownedWindow : ownedWindows) {
                 if (ownedWindow.isOpen()) {
-                    ownedWindowIndexes.add(new Integer(display.indexOf(ownedWindow)));
+                    ownedWindowIndexes.add(Integer.valueOf(display.indexOf(ownedWindow)));
                 }
             }
 

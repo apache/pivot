@@ -211,7 +211,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         listViewPanorama.getStyles().put("alwaysShowScrollButtons", new Boolean(true));
 
         listViewBorder = new Border(listViewPanorama);
-        listViewBorder.getStyles().put("padding", new Integer(0));
+        listViewBorder.getStyles().put("padding", Integer.valueOf(0));
         listViewBorder.getStyles().put("color", borderColor);
 
         // Set the popup content

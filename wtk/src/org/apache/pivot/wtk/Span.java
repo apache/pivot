@@ -64,8 +64,8 @@ public final class Span {
             throw new IllegalArgumentException(END_KEY + " is required.");
         }
 
-        start = (Integer) span.get(START_KEY);
-        end = (Integer) span.get(END_KEY);
+        start = ((Integer) span.get(START_KEY)).intValue();
+        end = ((Integer) span.get(END_KEY)).intValue();
     }
 
     /**

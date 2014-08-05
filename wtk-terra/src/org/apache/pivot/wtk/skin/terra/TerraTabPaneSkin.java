@@ -604,7 +604,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         tabButtonBoxPane.getStyles().put("fill", new Boolean(true));
 
         tabButtonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
-        tabButtonPanorama.getStyles().put("buttonPadding", new Integer(6));
+        tabButtonPanorama.getStyles().put("buttonPadding", Integer.valueOf(6));
         tabButtonPanorama.setView(tabButtonBoxPane);
 
         tabButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
@@ -1107,41 +1107,41 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 double left = contentBounds.x + 0.5;
                 double bottom = top + contentBounds.height - 1;
                 double right = left + contentBounds.width - 1;
-                
+
                 graphics.setPaint(borderColor);
-                
+
                 // Draw the right and bottom borders
                 graphics.draw(new Line2D.Double(right, top, right, bottom));
                 graphics.draw(new Line2D.Double(left, bottom, right, bottom));
-                
+
                 // Draw the left and top borders
                 switch (tabOrientation) {
                     case HORIZONTAL: {
                         graphics.draw(new Line2D.Double(left, top, left, bottom));
-                        
+
                         Point selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane,
                             0, 0);
                         graphics.draw(new Line2D.Double(left, top, selectedTabButtonLocation.x + 0.5,
                             top));
                         graphics.draw(new Line2D.Double(selectedTabButtonLocation.x
                             + activeTabButton.getWidth() - 0.5, top, right, top));
-                        
+
                         break;
                     }
-                    
+
                     case VERTICAL: {
                         graphics.draw(new Line2D.Double(left, top, right, top));
-                        
+
                         Point selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane,
                             0, 0);
                         graphics.draw(new Line2D.Double(left, top, left,
                             selectedTabButtonLocation.y + 0.5));
                         graphics.draw(new Line2D.Double(left, selectedTabButtonLocation.y
                             + activeTabButton.getHeight() - 0.5, left, bottom));
-                        
+
                         break;
                     }
-                    
+
                     default: {
                         break;
                     }
@@ -1402,7 +1402,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setButtonSpacing(int buttonSpacing) {
-        tabButtonBoxPane.getStyles().put("spacing", new Integer(buttonSpacing));
+        tabButtonBoxPane.getStyles().put("spacing", Integer.valueOf(buttonSpacing));
     }
 
     public final void setButtonCornerRadius(int buttonCornerRadius) {

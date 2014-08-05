@@ -73,7 +73,7 @@ public class RadioButtonGroup extends ButtonGroup {
         public boolean include(Integer index) {
             boolean include = defaultFilter.include(index);
             if (include) {
-                Button button = buttonOrder.get(index);
+                Button button = buttonOrder.get(index.intValue());
                 String rendered = button.getDataRenderer().toString(button.getButtonData());
                 if (rendered != null && rendered.length() > 0) {
                     char first = Character.toUpperCase(rendered.charAt(0));
@@ -219,7 +219,7 @@ public class RadioButtonGroup extends ButtonGroup {
     private final Filter<Integer> defaultFilter = new Filter<Integer>() {
         @Override
         public boolean include(Integer index) {
-            Button button = buttonOrder.get(index);
+            Button button = buttonOrder.get(index.intValue());
             boolean focusable = button.isFocusable();
             return focusable;
         }
@@ -532,7 +532,7 @@ public class RadioButtonGroup extends ButtonGroup {
         if (length > 0) {
             // (index + 1) --> last index
             for (int i = (index + 1); i < length; i++) {
-                if (filterWithDefault.include(i)) {
+                if (filterWithDefault.include(Integer.valueOf(i))) {
                     result = i;
                     break;
                 }
@@ -540,7 +540,7 @@ public class RadioButtonGroup extends ButtonGroup {
             if (circularArgument && result == NOT_FOUND_INDEX) {
                 // first index --> index
                 for (int i = 0; i <= index; i++) {
-                    if (filterWithDefault.include(i)) {
+                    if (filterWithDefault.include(Integer.valueOf(i))) {
                         result = i;
                         break;
                     }
@@ -572,7 +572,7 @@ public class RadioButtonGroup extends ButtonGroup {
         if (length > 0) {
             // (index - 1) --> first index
             for (int i = (index - 1); i >= 0; i--) {
-                if (filterWithDefault.include(i)) {
+                if (filterWithDefault.include(Integer.valueOf(i))) {
                     result = i;
                     break;
                 }
@@ -580,7 +580,7 @@ public class RadioButtonGroup extends ButtonGroup {
             if (circularArgument && result == NOT_FOUND_INDEX) {
                 // last index --> index
                 for (int i = (length - 1); i >= index; i--) {
-                    if (filterWithDefault.include(i)) {
+                    if (filterWithDefault.include(Integer.valueOf(i))) {
                         result = i;
                         break;
                     }

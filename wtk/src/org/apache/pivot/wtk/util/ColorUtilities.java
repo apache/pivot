@@ -130,7 +130,7 @@ public final class ColorUtilities {
      * @return an updated version of the color, with the given transparency
      */
     public static Color setTransparencyInColor(final Color original, final int transparency) {
-        Color updated = new Color(original.getRed(), original.getGreen(), original.getBlue(), 
+        Color updated = new Color(original.getRed(), original.getGreen(), original.getBlue(),
             transparency);
         return updated;
     }

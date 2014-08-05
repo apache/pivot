@@ -167,7 +167,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
         // Create the border
         calendarBorder = new Border(calendar);
-        calendarBorder.getStyles().put("padding", new Integer(0));
+        calendarBorder.getStyles().put("padding", Integer.valueOf(0));
         calendarBorder.getStyles().put("color", borderColor);
 
         // Set the popup content

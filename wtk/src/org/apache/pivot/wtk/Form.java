@@ -575,12 +575,12 @@ public class Form extends Container {
 
     public static boolean isRequired(Component component) {
         Boolean value = (Boolean) component.getAttribute(Attribute.REQUIRED);
-        return (value == null) ? false : value;
+        return (value == null) ? false : value.booleanValue();
     }
 
     public static void setRequired(Component component, boolean required) {
-        Boolean previousValue = (Boolean) component.setAttribute(Attribute.REQUIRED, required);
-        boolean previousRequired = (previousValue == null) ? false : previousValue;
+        Boolean previousValue = (Boolean) component.setAttribute(Attribute.REQUIRED, new Boolean(required));
+        boolean previousRequired = (previousValue == null) ? false : previousValue.booleanValue();
 
         if (previousRequired != required) {
             Container parent = component.getParent();

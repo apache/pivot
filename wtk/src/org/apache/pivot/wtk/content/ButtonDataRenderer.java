@@ -75,7 +75,7 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
             imageView.setVisible(true);
             imageView.setImage(icon);
 
-            imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
+            imageView.getStyles().put("opacity", button.isEnabled() ? Float.valueOf(1.0f) : Float.valueOf(0.5f));
 
             if (getFillIcon()) {
                 int buttonWidth = button.getWidth();
@@ -139,12 +139,12 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
     }
 
     public boolean getFillIcon() {
-        return (Boolean) imageView.getStyles().get("fill");
+        return ((Boolean) imageView.getStyles().get("fill")).booleanValue();
     }
 
     public void setFillIcon(boolean fillIcon) {
-        imageView.getStyles().put("fill", fillIcon);
-        getStyles().put("fill", fillIcon);
+        imageView.getStyles().put("fill", Boolean.valueOf(fillIcon));
+        getStyles().put("fill", Boolean.valueOf(fillIcon));
     }
 
     @Override

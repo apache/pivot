@@ -378,7 +378,7 @@ public class TerraPaletteSkin extends WindowSkin {
             graphics.setPaint(new GradientPaint(width / 2f, 0, titleBarBevelColor, width / 2f,
                 titleBarHeight + 1, currentTitleBarBackgroundColor));
             graphics.fillRect(0, 0, width, titleBarHeight + 1);
-            
+
             // Draw the border
             graphics.setPaint(currentTitleBarBorderColor);
             GraphicsUtilities.drawRect(graphics, 0, 0, width, titleBarHeight + 1);
@@ -389,7 +389,7 @@ public class TerraPaletteSkin extends WindowSkin {
             graphics.setPaint(contentBorderColor);
             GraphicsUtilities.drawRect(graphics, contentAreaRectangle.x, contentAreaRectangle.y,
                 contentAreaRectangle.width, contentAreaRectangle.height);
-            
+
             graphics.setPaint(contentBevelColor);
             GraphicsUtilities.drawLine(graphics, contentAreaRectangle.x + 1,
                 contentAreaRectangle.y + 1, contentAreaRectangle.width - 2, Orientation.HORIZONTAL);

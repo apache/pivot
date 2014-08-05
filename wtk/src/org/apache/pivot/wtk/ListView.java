@@ -443,14 +443,14 @@ public class ListView extends Component {
             int updated = rangeSelection.insertIndex(index);
 
             // Increment checked indexes
-            int i = ArrayList.binarySearch(checkedIndexes, index);
+            int i = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index));
             if (i < 0) {
                 i = -(i + 1);
             }
 
             int n = checkedIndexes.getLength();
             while (i < n) {
-                checkedIndexes.update(i, checkedIndexes.get(i) + 1);
+                checkedIndexes.update(i, Integer.valueOf(checkedIndexes.get(i).intValue() + 1));
                 i++;
             }
 
@@ -477,12 +477,12 @@ public class ListView extends Component {
             int updated = rangeSelection.removeIndexes(index, count);
 
             // Remove and decrement checked indexes
-            int i = ArrayList.binarySearch(checkedIndexes, index);
+            int i = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index));
             if (i < 0) {
                 i = -(i + 1);
             }
 
-            int j = ArrayList.binarySearch(checkedIndexes, index + count - 1);
+            int j = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index + count - 1));
             if (j < 0) {
                 j = -(j + 1);
             } else {
@@ -493,7 +493,7 @@ public class ListView extends Component {
 
             int n = checkedIndexes.getLength();
             while (i < n) {
-                checkedIndexes.update(i, checkedIndexes.get(i) - count);
+                checkedIndexes.update(i, Integer.valueOf(checkedIndexes.get(i).intValue() - count));
                 i++;
             }
 
@@ -1149,7 +1149,7 @@ public class ListView extends Component {
      * @param index
      */
     public boolean isItemChecked(int index) {
-        return (ArrayList.binarySearch(checkedIndexes, index) >= 0);
+        return (ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index)) >= 0);
     }
 
     /**
@@ -1163,11 +1163,11 @@ public class ListView extends Component {
             throw new IllegalStateException("Checkmarks are not enabled.");
         }
 
-        int i = ArrayList.binarySearch(checkedIndexes, index);
+        int i = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index));
 
         if ((i < 0 && checked) || (i >= 0 && !checked)) {
             if (checked) {
-                checkedIndexes.insert(index, -(i + 1));
+                checkedIndexes.insert(Integer.valueOf(index), -(i + 1));
             } else {
                 checkedIndexes.remove(i, 1);
             }
@@ -1191,7 +1191,7 @@ public class ListView extends Component {
         this.checkedIndexes = new ArrayList<>();
 
         for (Integer index : checkedIndexesLocal) {
-            listViewItemStateListeners.itemCheckedChanged(this, index);
+            listViewItemStateListeners.itemCheckedChanged(this, index.intValue());
         }
     }
 
@@ -1659,9 +1659,9 @@ public class ListView extends Component {
 
                     Object item;
                     if (checkedItemsBindMapping == null) {
-                        item = listData.get(index);
+                        item = listData.get(index.intValue());
                     } else {
-                        item = checkedItemsBindMapping.get(listData, index);
+                        item = checkedItemsBindMapping.get(listData, index.intValue());
                     }
 
                     items.add(item);

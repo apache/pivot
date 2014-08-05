@@ -54,13 +54,13 @@ public final class Point implements Serializable {
         }
 
         if (point.containsKey(X_KEY)) {
-            x = (Integer) point.get(X_KEY);
+            x = ((Integer) point.get(X_KEY)).intValue();
         } else {
             x = 0;
         }
 
         if (point.containsKey(Y_KEY)) {
-            y = (Integer) point.get(Y_KEY);
+            y = ((Integer) point.get(Y_KEY)).intValue();
         } else {
             y = 0;
         }

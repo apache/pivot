@@ -366,7 +366,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         @Override
         public void render(Object data, Button button, boolean highlighted) {
             CalendarDate date = (CalendarDate) data;
-            super.render(new Integer(date.day + 1), button, highlighted);
+            super.render(Integer.valueOf(date.day + 1), button, highlighted);
 
             if (button.isSelected()) {
                 label.getStyles().put("color", button.getStyles().get("selectionColor"));
@@ -460,8 +460,8 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         // Add the month/year table pane
         TablePane monthYearTablePane = new TablePane();
-        monthYearTablePane.getStyles().put("padding", new Integer(3));
-        monthYearTablePane.getStyles().put("horizontalSpacing", new Integer(4));
+        monthYearTablePane.getStyles().put("padding", Integer.valueOf(3));
+        monthYearTablePane.getStyles().put("horizontalSpacing", Integer.valueOf(4));
 
         new TablePane.Column(monthYearTablePane, 1, true);  // note: this is useful, even if not used directly
         new TablePane.Column(monthYearTablePane, -1);  // note: this is useful, even if not used directly

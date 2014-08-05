@@ -279,7 +279,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 }
 
                 rowY += rowHeight;
-                rowBoundaries.add(new Integer(rowY));
+                rowBoundaries.add(Integer.valueOf(rowY));
                 rowY++;
             }
         } else {
@@ -582,7 +582,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             if (y == 0) {
                 rowIndex = 0;
             } else {
-                rowIndex = ArrayList.binarySearch(rowBoundaries, new Integer(y));
+                rowIndex = ArrayList.binarySearch(rowBoundaries, Integer.valueOf(y));
                 if (rowIndex < 0) {
                     rowIndex = -(rowIndex + 1);
                 }
@@ -674,7 +674,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             TableView.Column column = columns.get(i);
 
             if (column.isRelative()) {
-                columnWidths.add(new Integer(0));
+                columnWidths.add(Integer.valueOf(0));
                 relativeWidth += column.getWidth();
             } else {
                 int columnWidth = column.getWidth();
@@ -696,7 +696,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
                 columnWidth = Math.min(Math.max(columnWidth, column.getMinimumWidth()),
                     column.getMaximumWidth());
-                columnWidths.add(new Integer(columnWidth));
+                columnWidths.add(Integer.valueOf(columnWidth));
                 fixedWidth += columnWidth;
             }
         }
@@ -710,8 +710,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             if (column.isRelative()) {
                 int columnWidth = (int) Math.round((double) (column.getWidth() * variableWidth)
                     / (double) relativeWidth);
-                columnWidths.update(i, new Integer(
-                    Math.min(Math.max(columnWidth, column.getMinimumWidth()), 
+                columnWidths.update(i, Integer.valueOf(
+                    Math.min(Math.max(columnWidth, column.getMinimumWidth()),
                         column.getMaximumWidth())));
             }
         }

@@ -381,7 +381,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         if (!themeIsFlat()) {
             graphics.setPaint(borderColor);
             GraphicsUtilities.drawRect(graphics, 0, 0, width, height);
-            
+
             graphics.setPaint(bevelColor);
             GraphicsUtilities.drawLine(graphics, 1, height - 2, width - 2, Orientation.HORIZONTAL);
         }

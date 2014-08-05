@@ -404,7 +404,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
 
     /**
      * Returns the current Theme.
-     * 
+     *
      * @return the theme
      */
     protected Theme currentTheme() {
@@ -413,10 +413,10 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
 
     /**
      * Returns if the current Theme is flat.
-     * 
+     *
      * Note that flat themes usually have no bevel, gradients, shadow effects,
      * and in some cases even no borders.
-     * 
+     *
      * @return true if it is flat, false otherwise (default)
      */
     protected boolean themeIsFlat() {

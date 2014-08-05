@@ -23,7 +23,7 @@ import org.apache.pivot.wtk.skin.ScrollPaneSkin;
  * Scroll pane skin that applies terra-specific colors.
  */
 public class TerraScrollPaneSkin extends ScrollPaneSkin {
- 
+
     public TerraScrollPaneSkin() {
         super();
 

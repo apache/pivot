@@ -58,13 +58,13 @@ public final class Limits implements Serializable {
         }
 
         if (limits.containsKey(MINIMUM_KEY)) {
-            minimum = (Integer) limits.get(MINIMUM_KEY);
+            minimum = ((Integer) limits.get(MINIMUM_KEY)).intValue();
         } else {
             minimum = Integer.MIN_VALUE;
         }
 
         if (limits.containsKey(MAXIMUM_KEY)) {
-            maximum = (Integer) limits.get(MAXIMUM_KEY);
+            maximum = ((Integer) limits.get(MAXIMUM_KEY)).intValue();
         } else {
             maximum = Integer.MAX_VALUE;
         }

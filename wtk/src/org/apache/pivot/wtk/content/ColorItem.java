@@ -66,8 +66,10 @@ public class ColorItem {
 
     public void setName(String name) {
         if (name == null) {
-            this.name = String.format("#%02X%02X%02X", color.getRed(), color.getGreen(),
-                color.getBlue());
+            this.name = String.format("#%02X%02X%02X",
+                Integer.valueOf(color.getRed()),
+                Integer.valueOf(color.getGreen()),
+                Integer.valueOf(color.getBlue()));
         } else {
             this.name = name;
         }

@@ -341,7 +341,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
 
     @SuppressWarnings("unused")
     public TerraColorChooserSkin() {
-        tablePane.getStyles().put("horizontalSpacing", new Integer(6));
+        tablePane.getStyles().put("horizontalSpacing", Integer.valueOf(6));
         new TablePane.Column(tablePane, 31, true);  // note: this is useful, even if not used directly
         new TablePane.Column(tablePane, 4, true);  // note: this is useful, even if not used directly
 
@@ -394,7 +394,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
             throw new IllegalArgumentException("spacing is negative.");
         }
 
-        tablePane.getStyles().put("horizontalSpacing", new Integer(spacing));
+        tablePane.getStyles().put("horizontalSpacing", Integer.valueOf(spacing));
     }
 
     public final void setSpacing(Number spacing) {

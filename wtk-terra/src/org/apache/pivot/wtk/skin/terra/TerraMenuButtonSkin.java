@@ -661,7 +661,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setCloseTransitionDuration(int closeTransitionDuration) {
-        menuPopup.getStyles().put("closeTransitionDuration", new Integer(closeTransitionDuration));
+        menuPopup.getStyles().put("closeTransitionDuration", Integer.valueOf(closeTransitionDuration));
     }
 
     public int getCloseTransitionRate() {
@@ -669,7 +669,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setCloseTransitionRate(int closeTransitionRate) {
-        menuPopup.getStyles().put("closeTransitionRate", new Integer(closeTransitionRate));
+        menuPopup.getStyles().put("closeTransitionRate", Integer.valueOf(closeTransitionRate));
     }
 
     @Override

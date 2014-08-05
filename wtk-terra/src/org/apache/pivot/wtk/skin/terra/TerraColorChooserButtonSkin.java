@@ -168,7 +168,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         // Create the border
         colorChooserBorder = new Border(colorChooser);
         colorChooserBorder.getStyles().put("color", borderColor);
-        colorChooserBorder.getStyles().put("padding", new Integer(2));
+        colorChooserBorder.getStyles().put("padding", Integer.valueOf(2));
 
         // Set the popup content
         colorChooserPopup.setContent(colorChooserBorder);

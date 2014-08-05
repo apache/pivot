@@ -141,7 +141,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
         border.getStyles().put("color", theme.getColor(7));
         border.getStyles().put("backgroundColor", null);
-        border.getStyles().put("padding", new Integer(0));
+        border.getStyles().put("padding", Integer.valueOf(0));
     }
 
     @Override

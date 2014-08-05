@@ -61,9 +61,9 @@ public class ScrollBar extends Container {
                 throw new IllegalArgumentException(EXTENT_KEY + " is required.");
             }
 
-            start = (Integer) scope.get(START_KEY);
-            end = (Integer) scope.get(END_KEY);
-            extent = (Integer) scope.get(EXTENT_KEY);
+            start = ((Integer) scope.get(START_KEY)).intValue();
+            end = ((Integer) scope.get(END_KEY)).intValue();
+            extent = ((Integer) scope.get(EXTENT_KEY)).intValue();
         }
 
         @Override
@@ -239,16 +239,19 @@ public class ScrollBar extends Container {
         if (start != previousStart || end != previousEnd || extent != previousExtent) {
             if (start > value) {
                 throw new IllegalArgumentException(String.format(
-                    "start (%d) is greater than value (%d)", start, value));
+                    "start (%d) is greater than value (%d)",
+                    Integer.valueOf(start), Integer.valueOf(value)));
             }
 
             if (extent < 0) {
-                throw new IllegalArgumentException(String.format("extent (%d) is negative", extent));
+                throw new IllegalArgumentException(String.format("extent (%d) is negative",
+                    Integer.valueOf(extent)));
             }
 
             if (end < value + extent) {
                 throw new IllegalArgumentException(String.format(
-                    "end (%d) is less than value (%d) + extent (%d)", end, value, extent));
+                    "end (%d) is less than value (%d) + extent (%d)",
+                    Integer.valueOf(end), Integer.valueOf(value), Integer.valueOf(extent)));
             }
 
             this.start = start;
@@ -293,12 +296,14 @@ public class ScrollBar extends Container {
         if (value != previousValue) {
             if (value < start) {
                 throw new IllegalArgumentException(String.format(
-                    "value (%d) is less than start (%d)", value, start));
+                    "value (%d) is less than start (%d)",
+                    Integer.valueOf(value), Integer.valueOf(start)));
             }
 
             if (value + extent > end) {
                 throw new IllegalArgumentException(String.format(
-                    "value (%d) + extent (%d) is greater than end (%d)", value, extent, end));
+                    "value (%d) + extent (%d) is greater than end (%d)",
+                    Integer.valueOf(value), Integer.valueOf(extent), Integer.valueOf(end)));
             }
 
             this.value = value;
