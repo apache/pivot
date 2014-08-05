@@ -123,4 +123,15 @@ public final class ColorUtilities {
         return difference;
     }
 
+    /**
+     * Returns a modified version of the given Color.
+     * @param original the original color
+     * @param transparency the desired transparency (alpha) to set
+     * @return an updated version of the color, with the given transparency
+     */
+    public static Color setTransparencyInColor(final Color original, final int transparency) {
+        Color updated = new Color(original.getRed(), original.getGreen(), original.getBlue(), 
+            transparency);
+        return updated;
+    }
 }

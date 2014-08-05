@@ -35,6 +35,7 @@ import org.apache.pivot.wtk.MenuListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ContainerSkin;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * Menu skin.
@@ -56,9 +57,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     public TerraMenuSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
         Color backgroundColor = theme.getColor(4);
-        backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
-            backgroundColor.getBlue(), ALPHA);
-        setBackgroundColor(backgroundColor);
+        setBackgroundColor(ColorUtilities.setTransparencyInColor(backgroundColor, ALPHA));
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -66,8 +65,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
         activeColor = theme.getColor(4);
         activeBackgroundColor = theme.getColor(14);
         marginColor = theme.getColor(11);
-        marginColor = new Color(marginColor.getRed(), marginColor.getGreen(),
-            marginColor.getBlue(), ALPHA);
+        marginColor = ColorUtilities.setTransparencyInColor(marginColor, ALPHA);
         margin = 20;
         separatorColor = theme.getColor(7);
         sectionSpacing = 7;

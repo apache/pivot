@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * Dialog skin.
@@ -98,8 +99,7 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogListener, D
         super();
 
         Color backgroundColor = getBackgroundColor();
-        setBackgroundColor(new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
-            backgroundColor.getBlue(), ALPHA));
+        setBackgroundColor(ColorUtilities.setTransparencyInColor(backgroundColor, ALPHA));
     }
 
     @Override

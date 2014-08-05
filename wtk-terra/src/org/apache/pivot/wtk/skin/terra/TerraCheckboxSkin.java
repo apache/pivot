@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.CheckboxSkin;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * Terra checkbox skin. <p> TODO Button alignment style (vertical only).
@@ -169,8 +170,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         // Paint the focus state
         if (checkbox.isFocused()) {
             if (buttonData == null) {
-                Color focusColor = new Color(buttonSelectionColor.getRed(),
-                    buttonSelectionColor.getGreen(), buttonSelectionColor.getBlue(), ALPHA);
+                Color focusColor = ColorUtilities.setTransparencyInColor(buttonSelectionColor, ALPHA);
                 graphics.setColor(focusColor);
                 graphics.fillRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
             } else {

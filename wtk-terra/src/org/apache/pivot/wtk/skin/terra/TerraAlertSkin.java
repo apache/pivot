@@ -35,6 +35,7 @@ import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * Alert skin.
@@ -65,8 +66,7 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         Color backgroundColor = theme.getColor(9);
-        setBackgroundColor(new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
-            backgroundColor.getBlue(), ALPHA));
+        setBackgroundColor(ColorUtilities.setTransparencyInColor(backgroundColor, ALPHA));
 
         setBorderBackgroundColor(theme.getColor(10));
         setBorderColor(theme.getColor(7));

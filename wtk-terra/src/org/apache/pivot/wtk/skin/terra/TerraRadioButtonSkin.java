@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.RadioButtonSkin;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * Terra radio button skin. <p> TODO Button alignment style (vertical only).
@@ -167,8 +168,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         // Paint the focus state
         if (radioButton.isFocused()) {
             if (buttonData == null) {
-                Color focusColor = new Color(buttonSelectionColor.getRed(),
-                    buttonSelectionColor.getGreen(), buttonSelectionColor.getBlue(), ALPHA);
+                Color focusColor = ColorUtilities.setTransparencyInColor(buttonSelectionColor, ALPHA);
                 graphics.setColor(focusColor);
                 graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
             } else {

@@ -54,6 +54,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.WindowSkin;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * Frame skin.
@@ -189,8 +190,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(new Color(contentBorderColor.getRed(), contentBorderColor.getGreen(),
-                contentBorderColor.getBlue(), ALPHA_IMAGE));
+            graphics.setPaint(ColorUtilities.setTransparencyInColor(contentBorderColor, ALPHA_IMAGE));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);

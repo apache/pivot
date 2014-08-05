@@ -52,6 +52,7 @@ import org.apache.pivot.wtk.WindowClassListener;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.WindowSkin;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * Palette skin class.
@@ -107,8 +108,7 @@ public class TerraPaletteSkin extends WindowSkin {
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(new Color(contentBorderColor.getRed(), contentBorderColor.getGreen(),
-                contentBorderColor.getBlue(), ALPHA_IMAGE));
+            graphics.setPaint(ColorUtilities.setTransparencyInColor(contentBorderColor, ALPHA_IMAGE));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);
@@ -164,8 +164,7 @@ public class TerraPaletteSkin extends WindowSkin {
     public TerraPaletteSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
         Color backgroundColor = theme.getColor(10);
-        setBackgroundColor(new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
-            backgroundColor.getBlue(), ALPHA));
+        setBackgroundColor(ColorUtilities.setTransparencyInColor(backgroundColor, ALPHA));
 
         titleBarColor = theme.getColor(4);
         titleBarBackgroundColor = theme.getColor(14);

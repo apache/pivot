@@ -50,6 +50,7 @@ import org.apache.pivot.wtk.effects.TranslationDecorator;
 import org.apache.pivot.wtk.effects.easing.Quadratic;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.WindowSkin;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * Sheet skin class.
@@ -155,8 +156,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(new Color(borderColor.getRed(), borderColor.getGreen(),
-                borderColor.getBlue(), ALPHA_IMAGE));
+            graphics.setPaint(ColorUtilities.setTransparencyInColor(borderColor, ALPHA_IMAGE));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);
@@ -259,9 +259,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
 
         Color backgroundColor = theme.getColor(11);
-        backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(),
-            backgroundColor.getBlue(), ALPHA);
-        setBackgroundColor(backgroundColor);
+        setBackgroundColor(ColorUtilities.setTransparencyInColor(backgroundColor, ALPHA));
 
         borderColor = theme.getColor(7);
         padding = new Insets(8);
