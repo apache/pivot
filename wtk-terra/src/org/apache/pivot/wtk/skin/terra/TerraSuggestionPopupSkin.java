@@ -209,7 +209,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
         if (!themeIsFlat()) {
             // Attach the drop-shadow decorator
-            dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+            dropShadowDecorator = new DropShadowDecorator();
             suggestionPopup.getDecorators().add(dropShadowDecorator);
         }
     }

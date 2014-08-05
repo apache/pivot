@@ -44,7 +44,7 @@ public class DropShadowDecorator implements Decorator {
     public static final float DEFAULT_SHADOW_OPACITY = 0.25f;
 
     public DropShadowDecorator() {
-        this(5, 5, 5);
+        this(3, 3, 3);
     }
 
     public DropShadowDecorator(int blurRadius, int xOffset, int yOffset) {

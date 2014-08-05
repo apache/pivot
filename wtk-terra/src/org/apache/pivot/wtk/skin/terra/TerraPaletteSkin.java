@@ -232,7 +232,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
         if (!themeIsFlat()) {
             // Attach the drop-shadow decorator
-            dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+            dropShadowDecorator = new DropShadowDecorator();
             palette.getDecorators().add(dropShadowDecorator);
         }
 

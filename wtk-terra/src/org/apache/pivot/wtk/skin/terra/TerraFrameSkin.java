@@ -297,7 +297,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         if (!themeIsFlat()) {
             // Attach the drop-shadow decorator
-            dropShadowDecorator = new DropShadowDecorator();
+            dropShadowDecorator = new DropShadowDecorator(5, 5, 5);
             frame.getDecorators().add(dropShadowDecorator);
         }
 

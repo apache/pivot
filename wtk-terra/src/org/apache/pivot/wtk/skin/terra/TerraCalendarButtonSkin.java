@@ -174,7 +174,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         calendarPopup.setContent(calendarBorder);
 
         // Attach the drop-shadow decorator
-        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+        dropShadowDecorator = new DropShadowDecorator();
         calendarPopup.getDecorators().add(dropShadowDecorator);
     }
 

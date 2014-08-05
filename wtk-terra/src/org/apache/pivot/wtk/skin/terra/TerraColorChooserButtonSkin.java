@@ -174,7 +174,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         colorChooserPopup.setContent(colorChooserBorder);
 
         // Attach the drop-shadow decorator
-        dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+        dropShadowDecorator = new DropShadowDecorator();
         colorChooserPopup.getDecorators().add(dropShadowDecorator);
     }
 

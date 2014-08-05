@@ -219,7 +219,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         // Attach the drop-shadow decorator
         if (!themeIsFlat()) {
-            dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+            dropShadowDecorator = new DropShadowDecorator();
             listViewPopup.getDecorators().add(dropShadowDecorator);
         }
     }

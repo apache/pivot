@@ -375,7 +375,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
         // Create the flag message popup
         flagMessageLabel.getStyles().put("padding", new Insets(3, 4, 3, 4));
 
-        flagMessageWindow.getDecorators().add(new DropShadowDecorator(3, 3, 3));
+        flagMessageWindow.getDecorators().add(new DropShadowDecorator());
         flagMessageWindow.getDecorators().add(new PopupFieldIndicatorDecorator());
 
         flagMessageWindow.getWindowStateListeners().add(new WindowStateListener.Adapter() {

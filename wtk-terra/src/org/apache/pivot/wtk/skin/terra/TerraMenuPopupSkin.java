@@ -162,7 +162,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
 
         // Attach the drop-shadow decorator
         if (!themeIsFlat()) {
-            dropShadowDecorator = new DropShadowDecorator(3, 3, 3);
+            dropShadowDecorator = new DropShadowDecorator();
             menuPopup.getDecorators().add(dropShadowDecorator);
         }
     }
