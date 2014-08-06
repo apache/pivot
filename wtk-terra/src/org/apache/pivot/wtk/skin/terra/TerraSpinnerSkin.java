@@ -678,7 +678,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
                 buttonWidth + 1, Orientation.HORIZONTAL);
         } else {
             graphics.setPaint(buttonBackgroundColor);
-            graphics.fillRect(buttonX, 0, buttonWidth, height);
+            graphics.fillRect(buttonX, 0, width, height);
         }
     }
 
