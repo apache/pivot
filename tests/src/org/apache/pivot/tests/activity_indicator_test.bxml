@@ -16,8 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<StackPane xmlns:bxml="http://pivot.apache.org/bxml"
+<Window title="ActivityIndicator Test"
+    xmlns:bxml="http://pivot.apache.org/bxml"
+    xmlns:content="org.apache.pivot.wtk.content"
     xmlns="org.apache.pivot.wtk">
-    <Label styles="{font:'Arial BOLD 24', horizontalAlignment:'center', verticalAlignment:'center'}" text="Hello"/>
-    <ActivityIndicator active="true"/>
-</StackPane>
+    <StackPane>
+        <Label styles="{font:'Arial BOLD 24', horizontalAlignment:'center', verticalAlignment:'center'}" text="Hello"/>
+        <ActivityIndicator active="true"/>
+    </StackPane>
+</Window>
