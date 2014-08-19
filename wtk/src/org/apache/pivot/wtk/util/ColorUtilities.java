@@ -101,6 +101,22 @@ public final class ColorUtilities {
     }
 
     /**
+     * Returns a Color by subtracting the given color from white.
+     *
+     * @param color the color to subtract
+     * @return a Color
+     */
+    public static Color colorDifferenceFromWhite(final Color color) {
+        int[] difference = new int[3];
+
+        difference[0] = 255 - color.getRed();
+        difference[1] = 255 - color.getGreen();
+        difference[2] = 255 - color.getBlue();
+
+        return new Color(difference[0], difference[1], difference[2]);
+    }
+
+    /**
      * Returns a numeric version of the difference of all color in HSV
      * components.
      *
@@ -132,6 +148,7 @@ public final class ColorUtilities {
     public static Color setTransparencyInColor(final Color original, final int transparency) {
         Color updated = new Color(original.getRed(), original.getGreen(), original.getBlue(),
             transparency);
+
         return updated;
     }
 }

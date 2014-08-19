@@ -49,8 +49,13 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     public SeparatorSkin() {
         Theme theme = Theme.getTheme();
         font = theme.getFont().deriveFont(Font.BOLD);
-        color = Color.BLACK;
-        headingColor = Color.BLACK;
+        if (!themeIsDark()) {
+            color = Color.BLACK;
+            headingColor = Color.BLACK;
+        } else {
+            color = Color.WHITE;
+            headingColor = Color.WHITE;
+        }
         thickness = 1;
         padding = new Insets(4, 0, 4, 4);
     }

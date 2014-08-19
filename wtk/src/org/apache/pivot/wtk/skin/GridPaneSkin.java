@@ -97,14 +97,25 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     private int verticalSpacing = 0;
     private boolean showHorizontalGridLines = false;
     private boolean showVerticalGridLines = false;
-    private Color horizontalGridColor = Color.BLACK;
-    private Color verticalGridColor = Color.BLACK;
+    private Color horizontalGridColor;
+    private Color verticalGridColor;
 
     /**
      * These are cached computed values, for performance.
      */
     private int cellWidth = 0;
     private int cellHeight = 0;
+
+
+    public GridPaneSkin() {
+        if (!themeIsDark()) {
+            horizontalGridColor = Color.BLACK;
+            verticalGridColor = Color.BLACK;
+        } else {
+            horizontalGridColor = Color.WHITE;
+            verticalGridColor = Color.WHITE;
+        }
+    }
 
     @Override
     public void install(Component component) {

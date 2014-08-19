@@ -65,7 +65,11 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     private static final int DEFAULT_VERTICAL_INCREMENT = 10;
 
     public ScrollPaneSkin() {
-        setBackgroundPaint(Color.WHITE);
+        if (!themeIsDark()) {
+            setBackgroundPaint(Color.WHITE);
+        } else {
+            setBackgroundPaint(Color.BLACK);
+        }
 
         horizontalScrollBar.setUnitIncrement(DEFAULT_HORIZONTAL_INCREMENT);
         verticalScrollBar.setUnitIncrement(DEFAULT_VERTICAL_INCREMENT);

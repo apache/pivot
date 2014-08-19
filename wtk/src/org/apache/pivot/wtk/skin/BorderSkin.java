@@ -52,12 +52,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     private CornerRadii cornerRadii;
 
     public BorderSkin() {
-        Theme theme = Theme.getTheme();
-        setBackgroundColor(Color.WHITE);
-
-        font = theme.getFont().deriveFont(Font.BOLD);
-        color = Color.BLACK;
-        titleColor = Color.BLACK;
+        if (!themeIsDark()) {
+            setBackgroundColor(Color.WHITE);
+            color = Color.BLACK;
+            titleColor = Color.BLACK;
+        } else {
+            setBackgroundColor(Color.BLACK);
+            color = Color.WHITE;
+            titleColor = Color.WHITE;
+        }
+        font = currentTheme().getFont().deriveFont(Font.BOLD);
         thickness = 1;
         padding = Insets.NONE;
         cornerRadii = CornerRadii.NONE;

@@ -59,7 +59,11 @@ public class WindowSkin extends ContainerSkin implements Window.Skin, WindowList
     }
 
     public WindowSkin() {
-        setBackgroundColor(Color.WHITE);
+        if (!themeIsDark()) {
+            setBackgroundColor(Color.WHITE);
+        } else {
+            setBackgroundColor(Color.BLACK);
+        }
     }
 
     @Override

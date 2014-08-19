@@ -45,12 +45,22 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     private int verticalSpacing = 0;
     private boolean showHorizontalGridLines = false;
     private boolean showVerticalGridLines = false;
-    private Color horizontalGridColor = Color.BLACK;
-    private Color verticalGridColor = Color.BLACK;
+    private Color horizontalGridColor;
+    private Color verticalGridColor;
     private Color highlightBackgroundColor = Color.GRAY;
 
     private int[] columnWidths = null;
     private int[] rowHeights = null;
+
+    public TablePaneSkin() {
+        if (!themeIsDark()) {
+            horizontalGridColor = Color.BLACK;
+            verticalGridColor = Color.BLACK;
+        } else {
+            horizontalGridColor = Color.WHITE;
+            verticalGridColor = Color.WHITE;
+        }
+    }
 
     @Override
     public void install(Component component) {

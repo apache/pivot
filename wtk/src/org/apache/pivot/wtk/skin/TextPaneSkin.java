@@ -146,12 +146,20 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     public TextPaneSkin() {
         Theme theme = Theme.getTheme();
         font = theme.getFont();
-        color = Color.BLACK;
+        if (!themeIsDark()) {
+            color = Color.BLACK;
+            selectionColor = Color.LIGHT_GRAY;
+            selectionBackgroundColor = Color.BLACK;
+            inactiveSelectionColor = Color.LIGHT_GRAY;
+            inactiveSelectionBackgroundColor = Color.BLACK;
+        } else {
+            color = Color.WHITE;
+            selectionColor = Color.DARK_GRAY;
+            selectionBackgroundColor = Color.WHITE;
+            inactiveSelectionColor = Color.DARK_GRAY;
+            inactiveSelectionBackgroundColor = Color.WHITE;
+        }
         inactiveColor = Color.GRAY;
-        selectionColor = Color.LIGHT_GRAY;
-        selectionBackgroundColor = Color.BLACK;
-        inactiveSelectionColor = Color.LIGHT_GRAY;
-        inactiveSelectionBackgroundColor = Color.BLACK;
     }
 
     @Override

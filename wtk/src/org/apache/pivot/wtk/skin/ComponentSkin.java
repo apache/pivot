@@ -412,6 +412,18 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
     }
 
     /**
+     * Returns if the current Theme is dark.
+     *
+     * Usually this means that (if true) any
+     * color will be transformed in the opposite way.
+     *
+     * @return true if it is flat, false otherwise (default)
+     */
+    protected boolean themeIsDark() {
+        return currentTheme().isThemeDark();
+    }
+
+    /**
      * Returns if the current Theme is flat.
      *
      * Note that flat themes usually have no bevel, gradients, shadow effects,

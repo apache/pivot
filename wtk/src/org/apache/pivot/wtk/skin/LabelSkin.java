@@ -61,9 +61,12 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     private float textHeight = 0;
 
     public LabelSkin() {
-        Theme theme = Theme.getTheme();
-        font = theme.getFont();
-        color = Color.BLACK;
+        font = currentTheme().getFont();
+        if (!themeIsDark()) {
+            color = Color.BLACK;
+        } else {
+            color = Color.WHITE;
+        }
         disabledColor = Color.GRAY;
         backgroundColor = null;
         textDecoration = null;
