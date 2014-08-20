@@ -53,13 +53,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     private int[] rowHeights = null;
 
     public TablePaneSkin() {
-        if (!themeIsDark()) {
-            horizontalGridColor = Color.BLACK;
-            verticalGridColor = Color.BLACK;
-        } else {
-            horizontalGridColor = Color.WHITE;
-            verticalGridColor = Color.WHITE;
-        }
+        horizontalGridColor = defaultForegroundColor();
+        verticalGridColor = defaultForegroundColor();
     }
 
     @Override

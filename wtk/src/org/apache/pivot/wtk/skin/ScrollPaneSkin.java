@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Transparency;
@@ -65,11 +64,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     private static final int DEFAULT_VERTICAL_INCREMENT = 10;
 
     public ScrollPaneSkin() {
-        if (!themeIsDark()) {
-            setBackgroundPaint(Color.WHITE);
-        } else {
-            setBackgroundPaint(Color.BLACK);
-        }
+        setBackgroundPaint(defaultBackgroundColor());
 
         horizontalScrollBar.setUnitIncrement(DEFAULT_HORIZONTAL_INCREMENT);
         verticalScrollBar.setUnitIncrement(DEFAULT_VERTICAL_INCREMENT);

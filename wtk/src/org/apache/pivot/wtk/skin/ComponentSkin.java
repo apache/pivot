@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.skin;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import org.apache.pivot.json.JSONSerializer;
@@ -434,4 +435,29 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
     protected boolean themeIsFlat() {
         return currentTheme().isThemeFlat();
     }
+
+    /**
+     * Returns the default background color.
+     * 
+     * @return White if the theme is not dark (default), or Black.
+     */
+    protected Color defaultBackgroundColor() {
+        if (!themeIsDark()) {
+            return Color.WHITE;
+        }
+        return Color.BLACK;
+    }
+
+    /**
+     * Returns the default foreground color.
+     * 
+     * @return Black if the theme is not dark (default), or White.
+     */
+    protected Color defaultForegroundColor() {
+        if (!themeIsDark()) {
+            return Color.BLACK;
+        }
+        return Color.WHITE;
+    }
+
 }

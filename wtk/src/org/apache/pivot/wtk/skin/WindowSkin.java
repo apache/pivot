@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.wtk.skin;
 
-import java.awt.Color;
-
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Bounds;
@@ -59,11 +57,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin, WindowList
     }
 
     public WindowSkin() {
-        if (!themeIsDark()) {
-            setBackgroundColor(Color.WHITE);
-        } else {
-            setBackgroundColor(Color.BLACK);
-        }
+        setBackgroundColor(defaultBackgroundColor());
     }
 
     @Override

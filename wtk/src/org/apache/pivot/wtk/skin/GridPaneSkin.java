@@ -108,13 +108,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
 
     public GridPaneSkin() {
-        if (!themeIsDark()) {
-            horizontalGridColor = Color.BLACK;
-            verticalGridColor = Color.BLACK;
-        } else {
-            horizontalGridColor = Color.WHITE;
-            verticalGridColor = Color.WHITE;
-        }
+        horizontalGridColor = defaultForegroundColor();
+        verticalGridColor = defaultForegroundColor();
     }
 
     @Override

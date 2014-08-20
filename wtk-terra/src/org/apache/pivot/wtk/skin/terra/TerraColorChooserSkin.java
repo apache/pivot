@@ -89,11 +89,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
 
             // Mark the selected hue
             float hue = hueChooser.getHue();
-            if (!themeIsDark()) {
-                graphics.setColor(Color.BLACK);
-            } else {
-                graphics.setColor(Color.WHITE);
-            }
+            graphics.setColor(defaultForegroundColor());
             graphics.fillRect(0, Math.min((int) (height * (1f - hue)), height - 1), width, 1);
         }
 
@@ -247,11 +243,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
             if (!getComponent().getWindow().isClosing()) {
                 float saturation = saturationValueChooser.getSaturation();
                 float value = saturationValueChooser.getValue();
-                if (!themeIsDark()) {
-                    graphics.setColor(Color.WHITE);
-                } else {
-                    graphics.setColor(Color.BLACK);
-                }
+                graphics.setColor(defaultBackgroundColor());
                 graphics.setXORMode(Color.getHSBColor(hue, 0f, 0f));
                 graphics.fillRect(0, Math.min((int) (height * (1f - saturation)), height - 1),
                     width, 1);

@@ -152,19 +152,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     public TextAreaSkin() {
         Theme theme = Theme.getTheme();
         font = theme.getFont();
+
+        color = defaultForegroundColor();
+        selectionBackgroundColor = defaultForegroundColor();
+        inactiveSelectionBackgroundColor = defaultForegroundColor();
         if (!themeIsDark()) {
-            color = Color.BLACK;
             selectionColor = Color.LIGHT_GRAY;
-            selectionBackgroundColor = Color.BLACK;
             inactiveSelectionColor = Color.LIGHT_GRAY;
-            inactiveSelectionBackgroundColor = Color.BLACK;
         } else {
-            color = Color.WHITE;
             selectionColor = Color.DARK_GRAY;
-            selectionBackgroundColor = Color.WHITE;
             inactiveSelectionColor = Color.DARK_GRAY;
-            inactiveSelectionBackgroundColor = Color.WHITE;
         }
+
         backgroundColor = null;
         inactiveColor = Color.GRAY;
         margin = new Insets(4);

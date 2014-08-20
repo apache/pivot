@@ -135,14 +135,9 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         setBackgroundColor((Color) null);
 
         panorama = new Panorama();
-        if (!themeIsDark()) {
-            panorama.getStyles().put("buttonBackgroundColor", Color.WHITE);
-        } else {
-            panorama.getStyles().put("buttonBackgroundColor", Color.BLACK);
-        }
+        panorama.getStyles().put("buttonBackgroundColor", defaultBackgroundColor());
 
         border = new Border(panorama);
-
         border.getStyles().put("color", theme.getColor(7));
         border.getStyles().put("backgroundColor", null);
         border.getStyles().put("padding", Integer.valueOf(0));
