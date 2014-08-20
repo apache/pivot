@@ -56,7 +56,7 @@ public final class ColorUtilities {
     }
 
     /**
-     * Change the brightness of the given color, and returns the changes color.
+     * Change the brightness of the given color, and returns the changed color.
      *
      * @param color the color
      * @param adjustment the adjustment factor (usually in the range ]0 .. 1[)
