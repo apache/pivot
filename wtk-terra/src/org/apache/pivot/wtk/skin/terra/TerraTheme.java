@@ -297,20 +297,12 @@ public final class TerraTheme extends Theme {
                 try {
                     defaultBackgroundColor = Color.decode((String) properties.get("defaultBackgroundColor"));
                 } catch (NullPointerException npe1) {
-                    if (!isThemeDark()) {
-                        defaultBackgroundColor = Color.WHITE;
-                    } else {
-                        defaultBackgroundColor = Color.BLACK;
-                    }
+                    defaultBackgroundColor = super.getDefaultBackgroundColor();
                 }
                 try {
                     defaultForegroundColor = Color.decode((String) properties.get("defaultForegroundColor"));
                 } catch (NullPointerException npe2) {
-                    if (!isThemeDark()) {
-                        defaultForegroundColor = Color.WHITE;
-                    } else {
-                        defaultForegroundColor = Color.BLACK;
-                    }
+                    defaultForegroundColor = super.getDefaultForegroundColor();
                 }
             } finally {
                 inputStream.close();
