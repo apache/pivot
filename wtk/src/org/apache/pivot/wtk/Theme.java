@@ -215,6 +215,30 @@ public abstract class Theme {
     }
 
     /**
+     * Returns a safe (and general) default background color.
+     * 
+     * @return White if the theme is not dark (default), or Black.
+     */
+    public Color getDefaultBackgroundColor() {
+        if (!isThemeDark()) {
+            return Color.WHITE;
+        }
+        return Color.BLACK;
+    }
+
+    /**
+     * Returns a safe (and general) default foreground color.
+     * 
+     * @return Black if the theme is not dark (default), or White.
+     */
+    public Color getDefaultForegroundColor() {
+        if (!isThemeDark()) {
+            return Color.BLACK;
+        }
+        return Color.WHITE;
+    }
+
+    /**
      * Gets the current theme, as determined by the {@linkplain #PROVIDER_NAME
      * theme provider}.
      *

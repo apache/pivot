@@ -45,5 +45,8 @@
         warning: "message_type-warning-16x16.png",
         question: "message_type-question-16x16.png",
         info: "message_type-info-16x16.png"
-    }
+    },
+
+    defaultBackgroundColor: "#ff0000",
+    defaultForegroundColor: "#ffff00"
 }

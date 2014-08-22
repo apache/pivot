@@ -102,6 +102,9 @@ public final class TerraTheme extends Theme {
     private static boolean themeIsDark = false;
     private static boolean themeIsFlat = false;
 
+    private static Color defaultBackgroundColor;
+    private static Color defaultForegroundColor;
+
     public static final String LOCATION_PROPERTY = "location";
     public static final String COMMAND_BUTTON_STYLE = "commandButton";
 
@@ -290,6 +293,25 @@ public final class TerraTheme extends Theme {
                 Map<String, String> smallMessageIconNames = (Map<String, String>) properties.get("smallMessageIcons");
                 smallMessageIcons = new HashMap<>();
                 loadMessageIcons(smallMessageIconNames, smallMessageIcons);
+
+                try {
+                    defaultBackgroundColor = Color.decode((String) properties.get("defaultBackgroundColor"));
+                } catch (NullPointerException npe1) {
+                    if (!isThemeDark()) {
+                        defaultBackgroundColor = Color.WHITE;
+                    } else {
+                        defaultBackgroundColor = Color.BLACK;
+                    }
+                }
+                try {
+                    defaultForegroundColor = Color.decode((String) properties.get("defaultForegroundColor"));
+                } catch (NullPointerException npe2) {
+                    if (!isThemeDark()) {
+                        defaultForegroundColor = Color.WHITE;
+                    } else {
+                        defaultForegroundColor = Color.BLACK;
+                    }
+                }
             } finally {
                 inputStream.close();
             }
@@ -501,6 +523,26 @@ public final class TerraTheme extends Theme {
         }
 
         smallMessageIcons.put(messageType, smallMessageIcon);
+    }
+
+    /**
+     * Gets the theme's default background color.
+     * 
+     * @return the color if set, or White if the theme is not dark (default), or Black.
+     */
+    @Override
+    public Color getDefaultBackgroundColor() {
+        return defaultBackgroundColor;
+    }
+
+    /**
+     * Gets the theme's default foreground color.
+     * 
+     * @return the color if set, or Black if the theme is not dark (default), or White.
+     */
+    @Override
+    public Color getDefaultForegroundColor() {
+        return defaultForegroundColor;
     }
 
     /**
