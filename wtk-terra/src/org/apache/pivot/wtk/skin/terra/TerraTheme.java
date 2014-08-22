@@ -294,15 +294,17 @@ public final class TerraTheme extends Theme {
                 smallMessageIcons = new HashMap<>();
                 loadMessageIcons(smallMessageIconNames, smallMessageIcons);
 
-                try {
-                    defaultBackgroundColor = Color.decode((String) properties.get("defaultBackgroundColor"));
-                } catch (NullPointerException npe1) {
+                String defaultBackgroundColorString = (String) properties.get("defaultBackgroundColor");
+                if (defaultBackgroundColorString != null) {
+                    defaultBackgroundColor = Color.decode(defaultBackgroundColorString);
+                } else {
                     defaultBackgroundColor = super.getDefaultBackgroundColor();
                 }
-                try {
-                    defaultForegroundColor = Color.decode((String) properties.get("defaultForegroundColor"));
-                } catch (NullPointerException npe2) {
-                    defaultForegroundColor = super.getDefaultForegroundColor();
+                String defaultForegroundColorString = (String) properties.get("defaultForegroundColor");
+                if (defaultForegroundColorString != null) {
+                    defaultForegroundColor = Color.decode(defaultForegroundColorString);
+                } else {
+                    defaultForegroundColor = super.getDefaultBackgroundColor();
                 }
             } finally {
                 inputStream.close();
