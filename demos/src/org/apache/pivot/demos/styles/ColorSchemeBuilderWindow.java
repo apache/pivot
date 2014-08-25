@@ -102,7 +102,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             blueSpinner.setSelectedIndex(0);
 
             BoxPane colorBoxPane = new BoxPane();
-            colorBoxPane.getStyles().put("fill", true);
+            colorBoxPane.getStyles().put("fill", new Boolean(true));
             colorBoxPane.getStyles().put("padding", "{left:4}");
             colorBoxPane.add(redSpinner);
             colorBoxPane.add(greenSpinner);
@@ -118,9 +118,9 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                 public void selectedColorChanged(ColorChooserButton colorChooserButtonArgument,
                     Color previousSelectedColor) {
                     Color selectedColor = colorChooserButtonArgument.getSelectedColor();
-                    redSpinner.setSelectedItem(selectedColor.getRed());
-                    greenSpinner.setSelectedItem(selectedColor.getGreen());
-                    blueSpinner.setSelectedItem(selectedColor.getBlue());
+                    redSpinner.setSelectedItem(Integer.valueOf(selectedColor.getRed()));
+                    greenSpinner.setSelectedItem(Integer.valueOf(selectedColor.getGreen()));
+                    blueSpinner.setSelectedItem(Integer.valueOf(selectedColor.getBlue()));
 
                     // Update the theme
                     Theme themeLocal = Theme.getTheme();
@@ -133,7 +133,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                     for (int j = 0; j < 3; j++) {
                         Component colorPaletteCell = colorPaletteTablePane.getRows().get(iLocal).get(
                             j);
-                        colorPaletteCell.getStyles().put("backgroundColor", offset + j);
+                        colorPaletteCell.getStyles().put("backgroundColor", Integer.valueOf(offset + j));
                     }
 
                     reloadContent();
@@ -146,9 +146,9 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             SpinnerSelectionListener spinnerSelectionListener = new SpinnerSelectionListener.Adapter() {
                 @Override
                 public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
-                    int red = (Integer) redSpinner.getSelectedItem();
-                    int green = (Integer) greenSpinner.getSelectedItem();
-                    int blue = (Integer) blueSpinner.getSelectedItem();
+                    int red = ((Integer) redSpinner.getSelectedItem()).intValue();
+                    int green = ((Integer) greenSpinner.getSelectedItem()).intValue();
+                    int blue = ((Integer) blueSpinner.getSelectedItem()).intValue();
 
                     colorChooserButton.setSelectedColor(new Color(red, green, blue));
                 }
@@ -186,10 +186,11 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         return theme.getNumberOfPaletteColors();
     }
 
+    @SuppressWarnings("unused")
     private void createColorPalette() {
-        new TablePane.Column(colorPaletteTablePane, 1, true);
-        new TablePane.Column(colorPaletteTablePane, 1, true);
-        new TablePane.Column(colorPaletteTablePane, 1, true);
+        new TablePane.Column(colorPaletteTablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(colorPaletteTablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(colorPaletteTablePane, 1, true);  // note: this is useful, even if not used directly
 
         int numberOfPaletteColors = getNumberOfPaletteColors();
         for (int i = 0; i < numberOfPaletteColors; i++) {
@@ -201,13 +202,13 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             row.add(createColorPaletteCell(offset + 2));
         }
 
-        colorPaletteTablePane.getStyles().put("horizontalSpacing", 4);
-        colorPaletteTablePane.getStyles().put("verticalSpacing", 4);
+        colorPaletteTablePane.getStyles().put("horizontalSpacing", Integer.valueOf(4));
+        colorPaletteTablePane.getStyles().put("verticalSpacing", Integer.valueOf(4));
     }
 
     private static Component createColorPaletteCell(int index) {
         Border border = new Border();
-        border.getStyles().put("backgroundColor", index);
+        border.getStyles().put("backgroundColor", Integer.valueOf(index));
 
         Theme theme = Theme.getTheme();
 
@@ -215,10 +216,10 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         label.setText(Integer.toString(index));
         label.getStyles().put("font", "{size:'80%'}");
         label.getStyles().put("backgroundColor", theme.getColor(4));
-        label.getStyles().put("padding", 1);
+        label.getStyles().put("padding", Integer.valueOf(1));
 
         BoxPane boxPane = new BoxPane();
-        boxPane.getStyles().put("padding", 2);
+        boxPane.getStyles().put("padding", Integer.valueOf(2));
         boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
@@ -248,8 +249,11 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         for (int i = 0; i < numberOfPaletteColors; i++) {
             ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
             Color color = colorChooserButton.getSelectedColor();
-            colors.add(String.format("#%02X%02X%02X", color.getRed(), color.getGreen(),
-                color.getBlue()));
+            colors.add(String.format("#%02X%02X%02X", 
+                Integer.valueOf(color.getRed()), 
+                Integer.valueOf(color.getGreen()),
+                Integer.valueOf(color.getBlue()))
+            );
         }
 
         LocalManifest clipboardContent = new LocalManifest();
@@ -272,8 +276,11 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             colorChooserButton.setSelectedColor(themeOriginalColors.get(i));
 
             Color color = colorChooserButton.getSelectedColor();
-            colors.add(String.format("#%02X%02X%02X", color.getRed(), color.getGreen(),
-                color.getBlue()));
+            colors.add(String.format("#%02X%02X%02X", 
+                Integer.valueOf(color.getRed()), 
+                Integer.valueOf(color.getGreen()),
+                Integer.valueOf(color.getBlue()))
+            );
         }
 
         reloadContent();

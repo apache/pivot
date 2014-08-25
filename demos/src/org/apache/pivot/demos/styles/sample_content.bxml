@@ -93,7 +93,7 @@ limitations under the License.
                         </TablePane.Row>
 
                         <TablePane.Row>
-                            <Border TablePane.columnSpan="2" styles="{color:10}">
+                            <Border TablePane.columnSpan="2">
                                 <ScrollPane horizontalScrollBarPolicy="fill" preferredHeight="80">
                                     <TableView bxml:id="tableView" selectMode="multi"
                                         tooltipText="TableView sample"
@@ -127,7 +127,7 @@ limitations under the License.
                         </TablePane.Row>
 
                         <TablePane.Row>
-                            <Border TablePane.columnSpan="2" styles="{color:10}">
+                            <Border TablePane.columnSpan="2">
                                 <ScrollPane horizontalScrollBarPolicy="fill" preferredHeight="80">
                                     <TreeView bxml:id="treeView" selectMode="multi"
                                         tooltipText="TreeView sample"
