@@ -136,6 +136,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                         colorPaletteCell.getStyles().put("backgroundColor", Integer.valueOf(offset + j));
                     }
 
+                    // Reload the sample part of the content (but not all the application),
+                    // this means that the rest of the application always show original colors
                     reloadContent();
                 }
             };
