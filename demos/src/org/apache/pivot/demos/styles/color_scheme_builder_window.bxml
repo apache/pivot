@@ -41,7 +41,6 @@ limitations under the License.
                             </columns>
                         </TablePane>
                     </TablePane.Row>
-
                     <TablePane.Row>
                         <Separator/>
                     </TablePane.Row>
@@ -49,15 +48,23 @@ limitations under the License.
                     <TablePane.Row>
                         <TablePane bxml:id="colorPaletteTablePane" styles="{horizontalSpacing:4, verticalSpacing:4}"/>
                     </TablePane.Row>
+                    <TablePane.Row>
+                        <Separator/>
+                    </TablePane.Row>
+
+                    <TablePane.Row>
+                        <Label text="Change colors and see updated results at right"
+                        maximumWidth="150"
+                        styles="{wrapText:true, padding:8, horizontalAlignment:'center', verticalAlignment:'top'}"/>
+                    </TablePane.Row>
+                    <TablePane.Row>
+                        <Separator/>
+                    </TablePane.Row>
 
                     <TablePane.Row height="1*">
                         <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
                             <PushButton bxml:id="copyToClipboardButton" buttonData="Copy"
                                 tooltipText="Click to copy color data in Clipboard"/>
-                        </BoxPane>
-                    </TablePane.Row>
-                    <TablePane.Row height="1*">
-                        <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
                             <PushButton bxml:id="resetPaletteButton" buttonData="Reset"
                                 tooltipText="Click to reset color data to theme default"/>
                         </BoxPane>
