@@ -23,13 +23,13 @@
     themeIsFlat: false,
 
     colors: [
-        "#000000",
-        "#ffffff",
+        "#0a0a0a",
+        "#ebebeb",
         "#999999",
-        "#dddcd5",
-        "#336699",
-        "#336699",
-        "#ffe480",
+        "#dcdcdc",
+        "#004d99",
+        "#0076eb",
+        "#eae200",
         "#eb0000"
     ],
 
