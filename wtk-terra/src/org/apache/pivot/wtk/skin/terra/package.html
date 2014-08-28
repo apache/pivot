@@ -66,6 +66,25 @@ of any "base color palette", in the range [0.0..1.0].
 </td>
 </tr>
 <tr valign="top">
+<td><tt>themeIsDark</tt></td>
+<td><tt>boolean</tt></td>
+<td>
+Tell if the theme is dark.
+Usually this means that (if true) any color will be transformed in the opposite way
+(brightening instead of darkening, and darkening instead of brightening).
+Set true if dark, false otherwise (default).
+</td>
+</tr>
+<tr valign="top">
+<td><tt>themeIsFlat</tt></td>
+<td><tt>boolean</tt></td>
+<td>
+Tell if the theme is flat.
+Usually this means that (if true) any border/shadow will not be drawn.
+Set true if flat, false otherwise (default).
+</td>
+</tr>
+<tr valign="top">
 <td><tt>colors</tt></td>
 <td><tt>List&lt;String&gt;</tt></td>
 <td>
@@ -95,15 +114,38 @@ Small message icon names; must include values for "error", "warning", "question"
 Names are specified as resource named relative to the <tt>TerraTheme</tt> class.
 </td>
 </tr>
+<tr valign="top">
+<td><tt>defaultBackgroundColor</tt></td>
+<td><tt>String</tt></td>
+<td>
+The theme's default background color in hexadecimal format, for example <tt>#ffffff</tt>.
+If not set, a generic default will be used.
+</td>
+</tr>
+<tr valign="top">
+<td><tt>defaultForegroundColor</tt></td>
+<td><tt>String</tt></td>
+<td>
+The theme's default foreground color in hexadecimal format, for example <tt>#000000</tt>.
+If not set, a generic default will be used.
+</td>
+</tr>
 </table>
 <br/>
 
 <p>
 By default, the theme definition in <tt>TerraTheme_default.json</tt> is used,
 but can be overridden via the <tt>org.apache.pivot.wtk.skin.terra.location</tt>
-property.
+property.<br/>
+For Example, in VM arguments set:<br/>
+<tt>-Dorg.apache.pivot.wtk.skin.terra.location=TerraTheme_dark.json</tt><br/>
+or<br/>
+<tt>-Dorg.apache.pivot.wtk.skin.terra.location=/org/apache/pivot/tests/TerraTheme_test.json</tt><br/>
 </p>
 <br/>
+
+<br/>
+<hr/>
 
 </body>
 </html>
