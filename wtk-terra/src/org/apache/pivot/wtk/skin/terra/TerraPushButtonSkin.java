@@ -63,7 +63,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
-        backgroundColor = theme.getColor(10);
+        if (!themeIsFlat()) {
+            backgroundColor = theme.getColor(10);
+        } else {
+            backgroundColor = theme.getColor(9);
+        }
         disabledBackgroundColor = theme.getColor(10);
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
