@@ -139,7 +139,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             if (returnType == Vote.class) {
                 result = Vote.APPROVE;
             } else if (returnType == Boolean.TYPE) {
-                result = false;
+                result = Boolean.FALSE;
             }
 
             return result;
@@ -176,7 +176,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 if (returnType == Vote.class) {
                     result = Vote.APPROVE;
                 } else if (returnType == Boolean.TYPE) {
-                    result = false;
+                    result = Boolean.FALSE;
                 }
             }
 
@@ -292,7 +292,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     public BXMLSerializer() {
         xmlInputFactory = XMLInputFactory.newInstance();
-        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
+        xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", Boolean.TRUE);
 
         scriptEngineManager = new javax.script.ScriptEngineManager();
         scriptEngineManager.setBindings(new Bindings() {
@@ -381,13 +381,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 return values;
             }
         });
-    }
-
-    /** DO NOT USE. see https://issues.apache.org/jira/browse/PIVOT-742 */
-    @Deprecated
-    public BXMLSerializer(@SuppressWarnings("unused")
-    final ClassLoader classLoader) {
-        throw new UnsupportedOperationException("https://issues.apache.org/jira/browse/PIVOT-742");
     }
 
     /**

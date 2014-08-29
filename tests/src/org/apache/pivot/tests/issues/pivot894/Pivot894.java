@@ -97,15 +97,15 @@ public class Pivot894 extends Application.Adapter {
                         @Override
                         public void run() {
                             Iterator<Component> iterator = cardPane.iterator();
-                            List<Component> deprecated = new ArrayList<>();
+                            List<Component> componentList = new ArrayList<>();
                             while (iterator.hasNext()) {
                                 Component card = iterator.next();
                                 if (!card.isShowing()) {
-                                    deprecated.add(card);
+                                    componentList.add(card);
                                 }
                             }
 
-                            for (Component card : deprecated) {
+                            for (Component card : componentList) {
                                 cardPane.remove(card);
                             }
 
