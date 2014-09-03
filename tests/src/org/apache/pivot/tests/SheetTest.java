@@ -45,6 +45,7 @@ public class SheetTest extends Application.Adapter {
     private Frame frame = null;
     private Sheet sheet = null;
 
+    @SuppressWarnings("unused")
     @Override
     public void startup(final Display display, Map<String, String> properties) throws Exception {
         Picture picture = (Picture) Image.load(getClass().getResource("IMG_0767_2.jpg"));
@@ -63,7 +64,7 @@ public class SheetTest extends Application.Adapter {
 
         final TablePane tablePane = new TablePane();
         tablePane.setPreferredSize(320, 240);
-        new TablePane.Column(tablePane, 1, true);
+        new TablePane.Column(tablePane, 1, true);  // note: this is useful, even if not used directly
         TablePane.Row row0 = new TablePane.Row(tablePane, 1, true);
         TablePane.Row row1 = new TablePane.Row(tablePane, -1);
 

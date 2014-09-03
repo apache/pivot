@@ -176,6 +176,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
 
     // private Color contentBevelColor; // TODO: future use
 
+    @SuppressWarnings("unused")
     public FakeWindowSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(10));
@@ -191,8 +192,8 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
 
         // The title bar table pane contains two nested box panes: one for
         // the title contents and the other for the buttons
-        new TablePane.Column(titleBarTablePane, 1, true);
-        new TablePane.Column(titleBarTablePane, -1);
+        new TablePane.Column(titleBarTablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(titleBarTablePane, -1);  // note: this is useful, even if not used directly
 
         TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 

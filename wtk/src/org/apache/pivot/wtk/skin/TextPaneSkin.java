@@ -880,9 +880,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
         boolean commandPressed = Keyboard.isPressed(commandModifier);
-        boolean wordNavPressed = Keyboard.isPressed(Platform.getWordNavigationModifier());
+        // boolean wordNavPressed = Keyboard.isPressed(Platform.getWordNavigationModifier());
         boolean shiftPressed = Keyboard.isPressed(Keyboard.Modifier.SHIFT);
-        boolean ctrlPressed = Keyboard.isPressed(Keyboard.Modifier.CTRL);
+        // boolean ctrlPressed = Keyboard.isPressed(Keyboard.Modifier.CTRL);
         boolean metaPressed = Keyboard.isPressed(Keyboard.Modifier.META);
         boolean isEditable = textPane.isEditable();
 

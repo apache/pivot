@@ -36,14 +36,15 @@ import org.apache.pivot.wtk.Window;
 public class ColorPaletteTest extends Application.Adapter {
     private Window window = null;
 
+    @SuppressWarnings("unused")
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         Theme theme = Theme.getTheme();
 
         TablePane tablePane = new TablePane();
-        new TablePane.Column(tablePane, 1, true);
-        new TablePane.Column(tablePane, 1, true);
-        new TablePane.Column(tablePane, 1, true);
+        new TablePane.Column(tablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(tablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(tablePane, 1, true);  // note: this is useful, even if not used directly
 
         int numberOfPaletteColors = theme.getNumberOfPaletteColors();
         // ArrayList<String> colors = new ArrayList<>(numberOfPaletteColors);
