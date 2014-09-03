@@ -24,6 +24,7 @@ import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 
 public class RowEditorDemo extends Application.Adapter {
@@ -44,9 +45,13 @@ public class RowEditorDemo extends Application.Adapter {
         String title = (String) resources.get("title");
         System.out.println("Title from Resources file is: \"" + title + "\"");
 
+        // print if the theme has transitions enabled
+        System.out.println("Theme has transitions enabled: " + Theme.getTheme().isTransitionEnabled());
+
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window) bxmlSerializer.readObject(
             RowEditorDemo.class.getResource("row_editor_demo.bxml"), resources);
+
         window.open(display);
     }
 

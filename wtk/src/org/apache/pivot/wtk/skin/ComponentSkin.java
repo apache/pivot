@@ -437,6 +437,15 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
     }
 
     /**
+     * Returns if the current Theme has transitions enabled.
+     *
+     * @return true if transitions are enabled (default), false otherwise
+     */
+    protected boolean themeHasTransitionEnabled() {
+        return currentTheme().isTransitionEnabled();
+    }
+
+    /**
      * Returns the Theme default background color.
      * 
      * @return White if the theme is not dark (default), or Black.

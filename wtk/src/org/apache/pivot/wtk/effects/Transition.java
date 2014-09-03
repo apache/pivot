@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.effects;
 
 import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.Theme;
 
 /**
  * Abstract base class for "transitions", which are animated application
@@ -82,6 +83,9 @@ public abstract class Transition {
 
     /**
      * Creates a new transition with the given duration, rate, and repeat.
+     * 
+     * Note that if the current Theme has transitions not enabled,
+     * will be set default values instead of given arguments.
      *
      * @param duration Transition duration, in milliseconds.
      * @param rate Transition rate, in frames per second.
@@ -91,12 +95,19 @@ public abstract class Transition {
      * <tt>false</tt> otherwise.
      */
     public Transition(int duration, int rate, boolean repeating, boolean reversed) {
-        if (duration <= 0) {
+        if (duration < 0) {
             throw new IllegalArgumentException("duration must be positive.");
         }
 
-        this.duration = duration;
-        this.rate = rate;
+        if (!themeHasTransitionEnabled()) {
+            // System.out.println("transitions not enabled, overriding transition values");
+            this.duration = 0;
+            this.rate = 0;
+        } else {
+            this.duration = duration;
+            this.rate = rate;
+        }
+
         this.repeating = repeating;
         this.reversed = reversed;
     }
@@ -161,10 +172,17 @@ public abstract class Transition {
      * Returns the transition interval, the number of milliseconds between
      * updates.
      *
-     * @return The transition interval, in milliseconds.
+     * @return The transition interval in milliseconds,
+     *         or a default minimum value if transitions has been disabled.
      */
     public int getInterval() {
-        return (int) ((1f / rate) * 1000);
+        int interval;
+        if (rate != 0) {
+            interval = (int) ((1f / rate) * 1000);
+        } else {
+            interval = 1;
+        }
+        return interval;
     }
 
     /**
@@ -213,7 +231,12 @@ public abstract class Transition {
      * percent remaining.
      */
     public float getPercentComplete() {
-        float percentComplete = (float) (currentTime - startTime) / (float) (duration);
+        float percentComplete;
+        if (duration != 0) {
+            percentComplete = (float) (currentTime - startTime) / (float) (duration);
+        } else {
+            percentComplete = 1.0f;
+        }
 
         if (reversed) {
             percentComplete = 1.0f - percentComplete;
@@ -333,4 +356,15 @@ public abstract class Transition {
 
         setReversed(!isReversed());
     }
+
+    /**
+     * Tell if the theme has transitions enabled.<br/> Usually this means that (if false) any
+     * effect/transition will not be drawn.
+     *
+     * @return true if enabled (default), false otherwise
+     */
+    protected boolean themeHasTransitionEnabled() {
+        return Theme.getTheme().isTransitionEnabled();
+    }
+
 }

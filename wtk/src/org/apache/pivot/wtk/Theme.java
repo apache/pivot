@@ -180,6 +180,14 @@ public abstract class Theme {
     public abstract boolean isThemeFlat();
 
     /**
+     * Tell if the theme has transitions enabled.<br/> Usually this means that (if false) any
+     * effect/transition will not be drawn.
+     *
+     * @return true if enabled (default), false otherwise
+     */
+    public abstract boolean isTransitionEnabled();
+
+    /**
      * Returns the skin class responsible for skinning the specified component
      * class.
      *

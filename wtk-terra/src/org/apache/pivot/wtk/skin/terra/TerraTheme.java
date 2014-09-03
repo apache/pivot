@@ -101,6 +101,7 @@ public final class TerraTheme extends Theme {
     private static float colorMultiplier = 0.1f;
     private static boolean themeIsDark = false;
     private static boolean themeIsFlat = false;
+    private static boolean transitionEnabled = true;
 
     private static Color defaultBackgroundColor;
     private static Color defaultForegroundColor;
@@ -275,6 +276,11 @@ public final class TerraTheme extends Theme {
                 Boolean flat = (Boolean) properties.get("themeIsFlat");
                 if (flat != null) {
                     themeIsFlat = flat.booleanValue();
+                }
+
+                Boolean transition = (Boolean) properties.get("transitionEnabled");
+                if (transition != null) {
+                    transitionEnabled = transition.booleanValue();
                 }
 
                 for (String colorCode : colorCodes) {
@@ -467,6 +473,17 @@ public final class TerraTheme extends Theme {
     @Override
     public boolean isThemeFlat() {
         return themeIsFlat;
+    }
+
+    /**
+     * Tell if the theme has transitions enabled.<br/> Usually this means that (if false) any
+     * effect/transition will not be drawn.
+     *
+     * @return true if enabled (default), false otherwise
+     */
+    @Override
+    public boolean isTransitionEnabled() {
+        return transitionEnabled;
     }
 
     /**
