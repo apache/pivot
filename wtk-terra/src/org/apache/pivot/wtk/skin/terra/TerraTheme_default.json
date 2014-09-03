@@ -22,6 +22,8 @@
 
     themeIsFlat: false,
 
+    transitionEnabled: true,
+
     colors: [
         "#0a0a0a",
         "#ebebeb",
