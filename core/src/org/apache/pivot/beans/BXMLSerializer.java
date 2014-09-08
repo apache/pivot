@@ -243,6 +243,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
     public static final char OBJECT_REFERENCE_PREFIX = '$';
+    public static final char SLASH_PREFIX = '/';
 
     public static final String NAMESPACE_BINDING_PREFIX = OBJECT_REFERENCE_PREFIX + "{";
     public static final String NAMESPACE_BINDING_SUFFIX = "}";
@@ -855,7 +856,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             // Determine location from src attribute
             URL locationLocal;
-            if (src.charAt(0) == '/') {
+            if (src.charAt(0) == SLASH_PREFIX) {
                 locationLocal = classLoader.getResource(src.substring(1));
             } else {
                 locationLocal = new URL(this.location, src);
@@ -1327,7 +1328,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                     try {
                         URL scriptLocation;
-                        if (src.charAt(0) == '/') {
+                        if (src.charAt(0) == SLASH_PREFIX) {
                             scriptLocation = classLoader.getResource(src.substring(1));
                         } else {
                             scriptLocation = new URL(location, src);
