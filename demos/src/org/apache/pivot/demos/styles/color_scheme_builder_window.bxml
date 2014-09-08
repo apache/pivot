@@ -57,9 +57,6 @@ limitations under the License.
                         maximumWidth="150"
                         styles="{wrapText:true, padding:8, horizontalAlignment:'center', verticalAlignment:'top'}"/>
                     </TablePane.Row>
-                    <TablePane.Row>
-                        <Separator/>
-                    </TablePane.Row>
 
                     <TablePane.Row height="1*">
                         <BoxPane orientation="vertical" styles="{fill:true, verticalAlignment:'bottom'}">
