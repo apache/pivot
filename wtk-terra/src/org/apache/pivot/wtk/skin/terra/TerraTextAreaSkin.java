@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.skin.TextAreaSkin;
 public class TerraTextAreaSkin extends TextAreaSkin {
     public TerraTextAreaSkin() {
         setColor(1);
+        setBackgroundColor(11);
         setInactiveColor(7);
         setSelectionColor(4);
         setSelectionBackgroundColor(14);
