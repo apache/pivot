@@ -224,7 +224,7 @@ public abstract class Theme {
 
     /**
      * Returns a safe (and general) default background color.
-     * 
+     *
      * @return White if the theme is not dark (default), or Black.
      */
     public Color getDefaultBackgroundColor() {
@@ -236,7 +236,7 @@ public abstract class Theme {
 
     /**
      * Returns a safe (and general) default foreground color.
-     * 
+     *
      * @return Black if the theme is not dark (default), or White.
      */
     public Color getDefaultForegroundColor() {

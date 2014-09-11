@@ -447,7 +447,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
 
     /**
      * Returns the Theme default background color.
-     * 
+     *
      * @return White if the theme is not dark (default), or Black.
      */
     protected Color defaultBackgroundColor() {
@@ -456,7 +456,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
 
     /**
      * Returns the Theme default foreground color.
-     * 
+     *
      * @return Black if the theme is not dark (default), or White.
      */
     protected Color defaultForegroundColor() {

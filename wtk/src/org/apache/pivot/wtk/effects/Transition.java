@@ -83,7 +83,7 @@ public abstract class Transition {
 
     /**
      * Creates a new transition with the given duration, rate, and repeat.
-     * 
+     *
      * Note that if the current Theme has transitions not enabled,
      * will be set default values instead of given arguments.
      *

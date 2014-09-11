@@ -22,10 +22,7 @@ package org.apache.pivot.charts;
 public class ThermometerView extends SingleValueChartView {
 
     public static enum Units {
-        NONE,
-        CELSIUS,
-        FAHRENHEIT,
-        KELVIN
+        NONE, CELSIUS, FAHRENHEIT, KELVIN
     }
 
     public ThermometerView() {

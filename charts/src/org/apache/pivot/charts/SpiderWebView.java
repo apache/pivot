@@ -23,4 +23,3 @@ public class SpiderWebView extends ChartView {
     }
 
 }
-

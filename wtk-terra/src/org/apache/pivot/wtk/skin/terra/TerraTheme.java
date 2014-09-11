@@ -538,7 +538,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets the theme's default background color.
-     * 
+     *
      * @return the color if set, or White if the theme is not dark (default), or Black.
      */
     @Override
@@ -548,7 +548,7 @@ public final class TerraTheme extends Theme {
 
     /**
      * Gets the theme's default foreground color.
-     * 
+     *
      * @return the color if set, or Black if the theme is not dark (default), or White.
      */
     @Override

@@ -22,9 +22,7 @@ package org.apache.pivot.charts;
 public class DialView extends SingleValueChartView {
 
     public static enum Shape {
-        PIE,
-        CHORD,
-        CIRCLE
+        PIE, CHORD, CIRCLE
     }
 
     public DialView() {

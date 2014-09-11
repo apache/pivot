@@ -251,8 +251,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         for (int i = 0; i < numberOfPaletteColors; i++) {
             ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
             Color color = colorChooserButton.getSelectedColor();
-            colors.add(String.format("#%02X%02X%02X", 
-                Integer.valueOf(color.getRed()), 
+            colors.add(String.format("#%02X%02X%02X",
+                Integer.valueOf(color.getRed()),
                 Integer.valueOf(color.getGreen()),
                 Integer.valueOf(color.getBlue()))
             );
@@ -278,8 +278,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             colorChooserButton.setSelectedColor(themeOriginalColors.get(i));
 
             Color color = colorChooserButton.getSelectedColor();
-            colors.add(String.format("#%02X%02X%02X", 
-                Integer.valueOf(color.getRed()), 
+            colors.add(String.format("#%02X%02X%02X",
+                Integer.valueOf(color.getRed()),
                 Integer.valueOf(color.getGreen()),
                 Integer.valueOf(color.getBlue()))
             );

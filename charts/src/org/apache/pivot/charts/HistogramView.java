@@ -28,9 +28,9 @@ public class HistogramView extends ChartView {
         private final double binEnd;
         private final double frequency;
 
-        public HistogramBin(int series, int item, double binStart,
-                            double binValue, double binEnd, double frequency) {
-            super(series,item);
+        public HistogramBin(int series, int item, double binStart, double binValue, double binEnd,
+            double frequency) {
+            super(series, item);
             this.binEnd = binEnd;
             this.binStart = binStart;
             this.binValue = binValue;
@@ -55,10 +55,10 @@ public class HistogramView extends ChartView {
 
         @Override
         public String toString() {
-            return "bin #"+getElementIndex()+","+binStart+" - "+binEnd+", frequency "+frequency;
+            return "bin #" + getElementIndex() + "," + binStart + " - " + binEnd + ", frequency "
+                + frequency;
         }
 
     }
 
 }
-

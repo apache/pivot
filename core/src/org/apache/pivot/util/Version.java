@@ -105,7 +105,7 @@ public class Version implements Comparable<Version>, Serializable {
     @Override
     public String toString() {
         String string = this.majorRevision + "." + this.minorRevision + "."
-            + this.maintenanceRevision + "_" + String.format("%02d", this.updateRevision);
+            + this.maintenanceRevision + "_" + String.format("%02d", Byte.valueOf(this.updateRevision));
 
         if (this.build != null) {
             string += "-" + this.build;
