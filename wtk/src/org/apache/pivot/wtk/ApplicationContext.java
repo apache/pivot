@@ -2055,6 +2055,28 @@ public abstract class ApplicationContext {
         return cursor;
     }
 
+    public static void defaultUncaughtExceptionHandler(Exception exception) {
+        exception.printStackTrace();
+
+        Display display = (displays.getLength() > 0) ? displays.get(0) : null;
+        if (display == null) {
+            return;
+        }
+
+        String message = exception.getClass().getName();
+
+        TextArea body = null;
+        String bodyText = exception.getMessage();
+        if (bodyText != null && bodyText.length() > 0) {
+            body = new TextArea();
+            body.setText(bodyText);
+            body.setEditable(false);
+        }
+
+        Alert alert = new Alert(MessageType.ERROR, message, null, body, false);
+        alert.open(display);
+    }
+
     public static void handleUncaughtException(Exception exception) {
         int n = 0;
         for (Application application : applications) {
@@ -2067,25 +2089,7 @@ public abstract class ApplicationContext {
         }
 
         if (n == 0) {
-            exception.printStackTrace();
-
-            Display display = (displays.getLength() > 0) ? displays.get(0) : null;
-            if (display == null) {
-                return;
-            }
-
-            String message = exception.getClass().getName();
-
-            TextArea body = null;
-            String bodyText = exception.getMessage();
-            if (bodyText != null && bodyText.length() > 0) {
-                body = new TextArea();
-                body.setText(bodyText);
-                body.setEditable(false);
-            }
-
-            Alert alert = new Alert(MessageType.ERROR, message, null, body, false);
-            alert.open(display);
+            defaultUncaughtExceptionHandler(exception);
         }
     }
 
