@@ -1162,7 +1162,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-        boolean consumed = super.keyPressed(component, keyCode, keyLocation);
+        boolean consumed = false;
 
         TextInput textInput = (TextInput)getComponent();
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
