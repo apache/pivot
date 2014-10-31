@@ -216,6 +216,7 @@ limitations under the License.
                     <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                     <attribute name="Implementation-Title" value="Apache Pivot @{title}"/>
                     <attribute name="Implementation-Version" value="${version}"/>
+                    <attribute name="Permissions" value="${permissions}"/>
                 </manifest>
                 <fileset dir="@{project}/${folder.bin}">
                     <exclude name="**/test/**"/>
