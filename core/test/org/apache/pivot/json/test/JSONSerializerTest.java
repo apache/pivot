@@ -133,10 +133,20 @@ public class JSONSerializerTest {
 
         jsonSerializer.getJSONSerializerListeners().add(jsonSerializerListener);
         Object o1 = jsonSerializer.readObject(getClass().getResourceAsStream("map.json"));
+        assertEquals(JSON.get(o1, "a"), 100);
+        assertEquals(JSON.get(o1, "b"), "Hello");
+        assertEquals(JSON.get(o1, "c"), false);
         assertEquals(JSON.get(o1, "e.g"), 5);
+        assertEquals(JSON.get(o1, "i.a"), 200);
+        assertEquals(JSON.get(o1, "i.c"), true);
 
         jsonSerializer.getJSONSerializerListeners().remove(jsonSerializerListener);
         Object o2 = jsonSerializer.readObject(getClass().getResourceAsStream("map.json"));
+        assertEquals(JSON.get(o2, "k[1].a"), 10);
+        assertEquals(JSON.get(o2, "k[2].a"), 100);
+        assertEquals(JSON.get(o2, "k[2].b"), 200);
+        assertEquals(JSON.get(o2, "k[2].c"), "300");
+        assertEquals(JSON.get(o2, "j"), 200);
 
         assertTrue(o1.equals(o2));
 

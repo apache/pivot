@@ -42,6 +42,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.EchoReader;
 import org.apache.pivot.io.EchoWriter;
+import org.apache.pivot.serialization.MacroReader;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
@@ -248,17 +249,18 @@ public class JSONSerializer implements Serializer<Object> {
 
         // Move to the first character
         LineNumberReader lineNumberReader = new LineNumberReader(reader);
-        c = lineNumberReader.read();
+        MacroReader macroReader = new MacroReader(lineNumberReader);
+        c = macroReader.read();
 
         // Ignore BOM (if present)
         if (c == 0xFEFF) {
-            c = lineNumberReader.read();
+            c = macroReader.read();
         }
 
         // Read the root value
         Object object;
         try {
-            object = readValue(lineNumberReader, type);
+            object = readValue(macroReader, type);
         } catch (SerializationException exception) {
             System.err.println("An error occurred while processing input at line number "
                 + (lineNumberReader.getLineNumber() + 1));
@@ -292,7 +294,7 @@ public class JSONSerializer implements Serializer<Object> {
         } else if (c == '{') {
             object = readMapValue(reader, typeArgument);
         } else {
-            throw new SerializationException("Unexpected character in input stream.");
+            throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
         }
 
         return object;
@@ -333,7 +335,7 @@ public class JSONSerializer implements Serializer<Object> {
                         c = reader.read();
                     }
                 } else {
-                    throw new SerializationException("Unexpected character in input stream.");
+                    throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
                 }
             }
         }
@@ -347,7 +349,7 @@ public class JSONSerializer implements Serializer<Object> {
 
         while (c != -1 && i < n) {
             if (nullString.charAt(i) != c) {
-                throw new SerializationException("Unexpected character in input stream.");
+                throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
             }
 
             c = reader.read();
@@ -494,7 +496,7 @@ public class JSONSerializer implements Serializer<Object> {
 
         while (c != -1 && i < n) {
             if (text.charAt(i) != c) {
-                throw new SerializationException("Unexpected character in input stream.");
+                throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
             }
 
             c = reader.read();
@@ -612,7 +614,7 @@ public class JSONSerializer implements Serializer<Object> {
                 throw new SerializationException("Unexpected end of input stream.");
             } else {
                 if (c != ']') {
-                    throw new SerializationException("Unexpected character in input stream.");
+                    throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
                 }
             }
         }
@@ -764,7 +766,7 @@ public class JSONSerializer implements Serializer<Object> {
             skipWhitespaceAndComments(reader);
 
             if (c != ':') {
-                throw new SerializationException("Unexpected character in input stream.");
+                throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
             }
 
             // Move to the first character after ':'
@@ -795,7 +797,7 @@ public class JSONSerializer implements Serializer<Object> {
                 throw new SerializationException("Unexpected end of input stream.");
             } else {
                 if (c != '}') {
-                    throw new SerializationException("Unexpected character in input stream.");
+                    throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
                 }
             }
         }

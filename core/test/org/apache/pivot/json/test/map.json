@@ -14,16 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{   a: 100,
-    b: "Hello",
-    c: false,
-    d: ["1", "2", "3"],
+// Test some of the new macro capabilities
+# define TWO 2
+# define THREE 3
+#define TWENTY ${TWO}${ZERO}
+#define THIRTY ${THREE}${ZERO}
+#define TWO_HUNDRED ${TWO}${ZERO}${ZERO}
+#define THREE_HUNDRED ${THREE}${ZERO}${ZERO}
+# define ZERO 0
+# define A_B_C a: 1${ZERO}${ZERO},\
+    b: "Hello",\
+    c: false
+
+{   ${A_B_C},
+    d: ["1", "2", "${THREE}"],
     e: {f: 4, g: 5, h: 6},
-    "i": { a: 200, b: "Goodbye", c: true},
-    j: 200,
+    "i": { a: ${TWO_HUNDRED}, b: "Goodbye", c: true},
+    j: ${TWO_HUNDRED},
     k:  [
-        {a:1, b:2, c:"3"},
-        {a:10, b:20, c:"30"},
-        {a:100, b:200, c:"300"}
+        {a:1, b:2, c:"${THREE}"},
+        {a:1${ZERO}, b:${TWENTY}, c:"${THIRTY}"},
+        {a:1${ZERO}${ZERO}, b:${TWO_HUNDRED}, c:"${THREE_HUNDRED}"}
     ]
 }
