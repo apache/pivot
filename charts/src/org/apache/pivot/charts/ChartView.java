@@ -421,6 +421,7 @@ public abstract class ChartView extends Component {
     private CategorySequence categorySequence = new CategorySequence();
 
     private ListHandler chartDataHandler = new ListHandler();
+    private ValueMarkersHandler valueMarkersHandler = new ValueMarkersHandler();
 
     private ChartViewListenerList chartViewListeners = new ChartViewListenerList();
     private ChartViewCategoryListenerList chartViewCategoryListeners = new ChartViewCategoryListenerList();
@@ -583,9 +584,17 @@ public abstract class ChartView extends Component {
     }
 
     public void setValueMarkers(List<ValueMarker> valueMarkers) {
-        this.valueMarkers = valueMarkers;
-        if (valueMarkers != null) {
-            valueMarkers.getListListeners().add(new ValueMarkersHandler());
+        List<ValueMarker> previousValueMarkers = this.valueMarkers;
+
+        if (previousValueMarkers != valueMarkers) {
+            if (previousValueMarkers != null) {
+                previousValueMarkers.getListListeners().remove(valueMarkersHandler);
+            }
+
+            this.valueMarkers = valueMarkers;
+            if (valueMarkers != null) {
+                valueMarkers.getListListeners().add(valueMarkersHandler);
+            }
         }
     }
 
