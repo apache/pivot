@@ -508,7 +508,9 @@ limitations under the License.
     </target>
 
     <target name="tests" depends="core, web, wtk, wtk-terra">
-        <compile project="tests"/>
+        <compile project="tests">
+            <fileset dir="wtk" includes="lib/**/*.jar"/>
+        </compile>
     </target>
 
     <target name="tutorials" depends="core, wtk, web">
