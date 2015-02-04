@@ -83,7 +83,7 @@ limitations under the License.
             also extend <tt>ConstrainedVisual</tt>. In Pivot, a component's "skin" is responsible
             for the visual representation of the component. As a result, <tt>Component</tt>
             delegates the implementation of all <tt>ConstrainedVisual</tt> methods to the skin.
-            The skin may, in turn, delegate some renderering responsibility to one or more
+            The skin may, in turn, delegate some rendering responsibility to one or more
             renderers, which are used to paint some components' content (such as a button label or
             a list item); this relationship is represented by the dotted line in the diagram.
             Renderers are often implemented as extensions of the <tt>Component</tt> class, allowing
