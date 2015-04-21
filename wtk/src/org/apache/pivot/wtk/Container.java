@@ -492,9 +492,8 @@ public abstract class Container extends Component
      * focusable, this requests that focus be set to the first focusable
      * descendant in this container.
      *
-     * @return
-     * The component that got the focus, or <tt>null</tt> if the focus request
-     * was denied
+     * @return <tt>true</tt> if the container or one of its descendants gained
+     * the focus or <tt>false</tt> if no component was found to gain the focus.
      */
     @Override
     public boolean requestFocus() {
