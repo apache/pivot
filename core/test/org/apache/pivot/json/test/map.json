@@ -25,5 +25,7 @@
         {a:1, b:2, c:"3"},
         {a:10, b:20, c:"30"},
         {a:100, b:200, c:"300"}
-    ]
+    ],
+    m: "Hello\r\n\tWorld!",
+    n: "This is a \"test\" of the \'quoting\' in \\JSON\\"
 }
