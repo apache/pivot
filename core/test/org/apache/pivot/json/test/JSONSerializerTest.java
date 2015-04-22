@@ -139,6 +139,7 @@ public class JSONSerializerTest {
         assertEquals(JSON.get(o1, "e.g"), 5);
         assertEquals(JSON.get(o1, "i.a"), 200);
         assertEquals(JSON.get(o1, "i.c"), true);
+        assertEquals(JSON.get(o1, "m"), "Hello\r\n\tWorld!");
 
         jsonSerializer.getJSONSerializerListeners().remove(jsonSerializerListener);
         Object o2 = jsonSerializer.readObject(getClass().getResourceAsStream("map.json"));
@@ -147,6 +148,7 @@ public class JSONSerializerTest {
         assertEquals(JSON.get(o2, "k[2].b"), 200);
         assertEquals(JSON.get(o2, "k[2].c"), "300");
         assertEquals(JSON.get(o2, "j"), 200);
+        assertEquals(JSON.get(o2, "n"), "This is a \"test\" of the 'quoting' in \\JSON\\");
 
         assertTrue(o1.equals(o2));
 
@@ -157,18 +159,25 @@ public class JSONSerializerTest {
     }
 
     @Test
-    public void testJavaMap() {
+    public void testJavaMap() throws SerializationException {
         System.out.println("Test interaction with Standard java.util.Map");
 
         java.util.HashMap<String, java.util.Map<String, String>> root = new java.util.HashMap<>();
         java.util.HashMap<String, String> child = new java.util.HashMap<>();
 
         child.put("name", "John Doe");
+        child.put("address", "123 Main St.\r\nAnytown USA");
         root.put("child", child);
 
         String childName = JSON.get(root, "child.name");
-        System.out.println("JSON child.name = \"" + childName + "\"");
+        String childAddr = JSON.get(root, "child.address");
+        System.out.println("JSON child.name = \"" + childName + "\", child.address = \"" + childAddr + "\"");
         assertEquals(childName, "John Doe");
+        assertEquals(childAddr, "123 Main St.\r\nAnytown USA");
+
+        String serializedForm = JSONSerializer.toString(root);
+        System.out.println("Serialized form: \"" + serializedForm + "\"");
+        assertEquals(serializedForm, "{child: {address: \"123 Main St.\\r\\nAnytown USA\", name: \"John Doe\"}}");
     }
 
 }

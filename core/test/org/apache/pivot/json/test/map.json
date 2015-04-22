@@ -29,11 +29,13 @@
 {   ${A_B_C},
     d: ["1", "2", "${THREE}"],
     e: {f: 4, g: 5, h: 6},
-    "i": { a: ${TWO_HUNDRED}, b: "Goodbye", c: true},
+    "i": { a: ${TWO_HUNDRED}, b: "Goodbye", c: true },
     j: ${TWO_HUNDRED},
     k:  [
         {a:1, b:2, c:"${THREE}"},
         {a:1${ZERO}, b:${TWENTY}, c:"${THIRTY}"},
         {a:1${ZERO}${ZERO}, b:${TWO_HUNDRED}, c:"${THREE_HUNDRED}"}
-    ]
+    ],
+    m: "Hello\r\n\tWorld!",
+    n: "This is a \"test\" of the \'quoting\' in \\JSON\\"
 }

@@ -40,6 +40,7 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.adapter.MapAdapter;
 import org.apache.pivot.io.EchoReader;
 import org.apache.pivot.io.EchoWriter;
 import org.apache.pivot.serialization.MacroReader;
@@ -378,6 +379,8 @@ public class JSONSerializer implements Serializer<Object> {
         c = reader.read();
 
         while (c != -1 && c != t) {
+            // The JSON spec says that control characters are not supported,
+            // so silently ignore them
             if (!Character.isISOControl(c)) {
                 if (c == '\\') {
                     c = reader.read();
@@ -875,6 +878,21 @@ public class JSONSerializer implements Serializer<Object> {
                         break;
                     }
 
+                    case '\r': {
+                        stringBuilder.append("\\r");
+                        break;
+                    }
+
+                    case '\f': {
+                        stringBuilder.append("\\f");
+                        break;
+                    }
+
+                    case '\b': {
+                        stringBuilder.append("\\b");
+                        break;
+                    }
+
                     case '\\':
                     case '\"':
                     case '\'': {
@@ -883,7 +901,10 @@ public class JSONSerializer implements Serializer<Object> {
                     }
 
                     default: {
-                        if (charset.name().startsWith("UTF") || ci <= 0xFF) {
+                        // For Unicode character sets if it is a control character, then use \\uXXXX notation
+                        // and for other character sets if the value is an ASCII control character.
+                        if ((charset.name().startsWith("UTF") && !Character.isISOControl(ci)) ||
+                            (ci > 0x1F && ci != 0x7F && ci <= 0xFF)) {
                             stringBuilder.append(ci);
                         } else {
                             stringBuilder.append("\\u");
@@ -932,6 +953,8 @@ public class JSONSerializer implements Serializer<Object> {
             Map<String, Object> map;
             if (object instanceof Map<?, ?>) {
                 map = (Map<String, Object>) object;
+            } else if (object instanceof java.util.Map<?, ?>) {
+                map = new MapAdapter<>((java.util.Map<String, Object>)object);
             } else {
                 map = new BeanAdapter(object, true);
             }
