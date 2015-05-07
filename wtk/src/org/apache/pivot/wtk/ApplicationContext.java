@@ -74,7 +74,7 @@ import org.apache.pivot.wtk.effects.ShadeDecorator;
  */
 public abstract class ApplicationContext {
     /**
-     * Native display host.
+     * Native display host. This is the Pivot interface with AWT.
      */
     public static class DisplayHost extends java.awt.Component {
         private static final long serialVersionUID = -815713849595314026L;
@@ -374,10 +374,24 @@ public abstract class ApplicationContext {
             return currentAWTEvent;
         }
 
+        /**
+         * Access the current scale (or zoom) factor for the entire application's
+         * display.
+         * @see #setScale
+         */
         public double getScale() {
             return scale;
         }
 
+        /**
+         * Use this method to scale up or down (that is zoom in or out)
+         * the entire application's display.
+         * <p> For the main application window, a {@link org.apache.pivot.wtk.effects.ScaleDecorator}
+         * cannot be used.  This method (and related ones) must be used instead.
+         * @see #scaleUp
+         * @see #scaleDown
+         * @see #getScale
+         */
         public void setScale(double scale) {
             if (scale != this.scale) {
                 this.scale = scale;
@@ -387,6 +401,16 @@ public abstract class ApplicationContext {
             }
         }
 
+        /**
+         * Use this method to zoom in to the application's main window
+         * (that is, make all the text and components look visually bigger).
+         * <p> The scale is increased in discrete steps for each call to
+         * this method: 1, 1.25, 1.5, 2.0, then whole integer values
+         * up to a maximum of 12.
+         * @see #setScale
+         * @see #scaleDown
+         * @see #getScale
+         */
         public void scaleUp() {
             double newScale;
 
@@ -405,6 +429,16 @@ public abstract class ApplicationContext {
             setScale(newScale);
         }
 
+        /**
+         * Use this method to zoom out of the application's main window
+         * (that is, to make all the text and components visually smaller).
+         * <p> The scale is decreased in discrete steps for each call to
+         * this method:  next whole integer down for values above 2.0, then
+         * 2.0, 1.5, 1.25, then finally 1.
+         * @see #setScale
+         * @see #scaleUp
+         * @see #getScale
+         */
         public void scaleDown() {
             double newScale;
 
