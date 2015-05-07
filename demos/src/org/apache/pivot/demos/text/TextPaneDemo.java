@@ -356,6 +356,15 @@ public class TextPaneDemo extends Application.Adapter {
             }
         });
 
+        String scaleProperty = properties.get("scale");
+        if (scaleProperty != null && !scaleProperty.isEmpty()) {
+            try {
+                double scaleFactor = Double.parseDouble(scaleProperty);
+                display.getDisplayHost().setScale(scaleFactor);
+            } catch (NumberFormatException nfe) {
+                ;
+            }
+        }
         window.open(display);
         textPane.requestFocus();
     }
