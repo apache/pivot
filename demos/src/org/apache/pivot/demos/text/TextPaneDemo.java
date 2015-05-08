@@ -104,6 +104,13 @@ public class TextPaneDemo extends Application.Adapter {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
+        System.out.println("startup(...)");
+        System.out.println("\n"
+            + "In this test application as a sample for setting the display scale on startup, use startup argument \"--scale=n\" property; \n"
+            + "for instance, using \"--scale=2.0\" will set double scale on the whole application.\n"
+            + "\n"
+            + "Anyway, using Ctrl-Shift-MouseWheel will scale the display up and down as well, for the user of your application.\n");
+
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window) bxmlSerializer.readObject(TextPaneDemo.class, "text_pane_demo.bxml");
         bxmlSerializer.bind(this, TextPaneDemo.class);
@@ -144,7 +151,7 @@ public class TextPaneDemo extends Application.Adapter {
         });
 
         fontSizeListButton.setListData(new NumericSpinnerData(12, 30, 1));
-        fontSizeListButton.setSelectedItem(12);
+        fontSizeListButton.setSelectedItem(new Integer(12));
 
         openFileButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
@@ -313,7 +320,7 @@ public class TextPaneDemo extends Application.Adapter {
         ListButtonSelectionListener fontButtonPressListener = new ListButtonSelectionListener.Adapter() {
             @Override
             public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
-                int selectedFontSize = (Integer) fontSizeListButton.getSelectedItem();
+                int selectedFontSize = ((Integer) fontSizeListButton.getSelectedItem()).intValue();
                 String selectedFontFamily = (String) fontFamilyListButton.getSelectedItem();
                 final Font derivedFont = Font.decode(selectedFontFamily + " " + selectedFontSize);
 
@@ -331,7 +338,7 @@ public class TextPaneDemo extends Application.Adapter {
         wrapTextCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                textPane.getStyles().put("wrapText", wrapTextCheckbox.isSelected());
+                textPane.getStyles().put("wrapText", new Boolean(wrapTextCheckbox.isSelected()));
             }
         });
 
@@ -360,9 +367,11 @@ public class TextPaneDemo extends Application.Adapter {
         if (scaleProperty != null && !scaleProperty.isEmpty()) {
             try {
                 double scaleFactor = Double.parseDouble(scaleProperty);
+                System.out.println("Got scaling factor \"" + scaleProperty
+                    + "\" from command line arguments, now applying to display");
                 display.getDisplayHost().setScale(scaleFactor);
             } catch (NumberFormatException nfe) {
-                ;
+                System.err.println("(NumberFormatException: " + nfe.getMessage());
             }
         }
         window.open(display);
@@ -603,6 +612,7 @@ public class TextPaneDemo extends Application.Adapter {
 
     @Override
     public boolean shutdown(boolean optional) {
+        System.out.println("shutdown(" + optional + ")");
         if (window != null) {
             window.close();
         }
