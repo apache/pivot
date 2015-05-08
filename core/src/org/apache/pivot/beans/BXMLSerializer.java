@@ -488,8 +488,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 case READ_ONLY_PROPERTY: {
-                    // Bind to <parent element ID>.<element name>.<attribute
-                    // name>
+                    // Bind to <parent element ID>.<element name>.<attribute name>
                     if (elementLocal.parent.id == null) {
                         elementLocal.parent.id = INTERNAL_ID_PREFIX + Integer.toString(nextID++);
                         namespace.put(elementLocal.parent.id, elementLocal.parent.value);
