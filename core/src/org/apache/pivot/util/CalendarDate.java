@@ -268,6 +268,42 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
     }
 
     /**
+     * Adds the specified number of months to this calendar date and returns the
+     * resulting calendar date. The number of months may be negative, in which
+     * case the result will be a date before this calendar date. <p> More
+     * formally, it is defined that given calendar dates <tt>c1</tt> and
+     * <tt>c2</tt>, the following will return <tt>true</tt>: <pre>
+     * c1.add(c2.subtract(c1)).equals(c2); </pre>
+     *
+     * @param months The number of months to add to (or subtract from if negative)
+     * this calendar date.
+     * @return The resulting calendar date.
+     */
+    public CalendarDate addMonths(int months) {
+        GregorianCalendar calendar = toCalendar();
+        calendar.add(Calendar.MONTH, months);
+        return new CalendarDate(calendar);
+    }
+
+    /**
+     * Adds the specified number of years to this calendar date and returns the
+     * resulting calendar date. The number of years may be negative, in which
+     * case the result will be a date before this calendar date. <p> More
+     * formally, it is defined that given calendar dates <tt>c1</tt> and
+     * <tt>c2</tt>, the following will return <tt>true</tt>: <pre>
+     * c1.add(c2.subtract(c1)).equals(c2); </pre>
+     *
+     * @param years The number of years to add to (or subtract from if negative)
+     * this calendar date.
+     * @return The resulting calendar date.
+     */
+    public CalendarDate addYears(int years) {
+        GregorianCalendar calendar = toCalendar();
+        calendar.add(Calendar.YEAR, years);
+        return new CalendarDate(calendar);
+    }
+
+    /**
      * Gets the number of days in between this calendar date and the specified
      * calendar date. If this calendar date represents a day after the specified
      * calendar date, the difference will be positive. If this calendar date
