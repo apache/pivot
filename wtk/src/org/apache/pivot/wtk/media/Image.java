@@ -89,33 +89,21 @@ public abstract class Image implements Visual {
         public Image execute() throws TaskExecutionException {
             Image image = null;
 
-            try {
-                InputStream inputStream = null;
+            // NOTE We don't open the stream until the callback executes
+            // because this is a potentially time-consuming operation
+            try (InputStream inputStream =
+                    new MonitoredInputStream(new BufferedInputStream(location.openStream()))) {
 
-                try {
-                    // NOTE We don't open the stream until the callback executes
-                    // because
-                    // this is a potentially time-consuming operation
-                    inputStream = new MonitoredInputStream(new BufferedInputStream(
-                        location.openStream()));
-
-                    if (location.getFile().endsWith(SVGDiagramSerializer.SVG_EXTENSION)) {
-                        SVGDiagramSerializer serializer = new SVGDiagramSerializer();
-                        SVGDiagram diagram = serializer.readObject(inputStream);
-                        image = new Drawing(diagram);
-                    } else {
-                        BufferedImageSerializer serializer = new BufferedImageSerializer();
-                        BufferedImage bufferedImage = serializer.readObject(inputStream);
-                        image = new Picture(bufferedImage);
-                    }
-                } finally {
-                    if (inputStream != null) {
-                        inputStream.close();
-                    }
+                if (location.getFile().endsWith(SVGDiagramSerializer.SVG_EXTENSION)) {
+                    SVGDiagramSerializer serializer = new SVGDiagramSerializer();
+                    SVGDiagram diagram = serializer.readObject(inputStream);
+                    image = new Drawing(diagram);
+                } else {
+                    BufferedImageSerializer serializer = new BufferedImageSerializer();
+                    BufferedImage bufferedImage = serializer.readObject(inputStream);
+                    image = new Picture(bufferedImage);
                 }
-            } catch (IOException exception) {
-                throw new TaskExecutionException(exception);
-            } catch (SerializationException exception) {
+            } catch (IOException | SerializationException exception) {
                 throw new TaskExecutionException(exception);
             }
 
