@@ -141,9 +141,9 @@ public class Pivot859 extends Application.Adapter {
     }
 
     private void clearContent() {
-        updateStatus("Clearing text area content ...");
         // contentArea.clear();
         contentArea.setText("");
+        updateStatus("Cleared text area content.");
     }
 
     private URL buildURL() {
@@ -173,18 +173,21 @@ public class Pivot859 extends Application.Adapter {
         try {
             updateStatus("Retrieving Content from URL \"" + url + "\" ...");
 
-            long start = System.currentTimeMillis();
             Serializer<String> serializer = new StringSerializer();
-            @SuppressWarnings("resource")
-            InputStream inputStream = url.openStream();
-            String result = serializer.readObject(inputStream);
+            String result = null;
+
+            long start = System.nanoTime();
+            try (InputStream inputStream = url.openStream()) {
+                result = serializer.readObject(inputStream);
+            }
+            long end = System.nanoTime();
+
             if (result == null) {
                 result = "";
             }
-            long end = System.currentTimeMillis();
-
             contentArea.setText(result);
-            updateStatus("retrieved " + result.length() + " chars in " + (end - start) + " msec.");
+            double elapsedSecs = ((double)(end - start)) / 1000000000.0d;
+            updateStatus("retrieved " + result.length() + " chars in " + elapsedSecs + " sec.");
         } catch (Exception e) {
             e.printStackTrace();
         }
