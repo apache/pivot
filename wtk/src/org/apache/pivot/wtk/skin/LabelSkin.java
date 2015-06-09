@@ -272,14 +272,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     float lineWidth = 0;
                     int lastWhitespaceIndex = -1;
 
-                    // NOTE We use a character iterator here only because it is
-                    // the most
-                    // efficient way to measure the character bounds (as of Java
-                    // 6, the version
-                    // of Font#getStringBounds() that takes a String performs a
-                    // string copy,
-                    // whereas the version that takes a character iterator does
-                    // not)
+                    // NOTE: We use a character iterator here only because it is the most
+                    // efficient way to measure the character bounds (as of Java 6, the version
+                    // of Font#getStringBounds() that takes a String performs a string copy,
+                    // whereas the version that takes a character iterator does not).
                     StringCharacterIterator ci = new StringCharacterIterator(text);
                     while (i < n) {
                         char c = text.charAt(i);
