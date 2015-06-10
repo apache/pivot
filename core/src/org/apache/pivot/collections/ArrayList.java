@@ -393,6 +393,12 @@ public class ArrayList<T> implements List<T>, Serializable {
         return length;
     }
 
+    public void addAll(Collection<T> collection) {
+        for (T item : collection) {
+            add(item);
+        }
+    }
+
     public void trimToSize() {
         Object[] itemsLocal = new Object[length];
         System.arraycopy(this.items, 0, itemsLocal, 0, length);
