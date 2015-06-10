@@ -101,8 +101,7 @@ public interface Application {
      * Optional interface that allows an application to handle uncaught
      * exceptions thrown during a user input event.
      */
-    public interface UncaughtExceptionHandler {
-        public void uncaughtExceptionThrown(Exception exception);
+    public interface UncaughtExceptionHandler extends Thread.UncaughtExceptionHandler {
     }
 
     /**

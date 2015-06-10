@@ -72,7 +72,7 @@ import org.apache.pivot.wtk.effects.ShadeDecorator;
 /**
  * Base class for application contexts.
  */
-public abstract class ApplicationContext {
+public abstract class ApplicationContext implements Thread.UncaughtExceptionHandler {
     /**
      * Native display host. This is the Pivot interface with AWT.
      */
@@ -1691,7 +1691,7 @@ public abstract class ApplicationContext {
                     for (Application application : applications) {
                         if (application instanceof Application.UncaughtExceptionHandler) {
                             Application.UncaughtExceptionHandler uncaughtExceptionHandler = (Application.UncaughtExceptionHandler) application;
-                            uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                            uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), exception);
                         }
                     }
                 }
@@ -2074,7 +2074,7 @@ public abstract class ApplicationContext {
         return cursor;
     }
 
-    public static void defaultUncaughtExceptionHandler(Exception exception) {
+    public static void defaultUncaughtExceptionHandler(Thread thread, Throwable exception) {
         exception.printStackTrace();
 
         Display display = (displays.getLength() > 0) ? displays.get(0) : null;
@@ -2096,18 +2096,18 @@ public abstract class ApplicationContext {
         alert.open(display);
     }
 
-    public static void handleUncaughtException(Exception exception) {
+    public static void handleUncaughtException(Throwable exception) {
         int n = 0;
         for (Application application : applications) {
             if (application instanceof Application.UncaughtExceptionHandler) {
                 Application.UncaughtExceptionHandler uncaughtExceptionHandler = (Application.UncaughtExceptionHandler) application;
-                uncaughtExceptionHandler.uncaughtExceptionThrown(exception);
+                uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), exception);
                 n++;
             }
         }
 
         if (n == 0) {
-            defaultUncaughtExceptionHandler(exception);
+            defaultUncaughtExceptionHandler(Thread.currentThread(), exception);
         }
     }
 
