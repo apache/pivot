@@ -210,7 +210,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
         @Override
         public void render(Object item, int index, ListView listView, boolean selected,
-            boolean checked, boolean highlighted, boolean disabled) {
+            Button.State state, boolean highlighted, boolean disabled) {
             label.getStyles().put("font", listView.getStyles().get("font"));
 
             Object color = null;
@@ -459,7 +459,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
         @Override
         public void render(Object item, int index, ListView listView, boolean selected,
-            boolean checked, boolean highlighted, boolean disabled) {
+            Button.State state, boolean highlighted, boolean disabled) {
             label.getStyles().put("font", listView.getStyles().get("font"));
 
             Object color = null;

@@ -27,4 +27,13 @@ public interface ListViewItemStateListener {
      * @param index
      */
     public void itemCheckedChanged(ListView listView, int index);
+
+    /**
+     * Called when a tri-state item's state has changed.
+     *
+     * @param listView
+     * @param index
+     */
+    public void itemCheckedStateChanged(ListView listView, int index);
+
 }

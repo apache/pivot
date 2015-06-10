@@ -28,6 +28,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -120,7 +121,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
         int index = 0;
         for (Object item : listData) {
-            itemRenderer.render(item, index++, listView, false, false, false, false);
+            itemRenderer.render(item, index++, listView, false, Button.State.UNSELECTED, false, false);
             preferredWidth = Math.max(preferredWidth, itemRenderer.getPreferredWidth(-1));
         }
 
@@ -149,11 +150,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
             int index = 0;
             for (Object item : listData) {
-                itemRenderer.render(item, index++, listView, false, false, false, false);
+                itemRenderer.render(item, index++, listView, false, Button.State.UNSELECTED, false, false);
                 preferredHeight += itemRenderer.getPreferredHeight(clientWidth);
             }
         } else {
-            itemRenderer.render(null, -1, listView, false, false, false, false);
+            itemRenderer.render(null, -1, listView, false, Button.State.UNSELECTED, false, false);
 
             int fixedItemHeightLocal = itemRenderer.getPreferredHeight(-1);
             if (listView.getCheckmarksEnabled()) {
@@ -183,7 +184,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         @SuppressWarnings("unchecked")
         List<Object> listData = (List<Object>) listView.getListData();
         if (variableItemHeight && listData.getLength() > 0) {
-            itemRenderer.render(listData.get(0), 0, listView, false, false, false, false);
+            itemRenderer.render(listData.get(0), 0, listView, false, Button.State.UNSELECTED, false, false);
             int itemHeight = itemRenderer.getPreferredHeight(clientWidth);
             if (listView.getCheckmarksEnabled()) {
                 itemHeight = Math.max(CHECKBOX.getHeight()
@@ -192,7 +193,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
             baseline = itemRenderer.getBaseline(clientWidth, itemHeight);
         } else {
-            itemRenderer.render(null, -1, listView, false, false, false, false);
+            itemRenderer.render(null, -1, listView, false, Button.State.UNSELECTED, false, false);
 
             int fixedItemHeightLocal = itemRenderer.getPreferredHeight(-1);
             if (listView.getCheckmarksEnabled()) {
@@ -232,14 +233,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                 int itemWidth = width;
                 int itemX = 0;
 
-                boolean checked = false;
+                Button.State state = Button.State.UNSELECTED;
                 if (listView.getCheckmarksEnabled()) {
-                    checked = listView.isItemChecked(i);
+                    if (listView.getAllowTriStateCheckmarks()) {
+                        state = listView.getItemCheckmarkState(i);
+                    } else {
+                        state = listView.isItemChecked(i) ? Button.State.SELECTED : Button.State.UNSELECTED;
+                    }
                     itemX = CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right);
                     itemWidth -= itemX;
                 }
 
-                itemRenderer.render(item, i, listView, false, checked, false, false);
+                itemRenderer.render(item, i, listView, false, state, false, false);
                 int itemHeight = itemRenderer.getPreferredHeight(itemWidth);
 
                 if (listView.getCheckmarksEnabled()) {
@@ -250,7 +255,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                 itemBoundaries.add(itemY);
             }
         } else {
-            itemRenderer.render(null, -1, listView, false, false, false, false);
+            itemRenderer.render(null, -1, listView, false, Button.State.UNSELECTED, false, false);
             fixedItemHeight = itemRenderer.getPreferredHeight(-1);
 
             if (listView.getCheckmarksEnabled()) {
@@ -363,16 +368,26 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
             int itemX = 0;
             int itemWidth = width;
 
-            boolean checked = false;
+            Button.State state = Button.State.UNSELECTED;
             if (listView.getCheckmarksEnabled()) {
-                checked = listView.isItemChecked(itemIndex);
+                if (listView.getAllowTriStateCheckmarks()) {
+                    state = listView.getItemCheckmarkState(itemIndex);
+                } else {
+                    state = listView.isItemChecked(itemIndex) ? Button.State.SELECTED : Button.State.UNSELECTED;
+                }
 
                 int checkboxY = (itemHeight - CHECKBOX.getHeight()) / 2;
                 Graphics2D checkboxGraphics = (Graphics2D) graphics.create(checkboxPadding.left,
                     itemY + checkboxY, CHECKBOX.getWidth(), CHECKBOX.getHeight());
 
-                CHECKBOX.setSelected(checked);
                 CHECKBOX.setEnabled(!disabled && !listView.isCheckmarkDisabled(itemIndex));
+                if (listView.getAllowTriStateCheckmarks()) {
+                    CHECKBOX.setTriState(true);
+                    CHECKBOX.setState(state);
+                } else {
+                    CHECKBOX.setTriState(false);
+                    CHECKBOX.setSelected(state == Button.State.SELECTED);
+                }
                 CHECKBOX.paint(checkboxGraphics);
                 checkboxGraphics.dispose();
 
@@ -385,7 +400,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
             Graphics2D rendererGraphics = (Graphics2D) graphics.create(itemX, itemY, itemWidth,
                 itemHeight);
 
-            itemRenderer.render(item, itemIndex, listView, selected, checked, highlighted, disabled);
+            itemRenderer.render(item, itemIndex, listView, selected, state, highlighted, disabled);
             itemRenderer.setSize(itemWidth, itemHeight);
             itemRenderer.paint(rendererGraphics);
             rendererGraphics.dispose();
@@ -936,7 +951,28 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         if (itemIndex != -1 && !listView.isItemDisabled(itemIndex)) {
             if (listView.getCheckmarksEnabled() && !listView.isCheckmarkDisabled(itemIndex)
                 && getCheckboxBounds(itemIndex).contains(x, y)) {
-                listView.setItemChecked(itemIndex, !listView.isItemChecked(itemIndex));
+                if (listView.getAllowTriStateCheckmarks()) {
+                    Button.State currentState = listView.getItemCheckmarkState(itemIndex);
+                    Button.State nextState = currentState;
+                    switch (currentState) {
+                        case UNSELECTED:
+                            if (listView.getCheckmarksMixedAsChecked()) {
+                                nextState = Button.State.SELECTED;
+                            } else {
+                                nextState = Button.State.MIXED;
+                            }
+                            break;
+                        case MIXED:
+                            nextState = Button.State.SELECTED;
+                            break;
+                        case SELECTED:
+                            nextState = Button.State.UNSELECTED;
+                            break;
+                    }
+                    listView.setItemCheckmarkState(itemIndex, nextState);
+                } else {
+                    listView.setItemChecked(itemIndex, !listView.isItemChecked(itemIndex));
+                }
             } else {
                 if (selectIndex != -1 && count == 1 && button == Mouse.Button.LEFT) {
                     ListView.ItemEditor itemEditor = listView.getItemEditor();
@@ -1213,6 +1249,16 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
+    public void checkmarksTriStateChanged(ListView listView) {
+        repaintComponent();
+    }
+
+    @Override
+    public void checkmarksMixedAsCheckedChanged(ListView listView) {
+        repaintComponent();
+    }
+
+    @Override
     public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
         repaintComponent();
     }
@@ -1256,6 +1302,11 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     // List view item state events
     @Override
     public void itemCheckedChanged(ListView listView, int index) {
+        repaintComponent(getItemBounds(index));
+    }
+
+    @Override
+    public void itemCheckedStateChanged(ListView listView, int index) {
         repaintComponent(getItemBounds(index));
     }
 

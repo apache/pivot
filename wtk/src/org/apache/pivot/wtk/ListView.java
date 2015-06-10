@@ -32,6 +32,7 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 
 /**
@@ -75,12 +76,14 @@ public class ListView extends Component {
          * <tt>item</tt> is <tt>null</tt>.
          * @param listView The host component.
          * @param selected If <tt>true</tt>, the item is selected. the item.
-         * @param checked If <tt>true</tt>, the item is checked.
+         * @param state The selected, unselected or mixed state for the checkmark.
+         * If tri-state checkmarks are not enabled, this value will either be
+         * selected or unselected.
          * @param highlighted If <tt>true</tt>, the item is highlighted.
          * @param disabled If <tt>true</tt>, the item is disabled.
          */
         public void render(Object item, int index, ListView listView, boolean selected,
-            boolean checked, boolean highlighted, boolean disabled);
+            Button.State state, boolean highlighted, boolean disabled);
 
         /**
          * Converts a list item to a string representation.
@@ -178,6 +181,30 @@ public class ListView extends Component {
         public Object get(List<?> listData, int index);
     }
 
+    /**
+     * Translates between item position and bind context data as well
+     * as item state during data binding.
+     */
+    public interface ItemStateBindMapping extends ItemBindMapping {
+        /**
+         * Returns the {@link Button$State} for the given item during a
+         * {@link Component#load(Object)} operation.
+         *
+         * @param item The list item whose state we need.
+         * @return The {@link Button$State} for the given item.
+         */
+        public Button.State getState(Object item);
+
+        /**
+         * Sets the {@link Button$State} for the given item during a
+         * {@link Component#store(Object)} operation.
+         *
+         * @param item The list item whose state we are going to set.
+         * @param state The {@link Button$State} for the given item.
+         */
+        public void setState(Object item, Button.State state);
+    }
+
     private static class ListViewListenerList extends WTKListenerList<ListViewListener> implements
         ListViewListener {
         @Override
@@ -213,6 +240,20 @@ public class ListView extends Component {
         public void checkmarksEnabledChanged(ListView listView) {
             for (ListViewListener listener : this) {
                 listener.checkmarksEnabledChanged(listView);
+            }
+        }
+
+        @Override
+        public void checkmarksTriStateChanged(ListView listView) {
+            for (ListViewListener listener : this) {
+                listener.checkmarksTriStateChanged(listView);
+            }
+        }
+
+        @Override
+        public void checkmarksMixedAsCheckedChanged(ListView listView) {
+            for (ListViewListener listener : this) {
+                listener.checkmarksMixedAsCheckedChanged(listView);
             }
         }
 
@@ -277,6 +318,13 @@ public class ListView extends Component {
         public void itemCheckedChanged(ListView listView, int index) {
             for (ListViewItemStateListener listener : this) {
                 listener.itemCheckedChanged(listView, index);
+            }
+        }
+
+        @Override
+        public void itemCheckedStateChanged(ListView listView, int index) {
+            for (ListViewItemStateListener listener : this) {
+                listener.itemCheckedStateChanged(listView, index);
             }
         }
     }
@@ -404,6 +452,28 @@ public class ListView extends Component {
                 listener.checkedItemsBindMappingChanged(listView, previousCheckedItemsBindMapping);
             }
         }
+
+        @Override
+        public void itemsStateKeyChanged(ListView listView, String previousItemsStateKey) {
+            for (ListViewBindingListener listener : this) {
+                listener.itemsStateKeyChanged(listView, previousItemsStateKey);
+            }
+        }
+
+        @Override
+        public void itemsStateBindTypeChanged(ListView listView, BindType previousItemsStateBindType) {
+            for (ListViewBindingListener listener : this) {
+                listener.itemsStateBindTypeChanged(listView, previousItemsStateBindType);
+            }
+        }
+
+        @Override
+        public void itemsStateBindMappingChanged(ListView listView,
+            ListView.ItemStateBindMapping previousItemsStateBindMapping) {
+            for (ListViewBindingListener listener : this) {
+                listener.itemsStateBindMappingChanged(listView, previousItemsStateBindMapping);
+            }
+        }
     }
 
     private List<?> listData = null;
@@ -416,6 +486,10 @@ public class ListView extends Component {
 
     private boolean checkmarksEnabled = false;
     private ArrayList<Integer> checkedIndexes = new ArrayList<>();
+
+    private boolean allowTriStateCheckmarks = false;
+    private boolean checkmarksMixedAsChecked = false;
+    private ArrayList<Integer> mixedIndexes = new ArrayList<>();
 
     private Filter<?> disabledItemFilter = null;
     private Filter<?> disabledCheckmarkFilter = null;
@@ -436,13 +510,17 @@ public class ListView extends Component {
     private BindType checkedItemsBindType = BindType.BOTH;
     private ItemBindMapping checkedItemsBindMapping = null;
 
+    private String itemsStateKey = null;
+    private BindType itemsStateBindType = BindType.BOTH;
+    private ItemStateBindMapping itemsStateBindMapping = null;
+
     private ListListener<Object> listDataListener = new ListListener<Object>() {
         @Override
         public void itemInserted(List<Object> list, int index) {
             // Increment selected ranges
             int updated = rangeSelection.insertIndex(index);
 
-            // Increment checked indexes
+            // Increment checked and mixed indexes
             int i = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index));
             if (i < 0) {
                 i = -(i + 1);
@@ -452,6 +530,19 @@ public class ListView extends Component {
             while (i < n) {
                 checkedIndexes.update(i, Integer.valueOf(checkedIndexes.get(i).intValue() + 1));
                 i++;
+            }
+
+            if (allowTriStateCheckmarks) {
+                i = ArrayList.binarySearch(mixedIndexes, Integer.valueOf(index));
+                if (i < 0) {
+                    i = -(i + 1);
+                }
+
+                n = mixedIndexes.getLength();
+                while (i < n) {
+                    mixedIndexes.update(i, Integer.valueOf(mixedIndexes.get(i).intValue() + 1));
+                    i++;
+                }
             }
 
             // Notify listeners that items were inserted
@@ -476,7 +567,7 @@ public class ListView extends Component {
             // Decrement selected ranges
             int updated = rangeSelection.removeIndexes(index, count);
 
-            // Remove and decrement checked indexes
+            // Remove and decrement checked and mixed indexes
             int i = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index));
             if (i < 0) {
                 i = -(i + 1);
@@ -495,6 +586,28 @@ public class ListView extends Component {
             while (i < n) {
                 checkedIndexes.update(i, Integer.valueOf(checkedIndexes.get(i).intValue() - count));
                 i++;
+            }
+
+            if (allowTriStateCheckmarks) {
+                i = ArrayList.binarySearch(mixedIndexes, Integer.valueOf(index));
+                if (i < 0) {
+                    i = -(i + 1);
+                }
+
+                j = ArrayList.binarySearch(mixedIndexes, Integer.valueOf(index + count - 1));
+                if (j < 0) {
+                    j = -(j + 1);
+                } else {
+                    j++;
+                }
+
+                mixedIndexes.remove(i, j - i);
+
+                n = mixedIndexes.getLength();
+                while (i < n) {
+                    mixedIndexes.update(i, Integer.valueOf(mixedIndexes.get(i).intValue() - count));
+                    i++;
+                }
             }
 
             // Notify listeners that items were removed
@@ -519,6 +632,7 @@ public class ListView extends Component {
             int cleared = rangeSelection.getLength();
             rangeSelection.clear();
             checkedIndexes.clear();
+            mixedIndexes.clear();
 
             listViewItemListeners.itemsCleared(ListView.this);
 
@@ -537,6 +651,7 @@ public class ListView extends Component {
                 int cleared = rangeSelection.getLength();
                 rangeSelection.clear();
                 checkedIndexes.clear();
+                mixedIndexes.clear();
 
                 listViewItemListeners.itemsSorted(ListView.this);
 
@@ -612,6 +727,7 @@ public class ListView extends Component {
                 cleared = rangeSelection.getLength();
                 rangeSelection.clear();
                 checkedIndexes.clear();
+                mixedIndexes.clear();
 
                 ((List<Object>) previousListData).getListListeners().remove(listDataListener);
             } else {
@@ -1134,6 +1250,7 @@ public class ListView extends Component {
         if (this.checkmarksEnabled != checkmarksEnabled) {
             // Clear any current check state
             checkedIndexes.clear();
+            mixedIndexes.clear();
 
             // Update the check mode
             this.checkmarksEnabled = checkmarksEnabled;
@@ -1145,10 +1262,17 @@ public class ListView extends Component {
 
     /**
      * Returns an item's checked state.
+     * <p> For a tri-state checkmark, if the {@link #checkmarksMixedAsChecked} flag
+     * is set, this method returns <tt>true</tt> if the state is {@link Button$State#MIXED}.
      *
      * @param index
      */
     public boolean isItemChecked(int index) {
+        if (allowTriStateCheckmarks && checkmarksMixedAsChecked) {
+            if (ArrayList.binarySearch(mixedIndexes, Integer.valueOf(index)) >= 0) {
+                return true;
+            }
+        }
         return (ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index)) >= 0);
     }
 
@@ -1163,23 +1287,34 @@ public class ListView extends Component {
             throw new IllegalStateException("Checkmarks are not enabled.");
         }
 
-        int i = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index));
+        if (allowTriStateCheckmarks) {
+            setItemCheckmarkState(index, checked ? Button.State.SELECTED : Button.State.UNSELECTED);
+        } else {
+            int i = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index));
 
-        if ((i < 0 && checked) || (i >= 0 && !checked)) {
-            if (checked) {
-                checkedIndexes.insert(Integer.valueOf(index), -(i + 1));
-            } else {
-                checkedIndexes.remove(i, 1);
+            if ((i < 0 && checked) || (i >= 0 && !checked)) {
+                if (checked) {
+                    checkedIndexes.insert(Integer.valueOf(index), -(i + 1));
+                } else {
+                    checkedIndexes.remove(i, 1);
+                }
+
+                listViewItemStateListeners.itemCheckedChanged(this, index);
             }
-
-            listViewItemStateListeners.itemCheckedChanged(this, index);
         }
     }
 
     /**
      * Returns the indexes of currently checked items.
+     * <p> If the {@link #checkmarksMixedAsChecked} flag is set this method
+     * will return all the checked and <tt>MIXED</tt> state items.
      */
     public ImmutableList<Integer> getCheckedIndexes() {
+        if (checkmarksMixedAsChecked) {
+            ArrayList<Integer> list = new ArrayList<>(checkedIndexes);
+            list.addAll(mixedIndexes);
+            return new ImmutableList<>(list);
+        }
         return new ImmutableList<>(checkedIndexes);
     }
 
@@ -1187,12 +1322,24 @@ public class ListView extends Component {
      * Clears the checked state of all checked items.
      */
     public void clearCheckmarks() {
-        ArrayList<Integer> checkedIndexesLocal = this.checkedIndexes;
+        List<Integer> checkedIndexesLocal = this.checkedIndexes;
+        List<Integer> mixedIndexesLocal = this.mixedIndexes;
         this.checkedIndexes = new ArrayList<>();
+        this.mixedIndexes = new ArrayList<>();
 
         for (Integer index : checkedIndexesLocal) {
             listViewItemStateListeners.itemCheckedChanged(this, index.intValue());
         }
+        if (checkmarksMixedAsChecked) {
+            for (Integer index : mixedIndexesLocal) {
+                listViewItemStateListeners.itemCheckedChanged(this, index.intValue());
+            }
+        } else {
+            for (Integer index : mixedIndexesLocal) {
+                listViewItemStateListeners.itemCheckedStateChanged(this, index.intValue());
+            }
+        }
+
     }
 
     /**
@@ -1213,6 +1360,115 @@ public class ListView extends Component {
         }
 
         return disabled;
+    }
+
+    /**
+     * Gets the state of all items' checkmarks (for the tri-state case).
+     */
+    public ImmutableList<Button.State> getCheckmarkStates() {
+        List<Button.State> states = new ArrayList<>();
+        if (listData != null) {
+            // For speed:  initially set all to unselected, then do a simple
+            // iteration through the checked and mixed arrays, updating the
+            // appropriate entry in the list with the updated state
+            for (int index = 0; index < listData.getLength(); index++) {
+                states.add(Button.State.UNSELECTED);
+            }
+            for (Integer checked : checkedIndexes) {
+                int index = checked.intValue();
+                states.update(index, Button.State.SELECTED);
+            }
+            for (Integer mixed : mixedIndexes) {
+                int index = mixed.intValue();
+                states.update(index, Button.State.MIXED);
+            }
+        }
+        return new ImmutableList<>(states);
+    }
+
+    /**
+     * Gets an item's checkmark state (for tri-state checkmarks).
+     * <p> Note: this method returns the real state regardless of the
+     * setting of the {@link #checkmarksMixedAsChecked} flag.
+     */
+    public Button.State getItemCheckmarkState(int index) {
+        // Find out where the item is stored currently (if at all)
+        int checked = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index));
+        int mixed   = allowTriStateCheckmarks ? ArrayList.binarySearch(mixedIndexes, Integer.valueOf(index)) : -1;
+
+        if (checked < 0 && mixed < 0) {
+            return Button.State.UNSELECTED;
+        }
+        if (checked >= 0) {
+            return Button.State.SELECTED;
+        }
+        return Button.State.MIXED;
+    }
+
+    /**
+     * Sets an item's checkmark state (for tri-state checkmarks).
+     *
+     * @param   state
+     */
+    public void setItemCheckmarkState(int index, Button.State state) {
+        if (!checkmarksEnabled) {
+            throw new IllegalStateException("Checkmarks are not enabled.");
+        }
+        if (!allowTriStateCheckmarks) {
+            throw new IllegalStateException("Tri-state checkmarks are not enabled.");
+        }
+
+        // Find out where the item is stored currently (if at all)
+        int checked = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index));
+        int mixed   = ArrayList.binarySearch(mixedIndexes, Integer.valueOf(index));
+
+        // There are six possible transitions here:
+        // 1. Unchecked -> Mixed
+        // 2. Unchecked -> Checked
+        // 3. Mixed -> Unchecked
+        // 4. Mixed -> Checked
+        // 5. Checked -> Mixed
+        // 6. Checked -> Unchecked
+
+        Button.State currentState = Button.State.UNSELECTED;
+        if (checked >= 0) {
+            currentState = Button.State.SELECTED;
+        } else if (mixed >= 0) {
+            currentState = Button.State.MIXED;
+        }
+        if (state != currentState) {
+            boolean itemCheckedListener = false;
+            boolean itemStateListener = false;
+
+            // Remove it from its current place (if any)
+            if (checked >= 0) {
+                checkedIndexes.remove(checked, 1);
+                itemCheckedListener = true;
+            }
+            if (mixed >= 0) {
+                mixedIndexes.remove(mixed, 1);
+                itemStateListener = true;
+            }
+            // Now put it back in its new place (if necessary)
+            switch (state) {
+                case MIXED:
+                    mixedIndexes.insert(Integer.valueOf(index), -(mixed + 1));
+                    itemStateListener = true;
+                    break;
+                case SELECTED:
+                    checkedIndexes.insert(Integer.valueOf(index), -(checked + 1));
+                    itemCheckedListener = true;
+                    break;
+            }
+
+            // Now, notify any listeners necessary (one or two)
+            if (itemCheckedListener) {
+                listViewItemStateListeners.itemCheckedChanged(this, index);
+            }
+            if (itemStateListener) {
+                listViewItemStateListeners.itemCheckedStateChanged(this, index);
+            }
+        }
     }
 
     /**
@@ -1249,6 +1505,65 @@ public class ListView extends Component {
         if (previousDisabledCheckmarkFilter != disabledCheckmarkFilter) {
             this.disabledCheckmarkFilter = disabledCheckmarkFilter;
             listViewListeners.disabledCheckmarkFilterChanged(this, previousDisabledCheckmarkFilter);
+        }
+    }
+
+    /**
+     * Get the flag saying whether tri-state checkmarks are allowed in this <tt>ListView</tt>.
+     * <p> Tri-state checkmarks show checked, unchecked and mixed states.  For a list view with
+     * this property enabled, then there are additional methods to set the mixed state, to get
+     * the true state of all the items, and to decide if mixed state should be treated as checked
+     * or not for all the other "checked" methods.
+     */
+    public boolean getAllowTriStateCheckmarks() {
+        return allowTriStateCheckmarks;
+    }
+
+    /**
+     * Set the flag saying whether tri-state checkmarks are allowed in this <tt>ListView</tt>.
+     * <p> Tri-state checkmarks show checked, unchecked and mixed states.  For a list view with
+     * this property enabled, then there are additional methods to set the mixed state, to get
+     * the true state of all the items, and to decide if mixed state should be treated as checked
+     * or not for all the other "checked" methods.
+     * <p> Clears the check state if the setting has changed (but does not fire any check
+     * state change events).
+     *
+     * @param   allow
+     */
+    public void setAllowTriStateCheckmarks(boolean allow) {
+        if (allowTriStateCheckmarks != allow) {
+            // Clear any current check state
+            checkedIndexes.clear();
+            mixedIndexes.clear();
+
+            allowTriStateCheckmarks = allow;
+
+            listViewListeners.checkmarksTriStateChanged(this);
+        }
+    }
+
+    /**
+     * Get the flag saying whether the mixed state of tri-state checkmarks should be treated for
+     * all other purposes as "checked" or not.  This setting will also affect what happens when
+     * we get mouse clicks on the checkmark.  Set to <tt>false</tt> <code>UNSELECTED</code>
+     *  will go to <code>MIXED</code>; while set to <tt>true</tt> <code>UNSELECTED</code> will
+     * go to <code>SELECTED</code>.
+     */
+    public boolean getCheckmarksMixedAsChecked() {
+        return checkmarksMixedAsChecked;
+    }
+
+    /**
+     * Set the flag saying whether the mixed state of the tri-state checkmarks should be treated for
+     * all other purposes as "checked" or not.
+     *
+     * @param mixedAsChecked
+     */
+    public void setCheckmarksMixedAsChecked(boolean mixedAsChecked) {
+        if (checkmarksMixedAsChecked != mixedAsChecked) {
+            checkmarksMixedAsChecked = mixedAsChecked;
+
+            listViewListeners.checkmarksMixedAsCheckedChanged(this);
         }
     }
 
@@ -1311,7 +1626,8 @@ public class ListView extends Component {
      */
     public void setListDataKey(String listDataKey) {
         String previousListDataKey = this.listDataKey;
-        if (previousListDataKey != listDataKey) {
+
+        if (!Utils.stringsAreEqual(previousListDataKey, listDataKey)) {
             this.listDataKey = listDataKey;
             listViewBindingListeners.listDataKeyChanged(this, previousListDataKey);
         }
@@ -1354,7 +1670,7 @@ public class ListView extends Component {
     public void setSelectedItemKey(String selectedItemKey) {
         String previousSelectedItemKey = this.selectedItemKey;
 
-        if (previousSelectedItemKey != selectedItemKey) {
+        if (!Utils.stringsAreEqual(previousSelectedItemKey, selectedItemKey)) {
             this.selectedItemKey = selectedItemKey;
             listViewBindingListeners.selectedItemKeyChanged(this, previousSelectedItemKey);
         }
@@ -1397,7 +1713,7 @@ public class ListView extends Component {
     public void setSelectedItemsKey(String selectedItemsKey) {
         String previousSelectedItemsKey = this.selectedItemsKey;
 
-        if (previousSelectedItemsKey != selectedItemsKey) {
+        if (!Utils.stringsAreEqual(previousSelectedItemsKey, selectedItemsKey)) {
             this.selectedItemsKey = selectedItemsKey;
             listViewBindingListeners.selectedItemsKeyChanged(this, previousSelectedItemsKey);
         }
@@ -1441,7 +1757,7 @@ public class ListView extends Component {
     public void setCheckedItemsKey(String checkedItemsKey) {
         String previousCheckedItemsKey = this.checkedItemsKey;
 
-        if (previousCheckedItemsKey != checkedItemsKey) {
+        if (!Utils.stringsAreEqual(previousCheckedItemsKey, checkedItemsKey)) {
             this.checkedItemsKey = checkedItemsKey;
             listViewBindingListeners.checkedItemsKeyChanged(this, previousCheckedItemsKey);
         }
@@ -1474,6 +1790,49 @@ public class ListView extends Component {
             this.checkedItemsBindMapping = checkedItemsBindMapping;
             listViewBindingListeners.checkedItemsBindMappingChanged(this,
                 previousCheckedItemsBindMapping);
+        }
+    }
+
+    public String getItemsStateKey() {
+        return itemsStateKey;
+    }
+
+    public void setItemsStateKey(String itemsStateKey) {
+        String previousItemsStateKey = this.itemsStateKey;
+
+        if (!Utils.stringsAreEqual(previousItemsStateKey, itemsStateKey)) {
+            this.itemsStateKey = itemsStateKey;
+            listViewBindingListeners.itemsStateKeyChanged(this, previousItemsStateKey);
+        }
+    }
+
+    public BindType getItemsStateBindType() {
+        return itemsStateBindType;
+    }
+
+    public void setItemsStateBindType(BindType itemsStateBindType) {
+        if (itemsStateBindType == null) {
+            throw new IllegalArgumentException("Bind type must not be null");
+        }
+
+        BindType previousItemsStateBindType = this.itemsStateBindType;
+        if (previousItemsStateBindType != itemsStateBindType) {
+            this.itemsStateBindType = itemsStateBindType;
+            listViewBindingListeners.itemsStateBindTypeChanged(this, previousItemsStateBindType);
+        }
+    }
+
+    public ItemStateBindMapping getItemsStateBindMapping() {
+        return itemsStateBindMapping;
+    }
+
+    public void setItemsStateBindMapping(ItemStateBindMapping itemsStateBindMapping) {
+        ItemStateBindMapping previousItemsStateBindMapping = this.itemsStateBindMapping;
+
+        if (previousItemsStateBindMapping != itemsStateBindMapping) {
+            this.itemsStateBindMapping = itemsStateBindMapping;
+            listViewBindingListeners.itemsStateBindMappingChanged(this,
+                previousItemsStateBindMapping);
         }
     }
 
@@ -1552,6 +1911,35 @@ public class ListView extends Component {
         }
 
         if (checkmarksEnabled) {
+            if (allowTriStateCheckmarks) {
+                if (itemsStateKey != null && JSON.containsKey(context, itemsStateKey)
+                    && itemsStateBindType != BindType.STORE) {
+                    Sequence<Object> items = (Sequence<Object>) JSON.get(context, itemsStateKey);
+
+                    clearCheckmarks();
+
+                    for (int i = 0, n = items.getLength(); i < n; i++) {
+                        Object item = items.get(i);
+
+                        int index;
+                        if (itemsStateBindMapping == null) {
+                            index = ((List<Object>) listData).indexOf(item);
+                        } else {
+                            index = itemsStateBindMapping.indexOf(listData, item);
+                        }
+
+                        if (index != -1) {
+                            Button.State state = Button.State.UNSELECTED;
+                            if (itemsStateBindMapping == null) {
+                                state = itemsStateBindMapping.getState(item);
+                            } else {
+                                state = Button.State.SELECTED;
+                            }
+                            setItemCheckmarkState(index, state);
+                        }
+                    }
+                }
+            }
             if (checkedItemsKey != null && JSON.containsKey(context, checkedItemsKey)
                 && checkedItemsBindType != BindType.STORE) {
                 Sequence<Object> items = (Sequence<Object>) JSON.get(context, checkedItemsKey);
@@ -1650,6 +2038,54 @@ public class ListView extends Component {
         }
 
         if (checkmarksEnabled) {
+            if (allowTriStateCheckmarks) {
+                if (itemsStateKey != null && JSON.containsKey(context, itemsStateKey)
+                    && itemsStateBindType != BindType.LOAD) {
+                    ArrayList<Object> items = new ArrayList<>();
+
+                    for (int i = 0, n = mixedIndexes.getLength(); i < n; i++) {
+                        Integer index = mixedIndexes.get(i);
+
+                        Object item;
+                        if (itemsStateBindMapping == null) {
+                            item = listData.get(index.intValue());
+                        } else {
+                            item = itemsStateBindMapping.get(listData, index.intValue());
+                        }
+
+                        if (itemsStateBindMapping == null) {
+                            // TODO: ?? what to do here?  we need to set the MIXED state for the item
+                        } else {
+                            itemsStateBindMapping.setState(item, Button.State.MIXED);
+                        }
+
+                        items.add(item);
+                    }
+
+                    // TODO: what about the mixedAsChecked flag?  Does it make a difference here or not?
+
+                    for (int i = 0, n = checkedIndexes.getLength(); i < n; i++) {
+                        Integer index = checkedIndexes.get(i);
+
+                        Object item;
+                        if (itemsStateBindMapping == null) {
+                            item = listData.get(index.intValue());
+                        } else {
+                            item = itemsStateBindMapping.get(listData, index.intValue());
+                        }
+
+                        if (itemsStateBindMapping == null) {
+                            // TODO: ?? what to do here?  we need to set the SELECTED state for the item
+                        } else {
+                            itemsStateBindMapping.setState(item, Button.State.SELECTED);
+                        }
+
+                        items.add(item);
+                    }
+
+                    JSON.put(context, itemsStateKey, items);
+                }
+            }
             if (checkedItemsKey != null && JSON.containsKey(context, checkedItemsKey)
                 && checkedItemsBindType != BindType.LOAD) {
                 ArrayList<Object> items = new ArrayList<>();

@@ -21,6 +21,7 @@ import java.awt.Font;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
@@ -61,7 +62,7 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
 
     @Override
     public void render(Object item, int index, ListView listView, boolean selected,
-        boolean checked, boolean highlighted, boolean disabled) {
+        Button.State state, boolean highlighted, boolean disabled) {
         if (item != null) {
             Element itemElement = (Element) item;
 

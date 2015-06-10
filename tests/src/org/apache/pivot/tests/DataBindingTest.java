@@ -54,13 +54,13 @@ public class DataBindingTest extends Application.Adapter {
     public static class TestListViewItemRenderer extends ListViewItemRenderer {
         @Override
         public void render(final Object item, int index, final ListView listView, boolean selected,
-            boolean checked, boolean highlighted, boolean disabled) {
+            Button.State state, boolean highlighted, boolean disabled) {
             Object itemLoaded = item;
             if (itemLoaded != null) {
                 itemLoaded = JSON.get(item, "text");
             }
 
-            super.render(itemLoaded, index, listView, selected, checked, highlighted, disabled);
+            super.render(itemLoaded, index, listView, selected, state, highlighted, disabled);
         }
 
         @Override

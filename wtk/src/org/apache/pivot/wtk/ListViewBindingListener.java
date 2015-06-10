@@ -90,6 +90,22 @@ public interface ListViewBindingListener {
             ListView.ItemBindMapping previousCheckedItemsBindMapping) {
             // empty block
         }
+
+        @Override
+        public void itemsStateKeyChanged(ListView listView, String previousItemsStateKey) {
+            // empty block
+        }
+
+        @Override
+        public void itemsStateBindTypeChanged(ListView listView, BindType previousItemsStateBindType) {
+            // empty block
+        }
+
+        @Override
+        public void itemsStateBindMappingChanged(ListView listView,
+            ListView.ItemStateBindMapping previousItemsStateBindMapping) {
+            // empty block
+        }
     }
 
     /**
@@ -192,4 +208,29 @@ public interface ListViewBindingListener {
      */
     public void checkedItemsBindMappingChanged(ListView listView,
         ListView.ItemBindMapping previousCheckedItemsBindMapping);
+
+    /**
+     * Called when a list view's items state key has changed.
+     *
+     * @param listView
+     * @param previousItemsStateKey
+     */
+    public void itemsStateKeyChanged(ListView listView, String previousItemsStateKey);
+
+    /**
+     * Called when a list view's items state bind type has changed.
+     *
+     * @param listView
+     * @param previousItemsStateBindType
+     */
+    public void itemsStateBindTypeChanged(ListView listView, BindType previousItemsStateBindType);
+
+    /**
+     * Called when a list view's items state bind mapping has changed.
+     *
+     * @param listView
+     * @param previousItemsStateBindMapping
+     */
+    public void itemsStateBindMappingChanged(ListView listView,
+        ListView.ItemStateBindMapping previousItemsStateBindMapping);
 }

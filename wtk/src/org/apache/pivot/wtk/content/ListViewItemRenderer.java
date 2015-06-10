@@ -21,6 +21,7 @@ import java.awt.Font;
 
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
@@ -63,7 +64,7 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
 
     @Override
     public void render(Object item, int index, ListView listView, boolean selected,
-        boolean checked, boolean highlighted, boolean disabled) {
+        Button.State state, boolean highlighted, boolean disabled) {
         renderStyles(listView, selected, highlighted, disabled);
 
         Image icon = null;

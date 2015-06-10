@@ -131,8 +131,8 @@ public class TextPaneDemo extends Application.Adapter {
         fontFamilyListButton.setItemRenderer(new ListViewItemRenderer() {
             @Override
             public void render(Object item, int index, ListView listView, boolean selected,
-                boolean checked, boolean highlighted, boolean disabled) {
-                super.render(item, index, listView, selected, checked, highlighted, disabled);
+                Button.State state, boolean highlighted, boolean disabled) {
+                super.render(item, index, listView, selected, state, highlighted, disabled);
                 if (item != null) {
                     String fontFamilyName = (String) item;
                     label.getStyles().put("font", Font.decode(fontFamilyName + "-12"));

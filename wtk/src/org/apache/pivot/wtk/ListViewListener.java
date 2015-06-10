@@ -54,6 +54,16 @@ public interface ListViewListener {
         }
 
         @Override
+        public void checkmarksTriStateChanged(ListView listView) {
+            // empty block
+        }
+
+        @Override
+        public void checkmarksMixedAsCheckedChanged(ListView listView) {
+            // empty block
+        }
+
+        @Override
         public void disabledItemFilterChanged(ListView listView,
             Filter<?> previousDisabledItemFilter) {
             // empty block
@@ -104,6 +114,21 @@ public interface ListViewListener {
      * @param listView
      */
     public void checkmarksEnabledChanged(ListView listView);
+
+    /**
+     * Called when a list view's tri-state checkmarks flag has been changed.
+     *
+     * @param listView
+     */
+    public void checkmarksTriStateChanged(ListView listView);
+
+    /**
+     * Called when a list view's flag to decide if mixed checkbox state should
+     * be treated as checked has been changed.
+     *
+     * @param listView
+     */
+    public void checkmarksMixedAsCheckedChanged(ListView listView);
 
     /**
      * Called when a list view's disabled item filter has changed.

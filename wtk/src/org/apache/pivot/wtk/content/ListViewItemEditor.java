@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.wtk.Bounds;
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
@@ -98,7 +99,7 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
 
         // Render the item data
         ListViewItemRenderer itemRenderer = (ListViewItemRenderer) listViewArgument.getItemRenderer();
-        itemRenderer.render(listItem, itemIndexArgument, listViewArgument, false, false, false,
+        itemRenderer.render(listItem, itemIndexArgument, listViewArgument, false, Button.State.UNSELECTED, false,
             false);
         itemRenderer.setSize(itemBounds.width, itemBounds.height);
 

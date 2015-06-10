@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.content;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.media.Image;
@@ -79,7 +80,7 @@ public class ListViewColorItemRenderer extends ListViewItemRenderer {
 
     @Override
     public void render(Object item, int index, ListView listView, boolean selected,
-        boolean checked, boolean highlighted, boolean disabled) {
+        Button.State state, boolean highlighted, boolean disabled) {
         if (item != null) {
             ColorItem colorItem;
             if (item instanceof ColorItem) {
@@ -98,6 +99,6 @@ public class ListViewColorItemRenderer extends ListViewItemRenderer {
             listItem.setText(name);
         }
 
-        super.render(listItem, index, listView, selected, checked, highlighted, disabled);
+        super.render(listItem, index, listView, selected, state, highlighted, disabled);
     }
 }

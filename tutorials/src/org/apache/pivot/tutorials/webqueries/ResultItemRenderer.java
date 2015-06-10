@@ -22,6 +22,7 @@ import java.awt.Font;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.BoxPane;
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
@@ -59,7 +60,7 @@ public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer
 
     @Override
     public void render(Object item, int index, ListView listView, boolean selected,
-        boolean checked, boolean highlighted, boolean disabled) {
+        Button.State checkedState, boolean highlighted, boolean disabled) {
         if (item != null) {
             titleLabel.setText((String) JSON.get(item, "title"));
             phoneLabel.setText((String) JSON.get(item, "Phone"));
