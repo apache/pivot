@@ -232,7 +232,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                         HostApplet.this.application.startup(
                             HostApplet.this.displayHost.getDisplay(), new ImmutableMap<>(
                                 HostApplet.this.startupProperties));
-                    } catch (Exception exception) {
+                    } catch (Throwable exception) {
                         handleUncaughtException(exception);
                     }
                 }
@@ -248,13 +248,13 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 if (HostApplet.this.application != null) {
                     try {
                         HostApplet.this.application.shutdown(false);
-                    } catch (Exception exception) {
+                    } catch (Throwable exception) {
                         handleUncaughtException(exception);
+                    } finally {
+                        // Remove the application from the application list
+                        applications.remove(HostApplet.this.application);
+                        HostApplet.this.application = null;
                     }
-
-                    // Remove the application from the application list
-                    applications.remove(HostApplet.this.application);
-                    HostApplet.this.application = null;
                 }
             }
         }

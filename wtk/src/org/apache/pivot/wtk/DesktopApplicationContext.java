@@ -259,19 +259,17 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 case WindowEvent.WINDOW_ICONIFIED: {
                     try {
                         application.suspend();
-                    } catch (Exception exception) {
+                    } catch (Throwable exception) {
                         handleUncaughtException(exception);
                     }
-
                     break;
                 }
                 case WindowEvent.WINDOW_DEICONIFIED: {
                     try {
                         application.resume();
-                    } catch (Exception exception) {
+                    } catch (Throwable exception) {
                         handleUncaughtException(exception);
                     }
-
                     break;
                 }
                 default: {
@@ -416,13 +414,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
         if (application != null) {
             try {
                 cancelShutdown = application.shutdown(optional);
-            } catch (Exception exception) {
+            } catch (Throwable exception) {
                 handleUncaughtException(exception);
-            }
-
-            if (!cancelShutdown) {
-                // Remove the application from the application list
-                applications.remove(application);
+            } finally {
+                if (!cancelShutdown) {
+                    // Remove the application from the application list
+                    applications.remove(application);
+                }
             }
         }
 
@@ -656,8 +654,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             // Initial configuration of the windows
             setFullScreen(fullScreen, visible);
 
-            // TODO This is a workaround for Java bug #6365898 on Linux (fixed
-            // only in Java 7),
+            // TODO This is a workaround for Java bug #6365898 on Linux (fixed only in Java 7),
             // revisit / remove later when we'll require Java 7
             if (maximized && visible) {
                 windowedHostFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
@@ -669,9 +666,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 @Override
                 public void run() {
                     try {
-                        application.startup(primaryDisplayHost.getDisplay(), new ImmutableMap<>(
-                            properties));
-                    } catch (Exception exception) {
+                        application.startup(primaryDisplayHost.getDisplay(), new ImmutableMap<>(properties));
+                    } catch (Throwable exception) {
                         handleUncaughtException(exception);
                     }
                 }
