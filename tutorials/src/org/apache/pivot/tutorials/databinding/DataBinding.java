@@ -62,10 +62,8 @@ public class DataBinding extends Window implements Bindable {
             @Override
             public void buttonPressed(Button button) {
                 JSONSerializer serializer = new JSONSerializer();
-                @SuppressWarnings("resource")
-                InputStream inputStream = getClass().getResourceAsStream("contact.json");
 
-                try {
+                try (InputStream inputStream = getClass().getResourceAsStream("contact.json")) {
                     form.load(serializer.readObject(inputStream));
                     sourceLabel.setText("JSON");
                 } catch (Exception exception) {

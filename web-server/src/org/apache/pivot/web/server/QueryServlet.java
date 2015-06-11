@@ -394,7 +394,7 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "resource" })
+    @SuppressWarnings("unchecked")
     protected final void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         Path path = getPath(request);
@@ -423,21 +423,17 @@ public abstract class QueryServlet extends HttpServlet {
                 File tempFile = File.createTempFile(getClass().getName(), null);
 
                 // Serialize the result to an intermediary file
-                FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
-                try {
+                try (FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
                     serializer.writeObject(result, fileOutputStream);
                 } catch (SerializationException exception) {
                     throw new ServletException(exception);
-                } finally {
-                    fileOutputStream.close();
                 }
 
                 // Set the content length header
                 response.setHeader(CONTENT_LENGTH_HEADER, String.valueOf(tempFile.length()));
 
                 // Write the contents of the file out to the response
-                FileInputStream fileInputStream = new FileInputStream(tempFile);
-                try {
+                try (FileInputStream fileInputStream = new FileInputStream(tempFile)) {
                     byte[] buffer = new byte[1024];
                     int nBytes;
                     do {
@@ -446,8 +442,6 @@ public abstract class QueryServlet extends HttpServlet {
                             responseOutputStream.write(buffer, 0, nBytes);
                         }
                     } while (nBytes != -1);
-                } finally {
-                    fileInputStream.close();
                 }
             } else {
                 try {

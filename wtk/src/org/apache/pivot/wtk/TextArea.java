@@ -687,17 +687,11 @@ public class TextArea extends Component {
 
     public void setText(URL textURL) throws IOException {
         if (textURL == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("URL for text is null.");
         }
 
-        InputStream inputStream = null;
-        try {
-            inputStream = textURL.openStream();
+        try (InputStream inputStream = textURL.openStream()) {
             setText(new InputStreamReader(inputStream));
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
         }
     }
 

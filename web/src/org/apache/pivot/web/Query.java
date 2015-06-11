@@ -147,9 +147,8 @@ public abstract class Query<V> extends IOTask<V> {
 
     static {
         try {
-            // See
-            // http://java.sun.com/javase/6/docs/technotes/guides/net/proxies.html
-            // For more info on this system property
+            // See http://java.sun.com/javase/6/docs/technotes/guides/net/proxies.html
+            // for more info on this system property.
             System.setProperty("java.net.useSystemProxies", "true");
         } catch (SecurityException exception) {
             // No-op
@@ -164,8 +163,7 @@ public abstract class Query<V> extends IOTask<V> {
      * @param path
      * @param secure
      */
-    public Query(String hostname, int port, String path, boolean secure,
-        ExecutorService executorService) {
+    public Query(String hostname, int port, String path, boolean secure, ExecutorService executorService) {
         super(executorService);
 
         try {
@@ -303,7 +301,7 @@ public abstract class Query<V> extends IOTask<V> {
      */
     public void setSerializer(Serializer<?> serializer) {
         if (serializer == null) {
-            throw new IllegalArgumentException("serializer is null.");
+            throw new IllegalArgumentException("Serializer is null.");
         }
 
         this.serializer = serializer;
@@ -412,14 +410,8 @@ public abstract class Query<V> extends IOTask<V> {
 
             // Write the request body
             if (result != null) {
-                OutputStream outputStream = null;
-                try {
-                    outputStream = connection.getOutputStream();
+                try (OutputStream outputStream = connection.getOutputStream()) {
                     serializerLocal.writeObject(result, new MonitoredOutputStream(outputStream));
-                } finally {
-                    if (outputStream != null) {
-                        outputStream.close();
-                    }
                 }
             }
 
@@ -447,14 +439,8 @@ public abstract class Query<V> extends IOTask<V> {
 
             // Read the response body
             if (method == Method.GET && status == Query.Status.OK) {
-                InputStream inputStream = null;
-                try {
-                    inputStream = connection.getInputStream();
+                try (InputStream inputStream = connection.getInputStream()) {
                     result = serializerLocal.readObject(new MonitoredInputStream(inputStream));
-                } finally {
-                    if (inputStream != null) {
-                        inputStream.close();
-                    }
                 }
             }
 

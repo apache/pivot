@@ -172,19 +172,11 @@ public class ProxyServlet extends HttpServlet {
 
         // Write the request body
         if (connection.getDoOutput()) {
-            OutputStream outputStream = null;
-
-            try {
+            try (OutputStream outputStream = new BufferedOutputStream(connection.getOutputStream(), BUFFER_SIZE)) {
                 InputStream inputStream = request.getInputStream();
 
-                outputStream = connection.getOutputStream();
-                outputStream = new BufferedOutputStream(outputStream, BUFFER_SIZE);
                 for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
                     outputStream.write((byte) data);
-                }
-            } finally {
-                if (outputStream != null) {
-                    outputStream.close();
                 }
             }
         }

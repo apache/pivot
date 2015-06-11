@@ -211,8 +211,7 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
         ParserConfigurationException, SAXException {
         BXMLSerializer serializer = new BXMLSerializer();
         serializer.setLocation(f.toURI().toURL());
-        final FileInputStream in = new FileInputStream(f);
-        try {
+        try (FileInputStream in = new FileInputStream(f)) {
             Object obj = serializer.readObject(in);
             if (!(obj instanceof Component)) {
                 throw new IllegalStateException("obj " + obj + " is of class " + obj.getClass()
@@ -237,15 +236,10 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
             // add the loaded widget to the display
             this.loadedComponent = (Component) obj;
             playgroundCardPane.add((Component) obj);
-        } finally {
-            in.close();
         }
-        final FileInputStream in2 = new FileInputStream(f);
-        try {
+        try (FileInputStream in2 = new FileInputStream(f)) {
             CreateHighlightedXML xml = new CreateHighlightedXML();
             bxmlSourceTextPane.setDocument(xml.prettyPrint(in2));
-        } finally {
-            in2.close();
         }
         this.file = f;
     }

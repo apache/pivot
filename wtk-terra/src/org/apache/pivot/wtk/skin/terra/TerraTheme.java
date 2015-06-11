@@ -221,19 +221,13 @@ public final class TerraTheme extends Theme {
         load(locationURL);
 
         // Install named styles
-        try {
-            InputStream inputStream = getClass().getResourceAsStream("terra_theme_styles.json");
+        try (InputStream inputStream = getClass().getResourceAsStream("terra_theme_styles.json")) {
+            JSONSerializer serializer = new JSONSerializer();
+            Map<String, ?> terraThemeStyles = (Map<String, ?>) serializer.readObject(inputStream);
 
-            try {
-                JSONSerializer serializer = new JSONSerializer();
-                Map<String, ?> terraThemeStyles = (Map<String, ?>) serializer.readObject(inputStream);
-
-                for (String name : terraThemeStyles) {
-                    Component.getNamedStyles().put(packageName + "." + name,
-                        (Map<String, ?>) terraThemeStyles.get(name));
-                }
-            } finally {
-                inputStream.close();
+            for (String name : terraThemeStyles) {
+                Component.getNamedStyles().put(packageName + "." + name,
+                    (Map<String, ?>) terraThemeStyles.get(name));
             }
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -247,73 +241,67 @@ public final class TerraTheme extends Theme {
             throw new IllegalArgumentException("Location URL is null");
         }
 
-        try {
-            InputStream inputStream = location.openStream();
+        try (InputStream inputStream = location.openStream()) {
+            JSONSerializer serializer = new JSONSerializer();
+            @SuppressWarnings("unchecked")
+            Map<String, ?> properties = (Map<String, ?>) serializer.readObject(inputStream);
 
-            try {
-                JSONSerializer serializer = new JSONSerializer();
-                @SuppressWarnings("unchecked")
-                Map<String, ?> properties = (Map<String, ?>) serializer.readObject(inputStream);
+            font = Font.decode((String) properties.get("font"));
 
-                font = Font.decode((String) properties.get("font"));
+            @SuppressWarnings("unchecked")
+            List<String> colorCodes = (List<String>) properties.get("colors");
+            numberOfPaletteColors = colorCodes.getLength();
+            int numberOfColors = numberOfPaletteColors * 3;
+            colors = new ArrayList<>(numberOfColors);
 
-                @SuppressWarnings("unchecked")
-                List<String> colorCodes = (List<String>) properties.get("colors");
-                numberOfPaletteColors = colorCodes.getLength();
-                int numberOfColors = numberOfPaletteColors * 3;
-                colors = new ArrayList<>(numberOfColors);
+            Double mult = (Double) properties.get("colorMultiplier");
+            if (mult != null) {
+                colorMultiplier = mult.floatValue();
+            }
 
-                Double mult = (Double) properties.get("colorMultiplier");
-                if (mult != null) {
-                    colorMultiplier = mult.floatValue();
-                }
+            Boolean dark = (Boolean) properties.get("themeIsDark");
+            if (dark != null) {
+                themeIsDark = dark.booleanValue();
+            }
 
-                Boolean dark = (Boolean) properties.get("themeIsDark");
-                if (dark != null) {
-                    themeIsDark = dark.booleanValue();
-                }
+            Boolean flat = (Boolean) properties.get("themeIsFlat");
+            if (flat != null) {
+                themeIsFlat = flat.booleanValue();
+            }
 
-                Boolean flat = (Boolean) properties.get("themeIsFlat");
-                if (flat != null) {
-                    themeIsFlat = flat.booleanValue();
-                }
+            Boolean transition = (Boolean) properties.get("transitionEnabled");
+            if (transition != null) {
+                transitionEnabled = transition.booleanValue();
+            }
 
-                Boolean transition = (Boolean) properties.get("transitionEnabled");
-                if (transition != null) {
-                    transitionEnabled = transition.booleanValue();
-                }
+            for (String colorCode : colorCodes) {
+                Color baseColor = Color.decode(colorCode);
+                colors.add(darken(baseColor));
+                colors.add(baseColor);
+                colors.add(brighten(baseColor));
+            }
 
-                for (String colorCode : colorCodes) {
-                    Color baseColor = Color.decode(colorCode);
-                    colors.add(darken(baseColor));
-                    colors.add(baseColor);
-                    colors.add(brighten(baseColor));
-                }
+            @SuppressWarnings("unchecked")
+            Map<String, String> messageIconNames = (Map<String, String>) properties.get("messageIcons");
+            messageIcons = new HashMap<>();
+            loadMessageIcons(messageIconNames, messageIcons);
 
-                @SuppressWarnings("unchecked")
-                Map<String, String> messageIconNames = (Map<String, String>) properties.get("messageIcons");
-                messageIcons = new HashMap<>();
-                loadMessageIcons(messageIconNames, messageIcons);
+            @SuppressWarnings("unchecked")
+            Map<String, String> smallMessageIconNames = (Map<String, String>) properties.get("smallMessageIcons");
+            smallMessageIcons = new HashMap<>();
+            loadMessageIcons(smallMessageIconNames, smallMessageIcons);
 
-                @SuppressWarnings("unchecked")
-                Map<String, String> smallMessageIconNames = (Map<String, String>) properties.get("smallMessageIcons");
-                smallMessageIcons = new HashMap<>();
-                loadMessageIcons(smallMessageIconNames, smallMessageIcons);
-
-                String defaultBackgroundColorString = (String) properties.get("defaultBackgroundColor");
-                if (defaultBackgroundColorString != null) {
-                    defaultBackgroundColor = Color.decode(defaultBackgroundColorString);
-                } else {
-                    defaultBackgroundColor = super.getDefaultBackgroundColor();
-                }
-                String defaultForegroundColorString = (String) properties.get("defaultForegroundColor");
-                if (defaultForegroundColorString != null) {
-                    defaultForegroundColor = Color.decode(defaultForegroundColorString);
-                } else {
-                    defaultForegroundColor = super.getDefaultBackgroundColor();
-                }
-            } finally {
-                inputStream.close();
+            String defaultBackgroundColorString = (String) properties.get("defaultBackgroundColor");
+            if (defaultBackgroundColorString != null) {
+                defaultBackgroundColor = Color.decode(defaultBackgroundColorString);
+            } else {
+                defaultBackgroundColor = super.getDefaultBackgroundColor();
+            }
+            String defaultForegroundColorString = (String) properties.get("defaultForegroundColor");
+            if (defaultForegroundColorString != null) {
+                defaultForegroundColor = Color.decode(defaultForegroundColorString);
+            } else {
+                defaultForegroundColor = super.getDefaultBackgroundColor();
             }
         } catch (IOException exception) {
             throw new RuntimeException(exception);

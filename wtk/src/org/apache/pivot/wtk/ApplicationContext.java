@@ -1719,6 +1719,7 @@ public abstract class ApplicationContext implements Thread.UncaughtExceptionHand
     private static HashMap<URI, Object> resourceCache = new HashMap<>();
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
+    private static final Package CURRENT_PACKAGE = ApplicationContext.class.getPackage();
     private static Version jvmVersion = null;
     private static Version pivotVersion = null;
 
@@ -1727,7 +1728,7 @@ public abstract class ApplicationContext implements Thread.UncaughtExceptionHand
         jvmVersion = Version.decode(System.getProperty("java.vm.version"));
 
         // Get the Pivot version
-        String version = ApplicationContext.class.getPackage().getImplementationVersion();
+        String version = CURRENT_PACKAGE.getImplementationVersion();
         if (version == null) {
             pivotVersion = new Version(0, 0, 0, 0);
         } else {
@@ -1764,44 +1765,36 @@ public abstract class ApplicationContext implements Thread.UncaughtExceptionHand
 
         URL stylesheetLocation = classLoader.getResource(resourceName.substring(1));
         if (stylesheetLocation == null) {
-            throw new RuntimeException("Unable to locate style sheet resource \"" + resourceName
-                + "\".");
+            throw new RuntimeException("Unable to locate style sheet resource \"" + resourceName + "\".");
         }
 
-        try {
-            InputStream inputStream = stylesheetLocation.openStream();
+        try (InputStream inputStream = stylesheetLocation.openStream()) {
+            JSONSerializer serializer = new JSONSerializer();
+            Map<String, ?> stylesheet = (Map<String, ?>) serializer.readObject(inputStream);
 
-            try {
-                JSONSerializer serializer = new JSONSerializer();
-                Map<String, ?> stylesheet = (Map<String, ?>) serializer.readObject(inputStream);
+            for (String name : stylesheet) {
+                Map<String, ?> styles = (Map<String, ?>) stylesheet.get(name);
 
-                for (String name : stylesheet) {
-                    Map<String, ?> styles = (Map<String, ?>) stylesheet.get(name);
-
-                    int i = name.lastIndexOf('.') + 1;
-                    if (Character.isUpperCase(name.charAt(i))) {
-                        // Assume the current package if none specified
-                        if (!name.contains(".")) {
-                            name = ApplicationContext.class.getPackage().getName() + "." + name;
-                        }
-
-                        Class<?> type = null;
-                        try {
-                            type = Class.forName(name);
-                        } catch (ClassNotFoundException exception) {
-                            // No-op
-                        }
-
-                        if (type != null && Component.class.isAssignableFrom(type)) {
-                            Component.getTypedStyles().put((Class<? extends Component>) type,
-                                styles);
-                        }
-                    } else {
-                        Component.getNamedStyles().put(name, styles);
+                int i = name.lastIndexOf('.') + 1;
+                if (Character.isUpperCase(name.charAt(i))) {
+                    // Assume the current package if none specified
+                    if (!name.contains(".")) {
+                        name = CURRENT_PACKAGE.getName() + "." + name;
                     }
+
+                    Class<?> type = null;
+                    try {
+                        type = Class.forName(name);
+                    } catch (ClassNotFoundException exception) {
+                        // No-op
+                    }
+
+                    if (type != null && Component.class.isAssignableFrom(type)) {
+                        Component.getTypedStyles().put((Class<? extends Component>) type, styles);
+                    }
+                } else {
+                    Component.getNamedStyles().put(name, styles);
                 }
-            } finally {
-                inputStream.close();
             }
         } catch (IOException exception) {
             throw new RuntimeException(exception);
