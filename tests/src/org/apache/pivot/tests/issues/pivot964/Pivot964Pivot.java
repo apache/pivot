@@ -22,14 +22,20 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.collections.adapter.ListAdapter;
+import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ImageView;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Spinner;
+import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Drawing;
 import org.apache.pivot.wtk.media.SVGDiagramSerializer;
@@ -49,14 +55,29 @@ public class Pivot964Pivot extends Application.Adapter {
     protected SVGDiagram diagram;
     protected SVGElement root;
     protected Window window;
+    String[] spinnerData = {
+        "0", "100", "200", "210", "220", "230", "240", "250",
+        "260", "261", "262", "263", "264", "265", "266", "267", "268", "269",
+        "270", "280", "290", "300", "400",
+        "500", "501", "502", "503", "504", "505", "506", "507", "508", "509", "510",
+        "600", "700", "800", "900", "1000", "1500", "2000" 
+    };
 
     public static void main(String[] args) {
         DesktopApplicationContext.main(Pivot964Pivot.class, args);
     }
 
+    private void setStyles(Component comp, String styles) {
+        try {
+            comp.setStyles(styles);
+        } catch (SerializationException se) {
+            throw new RuntimeException(se);
+        }
+    }
+
     @Override
     public void startup(Display display, Map<String, String> properties) {
-        display.getHostWindow().setSize(1000, 600);  // force dimensions for host frame
+        display.getHostWindow().setSize(1028, 600);  // force dimensions for host frame
 
         window = new Window();
 
@@ -66,12 +87,44 @@ public class Pivot964Pivot extends Application.Adapter {
 
         BoxPane bp = new BoxPane();
 
+        TablePane tp = new TablePane();
+        setStyles(tp, "{padding: 4}");
+        TablePane.Column c1 = new TablePane.Column(-1);
+        TablePane.Column c2 = new TablePane.Column(-1);
+        tp.getColumns().add(c1);
+        tp.getColumns().add(c2);
+        TablePane.Row r1 = new TablePane.Row(-1);
+        TablePane.Row r2 = new TablePane.Row(-1);
+        TablePane.Row r3 = new TablePane.Row(-1);
+
         PushButton pb1 = new PushButton("Visible");
         PushButton pb2 = new PushButton("Invisible (bug)");
+        r1.add(pb1);
+        r1.add(pb2);
+        final Spinner sp1 = new Spinner(new ListAdapter<>(spinnerData));
+        sp1.setPreferredWidth(80);
+        sp1.setSelectedIndex(0);
+        final Spinner sp2 = new Spinner(new ListAdapter<>(spinnerData));
+        sp2.setPreferredWidth(80);
+        sp2.setSelectedIndex(0);
+        BoxPane bp1 = new BoxPane();
+        setStyles(bp1, "{verticalAlignment:'center', padding: 4, spacing: 2}");
+        bp1.add(new Label("X:"));
+        bp1.add(sp1);
+        r2.add(bp1);
+        BoxPane bp2 = new BoxPane();
+        setStyles(bp2, "{verticalAlignment:'center', padding: 4, spacing: 2}");
+        bp2.add(new Label("Y:"));
+        bp2.add(sp2);
+        r2.add(bp2);
+        tp.getRows().add(r1);
+        tp.getRows().add(r2);
+        r3.add(new Label("   Max X=507"));
+        r3.add(new Label("   Max Y=269"));
+        tp.getRows().add(r3);
 
         bp.add(image);
-        bp.add(pb1);
-        bp.add(pb2);
+        bp.add(tp);
 
         pb1.getButtonPressListeners().add(new ButtonPressListener() {
 
@@ -95,7 +148,10 @@ public class Pivot964Pivot extends Application.Adapter {
             @Override
             public void buttonPressed(Button arg0) {
                 try {
-                    root.setAttribute("viewBox", AnimationElement.AT_XML, "800 0 2368 1652");
+                    String xOffset = (String)sp1.getSelectedItem();
+                    String yOffset = (String)sp2.getSelectedItem();
+                    String viewBox = String.format("%1$s %2$s 2368 1652", xOffset, yOffset);
+                    root.setAttribute("viewBox", AnimationElement.AT_XML, viewBox);
                     root.updateTime(0f);
                     image.repaint();
                 } catch (SVGElementException e) {
@@ -137,9 +193,9 @@ public class Pivot964Pivot extends Application.Adapter {
         PrintWriter pw = new PrintWriter(sw);
 
         pw.println(
-            "<svg width=\"800\" height=\"600\" style=\"fill:none;stroke-width:2\" viewBox=\"0 0 2368 1652\">");
+            "<svg width=\"800\" height=\"600\" style=\"fill:none;stroke-width:20\" viewBox=\"0 0 2368 1652\">");
         pw.println(
-            "<rect x=\"0\" y=\"0\" width=\"2000\" height=\"1000\" style=\"stroke:blue;fill:blue\"/>");
+            "<rect x=\"0\" y=\"0\" width=\"2000\" height=\"1000\" style=\"stroke:blue;fill:cyan\"/>");
         pw.println("</svg>");
 
         pw.close();
