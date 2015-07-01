@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Arrays;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.adapter.ListAdapter;
@@ -101,10 +102,10 @@ public class Pivot964Pivot extends Application.Adapter {
         PushButton pb2 = new PushButton("Invisible (bug)");
         r1.add(pb1);
         r1.add(pb2);
-        final Spinner sp1 = new Spinner(new ListAdapter<String>(spinnerData));
+        final Spinner sp1 = new Spinner(new ListAdapter<String>(Arrays.asList(spinnerData)));
         sp1.setPreferredWidth(80);
         sp1.setSelectedIndex(0);
-        final Spinner sp2 = new Spinner(new ListAdapter<String>(spinnerData));
+        final Spinner sp2 = new Spinner(new ListAdapter<String>(Arrays.asList(spinnerData)));
         sp2.setPreferredWidth(80);
         sp2.setSelectedIndex(0);
         BoxPane bp1 = new BoxPane();
