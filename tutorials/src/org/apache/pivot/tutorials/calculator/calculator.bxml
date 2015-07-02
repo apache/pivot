@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<Window title="Calculator" 
+<Window title="Calculator"
         maximized="true"
         bxml:id="mainWindow"
         xmlns:bxml="http://pivot.apache.org/bxml"
