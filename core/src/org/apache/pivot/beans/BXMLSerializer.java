@@ -599,13 +599,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         this.location = locationArgument;
         this.resources = resourcesArgument;
 
-        InputStream inputStream = new BufferedInputStream(locationArgument.openStream());
-
         Object object;
-        try {
+        try (InputStream inputStream = new BufferedInputStream(locationArgument.openStream())) {
             object = readObject(inputStream);
-        } finally {
-            inputStream.close();
         }
 
         this.location = null;
@@ -873,11 +869,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             }
 
             // Read the object
-            InputStream inputStream = new BufferedInputStream(locationLocal.openStream());
-            try {
+            try (InputStream inputStream = new BufferedInputStream(locationLocal.openStream())) {
                 element.value = serializer.readObject(inputStream);
-            } finally {
-                inputStream.close();
             }
         } else if (element.type == Element.Type.REFERENCE) {
             // Dereference the value
@@ -1303,8 +1296,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             case SCRIPT: {
                 String src = null;
-                if (element.properties.containsKey(INCLUDE_SRC_ATTRIBUTE)) {
-                    src = element.properties.get(INCLUDE_SRC_ATTRIBUTE);
+                if (element.properties.containsKey(SCRIPT_SRC_ATTRIBUTE)) {
+                    src = element.properties.get(SCRIPT_SRC_ATTRIBUTE);
                 }
 
                 if (src != null) {
@@ -1329,6 +1322,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         URL scriptLocation;
                         if (src.charAt(0) == SLASH_PREFIX) {
                             scriptLocation = classLoader.getResource(src.substring(1));
+                            if (scriptLocation == null) {  // add a fallback
+                                scriptLocation = new URL(location, src.substring(1));
+                            }
                         } else {
                             scriptLocation = new URL(location, src);
                         }
