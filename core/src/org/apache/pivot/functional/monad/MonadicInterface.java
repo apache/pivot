@@ -17,18 +17,12 @@
 package org.apache.pivot.functional.monad;
 
 /**
- * Definition of a generic Monad.
+ * Definition of generic Monadic methods.
  */
-public abstract class Monad<T> implements MonadicInterface<T> {
+@SuppressWarnings("unused")
+public interface MonadicInterface<T> {
 
-    /** Default constructor */
-    protected Monad() {
-        // no-op
-    }
-
-    @Override
-    public String toString() {
-        return "Monad()";
-    }
+// TODO: check if add other abstract (generic, typical of Monads: apply, unit, map, flatten, etc)
+//       methods here (MonadicInterface), and see what to implement in Option and in Try ...
 
 }

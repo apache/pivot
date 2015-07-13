@@ -31,7 +31,6 @@ public abstract class Option<T> extends Monad<T> {
 
     /**
      * Constructor with a value to set in the Option
-     *
      * @param val the value to set in the Option
      */
     Option(final T val) {
@@ -51,7 +50,6 @@ public abstract class Option<T> extends Monad<T> {
     public abstract T getValue();
 
     /**
-     *
      * Return the value contained in the Option, or an alternative value if not set.
      * @param alternativeValue the value to return as alternative (if value wasn't set in the Option)
      * @return value if set, otherwise alternativeValue

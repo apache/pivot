@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 /**
  * Container for an immutable no-value, derived from Option.
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public final class None<T> extends Option<T> {
     private static final None INSTANCE = new None<>();
 
