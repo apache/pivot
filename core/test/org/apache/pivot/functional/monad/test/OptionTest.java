@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 import org.apache.pivot.functional.monad.None;
 import org.apache.pivot.functional.monad.Option;
 import org.apache.pivot.functional.monad.OptionCompanion;
+import org.apache.pivot.functional.monad.Some;
 import org.junit.Test;
 
 public class OptionTest {
@@ -40,6 +41,7 @@ public class OptionTest {
 
         Option<Object> on = o.fromValue(null);
         assertNotNull(on);
+        assertTrue(on instanceof None);
         assertTrue(on.hasValue() == false);
         System.out.println("companionNoneTest(), has value is " + on.hasValue());
         Object onValue = on.getValue();  // throw Exception here
@@ -53,6 +55,7 @@ public class OptionTest {
 
         Option<Object> oo = o.fromValue(new String("Hello"));
         assertNotNull(oo);
+        assertTrue(oo instanceof Some);
         assertTrue(oo.hasValue() == true);
         Object ooValue = oo.getValue();
         assertTrue(ooValue instanceof String);
@@ -66,6 +69,7 @@ public class OptionTest {
 
         Option<String> os = o.fromValue("Hello");
         assertNotNull(os);
+        assertTrue(os instanceof Some);
         assertTrue(os.hasValue() == true);
         Object osValue = os.getValue();
         assertTrue(osValue instanceof String);
@@ -79,6 +83,7 @@ public class OptionTest {
 
         Option<Number> on = o.fromValue(new Double(3.14149));
         assertNotNull(on);
+        assertTrue(on instanceof Some);
         assertTrue(on.hasValue() == true);
         Object onValue = on.getValue();
         assertTrue(onValue instanceof Number);
