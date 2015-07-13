@@ -42,8 +42,8 @@ limitations under the License.
 
     <!-- <bxml:script src="pivot_949.js"/> // ok if it's in the same package/folder -->
     <!-- <bxml:script src="./pivot_949.js"/> // ok if it's in the same package/folder -->
-    <bxml:script src="/pivot_949.js"/>
-    <!-- <bxml:script src="$nextURI"/>  // TODO: later ... -->
+    <!-- <bxml:script src="/pivot_949.js"/>  // ok with PIVOT-949, first part of the fix -->
+    <bxml:script src="$nextURI"/>  <!-- // ok with PIVOT-949, second part of the fix -->
 
     <Label text="$foo"/>
 
