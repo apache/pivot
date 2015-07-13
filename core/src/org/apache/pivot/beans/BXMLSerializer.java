@@ -1332,6 +1332,17 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     src = element.properties.get(SCRIPT_SRC_ATTRIBUTE);
                 }
 
+                if (src != null && src.charAt(0) == OBJECT_REFERENCE_PREFIX) {
+                    src = src.substring(1);
+                    if (src.length() > 0) {
+                        if (!JSON.containsKey(namespace, src)) {
+                            throw new SerializationException("Value \"" + src + "\" is not defined.");
+                        }
+                        String variableValue = JSON.get(namespace, src);
+                        src = variableValue;
+                    }
+                }
+
                 if (src != null) {
                     int i = src.lastIndexOf(".");
                     if (i == -1) {
