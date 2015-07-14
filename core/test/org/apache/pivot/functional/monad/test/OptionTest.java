@@ -20,6 +20,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 import org.apache.pivot.functional.monad.None;
 import org.apache.pivot.functional.monad.Option;
@@ -89,6 +90,112 @@ public class OptionTest {
         assertTrue(onValue instanceof Number);
         assertTrue(onValue instanceof Double);
         System.out.println("companionNumberTest(), value stored is " + onValue);
+    }
+
+    @Test
+    public void companionRealUsageRandomTest() {
+        OptionCompanion<String> o = OptionCompanion.getInstance();
+        assertNotNull(o);
+
+        Option<String> os = null;
+        String value;
+
+        // randomizing this test
+        Random randomGenerator = new Random();
+        int randomInt = randomGenerator.nextInt(100);
+
+        // store the value in the Option instance (Some if not null, otherwise None)
+        // note that try/catch block here are unnecessary, but probably near to a real-world usage
+        try {
+            // randomizing this test:
+            // for even numbers a value will be generated,
+            // but for odd numbers the value will be null so a call on it will throw a RuntimeException
+            if (randomInt % 2 == 0) {
+                value = String.valueOf(randomInt);
+            } else {
+                value = null;
+            }
+
+            os = o.fromValue(value);
+        } catch (RuntimeException e) {
+            System.err.println("companionRealUsageRandomTest(), got RuntimeException " + e);
+            os = o.fromValue(null);
+        }
+
+        // verify the value stored
+        System.out.println("companionRealUsageRandomTest(), stored element has a value " + os.hasValue());
+        try {
+            String tsValue;  // = os.getValue();  // this will throw a RuntimeException if os is a None
+            // System.out.println("companionRealUsageRandomTest(), value stored is " + tsValue);
+
+            if (randomInt % 2 == 0) {
+                assertTrue(os instanceof Some);
+                assertTrue(os.hasValue() == true);
+                tsValue = os.getValue();
+                System.out.println("companionRealUsageRandomTest(), value stored is " + tsValue);
+                assertTrue(tsValue != null);
+            } else {
+                assertTrue(os instanceof None);
+                assertTrue(os.hasValue() == false);
+                tsValue = os.getValue();  // will throw a RuntimeException when called in the case
+                assertTrue(tsValue == null);  // never called
+            }
+
+        } catch (RuntimeException e) {
+            System.err.println("companionRealUsageRandomTest(), got RuntimeException " + e);
+            assertTrue(os.hasValue() == false);
+        }
+    }
+
+    @Test
+    public void optionSomeTest() {
+        OptionCompanion<String> o = OptionCompanion.getInstance();
+        assertNotNull(o);
+
+        // sample by direct instancing of Some/None classes, but discouraged
+
+        Option<String> os = null;
+        String tsValue = null;
+
+        // store the value in the Option instance (Some if not null, otherwise None)
+        os = new Some<>("Optional value");
+        assertTrue(os != null);
+
+        // verify the value stored
+        System.out.println("optionSomeTest(), stored element has a value " + os.hasValue());
+        assertTrue(os instanceof Some);
+        assertTrue(os.hasValue() == true);
+        tsValue = os.getValue();
+        System.out.println("optionSomeTest(), value stored is " + tsValue);
+        assertTrue(tsValue != null);
+    }
+
+    @Test
+    public void optionNoneTest() {
+        OptionCompanion<String> o = OptionCompanion.getInstance();
+        assertNotNull(o);
+
+        // sample by direct instancing of Some/None classes, but discouraged
+
+        Option<String> os = null;
+        String tsValue = null;
+
+        // store the value in the Option instance (Some if not null, otherwise None)
+        // os = new None<>();  // discouraged
+        os = None.getInstance();  // better
+        assertTrue(os != null);
+
+        // verify the value stored
+        System.out.println("optionNoneTest(), stored element has a value " + os.hasValue());
+        assertTrue(os instanceof None);
+        assertTrue(os.hasValue() == false);
+        try {
+            tsValue = os.getValue();  // will throw a RuntimeException when called in the case
+            assertTrue(tsValue == null);  // never called
+        } catch (RuntimeException e) {
+            System.err.println("optionNoneTest(), got RuntimeException " + e);
+            assertTrue(os.hasValue() == false);
+        }
     }
 
 }

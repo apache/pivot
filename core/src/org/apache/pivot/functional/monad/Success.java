@@ -25,7 +25,7 @@ public class Success<T> extends Try<T> {
     /**
      * Default constructor, do not use because it set null as invariant value to hold.
      */
-    Success() {
+    public Success() {
         throw new IllegalArgumentException("Success must have a value in the constructor");
     }
 
@@ -33,7 +33,7 @@ public class Success<T> extends Try<T> {
      * Constructor with a value to set in the Option
      * @param val the value to set
      */
-    Success(final T val) {
+    public Success(final T val) {
         this.value = val;
     }
 

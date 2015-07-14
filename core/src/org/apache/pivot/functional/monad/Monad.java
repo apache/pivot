@@ -19,7 +19,7 @@ package org.apache.pivot.functional.monad;
 /**
  * Definition of a generic Monad.
  */
-public abstract class Monad<T> implements MonadicInterface<T> {
+public abstract class Monad<T> implements MonadicOperations<T> {
 
     /** Default constructor */
     protected Monad() {

@@ -25,7 +25,7 @@ public final class Some<T> extends Option<T> {
      * Default constructor, do not use here or an IllegalArgumentException will
      * be thrown.
      */
-    Some() {
+    public Some() {
         throw new IllegalArgumentException("Some must have a value in the constructor");
     }
 
@@ -34,7 +34,7 @@ public final class Some<T> extends Option<T> {
      *
      * @param val the value to set
      */
-    Some(T val) {
+    public Some(T val) {
         super(val);
     }
 

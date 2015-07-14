@@ -25,7 +25,7 @@ public abstract class Option<T> extends Monad<T> {
     /**
      * Default constructor, do not use because it set null as invariant value to hold.
      */
-    Option() {
+    public Option() {
         this(null);
     }
 
@@ -33,7 +33,7 @@ public abstract class Option<T> extends Monad<T> {
      * Constructor with a value to set in the Option
      * @param val the value to set in the Option
      */
-    Option(final T val) {
+    public Option(final T val) {
         this.value = val;
     }
 
