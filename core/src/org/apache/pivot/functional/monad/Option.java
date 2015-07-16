@@ -58,9 +58,17 @@ public abstract class Option<T> extends Monad<T> {
         return (hasValue() == true) ? getValue() : alternativeValue;
     }
 
+    /**
+     * Return the value contained in the Option, or null if it hasn't a value set.
+     * @return value if set, otherwise null
+     */
+    public T getValueOrNull() {
+        return getValueOrElse(null);
+    }
+
     @Override
     public String toString() {
-        return "Monad(" + ((value != null) ? value.toString() : "null") + ")";
+        return "Option(" + ((value != null) ? value.toString() : "null") + ")";
     }
 
     @Override

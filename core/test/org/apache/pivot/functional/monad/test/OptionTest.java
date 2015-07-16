@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.functional.monad.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -149,16 +150,13 @@ public class OptionTest {
 
     @Test
     public void optionSomeTest() {
-        OptionCompanion<String> o = OptionCompanion.getInstance();
-        assertNotNull(o);
-
         // sample by direct instancing of Some/None classes, but discouraged
-
         Option<String> os = null;
         String tsValue = null;
 
         // store the value in the Option instance (Some if not null, otherwise None)
         os = new Some<>("Optional value");
+        System.out.println("optionSomeTest(), instance variable is " + os);
         assertTrue(os != null);
 
         // verify the value stored
@@ -168,21 +166,23 @@ public class OptionTest {
         tsValue = os.getValue();
         System.out.println("optionSomeTest(), value stored is " + tsValue);
         assertTrue(tsValue != null);
+        // test with alternative value
+        tsValue = os.getValueOrElse("Alternative value");
+        assertEquals("Optional value", tsValue);
+        tsValue = os.getValueOrNull();
+        assertEquals("Optional value", tsValue);
     }
 
     @Test
     public void optionNoneTest() {
-        OptionCompanion<String> o = OptionCompanion.getInstance();
-        assertNotNull(o);
-
         // sample by direct instancing of Some/None classes, but discouraged
-
         Option<String> os = null;
         String tsValue = null;
 
         // store the value in the Option instance (Some if not null, otherwise None)
         // os = new None<>();  // discouraged
         os = None.getInstance();  // better
+        System.out.println("optionNoneTest(), instance variable is " + os);
         assertTrue(os != null);
 
         // verify the value stored
@@ -196,6 +196,37 @@ public class OptionTest {
             System.err.println("optionNoneTest(), got RuntimeException " + e);
             assertTrue(os.hasValue() == false);
         }
+        // test with alternative value
+        tsValue = os.getValueOrElse("Alternative value");
+        assertEquals("Alternative value", tsValue);
+        tsValue = os.getValueOrNull();
+        assertEquals(null, tsValue);
+    }
+
+    @Test
+    public void optionSomeEqualsTest() {
+        // sample by direct instancing of Some/None classes, but discouraged
+        Option<String> os1 = new Some<>("Optional value 1");
+        System.out.println("optionSomeEqualsTest(), instance variable 1 is " + os1);
+        Option<String> os2 = new Some<>("Optional value 2");
+        System.out.println("optionSomeEqualsTest(), instance variable 2 is " + os2);
+
+        // verify the value stored
+        System.out.println("optionSomeEqualsTest(), two instances are not the same object " + (os1 != os2));
+        assertTrue(os1 != os2);
+    }
+
+    @Test
+    public void optionNoneEqualsTest() {
+        // sample by direct instancing of Some/None classes, but discouraged
+        None<String> on1 = None.getInstance();
+        System.out.println("optionNoneEqualsTest(), instance variable 1 is " + on1);
+        None<String> on2 = None.getInstance();
+        System.out.println("optionNoneEqualsTest(), instance variable 2 is " + on2);
+
+        // verify the value stored
+        System.out.println("optionNoneEqualsTest(), two instances are the same object " + (on1 == on2));
+        assertTrue(on1 == on2);
     }
 
 }
