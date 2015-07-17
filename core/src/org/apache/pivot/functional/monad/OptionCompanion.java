@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.functional.monad;
 
+import java.util.Objects;
+
 /**
  * Utility class for additional Option methods.
  */
@@ -68,9 +70,7 @@ public final class OptionCompanion<T> {
      * @return the value if any, or null
      */
     public T toValue(final Option<T> o) {
-        if (o == null) {
-            throw new IllegalArgumentException("option is null.");
-        }
+        Objects.requireNonNull(o);
 
         if (!o.hasValue()) {
             return null;
@@ -87,9 +87,7 @@ public final class OptionCompanion<T> {
      * @return value if set, otherwise alternativeValue
      */
     public T toValueOrElse(final Option<T> o, final T alternativeValue) {
-        if (o == null) {
-            throw new IllegalArgumentException("option is null.");
-        }
+        Objects.requireNonNull(o);
 
         return o.getValueOrElse(alternativeValue);
     }
@@ -100,9 +98,7 @@ public final class OptionCompanion<T> {
      * @return true if it contains at least one nested Option, otherwise false
      */
     public boolean hasNestedOptions(final Option<T> o) {
-        if (o == null) {
-            throw new IllegalArgumentException("option is null.");
-        }
+        Objects.requireNonNull(o);
 
         if (o instanceof None) {
             return false;
@@ -110,63 +106,5 @@ public final class OptionCompanion<T> {
 
         return o.getValue() instanceof Option;
     }
-
-/*
-// TODO: temp ...
-    // flatten the given Option, and return a transformed copy of it
-    public Option<T> flatten(final Option<T> o) {
-        if (o == null) {
-            throw new IllegalArgumentException("option is null.");
-        }
-
-        T val = o.getValue();
-        Option child;
-        boolean valueIsOption = isOption(val);
-        if (!isOption(val))
-            return fromValue(val);
-        // else ...
-        child = (Option) val;
-
-int i = 0  // temp
-        while (isOption(child) && !child.isNone()) {
-            val = child.getValue();
-            if (!isOption(val))
-                return fromValue(val);
-            // else ...
-            child = (Option) val;
-
-// temp, to avoid infinite loops with wrong implementation here (during development) ...
-if (i > maxDepth) {
-    System.err.println("Force loop exiting, infinite loop found ...")
-    break
-    }
-i++
-// temp
-        }
-
-        val = child.getValue();
-        valueIsOption = isOption(val);
-        if (valueIsOption) {
-            return (Option) val;
-        }
-        return fromValue(val);
-    }
-
-    public Option<T> fromValueFlatten(final T val) {
-        if (!isOption(val)) {
-            return fromValue(val);
-        }
-        return flatten((Option) val);
-    }
-
-    public T toValueFlatten(final Option<T> o) {
-        if (o == null) {
-            throw new IllegalArgumentException("option is null.");
-        }
-
-        Option flat = flatten(o);
-        return flat.getValue();
-    }
- */
 
 }

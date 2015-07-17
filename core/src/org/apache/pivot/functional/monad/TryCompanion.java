@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.functional.monad;
 
+import java.util.Objects;
+
 /**
  * Utility class for additional Try methods.
  */
@@ -74,11 +76,48 @@ public final class TryCompanion<T> {
      * @return the Success instance containing the value, or the Failure instance containing the exception
      */
     public T toValue(final Try<T> t) {
-        if (t == null) {
-            throw new IllegalArgumentException("try is null.");
-        }
-
+        Objects.requireNonNull(t);
         return t.getValue();
     }
 
+    /**
+     * Utility method to return the value contained,
+     * or an alternate value if not present.
+     * @param t the Try
+     * @param alternativeValue the alternative value (null could be used here)
+     * @return value if set, otherwise alternativeValue
+     */
+    public T toValueOrElse(final Try<T> t, final T alternativeValue) {
+        Objects.requireNonNull(t);
+        return t.getValueOrElse(alternativeValue);
+    }
+
+    /**
+     * Utility method that tell if the given Try has nested Try instances.
+     * @param t the Try to test
+     * @return true if it contains at least one nested Try, otherwise false
+     */
+    public boolean hasNestedOptions(final Try<T> t) {
+        Objects.requireNonNull(t);
+
+        if (t instanceof Failure) {
+            return false;
+        }
+
+        return t.getValue() instanceof Try;
+    }
+
+    /**
+     * Utility method to return the value contained in the Try, in a Option instance
+     * @param t the Try
+     * @return an Option instance: Some(value) if success, None otherwise
+     */
+    @SuppressWarnings("unchecked")
+    public Option<T> toOption(final Try<T> t) {
+        Objects.requireNonNull(t);
+        if (t.isSuccess()) {
+            return (Option<T>) OptionCompanion.getInstance().fromValue(t.getValue());
+        }
+        return None.getInstance();
+    }
 }

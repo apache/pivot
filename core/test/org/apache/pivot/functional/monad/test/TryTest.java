@@ -24,6 +24,9 @@ import java.util.Iterator;
 import java.util.Random;
 
 import org.apache.pivot.functional.monad.Failure;
+import org.apache.pivot.functional.monad.None;
+import org.apache.pivot.functional.monad.Option;
+import org.apache.pivot.functional.monad.Some;
 import org.apache.pivot.functional.monad.Success;
 import org.apache.pivot.functional.monad.Try;
 import org.apache.pivot.functional.monad.TryCompanion;
@@ -210,10 +213,10 @@ public class TryTest {
     }
 
     @Test
-    public void optionTryIteratorTest() {
+    public void trySuccessIteratorTest() {
         // sample by direct instancing of Success/Failure classes, but discouraged
         Try<String> ts = new Success<>("Hello with Success");
-        System.out.println("optionTryIteratorTest(), instance variable is " + ts);
+        System.out.println("trySuccessIteratorTest(), instance variable is " + ts);
 
         // iterate and verify on the value stored
         Iterator<String> it = ts.iterator();
@@ -221,7 +224,7 @@ public class TryTest {
         int i = 0;
         while (it.hasNext()) {
             String value = it.next();
-            System.out.println("optionTryIteratorTest(), value " + i + " from iterator is " + value);
+            System.out.println("trySuccessIteratorTest(), value " + i + " from iterator is " + value);
             assertNotNull(value);
             assertEquals("Hello with Success", value);
             i++;
@@ -230,9 +233,9 @@ public class TryTest {
 
         // another test
         i = 0;
-        System.out.println("optionTryIteratorTest(), another test");
+        System.out.println("trySuccessIteratorTest(), another test");
         for (String value : ts) {
-            System.out.println("optionTryIteratorTest(), value " + i + " from iterator is " + value);
+            System.out.println("trySuccessIteratorTest(), value " + i + " from iterator is " + value);
             assertNotNull(value);
             assertEquals("Hello with Success", value);
             i++;
@@ -241,7 +244,7 @@ public class TryTest {
     }
 
     @Test
-    public void optionFailureIteratorTest() {
+    public void tryFailureIteratorTest() {
         // sample by direct instancing of Success/Failure classes, but discouraged
         Try<String> tf = null;
 
@@ -251,7 +254,7 @@ public class TryTest {
         } catch (RuntimeException e) {
             tf = new Failure<>(e);
         }
-        System.out.println("optionFailureIteratorTest(), instance variable is " + tf);
+        System.out.println("tryFailureIteratorTest(), instance variable is " + tf);
 
         // iterate and verify on the value stored
         Iterator<String> it = tf.iterator();
@@ -260,7 +263,7 @@ public class TryTest {
         while (it.hasNext()) {
             // never executed in this case
             String value = it.next();
-            System.out.println("optionFailureIteratorTest(), value " + i + " from iterator is " + value);
+            System.out.println("tryFailureIteratorTest(), value " + i + " from iterator is " + value);
             assertEquals(null, value);
             i++;
         }
@@ -268,14 +271,70 @@ public class TryTest {
 
         // another test
         i = 0;
-        System.out.println("optionFailureIteratorTest(), another test");
+        System.out.println("tryFailureIteratorTest(), another test");
         for (String value : tf) {
             // never executed in this case
-            System.out.println("optionFailureIteratorTest(), value " + i + " from iterator is " + value);
+            System.out.println("tryFailureIteratorTest(), value " + i + " from iterator is " + value);
             assertEquals(null, value);
             i++;
         }
         assertEquals(i, 0);
+    }
+
+    @Test
+    public void companionSuccessToOptionTest() {
+        TryCompanion<String> t = TryCompanion.getInstance();
+        assertNotNull(t);
+
+        Try<String> ts = t.fromValue("Hello");
+        Option<String> os = t.toOption(ts);
+
+        // verify the value stored
+        System.out.println("companionSuccessToOptionTest(), Try instance is " + ts);
+        System.out.println("companionSuccessToOptionTest(), Option instance is " + os);
+
+        assertNotNull(ts);
+        assertTrue(ts instanceof Success);
+        assertTrue(ts.isSuccess() == true);
+
+        assertNotNull(os);
+        assertTrue(os instanceof Some);
+        assertTrue(os.hasValue() == true);
+
+        String osValue = os.getValue();
+        assertTrue(osValue != null);
+        assertTrue(osValue.equals("Hello"));
+        System.out.println("companionSuccessToOptionTest(), value stored is " + osValue);
+    }
+
+    @Test
+    public void companionFailureToOptionTest() {
+        TryCompanion<String> t = TryCompanion.getInstance();
+        assertNotNull(t);
+
+        RuntimeException re = new IllegalArgumentException("Sample RuntimeException");
+        Try<String> tf = t.fromValue(re);
+        Option<String> on = t.toOption(tf);
+
+        // verify the value stored
+        System.out.println("companionFailureToOptionTest(), Try instance is " + tf);
+        System.out.println("companionFailureToOptionTest(), Option instance is " + on);
+
+        assertNotNull(tf);
+        assertTrue(tf instanceof Failure);
+        assertTrue(tf.isSuccess() == false);
+
+        assertNotNull(on);
+        assertTrue(on instanceof None);
+        assertTrue(on.hasValue() == false);
+
+        try {
+            String onValue = on.getValue();  // this will throw a RuntimeException for the non-value of None
+            assertTrue(onValue != null);  // never called
+        } catch (RuntimeException e) {
+            System.err.println("companionFailureToOptionTest(), got RuntimeException " + e);
+        }
+
     }
 
 }
