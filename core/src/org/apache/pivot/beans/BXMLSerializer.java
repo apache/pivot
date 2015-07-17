@@ -128,6 +128,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     SimpleBindings bindings = new SimpleBindings();
                     bindings.put(ARGUMENTS_KEY, args);
                     scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+                    scriptEngine.eval(NASHORN_COMPAT_SCRIPT);
                     scriptEngine.eval(script);
                 } catch (ScriptException exception) {
                     reportException(exception, script);
@@ -159,6 +160,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             String methodName = method.getName();
             Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
+            bindings = substituteGlobals(scriptEngine, bindings);
             if (bindings.containsKey(methodName)) {
                 Invocable invocable;
                 try {
@@ -197,6 +199,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         public Object evaluate(final Object value) {
             Object result = value;
             Bindings bindings = scriptEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
+            bindings = substituteGlobals(scriptEngine, bindings);
             if (bindings.containsKey(functionName)) {
                 Invocable invocable;
                 try {
@@ -251,6 +254,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     public static final String INTERNAL_ID_PREFIX = "$";
 
     public static final String LANGUAGE_PROCESSING_INSTRUCTION = "language";
+
+    public static final String NASHORN_GLOBAL = "nashorn.global";
+    public static final String NASHORN_COMPAT_SCRIPT = "if (typeof importClass != \"function\") { load(\"nashorn:mozilla_compat.js\"); }";
 
     public static final String BXML_PREFIX = "bxml";
     public static final String BXML_EXTENSION = "bxml";
@@ -384,6 +390,16 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         });
     }
 
+    private static Bindings substituteGlobals(ScriptEngine scriptEngine, final Bindings bindings) {
+        Bindings newBindings = bindings;
+        Object nashornGlobals = newBindings.get(NASHORN_GLOBAL);
+        if (nashornGlobals != null && nashornGlobals instanceof Bindings) {
+            newBindings = (Bindings)nashornGlobals;
+            scriptEngine.setBindings(newBindings, ScriptContext.ENGINE_SCOPE);
+        }
+        return newBindings;
+    }
+ 
     /**
      * Deserializes an object hierarchy from a BXML resource. <p> This is the
      * base version of the method. It does not set the "location" or "resources"
@@ -1257,6 +1273,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
 
                 try {
+                    scriptEngine.eval(NASHORN_COMPAT_SCRIPT);
                     scriptEngine.eval(script);
                 } catch (ScriptException exception) {
                     reportException(exception, script);
@@ -1344,6 +1361,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         try {
                             scriptReader = new BufferedReader(new InputStreamReader(
                                 scriptLocation.openStream()));
+                            scriptEngine.eval(NASHORN_COMPAT_SCRIPT);
                             scriptEngine.eval(scriptReader);
                         } catch (ScriptException exception) {
                             reportException(exception);
@@ -1371,6 +1389,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         ScriptContext.ENGINE_SCOPE);
 
                     try {
+                        scriptEngine.eval(NASHORN_COMPAT_SCRIPT);
                         scriptEngine.eval(script);
                     } catch (ScriptException exception) {
                         reportException(exception, script);
