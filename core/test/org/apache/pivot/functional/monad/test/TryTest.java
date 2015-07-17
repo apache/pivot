@@ -16,9 +16,11 @@
  */
 package org.apache.pivot.functional.monad.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Iterator;
 import java.util.Random;
 
 import org.apache.pivot.functional.monad.Failure;
@@ -143,11 +145,7 @@ public class TryTest {
 
     @Test
     public void trySuccessTest() {
-        TryCompanion<String> t = TryCompanion.getInstance();
-        assertNotNull(t);
-
         // sample by direct instancing of Success/Failure classes, but discouraged
-
         Try<String> ts = null;
 
         // store the value (or the RuntimeException) in the Try instance
@@ -161,8 +159,9 @@ public class TryTest {
 
         // verify the value stored
         System.out.println("trySuccessTest(), value stored is a success " + ts.isSuccess());
+        String tsValue;
         try {
-            String tsValue = ts.getValue();  // this will throw the RuntimeException stored inside the Failure
+            tsValue = ts.getValue();  // this will throw the RuntimeException stored inside the Failure
             assertTrue(tsValue != null);  // called only when a real value is stored (and not a RuntimeException)
             System.out.println("trySuccessTest(), value stored is " + tsValue);
             assertTrue(ts.isSuccess() == true);
@@ -170,37 +169,113 @@ public class TryTest {
             System.err.println("trySuccessTest(), exception stored is " + e);
             assertTrue(ts.isSuccess() == false);
         }
+        // test with alternative value
+        tsValue = ts.getValueOrElse("Alternative value");
+        assertEquals("Hello with Success", tsValue);
+        tsValue = ts.getValueOrNull();
+        assertEquals("Hello with Success", tsValue);
     }
 
     @Test
     public void tryFailureTest() {
-        TryCompanion<String> t = TryCompanion.getInstance();
-        assertNotNull(t);
-
         // sample by direct instancing of Success/Failure classes, but discouraged
-
-        Try<String> ts = null;
+        Try<String> tf = null;
 
         // store the value (or the RuntimeException) in the Try instance
         try {
             throw new NullPointerException("Sample RuntimeException");  // simulate an exception here
         } catch (RuntimeException e) {
             // ts = new Success<>(e);  // compile error, ok
-            ts = new Failure<>(e);
+            tf = new Failure<>(e);
             assertTrue(e != null);  // unnecessary
         }
 
         // verify the value stored
-        System.out.println("tryFailureTest(), value stored is a success " + ts.isSuccess());
+        System.out.println("tryFailureTest(), value stored is a success " + tf.isSuccess());
+        String tsValue;
         try {
-            String tsValue = ts.getValue();  // this will throw the RuntimeException stored inside the Failure
+            tsValue = tf.getValue();  // this will throw the RuntimeException stored inside the Failure
             assertTrue(tsValue != null);  // called only when a real value is stored (and not a RuntimeException)
             System.out.println("tryFailureTest(), value stored is " + tsValue);
-            assertTrue(ts.isSuccess() == true);
+            assertTrue(tf.isSuccess() == true);
         } catch (RuntimeException e) {
             System.err.println("tryFailureTest(), exception stored is " + e);
-            assertTrue(ts.isSuccess() == false);
+            assertTrue(tf.isSuccess() == false);
         }
+        // test with alternative value
+        tsValue = tf.getValueOrElse("Alternative value");
+        assertEquals("Alternative value", tsValue);
+        tsValue = tf.getValueOrNull();
+        assertEquals(null, tsValue);
+    }
+
+    @Test
+    public void optionTryIteratorTest() {
+        // sample by direct instancing of Success/Failure classes, but discouraged
+        Try<String> ts = new Success<>("Hello with Success");
+        System.out.println("optionTryIteratorTest(), instance variable is " + ts);
+
+        // iterate and verify on the value stored
+        Iterator<String> it = ts.iterator();
+        assertNotNull(it);
+        int i = 0;
+        while (it.hasNext()) {
+            String value = it.next();
+            System.out.println("optionTryIteratorTest(), value " + i + " from iterator is " + value);
+            assertNotNull(value);
+            assertEquals("Hello with Success", value);
+            i++;
+        }
+        assertEquals(i, 1);
+
+        // another test
+        i = 0;
+        System.out.println("optionTryIteratorTest(), another test");
+        for (String value : ts) {
+            System.out.println("optionTryIteratorTest(), value " + i + " from iterator is " + value);
+            assertNotNull(value);
+            assertEquals("Hello with Success", value);
+            i++;
+        }
+        assertEquals(i, 1);
+    }
+
+    @Test
+    public void optionFailureIteratorTest() {
+        // sample by direct instancing of Success/Failure classes, but discouraged
+        Try<String> tf = null;
+
+        // store the value (or the RuntimeException) in the Try instance
+        try {
+            throw new NullPointerException("Sample RuntimeException");  // simulate an exception here
+        } catch (RuntimeException e) {
+            tf = new Failure<>(e);
+        }
+        System.out.println("optionFailureIteratorTest(), instance variable is " + tf);
+
+        // iterate and verify on the value stored
+        Iterator<String> it = tf.iterator();
+        assertNotNull(it);
+        int i = 0;
+        while (it.hasNext()) {
+            // never executed in this case
+            String value = it.next();
+            System.out.println("optionFailureIteratorTest(), value " + i + " from iterator is " + value);
+            assertEquals(null, value);
+            i++;
+        }
+        assertEquals(i, 0);
+
+        // another test
+        i = 0;
+        System.out.println("optionFailureIteratorTest(), another test");
+        for (String value : tf) {
+            // never executed in this case
+            System.out.println("optionFailureIteratorTest(), value " + i + " from iterator is " + value);
+            assertEquals(null, value);
+            i++;
+        }
+        assertEquals(i, 0);
     }
 
 }

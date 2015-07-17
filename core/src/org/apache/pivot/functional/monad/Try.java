@@ -16,10 +16,12 @@
  */
 package org.apache.pivot.functional.monad;
 
+import java.util.Iterator;
+
 /**
  * Definition of a generic Monad.
  */
-public abstract class Try<T> extends Monad<T> {
+public abstract class Try<T> extends Monad<T> implements Iterable<T> {
 
     /** Default constructor */
     protected Try() {
@@ -38,9 +40,59 @@ public abstract class Try<T> extends Monad<T> {
      */
     public abstract T getValue();
 
+    /**
+     * Return the value contained in the Try if it is a successful value, or an alternative value.
+     * @param alternativeValue the value to return as alternative
+     * @return value if it is a successful value, otherwise alternativeValue
+     */
+    public T getValueOrElse(final T alternativeValue) {
+        return (isSuccess() == true) ? getValue() : alternativeValue;
+    }
+
+    /**
+     * Return the value contained in the Try, or null if it hasn't a value set.
+     * @return value if it is a successful value, otherwise null
+     */
+    public T getValueOrNull() {
+        return getValueOrElse(null);
+    }
+
     @Override
     public String toString() {
         return "Try()";
+    }
+
+    /**
+     * Return an Iterator
+     * @see java.lang.Iterable#iterator()
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new TryIterator();
+    }
+
+
+    /**
+     * Immutable iterator on the value contained in the Try (if any).
+     */
+    private class TryIterator implements Iterator<T> {
+        private int cursor = 0;
+
+        @Override
+        public boolean hasNext() {
+            return (isSuccess() && cursor == 0);
+        }
+
+        @Override
+        public T next() {
+            cursor++;
+            return getValue();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 
 }

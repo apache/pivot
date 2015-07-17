@@ -110,14 +110,14 @@ public abstract class Option<T> extends Monad<T> implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new MonadIterator();
+        return new OptionIterator();
     }
 
-    
+
     /**
      * Immutable iterator on the value contained in the Option (if any).
      */
-    private class MonadIterator implements Iterator<T> {
+    private class OptionIterator implements Iterator<T> {
         private int cursor = 0;
 
         @Override
