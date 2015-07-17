@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -152,7 +153,7 @@ public class OptionTest {
     public void optionSomeTest() {
         // sample by direct instancing of Some/None classes, but discouraged
         Option<String> os = null;
-        String tsValue = null;
+        String osValue = null;
 
         // store the value in the Option instance (Some if not null, otherwise None)
         os = new Some<>("Optional value");
@@ -163,14 +164,14 @@ public class OptionTest {
         System.out.println("optionSomeTest(), stored element has a value " + os.hasValue());
         assertTrue(os instanceof Some);
         assertTrue(os.hasValue() == true);
-        tsValue = os.getValue();
-        System.out.println("optionSomeTest(), value stored is " + tsValue);
-        assertTrue(tsValue != null);
+        osValue = os.getValue();
+        System.out.println("optionSomeTest(), value stored is " + osValue);
+        assertTrue(osValue != null);
         // test with alternative value
-        tsValue = os.getValueOrElse("Alternative value");
-        assertEquals("Optional value", tsValue);
-        tsValue = os.getValueOrNull();
-        assertEquals("Optional value", tsValue);
+        osValue = os.getValueOrElse("Alternative value");
+        assertEquals("Optional value", osValue);
+        osValue = os.getValueOrNull();
+        assertEquals("Optional value", osValue);
     }
 
     @Test
@@ -227,6 +228,68 @@ public class OptionTest {
         // verify the value stored
         System.out.println("optionNoneEqualsTest(), two instances are the same object " + (on1 == on2));
         assertTrue(on1 == on2);
+    }
+
+    @Test
+    public void optionSomeIteratorTest() {
+        // sample by direct instancing of Some/None classes, but discouraged
+        Option<String> os = new Some<>("Optional value");
+        System.out.println("optionSomeIteratorTest(), instance variable is " + os);
+
+        // iterate and verify on the value stored
+        Iterator<String> it = os.iterator();
+        assertNotNull(it);
+        int i = 0;
+        while (it.hasNext()) {
+            String value = it.next();
+            System.out.println("optionSomeIteratorTest(), value " + i + " from iterator is " + value);
+            assertNotNull(value);
+            assertEquals("Optional value", value);
+            i++;
+        }
+        assertEquals(i, 1);
+
+        // another test
+        i = 0;
+        System.out.println("optionSomeIteratorTest(), another test");
+        for (String value : os) {
+            System.out.println("optionSomeIteratorTest(), value " + i + " from iterator is " + value);
+            assertNotNull(value);
+            assertEquals("Optional value", value);
+            i++;
+        }
+        assertEquals(i, 1);
+    }
+
+    @Test
+    public void optionNoneIteratorTest() {
+        // sample by direct instancing of Some/None classes, but discouraged
+        None<String> on = None.getInstance();
+        System.out.println("optionNoneIteratorTest(), instance variable is " + on);
+
+        // iterate and verify on the value stored
+        Iterator<String> it = on.iterator();
+        assertNotNull(it);
+        int i = 0;
+        while (it.hasNext()) {
+            // never executed in this case
+            String value = it.next();
+            System.out.println("optionNoneIteratorTest(), value " + i + " from iterator is " + value);
+            assertEquals(null, value);
+            i++;
+        }
+        assertEquals(i, 0);
+
+        // another test
+        i = 0;
+        System.out.println("optionNoneIteratorTest(), another test");
+        for (String value : on) {
+            // never executed in this case
+            System.out.println("optionNoneIteratorTest(), value " + i + " from iterator is " + value);
+            assertEquals(null, value);
+            i++;
+        }
+        assertEquals(i, 0);
     }
 
 }

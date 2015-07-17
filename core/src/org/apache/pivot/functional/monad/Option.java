@@ -16,10 +16,12 @@
  */
 package org.apache.pivot.functional.monad;
 
+import java.util.Iterator;
+
 /**
  * Definition of a generic Option container, to hold an invariant value (derived from Monad).
  */
-public abstract class Option<T> extends Monad<T> {
+public abstract class Option<T> extends Monad<T> implements Iterable<T> {
     final T value;
 
     /**
@@ -100,6 +102,39 @@ public abstract class Option<T> extends Monad<T> {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Return an Iterator
+     * @see java.lang.Iterable#iterator()
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new MonadIterator();
+    }
+
+    
+    /**
+     * Immutable iterator on the value contained in the Option (if any).
+     */
+    private class MonadIterator implements Iterator<T> {
+        private int cursor = 0;
+
+        @Override
+        public boolean hasNext() {
+            return (hasValue() && cursor == 0);
+        }
+
+        @Override
+        public T next() {
+            cursor++;
+            return getValue();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 
 }
