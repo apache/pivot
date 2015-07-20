@@ -21,7 +21,7 @@ import java.util.Objects;
 /**
  * Utility class for additional Try methods.
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes"})
 public final class TryCompanion<T> {
     private static final TryCompanion INSTANCE = new TryCompanion<>();
 

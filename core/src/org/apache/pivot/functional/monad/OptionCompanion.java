@@ -21,7 +21,7 @@ import java.util.Objects;
 /**
  * Utility class for additional Option methods.
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes"})
 public final class OptionCompanion<T> {
     private static final OptionCompanion INSTANCE = new OptionCompanion<>();
 
