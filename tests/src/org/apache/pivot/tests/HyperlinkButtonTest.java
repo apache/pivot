@@ -32,7 +32,7 @@ public class HyperlinkButtonTest extends Application.Adapter {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         frame = new Frame();
-        frame.setTitle("Hyperink Button Test");
+        frame.setTitle("Hyperlink Button Test");
         frame.setPreferredSize(480, 360);
 
         HyperlinkButton button1 = new HyperlinkButton("http://pivot.apache.org");
