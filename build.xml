@@ -513,6 +513,9 @@ limitations under the License.
         <compile project="tests">
             <fileset dir="wtk" includes="lib/**/*.jar"/>
         </compile>
+        <copy todir="tests/${folder.bin}">
+            <fileset dir="tests/src" includes="**/*.png"/>
+        </copy>
     </target>
 
     <target name="tutorials" depends="core, wtk, web">

@@ -48,6 +48,7 @@ import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.GridPane;
+import org.apache.pivot.wtk.HyperlinkButton;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.ListButton;
@@ -128,6 +129,7 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(BoxPane.class, TerraBoxPaneSkin.class);
         componentSkinMap.put(Frame.class, TerraFrameSkin.class);
         componentSkinMap.put(GridPane.class, TerraGridPaneSkin.class);
+        componentSkinMap.put(HyperlinkButton.class, TerraLinkButtonSkin.class);
         componentSkinMap.put(Label.class, TerraLabelSkin.class);
         componentSkinMap.put(LinkButton.class, TerraLinkButtonSkin.class);
         componentSkinMap.put(ListButton.class, TerraListButtonSkin.class);
