@@ -346,7 +346,7 @@ public class Spinner extends Container {
      * (which is "spinnerData") is invoked in a BXML file,
      * <code>BXMLSerializer</code> trying to add to this immutable sequence will
      * catch an exception and will do a {@link #setSpinnerData
-     * setSpinnerData(List<?>)} instead.
+     * setSpinnerData(List&lt;?&gt;)} instead.
      */
     public Spinner() {
         this(new ImmutableList<>(new ArrayList<>()));

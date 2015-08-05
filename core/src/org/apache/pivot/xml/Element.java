@@ -514,7 +514,7 @@ public class Element extends Node implements List<Node> {
          *
          * @param attributeName
          * @return <tt>true</tt> if this element defines the given attribute;
-         * <tt>false<tt>, otherwise.
+         * <tt>false</tt>, otherwise.
          */
         @Override
         public boolean containsKey(String attributeName) {

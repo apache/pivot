@@ -228,7 +228,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         /**
          * {@link KeyCode#ENTER ENTER} 'presses' the button.<br>
          * {@link KeyCode#UP UP}, {@link KeyCode#DOWN DOWN},
-         * {@link KeyCode#LEFT LEFT} & {@link KeyCode#RIGHT RIGHT} Navigate
+         * {@link KeyCode#LEFT LEFT} &amp; {@link KeyCode#RIGHT RIGHT} Navigate
          * around the date grid.
          */
         @Override

@@ -223,7 +223,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      *
      * @param reader The reader from which data will be read.
      * @return A list containing the data read from the CSV file. The list items
-     * are instances of Dictionary<String, Object> populated by mapping columns
+     * are instances of <tt>Dictionary&lt;String, Object&gt;</tt> populated by mapping columns
      * in the CSV file to keys in the key sequence. <p> If no keys have been
      * specified when this method is called, they are assumed to be defined in
      * the first line of the file.
@@ -450,7 +450,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * Writes values to a comma-separated value stream.
      *
      * @param items A list containing the data to write to the CSV file. List
-     * items must be instances of Dictionary<String, Object>. The dictionary
+     * items must be instances of <tt>Dictionary&lt;String, Objecti&gt;</tt>. The dictionary
      * values will be written out in the order specified by the key sequence.
      * @param writer The writer to which data will be written.
      */
