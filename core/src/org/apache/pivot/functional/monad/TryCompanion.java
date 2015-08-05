@@ -72,7 +72,7 @@ public final class TryCompanion<T> {
 
     /**
      * Utility method to return the value contained.
-     * @param o the try instance
+     * @param t the try instance
      * @return the Success instance containing the value, or the Failure instance containing the exception
      */
     public T toValue(final Try<T> t) {

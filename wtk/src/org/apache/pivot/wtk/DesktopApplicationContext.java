@@ -794,7 +794,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     /**
-     * Gets the window hosting the specified Display and makes it visible.</br>
+     * Gets the window hosting the specified Display and makes it visible.<br>
      * This will cause a visible {@link SplashScreen} to be closed.<br> It is
      * intended to be called one time when the Pivot application has initialized
      * its UI and the SplashScreen is ready to be dismissed, but can be safely

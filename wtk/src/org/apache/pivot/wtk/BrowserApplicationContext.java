@@ -42,9 +42,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
      * <li><tt>application_class_name</tt> - the class name of the application
      * to launch.</li> <li><tt>startup_properties</tt> - startup properties to
      * be passed to the application. Properties use HTTP query string syntax;
-     * e.g. "a=1&b=2".</li> <li><tt>system_properties</tt> - system properties
+     * e.g. "a=1&amp;b=2".</li> <li><tt>system_properties</tt> - system properties
      * to set at startup. Properties use HTTP query string syntax; e.g.
-     * "a=1&b=2" (trusted applets only).</li> </ul>
+     * "a=1&amp;b=2" (trusted applets only).</li> </ul>
      */
     public static final class HostApplet extends Applet {
         private static final long serialVersionUID = -7710026348576806673L;

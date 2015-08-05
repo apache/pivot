@@ -2222,7 +2222,7 @@ public abstract class Component implements ConstrainedVisual {
      * Returns the tooltip's mode for wrapping its text.
      *
      * @return <tt>true</tt> if the tooltip text wrap mode is enabled;
-     * </tt>false</tt> if not.
+     * <tt>false</tt> if not.
      */
     public boolean getTooltipWrapText() {
         return tooltipWrapText;
@@ -2246,7 +2246,7 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Tells whether or not this component is fully opaque when painted.
      *
-     * @return <tt>true</tt> if this component is opaque; </tt>false</tt> if any
+     * @return <tt>true</tt> if this component is opaque; <tt>false</tt> if any
      * part of it is transparent or translucent.
      */
     public boolean isOpaque() {

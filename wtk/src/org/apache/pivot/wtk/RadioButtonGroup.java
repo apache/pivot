@@ -31,8 +31,8 @@ import org.apache.pivot.wtk.Keyboard.Modifier;
 /**
  * Extension of {@link ButtonGroup} providing keyboard navigation within the
  * group and modified focus navigation that treats the group as a single
- * focusable entity.<br><br> {@link KeyCode#UP UP} & {@link KeyCode#LEFT LEFT}
- * Select the previous button<br> {@link KeyCode#DOWN DOWN} &
+ * focusable entity.<br><br> {@link KeyCode#UP UP} &amp; {@link KeyCode#LEFT LEFT}
+ * Select the previous button<br> {@link KeyCode#DOWN DOWN} &amp;
  * {@link KeyCode#RIGHT RIGHT} Select the next button<br> {@link KeyCode#HOME
  * HOME} Select the first button<br> {@link KeyCode#END END} Select the last
  * button<br><br> (Note that only {@link Component#isFocusable() focusable}

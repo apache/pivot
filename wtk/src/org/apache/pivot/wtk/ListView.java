@@ -187,20 +187,20 @@ public class ListView extends Component {
      */
     public interface ItemStateBindMapping extends ItemBindMapping {
         /**
-         * Returns the {@link Button$State} for the given item during a
+         * Returns the {@link Button.State} for the given item during a
          * {@link Component#load(Object)} operation.
          *
          * @param item The list item whose state we need.
-         * @return The {@link Button$State} for the given item.
+         * @return The {@link Button.State} for the given item.
          */
         public Button.State getState(Object item);
 
         /**
-         * Sets the {@link Button$State} for the given item during a
+         * Sets the {@link Button.State} for the given item during a
          * {@link Component#store(Object)} operation.
          *
          * @param item The list item whose state we are going to set.
-         * @param state The {@link Button$State} for the given item.
+         * @param state The {@link Button.State} for the given item.
          */
         public void setState(Object item, Button.State state);
     }
@@ -1263,7 +1263,7 @@ public class ListView extends Component {
     /**
      * Returns an item's checked state.
      * <p> For a tri-state checkmark, if the {@link #checkmarksMixedAsChecked} flag
-     * is set, this method returns <tt>true</tt> if the state is {@link Button$State#MIXED}.
+     * is set, this method returns <tt>true</tt> if the state is {@link Button.State#MIXED}.
      *
      * @param index
      */
