@@ -358,7 +358,7 @@ public abstract class Transition {
     }
 
     /**
-     * Tell if the theme has transitions enabled.<br/> Usually this means that (if false) any
+     * Tell if the theme has transitions enabled.<br> Usually this means that (if false) any
      * effect/transition will not be drawn.
      *
      * @return true if enabled (default), false otherwise

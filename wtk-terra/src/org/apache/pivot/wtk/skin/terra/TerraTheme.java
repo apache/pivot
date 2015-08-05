@@ -443,7 +443,7 @@ public final class TerraTheme extends Theme {
     }
 
     /**
-     * Tell if the theme is dark.<br/> Usually this means that (if true) any
+     * Tell if the theme is dark.<br> Usually this means that (if true) any
      * color will be transformed in the opposite way (brightening instead of
      * darkening, and darkening instead of brightening).
      *
@@ -455,7 +455,7 @@ public final class TerraTheme extends Theme {
     }
 
     /**
-     * Tell if the theme is flat.<br/> Usually this means that (if true) any
+     * Tell if the theme is flat.<br> Usually this means that (if true) any
      * border/shadow will not be drawn.
      *
      * @return true if flat, false otherwise (default)
@@ -466,7 +466,7 @@ public final class TerraTheme extends Theme {
     }
 
     /**
-     * Tell if the theme has transitions enabled.<br/> Usually this means that (if false) any
+     * Tell if the theme has transitions enabled.<br> Usually this means that (if false) any
      * effect/transition will not be drawn.
      *
      * @return true if enabled (default), false otherwise

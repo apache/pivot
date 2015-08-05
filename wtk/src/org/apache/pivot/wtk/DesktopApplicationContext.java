@@ -795,7 +795,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Gets the window hosting the specified Display and makes it visible.</br>
-     * This will cause a visible {@link SplashScreen} to be closed.<br/> It is
+     * This will cause a visible {@link SplashScreen} to be closed.<br> It is
      * intended to be called one time when the Pivot application has initialized
      * its UI and the SplashScreen is ready to be dismissed, but can be safely
      * called regardless of whether there is now, or used to be, a visible
@@ -889,10 +889,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Utility method to make it easier to define <tt>main()</tt> entry-points
-     * into applications.<br/> This is useful if application instance has
+     * into applications.<br> This is useful if application instance has
      * already been created, for example from a scripting environment and I set
      * some external properties in the application for later reuse, so I must
-     * use that instance.<br/> But it's important to NOT call usual methods of
+     * use that instance.<br> But it's important to NOT call usual methods of
      * application lifecycle before passing it here, to avoid side effects.
      *
      * @param applicationInstance an instance of Application entry point

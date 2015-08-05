@@ -31,30 +31,30 @@ import org.apache.pivot.wtk.Keyboard.Modifier;
 /**
  * Extension of {@link ButtonGroup} providing keyboard navigation within the
  * group and modified focus navigation that treats the group as a single
- * focusable entity.<br/><br/> {@link KeyCode#UP UP} & {@link KeyCode#LEFT LEFT}
- * Select the previous button<br/> {@link KeyCode#DOWN DOWN} &
- * {@link KeyCode#RIGHT RIGHT} Select the next button<br/> {@link KeyCode#HOME
- * HOME} Select the first button<br/> {@link KeyCode#END END} Select the last
- * button<br/><br/> (Note that only {@link Component#isFocusable() focusable}
- * buttons are considered when searching for a Button to select)<br/><br/> When
+ * focusable entity.<br><br> {@link KeyCode#UP UP} & {@link KeyCode#LEFT LEFT}
+ * Select the previous button<br> {@link KeyCode#DOWN DOWN} &
+ * {@link KeyCode#RIGHT RIGHT} Select the next button<br> {@link KeyCode#HOME
+ * HOME} Select the first button<br> {@link KeyCode#END END} Select the last
+ * button<br><br> (Note that only {@link Component#isFocusable() focusable}
+ * buttons are considered when searching for a Button to select)<br><br> When
  * a button within the group is focused and key is typed, an attempt is made to
  * find the next button (default) or previous button (when the SHIFT modifier is
  * pressed) whose renderer text starts with the typed character. This search
  * will always behave as if the <code>circular</code> property were
- * set.<br/><br/> By default, {@link KeyCode#TAB TAB} and {@link KeyCode#TAB
+ * set.<br><br> By default, {@link KeyCode#TAB TAB} and {@link KeyCode#TAB
  * SHIFT+TAB} key presses will transfer focus out of the group (forwards or
  * backwards respectively). This is managed by the
  * {@link #setIntraGroupFocusTransferEnabled(boolean)
- * intraGroupFocusTransferEnabled} property.<br/><br/> The
+ * intraGroupFocusTransferEnabled} property.<br><br> The
  * {@link #setCircular(boolean) circular} property can be enabled to allow the
  * selection to transfer seamlessly from one end of the group to the other.
  * (i.e. holding down an arrow key will cycle through all focusable buttons)
- * <br/><br/> Note that due to the conflicting return types of the
+ * <br><br> Note that due to the conflicting return types of the
  * <code>add(T)</code> and <code>remove(T)</code> methods in the
  * {@link Group#add(Object) Group} and {@link Sequence#add(Object) Sequence}
  * interfaces, this class cannot actually implement
  * <code>Sequence&lt;Button&gt;</code>, although most of the same methods are
- * implemented.<br/>
+ * implemented.<br>
  */
 public class RadioButtonGroup extends ButtonGroup {
 
@@ -88,9 +88,9 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * ComponentKeyListener to be applied to all buttons as they are added to
-     * the group.<br/><br/> At least one button in the group must be focused for
+     * the group.<br><br> At least one button in the group must be focused for
      * this listener to be executed, but that won't necessarily be a selected
-     * button.<br/> This also means that the group will not be empty, although
+     * button.<br> This also means that the group will not be empty, although
      * some of the buttons contained within may not be focusable, or even
      * visible.
      */
@@ -148,7 +148,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
         /**
          * Attempt to jump to the button whose rendered text begins with the
-         * typed character.<br/>
+         * typed character.<br>
          */
         @Override
         public boolean keyTyped(Component component, char character) {
@@ -198,7 +198,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * Ensure that all buttons in this group have the custom
-     * ComponentKeyListener.<br/> This relies on the logic within ButtonGroup to
+     * ComponentKeyListener.<br> This relies on the logic within ButtonGroup to
      * prevent duplicates.
      */
     private final ButtonGroupListener buttonGroupListener = new ButtonGroupListener.Adapter() {
@@ -242,9 +242,9 @@ public class RadioButtonGroup extends ButtonGroup {
      * {@link RadioButtonGroup#selectPreviousButton(Button) previous} or
      * {@link RadioButtonGroup#selectNextButton(Button) next} focusable button
      * will not stop when the group's lower or upper bounds (respectively) are
-     * reached.<br/> Instead, the search will 'wrap' and continue from the
+     * reached.<br> Instead, the search will 'wrap' and continue from the
      * opposite bound until each button in the entire group has been tested for
-     * inclusion. <br/><br/> Defaults to <code>false</code>
+     * inclusion. <br><br> Defaults to <code>false</code>
      */
     public boolean isCircular() {
         return circular;
@@ -255,7 +255,7 @@ public class RadioButtonGroup extends ButtonGroup {
      * {@link RadioButtonGroup#selectPreviousButton(Button) previous} or
      * {@link RadioButtonGroup#selectNextButton(Button) next} focusable button
      * will not stop when the group's lower or upper bounds (respectively) are
-     * reached.<br/> Instead, the search will 'wrap' and continue from the
+     * reached.<br> Instead, the search will 'wrap' and continue from the
      * opposite bound until each button in the entire group has been tested for
      * inclusion.
      */
@@ -265,7 +265,7 @@ public class RadioButtonGroup extends ButtonGroup {
 
     /**
      * When true, TAB and SHIFT+TAB transfer focus out of the RadioButtonGroup.
-     * <br/> Defaults to <code>false</code>
+     * <br> Defaults to <code>false</code>
      */
     public boolean isIntraGroupFocusTransferEnabled() {
         return intraGroupFocusTransferEnabled;
