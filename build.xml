@@ -218,12 +218,16 @@ limitations under the License.
                     <attribute name="Implementation-Title" value="Apache Pivot @{title}"/>
                     <attribute name="Implementation-Version" value="${version}"/>
                     <attribute name="Permissions" value="${permissions}"/>
+                    <attribute name="Codebase" value="*"/>
+                    <attribute name="Caller-Allowable-Codebase" value="*"/>
+                    <attribute name="Application-Library-Allowable-Codebase" value="*"/>
                 </manifest>
                 <fileset dir="@{project}/${folder.bin}">
                     <exclude name="**/test/**"/>
                 </fileset>
                 <fileset dir="@{project}/src">
                     <exclude name="**/*.java"/>
+                    <exclude name="**/*.bak"/>
                     <exclude name="**/package.html"/>
                 </fileset>
             </jar>
@@ -251,6 +255,10 @@ limitations under the License.
                     <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                     <attribute name="Implementation-Title" value="Apache Pivot @{title}"/>
                     <attribute name="Implementation-Version" value="${version}"/>
+                    <attribute name="Permissions" value="${permissions}"/>
+                    <attribute name="Codebase" value="*"/>
+                    <attribute name="Caller-Allowable-Codebase" value="*"/>
+                    <attribute name="Application-Library-Allowable-Codebase" value="*"/>
                 </manifest>
                 <fileset dir="@{jarFileset}">
                     <include name="LICENSE"/>
@@ -767,6 +775,7 @@ limitations under the License.
             <classes dir="demos-server/${folder.bin}"/>
             <classes dir="demos-server/src">
                 <exclude name="**/*.java"/>
+                <exclude name="**/*.bak"/>
                 <exclude name="**/package.html"/>
             </classes>
             <lib dir="${folder.lib}">
@@ -833,6 +842,7 @@ limitations under the License.
             <classes dir="tutorials-server/${folder.bin}"/>
             <classes dir="tutorials-server/src">
                 <exclude name="**/*.java"/>
+                <exclude name="**/*.bak"/>
                 <exclude name="**/package.html"/>
             </classes>
             <lib dir="${folder.lib}">
