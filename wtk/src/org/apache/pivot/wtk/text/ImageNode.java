@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Node representing an image.
  */
-public class ImageNode extends Node {
+public class ImageNode extends Block {
     private static class ImageNodeListenerList extends ListenerList<ImageNodeListener> implements
         ImageNodeListener {
         @Override
@@ -128,7 +128,7 @@ public class ImageNode extends Node {
     }
 
     @Override
-    public Node getRange(int offset, int characterCount) {
+    public Element getRange(int offset, int characterCount) {
         if (offset < 0 || offset > 1) {
             throw new IndexOutOfBoundsException();
         }
@@ -141,7 +141,7 @@ public class ImageNode extends Node {
     }
 
     @Override
-    public Node duplicate(boolean recursive) {
+    public Element duplicate(boolean recursive) {
         return new ImageNode(this);
     }
 

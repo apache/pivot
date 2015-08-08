@@ -24,6 +24,12 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.HyperlinkButton;
+import org.apache.pivot.wtk.TextPane;
+import org.apache.pivot.wtk.text.ComponentNode;
+import org.apache.pivot.wtk.text.Document;
+import org.apache.pivot.wtk.text.ImageNode;
+import org.apache.pivot.wtk.text.Paragraph;
+import org.apache.pivot.wtk.text.TextNode;
 
 
 public class HyperlinkButtonTest extends Application.Adapter {
@@ -37,11 +43,25 @@ public class HyperlinkButtonTest extends Application.Adapter {
 
         HyperlinkButton button1 = new HyperlinkButton("http://pivot.apache.org");
         HyperlinkButton button2 = new HyperlinkButton("Apache website", "http://apache.org");
-        BoxPane bp = new BoxPane(Orientation.VERTICAL);
-        bp.add(button1);
-        bp.add(button2);
+        TextPane textPane = new TextPane();
+        Document document = new Document();
+        TextNode text1 = new TextNode("Link to the Apache Pivot site: ");
+        TextNode text2 = new TextNode("Main Apache Software Foundation website: ");
+        ComponentNode compNode1 = new ComponentNode(button1);
+        ComponentNode compNode2 = new ComponentNode(button2);
+        Paragraph para1 = new Paragraph();
+        para1.add(text1);
+        document.add(para1);
+        document.add(compNode1);
+        Paragraph para2 = new Paragraph();
+        para2.add(text2);
+        document.add(para2);
+        document.add(compNode2);
+        ImageNode image1 = new ImageNode("/org/apache/pivot/tests/house.png");
+        document.add(image1);
+        textPane.setDocument(document);
 
-        frame.setContent(bp);
+        frame.setContent(textPane);
 
         frame.open(display);
     }

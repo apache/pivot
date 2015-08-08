@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.Component;
 /**
  * Node representing a live pivot component.
  */
-public class ComponentNode extends Node {
+public class ComponentNode extends Block {
 
     private static class ComponentNodeListenerList extends ListenerList<ComponentNodeListener>
         implements ComponentNodeListener {
@@ -83,7 +83,7 @@ public class ComponentNode extends Node {
     }
 
     @Override
-    public Node getRange(int offset, int characterCount) {
+    public Element getRange(int offset, int characterCount) {
         if (offset < 0 || offset > 1) {
             throw new IndexOutOfBoundsException();
         }
@@ -96,7 +96,7 @@ public class ComponentNode extends Node {
     }
 
     @Override
-    public Node duplicate(boolean recursive) {
+    public Element duplicate(boolean recursive) {
         return new ComponentNode(this);
     }
 
