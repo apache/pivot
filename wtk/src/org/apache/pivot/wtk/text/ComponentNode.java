@@ -17,7 +17,14 @@
 package org.apache.pivot.wtk.text;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.TextArea;
+import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.TextPane;
+import org.apache.pivot.wtk.content.ButtonData;
 
 /**
  * Node representing a live pivot component.
@@ -62,14 +69,51 @@ public class ComponentNode extends Block {
         }
     }
 
+    public String getText() {
+        return getText(this.component);
+    }
+
+    private String getText(Component comp) {
+        if (comp instanceof TextInput) {
+            return ((TextInput)comp).getText();
+        } else if (comp instanceof TextArea) {
+            return ((TextArea)comp).getText();
+        } else if (comp instanceof TextPane) {
+            return ((TextPane)comp).getText();
+        } else if (comp instanceof Label) {
+            return ((Label)comp).getText();
+        } else if (comp instanceof Button) {
+            Object buttonData = ((Button)comp).getButtonData();
+            if (buttonData instanceof ButtonData) {
+                return ((ButtonData)buttonData).getText();
+            } else if (buttonData instanceof String) {
+                return (String)buttonData;
+            } else {
+                return buttonData.toString();
+            }
+        } else if (comp instanceof Container) {
+            StringBuilder buf = new StringBuilder();
+            for (Component child : (Container)comp) {
+                buf.append(getText(child));
+            }
+            return buf.toString();
+        }
+        return "";
+    }
+
     @Override
     public char getCharacterAt(int offset) {
-        return 0x00;
+        String componentText = getText();
+        if (offset < 0 || offset >= componentText.length()) {
+            throw new IndexOutOfBoundsException();
+        }
+        return componentText.charAt(offset);
     }
 
     @Override
     public int getCharacterCount() {
-        return 1;
+        String componentText = getText();
+        return componentText.length();
     }
 
     @Override
@@ -84,11 +128,13 @@ public class ComponentNode extends Block {
 
     @Override
     public Element getRange(int offset, int characterCount) {
-        if (offset < 0 || offset > 1) {
+        // Note: only supports getting the complete range of text
+        String componentText = getText();
+        if (offset < 0 || offset >= componentText.length()) {
             throw new IndexOutOfBoundsException();
         }
 
-        if (characterCount != 1) {
+        if (characterCount != componentText.length()) {
             throw new IllegalArgumentException("Invalid characterCount.");
         }
 

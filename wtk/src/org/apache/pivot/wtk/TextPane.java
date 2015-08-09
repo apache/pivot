@@ -705,6 +705,8 @@ public class TextPane extends Container {
         for (Node node : element) {
             if (node instanceof TextNode) {
                 text.append(((TextNode) node).getCharacters());
+            } else if (node instanceof ComponentNode) {
+                text.append(((ComponentNode) node).getText());
             } else if (node instanceof Element) {
                 addToText(text, (Element) node);
             }

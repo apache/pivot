@@ -138,7 +138,11 @@ public class PlainTextSerializer implements Serializer<Document> {
 
         BufferedWriter bufferedWriter = new BufferedWriter(writer, BUFFER_SIZE);
 
-        if (object instanceof Element) {
+        if (object instanceof ComponentNode) {
+            ComponentNode compNode = (ComponentNode) object;
+            bufferedWriter.write(compNode.getText());
+            bufferedWriter.newLine();
+        } else if (object instanceof Element) {
             Element element = (Element) object;
 
             for (Node node : element) {
