@@ -25,11 +25,13 @@ import java.awt.Graphics2D;
 public interface Visual {
     /**
      * Returns the visual's width.
+     * @return Current width of this visual.
      */
     public int getWidth();
 
     /**
      * Returns the visual's height.
+     * @return Current height of this visual.
      */
     public int getHeight();
 

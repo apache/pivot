@@ -150,6 +150,7 @@ public interface List<T> extends Sequence<T>, Collection<T> {
 
     /**
      * Returns the list listener list.
+     * @return The list of listeners for this list.
      */
     public ListenerList<ListListener<T>> getListListeners();
 }

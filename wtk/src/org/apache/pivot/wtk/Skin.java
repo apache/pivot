@@ -52,6 +52,7 @@ public interface Skin extends ConstrainedVisual {
 
     /**
      * Returns the component with which a skin is associated.
+     * @return This skin's associated component.
      */
     public Component getComponent();
 

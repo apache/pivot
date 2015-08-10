@@ -528,6 +528,7 @@ public interface Sequence<T> {
      * Retrieves the item at the given index.
      *
      * @param index The index of the item to retrieve.
+     * @return The item at this index in the sequence.
      */
     public T get(int index);
 

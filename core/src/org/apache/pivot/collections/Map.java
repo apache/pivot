@@ -93,6 +93,7 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
 
     /**
      * Returns the number of entries in the map.
+     * @return Current number of map entries.
      */
     public int getCount();
 
@@ -104,6 +105,7 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
 
     /**
      * Returns the map listener collection.
+     * @return Current list of listeners on this map.
      */
     public ListenerList<MapListener<K, V>> getMapListeners();
 }
