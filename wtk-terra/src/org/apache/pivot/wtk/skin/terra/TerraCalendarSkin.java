@@ -431,7 +431,8 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         // Year spinner
         yearSpinner = new Spinner();
-        yearSpinner.setSpinnerData(new NumericSpinnerData(0, Short.MAX_VALUE));
+        yearSpinner.setSpinnerData(new NumericSpinnerData(CalendarDate.getMinimumSupportedYear(),
+                                                          CalendarDate.getMaximumSupportedYear()));
 
         yearSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener.Adapter() {
             @Override
@@ -502,7 +503,7 @@ public class TerraCalendarSkin extends CalendarSkin {
                     // result of the user toggling the date button (as opposed
                     // to changing the month or year), clear the selection
                     if (selectedDate == null
-                        || (selectedDate.year == yearSpinner.getSelectedIndex()
+                        || (selectedDate.year == ((Integer)yearSpinner.getSelectedItem())
                             && selectedDate.month == monthSpinner.getSelectedIndex())) {
                         calendar.setSelectedDate((CalendarDate)null);
                     }
@@ -545,7 +546,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         Calendar calendar = (Calendar)component;
         calendar.add(calendarTablePane);
 
-        yearSpinner.setSelectedIndex(calendar.getYear());
+        yearSpinner.setSelectedItem(calendar.getYear());
         monthSpinner.setSelectedIndex(calendar.getMonth());
         updateLabels();
         updateCalendar();
@@ -620,7 +621,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         Filter<CalendarDate> disabledDateFilter = calendar.getDisabledDateFilter();
 
         monthSpinner.setSelectedIndex(month);
-        yearSpinner.setSelectedIndex(year);
+        yearSpinner.setSelectedItem(year);
 
         // Determine the first and last days of the month
         Locale locale = calendar.getLocale();
@@ -938,7 +939,7 @@ public class TerraCalendarSkin extends CalendarSkin {
     // Calendar events
     @Override
     public void yearChanged(Calendar calendar, int previousYear) {
-        yearSpinner.setSelectedIndex(calendar.getYear());
+        yearSpinner.setSelectedItem(calendar.getYear());
         updateCalendar();
     }
 

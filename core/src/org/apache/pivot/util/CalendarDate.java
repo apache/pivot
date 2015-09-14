@@ -205,6 +205,26 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
     private static final Pattern PATTERN = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
 
     /**
+     * Return the minimum supported year. This is to help the {@link org.apache.pivot.wtk.CalendarButton}
+     * get the right range of years, which should be this value up to and including
+     * {@link #getMaximumSupportedYear}.
+     */
+    public static int getMinimumSupportedYear() {
+        // The test in the constructor is year <= GREGORIAN_CUTOVER_YEAR, so we must
+        // return +1 here as the minimum legal year.
+        return GREGORIAN_CUTOVER_YEAR + 1;
+    }
+
+    /**
+     * Return the maximum supported year. This is to help the {@link org.apache.pivot.wtk.CalendarButton}
+     * get the right range of years, which should be {@link #getMinimumSupportedYear}
+     * up to and including this value.
+     */
+    public static int getMaximumSupportedYear() {
+        return 9999;
+    }
+
+    /**
      * Creates a new <tt>CalendarDate</tt> representing the current day in the
      * default timezone and the default locale.
      */
