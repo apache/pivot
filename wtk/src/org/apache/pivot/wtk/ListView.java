@@ -876,6 +876,10 @@ public class ListView extends Component {
      * @return
      * The ranges that were actually set.
      *
+     * @throws
+     * IllegalArgumentException if the range string is {@code null} or
+     * if it can't be parsed as a JSON list.
+     *
      * @see #setSelectedRanges(Sequence)
      */
     public final Sequence<Span> setSelectedRanges(String selectedRanges) {
@@ -953,6 +957,9 @@ public class ListView extends Component {
      *
      * @return
      * The ranges that were added to the selection.
+     *
+     * @throws
+     * IllegalStateException if the {@code ListView} is not in multi-selection mode.
      */
     public Sequence<Span> addSelectedRange(int start, int end) {
         if (selectMode != SelectMode.MULTI) {
@@ -986,6 +993,9 @@ public class ListView extends Component {
      *
      * @return
      * The ranges that were added to the selection.
+     *
+     * @throws
+     * IllegalArgumentException if the range is {@code null}.
      */
     public Sequence<Span> addSelectedRange(Span range) {
         if (range == null) {
@@ -1021,6 +1031,9 @@ public class ListView extends Component {
      *
      * @return
      * The ranges that were removed from the selection.
+     *
+     * @throws
+     * IllegalStateException if the {@code ListView} is not in multi-selection mode.
      */
     public Sequence<Span> removeSelectedRange(int start, int end) {
         if (selectMode != SelectMode.MULTI) {
@@ -1191,10 +1204,10 @@ public class ListView extends Component {
     }
 
     /**
-     * Enables or disabled checkmarks. Clears the check state if the check
+     * Enables or disables checkmarks. Clears the check state if the check
      * mode has changed (but does not fire any check state change events).
      *
-     * @param checkmarksEnabled
+     * @param checkmarksEnabled Whether checkmarks are enabled for each item.
      */
     public void setCheckmarksEnabled(boolean checkmarksEnabled) {
         if (this.checkmarksEnabled != checkmarksEnabled) {
@@ -1212,7 +1225,7 @@ public class ListView extends Component {
     /**
      * Returns an item's checked state.
      *
-     * @param index
+     * @param index Index of item to interrogate.
      */
     public boolean isItemChecked(int index) {
         return (ArrayList.binarySearch(checkedIndexes, index) >= 0);
@@ -1221,8 +1234,9 @@ public class ListView extends Component {
     /**
      * Sets an item's checked state.
      *
-     * @param index
-     * @param checked
+     * @param index Index of item.
+     * @param checked New value for the item's <tt>checked</tt> state.
+     * @throws IllegalStateException if checkmarks are not enabled.
      */
     public void setItemChecked(int index, boolean checked) {
         if (!checkmarksEnabled) {
@@ -1263,14 +1277,15 @@ public class ListView extends Component {
     }
 
     /**
-     * Tells whether or not an item's checkmark is disabled.
+     * Tells whether or not an item's checkmark is disabled.  Queries the
+     * current disabled checkmark filter (if any).
      *
      * @param index
      * The index of the item whose disabled checkmark state is to be tested.
      *
      * @return
      * <tt>true</tt> if the item's checkmark is disabled; <tt>false</tt>
-     * otherwise.
+     * otherwise (such as if no disabled checkmark filter is set).
      */
     @SuppressWarnings("unchecked")
     public boolean isCheckmarkDisabled(int index) {
@@ -1291,7 +1306,7 @@ public class ListView extends Component {
      * their inclusion in this filter. If this filter is set to <tt>null</tt>,
      * all checkboxes will be interactive.
      * <p>
-     * <b>Note:</b> this filter is only relavent if
+     * <b>Note:</b> this filter is only relevant if
      * {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is set to true.
      *
      * @return
