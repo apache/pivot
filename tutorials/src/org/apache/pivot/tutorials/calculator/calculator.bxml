@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except in
+compliance with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<Window title="Calculator" 
+        maximized="true"
+        bxml:id="mainWindow"
+        xmlns:bxml="http://pivot.apache.org/bxml"
+        xmlns:content="org.apache.pivot.wtk.content"
+        xmlns="org.apache.pivot.wtk">
+    <actionMappings>
+        <Window.ActionMapping action="ZERO" keyStroke="N0" />
+        <Window.ActionMapping action="ONE" keyStroke="N1" />
+        <Window.ActionMapping action="TWO" keyStroke="N2" />
+        <Window.ActionMapping action="THREE" keyStroke="N3" />
+        <Window.ActionMapping action="FOUR" keyStroke="N4" />
+        <Window.ActionMapping action="FIVE" keyStroke="N5" />
+        <Window.ActionMapping action="SIX" keyStroke="N6" />
+        <Window.ActionMapping action="SEVEN" keyStroke="N7" />
+        <Window.ActionMapping action="EIGHT" keyStroke="N8" />
+        <Window.ActionMapping action="NINE" keyStroke="N9" />
+        <Window.ActionMapping action="DOT" keyStroke="PERIOD" />
+        <Window.ActionMapping action="ADD" keyStroke="PLUS" />
+        <Window.ActionMapping action="ADD" keyStroke="ADD" />
+        <Window.ActionMapping action="SUBTRACT" keyStroke="MINUS" />
+        <Window.ActionMapping action="SUBTRACT" keyStroke="SUBTRACT" />
+        <Window.ActionMapping action="MULTIPLY" keyStroke="MULTIPLY" />
+        <Window.ActionMapping action="MULTIPLY" keyStroke="X" />
+        <Window.ActionMapping action="MULTIPLY" keyStroke="ASTERISK" />
+        <Window.ActionMapping action="DIVIDE" keyStroke="DIVIDE" />
+        <Window.ActionMapping action="DIVIDE" keyStroke="SLASH" />
+        <Window.ActionMapping action="EQUALS" keyStroke="EQUALS" />
+        <Window.ActionMapping action="EQUALS" keyStroke="ENTER" />
+        <Window.ActionMapping action="BACKSPACE" keyStroke="BACKSPACE" />
+        <Window.ActionMapping action="CLEAR" keyStroke="C" />
+        <Window.ActionMapping action="QUIT" keyStroke="Q" />
+        <Window.ActionMapping action="QUIT" keyStroke="Alt-F4" />
+        <Window.ActionMapping action="QUIT" keyStroke="Cmd-Q" />
+    </actionMappings>
+    <TablePane bxml:id="mainTablePane">
+        <columns>
+            <TablePane.Column width="1*"/>
+        </columns>
+        <rows>
+            <TablePane.Row height="-1">
+                <TablePane>
+                    <columns>
+                        <TablePane.Column width="-1"/>
+                        <TablePane.Column width="1*"/>
+                    </columns>
+                    <rows>
+                        <TablePane.Row height="-1">
+                            <BoxPane styles="{horizontalAlignment:'left',backgroundColor:'black'}">
+                                <PushButton bxml:id="settingsButton">
+                                    <content:ButtonData icon="@asterisk_orange.png"/>
+                                </PushButton>
+                            </BoxPane>
+                            <BoxPane styles="{padding:6,horizontalAlignment:'right',backgroundColor:'black'}">
+                                <Label bxml:id="resultText" text="0" styleName="resultLabel"/>
+                            </BoxPane>
+                        </TablePane.Row>
+                    </rows>
+                </TablePane>
+            </TablePane.Row>
+            <TablePane.Row height="-1">
+                <TablePane>
+                    <columns>
+                        <TablePane.Column width="1*"/>
+                        <TablePane.Column width="1*"/>
+                        <TablePane.Column width="1*"/>
+                        <TablePane.Column width="1*"/>
+                    </columns>
+                    <rows>
+                        <TablePane.Row height="-1">
+                            <PushButton bxml:id="clearButton" buttonData="C" action="CLEAR" styleName="greyButton"/>
+                            <PushButton bxml:id="changeSignButton" buttonData="+/&#x2212;" action="NEGATE" styleName="greyButton"/>
+                            <PushButton bxml:id="percentButton" buttonData="%%" action="PERCENT" styleName="greyButton"/>
+                            <PushButton bxml:id="divideButton" buttonData="&#x00F7;" action="DIVIDE" styleName="orangeButton"/>
+                        </TablePane.Row>
+                        <TablePane.Row height="-1">
+                            <PushButton bxml:id="sevenButton" buttonData="7" action="SEVEN" styleName="whiteButton"/>
+                            <PushButton bxml:id="eightButton" buttonData="8" action="EIGHT" styleName="whiteButton"/>
+                            <PushButton bxml:id="nineButton" buttonData="9" action="NINE" styleName="whiteButton"/>
+                            <PushButton bxml:id="multiplyButton" buttonData="&#x00D7;" action="MULTIPLY" styleName="orangeButton"/>
+                        </TablePane.Row>
+                        <TablePane.Row height="-1">
+                            <PushButton bxml:id="fourButton" buttonData="4" action="FOUR" styleName="whiteButton"/>
+                            <PushButton bxml:id="fiveButton" buttonData="5" action="FIVE" styleName="whiteButton"/>
+                            <PushButton bxml:id="sixButton" buttonData="6" action="SIX" styleName="whiteButton"/>
+                            <PushButton bxml:id="minusButton" buttonData="&#x2212;" action="SUBTRACT" styleName="orangeButton"/>
+                        </TablePane.Row>
+                        <TablePane.Row height="-1">
+                            <PushButton bxml:id="oneButton" buttonData="1" action="ONE" styleName="whiteButton"/>
+                            <PushButton bxml:id="twoButton" buttonData="2" action="TWO" styleName="whiteButton"/>
+                            <PushButton bxml:id="threeButton" buttonData="3" action="THREE" styleName="whiteButton"/>
+                            <PushButton bxml:id="plusButton" buttonData="+" action="ADD" styleName="orangeButton"/>
+                        </TablePane.Row>
+                        <TablePane.Row height="-1">
+                            <PushButton TablePane.columnSpan="2" bxml:id="zeroButton" action="ZERO" buttonData="0" styleName="whiteButton"/>
+                            <TablePane.Filler/>
+                            <PushButton bxml:id="dotButton" buttonData="&#x2219;" action="DOT" styleName="whiteButton"/>
+                            <PushButton bxml:id="equalsButton" buttonData="=" action="EQUALS" styleName="orangeButton"/>
+                        </TablePane.Row>
+                    </rows>
+                </TablePane>
+            </TablePane.Row>
+        </rows>
+    </TablePane>
+</Window>
+

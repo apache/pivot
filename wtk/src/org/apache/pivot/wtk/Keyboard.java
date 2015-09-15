@@ -201,6 +201,8 @@ public final class Keyboard {
         public static final int N8 = KeyEvent.VK_8;
         public static final int N9 = KeyEvent.VK_9;
 
+        public static final int PERIOD = KeyEvent.VK_PERIOD;
+
         public static final int TAB = KeyEvent.VK_TAB;
         public static final int SPACE = KeyEvent.VK_SPACE;
         public static final int ENTER = KeyEvent.VK_ENTER;
@@ -243,6 +245,9 @@ public final class Keyboard {
         public static final int SUBTRACT = KeyEvent.VK_SUBTRACT;
         public static final int MULTIPLY = KeyEvent.VK_MULTIPLY;
         public static final int DIVIDE = KeyEvent.VK_DIVIDE;
+
+        public static final int SLASH = KeyEvent.VK_SLASH;
+        public static final int ASTERISK = KeyEvent.VK_ASTERISK;
 
         public static final int F1 = KeyEvent.VK_F1;
         public static final int F2 = KeyEvent.VK_F2;
