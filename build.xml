@@ -224,6 +224,9 @@ limitations under the License.
                 </manifest>
                 <fileset dir="@{project}/${folder.bin}">
                     <exclude name="**/test/**"/>
+                    <exclude name="**/*.bxml"/>
+                    <exclude name="**/*.json"/>
+                    <exclude name="**/*.png"/>
                 </fileset>
                 <fileset dir="@{project}/src">
                     <exclude name="**/*.java"/>
@@ -526,8 +529,8 @@ limitations under the License.
         </compile>
         <copy todir="tests/${folder.bin}">
             <fileset dir="tests/src" includes="**/*.bxml"/>
-            <fileset dir="tests/src" includes="**/*.png"/>
             <fileset dir="tests/src" includes="**/*.json"/>
+            <fileset dir="tests/src" includes="**/*.png"/>
         </copy>
     </target>
 
@@ -535,8 +538,8 @@ limitations under the License.
         <compile project="tutorials"/>
         <copy todir="tutorials/${folder.bin}">
             <fileset dir="tutorials/src" includes="**/*.bxml"/>
-            <fileset dir="tutorials/src" includes="**/*.png"/>
             <fileset dir="tutorials/src" includes="**/*.json"/>
+            <fileset dir="tutorials/src" includes="**/*.png"/>
         </copy>
     </target>
 
