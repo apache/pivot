@@ -84,10 +84,10 @@ public class Calculator
                         changeOperator(Operator.ADD);
                         return true;
                       case '%':
-                        ACTION.PERCENT.perform(comp);
+                        ((ActionDoer)ACTION.PERCENT).perform(comp);
                         return true;
                       case '\u007F':
-                        ACTION.BACKSPACE.perform(comp);
+                        ((ActionDoer)ACTION.BACKSPACE).perform(comp);
                         return true;
                       default:
                           return false;
