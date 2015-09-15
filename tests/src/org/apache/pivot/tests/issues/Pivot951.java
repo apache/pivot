@@ -39,8 +39,10 @@ public class Pivot951 extends Application.Adapter {
             public boolean mouseClick(Component component, Button button, int x, int y, int count) {
                 if (count == 1) {
                     System.out.println("Click!");
-                } else {
+                } else if (count == 2) {
                     System.out.println("Double Click!");
+                } else {
+                    System.out.println("Clicked " + count + " times!");
                 }
                 return true;
             }
