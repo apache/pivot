@@ -42,5 +42,13 @@
         padding : { top : 8, bottom : 8 },
     },
 
+    buttonBorderHighlight : {
+        borderColor : 'black'
+    },
+
+    buttonBorderNormal : {
+        borderColor : 7
+    }
+
 }
         

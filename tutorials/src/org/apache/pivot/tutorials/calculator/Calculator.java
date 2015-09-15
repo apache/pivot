@@ -56,9 +56,13 @@ public class Calculator
     private static StringBuilder resultBuffer = new StringBuilder("0");
     private static BigDecimal result = BigDecimal.ZERO;
     private static boolean seenDecimalPoint = false;
+    private static boolean clearingAll = false;
     private static BigDecimal accumulator = BigDecimal.ZERO;
     private static Operator currentOperator = null;
+    private static PushButton currentOperatorButton = null;
+    private static boolean justSeenOperator = false;
 
+    /** Instance variable so non-static components can be accessed from static methods. */
     private static Calculator instance;
 
     @Override
@@ -82,7 +86,6 @@ public class Calculator
                       case '%':
                         ACTION.PERCENT.perform(comp);
                         return true;
-                      case '\u0008':
                       case '\u007F':
                         ACTION.BACKSPACE.perform(comp);
                         return true;
@@ -91,6 +94,13 @@ public class Calculator
                     }
                 }
             });
+
+            // Hook up the operators with their buttons
+            Operator.ADD.setButton(plusButton);
+            Operator.SUBTRACT.setButton(minusButton);
+            Operator.MULTIPLY.setButton(multiplyButton);
+            Operator.DIVIDE.setButton(divideButton);
+            Operator.EQUALS.setButton(equalsButton);
 
             mainWindow.open(display);
             mainWindow.requestFocus();
@@ -107,7 +117,22 @@ public class Calculator
         instance.resultText.setText(resultBuffer.toString());
     }
 
+    private static void setClearAll(boolean all) {
+        instance.clearButton.setButtonData(all ? "AC" : "C");
+        clearingAll = all;
+    }
+
+    private static void setOperatorButton(boolean on) {
+        if (currentOperatorButton != null) {
+            currentOperatorButton.setStyleName(on ? "buttonBorderHighlight" : "buttonBorderNormal");
+        }
+    }
+
     private static void digit(char digit) {
+        setClearAll(false);
+        setOperatorButton(false);
+        justSeenOperator = false;
+
         switch (digit) {
           case '0':
           case '1':
@@ -140,7 +165,17 @@ public class Calculator
         SUBTRACT,
         MULTIPLY,
         DIVIDE,
-        EQUALS
+        EQUALS;
+
+        private PushButton button;
+
+        public void setButton(PushButton button) {
+            this.button = button;
+        }
+
+        public PushButton getButton() {
+            return this.button;
+        }
     }
 
     private static void changeOperator(Operator newOperator) {
@@ -149,9 +184,15 @@ public class Calculator
             accumulator = result;
             resultBuffer = new StringBuilder();
             seenDecimalPoint = false;
-            // TODO: highlight (somehow) the selected operator
-        }
-        else {
+            currentOperatorButton = currentOperator.getButton();
+            setOperatorButton(true);
+            justSeenOperator = true;
+        } else if (justSeenOperator) {
+            setOperatorButton(false);
+            currentOperator = newOperator;
+            currentOperatorButton = currentOperator.getButton();
+            setOperatorButton(true);
+        } else {
             // Perform the currentOperator function on accumulator x result
             switch (currentOperator) {
               case ADD:
@@ -168,11 +209,14 @@ public class Calculator
                 break;
             }
             if (newOperator == Operator.EQUALS) {
+                setOperatorButton(false);
                 currentOperator = null;
+                currentOperatorButton = null;
+                justSeenOperator = false;
                 accumulator = BigDecimal.ZERO;
-            }
-            else {
+            } else {
                 currentOperator = newOperator;
+                currentOperatorButton = currentOperator.getButton();
                 accumulator = result;
             }
             seenDecimalPoint = false;
@@ -313,7 +357,11 @@ public class Calculator
                     if (ch == '.') {
                         seenDecimalPoint = false;
                     }
-                    resultBuffer.deleteCharAt(resultBuffer.length() - 1);
+                    if (resultBuffer.length() == 1) {
+                        resultBuffer.setCharAt(0, '0');
+                    } else {
+                        resultBuffer.deleteCharAt(resultBuffer.length() - 1);
+                    }
                     instance.resultText.setText(resultBuffer.toString());
                 }
             }
@@ -323,8 +371,15 @@ public class Calculator
             public void perform(Component source) {
                 result = BigDecimal.ZERO;
                 seenDecimalPoint = false;
-                accumulator = BigDecimal.ZERO;
-                currentOperator = null;
+                justSeenOperator = false;
+                if (clearingAll) {
+                    accumulator = BigDecimal.ZERO;
+                    setOperatorButton(false);
+                    currentOperator = null;
+                    currentOperatorButton = null;
+                } else {
+                    setClearAll(true);
+                }
                 updateResult();
             }
         },
