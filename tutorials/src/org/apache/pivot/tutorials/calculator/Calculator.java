@@ -294,7 +294,14 @@ public class Calculator
         PERCENT {
             @Override
             public void perform(Component source) {
-                result = result.scaleByPowerOfTen(-2);
+                if (currentOperator == null ||
+                    currentOperator == Operator.MULTIPLY ||
+                    currentOperator == Operator.DIVIDE ||
+                    accumulator == null) {
+                    result = result.scaleByPowerOfTen(-2);
+                } else {
+                    result = accumulator.multiply(result, MC).scaleByPowerOfTen(-2);
+                }
                 updateResult();
             }
         },
