@@ -392,10 +392,13 @@ limitations under the License.
     </target>
 
 
-    <!-- Compile all classes (tests included) -->
+    <!-- Compile all classes (not including tests, because they depend on packaged .jar files) -->
     <target name="compile" description="Compiles all projects"
-        depends="environment-info, charts, core, demos, demos-server, tests, tutorials, tutorials-server, web, web-server, wtk, wtk-terra"/>
+        depends="environment-info, charts, core, demos, demos-server, tutorials, tutorials-server, web, web-server, wtk, wtk-terra"/>
 
+    <!-- Compile all classes (tests included) -->
+    <target name="compile-tests" description="Compiles tests after compiling everything else"
+        depends="compile, tests"/>
 
     <!-- Package JAR files -->
     <target name="package" description="Packages all projects into JAR files" depends="compile">
@@ -412,7 +415,7 @@ limitations under the License.
     </target>
 
     <!-- Package JAR file for tests, note that this could be needed only for interactive GUI Tests -->
-    <target name="package-tests" description="Packages only tests project into JAR files" depends="compile">
+    <target name="package-tests" description="Packages only tests project into JAR files" depends="compile-tests">
         <package project="tests" jarFile="${jar.tests}" title="Tests"/>
     </target>
 
@@ -439,7 +442,7 @@ limitations under the License.
     </target>
 
     <!-- Run unit tests -->
-    <target name="test" description="Executes unit tests" depends="compile">
+    <target name="test" description="Executes unit tests" depends="compile-tests">
         <test project="charts"/>
         <test project="core"/>
         <test project="demos"/>
@@ -522,12 +525,19 @@ limitations under the License.
             <fileset dir="wtk" includes="lib/**/*.jar"/>
         </compile>
         <copy todir="tests/${folder.bin}">
+            <fileset dir="tests/src" includes="**/*.bxml"/>
             <fileset dir="tests/src" includes="**/*.png"/>
+            <fileset dir="tests/src" includes="**/*.json"/>
         </copy>
     </target>
 
     <target name="tutorials" depends="core, wtk, web">
         <compile project="tutorials"/>
+        <copy todir="tutorials/${folder.bin}">
+            <fileset dir="tutorials/src" includes="**/*.bxml"/>
+            <fileset dir="tutorials/src" includes="**/*.png"/>
+            <fileset dir="tutorials/src" includes="**/*.json"/>
+        </copy>
     </target>
 
     <target name="tutorials-server" depends="core, web, web-server">
