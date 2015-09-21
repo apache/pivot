@@ -64,7 +64,7 @@ limitations under the License.
                 }
             %>
 
-            <jnlp spec="1.6+" codebase="<%= codebase %>" href="<%= href %>">
+            <jnlp spec="1.7+" codebase="<%= codebase %>" href="<%= href %>">
             ]]>
         </xsl:text>
 
@@ -92,12 +92,12 @@ limitations under the License.
 
 	<xsl:choose>
 		<xsl:when test="/document/properties/java_memory_options_huge">
-            <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"
+            <java version="1.7+" href="http://java.sun.com/products/autodl/j2se"
 				initial-heap-size="256M" max-heap-size="1024M"
 			/>
 		</xsl:when>
 		<xsl:otherwise>
-            <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+            <java version="1.7+" href="http://java.sun.com/products/autodl/j2se"/>
 		</xsl:otherwise>
 	</xsl:choose>
 

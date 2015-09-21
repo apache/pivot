@@ -4,7 +4,7 @@ Bundle-Name: Eclipse Plug-in for Apache Pivot
 Bundle-SymbolicName: org.apache.pivot.eclipse;singleton:=true
 Bundle-Version: 2.0
 Bundle-Vendor: Apache Software Foundation
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0",
  org.eclipse.ui;bundle-version="3.5.2",
  org.eclipse.swt;bundle-version="3.5.2",

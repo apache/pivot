@@ -156,7 +156,7 @@ limitations under the License.
                 parameters.system_properties = systemProperties.join("&amp;");
             </xsl:if>
 
-            deployJava.runApplet(attributes, parameters, "1.6");
+            deployJava.runApplet(attributes, parameters, "1.7");
         </script>
     </xsl:template>
 </xsl:stylesheet>

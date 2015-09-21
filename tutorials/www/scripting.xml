@@ -23,7 +23,7 @@ limitations under the License.
 
     <body>
         <p>
-            Because Pivot requires a minimum of Java 6 update 10, Pivot applications can take
+            Pivot applications can take
             advantage of the JVM scripting support provided by the <tt>javax.script</tt> package
             included with JDK versions 1.6 and later. While these APIs can be used on their own to
             script Pivot applications, Pivot includes platform support for easily embedding script
