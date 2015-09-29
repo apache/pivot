@@ -27,31 +27,33 @@ import org.apache.pivot.util.Resources;
  */
 public interface Resolvable {
     /**
-     * Returns's the serializer's namespace.
+     * Access the serializer's namespace.
+     * @return The namespace of the serializer (namely the mapping of
+     * names to values).
      */
     public Map<String, Object> getNamespace();
 
     /**
      * Sets the serializer's namespace. This is used for variable resolution.
      *
-     * @param namespace
+     * @param namespace The new namespace to use for this serializer.
      */
     public void setNamespace(Map<String, Object> namespace);
 
     /**
-     * Returns the serializer's location.
+     * @return The serializer's location.
      */
     public URL getLocation();
 
     /**
      * Sets the serializer's location. This is used for URL resolution.
      *
-     * @param location
+     * @param location Where we are to load resources for this serializer.
      */
     public void setLocation(URL location);
 
     /**
-     * Returns the serializer's resource bundle.
+     * @return The serializer's resource bundle.
      */
     public Resources getResources();
 
@@ -59,7 +61,7 @@ public interface Resolvable {
      * Sets the serializer's resource bundle. This is used for resource
      * resolution.
      *
-     * @param resources
+     * @param resources Resource bundle to use to resolve text resources.
      */
     public void setResources(Resources resources);
 }

@@ -144,6 +144,8 @@ public class BeanMonitor {
 
     /**
      * Returns the bean object that this monitor wraps.
+     *
+     * @return The object we are wrapping.
      */
     public Object getBean() {
         return bean;

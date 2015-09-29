@@ -172,6 +172,8 @@ public class BeanAdapter implements Map<String, Object> {
      * there is a "get" method but no corresponding "set" method).
      *
      * @param bean The bean object to wrap.
+     * @param ignoreReadOnlyProperties <tt>true</tt> if {@code final} or non-settable
+     * fields should be excluded from the dictionary, <tt>false</tt> to include all fields.
      */
     public BeanAdapter(Object bean, boolean ignoreReadOnlyProperties) {
         if (bean == null) {
@@ -455,6 +457,7 @@ public class BeanAdapter implements Map<String, Object> {
      * Returns the type of a property.
      *
      * @param key The property name.
+     * @return The real class type of this property.
      * @see #getType(Class, String)
      */
     public Class<?> getType(String key) {
@@ -465,6 +468,7 @@ public class BeanAdapter implements Map<String, Object> {
      * Returns the generic type of a property.
      *
      * @param key The property name.
+     * @return The generic type of this property.
      * @see #getGenericType(Class, String)
      */
     public Type getGenericType(String key) {
@@ -725,6 +729,7 @@ public class BeanAdapter implements Map<String, Object> {
      *
      * @param beanClass The bean class.
      * @param key The property name.
+     * @param valueType The type of the property.
      * @return The getter method, or <tt>null</tt> if the method does not exist.
      */
     public static Method getSetterMethod(final Class<?> beanClass, final String key,
@@ -800,9 +805,11 @@ public class BeanAdapter implements Map<String, Object> {
     /**
      * Coerces a value to a given type.
      *
-     * @param value
-     * @param type
+     * @param <T> The parametric type to coerce to.
+     * @param value The object to be coerced.
+     * @param type The type to coerce it to.
      * @return The coerced value.
+     * @throws IllegalArgumentException for all the possible other exceptions.
      */
     @SuppressWarnings("unchecked")
     public static <T> T coerce(Object value, Class<? extends T> type) {

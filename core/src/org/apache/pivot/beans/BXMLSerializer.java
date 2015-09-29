@@ -543,8 +543,16 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     /**
-     * Deserializes an object hierarchy from a BXML resource.
+     * Deserializes an object hierarchy from a BXML resource, and do not
+     * localize any text.
      *
+     * @param baseType The base type from which to access needed resources.
+     * @param resourceName Name of the BXML resource to deserialize.
+     * @return the top-level deserialized object.
+     * @throws IllegalArgumentException for <tt>null</tt> type or resource name or if
+     * the resource could not be found.
+     * @throws IOException for any error reading the BXML resource.
+     * @throws SerializationException for any other errors encountered deserializing the resource.
      * @see #readObject(Class, String, boolean)
      */
     public final Object readObject(Class<?> baseType, String resourceName) throws IOException,
@@ -565,6 +573,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * localized using the resource bundle specified by the base type.
      * Otherwise, it will not be localized, and any use of the resource
      * resolution operator will result in a serialization exception.
+     * @return the top-level deserialized object.
+     * @throws IllegalArgumentException for <tt>null</tt> type or resource name or if
+     * the resource could not be found.
+     * @throws IOException for any error reading the BXML resource.
+     * @throws SerializationException for any other errors encountered deserializing the resource.
      * @see #readObject(URL, Resources)
      */
     public final Object readObject(Class<?> baseType, String resourceName, boolean localize)
@@ -593,6 +606,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * {@link #setResources(Resources)} before calling this method.
      *
      * @param locationArgument The location of the BXML resource.
+     * @return The top-level deserialized object.
+     * @throws IOException for any error reading the BXML resource.
+     * @throws SerializationException for any other errors encountered deserializing the resource.
      * @see #readObject(URL, Resources)
      */
     public final Object readObject(URL locationArgument) throws IOException, SerializationException {
@@ -604,7 +620,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      *
      * @param locationArgument The location of the BXML resource.
      * @param resourcesArgument The resources that will be used to localize the
-     * deserialized resource. #see readObject(InputStream)
+     * deserialized resource.
+     * @return The top-level deserialized object.
+     * @throws IOException for any error reading the BXML resource.
+     * @throws SerializationException for any other errors encountered deserializing the resource.
+     * @see #readObject(InputStream)
      */
     public final Object readObject(URL locationArgument, Resources resourcesArgument)
         throws IOException, SerializationException {
@@ -1422,6 +1442,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * location where an error occurred (if the error was not an
      * XMLStreamException, which has its own
      * {@link XMLStreamException#getLocation} method).
+     * @return The current location in the XML stream.
      */
     public Location getCurrentLocation() {
         return xmlStreamReader.getLocation();
@@ -1448,6 +1469,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * Hook used for standardized reporting of exceptions during this process.
      * <p>Subclasses should override this method in order to do something besides
      * print to <tt>System.err</tt>.
+     * @param exception Whatever exception has been thrown during processing.
      */
     protected void reportException(Throwable exception) {
         String message = exception.getLocalizedMessage();
@@ -1517,7 +1539,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     /**
      * Applies BXML binding annotations to an object.
      *
-     * @param object
+     * @param object The object to bind BXML values to.
+     * @throws BindException If an error occurs during binding.
      * @see #bind(Object, Class)
      */
     public void bind(Object object) {
@@ -1533,9 +1556,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * reflection to set internal member variables. As a result, it may only be
      * called from trusted code.
      *
-     * @param object
-     * @param type
-     * @throws BindException If an error occurs during binding
+     * @param object The object to bind BXML values to.
+     * @param type The type of the object.
+     * @throws BindException If an error occurs during binding.
      */
     public void bind(Object object, Class<?> type) throws BindException {
         if (object == null) {
@@ -1595,6 +1618,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * such as dependency-injected construction.
      *
      * @param type The type of serializer being requested.
+     * @return The new serializer to use.
+     * @throws InstantiationException if an object of the given type cannot
+     * be instantiated.
+     * @throws IllegalAccessException if the class cannot be accessed in the
+     * current security environment.
      */
     protected Serializer<?> newIncludeSerializer(Class<? extends Serializer<?>> type)
         throws InstantiationException, IllegalAccessException {
@@ -1608,6 +1636,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * such as dependency-injected construction.
      *
      * @param type The type of object being requested.
+     * @return The newly created object.
+     * @throws InstantiationException if an object of the given type cannot
+     * be instantiated.
+     * @throws IllegalAccessException if the class cannot be accessed in the
+     * current security environment.
      */
     protected Object newTypedObject(Class<?> type) throws InstantiationException,
         IllegalAccessException {
@@ -1618,6 +1651,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * Gets a read-only version of the XML stream reader that's being used by
      * this serializer. Subclasses can use this to access information about the
      * current event.
+     * @return The read-only reader.
      */
     protected final XMLStreamReader getXMLStreamReader() {
         return new StreamReaderDelegate(xmlStreamReader) {
@@ -1643,6 +1677,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * extensions with MIME types, which are used to automatically determine an
      * appropriate serializer to use for an include based on file extension.
      *
+     * @return The map between file extensions and MIME types.
      * @see #getMimeTypes()
      */
     public static Map<String, String> getFileExtensions() {
@@ -1654,6 +1689,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * types with serializer classes. The serializer for a given MIME type will
      * be used to deserialize the data for an include that references the MIME
      * type.
+     * @return The map associating MIME types with serializers.
      */
     public static Map<String, Class<? extends Serializer<?>>> getMimeTypes() {
         return mimeTypes;

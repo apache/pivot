@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface IDProperty {
     /**
-     * The name of the ID property.
+     * @return The name of the ID property.
      */
     public String value();
 }

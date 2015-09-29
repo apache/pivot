@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface DefaultProperty {
     /**
-     * The name of the default property.
+     * @return The name of the default property.
      */
     public String value();
 }

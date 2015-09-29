@@ -32,6 +32,9 @@ public interface Serializer<T> {
      *
      * @param inputStream The data stream from which the object will be read.
      * @return The deserialized object.
+     * @throws IOException for any errors accessing or reading the object.
+     * @throws SerializationException for any formatting errors encountered
+     * while deserializing the object.
      */
     public T readObject(InputStream inputStream) throws IOException, SerializationException;
 
@@ -40,6 +43,9 @@ public interface Serializer<T> {
      *
      * @param object The object to serialize.
      * @param outputStream The data stream to which the object will be written.
+     * @throws IOException for any errors accessing or reading the object.
+     * @throws SerializationException for any formatting errors encountered
+     * while deserializing the object.
      */
     public void writeObject(T object, OutputStream outputStream) throws IOException,
         SerializationException;
@@ -50,6 +56,7 @@ public interface Serializer<T> {
      * @param object If provided, allows the serializer to attach parameters to
      * the returned MIME type containing more detailed information about the
      * data. If <tt>null</tt>, the base MIME type is returned.
+     * @return The MIME type of the current data.
      */
     public String getMIMEType(T object);
 }

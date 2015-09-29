@@ -23,8 +23,8 @@ public interface PropertyChangeListener {
     /**
      * Called when a Java bean property has changed.
      *
-     * @param bean
-     * @param propertyName
+     * @param bean The object in question.
+     * @param propertyName The name of the property that has changed.
      */
     public void propertyChanged(Object bean, String propertyName);
 }

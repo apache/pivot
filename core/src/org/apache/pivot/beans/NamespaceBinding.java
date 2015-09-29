@@ -34,7 +34,8 @@ public class NamespaceBinding {
         /**
          * Transforms a source value during a bind operation.
          *
-         * @param value
+         * @param value The object to transform.
+         * @return The transformed object.
          */
         public Object evaluate(Object value);
     }
@@ -150,49 +151,49 @@ public class NamespaceBinding {
     }
 
     /**
-     * Returns the namespace.
+     * @return The namespace.
      */
     public Map<String, Object> getNamespace() {
         return namespace;
     }
 
     /**
-     * Returns the path to the source property.
+     * @return The path to the source property.
      */
     public String getSourcePath() {
         return sourcePath;
     }
 
     /**
-     * Returns the source object.
+     * @return The source object.
      */
     public Object getSource() {
         return source;
     }
 
     /**
-     * Returns the name of the source property.
+     * @return The name of the source property.
      */
     public String getSourceKey() {
         return sourceKey;
     }
 
     /**
-     * Returns the path to the target property.
+     * @return The path to the target property.
      */
     public String getTargetPath() {
         return targetPath;
     }
 
     /**
-     * Returns the target object.
+     * @return The target object.
      */
     public Object getTarget() {
         return target;
     }
 
     /**
-     * Returns the name of the target property.
+     * @return The name of the target property.
      */
     public String getTargetKey() {
         return targetKey;
@@ -210,6 +211,8 @@ public class NamespaceBinding {
 
     /**
      * Returns the current source value with any bind mapping applied.
+     * @return The source value transformed by the bind mapping (if any), or
+     * if none, the source value itself.
      */
     public Object getTransformedSourceValue() {
         Object sourceValue = sourceMap.get(sourceKey);
@@ -217,7 +220,8 @@ public class NamespaceBinding {
     }
 
     /**
-     * Binds the source property to the target property.
+     * Binds the source property to the target property. That is, add the already set
+     * listeners to the source object's listener lists.
      */
     public void bind() {
         if (source instanceof Map<?, ?>) {
@@ -228,7 +232,8 @@ public class NamespaceBinding {
     }
 
     /**
-     * Unbinds the source property from the target property.
+     * Unbinds the source property from the target property. That is, remove the
+     * listeners from the source object's listener lists.
      */
     public void unbind() {
         if (source instanceof Map<?, ?>) {
