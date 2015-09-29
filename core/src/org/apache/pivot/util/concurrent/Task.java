@@ -183,7 +183,7 @@ public abstract class Task<V> {
     }
 
     /**
-     * Returns the executor service used to execute this task.
+     * @return The executor service used to execute this task.
      */
     public ExecutorService getExecutorService() {
         return executorService;
@@ -223,8 +223,9 @@ public abstract class Task<V> {
     }
 
     /**
-     * Returns the timeout value for this task.
+     * Return the timeout value for this task.
      *
+     * @return The timeout value.
      * @see #setTimeout(long)
      */
     public synchronized long getTimeout() {

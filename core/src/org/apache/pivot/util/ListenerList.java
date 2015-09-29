@@ -69,7 +69,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
     /**
      * Adds a listener to the list, if it has not previously been added.
      *
-     * @param listener
+     * @param listener New listener to add to the list.
      */
     public void add(T listener) {
         if (indexOf(listener) >= 0) {
@@ -88,7 +88,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
     /**
      * Removes a listener from the list, if it has previously been added.
      *
-     * @param listener
+     * @param listener The listener to remove from the list.
      */
     public void remove(T listener) {
         int index = indexOf(listener);
@@ -122,7 +122,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
     /**
      * Tests the existence of a listener in the list.
      *
-     * @param listener
+     * @param listener The listener to test.
      * @return <tt>true</tt> if the listener exists in the list; <tt>false</tt>,
      * otherwise.
      */
@@ -152,9 +152,9 @@ public abstract class ListenerList<T> implements Iterable<T> {
     /**
      * Get the indexed element in the list.
      *
-     * @return
-     * the element at position <tt>index</tt>
-     * or throw an <tt>IndexOutOfBoundsException</tt>
+     * @param index Position of the element to retrieve.
+     * @return The element at position <tt>index</tt>.
+     * @throws IndexOutOfBoundsException if the index is out of range.
      */
     public T get(int index) {
         if (index < 0 || index >= last) {

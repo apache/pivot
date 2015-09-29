@@ -27,6 +27,7 @@ public final class TryCompanion<T> {
 
     /**
      * Get the static instance.
+     * @param <T> The type of this companion object.
      * @return the static instance
      */
     public static final <T> TryCompanion<T> getInstance() {

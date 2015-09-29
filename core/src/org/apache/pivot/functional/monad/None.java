@@ -27,6 +27,7 @@ public final class None<T> extends Option<T> {
 
     /**
      * Get the static instance.
+     * @param <T> The type of this no-value object.
      * @return the static instance
      */
     public static final <T> None<T> getInstance() {

@@ -71,6 +71,7 @@ public interface Stack<T> extends Collection<T> {
     /**
      * Removes the top item from the stack and returns it.
      *
+     * @return The top item from the stack (removed from it).
      * @throws IllegalStateException If the stack contains no items.
      */
     public T pop();
@@ -80,6 +81,7 @@ public interface Stack<T> extends Collection<T> {
      * Returns null if the stack contains no items. Will also return null if the
      * top item in the stack is null. <tt>getLength()</tt> can be used to
      * distinguish between these two cases.
+     * @return The top item from the stack (which remains there).
      */
     public T peek();
 
@@ -93,12 +95,12 @@ public interface Stack<T> extends Collection<T> {
     public boolean isEmpty();
 
     /**
-     * Returns the stack depth.
+     * @return The stack depth.
      */
     public int getDepth();
 
     /**
-     * Returns the stack listener list.
+     * @return The stack listener list.
      */
     public ListenerList<StackListener<T>> getStackListeners();
 }

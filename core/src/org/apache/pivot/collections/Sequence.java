@@ -268,6 +268,7 @@ public interface Sequence<T> {
         /**
          * Adds an item to a nested sequence.
          *
+         * @param <T> Type of the items in this sequence.
          * @param sequence The root sequence.
          * @param item The item to be added to the sequence.
          * @param path The path of the sequence to which the item should be
@@ -283,6 +284,7 @@ public interface Sequence<T> {
         /**
          * Inserts an item into a nested sequence.
          *
+         * @param <T> Type of items in this sequence.
          * @param sequence The root sequence.
          * @param item The item to be inserted into the sequence.
          * @param path The path of the sequence into which the item should be
@@ -298,6 +300,7 @@ public interface Sequence<T> {
         /**
          * Updates an item in a nested sequence.
          *
+         * @param <T> The type of items in this sequence.
          * @param sequence The root sequence.
          * @param path The path of the item to update.
          * @param item The item that will replace any existing value at the given
@@ -326,6 +329,7 @@ public interface Sequence<T> {
         /**
          * Removes the first occurrence of an item from a nested sequence.
          *
+         * @param <T> The type of items in this sequence.
          * @param sequence The root sequence.
          * @param item The item to remove.
          * @return The path of the item that was removed.
@@ -342,10 +346,13 @@ public interface Sequence<T> {
         }
 
         /**
-         * Removes an item from a nested sequence.
+         * Removes items from a nested sequence.
          *
+         * @param <T> The type of items in this sequence.
          * @param sequence The root sequence.
-         * @param path The path of the item to remove.
+         * @param path The path of the item(s) to remove.
+         * @param count The number of items to remove.
+         * @return The sequence of items that were removed.
          */
         @SuppressWarnings("unchecked")
         public static <T> Sequence<T> remove(final Sequence<T> sequence, final Path path, int count) {
@@ -369,6 +376,7 @@ public interface Sequence<T> {
         /**
          * Retrieves an item from a nested sequence.
          *
+         * @param <T> The type of items in this sequence.
          * @param sequence The root sequence.
          * @param path The path of the item to retrieve.
          * @return The item at the given path, or <tt>null</tt> if the path is
@@ -403,10 +411,11 @@ public interface Sequence<T> {
         /**
          * Returns the path to an item in a nested sequence.
          *
+         * @param <T> The type of items in this sequence.
          * @param sequence The root sequence.
          * @param item The item to locate.
          * @return The path of first occurrence of the item if it exists in the
-         * sequence; <tt>null</tt>, otherwise.
+         * sequence; <tt>null</tt> otherwise.
          */
         @SuppressWarnings("unchecked")
         public static <T> Path pathOf(final Sequence<T> sequence, final T item) {
@@ -443,6 +452,9 @@ public interface Sequence<T> {
         /**
          * Returns an iterator that will perform a depth-first traversal of the
          * nested sequence.
+         * @param <T> The type of items in this sequence.
+         * @param sequence The sequence for which we are requesting an iterator.
+         * @return The new iterator over the sequence (depth-first order).
          */
         public static <T> ItemIterator<T> depthFirstIterator(Sequence<T> sequence) {
             return new DepthFirstItemIterator<>(sequence);
@@ -454,6 +466,8 @@ public interface Sequence<T> {
          *
          * @param ancestorPath The ancestor path to test.
          * @param descendantPath The descendant path to test.
+         * @return <tt>true</tt> if the second argument is a descendant of the first
+         * path argument, <tt>false</tt> otherwise.
          */
         public static boolean isDescendant(Path ancestorPath, Path descendantPath) {
             int ancestorLength = ancestorPath.getLength();

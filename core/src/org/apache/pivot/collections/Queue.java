@@ -72,6 +72,7 @@ public interface Queue<T> extends Collection<T> {
      * Removes the item from the head of the queue and returns it. Calling this
      * method should have the same effect as: <code>remove(getLength() - 1,
      * 1);</code>
+     * @return The (removed) object at the head of the queue.
      */
     public T dequeue();
 
@@ -80,6 +81,7 @@ public interface Queue<T> extends Collection<T> {
      * queue. Returns null if the queue contains no items. Will also return null
      * if the head item in the queue is null. <tt>isEmpty()</tt> can be used to
      * distinguish between these two cases.
+     * @return The object at the head of the queue (not removed from the queue).
      */
     public T peek();
 
@@ -93,12 +95,12 @@ public interface Queue<T> extends Collection<T> {
     public boolean isEmpty();
 
     /**
-     * Returns the length of the queue.
+     * @return The length of the queue.
      */
     public int getLength();
 
     /**
-     * Returns the queue listener list.
+     * @return The queue listener list.
      */
     public ListenerList<QueueListener<T>> getQueueListeners();
 }

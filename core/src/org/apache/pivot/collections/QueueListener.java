@@ -50,31 +50,31 @@ public interface QueueListener<T> {
     /**
      * Called when an item has been inserted into the tail of a queue.
      *
-     * @param queue
-     * @param item
+     * @param queue The queue that has been modified.
+     * @param item The item that was just added to the queue.
      */
     public void itemEnqueued(Queue<T> queue, T item);
 
     /**
      * Called when an item has been removed from the head of a queue.
      *
-     * @param queue
-     * @param item
+     * @param queue The queue in question.
+     * @param item The item that was just removed from the head of the queue.
      */
     public void itemDequeued(Queue<T> queue, T item);
 
     /**
      * Called when a queue has been cleared.
      *
-     * @param queue
+     * @param queue The newly cleared queue object.
      */
     public void queueCleared(Queue<T> queue);
 
     /**
      * Called when a queue's comparator has changed.
      *
-     * @param queue
-     * @param previousComparator
+     * @param queue The queue that changed.
+     * @param previousComparator Previous value of the queue's comparator (if any).
      */
     public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator);
 }

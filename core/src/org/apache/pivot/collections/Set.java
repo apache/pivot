@@ -77,7 +77,7 @@ public interface Set<E> extends Group<E>, Collection<E> {
     public void clear();
 
     /**
-     * Returns the number of elements in the set.
+     * @return The number of elements in the set.
      */
     public int getCount();
 
@@ -88,7 +88,7 @@ public interface Set<E> extends Group<E>, Collection<E> {
     public void setComparator(Comparator<E> comparator);
 
     /**
-     * Returns the set listener collection.
+     * @return The set listener list.
      */
     public ListenerList<SetListener<E>> getSetListeners();
 }
