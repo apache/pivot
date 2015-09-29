@@ -23,12 +23,12 @@ public interface ComponentMouseWheelListener {
     /**
      * Called when the mouse wheel is scrolled over a component.
      *
-     * @param component
-     * @param scrollType
-     * @param scrollAmount
-     * @param wheelRotation
-     * @param x
-     * @param y
+     * @param component Component under the mouse pointer.
+     * @param scrollType What type of scroll was requested on the mouse.
+     * @param scrollAmount Amount of scrolling.
+     * @param wheelRotation Rotation value.
+     * @param x X position of the mouse.
+     * @param y Y position of the mouse.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */

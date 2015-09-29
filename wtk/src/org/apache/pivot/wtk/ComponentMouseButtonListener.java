@@ -43,10 +43,10 @@ public interface ComponentMouseButtonListener {
     /**
      * Called when a mouse button is pressed over a component.
      *
-     * @param component
-     * @param button
-     * @param x
-     * @param y
+     * @param component Component that is under the mouse pointer.
+     * @param button Which mouse button was pressed.
+     * @param x X position of the mouse.
+     * @param y Y position of the mouse.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
@@ -55,10 +55,10 @@ public interface ComponentMouseButtonListener {
     /**
      * Called when a mouse button is released over a component.
      *
-     * @param component
-     * @param button
-     * @param x
-     * @param y
+     * @param component Component user the mouse pointer.
+     * @param button Which mouse button that was released.
+     * @param x X position of the mouse.
+     * @param y Y position of the mouse.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
@@ -67,11 +67,11 @@ public interface ComponentMouseButtonListener {
     /**
      * Called when a mouse button is clicked over a component.
      *
-     * @param component
-     * @param button
-     * @param x
-     * @param y
-     * @param count
+     * @param component Component user the mouse pointer.
+     * @param button Which mouse button was clicked.
+     * @param x X position of the mouse.
+     * @param y Y position of the mouse.
+     * @param count Number of clicks (1 = single click, 2 = double click, etc.).
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */

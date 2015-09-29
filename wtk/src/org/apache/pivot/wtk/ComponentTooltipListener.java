@@ -23,9 +23,9 @@ public interface ComponentTooltipListener {
     /**
      * Called when a tooltip has been triggered over a component.
      *
-     * @param component
-     * @param x
-     * @param y
+     * @param component The component in question.
+     * @param x X position of the mouse.
+     * @param y Y position of the mouse.
      */
     public void tooltipTriggered(Component component, int x, int y);
 }

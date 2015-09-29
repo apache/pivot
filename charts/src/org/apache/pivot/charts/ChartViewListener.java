@@ -25,47 +25,47 @@ public interface ChartViewListener {
     /**
      * Fired when a chart view's data changes.
      *
-     * @param chartView
-     * @param previousChartData
+     * @param chartView The chart that is changing.
+     * @param previousChartData Previous data for the chart.
      */
     public void chartDataChanged(ChartView chartView, List<?> previousChartData);
 
     /**
      * Fired when a chart view's series name key changes.
      *
-     * @param chartView
-     * @param previousSeriesNameKey
+     * @param chartView The chart that is changing.
+     * @param previousSeriesNameKey Previous value of the key for the series name.
      */
     public void seriesNameKeyChanged(ChartView chartView, String previousSeriesNameKey);
 
     /**
      * Fired when a chart view's title changes.
      *
-     * @param chartView
-     * @param previousTitle
+     * @param chartView The chart that changed.
+     * @param previousTitle Previous title for this chart.
      */
     public void titleChanged(ChartView chartView, String previousTitle);
 
     /**
      * Fired when a chart view's horizontal axis label changes.
      *
-     * @param chartView
-     * @param previousHorizontalAxisLabel
+     * @param chartView The chart that has changed.
+     * @param previousHorizontalAxisLabel Previous value of the horizontal axis label.
      */
     public void horizontalAxisLabelChanged(ChartView chartView, String previousHorizontalAxisLabel);
 
     /**
      * Fired when a chart view's vertical axis label changes.
      *
-     * @param chartView
-     * @param previousVerticalAxisLabel
+     * @param chartView The chart that has changed.
+     * @param previousVerticalAxisLabel Previous value of the vertical axis label.
      */
     public void verticalAxisLabelChanged(ChartView chartView, String previousVerticalAxisLabel);
 
     /**
      * Fired when a chart view's "show legend" flag changes.
      *
-     * @param chartView
+     * @param chartView The chart that has changed.
      */
     public void showLegendChanged(ChartView chartView);
 }

@@ -44,9 +44,9 @@ public interface ComponentMouseListener {
     /**
      * Called when the mouse is moved over a component.
      *
-     * @param component
-     * @param x
-     * @param y
+     * @param component Component that is under the mouse.
+     * @param x X position of the mouse.
+     * @param y Y position of the mouse.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
@@ -55,14 +55,14 @@ public interface ComponentMouseListener {
     /**
      * Called when the mouse enters a component.
      *
-     * @param component
+     * @param component Component that is now under the mouse pointer.
      */
     public void mouseOver(Component component);
 
     /**
      * Called when the mouse exits a component.
      *
-     * @param component
+     * @param component Component that has now lost the mouse pointer.
      */
     public void mouseOut(Component component);
 }

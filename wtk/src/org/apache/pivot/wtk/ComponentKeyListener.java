@@ -44,8 +44,8 @@ public interface ComponentKeyListener {
     /**
      * Called when a key has been typed.
      *
-     * @param component
-     * @param character
+     * @param component Component that has the focus, that is receiving this key.
+     * @param character The decoded character that was typed.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
@@ -54,9 +54,9 @@ public interface ComponentKeyListener {
     /**
      * Called when a key has been pressed.
      *
-     * @param component
-     * @param keyCode
-     * @param keyLocation
+     * @param component Component that has the focus.
+     * @param keyCode The key code for the key that was pressed.
+     * @param keyLocation Location value for the key (left or right for shift keys, etc.).
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
@@ -65,9 +65,9 @@ public interface ComponentKeyListener {
     /**
      * Called when a key has been released.
      *
-     * @param component
-     * @param keyCode
-     * @param keyLocation
+     * @param component Component that has the focus, that is receiving this key event.
+     * @param keyCode Code for the key that was released.
+     * @param keyLocation Location of the key.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */

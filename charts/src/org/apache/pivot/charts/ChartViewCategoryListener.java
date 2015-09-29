@@ -25,17 +25,17 @@ public interface ChartViewCategoryListener {
     /**
      * Fired when a category is inserted into a chart view.
      *
-     * @param chartView
-     * @param index
+     * @param chartView The chart that is changing.
+     * @param index The index of the new category that was inserted.
      */
     public void categoryInserted(ChartView chartView, int index);
 
     /**
      * Fired when a category is removed from a chart view.
      *
-     * @param chartView
-     * @param index
-     * @param categories
+     * @param chartView The chart that is changing.
+     * @param index The index of the first category that was removed.
+     * @param categories The list of removed categories.
      */
     public void categoriesRemoved(ChartView chartView, int index,
         Sequence<ChartView.Category> categories);
@@ -43,18 +43,18 @@ public interface ChartViewCategoryListener {
     /**
      * Fired when a chart view's category key changes.
      *
-     * @param chartView
-     * @param index
-     * @param previousKey
+     * @param chartView The chart that is changing.
+     * @param index The index of the category whose key changed.
+     * @param previousKey Previous value of the changed key.
      */
     public void categoryKeyChanged(ChartView chartView, int index, String previousKey);
 
     /**
      * Fired when a chart view's category label changes.
      *
-     * @param chartView
-     * @param index
-     * @param previousLabel
+     * @param chartView The chart that is changing.
+     * @param index The index of the category whose label changed.
+     * @param previousLabel Previous value of the changed label.
      */
     public void categoryLabelChanged(ChartView chartView, int index, String previousLabel);
 }

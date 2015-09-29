@@ -23,39 +23,39 @@ public interface ChartViewSeriesListener {
     /**
      * Fired when a series is inserted into a chart view's data set.
      *
-     * @param chartView
-     * @param index
+     * @param chartView The chart that has changed.
+     * @param index Index of the series that was inserted.
      */
     public void seriesInserted(ChartView chartView, int index);
 
     /**
      * Fired when a series is removed from a chart view's data set.
      *
-     * @param chartView
-     * @param index
-     * @param count
+     * @param chartView The chart that has changed.
+     * @param index Starting index of the removed series.
+     * @param count Number of series removed.
      */
     public void seriesRemoved(ChartView chartView, int index, int count);
 
     /**
      * Fired when a chart view's series data is cleared.
      *
-     * @param chartView
+     * @param chartView The chart that has changed.
      */
     public void seriesCleared(ChartView chartView);
 
     /**
      * Fired when a series is updated in a chart view's data set.
      *
-     * @param chartView
-     * @param index
+     * @param chartView The chart that has changed.
+     * @param index Index of the series that was updated.
      */
     public void seriesUpdated(ChartView chartView, int index);
 
     /**
      * Fired when a chart view's series data is sorted.
      *
-     * @param chartView
+     * @param chartView Chart that changed.
      */
     public void seriesSorted(ChartView chartView);
 }
